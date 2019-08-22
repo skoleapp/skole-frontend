@@ -1,3 +1,3 @@
-# skole-backend
+# skole-fronted
 
-Repository for the backend
+Repository for the frontend
