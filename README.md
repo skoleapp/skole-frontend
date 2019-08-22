@@ -1,3 +1,3 @@
-# react-components
+# skole-backend
 
-Repository for react apps & components
+Repository for the backend
