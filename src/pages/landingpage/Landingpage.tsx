@@ -2,6 +2,7 @@ import React from "react";
 
 import { Wrapper, Header, Title } from "./styles";
 import Login from "../../components/login/Login";
+import IntersectingWrapper from "../../components/intersecting/IntersectingWrapper";
 import Flexbox from "flexbox-react";
 
 const Landingpage = () => {
@@ -12,7 +13,9 @@ const Landingpage = () => {
           <Login />
         </Flexbox>
       </Header>
-      <Title font="cursive">Skole!</Title>
+      <IntersectingWrapper time={1}>
+        <Title font="cursive">Skole!</Title>
+      </IntersectingWrapper>
     </Wrapper>
   );
 };
