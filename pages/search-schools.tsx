@@ -1,15 +1,16 @@
 import { Layout } from "../organisms/Layout";
 import { ListSchools } from "../templates";
 import "../index.css";
-import { Header, Flexbox } from "../atoms";
-import { Login } from "../organisms";
-
+import { Header, Flexbox, Button } from "../atoms";
+import Link from "next/link";
 export default () => (
   <Layout title="skole | ebin oppimisalusta">
     <>
       <Header>
-        <Flexbox justifyContent="flex-end">
-          <Login />
+        <Flexbox justifyContent="flex-start">
+          <Link href="/loginpage">
+            <Button>Login</Button>
+          </Link>
         </Flexbox>
       </Header>
       <ListSchools />
