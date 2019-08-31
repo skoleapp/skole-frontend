@@ -1,8 +1,7 @@
 import { Layout } from "../organisms/Layout";
 import { ListSchools } from "../templates";
 import "../index.css";
-import { Header } from "../atoms";
-import Flexbox from "flexbox-react";
+import { Header, Flexbox } from "../atoms";
 import { Login } from "../organisms";
 
 export default () => (

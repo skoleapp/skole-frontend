@@ -19,7 +19,6 @@
     "@types/styled-components": "^4.1.18",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-typescript": "^1.1.1",
-    "flexbox-react": "^4.4.0",
     "next": "^9.0.5",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
