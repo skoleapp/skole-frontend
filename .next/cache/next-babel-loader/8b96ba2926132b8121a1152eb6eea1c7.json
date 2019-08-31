@@ -1,0 +1,1 @@
+{"ast":null,"code":"export { HeadComponent as Head } from './Head';","map":{"version":3,"sources":["/Users/blomqma/projects/skole/frontend/organisms/index.ts"],"names":["HeadComponent","Head"],"mappings":"AAAA,SAASA,aAAa,IAAIC,IAA1B,QAAsC,QAAtC","sourcesContent":["export { HeadComponent as Head } from './Head';\n"]},"metadata":{},"sourceType":"module"}
