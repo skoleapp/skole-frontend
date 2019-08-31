@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Head } from '.';
 
 interface Props {
   title: string;
-  children: JSX.Element | string;
+  children: ReactNode;
 }
 
 export const Layout: React.SFC<Props> = ({ title, children }) => (

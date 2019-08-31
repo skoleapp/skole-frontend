@@ -7,14 +7,12 @@ import { LandingPage } from '../templates';
 
 const Index: React.SFC<{}> = () => (
   <Layout title="skole | ebin oppimisalusta">
-    <>
-      <Header>
-        <FlexBox justifyContent="flex-end">
-          <Login />
-        </FlexBox>
-      </Header>
-      <LandingPage />
-    </>
+    <Header>
+      <FlexBox justifyContent="flex-end">
+        <Login />
+      </FlexBox>
+    </Header>
+    <LandingPage />
   </Layout>
 );
 
