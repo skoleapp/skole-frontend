@@ -7,14 +7,12 @@ import { ListSchools } from '../templates';
 
 const SearchSchools: React.SFC<{}> = () => (
   <Layout title="skole | ebin oppimisalusta">
-    <>
-      <Header>
-        <FlexBox justifyContent="flex-end">
-          <Login />
-        </FlexBox>
-      </Header>
-      <ListSchools />
-    </>
+    <Header>
+      <FlexBox justifyContent="flex-end">
+        <Login />
+      </FlexBox>
+    </Header>
+    <ListSchools />
   </Layout>
 );
 
