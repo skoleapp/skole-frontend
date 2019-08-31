@@ -1,0 +1,1 @@
+export { IntersectingWrapper } from './IntersectingWrapper';

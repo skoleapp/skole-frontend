@@ -1,5 +1,5 @@
 import { Layout } from "../organisms/Layout";
-import { LandingPage } from "../templates";
+import { ListSchools } from "../templates";
 import "../index.css";
 import { Header, Flexbox } from "../atoms";
 import { Login } from "../organisms";
@@ -12,7 +12,7 @@ export default () => (
           <Login />
         </Flexbox>
       </Header>
-      <LandingPage />
+      <ListSchools />
     </>
   </Layout>
 );
