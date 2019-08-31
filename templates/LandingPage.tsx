@@ -9,11 +9,14 @@ export const LandingPage = () => {
       <IntersectingWrapper time={1}>
         <Title font="monospace">Skole!</Title>
       </IntersectingWrapper>
-      <Link href="/user">
-        <Title>
+      <Title>
+        <Link href="/account">
           <button>User page</button>
-        </Title>
-      </Link>
+        </Link>
+        <Link href="/search-schools">
+          <button>search-schools</button>
+        </Link>
+      </Title>
     </Wrapper>
   );
 };
