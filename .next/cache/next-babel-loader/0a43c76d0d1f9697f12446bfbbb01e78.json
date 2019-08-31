@@ -1,0 +1,1 @@
+{"ast":null,"code":"export { LandingPage } from './LandingPage';","map":{"version":3,"sources":["/Users/blomqma/projects/skole/frontend/templates/index.ts"],"names":[],"mappings":"AAAA,SAAA,WAAA,QAAA,eAAA","sourcesContent":["export { LandingPage } from './LandingPage';\n\n"]},"metadata":{},"sourceType":"module"}
