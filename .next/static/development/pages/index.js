@@ -15,10 +15,10 @@ __webpack_require__.r(__webpack_exports__);
 var Animated = styled_components__WEBPACK_IMPORTED_MODULE_0__["default"].div.withConfig({
   displayName: "Animated",
   componentId: "sweofb-0"
-})(["opacity:", ";transition:opacity ", ";"], function (props) {
+})(["opacity:", ";transition:opacity ", ";background:var(--black);"], function (props) {
   return props.launch ? 1 : 0;
 }, function (props) {
-  return props.time ? props.time + 's' : '0.2s';
+  return props.time ? props.time + "s" : "0.2s";
 });
 
 /***/ }),
@@ -174,7 +174,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _atoms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../atoms */ "./atoms/index.ts");
-var _jsxFileName = "/Users/blomqma/projects/skole/frontend/molecules/IntersectingWrapper.tsx";
+var _jsxFileName = "/Users/wkpelt/skole-frontend/molecules/IntersectingWrapper.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -6329,10 +6329,10 @@ exports["default"] = function () {
 
 /***/ }),
 
-/***/ "./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2FUsers%2Fblomqma%2Fprojects%2Fskole%2Ffrontend%2Fpages%2Findex.tsx!./":
-/*!*********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2FUsers%2Fblomqma%2Fprojects%2Fskole%2Ffrontend%2Fpages%2Findex.tsx ***!
-  \*********************************************************************************************************************************************************************************/
+/***/ "./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2FUsers%2Fwkpelt%2Fskole-frontend%2Fpages%2Findex.tsx!./":
+/*!*******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2FUsers%2Fwkpelt%2Fskole-frontend%2Fpages%2Findex.tsx ***!
+  \*******************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12053,7 +12053,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/head */ "./node_modules/next-server/dist/lib/head.js");
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "/Users/blomqma/projects/skole/frontend/organisms/Head.tsx";
+var _jsxFileName = "/Users/wkpelt/skole-frontend/organisms/Head.tsx";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -12107,7 +12107,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! . */ "./organisms/index.ts");
-var _jsxFileName = "/Users/blomqma/projects/skole/frontend/organisms/Layout.tsx";
+var _jsxFileName = "/Users/wkpelt/skole-frontend/organisms/Layout.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -12151,7 +12151,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _atoms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../atoms */ "./atoms/index.ts");
-var _jsxFileName = "/Users/blomqma/projects/skole/frontend/organisms/Login.tsx";
+var _jsxFileName = "/Users/wkpelt/skole-frontend/organisms/Login.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -12277,9 +12277,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _organisms_Layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../organisms/Layout */ "./organisms/Layout.tsx");
 /* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../templates */ "./templates/index.ts");
-var _jsxFileName = "/Users/blomqma/projects/skole/frontend/pages/index.tsx";
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../index.css */ "./index.css");
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_3__);
+var _jsxFileName = "/Users/wkpelt/skole-frontend/pages/index.tsx";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
@@ -12287,13 +12290,13 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
     title: "skole | ebin oppimisalusta",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 5
+      lineNumber: 6
     },
     __self: this
   }, __jsx(_templates__WEBPACK_IMPORTED_MODULE_2__["LandingPage"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 6
+      lineNumber: 7
     },
     __self: this
   }));
@@ -12318,7 +12321,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _molecules__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../molecules */ "./molecules/index.ts");
 /* harmony import */ var flexbox_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flexbox-react */ "./node_modules/flexbox-react/dist/index.js");
 /* harmony import */ var flexbox_react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flexbox_react__WEBPACK_IMPORTED_MODULE_4__);
-var _jsxFileName = "/Users/blomqma/projects/skole/frontend/templates/LandingPage.tsx";
+var _jsxFileName = "/Users/wkpelt/skole-frontend/templates/LandingPage.tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
@@ -12387,13 +12390,13 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 0:
-/*!*************************************************************************************************************************************!*\
-  !*** multi next-client-pages-loader?page=%2F&absolutePagePath=%2FUsers%2Fblomqma%2Fprojects%2Fskole%2Ffrontend%2Fpages%2Findex.tsx ***!
-  \*************************************************************************************************************************************/
+/*!***********************************************************************************************************************!*\
+  !*** multi next-client-pages-loader?page=%2F&absolutePagePath=%2FUsers%2Fwkpelt%2Fskole-frontend%2Fpages%2Findex.tsx ***!
+  \***********************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! next-client-pages-loader?page=%2F&absolutePagePath=%2FUsers%2Fblomqma%2Fprojects%2Fskole%2Ffrontend%2Fpages%2Findex.tsx! */"./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2FUsers%2Fblomqma%2Fprojects%2Fskole%2Ffrontend%2Fpages%2Findex.tsx!./");
+module.exports = __webpack_require__(/*! next-client-pages-loader?page=%2F&absolutePagePath=%2FUsers%2Fwkpelt%2Fskole-frontend%2Fpages%2Findex.tsx! */"./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2FUsers%2Fwkpelt%2Fskole-frontend%2Fpages%2Findex.tsx!./");
 
 
 /***/ }),
@@ -12409,5 +12412,5 @@ module.exports = dll_01f9a3fa864a7b7414d8;
 
 /***/ })
 
-},[[0,"static/runtime/webpack.js"]]]);
+},[[0,"static/runtime/webpack.js","styles"]]]);
 //# sourceMappingURL=index.js.map
