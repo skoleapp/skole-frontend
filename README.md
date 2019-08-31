@@ -16,5 +16,5 @@ $ yarn
 - To run project in localhost:3000, run:
 
 ```console
-$ yarn start
+$ yarn dev
 ```
