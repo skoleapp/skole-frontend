@@ -2,7 +2,7 @@ import React, { useState, SyntheticEvent } from "react";
 import { connect } from "react-redux";
 import actions from "../redux/actions";
 
-const Signup = (props: any) => {
+export const Signup = (props: any) => {
   const { register } = props;
 
   const [username, setUsername] = useState("");

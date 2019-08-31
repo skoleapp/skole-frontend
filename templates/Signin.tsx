@@ -2,7 +2,7 @@ import React, { useState, SyntheticEvent } from "react";
 import { connect } from "react-redux";
 import actions from "../redux/actions";
 
-const Signin = (props: any) => {
+export const Signin = (props: any) => {
   const { authenticate } = props;
 
   const [email, setEmail] = useState("");
