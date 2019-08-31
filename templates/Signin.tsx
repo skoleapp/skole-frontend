@@ -28,7 +28,7 @@ const Signin = (props: any) => {
               type="email"
               placeholder="Email ID"
               required
-              value={this.state.email_id}
+              value={email}
               onChange={e => setEmail(e.target.value)}
             />
           </p>
@@ -40,7 +40,7 @@ const Signin = (props: any) => {
               type="password"
               placeholder="Password"
               required
-              value={this.state.password}
+              value={password}
               onChange={e => setPassword(e.target.value)}
             />
           </p>
