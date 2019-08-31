@@ -7,7 +7,8 @@ declare module "styled-components" {
   }
 
   export interface TitleProps {
-    font: string;
+    font?: string;
+    size?: number;
   }
   export interface FlexboxProps {
     justifyContent?: string;
