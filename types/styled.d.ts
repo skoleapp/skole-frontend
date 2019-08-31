@@ -1,16 +1,16 @@
-import "styled-components";
+import 'styled-components';
 
-declare module "styled-components" {
-  export interface AnimatedProps {
+declare module 'styled-components' {
+  declare interface AnimatedProps {
     launch: boolean;
     time?: number;
   }
 
-  export interface TitleProps {
+  declare interface TitleProps {
     font?: string;
     size?: number;
   }
-  export interface FlexboxProps {
+  declare interface FlexBoxProps {
     justifyContent?: string;
     alignItems?: string;
     alignContent?: string;

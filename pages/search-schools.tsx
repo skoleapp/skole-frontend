@@ -1,18 +1,21 @@
-import { Layout } from "../organisms/Layout";
-import { ListSchools } from "../templates";
-import "../index.css";
-import { Header, Flexbox } from "../atoms";
-import { Login } from "../organisms";
+import React from 'react';
+import { FlexBox, Header } from '../atoms';
+import '../index.css';
+import { Login } from '../organisms';
+import { Layout } from '../organisms/Layout';
+import { ListSchools } from '../templates';
 
-export default () => (
+const SearchSchools: React.SFC<{}> = () => (
   <Layout title="skole | ebin oppimisalusta">
     <>
       <Header>
-        <Flexbox justifyContent="flex-end">
+        <FlexBox justifyContent="flex-end">
           <Login />
-        </Flexbox>
+        </FlexBox>
       </Header>
       <ListSchools />
     </>
   </Layout>
 );
+
+export default SearchSchools;

@@ -1,2 +1,2 @@
-export { LandingPage } from "./LandingPage";
-export { ListSchools } from "./ListSchools";
+export { LandingPage } from './LandingPage';
+export { ListSchools } from './ListSchools';

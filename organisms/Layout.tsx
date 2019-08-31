@@ -1,5 +1,5 @@
-import React from "react";
-import { Head } from ".";
+import React from 'react';
+import { Head } from '.';
 
 interface Props {
   title: string;
@@ -7,8 +7,8 @@ interface Props {
 }
 
 export const Layout: React.SFC<Props> = ({ title, children }) => (
-  <React.Fragment>
+  <>
     <Head title={title} />
     <div>{children}</div>
-  </React.Fragment>
+  </>
 );
