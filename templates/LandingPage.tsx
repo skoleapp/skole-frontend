@@ -1,20 +1,19 @@
 import React from "react";
-import { Wrapper, Header, Title } from "../atoms";
-import { Login } from "../organisms";
+import { Wrapper, Title } from "../atoms";
 import { IntersectingWrapper } from "../molecules";
-import Flexbox from "flexbox-react";
+import Link from "next/link";
 
 export const LandingPage = () => {
   return (
     <Wrapper>
-      <Header>
-        <Flexbox justifyContent="flex-end">
-          <Login />
-        </Flexbox>
-      </Header>
       <IntersectingWrapper time={1}>
-        <Title font="cursive">Skole!</Title>
+        <Title font="monospace">Skole!</Title>
       </IntersectingWrapper>
+      <Link href="/user">
+        <Title>
+          <button>User page</button>
+        </Title>
+      </Link>
     </Wrapper>
   );
 };

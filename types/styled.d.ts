@@ -1,12 +1,13 @@
-import 'styled-components';
+import "styled-components";
 
-declare module 'styled-components' {
-    export interface AnimatedProps {
-        launch: boolean;
-        time?: number;
-    }
+declare module "styled-components" {
+  export interface AnimatedProps {
+    launch: boolean;
+    time?: number;
+  }
 
-    export interface TitleProps {
-        font: string;
-    }
+  export interface TitleProps {
+    font?: string;
+    size?: number;
+  }
 }
