@@ -1,16 +1,14 @@
-import React from "react";
-import { Flexbox, Card, Button } from "../atoms";
-import { Login } from "../organisms";
+import React from 'react';
+import { FlexBox, Card, Button } from '../atoms';
+import { Login } from '../organisms';
 
-export const Loginbox = () => {
-  return (
-    <Card>
-      <Flexbox justifyContent="center">
-        <Login></Login>
-      </Flexbox>
-      <Flexbox justifyContent="center">
-        <Button>Register</Button>
-      </Flexbox>
-    </Card>
-  );
-};
+export const Loginbox: React.SFC<{}> = () => (
+  <Card>
+    <FlexBox justifyContent="center">
+      <Login></Login>
+    </FlexBox>
+    <FlexBox justifyContent="center">
+      <Button>Register</Button>
+    </FlexBox>
+  </Card>
+);
