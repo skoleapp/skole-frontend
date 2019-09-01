@@ -1,10 +1,10 @@
-import React, { SyntheticEvent, useState } from "react";
-import { Button, Input } from "../atoms";
+import React, { SyntheticEvent, useState } from 'react';
+import { Button, Input } from '../atoms';
 
-export const Login = () => {
+export const Login: React.FC<{}> = () => {
   const [loginOpen, setLoginOpen] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleUsername = (e: SyntheticEvent): void => {
     const target = e.target as HTMLInputElement;
@@ -18,39 +18,29 @@ export const Login = () => {
     console.log(target.value);
   };
 
-  const handleLogin = (e: SyntheticEvent) => {
-    e.preventDefault();
-    //do magic
-    setUsername("");
-    setPassword("");
+  const handleLogin = (e: SyntheticEvent): void => {
+    setUsername('');
+    setPassword('');
     console.log(e);
   };
 
   return (
     <>
-      {!loginOpen && (
-        <Button onClick={() => setLoginOpen(true)}>Sign in</Button>
-      )}
+      {!loginOpen && <Button onClick={(): void => setLoginOpen(true)}>Sign in</Button>}
       {loginOpen && (
         <form>
           <Input
             value={username}
-            onChange={username => handleUsername(username)}
+            onChange={(username): void => handleUsername(username)}
             placeholder="Username"
           />
           <Input
             value={password}
-            onChange={password => handlePassword(password)}
+            onChange={(password): void => handlePassword(password)}
             placeholder="Password"
             type="password"
           />
-          <Button
-            onClick={e => {
-              handleLogin(e);
-            }}
-          >
-            Log in
-          </Button>
+          <Button onClick={(e): void => handleLogin(e)}>Log in</Button>
         </form>
       )}
     </>
