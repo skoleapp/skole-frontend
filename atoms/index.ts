@@ -1,6 +1,8 @@
 export { Animated } from './Animated';
 export { Button } from './Button';
+export { Background } from './Background';
 export { Card } from './Card';
+export { Centered } from './Centered';
 export { FlexBox } from './FlexBox';
 export { Header } from './Header';
 export { Input } from './Input';

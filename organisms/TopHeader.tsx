@@ -8,8 +8,8 @@ import Link from 'next/link';
 
 export const TopHeader: React.SFC<{}> = () => (
   <Header>
-    <FlexBox justifyContent="space-between" alignItems="center">
-      <Link href="/login">
+    <FlexBox justifyContent="space-between" alignItems="center" height="100%">
+      <Link href="/auth">
         <Button width="100px">Login</Button>
       </Link>
       <Link href="/">

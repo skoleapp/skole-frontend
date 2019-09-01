@@ -1,6 +1,7 @@
 import React, { SyntheticEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../actions';
+import { FlexBox } from '../atoms';
 
 export const Register: React.FC<{}> = () => {
   const [username, setUsername] = useState('');
@@ -14,39 +15,37 @@ export const Register: React.FC<{}> = () => {
   };
 
   return (
-    <div>
-      <h3>Sign Up</h3>
-      <form onSubmit={(e): void => handleSubmit(e)}>
-        <div>
-          <input
-            type="text"
-            placeholder="username"
-            required
-            value={username}
-            onChange={(e): void => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type="email"
-            placeholder="Email"
-            required
-            value={email}
-            onChange={(e): void => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            required
-            value={password}
-            onChange={(e): void => setPassword(e.target.value)}
-          />
-        </div>
-
-        <button type="submit">Register</button>
-      </form>
-    </div>
+    <form onSubmit={(e): void => handleSubmit(e)}>
+      <FlexBox justifyContent="center">
+        <input
+          type="text"
+          placeholder="Käyttäjänimi"
+          required
+          value={username}
+          onChange={(e): void => setUsername(e.target.value)}
+        />
+      </FlexBox>
+      <FlexBox justifyContent="center">
+        <input
+          type="email"
+          placeholder="Sähköposti"
+          required
+          value={email}
+          onChange={(e): void => setEmail(e.target.value)}
+        />
+      </FlexBox>
+      <FlexBox justifyContent="center">
+        <input
+          type="password"
+          placeholder="Salasana"
+          required
+          value={password}
+          onChange={(e): void => setPassword(e.target.value)}
+        />
+      </FlexBox>
+      <FlexBox justifyContent="center">
+        <button type="submit">Rekisteröidy</button>
+      </FlexBox>
+    </form>
   );
 };
