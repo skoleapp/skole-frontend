@@ -28,7 +28,7 @@ export const Login: React.FC<{}> = () => {
     <>
       {!loginOpen && <Button onClick={(): void => setLoginOpen(true)}>Sign in</Button>}
       {loginOpen && (
-        <form>
+        <form onSubmit={(e): void => handleLogin(e)}>
           <Input
             value={username}
             onChange={(username): void => handleUsername(username)}
@@ -40,7 +40,7 @@ export const Login: React.FC<{}> = () => {
             placeholder="Password"
             type="password"
           />
-          <Button onClick={(e): void => handleLogin(e)}>Log in</Button>
+          <Button type="submit">Log in</Button>
         </form>
       )}
     </>

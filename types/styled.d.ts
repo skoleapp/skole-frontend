@@ -14,5 +14,10 @@ declare module 'styled-components' {
     justifyContent?: string;
     alignItems?: string;
     alignContent?: string;
+    width?: string;
+    flexDirection?: string;
+  }
+  declare interface ButtonProps {
+    width?: string;
   }
 }
