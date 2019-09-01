@@ -1,9 +1,8 @@
 import React from 'react';
-import { Layout } from '../organisms/Layout';
+import { Layout, TopHeader } from '../organisms';
 import '../index.css';
 import { Signin, Signup } from '../templates';
 import { register, authenticate } from '../redux/actions/authActions';
-import TopHeader from '../organisms/TopHeader';
 import { FlexBox } from '../atoms';
 
 const Login: React.SFC<{}> = () => (
