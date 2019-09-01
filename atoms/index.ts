@@ -1,6 +1,6 @@
 export { Animated } from './Animated';
 export { Button } from './Button';
-export { FlexBox } from './FlexBox';
+export { FlexBox } from './Flexbox';
 export { Header } from './Header';
 export { Input } from './Input';
 export { Title } from './Title';
