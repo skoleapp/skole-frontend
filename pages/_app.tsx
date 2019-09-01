@@ -1,8 +1,8 @@
+import React from 'react';
 import { Provider } from 'react-redux';
 import App, { Container } from 'next/app';
 import withRedux from 'next-redux-wrapper';
-import { initStore } from '../redux';
-import React from 'react';
+import initStore from '../redux';
 
 declare interface PropsParams {
   Component: any;

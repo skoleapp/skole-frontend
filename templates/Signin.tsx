@@ -1,26 +1,28 @@
 import React, { useState, SyntheticEvent } from 'react';
-import { connect } from 'react-redux';
 import actions from '../redux/actions';
 
-export const Signin = (props: any) => {
-  const { authenticate } = props;
+import { useDispatch } from 'react-redux';
 
+export const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
+
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    authenticate({ email: email, password: password }, 'login');
+    dispatch(actions.authenticate({ email, password }, 'login'));
   };
 
   return (
     <div>
-      <h3 className="title is-3">Sign In</h3>
+      <h3>Sign In</h3>
       <form onSubmit={e => handleSubmit(e)}>
         <div>
           <input
             className="input"
-            type="email"
+            //HUOM !
+            type="text"
             placeholder="Email"
             required
             value={email}
@@ -43,8 +45,3 @@ export const Signin = (props: any) => {
     </div>
   );
 };
-
-export default connect(
-  state => state,
-  actions
-)(Signin);

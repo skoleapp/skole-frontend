@@ -1,16 +1,42 @@
 import Router from 'next/router';
 import axios from 'axios';
-//import { AUTHENTICATE, USER } from '../types';
+import { AUTHENTICATE } from '../types';
+import { AnyAction } from 'redux';
+import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 import { API } from '../../config';
 
-declare interface FormParams {
-  username: string;
+interface FormParams {
+  username?: string;
   email: string;
   password: string;
 }
 
+const authenticate = (
+  { email, password }: FormParams,
+  type: string
+): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+  if (type !== 'login') {
+    throw new Error('Wrong API call!');
+  }
+  console.log(email, password);
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+    axios
+      .post(`${API}/${type}`, { email, password })
+      .then(response => {
+        console.log(response);
+
+        //setCookie('token', response.data.data.user.token);
+        Router.push('/account');
+        dispatch({ type: AUTHENTICATE, payload: 'token-1337' });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+};
+
 // register user
-export const register = ({ username, email, password }: FormParams, type: string): void => {
+const register = ({ username, email, password }: FormParams, type: string): void => {
   if (type !== 'register') {
     throw new Error('Wrong API call!');
   }
@@ -26,51 +52,13 @@ export const register = ({ username, email, password }: FormParams, type: string
     .then(response => {
       console.log(response);
       Router.push('/signin');
-      //console.log(response.data.meta.message);
     })
     .catch(err => {
       console.log(err);
     });
 };
 
-// gets token from the api and stores it in the redux store and in cookie
-export const authenticate = ({ email, password }: FormParams, type: string): any => {
-  if (type !== 'login') {
-    throw new Error('Wrong API call!');
-  }
-  axios
-    .post(`${API}/${type}`, { email, password })
-    .then(response => {
-      console.log(response);
-      //Router.push('/users');
-      /*         dispatch({
-          type: AUTHENTICATE,
-          payload: response.data.data.user.token
-        }); */
-    })
-    .catch(error => {
-      console.log(error);
-    });
-};
-
-export const getUser = ({ token }: { token: string }, type: string) => {
-  console.log(token);
-  axios
-    .get(`${API}/${type}`, {
-      headers: {
-        Authorization: 'bearer ' + token
-      }
-    })
-    /*       .then(response => {
-        dispatch({ type: USER, payload: response.data.data.user });
-      }) */
-    .catch(error => {
-      console.log(error);
-    });
-};
-
 export default {
   register,
-  authenticate,
-  getUser
+  authenticate
 };
