@@ -11,9 +11,7 @@ export const Signup = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(
-      actions.register({ username: username, email: email, password: password }, 'register')
-    );
+    dispatch(actions.register({ username, email, password }, 'register'));
   };
 
   return (

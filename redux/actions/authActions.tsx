@@ -36,26 +36,32 @@ const authenticate = (
 };
 
 // register user
-const register = ({ username, email, password }: FormParams, type: string): void => {
+const register = (
+  { username, email, password }: FormParams,
+  type: string
+): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   if (type !== 'register') {
     throw new Error('Wrong API call!');
   }
   //console.log(`${API}/${type}`, { username, email, password });
 
   console.log('test');
-  axios
-    .post(`http://localhost:8000/api/user`, {
-      username,
-      email,
-      password
-    })
-    .then(response => {
-      console.log(response);
-      Router.push('/signin');
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+    axios
+      .post(`http://localhost:8000/api/user`, {
+        username,
+        email,
+        password
+      })
+      .then(response => {
+        console.log(response);
+        console.log(dispatch);
+        Router.push('/signin');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 };
 
 export default {
