@@ -7,14 +7,20 @@
 
 ## Instructions
 
-- To install dependencies, run:
+### Installing dependencies
 
 ```console
 $ yarn
 ```
 
-- To run project in localhost:3000, run:
+### Running environment
 
 ```console
 $ yarn dev
+```
+
+### Building client-side API
+
+```console
+$ yarn run build-api    # or just `yarn`
 ```
