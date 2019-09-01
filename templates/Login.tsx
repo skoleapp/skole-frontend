@@ -1,31 +1,30 @@
-import React, { useState, SyntheticEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import actions from '../redux/actions';
+import { login } from '../actions';
 
-export const Signin = () => {
+export const Login: React.FC<{}> = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    dispatch(actions.authenticate({ email, password }, 'login'));
+    dispatch(login({ email, password }));
   };
 
   return (
     <div>
       <h3>Sign In</h3>
-      <form onSubmit={e => handleSubmit(e)}>
+      <form onSubmit={(e): void => handleSubmit(e)}>
         <div>
           <input
             className="input"
-            //HUOM !
             type="text"
             placeholder="Email"
             required
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e): void => setEmail(e.target.value)}
           />
         </div>
         <div>
@@ -35,7 +34,7 @@ export const Signin = () => {
             placeholder="Password"
             required
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e): void => setPassword(e.target.value)}
           />
         </div>
 

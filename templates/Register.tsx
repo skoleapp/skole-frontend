@@ -1,30 +1,29 @@
-import React, { useState, SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import actions from '../redux/actions';
+import { register } from '../actions';
 
-export const Signup = () => {
+export const Register: React.FC<{}> = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const dispatch = useDispatch();
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    dispatch(actions.register({ username, email, password }, 'register'));
+    dispatch(register({ username, email, password }));
   };
 
   return (
     <div>
       <h3>Sign Up</h3>
-      <form onSubmit={e => handleSubmit(e)}>
+      <form onSubmit={(e): void => handleSubmit(e)}>
         <div>
           <input
             type="text"
             placeholder="username"
             required
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e): void => setUsername(e.target.value)}
           />
         </div>
         <div>
@@ -33,7 +32,7 @@ export const Signup = () => {
             placeholder="Email"
             required
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e): void => setEmail(e.target.value)}
           />
         </div>
         <div>
@@ -42,7 +41,7 @@ export const Signup = () => {
             placeholder="Password"
             required
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e): void => setPassword(e.target.value)}
           />
         </div>
 

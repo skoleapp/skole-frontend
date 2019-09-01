@@ -1,17 +1,17 @@
 import React from 'react';
-import { Layout, TopHeader } from '../organisms';
-import '../index.css';
-import { Signin, Signup } from '../templates';
 import { FlexBox } from '../atoms';
+import '../index.css';
+import { Layout, TopHeader } from '../organisms';
+import { Login, Register } from '../templates';
 
-const Login: React.SFC<{}> = () => (
+const Auth: React.SFC<{}> = () => (
   <Layout title="skole | Login">
     <TopHeader />
     <FlexBox justifyContent="center" flexDirection="column" alignItems="center">
-      <Signin></Signin>
-      <Signup></Signup>
+      <Login />
+      <Register />
     </FlexBox>
   </Layout>
 );
 
-export default Login;
+export default Auth;
