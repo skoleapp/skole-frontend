@@ -9,7 +9,7 @@ export default () => (
     <>
       <Header>
         <Flexbox justifyContent="flex-start">
-          <Link href="/loginpage">
+          <Link href="/login">
             <Button>Login</Button>
           </Link>
         </Flexbox>

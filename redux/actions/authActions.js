@@ -4,45 +4,39 @@ import { AUTHENTICATE, DEAUTHENTICATE, USER } from "../types";
 import { API } from "../../config";
 
 // register user
-const register = ({ username, email, password }, type) => {
+export const register = ({ username, email, password }, type) => {
   if (type !== "register") {
     throw new Error("Wrong API call!");
   }
-  return dispatch => {
-    axios
-      .post(`${API}/${type}`, { username, email, password })
-      .then(response => {
-        Router.push("/signin");
-        console.log(response.data.meta.message);
-      })
-      .catch(err => {
-        switch (error.response.status) {
-          case 422:
-            alert(error.response.data.meta.message);
-            break;
-          case 401:
-            alert(error.response.data.meta.message);
-            break;
-          case 500:
-            alert("Interval server error! Try again!");
-            break;
-          default:
-            alert(error.response.data.meta.message);
-            break;
-        }
-      });
-  };
+  //console.log(`${API}/${type}`, { username, email, password });
+
+  console.log("test");
+  axios
+    .post(`http://localhost:8000/api/user`, {
+      username,
+      email,
+      password
+    })
+    .then(response => {
+      console.log(response);
+      //Router.push("/signin");
+      //console.log(response.data.meta.message);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
+
 // gets token from the api and stores it in the redux store and in cookie
-const authenticate = ({ email, password }, type) => {
+export const authenticate = ({ email, password }, type) => {
   if (type !== "login") {
     throw new Error("Wrong API call!");
   }
   return dispatch => {
-    console.log(email_id);
     axios
       .post(`${API}/${type}`, { email, password })
       .then(response => {
+        console.log(response);
         console.log(response.data.data.user.token);
         //setCookie('token', response.data.data.user.token);
         Router.push("/users");
@@ -71,7 +65,7 @@ const authenticate = ({ email, password }, type) => {
   };
 };
 
-// gets the token from the cookie and saves it in the store
+/* // gets the token from the cookie and saves it in the store
 const reauthenticate = token => {
   return dispatch => {
     dispatch({ type: AUTHENTICATE, payload: token });
@@ -85,9 +79,9 @@ const deauthenticate = () => {
     Router.push("/");
     dispatch({ type: DEAUTHENTICATE });
   };
-};
+}; */
 
-const getUser = ({ token }, type) => {
+export const getUser = ({ token }, type) => {
   console.log(token);
   return dispatch => {
     axios
@@ -124,7 +118,5 @@ const getUser = ({ token }, type) => {
 export default {
   register,
   authenticate,
-  reauthenticate,
-  deauthenticate,
   getUser
 };

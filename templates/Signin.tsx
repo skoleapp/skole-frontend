@@ -10,7 +10,7 @@ export const Signin = (props: any) => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    authenticate({ email: email, password: password }, "signin");
+    authenticate({ email: email, password: password }, "login");
   };
 
   return (

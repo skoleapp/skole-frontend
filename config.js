@@ -1,3 +1,1 @@
-export const API = () => {
-  return "/api";
-};
+export const API = "/api";
