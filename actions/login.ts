@@ -26,7 +26,7 @@ export const login = (params: AuthParams) => async (dispatch: Dispatch): Promise
   //   }
 
   // This is just a mock
-  return new Promise<Response>(resolve =>
+  return new Promise<Response>((resolve): void =>
     resolve({
       user: 'test',
       token: 'test'
