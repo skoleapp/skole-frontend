@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "next",
     "lint": "eslint . --ext .js,.tsx,.ts",
-    "build-api": "openapi-generator generate -i docs/openapi.yaml -g typescript-axios -o openapi",
+    "build-api": "openapi-generator generate -i docs/openapi.yaml -g javascript -o openapi",
     "postinstall": "yarn run build-api"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "@types/styled-components": "^4.1.18",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-typescript": "^1.1.1",
+    "dotenv": "^8.1.0",
     "next": "^9.0.5",
     "next-redux-wrapper": "^3.0.0",
     "react": "^16.9.0",
