@@ -1,11 +1,11 @@
 import React from 'react';
-import { FlexBox, Card, Button } from '../atoms';
-import { Login } from '../organisms';
+import { Login } from '.';
+import { Button, Card, FlexBox } from '../atoms';
 
-export const Loginbox: React.SFC<{}> = () => (
+export const LoginBox: React.SFC<{}> = () => (
   <Card>
     <FlexBox justifyContent="center">
-      <Login></Login>
+      <Login />
     </FlexBox>
     <FlexBox justifyContent="center">
       <Button>Register</Button>
