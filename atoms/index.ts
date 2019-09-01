@@ -1,7 +1,7 @@
 export { Animated } from './Animated';
 export { Button } from './Button';
 export { Card } from './Card';
-export { FlexBox } from './FlexBox';
+export { Flexbox } from './Flexbox';
 export { Header } from './Header';
 export { Input } from './Input';
 export { Title } from './Title';

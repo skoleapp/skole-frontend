@@ -1,14 +1,14 @@
 import React from 'react';
 import { Login } from '.';
-import { Button, Card, FlexBox } from '../atoms';
+import { Button, Card, Flexbox } from '../atoms';
 
 export const LoginBox: React.SFC<{}> = () => (
   <Card>
-    <FlexBox justifyContent="center">
+    <Flexbox justifyContent="center">
       <Login />
-    </FlexBox>
-    <FlexBox justifyContent="center">
+    </Flexbox>
+    <Flexbox justifyContent="center">
       <Button>Register</Button>
-    </FlexBox>
+    </Flexbox>
   </Card>
 );

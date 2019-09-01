@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlexBox } from '../atoms';
+import { Flexbox } from '../atoms';
 import '../index.css';
 import { Layout, TopHeader } from '../organisms';
 import { Login, Register } from '../templates';
@@ -7,10 +7,10 @@ import { Login, Register } from '../templates';
 const Auth: React.SFC<{}> = () => (
   <Layout title="skole | Login">
     <TopHeader />
-    <FlexBox justifyContent="center" flexDirection="column" alignItems="center">
+    <Flexbox justifyContent="center" flexDirection="column" alignItems="center">
       <Login />
       <Register />
-    </FlexBox>
+    </Flexbox>
   </Layout>
 );
 
