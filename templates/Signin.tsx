@@ -1,7 +1,6 @@
 import React, { useState, SyntheticEvent } from 'react';
-import actions from '../redux/actions';
-
 import { useDispatch } from 'react-redux';
+import actions from '../redux/actions';
 
 export const Signin = () => {
   const [email, setEmail] = useState('');

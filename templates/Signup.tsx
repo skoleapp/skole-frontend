@@ -1,5 +1,5 @@
 import React, { useState, SyntheticEvent } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import actions from '../redux/actions';
 
 export const Signup = () => {
@@ -11,7 +11,6 @@ export const Signup = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-
     dispatch(
       actions.register({ username: username, email: email, password: password }, 'register')
     );
@@ -54,8 +53,3 @@ export const Signup = () => {
     </div>
   );
 };
-
-export default connect(
-  state => state,
-  actions
-)(Signup);
