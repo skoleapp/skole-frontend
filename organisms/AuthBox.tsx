@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, FlexBox, Title } from '../atoms';
+import { Card, FlexBox, Title, Anchor } from '../atoms';
 import { Login, Register } from '../templates';
 
 export const AuthBox: React.SFC<{}> = () => {
@@ -14,30 +14,32 @@ export const AuthBox: React.SFC<{}> = () => {
         alignItems="center"
         style={{ height: '100%' }}
       >
-        <Title>Skole</Title>
+        <Title font="none" margin="30px 0px 0px 0px">
+          Skole
+        </Title>
 
         {loginOpen && !registerOpen && <Login />}
         {registerOpen && !loginOpen && <Register />}
 
         {!loginOpen && (
-          <Button
+          <Anchor
             onClick={() => {
               setLoginOpen(true);
               setRegisterOpen(false);
             }}
           >
-            Kirjaudu sisään
-          </Button>
+            Löytyykö jo käyttäjä?
+          </Anchor>
         )}
         {!registerOpen && (
-          <Button
+          <Anchor
             onClick={() => {
               setRegisterOpen(true);
               setLoginOpen(false);
             }}
           >
-            Rekisteröidy
-          </Button>
+            Uusi käyttäjä?
+          </Anchor>
         )}
       </FlexBox>
     </Card>

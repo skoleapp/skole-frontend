@@ -7,7 +7,7 @@ const Auth: React.SFC<{}> = () => (
   <Layout title="skole | Authentication">
     <TopHeader />
     <Background />
-    <Centered>
+    <Centered top="40%">
       <AuthBox />
     </Centered>
   </Layout>

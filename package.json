@@ -21,6 +21,7 @@
     "@types/styled-components": "^4.1.18",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-typescript": "^1.1.1",
+    "formik": "^1.5.8",
     "next": "^9.0.5",
     "next-redux-wrapper": "^3.0.0",
     "react": "^16.9.0",

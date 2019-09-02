@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../actions';
-import { FlexBox } from '../atoms';
+import { FlexBox, Input, Button } from '../atoms';
 
 export const Register: React.FC<{}> = () => {
   const [username, setUsername] = useState('');
@@ -16,35 +16,38 @@ export const Register: React.FC<{}> = () => {
 
   return (
     <form onSubmit={(e): void => handleSubmit(e)}>
-      <FlexBox justifyContent="center">
-        <input
+      <FlexBox justifyContent="center" flexDirection="column">
+        <Input
           type="text"
-          placeholder="Käyttäjänimi"
           required
+          placeholder="Käyttäjänimi"
+          animation
           value={username}
           onChange={(e): void => setUsername(e.target.value)}
         />
       </FlexBox>
-      <FlexBox justifyContent="center">
-        <input
+      <FlexBox justifyContent="center" flexDirection="column">
+        <Input
           type="email"
-          placeholder="Sähköposti"
           required
+          placeholder="Sähköposti"
+          animation
           value={email}
           onChange={(e): void => setEmail(e.target.value)}
         />
       </FlexBox>
-      <FlexBox justifyContent="center">
-        <input
+      <FlexBox justifyContent="center" flexDirection="column">
+        <Input
           type="password"
-          placeholder="Salasana"
           required
+          placeholder="Salasana"
+          animation
           value={password}
           onChange={(e): void => setPassword(e.target.value)}
         />
       </FlexBox>
       <FlexBox justifyContent="center">
-        <button type="submit">Rekisteröidy</button>
+        <Button type="submit">Rekisteröidy</Button>
       </FlexBox>
     </form>
   );

@@ -1,8 +1,18 @@
-import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
-export const Background = styled.div`
+interface GlobalStyleProps {
+  color?: string;
+}
+export const Background = createGlobalStyle<GlobalStyleProps>`
+  body {
+    background-color: ${props => (props.color ? props.color : 'PapayaWhip')};
+  }
+`;
+
+/* export const Background = styled.div`
   height: 100%;
   width: 100%;
+  background-color: tan;
   background: url('https://www.fftelecoms.org/app/uploads/2014/02/portable_addiction_nouvelles_technologies.jpg')
     no-repeat center center fixed;
   -webkit-background-size: cover;
@@ -15,3 +25,4 @@ export const Background = styled.div`
   top: 0px;
   z-index: -1;
 `;
+ */
