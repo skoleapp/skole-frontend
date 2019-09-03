@@ -1,17 +1,23 @@
-import Link from 'next/link';
 import React from 'react';
+import Link from 'next/link';
 import { Button, Flexbox, Header } from '../atoms';
 
 // should include Login/Signup or account in the left
 // Skole icon in the center
 // Dropdown menu in the right
+// if logged in, show account
+const isLoggedIn = false;
 
 export const TopHeader: React.SFC<{}> = () => (
   <Header>
-    <Flexbox justifyContent="space-between" alignItems="center">
-      <Link href="/login">
-        <Button width="100px">Login</Button>
-      </Link>
+    <Flexbox justifyContent="space-between" alignItems="center" height="100%">
+      {!isLoggedIn ? (
+        <Link href="/auth">
+          <Button width="100px">Login</Button>
+        </Link>
+      ) : (
+        <div>Logged in !</div>
+      )}
       <Link href="/">
         <Button width="100px">Skole</Button>
       </Link>

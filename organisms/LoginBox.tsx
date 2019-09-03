@@ -1,5 +1,5 @@
 import React from 'react';
-import { Login } from '.';
+import { Login } from '../templates';
 import { Button, Card, Flexbox } from '../atoms';
 
 export const LoginBox: React.SFC<{}> = () => (

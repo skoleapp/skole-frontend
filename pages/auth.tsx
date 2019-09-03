@@ -1,16 +1,15 @@
 import React from 'react';
-import { Flexbox } from '../atoms';
+import { Centered, Background } from '../atoms';
 import '../index.css';
-import { Layout, TopHeader } from '../organisms';
-import { Login, Register } from '../templates';
+import { Layout, TopHeader, AuthBox } from '../organisms';
 
 const Auth: React.SFC<{}> = () => (
-  <Layout title="skole | Login">
+  <Layout title="skole | Authentication">
     <TopHeader />
-    <Flexbox justifyContent="center" flexDirection="column" alignItems="center">
-      <Login />
-      <Register />
-    </Flexbox>
+    <Background />
+    <Centered top="40%">
+      <AuthBox />
+    </Centered>
   </Layout>
 );
 

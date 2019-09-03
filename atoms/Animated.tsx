@@ -1,4 +1,9 @@
-import styled, { AnimatedProps } from 'styled-components';
+import styled from 'styled-components';
+
+interface AnimatedProps {
+  launch: boolean;
+  time?: number;
+}
 
 export const Animated = styled.div<AnimatedProps>`
   opacity: ${(props): number => (props.launch ? 1 : 0)};
