@@ -1,6 +1,7 @@
 import React, { SyntheticEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../actions';
+import { Flexbox, Input, Button } from '../atoms';
 
 export const Register: React.FC<{}> = () => {
   const [username, setUsername] = useState('');
@@ -14,39 +15,40 @@ export const Register: React.FC<{}> = () => {
   };
 
   return (
-    <div>
-      <h3>Sign Up</h3>
-      <form onSubmit={(e): void => handleSubmit(e)}>
-        <div>
-          <input
-            type="text"
-            placeholder="username"
-            required
-            value={username}
-            onChange={(e): void => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type="email"
-            placeholder="Email"
-            required
-            value={email}
-            onChange={(e): void => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            required
-            value={password}
-            onChange={(e): void => setPassword(e.target.value)}
-          />
-        </div>
-
-        <button type="submit">Register</button>
-      </form>
-    </div>
+    <form onSubmit={(e): void => handleSubmit(e)}>
+      <Flexbox justifyContent="center" flexDirection="column">
+        <Input
+          type="text"
+          required
+          placeholder="Käyttäjänimi"
+          animation
+          value={username}
+          onChange={(e): void => setUsername(e.target.value)}
+        />
+      </Flexbox>
+      <Flexbox justifyContent="center" flexDirection="column">
+        <Input
+          type="email"
+          required
+          placeholder="Sähköposti"
+          animation
+          value={email}
+          onChange={(e): void => setEmail(e.target.value)}
+        />
+      </Flexbox>
+      <Flexbox justifyContent="center" flexDirection="column">
+        <Input
+          type="password"
+          required
+          placeholder="Salasana"
+          animation
+          value={password}
+          onChange={(e): void => setPassword(e.target.value)}
+        />
+      </Flexbox>
+      <Flexbox justifyContent="center">
+        <Button type="submit">Rekisteröidy</Button>
+      </Flexbox>
+    </form>
   );
 };

@@ -1,4 +1,4 @@
-export { LoginBox } from '../organisms/LoginBox';
+export { AuthBox } from '../organisms/AuthBox';
 export { LandingPage } from './LandingPage';
 export { ListSchools } from './ListSchools';
 export { Login } from './Login';
