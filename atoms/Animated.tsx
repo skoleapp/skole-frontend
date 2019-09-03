@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-declare interface AnimatedProps {
+interface AnimatedProps {
   launch: boolean;
   time?: number;
 }

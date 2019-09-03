@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Header = styled.div`
+interface HeaderProps {
+  isLoggedIn?: boolean;
+}
+
+export const Header = styled.div<HeaderProps>`
   top: 0px;
   background-color: cadetblue;
   position: sticky;

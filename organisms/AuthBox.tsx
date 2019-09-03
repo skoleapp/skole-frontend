@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Flexbox, Title, Anchor } from '../atoms';
+import { Card, Flexbox, Title, Anchor, Subtitle } from '../atoms';
 import { Login, Register } from '../templates';
 
 export const AuthBox: React.SFC<{}> = () => {
@@ -17,6 +17,9 @@ export const AuthBox: React.SFC<{}> = () => {
         <Title font="none" margin="30px 0px 0px 0px">
           Skole
         </Title>
+        <Subtitle size={20} font="none" margin="0">
+          ebin
+        </Subtitle>
 
         {loginOpen && !registerOpen && <Login />}
         {registerOpen && !loginOpen && <Register />}
