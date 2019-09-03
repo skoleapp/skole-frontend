@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Flexbox, Title, Anchor, Subtitle } from '../atoms';
+import { Anchor, Card, Flexbox, Subtitle, Title } from '../atoms';
 import { Login, Register } from '../templates';
 
 export const AuthBox: React.SFC<{}> = () => {
@@ -26,7 +26,7 @@ export const AuthBox: React.SFC<{}> = () => {
 
         {!loginOpen && (
           <Anchor
-            onClick={() => {
+            onClick={(): void => {
               setLoginOpen(true);
               setRegisterOpen(false);
             }}
@@ -36,7 +36,7 @@ export const AuthBox: React.SFC<{}> = () => {
         )}
         {!registerOpen && (
           <Anchor
-            onClick={() => {
+            onClick={(): void => {
               setRegisterOpen(true);
               setLoginOpen(false);
             }}
