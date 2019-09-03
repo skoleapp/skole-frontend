@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-interface FlexBoxProps {
+interface FlexboxProps {
   justifyContent?: string;
   alignItems?: string;
   alignContent?: string;
@@ -11,7 +11,7 @@ interface FlexBoxProps {
   bottom?: string;
 }
 
-export const FlexBox = styled.div<FlexBoxProps>`
+export const Flexbox = styled.div<FlexboxProps>`
   display: flex;
   justify-content: ${(props): string | undefined => props.justifyContent};
   align-items: ${(props): string | undefined => props.alignItems};

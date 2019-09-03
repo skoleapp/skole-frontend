@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../actions';
-import { FlexBox, Input, Button } from '../atoms';
+import { Flexbox, Input, Button } from '../atoms';
 
 export const Register: React.FC<{}> = () => {
   const [username, setUsername] = useState('');
@@ -16,7 +16,7 @@ export const Register: React.FC<{}> = () => {
 
   return (
     <form onSubmit={(e): void => handleSubmit(e)}>
-      <FlexBox justifyContent="center" flexDirection="column">
+      <Flexbox justifyContent="center" flexDirection="column">
         <Input
           type="text"
           required
@@ -25,8 +25,8 @@ export const Register: React.FC<{}> = () => {
           value={username}
           onChange={(e): void => setUsername(e.target.value)}
         />
-      </FlexBox>
-      <FlexBox justifyContent="center" flexDirection="column">
+      </Flexbox>
+      <Flexbox justifyContent="center" flexDirection="column">
         <Input
           type="email"
           required
@@ -35,8 +35,8 @@ export const Register: React.FC<{}> = () => {
           value={email}
           onChange={(e): void => setEmail(e.target.value)}
         />
-      </FlexBox>
-      <FlexBox justifyContent="center" flexDirection="column">
+      </Flexbox>
+      <Flexbox justifyContent="center" flexDirection="column">
         <Input
           type="password"
           required
@@ -45,10 +45,10 @@ export const Register: React.FC<{}> = () => {
           value={password}
           onChange={(e): void => setPassword(e.target.value)}
         />
-      </FlexBox>
-      <FlexBox justifyContent="center">
+      </Flexbox>
+      <Flexbox justifyContent="center">
         <Button type="submit">Rekisteröidy</Button>
-      </FlexBox>
+      </Flexbox>
     </form>
   );
 };

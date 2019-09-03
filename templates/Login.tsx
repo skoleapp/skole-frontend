@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 //import { useDispatch } from 'react-redux';
 //import { login } from '../actions';
-import { FlexBox, Input, Button } from '../atoms';
+import { Flexbox, Input, Button } from '../atoms';
 import Router from 'next/router';
 
 export const Login: React.FC<{}> = () => {
@@ -18,7 +18,7 @@ export const Login: React.FC<{}> = () => {
 
   return (
     <form onSubmit={(e): void => handleSubmit(e)}>
-      <FlexBox justifyContent="center" flexDirection="column">
+      <Flexbox justifyContent="center" flexDirection="column">
         <Input
           type="email"
           placeholder="Sähköposti"
@@ -27,8 +27,8 @@ export const Login: React.FC<{}> = () => {
           value={email}
           onChange={(e): void => setEmail(e.target.value)}
         />
-      </FlexBox>
-      <FlexBox justifyContent="center" flexDirection="column">
+      </Flexbox>
+      <Flexbox justifyContent="center" flexDirection="column">
         <Input
           type="password"
           placeholder="Salasana"
@@ -37,10 +37,10 @@ export const Login: React.FC<{}> = () => {
           value={password}
           onChange={(e): void => setPassword(e.target.value)}
         />
-      </FlexBox>
-      <FlexBox justifyContent="center">
+      </Flexbox>
+      <Flexbox justifyContent="center">
         <Button type="submit">Kirjaudu sisään</Button>
-      </FlexBox>
+      </Flexbox>
     </form>
   );
 };

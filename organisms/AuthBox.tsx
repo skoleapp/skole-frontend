@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, FlexBox, Title, Anchor } from '../atoms';
+import { Card, Flexbox, Title, Anchor } from '../atoms';
 import { Login, Register } from '../templates';
 
 export const AuthBox: React.SFC<{}> = () => {
@@ -8,7 +8,7 @@ export const AuthBox: React.SFC<{}> = () => {
 
   return (
     <Card>
-      <FlexBox
+      <Flexbox
         justifyContent="space-between"
         flexDirection="column"
         alignItems="center"
@@ -41,7 +41,7 @@ export const AuthBox: React.SFC<{}> = () => {
             Uusi käyttäjä?
           </Anchor>
         )}
-      </FlexBox>
+      </Flexbox>
     </Card>
   );
 };

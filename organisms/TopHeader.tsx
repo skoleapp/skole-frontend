@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, FlexBox, Button } from '../atoms';
+import { Header, Flexbox, Button } from '../atoms';
 import Link from 'next/link';
 
 // should include Login/Signup or account in the left
@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export const TopHeader: React.SFC<{}> = () => (
   <Header>
-    <FlexBox justifyContent="space-between" alignItems="center" height="100%">
+    <Flexbox justifyContent="space-between" alignItems="center" height="100%">
       <Link href="/auth">
         <Button width="100px">Login</Button>
       </Link>
@@ -18,7 +18,7 @@ export const TopHeader: React.SFC<{}> = () => (
       <Link href="/search-schools">
         <Button width="100px">=</Button>
       </Link>
-    </FlexBox>
+    </Flexbox>
   </Header>
 );
 export default TopHeader;
