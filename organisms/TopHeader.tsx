@@ -1,6 +1,6 @@
 import React from 'react';
-import { Header, Flexbox, Button } from '../atoms';
 import Link from 'next/link';
+import { Button, Flexbox, Header } from '../atoms';
 
 // should include Login/Signup or account in the left
 // Skole icon in the center
