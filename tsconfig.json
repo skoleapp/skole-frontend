@@ -21,5 +21,12 @@
     "isolatedModules": true
   },
   "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "store/index.js",
+    "pages/_app.js",
+    "skole-api.js"
+  ]
 }

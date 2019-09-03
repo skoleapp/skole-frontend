@@ -1,5 +1,4 @@
-require('dotenv').config();
-import { updatePet } from './openapi/src';
+import { updatePet } from './openapi/api';
 
 const PROD_BASE_PATH = 'https://api.skole.fi/';
 const DEV_BASE_PATH = 'http://localhost:8000/api';
@@ -15,7 +14,6 @@ const apiFactory = module => {
 };
 
 // TODO: Add API endpoints like below
-
 const SkoleApi = {
   UpdatePetAPI: apiFactory(updatePet)
 };
