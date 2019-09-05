@@ -20,6 +20,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "exclude": ["node_modules", "openapi"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "exclude": ["node_modules"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "store/index.js", "pages/_app.js"]
 }
