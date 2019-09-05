@@ -1,7 +1,7 @@
 import React from 'react';
-import { Title, Background } from '../atoms';
+import { Background, Title } from '../components/atoms';
+import { Layout, TopHeader } from '../components/organisms';
 import '../index.css';
-import { Layout, TopHeader } from '../organisms';
 
 const Account: React.SFC<{}> = () => (
   <Layout title="skole | account">

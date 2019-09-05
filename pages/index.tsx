@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { NextPage } from 'next';
 import React from 'react';
-import { Background } from '../atoms';
+import { Background } from '../components/atoms';
+import { Layout, TopHeader } from '../components/organisms';
+import { LandingPage } from '../components/templates';
 import '../index.css';
-import { Layout, TopHeader } from '../organisms';
-import { LandingPage } from '../templates';
 
 interface Data {
   completed: boolean;

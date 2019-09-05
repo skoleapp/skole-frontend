@@ -1,7 +1,7 @@
 import React from 'react';
-import { Title } from '../atoms';
+import { Title } from '../components/atoms';
+import { Layout, TopHeader } from '../components/organisms';
 import '../index.css';
-import { Layout, TopHeader } from '../organisms';
 
 const EditAccount: React.SFC<{}> = () => (
   <Layout title="skole | account">
