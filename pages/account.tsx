@@ -1,6 +1,5 @@
 import React from 'react';
-import { Background, Title } from '../components/atoms';
-import { Layout, TopHeader } from '../components/organisms';
+import { Background, Layout, Title, TopHeader } from '../components';
 import '../index.css';
 
 const Account: React.SFC<{}> = () => (

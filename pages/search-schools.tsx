@@ -1,7 +1,6 @@
 import React from 'react';
+import { Layout, ListSchools, TopHeader } from '../components';
 import { Background } from '../components/atoms';
-import { Layout, TopHeader } from '../components/organisms';
-import { ListSchools } from '../components/templates';
 import '../index.css';
 
 const SearchSchools: React.SFC<{}> = () => (

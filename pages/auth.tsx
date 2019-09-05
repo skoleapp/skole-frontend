@@ -1,6 +1,5 @@
 import React from 'react';
-import { Background, Centered } from '../components/atoms';
-import { AuthBox, Layout, TopHeader } from '../components/organisms';
+import { AuthBox, Background, Centered, Layout, TopHeader } from '../components';
 import '../index.css';
 
 const Auth: React.SFC<{}> = () => (

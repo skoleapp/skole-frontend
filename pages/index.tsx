@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { NextPage } from 'next';
 import React from 'react';
-import { Background } from '../components/atoms';
-import { Layout, TopHeader } from '../components/organisms';
+import { Background, Layout, TopHeader } from '../components';
 import { LandingPage } from '../components/templates';
 import '../index.css';
 
