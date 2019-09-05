@@ -15,7 +15,7 @@ export const Input = styled.input<InputProps>`
   margin: 7px;
   transition: all 0.2s;
   &:hover {
-    transform: ${props => (props.animation ? 'scale(1.1)' : 'none')};
+    transform: ${(props): string => (props.animation ? 'scale(1.1)' : 'none')};
   }
   &:focus {
     transform: scale(1.1);

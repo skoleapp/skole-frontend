@@ -5,7 +5,8 @@ interface GlobalStyleProps {
 }
 export const Background = createGlobalStyle<GlobalStyleProps>`
   body {
-    background-color: ${props => (props.color ? props.color : 'PapayaWhip')};
+    background-color: ${(props: GlobalStyleProps): string =>
+      props.color ? props.color : 'PapayaWhip'};
   }
 `;
 
