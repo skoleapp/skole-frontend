@@ -1,6 +1,5 @@
 import React from 'react';
-import { Layout, ListSchools, TopHeader } from '../components';
-import { Background } from '../components/atoms';
+import { Background, Layout, ListSchools, TopHeader } from '../components';
 import '../index.css';
 
 const SearchSchools: React.SFC<{}> = () => (

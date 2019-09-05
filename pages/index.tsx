@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { NextPage } from 'next';
 import React from 'react';
-import { Background, Layout, TopHeader } from '../components';
-import { LandingPage } from '../components/templates';
+import { Background, LandingPage, Layout, TopHeader } from '../components';
 import '../index.css';
 
 interface Data {
