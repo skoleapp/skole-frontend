@@ -1,16 +1,24 @@
 import { AnyAction } from 'redux';
 import { LOGIN_USER, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS } from '../actions/types';
 
+interface User {
+  id: string;
+  username: string;
+  email: string;
+}
+
 interface AuthState {
-  user: string | null;
+  user: User | null;
   token: string | null;
+  isLoggedIn: boolean | null;
   loading: boolean | null;
   error: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem('token'),
+  token: null,
+  isLoggedIn: null,
   loading: null,
   error: null
 };

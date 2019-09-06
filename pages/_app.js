@@ -4,9 +4,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { initStore } from '../redux';
 
-class ConnectedApp extends App {
+class AppProvider extends App {
   render() {
     const { Component, pageProps, store } = this.props;
+
     return (
       <Provider store={store}>
         <Component {...pageProps} />
@@ -15,7 +16,7 @@ class ConnectedApp extends App {
   }
 }
 
-ConnectedApp.getInitialProps = async ({ Component, ctx }) => {
+AppProvider.getInitialProps = async ({ Component, ctx }) => {
   return {
     pageProps: {
       ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
@@ -23,4 +24,4 @@ ConnectedApp.getInitialProps = async ({ Component, ctx }) => {
   };
 };
 
-export default withRedux(initStore, { debug: false })(ConnectedApp);
+export default withRedux(initStore, { debug: false })(AppProvider);
