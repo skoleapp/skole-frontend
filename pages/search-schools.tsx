@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout, ListSchools } from '../components';
 import '../index.css';
 
-const SearchSchools: React.SFC<{}> = () => (
+const SearchSchools: React.FC = () => (
   <Layout title="skole | ebin oppimisalusta">
     <ListSchools />
   </Layout>

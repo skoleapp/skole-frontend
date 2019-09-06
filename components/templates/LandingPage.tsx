@@ -1,8 +1,8 @@
 import React from 'react';
-import { Title, Wrapper, Centered, Input } from '../atoms';
+import { Centered, Input, Title, Wrapper } from '../atoms';
 import { IntersectingWrapper } from '../molecules';
 
-export const LandingPage: React.SFC<{}> = () => {
+export const LandingPage: React.FC = () => {
   return (
     <Wrapper>
       <IntersectingWrapper time={2}>

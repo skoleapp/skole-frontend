@@ -1,8 +1,8 @@
 import React from 'react';
-import { Login } from '../templates';
 import { Button, Card, Flexbox } from '../atoms';
+import { Login } from '../templates';
 
-export const LoginBox: React.SFC<{}> = () => (
+export const LoginBox: React.FC = () => (
   <Card>
     <Flexbox justifyContent="center">
       <Login />
