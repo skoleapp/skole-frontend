@@ -1,7 +1,6 @@
 import React from 'react';
-import { Centered, Background } from '../atoms';
+import { AuthBox, Background, Centered, Layout, TopHeader } from '../components';
 import '../index.css';
-import { Layout, TopHeader, AuthBox } from '../organisms';
 
 const Auth: React.SFC<{}> = () => (
   <Layout title="skole | Authentication">

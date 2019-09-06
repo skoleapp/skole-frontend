@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Head } from '.';
+import { Head } from '../organisms';
 
 interface Props {
   title: string;

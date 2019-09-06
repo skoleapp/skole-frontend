@@ -1,8 +1,6 @@
 import React from 'react';
+import { Background, Layout, ListSchools, TopHeader } from '../components';
 import '../index.css';
-import { Layout, TopHeader } from '../organisms';
-import { ListSchools } from '../templates';
-import { Background } from '../atoms';
 
 const SearchSchools: React.SFC<{}> = () => (
   <Layout title="skole | ebin oppimisalusta">
