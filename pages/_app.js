@@ -16,14 +16,6 @@ const UserProvider = ({ pageProps, Component }) => {
 };
 
 class StoreProvider extends App {
-  static async getInitialProps({ Component, ctx }) {
-    return {
-      pageProps: {
-        ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
-      }
-    };
-  }
-
   render() {
     const { Component, pageProps, store } = this.props;
 
@@ -34,5 +26,13 @@ class StoreProvider extends App {
     );
   }
 }
+
+StoreProvider.getInitialProps = async ({ Component, ctx }) => {
+  return {
+    pageProps: {
+      ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
+    }
+  };
+};
 
 export default withRedux(initStore, { debug: false })(StoreProvider);
