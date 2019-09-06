@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import { LOGIN } from '../actions/types';
+import { LOGIN_USER, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS } from '../actions/types';
 
 interface AuthState {
   user: string | null;
@@ -10,15 +10,19 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: null,
+  token: localStorage.getItem('token'),
   loading: null,
   error: null
 };
 
 export default (state = initialState, action: AnyAction): AuthState => {
   switch (action.type) {
-    case LOGIN:
-      return { ...state, token: action.payload };
+    case LOGIN_USER:
+      return { ...state, loading: true };
+    case LOGIN_USER_SUCCESS:
+      return { ...state, token: action.payload, loading: false };
+    case LOGIN_USER_ERROR:
+      return { ...state, error: action.payload, loading: false };
     default:
       return state;
   }
