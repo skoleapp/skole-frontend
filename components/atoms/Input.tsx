@@ -14,10 +14,13 @@ export const Input = styled.input<InputProps>`
   border-radius: 3px;
   margin: 7px;
   transition: all 0.2s;
+  text-align: center;
+
   &:hover {
-    transform: ${(props): string => (props.animation ? 'scale(1.1)' : 'none')};
+    transform: ${(props): string => (props.animation ? 'var(--scale)' : 'none')};
   }
+
   &:focus {
-    transform: scale(1.1);
+    transform: var(--scale);
   }
 `;

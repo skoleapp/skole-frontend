@@ -14,6 +14,7 @@ export const Anchor = styled.a<AnchorProps>`
   margin: ${(props): string => (props.margin ? props.margin : '22px')};
   text-align: ${(props): string => (props.textAlign ? props.textAlign : 'center')};
   text-decoration: none;
+
   &:hover {
     cursor: pointer;
     text-decoration: underline;

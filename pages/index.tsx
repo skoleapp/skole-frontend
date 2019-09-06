@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { NextPage } from 'next';
 import React from 'react';
-import { Background, LandingPage, Layout, TopHeader } from '../components';
+import { LandingPage, Layout } from '../components';
 import '../index.css';
 
 interface Data {
@@ -20,8 +20,6 @@ const Index: NextPage<Props> = ({ data }) => {
 
   return (
     <Layout title="skole | ebin oppimisalusta">
-      <TopHeader />
-      <Background />
       <LandingPage />
     </Layout>
   );
