@@ -32,7 +32,7 @@ const UserProvider = ({ pageProps, Component }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    dispatch(getUser(token));
+    token && dispatch(getUser(token));
     return () => {
       localStorage.clear();
     };
