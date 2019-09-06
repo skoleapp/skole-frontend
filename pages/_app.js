@@ -1,7 +1,9 @@
+import withRedux from 'next-redux-wrapper';
 import App from 'next/app';
 import React, { useEffect } from 'react';
 import { Provider, useDispatch } from 'react-redux';
-import { getUser } from '../redux';
+import '../index.css';
+import { getUser, initStore } from '../redux';
 
 // Here we can use redux actions - load user automatically
 const UserProvider = ({ pageProps, Component }) => {
