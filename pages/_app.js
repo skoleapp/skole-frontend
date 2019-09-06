@@ -33,9 +33,6 @@ const UserProvider = ({ pageProps, Component }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     token && dispatch(getUser(token));
-    return () => {
-      localStorage.clear();
-    };
   }, []);
 
   return <Component {...pageProps} />;
