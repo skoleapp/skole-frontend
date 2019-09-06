@@ -1,9 +1,7 @@
-import { NextPage } from 'next';
 import React from 'react';
 import { LandingPage, Layout } from '../components';
-import '../index.css';
 
-const Index: NextPage = () => (
+const Index: React.FC = () => (
   <Layout title="skole | ebin oppimisalusta">
     <LandingPage />
   </Layout>

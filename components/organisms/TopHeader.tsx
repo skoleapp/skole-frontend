@@ -1,5 +1,5 @@
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
 import { Button, Flexbox, Header } from '../atoms';
 
 // should include Login/Signup or account in the left
@@ -8,7 +8,7 @@ import { Button, Flexbox, Header } from '../atoms';
 // if logged in, show account
 const isLoggedIn = false;
 
-export const TopHeader: React.SFC<{}> = () => (
+export const TopHeader: React.FC = () => (
   <Header>
     <Flexbox justifyContent="space-between" alignItems="center" height="100%">
       {!isLoggedIn ? (

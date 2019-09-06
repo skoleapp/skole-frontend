@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { register } from '../../redux';
 import { Button, Flexbox, Input } from '../atoms';
 
-export const Register: React.FC<{}> = () => {
+export const Register: React.FC = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

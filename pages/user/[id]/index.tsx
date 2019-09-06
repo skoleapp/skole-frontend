@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import React from 'react';
 import { Header, Layout } from '../../../components';
 
 // Navigate dynamic URLs like this
-export default () => {
+const User: React.FC = () => {
   const router = useRouter();
 
   const id1 = 1;
@@ -22,3 +23,5 @@ export default () => {
     </Layout>
   );
 };
+
+export default User;

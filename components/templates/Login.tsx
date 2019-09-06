@@ -1,31 +1,37 @@
 import React, { FormEvent, useState } from 'react';
-//import { useDispatch } from 'react-redux';
-//import { login } from '../actions';
-import { Flexbox, Input, Button } from '../atoms';
-import Router from 'next/router';
+import { useDispatch } from 'react-redux';
+import { login } from '../../redux';
+import { Button, Flexbox, Input } from '../atoms';
 
-export const Login: React.FC<{}> = () => {
-  const [email, setEmail] = useState('');
+export const Login: React.FC = () => {
+  const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    Router.push('/account');
-    //dispatch(login({ email, password }));
+
+    dispatch(
+      login({
+        usernameOrEmail,
+        password
+      })
+    );
+
+    // Router.push('/account');
   };
 
   return (
     <form onSubmit={(e): void => handleSubmit(e)}>
       <Flexbox justifyContent="center" flexDirection="column">
         <Input
-          type="email"
+          type="text"
           placeholder="Sähköposti"
           animation
           required
-          value={email}
-          onChange={(e): void => setEmail(e.target.value)}
+          value={usernameOrEmail}
+          onChange={(e): void => setUsernameOrEmail(e.target.value)}
         />
       </Flexbox>
       <Flexbox justifyContent="center" flexDirection="column">

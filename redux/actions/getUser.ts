@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import { getApiUrl } from '../../utils';
 import { GET_USER, GET_USER_ERROR, GET_USER_SUCCESS } from './types';
 
-export const getUser = (token: string) => async (dispatch: Dispatch) => {
+export const getUser = (token: string) => async (dispatch: Dispatch): Promise<void> => {
   dispatch({ type: GET_USER });
 
   const url = getApiUrl('get-user');

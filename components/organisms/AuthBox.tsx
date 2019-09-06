@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Anchor, Card, Flexbox, Subtitle, Title } from '../atoms';
 import { Login, Register } from '../templates';
 
-export const AuthBox: React.SFC<{}> = () => {
+export const AuthBox: React.FC = () => {
   const [loginOpen, setLoginOpen] = useState(true);
   const [registerOpen, setRegisterOpen] = useState(false);
 
