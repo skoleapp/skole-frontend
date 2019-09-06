@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { register } from '../../actions';
+import { register } from '../../redux';
 import { Button, Flexbox, Input } from '../atoms';
 
 export const Register: React.FC<{}> = () => {
