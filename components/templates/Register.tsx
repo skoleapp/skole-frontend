@@ -5,21 +5,21 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { register } from '../../redux';
 
+const registerSchema = Yup.object().shape({
+  username: Yup.string().required('Username is required'),
+  email: Yup.string()
+    .email('Email is invalid')
+    .required('Email is required'),
+  password: Yup.string()
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Passwords must match')
+});
+
 export const Register: React.FC = () => {
   const dispatch = useDispatch();
-
-  const registerSchema = Yup.object().shape({
-    username: Yup.string().required('Username is required'),
-    email: Yup.string()
-      .email('Email is invalid')
-      .required('Email is required'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Passwords must match')
-  });
 
   return (
     <Formik

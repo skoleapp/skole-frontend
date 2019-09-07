@@ -5,13 +5,14 @@ import { login } from '../../redux';
 import { Flexbox, Input } from '../atoms';
 import { Formik, Form, ErrorMessage } from 'formik';
 
+const loginSchema = Yup.object().shape({
+  usernameOrEmail: Yup.string().required('Username or email is required'),
+  password: Yup.string().required('Password is required')
+});
+
 export const Login: React.FC = () => {
   const dispatch = useDispatch();
 
-  const loginSchema = Yup.object().shape({
-    usernameOrEmail: Yup.string().required('Username or email is required'),
-    password: Yup.string().required('Password is required')
-  });
   return (
     <Formik
       initialValues={{
