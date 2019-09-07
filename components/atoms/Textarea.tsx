@@ -11,9 +11,9 @@ interface TextAreaProps {
 
 const StyledTextarea = styled.textarea`
   maxlength: ${(props): number | undefined => props.maxLength};
-  cols: ${(props): number | undefined => props.cols}
-  cols: ${(props): number | undefined => props.rows}
-
+  cols: ${(props): number | undefined => props.cols};
+  rows: ${(props): number | undefined => props.rows};
+  resize: none;
 `;
 
 export const Textarea: React.FC<TextAreaProps> = ({
