@@ -1,12 +1,11 @@
-import React, { ReactChild, useEffect, useRef, useState } from 'react';
-import { Animated } from '../atoms';
+import React, { useEffect, useRef, useState } from 'react';
+import { AnimatedDiv } from '../atoms';
 interface Props {
-  children: ReactChild;
   time?: number;
 }
 
 export const IntersectingWrapper: React.FC<Props> = ({ children, time }) => {
-  const element = useRef<HTMLInputElement>(null);
+  const element = useRef<HTMLDivElement>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
 
   useEffect(() => {
@@ -33,8 +32,8 @@ export const IntersectingWrapper: React.FC<Props> = ({ children, time }) => {
   }, [element]);
 
   return (
-    <Animated launch={isIntersecting} time={time ? time : 1} ref={element}>
+    <AnimatedDiv launch={isIntersecting} time={time ? time : 1} ref={element}>
       {children}
-    </Animated>
+    </AnimatedDiv>
   );
 };

@@ -1,12 +1,9 @@
-export { Animated } from './Animated';
 export { Anchor } from './Anchor';
+export { AnimatedDiv } from './AnimatedDiv';
 export { Button } from './Button';
-export { Background } from './Background';
 export { Card } from './Card';
-export { Centered } from './Centered';
-export { Flexbox } from './Flexbox';
+export { GoButton } from './GoButton';
 export { Header } from './Header';
 export { Input } from './Input';
+export { SearchInput } from './SearchInput';
 export { Title } from './Title';
-export { Subtitle } from './Subtitle';
-export { Wrapper } from './Wrapper';

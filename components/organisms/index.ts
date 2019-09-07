@@ -1,3 +1,4 @@
-export { AuthBox } from './AuthBox';
 export { HeadComponent as Head } from './Head';
-export { TopHeader } from './TopHeader';
+export { Layout } from './Layout';
+export { LoginCard } from './LoginCard';
+export { RegisterCard } from './RegisterCard';

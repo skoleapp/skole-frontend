@@ -1,19 +1,16 @@
 import styled from 'styled-components';
 
-interface CardProps {
-  width?: string;
-  height?: string;
-  margin?: string;
-}
-
-export const Card = styled.div<CardProps>`
-  width: ${(props): string | undefined => (props.width ? props.width : '250px')};
-  height: ${(props): string | undefined => (props.height ? props.height : '350px')};
-  border-radius: 6px;
-  -webkit-box-shadow: 0px 0px 17px 1px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0px 0px 17px 1px rgba(0, 0, 0, 0.5);
-  box-shadow: 0px 0px 17px 1px rgba(0, 0, 0, 0.5);
-  background-color: whitesmoke;
-  overflow: hidden;
-  margin: ${(props): string | undefined => props.margin};
+export const StyledCard = styled.div`
+  border-radius: 0.5rem;
+  text-align: center;
+  background-color: var(--white);
+  margin: 0.5rem;
+  display: flex;
+  flex-direction: column !important;
+  max-width: 15rem;
+  margin: 0 auto;
+  margin-top: 1rem;
+  box-shadow: 0.1rem 0.1rem 1rem var(--black);
 `;
+
+export const Card: React.FC = ({ children }) => <StyledCard>{children}</StyledCard>;

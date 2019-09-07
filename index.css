@@ -1,12 +1,21 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap');
 
 :root {
-  --scale: scale(1.1);
+  /* Colors */
   --primary: rgb(162, 75, 63);
   --secondary: rgba(253, 246, 227);
+  --white: whitesmoke;
+  --black: #000000;
+
+  /* Animations */
+  --scale: scale(1.05);
+  --transition: all 0.1s ease-in;
 }
 
+html,
 body {
-  margin: 0px;
-  font-family: 'Ubuntu Mono', monospace;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Ubuntu', sans-serif;
 }

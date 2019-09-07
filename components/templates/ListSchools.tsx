@@ -1,7 +1,7 @@
 import React from 'react';
-import { Wrapper } from '../atoms';
-import schools from './schools.json';
+// import schools from '../../temp-schools.json';
+import { Title } from '../atoms';
 
-console.log(schools);
+// console.log(schools);
 
-export const ListSchools: React.FC = () => <Wrapper></Wrapper>;
+export const ListSchools: React.FC = () => <Title text="List Schools" />;

@@ -1,18 +1,28 @@
 import React from 'react';
-import { Centered, Input, Title, Wrapper } from '../atoms';
-import { IntersectingWrapper } from '../molecules';
+import styled from 'styled-components';
+import { GoButton, Header, SearchInput } from '../atoms';
+import { IntersectingWrapper, Row } from '../molecules';
 
-export const LandingPage: React.FC = () => {
-  return (
-    <Wrapper>
-      <IntersectingWrapper time={2}>
-        <Centered top="20%">
-          <Title size={100}>skole</Title>
-          <IntersectingWrapper time={4}>
-            <Input width="400px" type="text" placeholder="Hae kursseja..." fontSize="2em"></Input>
-          </IntersectingWrapper>
-        </Centered>
-      </IntersectingWrapper>
-    </Wrapper>
-  );
-};
+const StyledLanginPage = styled.div`
+  margin-top: 2rem;
+
+  .input-section {
+    margin-top: 2rem;
+  }
+`;
+
+export const LandingPage: React.FC = () => (
+  <StyledLanginPage>
+    {/* <Row>
+      <Column> */}
+    <IntersectingWrapper time={4}>
+      <Header />
+      <Row className="input-section">
+        <SearchInput type="text" placeholder="Search courses..." />
+        <GoButton />
+      </Row>
+    </IntersectingWrapper>
+    {/* </Column>
+    </Row> */}
+  </StyledLanginPage>
+);

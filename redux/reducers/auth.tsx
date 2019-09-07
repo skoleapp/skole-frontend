@@ -1,29 +1,6 @@
 import { AnyAction } from 'redux';
-import {
-  GET_USER,
-  GET_USER_ERROR,
-  GET_USER_SUCCESS,
-  LOGIN_USER,
-  LOGIN_USER_ERROR,
-  LOGIN_USER_SUCCESS,
-  REGISTER_USER,
-  REGISTER_USER_ERROR,
-  REGISTER_USER_SUCCESS
-} from '../actions/types';
-
-interface User {
-  id: string;
-  username: string;
-  email: string;
-}
-
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  isLoggedIn: boolean | null;
-  loading: boolean | null;
-  error: string | null;
-}
+import { GET_USER, GET_USER_ERROR, GET_USER_SUCCESS, LOGIN_USER, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, REGISTER_USER, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS } from '../actions/types';
+import { AuthState } from './interfaces';
 
 const initialState: AuthState = {
   user: null,

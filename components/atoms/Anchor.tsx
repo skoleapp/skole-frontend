@@ -1,20 +1,13 @@
 import styled from 'styled-components';
 
-interface AnchorProps {
+interface Props extends React.HTMLProps<HTMLAnchorElement> {
   color?: string;
-  font?: string;
-  size?: number;
-  margin?: string;
-  textAlign?: string;
 }
 
-export const Anchor = styled.a<AnchorProps>`
+export const Anchor = styled.a<Props>`
   color: ${(props): string => (props.color ? props.color : 'var(--primary)')};
-  font-family: ${(props): string => (props.font ? props.font : 'Verdana')};
-  font-size: ${(props): string => (props.size ? props.size + 'px' : '16px')};
-  margin: ${(props): string => (props.margin ? props.margin : '22px')};
-  text-align: ${(props): string => (props.textAlign ? props.textAlign : 'center')};
   text-decoration: none;
+  margin: 0.5rem;
 
   &:hover {
     cursor: pointer;

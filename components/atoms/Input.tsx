@@ -1,26 +1,17 @@
 import styled from 'styled-components';
 
-interface InputProps {
-  fontSize?: string;
-  width?: string;
-  animation?: boolean;
-}
-
-export const Input = styled.input<InputProps>`
-  color: black;
-  font-size: ${(props): string | undefined => props.fontSize};
-  width: ${(props): string | undefined => (props.width ? props.width : '160px')};
-  border: 2px solid white;
-  border-radius: 3px;
-  margin: 7px;
-  transition: all 0.2s;
+export const Input = styled.input`
+  border: 0.1rem solid var(--primary);
+  border-radius: 0.5rem;
+  margin: 0.5rem 0 0.5rem 0.5rem;
   text-align: center;
+  height: 2.25rem;
+  width: 10rem;
+  font-size: 1.25rem;
 
-  &:hover {
-    transform: ${(props): string => (props.animation ? 'var(--scale)' : 'none')};
-  }
-
+  &:hover,
   &:focus {
     transform: var(--scale);
+    transition: var(--transition);
   }
 `;
