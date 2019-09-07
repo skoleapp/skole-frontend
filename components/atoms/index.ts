@@ -10,3 +10,4 @@ export { Input } from './Input';
 export { Title } from './Title';
 export { Subtitle } from './Subtitle';
 export { Wrapper } from './Wrapper';
+export { Textarea } from './Textarea';
