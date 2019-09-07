@@ -10,6 +10,11 @@ const loginSchema = Yup.object().shape({
   password: Yup.string().required('Password is required')
 });
 
+interface FormikValues {
+  usernameOrEmail: string;
+  password: string;
+}
+
 export const Login: React.FC = () => {
   const dispatch = useDispatch();
 
@@ -20,14 +25,16 @@ export const Login: React.FC = () => {
         password: ''
       }}
       validationSchema={loginSchema}
-      onSubmit={fields => {
+      onSubmit={(fields: FormikValues): void => {
         dispatch(login(fields));
       }}
-      render={({ values, setFieldValue }) => (
+      render={({ values, setFieldValue }): React.ReactNode | undefined => (
         <Form>
           <Flexbox justifyContent="center" flexDirection="column">
             <Input
-              onChange={e => setFieldValue('usernameOrEmail', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setFieldValue('usernameOrEmail', e.target.value)
+              }
               value={values['usernameOrEmail']}
               placeholder="Username or email"
               name="usernameOrEmail"
@@ -37,7 +44,9 @@ export const Login: React.FC = () => {
           </Flexbox>
           <Flexbox justifyContent="center" flexDirection="column">
             <Input
-              onChange={e => setFieldValue('password', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setFieldValue('password', e.target.value)
+              }
               value={values['password']}
               placeholder="Password"
               name="password"

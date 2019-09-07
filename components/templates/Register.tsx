@@ -18,6 +18,13 @@ const registerSchema = Yup.object().shape({
     .required('Passwords must match')
 });
 
+interface FormikValues {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export const Register: React.FC = () => {
   const dispatch = useDispatch();
 
@@ -30,15 +37,17 @@ export const Register: React.FC = () => {
         confirmPassword: ''
       }}
       validationSchema={registerSchema}
-      onSubmit={fields => {
+      onSubmit={(fields: FormikValues): void => {
         console.log(fields);
         dispatch(register(fields));
       }}
-      render={({ values, setFieldValue }) => (
+      render={({ values, setFieldValue }): React.ReactNode | undefined => (
         <Form>
           <Flexbox justifyContent="center" flexDirection="column">
             <Input
-              onChange={e => setFieldValue('username', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setFieldValue('username', e.target.value)
+              }
               value={values['username']}
               placeholder="Username"
               name="username"
@@ -48,7 +57,9 @@ export const Register: React.FC = () => {
           </Flexbox>
           <Flexbox justifyContent="center" flexDirection="column">
             <Input
-              onChange={e => setFieldValue('email', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setFieldValue('email', e.target.value)
+              }
               value={values['email']}
               placeholder="Email"
               name="email"
@@ -58,7 +69,9 @@ export const Register: React.FC = () => {
           </Flexbox>
           <Flexbox justifyContent="center" flexDirection="column">
             <Input
-              onChange={e => setFieldValue('password', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setFieldValue('password', e.target.value)
+              }
               value={values['password']}
               placeholder="Password"
               name="password"
@@ -68,7 +81,9 @@ export const Register: React.FC = () => {
           </Flexbox>
           <Flexbox justifyContent="center" flexDirection="column">
             <Input
-              onChange={e => setFieldValue('confirmPassword', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setFieldValue('confirmPassword', e.target.value)
+              }
               value={values['confirmPassword']}
               placeholder="Confirm password"
               name="confirmPassword"
