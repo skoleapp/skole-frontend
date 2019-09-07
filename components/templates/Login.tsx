@@ -1,52 +1,56 @@
-import React, { FormEvent, useState } from 'react';
+import React from 'react';
+import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux';
-import { Button, Flexbox, Input } from '../atoms';
+import { Flexbox, Input } from '../atoms';
+import { Formik, Form, ErrorMessage } from 'formik';
 
 export const Login: React.FC = () => {
-  const [usernameOrEmail, setUsernameOrEmail] = useState('');
-  const [password, setPassword] = useState('');
-
   const dispatch = useDispatch();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-
-    dispatch(
-      login({
-        usernameOrEmail,
-        password
-      })
-    );
-
-    // Router.push('/account');
-  };
-
+  const loginSchema = Yup.object().shape({
+    usernameOrEmail: Yup.string().required('Username or email is required'),
+    password: Yup.string().required('Password is required')
+  });
   return (
-    <form onSubmit={(e): void => handleSubmit(e)}>
-      <Flexbox justifyContent="center" flexDirection="column">
-        <Input
-          type="text"
-          placeholder="Sähköposti"
-          animation
-          required
-          value={usernameOrEmail}
-          onChange={(e): void => setUsernameOrEmail(e.target.value)}
-        />
-      </Flexbox>
-      <Flexbox justifyContent="center" flexDirection="column">
-        <Input
-          type="password"
-          placeholder="Salasana"
-          animation
-          required
-          value={password}
-          onChange={(e): void => setPassword(e.target.value)}
-        />
-      </Flexbox>
-      <Flexbox justifyContent="center">
-        <Button type="submit">Kirjaudu sisään</Button>
-      </Flexbox>
-    </form>
+    <Formik
+      initialValues={{
+        usernameOrEmail: '',
+        password: ''
+      }}
+      validationSchema={loginSchema}
+      onSubmit={fields => {
+        dispatch(login(fields));
+      }}
+      render={({ values, setFieldValue }) => (
+        <Form>
+          <Flexbox justifyContent="center" flexDirection="column">
+            <Input
+              onChange={e => setFieldValue('usernameOrEmail', e.target.value)}
+              value={values['usernameOrEmail']}
+              placeholder="Username or email"
+              name="usernameOrEmail"
+              type="text"
+            />
+            <ErrorMessage name="usernameOrEmail" component="div" className="invalid-feedback" />
+          </Flexbox>
+          <Flexbox justifyContent="center" flexDirection="column">
+            <Input
+              onChange={e => setFieldValue('password', e.target.value)}
+              value={values['password']}
+              placeholder="Password"
+              name="password"
+              type="password"
+            />
+            <ErrorMessage name="password" component="div" className="invalid-feedback" />
+          </Flexbox>
+          <Flexbox justifyContent="center">
+            <button type="submit" className="btn btn-primary mr-2">
+              Login
+            </button>
+          </Flexbox>
+        </Form>
+      )}
+    />
   );
 };
