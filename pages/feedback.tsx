@@ -35,10 +35,10 @@ const Feedback: React.FC = () => {
         {!isSubmittted ? (
           <FeedbackCard>
             <Flexbox justifyContent="center">
-              <Button onClick={() => setRate('Terrible')}>Terrible</Button>
-              <Button onClick={() => setRate('Bad')}>Bad</Button>
-              <Button onClick={() => setRate('Fine')}>Fine</Button>
-              <Button onClick={() => setRate('Good')}>Good</Button>
+              <Button onClick={(): void => setRate('Terrible')}>Terrible</Button>
+              <Button onClick={(): void => setRate('Bad')}>Bad</Button>
+              <Button onClick={(): void => setRate('Fine')}>Fine</Button>
+              <Button onClick={(): void => setRate('Good')}>Good</Button>
             </Flexbox>
             <Flexbox justifyContent="center">
               <Textarea
@@ -46,7 +46,7 @@ const Feedback: React.FC = () => {
                 maxLength={150}
                 cols={40}
                 rows={10}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>): void => setComment(e.target.value)}
               />
             </Flexbox>
             <form onSubmit={(e): void => handleSubmit(e)}>
