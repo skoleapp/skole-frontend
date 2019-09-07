@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Header, Layout } from '../../../components';
+import { Layout, Title } from '../../../components';
 
 // Navigate dynamic URLs like this
 const User: React.FC = () => {
@@ -12,7 +12,7 @@ const User: React.FC = () => {
 
   return (
     <Layout title="User">
-      <Header>User {router.query.id}</Header>
+      <Title>User {router.query.id}</Title>
       {/* Link to other dynamic pages like this */}
       <Link href="/user/[id]" as={`/user/${id1}`}>
         <a>user 1</a>

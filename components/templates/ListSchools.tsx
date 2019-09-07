@@ -1,53 +1,7 @@
 import React from 'react';
-import { Title, Wrapper } from '../atoms';
-import { IntersectingWrapper } from '../molecules';
+import { Wrapper } from '../atoms';
+import schools from './schools.json';
 
-export const ListSchools: React.FC = () => (
-  <Wrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-    <IntersectingWrapper time={3}>
-      <Title font="monospace">Kurssi!</Title>
-    </IntersectingWrapper>
-  </Wrapper>
-);
+console.log(schools);
+
+export const ListSchools: React.FC = () => <Wrapper></Wrapper>;

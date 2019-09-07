@@ -1,0 +1,17 @@
+{
+  "schools": [
+    {
+      "Yliopisto": {
+        "Turun Yliopisto": {
+          "Luonnontieteiden ja tekniikan tiedekunta": {
+            "Tulevaisuuden Teknologioiden Laitos": {
+              "Tietotekniikka": { "Insinöörimatematiikka A": { "id": "MATE5398" } }
+            }
+          }
+        }
+      },
+      "Ammattikorkeakoulu": {},
+      "Lukio": {}
+    }
+  ]
+}

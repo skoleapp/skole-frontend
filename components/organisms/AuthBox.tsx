@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Anchor, Card, Flexbox, Subtitle, Title } from '../atoms';
+import { Anchor, Card, Flexbox, Title } from '../atoms';
 import { Login, Register } from '../templates';
 
 export const AuthBox: React.FC = () => {
@@ -15,11 +15,8 @@ export const AuthBox: React.FC = () => {
         style={{ height: '100%' }}
       >
         <Title font="none" margin="30px 0px 0px 0px">
-          Skole
+          skole
         </Title>
-        <Subtitle size={20} font="none" margin="0">
-          ebin
-        </Subtitle>
 
         {loginOpen && !registerOpen && <Login />}
         {registerOpen && !loginOpen && <Register />}

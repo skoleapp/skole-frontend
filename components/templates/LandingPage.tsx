@@ -7,9 +7,7 @@ export const LandingPage: React.FC = () => {
     <Wrapper>
       <IntersectingWrapper time={2}>
         <Centered top="20%">
-          <Title size={100} font="none">
-            Skole!
-          </Title>
+          <Title size={100}>skole</Title>
           <IntersectingWrapper time={4}>
             <Input width="400px" type="text" placeholder="Hae kursseja..." fontSize="2em"></Input>
           </IntersectingWrapper>
