@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 interface AnchorProps {
+  color?: string;
   font?: string;
   size?: number;
   margin?: string;
@@ -8,7 +9,7 @@ interface AnchorProps {
 }
 
 export const Anchor = styled.a<AnchorProps>`
-  color: #428bca;
+  color: ${(props): string => (props.color ? props.color : 'var(--primary)')};
   font-family: ${(props): string => (props.font ? props.font : 'Verdana')};
   font-size: ${(props): string => (props.size ? props.size + 'px' : '16px')};
   margin: ${(props): string => (props.margin ? props.margin : '22px')};

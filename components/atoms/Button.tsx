@@ -7,7 +7,7 @@ interface ButtonProps {
 
 export const Button = styled.button<ButtonProps>`
   cursor: pointer;
-  font-size: ${(props): string | undefined => (props.size ? props.size : '1em')};
+  font-size: ${(props): string | undefined => (props.size ? props.size : '1rem')};
   border: 2px solid white;
   border-radius: 3px;
   margin: 7px;

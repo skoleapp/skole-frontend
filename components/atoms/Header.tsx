@@ -6,7 +6,7 @@ interface HeaderProps {
 
 export const Header = styled.div<HeaderProps>`
   top: 0px;
-  background-color: cadetblue;
+  background-color: var(--primary);
   position: sticky;
   width: 100%;
   height: 50px;
