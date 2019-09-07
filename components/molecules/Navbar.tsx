@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { HamburgerButton } from '../atoms';
 
 const StyledNavbar = styled.div`
   min-width: 100%;
@@ -7,4 +8,8 @@ const StyledNavbar = styled.div`
   background: var(--primary);
 `;
 
-export const Navbar: React.FC = () => <StyledNavbar />;
+export const Navbar: React.FC = () => (
+  <StyledNavbar>
+    <HamburgerButton />
+  </StyledNavbar>
+);

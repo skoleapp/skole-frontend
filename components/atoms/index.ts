@@ -3,6 +3,7 @@ export { AnimatedDiv } from './AnimatedDiv';
 export { Button } from './Button';
 export { Card } from './Card';
 export { GoButton } from './GoButton';
+export { HamburgerButton } from './HamburgerButton';
 export { Header } from './Header';
 export { Input } from './Input';
 export { SearchInput } from './SearchInput';
