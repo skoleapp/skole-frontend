@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 import { getApiUrl } from '../../utils';
 import { SkoleToast } from '../../utils/toast';
 import { LOGIN_USER, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS } from './types';
+import Router from 'next/router';
 
 interface LoginParams {
   usernameOrEmail: string;
@@ -23,10 +24,7 @@ export const login = (params: LoginParams) => async (dispatch: Dispatch): Promis
       payload: res.data
     });
 
-    return SkoleToast({
-      msg: `Welcome back ${res.data.username}!`,
-      toastType: 'success'
-    });
+    Router.push('/user/me');
   } catch (e) {
     dispatch({
       type: LOGIN_USER_ERROR,
