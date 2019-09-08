@@ -59,7 +59,7 @@ export const Menu: React.FC = () => {
         <MenuListItem href="/register">register</MenuListItem>
         <MenuListItem href="/search-schools">search</MenuListItem>
         <MenuListItem href="/account">account</MenuListItem>
-        <MenuListItem href="/feedback"></MenuListItem>
+        <MenuListItem href="/feedback">feedback</MenuListItem>
       </ul>
     </StyledMenu>
   );
