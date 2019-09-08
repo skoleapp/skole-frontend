@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { Anchor, Card, Title } from '../atoms';
-import { LoginForm } from '../molecules';
+import { LoginForm } from '../organisms';
 
 export const LoginCard: React.FC = () => (
   <Card>
