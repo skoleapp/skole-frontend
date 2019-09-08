@@ -6,6 +6,9 @@
   --secondary: rgba(253, 246, 227);
   --white: whitesmoke;
   --black: #000000;
+  --green: lightgreen;
+  --yellow: yellow;
+  --red: red;
 
   /* Animations */
   --scale: scale(1.05);

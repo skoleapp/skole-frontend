@@ -11,6 +11,12 @@ const StyledRow = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+
+  // &::after {
+  //   content: '';
+  //   clear: both;
+  //   display: table;
+  // }
 `;
 
 export const Row: React.FC<Props> = ({ children }) => <StyledRow>{children}</StyledRow>;

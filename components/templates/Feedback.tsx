@@ -1,16 +1,15 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { Button, Card, Title } from '../atoms';
-import { Textarea } from '../atoms/Textarea';
-import { IntersectingWrapper } from '../molecules';
+import { FormEvent, useState } from 'react';
+import { FeedbackCard } from '../organisms/FeedbackCard';
+import { ThanksForFeedbackCard } from '../organisms/ThanksForFeedbackCard';
 
-type Rate = 'bad' | 'ok' | 'good' | '';
+export type Rate = 'bad' | 'ok' | 'good' | '';
 
-export const Feedback = () => {
+export const Feedback: React.FC = () => {
   //const dispatch = useDispatch();
 
   const [rate, setRate] = useState<Rate>('');
   const [comment, setComment] = useState('');
-  const [submittted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -18,24 +17,14 @@ export const Feedback = () => {
     console.log({ rate, comment });
   };
 
-  return !submittted ? (
-    <Card>
-      <form onSubmit={(e): void => handleSubmit(e)}>
-        <Button onClick={(): void => setRate('bad')} text="bad" />
-        <Button onClick={(): void => setRate('ok')} text="ok" />
-        <Button onClick={(): void => setRate('good')} text="good" />
-        <Textarea
-          placeholder="Tell us how we can improve our company"
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>): void => setComment(e.target.value)}
-        />
-        <Button type="submit" text="submit" />
-      </form>
-    </Card>
+  return !submitted ? (
+    <FeedbackCard
+      handleSubmit={handleSubmit}
+      setRate={setRate}
+      setComment={setComment}
+      rate={rate}
+    />
   ) : (
-    <Card>
-      <IntersectingWrapper time={3}>
-        <Title text="Thank you for your feedback!" />
-      </IntersectingWrapper>
-    </Card>
+    <ThanksForFeedbackCard />
   );
 };

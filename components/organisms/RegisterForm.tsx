@@ -80,7 +80,7 @@ export const RegisterForm: React.FC = () => {
             type="password"
           />
           <ErrorMessage name="confirmPassword" component="div" className="invalid-feedback" />
-          <Button type="submit" text="register" />
+          <Button type="submit">register</Button>
         </Form>
       )}
     />

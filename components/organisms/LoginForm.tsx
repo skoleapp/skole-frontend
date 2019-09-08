@@ -50,7 +50,7 @@ export const LoginForm: React.FC = () => {
             type="password"
           />
           <ErrorMessage name="password" component="div" className="invalid-feedback" />
-          <Button type="submit" text="login" />
+          <Button type="submit">login</Button>
         </Form>
       )}
     />

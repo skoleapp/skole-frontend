@@ -34,7 +34,7 @@ export const Menu: React.FC = () => {
         <MenuListItem href="/register" text="register" />
         <MenuListItem href="/search" text="search" />
         <MenuListItem href="/account" text="account" />
-        <MenuListItem href="/feedback" text="feedback" />
+        <MenuListItem href="/leave-feedback" text="leave feedback" />
       </ul>
     </StyledMenu>
   ) : null;
