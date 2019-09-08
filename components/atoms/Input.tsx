@@ -6,7 +6,7 @@ export const Input = styled.input`
   margin: 0.5rem 0 0.5rem 0.5rem;
   text-align: center;
   height: 2.25rem;
-  width: 10rem;
+  width: 12rem;
   font-size: 1.25rem;
 
   &:hover,

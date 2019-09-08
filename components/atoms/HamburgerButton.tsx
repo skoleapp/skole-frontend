@@ -30,6 +30,7 @@ const HamburgerButtonCheckbox = styled.input`
   width: 3.75rem;
   height: 3.75rem;
   opacity: 0;
+  z-index: 2;
 `;
 
 interface StyledHamburgerButtonProps extends HTMLProps<HTMLElement> {

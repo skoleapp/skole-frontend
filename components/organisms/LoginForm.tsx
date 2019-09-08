@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { login } from '../../redux';
 import { Button, Input } from '../atoms';
+import { Column, Row } from '../molecules';
 
 const loginSchema = Yup.object().shape({
   usernameOrEmail: Yup.string().required('Username or email is required'),
@@ -30,27 +31,33 @@ export const LoginForm: React.FC = () => {
       }}
       render={({ values, setFieldValue }): React.ReactNode | undefined => (
         <Form>
-          <Input
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              setFieldValue('usernameOrEmail', e.target.value)
-            }
-            value={values['usernameOrEmail']}
-            placeholder="Username or email"
-            name="usernameOrEmail"
-            type="text"
-          />
-          <ErrorMessage name="usernameOrEmail" component="div" className="invalid-feedback" />
-          <Input
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              setFieldValue('password', e.target.value)
-            }
-            value={values['password']}
-            placeholder="Password"
-            name="password"
-            type="password"
-          />
-          <ErrorMessage name="password" component="div" className="invalid-feedback" />
-          <Button type="submit">login</Button>
+          <Column>
+            <Row>
+              <Input
+                onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                  setFieldValue('usernameOrEmail', e.target.value)
+                }
+                value={values['usernameOrEmail']}
+                placeholder="Username or email"
+                name="usernameOrEmail"
+                type="text"
+              />
+              <ErrorMessage name="usernameOrEmail" component="div" className="invalid-feedback" />
+            </Row>
+            <Row>
+              <Input
+                onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                  setFieldValue('password', e.target.value)
+                }
+                value={values['password']}
+                placeholder="Password"
+                name="password"
+                type="password"
+              />
+              <ErrorMessage name="password" component="div" className="invalid-feedback" />
+            </Row>
+            <Button type="submit">login</Button>
+          </Column>
         </Form>
       )}
     />

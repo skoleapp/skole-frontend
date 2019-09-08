@@ -1,4 +1,4 @@
-export { Account } from './Account';
+export { AccountPage } from './AccountPage';
 export { EditAccount } from './EditAccount';
 export { Feedback } from './Feedback';
 export { LandingPage } from './LandingPage';

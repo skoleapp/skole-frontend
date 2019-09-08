@@ -8,11 +8,16 @@ const StyledMenuListItem = styled.li`
   list-style: none;
   color: var(--white);
   font-size: 1.75rem;
+  line-height: 1.5;
 
   &:hover {
-    color: var(--black);
     transform: var(--scale);
     transition: var(--transition);
+  }
+
+  a:hover {
+    text-decoration: none !important;
+    color: var(--black);
   }
 `;
 
