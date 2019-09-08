@@ -4,7 +4,7 @@ import { ThanksForFeedbackCard } from '../organisms/ThanksForFeedbackCard';
 
 export type Rate = 'bad' | 'ok' | 'good' | '';
 
-export const Feedback: React.FC = () => {
+export const FeedbackPage: React.FC = () => {
   //const dispatch = useDispatch();
 
   const [rate, setRate] = useState<Rate>('');

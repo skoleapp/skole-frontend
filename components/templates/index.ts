@@ -1,6 +1,6 @@
 export { AccountPage } from './AccountPage';
 export { EditAccount } from './EditAccount';
-export { Feedback } from './Feedback';
+export { FeedbackPage } from './FeedbackPage';
 export { LandingPage } from './LandingPage';
 export { ListSchools } from './ListSchools';
 export { LoginCard } from './LoginCard';
