@@ -7,7 +7,7 @@ export const Input = styled.input`
   text-align: center;
   height: 2.25rem;
   width: 12rem;
-  font-size: 1.25rem;
+  font-size: 1.05rem;
 
   &:hover,
   &:focus {

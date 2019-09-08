@@ -9,12 +9,14 @@ interface Props {
 }
 
 export const Layout: React.FC<Props> = ({ title, children }) => (
-  <Container>
+  <>
     <Head title={title} />
-    <Navbar />
-    <Menu />
     <Background />
-    {children}
+    <Menu />
+    <Container>
+      <Navbar />
+      {children}
+    </Container>
     <ToastContainer />
-  </Container>
+  </>
 );
