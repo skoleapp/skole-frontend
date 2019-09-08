@@ -32,7 +32,7 @@ export const MenuListItem: React.FC<Props> = ({ href, children }) => {
   return (
     <StyledMenuListItem
       onClick={(): void => {
-        dispatch(toggleMenu());
+        dispatch(toggleMenu(false));
       }}
     >
       <Link href={href}>

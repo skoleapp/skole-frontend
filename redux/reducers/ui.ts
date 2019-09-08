@@ -9,7 +9,7 @@ const initialState: UIState = {
 export default (state = initialState, action: AnyAction): UIState => {
   switch (action.type) {
     case TOGGLE_MENU:
-      return { menuOpen: !state.menuOpen };
+      return { menuOpen: action.payload };
     default:
       return state;
   }

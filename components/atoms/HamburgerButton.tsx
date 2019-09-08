@@ -1,4 +1,4 @@
-import React, { HTMLProps, useState } from 'react';
+import React, { HTMLProps } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State, toggleMenu } from '../../redux';
@@ -70,17 +70,18 @@ const StyledHamburgerButton = styled.div<StyledHamburgerButtonProps>`
 
 export const HamburgerButton: React.FC = () => {
   const { menuOpen } = useSelector((state: State) => state.ui);
-  const [checked, setChecked] = useState(menuOpen);
   const dispatch = useDispatch();
 
   return (
-    <HamburgerButtonWrapper checked={checked}>
+    <HamburgerButtonWrapper checked={menuOpen}>
       <HamburgerButtonCheckbox
         type="checkbox"
-        checked={checked}
-        onChange={(): void => dispatch(toggleMenu()) && setChecked(!checked)}
+        checked={menuOpen}
+        onChange={(): void => {
+          dispatch(toggleMenu(!menuOpen));
+        }}
       />
-      <StyledHamburgerButton checked={checked} />
+      <StyledHamburgerButton checked={menuOpen} />
     </HamburgerButtonWrapper>
   );
 };

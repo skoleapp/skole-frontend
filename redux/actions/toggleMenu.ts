@@ -1,10 +1,6 @@
 import { AnyAction, Dispatch } from 'redux';
 import { TOGGLE_MENU } from './types';
 
-export type toggleMenuReturnType = {
-  type: string;
-};
-
-export const toggleMenu = () => (dispatch: Dispatch<AnyAction>): toggleMenuReturnType => {
-  return dispatch({ type: TOGGLE_MENU });
+export const toggleMenu = (open: boolean) => (dispatch: Dispatch<AnyAction>): void => {
+  dispatch({ type: TOGGLE_MENU, payload: open });
 };
