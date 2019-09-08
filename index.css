@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap');
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 :root {
   /* Colors */
   --primary: rgb(162, 75, 63);
@@ -13,7 +22,8 @@
   /* Animations */
   --scale: scale(1.05);
   --transition: all 0.1s ease-in;
-  --menu-speen: 0.2s;
+  --menu-speed: 0.3s;
+  --fade-in: fadeIn 0.25s;
 }
 
 html,

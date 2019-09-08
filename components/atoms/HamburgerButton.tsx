@@ -44,7 +44,7 @@ const StyledHamburgerButton = styled.div<StyledHamburgerButtonProps>`
   display: flex;
   justify-content: center;
   border-radius: 1rem;
-  transition: all 0.6s ease;
+  transition: all var(--menu-speed) ease;
   transform: ${({ checked }) => checked && `rotate(135deg)`};
 
   &:before,

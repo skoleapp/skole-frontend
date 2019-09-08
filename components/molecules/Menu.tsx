@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State } from '../../redux';
@@ -11,6 +12,7 @@ const StyledMenu = styled.div`
   right: 0;
   background: var(--primary);
   z-index: 1;
+  animation: var(--fade-in);
 
   display: flex;
   align-items: center;
@@ -26,6 +28,13 @@ const StyledMenu = styled.div`
 export const Menu: React.FC = () => {
   const { menuOpen } = useSelector((state: State) => state.ui);
 
+  useEffect(() => {
+    console.log('mounting');
+    return () => {
+      console.log('unmounting');
+    };
+  }, []);
+
   return menuOpen ? (
     <StyledMenu>
       <ul>
@@ -34,7 +43,7 @@ export const Menu: React.FC = () => {
         <MenuListItem href="/register" text="register" />
         <MenuListItem href="/search" text="search" />
         <MenuListItem href="/account" text="account" />
-        <MenuListItem href="/leave-feedback" text="leave feedback" />
+        <MenuListItem href="/leave-feedback" text="feedback" />
       </ul>
     </StyledMenu>
   ) : null;
