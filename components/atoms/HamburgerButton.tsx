@@ -24,11 +24,11 @@ const HamburgerButtonWrapper = styled.div<HamburgerButtonWrapperProps>`
 
 const HamburgerButtonCheckbox = styled.input`
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 0;
+  right: 0;
   cursor: pointer;
-  width: 3rem;
-  height: 3rem;
+  width: 3.75rem;
+  height: 3.75rem;
   opacity: 0;
 `;
 
