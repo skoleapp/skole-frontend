@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { Background, Container, Menu, Navbar } from '../molecules';
+import { Background, Container, Footer, Menu, Navbar } from '../molecules';
 import { Head } from '../organisms';
 
 interface Props {
@@ -16,6 +16,7 @@ export const Layout: React.FC<Props> = ({ title, children }) => (
     <Container>
       <Navbar />
       {children}
+      <Footer />
     </Container>
     <ToastContainer />
   </>
