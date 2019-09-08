@@ -38,7 +38,9 @@ export const RegisterForm: React.FC = () => {
         confirmPassword: ''
       }}
       validationSchema={registerSchema}
-      onSubmit={(fields: FormikValues) => dispatch(register(fields))}
+      onSubmit={(fields: FormikValues): void => {
+        dispatch(register(fields));
+      }}
       render={({ values, setFieldValue }): React.ReactNode | undefined => (
         <Form>
           <Column>

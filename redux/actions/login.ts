@@ -1,9 +1,9 @@
 import axios from 'axios';
+import Router from 'next/router';
 import { Dispatch } from 'redux';
 import { getApiUrl } from '../../utils';
 import { SkoleToast } from '../../utils/toast';
 import { LOGIN_USER, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS } from './types';
-import Router from 'next/router';
 
 interface LoginParams {
   usernameOrEmail: string;

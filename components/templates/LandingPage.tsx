@@ -13,8 +13,6 @@ const StyledLanginPage = styled.div`
 
 export const LandingPage: React.FC = () => (
   <StyledLanginPage>
-    {/* <Row>
-      <Column> */}
     <IntersectingWrapper time={4}>
       <Header />
       <Row className="input-section">
@@ -22,7 +20,5 @@ export const LandingPage: React.FC = () => (
         <GoButton />
       </Row>
     </IntersectingWrapper>
-    {/* </Column>
-    </Row> */}
   </StyledLanginPage>
 );

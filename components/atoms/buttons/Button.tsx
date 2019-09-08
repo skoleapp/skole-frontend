@@ -1,9 +1,5 @@
 import styled from 'styled-components';
 
-// interface Props extends React.HTMLProps<HTMLButtonElement> {
-//   text: string;
-// }
-
 export const Button = styled.button`
   cursor: pointer;
   background var(--primary);
@@ -15,5 +11,3 @@ export const Button = styled.button`
   font-size: 1rem;
   text-transform: uppercase;
 `;
-
-// export const Button: React.FC<Props> = ({ text }) => <StyledButton>{text}</StyledButton>;

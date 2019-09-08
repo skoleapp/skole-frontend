@@ -5,7 +5,7 @@ import { LoginForm } from '../organisms';
 
 export const LoginCard: React.FC = () => (
   <Card>
-    <Title text="login" />
+    <Title>Login</Title>
     <LoginForm />
     <Link href="/register">
       <Anchor variant="red">New user?</Anchor>

@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 const StyledGoButton = styled.button`
@@ -20,4 +21,4 @@ const StyledGoButton = styled.button`
   }
 `;
 
-export const GoButton = () => <StyledGoButton>go</StyledGoButton>;
+export const GoButton: React.FC = () => <StyledGoButton>go</StyledGoButton>;

@@ -4,4 +4,4 @@ import { Title } from '../atoms';
 
 // console.log(schools);
 
-export const ListSchools: React.FC = () => <Title text="List Schools" />;
+export const ListSchools: React.FC = () => <Title>List Schools</Title>;

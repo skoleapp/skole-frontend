@@ -1,3 +1,4 @@
-import { Title } from "../atoms";
+import React from 'react';
+import { Title } from '../atoms';
 
-export const EditAccount = () => <Title text="edit account" />
+export const EditAccount: React.FC = () => <Title>Edit Account</Title>;

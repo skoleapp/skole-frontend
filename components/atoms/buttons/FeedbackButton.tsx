@@ -20,7 +20,7 @@ interface Props {
 }
 
 export const FeedbackButton = styled(Button)<Props>`
-  background: ${({ variant }) => getBackgroundForVaraint(variant)};
+  background: ${({ variant }): string => getBackgroundForVaraint(variant)};
   border: 0.1rem solid var(--black);
   color: var(--white);
   text-shadow: 0.1rem 0.1rem 0.1rem var(--black);

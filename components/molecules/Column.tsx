@@ -10,7 +10,7 @@ const breakPoints = {
 const getWidthString = (span: number): string | undefined => {
   if (!span) return;
 
-  let width = (span / 12) * 100;
+  const width = (span / 12) * 100;
   return `width: ${width}%;`;
 };
 

@@ -5,7 +5,7 @@ import { RegisterForm } from '../organisms';
 
 export const RegisterCard: React.FC = () => (
   <Card>
-    <Title text="register" />
+    <Title>Register</Title>
     <RegisterForm />
     <Link href="/login">
       <Anchor variant="red">Already a user?</Anchor>

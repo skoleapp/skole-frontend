@@ -1,7 +1,10 @@
 import React from 'react';
-import { FeedbackPage } from '../components';
-import '../index.css';
+import { FeedbackPage, Layout } from '../components';
 
-const Feedback: React.FC = () => <FeedbackPage />;
+const Feedback: React.FC = () => (
+  <Layout title="Leave Feedback">
+    <FeedbackPage />
+  </Layout>
+);
 
 export default Feedback;

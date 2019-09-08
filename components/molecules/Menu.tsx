@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State } from '../../redux';
@@ -26,7 +26,7 @@ const StyledMenu = styled.div<Props>`
   visibility: hidden;
 
   // Apply transition after initial render
-  transition: ${({ counter }) => counter > 1 && 'var(--transition)'};
+  transition: ${({ counter }): string => (counter > 1 ? 'var(--transition)' : 'none')};
 
   // Apply animation after initial render
   animation: ${({ menuOpen, counter }): string => {
@@ -54,12 +54,12 @@ export const Menu: React.FC = () => {
   return (
     <StyledMenu menuOpen={menuOpen} counter={counter}>
       <ul>
-        <MenuListItem href="/" text="home" />
-        <MenuListItem href="/login" text="login" />
-        <MenuListItem href="/register" text="register" />
-        <MenuListItem href="/search-schools" text="search" />
-        <MenuListItem href="/account" text="account" />
-        <MenuListItem href="/leave-feedback" text="feedback" />
+        <MenuListItem href="/">home</MenuListItem>
+        <MenuListItem href="/login">login</MenuListItem>
+        <MenuListItem href="/register">register</MenuListItem>
+        <MenuListItem href="/search-schools">search</MenuListItem>
+        <MenuListItem href="/account">account</MenuListItem>
+        <MenuListItem href="/feedback"></MenuListItem>
       </ul>
     </StyledMenu>
   );

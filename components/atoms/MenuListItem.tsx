@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { toggleMenu } from '../../redux';
@@ -23,16 +24,19 @@ const StyledMenuListItem = styled.li`
 
 interface Props {
   href: string;
-  text: string;
 }
 
-export const MenuListItem: React.FC<Props> = ({ href, text }) => {
+export const MenuListItem: React.FC<Props> = ({ href, children }) => {
   const dispatch = useDispatch();
 
   return (
-    <StyledMenuListItem onClick={() => dispatch(toggleMenu())}>
+    <StyledMenuListItem
+      onClick={(): void => {
+        dispatch(toggleMenu());
+      }}
+    >
       <Link href={href}>
-        <Anchor variant="white">{text}</Anchor>
+        <Anchor variant="white">{children}</Anchor>
       </Link>
     </StyledMenuListItem>
   );

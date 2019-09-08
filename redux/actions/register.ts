@@ -25,7 +25,8 @@ export const register = (params: RegisterParams) => async (dispatch: Dispatch): 
       payload: res.data
     });
 
-    return SkoleToast({
+    // TODO: Add translated message
+    SkoleToast({
       msg: `Welcome ${res.data.username}!`,
       toastType: 'success'
     });
@@ -36,7 +37,7 @@ export const register = (params: RegisterParams) => async (dispatch: Dispatch): 
     });
 
     // TODO: Add translated message
-    return SkoleToast({
+    SkoleToast({
       msg: 'Encountered error while registering new user...',
       toastType: 'error'
     });

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { FeedbackCard } from '../organisms/FeedbackCard';
 import { ThanksForFeedbackCard } from '../organisms/ThanksForFeedbackCard';
 
