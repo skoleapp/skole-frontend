@@ -1,4 +1,10 @@
+export { AccountPage } from './AccountPage';
+export { EditAccount } from './EditAccount';
+export { FeedbackPage } from './FeedbackPage';
 export { HeadComponent as Head } from './Head';
-export { Layout } from './Layout';
+export { LandingPage } from './LandingPage';
+export { ListSchools } from './ListSchools';
+export { LoginCard } from './LoginCard';
 export { LoginForm } from './LoginForm';
+export { RegisterCard } from './RegisterCard';
 export { RegisterForm } from './RegisterForm';

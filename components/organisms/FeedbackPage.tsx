@@ -1,8 +1,6 @@
 import React, { FormEvent, useState } from 'react';
-import { FeedbackCard } from '../organisms/FeedbackCard';
-import { ThanksForFeedbackCard } from '../organisms/ThanksForFeedbackCard';
-
-export type Rate = 'bad' | 'ok' | 'good' | '';
+import { FeedbackCard, ThanksForFeedbackCard } from '../molecules';
+import { Rate } from '../shared';
 
 export const FeedbackPage: React.FC = () => {
   //const dispatch = useDispatch();
