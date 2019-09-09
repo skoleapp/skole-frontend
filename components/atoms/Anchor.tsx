@@ -1,20 +1,26 @@
 import styled from 'styled-components';
 
-interface AnchorProps {
-  color?: string;
-  font?: string;
-  size?: number;
-  margin?: string;
-  textAlign?: string;
+const getColorForVariant = (variant: string): string => {
+  switch (variant) {
+    case 'black':
+      return 'var(--black)';
+    case 'red':
+      return 'var(--primary)';
+    case 'white':
+      return 'var(--white)';
+    default:
+      return '';
+  }
+};
+
+interface Props extends React.HTMLProps<HTMLAnchorElement> {
+  variant: string;
 }
 
-export const Anchor = styled.a<AnchorProps>`
-  color: ${(props): string => (props.color ? props.color : 'var(--primary)')};
-  font-family: ${(props): string => (props.font ? props.font : 'Verdana')};
-  font-size: ${(props): string => (props.size ? props.size + 'px' : '16px')};
-  margin: ${(props): string => (props.margin ? props.margin : '22px')};
-  text-align: ${(props): string => (props.textAlign ? props.textAlign : 'center')};
+export const Anchor = styled.a<Props>`
+  color: ${({ variant }): string => getColorForVariant(variant)};
   text-decoration: none;
+  margin: 0.5rem;
 
   &:hover {
     cursor: pointer;

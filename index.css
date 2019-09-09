@@ -1,13 +1,49 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap');
 
 :root {
-  --scale: scale(1.1);
+  /* Colors */
   --primary: rgb(162, 75, 63);
   --secondary: rgba(253, 246, 227);
+  --white: whitesmoke;
+  --black: #000000;
+  --green: lightgreen;
+  --yellow: yellow;
+  --red: red;
+
+  /* Animations */
+  --scale: scale(1.05);
+  --transition: all 0.1s ease-in;
+  --menu-speed: 0.3s;
+  --fade-in: fadeIn 0.25s forwards;
+  --fade-out: fadeOut 0.25s forwards;
 }
 
+html,
 body {
-  margin: 0px;
+  margin: 0;
   padding: 0;
-  font-family: 'Ubuntu Mono', monospace;
+  height: 100%;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }

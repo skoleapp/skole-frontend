@@ -1,33 +1,18 @@
-import React, { ChangeEvent } from 'react';
 import styled from 'styled-components';
 
-interface TextAreaProps {
-  placeholder: string;
-  maxLength: number;
-  cols: number;
-  rows: number;
-  onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
-}
-
-const StyledTextarea = styled.textarea`
-  maxlength: ${(props): number | undefined => props.maxLength};
-  cols: ${(props): number | undefined => props.cols};
-  rows: ${(props): number | undefined => props.rows};
+export const Textarea = styled.textarea`
+  width: 15rem;
+  border: 0.1rem solid var(--primary);
+  border-radius: 0.5rem;
+  margin: 0.5rem;
+  height: 5rem;
+  font-size: 1.05rem;
+  padding: 1rem;
   resize: none;
-`;
 
-export const Textarea: React.FC<TextAreaProps> = ({
-  placeholder,
-  maxLength,
-  rows,
-  cols,
-  onChange
-}) => (
-  <StyledTextarea
-    placeholder={placeholder}
-    maxLength={maxLength}
-    rows={rows}
-    cols={cols}
-    onChange={onChange}
-  />
-);
+  &:hover,
+  &:focus {
+    transform: var(--scale);
+    transition: var(--transition);
+  }
+`;

@@ -2,10 +2,10 @@ const basePath =
   process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'https://api.skole.fi';
 
 const apiEndpoints = {
-  registerUser: '/user/register',
-  loginUser: '/user/login',
-  getUser: '/user',
-  meUser: 'user/me'
+  registerUser: '/user/register/',
+  loginUser: '/user/login/',
+  getUser: '/user/',
+  meUser: 'user/me/'
 };
 
 export const getApiUrl = (apiName: string, id?: string): string => {

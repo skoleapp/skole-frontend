@@ -1,14 +1,14 @@
+import React from 'react';
 import styled from 'styled-components';
 
-interface HeaderProps {
-  isLoggedIn?: boolean;
-}
-
-export const Header = styled.div<HeaderProps>`
-  top: 0px;
-  background-color: var(--primary);
-  position: sticky;
-  width: 100%;
-  height: 50px;
-  z-index: 999999;
+const StyledHeader = styled.h1`
+  margin: 0.5rem;
+  font-family: 'Ubuntu Mono', monospace;
+  color: var(--primary);
+  font-size: 4.5rem;
+  text-shadow: -0.05rem 0 var(--black), 0 0.05rem var(--black), 0.05rem 0 var(--black),
+    0 -0.05rem var(--black);
+  text-align: center;
 `;
+
+export const Header: React.FC = () => <StyledHeader>skole</StyledHeader>;

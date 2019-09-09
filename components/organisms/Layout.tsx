@@ -1,19 +1,23 @@
 import React, { ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { Background } from '../atoms';
-import { Head, TopHeader } from '../organisms';
+import { Background, Container, Footer, Menu, Navbar } from '../molecules';
+import { Head } from '../organisms';
 
 interface Props {
-  title: string;
+  title?: string;
   children: ReactNode;
 }
 
 export const Layout: React.FC<Props> = ({ title, children }) => (
   <>
     <Head title={title} />
-    <TopHeader />
     <Background />
-    {children}
+    <Menu />
+    <Container>
+      <Navbar />
+      {children}
+      <Footer />
+    </Container>
     <ToastContainer />
   </>
 );

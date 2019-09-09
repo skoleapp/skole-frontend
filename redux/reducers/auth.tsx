@@ -10,20 +10,7 @@ import {
   REGISTER_USER_ERROR,
   REGISTER_USER_SUCCESS
 } from '../actions/types';
-
-interface User {
-  id: string;
-  username: string;
-  email: string;
-}
-
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  isLoggedIn: boolean | null;
-  loading: boolean | null;
-  error: string | null;
-}
+import { AuthState } from './interfaces';
 
 const initialState: AuthState = {
   user: null,
