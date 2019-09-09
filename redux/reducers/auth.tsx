@@ -6,6 +6,7 @@ import {
   LOGIN_USER,
   LOGIN_USER_ERROR,
   LOGIN_USER_SUCCESS,
+  LOGOUT,
   REGISTER_USER,
   REGISTER_USER_ERROR,
   REGISTER_USER_SUCCESS
@@ -15,7 +16,7 @@ import { AuthState } from './interfaces';
 const initialState: AuthState = {
   user: null,
   token: null,
-  isLoggedIn: null,
+  loggedIn: null,
   loading: null,
   error: null
 };
@@ -26,14 +27,20 @@ export default (state = initialState, action: AnyAction): AuthState => {
     case REGISTER_USER:
     case GET_USER:
       return { ...state, loading: true };
+
     case LOGIN_USER_SUCCESS:
     case REGISTER_USER_SUCCESS:
     case GET_USER_SUCCESS:
-      return { ...state, token: action.payload, loading: false };
+      return { ...state, loggedIn: true, loading: false };
+
+    case LOGOUT:
+      return { ...state, loggedIn: false };
+
     case LOGIN_USER_ERROR:
     case REGISTER_USER_ERROR:
     case GET_USER_ERROR:
       return { ...state, error: action.payload, loading: false };
+
     default:
       return state;
   }
