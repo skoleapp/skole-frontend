@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { register } from '../../redux';
 import { Button, Input } from '../atoms';
-import { Row } from '../containers';
 
 const registerSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -43,54 +42,46 @@ export const RegisterForm: React.FC = () => {
       }}
       render={({ values, setFieldValue }): React.ReactNode | undefined => (
         <Form>
-          <Row>
-            <Input
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                setFieldValue('username', e.target.value)
-              }
-              value={values['username']}
-              placeholder="Username"
-              name="username"
-              type="text"
-            />
-            <ErrorMessage name="username" component="div" className="invalid-feedback" />
-          </Row>
-          <Row>
-            <Input
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                setFieldValue('email', e.target.value)
-              }
-              value={values['email']}
-              placeholder="Email"
-              name="email"
-              type="text"
-            />
-            <ErrorMessage name="email" component="div" className="invalid-feedback" />
-          </Row>
-          <Row>
-            <Input
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                setFieldValue('password', e.target.value)
-              }
-              value={values['password']}
-              placeholder="Password"
-              name="password"
-              type="password"
-            />
-            <ErrorMessage name="password" component="div" className="invalid-feedback" />
-          </Row>
-          <Row>
-            <Input
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                setFieldValue('confirmPassword', e.target.value)
-              }
-              value={values['confirmPassword']}
-              placeholder="Confirm password"
-              name="confirmPassword"
-              type="password"
-            />
-            <ErrorMessage name="confirmPassword" component="div" className="invalid-feedback" />
-          </Row>
+          <Input
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              setFieldValue('username', e.target.value)
+            }
+            value={values['username']}
+            placeholder="Username"
+            name="username"
+            type="text"
+          />
+          <ErrorMessage name="username" component="div" className="invalid-feedback" />
+          <Input
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              setFieldValue('email', e.target.value)
+            }
+            value={values['email']}
+            placeholder="Email"
+            name="email"
+            type="text"
+          />
+          <ErrorMessage name="email" component="div" className="invalid-feedback" />
+          <Input
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              setFieldValue('password', e.target.value)
+            }
+            value={values['password']}
+            placeholder="Password"
+            name="password"
+            type="password"
+          />
+          <ErrorMessage name="password" component="div" className="invalid-feedback" />
+          <Input
+            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              setFieldValue('confirmPassword', e.target.value)
+            }
+            value={values['confirmPassword']}
+            placeholder="Confirm password"
+            name="confirmPassword"
+            type="password"
+          />
+          <ErrorMessage name="confirmPassword" component="div" className="invalid-feedback" />
           <Button type="submit">register</Button>
         </Form>
       )}

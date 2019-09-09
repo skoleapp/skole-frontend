@@ -32,7 +32,7 @@ export const login = (params: LoginParams) => async (dispatch: Dispatch): Promis
     });
 
     // TODO: Add translated message
-    return SkoleToast({
+    SkoleToast({
       msg: 'Encountered error while logging in...',
       toastType: 'error'
     });
