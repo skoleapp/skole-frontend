@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { GoButton, Header, SearchInput } from '../atoms';
 import { IntersectingWrapper, Row } from '../molecules';
 
-const StyledLanginPage = styled.div`
+const StyledLangingPage = styled.div`
   margin-top: 2rem;
 
   .input-section {
@@ -12,7 +12,7 @@ const StyledLanginPage = styled.div`
 `;
 
 export const LandingPage: React.FC = () => (
-  <StyledLanginPage>
+  <StyledLangingPage>
     <IntersectingWrapper time={4}>
       <Header />
       <Row className="input-section">
@@ -20,5 +20,5 @@ export const LandingPage: React.FC = () => (
         <GoButton />
       </Row>
     </IntersectingWrapper>
-  </StyledLanginPage>
+  </StyledLangingPage>
 );
