@@ -9,7 +9,6 @@ const AppProvider = ({ store, Component, pageProps }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     token && store.dispatch(getUser(token));
-    return () => localStorage.clearItem('token');
   });
 
   return (
