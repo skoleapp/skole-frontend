@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IntersectingWrapper } from '../containers';
 import { HamburgerButton } from '../molecules';
 
 const StyledNavbar = styled.div`
@@ -10,8 +9,6 @@ const StyledNavbar = styled.div`
 
 export const Navbar: React.FC = () => (
   <StyledNavbar>
-    <IntersectingWrapper time={2}>
-      <HamburgerButton />
-    </IntersectingWrapper>
+    <HamburgerButton />
   </StyledNavbar>
 );
