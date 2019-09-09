@@ -1,10 +1,10 @@
 import React from 'react';
-import { LandingPage, Layout } from '../components';
+import { LandingPage, MainLayout } from '../components';
 
 const Index: React.FC = () => (
-  <Layout>
+  <MainLayout>
     <LandingPage />
-  </Layout>
+  </MainLayout>
 );
 
 export default Index;

@@ -1,13 +1,13 @@
 import React from 'react';
-import { GoButton, Header, SearchInput } from '../atoms';
-import { IntersectingWrapper, Row } from '../molecules';
+import { GoButton, LogoHeader, SearchInput } from '../atoms';
+import { Row } from '../containers';
 
 export const LandingPage: React.FC = () => (
-  <IntersectingWrapper time={4}>
-    <Header />
-    <Row className="input-section">
+  <>
+    <LogoHeader />
+    <Row>
       <SearchInput type="text" placeholder="Search courses..." />
       <GoButton />
     </Row>
-  </IntersectingWrapper>
+  </>
 );

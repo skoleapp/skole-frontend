@@ -1,10 +1,10 @@
 import React from 'react';
-import { Layout, ListSchools } from '../components';
+import { ListSchools, MainLayout } from '../components';
 
 const SearchSchools: React.FC = () => (
-  <Layout title="Search Schools">
+  <MainLayout title="Search Schools">
     <ListSchools />
-  </Layout>
+  </MainLayout>
 );
 
 export default SearchSchools;

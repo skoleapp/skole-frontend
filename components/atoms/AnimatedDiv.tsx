@@ -6,6 +6,6 @@ interface Props {
 }
 
 export const AnimatedDiv = styled.div<Props>`
-  opacity: ${(props): number => (props.launch ? 1 : 0)};
-  transition: opacity ${(props): string => (props.time ? props.time + 's' : '0.2s')};
+  opacity: ${({ launch }): number => (launch ? 1 : 0)};
+  transition: opacity ${({ time }): string => (time ? time + 's' : '0.2s')};
 `;

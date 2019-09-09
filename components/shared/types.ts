@@ -1,1 +1,1 @@
-export type Rate = 'bad' | 'ok' | 'good' | '';
+export type FeedbackType = 'bad' | 'ok' | 'good' | '';

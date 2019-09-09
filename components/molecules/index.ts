@@ -1,10 +1,5 @@
-export { Background } from './Background';
-export { Column } from './Column';
-export { Container } from './Container';
 export { FeedbackCard } from './FeedbackCard';
-export { Footer } from './Footer';
-export { IntersectingWrapper } from './IntersectingWrapper';
-export { Menu } from './Menu';
-export { Navbar } from './Navbar';
-export { Row } from './Row';
+export { HamburgerButton } from './HamburgerButton';
+export { LoginForm } from './LoginForm';
+export { RegisterForm } from './RegisterForm';
 export { ThanksForFeedbackCard } from './ThanksForFeedbackCard';

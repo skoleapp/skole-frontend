@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { Anchor, Card, Title } from '../atoms';
-import { RegisterForm } from '../organisms';
+import { RegisterForm } from '../molecules';
 
 export const RegisterCard: React.FC = () => (
   <Card>
