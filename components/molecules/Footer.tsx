@@ -1,19 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Column } from './Column';
+import { Row } from './Row';
 
 const StyledFooter = styled.div`
-  position: absolute;
-  bottom: 0;
-  height: 10rem;
-  width: 100%;
+  height: 8rem;
   background: var(--primary);
-  margin-bottom: -10rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   text-align: center;
 `;
 
 export const Footer: React.FC = () => (
-  <StyledFooter>© {new Date().getFullYear()} Skole Ltd.</StyledFooter>
+  <StyledFooter>
+    <Column sm={8} md={6}>
+      <Row>© {new Date().getFullYear()} Skole Ltd.</Row>
+    </Column>
+  </StyledFooter>
 );

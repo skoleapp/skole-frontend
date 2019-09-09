@@ -13,11 +13,9 @@ export const Layout: React.FC<Props> = ({ title, children }) => (
     <Head title={title} />
     <Background />
     <Menu />
-    <Container>
-      <Navbar />
-      {children}
-      <Footer />
-    </Container>
+    <Navbar />
+    <Container>{children}</Container>
+    <Footer />
     <ToastContainer />
   </>
 );
