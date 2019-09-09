@@ -10,7 +10,6 @@ const StyledRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
 `;
 
 export const Row: React.FC<Props> = ({ children }) => <StyledRow>{children}</StyledRow>;

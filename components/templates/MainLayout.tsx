@@ -1,15 +1,15 @@
 import React, { ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { Background, Container, Footer, Menu, Navbar } from '../molecules';
-import { Head } from '../organisms';
+import { Container, IntersectingWrapper } from '../containers';
+import { Background, Footer, Head, Menu, Navbar } from '../layout';
 
 interface Props {
   title?: string;
   children: ReactNode;
 }
 
-export const Layout: React.FC<Props> = ({ title, children }) => (
-  <>
+export const MainLayout: React.FC<Props> = ({ title, children }) => (
+  <IntersectingWrapper time={1}>
     <Head title={title} />
     <Background />
     <Menu />
@@ -17,5 +17,5 @@ export const Layout: React.FC<Props> = ({ title, children }) => (
     <Container>{children}</Container>
     <Footer />
     <ToastContainer />
-  </>
+  </IntersectingWrapper>
 );

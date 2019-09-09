@@ -26,7 +26,6 @@ interface Props extends HTMLProps<HTMLElement> {
 export const Column = styled.div<Props>`
   display: flex;
   flex-direction: column;
-  height: 100%;
   margin: 0 auto;
 
   ${({ xs }): BaseColumnFn => (xs ? getWidthString(xs) : 'width: 100%')};
