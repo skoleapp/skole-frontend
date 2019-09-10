@@ -1,10 +1,10 @@
 import React from 'react';
-import { Layout } from '../components';
+import { MainLayout } from '../components';
 
 const EditAccount: React.FC = () => (
-  <Layout title="Edit Account">
+  <MainLayout title="Edit Account">
     <EditAccount />
-  </Layout>
+  </MainLayout>
 );
 
 export default EditAccount;

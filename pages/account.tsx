@@ -1,10 +1,10 @@
 import React from 'react';
-import { AccountPage, Layout } from '../components';
+import { AccountPage, MainLayout } from '../components';
 
 const Account: React.FC = () => (
-  <Layout title="Account">
+  <MainLayout title="Account">
     <AccountPage />
-  </Layout>
+  </MainLayout>
 );
 
 export default Account;

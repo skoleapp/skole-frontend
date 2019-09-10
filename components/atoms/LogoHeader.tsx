@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledHeader = styled.h1`
+const StyledLogoHeader = styled.h1`
   margin: 0.5rem;
   font-family: 'Ubuntu Mono', monospace;
   color: var(--primary);
@@ -11,4 +11,4 @@ const StyledHeader = styled.h1`
   text-align: center;
 `;
 
-export const Header: React.FC = () => <StyledHeader>skole</StyledHeader>;
+export const LogoHeader: React.FC = () => <StyledLogoHeader>skole</StyledLogoHeader>;

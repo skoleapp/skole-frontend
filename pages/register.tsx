@@ -1,10 +1,10 @@
 import React from 'react';
-import { Layout, RegisterCard } from '../components';
+import { MainLayout, RegisterCard } from '../components';
 
 const Register: React.FC = () => (
-  <Layout title="Register">
+  <MainLayout title="Register">
     <RegisterCard />
-  </Layout>
+  </MainLayout>
 );
 
 export default Register;
