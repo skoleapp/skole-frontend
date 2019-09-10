@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { State } from '../../redux';
+import { State } from '../../interfaces';
 import { MenuListItem } from '../atoms';
 
 interface Props {
@@ -59,6 +59,7 @@ export const Menu: React.FC = () => {
         <MenuListItem href="/register">register</MenuListItem>
         <MenuListItem href="/search-schools">search</MenuListItem>
         <MenuListItem href="/account">account</MenuListItem>
+        <MenuListItem href="/edit-account">edit account</MenuListItem>
         <MenuListItem href="/feedback">feedback</MenuListItem>
       </ul>
     </StyledMenu>

@@ -1,4 +1,5 @@
 import { AnyAction } from 'redux';
+import { AuthState } from '../../interfaces';
 import {
   GET_USER,
   GET_USER_ERROR,
@@ -11,12 +12,10 @@ import {
   REGISTER_USER_ERROR,
   REGISTER_USER_SUCCESS
 } from '../actions/types';
-import { AuthState } from './interfaces';
 
 const initialState: AuthState = {
   user: null,
-  token: null,
-  loggedIn: null,
+  authenticated: null,
   loading: null,
   error: null
 };
@@ -31,15 +30,15 @@ export default (state = initialState, action: AnyAction): AuthState => {
     case LOGIN_USER_SUCCESS:
     case REGISTER_USER_SUCCESS:
     case GET_USER_SUCCESS:
-      return { ...state, loggedIn: true, loading: false };
+      return { ...state, authenticated: true, loading: false };
 
     case LOGOUT:
-      return { ...state, loggedIn: false };
+      return { ...state, authenticated: false };
 
     case LOGIN_USER_ERROR:
     case REGISTER_USER_ERROR:
     case GET_USER_ERROR:
-      return { ...state, error: action.payload, loading: false };
+      return { ...state, error: action.payload, authenticated: false, loading: false };
 
     default:
       return state;

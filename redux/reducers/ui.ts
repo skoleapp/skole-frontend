@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
+import { UIState } from '../../interfaces';
 import { TOGGLE_MENU } from '../actions/types';
-import { UIState } from './interfaces';
 
 const initialState: UIState = {
   menuOpen: false
