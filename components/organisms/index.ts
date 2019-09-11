@@ -1,5 +1,5 @@
 export { AccountPage } from './AccountPage';
-export { EditAccount } from './EditAccount';
+export { EditAccountPage } from './EditAccountPage';
 export { FeedbackPage } from './FeedbackPage';
 export { LandingPage } from './LandingPage';
 export { ListSchools } from './ListSchools';
