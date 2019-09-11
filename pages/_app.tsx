@@ -21,7 +21,7 @@ interface Props {
 
 const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     token && store.dispatch(getUser(token));
   });
 
