@@ -1,13 +1,12 @@
 import React, { HTMLProps } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { State, toggleMenu } from '../../redux';
-
+import { State } from '../../interfaces';
+import { InputCheckedProps } from '../../types';
+import { HamburgerButtonCheckbox, HamburgerButtonElements } from '../atoms';
 interface HamburgerButtonWrapperProps extends HTMLProps<HTMLElement> {
   checked: boolean | undefined;
 }
-
-type HamburgerButtonProps = string | false | undefined;
 
 const HamburgerButtonWrapper = styled.div<HamburgerButtonWrapperProps>`
   position: absolute;
@@ -21,67 +20,16 @@ const HamburgerButtonWrapper = styled.div<HamburgerButtonWrapperProps>`
   align-items: center;
   justify-content: center;
   border-radius: 0.25rem;
-  visibility: ${({ checked }): HamburgerButtonProps => checked && 'visible'};
-`;
-
-const HamburgerButtonCheckbox = styled.input`
-  position: absolute;
-  top: 0;
-  right: 0;
-  cursor: pointer;
-  width: 3.75rem;
-  height: 3.75rem;
-  opacity: 0;
-  z-index: 2;
-`;
-
-interface StyledHamburgerButtonProps extends HTMLProps<HTMLElement> {
-  checked: boolean | undefined;
-}
-
-const StyledHamburgerButton = styled.div<StyledHamburgerButtonProps>`
-  position: relative;
-  width: 100%;
-  height: 0.15rem;
-  background-color: var(--white);
-  display: flex;
-  justify-content: center;
-  border-radius: 1rem;
-  transition: all var(--menu-speed) ease;
-  transform: ${({ checked }): HamburgerButtonProps => checked && 'rotate(135deg)'};
-
-  &:before,
-  &:after {
-    content: '';
-    position: absolute;
-    top: -1rem;
-    width: inherit;
-    height: inherit;
-    background: inherit;
-    border-radius: inherit;
-    top: ${({ checked }): HamburgerButtonProps => checked && '0'};
-    transform: ${({ checked }): HamburgerButtonProps => checked && 'rotate(90deg)'};
-  }
-
-  &:after {
-    top: ${({ checked }): string => (checked ? `0` : `1rem`)};
-  }
+  visibility: ${({ checked }): InputCheckedProps => checked && 'visible'};
 `;
 
 export const HamburgerButton: React.FC = () => {
   const { menuOpen } = useSelector((state: State) => state.ui);
-  const dispatch = useDispatch();
 
   return (
     <HamburgerButtonWrapper checked={menuOpen}>
-      <HamburgerButtonCheckbox
-        type="checkbox"
-        checked={menuOpen}
-        onChange={(): void => {
-          dispatch(toggleMenu(!menuOpen));
-        }}
-      />
-      <StyledHamburgerButton checked={menuOpen} />
+      <HamburgerButtonCheckbox menuOpen={menuOpen} />
+      <HamburgerButtonElements menuOpen={menuOpen} />
     </HamburgerButtonWrapper>
   );
 };

@@ -1,10 +1,12 @@
 import React from 'react';
-import { MainLayout } from '../components';
+import { EditAccountPage, MainLayout, PrivatePage } from '../components';
 
 const EditAccount: React.FC = () => (
-  <MainLayout title="Edit Account">
-    <EditAccount />
-  </MainLayout>
+  <PrivatePage>
+    <MainLayout title="Edit Account">
+      <EditAccountPage />
+    </MainLayout>
+  </PrivatePage>
 );
 
 export default EditAccount;

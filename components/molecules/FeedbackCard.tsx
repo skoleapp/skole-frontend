@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction } from 'react';
+import { FeedbackType } from '../../types';
 import { Button, Card, FeedbackButton, Textarea, Title } from '../atoms';
 import { Row } from '../containers';
-import { FeedbackType } from '../shared';
 
 interface Props {
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
