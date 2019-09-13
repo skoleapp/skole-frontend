@@ -19,17 +19,32 @@ export const SearchItemShortcutsSection: React.FC = () => (
       <SearchItemShortcut
         text="High School"
         iconName="school"
-        href="/search-schools?school-type=high-school"
+        href={{
+          pathname: 'search-schools',
+          query: {
+            schoolType: 'high-school'
+          }
+        }}
       />
       <SearchItemShortcut
         text="University"
         iconName="graduation-cap"
-        href="/search-schools?school-type=university"
+        href={{
+          pathname: 'search-schools',
+          query: {
+            schoolType: 'university'
+          }
+        }}
       />
       <SearchItemShortcut
         text="University of Applied Sciences"
         iconName="chalkboard"
-        href="/search-schools?school-type=unversity-of-applied-sciences"
+        href={{
+          pathname: 'search-schools',
+          query: {
+            schoolType: 'university-of-applied-sciences'
+          }
+        }}
       />
     </StyledSearchItemShortcutContainer>
   </StyledShortcutSection>

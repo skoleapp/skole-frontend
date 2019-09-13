@@ -27,14 +27,23 @@ const StyledSearchItemShortcut = styled.div`
   }
 `;
 
+interface Query {
+  schoolType: string;
+}
+
+interface Href {
+  pathname: string;
+  query: Query;
+}
+
 interface Props {
   text: string;
   iconName: string;
-  href: string;
+  href: Href;
 }
 
 export const SearchItemShortcut: React.FC<Props> = ({ text, iconName, href }) => (
-  <Link href={href}>
+  <Link href={href.pathname}>
     <StyledSearchItemShortcut>
       <Column>
         <i className={`fas fa-2x fa-${iconName}`} />
