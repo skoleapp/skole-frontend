@@ -1,0 +1,22 @@
+[
+  {
+    "name": "home",
+    "href": "/"
+  },
+  {
+    "name": "login",
+    "href": "/login"
+  },
+  {
+    "name": "register",
+    "href": "/register"
+  },
+  {
+    "name": "account",
+    "href": "/account"
+  },
+  {
+    "name": "feedback",
+    "href": "/feedback"
+  }
+]

@@ -1,16 +1,15 @@
 import styled from 'styled-components';
+import menuItems from '../../static/menu-items.json';
 import { MenuListItem } from '../atoms';
 
 const StyledMenuList = styled.ul``;
 
 export const MenuList: React.FC = () => (
   <StyledMenuList>
-    <MenuListItem href="/">home</MenuListItem>
-    <MenuListItem href="/login">login</MenuListItem>
-    <MenuListItem href="/register">register</MenuListItem>
-    <MenuListItem href="/search-schools">search</MenuListItem>
-    <MenuListItem href="/account">account</MenuListItem>
-    <MenuListItem href="/edit-account">edit account</MenuListItem>
-    <MenuListItem href="/feedback">feedback</MenuListItem>
+    {menuItems.map((m, i) => (
+      <MenuListItem key={i} href={m.href}>
+        {m.name}
+      </MenuListItem>
+    ))}
   </StyledMenuList>
 );
