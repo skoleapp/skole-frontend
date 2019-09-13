@@ -1,18 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GoButton, LogoHeader, SearchInput } from '../atoms';
-import { Row } from '../containers';
+import { LogoHeader } from '../atoms';
+import { SearchInputSection, SearchItemShortcutsSection } from '../molecules';
 
 const StyledLandingPage = styled.div`
   margin-top: 3rem;
-`
+`;
 
 export const LandingPage: React.FC = () => (
   <StyledLandingPage>
     <LogoHeader />
-    <Row>
-      <SearchInput type="text" placeholder="Search courses..." />
-      <GoButton />
-    </Row>
+    <SearchInputSection />
+    <SearchItemShortcutsSection />
   </StyledLandingPage>
 );
