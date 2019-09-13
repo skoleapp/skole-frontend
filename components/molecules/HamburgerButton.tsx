@@ -9,7 +9,7 @@ interface HamburgerButtonWrapperProps extends HTMLProps<HTMLElement> {
 }
 
 const HamburgerButtonWrapper = styled.div<HamburgerButtonWrapperProps>`
-  position: absolute;
+  position: fixed;
   top: 0.5rem;
   right: 0.5rem;
   z-index: 2;

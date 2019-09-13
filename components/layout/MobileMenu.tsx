@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State } from '../../interfaces';
-import { MenuListItem } from '../atoms';
+import { MenuList } from '../molecules';
 
 interface Props {
   menuOpen: boolean;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const StyledMenu = styled.div<Props>`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
@@ -42,7 +42,7 @@ const StyledMenu = styled.div<Props>`
   }
 `;
 
-export const Menu: React.FC = () => {
+export const MobileMenu: React.FC = () => {
   const { menuOpen } = useSelector((state: State) => state.ui);
   const [counter, setCounter] = useState(0);
 
@@ -53,15 +53,7 @@ export const Menu: React.FC = () => {
 
   return (
     <StyledMenu menuOpen={menuOpen} counter={counter}>
-      <ul>
-        <MenuListItem href="/">home</MenuListItem>
-        <MenuListItem href="/login">login</MenuListItem>
-        <MenuListItem href="/register">register</MenuListItem>
-        <MenuListItem href="/search-schools">search</MenuListItem>
-        <MenuListItem href="/account">account</MenuListItem>
-        <MenuListItem href="/edit-account">edit account</MenuListItem>
-        <MenuListItem href="/feedback">feedback</MenuListItem>
-      </ul>
+      <MenuList />
     </StyledMenu>
   );
 };

@@ -4,6 +4,7 @@ import { Column } from './Column';
 
 const StyledContainer = styled.div`
   height: 100vh;
+  margin-top: 5rem;
 `;
 
 export const Container: React.FC = ({ children }) => (

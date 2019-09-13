@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { Container } from '../containers';
-import { Background, Footer, Head, Menu, Navbar } from '../layout';
+import { Background, Footer, Head, MobileMenu, Navbar } from '../layout';
 
 interface Props {
   title?: string;
@@ -12,7 +12,7 @@ export const MainLayout: React.FC<Props> = ({ title, children }) => (
   <>
     <Head title={title} />
     <Background />
-    <Menu />
+    <MobileMenu />
     <Navbar />
     <Container>{children}</Container>
     <Footer />
