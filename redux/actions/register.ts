@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Dispatch } from 'redux';
 import { getApiUrl } from '../../utils';
 import { SkoleToast } from '../../utils/toast';
-import { REGISTER_USER, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS } from './types';
+import { REGISTER, REGISTER_ERROR, REGISTER_SUCCESS } from './types';
 
 export interface RegisterParams {
   username: string;
@@ -15,13 +15,13 @@ export const register = (params: RegisterParams) => async (dispatch: Dispatch): 
   const url = getApiUrl('register-user');
   const payload = JSON.stringify(params);
 
-  dispatch({ type: REGISTER_USER });
+  dispatch({ type: REGISTER });
 
   try {
     const res = await axios.post(url, payload);
 
     dispatch({
-      type: REGISTER_USER_SUCCESS,
+      type: REGISTER_SUCCESS,
       payload: res.data
     });
 
@@ -32,7 +32,7 @@ export const register = (params: RegisterParams) => async (dispatch: Dispatch): 
     });
   } catch (e) {
     dispatch({
-      type: REGISTER_USER_ERROR,
+      type: REGISTER_ERROR,
       payload: e.message
     });
 

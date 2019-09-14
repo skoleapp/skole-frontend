@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
 import { Store } from 'redux';
-import { getUser, initStore } from '../redux';
+import { initStore, refreshToken } from '../redux';
 import '../styles';
 
 interface StatelessPage<P = {}> extends React.FC<P> {
@@ -22,7 +22,7 @@ interface Props {
 const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
-    token && store.dispatch(getUser(token));
+    token && store.dispatch(refreshToken(token));
   });
 
   return (

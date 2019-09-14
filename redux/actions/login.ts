@@ -1,33 +1,36 @@
 import axios from 'axios';
-import Router from 'next/router';
 import { Dispatch } from 'redux';
 import { getApiUrl } from '../../utils';
 import { SkoleToast } from '../../utils/toast';
-import { LOGIN_USER, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS } from './types';
+import { LOGIN, LOGIN_ERROR, LOGIN_SUCCESS } from './types';
 
 interface LoginParams {
   usernameOrEmail: string;
   password: string;
 }
 
-export const login = (params: LoginParams) => async (dispatch: Dispatch): Promise<void> => {
+export const login = ({ usernameOrEmail, password }: LoginParams) => async (
+  dispatch: Dispatch
+): Promise<void> => {
   const url = getApiUrl('login-user');
-  const payload = JSON.stringify(params);
 
-  dispatch({ type: LOGIN_USER });
+  const payload = {
+    username_or_email: usernameOrEmail,
+    password: password
+  };
+
+  dispatch({ type: LOGIN });
 
   try {
     const res = await axios.post(url, payload);
 
     dispatch({
-      type: LOGIN_USER_SUCCESS,
-      payload: res.data
+      type: LOGIN_SUCCESS,
+      payload: res.data.token
     });
-
-    Router.push('/user/me');
   } catch (e) {
     dispatch({
-      type: LOGIN_USER_ERROR,
+      type: LOGIN_ERROR,
       payload: e.message
     });
 

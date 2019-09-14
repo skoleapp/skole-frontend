@@ -3,40 +3,43 @@ import { AuthState } from '../../interfaces';
 import {
   GET_USER,
   GET_USER_ERROR,
-  GET_USER_SUCCESS,
-  LOGIN_USER,
-  LOGIN_USER_ERROR,
-  LOGIN_USER_SUCCESS,
+  LOGIN,
+  LOGIN_ERROR,
+  LOGIN_SUCCESS,
   LOGOUT,
-  REGISTER_USER,
-  REGISTER_USER_ERROR,
-  REGISTER_USER_SUCCESS
+  REFRESH_TOKEN,
+  REFRESH_TOKEN_SUCCESS,
+  REGISTER,
+  REGISTER_ERROR,
+  REGISTER_SUCCESS
 } from '../actions/types';
 
 const initialState: AuthState = {
   user: null,
-  authenticated: null,
+  authenticated: false,
   loading: null,
   error: null
 };
 
 export default (state = initialState, action: AnyAction): AuthState => {
   switch (action.type) {
-    case LOGIN_USER:
-    case REGISTER_USER:
+    case REGISTER:
     case GET_USER:
+    case LOGIN:
+    case REFRESH_TOKEN:
       return { ...state, loading: true };
 
-    case LOGIN_USER_SUCCESS:
-    case REGISTER_USER_SUCCESS:
-    case GET_USER_SUCCESS:
+    case LOGIN_SUCCESS:
+    case REFRESH_TOKEN_SUCCESS:
+      localStorage.setItem('token', action.payload);
       return { ...state, authenticated: true, loading: false };
 
     case LOGOUT:
-      return { ...state, authenticated: false };
+    case REGISTER_SUCCESS:
+      return { ...state, authenticated: false, loading: false };
 
-    case LOGIN_USER_ERROR:
-    case REGISTER_USER_ERROR:
+    case LOGIN_ERROR:
+    case REGISTER_ERROR:
     case GET_USER_ERROR:
       return { ...state, error: action.payload, authenticated: false, loading: false };
 
