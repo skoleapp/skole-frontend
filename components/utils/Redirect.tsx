@@ -4,8 +4,8 @@ import { LoadingScreen } from '../layout';
 
 interface Props {
   to: string;
-  loadingMessage: string;
+  loadingText: string;
 }
 
-export const Redirect: React.FC<Props> = ({ to, loadingMessage }) =>
-  Router.push(`/${to}`) && <LoadingScreen text={loadingMessage} />;
+export const Redirect: React.FC<Props> = ({ to, loadingText }) =>
+  Router.push(`/${to}`) && <LoadingScreen loadingText={loadingText} />;

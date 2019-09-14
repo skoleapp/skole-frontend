@@ -35,6 +35,9 @@ export default (state = initialState, action: AnyAction): AuthState => {
       return { ...state, authenticated: true, loading: false };
 
     case LOGOUT:
+      localStorage.removeItem('token');
+      return { ...state, authenticated: false };
+
     case REGISTER_SUCCESS:
       return { ...state, authenticated: false, loading: false };
 

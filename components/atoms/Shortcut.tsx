@@ -25,6 +25,7 @@ const StyledShortcut = styled.div`
     background: var(--secondary);
     color: var(--primary);
     border-color: var(--primary);
+    cursor: pointer;
   }
 `;
 

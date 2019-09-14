@@ -1,4 +1,3 @@
-export { DesktopMenuItems } from './DesktopMenuItems';
 export { FeedbackCard } from './FeedbackCard';
 export { HamburgerButton } from './HamburgerButton';
 export { LoginForm } from './LoginForm';

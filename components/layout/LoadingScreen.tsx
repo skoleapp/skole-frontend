@@ -21,12 +21,12 @@ const StyledLoadingScreen = styled.div`
   background: var(--primary);
 `;
 interface Props {
-  text: string;
+  loadingText: string;
 }
 
-export const LoadingScreen: React.FC<Props> = ({ text }) => (
+export const LoadingScreen: React.FC<Props> = ({ loadingText }) => (
   <StyledLoadingScreen>
-    <p>{text}</p>
+    <p>{loadingText}</p>
     <ClipLoader css={override} sizeUnit={'rem'} size={2} color={'var(--secondary)'} />
   </StyledLoadingScreen>
 );

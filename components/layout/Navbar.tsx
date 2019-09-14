@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useMobileBreakPoint } from '../hooks';
-import { DesktopMenuItems, HamburgerButton } from '../molecules';
+import { HamburgerButton } from '../molecules';
+import { DesktopMenuItems } from '../organisms';
 
 const StyledNavbar = styled.div`
   position: fixed;
