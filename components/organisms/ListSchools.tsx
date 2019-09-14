@@ -1,4 +1,4 @@
 import React from 'react';
-import { Title } from '../atoms';
+import { H1 } from '../atoms';
 
-export const ListSchools: React.FC = () => <Title>List Schools</Title>;
+export const ListSchools: React.FC = () => <H1>List Schools</H1>;

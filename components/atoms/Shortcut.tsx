@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { Column } from '../containers';
+import { Icon } from './Icon';
 
 const StyledShortcut = styled.div`
   margin: 0.5rem;
@@ -46,7 +47,7 @@ export const Shortcut: React.FC<Props> = ({ text, iconName, href }) => (
   <Link href={href.pathname}>
     <StyledShortcut>
       <Column>
-        <i className={`fas fa-2x fa-${iconName}`} />
+        <Icon iconName={iconName} />
         <p>{text}</p>
       </Column>
     </StyledShortcut>

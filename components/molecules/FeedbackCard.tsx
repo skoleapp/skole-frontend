@@ -1,6 +1,6 @@
 import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction } from 'react';
 import { FeedbackType } from '../../types';
-import { Button, Card, FeedbackButton, Textarea, Title } from '../atoms';
+import { Button, Card, FeedbackButton, H1, Textarea } from '../atoms';
 import { Row } from '../containers';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 export const FeedbackCard: React.FC<Props> = ({ handleSubmit, setRate, setComment, rate }) => (
   <Card>
-    <Title>Feedback</Title>
+    <H1>Feedback</H1>
     <form onSubmit={(e): void => handleSubmit(e)}>
       <Row>
         <FeedbackButton

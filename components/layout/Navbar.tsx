@@ -14,6 +14,7 @@ const StyledNavbar = styled.div`
 export const Navbar: React.FC = () => {
   const isMobile = useMobileBreakPoint();
 
+  // Render empty navbar until a value is resolved
   if (isMobile === null) {
     return <StyledNavbar />;
   }
