@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import shortcuts from '../../static/shortcuts.json';
 import { H3, Shortcut } from '../atoms';
 
 const StyledShortcutsContainer = styled.div`
@@ -16,36 +17,9 @@ export const ShortcutsSection: React.FC = () => (
   <StyledShortcutsSection>
     <H3>Where do you study?</H3>
     <StyledShortcutsContainer>
-      <Shortcut
-        text="High School"
-        iconName="school"
-        href={{
-          pathname: 'search-schools',
-          query: {
-            schoolType: 'high-school'
-          }
-        }}
-      />
-      <Shortcut
-        text="University"
-        iconName="graduation-cap"
-        href={{
-          pathname: 'search-schools',
-          query: {
-            schoolType: 'university'
-          }
-        }}
-      />
-      <Shortcut
-        text="University of Applied Sciences"
-        iconName="chalkboard"
-        href={{
-          pathname: 'search-schools',
-          query: {
-            schoolType: 'university-of-applied-sciences'
-          }
-        }}
-      />
+      {shortcuts.map((s, i) => (
+        <Shortcut key={i} text={s.text} iconName={s.iconName} href={s.href} />
+      ))}
     </StyledShortcutsContainer>
   </StyledShortcutsSection>
 );

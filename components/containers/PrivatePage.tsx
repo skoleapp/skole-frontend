@@ -1,8 +1,8 @@
-import Router from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { State } from '../../interfaces';
 import { LoadingScreen } from '../layout';
+import { Redirect } from '../utils';
 
 export const PrivatePage: React.FC = ({ children }) => {
   const { authenticated, loading } = useSelector((state: State) => state.auth);
@@ -12,7 +12,7 @@ export const PrivatePage: React.FC = ({ children }) => {
   }
 
   if (!authenticated) {
-    return Router.push('/login') && <LoadingScreen text="Loading login screen..." />;
+    return <Redirect to="login" loadingMessage="Loading login screen..." />;
   }
 
   return <>{children}</>;
