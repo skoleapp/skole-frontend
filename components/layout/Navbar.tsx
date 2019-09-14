@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HamburgerButton } from '../molecules';
-import { DesktopNavbar } from './DesktopNavbar';
+import { useMobileBreakPoint } from '../../utils/useMobileBreakPoint';
+import { DesktopMenuItems, HamburgerButton } from '../molecules';
 
 const StyledNavbar = styled.div`
   position: fixed;
@@ -11,9 +11,8 @@ const StyledNavbar = styled.div`
   background: var(--primary);
 `;
 
-export const Navbar: React.FC = () => (
-  <StyledNavbar>
-    <DesktopNavbar />
-    <HamburgerButton />
-  </StyledNavbar>
-);
+export const Navbar: React.FC = () => {
+  const isMobile = useMobileBreakPoint();
+
+  return <StyledNavbar>{isMobile ? <HamburgerButton /> : <DesktopMenuItems />}</StyledNavbar>;
+};

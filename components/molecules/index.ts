@@ -1,3 +1,5 @@
+export { DesktopMenuItems } from './DesktopMenuItems';
+export { DesktopMenuList } from './DesktopMenuList';
 export { FeedbackCard } from './FeedbackCard';
 export { HamburgerButton } from './HamburgerButton';
 export { LoginForm } from './LoginForm';
@@ -6,4 +8,3 @@ export { RegisterForm } from './RegisterForm';
 export { SearchInputSection } from './SearchInputSection';
 export { SearchItemShortcutsSection } from './SearchItemShortcutsSection';
 export { ThanksForFeedbackCard } from './ThanksForFeedbackCard';
-export { DesktopMenuList } from './DesktopMenuList';
