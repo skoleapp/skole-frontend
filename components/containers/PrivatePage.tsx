@@ -12,7 +12,7 @@ export const PrivatePage: React.FC = ({ children }) => {
   }
 
   if (!authenticated) {
-    return Router.push('/login') && <LoadingScreen text="Redirecting to login screen..." />;
+    return Router.push('/login') && <LoadingScreen text="Loading login screen..." />;
   }
 
   return <>{children}</>;
