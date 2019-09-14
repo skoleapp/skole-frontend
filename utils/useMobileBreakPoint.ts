@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 const MOBILE_BREAKPOINT = 768;
 
 export const useMobileBreakPoint = () => {
-  const [width, setWidth] = React.useState();
+  const [width, setWidth] = React.useState<number | null>(null);
   const resize = () => setWidth(window.innerWidth);
 
   useEffect(() => {
@@ -12,5 +12,5 @@ export const useMobileBreakPoint = () => {
     return () => window.removeEventListener('resize', resize);
   }, []);
 
-  return width < MOBILE_BREAKPOINT;
+  return width && width < MOBILE_BREAKPOINT;
 };

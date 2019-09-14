@@ -7,8 +7,8 @@ import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
 import { Store } from 'redux';
-import '../index.css';
 import { getUser, initStore } from '../redux';
+import '../styles';
 
 interface StatelessPage<P = {}> extends React.FC<P> {
   getInitialProps?: ({ Component, ctx }: AppContextType<Router>) => Promise<{ pageProps: {} }>;

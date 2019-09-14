@@ -14,5 +14,9 @@ const StyledNavbar = styled.div`
 export const Navbar: React.FC = () => {
   const isMobile = useMobileBreakPoint();
 
+  if (isMobile === null) {
+    return <StyledNavbar />;
+  }
+
   return <StyledNavbar>{isMobile ? <HamburgerButton /> : <DesktopMenuItems />}</StyledNavbar>;
 };
