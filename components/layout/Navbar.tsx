@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useMobileBreakPoint } from '../../utils/useMobileBreakPoint';
+import { useMobileBreakPoint } from '../../utils';
 import { DesktopMenuItems, HamburgerButton } from '../molecules';
 
 const StyledNavbar = styled.div`

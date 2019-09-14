@@ -5,5 +5,5 @@ export { Card } from './Card';
 export * from './headers';
 export * from './inputs';
 export { MenuListItem } from './MenuListItem';
-export { SearchItemShortcut } from './SearchItemShortcut';
+export { Shortcut } from './Shortcut';
 export { Textarea } from './Textarea';

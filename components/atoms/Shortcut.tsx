@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Column } from '../containers';
 
-const StyledSearchItemShortcut = styled.div`
+const StyledShortcut = styled.div`
   margin: 0.5rem;
   padding: 0.5rem;
   height: 12.5rem;
@@ -42,13 +42,13 @@ interface Props {
   href: Href;
 }
 
-export const SearchItemShortcut: React.FC<Props> = ({ text, iconName, href }) => (
+export const Shortcut: React.FC<Props> = ({ text, iconName, href }) => (
   <Link href={href.pathname}>
-    <StyledSearchItemShortcut>
+    <StyledShortcut>
       <Column>
         <i className={`fas fa-2x fa-${iconName}`} />
         <p>{text}</p>
       </Column>
-    </StyledSearchItemShortcut>
+    </StyledShortcut>
   </Link>
 );

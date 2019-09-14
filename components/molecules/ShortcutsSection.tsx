@@ -1,22 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import { H3, SearchItemShortcut } from '../atoms';
+import { H3, Shortcut } from '../atoms';
 
-const StyledSearchItemShortcutContainer = styled.div`
+const StyledShortcutsContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
 `;
 
-const StyledShortcutSection = styled.div`
+const StyledShortcutsSection = styled.div`
   margin-top: 5rem;
 `;
 
-export const SearchItemShortcutsSection: React.FC = () => (
-  <StyledShortcutSection>
+export const ShortcutsSection: React.FC = () => (
+  <StyledShortcutsSection>
     <H3>Where do you study?</H3>
-    <StyledSearchItemShortcutContainer>
-      <SearchItemShortcut
+    <StyledShortcutsContainer>
+      <Shortcut
         text="High School"
         iconName="school"
         href={{
@@ -26,7 +26,7 @@ export const SearchItemShortcutsSection: React.FC = () => (
           }
         }}
       />
-      <SearchItemShortcut
+      <Shortcut
         text="University"
         iconName="graduation-cap"
         href={{
@@ -36,7 +36,7 @@ export const SearchItemShortcutsSection: React.FC = () => (
           }
         }}
       />
-      <SearchItemShortcut
+      <Shortcut
         text="University of Applied Sciences"
         iconName="chalkboard"
         href={{
@@ -46,6 +46,6 @@ export const SearchItemShortcutsSection: React.FC = () => (
           }
         }}
       />
-    </StyledSearchItemShortcutContainer>
-  </StyledShortcutSection>
+    </StyledShortcutsContainer>
+  </StyledShortcutsSection>
 );
