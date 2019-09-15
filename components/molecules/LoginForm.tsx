@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { State } from '../../interfaces';
 import { login } from '../../redux';
 import { Button, Input, StyledForm } from '../atoms';
+import { Column } from '../containers';
 import { LoadingScreen } from '../layout';
 import { Redirect } from '../utils';
 
@@ -42,27 +43,29 @@ export const LoginForm: React.FC = () => {
       onSubmit={onSubmit}
       render={({ values, setFieldValue }): React.ReactNode | undefined => (
         <StyledForm>
-          <Input
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              setFieldValue('usernameOrEmail', e.target.value)
-            }
-            value={values['usernameOrEmail']}
-            placeholder="Username or email"
-            name="usernameOrEmail"
-            type="text"
-          />
-          <ErrorMessage name="usernameOrEmail" component="div" className="invalid-feedback" />
-          <Input
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              setFieldValue('password', e.target.value)
-            }
-            value={values['password']}
-            placeholder="Password"
-            name="password"
-            type="password"
-          />
-          <ErrorMessage name="password" component="div" className="invalid-feedback" />
-          <Button type="submit">login</Button>
+          <Column>
+            <Input
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setFieldValue('usernameOrEmail', e.target.value)
+              }
+              value={values['usernameOrEmail']}
+              placeholder="Username or email"
+              name="usernameOrEmail"
+              type="text"
+            />
+            <ErrorMessage name="usernameOrEmail" component="div" className="invalid-feedback" />
+            <Input
+              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
+                setFieldValue('password', e.target.value)
+              }
+              value={values['password']}
+              placeholder="Password"
+              name="password"
+              type="password"
+            />
+            <ErrorMessage name="password" component="div" className="invalid-feedback" />
+            <Button type="submit">login</Button>
+          </Column>
         </StyledForm>
       )}
     />
