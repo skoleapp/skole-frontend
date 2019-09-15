@@ -4,7 +4,7 @@ import { LogoHeader } from '../atoms';
 import { SearchInputSection, ShortcutsSection } from '../molecules';
 
 const StyledLandingPage = styled.div`
-  margin-top: 3rem;
+  margin-top: 2rem;
 `;
 
 export const LandingPage: React.FC = () => (

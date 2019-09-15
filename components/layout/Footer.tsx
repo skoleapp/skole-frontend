@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Anchor } from '../atoms';
 import { Column } from '../containers';
 
 const StyledFooter = styled.div`
   height: 8rem;
   background: var(--primary);
-  text-align: center;
 `;
 
 const StyledColumn = styled(Column)`
@@ -16,7 +16,8 @@ const StyledColumn = styled(Column)`
 export const Footer: React.FC = () => (
   <StyledFooter>
     <StyledColumn sm={8} md={6}>
-      © {new Date().getFullYear()} Skole Ltd.
+      <Anchor>© {new Date().getFullYear()} Skole Ltd.</Anchor>
+      <Anchor>Feedback</Anchor>
     </StyledColumn>
   </StyledFooter>
 );

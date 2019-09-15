@@ -1,10 +1,10 @@
-import { ErrorMessage, Form, Formik } from 'formik';
+import { ErrorMessage, Formik } from 'formik';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { State } from '../../interfaces';
 import { register } from '../../redux';
-import { Button, Input } from '../atoms';
+import { Button, Input, StyledForm } from '../atoms';
 import { LoadingScreen } from '../layout';
 import { Redirect } from '../utils';
 
@@ -58,7 +58,7 @@ export const RegisterForm: React.FC = () => {
       validationSchema={registerSchema}
       onSubmit={onSubmit}
       render={({ values, setFieldValue }): React.ReactNode | undefined => (
-        <Form>
+        <StyledForm>
           <Input
             onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
               setFieldValue('username', e.target.value)
@@ -100,7 +100,7 @@ export const RegisterForm: React.FC = () => {
           />
           <ErrorMessage name="confirmPassword" component="div" className="invalid-feedback" />
           <Button type="submit">register</Button>
-        </Form>
+        </StyledForm>
       )}
     />
   );
