@@ -9,11 +9,11 @@ export const getUser: any = (token: string) => async (dispatch: Dispatch): Promi
   try {
     const url = getApiUrl('get-user');
     const config = tokenConfig(token);
-    const { data } = await skoleAPI.get(url, config);
+    const { user } = await skoleAPI.get(url, config);
 
     dispatch({
       type: GET_USER_SUCCESS,
-      payload: data
+      payload: user
     });
   } catch (error) {
     createError(error);

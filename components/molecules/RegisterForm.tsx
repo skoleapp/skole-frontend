@@ -1,5 +1,5 @@
 import { ErrorMessage, Formik } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { State } from '../../interfaces';
@@ -7,7 +7,6 @@ import { register } from '../../redux';
 import { Button, Input, StyledForm } from '../atoms';
 import { Column } from '../containers';
 import { LoadingScreen } from '../layout';
-import { Redirect } from '../utils';
 
 const registerSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -32,20 +31,13 @@ interface FormikValues {
 export const RegisterForm: React.FC = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state: State) => state.auth);
-  const [registered, setRegistered] = useState(false);
 
   const onSubmit = (fields: FormikValues): void => {
-    dispatch(register(fields))
-      .then(() => setRegistered(true))
-      .catch(() => console.log('Error registering user...'));
+    dispatch(register(fields));
   };
 
   if (loading) {
     return <LoadingScreen loadingText="Logging in..." />;
-  }
-
-  if (registered) {
-    return <Redirect to="/login" loadingText="Successfully registered new user!" />;
   }
 
   return (

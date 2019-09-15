@@ -1,23 +1,17 @@
-import React, { useState } from 'react';
+import Link from 'next/link';
+import React from 'react';
 import { Anchor, H1 } from '../atoms';
 import { Column } from '../containers';
 import { LoginForm } from '../molecules';
-import { Redirect } from '../utils';
 
-export const LoginPage: React.FC = () => {
-  const [redirecting, setRedirecting] = useState(false);
-
-  if (redirecting) {
-    return <Redirect to="/register" />;
-  }
-
-  return (
-    <>
-      <Column>
-        <H1>Login</H1>
-        <LoginForm />
-        <Anchor onClick={(): void => setRedirecting(true)}>New user?</Anchor>
-      </Column>
-    </>
-  );
-};
+export const LoginPage: React.FC = () => (
+  <>
+    <Column>
+      <H1>Login</H1>
+      <LoginForm />
+      <Link href="/register">
+        <Anchor>New user?</Anchor>
+      </Link>
+    </Column>
+  </>
+);

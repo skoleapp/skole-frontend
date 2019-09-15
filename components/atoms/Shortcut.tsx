@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import Link from 'next/link';
+import React from 'react';
 import styled from 'styled-components';
 import { Column } from '../containers';
-import { Redirect } from '../utils';
 import { Icon } from './Icon';
 
 const StyledShortcut = styled.div`
@@ -44,19 +44,13 @@ interface Props {
   href: Href;
 }
 
-export const Shortcut: React.FC<Props> = ({ text, iconName, href }) => {
-  const [redirecting, setRedirecting] = useState(false);
-
-  if (redirecting) {
-    return <Redirect to={href.pathname} />;
-  }
-
-  return (
-    <StyledShortcut onClick={(): void => setRedirecting(true)}>
+export const Shortcut: React.FC<Props> = ({ text, iconName, href }) => (
+  <Link href={href.pathname}>
+    <StyledShortcut>
       <Column>
         <Icon iconName={iconName} />
         <p>{text}</p>
       </Column>
     </StyledShortcut>
-  );
-};
+  </Link>
+);

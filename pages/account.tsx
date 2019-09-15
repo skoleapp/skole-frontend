@@ -2,11 +2,11 @@ import React from 'react';
 import { AccountPage, MainLayout, PrivatePage } from '../components';
 
 const Account: React.FC = () => (
-  <MainLayout title="Account">
-    <PrivatePage>
+  <PrivatePage>
+    <MainLayout title="Account">
       <AccountPage />
-    </PrivatePage>
-  </MainLayout>
+    </MainLayout>
+  </PrivatePage>
 );
 
 export default Account;
