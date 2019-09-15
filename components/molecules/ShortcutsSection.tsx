@@ -7,9 +7,12 @@ const StyledShortcutsContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
+  margin-top: 3rem;
 `;
 
-const StyledShortcutsSection = styled.div``;
+const StyledShortcutsSection = styled.div`
+  margin-top: 5rem;
+`;
 
 export const ShortcutsSection: React.FC = () => (
   <StyledShortcutsSection>

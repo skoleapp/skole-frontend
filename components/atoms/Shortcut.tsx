@@ -7,21 +7,20 @@ import { Icon } from './Icon';
 const StyledShortcut = styled.div`
   margin: 0.5rem;
   padding: 0.5rem;
-  height: 15rem;
-  width: 15rem;
+  height: 10rem;
+  width: 10rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.75rem;
+  border-radius: 100%;
   border: 0.1rem solid var(--black);
   color: var(--black);
-  font-size: 1.5rem;
+  font-size: 1rem;
   background: var(--secondary);
   box-shadow: var(--box-shadow);
+  animation: var(--floating);
 
   &:hover {
-    transition: var(--transition);
-    transform: var(--scale);
     background: var(--secondary);
     color: var(--primary);
     border-color: var(--primary);

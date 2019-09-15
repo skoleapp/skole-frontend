@@ -17,6 +17,7 @@
   --menu-speed: 0.3s;
   --fade-in: fadeIn 0.25s forwards;
   --fade-out: fadeOut 0.25s forwards;
+  --floating: float 3s ease-in-out infinite;
 
   /* Shadows */
   --text-shadow: 0 0 0.05rem var(--black);
