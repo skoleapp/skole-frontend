@@ -13,4 +13,7 @@ export const Button = styled.button`
   text-transform: uppercase;
   box-shadow: var(--box-shadow);
   border: 0.1rem solid var(--white);
+  &:focus {
+    outline: none;
+  }
 `;

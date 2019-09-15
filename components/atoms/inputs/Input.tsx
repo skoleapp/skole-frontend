@@ -12,7 +12,6 @@ export const Input = styled.input`
 
   &:hover,
   &:focus {
-    transform: var(--scale);
-    transition: var(--transition);
+    outline: none;
   }
 `;

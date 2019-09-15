@@ -16,10 +16,9 @@ const StyledGoButton = styled.button`
 
   &:hover,
   &:focus {
-    transform: var(--scale);
-    transition: var(--transition);
     background: var(--primary);
     color: var(--white);
+    outline: none;
   }
 `;
 
