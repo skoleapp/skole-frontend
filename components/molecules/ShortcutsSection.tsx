@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import shortcuts from '../../static/shortcuts.json';
+import { shortcuts } from '../../static';
 import { H3, Shortcut } from '../atoms';
 
 const StyledShortcutsContainer = styled.div`

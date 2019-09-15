@@ -13,7 +13,7 @@ const Login: React.FC = () => {
   }
 
   if (authenticated) {
-    return <Redirect to="account" loadingText="Successfully logged in!" />;
+    return <Redirect to="/account" loadingText="Successfully logged in!" />;
   }
 
   return (

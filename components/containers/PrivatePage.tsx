@@ -8,11 +8,11 @@ export const PrivatePage: React.FC = ({ children }) => {
   const { authenticated, loading } = useSelector((state: State) => state.auth);
 
   if (loading) {
-    return <LoadingScreen loadingText="Loading user details..." />;
+    return <LoadingScreen />;
   }
 
   if (!authenticated) {
-    return <Redirect to="login" loadingText="Loading login screen..." />;
+    return <Redirect to="/login" />;
   }
 
   return <>{children}</>;

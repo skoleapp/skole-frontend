@@ -2,6 +2,7 @@ import { css } from '@emotion/core';
 import React from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import styled from 'styled-components';
+import { getLoadingText } from '../../utils';
 
 const override = css`
   display: block;
@@ -10,9 +11,11 @@ const override = css`
 `;
 
 const StyledLoadingScreen = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,12 +24,12 @@ const StyledLoadingScreen = styled.div`
   background: var(--primary);
 `;
 interface Props {
-  loadingText: string;
+  loadingText?: string;
 }
 
 export const LoadingScreen: React.FC<Props> = ({ loadingText }) => (
   <StyledLoadingScreen>
-    <p>{loadingText}</p>
+    <p>{loadingText ? loadingText : getLoadingText()}</p>
     <ClipLoader css={override} sizeUnit={'rem'} size={2} color={'var(--secondary)'} />
   </StyledLoadingScreen>
 );

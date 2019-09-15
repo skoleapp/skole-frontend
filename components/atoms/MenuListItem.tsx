@@ -1,8 +1,8 @@
-import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { toggleMenu } from '../../redux';
+import { Redirect } from '../utils';
 import { Anchor } from './Anchor';
 
 const StyledMenuListItem = styled.li`
@@ -28,16 +28,20 @@ interface Props {
 
 export const MenuListItem: React.FC<Props> = ({ href, children }) => {
   const dispatch = useDispatch();
+  const [redirecting, setRedirecting] = useState(false);
+
+  if (redirecting) {
+    return <Redirect to={href} />;
+  }
 
   return (
     <StyledMenuListItem
       onClick={(): void => {
         dispatch(toggleMenu(false));
+        setRedirecting(true);
       }}
     >
-      <Link href={href}>
-        <Anchor variant="white">{children}</Anchor>
-      </Link>
+      <Anchor variant="white">{children}</Anchor>
     </StyledMenuListItem>
   );
 };
