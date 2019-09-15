@@ -9,11 +9,12 @@ interface LoginParams {
   password: string;
 }
 
+// eslint-disable-next-line
 export const login: any = ({ usernameOrEmail, password }: LoginParams) => async (
   dispatch: Dispatch
 ): Promise<void> => {
   const payload = {
-    username_or_email: usernameOrEmail,
+    username_or_email: usernameOrEmail, // eslint-disable-line
     password: password
   };
 

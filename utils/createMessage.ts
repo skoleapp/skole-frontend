@@ -1,6 +1,6 @@
 import { SkoleToast } from './toast';
 
-export const createMessage = (msg: string) => {
+export const createMessage = (msg: string): void => {
   SkoleToast({
     msg,
     toastType: 'success'

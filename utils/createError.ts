@@ -1,6 +1,7 @@
 import { SkoleToast } from './toast';
 
-export const createError = (error: any) => {
+// eslint-disable-next-line
+export const createError = (error: any): void => {
   if (error.username) {
     SkoleToast({
       msg: `Username: ${error.username.join()}`,

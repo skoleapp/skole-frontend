@@ -5,7 +5,8 @@ export const skoleAPI = axios.create({
   baseURL: basePath
 });
 
-const responseHandler = (response: AxiosResponse) => {
+// eslint-disable-next-line
+const responseHandler = (response: AxiosResponse): Promise<AxiosResponse<any>> => {
   const { data } = response;
 
   if (data.error) {
@@ -15,7 +16,8 @@ const responseHandler = (response: AxiosResponse) => {
   return Promise.resolve(response);
 };
 
-const errorHandler = (error: AxiosResponse) => {
+// eslint-disable-next-line
+const errorHandler = (error: AxiosResponse): Promise<AxiosResponse<any>> => {
   return Promise.reject({ ...error });
 };
 

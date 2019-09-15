@@ -11,43 +11,44 @@ export interface RegisterParams {
   confirmPassword: string;
 }
 
-export const register: any = ({
-  username,
-  email,
-  password,
-  confirmPassword
-}: RegisterParams) => async (dispatch: Dispatch): Promise<AnyAction> => {
-  return new Promise(async (resolve, reject) => {
-    dispatch({ type: REGISTER });
+// eslint-disable-next-line
+export const register: any = ({ username, email, password, confirmPassword }: RegisterParams) => (
+  dispatch: Dispatch
+): Promise<AnyAction> => {
+  return new Promise(
+    // eslint-disable-next-line
+    async (resolve, reject): Promise<void> => {
+      dispatch({ type: REGISTER });
 
-    const payload = {
-      username,
-      email,
-      password: {
-        password,
-        confirm_password: confirmPassword
+      const payload = {
+        username,
+        email,
+        password: {
+          password,
+          confirm_password: confirmPassword // eslint-disable-line
+        }
+      };
+
+      try {
+        const url = getApiUrl('register');
+        const { data } = await skoleAPI.post(url, payload);
+
+        const msg = registerSuccessMessage(data.data.username);
+
+        setTimeout(() => {
+          createMessage(msg);
+        }, 250);
+
+        resolve(dispatch({ type: REGISTER_SUCCESS }));
+      } catch (error) {
+        createError(error);
+        reject(
+          dispatch({
+            type: REGISTER_ERROR,
+            payload: error
+          })
+        );
       }
-    };
-
-    try {
-      const url = getApiUrl('register');
-      const { data } = await skoleAPI.post(url, payload);
-
-      const msg = registerSuccessMessage(data.data.username);
-
-      setTimeout(() => {
-        createMessage(msg);
-      }, 250);
-
-      resolve(dispatch({ type: REGISTER_SUCCESS }));
-    } catch (error) {
-      createError(error);
-      reject(
-        dispatch({
-          type: REGISTER_ERROR,
-          payload: error
-        })
-      );
     }
-  });
+  );
 };

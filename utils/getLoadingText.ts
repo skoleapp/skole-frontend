@@ -1,4 +1,4 @@
 // TODO: Build a meme generator
-export const getLoadingText = () => {
+export const getLoadingText = (): string => {
   return 'Loading...';
 };

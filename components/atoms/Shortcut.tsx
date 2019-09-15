@@ -52,7 +52,7 @@ export const Shortcut: React.FC<Props> = ({ text, iconName, href }) => {
   }
 
   return (
-    <StyledShortcut onClick={() => setRedirecting(true)}>
+    <StyledShortcut onClick={(): void => setRedirecting(true)}>
       <Column>
         <Icon iconName={iconName} />
         <p>{text}</p>
