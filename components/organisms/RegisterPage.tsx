@@ -7,7 +7,7 @@ export const RegisterPage: React.FC = () => (
   <>
     <H1>Register</H1>
     <RegisterForm />
-    <Link href="/link">
+    <Link href="/login">
       <Anchor>Already a user?</Anchor>
     </Link>
   </>
