@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { basePath } from './api';
 
 export const skoleAPI = axios.create({
@@ -8,17 +8,13 @@ export const skoleAPI = axios.create({
 // eslint-disable-next-line
 const responseHandler = (response: AxiosResponse): Promise<AxiosResponse<any>> => {
   const { data } = response;
-
-  if (data.error) {
-    return Promise.reject(data.error);
-  }
-
-  return Promise.resolve(response);
+  return Promise.resolve(data);
 };
 
 // eslint-disable-next-line
-const errorHandler = (error: AxiosResponse): Promise<AxiosResponse<any>> => {
-  return Promise.reject({ ...error });
+const errorHandler = (error: any): Promise<AxiosError<any>> => {
+  const { data } = error.response;
+  return Promise.reject(data.error);
 };
 
 skoleAPI.interceptors.response.use(

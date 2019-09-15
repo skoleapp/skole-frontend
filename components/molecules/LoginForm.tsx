@@ -7,11 +7,10 @@ import { login } from '../../redux';
 import { Button, Input, StyledForm } from '../atoms';
 import { Column } from '../containers';
 import { LoadingScreen } from '../layout';
-import { Redirect } from '../utils';
 
 const loginSchema = Yup.object().shape({
-  usernameOrEmail: Yup.string().required('Username or email is required'),
-  password: Yup.string().required('Password is required')
+  usernameOrEmail: Yup.string().required('Username or email is required!'),
+  password: Yup.string().required('Password is required!')
 });
 
 interface FormikValues {
@@ -21,16 +20,14 @@ interface FormikValues {
 
 export const LoginForm: React.FC = () => {
   const dispatch = useDispatch();
-  const { loading, authenticated } = useSelector((state: State) => state.auth);
+  const { loading } = useSelector((state: State) => state.auth);
 
-  const onSubmit = (fields: FormikValues): void => dispatch(login(fields));
+  const onSubmit = (fields: FormikValues): void => {
+    dispatch(login(fields));
+  };
 
   if (loading) {
     return <LoadingScreen loadingText="Logging in..." />;
-  }
-
-  if (authenticated) {
-    return <Redirect to="/account" loadingText="Successfully logged in!" />;
   }
 
   return (
