@@ -3,10 +3,11 @@ import withRedux from 'next-redux-wrapper';
 import { AppContextType } from 'next-server/dist/lib/utils';
 import { AppContext } from 'next/app';
 import { Router, useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
 import { Store } from 'redux';
+import { LoadingScreen } from '../components/layout';
 import { initStore, refreshToken } from '../redux';
 import '../styles';
 
@@ -20,6 +21,12 @@ interface Props {
 }
 
 const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
+  const [redirect, setRedirect] = useState(false);
+
+  Router.events.on('routeChangeStart', () => setRedirect(true));
+  Router.events.on('routeChangeComplete', () => setRedirect(false));
+  Router.events.on('routeChangeError', () => setRedirect(false));
+
   const router = useRouter();
 
   useEffect(() => {
@@ -27,7 +34,11 @@ const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Prop
       const token = localStorage.getItem('token');
       token && store.dispatch(refreshToken(token));
     }
-  });
+  }, []);
+
+  if (redirect) {
+    return <LoadingScreen />;
+  }
 
   return (
     <Provider store={store}>

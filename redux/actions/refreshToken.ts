@@ -9,11 +9,11 @@ export const refreshToken: any = (token: string) => async (dispatch: Dispatch): 
   try {
     const url = getApiUrl('refresh-token');
     const config = tokenConfig(token);
-    const { data } = await skoleAPI.get(url, config);
+    const { refresh_token } = await skoleAPI.get(url, config);
 
     dispatch({
       type: REFRESH_TOKEN_SUCCESS,
-      payload: data.refresh_token
+      payload: refresh_token
     });
   } catch (error) {
     dispatch({
