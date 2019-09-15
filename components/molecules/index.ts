@@ -5,4 +5,4 @@ export { MenuList } from './MenuList';
 export { RegisterForm } from './RegisterForm';
 export { SearchInputSection } from './SearchInputSection';
 export { ShortcutsSection } from './ShortcutsSection';
-export { ThanksForFeedbackCard } from './ThanksForFeedbackCard';
+export { ThanksForFeedback } from './ThanksForFeedback';

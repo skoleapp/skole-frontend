@@ -14,11 +14,11 @@ const getColorForVariant = (variant: string): string => {
 };
 
 interface Props extends React.HTMLProps<HTMLAnchorElement> {
-  variant: string;
+  variant?: string;
 }
 
 export const Anchor = styled.a<Props>`
-  color: ${({ variant }): string => getColorForVariant(variant)};
+  color: ${({ variant }): string => (variant ? getColorForVariant(variant) : 'var(--black)')};
   text-decoration: none;
   margin: 0.5rem;
 

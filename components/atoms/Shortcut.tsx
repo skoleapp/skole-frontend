@@ -12,12 +12,12 @@ const StyledShortcut = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
   border-radius: 0.75rem;
   border: 0.1rem solid var(--black);
   color: var(--black);
   font-size: 1.5rem;
-  background: var(--primary);
+  background: var(--secondary);
+  box-shadow: var(--box-shadow);
 
   &:hover {
     transition: var(--transition);

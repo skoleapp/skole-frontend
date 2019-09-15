@@ -1,9 +1,9 @@
 import React from 'react';
-import { LoginCard, MainLayout } from '../components';
+import { LoginPage, MainLayout } from '../components';
 
 const Login: React.FC = () => (
   <MainLayout title="Login">
-    <LoginCard />
+    <LoginPage />
   </MainLayout>
 );
 

@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Anchor } from '../atoms';
 import { Column } from '../containers';
+import { Redirect } from '../utils';
 
 const StyledFooter = styled.div`
   height: 8rem;
   background: var(--primary);
-  text-align: center;
 `;
 
 const StyledColumn = styled(Column)`
@@ -13,10 +14,19 @@ const StyledColumn = styled(Column)`
   height: 100%;
 `;
 
-export const Footer: React.FC = () => (
-  <StyledFooter>
-    <StyledColumn sm={8} md={6}>
-      © {new Date().getFullYear()} Skole Ltd.
-    </StyledColumn>
-  </StyledFooter>
-);
+export const Footer: React.FC = () => {
+  const [redirect, setRedirect] = useState(false);
+
+  if (redirect) {
+    return <Redirect to="/feedback" />;
+  }
+
+  return (
+    <StyledFooter>
+      <StyledColumn sm={8} md={6}>
+        <Anchor>© {new Date().getFullYear()} Skole Ltd.</Anchor>
+        <Anchor onClick={() => setRedirect(true)}>Feedback</Anchor>
+      </StyledColumn>
+    </StyledFooter>
+  );
+};
