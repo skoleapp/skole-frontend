@@ -1,7 +1,4 @@
 import React from 'react';
-// import schools from '../../temp-schools.json';
-import { Title } from '../atoms';
+import { H1 } from '../atoms';
 
-// console.log(schools);
-
-export const ListSchools: React.FC = () => <Title>List Schools</Title>;
+export const ListSchools: React.FC = () => <H1>List Schools</H1>;

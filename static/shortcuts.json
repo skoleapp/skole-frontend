@@ -1,0 +1,32 @@
+[
+  {
+    "text": "High School",
+    "iconName": "school",
+    "href": {
+      "pathname": "search-schools",
+      "query": {
+        "schoolType": "high-school"
+      }
+    }
+  },
+  {
+    "text": "University",
+    "iconName": "graduation-cap",
+    "href": {
+      "pathname": "search-schools",
+      "query": {
+        "schoolType": "university"
+      }
+    }
+  },
+  {
+    "text": "University of Applied Sciences",
+    "iconName": "chalkboard",
+    "href": {
+      "pathname": "search-schools",
+      "query": {
+        "schoolType": "university-of-applied-sciences"
+      }
+    }
+  }
+]

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const StyledGoButton = styled.button`
   border: 0.1rem solid var(--primary);
   height: 2.52rem;
-  border-radius: 0 0.5rem 0.5rem 0;
+  border-radius: 0 0.75rem 0.75rem 0;
   background: var(--white);
   text-transform: uppercase;
   color: var(--primary);

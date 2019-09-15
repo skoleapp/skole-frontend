@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { Column } from './Column';
 
 const StyledContainer = styled.div`
-  height: 100vh;
+  min-height: 100vh;
+  margin-top: 6rem;
+  margin-bottom: 1rem;
 `;
 
 export const Container: React.FC = ({ children }) => (

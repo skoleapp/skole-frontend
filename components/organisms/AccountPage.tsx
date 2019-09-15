@@ -1,4 +1,4 @@
 import React from 'react';
-import { Title } from '../atoms';
+import { H1 } from '../atoms';
 
-export const AccountPage: React.FC = () => <Title>Account</Title>;
+export const AccountPage: React.FC = () => <H1>Account</H1>;

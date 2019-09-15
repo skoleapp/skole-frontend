@@ -27,6 +27,8 @@ export const Column = styled.div<Props>`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  justify-content: center;
+  align-items: center;
 
   ${({ xs }): BaseColumnFn => (xs ? getWidthString(xs) : 'width: 100%')};
 

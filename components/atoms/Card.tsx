@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 export const StyledCard = styled.div`
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   text-align: center;
   background-color: var(--white);
   margin: 0.5rem;

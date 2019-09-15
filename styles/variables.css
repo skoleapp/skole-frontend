@@ -1,0 +1,19 @@
+@import './keyframes.css';
+
+:root {
+  /* Colors */
+  --primary: rgb(162, 75, 63);
+  --secondary: rgba(253, 246, 227);
+  --white: whitesmoke;
+  --black: #000000;
+  --green: lightgreen;
+  --yellow: yellow;
+  --red: red;
+
+  /* Animations */
+  --scale: scale(1.05);
+  --transition: all 0.1s ease-in;
+  --menu-speed: 0.3s;
+  --fade-in: fadeIn 0.25s forwards;
+  --fade-out: fadeOut 0.25s forwards;
+}
