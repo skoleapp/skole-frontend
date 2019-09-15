@@ -15,10 +15,10 @@ const StyledColumn = styled(Column)`
 `;
 
 export const Footer: React.FC = () => {
-  const [redirect, setRedirect] = useState(false)
+  const [redirect, setRedirect] = useState(false);
 
   if (redirect) {
-    return <Redirect to="/feedback" />
+    return <Redirect to="/feedback" />;
   }
 
   return (

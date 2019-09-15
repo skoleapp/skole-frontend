@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const StyledGoButton = styled.button`
   border: 0.1rem solid var(--primary);
-  height: 2.84rem;
+  height: 2.87rem;
   width: 4rem;
   border-radius: 0 0.75rem 0.75rem 0;
   background: var(--white);
