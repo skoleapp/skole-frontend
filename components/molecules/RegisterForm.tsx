@@ -1,21 +1,24 @@
 import { ErrorMessage, Form, Formik } from 'formik';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
+import { State } from '../../interfaces';
 import { register } from '../../redux';
 import { Button, Input } from '../atoms';
+import { LoadingScreen } from '../layout';
+import { Redirect } from '../utils';
 
 const registerSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
   email: Yup.string()
-    .email('Email is invalid')
-    .required('Email is required'),
+    .email('Invalid email!')
+    .required('Email is required!'),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
+    .min(6, 'Password must be at least 6 characters long!')
+    .required('Password is required!'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Passwords must match')
+    .oneOf([Yup.ref('password'), null], 'Passwords do not match!')
+    .required('Confirm password is required!')
 });
 
 interface FormikValues {
@@ -27,6 +30,22 @@ interface FormikValues {
 
 export const RegisterForm: React.FC = () => {
   const dispatch = useDispatch();
+  const { loading } = useSelector((state: State) => state.auth);
+  const [registered, setRegistered] = useState(false);
+
+  const onSubmit = (fields: FormikValues): void => {
+    dispatch(register(fields))
+      .then(() => setRegistered(true))
+      .catch(() => console.log('Error registering user...'));
+  };
+
+  if (loading) {
+    return <LoadingScreen loadingText="Logging in..." />;
+  }
+
+  if (registered) {
+    return <Redirect to="/login" loadingText="Successfully registered new user!" />;
+  }
 
   return (
     <Formik
@@ -37,9 +56,7 @@ export const RegisterForm: React.FC = () => {
         confirmPassword: ''
       }}
       validationSchema={registerSchema}
-      onSubmit={(fields: FormikValues): void => {
-        dispatch(register(fields));
-      }}
+      onSubmit={onSubmit}
       render={({ values, setFieldValue }): React.ReactNode | undefined => (
         <Form>
           <Input

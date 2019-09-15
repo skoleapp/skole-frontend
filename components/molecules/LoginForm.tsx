@@ -1,9 +1,12 @@
 import { ErrorMessage, Form, Formik } from 'formik';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
+import { State } from '../../interfaces';
 import { login } from '../../redux';
 import { Button, Input } from '../atoms';
+import { LoadingScreen } from '../layout';
+import { Redirect } from '../utils';
 
 const loginSchema = Yup.object().shape({
   usernameOrEmail: Yup.string().required('Username or email is required'),
@@ -17,6 +20,17 @@ interface FormikValues {
 
 export const LoginForm: React.FC = () => {
   const dispatch = useDispatch();
+  const { loading, authenticated } = useSelector((state: State) => state.auth);
+
+  const onSubmit = (fields: FormikValues): void => dispatch(login(fields));
+
+  if (loading) {
+    return <LoadingScreen loadingText="Logging in..." />;
+  }
+
+  if (authenticated) {
+    return <Redirect to="/account" loadingText="Successfully logged in!" />;
+  }
 
   return (
     <Formik
@@ -25,9 +39,7 @@ export const LoginForm: React.FC = () => {
         password: ''
       }}
       validationSchema={loginSchema}
-      onSubmit={(fields: FormikValues): void => {
-        dispatch(login(fields));
-      }}
+      onSubmit={onSubmit}
       render={({ values, setFieldValue }): React.ReactNode | undefined => (
         <Form>
           <Input

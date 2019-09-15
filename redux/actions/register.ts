@@ -1,45 +1,53 @@
-import axios from 'axios';
-import { Dispatch } from 'redux';
-import { getApiUrl } from '../../utils';
-import { SkoleToast } from '../../utils/toast';
+import { AnyAction, Dispatch } from 'redux';
+import { registerSuccessMessage } from '../../static';
+import { createError, getApiUrl, skoleAPI } from '../../utils';
+import { createMessage } from '../../utils/createMessage';
 import { REGISTER, REGISTER_ERROR, REGISTER_SUCCESS } from './types';
 
 export interface RegisterParams {
   username: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
-// TODO: Add return type for the function
-export const register = (params: RegisterParams) => async (dispatch: Dispatch): Promise<void> => {
-  const url = getApiUrl('register-user');
-  const payload = JSON.stringify(params);
+export const register: any = ({
+  username,
+  email,
+  password,
+  confirmPassword
+}: RegisterParams) => async (dispatch: Dispatch): Promise<AnyAction> => {
+  return new Promise(async (resolve, reject) => {
+    dispatch({ type: REGISTER });
 
-  dispatch({ type: REGISTER });
+    const payload = {
+      username,
+      email,
+      password: {
+        password,
+        confirm_password: confirmPassword
+      }
+    };
 
-  try {
-    const res = await axios.post(url, payload);
+    try {
+      const url = getApiUrl('register');
+      const { data } = await skoleAPI.post(url, payload);
 
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: res.data
-    });
+      const msg = registerSuccessMessage(data.data.username);
 
-    // TODO: Add translated message
-    SkoleToast({
-      msg: `Welcome ${res.data.username}!`,
-      toastType: 'success'
-    });
-  } catch (e) {
-    dispatch({
-      type: REGISTER_ERROR,
-      payload: e.message
-    });
+      setTimeout(() => {
+        createMessage(msg);
+      }, 250);
 
-    // TODO: Add translated message
-    SkoleToast({
-      msg: 'Encountered error while registering new user...',
-      toastType: 'error'
-    });
-  }
+      resolve(dispatch({ type: REGISTER_SUCCESS }));
+    } catch (error) {
+      createError(error);
+      reject(
+        dispatch({
+          type: REGISTER_ERROR,
+          payload: error
+        })
+      );
+    }
+  });
 };

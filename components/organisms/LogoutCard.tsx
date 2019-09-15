@@ -10,7 +10,7 @@ export const LogoutCard: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(logout());
+    authenticated && dispatch(logout());
   }, []);
 
   authenticated && loading && <LoadingScreen loadingText="Logging out..." />;

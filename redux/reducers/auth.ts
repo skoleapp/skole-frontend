@@ -8,6 +8,7 @@ import {
   LOGIN_SUCCESS,
   LOGOUT,
   REFRESH_TOKEN,
+  REFRESH_TOKEN_ERROR,
   REFRESH_TOKEN_SUCCESS,
   REGISTER,
   REGISTER_ERROR,
@@ -15,7 +16,13 @@ import {
 } from '../actions/types';
 
 const initialState: AuthState = {
-  user: null,
+  user: {
+    id: null,
+    username: null,
+    email: null,
+    bio: null,
+    points: null
+  },
   authenticated: false,
   loading: null,
   error: null
@@ -36,14 +43,15 @@ export default (state = initialState, action: AnyAction): AuthState => {
 
     case LOGOUT:
       localStorage.removeItem('token');
-      return { ...state, authenticated: false };
+      return { ...initialState };
 
     case REGISTER_SUCCESS:
-      return { ...state, authenticated: false, loading: false };
+      return { ...state, loading: false };
 
     case LOGIN_ERROR:
     case REGISTER_ERROR:
     case GET_USER_ERROR:
+    case REFRESH_TOKEN_ERROR:
       return { ...state, error: action.payload, authenticated: false, loading: false };
 
     default:

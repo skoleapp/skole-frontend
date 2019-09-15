@@ -1,2 +1,3 @@
-export { privateMenuItems, publicMenuItems } from './menuItems';
-export { shortcuts } from './shortcuts';
+export * from './menuItems';
+export * from './messages';
+export * from './shortcuts';

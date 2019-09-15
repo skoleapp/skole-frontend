@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State } from '../../interfaces';
+import { Column } from '../containers';
 import { MenuList } from '../molecules';
 
 interface Props {
@@ -53,7 +54,9 @@ export const MobileMenu: React.FC = () => {
 
   return (
     <StyledMenu menuOpen={menuOpen} counter={counter}>
-      <MenuList />
+      <Column>
+        <MenuList />
+      </Column>
     </StyledMenu>
   );
 };

@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { Dispatch } from 'redux';
-import { getApiUrl } from '../../utils';
-import { SkoleToast } from '../../utils/toast';
+import { loginSuccessMessage } from '../../static';
+import { createError, getApiUrl, skoleAPI } from '../../utils';
+import { createMessage } from '../../utils/createMessage';
 import { LOGIN, LOGIN_ERROR, LOGIN_SUCCESS } from './types';
 
 interface LoginParams {
@@ -9,11 +9,9 @@ interface LoginParams {
   password: string;
 }
 
-export const login = ({ usernameOrEmail, password }: LoginParams) => async (
+export const login: any = ({ usernameOrEmail, password }: LoginParams) => async (
   dispatch: Dispatch
 ): Promise<void> => {
-  const url = getApiUrl('login-user');
-
   const payload = {
     username_or_email: usernameOrEmail,
     password: password
@@ -22,22 +20,25 @@ export const login = ({ usernameOrEmail, password }: LoginParams) => async (
   dispatch({ type: LOGIN });
 
   try {
-    const res = await axios.post(url, payload);
+    const url = getApiUrl('login');
+    const { data } = await skoleAPI.post(url, payload);
+
+    const msg = loginSuccessMessage('test');
+
+    setTimeout(() => {
+      createMessage(msg);
+    }, 500);
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: res.data.token
+      payload: data.token
     });
-  } catch (e) {
+  } catch (error) {
+    createError(error);
+
     dispatch({
       type: LOGIN_ERROR,
-      payload: e.message
-    });
-
-    // TODO: Add translated message
-    SkoleToast({
-      msg: 'Encountered error while logging in...',
-      toastType: 'error'
+      payload: error
     });
   }
 };
