@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { createError, getApiUrl, skoleAPI, tokenConfig } from '../../utils';
+import { createErrors, getApiUrl, skoleAPI, tokenConfig } from '../../utils';
 import { GET_USER, GET_USER_ERROR, GET_USER_SUCCESS } from './types';
 
 // eslint-disable-next-line
@@ -16,10 +16,9 @@ export const getUser: any = (token: string) => async (dispatch: Dispatch): Promi
       payload: user
     });
   } catch (error) {
-    createError(error);
     dispatch({
       type: GET_USER_ERROR,
-      payload: error
+      payload: createErrors(error)
     });
   }
 };

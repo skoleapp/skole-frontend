@@ -22,4 +22,9 @@ export const Button = styled.button`
   &:focus {
     outline: none;
   }
+
+  &:disabled {
+    opacity: 0.5;
+    transform: none;
+  }
 `;

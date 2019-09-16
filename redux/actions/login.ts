@@ -1,6 +1,5 @@
-import Router from 'next/router';
 import { Dispatch } from 'redux';
-import { createError, getApiUrl, skoleAPI } from '../../utils';
+import { createErrors, getApiUrl, skoleAPI } from '../../utils';
 import { LOGIN, LOGIN_ERROR, LOGIN_SUCCESS } from './types';
 
 interface LoginParams {
@@ -8,26 +7,21 @@ interface LoginParams {
   password: string;
 }
 
-export const login = ({ usernameOrEmail, password }: LoginParams) => async (
-  dispatch: Dispatch
-): Promise<void> => {
-  const payload = {
-    username_or_email: usernameOrEmail, // eslint-disable-line
-    password: password
-  };
+export const login = ({ usernameOrEmail, password }: LoginParams) => (dispatch: Dispatch) => {
+  return new Promise(async (resolve, reject) => {
+    const payload = {
+      username_or_email: usernameOrEmail, // eslint-disable-line
+      password: password
+    };
 
-  dispatch({ type: LOGIN });
+    dispatch({ type: LOGIN });
 
-  try {
-    const url = getApiUrl('login');
-    const { token } = await skoleAPI.post(url, payload);
-    dispatch({ type: LOGIN_SUCCESS, payload: token });
-    Router.push('/account');
-  } catch (error) {
-    createError(error);
-    dispatch({
-      type: LOGIN_ERROR,
-      payload: error
-    });
-  }
+    try {
+      const url = getApiUrl('login');
+      const { token } = await skoleAPI.post(url, payload);
+      resolve(dispatch({ type: LOGIN_SUCCESS, payload: token }));
+    } catch (error) {
+      reject(dispatch({ type: LOGIN_ERROR, payload: createErrors(error) }));
+    }
+  });
 };

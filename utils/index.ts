@@ -1,6 +1,6 @@
 export { getApiUrl } from './api';
 export { skoleAPI } from './axiosConfig';
-export { createError } from './createError';
+export { createErrors } from './createErrors';
 export { getLoadingText } from './getLoadingText';
 export { SkoleToast } from './toast';
 export { tokenConfig } from './tokenConfig';

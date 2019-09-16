@@ -1,102 +1,45 @@
-import { ErrorMessage, Formik } from 'formik';
+import { ErrorMessage, Field, Form, FormikProps } from 'formik';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as Yup from 'yup';
-import { State } from '../../interfaces';
-import { register } from '../../redux';
-import { Button, Input, StyledForm } from '../atoms';
+import { RegisterFormValues } from '../../interfaces';
+import {
+  Button,
+  CheckboxFormField,
+  FormErrorMessage,
+  LoadingIndicator,
+  TextInputFormField
+} from '../atoms';
 import { Column } from '../containers';
-import { LoadingScreen } from '../layout';
 
-const registerSchema = Yup.object().shape({
-  username: Yup.string().required('Username is required'),
-  email: Yup.string()
-    .email('Invalid email!')
-    .required('Email is required!'),
-  password: Yup.string()
-    .min(6, 'Password must be at least 6 characters long!')
-    .required('Password is required!'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords do not match!')
-    .required('Confirm password is required!')
-});
-
-interface FormikValues {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export const RegisterForm: React.FC = () => {
-  const dispatch = useDispatch();
-  const { loading } = useSelector((state: State) => state.auth);
-
-  const onSubmit = (fields: FormikValues): void => {
-    dispatch(register(fields));
-  };
-
-  if (loading) {
-    return <LoadingScreen loadingText="Registering user..." />;
-  }
-
-  return (
-    <Formik
-      initialValues={{
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-      }}
-      validationSchema={registerSchema}
-      onSubmit={onSubmit}
-      render={({ values, setFieldValue }): React.ReactNode | undefined => (
-        <StyledForm>
-          <Column>
-            <Input
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                setFieldValue('username', e.target.value)
-              }
-              value={values.username}
-              placeholder="Username"
-              name="username"
-              type="text"
-            />
-            <ErrorMessage name="username" component="div" className="invalid-feedback" />
-            <Input
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                setFieldValue('email', e.target.value)
-              }
-              value={values.email}
-              placeholder="Email"
-              name="email"
-              type="text"
-            />
-            <ErrorMessage name="email" component="div" className="invalid-feedback" />
-            <Input
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                setFieldValue('password', e.target.value)
-              }
-              value={values.password}
-              placeholder="Password"
-              name="password"
-              type="password"
-            />
-            <ErrorMessage name="password" component="div" className="invalid-feedback" />
-            <Input
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
-                setFieldValue('confirmPassword', e.target.value)
-              }
-              value={values.confirmPassword}
-              placeholder="Confirm password"
-              name="confirmPassword"
-              type="password"
-            />
-            <ErrorMessage name="confirmPassword" component="div" className="invalid-feedback" />
-            <Button type="submit">register</Button>
-          </Column>
-        </StyledForm>
-      )}
+export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> = ({
+  isSubmitting
+}) => (
+  <Form>
+    <Field placeholder="Username" name="username" component={TextInputFormField} label="Username" />
+    <Field placeholder="Email" name="email" component={TextInputFormField} label="Email" />
+    <Field
+      placeholder="Password"
+      name="password"
+      component={TextInputFormField}
+      label="Password"
+      type="password"
     />
-  );
-};
+    <Field
+      placeholder="Confirm password"
+      name="confirmPassword"
+      type="password"
+      component={TextInputFormField}
+      label="Confirm Password"
+    />
+    <Field name="agreeToTerms" component={CheckboxFormField} label="Agree to Terms" />
+    <Column>
+      {isSubmitting ? (
+        <LoadingIndicator />
+      ) : (
+        <ErrorMessage name="general" component={FormErrorMessage} />
+      )}
+    </Column>
+    <Button type="submit" disabled={isSubmitting}>
+      register
+    </Button>
+  </Form>
+);

@@ -1,14 +1,7 @@
-import { css } from '@emotion/core';
 import React from 'react';
-import ClipLoader from 'react-spinners/ClipLoader';
 import styled from 'styled-components';
 import { getLoadingText } from '../../utils';
-
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: black;
-`;
+import { LoadingIndicator } from '../atoms';
 
 const StyledLoadingScreen = styled.div`
   position: fixed;
@@ -30,6 +23,6 @@ interface Props {
 export const LoadingScreen: React.FC<Props> = ({ loadingText }) => (
   <StyledLoadingScreen>
     <p>{loadingText ? loadingText : getLoadingText()}</p>
-    <ClipLoader css={override} sizeUnit={'rem'} size={2} color={'var(--secondary)'} />
+    <LoadingIndicator primary />
   </StyledLoadingScreen>
 );

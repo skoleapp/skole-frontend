@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { getApiUrl, skoleAPI, tokenConfig } from '../../utils';
+import { createErrors, getApiUrl, skoleAPI, tokenConfig } from '../../utils';
 import { REFRESH_TOKEN, REFRESH_TOKEN_ERROR, REFRESH_TOKEN_SUCCESS } from './types';
 
 // eslint-disable-next-line
@@ -18,7 +18,7 @@ export const refreshToken: any = (token: string) => async (dispatch: Dispatch): 
   } catch (error) {
     dispatch({
       type: REFRESH_TOKEN_ERROR,
-      payload: error
+      payload: createErrors(error)
     });
   }
 };

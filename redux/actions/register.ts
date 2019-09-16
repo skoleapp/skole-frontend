@@ -1,6 +1,5 @@
-import Router from 'next/router';
 import { Dispatch } from 'redux';
-import { createError, getApiUrl, skoleAPI } from '../../utils';
+import { createErrors, getApiUrl, skoleAPI } from '../../utils';
 import { REGISTER, REGISTER_ERROR, REGISTER_SUCCESS } from './types';
 export interface RegisterParams {
   username: string;
@@ -9,30 +8,27 @@ export interface RegisterParams {
   confirmPassword: string;
 }
 
-export const register = ({ username, email, password, confirmPassword }: RegisterParams) => async (
+export const register = ({ username, email, password, confirmPassword }: RegisterParams) => (
   dispatch: Dispatch
-): Promise<void> => {
-  dispatch({ type: REGISTER });
+) => {
+  return new Promise(async (resolve, reject) => {
+    dispatch({ type: REGISTER });
 
-  const payload = {
-    username,
-    email,
-    password: {
-      password,
-      confirm_password: confirmPassword // eslint-disable-line
+    const payload = {
+      username,
+      email,
+      password: {
+        password,
+        confirm_password: confirmPassword // eslint-disable-line
+      }
+    };
+
+    try {
+      const url = getApiUrl('register');
+      const { message } = await skoleAPI.post(url, payload);
+      resolve(dispatch({ type: REGISTER_SUCCESS, payload: message }));
+    } catch (error) {
+      reject(dispatch({ type: REGISTER_ERROR, payload: createErrors(error) }));
     }
-  };
-
-  try {
-    const url = getApiUrl('register');
-    const { message } = await skoleAPI.post(url, payload);
-    dispatch({ type: REGISTER_SUCCESS, payload: message });
-    Router.push('/login');
-  } catch (error) {
-    createError(error);
-    dispatch({
-      type: REGISTER_ERROR,
-      payload: error
-    });
-  }
+  });
 };
