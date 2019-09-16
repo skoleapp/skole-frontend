@@ -9,11 +9,11 @@ export const refreshToken: any = (token: string) => async (dispatch: Dispatch): 
   try {
     const url = getApiUrl('refresh-token');
     const config = tokenConfig(token);
-    const { refresh_token } = await skoleAPI.get(url, config);
+    const { refresh_token } = await skoleAPI.get(url, config); // eslint-disable-line @typescript-eslint/camelcase
 
     dispatch({
       type: REFRESH_TOKEN_SUCCESS,
-      payload: refresh_token
+      payload: refresh_token // eslint-disable-line @typescript-eslint/camelcase
     });
   } catch (error) {
     dispatch({

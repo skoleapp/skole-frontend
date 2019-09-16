@@ -8,7 +8,7 @@ interface Errors {
 
 // eslint-disable-next-line
 export const createErrors = (error: any): Errors => {
-  let errors = {
+  const errors = {
     username: '',
     email: '',
     password: '',

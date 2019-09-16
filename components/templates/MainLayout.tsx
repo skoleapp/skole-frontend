@@ -9,7 +9,8 @@ interface StyledMainLayoutProps {
 }
 
 const StyledMainLayout = styled.div<StyledMainLayoutProps>`
-  background: ${({ secondary }) => (secondary && 'var(--secondary-bg)') || 'var(--primary-bg)'};
+  background: ${({ secondary }): string =>
+    (secondary && 'var(--secondary-bg)') || 'var(--primary-bg)'};
 `;
 
 interface Props {

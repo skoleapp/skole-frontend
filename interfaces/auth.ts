@@ -12,6 +12,6 @@ export interface LoginFormValues {
 }
 
 export interface FormFieldProps {
-  field: any;
+  field: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
   label: string;
 }
