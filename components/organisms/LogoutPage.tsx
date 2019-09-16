@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../interfaces';
 import { logout } from '../../redux';
-import { H1 } from '../atoms';
+import { Button, H3 } from '../atoms';
 import { LoadingScreen } from '../layout';
 
 export const LogoutPage: React.FC = () => {
@@ -13,7 +14,14 @@ export const LogoutPage: React.FC = () => {
     authenticated && dispatch(logout());
   }, []);
 
-  authenticated && loading && <LoadingScreen loadingText="Logging out..." />;
+  authenticated || (loading && <LoadingScreen loadingText="Logging out..." />);
 
-  return <H1>You have been logged out!</H1>;
+  return (
+    <>
+      <H3>You are logged out!</H3>
+      <Link href="/login">
+        <Button>login again</Button>
+      </Link>
+    </>
+  );
 };

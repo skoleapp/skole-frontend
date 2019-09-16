@@ -7,4 +7,5 @@ export * from './inputs';
 export { MenuListItem } from './MenuListItem';
 export { Shortcut } from './Shortcut';
 export { StyledForm } from './StyledForm';
+export { Text } from './Text';
 export { Textarea } from './Textarea';

@@ -1,4 +1,12 @@
+import Link from 'next/link';
 import React from 'react';
-import { H1 } from '../atoms';
+import { Button, Text } from '../atoms';
 
-export const ThanksForFeedback: React.FC = () => <H1>Thank you for your feedback!</H1>;
+export const ThanksForFeedback: React.FC = () => (
+  <>
+    <Text>Thank you for your feedback!</Text>
+    <Link href="/">
+      <Button>back to home</Button>
+    </Link>
+  </>
+);

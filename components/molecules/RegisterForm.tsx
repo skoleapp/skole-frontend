@@ -37,7 +37,7 @@ export const RegisterForm: React.FC = () => {
   };
 
   if (loading) {
-    return <LoadingScreen loadingText="Logging in..." />;
+    return <LoadingScreen loadingText="Registering user..." />;
   }
 
   return (
@@ -57,7 +57,7 @@ export const RegisterForm: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                 setFieldValue('username', e.target.value)
               }
-              value={values['username']}
+              value={values.username}
               placeholder="Username"
               name="username"
               type="text"
@@ -67,7 +67,7 @@ export const RegisterForm: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                 setFieldValue('email', e.target.value)
               }
-              value={values['email']}
+              value={values.email}
               placeholder="Email"
               name="email"
               type="text"
@@ -77,7 +77,7 @@ export const RegisterForm: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                 setFieldValue('password', e.target.value)
               }
-              value={values['password']}
+              value={values.password}
               placeholder="Password"
               name="password"
               type="password"
@@ -87,7 +87,7 @@ export const RegisterForm: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                 setFieldValue('confirmPassword', e.target.value)
               }
-              value={values['confirmPassword']}
+              value={values.confirmPassword}
               placeholder="Confirm password"
               name="confirmPassword"
               type="password"

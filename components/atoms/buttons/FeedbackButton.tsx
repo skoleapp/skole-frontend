@@ -4,13 +4,13 @@ import { Button } from './Button';
 const getBackgroundForVaraint = (variant: string): string => {
   switch (variant) {
     case 'good':
-      return 'var(--green)';
+      return 'var(--good-button)';
     case 'ok':
-      return 'var(--yellow)';
+      return 'var(--neutral-button)';
     case 'bad':
-      return 'var(--red)';
+      return 'var(--negative-button)';
     default:
-      return 'var(--white)';
+      return 'var(--primary)';
   }
 };
 
@@ -21,17 +21,8 @@ interface Props {
 
 export const FeedbackButton = styled(Button)<Props>`
   background: ${({ variant }): string => getBackgroundForVaraint(variant)};
-  border: 0.1rem solid var(--black);
   color: var(--white);
-  text-shadow: 0.1rem 0.1rem 0.1rem var(--black);
+  text-shadow: var(--text-shadow);
   opacity: ${({ selected }): string => (selected ? '1' : '0.5')};
-
-  &:hover {
-    transform: var(--scale);
-    transition: var(--transition);
-  }
-
-  &:focus {
-    outline: none;
-  }
+  width: 5rem;
 `;

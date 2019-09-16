@@ -2,7 +2,7 @@ import React from 'react';
 import { MainLayout, RegisterPage } from '../components';
 
 const Register: React.FC = () => (
-  <MainLayout title="Register">
+  <MainLayout title="Register" secondary>
     <RegisterPage />
   </MainLayout>
 );

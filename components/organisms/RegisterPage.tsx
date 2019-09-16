@@ -8,7 +8,7 @@ export const RegisterPage: React.FC = () => (
     <H1>Register</H1>
     <RegisterForm />
     <Link href="/login">
-      <Anchor>Already a user?</Anchor>
+      <Anchor variant="red">Already a user?</Anchor>
     </Link>
   </>
 );

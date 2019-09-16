@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import { FeedbackType } from '../../types';
-import { FeedbackCard, ThanksForFeedback } from '../molecules';
+import { H1 } from '../atoms';
+import { FeedbackForm, ThanksForFeedback } from '../molecules';
 
 export const FeedbackPage: React.FC = () => {
   //const dispatch = useDispatch();
@@ -9,20 +10,20 @@ export const FeedbackPage: React.FC = () => {
   const [comment, setComment] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     setSubmitted(true);
     console.log({ rate, comment });
   };
 
-  return !submitted ? (
-    <FeedbackCard
-      handleSubmit={handleSubmit}
-      setRate={setRate}
-      setComment={setComment}
-      rate={rate}
-    />
-  ) : (
-    <ThanksForFeedback />
+  return (
+    <>
+      <H1>Leave Feedback</H1>
+      {!submitted ? (
+        <FeedbackForm onSubmit={onSubmit} setRate={setRate} setComment={setComment} rate={rate} />
+      ) : (
+        <ThanksForFeedback />
+      )}
+    </>
   );
 };

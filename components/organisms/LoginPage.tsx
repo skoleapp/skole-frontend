@@ -10,7 +10,7 @@ export const LoginPage: React.FC = () => (
       <H1>Login</H1>
       <LoginForm />
       <Link href="/register">
-        <Anchor>New user?</Anchor>
+        <Anchor variant="red">New user?</Anchor>
       </Link>
     </Column>
   </>

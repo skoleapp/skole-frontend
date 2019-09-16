@@ -19,10 +19,14 @@ const menuItems = {
   logout: {
     name: 'logout',
     href: '/logout'
+  },
+  search: {
+    name: 'search',
+    href: '/search'
   }
 };
 
-const { home, login, register, account, logout } = menuItems;
+const { home, login, register, account, logout, search } = menuItems;
 
-export const publicMenuItems = [home, login, register];
-export const privateMenuItems = [home, account, logout];
+export const publicMenuItems = [home, login, register, search];
+export const privateMenuItems = [home, account, logout, search];

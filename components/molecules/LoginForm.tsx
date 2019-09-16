@@ -45,7 +45,7 @@ export const LoginForm: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                 setFieldValue('usernameOrEmail', e.target.value)
               }
-              value={values['usernameOrEmail']}
+              value={values.usernameOrEmail}
               placeholder="Username or email"
               name="usernameOrEmail"
               type="text"
@@ -55,7 +55,7 @@ export const LoginForm: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>
                 setFieldValue('password', e.target.value)
               }
-              value={values['password']}
+              value={values.password}
               placeholder="Password"
               name="password"
               type="password"

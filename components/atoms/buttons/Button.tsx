@@ -4,7 +4,7 @@ export const Button = styled.button`
   cursor: pointer;
   background var(--primary);
   border-radius: 0.75rem;
-  margin: 2rem 0.5rem;
+  margin: 1rem 0.5rem;
   padding: 0.5rem;
   color: var(--secondary);
   width: 18.35rem;
@@ -13,6 +13,12 @@ export const Button = styled.button`
   text-transform: uppercase;
   box-shadow: var(--box-shadow);
   border: 0.1rem solid var(--white);
+
+  &:hover {
+    transform: var(--scale);
+    transition: var(--transition);
+  }
+
   &:focus {
     outline: none;
   }

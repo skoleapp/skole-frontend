@@ -3,7 +3,7 @@ export { DesktopMenuItems } from './DesktopMenuItems';
 export { EditAccountPage } from './EditAccountPage';
 export { FeedbackPage } from './FeedbackPage';
 export { LandingPage } from './LandingPage';
-export { ListSchools } from './ListSchools';
 export { LoginPage } from './LoginPage';
 export { LogoutPage } from './LogoutPage';
 export { RegisterPage } from './RegisterPage';
+export { SearchPage } from './SearchPage';

@@ -1,4 +1,4 @@
-export { FeedbackCard } from './FeedbackCard';
+export { FeedbackForm } from './FeedbackForm';
 export { HamburgerButton } from './HamburgerButton';
 export { LoginForm } from './LoginForm';
 export { MenuList } from './MenuList';

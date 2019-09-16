@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import { Anchor } from '../atoms';
+import { Anchor, Text } from '../atoms';
 import { Column } from '../containers';
 
 const StyledFooter = styled.div`
@@ -17,7 +17,7 @@ const StyledColumn = styled(Column)`
 export const Footer: React.FC = () => (
   <StyledFooter>
     <StyledColumn sm={8} md={6}>
-      <p>© {new Date().getFullYear()} Skole Ltd.</p>
+      <Text>© {new Date().getFullYear()} Skole Ltd.</Text>
       <Link href="/feedback">
         <Anchor>Feedback</Anchor>
       </Link>
