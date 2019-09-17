@@ -1,10 +1,10 @@
-import { Field, Form, FormikProps } from 'formik';
+import { Field, FormikProps } from 'formik';
 import React from 'react';
 import { RegisterFormValues } from '../../interfaces';
-import { CheckboxFormField, FormSubmitSection, TextInputFormField } from '../atoms';
+import { CheckboxFormField, Form, FormSubmitSection, TextInputFormField } from '../atoms';
 
 export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> = props => (
-  <Form onKeyDown={e => e.key === 'Enter' && props.handleSubmit()}>
+  <Form {...props}>
     <Field placeholder="Username" name="username" component={TextInputFormField} label="Username" />
     <Field placeholder="Email" name="email" component={TextInputFormField} label="Email" />
     <Field

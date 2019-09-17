@@ -1,10 +1,10 @@
-import { Field, Form, FormikProps } from 'formik';
+import { Field, FormikProps } from 'formik';
 import React from 'react';
 import { LoginFormValues } from '../../interfaces';
-import { FormSubmitSection, TextInputFormField } from '../atoms';
+import { Form, FormSubmitSection, TextInputFormField } from '../atoms';
 
 export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
-  <Form onKeyDown={e => e.key === 'Enter' && props.handleSubmit()}>
+  <Form {...props}>
     <Field
       placeholder="Username or email"
       name="usernameOrEmail"
