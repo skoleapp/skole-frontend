@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { serverErrorMessage, unableToRetrieveDataMessage } from '../static/messages';
 import { basePath } from './api';
 
 export const skoleAPI = axios.create({
@@ -6,15 +7,23 @@ export const skoleAPI = axios.create({
 });
 
 // eslint-disable-next-line
-const responseHandler = (response: AxiosResponse): Promise<AxiosResponse<any>> => {
-  const { data } = response;
-  return Promise.resolve(data);
+const responseHandler = (response: AxiosResponse): any => {
+  if (response.data) {
+    const { data } = response;
+    return Promise.resolve(data);
+  }
+
+  return Promise.reject({ serverError: unableToRetrieveDataMessage });
 };
 
 // eslint-disable-next-line
 const errorHandler = (error: any): Promise<AxiosError<any>> => {
-  const { data } = error.response;
-  return Promise.reject(data.error);
+  if (error.response && error.response.data) {
+    const { data } = error.response;
+    return Promise.reject(data.error);
+  }
+
+  return Promise.reject({ serverError: serverErrorMessage });
 };
 
 skoleAPI.interceptors.response.use(

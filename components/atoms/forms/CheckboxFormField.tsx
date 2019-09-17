@@ -1,10 +1,10 @@
 import { ErrorMessage } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
+import { FormErrorMessage } from '.';
 import { FormFieldProps } from '../../../interfaces';
 import { Row } from '../../containers';
-import { FormErrorMessage } from '../FormErrorMessage';
-import { Label } from './Label';
+import { Label } from '../inputs';
 
 const StyledCheckbox = styled.input`
   margin: 0.5rem;

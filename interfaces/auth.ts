@@ -4,11 +4,13 @@ export interface RegisterFormValues {
   password: string;
   confirmPassword: string;
   agreeToTerms: boolean;
+  general: string;
 }
 
 export interface LoginFormValues {
   usernameOrEmail: string;
   password: string;
+  general: string;
 }
 
 export interface FormFieldProps {

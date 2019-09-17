@@ -42,5 +42,9 @@ export const createErrors = (error: any): Errors => {
     errors.general = error.non_field_errors.join();
   }
 
+  if (error.serverError) {
+    errors.general = error.serverError;
+  }
+
   return errors;
 };

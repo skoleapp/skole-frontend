@@ -1,11 +1,10 @@
-import { ErrorMessage, Field, Form, FormikProps } from 'formik';
+import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
 import { LoginFormValues } from '../../interfaces';
-import { Button, FormErrorMessage, LoadingIndicator, TextInputFormField } from '../atoms';
-import { Column } from '../containers';
+import { FormSubmitSection, TextInputFormField } from '../atoms';
 
-export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = ({ isSubmitting }) => (
-  <Form>
+export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
+  <Form onKeyDown={e => e.key === 'Enter' && props.handleSubmit()}>
     <Field
       placeholder="Username or email"
       name="usernameOrEmail"
@@ -19,15 +18,6 @@ export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = ({ i
       label="Password"
       type="password"
     />
-    <Column>
-      {isSubmitting ? (
-        <LoadingIndicator />
-      ) : (
-        <ErrorMessage name="general" component={FormErrorMessage} />
-      )}
-    </Column>
-    <Button type="submit" disabled={isSubmitting}>
-      login
-    </Button>
+    <FormSubmitSection submitButtonText="login" {...props} />
   </Form>
 );

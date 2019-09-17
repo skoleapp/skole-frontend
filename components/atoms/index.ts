@@ -2,7 +2,7 @@ export { Anchor } from './Anchor';
 export { AnimatedDiv } from './AnimatedDiv';
 export * from './buttons';
 export { Card } from './Card';
-export { FormErrorMessage } from './FormErrorMessage';
+export * from './forms';
 export * from './headers';
 export * from './inputs';
 export { LoadingIndicator } from './LoadingIndicator';

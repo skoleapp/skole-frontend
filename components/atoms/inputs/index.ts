@@ -1,3 +1,3 @@
-export { CheckboxFormField } from './CheckboxFormField';
+export { Label } from './Label';
 export { SearchInput } from './SearchInput';
-export { TextInputFormField } from './TextInputFormField';
+export { TextInput } from './TextInput';

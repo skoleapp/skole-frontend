@@ -1,19 +1,10 @@
-import { ErrorMessage, Field, Form, FormikProps } from 'formik';
+import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
 import { RegisterFormValues } from '../../interfaces';
-import {
-  Button,
-  CheckboxFormField,
-  FormErrorMessage,
-  LoadingIndicator,
-  TextInputFormField
-} from '../atoms';
-import { Column } from '../containers';
+import { CheckboxFormField, FormSubmitSection, TextInputFormField } from '../atoms';
 
-export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> = ({
-  isSubmitting
-}) => (
-  <Form>
+export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> = props => (
+  <Form onKeyDown={e => e.key === 'Enter' && props.handleSubmit()}>
     <Field placeholder="Username" name="username" component={TextInputFormField} label="Username" />
     <Field placeholder="Email" name="email" component={TextInputFormField} label="Email" />
     <Field
@@ -31,15 +22,6 @@ export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> 
       label="Confirm Password"
     />
     <Field name="agreeToTerms" component={CheckboxFormField} label="Agree to Terms" />
-    <Column>
-      {isSubmitting ? (
-        <LoadingIndicator />
-      ) : (
-        <ErrorMessage name="general" component={FormErrorMessage} />
-      )}
-    </Column>
-    <Button type="submit" disabled={isSubmitting}>
-      register
-    </Button>
+    <FormSubmitSection submitButtonText="register" {...props} />
   </Form>
 );

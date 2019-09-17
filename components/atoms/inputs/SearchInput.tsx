@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { StyledTextInput } from './TextInputFormField';
+import { TextInput } from './TextInput';
 
-export const SearchInput = styled(StyledTextInput)`
+export const SearchInput = styled(TextInput)`
   margin: 0;
   border-radius: 0.75rem 0 0 0.75rem;
   width: 14rem;

@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { createErrors, getApiUrl, skoleAPI, tokenConfig } from '../../utils';
+import { getApiUrl, skoleAPI, tokenConfig } from '../../utils';
 import { REFRESH_TOKEN, REFRESH_TOKEN_ERROR, REFRESH_TOKEN_SUCCESS } from './types';
 
 // eslint-disable-next-line
@@ -15,10 +15,9 @@ export const refreshToken: any = (token: string) => async (dispatch: Dispatch): 
       type: REFRESH_TOKEN_SUCCESS,
       payload: refresh_token // eslint-disable-line @typescript-eslint/camelcase
     });
-  } catch (error) {
+  } catch {
     dispatch({
-      type: REFRESH_TOKEN_ERROR,
-      payload: createErrors(error)
+      type: REFRESH_TOKEN_ERROR
     });
   }
 };
