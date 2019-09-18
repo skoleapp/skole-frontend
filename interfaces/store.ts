@@ -8,7 +8,7 @@ interface User {
 
 export interface AuthState {
   user: User;
-  authenticated: boolean;
+  authenticated: boolean | null;
   loading: boolean | null;
   error: string | null;
 }

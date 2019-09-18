@@ -5,7 +5,6 @@ import { AppContext } from 'next/app';
 import Router, { Router as RouterType } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
-import 'react-toastify/dist/ReactToastify.css';
 import { Store } from 'redux';
 import { LoadingScreen } from '../components/layout';
 import { initStore, refreshToken } from '../redux';
@@ -29,10 +28,9 @@ const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Prop
   Router.events.on('routeChangeError', () => setRedirect(false));
 
   useEffect(() => {
-    if (Router.pathname !== '/logout') {
-      const token = localStorage.getItem('token');
-      token && store.dispatch(refreshToken(token));
-    }
+    window.scrollTo(0, 0);
+    const token = localStorage.getItem('token');
+    token && store.dispatch(refreshToken(token));
   }, []);
 
   if (redirect) {

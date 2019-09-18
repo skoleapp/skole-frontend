@@ -23,7 +23,7 @@ const initialState: AuthState = {
     bio: null,
     points: null
   },
-  authenticated: false,
+  authenticated: null,
   loading: null,
   error: null
 };

@@ -22,8 +22,8 @@ export const login = ({ usernameOrEmail, password }: LoginParams) => (
 
       try {
         const url = getApiUrl('login');
-        const { token } = await skoleAPI.post(url, payload);
-        resolve(dispatch({ type: LOGIN_SUCCESS, payload: token }));
+        const { data } = await skoleAPI.post(url, payload);
+        resolve(dispatch({ type: LOGIN_SUCCESS, payload: data.token }));
       } catch (error) {
         reject(dispatch({ type: LOGIN_ERROR, payload: createErrors(error) }));
       }

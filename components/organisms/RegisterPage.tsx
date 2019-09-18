@@ -1,16 +1,16 @@
 import { Formik, FormikActions } from 'formik';
 import Link from 'next/link';
-import Router from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { RegisterFormValues } from '../../interfaces';
 import { register } from '../../redux';
 import { registerInitialValues, registerSchema } from '../../static';
-import { Anchor, H1 } from '../atoms';
+import { Anchor, Button, H1, H3 } from '../atoms';
 import { RegisterForm } from '../molecules';
 
 export const RegisterPage: React.FC = () => {
   const dispatch = useDispatch();
+  const [registered, setRegistered] = useState(false);
 
   const onSubmit = async (
     values: RegisterFormValues,
@@ -18,7 +18,7 @@ export const RegisterPage: React.FC = () => {
   ): Promise<void> => {
     try {
       await dispatch(register(values));
-      Router.push('/login');
+      setRegistered(true);
     } catch (error) {
       const { payload } = error;
       Object.keys(payload).forEach(key => {
@@ -28,6 +28,17 @@ export const RegisterPage: React.FC = () => {
       actions.setSubmitting(false);
     }
   };
+
+  if (registered) {
+    return (
+      <>
+        <H3>Successfully registered new user!</H3>
+        <Link href="/login">
+          <Button>login here</Button>
+        </Link>
+      </>
+    );
+  }
 
   return (
     <>

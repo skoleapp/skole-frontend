@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
 import { Container } from '../containers';
 import { Footer, Head, MobileMenu, Navbar } from '../layout';
@@ -26,6 +25,5 @@ export const MainLayout: React.FC<Props> = ({ title, children, secondary }) => (
     <Navbar />
     <Container>{children}</Container>
     <Footer />
-    <ToastContainer />
   </StyledMainLayout>
 );

@@ -8,9 +8,8 @@ export const skoleAPI = axios.create({
 
 // eslint-disable-next-line
 const responseHandler = (response: AxiosResponse): any => {
-  if (response.data) {
-    const { data } = response;
-    return Promise.resolve(data);
+  if (response) {
+    return Promise.resolve(response);
   }
 
   return Promise.reject({ serverError: unableToRetrieveDataMessage });

@@ -27,8 +27,8 @@ export const register = ({ username, email, password, confirmPassword }: Registe
 
       try {
         const url = getApiUrl('register');
-        const { message } = await skoleAPI.post(url, payload);
-        resolve(dispatch({ type: REGISTER_SUCCESS, payload: message }));
+        await skoleAPI.post(url, payload);
+        resolve(dispatch({ type: REGISTER_SUCCESS }));
       } catch (error) {
         reject(dispatch({ type: REGISTER_ERROR, payload: createErrors(error) }));
       }
