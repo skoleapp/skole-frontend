@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from '.';
+import { Button } from './Button';
 
 const getBackgroundForVaraint = (variant: string): string => {
   switch (variant) {

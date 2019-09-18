@@ -1,7 +1,7 @@
 import { NextPage, NextPageContext } from 'next';
 import withRedux from 'next-redux-wrapper';
-import { AppContextType } from 'next-server/dist/lib/utils';
 import { AppContext } from 'next/app';
+import { AppContextType } from 'next/dist/next-server/lib/utils';
 import Router, { Router as RouterType } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
