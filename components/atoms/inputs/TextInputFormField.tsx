@@ -1,9 +1,9 @@
 import { ErrorMessage } from 'formik';
 import React from 'react';
+import { Label, TextInput } from '.';
 import { FormFieldProps } from '../../../interfaces';
 import { Column } from '../../containers';
-import { Label, TextInput } from '../inputs';
-import { FormErrorMessage } from './FormErrorMessage';
+import { FormErrorMessage } from '../forms/FormErrorMessage';
 
 export const TextInputFormField: React.FC<FormFieldProps> = ({ field, label, ...props }) => (
   <Column>

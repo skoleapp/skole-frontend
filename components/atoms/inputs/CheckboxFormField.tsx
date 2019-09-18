@@ -1,9 +1,9 @@
 import { ErrorMessage } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import { FormErrorMessage } from '.';
 import { FormFieldProps } from '../../../interfaces';
 import { Row } from '../../containers';
+import { FormErrorMessage } from '../forms';
 import { Label } from '../inputs';
 
 const StyledCheckbox = styled.input`
