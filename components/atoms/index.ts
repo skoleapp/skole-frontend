@@ -9,4 +9,3 @@ export { LoadingIndicator } from './LoadingIndicator';
 export { MenuListItem } from './MenuListItem';
 export { Shortcut } from './Shortcut';
 export { Text } from './Text';
-export { Textarea } from './Textarea';

@@ -5,7 +5,7 @@ import { getApiUrl, skoleAPI } from '../utils';
 
 // FIXME: Add proper types for this
 interface Props {
-  data: any; // eslint-disable-line no-explicit-any
+  data: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 const Search: NextPage<Props> = ({ data }) => (
@@ -14,7 +14,9 @@ const Search: NextPage<Props> = ({ data }) => (
   </MainLayout>
 );
 
-Search.getInitialProps = async ({ query }) => {
+// FIXME: Add proper types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Search.getInitialProps = async ({ query }): Promise<any> => {
   const baseUrl = getApiUrl('course');
   const url = baseUrl + `search/?${query.search}/`;
   try {

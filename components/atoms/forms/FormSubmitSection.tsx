@@ -1,10 +1,10 @@
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
+import { FormErrorMessage } from '.';
 import { LoginFormValues, RegisterFormValues } from '../../../interfaces';
 import { Column } from '../../containers';
 import { Button } from '../buttons';
 import { LoadingIndicator } from '../LoadingIndicator';
-import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends FormikProps<LoginFormValues | RegisterFormValues> {
   submitButtonText: string;

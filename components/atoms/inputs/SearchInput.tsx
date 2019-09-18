@@ -1,6 +1,7 @@
+import React from 'react';
 import styled from 'styled-components';
+import { TextInput } from '.';
 import { FormFieldProps } from '../../../interfaces';
-import { TextInput } from './TextInput';
 
 export const StyledSearchInput = styled(TextInput)`
   border-radius: 0.75rem 0 0 0.75rem;
@@ -9,6 +10,6 @@ export const StyledSearchInput = styled(TextInput)`
   margin-right: 0.15rem;
 `;
 
-export const SearchInput: React.FC<FormFieldProps> = ({ field, label, ...props }) => (
+export const SearchInput: React.FC<FormFieldProps> = ({ field, ...props }) => (
   <StyledSearchInput {...field} {...props} />
 );
