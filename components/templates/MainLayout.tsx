@@ -4,22 +4,21 @@ import { Container } from '../containers';
 import { Footer, Head, MobileMenu, Navbar } from '../layout';
 
 interface StyledMainLayoutProps {
-  secondary?: boolean;
+  primary?: boolean;
 }
 
 const StyledMainLayout = styled.div<StyledMainLayoutProps>`
-  background: ${({ secondary }): string =>
-    (secondary && 'var(--secondary-bg)') || 'var(--primary-bg)'};
+  background: ${({ primary }): string => (primary && 'var(--primary-bg)') || 'var(--secondary-bg)'};
 `;
 
 interface Props {
   title?: string;
   children: ReactNode;
-  secondary?: boolean;
+  primary?: boolean;
 }
 
-export const MainLayout: React.FC<Props> = ({ title, children, secondary }) => (
-  <StyledMainLayout secondary={secondary}>
+export const MainLayout: React.FC<Props> = ({ title, children, primary }) => (
+  <StyledMainLayout primary={primary}>
     <Head title={title} />
     <MobileMenu />
     <Navbar />
