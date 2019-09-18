@@ -20,7 +20,6 @@ export const LoginPage: React.FC = () => {
       await dispatch(login(values));
       Router.push('/account');
     } catch (error) {
-      console.log(error);
       const { payload } = error;
       Object.keys(payload).forEach(key => {
         actions.setFieldError(key, payload[key]);
