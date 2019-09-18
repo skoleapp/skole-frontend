@@ -1,16 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const StyledGoButtonWrapper = styled.div``;
+
 const StyledGoButton = styled.button`
   border: 0.1rem solid var(--primary);
-  height: 2.87rem;
+  height: 2.83rem;
   width: 4rem;
   border-radius: 0 0.75rem 0.75rem 0;
   background: var(--white);
   text-transform: uppercase;
   color: var(--primary);
   font-weight: bold;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   margin: 0.5rem 0.5rem 0.5rem 0;
   box-shadow: var(--box-shadow);
 
@@ -22,4 +24,8 @@ const StyledGoButton = styled.button`
   }
 `;
 
-export const GoButton: React.FC = () => <StyledGoButton>go</StyledGoButton>;
+export const GoButton: React.FC = () => (
+  <StyledGoButtonWrapper>
+    <StyledGoButton type="submit">go</StyledGoButton>
+  </StyledGoButtonWrapper>
+);

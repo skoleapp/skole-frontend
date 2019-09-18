@@ -13,7 +13,7 @@ const StyledMainLayout = styled.div<StyledMainLayoutProps>`
 
 interface Props {
   title?: string;
-  children: ReactNode;
+  children?: ReactNode;
   primary?: boolean;
 }
 

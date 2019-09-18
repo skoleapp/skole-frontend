@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import { ShortcutProps } from '../../interfaces';
 import { Column } from '../containers';
 import { Icon } from './Icon';
 
@@ -29,23 +30,8 @@ const StyledShortcut = styled.div`
   }
 `;
 
-interface Query {
-  schoolType: string;
-}
-
-interface Href {
-  pathname: string;
-  query: Query;
-}
-
-interface Props {
-  text: string;
-  iconName: string;
-  href: Href;
-}
-
-export const Shortcut: React.FC<Props> = ({ text, iconName, href }) => (
-  <Link href={href.pathname}>
+export const Shortcut: React.FC<ShortcutProps> = ({ text, iconName, href }) => (
+  <Link href={href}>
     <StyledShortcut>
       <Column>
         <Icon iconName={iconName} />

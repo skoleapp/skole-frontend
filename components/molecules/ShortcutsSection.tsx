@@ -1,19 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import { shortcuts } from '../../static';
-import { H2, Shortcut } from '../atoms';
+import { ShortcutProps } from '../../interfaces';
+import { Shortcut } from '../atoms';
 
 const StyledShortcutsContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
+  margin-top: 2rem;
 `;
 
 const StyledShortcutsSection = styled.div``;
 
-export const ShortcutsSection: React.FC = () => (
+interface Props {
+  shortcuts: ShortcutProps[];
+}
+
+export const ShortcutsSection: React.FC<Props> = ({ shortcuts }) => (
   <StyledShortcutsSection>
-    <H2>Where do you study?</H2>
     <StyledShortcutsContainer>
       {shortcuts.map((s, i) => (
         <Shortcut key={i} text={s.text} iconName={s.iconName} href={s.href} />

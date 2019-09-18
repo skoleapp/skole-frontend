@@ -6,12 +6,13 @@ const apiEndpoints = {
   login: '/user/login/',
   refreshToken: '/user/refresh-token/',
   getUser: '/user/',
-  meUser: 'user/me/'
+  meUser: '/user/me/',
+  course: '/course/'
 };
 
-const { register, login, refreshToken, getUser } = apiEndpoints;
+const { register, login, refreshToken, getUser, course } = apiEndpoints;
 
-export const getApiUrl = (apiName: string, id?: string): string => {
+export const getApiUrl = (apiName: string): string => {
   switch (apiName) {
     case 'register':
       return register;
@@ -21,8 +22,8 @@ export const getApiUrl = (apiName: string, id?: string): string => {
       return refreshToken;
     case 'get-user':
       return getUser;
-    case 'user-detail':
-      return getUser + `/${id}`;
+    case 'course':
+      return course;
     default:
       return basePath;
   }

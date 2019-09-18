@@ -7,16 +7,16 @@ export const skoleAPI = axios.create({
 });
 
 // eslint-disable-next-line
-const responseHandler = (response: AxiosResponse): any => {
+const responseHandler = (response: AxiosResponse<any>): Promise<AxiosResponse> => {
   if (response) {
-    return Promise.resolve(response);
+    return Promise.resolve({ ...response });
   }
 
   return Promise.reject({ serverError: unableToRetrieveDataMessage });
 };
 
 // eslint-disable-next-line
-const errorHandler = (error: any): Promise<AxiosError<any>> => {
+const errorHandler = (error: any): Promise<AxiosError> => {
   if (error.response && error.response.data) {
     const { data } = error.response;
     return Promise.reject(data.error);
