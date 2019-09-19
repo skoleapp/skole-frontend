@@ -3,7 +3,7 @@ import { H1, MainLayout } from '../../../components';
 
 const HighSchool: React.FC = () => (
   <MainLayout title="High School">
-    <H1>HighSchool</H1>
+    <H1>High School</H1>
   </MainLayout>
 );
 
