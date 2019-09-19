@@ -4,9 +4,8 @@ import { Column } from './Column';
 
 const StyledContainer = styled.div`
   min-height: 100vh;
-  margin-top: 6rem;
-  margin-bottom: 1rem;
   text-align: center;
+  margin: 1rem;
 `;
 
 export const Container: React.FC = ({ children }) => (
