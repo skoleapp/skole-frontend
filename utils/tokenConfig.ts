@@ -1,17 +1,15 @@
-interface Headers {
-  'Content-Type': string;
-  Authorization: string;
-}
+import { AxiosRequestConfig } from 'axios';
 
-interface TokenConfig {
-  headers: Headers;
-}
+// eslint-disable-next-line no-explicit-any
+export const tokenConfig = () => (getState: any): AxiosRequestConfig => {
+  const { token } = getState().auth.token;
 
-export const tokenConfig = (token: string): TokenConfig => {
-  return {
+  const config: AxiosRequestConfig = {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Token ${token}`
     }
   };
+
+  return config;
 };

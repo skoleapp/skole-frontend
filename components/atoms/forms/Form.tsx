@@ -1,10 +1,10 @@
 import { Form as FormikForm, FormikProps } from 'formik';
 import React from 'react';
-import { LoginFormValues, RegisterFormValues, SearchCoursesValueType } from '../../../interfaces';
+import { LoginFormValues, RegisterFormValues, SearchFormProps } from '../../../interfaces';
 
-export const Form: React.ComponentType<
-  FormikProps<LoginFormValues | RegisterFormValues | SearchCoursesValueType>
-> = ({ handleSubmit, children }) => (
+type AnyForm = LoginFormValues | RegisterFormValues | SearchFormProps;
+
+export const Form: React.ComponentType<FormikProps<AnyForm>> = ({ handleSubmit, children }) => (
   <FormikForm onKeyDown={(e): false | void => e.key === 'Enter' && handleSubmit()}>
     {children}
   </FormikForm>

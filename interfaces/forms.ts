@@ -17,3 +17,7 @@ export interface FormFieldProps {
   field: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
   label: string;
 }
+
+export interface SearchFormProps {
+  search: string;
+}

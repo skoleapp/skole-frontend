@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { serverErrorMessage, unableToRetrieveDataMessage } from '../static/messages';
+
 export const basePath =
   process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'https://api.skole.fi';
 
@@ -6,11 +9,11 @@ const apiEndpoints = {
   login: '/user/login/',
   refreshToken: '/user/refresh-token/',
   getUser: '/user/',
-  meUser: '/user/me/',
+  userMe: '/user/me/',
   course: '/course/'
 };
 
-const { register, login, refreshToken, getUser, course } = apiEndpoints;
+const { register, login, refreshToken, getUser, course, userMe } = apiEndpoints;
 
 export const getApiUrl = (apiName: string): string => {
   switch (apiName) {
@@ -22,9 +25,44 @@ export const getApiUrl = (apiName: string): string => {
       return refreshToken;
     case 'get-user':
       return getUser;
+    case 'user-me':
+      return userMe;
     case 'course':
       return course;
     default:
       return basePath;
   }
 };
+
+export const skoleAPI = axios.create({
+  baseURL: basePath
+});
+
+// eslint-disable-next-line
+const responseHandler = (response: any): Promise<any> => {
+  if (response) {
+    return Promise.resolve(response);
+  }
+
+  return Promise.reject({ serverError: unableToRetrieveDataMessage });
+};
+
+// eslint-disable-next-line
+const errorHandler = (error: any): Promise<any> => {
+  if (error.response && error.response.data) {
+    const { data } = error.response;
+
+    if (data.error) {
+      return Promise.reject(data.error);
+    }
+
+    return Promise.reject(data);
+  }
+
+  return Promise.reject({ serverError: serverErrorMessage });
+};
+
+skoleAPI.interceptors.response.use(
+  response => responseHandler(response),
+  error => errorHandler(error)
+);

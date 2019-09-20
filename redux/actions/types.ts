@@ -6,14 +6,16 @@ export const LOGIN = 'LOGIN_USER';
 export const LOGIN_SUCCESS = 'LOGIN_USER_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_USER_ERROR';
 
+export const SET_TOKEN = 'SET_TOKEN';
+
 export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 export const REFRESH_TOKEN_SUCCESS = 'REFRESH_TOKEN_SUCCESS';
 export const REFRESH_TOKEN_ERROR = 'REFRESH_TOKEN_ERROR';
 
 export const LOGOUT = 'LOGOUT';
 
-export const GET_USER = 'GET_USER';
-export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
-export const GET_USER_ERROR = 'GET_USER_ERROR';
+export const GET_USER_ME = 'GET_USER_ME';
+export const GET_USER_ME_SUCCESS = 'GET_USER_ME_SUCCESS';
+export const GET_USER_ME_ERROR = 'GET_USER_ME_ERROR';
 
 export const TOGGLE_MENU = 'TOGGLE_MENU';

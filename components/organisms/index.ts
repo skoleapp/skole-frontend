@@ -1,7 +1,6 @@
 export { AccountPage } from './AccountPage';
 export { CoursesPage } from './CoursesPage';
 export { DesktopMenuItems } from './DesktopMenuItems';
-export { EditAccountPage } from './EditAccountPage';
 export { FeedbackPage } from './FeedbackPage';
 export { LandingPage } from './LandingPage';
 export { LoginPage } from './LoginPage';
