@@ -1,12 +1,16 @@
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
-import { LoginFormValues, RegisterFormValues } from '../../../interfaces';
-import { Column } from '../../containers';
+import styled from 'styled-components';
+import { LoginFormValues, RegisterFormValues, User } from '../../../interfaces';
 import { Button } from '../buttons';
 import { LoadingIndicator } from '../LoadingIndicator';
 import { FormErrorMessage } from './FormErrorMessage';
 
-interface Props extends FormikProps<LoginFormValues | RegisterFormValues> {
+const StyledFormSubmitSection = styled.div`
+  margin-top: 1rem;
+`;
+
+interface Props extends FormikProps<LoginFormValues | RegisterFormValues | User> {
   submitButtonText: string;
 }
 
@@ -14,7 +18,7 @@ export const FormSubmitSection: React.ComponentType<Props> = ({
   isSubmitting,
   submitButtonText
 }) => (
-  <Column>
+  <StyledFormSubmitSection>
     {isSubmitting ? (
       <LoadingIndicator />
     ) : (
@@ -23,5 +27,5 @@ export const FormSubmitSection: React.ComponentType<Props> = ({
     <Button type="submit" disabled={isSubmitting}>
       {submitButtonText}
     </Button>
-  </Column>
+  </StyledFormSubmitSection>
 );

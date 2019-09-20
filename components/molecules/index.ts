@@ -1,3 +1,4 @@
+export { EditAccountForm } from './EditAccountForm';
 export { FeedbackForm } from './FeedbackForm';
 export { HamburgerButton } from './HamburgerButton';
 export { LoginForm } from './LoginForm';

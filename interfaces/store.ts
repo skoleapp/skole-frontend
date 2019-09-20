@@ -5,7 +5,7 @@ export interface User {
   title: string | null;
   bio: string | null;
   points: number | null;
-  language: number | null;
+  language: string | null;
 }
 
 export interface AuthState {
