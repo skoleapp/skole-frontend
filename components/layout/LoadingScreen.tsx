@@ -1,18 +1,14 @@
-import { css } from '@emotion/core';
 import React from 'react';
-import ClipLoader from 'react-spinners/ClipLoader';
 import styled from 'styled-components';
-
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: black;
-`;
+import { getLoadingText } from '../../utils';
+import { LoadingIndicator } from '../atoms';
 
 const StyledLoadingScreen = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,12 +17,12 @@ const StyledLoadingScreen = styled.div`
   background: var(--primary);
 `;
 interface Props {
-  text: string;
+  loadingText?: string;
 }
 
-export const LoadingScreen: React.FC<Props> = ({ text }) => (
+export const LoadingScreen: React.FC<Props> = ({ loadingText }) => (
   <StyledLoadingScreen>
-    <p>{text}</p>
-    <ClipLoader css={override} sizeUnit={'rem'} size={2} color={'var(--secondary)'} />
+    <p>{loadingText ? loadingText : getLoadingText()}</p>
+    <LoadingIndicator primary />
   </StyledLoadingScreen>
 );

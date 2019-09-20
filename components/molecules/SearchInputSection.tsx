@@ -1,10 +1,16 @@
+import { Field, FormikProps } from 'formik';
 import React from 'react';
-import { GoButton, SearchInput } from '../atoms';
+import { SearchCoursesValueType } from '../../interfaces';
+import { Form, GoButton, SearchInput } from '../atoms';
 import { Row } from '../containers';
 
-export const SearchInputSection: React.FC = () => (
-  <Row>
-    <SearchInput type="text" placeholder="Search courses..." />
-    <GoButton />
-  </Row>
+export const SearchInputSection: React.ComponentType<
+  FormikProps<SearchCoursesValueType>
+> = props => (
+  <Form {...props}>
+    <Row>
+      <Field name="search" placeholder="Search courses..." component={SearchInput} />
+      <GoButton />
+    </Row>
+  </Form>
 );

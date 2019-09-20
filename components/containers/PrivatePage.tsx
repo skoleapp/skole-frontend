@@ -1,19 +1,24 @@
-import React from 'react';
+import Router from 'next/router';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { State } from '../../interfaces';
 import { LoadingScreen } from '../layout';
-import { Redirect } from '../utils';
 
-export const PrivatePage: React.FC = ({ children }) => {
+// FIXME: Find a proper typing for the props
+// eslint-disable-next-line
+export const PrivatePage: React.FC<any> = ({ component: Component, ...props }) => {
   const { authenticated, loading } = useSelector((state: State) => state.auth);
 
+  // Wait until authenticated state is set to either true or false
+  useEffect(() => {
+    if (authenticated === false) {
+      Router.push('/login');
+    }
+  }, []);
+
   if (loading) {
-    return <LoadingScreen text="Loading user details..." />;
+    return <LoadingScreen />;
   }
 
-  if (!authenticated) {
-    return <Redirect to="login" loadingMessage="Loading login screen..." />;
-  }
-
-  return <>{children}</>;
+  return <Component {...props} />;
 };

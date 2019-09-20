@@ -1,13 +1,13 @@
 interface User {
-  id: string;
-  username: string;
-  email: string;
-  bio: string;
-  points: number;
+  id: string | null;
+  username: string | null;
+  email: string | null;
+  bio: string | null;
+  points: number | null;
 }
 
 export interface AuthState {
-  user: User | null;
+  user: User;
   authenticated: boolean | null;
   loading: boolean | null;
   error: string | null;

@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useMobileBreakPoint } from '../hooks';
-import { DesktopMenuItems, HamburgerButton } from '../molecules';
+import { HamburgerButton } from '../molecules';
+import { DesktopMenuItems } from '../organisms';
 
 const StyledNavbar = styled.div`
-  position: fixed;
-  z-index: 1;
   height: 5rem;
   width: 100%;
   background: var(--primary);

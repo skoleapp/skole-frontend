@@ -1,23 +1,29 @@
-const basePath =
+export const basePath =
   process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'https://api.skole.fi';
 
 const apiEndpoints = {
-  registerUser: '/user/register/',
-  loginUser: '/user/login/',
+  register: '/user/register/',
+  login: '/user/login/',
+  refreshToken: '/user/refresh-token/',
   getUser: '/user/',
-  meUser: 'user/me/'
+  meUser: '/user/me/',
+  course: '/course/'
 };
 
-export const getApiUrl = (apiName: string, id?: string): string => {
+const { register, login, refreshToken, getUser, course } = apiEndpoints;
+
+export const getApiUrl = (apiName: string): string => {
   switch (apiName) {
-    case 'register-user':
-      return basePath + apiEndpoints.registerUser;
-    case 'login-user':
-      return basePath + apiEndpoints.loginUser;
+    case 'register':
+      return register;
+    case 'login':
+      return login;
+    case 'refresh-token':
+      return refreshToken;
     case 'get-user':
-      return basePath + apiEndpoints.getUser;
-    case 'user-detail':
-      return basePath + apiEndpoints.getUser + `/${id}`;
+      return getUser;
+    case 'course':
+      return course;
     default:
       return basePath;
   }
