@@ -16,7 +16,7 @@ export const EditAccountPage: React.FC<Props> = ({ initialValues }) => {
    * If the request is successful, update the store.
    * Otherwise display errors in the form accordingly.
    */
-  const onSubmit = (values: any) => console.log('Submit!', values);
+  const onSubmit = (values: User): void => console.log('Submit!', values);
 
   return (
     <>

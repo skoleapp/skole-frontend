@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../../interfaces';
+import { State, User } from '../../interfaces';
 import { getUserMe } from '../../redux';
 
-export const useAccount: any = () => {
+type UseAccount = () => (boolean | User | null)[];
+
+export const useAccount: UseAccount = () => {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state: State) => state.auth);
 

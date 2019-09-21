@@ -52,7 +52,7 @@ export default (state = initialState, action: AnyAction): AuthState => {
       localStorage.removeItem('token');
       return { ...initialState };
 
-    case GET_USER_ME_SUCCESS:
+    case GET_USER_ME_SUCCESS: {
       const { id, username, email, title, bio, points, language } = action.payload;
 
       return {
@@ -68,6 +68,7 @@ export default (state = initialState, action: AnyAction): AuthState => {
           language
         }
       };
+    }
 
     case LOGIN_ERROR:
     case REGISTER_ERROR:
