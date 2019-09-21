@@ -1,3 +1,5 @@
+import { User } from './store';
+
 export interface RegisterFormValues {
   username: string;
   email: string;
@@ -21,3 +23,5 @@ export interface FormFieldProps {
 export interface SearchFormProps {
   search: string;
 }
+
+export type AnyForm = LoginFormValues | RegisterFormValues | SearchFormProps | User;
