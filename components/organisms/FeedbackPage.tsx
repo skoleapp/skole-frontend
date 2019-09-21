@@ -3,6 +3,7 @@ import { FeedbackType } from '../../types';
 import { H1 } from '../atoms';
 import { FeedbackForm, ThanksForFeedback } from '../molecules';
 
+// TODO: convert this to use Formik
 export const FeedbackPage: React.FC = () => {
   //const dispatch = useDispatch();
 
