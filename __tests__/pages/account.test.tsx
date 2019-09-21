@@ -2,7 +2,7 @@ import React from 'react';
 import { AccountPage, MainLayout } from '../../components';
 import Account from '../../pages/account';
 import { initialAuthState } from '../../redux';
-import { connectedWrapper } from '../../utils/testUtils';
+import { connectedWrapper } from '../../utils';
 
 describe('account page', () => {
   const wrapper = connectedWrapper({ component: Account });

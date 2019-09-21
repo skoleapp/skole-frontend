@@ -1,11 +1,21 @@
-import { setToken } from '../../../redux';
-import { SET_TOKEN } from '../../../redux/actions/types';
+import { useDispatch } from 'react-redux';
+import { initialAuthState, initStore, setToken } from '../../../redux';
 
 describe('auth actions', () => {
+  const store = initStore();
+  const dispatch = useDispatch();
+
   describe('set token action', () => {
     it('dispatches action with type `SET_TOKEN` and token as payload', () => {
-      const action = setToken('token');
-      expect(action).toEqual({ type: SET_TOKEN, payload: 'token' });
+      dispatch(setToken('token'));
+      const state = store.getState();
+
+      const expectedState = {
+        ...initialAuthState,
+        token: 'token'
+      };
+
+      expect(state).toEqual(expectedState);
     });
   });
 

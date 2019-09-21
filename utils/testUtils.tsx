@@ -1,19 +1,18 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { applyMiddleware, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import { rootReducer } from '../redux';
-
-const store = createStore(rootReducer, applyMiddleware(thunk));
+import { initStore } from '../redux';
 
 interface Params {
   component: any; // eslint-disable-line
 }
 
-export const connectedWrapper = ({ component: Component }: Params): ShallowWrapper =>
-  shallow(
+export const connectedWrapper = ({ component: Component }: Params): ShallowWrapper => {
+  const store = initStore();
+
+  return shallow(
     <Provider store={store}>
       <Component />
     </Provider>
   ).dive();
+};
