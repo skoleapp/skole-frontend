@@ -16,16 +16,14 @@ const onSubmit = (values: SearchFormProps): void => {
   Router.push({ pathname: '/search', query: { search } });
 };
 
-export const LandingPage: React.FC = () => {
-  return (
-    <StyledLandingPage>
-      <LogoHeader />
-      <Formik
-        component={SearchInputSection}
-        onSubmit={onSubmit}
-        initialValues={searchCoursesInitialValues}
-      />
-      <ShortcutsSection shortcuts={landingPageShortcuts} />
-    </StyledLandingPage>
-  );
-};
+export const LandingPage: React.FC = () => (
+  <StyledLandingPage>
+    <LogoHeader />
+    <Formik
+      component={SearchInputSection}
+      onSubmit={onSubmit}
+      initialValues={searchCoursesInitialValues}
+    />
+    <ShortcutsSection shortcuts={landingPageShortcuts} />
+  </StyledLandingPage>
+);
