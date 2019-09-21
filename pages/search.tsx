@@ -32,7 +32,8 @@ interface URLProps {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Search.getInitialProps = async ({ query }): Promise<URLProps> => {
   const baseUrl = getApiUrl('course');
-  const url = baseUrl + `search/?${query.search}/`;
+  const { search } = query;
+  const url = baseUrl + `search/?${search}/`;
   return { url };
 };
 

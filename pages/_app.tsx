@@ -27,11 +27,15 @@ export const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps 
   Router.events.on('routeChangeComplete', () => setRedirect(false));
   Router.events.on('routeChangeError', () => setRedirect(false));
 
+  const handleTokenRefresh = async (): Promise<void> => {
+    const token = localStorage.getItem('token');
+    token && (await store.dispatch(setToken(token)));
+    store.dispatch(refreshToken());
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    const token = localStorage.getItem('token');
-    token && store.dispatch(setToken(token));
-    store.dispatch(refreshToken(token));
+    handleTokenRefresh();
   }, []);
 
   if (redirect) {

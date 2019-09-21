@@ -4,7 +4,7 @@ import { LandingPage, MainLayout } from '../../components';
 import Index from '../../pages/index';
 
 describe('landing page', () => {
-  let wrapper = shallow(<Index />);
+  const wrapper = shallow(<Index />);
   const layout = wrapper.find(<MainLayout />);
   const landingPage = layout.find(<LandingPage />);
 

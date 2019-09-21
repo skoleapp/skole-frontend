@@ -10,7 +10,7 @@ export const useAccount: any = () => {
   const { user, loading, token } = useSelector((state: State) => state.auth);
 
   useEffect(() => {
-    token && dispatch(getUserMe(token));
+    token && dispatch(getUserMe());
   }, [token]);
 
   return [user, loading];
