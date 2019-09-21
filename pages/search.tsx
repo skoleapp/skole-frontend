@@ -1,23 +1,9 @@
 import { NextPage } from 'next';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { MainLayout, SearchPage } from '../components';
+import { useSearch } from '../components/hooks/useSearch';
 import { LoadingScreen } from '../components/layout';
-import { State } from '../interfaces';
-import { search } from '../redux';
 import { getApiUrl } from '../utils';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const useSearch = (url: string): any => {
-  const { results, loading } = useSelector((state: State) => state.search);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(search(url));
-  }, []);
-
-  return [results, loading];
-};
 
 // FIXME: Add proper types for this
 interface Props {
