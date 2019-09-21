@@ -19,7 +19,7 @@ interface Props {
   pageProps: NextPageContext;
 }
 
-const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
+export const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
   const [redirect, setRedirect] = useState(false);
 
   // FIXME: these are causing memory leaks

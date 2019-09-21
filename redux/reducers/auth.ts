@@ -15,7 +15,7 @@ import {
   REGISTER_ERROR
 } from '../actions/types';
 
-const initialState: AuthState = {
+export const initialAuthState: AuthState = {
   user: {
     id: null,
     username: null,
@@ -31,7 +31,7 @@ const initialState: AuthState = {
   errors: null
 };
 
-export default (state = initialState, action: AnyAction): AuthState => {
+export default (state = initialAuthState, action: AnyAction): AuthState => {
   switch (action.type) {
     case REGISTER:
     case LOGIN:
@@ -46,7 +46,7 @@ export default (state = initialState, action: AnyAction): AuthState => {
 
     case LOGOUT:
       localStorage.removeItem('token');
-      return { ...initialState };
+      return { ...state };
 
     case GET_USER_ME_SUCCESS: {
       const { id, username, email, title, bio, points, language } = action.payload;
