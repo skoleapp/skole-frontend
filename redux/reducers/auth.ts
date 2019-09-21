@@ -12,8 +12,7 @@ import {
   REFRESH_TOKEN_ERROR,
   REFRESH_TOKEN_SUCCESS,
   REGISTER,
-  REGISTER_ERROR,
-  SET_TOKEN
+  REGISTER_ERROR
 } from '../actions/types';
 
 const initialState: AuthState = {
@@ -29,7 +28,7 @@ const initialState: AuthState = {
   authenticated: null,
   token: null,
   loading: null,
-  error: null
+  errors: null
 };
 
 export default (state = initialState, action: AnyAction): AuthState => {
@@ -39,9 +38,6 @@ export default (state = initialState, action: AnyAction): AuthState => {
     case REFRESH_TOKEN:
     case GET_USER_ME:
       return { ...state, loading: true };
-
-    case SET_TOKEN:
-      return { ...state, token: action.payload };
 
     case LOGIN_SUCCESS:
     case REFRESH_TOKEN_SUCCESS:
@@ -74,7 +70,7 @@ export default (state = initialState, action: AnyAction): AuthState => {
     case REGISTER_ERROR:
     case GET_USER_ME_ERROR:
     case REFRESH_TOKEN_ERROR:
-      return { ...state, error: action.payload, authenticated: false, loading: false };
+      return { ...state, errors: action.payload, authenticated: false, loading: false };
 
     default:
       return state;

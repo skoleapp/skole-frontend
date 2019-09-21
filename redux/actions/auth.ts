@@ -22,25 +22,17 @@ export const setToken: any = (token: string) => (dispatch: Dispatch): AnyAction 
   dispatch({ type: SET_TOKEN, payload: token });
 
 // eslint-disable-next-line
-export const refreshToken: any = () => async (dispatch: Dispatch): Promise<void> => {
+export const refreshToken: any = (token: string) => async (dispatch: Dispatch): Promise<void> => {
   dispatch({ type: REFRESH_TOKEN });
 
   try {
     const url = getApiUrl('refresh-token');
-
-    // FIXME: find proper config type
-    const config: any = tokenConfig(); // eslint-disable-line @typescript-eslint/no-explicit-any
-
+    const config = tokenConfig(token);
     const { data } = await skoleAPI.get(url, config);
-
-    dispatch({
-      type: REFRESH_TOKEN_SUCCESS,
-      payload: data.refresh_token // eslint-disable-line @typescript-eslint/camelcase
-    });
-  } catch {
-    dispatch({
-      type: REFRESH_TOKEN_ERROR
-    });
+    // eslint-disable-line @typescript-eslint/camelcase
+    dispatch({ type: REFRESH_TOKEN_SUCCESS, payload: data.refresh_token });
+  } catch (error) {
+    dispatch({ type: REFRESH_TOKEN_ERROR, payload: createErrors(error) });
   }
 };
 
@@ -110,24 +102,15 @@ export const login = ({ usernameOrEmail, password }: LoginParams) => (
 
 export const logout = () => (dispatch: Dispatch): { type: string } => dispatch({ type: LOGOUT });
 
-export const getUserMe = () => async (dispatch: Dispatch): Promise<void> => {
+export const getUserMe = (token: string) => async (dispatch: Dispatch): Promise<void> => {
   dispatch({ type: GET_USER_ME });
 
   try {
     const url = getApiUrl('user-me');
-
-    // FIXME: find proper config type
-    const config: any = tokenConfig(); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const config = tokenConfig(token);
     const { data } = await skoleAPI.get(url, config);
-
-    dispatch({
-      type: GET_USER_ME_SUCCESS,
-      payload: data
-    });
+    dispatch({ type: GET_USER_ME_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: GET_USER_ME_ERROR,
-      payload: createErrors(error)
-    });
+    dispatch({ type: GET_USER_ME_ERROR, payload: createErrors(error) });
   }
 };

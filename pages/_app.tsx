@@ -31,7 +31,7 @@ const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Prop
     window.scrollTo(0, 0);
     const token = localStorage.getItem('token');
     token && store.dispatch(setToken(token));
-    store.dispatch(refreshToken());
+    store.dispatch(refreshToken(token));
   }, []);
 
   if (redirect) {

@@ -19,3 +19,7 @@ export const GET_USER_ME_SUCCESS = 'GET_USER_ME_SUCCESS';
 export const GET_USER_ME_ERROR = 'GET_USER_ME_ERROR';
 
 export const TOGGLE_MENU = 'TOGGLE_MENU';
+
+export const SEARCH = 'SEARCH';
+export const SEARCH_SUCCESS = 'SEARCH_SUCCESS';
+export const SEARCH_ERROR = 'SEARCH_ERROR';

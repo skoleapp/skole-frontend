@@ -1,10 +1,4 @@
-interface Errors {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  general: string;
-}
+import { Errors } from '../interfaces';
 
 // eslint-disable-next-line
 export const createErrors = (error: any): Errors => {
@@ -13,9 +7,11 @@ export const createErrors = (error: any): Errors => {
     email: '',
     password: '',
     confirmPassword: '',
-    general: ''
+    general: '',
+    serverError: ''
   };
 
+  // 4xx errors
   if (error) {
     if (error.username) {
       errors.username = error.username.join();
@@ -47,8 +43,9 @@ export const createErrors = (error: any): Errors => {
       errors.general = error.detail;
     }
 
+    // 5xx errors
     if (error.serverError) {
-      errors.general = error.serverError;
+      errors.serverError = error.serverError;
     }
   }
 
