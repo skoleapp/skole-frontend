@@ -10,6 +10,7 @@ const StyledMenuListItem = styled.li`
   color: var(--white);
   font-size: 1.75rem;
   line-height: 1.5;
+  text-align: center;
 
   &:hover {
     transform: var(--scale);

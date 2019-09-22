@@ -1,5 +1,5 @@
 export interface MenuOpenProps {
-  menuOpen: boolean;
+  open: boolean;
 }
 
 export interface ShortcutProps {
