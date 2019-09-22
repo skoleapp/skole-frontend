@@ -12,7 +12,8 @@ import {
   REFRESH_TOKEN_ERROR,
   REFRESH_TOKEN_SUCCESS,
   REGISTER,
-  REGISTER_ERROR
+  REGISTER_ERROR,
+  SET_TOKEN
 } from '../actions/types';
 
 export const initialAuthState: AuthState = {
@@ -38,6 +39,9 @@ export default (state = initialAuthState, action: AnyAction): AuthState => {
     case REFRESH_TOKEN:
     case GET_USER_ME:
       return { ...state, loading: true };
+
+    case SET_TOKEN:
+      return { ...state, token: action.payload };
 
     case LOGIN_SUCCESS:
     case REFRESH_TOKEN_SUCCESS:
