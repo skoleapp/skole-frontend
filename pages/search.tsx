@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
 import React from 'react';
+import { getApiUrl } from '../api';
 import { MainLayout, SearchPage } from '../components';
 import { useSearch } from '../components/hooks/useSearch';
 import { LoadingScreen } from '../components/layout';
-import { getApiUrl } from '../utils';
 
 // FIXME: Add proper types for this
 interface Props {

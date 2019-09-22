@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
-import { createErrors, skoleAPI } from '../../utils';
+import { skoleAPI } from '../../api';
+import { createErrors } from '../../utils';
 import { SEARCH, SEARCH_ERROR, SEARCH_SUCCESS } from './types';
 
 export const search = (url: string) => async (dispatch: Dispatch): Promise<void> => {

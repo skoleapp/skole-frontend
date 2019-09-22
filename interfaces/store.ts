@@ -4,7 +4,7 @@ export interface Errors {
   password: string;
   confirmPassword: string;
   general: string;
-  serverError: string;
+  serverNotFound: string;
 }
 
 export interface User {

@@ -1,18 +1,32 @@
 import { Errors } from '../interfaces';
 
 // eslint-disable-next-line
-export const createErrors = (error: any): Errors => {
+export const createErrors = ({ data, status }: any): Errors => {
+  const { error, detail } = data;
+
   const errors = {
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
     general: '',
-    serverError: ''
+    serverNotFound: ''
   };
 
-  // 4xx errors
+  // Server not available
+  if (status === 503) {
+    errors.serverNotFound = error;
+  }
+
+  if (detail) {
+    errors.general = detail;
+  }
+
   if (error) {
+    if (error.non_field_errors) {
+      errors.general = error.non_field_errors.join();
+    }
+
     if (error.username) {
       errors.username = error.username.join();
     }
@@ -33,19 +47,6 @@ export const createErrors = (error: any): Errors => {
       if (error.password.non_field_errors) {
         errors.general = error.password.non_field_errors.join();
       }
-    }
-
-    if (error.non_field_errors) {
-      errors.general = error.non_field_errors.join();
-    }
-
-    if (error.detail) {
-      errors.general = error.detail;
-    }
-
-    // 5xx errors
-    if (error.serverError) {
-      errors.serverError = error.serverError;
     }
   }
 

@@ -1,6 +1,7 @@
 import { AnyAction, Dispatch } from 'redux';
+import { getApiUrl, skoleAPI, tokenConfig } from '../../api';
 import { State } from '../../interfaces';
-import { createErrors, getApiUrl, skoleAPI, tokenConfig } from '../../utils';
+import { createErrors } from '../../utils';
 import {
   GET_USER_ME,
   GET_USER_ME_ERROR,

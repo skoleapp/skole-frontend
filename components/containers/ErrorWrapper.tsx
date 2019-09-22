@@ -7,12 +7,12 @@ export const ErrorWrapper: React.FC = ({ children }) => {
   const authError = useSelector((state: State) => state.auth.errors);
   const searchError = useSelector((state: State) => state.search.errors);
 
-  if (authError && authError.serverError) {
-    return <ErrorPage error={authError.serverError} />;
+  if (authError && authError.serverNotFound) {
+    return <ErrorPage error={authError.serverNotFound} />;
   }
 
-  if (searchError && searchError.serverError) {
-    return <ErrorPage error={searchError.serverError} />;
+  if (searchError && searchError.serverNotFound) {
+    return <ErrorPage error={searchError.serverNotFound} />;
   }
 
   return <>{children}</>;
