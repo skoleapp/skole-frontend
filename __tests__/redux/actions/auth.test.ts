@@ -1,6 +1,5 @@
 import moxios from 'moxios';
-import { useDispatch } from 'react-redux';
-import { initialAuthState, initStore, setToken } from '../../../redux';
+import { initialAuthState, initStore, refreshToken, setToken } from '../../../redux';
 
 describe('auth actions', () => {
   beforeEach(() => {
@@ -12,23 +11,42 @@ describe('auth actions', () => {
   });
 
   const store = initStore();
-  const dispatch = useDispatch();
 
   describe('set token action', () => {
     it('sets the token in the store', () => {
-      dispatch(setToken('token'));
-      const state = store.getState();
+      store.dispatch(setToken('token'));
+      const { auth } = store.getState();
 
       const expectedState = {
         ...initialAuthState,
         token: 'token'
       };
 
-      expect(state).toEqual(expectedState);
+      expect(auth).toEqual(expectedState);
     });
   });
 
-  it('refreshes the token', () => {});
+  it('refreshes the token', () => {
+    const store = initStore();
+    const oldToken = 'oldToken';
+    const newToken = 'newToken';
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: {
+          refresh_token: newToken // eslint-disable-line
+        }
+      });
+    });
+
+    store.dispatch(refreshToken(oldToken)).then(() => {
+      const state = store.getState();
+      const { token } = state.auth;
+      expect(token).toBe(newToken);
+    });
+  });
 
   // TODO: Implement tests for other action creators...
 });
