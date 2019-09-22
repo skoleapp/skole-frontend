@@ -7,7 +7,7 @@ interface Props {
 
 export const HeadComponent: React.FC<Props> = ({ title }) => (
   <Head>
-    <title>{`Skole` && title ? title : ``}</title>
+    <title>{`Skole | ${title}`}</title>
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <link
       rel="stylesheet"
