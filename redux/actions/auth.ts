@@ -1,5 +1,5 @@
 import { AnyAction, Dispatch } from 'redux';
-import { getApiUrl, skoleAPI, tokenConfig } from '../../api';
+import { getApiUrl, refreshTokenConfig, skoleAPI, tokenConfig } from '../../api';
 import { State } from '../../interfaces';
 import { createErrors } from '../../utils';
 import {
@@ -15,24 +15,16 @@ import {
   REFRESH_TOKEN_SUCCESS,
   REGISTER,
   REGISTER_ERROR,
-  REGISTER_SUCCESS,
-  SET_TOKEN
+  REGISTER_SUCCESS
 } from './types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const setToken: any = (token: string) => (dispatch: Dispatch): AnyAction =>
-  dispatch({ type: SET_TOKEN, payload: token });
-
 // eslint-disable-next-line
-export const refreshToken: any = () => async (
-  dispatch: Dispatch,
-  getState: () => State
-): Promise<void> => {
+export const refreshToken: any = (token: string) => async (dispatch: Dispatch): Promise<void> => {
   dispatch({ type: REFRESH_TOKEN });
 
   try {
     const url = getApiUrl('refresh-token');
-    const config = tokenConfig(getState);
+    const config = refreshTokenConfig(token);
     const { data } = await skoleAPI.get(url, config);
     // eslint-disable-line @typescript-eslint/camelcase
     dispatch({ type: REFRESH_TOKEN_SUCCESS, payload: data.refresh_token });
@@ -105,7 +97,8 @@ export const login = ({ usernameOrEmail, password }: LoginParams) => (
   );
 };
 
-export const logout = () => (dispatch: Dispatch): { type: string } => dispatch({ type: LOGOUT });
+export const logout = () => (dispatch: Dispatch): void =>
+  dispatch({ type: LOGOUT }) && localStorage.removeItem('token');
 
 export const getUserMe = () => async (dispatch: Dispatch, getState: () => State): Promise<void> => {
   dispatch({ type: GET_USER_ME });

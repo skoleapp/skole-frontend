@@ -12,3 +12,12 @@ export const tokenConfig = (getState: () => State): AxiosRequestConfig => {
     }
   };
 };
+
+export const refreshTokenConfig = (token: string): AxiosRequestConfig => {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Token ${token}`
+    }
+  };
+};
