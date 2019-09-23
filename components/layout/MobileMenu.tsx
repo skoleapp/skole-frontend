@@ -8,17 +8,18 @@ interface StyledMenuProps {
   open: boolean;
 }
 
-const StyledMenu = styled.nav<StyledMenuProps>`
+const StyledMobileMenu = styled.nav<StyledMenuProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   background: var(--primary);
-  transform: ${({ open }): string => (open ? 'translateX(0)' : 'translateX(-100%)')};
+  transform: ${({ open }): string => (open ? 'scale(1.5)' : ' scale(0)')};
+  border-radius: 50%;
   height: 100vh;
   width: 100%;
   position: absolute;
   top: 0;
-  left: 0;
   transition: var(--transition);
 `;
 
@@ -26,8 +27,8 @@ export const MobileMenu: React.FC = () => {
   const { menuOpen } = useSelector((state: State) => state.ui);
 
   return (
-    <StyledMenu open={menuOpen}>
+    <StyledMobileMenu open={menuOpen}>
       <MenuList />
-    </StyledMenu>
+    </StyledMobileMenu>
   );
 };

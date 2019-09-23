@@ -5,21 +5,13 @@ import styled from 'styled-components';
 import { toggleMenu } from '../../redux';
 import { Anchor } from './Anchor';
 
-const StyledMenuListItem = styled.li`
-  list-style: none;
-  color: var(--white);
-  font-size: 1.75rem;
-  line-height: 1.5;
-  text-align: center;
+const StyledMenuListItem = styled(Anchor)`
+  font-size: 1.5rem;
+  line-height: 0.75;
 
   &:hover {
     transform: var(--scale);
     transition: var(--transition);
-  }
-
-  a:hover {
-    text-decoration: none !important;
-    color: var(--black);
   }
 `;
 
@@ -36,8 +28,9 @@ export const MenuListItem: React.FC<Props> = ({ href, children }) => {
         onClick={(): void => {
           dispatch(toggleMenu(false));
         }}
+        variant="white"
       >
-        <Anchor variant="white">{children}</Anchor>
+        {children}
       </StyledMenuListItem>
     </Link>
   );

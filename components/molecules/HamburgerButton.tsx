@@ -26,7 +26,7 @@ const StyledHamburgerButton = styled.button<MenuOpenProps>`
   div {
     width: 3rem;
     height: 0.25rem;
-    background: ${({ open }): string => (open ? 'var(--black)' : 'var(--white)')};
+    background: var(--white);
     border-radius: 1rem;
     transition: var(--transition);
     position: relative;
