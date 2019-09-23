@@ -9,6 +9,11 @@ interface StyledMenuProps {
 }
 
 const StyledMobileMenu = styled.nav<StyledMenuProps>`
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,10 +21,6 @@ const StyledMobileMenu = styled.nav<StyledMenuProps>`
   background: var(--primary);
   transform: ${({ open }): string => (open ? 'scale(1.5)' : ' scale(0)')};
   border-radius: 50%;
-  height: 100vh;
-  width: 100%;
-  position: absolute;
-  top: 0;
   transition: var(--transition);
 `;
 
