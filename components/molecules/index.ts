@@ -1,6 +1,7 @@
 export { MenuList } from '../atoms/MenuList';
 export { DesktopMenuItems } from './DesktopMenuItems';
 export { EditAccountForm } from './EditAccountForm';
+export { FeedbackButtonSection } from './FeedbackButtonSection';
 export { FeedbackForm } from './FeedbackForm';
 export { HamburgerButton } from './HamburgerButton';
 export { LoginForm } from './LoginForm';

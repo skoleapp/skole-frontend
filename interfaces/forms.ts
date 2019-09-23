@@ -24,4 +24,13 @@ export interface SearchFormProps {
   search: string;
 }
 
-export type AnyForm = LoginFormValues | RegisterFormValues | SearchFormProps | User;
+export interface FeedbackFormValues {
+  comment: string;
+}
+
+export type AnyForm =
+  | LoginFormValues
+  | RegisterFormValues
+  | SearchFormProps
+  | User
+  | FeedbackFormValues;

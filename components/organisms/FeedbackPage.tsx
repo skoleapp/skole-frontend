@@ -1,27 +1,41 @@
-import React, { FormEvent, useState } from 'react';
+import { Formik } from 'formik';
+import React, { useState } from 'react';
+import * as Yup from 'yup';
+import { FeedbackFormValues } from '../../interfaces';
 import { FeedbackType } from '../../types';
 import { H1 } from '../atoms';
-import { FeedbackForm, ThanksForFeedback } from '../molecules';
+import { FeedbackButtonSection, FeedbackForm, ThanksForFeedback } from '../molecules';
 
-// TODO: convert this to use Formik
+const initialValues = {
+  comment: ''
+};
+
+const validationSchema = Yup.object().shape({
+  comment: Yup.string().required('Please tell us some details about your feedback :)')
+});
+
 export const FeedbackPage: React.FC = () => {
-  //const dispatch = useDispatch();
-
-  const [rate, setRate] = useState<FeedbackType>('');
-  const [comment, setComment] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [rate, setRate] = useState<FeedbackType>('');
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
+  const onSubmit = async (values: FeedbackFormValues): Promise<void> => {
+    console.log({ ...values, rate });
     setSubmitted(true);
-    console.log({ rate, comment });
   };
 
   return (
     <>
       <H1>Leave Feedback</H1>
       {!submitted ? (
-        <FeedbackForm onSubmit={onSubmit} setRate={setRate} setComment={setComment} rate={rate} />
+        <>
+          <FeedbackButtonSection rate={rate} setRate={setRate} />
+          <Formik
+            onSubmit={onSubmit}
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            component={FeedbackForm}
+          />
+        </>
       ) : (
         <ThanksForFeedback />
       )}
