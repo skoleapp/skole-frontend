@@ -28,12 +28,22 @@ interface URLProps {
   url: string;
 }
 
+const getQueryParams = ({ search, school_type }: any) => {
+  if (search) {
+    return `?search=${search}`;
+  }
+
+  if (school_type) {
+    return `?search=${school_type}`;
+  }
+};
+
 // FIXME: Add proper types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Search.getInitialProps = async ({ query }): Promise<URLProps> => {
   const baseUrl = getApiUrl('course');
-  const { search } = query;
-  const url = baseUrl + `search/?${search}/`;
+  const url = baseUrl + getQueryParams(query);
+  console.log(url);
   return { url };
 };
 

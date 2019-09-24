@@ -1,41 +1,52 @@
-const coursesPageShortcutsData = {
+import { HIGH_SCHOOL, UNIVERSITY, UNIVERSITY_OF_APPLIED_SCIENCES } from './schoolTypes';
+
+const schoolShortcutsData = {
   highSchool: {
     text: 'High School',
     iconName: 'school',
-    href: '/courses/high-school'
+    href: {
+      pathname: '/search-courses',
+      query: { school_type: HIGH_SCHOOL }
+    }
   },
   university: {
     text: 'University',
     iconName: 'graduation-cap',
-    href: '/courses/university'
+    href: {
+      pathname: '/search-courses',
+      query: { school_type: UNIVERSITY }
+    }
   },
   universityOfAppliedSciences: {
     text: 'University of Applied Sciences',
     iconName: 'chalkboard',
-    href: '/courses/university-of-applied-sciences'
+    href: {
+      pathname: '/search-courses',
+      query: { school_type: UNIVERSITY_OF_APPLIED_SCIENCES }
+    }
   }
 };
 
-const { highSchool, university, universityOfAppliedSciences } = coursesPageShortcutsData;
-export const coursesPageShortcuts = [highSchool, university, universityOfAppliedSciences];
+const { highSchool, university, universityOfAppliedSciences } = schoolShortcutsData;
+export const schoolShortcuts = [highSchool, university, universityOfAppliedSciences];
 
-const landingPageShortcutsData = {
-  courses: {
-    text: 'All Courses',
+const actionShortcutsData = {
+  searchCourses: {
+    text: 'Search Courses',
     iconName: 'chalkboard-teacher',
-    href: '/courses'
+    href: { pathname: '/search-courses' }
   },
   uploadResource: {
     text: 'Upload Resource',
     iconName: 'sticky-note',
-    href: '/upload-resource'
+    href: { pathname: '/upload-resource' }
   },
   createCourse: {
     text: 'Create Course',
     iconName: 'plus-circle',
-    href: '/create-course'
+    href: { pathname: '/create-course' }
   }
 };
 
-const { courses, uploadResource, createCourse } = landingPageShortcutsData;
-export const landingPageShortcuts = [courses, uploadResource, createCourse];
+const { searchCourses, uploadResource, createCourse } = actionShortcutsData;
+export const actionShortcuts = [searchCourses, uploadResource, createCourse];

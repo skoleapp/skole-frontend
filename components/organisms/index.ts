@@ -1,5 +1,4 @@
 export { AccountPage } from './AccountPage';
-export { CoursesPage } from './CoursesPage';
 export { EditAccountPage } from './EditAccountPage';
 export { ErrorPage } from './ErrorPage';
 export { FeedbackPage } from './FeedbackPage';
