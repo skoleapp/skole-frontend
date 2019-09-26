@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { State } from '../../interfaces';
 import { ErrorPage } from '../organisms';
 
-export const ErrorWrapper: React.FC = ({ children }) => {
+export const ErrorBoundary: React.FC = ({ children }) => {
   const authError = useSelector((state: State) => state.auth.errors);
   const searchError = useSelector((state: State) => state.search.errors);
 
