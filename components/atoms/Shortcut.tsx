@@ -8,8 +8,8 @@ import { Icon } from './Icon';
 const StyledShortcut = styled.div`
   margin: 0.5rem;
   padding: 0.5rem;
-  height: 15rem;
-  width: 15rem;
+  height: 14rem;
+  width: 14rem;
   display: flex;
   justify-content: center;
   align-items: center;

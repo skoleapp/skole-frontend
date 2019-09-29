@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const StyledCard = styled.div`
   border-radius: var(--border-radius);
-  background-color: var(--white);
+  background: var(--white);
   margin: 2rem 0.5rem;
   padding: 0.5rem;
   box-shadow: var(--box-shadow);
