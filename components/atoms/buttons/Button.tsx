@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Button = styled.button`
   cursor: pointer;
   background var(--primary);
-  border-radius: 0.75rem;
+  border-radius: var(--border-radius);
   margin: 1rem 0.5rem;
   padding: 0.5rem;
   color: var(--secondary);
@@ -12,7 +12,7 @@ export const Button = styled.button`
   font-size: 1.05rem;
   text-transform: uppercase;
   box-shadow: var(--box-shadow);
-  border: 0.1rem solid var(--white);
+  border: var(--white-border);
 
   &:hover {
     transform: var(--scale);

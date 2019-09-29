@@ -13,8 +13,8 @@ const StyledShortcut = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.75rem;
-  border: 0.1rem solid var(--black);
+  border-radius: var(--border-radius);
+  border: var(--black-border)
   color: var(--black);
   font-size: 1.5rem;
   background: var(--secondary);

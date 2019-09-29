@@ -4,9 +4,9 @@ import { FormFieldProps } from '../../../interfaces';
 import { TextInput } from './TextInput';
 
 export const StyledSearchInput = styled(TextInput)`
-  border-radius: 0.75rem 0 0 0.75rem;
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
   width: 14rem;
-  border: 0.1rem solid var(--primary);
+  border: var(--primary-border);
   margin-right: 0.15rem;
 `;
 

@@ -7,8 +7,8 @@ import { Label } from './Label';
 
 export const StyledTextarea = styled.textarea`
   width: 15rem;
-  border: 0.1rem solid var(--primary);
-  border-radius: 0.5rem;
+  border: var(--primary-border);
+  border-radius: var(--border-radius);
   margin: 0.5rem;
   height: 5rem;
   font-size: 1.05rem;
