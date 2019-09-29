@@ -4,6 +4,7 @@ export * from './buttons';
 export { Card } from './Card';
 export * from './forms';
 export * from './headers';
+export { HR } from './HR';
 export * from './inputs';
 export { LoadingIndicator } from './LoadingIndicator';
 export { MenuListItem } from './MenuListItem';
