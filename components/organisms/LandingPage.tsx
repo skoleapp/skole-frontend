@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { SearchFormProps } from '../../interfaces';
 import { actionShortcuts, schoolShortcuts } from '../../static';
-import { Card, LogoHeader } from '../atoms';
+import { LogoHeader } from '../atoms';
 import { SearchInputSection, ShortcutsSection } from '../molecules';
 
 export const initialValues = {
@@ -24,9 +24,7 @@ export const LandingPage: React.FC = () => (
   <StyledLandingPage>
     <LogoHeader />
     <Formik component={SearchInputSection} onSubmit={onSubmit} initialValues={initialValues} />
-    <Card>
-      <ShortcutsSection shortcuts={schoolShortcuts} title="Where do you study?" />
-      <ShortcutsSection shortcuts={actionShortcuts} title="What would you like to do?" />
-    </Card>
+    <ShortcutsSection shortcuts={schoolShortcuts} title="Where do you study?" />
+    <ShortcutsSection shortcuts={actionShortcuts} title="What would you like to do?" />
   </StyledLandingPage>
 );
