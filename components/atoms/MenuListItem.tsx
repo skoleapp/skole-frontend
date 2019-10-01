@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { toggleMenu } from '../../redux';
+import { closeWidgets } from '../../redux';
 import { Anchor } from './Anchor';
 
 const StyledMenuListItem = styled(Anchor)`
@@ -26,7 +26,7 @@ export const MenuListItem: React.FC<Props> = ({ href, children }) => {
     <Link href={href}>
       <StyledMenuListItem
         onClick={(): void => {
-          dispatch(toggleMenu(false));
+          dispatch(closeWidgets());
         }}
         variant="white"
       >

@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { MenuListItem } from '.';
 import { State } from '../../interfaces';
 import { privateMenuItems, publicMenuItems } from '../../static';
+import { MenuListItem } from '../atoms';
 
 export const MenuList: React.FC = () => {
   const router = useRouter();
