@@ -2,12 +2,12 @@
 
 :root {
   /* Backgrounds */
-  --primary-bg: linear-gradient(10deg, var(--primary) 55%, var(--secondary) 45%);
-  --secondary-bg: var(--secondary);
+  --primary-bg: var(--secondary);
+  --secondary-bg: linear-gradient(var(--secondary) 10%, var(--primary) 90%);
 
   /* Colors */
   --primary: rgb(173, 54, 54);
-  --secondary: rgba(245, 245, 245);
+  --secondary: rgba(250, 242, 222);
 
   --white: #ffffff;
   --black: #000000;

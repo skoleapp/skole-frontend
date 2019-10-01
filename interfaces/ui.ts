@@ -14,3 +14,9 @@ export interface ShortcutProps {
   iconName: string;
   href: Href;
 }
+
+export type Variant = 'white' | 'red' | undefined;
+
+export interface VariantProps {
+  variant?: Variant;
+}

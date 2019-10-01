@@ -27,6 +27,10 @@ const StyledShortcut = styled.div`
     color: var(--primary);
     border-color: var(--primary);
     cursor: pointer;
+
+    i {
+      color: var(--primary);
+    }
   }
 `;
 

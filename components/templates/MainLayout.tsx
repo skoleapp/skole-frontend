@@ -6,12 +6,13 @@ import { Container, ErrorBoundary } from '../containers';
 import { Footer, Head, MobileMenu, Navbar } from '../layout';
 
 interface StyledMainLayoutProps {
-  primary?: boolean;
+  secondary?: boolean;
   menuOpen: boolean;
 }
 
 const StyledMainLayout = styled.div<StyledMainLayoutProps>`
-  background: ${({ primary }): string => (primary && 'var(--primary-bg)') || 'var(--secondary-bg)'};
+  background: ${({ secondary }): string =>
+    (secondary && 'var(--secondary-bg)') || 'var(--primary-bg)'};
   position: ${({ menuOpen }): string => (menuOpen ? 'fixed' : 'relative')};
   min-height: 100%;
   width: 100%;
@@ -20,14 +21,14 @@ const StyledMainLayout = styled.div<StyledMainLayoutProps>`
 interface Props {
   title?: string;
   children?: ReactNode;
-  primary?: boolean;
+  secondary?: boolean;
 }
 
-export const MainLayout: React.FC<Props> = ({ title, children, primary }) => {
+export const MainLayout: React.FC<Props> = ({ title, children, secondary }) => {
   const { menuOpen } = useSelector((state: State) => state.ui);
 
   return (
-    <StyledMainLayout primary={primary} menuOpen={menuOpen}>
+    <StyledMainLayout secondary={secondary} menuOpen={menuOpen}>
       <Head title={title} />
       <Navbar />
       <MobileMenu />

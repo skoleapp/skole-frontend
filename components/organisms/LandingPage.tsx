@@ -15,6 +15,10 @@ const StyledLandingPage = styled.div`
   margin-top: 2rem;
 `;
 
+const LandingpageShortcuts = styled.div`
+  margin-top: 8rem;
+`;
+
 const onSubmit = (values: SearchFormProps): void => {
   const { search } = values;
   Router.push({ pathname: '/search-courses', query: { search } });
@@ -24,7 +28,9 @@ export const LandingPage: React.FC = () => (
   <StyledLandingPage>
     <LogoHeader />
     <Formik component={SearchInputSection} onSubmit={onSubmit} initialValues={initialValues} />
-    <ShortcutsSection shortcuts={schoolShortcuts} title="Where do you study?" />
-    <ShortcutsSection shortcuts={actionShortcuts} title="What would you like to do?" />
+    <LandingpageShortcuts>
+      <ShortcutsSection shortcuts={schoolShortcuts} title="Where do you study?" />
+      <ShortcutsSection shortcuts={actionShortcuts} title="What would you like to do?" />
+    </LandingpageShortcuts>
   </StyledLandingPage>
 );

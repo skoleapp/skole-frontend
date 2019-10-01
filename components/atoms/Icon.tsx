@@ -1,28 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Variant, VariantProps } from '../../interfaces';
+import { getColorForVariant } from '../../utils';
 
-type IconVariant = 'white';
-
-interface IconProps {
-  variant?: IconVariant;
-}
-
-const getColorForVariant = (variant?: string): string => {
-  switch (variant) {
-    case 'white':
-      return 'var(--white)';
-    default:
-      return 'var(--black)';
-  }
-};
-
-const StyledIcon = styled.i<IconProps>`
-  color: ${({ variant }): string | undefined => getColorForVariant(variant)};
+const StyledIcon = styled.i<VariantProps>`
+  color: ${({ variant }): string => getColorForVariant(variant)};
 `;
 
 interface Props {
   iconName: string;
-  variant?: IconVariant;
+  variant?: Variant;
 }
 
 export const Icon: React.FC<Props> = ({ iconName, variant }) => (
