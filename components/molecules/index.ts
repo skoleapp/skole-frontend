@@ -2,6 +2,7 @@ export { EditAccountForm } from './EditAccountForm';
 export { FeedbackButtonSection } from './FeedbackButtonSection';
 export { FeedbackForm } from './FeedbackForm';
 export { HamburgerButton } from './HamburgerButton';
+export { HomeButton } from './HomeButton';
 export { LoginForm } from './LoginForm';
 export { MenuList } from './MenuList';
 export { RegisterForm } from './RegisterForm';
