@@ -34,7 +34,7 @@ export const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps 
     token && store.dispatch(refreshToken(token));
 
     // Only persist the correct token in local storage when demounting
-    return () => {
+    return (): void => {
       const { token } = store.getState().auth;
       localStorage.setItem('token', token);
     };
