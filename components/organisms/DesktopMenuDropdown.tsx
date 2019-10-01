@@ -7,16 +7,12 @@ import { Icon } from '../atoms/Icon';
 import { MenuList } from '../molecules';
 
 const StyledDesktopMenuDropdown = styled.div`
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
-`;
-
-const ToggleIcon = styled.div`
-  position: fixed:
-  z-index: 1;
+  margin-right: 30vw;
   height: 5rem;
-  width: 10rem;
+  width: 5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,12 +20,13 @@ const ToggleIcon = styled.div`
   cursor: pointer;
 `;
 
+const ToggleIcon = styled.div``;
+
 const Dropdown = styled.div<MenuOpenProps>`
-  position: fixed;
+  position: absolute;
   height: auto;
-  width: 10rem;
+  width: auto;
   top: 5rem;
-  right: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -37,7 +34,9 @@ const Dropdown = styled.div<MenuOpenProps>`
   background: var(--primary);
   visibility: ${({ open }): string => (open ? 'visible' : 'hidden')};
   border-radius: 0 0 var(--border-radius) var(--border-radius);
-  padding-bottom: 1rem;
+  padding: 1rem 0.5rem;
+  border: var(--black-border);
+  border-style: none solid solid solid;
 `;
 
 export const DesktopMenuDropdown: React.FC = () => {
