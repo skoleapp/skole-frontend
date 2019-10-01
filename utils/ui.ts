@@ -10,3 +10,8 @@ export const getColorForVariant = (variant: Variant): string => {
       return 'var(--black)';
   }
 };
+
+// TODO: Build a meme generator
+export const getLoadingText = (): string => {
+  return 'Loading...';
+};

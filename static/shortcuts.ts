@@ -1,12 +1,10 @@
-import { HIGH_SCHOOL, UNIVERSITY, UNIVERSITY_OF_APPLIED_SCIENCES } from './schoolTypes';
-
 const schoolShortcutsData = {
   highSchool: {
     text: 'High School',
     iconName: 'school',
     href: {
       pathname: '/search-courses',
-      query: { school_type: HIGH_SCHOOL }
+      query: { school_type: 'high-school' } // eslint-disable-line
     }
   },
   university: {
@@ -14,7 +12,7 @@ const schoolShortcutsData = {
     iconName: 'graduation-cap',
     href: {
       pathname: '/search-courses',
-      query: { school_type: UNIVERSITY }
+      query: { school_type: 'university' } // eslint-disable-line
     }
   },
   universityOfAppliedSciences: {
@@ -22,7 +20,7 @@ const schoolShortcutsData = {
     iconName: 'chalkboard',
     href: {
       pathname: '/search-courses',
-      query: { school_type: UNIVERSITY_OF_APPLIED_SCIENCES }
+      query: { school_type: 'university-of-applied-sciences' } // eslint-disable-line
     }
   }
 };
