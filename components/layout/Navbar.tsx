@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useMobileBreakPoint } from '../hooks';
 import { HamburgerButton, HomeButton } from '../molecules';
-import { DesktopMenuDropdown, SearchWidget } from '../organisms';
+import { AuthMenu, SearchWidget } from '../organisms';
 
 const StyledNavbar = styled.div`
   height: 5rem;
@@ -35,7 +35,7 @@ export const Navbar: React.FC = () => {
         <DesktopNavbarItems>
           <HomeButton />
           <SearchWidget />
-          <DesktopMenuDropdown />
+          <AuthMenu />
         </DesktopNavbarItems>
       )}
     </StyledNavbar>

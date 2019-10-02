@@ -1,5 +1,5 @@
 export { AccountPage } from './AccountPage';
-export { DesktopMenuDropdown } from './DesktopMenuDropdown';
+export { AuthMenu } from './AuthMenu';
 export { EditAccountPage } from './EditAccountPage';
 export { ErrorPage } from './ErrorPage';
 export { FeedbackPage } from './FeedbackPage';

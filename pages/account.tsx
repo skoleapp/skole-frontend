@@ -1,6 +1,6 @@
 import React from 'react';
 import { AccountPage, MainLayout, PrivatePage } from '../components';
-import { useAccount } from '../components/hooks/useAccount';
+import { useAccount } from '../components/hooks';
 import { LoadingScreen } from '../components/layout';
 
 const Account: React.FC = () => {

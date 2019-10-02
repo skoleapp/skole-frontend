@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { MenuOpenProps, State } from '../../interfaces';
+import { State, WidgetOpenProps } from '../../interfaces';
 import { toggleMenu } from '../../redux';
 
-const StyledHamburgerButton = styled.button<MenuOpenProps>`
+const StyledHamburgerButton = styled.button<WidgetOpenProps>`
   position: absolute;
   top: 1.2rem;
   right: 1.3rem;

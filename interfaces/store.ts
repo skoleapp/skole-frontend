@@ -27,7 +27,8 @@ export interface AuthState {
 
 export interface UIState {
   menuOpen: boolean;
-  desktopMenuDropdownOpen: boolean;
+  authMenuOpen: boolean;
+  searchInputOpen: boolean;
 }
 
 export interface SearchState {

@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import React from 'react';
 import { getApiUrl } from '../api';
 import { MainLayout, SearchPage } from '../components';
-import { useSearch } from '../components/hooks/useSearch';
+import { useSearch } from '../components/hooks';
 import { LoadingScreen } from '../components/layout';
 import { getQueryParams } from '../utils';
 
