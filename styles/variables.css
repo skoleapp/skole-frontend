@@ -3,7 +3,7 @@
 :root {
   /* Backgrounds */
   --primary-bg: var(--secondary);
-  --secondary-bg: linear-gradient(var(--secondary) 10%, var(--primary) 90%);
+  --secondary-bg: url('../static/background.jpg');
 
   /* Colors */
   --primary: rgb(173, 54, 54);

@@ -17,13 +17,12 @@ const StyledShortcut = styled.div`
   border: var(--black-border)
   color: var(--black);
   font-size: 1.5rem;
-  background: var(--secondary);
+  background: var(--white);
   box-shadow: var(--box-shadow);
 
   &:hover {
     transition: var(--transition);
     transform: var(--scale);
-    background: var(--secondary);
     color: var(--primary);
     border-color: var(--primary);
     cursor: pointer;
