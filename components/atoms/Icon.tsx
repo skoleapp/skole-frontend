@@ -14,8 +14,13 @@ interface Props {
   iconName: string;
   variant?: Variant;
   iconSize: IconSize;
+  onClick?: () => void;
 }
 
-export const Icon: React.FC<Props> = ({ iconName, variant, iconSize }) => (
-  <StyledIcon variant={variant} className={`fas fa-${iconSize}x fa-${iconName}`} />
+export const Icon: React.FC<Props> = ({ iconName, variant, iconSize, onClick }) => (
+  <StyledIcon
+    variant={variant}
+    className={`fas fa-${iconSize}x fa-${iconName}`}
+    onClick={onClick}
+  />
 );
