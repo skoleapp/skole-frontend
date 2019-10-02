@@ -3,6 +3,7 @@ export { AuthMenu } from './AuthMenu';
 export { EditAccountPage } from './EditAccountPage';
 export { ErrorPage } from './ErrorPage';
 export { FeedbackPage } from './FeedbackPage';
+export { HomeButton } from './HomeButton';
 export { LandingPage } from './LandingPage';
 export { LoginPage } from './LoginPage';
 export { LogoutPage } from './LogoutPage';

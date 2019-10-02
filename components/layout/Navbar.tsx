@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useMobileBreakPoint } from '../hooks';
-import { HamburgerButton, HomeButton } from '../molecules';
-import { AuthMenu, SearchWidget } from '../organisms';
+import { HamburgerButton } from '../molecules';
+import { AuthMenu, HomeButton, SearchWidget } from '../organisms';
 
 const StyledNavbar = styled.div`
   height: 5rem;
