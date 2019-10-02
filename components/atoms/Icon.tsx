@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Variant, VariantProps } from '../../interfaces';
+import { IconProps, Variant, VariantProps } from '../../interfaces';
 import { getColorForVariant } from '../../utils';
 
 const StyledIcon = styled.i<VariantProps>`
@@ -10,11 +10,9 @@ const StyledIcon = styled.i<VariantProps>`
 
 type IconSize = '1' | '2' | '3';
 
-interface Props {
-  iconName: string;
+interface Props extends IconProps {
   variant?: Variant;
   iconSize: IconSize;
-  onClick?: () => void;
 }
 
 export const Icon: React.FC<Props> = ({ iconName, variant, iconSize, onClick }) => (
