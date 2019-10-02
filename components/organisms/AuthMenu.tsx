@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State, WidgetOpenProps } from '../../interfaces';
 import { toggleAuthMenu } from '../../redux';
-import { Icon } from '../atoms/Icon';
 import { useWidget } from '../hooks';
-import { MenuList } from '../molecules';
+import { MenuList, NavbarIcon } from '../molecules';
 
 const StyledAuthMenu = styled.div`
   display: flex;
@@ -21,12 +20,16 @@ const Dropdown = styled.div<WidgetOpenProps>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: var(--primary);
+  background: var(--white);
   visibility: ${({ open }): string => (open ? 'visible' : 'hidden')};
   border-radius: 0 0 var(--border-radius) var(--border-radius);
   padding: 1rem 0.5rem;
   border: var(--black-border);
   border-style: none solid solid solid;
+
+  a {
+    color: var(--primary);
+  }
 `;
 
 export const AuthMenu: React.FC = () => {
@@ -41,7 +44,7 @@ export const AuthMenu: React.FC = () => {
       }}
       ref={node}
     >
-      <Icon iconName="user-circle" variant="white" iconSize="2" />
+      <NavbarIcon iconName="user-circle" />
       <Dropdown open={authMenuOpen}>
         <MenuList />
       </Dropdown>

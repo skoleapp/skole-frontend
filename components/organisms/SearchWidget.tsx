@@ -5,9 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { SearchFormProps, State, WidgetOpenProps } from '../../interfaces';
 import { closeWidgets, toggleSearchInput } from '../../redux';
-import { Icon } from '../atoms/Icon';
 import { useWidget } from '../hooks';
-import { SearchInputSection } from '../molecules';
+import { NavbarIcon, SearchInputSection } from '../molecules';
 
 export const initialValues = {
   search: ''
@@ -27,7 +26,7 @@ const SearchInput = styled.div<WidgetOpenProps>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: var(--primary);
+  background: var(--white);
   visibility: ${({ open }): string => (open ? 'visible' : 'hidden')};
   border-radius: 0 0 var(--border-radius) var(--border-radius);
   padding: 1rem 0.5rem;
@@ -60,7 +59,7 @@ export const SearchWidget: React.FC = () => {
       }}
       ref={node}
     >
-      <Icon iconName="search" variant="white" iconSize="2" onClick={onIconClick} />
+      <NavbarIcon iconName="search" onClick={onIconClick} />
       <SearchInput open={searchInputOpen}>
         <Formik component={SearchInputSection} onSubmit={onSubmit} initialValues={initialValues} />
       </SearchInput>
