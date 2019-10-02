@@ -23,13 +23,8 @@ const StyledShortcut = styled.div`
   &:hover {
     transition: var(--transition);
     transform: var(--scale);
-    color: var(--primary);
     border-color: var(--primary);
     cursor: pointer;
-
-    i {
-      color: var(--primary);
-    }
   }
 `;
 

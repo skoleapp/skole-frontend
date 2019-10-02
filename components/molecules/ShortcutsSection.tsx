@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ShortcutProps } from '../../interfaces';
-import { H3, Shortcut } from '../atoms';
+import { H2, Shortcut } from '../atoms';
 
 const StyledShortcutsContainer = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ interface Props {
 
 export const ShortcutsSection: React.FC<Props> = ({ shortcuts, title }) => (
   <>
-    <H3>{title}</H3>
+    <H2>{title}</H2>
     <StyledShortcutsContainer>
       {shortcuts.map((s, i) => (
         <Shortcut key={i} text={s.text} iconName={s.iconName} href={s.href} />

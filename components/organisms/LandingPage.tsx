@@ -9,7 +9,7 @@ const StyledLandingPage = styled.div`
 `;
 
 const LandingpageShortcuts = styled.div`
-  margin-top: 4rem;
+  margin-top: 2rem;
 `;
 
 export const LandingPage: React.FC = () => (
