@@ -37,7 +37,7 @@ export const Shortcut: React.FC<ShortcutProps> = ({ text, iconName, href }) => (
   <Link href={href}>
     <StyledShortcut>
       <Column>
-        <Icon iconName={iconName} />
+        <Icon iconName={iconName} iconSize="3" />
         <p>{text}</p>
       </Column>
     </StyledShortcut>

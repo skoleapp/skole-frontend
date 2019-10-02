@@ -8,11 +8,14 @@ const StyledIcon = styled.i<VariantProps>`
   cursor: pointer;
 `;
 
+type IconSize = '1' | '2' | '3';
+
 interface Props {
   iconName: string;
   variant?: Variant;
+  iconSize: IconSize;
 }
 
-export const Icon: React.FC<Props> = ({ iconName, variant }) => (
-  <StyledIcon variant={variant} className={`fas fa-3x fa-${iconName}`} />
+export const Icon: React.FC<Props> = ({ iconName, variant, iconSize }) => (
+  <StyledIcon variant={variant} className={`fas fa-${iconSize}x fa-${iconName}`} />
 );

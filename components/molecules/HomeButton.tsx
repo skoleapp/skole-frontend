@@ -8,7 +8,7 @@ const StyledHomeButton = styled.div``;
 export const HomeButton: React.FC = () => (
   <Link href="/">
     <StyledHomeButton>
-      <Icon iconName="home" variant="white" />
+      <Icon iconName="home" iconSize="2" variant="white" />
     </StyledHomeButton>
   </Link>
 );

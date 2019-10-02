@@ -58,7 +58,7 @@ export const DesktopMenuDropdown: React.FC = () => {
       }}
       ref={node}
     >
-      <Icon iconName="user-circle" variant="white" />
+      <Icon iconName="user-circle" variant="white" iconSize="2" />
       <Dropdown open={desktopMenuDropdownOpen}>
         <MenuList />
       </Dropdown>
