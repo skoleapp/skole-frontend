@@ -20,3 +20,8 @@ export type Variant = 'white' | 'red' | undefined;
 export interface VariantProps {
   variant?: Variant;
 }
+
+export interface IconProps {
+  iconName: string;
+  onClick?: () => void;
+}
