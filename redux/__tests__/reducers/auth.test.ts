@@ -1,5 +1,5 @@
-import { GET_USER_ME, LOGIN, REFRESH_TOKEN, REGISTER } from '../../../redux/actions/types';
-import authReducer, { initialAuthState } from '../../../redux/reducers/auth';
+import { GET_USER_ME, LOGIN, REFRESH_TOKEN, REGISTER } from '../../actions/types';
+import authReducer, { initialAuthState } from '../../reducers/auth';
 
 describe('auth reducer', () => {
   it('returns initial state when no action is dispatched', () => {
