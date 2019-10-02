@@ -12,6 +12,7 @@ const StyledMenuListItem = styled(Anchor)`
   &:hover {
     transform: var(--scale);
     transition: var(--transition);
+    text-decoration: none;
   }
 `;
 
