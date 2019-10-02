@@ -4,6 +4,7 @@ import { getApiUrl } from '../api';
 import { MainLayout, SearchPage } from '../components';
 import { useSearch } from '../components/hooks/useSearch';
 import { LoadingScreen } from '../components/layout';
+import { getQueryParams } from '../utils';
 
 // FIXME: Add proper types for this
 interface Props {
@@ -28,22 +29,9 @@ interface URLProps {
   url: string;
 }
 
-const getQueryParams = ({ search, school_type }: any) => {
-  if (search) {
-    return `?search=${search}`;
-  }
-
-  if (school_type) {
-    return `?search=${school_type}`;
-  }
-};
-
-// FIXME: Add proper types
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 Search.getInitialProps = async ({ query }): Promise<URLProps> => {
   const baseUrl = getApiUrl('course');
   const url = baseUrl + getQueryParams(query);
-  console.log(url);
   return { url };
 };
 

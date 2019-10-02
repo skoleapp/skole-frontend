@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useMobileBreakPoint } from '../hooks';
 import { HamburgerButton, HomeButton } from '../molecules';
-import { DesktopMenuDropdown } from '../organisms';
+import { DesktopMenuDropdown, SearchWidget } from '../organisms';
 
 const StyledNavbar = styled.div`
   height: 5rem;
@@ -12,7 +12,8 @@ const StyledNavbar = styled.div`
 
 const DesktopNavbarItems = styled.div`
   height: 100%;
-  width: 100%;
+  width: 50%;
+  margin: 0 auto;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -33,6 +34,7 @@ export const Navbar: React.FC = () => {
       ) : (
         <DesktopNavbarItems>
           <HomeButton />
+          <SearchWidget />
           <DesktopMenuDropdown />
         </DesktopNavbarItems>
       )}

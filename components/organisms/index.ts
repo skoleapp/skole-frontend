@@ -8,3 +8,4 @@ export { LoginPage } from './LoginPage';
 export { LogoutPage } from './LogoutPage';
 export { RegisterPage } from './RegisterPage';
 export { SearchPage } from './SearchPage';
+export { SearchWidget } from './SearchWidget';
