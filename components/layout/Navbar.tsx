@@ -10,6 +10,14 @@ const StyledNavbar = styled.div`
   background: var(--primary);
 `;
 
+const DesktopNavbarItems = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
 export const Navbar: React.FC = () => {
   const isMobile = useMobileBreakPoint();
 
@@ -23,10 +31,10 @@ export const Navbar: React.FC = () => {
       {isMobile ? (
         <HamburgerButton />
       ) : (
-        <>
+        <DesktopNavbarItems>
           <HomeButton />
           <DesktopMenuDropdown />
-        </>
+        </DesktopNavbarItems>
       )}
     </StyledNavbar>
   );

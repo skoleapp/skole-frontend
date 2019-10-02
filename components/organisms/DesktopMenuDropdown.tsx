@@ -7,20 +7,9 @@ import { Icon } from '../atoms/Icon';
 import { MenuList } from '../molecules';
 
 const StyledDesktopMenuDropdown = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-right: 30vw;
-  height: 5rem;
-  width: 5rem;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  cursor: pointer;
 `;
-
-const ToggleIcon = styled.div``;
 
 const Dropdown = styled.div<MenuOpenProps>`
   position: absolute;
@@ -63,14 +52,13 @@ export const DesktopMenuDropdown: React.FC = () => {
   }, [desktopMenuDropdownOpen]);
 
   return (
-    <StyledDesktopMenuDropdown ref={node}>
-      <ToggleIcon
-        onClick={(): void => {
-          dispatch(toggleDesktopMenuDropdown(!desktopMenuDropdownOpen));
-        }}
-      >
-        <Icon iconName="user-circle" variant="white" />
-      </ToggleIcon>
+    <StyledDesktopMenuDropdown
+      onClick={(): void => {
+        dispatch(toggleDesktopMenuDropdown(!desktopMenuDropdownOpen));
+      }}
+      ref={node}
+    >
+      <Icon iconName="user-circle" variant="white" />
       <Dropdown open={desktopMenuDropdownOpen}>
         <MenuList />
       </Dropdown>

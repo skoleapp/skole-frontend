@@ -5,6 +5,7 @@ import { getColorForVariant } from '../../utils';
 
 const StyledIcon = styled.i<VariantProps>`
   color: ${({ variant }): string => getColorForVariant(variant)};
+  cursor: pointer;
 `;
 
 interface Props {
