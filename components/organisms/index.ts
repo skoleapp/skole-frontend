@@ -7,5 +7,6 @@ export { HomeButton } from './HomeButton';
 export { LandingPage } from './LandingPage';
 export { LoginPage } from './LoginPage';
 export { LogoutPage } from './LogoutPage';
+export { NotFound } from './NotFound';
 export { RegisterPage } from './RegisterPage';
 export { SearchWidget } from './SearchWidget';
