@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../interfaces';
 import { logout } from '../../redux';
@@ -10,23 +10,12 @@ export const LogoutPage: React.FC = () => {
   const { authenticated, loading } = useSelector((state: State) => state.auth);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    authenticated && dispatch(logout());
+  }, [authenticated]);
+
   if (loading) {
     return <LoadingScreen />;
-  }
-
-  if (authenticated) {
-    return (
-      <>
-        <H3>Logout Here!</H3>
-        <Button
-          onClick={(): void => {
-            dispatch(logout());
-          }}
-        >
-          log out
-        </Button>
-      </>
-    );
   }
 
   return (

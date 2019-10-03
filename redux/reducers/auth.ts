@@ -1,8 +1,9 @@
 import { AnyAction } from 'redux';
 import { AuthState } from '../../interfaces';
 import {
-  GET_USER,
-  GET_USER_ERROR,
+  GET_USER_ME,
+  GET_USER_ME_ERROR,
+  GET_USER_ME_SUCCESS,
   LOGIN,
   LOGIN_ERROR,
   LOGIN_SUCCESS,
@@ -11,48 +12,63 @@ import {
   REFRESH_TOKEN_ERROR,
   REFRESH_TOKEN_SUCCESS,
   REGISTER,
-  REGISTER_ERROR,
-  REGISTER_SUCCESS
+  REGISTER_ERROR
 } from '../actions/types';
 
-const initialState: AuthState = {
+export const initialAuthState: AuthState = {
   user: {
     id: null,
     username: null,
     email: null,
+    title: null,
     bio: null,
-    points: null
+    points: null,
+    language: null
   },
   authenticated: null,
+  token: null,
   loading: null,
-  error: null
+  errors: null
 };
 
-export default (state = initialState, action: AnyAction): AuthState => {
+export default (state = initialAuthState, action: AnyAction): AuthState => {
   switch (action.type) {
     case REGISTER:
-    case GET_USER:
     case LOGIN:
     case REFRESH_TOKEN:
+    case GET_USER_ME:
       return { ...state, loading: true };
 
     case LOGIN_SUCCESS:
     case REFRESH_TOKEN_SUCCESS:
-      localStorage.setItem('token', action.payload);
-      return { ...state, authenticated: true, loading: false };
+      return { ...state, authenticated: true, token: action.payload, loading: false };
 
     case LOGOUT:
-      localStorage.removeItem('token');
-      return { ...initialState };
+      return { ...initialAuthState };
 
-    case REGISTER_SUCCESS:
-      return { ...state, loading: false };
+    case GET_USER_ME_SUCCESS: {
+      const { id, username, email, title, bio, points, language } = action.payload;
+
+      return {
+        ...state,
+        loading: false,
+        user: {
+          id,
+          username,
+          email,
+          title,
+          bio,
+          points,
+          language
+        }
+      };
+    }
 
     case LOGIN_ERROR:
     case REGISTER_ERROR:
-    case GET_USER_ERROR:
+    case GET_USER_ME_ERROR:
     case REFRESH_TOKEN_ERROR:
-      return { ...state, error: action.payload, authenticated: false, loading: false };
+      return { ...state, errors: action.payload, authenticated: false, loading: false };
 
     default:
       return state;

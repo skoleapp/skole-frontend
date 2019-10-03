@@ -1,2 +1,2 @@
-export type FeedbackType = 'bad' | 'ok' | 'good' | '';
+export type FeedbackType = 'bad' | 'neutral' | 'good' | '';
 export type InputCheckedProps = string | false | undefined;

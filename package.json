@@ -12,16 +12,16 @@
   "license": "MIT",
   "scripts": {
     "dev": "next",
-    "lint": "eslint . --ext .js,.tsx,.ts"
+    "lint": "eslint . --ext .js,.tsx,.ts",
+    "test": "jest --watch"
   },
   "dependencies": {
-    "@types/redux": "^3.6.0",
     "@emotion/core": "^10.0.17",
-    "@zeit/next-css": "^1.0.1",
-    "@zeit/next-typescript": "^1.1.1",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
     "axios": "^0.19.0",
     "formik": "^1.5.8",
     "next": "^9.0.5",
+    "next-assets-import": "^0.0.2",
     "next-redux-wrapper": "^3.0.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -38,10 +38,13 @@
     "@types/next": "^8.0.6",
     "@types/react": "^16.9.2",
     "@types/react-redux": "^7.1.2",
+    "@types/redux": "^3.6.0",
     "@types/styled-components": "^4.1.18",
     "@types/yup": "^0.26.23",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
+    "@zeit/next-css": "^1.0.1",
+    "@zeit/next-typescript": "^1.1.1",
     "babel-plugin-styled-components": "^1.10.6",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
@@ -50,6 +53,7 @@
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.14.3",
+    "jest": "^24.9.0",
     "jest-environment-enzyme": "^7.1.0",
     "jest-enzyme": "^7.1.0",
     "prettier": "^1.18.2",
@@ -57,7 +61,6 @@
     "typescript": "^3.6.2"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "jest-enzyme",
     "testEnvironment": "enzyme"
   }
 }

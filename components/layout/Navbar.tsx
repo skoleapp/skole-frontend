@@ -2,12 +2,21 @@ import React from 'react';
 import styled from 'styled-components';
 import { useMobileBreakPoint } from '../hooks';
 import { HamburgerButton } from '../molecules';
-import { DesktopMenuItems } from '../organisms';
+import { AuthMenu, HomeButton, SearchWidget } from '../organisms';
 
 const StyledNavbar = styled.div`
   height: 5rem;
   width: 100%;
   background: var(--primary);
+`;
+
+const DesktopNavbarItems = styled.div`
+  height: 100%;
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 export const Navbar: React.FC = () => {
@@ -18,5 +27,17 @@ export const Navbar: React.FC = () => {
     return <StyledNavbar />;
   }
 
-  return <StyledNavbar>{isMobile ? <HamburgerButton /> : <DesktopMenuItems />}</StyledNavbar>;
+  return (
+    <StyledNavbar>
+      {isMobile ? (
+        <HamburgerButton />
+      ) : (
+        <DesktopNavbarItems>
+          <HomeButton />
+          <SearchWidget />
+          <AuthMenu />
+        </DesktopNavbarItems>
+      )}
+    </StyledNavbar>
+  );
 };

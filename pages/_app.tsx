@@ -19,7 +19,7 @@ interface Props {
   pageProps: NextPageContext;
 }
 
-const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
+export const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
   const [redirect, setRedirect] = useState(false);
 
   // FIXME: these are causing memory leaks
@@ -29,8 +29,15 @@ const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Prop
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
     const token = localStorage.getItem('token');
     token && store.dispatch(refreshToken(token));
+
+    // Only persist the correct token in local storage when demounting
+    return (): void => {
+      const { token } = store.getState().auth;
+      localStorage.setItem('token', token);
+    };
   }, []);
 
   if (redirect) {

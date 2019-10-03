@@ -3,11 +3,26 @@ import Link from 'next/link';
 import Router from 'next/router';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
 import { LoginFormValues } from '../../interfaces';
 import { login } from '../../redux';
-import { loginInitialValues, loginSchema } from '../../static';
 import { Anchor, H1 } from '../atoms';
 import { LoginForm } from '../molecules';
+
+export const initialValues = {
+  usernameOrEmail: '',
+  password: '',
+  general: ''
+};
+
+export const validationSchema = Yup.object().shape({
+  usernameOrEmail: Yup.string()
+    .label('Username or email')
+    .required('Username or email is required.'),
+  password: Yup.string()
+    .label('Password')
+    .required('Password is required!')
+});
 
 export const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,8 +48,8 @@ export const LoginPage: React.FC = () => {
     <>
       <H1>Login</H1>
       <Formik
-        initialValues={loginInitialValues}
-        validationSchema={loginSchema}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
         onSubmit={onSubmit}
         component={LoginForm}
       />

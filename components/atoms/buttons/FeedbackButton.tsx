@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import { SM } from '../../../static';
 import { Button } from './Button';
 
-const getBackgroundForVaraint = (variant: string): string => {
-  switch (variant) {
+const getBackgroundForValue = (value: string): string => {
+  switch (value) {
     case 'good':
       return 'var(--good-button)';
     case 'ok':
@@ -15,14 +16,17 @@ const getBackgroundForVaraint = (variant: string): string => {
 };
 
 interface Props {
-  variant: string;
+  value: string;
   selected: boolean;
 }
 
 export const FeedbackButton = styled(Button)<Props>`
-  background: ${({ variant }): string => getBackgroundForVaraint(variant)};
+  background: ${({ value }): string => getBackgroundForValue(value)};
   color: var(--white);
   text-shadow: var(--text-shadow);
   opacity: ${({ selected }): string => (selected ? '1' : '0.5')};
-  width: 5rem;
+
+  @media screen and (min-width: ${SM}) {
+    width: 7rem;
+  }
 `;
