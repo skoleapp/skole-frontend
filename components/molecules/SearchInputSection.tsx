@@ -7,7 +7,7 @@ import { Row } from '../containers';
 export const SearchInputSection: React.ComponentType<FormikProps<SearchFormProps>> = props => (
   <Form {...props}>
     <Row>
-      <Field name="search" placeholder="Search courses..." component={SearchInput} />
+      <Field name="search" placeholder="Search anything!" component={SearchInput} />
       <GoButton />
     </Row>
   </Form>

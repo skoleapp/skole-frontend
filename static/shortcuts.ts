@@ -3,7 +3,7 @@ const schoolShortcutsData = {
     text: 'High School',
     iconName: 'school',
     href: {
-      pathname: '/search-courses',
+      pathname: '/school',
       query: { school_type: 'high-school' } // eslint-disable-line
     }
   },
@@ -11,7 +11,7 @@ const schoolShortcutsData = {
     text: 'University',
     iconName: 'graduation-cap',
     href: {
-      pathname: '/search-courses',
+      pathname: '/school',
       query: { school_type: 'university' } // eslint-disable-line
     }
   },
@@ -19,7 +19,7 @@ const schoolShortcutsData = {
     text: 'University of Applied Sciences',
     iconName: 'chalkboard',
     href: {
-      pathname: '/search-courses',
+      pathname: '/school',
       query: { school_type: 'university-of-applied-sciences' } // eslint-disable-line
     }
   }
