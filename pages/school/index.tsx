@@ -1,4 +1,3 @@
-import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { H1, MainLayout, NotFound } from '../../components';
@@ -16,12 +15,7 @@ const renderContentForSchoolType = (schoolType: string | string[]): JSX.Element 
   }
 };
 
-// FIXME: Add proper types for this
-interface Props {
-  url: string; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
-
-const School: NextPage<Props> = () => {
+const School: React.FC = () => {
   const router = useRouter();
   const schoolType = router.query.school_type; // eslint-disable-line
 
