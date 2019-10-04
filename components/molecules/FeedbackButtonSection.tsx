@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { FeedbackType } from '../../types';
 import { FeedbackButton } from '../atoms';
 
@@ -13,7 +13,7 @@ export const FeedbackButtonSection: React.FC<Props> = ({ rate, setRate }) => (
       value="good"
       type="button"
       selected={rate === 'good'}
-      onClick={() => setRate('good')}
+      onClick={(): void => setRate('good')}
     >
       good
     </FeedbackButton>
@@ -21,7 +21,7 @@ export const FeedbackButtonSection: React.FC<Props> = ({ rate, setRate }) => (
       value="neutral"
       type="button"
       selected={rate === 'neutral'}
-      onClick={() => setRate('neutral')}
+      onClick={(): void => setRate('neutral')}
     >
       neutral
     </FeedbackButton>
@@ -29,7 +29,7 @@ export const FeedbackButtonSection: React.FC<Props> = ({ rate, setRate }) => (
       value="bad"
       type="button"
       selected={rate === 'bad'}
-      onClick={() => setRate('bad')}
+      onClick={(): void => setRate('bad')}
     >
       bad
     </FeedbackButton>
