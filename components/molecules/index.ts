@@ -9,3 +9,4 @@ export { RegisterForm } from './RegisterForm';
 export { SearchInputSection } from './SearchInputSection';
 export { ShortcutsSection } from './ShortcutsSection';
 export { ThanksForFeedback } from './ThanksForFeedback';
+export { UserInfoCard } from './UserInfoCard';
