@@ -30,7 +30,7 @@ export const Column = styled.div<Props>`
   justify-content: center;
   align-items: center;
 
-  ${({ xs }): BaseColumnFn => (xs ? getWidthString(xs) : 'width: 100%')};
+  ${({ xs }): BaseColumnFn => (xs ? getWidthString(xs) : 'width: 100%;')};
 
   @media only screen and (min-width: ${breakPoints.sm}) {
     ${({ sm }): BaseColumnFn | 0 => sm && getWidthString(sm)};

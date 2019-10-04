@@ -2,11 +2,12 @@ import styled from 'styled-components';
 
 export const TextInput = styled.input`
   border: var(--white-border);
-  border-radius: 0.75rem;
+  border-radius: var(--border-radius);
   margin: 0.5rem;
   text-align: center;
-  height: 2.5rem;
-  width: 18rem;
+  height: 2.25rem;
+  width: 100%;
+  max-width: 18rem;
   font-size: 1.05rem;
   box-shadow: var(--box-shadow);
 
