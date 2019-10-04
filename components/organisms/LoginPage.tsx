@@ -1,12 +1,11 @@
 import { Formik, FormikActions } from 'formik';
-import Link from 'next/link';
 import Router from 'next/router';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { LoginFormValues } from '../../interfaces';
 import { login } from '../../redux';
-import { Anchor, H1 } from '../atoms';
+import { Card, H1 } from '../atoms';
 import { LoginForm } from '../molecules';
 
 export const initialValues = {
@@ -45,7 +44,7 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <>
+    <Card>
       <H1>Login</H1>
       <Formik
         initialValues={initialValues}
@@ -53,9 +52,6 @@ export const LoginPage: React.FC = () => {
         onSubmit={onSubmit}
         component={LoginForm}
       />
-      <Link href="/register">
-        <Anchor variant="red">New user?</Anchor>
-      </Link>
-    </>
+    </Card>
   );
 };

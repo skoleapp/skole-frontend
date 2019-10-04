@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { RegisterFormValues } from '../../interfaces';
 import { register } from '../../redux';
-import { Anchor, Button, H1, H3 } from '../atoms';
+import { Button, Card, H1, H2 } from '../atoms';
 import { RegisterForm } from '../molecules';
 
 const initialValues = {
@@ -59,19 +59,19 @@ export const RegisterPage: React.FC = () => {
     }
   };
 
-  if (registered) {
+  if (!registered) {
     return (
-      <>
-        <H3>Successfully registered new user!</H3>
+      <Card>
+        <H2>Successfully registered new user!</H2>
         <Link href="/login">
           <Button>login here</Button>
         </Link>
-      </>
+      </Card>
     );
   }
 
   return (
-    <>
+    <Card>
       <H1>Register</H1>
       <Formik
         initialValues={initialValues}
@@ -79,9 +79,6 @@ export const RegisterPage: React.FC = () => {
         onSubmit={onSubmit}
         component={RegisterForm}
       />
-      <Link href="/login">
-        <Anchor variant="red">Already a user?</Anchor>
-      </Link>
-    </>
+    </Card>
   );
 };
