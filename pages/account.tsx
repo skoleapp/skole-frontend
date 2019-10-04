@@ -12,7 +12,7 @@ const Account: React.FC = () => {
 
   return (
     <MainLayout title="Account">
-      <PrivatePage component={AccountPage} {...user} />
+      <PrivatePage component={AccountPage} user={user} />
     </MainLayout>
   );
 };

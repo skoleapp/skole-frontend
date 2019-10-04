@@ -25,3 +25,12 @@ export interface IconProps {
   iconName: string;
   onClick?: () => void;
 }
+
+export interface UserInfo {
+  title?: string | null;
+  username: string | null;
+  email: string | null;
+  bio: string | null;
+  points: number | null;
+  language: string | null;
+}

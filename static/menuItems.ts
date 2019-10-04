@@ -1,8 +1,11 @@
 const menuItems = {
+  home: {
+    name: 'home',
+    href: '/'
+  },
   login: {
     name: 'login',
-    href: '/login',
-    requireAuth: 'false'
+    href: '/login'
   },
   register: {
     name: 'register',
@@ -18,7 +21,7 @@ const menuItems = {
   }
 };
 
-const { login, register, account, logout } = menuItems;
+const { home, login, register, account, logout } = menuItems;
 
-export const publicMenuItems = [login, register];
-export const privateMenuItems = [account, logout];
+export const publicMenuItems = [home, login, register];
+export const privateMenuItems = [home, account, logout];

@@ -7,5 +7,5 @@ body {
   padding: 0;
   min-height: 100%;
   font-family: 'Ubuntu', sans-serif;
-  background: var(--primary);
+  background: var(--secondary);
 }

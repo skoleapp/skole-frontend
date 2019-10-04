@@ -30,9 +30,9 @@ export const schoolShortcuts = [highSchool, university, universityOfAppliedScien
 
 const actionShortcutsData = {
   searchCourses: {
-    text: 'Search Courses',
+    text: 'Search',
     iconName: 'chalkboard-teacher',
-    href: { pathname: '/search-courses' }
+    href: { pathname: '/search' }
   },
   uploadResource: {
     text: 'Upload Resource',
