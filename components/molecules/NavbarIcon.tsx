@@ -11,8 +11,8 @@ const StyledNavbarIcon = styled.div`
   }
 `;
 
-export const NavbarIcon: React.FC<IconProps> = ({ iconName }) => (
+export const NavbarIcon: React.FC<IconProps> = props => (
   <StyledNavbarIcon>
-    <Icon iconName={iconName} iconSize="2" variant="white" />
+    <Icon {...props} iconSize="2" variant="white" />
   </StyledNavbarIcon>
 );
