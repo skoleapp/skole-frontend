@@ -1,10 +1,9 @@
 import { Formik, FormikActions } from 'formik';
-import Router from 'next/router';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
+import { getApiUrl, skoleAPI } from '../../api';
 import { LoginFormValues } from '../../interfaces';
-import { login } from '../../redux';
+import { createFormErrors, login } from '../../utils';
 import { Card, H1 } from '../atoms';
 import { LoginForm } from '../molecules';
 
@@ -24,20 +23,28 @@ export const validationSchema = Yup.object().shape({
 });
 
 export const LoginPage: React.FC = () => {
-  const dispatch = useDispatch();
-
   const onSubmit = async (
     values: LoginFormValues,
     actions: FormikActions<LoginFormValues>
   ): Promise<void> => {
+    const { usernameOrEmail, password } = values;
+    const payload = { username_or_email: usernameOrEmail, password: password }; // eslint-disable-line @typescript-eslint/camelcase
+
     try {
-      await dispatch(login(values));
-      Router.push('/account');
+      const url = getApiUrl('login');
+      const { data, status } = await skoleAPI.post(url, payload);
+
+      if (status === 200) {
+        const { token } = await data;
+        await login({ token });
+      } else {
+        const errors = await createFormErrors(data.error);
+        Object.keys(errors).forEach(key => {
+          actions.setFieldError(key, (errors as any)[key]);
+        });
+      }
     } catch (error) {
-      const { payload } = error;
-      Object.keys(payload).forEach(key => {
-        actions.setFieldError(key, payload[key]);
-      });
+      console.log('Network error...');
     } finally {
       actions.setSubmitting(false);
     }
