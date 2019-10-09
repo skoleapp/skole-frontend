@@ -1,10 +1,10 @@
 import { Formik, FormikActions } from 'formik';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
+import { getApiUrl, skoleAPI } from '../../api';
 import { RegisterFormValues } from '../../interfaces';
-import { register } from '../../redux';
+import { createFormErrors } from '../../utils';
 import { Button, Card, H1, H2 } from '../atoms';
 import { RegisterForm } from '../molecules';
 
@@ -39,27 +39,43 @@ export const validationSchema = Yup.object().shape({
 });
 
 export const RegisterPage: React.FC = () => {
-  const dispatch = useDispatch();
   const [registered, setRegistered] = useState(false);
 
   const onSubmit = async (
     values: RegisterFormValues,
     actions: FormikActions<RegisterFormValues>
   ): Promise<void> => {
+    const { username, email, password, confirmPassword } = values;
+
+    const payload = {
+      username,
+      email,
+      password: {
+        password,
+        confirm_password: confirmPassword // eslint-disable-line
+      }
+    };
+
     try {
-      await dispatch(register(values));
-      setRegistered(true);
+      const url = getApiUrl('register');
+      const { data, status } = await skoleAPI.post(url, payload);
+
+      if (status === 201) {
+        setRegistered(true);
+      } else {
+        const errors = await createFormErrors(data.error);
+        Object.keys(errors).forEach(key => {
+          actions.setFieldError(key, (errors as any)[key]);
+        });
+      }
     } catch (error) {
-      const { payload } = error;
-      Object.keys(payload).forEach(key => {
-        actions.setFieldError(key, payload[key]);
-      });
+      console.log('Network error...');
     } finally {
       actions.setSubmitting(false);
     }
   };
 
-  if (!registered) {
+  if (registered) {
     return (
       <Card>
         <H2>Successfully registered new user!</H2>
