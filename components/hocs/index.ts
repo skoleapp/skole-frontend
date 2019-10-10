@@ -1,1 +1,0 @@
-export { withAuthSync } from './auth';

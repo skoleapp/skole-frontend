@@ -1,7 +1,8 @@
 import cookie from 'js-cookie';
-import { NextPageContext } from 'next';
+import { NextPage, NextPageContext } from 'next';
 import nextCookie from 'next-cookies';
 import Router from 'next/router';
+import { useEffect } from 'react';
 
 export const auth = (ctx: NextPageContext) => {
   const { token } = nextCookie(ctx);
@@ -36,4 +37,36 @@ export const logout = () => {
   // To support logging out from all windows.
   window.localStorage.setItem('logout', Date.now() as any);
   Router.push('/login');
+};
+
+export const withAuthSync = (WrappedComponent: NextPage) => {
+  const Wrapper = (props: any) => {
+    const syncLogout = (event: any) => {
+      if (event.key === 'logout') {
+        Router.push('/login');
+      }
+    };
+
+    useEffect(() => {
+      window.addEventListener('storage', syncLogout);
+
+      return () => {
+        window.removeEventListener('storage', syncLogout);
+        window.localStorage.removeItem('logout');
+      };
+    }, [null]);
+
+    return <WrappedComponent {...props} />;
+  };
+
+  Wrapper.getInitialProps = async (ctx: NextPageContext) => {
+    const token = auth(ctx);
+
+    const componentProps =
+      WrappedComponent.getInitialProps && (await WrappedComponent.getInitialProps(ctx));
+
+    return { ...componentProps, token };
+  };
+
+  return Wrapper;
 };
