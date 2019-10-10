@@ -1,13 +1,15 @@
+import { ClientContext, GraphQLClient } from 'graphql-hooks';
 import { NextPage, NextPageContext } from 'next';
 import withRedux from 'next-redux-wrapper';
 import { AppContext } from 'next/app';
 import { AppContextType } from 'next/dist/next-server/lib/utils';
 import Router, { Router as RouterType } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { LoadingScreen } from '../components/layout';
-import { initStore, refreshToken, setToken } from '../redux';
+import { withGraphQLClient } from '../lib';
+import { initStore } from '../redux';
 import '../styles';
 
 interface StatelessPage<P = {}> extends React.FC<P> {
@@ -22,26 +24,24 @@ interface Props {
 const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
   const [redirect, setRedirect] = useState(false);
 
-  // FIXME: these are causing memory leaks
   Router.events.on('routeChangeStart', () => setRedirect(true));
   Router.events.on('routeChangeComplete', () => setRedirect(false));
   Router.events.on('routeChangeError', () => setRedirect(false));
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    const token = localStorage.getItem('token');
-    token && store.dispatch(setToken(token));
-    store.dispatch(refreshToken());
-  }, []);
+  const client = new GraphQLClient({
+    url: '/graphql'
+  });
 
   if (redirect) {
     return <LoadingScreen />;
   }
 
   return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
+    <ClientContext.Provider value={client}>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </ClientContext.Provider>
   );
 };
 
@@ -54,4 +54,5 @@ AppProvider.getInitialProps = async ({ Component, ctx }: AppContext): Promise<an
   };
 };
 
-export default withRedux(initStore, { debug: false })(AppProvider);
+const ConnectedApp = withRedux(initStore, { debug: false })(AppProvider);
+export default withGraphQLClient(ConnectedApp);
