@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as R from 'ramda';
 
 const schools = [
   {
@@ -11,25 +12,23 @@ const schools = [
       { id: 'Oikeustieteellinen tiedekunta' },
       { id: 'Turun kauppakorkeakoulu' },
       { id: 'Yhteiskuntatieteellinen tiedekunta' }
-    ],
-    kursseja: 33
+    ]
   },
-  { id: 'Åbo Akademi', faculty: [{ id: 'Department of Gender Studies' }], kursseja: 8 },
-  { id: 'Aalto-yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }], kursseja: 6 },
-  { id: 'Helsingin yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }], kursseja: 1 },
+  { id: 'Åbo Akademi', faculty: [{ id: 'Department of Gender Studies' }] },
+  { id: 'Aalto-yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
+  { id: 'Helsingin yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
   {
     id: 'Tampereen teknillinen yliopisto',
-    faculty: [{ id: 'lute' }, { id: 'kauppis' }],
-    kursseja: 4
+    faculty: [{ id: 'lute' }, { id: 'kauppis' }]
   },
-  { id: 'Oulun yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }], kursseja: 2 },
-  { id: 'Vaasan yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }], kursseja: 5 },
+  { id: 'Oulun yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
+  { id: 'Vaasan yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
   {
     id: 'Lappeenrannan–Lahden teknillinen yliopisto',
-    faculty: [{ id: 'lute' }, { id: 'kauppis' }],
-    kursseja: 3
+    faculty: [{ id: 'lute' }, { id: 'kauppis' }]
   }
 ];
+
 interface Props {
   schoolType: string;
 }
@@ -40,6 +39,7 @@ interface SchoolRowProps {
   selectedSchool: number;
 }
 interface FacultyRowProps {
+  key: string | number;
   index: number;
   faculty: any;
   handleFacultySelection: (index: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -65,7 +65,7 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
         cursor: 'pointer'
       }}
     >
-      {faculty.id}
+      <div>{R.prop('id', faculty)}</div>
       {isExpanded ? (
         <div
           style={{
@@ -90,7 +90,10 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
   const isExpanded = selectedSchool === index ? true : false;
 
   const [selectedFaculty, setSelectedFaculty] = useState();
-  const handleFacultySelection = (index: number, e: any) => {
+  const handleFacultySelection = (
+    index: number,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     e.stopPropagation();
     if (index === selectedFaculty) {
       setSelectedFaculty(null);
@@ -110,7 +113,7 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
         cursor: 'pointer'
       }}
     >
-      <div>{school.id}</div>
+      <div>{R.prop('id', school)}</div>
       {isExpanded ? (
         <div
           style={{
@@ -124,7 +127,7 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
         >
           {school.faculty.map((faculty: any, index: number) => (
             <FacultyRow
-              key={faculty.id}
+              key={index}
               faculty={faculty}
               index={index}
               handleFacultySelection={handleFacultySelection}
@@ -149,9 +152,9 @@ export const ListingPage: React.FC<Props> = () => {
   };
   return (
     <div style={{ marginTop: '20px', border: '2px solid #e0e0e0' }}>
-      {schools.map((school, index) => (
+      {schools.map((school: any, index: number) => (
         <SchoolRow
-          key={school.id}
+          key={index}
           school={school}
           index={index}
           handleSchoolSelection={handleSchoolSelection}
