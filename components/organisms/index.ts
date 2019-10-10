@@ -10,3 +10,4 @@ export { LogoutPage } from './LogoutPage';
 export { NotFound } from './NotFound';
 export { RegisterPage } from './RegisterPage';
 export { SearchWidget } from './SearchWidget';
+export { ListingPage } from './ListingPage';
