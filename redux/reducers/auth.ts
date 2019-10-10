@@ -27,8 +27,7 @@ export const initialAuthState: AuthState = {
   },
   authenticated: null,
   token: null,
-  loading: null,
-  errors: null
+  loading: null
 };
 
 export default (state = initialAuthState, action: AnyAction): AuthState => {
@@ -68,7 +67,7 @@ export default (state = initialAuthState, action: AnyAction): AuthState => {
     case REGISTER_ERROR:
     case GET_USER_ME_ERROR:
     case REFRESH_TOKEN_ERROR:
-      return { ...state, errors: action.payload, authenticated: false, loading: false };
+      return { ...state, authenticated: false, loading: false };
 
     default:
       return state;

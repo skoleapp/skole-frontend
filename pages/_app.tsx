@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { LoadingScreen } from '../components/layout';
-import { initStore, refreshToken } from '../redux';
+import { initStore } from '../redux';
 import '../styles';
 
 interface StatelessPage<P = {}> extends React.FC<P> {
@@ -35,7 +35,7 @@ export const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps 
   useEffect(() => {
     window.scrollTo(0, 0);
     const token = localStorage.getItem('token');
-    token && store.dispatch(refreshToken(token));
+    // token && store.dispatch(refreshToken(token));
 
     // Only persist the correct token in local storage when demounting
     return (): void => {
