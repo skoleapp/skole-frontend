@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { LoadingScreen } from '../components/layout';
-import { initStore, refreshToken } from '../redux';
+import { initStore } from '../redux';
 import '../styles';
 
 interface StatelessPage<P = {}> extends React.FC<P> {
@@ -27,16 +27,19 @@ export const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps 
   Router.events.on('routeChangeComplete', () => setRedirect(false));
   Router.events.on('routeChangeError', () => setRedirect(false));
 
+  const setTokenAsynchronously = async (): Promise<void> => {
+    const { token } = await store.getState().auth;
+    await localStorage.setItem('token', token);
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
-
     const token = localStorage.getItem('token');
-    token && store.dispatch(refreshToken(token));
+    // token && store.dispatch(refreshToken(token));
 
     // Only persist the correct token in local storage when demounting
     return (): void => {
-      const { token } = store.getState().auth;
-      localStorage.setItem('token', token);
+      setTokenAsynchronously();
     };
   }, []);
 

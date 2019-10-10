@@ -1,7 +1,13 @@
 import { Field, FormikProps } from 'formik';
 import React from 'react';
 import { RegisterFormValues } from '../../interfaces';
-import { CheckboxFormField, Form, FormSubmitSection, TextInputFormField } from '../atoms';
+import {
+  CheckboxFormField,
+  Form,
+  FormLinkSection,
+  FormSubmitSection,
+  TextInputFormField
+} from '../atoms';
 
 export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> = props => (
   <Form {...props}>
@@ -23,5 +29,6 @@ export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> 
     />
     <Field name="agreeToTerms" component={CheckboxFormField} label="Agree to Terms" />
     <FormSubmitSection submitButtonText="register" {...props} />
+    <FormLinkSection href="/login" text="Already a user?" />
   </Form>
 );

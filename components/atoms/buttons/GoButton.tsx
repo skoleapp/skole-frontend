@@ -5,7 +5,7 @@ const StyledGoButtonWrapper = styled.div``;
 
 const StyledGoButton = styled.button`
   border: var(--primary-border);
-  height: 2.83rem;
+  height: 2.55rem;
   width: 4rem;
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
   background: var(--white);

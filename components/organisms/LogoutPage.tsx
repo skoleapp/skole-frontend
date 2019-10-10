@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../interfaces';
 import { logout } from '../../redux';
-import { Button, H3 } from '../atoms';
+import { Button, Card, H2 } from '../atoms';
 import { LoadingScreen } from '../layout';
 
 export const LogoutPage: React.FC = () => {
@@ -19,11 +19,11 @@ export const LogoutPage: React.FC = () => {
   }
 
   return (
-    <>
-      <H3>You have been logged out!</H3>
+    <Card>
+      <H2>You have been logged out!</H2>
       <Link href="/login">
         <Button>log back in</Button>
       </Link>
-    </>
+    </Card>
   );
 };

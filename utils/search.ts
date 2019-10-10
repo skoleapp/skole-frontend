@@ -1,5 +1,10 @@
+interface Params {
+  search?: string;
+  school_type?: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/camelcase
-export const getQueryParams = ({ search, school_type }: any): string | undefined => {
+export const getQueryParams = ({ search, school_type }: Params): string | undefined => {
   if (search) {
     return `?search=${search}`;
   }

@@ -1,7 +1,7 @@
 import { Field, FormikProps } from 'formik';
 import React from 'react';
 import { LoginFormValues } from '../../interfaces';
-import { Form, FormSubmitSection, TextInputFormField } from '../atoms';
+import { Form, FormLinkSection, FormSubmitSection, TextInputFormField } from '../atoms';
 
 export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
   <Form {...props}>
@@ -19,5 +19,6 @@ export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = prop
       type="password"
     />
     <FormSubmitSection submitButtonText="login" {...props} />
+    <FormLinkSection href="/register" text="New User?" />
   </Form>
 );

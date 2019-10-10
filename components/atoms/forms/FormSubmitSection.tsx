@@ -8,7 +8,7 @@ import { LoadingIndicator } from '../LoadingIndicator';
 import { FormErrorMessage } from './FormErrorMessage';
 
 const StyledFormSubmitSection = styled.div`
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 `;
 
 interface Props extends FormikProps<AnyForm> {

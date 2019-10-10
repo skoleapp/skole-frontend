@@ -4,10 +4,11 @@ const apiEndpoints = {
   refreshToken: '/user/refresh-token/',
   getUser: '/user/',
   userMe: '/user/me/',
-  course: '/course/'
+  course: '/course/',
+  search: '/search/'
 };
 
-const { register, login, refreshToken, getUser, course, userMe } = apiEndpoints;
+const { register, login, refreshToken, getUser, course, userMe, search } = apiEndpoints;
 
 export const getApiUrl = (apiName: string): string => {
   switch (apiName) {
@@ -23,6 +24,8 @@ export const getApiUrl = (apiName: string): string => {
       return userMe;
     case 'course':
       return course;
+    case 'search':
+      return search;
     default:
       return '';
   }

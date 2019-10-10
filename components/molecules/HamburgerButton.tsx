@@ -52,7 +52,12 @@ export const HamburgerButton: React.FC = () => {
   const dispatch = useDispatch();
 
   return (
-    <StyledHamburgerButton open={menuOpen} onClick={(): any => dispatch(toggleMenu(!menuOpen))}>
+    <StyledHamburgerButton
+      open={menuOpen}
+      onClick={(): void => {
+        dispatch(toggleMenu(!menuOpen));
+      }}
+    >
       <div />
       <div />
       <div />

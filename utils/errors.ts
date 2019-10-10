@@ -1,10 +1,8 @@
-import { Errors } from '../interfaces';
+import { FormErrors } from '../interfaces';
 
-// eslint-disable-next-line
-export const createErrors = ({ data, status }: any): Errors => {
-  const { error, detail } = data;
-
-  const errors = {
+// eslint-disable-next-line @typescript/no-explicit-any
+export const createFormErrors = (errors: any): FormErrors => {
+  const formErrors = {
     username: '',
     email: '',
     password: '',
@@ -13,42 +11,35 @@ export const createErrors = ({ data, status }: any): Errors => {
     serverNotFound: ''
   };
 
-  // Server not available
-  if (status === 503) {
-    errors.serverNotFound = error;
+  if (errors.detail) {
+    formErrors.general = errors.detail;
   }
 
-  if (detail) {
-    errors.general = detail;
+  if (errors.non_field_errors) {
+    formErrors.general = errors.non_field_errors.join();
   }
 
-  if (error) {
-    if (error.non_field_errors) {
-      errors.general = error.non_field_errors.join();
+  if (errors.username) {
+    formErrors.username = errors.username.join();
+  }
+
+  if (errors.email) {
+    formErrors.email = errors.email.join();
+  }
+
+  if (errors.password) {
+    if (errors.password.password) {
+      formErrors.password = errors.password.password.join();
     }
 
-    if (error.username) {
-      errors.username = error.username.join();
+    if (errors.password.confirm_password) {
+      formErrors.confirmPassword = errors.password.confirm_password.join();
     }
 
-    if (error.email) {
-      errors.email = error.email.join();
-    }
-
-    if (error.password) {
-      if (error.password.password) {
-        errors.password = error.password.password.join();
-      }
-
-      if (error.password.confirm_password) {
-        errors.confirmPassword = error.password.confirm_password.join();
-      }
-
-      if (error.password.non_field_errors) {
-        errors.general = error.password.non_field_errors.join();
-      }
+    if (errors.password.non_field_errors) {
+      formErrors.general = errors.password.non_field_errors.join();
     }
   }
 
-  return errors;
+  return formErrors;
 };

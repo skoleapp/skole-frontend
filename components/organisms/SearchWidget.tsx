@@ -48,7 +48,7 @@ export const SearchWidget: React.FC = () => {
 
   const onSubmit = (values: SearchFormProps): void => {
     const { search } = values;
-    Router.push({ pathname: '/search-courses', query: { search } });
+    Router.push({ pathname: '/search', query: { search } });
     dispatch(closeWidgets());
   };
 
