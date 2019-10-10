@@ -21,7 +21,7 @@ const responseHandler = (response: any): Promise<any> => {
 const errorHandler = (error: any): Promise<any> => {
   if (error.response) {
     const { data, status } = error.response;
-    return Promise.reject({ data, status });
+    return Promise.resolve({ data, status });
   }
 
   // Server not available
