@@ -1,5 +1,13 @@
 import { User } from './store';
 
+export interface FormErrors {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  general: string;
+}
+
 export interface RegisterFormValues {
   username: string;
   email: string;

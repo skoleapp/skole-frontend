@@ -1,12 +1,3 @@
-export interface Errors {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  general: string;
-  serverNotFound: string;
-}
-
 export interface User {
   id: string | null;
   username: string | null;
@@ -22,7 +13,6 @@ export interface AuthState {
   authenticated: boolean | null;
   token: string | null;
   loading: boolean | null;
-  errors: Errors | null;
 }
 
 export interface UIState {
@@ -34,7 +24,6 @@ export interface UIState {
 export interface SearchState {
   results: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   loading: boolean | null;
-  errors: Errors | null;
 }
 
 export interface State {
