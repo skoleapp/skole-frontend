@@ -30,6 +30,16 @@ export const LoginPage: React.FC = () => {
     const { usernameOrEmail, password } = values;
     const payload = { username_or_email: usernameOrEmail, password: password }; // eslint-disable-line @typescript-eslint/camelcase
 
+    // const [loginMutation] = useMutation(LOGIN);
+    // const data = loginMutation({
+    //   variables: {
+    //     usernameOrEmail,
+    //     password
+    //   }
+    // });
+
+    // console.log(data);
+
     try {
       const url = getApiUrl('login');
       const { data, status } = await skoleAPI.post(url, payload);
@@ -44,7 +54,7 @@ export const LoginPage: React.FC = () => {
         });
       }
     } catch (error) {
-      console.log('Network error...');
+      actions.setFieldError('general', 'Network error.');
     } finally {
       actions.setSubmitting(false);
     }

@@ -56,6 +56,17 @@ export const RegisterPage: React.FC = () => {
       }
     };
 
+    // const [registerMutation] = useMutation(REGISTER);
+    // const data = loginMutation({
+    //   variables: {
+    //     username,
+    //     email,
+    //     password
+    //   }
+    // });
+
+    // console.log(data);
+
     try {
       const url = getApiUrl('register');
       const { data, status } = await skoleAPI.post(url, payload);
@@ -69,7 +80,7 @@ export const RegisterPage: React.FC = () => {
         });
       }
     } catch (error) {
-      console.log('Network error...');
+      actions.setFieldError('general', 'Network error.');
     } finally {
       actions.setSubmitting(false);
     }
