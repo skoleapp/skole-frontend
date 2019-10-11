@@ -1,17 +1,24 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../../interfaces';
-import { getUserMe } from '../../redux';
+import { useQuery } from 'graphql-hooks';
+import { NextPageContext } from 'next';
+import nextCookie from 'next-cookies';
+import Router from 'next/router';
 
-// FIXME: Find proper types
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const useAccount: any = () => {
-  const dispatch = useDispatch();
-  const { user, loading, token } = useSelector((state: State) => state.auth);
+export const useAccount = async (ctx: NextPageContext) => {
+  const { token } = nextCookie(ctx);
+  const { loading, error, data } = useQuery(GET_USER_ME, {
+    variables: { token }
+  });
 
-  useEffect(() => {
-    token && dispatch(getUserMe());
-  }, [token]);
+  const redirectOnError = () =>
+    typeof window !== 'undefined'
+      ? Router.push('/login')
+      : ctx.res && ctx.res.writeHead(302, { Location: '/login' }).end();
 
-  return [user, loading];
+  if (!loading && error) {
+    return await redirectOnError();
+  }
+
+  if (!loading && data) {
+    return data;
+  }
 };
