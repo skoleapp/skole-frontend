@@ -4,10 +4,10 @@ import styled from 'styled-components';
 const StyledGoButtonWrapper = styled.div``;
 
 const StyledGoButton = styled.button`
-  border: 0.1rem solid var(--primary);
-  height: 2.83rem;
+  border: var(--primary-border);
+  height: 2.55rem;
   width: 4rem;
-  border-radius: 0 0.75rem 0.75rem 0;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
   background: var(--white);
   text-transform: uppercase;
   color: var(--primary);

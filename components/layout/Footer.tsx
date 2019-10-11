@@ -7,20 +7,16 @@ import { Column } from '../containers';
 const StyledFooter = styled.div`
   height: 8rem;
   background: var(--primary);
-`;
-
-const StyledColumn = styled(Column)`
-  justify-content: center;
-  height: 100%;
+  color: white;
 `;
 
 export const Footer: React.FC = () => (
   <StyledFooter>
-    <StyledColumn sm={8} md={6}>
+    <Column sm={8} md={6}>
       <Text>© {new Date().getFullYear()} Skole Ltd.</Text>
       <Link href="/feedback">
-        <Anchor>Feedback</Anchor>
+        <Anchor variant="white">Feedback</Anchor>
       </Link>
-    </StyledColumn>
+    </Column>
   </StyledFooter>
 );

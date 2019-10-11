@@ -5,8 +5,7 @@ const menuItems = {
   },
   login: {
     name: 'login',
-    href: '/login',
-    requireAuth: 'false'
+    href: '/login'
   },
   register: {
     name: 'register',
@@ -19,14 +18,10 @@ const menuItems = {
   logout: {
     name: 'logout',
     href: '/logout'
-  },
-  courses: {
-    name: 'courses',
-    href: '/courses'
   }
 };
 
-const { home, login, register, account, logout, courses } = menuItems;
+const { home, login, register, account, logout } = menuItems;
 
-export const publicMenuItems = [home, login, register, courses];
-export const privateMenuItems = [home, account, logout, courses];
+export const publicMenuItems = [home, login, register];
+export const privateMenuItems = [home, account, logout];

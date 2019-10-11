@@ -1,16 +1,17 @@
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import { LoginFormValues, RegisterFormValues, User } from '../../../interfaces';
+import { AnyForm } from '../../../interfaces';
+import { Column } from '../../containers';
 import { Button } from '../buttons';
 import { LoadingIndicator } from '../LoadingIndicator';
 import { FormErrorMessage } from './FormErrorMessage';
 
 const StyledFormSubmitSection = styled.div`
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 `;
 
-interface Props extends FormikProps<LoginFormValues | RegisterFormValues | User> {
+interface Props extends FormikProps<AnyForm> {
   submitButtonText: string;
 }
 
@@ -19,13 +20,15 @@ export const FormSubmitSection: React.ComponentType<Props> = ({
   submitButtonText
 }) => (
   <StyledFormSubmitSection>
-    {isSubmitting ? (
-      <LoadingIndicator />
-    ) : (
-      <ErrorMessage name="general" component={FormErrorMessage} />
-    )}
-    <Button type="submit" disabled={isSubmitting}>
-      {submitButtonText}
-    </Button>
+    <Column>
+      {isSubmitting ? (
+        <LoadingIndicator />
+      ) : (
+        <ErrorMessage name="general" component={FormErrorMessage} />
+      )}
+      <Button type="submit" disabled={isSubmitting}>
+        {submitButtonText}
+      </Button>
+    </Column>
   </StyledFormSubmitSection>
 );

@@ -1,30 +1,37 @@
-import { NextPage } from 'next';
+import { NextPage, NextPageContext } from 'next';
 import React from 'react';
-import { MainLayout, SearchPage } from '../components';
-import { getApiUrl, skoleAPI } from '../utils';
+import { getApiUrl, skoleAPI } from '../api';
+import { H1, MainLayout } from '../components';
+import { getQueryParams } from '../utils';
 
 // FIXME: Add proper types for this
+type SearchData = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
 interface Props {
-  data: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  data: SearchData;
 }
 
-const Search: NextPage<Props> = ({ data }) => (
-  <MainLayout title="Search">
-    <SearchPage {...data} />
-  </MainLayout>
-);
+const Search: NextPage<Props> = ({ data }) => {
+  data && console.log(data);
 
-// FIXME: Add proper types
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-Search.getInitialProps = async ({ query }): Promise<any> => {
-  const baseUrl = getApiUrl('course');
-  const url = baseUrl + `search/?${query.search}/`;
+  return (
+    <MainLayout title="Search">
+      <H1>Search</H1>
+    </MainLayout>
+  );
+};
+
+Search.getInitialProps = async (ctx: NextPageContext): Promise<SearchData> => {
+  const { query } = ctx;
+  const baseUrl = getApiUrl('search');
+  const url = baseUrl + getQueryParams(query);
+
   try {
     const { data } = await skoleAPI.get(url);
     return { data };
   } catch (error) {
+    // TODO: This should never happen, add logging?
     console.log(error);
-    return { data: null };
   }
 };
 

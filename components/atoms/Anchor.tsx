@@ -1,24 +1,9 @@
 import styled from 'styled-components';
+import { VariantProps } from '../../interfaces';
+import { getColorForVariant } from '../../utils';
 
-const getColorForVariant = (variant: string): string => {
-  switch (variant) {
-    case 'black':
-      return 'var(--black)';
-    case 'red':
-      return 'var(--primary)';
-    case 'white':
-      return 'var(--white)';
-    default:
-      return '';
-  }
-};
-
-interface Props extends React.HTMLProps<HTMLAnchorElement> {
-  variant?: string;
-}
-
-export const Anchor = styled.a<Props>`
-  color: ${({ variant }): string => (variant ? getColorForVariant(variant) : 'var(--black)')};
+export const Anchor = styled.a<VariantProps>`
+  color: ${({ variant }): string => getColorForVariant(variant)};
   text-decoration: none;
   margin: 0.5rem;
 

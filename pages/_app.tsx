@@ -10,6 +10,9 @@ import { LoadingScreen } from '../components/layout';
 import withGraphQLClient from '../lib/with-graphql-client';
 import { initStore } from '../redux';
 import '../styles';
+<<<<<<< HEAD
+=======
+>>>>>>> c2f209a32695b6374323fcea172519433293511f
 
 interface StatelessPage<P = {}> extends React.FC<P> {
   getInitialProps?: ({ Component, ctx }: AppContextType<RouterType>) => Promise<{ pageProps: {} }>;

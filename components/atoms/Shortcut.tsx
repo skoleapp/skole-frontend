@@ -2,41 +2,27 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { ShortcutProps } from '../../interfaces';
-import { Column } from '../containers';
+import { Card } from './Card';
 import { Icon } from './Icon';
 
-const StyledShortcut = styled.div`
-  margin: 0.5rem;
-  padding: 0.5rem;
-  height: 15rem;
-  width: 15rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0.75rem;
-  border: 0.1rem solid var(--black);
-  color: var(--black);
+const StyledCard = styled(Card)`
+  height: 14rem;
+  width: 14rem;
   font-size: 1.5rem;
-  background: var(--secondary);
-  box-shadow: var(--box-shadow);
+  margin: 1rem;
 
   &:hover {
     transition: var(--transition);
     transform: var(--scale);
-    background: var(--secondary);
-    color: var(--primary);
-    border-color: var(--primary);
     cursor: pointer;
   }
 `;
 
 export const Shortcut: React.FC<ShortcutProps> = ({ text, iconName, href }) => (
   <Link href={href}>
-    <StyledShortcut>
-      <Column>
-        <Icon iconName={iconName} />
-        <p>{text}</p>
-      </Column>
-    </StyledShortcut>
+    <StyledCard>
+      <Icon iconName={iconName} iconSize="3" />
+      <p>{text}</p>
+    </StyledCard>
   </Link>
 );

@@ -13,14 +13,21 @@ export interface AuthState {
   authenticated: boolean | null;
   token: string | null;
   loading: boolean | null;
-  error: string | null;
 }
 
 export interface UIState {
   menuOpen: boolean;
+  authMenuOpen: boolean;
+  searchInputOpen: boolean;
+}
+
+export interface SearchState {
+  results: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  loading: boolean | null;
 }
 
 export interface State {
   auth: AuthState;
   ui: UIState;
+  search: SearchState;
 }

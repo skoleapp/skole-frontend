@@ -12,11 +12,10 @@ import {
   REFRESH_TOKEN_ERROR,
   REFRESH_TOKEN_SUCCESS,
   REGISTER,
-  REGISTER_ERROR,
-  SET_TOKEN
+  REGISTER_ERROR
 } from '../actions/types';
 
-const initialState: AuthState = {
+export const initialAuthState: AuthState = {
   user: {
     id: null,
     username: null,
@@ -28,11 +27,10 @@ const initialState: AuthState = {
   },
   authenticated: null,
   token: null,
-  loading: null,
-  error: null
+  loading: null
 };
 
-export default (state = initialState, action: AnyAction): AuthState => {
+export default (state = initialAuthState, action: AnyAction): AuthState => {
   switch (action.type) {
     case REGISTER:
     case LOGIN:
@@ -40,19 +38,14 @@ export default (state = initialState, action: AnyAction): AuthState => {
     case GET_USER_ME:
       return { ...state, loading: true };
 
-    case SET_TOKEN:
-      return { ...state, token: action.payload };
-
     case LOGIN_SUCCESS:
     case REFRESH_TOKEN_SUCCESS:
-      localStorage.setItem('token', action.payload);
       return { ...state, authenticated: true, token: action.payload, loading: false };
 
     case LOGOUT:
-      localStorage.removeItem('token');
-      return { ...initialState };
+      return { ...initialAuthState };
 
-    case GET_USER_ME_SUCCESS:
+    case GET_USER_ME_SUCCESS: {
       const { id, username, email, title, bio, points, language } = action.payload;
 
       return {
@@ -68,12 +61,13 @@ export default (state = initialState, action: AnyAction): AuthState => {
           language
         }
       };
+    }
 
     case LOGIN_ERROR:
     case REGISTER_ERROR:
     case GET_USER_ME_ERROR:
     case REFRESH_TOKEN_ERROR:
-      return { ...state, error: action.payload, authenticated: false, loading: false };
+      return { ...state, authenticated: false, loading: false };
 
     default:
       return state;

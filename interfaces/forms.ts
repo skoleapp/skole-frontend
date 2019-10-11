@@ -1,3 +1,13 @@
+import { User } from './store';
+
+export interface FormErrors {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  general: string;
+}
+
 export interface RegisterFormValues {
   username: string;
   email: string;
@@ -21,3 +31,14 @@ export interface FormFieldProps {
 export interface SearchFormProps {
   search: string;
 }
+
+export interface FeedbackFormValues {
+  comment: string;
+}
+
+export type AnyForm =
+  | LoginFormValues
+  | RegisterFormValues
+  | SearchFormProps
+  | User
+  | FeedbackFormValues;

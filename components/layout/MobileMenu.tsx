@@ -1,62 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State } from '../../interfaces';
-import { Column } from '../containers';
 import { MenuList } from '../molecules';
 
-interface Props {
-  menuOpen: boolean;
-  counter: number;
+interface StyledMenuProps {
+  open: boolean;
 }
 
-const StyledMenu = styled.div<Props>`
-  position: fixed;
+const StyledMobileMenu = styled.nav<StyledMenuProps>`
+  position: absolute;
+  height: 100vh;
+  width: 100%;
   top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: var(--primary);
   z-index: 1;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  text-align: center;
-
-  // Use CSS animations ´forwards´ attribute to keep visibility state after animation
-  visibility: hidden;
-
-  // Apply transition after initial render
-  transition: ${({ counter }): string => (counter > 1 ? 'var(--transition)' : 'none')};
-
-  // Apply animation after initial render
-  animation: ${({ menuOpen, counter }): string => {
-    if (counter > 1) {
-      return menuOpen ? 'var(--fade-in)' : 'var(--fade-out)';
-    } else {
-      return 'none';
-    }
-  }};
-
-  ul {
-    margin-right: 2rem;
-  }
+  align-items: center;
+  background: var(--primary);
+  transform: ${({ open }): string => (open ? 'scale(1.5)' : ' scale(0)')};
+  border-radius: 50%;
+  transition: var(--transition);
 `;
 
 export const MobileMenu: React.FC = () => {
   const { menuOpen } = useSelector((state: State) => state.ui);
-  const [counter, setCounter] = useState(0);
-
-  // Keep log of number of times of menu toggled
-  useEffect(() => {
-    setCounter(counter + 1);
-  }, [menuOpen]);
 
   return (
-    <StyledMenu menuOpen={menuOpen} counter={counter}>
-      <Column>
-        <MenuList />
-      </Column>
-    </StyledMenu>
+    <StyledMobileMenu open={menuOpen}>
+      <MenuList />
+    </StyledMobileMenu>
   );
 };

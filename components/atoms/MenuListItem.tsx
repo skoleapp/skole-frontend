@@ -2,23 +2,17 @@ import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { logout, toggleMenu } from '../../redux';
+import { closeWidgets } from '../../redux';
 import { Anchor } from './Anchor';
 
-const StyledMenuListItem = styled.li`
-  list-style: none;
-  color: var(--white);
-  font-size: 1.75rem;
-  line-height: 1.5;
+const StyledMenuListItem = styled(Anchor)`
+  font-size: 1.5rem;
+  line-height: 0.75;
 
   &:hover {
     transform: var(--scale);
     transition: var(--transition);
-  }
-
-  a:hover {
-    text-decoration: none !important;
-    color: var(--black);
+    text-decoration: none;
   }
 `;
 
@@ -29,18 +23,15 @@ interface Props {
 export const MenuListItem: React.FC<Props> = ({ href, children }) => {
   const dispatch = useDispatch();
 
-  const onClick = (href: string): void => {
-    dispatch(toggleMenu(false));
-
-    if (href === '/logout') {
-      dispatch(logout());
-    }
-  };
-
   return (
     <Link href={href}>
-      <StyledMenuListItem onClick={(): void => onClick(href)}>
-        <Anchor variant="white">{children}</Anchor>
+      <StyledMenuListItem
+        onClick={(): void => {
+          dispatch(closeWidgets());
+        }}
+        variant="white"
+      >
+        {children}
       </StyledMenuListItem>
     </Link>
   );

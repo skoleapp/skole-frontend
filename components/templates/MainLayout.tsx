@@ -1,28 +1,41 @@
 import React, { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Container } from '../containers';
+import { State } from '../../interfaces';
+import { Container, ErrorBoundary } from '../containers';
 import { Footer, Head, MobileMenu, Navbar } from '../layout';
 
 interface StyledMainLayoutProps {
-  primary?: boolean;
+  secondary?: boolean;
+  menuOpen: boolean;
 }
 
 const StyledMainLayout = styled.div<StyledMainLayoutProps>`
-  background: ${({ primary }): string => (primary && 'var(--primary-bg)') || 'var(--secondary-bg)'};
+  background: ${({ secondary }): string =>
+    (secondary && 'var(--secondary-bg)') || 'var(--primary-bg)'};
+  position: ${({ menuOpen }): string => (menuOpen ? 'fixed' : 'relative')};
+  min-height: 100%;
+  width: 100%;
 `;
 
 interface Props {
   title?: string;
   children?: ReactNode;
-  primary?: boolean;
+  secondary?: boolean;
 }
 
-export const MainLayout: React.FC<Props> = ({ title, children, primary }) => (
-  <StyledMainLayout primary={primary}>
-    <Head title={title} />
-    <MobileMenu />
-    <Navbar />
-    <Container>{children}</Container>
-    <Footer />
-  </StyledMainLayout>
-);
+export const MainLayout: React.FC<Props> = ({ title, children, secondary }) => {
+  const { menuOpen } = useSelector((state: State) => state.ui);
+
+  return (
+    <StyledMainLayout secondary={secondary} menuOpen={menuOpen}>
+      <Head title={title} />
+      <Navbar />
+      <MobileMenu />
+      <Container>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </Container>
+      <Footer />
+    </StyledMainLayout>
+  );
+};

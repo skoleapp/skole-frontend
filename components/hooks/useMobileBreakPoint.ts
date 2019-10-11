@@ -6,7 +6,7 @@ type UseMobileBreakPoint = () => boolean | 0 | null;
 
 export const useMobileBreakPoint: UseMobileBreakPoint = () => {
   const [width, setWidth] = React.useState<number | null>(null);
-  const resize = (): void => setWidth(window.innerWidth);
+  const resize = async (): Promise<void> => await setWidth(window.innerWidth);
 
   useEffect(() => {
     resize();

@@ -1,17 +1,20 @@
-import React from 'react';
 import styled from 'styled-components';
+import { XS } from '../../static';
 
-export const StyledCard = styled.div`
-  border-radius: 0.75rem;
-  background-color: var(--white);
-  margin: 0.5rem;
+export const Card = styled.div`
+  border: var(--black-border);
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin: 0 1rem;
+  box-shadow: var(--box-shadow);
   display: flex;
-  flex-direction: column !important;
-  max-width: 18rem;
-  margin: 0 auto;
-  padding: 0.5rem;
-  margin-top: 1rem;
-  box-shadow: 0.1rem 0.1rem 1rem var(--black);
-`;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 25rem;
 
-export const Card: React.FC = ({ children }) => <StyledCard>{children}</StyledCard>;
+  @media screen and (min-width: ${XS}) {
+    margin: 0 auto;
+  }
+`;
