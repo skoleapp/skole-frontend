@@ -1,14 +1,13 @@
 import { ClientContext, GraphQLClient } from 'graphql-hooks';
 import { NextPage, NextPageContext } from 'next';
 import withRedux from 'next-redux-wrapper';
-import { AppContext } from 'next/app';
 import { AppContextType } from 'next/dist/next-server/lib/utils';
 import Router, { Router as RouterType } from 'next/router';
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { LoadingScreen } from '../components/layout';
-import { withGraphQLClient } from '../lib';
+import withGraphQLClient from '../lib/with-graphql-client';
 import { initStore } from '../redux';
 import '../styles';
 
@@ -16,28 +15,25 @@ interface StatelessPage<P = {}> extends React.FC<P> {
   getInitialProps?: ({ Component, ctx }: AppContextType<RouterType>) => Promise<{ pageProps: {} }>;
 }
 interface Props {
-  store: Store;
   Component: NextPage<any>; // eslint-disable-line
   pageProps: NextPageContext;
+  graphQLClient: GraphQLClient;
+  store: Store;
 }
 
-const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
+const App: StatelessPage<Props> = ({ Component, pageProps, graphQLClient, store }) => {
   const [redirect, setRedirect] = useState(false);
 
   Router.events.on('routeChangeStart', () => setRedirect(true));
   Router.events.on('routeChangeComplete', () => setRedirect(false));
   Router.events.on('routeChangeError', () => setRedirect(false));
 
-  const client = new GraphQLClient({
-    url: '/graphql'
-  });
-
   if (redirect) {
     return <LoadingScreen />;
   }
 
   return (
-    <ClientContext.Provider value={client}>
+    <ClientContext.Provider value={graphQLClient}>
       <Provider store={store}>
         <Component {...pageProps} />
       </Provider>
@@ -45,14 +41,4 @@ const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Prop
   );
 };
 
-// eslint-disable-next-line
-AppProvider.getInitialProps = async ({ Component, ctx }: AppContext): Promise<any> => {
-  return {
-    pageProps: {
-      ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
-    }
-  };
-};
-
-const ConnectedApp = withRedux(initStore, { debug: false })(AppProvider);
-export default withGraphQLClient(ConnectedApp);
+export default withGraphQLClient(withRedux(initStore, { debug: false })(App));
