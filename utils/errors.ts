@@ -11,34 +11,14 @@ export const createFormErrors = (errors: any): FormErrors => {
     serverNotFound: ''
   };
 
-  if (errors.detail) {
-    formErrors.general = errors.detail;
-  }
-
-  if (errors.non_field_errors) {
-    formErrors.general = errors.non_field_errors.join();
-  }
-
-  if (errors.username) {
-    formErrors.username = errors.username.join();
-  }
-
-  if (errors.email) {
-    formErrors.email = errors.email.join();
-  }
-
-  if (errors.password) {
-    if (errors.password.password) {
-      formErrors.password = errors.password.password.join();
-    }
-
-    if (errors.password.confirm_password) {
-      formErrors.confirmPassword = errors.password.confirm_password.join();
-    }
-
-    if (errors.password.non_field_errors) {
-      formErrors.general = errors.password.non_field_errors.join();
-    }
+  if (errors.graphQLErrors) {
+    errors.graphQLErrors.map((e: any) => {
+      if (e.field) {
+        (formErrors as any)[e.field] = e.message;
+      } else {
+        formErrors.general = e.message;
+      }
+    });
   }
 
   return formErrors;
