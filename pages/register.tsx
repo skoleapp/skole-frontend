@@ -48,7 +48,7 @@ const validationSchema = Yup.object().shape({
   )
 });
 
-const Register: NextPage = () => {
+const RegisterPage: NextPage = () => {
   const client = useApolloClient();
   const ref = useRef<any>();
 
@@ -109,7 +109,7 @@ const Register: NextPage = () => {
   );
 };
 
-Register.getInitialProps = async (context: any): Promise<{}> => {
+RegisterPage.getInitialProps = async (context: any): Promise<{}> => {
   const { loggedInUser } = await checkLoggedIn(context.apolloClient);
 
   if (loggedInUser.user) {
@@ -119,4 +119,4 @@ Register.getInitialProps = async (context: any): Promise<{}> => {
   return {};
 };
 
-export default withApollo(Register);
+export default withApollo(RegisterPage);

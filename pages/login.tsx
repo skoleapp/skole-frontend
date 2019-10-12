@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Password is required!')
 });
 
-const Login: NextPage = () => {
+const LoginPage: NextPage = () => {
   const client = useApolloClient();
   const ref = useRef<any>();
 
@@ -89,7 +89,7 @@ const Login: NextPage = () => {
   );
 };
 
-Login.getInitialProps = async (context: any): Promise<{}> => {
+LoginPage.getInitialProps = async (context: any): Promise<{}> => {
   const { loggedInUser } = await checkLoggedIn(context.apolloClient);
   if (loggedInUser.user) {
     redirect(context, '/');
@@ -98,4 +98,4 @@ Login.getInitialProps = async (context: any): Promise<{}> => {
   return {};
 };
 
-export default withApollo(Login);
+export default withApollo(LoginPage);
