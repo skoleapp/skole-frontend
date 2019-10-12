@@ -3,14 +3,11 @@ import gql from 'graphql-tag';
 import Router from 'next/router';
 
 export const checkLoggedIn = async (apolloClient: ApolloClient<any>) => {
-  console.log('test');
-
   try {
     const { data } = await apolloClient.query({
       query: gql`
         query userMe {
           node {
-            id
             username
             language
           }
