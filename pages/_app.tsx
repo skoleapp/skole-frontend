@@ -1,44 +1,52 @@
-import { ClientContext, GraphQLClient } from 'graphql-hooks';
 import { NextPage, NextPageContext } from 'next';
 import withRedux from 'next-redux-wrapper';
+import App from 'next/app';
 import { AppContextType } from 'next/dist/next-server/lib/utils';
 import Router, { Router as RouterType } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import { LoadingScreen } from '../components/layout';
-import withGraphQLClient from '../lib/with-graphql-client';
 import { initStore } from '../redux';
 import '../styles';
-
-interface StatelessPage<P = {}> extends React.FC<P> {
-  getInitialProps?: ({ Component, ctx }: AppContextType<RouterType>) => Promise<{ pageProps: {} }>;
-}
 interface Props {
   Component: NextPage<any>; // eslint-disable-line
   pageProps: NextPageContext;
-  graphQLClient: GraphQLClient;
   store: Store;
 }
 
-const App: StatelessPage<Props> = ({ Component, pageProps, graphQLClient, store }) => {
-  const [redirect, setRedirect] = useState(false);
+class SkoleApp extends App<Props> {
+  static async getInitialProps ({ Component, ctx }: AppContextType<RouterType>) {
+    let pageProps = {}
 
-  Router.events.on('routeChangeStart', () => setRedirect(true));
-  Router.events.on('routeChangeComplete', () => setRedirect(false));
-  Router.events.on('routeChangeError', () => setRedirect(false));
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx)
+    }
 
-  if (redirect) {
-    return <LoadingScreen />;
+    return { pageProps }
   }
 
-  return (
-    <ClientContext.Provider value={graphQLClient}>
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
-    </ClientContext.Provider>
-  );
+  state = {
+    redirect: false
+  }
+
+  render() {
+    const {Component, store, pageProps} = this.props
+
+    Router.events.on('routeChangeStart', () => this.setState({ ...this.state, redirect: true }));
+    Router.events.on('routeChangeComplete', () => this.setState({ ...this.state, redirect: false }));
+    Router.events.on('routeChangeError', () => this.setState({ ...this.state, redirect: false }));
+  
+    if (this.state.redirect) {
+      return <LoadingScreen />;
+    }
+  
+    return (
+        <Provider store={store}>
+          <Component {...pageProps} />
+        </Provider>
+    );
+  }
 };
 
-export default withGraphQLClient(withRedux(initStore, { debug: false })(App));
+export default withRedux(initStore)(SkoleApp);
