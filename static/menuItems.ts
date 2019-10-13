@@ -13,7 +13,7 @@ const menuItems = {
   },
   account: {
     name: 'account',
-    href: '/account'
+    href: '/user/me'
   },
   logout: {
     name: 'logout',
