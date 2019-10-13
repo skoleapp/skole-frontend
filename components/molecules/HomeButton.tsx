@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import React from 'react';
-import { Anchor } from '../atoms';
-import { NavbarIcon } from '../molecules';
+import { Anchor, NavbarIcon } from '../atoms';
 
 export const HomeButton: React.FC = () => (
   <Link href="/">
     <Anchor>
-      <NavbarIcon iconName="home"></NavbarIcon>
+      <NavbarIcon iconName="home" />
     </Anchor>
   </Link>
 );

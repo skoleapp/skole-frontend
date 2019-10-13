@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State, WidgetOpenProps } from '../../interfaces';
 import { toggleAuthMenu } from '../../redux';
+import { NavbarIcon } from '../atoms';
 import { useWidget } from '../hooks';
-import { MenuList, NavbarIcon } from '../molecules';
+import { MenuList } from '../molecules';
 
 const StyledAuthMenu = styled.div`
   display: flex;
