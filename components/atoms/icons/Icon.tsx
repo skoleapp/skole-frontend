@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IconProps, Variant, VariantProps } from '../../interfaces';
-import { getColorForVariant } from '../../utils';
+import { IconProps, Variant, VariantProps } from '../../../interfaces';
+import { getColorForVariant } from '../../../utils';
 
 const StyledIcon = styled.i<VariantProps>`
   color: ${({ variant }): string => getColorForVariant(variant)};
