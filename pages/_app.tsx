@@ -4,11 +4,13 @@ import App from 'next/app';
 import { AppContextType } from 'next/dist/next-server/lib/utils';
 import Router, { Router as RouterType } from 'next/router';
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider as StoreProvider } from 'react-redux';
 import { Store } from 'redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { LoadingScreen } from '../components/layout';
 import { initStore } from '../redux';
 import '../styles';
+
 interface Props {
   Component: NextPage<any>; // eslint-disable-line
   pageProps: NextPageContext;
@@ -16,37 +18,43 @@ interface Props {
 }
 
 class SkoleApp extends App<Props> {
-  static async getInitialProps ({ Component, ctx }: AppContextType<RouterType>) {
-    let pageProps = {}
+  static async getInitialProps({ Component, ctx }: AppContextType<RouterType>) {
+    let pageProps = {};
 
     if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx)
+      pageProps = await Component.getInitialProps(ctx);
     }
 
-    return { pageProps }
+    return { pageProps };
   }
 
   state = {
     redirect: false
-  }
+  };
 
   render() {
-    const {Component, store, pageProps} = this.props
+    const { Component, store, pageProps } = this.props;
 
     Router.events.on('routeChangeStart', () => this.setState({ ...this.state, redirect: true }));
-    Router.events.on('routeChangeComplete', () => this.setState({ ...this.state, redirect: false }));
+
+    Router.events.on('routeChangeComplete', () =>
+      this.setState({ ...this.state, redirect: false })
+    );
+
     Router.events.on('routeChangeError', () => this.setState({ ...this.state, redirect: false }));
-  
+
     if (this.state.redirect) {
       return <LoadingScreen />;
     }
-  
+
     return (
-        <Provider store={store}>
+      <StoreProvider store={store}>
+        <PersistGate persistor={(store as any).__PERSISTOR} loading={null}>
           <Component {...pageProps} />
-        </Provider>
+        </PersistGate>
+      </StoreProvider>
     );
   }
-};
+}
 
 export default withRedux(initStore)(SkoleApp);
