@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { SearchFormProps, State, WidgetOpenProps } from '../../interfaces';
 import { closeWidgets, toggleSearchInput } from '../../redux';
+import { NavbarIcon } from '../atoms';
 import { useWidget } from '../hooks';
-import { NavbarIcon, SearchInputSection } from '../molecules';
+import { SearchInputSection } from '../molecules';
 
 export const initialValues = {
   search: ''
