@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ShortcutProps } from '../../interfaces';
 import { Card } from './Card';
-import { Icon } from './Icon';
+import { Icon } from './icons';
 
 const StyledCard = styled(Card)`
   height: 14rem;
