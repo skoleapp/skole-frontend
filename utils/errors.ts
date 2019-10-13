@@ -1,6 +1,6 @@
 import { FormErrors } from '../interfaces';
 
-// eslint-disable-next-line @typescript/no-explicit-any
+// eslint-disable-next-line
 export const createFormErrors = (errors: any): FormErrors => {
   const formErrors = {
     username: '',
