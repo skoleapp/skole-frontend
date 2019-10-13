@@ -12,7 +12,7 @@ export const REFRESH_TOKEN_ERROR = 'REFRESH_TOKEN_ERROR';
 
 export const LOGOUT = 'LOGOUT';
 
-export const GET_USER_ME = 'GET_USER_ME';
+export const USER_ME = 'USER_ME';
 export const GET_USER_ME_SUCCESS = 'GET_USER_ME_SUCCESS';
 export const GET_USER_ME_ERROR = 'GET_USER_ME_ERROR';
 
