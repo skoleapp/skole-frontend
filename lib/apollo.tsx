@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/react-hooks';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
@@ -17,8 +17,8 @@ import React from 'react';
  * @param {Object} [config]
  * @param {Boolean} [config.ssr=true]
  */
-export function withApollo(PageComponent, { ssr = true } = {}) {
-  const WithApollo = ({ apolloClient, apolloState, ...pageProps }) => {
+export function withApollo(PageComponent: any, { ssr = true } = {}) {
+  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: any) => {
     const client = apolloClient || initApolloClient(apolloState, { getToken });
     return (
       <ApolloProvider client={client}>
@@ -49,7 +49,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async ctx => {
+    WithApollo.getInitialProps = async (ctx: any) => {
       const { AppTree } = ctx;
 
       // Run all GraphQL queries in the component tree
@@ -111,22 +111,22 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
   return WithApollo;
 }
 
-let apolloClient = null;
+let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
 /**
  * Always creates a new apollo client on the server
  * Creates or reuses apollo client in the browser.
  */
-function initApolloClient(...args) {
+function initApolloClient(initState: any, { getToken }: any) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
-    return createApolloClient(...args);
+    return createApolloClient(initState, { getToken });
   }
 
   // Reuse client on the client-side
   if (!apolloClient) {
-    apolloClient = createApolloClient(...args);
+    apolloClient = createApolloClient(initState, { getToken });
   }
 
   return apolloClient;
@@ -137,25 +137,14 @@ function initApolloClient(...args) {
  * @param  {Object} [initialState={}]
  * @param  {Object} config
  */
-function createApolloClient(initialState = {}, { getToken }) {
-  const fetchOptions = {};
-
-  // If you are using a https_proxy, add fetchOptions with 'https-proxy-agent' agent instance
-  // 'https-proxy-agent' is required here because it's a sever-side only module
-  if (typeof window === 'undefined') {
-    if (process.env.https_proxy) {
-      fetchOptions.agent = new (require('https-proxy-agent'))(process.env.https_proxy);
-    }
-  }
-
+function createApolloClient(initialState = {}, { getToken }: any) {
   const httpLink = new HttpLink({
-    uri: 'http://localhost:8000/graphql/', // Server URL (must be absolute)
-    credentials: 'same-origin',
-    fetch,
-    fetchOptions
+    uri: 'http://localhost:8000/graphql', // Server URL (must be absolute)
+    credentials: 'include',
+    fetch
   });
 
-  const authLink = setContext((request, { headers }) => {
+  const authLink = setContext((_request, { headers }) => {
     const token = getToken();
     return {
       headers: {
@@ -177,7 +166,7 @@ function createApolloClient(initialState = {}, { getToken }) {
  * Get the user token from cookie
  * @param {Object} req
  */
-function getToken(req) {
+function getToken(req: any) {
   const cookies = cookie.parse(req ? req.headers.cookie || '' : document.cookie);
   return cookies.token;
 }
