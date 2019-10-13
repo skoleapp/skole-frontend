@@ -9,7 +9,7 @@ import {
   TextInputFormField
 } from '../atoms';
 
-export const EditAccountForm: React.ComponentType<FormikProps<User>> = props => (
+export const EditUserForm: React.ComponentType<FormikProps<User>> = props => (
   <Form {...props}>
     <Field placeholder="Title" name="title" component={TextInputFormField} label="Title" />
     <Field placeholder="Username" name="username" component={TextInputFormField} label="Username" />

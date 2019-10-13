@@ -2,13 +2,13 @@ import { Formik } from 'formik';
 import React from 'react';
 import { User } from '../../interfaces';
 import { Card, H1 } from '../atoms';
-import { EditAccountForm } from '../molecules';
+import { EditUserForm } from '../molecules';
 
 interface Props {
   initialValues: User;
 }
 
-export const EditAccountPage: React.FC<Props> = ({ initialValues }) => {
+export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
   /*
    * TODO: Make a redux action that calls the /user/me endpoint with
    * a put request and returns a promise like in auth forms.
@@ -20,7 +20,7 @@ export const EditAccountPage: React.FC<Props> = ({ initialValues }) => {
   return (
     <Card>
       <H1>Edit Account</H1>
-      <Formik component={EditAccountForm} initialValues={initialValues} onSubmit={onSubmit} />
+      <Formik component={EditUserForm} initialValues={initialValues} onSubmit={onSubmit} />
     </Card>
   );
 };

@@ -1,17 +1,16 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { State } from '../../interfaces';
-import { logout } from '../../redux';
 import { Button, Card, H2 } from '../atoms';
 import { LoadingScreen } from '../layout';
 
-export const LogoutPage: React.FC = () => {
+export const LogoutCard: React.FC = () => {
   const { authenticated, loading } = useSelector((state: State) => state.auth);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
-    authenticated && dispatch(logout());
+    // authenticated && dispatch(logout());
   }, [authenticated]);
 
   if (loading) {
