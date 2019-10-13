@@ -1,10 +1,10 @@
 import React from 'react';
-import { FeedbackPage, MainLayout } from '../components';
+import { FeedbackCard, MainLayout } from '../components';
 
-const Feedback: React.FC = () => (
+const FeedbackPage: React.FC = () => (
   <MainLayout title="Leave Feedback">
-    <FeedbackPage />
+    <FeedbackCard />
   </MainLayout>
 );
 
-export default Feedback;
+export default FeedbackPage;

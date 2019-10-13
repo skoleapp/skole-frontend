@@ -1,10 +1,10 @@
 import React from 'react';
-import { LogoutPage, MainLayout } from '../components';
+import { LogoutCard, MainLayout } from '../components';
 
-const Logout: React.FC = () => (
+const LogoutPage: React.FC = () => (
   <MainLayout title="Login">
-    <LogoutPage />
+    <LogoutCard />
   </MainLayout>
 );
 
-export default Logout;
+export default LogoutPage;
