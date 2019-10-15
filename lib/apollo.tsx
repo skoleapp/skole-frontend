@@ -6,7 +6,6 @@ import { HttpLink } from 'apollo-link-http';
 import cookie from 'cookie';
 import fetch from 'isomorphic-unfetch';
 import Head from 'next/head';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 /**
@@ -38,14 +37,6 @@ export function withApollo(PageComponent: any, { ssr = true } = {}) {
 
     // Set correct display name for devtools
     WithApollo.displayName = `withApollo(${displayName})`;
-
-    // Add some prop types
-    WithApollo.propTypes = {
-      // Used for getDataFromTree rendering
-      apolloClient: PropTypes.object,
-      // Used for client/server rendering
-      apolloState: PropTypes.object
-    };
   }
 
   if (ssr || PageComponent.getInitialProps) {
@@ -139,7 +130,7 @@ function initApolloClient(initState: any, { getToken }: any) {
  */
 function createApolloClient(initialState = {}, { getToken }: any) {
   const httpLink = new HttpLink({
-    uri: 'http://localhost:8000/graphql', // Server URL (must be absolute)
+    uri: 'http://localhost:8000/graphql/', // Server URL (must be absolute)
     credentials: 'include',
     fetch
   });
