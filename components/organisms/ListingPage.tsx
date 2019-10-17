@@ -7,7 +7,18 @@ const schools = [
     faculty: [
       { id: 'Humanistinen tiedekunta' },
       { id: 'Kasvatustieteiden tiedekunta' },
-      { id: 'Luonnontieteiden ja tekniikan tiedekunta' },
+      {
+        id: 'Luonnontieteiden ja tekniikan tiedekunta',
+        facility: [
+          { id: 'Biokemian laitos' },
+          { id: 'Biologian laitos' },
+          { id: 'Fysiikan ja tähtitieteen laitos' },
+          { id: 'Kemian laitos' },
+          { id: 'Maantieteen ja geologian laitos' },
+          { id: 'Matematiikan ja tilastotieteen laitos' },
+          { id: 'Tulevaisuuden teknologioiden laitos' }
+        ]
+      },
       { id: 'Lääketieteellinen tiedekunta' },
       { id: 'Oikeustieteellinen tiedekunta' },
       { id: 'Turun kauppakorkeakoulu' },
@@ -53,6 +64,9 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
   selectedFaculty
 }) => {
   const isExpanded = selectedFaculty === index ? true : false;
+
+  const facilities = R.props(['id', 'facility'], faculty);
+  console.log(facilities);
   return (
     <div
       onClick={e => handleFacultySelection(index, e)}
@@ -74,7 +88,11 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
             flexDirection: 'column'
           }}
         >
-          moi
+          <div>
+            {facilities.map((facility: any, index: number) => {
+              return <div key={index}>{R.prop('id', facility)}</div>;
+            })}
+          </div>
         </div>
       ) : null}
     </div>
@@ -119,10 +137,7 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
           style={{
             margin: '20px 10px',
             display: 'flex',
-            flexDirection: 'column',
-            border: '2px inset #e0e0e0',
-            borderRight: 0,
-            borderBottom: 0
+            flexDirection: 'column'
           }}
         >
           {school.faculty.map((faculty: any, index: number) => (
