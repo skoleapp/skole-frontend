@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import { Anchor } from '../atoms';
 import Router from 'next/router';
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, createMuiTheme } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -128,7 +128,6 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
   const isExpanded = selectedFaculty === index ? true : false;
 
   const facilities = R.prop('facility', faculty);
-  console.log(facilities);
 
   return (
     <ExpansionPanel
