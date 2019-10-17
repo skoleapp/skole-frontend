@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import * as R from 'ramda';
+import { Anchor } from '../atoms';
+import Router from 'next/router';
 
 const schools = [
   {
     id: 'Turun yliopisto',
     faculty: [
-      { id: 'Humanistinen tiedekunta' },
-      { id: 'Kasvatustieteiden tiedekunta' },
+      { id: 'Humanistinen tiedekunta', facility: [] },
+      { id: 'Kasvatustieteiden tiedekunta', facility: [] },
       {
         id: 'Luonnontieteiden ja tekniikan tiedekunta',
         facility: [
-          { id: 'Biokemian laitos' },
+          { id: 'Biokemian laitos', href: 'dtek609_kallu' },
           { id: 'Biologian laitos' },
           { id: 'Fysiikan ja tähtitieteen laitos' },
           { id: 'Kemian laitos' },
@@ -19,13 +21,13 @@ const schools = [
           { id: 'Tulevaisuuden teknologioiden laitos' }
         ]
       },
-      { id: 'Lääketieteellinen tiedekunta' },
-      { id: 'Oikeustieteellinen tiedekunta' },
-      { id: 'Turun kauppakorkeakoulu' },
-      { id: 'Yhteiskuntatieteellinen tiedekunta' }
+      { id: 'Lääketieteellinen tiedekunta', facility: [] },
+      { id: 'Oikeustieteellinen tiedekunta', facility: [] },
+      { id: 'Turun kauppakorkeakoulu', facility: [] },
+      { id: 'Yhteiskuntatieteellinen tiedekunta', facility: [] }
     ]
   },
-  { id: 'Åbo Akademi', faculty: [{ id: 'Department of Gender Studies' }] },
+  { id: 'Åbo Akademi', faculty: [{ id: 'Department of Gender Studies', facility: [] }] },
   { id: 'Aalto-yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
   { id: 'Helsingin yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
   {
@@ -57,6 +59,12 @@ interface FacultyRowProps {
   selectedFaculty: number;
 }
 
+const handleFacilityClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
+  e.stopPropagation();
+  console.log('yes');
+  Router.push('/' + href);
+};
+
 const FacultyRow: React.FC<FacultyRowProps> = ({
   faculty,
   index,
@@ -65,8 +73,8 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
 }) => {
   const isExpanded = selectedFaculty === index ? true : false;
 
-  const facilities = R.props(['id', 'facility'], faculty);
-  console.log(facilities);
+  const facilities = R.prop('facility', faculty);
+
   return (
     <div
       onClick={e => handleFacultySelection(index, e)}
@@ -85,14 +93,24 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
           style={{
             margin: 20,
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            border: '0 none black',
+            borderLeft: '1px groove',
+            borderBottom: '1px groove'
           }}
         >
-          <div>
-            {facilities.map((facility: any, index: number) => {
-              return <div key={index}>{R.prop('id', facility)}</div>;
-            })}
-          </div>
+          <ul>
+            {facilities.map((facility: any, index: number) => (
+              <li style={{ margin: 10 }} key={index}>
+                <Anchor
+                  href={R.prop('href', facility)}
+                  onClick={e => handleFacilityClick(e, R.prop('href', facility))}
+                >
+                  {R.prop('id', facility)}
+                </Anchor>
+              </li>
+            ))}
+          </ul>
         </div>
       ) : null}
     </div>
@@ -120,6 +138,8 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
     }
   };
 
+  const faculties = R.prop('faculty', school);
+
   return (
     <div
       onClick={() => handleSchoolSelection(index)}
@@ -137,10 +157,13 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
           style={{
             margin: '20px 10px',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            border: '0 none black',
+            borderLeft: '1px groove',
+            borderBottom: '1px groove'
           }}
         >
-          {school.faculty.map((faculty: any, index: number) => (
+          {faculties.map((faculty: any, index: number) => (
             <FacultyRow
               key={index}
               faculty={faculty}
