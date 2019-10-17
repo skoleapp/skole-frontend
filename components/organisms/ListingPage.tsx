@@ -32,20 +32,32 @@ const schools = [
       { id: 'Turun kauppakorkeakoulu', facility: [] },
       { id: 'Yhteiskuntatieteellinen tiedekunta', facility: [] }
     ]
-  }
-  /*   { id: 'Åbo Akademi', faculty: [{ id: 'Department of Gender Studies', facility: [] }] },
-  { id: 'Aalto-yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
-  { id: 'Helsingin yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
+  },
+  { id: 'Åbo Akademi', faculty: [{ id: 'Department of Gender Studies', facility: [{ id: ' ' }] }] },
+  {
+    id: 'Aalto-yliopisto',
+    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+  },
+  {
+    id: 'Helsingin yliopisto',
+    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+  },
   {
     id: 'Tampereen teknillinen yliopisto',
-    faculty: [{ id: 'lute' }, { id: 'kauppis' }]
+    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
   },
-  { id: 'Oulun yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
-  { id: 'Vaasan yliopisto', faculty: [{ id: 'lute' }, { id: 'kauppis' }] },
+  {
+    id: 'Oulun yliopisto',
+    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+  },
+  {
+    id: 'Vaasan yliopisto',
+    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+  },
   {
     id: 'Lappeenrannan–Lahden teknillinen yliopisto',
-    faculty: [{ id: 'lute' }, { id: 'kauppis' }]
-  } */
+    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+  }
 ];
 
 const ExpansionPanel = withStyles({
@@ -67,7 +79,6 @@ const ExpansionPanel = withStyles({
 
 const ExpansionPanelSummary = withStyles({
   root: {
-    backgroundColor: 'rgba(0, 0, 0, .03)',
     borderBottom: '1px solid rgba(0, 0, 0, .125)',
     marginBottom: -1,
     minHeight: 56,
@@ -80,17 +91,10 @@ const ExpansionPanelSummary = withStyles({
       margin: '12px 0'
     }
   },
-  expanded: {
-    backgroundColor: ''
-  }
+  expanded: {}
 })(MuiExpansionPanelSummary);
 
-const ExpansionPanelDetails = withStyles({
-  root: {
-    padding: '0px 0px 0px 24px',
-    textAlign: 'left'
-  }
-})(MuiExpansionPanelDetails);
+const ExpansionPanelDetails = withStyles({})(MuiExpansionPanelDetails);
 
 interface Props {
   schoolType: string;
@@ -185,7 +189,14 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
       <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
         <Typography>{R.prop('id', school)}</Typography>
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+
+      <ExpansionPanelDetails
+        style={{
+          backgroundColor: 'var(--primary)',
+          padding: '0px 0px 0px 12px',
+          textAlign: 'left'
+        }}
+      >
         <Typography style={{ width: '100%' }}>
           {faculties.map((faculty: any, index: number) => (
             <FacultyRow
