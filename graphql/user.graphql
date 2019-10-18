@@ -1,12 +1,10 @@
-query User($id: ID) {
+query User($id: Int!) {
   user(id: $id) {
-    node {
-      id
-      username
-      title
-      bio
-      points
-      created
-    }
+    id
+    username
+    title
+    bio
+    points
+    created
   }
 }
