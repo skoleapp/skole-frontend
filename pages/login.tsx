@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { LoginCard, MainLayout } from '../components';
-import { checkLoggedIn, redirect, withApollo } from '../lib';
+import { getUserMe, redirect, withApollo } from '../lib';
 
 const LoginPage: NextPage = () => (
   <MainLayout title="Login">
@@ -10,10 +10,11 @@ const LoginPage: NextPage = () => (
 );
 
 // eslint-disable-next-line
-LoginPage.getInitialProps = async (context: any): Promise<{}> => {
-  const { loggedInUser } = await checkLoggedIn(context.apolloClient);
-  if (loggedInUser.user) {
-    redirect(context, '/');
+LoginPage.getInitialProps = async (ctx: any): Promise<{}> => {
+  const { userMe } = await getUserMe(ctx.apolloClient);
+
+  if (userMe) {
+    redirect(ctx, '/');
   }
 
   return {};
