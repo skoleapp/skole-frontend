@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { AuthState } from '../../interfaces';
-import { SET_USER } from '../actions/types';
+import { LOGOUT, SET_USER } from '../actions/types';
 
 export const initialAuthState: AuthState = {
   user: {
@@ -34,6 +34,9 @@ export default (state = initialAuthState, action: AnyAction): AuthState => {
         }
       };
     }
+
+    case LOGOUT:
+      return initialAuthState;
 
     default:
       return state;
