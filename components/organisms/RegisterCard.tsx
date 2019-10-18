@@ -46,6 +46,9 @@ export const RegisterCard: React.FC = () => {
 
   // eslint-disable-next-line
   const onCompleted = (data: any) => {
+    if (data.register.errors) {
+      return onError(data.register.errors);
+    }
     // Store the token in cookie.
     document.cookie = cookie.serialize('token', data.login.token, {
       maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -53,13 +56,19 @@ export const RegisterCard: React.FC = () => {
     });
     // Set user.
     dispatch(setUser(data.login.user));
+    // Force a reload of all the current queries now that the user is logged in.
+    client.cache.reset().then(() => {
+      Router.push('/');
+    });
   };
 
   // Create form errors and show them in the form accordingly.
   // eslint-disable-next-line
   const onError = (errors: any) => {
     const formErrors = createFormErrors(errors);
-    Object.keys(formErrors).forEach(key => ref.current.setFieldError(key, (errors as any)[key])); // eslint-disable-line
+    Object.keys(formErrors).forEach(
+      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line
+    );
   };
 
   const [register] = useRegisterMutation({ onCompleted, onError });
@@ -69,12 +78,8 @@ export const RegisterCard: React.FC = () => {
     actions: FormikActions<RegisterFormValues>
   ): Promise<void> => {
     const { username, email, password } = values;
-    register({ variables: { username, email, password } });
+    await register({ variables: { username, email, password } });
     actions.setSubmitting(false);
-    // Force a reload of all the current queries now that the user is logged in.
-    client.cache.reset().then(() => {
-      Router.push('/');
-    });
   };
 
   return (

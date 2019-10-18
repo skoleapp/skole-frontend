@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { MainLayout, RegisterCard } from '../components';
-import { getUserMe, redirect } from '../lib';
+import { getUserMe, redirect, withApollo } from '../lib';
 
 const RegisterPage: NextPage = () => (
   <MainLayout title="Register">
@@ -20,4 +20,4 @@ RegisterPage.getInitialProps = async (ctx: any): Promise<{}> => {
   return {};
 };
 
-export default RegisterPage;
+export default withApollo(RegisterPage);

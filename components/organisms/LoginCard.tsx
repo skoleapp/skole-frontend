@@ -19,7 +19,9 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required('Email is required.'),
+  email: Yup.string()
+    .email('Invalid email.')
+    .required('Email is required.'),
   password: Yup.string().required('Password is required!')
 });
 
@@ -38,25 +40,30 @@ export const LoginCard: React.FC = () => {
     });
     // Set user.
     dispatch(setUser(data.login.user));
+    // Force a reload of all the current queries now that the user is logged in.
+    client.cache.reset().then(() => {
+      Router.push('/');
+    });
   };
 
   // Create form errors and show them in the form accordingly.
   // eslint-disable-next-line
   const onError = (errors: any) => {
     const formErrors = createFormErrors(errors);
-    Object.keys(formErrors).forEach(key => ref.current.setFieldError(key, (errors as any)[key])); // eslint-disable-line
+    Object.keys(formErrors).forEach(
+      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line
+    );
   };
 
   const [login] = useLoginMutation({ onCompleted, onError });
 
-  const onSubmit = (values: LoginFormValues, actions: FormikActions<LoginFormValues>): void => {
+  const onSubmit = async (
+    values: LoginFormValues,
+    actions: FormikActions<LoginFormValues>
+  ): Promise<void> => {
     const { email, password } = values;
-    login({ variables: { email, password } });
+    await login({ variables: { email, password } });
     actions.setSubmitting(false);
-    // Force a reload of all the current queries now that the user is logged in.
-    client.cache.reset().then(() => {
-      Router.push('/');
-    });
   };
 
   return (
