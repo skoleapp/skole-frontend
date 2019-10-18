@@ -1,3 +1,4 @@
 export * from './apollo';
-export * from './checkLoggedIn';
+export * from './getUser';
+export * from './getUserMe';
 export * from './redirect';

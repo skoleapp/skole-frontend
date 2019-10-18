@@ -19,8 +19,8 @@ export const getUser = async (id: number, apolloClient: ApolloClient<any>) => {
       `
     });
 
-    return data.user;
+    return { user: data.user };
   } catch (error) {
-    console.log(error);
+    return { user: {} };
   }
 };

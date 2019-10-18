@@ -140,7 +140,7 @@ function createApolloClient(initialState = {}, { getToken }: any) {
     return {
       headers: {
         ...headers,
-        authorization: token ? `Bearer ${token}` : ''
+        authorization: token ? `JWT ${token}` : ''
       }
     };
   });
