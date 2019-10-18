@@ -1,3 +1,7 @@
+import { Dispatch } from 'react';
+import { AnyAction } from 'redux';
+import { SET_USER } from './types';
+
 // import { AnyAction, Dispatch } from 'redux';
 // import { getApiUrl, refreshTokenConfig, skoleAPI, tokenConfig } from '../../api';
 // import { State } from '../../interfaces';
@@ -112,3 +116,7 @@
 //     dispatch({ type: GET_USER_ME_ERROR, payload: createErrors(error) });
 //   }
 // };
+
+export const setUser = (data: any) => (dispatch: Dispatch<AnyAction>) => {
+  dispatch({ type: SET_USER, payload: { ...data } });
+};

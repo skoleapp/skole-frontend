@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import { rootReducer } from './reducers';
 const storage = require('redux-persist/lib/storage').default;
 
-export const initStore = (initialState = {}): Store => {
+export const initStore = (): Store => {
   let store: any; // eslint-disable-line
   const isServer = typeof window === 'undefined';
 
@@ -17,13 +17,12 @@ export const initStore = (initialState = {}): Store => {
 
     store = createStore(
       persistReducer(persistConfig, rootReducer),
-      initialState,
       composeWithDevTools(applyMiddleware(thunk))
     );
 
     store.__PERSISTOR = persistStore(store);
   } else {
-    store = createStore(rootReducer, initialState, applyMiddleware(thunk));
+    store = createStore(rootReducer, applyMiddleware(thunk));
   }
 
   return store;
