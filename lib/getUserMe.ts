@@ -20,7 +20,7 @@ export const getUserMe = async (apolloClient: ApolloClient<any>) => {
       `
     });
 
-    return { userMe: data.user };
+    return { userMe: data.userMe };
   } catch {
     return { userMe: {} };
   }
