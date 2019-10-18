@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { AuthState } from '../../interfaces';
-import { USER_ME } from '../actions/types';
+import { SET_USER } from '../actions/types';
 
 export const initialAuthState: AuthState = {
   user: {
@@ -17,7 +17,7 @@ export const initialAuthState: AuthState = {
 
 export default (state = initialAuthState, action: AnyAction): AuthState => {
   switch (action.type) {
-    case USER_ME: {
+    case SET_USER: {
       const { id, username, email, title, bio, points, language } = action.payload;
 
       return {
