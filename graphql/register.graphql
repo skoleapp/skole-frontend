@@ -1,10 +1,21 @@
 mutation Register($username: String!, $email: String!, $password: String!) {
   register(input: { username: $username, email: $email, password: $password }) {
-    user {
-      id
+    message
+    errors {
+      field
+      messages
     }
   }
   login(email: $email, password: $password) {
     token
+    user {
+      id
+      title
+      bio
+      points
+      created
+      email
+      language
+    }
   }
 }
