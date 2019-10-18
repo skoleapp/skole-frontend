@@ -1,5 +1,6 @@
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
+import { User } from '../../interfaces';
 import { SET_USER } from './types';
 
 // import { AnyAction, Dispatch } from 'redux';
@@ -117,6 +118,6 @@ import { SET_USER } from './types';
 //   }
 // };
 
-export const setUser = (data: any) => (dispatch: Dispatch<AnyAction>) => {
+export const setUser = (data: User) => (dispatch: Dispatch<AnyAction>) => {
   dispatch({ type: SET_USER, payload: { ...data } });
 };

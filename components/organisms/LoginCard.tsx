@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useLoginMutation } from '../../generated/graphql';
 import { LoginFormValues } from '../../interfaces';
-import { setUser } from '../../redux/actions/auth';
+import { setUser } from '../../redux/actions';
 import { createFormErrors } from '../../utils';
 import { Card, H1 } from '../atoms';
 import { LoginForm } from '../molecules';
@@ -40,6 +40,7 @@ export const LoginCard: React.FC = () => {
     dispatch(setUser(data.login.user));
   };
 
+  // Create form errors and show them in the form accordingly.
   // eslint-disable-next-line
   const onError = (errors: any) => {
     const formErrors = createFormErrors(errors);

@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useRegisterMutation } from '../../generated/graphql';
 import { RegisterFormValues } from '../../interfaces';
-import { setUser } from '../../redux/actions/auth';
+import { setUser } from '../../redux/actions';
 import { createFormErrors } from '../../utils';
 import { Card, H1 } from '../atoms';
 import { RegisterForm } from '../molecules';
@@ -55,6 +55,7 @@ export const RegisterCard: React.FC = () => {
     dispatch(setUser(data.login.user));
   };
 
+  // Create form errors and show them in the form accordingly.
   // eslint-disable-next-line
   const onError = (errors: any) => {
     const formErrors = createFormErrors(errors);
