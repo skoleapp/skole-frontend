@@ -6,7 +6,7 @@ export const getUser = async (id: number, apolloClient: ApolloClient<any>) => {
     const { data } = await apolloClient.query({
       variables: { id },
       query: gql`
-        query User($id: ID!) {
+        query User($id: Int!) {
           user(id: $id) {
             id
             username
@@ -20,7 +20,7 @@ export const getUser = async (id: number, apolloClient: ApolloClient<any>) => {
     });
 
     return { user: data.user };
-  } catch (error) {
-    return { user: {} };
+  } catch {
+    return { user: null };
   }
 };

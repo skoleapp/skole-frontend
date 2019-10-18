@@ -1,31 +1,28 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { MainLayout, UserInfoCard } from '../../../components';
-import { User } from '../../../interfaces';
+import { MainLayout, NotFound, UserInfoCard } from '../../../components';
 import { getUser, getUserMe, withApollo } from '../../../lib';
+import { SET_USER } from '../../../redux';
 
-const UserPage: NextPage<User> = props => (
+const UserPage: NextPage<any> = props => (
   <MainLayout title="User">
-    <UserInfoCard {...props} />
+    {props.user ? <UserInfoCard {...props.user} /> : <NotFound />}
   </MainLayout>
 );
 
 // eslint-disable-next-line
 UserPage.getInitialProps = async ({ query, apolloClient, store }: any): Promise<any> => {
-  const { id } = store.getState().auth.user;
+  const { userMe } = await getUserMe(apolloClient);
 
-  // Fetch public user data if not own profile, otherwise fetch own profile.
-  if (query.id !== 'me' || query.id !== id) {
-    const { user } = await getUser(query.id, apolloClient);
-    if (user) {
-      return { ...user, private: false };
-    }
-  } else {
-    const { userMe } = await getUserMe(apolloClient);
-    if (userMe) {
-      return { ...userMe, private: true };
+  if (userMe) {
+    store.dispatch({ type: SET_USER, payload: userMe });
+    if (query.id === userMe.id) {
+      return { user: userMe };
     }
   }
+
+  const { user } = await getUser(query.id, apolloClient);
+  return { user };
 };
 
 export default withApollo(UserPage);
