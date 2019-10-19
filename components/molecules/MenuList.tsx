@@ -1,46 +1,35 @@
+import { useApolloClient } from '@apollo/react-hooks';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../actions';
 import { State } from '../../interfaces';
 import { MenuListItem } from '../atoms';
 
 export const MenuList = () => {
   const { authenticated, user } = useSelector((state: State) => state.auth);
+  const dispatch = useDispatch();
+  const apolloClient = useApolloClient();
 
-  const allMenuItems = {
-    home: {
-      name: 'home',
-      href: '/'
-    },
-    login: {
-      name: 'login',
-      href: '/login'
-    },
-    register: {
-      name: 'register',
-      href: '/register'
-    },
-    account: {
-      name: 'account',
-      href: `/user/${user && user.id}`
-    },
-    logout: {
-      name: 'logout',
-      href: '/logout'
-    }
-  };
+  const renderPrivateMenuItems = () => (
+    <>
+      <MenuListItem href={`/user/${user.id}`}>account</MenuListItem>
+      <MenuListItem href="#" onClick={() => dispatch(logout(apolloClient))}>
+        logout
+      </MenuListItem>
+    </>
+  );
 
-  const { home, login, register, account, logout } = allMenuItems;
-  const publicMenuItems = [home, login, register];
-  const privateMenuItems = [home, account, logout];
-  const menuItems = authenticated ? privateMenuItems : publicMenuItems;
+  const renderPublicMenuItems = () => (
+    <>
+      <MenuListItem href="/login">login</MenuListItem>
+      <MenuListItem href="/register">register</MenuListItem>
+    </>
+  );
 
   return (
     <>
-      {menuItems.map((m, i) => (
-        <MenuListItem key={i} href={m.href}>
-          {m.name}
-        </MenuListItem>
-      ))}
+      <MenuListItem href="/">home</MenuListItem>
+      {authenticated && user.id ? renderPrivateMenuItems() : renderPublicMenuItems()}
     </>
   );
 };
