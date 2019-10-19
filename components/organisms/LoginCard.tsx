@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
+import { login } from '../../actions';
 import { useLoginMutation } from '../../generated/graphql';
 import { LoginFormValues } from '../../interfaces';
 import { createFormErrors } from '../../utils';
@@ -39,14 +40,14 @@ export const LoginCard: React.FC = () => {
     );
   };
 
-  const [login] = useLoginMutation({ onCompleted, onError });
+  const [loginMutation] = useLoginMutation({ onCompleted, onError });
 
   const onSubmit = async (
     values: LoginFormValues,
     actions: FormikActions<LoginFormValues>
   ): Promise<void> => {
     const { email, password } = values;
-    await login({ variables: { email, password } });
+    await loginMutation({ variables: { email, password } });
     actions.setSubmitting(false);
   };
 

@@ -60,14 +60,14 @@ export const RegisterCard: React.FC = () => {
     );
   };
 
-  const [register] = useRegisterMutation({ onCompleted, onError });
+  const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
   const onSubmit = async (
     values: RegisterFormValues,
     actions: FormikActions<RegisterFormValues>
   ): Promise<void> => {
     const { username, email, password } = values;
-    await register({ variables: { username, email, password } });
+    await registerMutation({ variables: { username, email, password } });
     actions.setSubmitting(false);
   };
 
