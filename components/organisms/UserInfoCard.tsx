@@ -34,7 +34,7 @@ export const UserInfoCard: React.FC<User> = ({
       <Text>Points: {points}</Text>
       <Text>Language: {language}</Text>
     </InfoSection>
-    <Link href={`/user/${id}/edit/`}>
+    <Link href={`/user/${id}/edit`}>
       <Button>edit account</Button>
     </Link>
   </Card>
