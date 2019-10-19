@@ -1,5 +1,6 @@
 import React from 'react';
 import { FeedbackCard, MainLayout } from '../components';
+import { withAuthSync } from '../lib';
 
 const FeedbackPage: React.FC = () => (
   <MainLayout title="Leave Feedback">
@@ -7,4 +8,4 @@ const FeedbackPage: React.FC = () => (
   </MainLayout>
 );
 
-export default FeedbackPage;
+export default withAuthSync(FeedbackPage);

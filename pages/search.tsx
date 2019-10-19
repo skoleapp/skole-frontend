@@ -1,22 +1,13 @@
-import { NextPage, NextPageContext } from 'next';
+import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout } from '../components';
+import { H1, MainLayout, Text } from '../components';
+import { withAuthSync } from '../lib';
 
-// FIXME: Add proper types for this
-type SearchData = any; // eslint-disable-line @typescript-eslint/no-explicit-any
-
-interface Props {
-  data: SearchData;
-}
-
-const SearchPage: NextPage<Props> = () => (
+const SearchPage: NextPage = () => (
   <MainLayout title="Search">
     <H1>Search</H1>
+    <Text>Search results will be show here.</Text>
   </MainLayout>
 );
 
-SearchPage.getInitialProps = async (ctx: NextPageContext): Promise<SearchData> => {
-  return {};
-};
-
-export default SearchPage;
+export default withAuthSync(SearchPage);
