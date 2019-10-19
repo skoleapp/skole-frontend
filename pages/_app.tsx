@@ -36,12 +36,10 @@ class SkoleApp extends App<Props> {
     const { Component, store, pageProps } = this.props;
 
     Router.events.on('routeChangeStart', () => this.setState({ ...this.state, redirect: true }));
-
+    Router.events.on('routeChangeError', () => this.setState({ ...this.state, redirect: false }));
     Router.events.on('routeChangeComplete', () =>
       this.setState({ ...this.state, redirect: false })
     );
-
-    Router.events.on('routeChangeError', () => this.setState({ ...this.state, redirect: false }));
 
     if (this.state.redirect) {
       return <LoadingScreen />;

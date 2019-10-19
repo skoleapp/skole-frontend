@@ -1,24 +1,34 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { getUser, getUserMe } from '../../../actions';
-import { MainLayout, NotFound, UserInfoCard } from '../../../components';
+import { getUser } from '../../../actions';
+import { MainLayout, NotFoundCard, UserInfoCard } from '../../../components';
+import { SkoleContext } from '../../../interfaces';
+import { redirect, withAuthSync } from '../../../lib';
+
+const userNotFoundText = 'The user you were looking for was not found...';
 
 const UserPage: NextPage<any> = ({ user }) => (
-  <MainLayout title="User">{user ? <UserInfoCard {...user} /> : <NotFound />}</MainLayout>
+  <MainLayout title="User">
+    {user ? <UserInfoCard {...user} /> : <NotFoundCard text={userNotFoundText} />}
+  </MainLayout>
 );
 
 // eslint-disable-next-line
-UserPage.getInitialProps = async ({ query, apolloClient, store }: any): Promise<any> => {
-  const { userMe } = await store.dispatch(getUserMe(apolloClient));
+UserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
+  const { store, query, apolloClient } = ctx;
+  const userMe = store.getState().auth.user;
 
-  if (userMe) {
-    if (query.id === userMe.id) {
+  // Use public or private profile based on query.
+  if (query.id !== userMe.id) {
+    const { user } = await getUser(query.id as any, apolloClient);
+    return { user };
+  } else {
+    if (!userMe) {
+      redirect(ctx, '/');
+    } else {
       return { user: userMe };
     }
   }
-
-  const { user } = await getUser(query.id, apolloClient);
-  return { user };
 };
 
-export default UserPage;
+export default withAuthSync(UserPage);
