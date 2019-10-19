@@ -1,4 +1,5 @@
 import { getUserMe } from '../actions';
+import { withApollo } from './apollo';
 
 export const withAuthSync = (WrappedComponent: any) => {
   const Wrapper = (props: any) => <WrappedComponent {...props} />;
@@ -12,5 +13,5 @@ export const withAuthSync = (WrappedComponent: any) => {
     return { ...componentProps };
   };
 
-  return Wrapper;
+  return withApollo(Wrapper);
 };
