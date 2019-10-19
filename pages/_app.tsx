@@ -9,7 +9,7 @@ import { Store } from 'redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { LoadingScreen } from '../components/layout';
 import { initStore } from '../lib';
-import '../styles';
+import '../static/styles';
 
 interface Props {
   Component: NextPage<any>;
