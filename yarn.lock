@@ -845,7 +845,7 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.4.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.0":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.4.2", "@babel/runtime@^7.5.5":
   version "7.6.3"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.3.tgz#935122c74c73d2240cafd32ddb5fc2a6cd35cf1f"
   integrity sha512-kq6anf9JGjW8Nt5rYfEuGRaEAaH1mkv3Bbu6rYvLOpPh/RusSJXuKPEAoZ7L7gybZkchE8+NV5g9vKF4AGAtsA==
@@ -1282,50 +1282,6 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@redux-saga/core@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@redux-saga/core/-/core-1.1.1.tgz#72432130630cca08260086ffc564c2aa5488a0a2"
-  integrity sha512-WKXfj2cYkP0eh74dE1ueMjVDoGJIkppXiMFgx0buVRkXENeZmRxIjM4lh9LEWWFqay7I/Qkw7+cMossa7xXoAQ==
-  dependencies:
-    "@babel/runtime" "^7.6.0"
-    "@redux-saga/deferred" "^1.1.0"
-    "@redux-saga/delay-p" "^1.1.0"
-    "@redux-saga/is" "^1.1.0"
-    "@redux-saga/symbols" "^1.1.0"
-    "@redux-saga/types" "^1.1.0"
-    redux "^4.0.4"
-    typescript-tuple "^2.2.1"
-
-"@redux-saga/deferred@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@redux-saga/deferred/-/deferred-1.1.0.tgz#aff018f64a936c288c18bd64ddf9ccfa143db6b4"
-  integrity sha512-wOCJCby3hx14bvrEeFLJ1JJTjJdXDJyC+B3JQ6eiqgzNghylbf969lIYmS2Arf2QuALfUtRBNPXBIMDKG9km4g==
-
-"@redux-saga/delay-p@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@redux-saga/delay-p/-/delay-p-1.1.0.tgz#4024f979d0f78763d2e90233be8c922781ae4400"
-  integrity sha512-BcRwXs20kKjgiYEwZARkpVoRIe/hHftW3iwPhdeW4/jPyR9gLv/vG8VsJMF5NDEch+/w/mJtdgSubq+wtOS47g==
-  dependencies:
-    "@redux-saga/symbols" "^1.1.0"
-
-"@redux-saga/is@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@redux-saga/is/-/is-1.1.0.tgz#d74358364ebde160bf1b8bd94903ff7684b12d41"
-  integrity sha512-0uFXWGSvDCfNBdROHwEVixNhFbI3S+UGBQfcPXQiYL+CjIjyR3DTg2Z+NFH9xzP+H4Oh/yGtTHDhC0GxYp7HQQ==
-  dependencies:
-    "@redux-saga/symbols" "^1.1.0"
-    "@redux-saga/types" "^1.1.0"
-
-"@redux-saga/symbols@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@redux-saga/symbols/-/symbols-1.1.0.tgz#676b277cb5deb48ce723b2b394cbae97f82e8319"
-  integrity sha512-Fzw1wV3j4hbac3MYmgNE18Z53URmQZeilTHZLF7Lm4SQ1jG4fcU47v2kElsEbQXUSaFqj+uJqdRzmDGNb6pRwQ==
-
-"@redux-saga/types@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@redux-saga/types/-/types-1.1.0.tgz#0e81ce56b4883b4b2a3001ebe1ab298b84237204"
-  integrity sha512-afmTuJrylUU/0OtqzaRkbyYFFNgCF73Bvel/sw90pvGrWIZ+vyoIJqA6eMSoA6+nb443kTmulmBtC9NerXboNg==
-
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -1525,6 +1481,13 @@
   version "15.7.3"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
+
+"@types/ramda@^0.26.33":
+  version "0.26.33"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.26.33.tgz#5fd1f22381ccf913a3627beb16f468fb57f82d94"
+  integrity sha512-sUCQmKfAWmlbb6PpFqvndbGgTf0bCcmHLJqMYw8ErVS0UoZTTiz952aFedJhV+JERiVH7poh33358c7p0AAN8A==
+  dependencies:
+    ts-toolbelt "^4.7.7"
 
 "@types/react-loadable@*":
   version "5.5.1"
@@ -8294,6 +8257,11 @@ railroad-diagrams@^1.0.0:
   resolved "https://registry.yarnpkg.com/railroad-diagrams/-/railroad-diagrams-1.0.0.tgz#eb7e6267548ddedfb899c1b90e57374559cddb7e"
   integrity sha1-635iZ1SN3t+4mcG5Dlc3RVnN234=
 
+ramda@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
+  integrity sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
+
 randexp@0.4.6:
   version "0.4.6"
   resolved "https://registry.yarnpkg.com/randexp/-/randexp-0.4.6.tgz#e986ad5e5e31dae13ddd6f7b3019aa7c87f60ca3"
@@ -8501,13 +8469,6 @@ redux-persist@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"
   integrity sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==
-
-redux-saga@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-1.1.1.tgz#7e02879beb02c92030b5fbe746fd70e8bda97dfb"
-  integrity sha512-guSnGJ/uEF8yL8Mn4aNa7HxRGCpVUALCkec9iTTD0fOhQqkF6bRQkBLeS+7/cAH3nFnr299bi/DOurTi1apcCA==
-  dependencies:
-    "@redux-saga/core" "^1.1.1"
 
 redux-thunk@^2.3.0:
   version "2.3.0"
@@ -9692,6 +9653,11 @@ ts-pnp@^1.1.2:
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.1.4.tgz#ae27126960ebaefb874c6d7fa4729729ab200d90"
   integrity sha512-1J/vefLC+BWSo+qe8OnJQfWTYRS6ingxjwqmHMqaMxXMj7kFtKLgAaYW3JeX3mktjgUL+etlU8/B4VUAUI9QGw==
 
+ts-toolbelt@^4.7.7:
+  version "4.8.20"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-4.8.20.tgz#0813ac0c4e443dc3cfd64d97fe4bfd203ae38c92"
+  integrity sha512-Mx83L7RqXS7bG0Knl/rrfsDxP7u/+S2MqumyH+7mP8eGrxaE8VtyWo1l9aw37sHtnuhYZSFLNZvnseOyIecgbQ==
+
 tslib@1.10.0, tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
@@ -9744,25 +9710,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-
-typescript-compare@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/typescript-compare/-/typescript-compare-0.0.2.tgz#7ee40a400a406c2ea0a7e551efd3309021d5f425"
-  integrity sha512-8ja4j7pMHkfLJQO2/8tut7ub+J3Lw2S3061eJLFQcvs3tsmJKp8KG5NtpLn7KcY2w08edF74BSVN7qJS0U6oHA==
-  dependencies:
-    typescript-logic "^0.0.0"
-
-typescript-logic@^0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/typescript-logic/-/typescript-logic-0.0.0.tgz#66ebd82a2548f2b444a43667bec120b496890196"
-  integrity sha512-zXFars5LUkI3zP492ls0VskH3TtdeHCqu0i7/duGt60i5IGPIpAHE/DWo5FqJ6EjQ15YKXrt+AETjv60Dat34Q==
-
-typescript-tuple@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/typescript-tuple/-/typescript-tuple-2.2.1.tgz#7d9813fb4b355f69ac55032e0363e8bb0f04dad2"
-  integrity sha512-Zcr0lbt8z5ZdEzERHAMAniTiIKerFCMgd7yjq1fPnDJ43et/k9twIFQMUYff9k5oXcsQ0WpvFcgzK2ZKASoW6Q==
-  dependencies:
-    typescript-compare "^0.0.2"
 
 typescript@^3.6.2:
   version "3.6.4"
