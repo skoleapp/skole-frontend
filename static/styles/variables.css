@@ -3,7 +3,7 @@
 :root {
   /* Backgrounds */
   --primary-bg: var(--secondary);
-  --secondary-bg: url('../static/background.jpg');
+  --secondary-bg: url('../images/background.jpg');
 
   /* Colors */
   --primary: rgb(173, 54, 54);

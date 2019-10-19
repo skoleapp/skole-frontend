@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { User } from '../../interfaces';
-import avatar from '../../static/avatar.jpg';
+import avatar from '../../static/images/avatar.jpg';
 import { Button, Card, H3, Text } from '../atoms';
 
 const StyledImage = styled.img`
