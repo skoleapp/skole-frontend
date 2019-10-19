@@ -5,7 +5,7 @@ import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserDocument, UserMeDocument } from '../generated/graphql';
 import { User } from '../interfaces';
-import { SET_USER } from './types';
+import { LOGOUT, SET_USER } from './types';
 
 interface LoginParams {
   client: ApolloClient<any>;
@@ -19,14 +19,13 @@ export const login = ({ client, token, user }: LoginParams) => (
   // Store the token in cookie.
   document.cookie = cookie.serialize('token', token, {
     maxAge: 30 * 24 * 60 * 60, // 30 days
-    path: '/' // make cookie available for all routes underneath "/"
+    path: '/' // Make cookie available for all routes underneath "/".
   });
-  // Set user.
+
   dispatch({ type: SET_USER, payload: { ...user } });
+
   // Force a reload of all the current queries now that the user is logged in.
-  client.cache.reset().then(() => {
-    Router.push('/');
-  });
+  client.cache.reset().then(() => Router.push('/'));
 };
 
 export const getUserMe: any = (apolloClient: ApolloClient<any>) => async (
@@ -57,4 +56,16 @@ export const getUser = async (id: number, apolloClient: ApolloClient<any>) => {
   } catch {
     return { user: null };
   }
+};
+
+export const logout: any = (apolloClient: ApolloClient<any>) => (dispatch: Dispatch<AnyAction>) => {
+  dispatch({ type: LOGOUT }); // Clear store.
+
+  document.cookie = cookie.serialize('token', '', {
+    maxAge: -1, // Expire the cookie immediately
+    path: '/' // Make cookie available for all routes underneath "/".
+  });
+
+  // Force a reload of all the current queries.
+  apolloClient.cache.reset().then(() => Router.push('/logout'));
 };
