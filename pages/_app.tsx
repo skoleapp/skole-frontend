@@ -8,7 +8,7 @@ import { Provider as StoreProvider } from 'react-redux';
 import { Store } from 'redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { LoadingScreen } from '../components/layout';
-import { initStore } from '../lib';
+import { initStore, withApollo } from '../lib';
 import '../static/styles';
 
 interface Props {
@@ -55,4 +55,4 @@ class SkoleApp extends App<Props> {
   }
 }
 
-export default withRedux(initStore)(SkoleApp);
+export default withApollo(withRedux(initStore)(SkoleApp));
