@@ -1,6 +1,3 @@
 next.config.js
 jest.setup.js
-lib/
 generated/
-_app.tsx
-config.ts
