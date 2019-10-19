@@ -6,6 +6,7 @@ import { HttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-unfetch';
 import Head from 'next/head';
 import React from 'react';
+import { SkoleContext } from '../interfaces';
 import { getToken } from './getToken';
 
 export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
@@ -29,7 +30,7 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async (ctx: any) => {
+    WithApollo.getInitialProps = async (ctx: SkoleContext) => {
       const { AppTree } = ctx;
       const apolloClient = (ctx.apolloClient = initApolloClient(
         {},
@@ -76,6 +77,7 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
+// eslint-disable-next-line
 const initApolloClient = (initState: any, { getToken }: any) => {
   if (typeof window === 'undefined') {
     return createApolloClient(initState, { getToken });
@@ -88,6 +90,7 @@ const initApolloClient = (initState: any, { getToken }: any) => {
   return apolloClient;
 };
 
+// eslint-disable-next-line
 const createApolloClient = (initialState = {}, { getToken }: any) => {
   const httpLink = new HttpLink({
     uri: 'http://localhost:8000/graphql/',

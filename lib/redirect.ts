@@ -1,13 +1,12 @@
 import Router from 'next/router';
+import { SkoleContext } from '../interfaces';
 
-// eslint-disable-next-line
-export const redirect = (context: any, target: string) => {
+// Redirect either on the server or in the browser.
+export const redirect = (context: SkoleContext, target: string) => {
   if (context.res) {
-    // server
     context.res.writeHead(303, { Location: target });
     context.res.end();
   } else {
-    // browser
-    Router.replace(target);
+    Router.push(target);
   }
 };

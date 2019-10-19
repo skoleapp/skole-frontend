@@ -1,10 +1,13 @@
+import { NextPage } from 'next';
 import { getUserMe } from '../actions';
+import { SkoleContext } from '../interfaces';
 import { withApollo } from './apollo';
 
-export const withAuthSync = (WrappedComponent: any) => {
-  const Wrapper = (props: any) => <WrappedComponent {...props} />;
+// This is a wrapper component to automatically update the user in the store.
+export const withAuthSync = (WrappedComponent: NextPage) => {
+  const Wrapper = (props: any) => <WrappedComponent {...props} />; // eslint-disable-line
 
-  Wrapper.getInitialProps = async (ctx: any) => {
+  Wrapper.getInitialProps = async (ctx: SkoleContext) => {
     await ctx.store.dispatch(getUserMe(ctx.apolloClient));
 
     const componentProps =
