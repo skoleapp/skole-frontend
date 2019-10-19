@@ -10,7 +10,6 @@ const LoginPage: NextPage = () => (
   </MainLayout>
 );
 
-// eslint-disable-next-line
 LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   const { authenticated } = ctx.store.getState().auth;
 

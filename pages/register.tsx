@@ -1,9 +1,8 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { getUserMe } from '../actions';
 import { MainLayout, RegisterCard } from '../components';
 import { SkoleContext } from '../interfaces';
-import { redirect, withApollo } from '../lib';
+import { redirect, withAuthSync } from '../lib';
 
 const RegisterPage: NextPage = () => (
   <MainLayout title="Register">
@@ -11,15 +10,14 @@ const RegisterPage: NextPage = () => (
   </MainLayout>
 );
 
-// eslint-disable-next-line
 RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
-  const { userMe } = await ctx.store.dispatch(getUserMe(ctx.apolloClient));
+  const { authenticated } = ctx.store.getState().auth;
 
-  if (userMe) {
+  if (authenticated) {
     redirect(ctx, '/');
   }
 
   return {};
 };
 
-export default withApollo(RegisterPage);
+export default withAuthSync(RegisterPage);
