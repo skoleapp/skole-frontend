@@ -1,10 +1,10 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { toggleAuthMenu } from '../../actions';
 import { State, WidgetOpenProps } from '../../interfaces';
-import { toggleAuthMenu } from '../../redux';
 import { NavbarIcon } from '../atoms';
-import { useWidget } from '../hooks';
+import { useHandleClickOutside } from '../hooks';
 import { MenuList } from '../molecules';
 
 const StyledAuthMenu = styled.div`
@@ -35,16 +35,10 @@ const Dropdown = styled.div<WidgetOpenProps>`
 
 export const AuthMenu: React.FC = () => {
   const { authMenuOpen } = useSelector((state: State) => state.ui);
-  const dispatch = useDispatch();
-  const node = useWidget('auth-menu');
+  const { node, onSelfClick } = useHandleClickOutside(toggleAuthMenu, authMenuOpen);
 
   return (
-    <StyledAuthMenu
-      onClick={(): void => {
-        dispatch(toggleAuthMenu(!authMenuOpen));
-      }}
-      ref={node}
-    >
+    <StyledAuthMenu onClick={onSelfClick} ref={node}>
       <NavbarIcon iconName="user-circle" />
       <Dropdown open={authMenuOpen}>
         <MenuList />

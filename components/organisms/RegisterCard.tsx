@@ -1,13 +1,11 @@
-import cookie from 'cookie';
 import { Formik, FormikActions } from 'formik';
-import Router from 'next/router';
 import React, { useRef } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
+import { login } from '../../actions';
 import { useRegisterMutation } from '../../generated/graphql';
 import { RegisterFormValues } from '../../interfaces';
-import { setUser } from '../../redux/actions';
 import { createFormErrors } from '../../utils';
 import { Card, H1 } from '../atoms';
 import { RegisterForm } from '../molecules';
@@ -49,17 +47,8 @@ export const RegisterCard: React.FC = () => {
     if (data.register.errors) {
       return onError(data.register.errors);
     }
-    // Store the token in cookie.
-    document.cookie = cookie.serialize('token', data.login.token, {
-      maxAge: 30 * 24 * 60 * 60, // 30 days
-      path: '/' // make cookie available for all routes underneath "/"
-    });
-    // Set user.
-    dispatch(setUser(data.login.user));
-    // Force a reload of all the current queries now that the user is logged in.
-    client.cache.reset().then(() => {
-      Router.push('/');
-    });
+
+    dispatch(login({ client, ...data.login }));
   };
 
   // Create form errors and show them in the form accordingly.
