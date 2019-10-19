@@ -11,7 +11,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "dev": "next",
+    "dev": "yarn run gen && next",
     "lint": "eslint . --ext .js,.tsx,.ts",
     "test": "jest --watch",
     "gen": "graphql-codegen --config codegen.yml"
