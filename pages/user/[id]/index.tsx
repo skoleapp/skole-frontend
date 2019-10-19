@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import React from 'react';
 import { getUser } from '../../../actions';
 import { MainLayout, NotFoundCard, UserInfoCard } from '../../../components';
-import { SkoleContext } from '../../../interfaces';
+import { SkoleContext, UserPageInitialProps } from '../../../interfaces';
 import { redirect, withAuthSync } from '../../../lib';
 
 const userNotFoundText = 'The user you were looking for was not found...';
@@ -13,22 +13,23 @@ const UserPage: NextPage<any> = ({ user }) => (
   </MainLayout>
 );
 
-// eslint-disable-next-line
-UserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
+UserPage.getInitialProps = async (ctx: SkoleContext): Promise<UserPageInitialProps> => {
   const { store, query, apolloClient } = ctx;
-  const userMe = store.getState().auth.user;
+  const { authenticated, user } = store.getState().auth;
 
   // Use public or private profile based on query.
-  if (query.id !== userMe.id) {
+  if (query.id !== user.id) {
     const { user } = await getUser(query.id as any, apolloClient);
     return { user };
   } else {
-    if (!userMe) {
+    if (!authenticated) {
       redirect(ctx, '/');
     } else {
-      return { user: userMe };
+      return { user };
     }
   }
+
+  return {};
 };
 
 export default withAuthSync(UserPage);

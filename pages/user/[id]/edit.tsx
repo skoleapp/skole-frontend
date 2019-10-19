@@ -1,31 +1,22 @@
+import { NextPage } from 'next';
 import React from 'react';
 import { EditUserCard, MainLayout } from '../../../components';
+import { SkoleContext, User, UserPageInitialProps } from '../../../interfaces';
+import { redirect, withAuthSync } from '../../../lib';
 
-const EditUserPage: React.FC = () => {
-  // const [user, loading] = useAccount();
+interface Props {
+  user?: User;
+}
 
-  // if (loading) {
-  //   return <LoadingScreen loadingText="Loading account details..." />;
-  // }
-
-  // const { title, username, email, bio, language } = user;
-
-  // const initialValues = {
-  //   title: title || '',
-  //   username: username || '',
-  //   email: email || '',
-  //   bio: bio || '',
-  //   language: language || ''
-  // };
-
+const EditUserPage: NextPage<Props> = ({ user }) => {
   const initialValues = {
-    id: '',
-    title: '',
-    username: '',
-    email: '',
-    bio: '',
-    points: 0,
-    language: ''
+    id: (user && user.id) || '',
+    title: (user && user.title) || '',
+    username: (user && user.username) || '',
+    email: (user && user.email) || '',
+    bio: (user && user.bio) || '',
+    language: (user && user.language) || '',
+    points: (user && user.points) || 0
   };
 
   return (
@@ -35,4 +26,19 @@ const EditUserPage: React.FC = () => {
   );
 };
 
-export default EditUserPage;
+EditUserPage.getInitialProps = async (ctx: SkoleContext): Promise<UserPageInitialProps> => {
+  const { store, query } = ctx;
+  const { authenticated, user } = store.getState().auth;
+
+  if (query.id !== user.id) {
+    redirect(ctx, `/user/${query.id}`); // Redirect to public user profile page if not own profile.
+  } else {
+    if (authenticated) {
+      return { user };
+    }
+  }
+
+  return {};
+};
+
+export default withAuthSync(EditUserPage);
