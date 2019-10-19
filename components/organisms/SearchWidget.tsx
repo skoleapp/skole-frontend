@@ -3,10 +3,10 @@ import Router from 'next/router';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { closeWidgets, toggleSearchInput } from '../../actions';
 import { SearchFormProps, State, WidgetOpenProps } from '../../interfaces';
-import { closeWidgets, toggleSearchInput } from '../../redux';
 import { NavbarIcon } from '../atoms';
-import { useWidget } from '../hooks';
+import { useHandleClickOutside } from '../hooks';
 import { SearchInputSection } from '../molecules';
 
 export const initialValues = {
@@ -39,13 +39,7 @@ const SearchInput = styled.div<WidgetOpenProps>`
 export const SearchWidget: React.FC = () => {
   const { searchInputOpen } = useSelector((state: State) => state.ui);
   const dispatch = useDispatch();
-  const node = useWidget('search-input');
-
-  const onIconClick = (): void => {
-    if (searchInputOpen) {
-      dispatch(toggleSearchInput(false));
-    }
-  };
+  const { node, onSelfClick } = useHandleClickOutside(toggleSearchInput, searchInputOpen);
 
   const onSubmit = (values: SearchFormProps): void => {
     const { search } = values;
@@ -54,13 +48,8 @@ export const SearchWidget: React.FC = () => {
   };
 
   return (
-    <StyledSearchWidget
-      onClick={(): void => {
-        !searchInputOpen && dispatch(toggleSearchInput(true));
-      }}
-      ref={node}
-    >
-      <NavbarIcon iconName="search" onClick={onIconClick} />
+    <StyledSearchWidget onClick={onSelfClick} ref={node}>
+      <NavbarIcon iconName="search" />
       <SearchInput open={searchInputOpen}>
         <Formik component={SearchInputSection} onSubmit={onSubmit} initialValues={initialValues} />
       </SearchInput>
