@@ -1,11 +1,11 @@
 import { AnyAction } from 'redux';
-import { UIState } from '../../interfaces';
 import {
   CLOSE_WIDGETS,
   TOGGLE_DESKTOP_MENU_DROPDOWN,
   TOGGLE_MENU,
   TOGGLE_SEARCH_INPUT
-} from '../actions/types';
+} from '../actions';
+import { UIState } from '../interfaces';
 
 const initialState: UIState = {
   menuOpen: false,

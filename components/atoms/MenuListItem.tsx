@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { closeWidgets } from '../../redux';
+import { closeWidgets } from '../../actions';
 import { Anchor } from './Anchor';
 
 const StyledMenuListItem = styled(Anchor)`

@@ -1,21 +1,17 @@
 import { NextPage } from 'next';
 import React from 'react';
+import { getUser, getUserMe } from '../../../actions';
 import { MainLayout, NotFound, UserInfoCard } from '../../../components';
-import { getUser, getUserMe, withApollo } from '../../../lib';
-import { SET_USER } from '../../../redux';
 
-const UserPage: NextPage<any> = props => (
-  <MainLayout title="User">
-    {props.user ? <UserInfoCard {...props.user} /> : <NotFound />}
-  </MainLayout>
+const UserPage: NextPage<any> = ({ user }) => (
+  <MainLayout title="User">{user ? <UserInfoCard {...user} /> : <NotFound />}</MainLayout>
 );
 
 // eslint-disable-next-line
 UserPage.getInitialProps = async ({ query, apolloClient, store }: any): Promise<any> => {
-  const { userMe } = await getUserMe(apolloClient);
+  const { userMe } = await store.dispatch(getUserMe(apolloClient));
 
   if (userMe) {
-    store.dispatch({ type: SET_USER, payload: userMe });
     if (query.id === userMe.id) {
       return { user: userMe };
     }
@@ -25,4 +21,4 @@ UserPage.getInitialProps = async ({ query, apolloClient, store }: any): Promise<
   return { user };
 };
 
-export default withApollo(UserPage);
+export default UserPage;

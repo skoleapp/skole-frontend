@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
-import { AuthState } from '../../interfaces';
-import { LOGOUT, SET_USER } from '../actions/types';
+import { LOGOUT, SET_USER } from '../actions';
+import { AuthState } from '../interfaces';
 
 export const initialAuthState: AuthState = {
   user: {

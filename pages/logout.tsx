@@ -2,9 +2,10 @@ import cookie from 'cookie';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
+import { LOGOUT } from '../actions';
 import { Anchor, Button, Card, H2, MainLayout } from '../components';
+import { SkoleContext } from '../interfaces';
 import { withApollo } from '../lib';
-import { LOGOUT } from '../redux';
 
 const LogoutPage: NextPage = () => (
   <MainLayout title="Login">
@@ -19,10 +20,10 @@ const LogoutPage: NextPage = () => (
   </MainLayout>
 );
 
-LogoutPage.getInitialProps = async ({ req, store, apolloClient }: any): Promise<{}> => {
+LogoutPage.getInitialProps = async ({ req, store, apolloClient }: SkoleContext): Promise<{}> => {
   store.dispatch({ type: LOGOUT }); // Clear store.
 
-  // Expire the cookie either on server or in browser.
+  // Expire the cookie either on server or in the browser.
   req
     ? req.headers.cookie || ''
     : (document.cookie = cookie.serialize('token', '', {
