@@ -35,11 +35,11 @@ const Dropdown = styled.div<WidgetOpenProps>`
 
 export const AuthMenu: React.FC = () => {
   const { authMenuOpen } = useSelector((state: State) => state.ui);
-  const { node, onSelfClick } = useHandleClickOutside(toggleAuthMenu, authMenuOpen);
+  const { node, toggleSelf } = useHandleClickOutside(toggleAuthMenu, authMenuOpen);
 
   return (
-    <StyledAuthMenu onClick={onSelfClick} ref={node}>
-      <NavbarIcon iconName="user-circle" />
+    <StyledAuthMenu ref={node}>
+      <NavbarIcon onClick={toggleSelf} iconName="user-circle" />
       <Dropdown open={authMenuOpen}>
         <MenuList />
       </Dropdown>

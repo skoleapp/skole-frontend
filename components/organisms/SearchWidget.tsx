@@ -39,7 +39,7 @@ const SearchInput = styled.div<WidgetOpenProps>`
 export const SearchWidget: React.FC = () => {
   const { searchInputOpen } = useSelector((state: State) => state.ui);
   const dispatch = useDispatch();
-  const { node, onSelfClick } = useHandleClickOutside(toggleSearchInput, searchInputOpen);
+  const { node, toggleSelf } = useHandleClickOutside(toggleSearchInput, searchInputOpen);
 
   const onSubmit = (values: SearchFormProps): void => {
     const { search } = values;
@@ -48,8 +48,8 @@ export const SearchWidget: React.FC = () => {
   };
 
   return (
-    <StyledSearchWidget onClick={onSelfClick} ref={node}>
-      <NavbarIcon iconName="search" />
+    <StyledSearchWidget ref={node}>
+      <NavbarIcon onClick={toggleSelf} iconName="search" />
       <SearchInput open={searchInputOpen}>
         <Formik component={SearchInputSection} onSubmit={onSubmit} initialValues={initialValues} />
       </SearchInput>

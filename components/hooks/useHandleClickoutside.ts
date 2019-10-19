@@ -5,7 +5,7 @@ import { State } from '../../interfaces';
 
 interface UseHandleClickOutside {
   node: MutableRefObject<any>;
-  onSelfClick: () => Dispatch<AnyAction>;
+  toggleSelf: () => Dispatch<AnyAction>;
 }
 
 /*
@@ -40,5 +40,5 @@ export const useHandleClickOutside = (
     };
   }, [authMenuOpen, searchInputOpen]);
 
-  return { node, onSelfClick: () => dispatch(action(!elementState)) };
+  return { node, toggleSelf: () => dispatch(action(!elementState)) };
 };
