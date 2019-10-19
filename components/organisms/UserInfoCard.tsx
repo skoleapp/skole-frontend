@@ -15,7 +15,15 @@ const InfoSection = styled.div`
   margin-top: 1rem;
 `;
 
-export const UserInfoCard: React.FC<User> = ({ title, username, email, bio, points, language }) => (
+export const UserInfoCard: React.FC<User> = ({
+  id,
+  title,
+  username,
+  email,
+  bio,
+  points,
+  language
+}) => (
   <Card>
     <H3>{title}</H3>
     <StyledImage src={avatar} />
@@ -26,7 +34,7 @@ export const UserInfoCard: React.FC<User> = ({ title, username, email, bio, poin
       <Text>Points: {points}</Text>
       <Text>Language: {language}</Text>
     </InfoSection>
-    <Link href="/edit-account">
+    <Link href={`/user/${id}/edit/`}>
       <Button>edit account</Button>
     </Link>
   </Card>
