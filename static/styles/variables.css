@@ -17,7 +17,7 @@
   --negative-button: red;
 
   /* Animations */
-  --scale: scale(1.05);
+  --scale: scale(1.02);
   --transition: all 0.1s ease-in;
   --menu-speed: 0.3s;
   --fade-in: fadeIn 0.25s forwards;
@@ -25,7 +25,7 @@
 
   /* Shadows */
   --text-shadow: 0 0 0.05rem var(--black);
-  --box-shadow: 0 0 0.15rem 0.05rem var(--black);
+  --box-shadow: 0 0 0.25rem 0.01rem var(--black);
 
   /* Borders */
   --primary-border: 0.1rem solid var(--primary);
