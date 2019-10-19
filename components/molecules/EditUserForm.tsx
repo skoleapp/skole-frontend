@@ -20,6 +20,6 @@ export const EditUserForm: React.ComponentType<FormikProps<User>> = props => (
       <option value="finnish">Finnish</option>
     </Field>
     <FormSubmitSection submitButtonText="save" {...props} />
-    <FormLinkSection href="/account" text="Back to Account" />
+    <FormLinkSection href={`/user/${props.values.id}/`} text="Back to Account" />
   </Form>
 );
