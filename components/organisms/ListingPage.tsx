@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
 
 import * as R from 'ramda';
 import { Anchor } from '../atoms';
@@ -11,6 +10,7 @@ import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { Universities, AMKs, HighSchools } from '../../utils/schools';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -51,16 +51,17 @@ interface SchoolRowProps {
   index: number;
   school: any;
   handleSchoolSelection: (index: number) => void;
-  selectedSchool: number;
-  selectedFaculty: number;
-  dispatch: (any) => void;
+  selectedSchool: number | null;
+  selectedFaculty: number | null;
+  setFoo: (any) => void;
+  foo: any;
 }
 interface FacultyRowProps {
   key: string | number;
   index: number;
   faculty: any;
   handleFacultySelection: (index: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  selectedFaculty: number;
+  selectedFaculty: number | null;
 }
 
 const handleFacilityClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
@@ -84,7 +85,7 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
       onClick={e => handleFacultySelection(index, e)}
     >
       <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
-        <Typography>{R.prop('id', faculty)}</Typography>
+        {R.prop('id', faculty)}
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <ul>
@@ -110,7 +111,8 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
   handleSchoolSelection,
   selectedSchool,
   selectedFaculty,
-  dispatch
+  setFoo,
+  foo
 }) => {
   const handleFacultySelection = (
     index: number,
@@ -118,8 +120,8 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
   ) => {
     e.stopPropagation();
     index === selectedFaculty
-      ? dispatch({ type: 'selectedFaculty', payload: null })
-      : dispatch({ type: 'selectedFaculty', payload: index });
+      ? setFoo({ ...foo, selectedFaculty: null })
+      : setFoo({ ...foo, selectedFaculty: index });
   };
 
   const faculties = R.prop('faculty', school);
@@ -131,7 +133,7 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
       onClick={() => handleSchoolSelection(index)}
     >
       <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
-        <Typography>{R.prop('id', school)}</Typography>
+        {R.prop('id', school)}
       </ExpansionPanelSummary>
 
       <ExpansionPanelDetails
@@ -141,7 +143,7 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
           textAlign: 'left'
         }}
       >
-        <Typography style={{ width: '100%' }}>
+        <div style={{ width: '100%' }}>
           {faculties.map((faculty: any, index: number) => (
             <FacultyRow
               key={index}
@@ -151,42 +153,68 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
               selectedFaculty={selectedFaculty}
             />
           ))}
-        </Typography>
+        </div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   );
 };
 
 export const ListingPage: React.FC = () => {
-  const {
-    selectedSchoolTypeString,
-    selectedSchoolType,
-    selectedSchool,
-    selectedFaculty
-  } = useSelector(state => state.schoolListing);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    return () => {
-      dispatch({ type: 'resetSchoolListing' });
-    };
-  }, []);
+  const [search, setSearch] = useState();
+  const [foo, setFoo] = useState({
+    selectedSchoolTypeString: 'University',
+    selectedSchoolType: Universities,
+    selectedSchool: null,
+    selectedFaculty: null
+  });
 
   const handleSwitch = (event: React.MouseEvent<HTMLElement>, newSchoolType: any) => {
-    dispatch({ type: 'selectedSchoolType', schoolTypeString: newSchoolType });
+    switch (newSchoolType) {
+      case 'University': {
+        return setFoo({
+          selectedSchool: null,
+          selectedFaculty: null,
+          selectedSchoolTypeString: newSchoolType,
+          selectedSchoolType: Universities
+        });
+      }
+      case 'AMKs': {
+        return setFoo({
+          selectedSchool: null,
+          selectedFaculty: null,
+          selectedSchoolTypeString: newSchoolType,
+          selectedSchoolType: AMKs
+        });
+      }
+      case 'HighSchools': {
+        return setFoo({
+          selectedSchool: null,
+          selectedFaculty: null,
+          selectedSchoolTypeString: newSchoolType,
+          selectedSchoolType: HighSchools
+        });
+      }
+      default: {
+        return null;
+      }
+    }
   };
+  const { selectedSchoolTypeString, selectedSchoolType, selectedSchool, selectedFaculty } = foo;
 
   const handleSchoolSelection = (index: number) => {
     index === selectedSchool
-      ? dispatch({ type: 'selectedSchool', payload: null })
-      : dispatch({ type: 'selectedSchool', payload: index });
+      ? setFoo({ ...foo, selectedSchool: null })
+      : setFoo({ ...foo, selectedSchool: index });
   };
 
   return (
     <div style={{ marginTop: '20px', border: '2px solid #e0e0e0' }}>
       <div style={{ width: '100%', display: 'flex' }}>
-        <input style={{ flex: '0 0 30%' }}></input>
+        <input
+          value={search}
+          onChange={e => setSearch(e.currentTarget.value)}
+          style={{ flex: '0 0 30%' }}
+        ></input>
         <ToggleButtonGroup
           style={{
             width: '100%',
@@ -198,7 +226,7 @@ export const ListingPage: React.FC = () => {
           exclusive
           onChange={handleSwitch}
         >
-          <ToggleButton style={{ width: '100%' }} color="black" value="University">
+          <ToggleButton style={{ width: '100%' }} value="University">
             Universities
           </ToggleButton>
           <ToggleButton style={{ width: '100%' }} value="AMKs">
@@ -216,8 +244,9 @@ export const ListingPage: React.FC = () => {
           index={index}
           handleSchoolSelection={handleSchoolSelection}
           selectedSchool={selectedSchool}
-          dispatch={dispatch}
           selectedFaculty={selectedFaculty}
+          setFoo={setFoo}
+          foo={foo}
         />
       ))}
     </div>
