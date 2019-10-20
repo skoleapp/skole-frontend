@@ -1,3 +1,4 @@
+import { Search } from '@material-ui/icons';
 import { Formik } from 'formik';
 import Router from 'next/router';
 import React from 'react';
@@ -49,7 +50,7 @@ export const SearchWidget: React.FC = () => {
 
   return (
     <StyledSearchWidget ref={node}>
-      <NavbarIcon onClick={toggleSelf} iconName="search" />
+      <NavbarIcon onClick={toggleSelf} icon={Search} />
       <SearchInput open={searchInputOpen}>
         <Formik component={SearchInputSection} onSubmit={onSubmit} initialValues={initialValues} />
       </SearchInput>

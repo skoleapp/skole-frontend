@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const StyledLogoHeader = styled.h1`
   margin: 0.5rem;
-  font-family: 'Ubuntu Mono', monospace;
+  font-family: 'Ubuntu Mono', monospace !important;
   color: var(--primary);
   font-size: 6.5rem;
   text-shadow: var(--text-shadow);

@@ -1,3 +1,4 @@
+import { AccountBox } from '@material-ui/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -39,7 +40,7 @@ export const AuthMenu: React.FC = () => {
 
   return (
     <StyledAuthMenu ref={node}>
-      <NavbarIcon onClick={toggleSelf} iconName="user-circle" />
+      <NavbarIcon onClick={toggleSelf} icon={AccountBox} />
       <Dropdown open={authMenuOpen}>
         <MenuList />
       </Dropdown>

@@ -1,3 +1,4 @@
+import { SvgIconComponent } from '@material-ui/icons';
 import { User } from './store';
 
 export interface WidgetOpenProps {
@@ -8,11 +9,6 @@ export type Variant = 'white' | 'red' | undefined;
 
 export interface VariantProps {
   variant?: Variant;
-}
-
-export interface IconProps {
-  iconName: string;
-  onClick?: () => void;
 }
 
 export interface UserInfo {
@@ -26,4 +22,9 @@ export interface UserInfo {
 
 export interface UserPageInitialProps {
   user?: User;
+}
+
+export interface IconProps {
+  icon: SvgIconComponent;
+  onClick?: () => void;
 }
