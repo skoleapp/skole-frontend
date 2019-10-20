@@ -1,8 +1,4 @@
 import React from 'react';
-import { H3 } from '../atoms';
+import { H1 } from '../atoms';
 
-interface Props {
-  error: string;
-}
-
-export const ErrorPage: React.FC<Props> = ({ error }) => <H3>{error}</H3>;
+export const ErrorPage: React.FC = () => <H1>Something went wrong...</H1>;

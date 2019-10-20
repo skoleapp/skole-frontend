@@ -6,10 +6,10 @@ import { Form, FormLinkSection, FormSubmitSection, TextInputFormField } from '..
 export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
   <Form {...props}>
     <Field
-      placeholder="Username or email"
-      name="usernameOrEmail"
+      placeholder="example@skole.com"
+      name="email"
       component={TextInputFormField}
-      label="Username or email"
+      label="Email"
     />
     <Field
       placeholder="Password"

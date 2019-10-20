@@ -1,0 +1,8 @@
+export const SET_USER = 'SET_USER';
+
+export const LOGOUT = 'LOGOUT';
+
+export const TOGGLE_MENU = 'TOGGLE_MENU';
+export const TOGGLE_DESKTOP_MENU_DROPDOWN = 'TOGGLE_DESKTOP_MENU_DROPDOWN';
+export const TOGGLE_SEARCH_INPUT = 'TOGGLE_SEARCH_INPUT';
+export const CLOSE_WIDGETS = 'CLOSE_WIDGETS';

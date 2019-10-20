@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State } from '../../interfaces';
-import { Container, ErrorBoundary } from '../containers';
+import { Container } from '../containers';
 import { Footer, Head, MobileMenu, Navbar } from '../layout';
 
 interface StyledMainLayoutProps {
@@ -32,9 +32,7 @@ export const MainLayout: React.FC<Props> = ({ title, children, secondary }) => {
       <Head title={title} />
       <Navbar />
       <MobileMenu />
-      <Container>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </Container>
+      <Container>{children}</Container>
       <Footer />
     </StyledMainLayout>
   );

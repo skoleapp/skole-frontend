@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { closeWidgets } from '../../redux';
+import { closeWidgets } from '../../actions';
 import { Anchor } from './Anchor';
 
 const StyledMenuListItem = styled(Anchor)`
@@ -18,19 +18,23 @@ const StyledMenuListItem = styled(Anchor)`
 
 interface Props {
   href: string;
+  onClick?: () => any;
 }
 
-export const MenuListItem: React.FC<Props> = ({ href, children }) => {
+export const MenuListItem: React.FC<Props> = ({ href, onClick, children }) => {
   const dispatch = useDispatch();
 
+  const handleClick = () => {
+    dispatch(closeWidgets());
+
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
-    <Link href={href}>
-      <StyledMenuListItem
-        onClick={(): void => {
-          dispatch(closeWidgets());
-        }}
-        variant="white"
-      >
+    <Link href={href ? href : '#'}>
+      <StyledMenuListItem onClick={handleClick} variant="white">
         {children}
       </StyledMenuListItem>
     </Link>

@@ -1,10 +1,23 @@
+import { NextPage } from 'next';
 import React from 'react';
-import { LoginPage, MainLayout } from '../components';
+import { LoginCard, MainLayout } from '../components';
+import { SkoleContext } from '../interfaces';
+import { redirect, withAuthSync } from '../lib';
 
-const Login: React.FC = () => (
+const LoginPage: NextPage = () => (
   <MainLayout title="Login">
-    <LoginPage />
+    <LoginCard />
   </MainLayout>
 );
 
-export default Login;
+LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  const { authenticated } = ctx.store.getState().auth;
+
+  if (authenticated) {
+    redirect(ctx, '/');
+  }
+
+  return {};
+};
+
+export default withAuthSync(LoginPage);

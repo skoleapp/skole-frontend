@@ -1,77 +1,98 @@
-import React, { useState } from 'react';
-import * as R from 'ramda';
-import { Anchor } from '../atoms';
-import Router from 'next/router';
+import React, { useState } from "react";
+import * as R from "ramda";
+import { Anchor } from "../atoms";
+import Router from "next/router";
 
-import { withStyles, createMuiTheme } from '@material-ui/core/styles';
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
+import { withStyles, createMuiTheme } from "@material-ui/core/styles";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import Typography from "@material-ui/core/Typography";
 
 const schools = [
   {
-    id: 'Turun yliopisto',
+    id: "Turun yliopisto",
     faculty: [
-      { id: 'Humanistinen tiedekunta', facility: [] },
-      { id: 'Kasvatustieteiden tiedekunta', facility: [] },
+      { id: "Humanistinen tiedekunta", facility: [] },
+      { id: "Kasvatustieteiden tiedekunta", facility: [] },
       {
-        id: 'Luonnontieteiden ja tekniikan tiedekunta',
+        id: "Luonnontieteiden ja tekniikan tiedekunta",
         facility: [
-          { id: 'Biokemian laitos', href: 'dtek609_kallu' },
-          { id: 'Biologian laitos' },
-          { id: 'Fysiikan ja tähtitieteen laitos' },
-          { id: 'Kemian laitos' },
-          { id: 'Maantieteen ja geologian laitos' },
-          { id: 'Matematiikan ja tilastotieteen laitos' },
-          { id: 'Tulevaisuuden teknologioiden laitos' }
+          { id: "Biokemian laitos", href: "dtek609_kallu" },
+          { id: "Biologian laitos" },
+          { id: "Fysiikan ja tähtitieteen laitos" },
+          { id: "Kemian laitos" },
+          { id: "Maantieteen ja geologian laitos" },
+          { id: "Matematiikan ja tilastotieteen laitos" },
+          { id: "Tulevaisuuden teknologioiden laitos" }
         ]
       },
-      { id: 'Lääketieteellinen tiedekunta', facility: [] },
-      { id: 'Oikeustieteellinen tiedekunta', facility: [] },
-      { id: 'Turun kauppakorkeakoulu', facility: [] },
-      { id: 'Yhteiskuntatieteellinen tiedekunta', facility: [] }
+      { id: "Lääketieteellinen tiedekunta", facility: [] },
+      { id: "Oikeustieteellinen tiedekunta", facility: [] },
+      { id: "Turun kauppakorkeakoulu", facility: [] },
+      { id: "Yhteiskuntatieteellinen tiedekunta", facility: [] }
     ]
   },
-  { id: 'Åbo Akademi', faculty: [{ id: 'Department of Gender Studies', facility: [{ id: ' ' }] }] },
   {
-    id: 'Aalto-yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: "Åbo Akademi",
+    faculty: [{ id: "Department of Gender Studies", facility: [{ id: " " }] }]
   },
   {
-    id: 'Helsingin yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: "Aalto-yliopisto",
+    faculty: [
+      { id: "lute", facility: [{ id: "" }] },
+      { id: "kauppis", facility: [{ id: "" }] }
+    ]
   },
   {
-    id: 'Tampereen teknillinen yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: "Helsingin yliopisto",
+    faculty: [
+      { id: "lute", facility: [{ id: "" }] },
+      { id: "kauppis", facility: [{ id: "" }] }
+    ]
   },
   {
-    id: 'Oulun yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: "Tampereen teknillinen yliopisto",
+    faculty: [
+      { id: "lute", facility: [{ id: "" }] },
+      { id: "kauppis", facility: [{ id: "" }] }
+    ]
   },
   {
-    id: 'Vaasan yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: "Oulun yliopisto",
+    faculty: [
+      { id: "lute", facility: [{ id: "" }] },
+      { id: "kauppis", facility: [{ id: "" }] }
+    ]
   },
   {
-    id: 'Lappeenrannan–Lahden teknillinen yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: "Vaasan yliopisto",
+    faculty: [
+      { id: "lute", facility: [{ id: "" }] },
+      { id: "kauppis", facility: [{ id: "" }] }
+    ]
+  },
+  {
+    id: "Lappeenrannan–Lahden teknillinen yliopisto",
+    faculty: [
+      { id: "lute", facility: [{ id: "" }] },
+      { id: "kauppis", facility: [{ id: "" }] }
+    ]
   }
 ];
 
 const ExpansionPanel = withStyles({
   root: {
-    border: '1px solid rgba(0, 0, 0, .125)',
-    boxShadow: 'none',
-    '&:not(:last-child)': {
+    border: "1px solid rgba(0, 0, 0, .125)",
+    boxShadow: "none",
+    "&:not(:last-child)": {
       borderBottom: 0
     },
-    '&:before': {
-      display: 'none'
+    "&:before": {
+      display: "none"
     },
-    '&$expanded': {
-      margin: 'auto'
+    "&$expanded": {
+      margin: "auto"
     }
   },
   expanded: {}
@@ -79,16 +100,16 @@ const ExpansionPanel = withStyles({
 
 const ExpansionPanelSummary = withStyles({
   root: {
-    borderBottom: '1px solid rgba(0, 0, 0, .125)',
+    borderBottom: "1px solid rgba(0, 0, 0, .125)",
     marginBottom: -1,
     minHeight: 56,
-    '&$expanded': {
+    "&$expanded": {
       minHeight: 56
     }
   },
   content: {
-    '&$expanded': {
-      margin: '12px 0'
+    "&$expanded": {
+      margin: "12px 0"
     }
   },
   expanded: {}
@@ -109,14 +130,20 @@ interface FacultyRowProps {
   key: string | number;
   index: number;
   faculty: any;
-  handleFacultySelection: (index: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  handleFacultySelection: (
+    index: number,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
   selectedFaculty: number;
 }
 
-const handleFacilityClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
+const handleFacilityClick = (
+  e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  href: string
+) => {
   e.stopPropagation();
-  console.log('yes');
-  Router.push('/' + href);
+  console.log("yes");
+  Router.push("/" + href);
 };
 
 const FacultyRow: React.FC<FacultyRowProps> = ({
@@ -127,7 +154,7 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
 }) => {
   const isExpanded = selectedFaculty === index ? true : false;
 
-  const facilities = R.prop('facility', faculty);
+  const facilities = R.prop("facility", faculty);
 
   return (
     <ExpansionPanel
@@ -135,18 +162,21 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
       expanded={selectedFaculty === index}
       onClick={e => handleFacultySelection(index, e)}
     >
-      <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
-        <Typography>{R.prop('id', faculty)}</Typography>
+      <ExpansionPanelSummary
+        aria-controls="panel1d-content"
+        id="panel1d-header"
+      >
+        <Typography>{R.prop("id", faculty)}</Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <ul>
           {facilities.map((facility: any, index: number) => (
             <li style={{ margin: 10 }} key={index}>
               <Anchor
-                href={R.prop('href', facility)}
-                onClick={e => handleFacilityClick(e, R.prop('href', facility))}
+                href={R.prop("href", facility)}
+                onClick={e => handleFacilityClick(e, R.prop("href", facility))}
               >
-                {R.prop('id', facility)}
+                {R.prop("id", facility)}
               </Anchor>
             </li>
           ))}
@@ -177,7 +207,7 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
     }
   };
 
-  const faculties = R.prop('faculty', school);
+  const faculties = R.prop("faculty", school);
 
   return (
     <ExpansionPanel
@@ -185,18 +215,21 @@ const SchoolRow: React.FC<SchoolRowProps> = ({
       expanded={selectedSchool === index}
       onClick={() => handleSchoolSelection(index)}
     >
-      <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
-        <Typography>{R.prop('id', school)}</Typography>
+      <ExpansionPanelSummary
+        aria-controls="panel1d-content"
+        id="panel1d-header"
+      >
+        <Typography>{R.prop("id", school)}</Typography>
       </ExpansionPanelSummary>
 
       <ExpansionPanelDetails
         style={{
-          backgroundColor: 'var(--primary)',
-          padding: '0px 0px 0px 12px',
-          textAlign: 'left'
+          backgroundColor: "var(--primary)",
+          padding: "0px 0px 0px 12px",
+          textAlign: "left"
         }}
       >
-        <Typography style={{ width: '100%' }}>
+        <Typography style={{ width: "100%" }}>
           {faculties.map((faculty: any, index: number) => (
             <FacultyRow
               key={index}
@@ -223,7 +256,7 @@ export const ListingPage: React.FC<Props> = () => {
     }
   };
   return (
-    <div style={{ marginTop: '20px', border: '2px solid #e0e0e0' }}>
+    <div style={{ marginTop: "20px", border: "2px solid #e0e0e0" }}>
       {schools.map((school: any, index: number) => (
         <SchoolRow
           key={index}

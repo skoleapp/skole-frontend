@@ -10,7 +10,7 @@ const StyledContainer = styled.div`
 `;
 
 export const Container: React.FC = ({ children }) => (
-  <Column sm={8} md={6}>
+  <Column sm={10} md={8}>
     <StyledContainer>{children}</StyledContainer>
   </Column>
 );

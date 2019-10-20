@@ -1,66 +1,58 @@
 import { NextPage, NextPageContext } from 'next';
 import withRedux from 'next-redux-wrapper';
-import { AppContext } from 'next/app';
+import App from 'next/app';
 import { AppContextType } from 'next/dist/next-server/lib/utils';
 import Router, { Router as RouterType } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
+import React from 'react';
+import { Provider as StoreProvider } from 'react-redux';
 import { Store } from 'redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { LoadingScreen } from '../components/layout';
-import { initStore } from '../redux';
-import '../styles';
+import { initStore, withApollo } from '../lib';
+import '../static/styles';
 
-interface StatelessPage<P = {}> extends React.FC<P> {
-  getInitialProps?: ({ Component, ctx }: AppContextType<RouterType>) => Promise<{ pageProps: {} }>;
-}
 interface Props {
-  store: Store;
-  Component: NextPage<any>; // eslint-disable-line
+  Component: NextPage<any>;
   pageProps: NextPageContext;
+  store: Store;
 }
 
-export const AppProvider: StatelessPage<Props> = ({ store, Component, pageProps }: Props) => {
-  const [redirect, setRedirect] = useState(false);
+class SkoleApp extends App<Props> {
+  static async getInitialProps({ Component, ctx }: AppContextType<RouterType>) {
+    let pageProps = {};
 
-  // FIXME: these are causing memory leaks
-  Router.events.on('routeChangeStart', () => setRedirect(true));
-  Router.events.on('routeChangeComplete', () => setRedirect(false));
-  Router.events.on('routeChangeError', () => setRedirect(false));
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx);
+    }
 
-  const setTokenAsynchronously = async (): Promise<void> => {
-    const { token } = await store.getState().auth;
-    await localStorage.setItem('token', token);
-  };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    const token = localStorage.getItem('token');
-    // token && store.dispatch(refreshToken(token));
-
-    // Only persist the correct token in local storage when demounting
-    return (): void => {
-      setTokenAsynchronously();
-    };
-  }, []);
-
-  if (redirect) {
-    return <LoadingScreen />;
+    return { pageProps };
   }
 
-  return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
-  );
-};
-
-// eslint-disable-next-line
-AppProvider.getInitialProps = async ({ Component, ctx }: AppContext): Promise<any> => {
-  return {
-    pageProps: {
-      ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
-    }
+  state = {
+    redirect: false
   };
-};
 
-export default withRedux(initStore, { debug: false })(AppProvider);
+  render() {
+    const { Component, store, pageProps } = this.props;
+
+    Router.events.on('routeChangeStart', () => this.setState({ ...this.state, redirect: true }));
+    Router.events.on('routeChangeError', () => this.setState({ ...this.state, redirect: false }));
+    Router.events.on('routeChangeComplete', () =>
+      this.setState({ ...this.state, redirect: false })
+    );
+
+    if (this.state.redirect) {
+      return <LoadingScreen />;
+    }
+
+    return (
+      <StoreProvider store={store}>
+        <PersistGate persistor={(store as any).__PERSISTOR} loading={null}>
+          <Component {...pageProps} />
+        </PersistGate>
+      </StoreProvider>
+    );
+  }
+}
+
+export default withApollo(withRedux(initStore)(SkoleApp));

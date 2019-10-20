@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ShortcutProps } from '../../interfaces';
-import { H2, Shortcut } from '../atoms';
+import { Shortcut } from '../atoms';
 
 const StyledShortcutsContainer = styled.div`
   display: flex;
@@ -10,18 +9,11 @@ const StyledShortcutsContainer = styled.div`
   margin-top: 2rem;
 `;
 
-interface Props {
-  shortcuts: ShortcutProps[];
-  title?: string;
-}
-
-export const ShortcutsSection: React.FC<Props> = ({ shortcuts, title }) => (
-  <>
-    <H2>{title}</H2>
-    <StyledShortcutsContainer>
-      {shortcuts.map((s, i) => (
-        <Shortcut key={i} text={s.text} iconName={s.iconName} href={s.href} />
-      ))}
-    </StyledShortcutsContainer>
-  </>
+export const ShortcutsSection: React.FC = () => (
+  <StyledShortcutsContainer>
+    <Shortcut text="Search Courses" iconName="chalkboard-teacher" href="/school" />
+    <Shortcut text="Upload Resource" iconName="sticky-note" href="/upload-resource" />
+    <Shortcut text="Create Course" iconName="plus-circle" href="/create-course" />
+    <Shortcut text="Leaderboard" iconName="star-half-alt" href="/user" />
+  </StyledShortcutsContainer>
 );

@@ -1,3 +1,2 @@
-export { useAccount } from './useAccount';
+export { useHandleClickOutside } from './useHandleClickoutside';
 export { useMobileBreakPoint } from './useMobileBreakPoint';
-export { useWidget } from './useWidget';

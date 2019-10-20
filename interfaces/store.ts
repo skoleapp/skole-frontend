@@ -11,8 +11,6 @@ export interface User {
 export interface AuthState {
   user: User;
   authenticated: boolean | null;
-  token: string | null;
-  loading: boolean | null;
 }
 
 export interface UIState {

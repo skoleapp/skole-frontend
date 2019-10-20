@@ -1,10 +1,23 @@
+import { NextPage } from 'next';
 import React from 'react';
-import { MainLayout, RegisterPage } from '../components';
+import { MainLayout, RegisterCard } from '../components';
+import { SkoleContext } from '../interfaces';
+import { redirect, withAuthSync } from '../lib';
 
-const Register: React.FC = () => (
+const RegisterPage: NextPage = () => (
   <MainLayout title="Register">
-    <RegisterPage />
+    <RegisterCard />
   </MainLayout>
 );
 
-export default Register;
+RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  const { authenticated } = ctx.store.getState().auth;
+
+  if (authenticated) {
+    redirect(ctx, '/');
+  }
+
+  return {};
+};
+
+export default withAuthSync(RegisterPage);

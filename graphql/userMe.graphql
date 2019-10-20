@@ -1,0 +1,11 @@
+query UserMe {
+  userMe {
+    id
+    username
+    email
+    title
+    bio
+    points
+    language
+  }
+}
