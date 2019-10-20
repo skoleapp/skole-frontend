@@ -1,13 +1,12 @@
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import { ShortcutProps } from '../../interfaces';
 import { Card } from './Card';
-import { Icon } from './Icon';
+import { Icon } from './icons';
 
 const StyledCard = styled(Card)`
-  height: 14rem;
-  width: 14rem;
+  height: 12rem;
+  width: 12rem;
   font-size: 1.5rem;
   margin: 1rem;
 
@@ -17,6 +16,12 @@ const StyledCard = styled(Card)`
     cursor: pointer;
   }
 `;
+
+interface ShortcutProps {
+  text: string;
+  iconName: string;
+  href: string;
+}
 
 export const Shortcut: React.FC<ShortcutProps> = ({ text, iconName, href }) => (
   <Link href={href}>

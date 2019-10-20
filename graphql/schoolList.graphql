@@ -1,0 +1,5 @@
+query SchoolList {
+  schoolList {
+    name
+  }
+}

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { toggleMenu } from '../../actions';
 import { State, WidgetOpenProps } from '../../interfaces';
-import { toggleMenu } from '../../redux';
 
 const StyledHamburgerButton = styled.button<WidgetOpenProps>`
   position: absolute;

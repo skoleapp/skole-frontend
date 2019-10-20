@@ -1,10 +1,12 @@
+import { NextPage } from 'next';
 import React from 'react';
 import { LandingPage, MainLayout } from '../components';
+import { withAuthSync } from '../lib';
 
-const Index: React.FC = () => (
+const IndexPage: NextPage = () => (
   <MainLayout title="Home" secondary>
     <LandingPage />
   </MainLayout>
 );
 
-export default Index;
+export default withAuthSync(IndexPage);

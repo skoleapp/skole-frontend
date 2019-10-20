@@ -1,6 +1,9 @@
+const R = require('ramda');
 import { FormErrors } from '../interfaces';
 
-// eslint-disable-next-line @typescript/no-explicit-any
+const networkErrorMessage = 'Netowork error.';
+
+// eslint-disable-next-line
 export const createFormErrors = (errors: any): FormErrors => {
   const formErrors = {
     username: '',
@@ -11,33 +14,25 @@ export const createFormErrors = (errors: any): FormErrors => {
     serverNotFound: ''
   };
 
-  if (errors.detail) {
-    formErrors.general = errors.detail;
-  }
-
-  if (errors.non_field_errors) {
-    formErrors.general = errors.non_field_errors.join();
-  }
-
-  if (errors.username) {
-    formErrors.username = errors.username.join();
-  }
-
-  if (errors.email) {
-    formErrors.email = errors.email.join();
-  }
-
-  if (errors.password) {
-    if (errors.password.password) {
-      formErrors.password = errors.password.password.join();
-    }
-
-    if (errors.password.confirm_password) {
-      formErrors.confirmPassword = errors.password.confirm_password.join();
-    }
-
-    if (errors.password.non_field_errors) {
-      formErrors.general = errors.password.non_field_errors.join();
+  if (!R.isEmpty({ ...errors })) {
+    if (errors.networkError && errors.networkError.name === 'ServerError') {
+      formErrors.general = networkErrorMessage;
+    } else if (errors.graphQLErrors && errors.graphQLErrors.length > 0) {
+      errors.graphQLErrors.map((e: any) => {
+        if (e.field) {
+          (formErrors as any)[e.field] = e.message;
+        } else {
+          formErrors.general = e.message;
+        }
+      });
+    } else {
+      errors.map((e: any) => {
+        if (e.field) {
+          (formErrors as any)[e.field] = e.messages.join();
+        } else {
+          formErrors.general = e.messages.join();
+        }
+      });
     }
   }
 

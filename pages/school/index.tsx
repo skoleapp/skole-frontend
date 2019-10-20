@@ -1,25 +1,12 @@
-import { useRouter } from 'next/router';
+import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout, NotFound } from '../../components';
+import { H1, MainLayout, Text } from '../../components';
 
-const renderContentForSchoolType = (schoolType: string | string[]): JSX.Element => {
-  switch (schoolType) {
-    case 'high-school':
-      return <H1>High School</H1>;
-    case 'university':
-      return <H1>University</H1>;
-    case 'university-of-applied-sciences':
-      return <H1>University of Applied Sciences</H1>;
-    default:
-      return <NotFound />;
-  }
-};
+const SchoolListPage: NextPage = () => (
+  <MainLayout title="School List">
+    <H1>School List</H1>
+    <Text>Here will be list of all schools.</Text>
+  </MainLayout>
+);
 
-const School: React.FC = () => {
-  const router = useRouter();
-  const schoolType = router.query.school_type; // eslint-disable-line
-
-  return <MainLayout title="School">{renderContentForSchoolType(schoolType)}</MainLayout>;
-};
-
-export default School;
+export default SchoolListPage;
