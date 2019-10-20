@@ -1,6 +1,8 @@
 const R = require('ramda');
 import { FormErrors } from '../interfaces';
 
+const networkErrorMessage = 'Netowork error.';
+
 // eslint-disable-next-line
 export const createFormErrors = (errors: any): FormErrors => {
   const formErrors = {
@@ -14,7 +16,7 @@ export const createFormErrors = (errors: any): FormErrors => {
 
   if (!R.isEmpty({ ...errors })) {
     if (errors.networkError && errors.networkError.name === 'ServerError') {
-      formErrors.general = errors.message;
+      formErrors.general = networkErrorMessage;
     } else if (errors.graphQLErrors && errors.graphQLErrors.length > 0) {
       errors.graphQLErrors.map((e: any) => {
         if (e.field) {
