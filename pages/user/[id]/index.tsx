@@ -1,11 +1,10 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { getUser } from '../../../actions';
+import { getUser, getUserMe } from '../../../actions';
 import { MainLayout, NotFoundCard, UserInfoCard } from '../../../components';
 import { SkoleContext, UserPageInitialProps } from '../../../interfaces';
-import { redirect, withAuthSync } from '../../../lib';
-
-const userNotFoundText = 'The user you were looking for was not found...';
+import { withApollo } from '../../../lib';
+import { userNotFoundText } from '../../../utils';
 
 const UserPage: NextPage<any> = ({ user }) => (
   <MainLayout title="User">
@@ -15,21 +14,15 @@ const UserPage: NextPage<any> = ({ user }) => (
 
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<UserPageInitialProps> => {
   const { store, query, apolloClient } = ctx;
-  const { authenticated, user } = store.getState().auth;
+  const { userMe } = await store.dispatch(getUserMe(apolloClient));
 
   // Use public or private profile based on query.
-  if (query.id !== user.id) {
+  if (userMe && query.id !== userMe.id) {
     const { user } = await getUser(query.id as any, apolloClient);
     return { user };
   } else {
-    if (!authenticated) {
-      redirect(ctx, '/');
-    } else {
-      return { user };
-    }
+    return { user: userMe };
   }
-
-  return {};
 };
 
-export default withAuthSync(UserPage);
+export default withApollo(UserPage);

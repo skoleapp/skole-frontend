@@ -1,8 +1,10 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { EditUserCard, MainLayout } from '../../../components';
-import { SkoleContext, User, UserPageInitialProps } from '../../../interfaces';
-import { redirect, withAuthSync } from '../../../lib';
+import { getUserMe } from '../../../actions';
+import { EditUserCard, MainLayout, NotFoundCard } from '../../../components';
+import { SkoleContext, User } from '../../../interfaces';
+import { redirect, withApollo } from '../../../lib';
+import { userNotFoundText } from '../../../utils';
 
 interface Props {
   user?: User;
@@ -21,24 +23,26 @@ const EditUserPage: NextPage<Props> = ({ user }) => {
 
   return (
     <MainLayout title="Edit User">
-      <EditUserCard initialValues={initialValues} />
+      {user ? (
+        <EditUserCard initialValues={initialValues} />
+      ) : (
+        <NotFoundCard text={userNotFoundText} />
+      )}
     </MainLayout>
   );
 };
 
-EditUserPage.getInitialProps = async (ctx: SkoleContext): Promise<UserPageInitialProps> => {
-  const { store, query } = ctx;
-  const { authenticated, user } = store.getState().auth;
+EditUserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
+  const { store, query, apolloClient } = ctx;
+  const { userMe } = await store.dispatch(getUserMe(apolloClient));
 
-  if (query.id !== user.id) {
-    redirect(ctx, `/user/${query.id}`); // Redirect to public user profile page if not own profile.
+  if (userMe && query.id !== userMe.id) {
+    return redirect(ctx, `/user/${query.id}`); // Redirect to public user profile page if not own profile.
+  } else if (userMe) {
+    return { user: userMe };
   } else {
-    if (authenticated) {
-      return { user };
-    }
+    return {};
   }
-
-  return {};
 };
 
-export default withAuthSync(EditUserPage);
+export default withApollo(EditUserPage);
