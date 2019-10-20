@@ -11,7 +11,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "dev": "yarn run gen && next",
+    "dev": "next",
     "lint": "eslint . --ext .js,.tsx,.ts",
     "test": "jest --watch",
     "gen": "graphql-codegen --config codegen.yml"
@@ -20,6 +20,8 @@
     "@apollo/react-hooks": "^3.1.2",
     "@apollo/react-ssr": "^3.1.2",
     "@emotion/core": "^10.0.17",
+    "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/ramda": "^0.26.33",
     "@types/redux": "^3.6.0",
@@ -42,8 +44,10 @@
     "react-redux": "^7.1.1",
     "react-spinners": "^0.6.1",
     "redux": "^4.0.4",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.3.2",
+    "typeface-roboto": "^0.0.75",
     "yup": "^0.27.0"
   },
   "devDependencies": {
