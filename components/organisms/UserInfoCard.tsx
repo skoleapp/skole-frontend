@@ -2,7 +2,6 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { User } from '../../interfaces';
-import avatar from '../../static/images/avatar.jpg';
 import { Button, Card, H3, Text } from '../atoms';
 
 const StyledImage = styled.img`
@@ -26,7 +25,7 @@ export const UserInfoCard: React.FC<User> = ({
 }) => (
   <Card>
     <H3>{title}</H3>
-    <StyledImage src={avatar} />
+    <StyledImage src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
     <InfoSection>
       <Text>Username: {username}</Text>
       <Text>Email: {email}</Text>

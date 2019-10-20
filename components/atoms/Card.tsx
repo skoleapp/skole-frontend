@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { XS } from '../../static';
+import { XS } from '../../utils';
 
 export const Card = styled.div`
   border: var(--black-border);

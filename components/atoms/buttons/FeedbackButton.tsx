@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SM } from '../../../static';
+import { SM } from '../../../utils';
 import { Button } from './Button';
 
 const getBackgroundForValue = (value: string): string => {
