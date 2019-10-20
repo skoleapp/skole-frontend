@@ -1,4 +1,3 @@
-import { CssBaseline } from '@material-ui/core';
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -30,7 +29,6 @@ export const MainLayout: React.FC<Props> = ({ title, children, secondary }) => {
 
   return (
     <StyledMainLayout secondary={secondary} menuOpen={menuOpen}>
-      <CssBaseline />
       <Head title={title} />
       <Navbar />
       <MobileMenu />
