@@ -34,11 +34,7 @@ export const getUserMe: any = (apolloClient: ApolloClient<any>) => async (
   try {
     const { data } = await apolloClient.query({ query: UserMeDocument });
     const { userMe } = data;
-
-    if (userMe) {
-      dispatch({ type: SET_USER, payload: { ...userMe } });
-    }
-
+    dispatch({ type: SET_USER, payload: { ...userMe } });
     return { userMe };
   } catch {
     return { userMe: null };
@@ -47,11 +43,7 @@ export const getUserMe: any = (apolloClient: ApolloClient<any>) => async (
 
 export const getUser = async (id: number, apolloClient: ApolloClient<any>) => {
   try {
-    const { data } = await apolloClient.query({
-      variables: { id },
-      query: UserDocument
-    });
-
+    const { data } = await apolloClient.query({ variables: { id }, query: UserDocument });
     return { user: data.user };
   } catch {
     return { user: null };
