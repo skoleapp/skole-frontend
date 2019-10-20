@@ -8,7 +8,12 @@ export const withAuthSync = (WrappedComponent: NextPage) => {
   const Wrapper = (props: any) => <WrappedComponent {...props} />; // eslint-disable-line
 
   Wrapper.getInitialProps = async (ctx: SkoleContext) => {
-    await ctx.store.dispatch(getUserMe(ctx.apolloClient));
+    const { store } = ctx;
+    const { authenticated } = store.getState().auth;
+
+    if (authenticated) {
+      await store.dispatch(getUserMe(ctx.apolloClient));
+    }
 
     const componentProps =
       WrappedComponent.getInitialProps && (await WrappedComponent.getInitialProps(ctx));
