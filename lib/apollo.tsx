@@ -98,7 +98,7 @@ const createApolloClient = (initialState = {}, { getToken }: any) => {
     fetch
   });
 
-  const authLink = setContext((_request, { headers }) => {
+  const authLink = setContext((_req, { headers }) => {
     const token = getToken();
     return {
       headers: {
