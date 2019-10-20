@@ -32,7 +32,7 @@ const validationSchema = Yup.object().shape({
     .required('Confirm password is required.'),
   agreeToTerms: Yup.boolean().test(
     'is-true',
-    'You must agree to terms to continue',
+    'You must agree to the terms and conditions to continue',
     (value: boolean) => value === true
   )
 });
