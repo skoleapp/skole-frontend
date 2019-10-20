@@ -1,7 +1,6 @@
-const R = require('ramda');
+import * as R from 'ramda';
 import { FormErrors } from '../interfaces';
-
-const networkErrorMessage = 'Netowork error.';
+import { networkErrorMessage } from './messages';
 
 // eslint-disable-next-line
 export const createFormErrors = (errors: any): FormErrors => {
