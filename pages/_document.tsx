@@ -45,6 +45,10 @@ export default class SkoleDocument extends Document {
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
           />
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css"
+          />
         </Head>
         <body>
           <Main />

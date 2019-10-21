@@ -5,10 +5,10 @@ import withRedux from 'next-redux-wrapper';
 import App from 'next/app';
 import { AppContextType } from 'next/dist/next-server/lib/utils';
 import Router, { Router as RouterType } from 'next/router';
+import NProgress from 'nprogress';
 import React from 'react';
 import { Provider as StoreProvider } from 'react-redux';
 import { Store } from 'redux';
-import { LoadingScreen } from '../components/layout';
 import { initStore, withApollo } from '../lib';
 import '../public';
 import { theme } from '../public';
@@ -30,10 +30,6 @@ class SkoleApp extends App<Props> {
     return { pageProps };
   }
 
-  state = {
-    redirect: false
-  };
-
   componentDidMount() {
     const jssStyles = document.querySelector('#jss-server-side');
 
@@ -45,15 +41,9 @@ class SkoleApp extends App<Props> {
   render() {
     const { Component, store, pageProps } = this.props;
 
-    Router.events.on('routeChangeStart', () => this.setState({ ...this.state, redirect: true }));
-    Router.events.on('routeChangeError', () => this.setState({ ...this.state, redirect: false }));
-    Router.events.on('routeChangeComplete', () =>
-      this.setState({ ...this.state, redirect: false })
-    );
-
-    if (this.state.redirect) {
-      return <LoadingScreen />;
-    }
+    Router.events.on('routeChangeStart', () => NProgress.start());
+    Router.events.on('routeChangeError', () => NProgress.done());
+    Router.events.on('routeChangeComplete', () => NProgress.done());
 
     return (
       <StoreProvider store={store}>
