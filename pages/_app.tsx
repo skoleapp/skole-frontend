@@ -10,6 +10,7 @@ import React from 'react';
 import { Provider as StoreProvider } from 'react-redux';
 import { Store } from 'redux';
 import { initStore, withApollo } from '../lib';
+import '../node_modules/nprogress/nprogress.css';
 import '../public';
 import { theme } from '../public';
 
@@ -30,7 +31,7 @@ class SkoleApp extends App<Props> {
     return { pageProps };
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     const jssStyles = document.querySelector('#jss-server-side');
 
     if (jssStyles && jssStyles.parentNode) {
@@ -38,7 +39,7 @@ class SkoleApp extends App<Props> {
     }
   }
 
-  render() {
+  render(): JSX.Element {
     const { Component, store, pageProps } = this.props;
 
     Router.events.on('routeChangeStart', () => NProgress.start());

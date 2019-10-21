@@ -5,3 +5,13 @@ body {
   background: var(--secondary);
   font-family: 'Roboto', sans-serif;
 }
+
+#nprogress .bar {
+  height: 0.25rem;
+  background-color: var(--white);
+}
+
+#nprogress .spinner-icon {
+  border-top-color: var(--white);
+  border-left-color: var(--white);
+}
