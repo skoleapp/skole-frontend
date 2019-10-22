@@ -1,5 +1,4 @@
 import { CssBaseline } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/styles';
 import { NextPage, NextPageContext } from 'next';
 import withRedux from 'next-redux-wrapper';
 import App from 'next/app';
@@ -11,17 +10,17 @@ import { Provider as StoreProvider } from 'react-redux';
 import { Store } from 'redux';
 import { initStore, withApollo } from '../lib';
 import '../node_modules/nprogress/nprogress.css';
-import '../public';
-import { theme } from '../public';
+import { GlobalStyle } from '../styles';
 
 interface Props {
-  Component: NextPage<any>;
+  Component: NextPage<any>; // eslint-disable-line
   pageProps: NextPageContext;
   store: Store;
 }
 
 class SkoleApp extends App<Props> {
-  static async getInitialProps({ Component, ctx }: AppContextType<RouterType>) {
+  // eslint-disable-next-line
+  static async getInitialProps({ Component, ctx }: AppContextType<RouterType>): Promise<any> {
     let pageProps = {};
 
     if (Component.getInitialProps) {
@@ -48,10 +47,9 @@ class SkoleApp extends App<Props> {
 
     return (
       <StoreProvider store={store}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
+        <CssBaseline />
+        <GlobalStyle />
+        <Component {...pageProps} />
       </StoreProvider>
     );
   }
