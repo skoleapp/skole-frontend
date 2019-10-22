@@ -1,42 +1,11 @@
 import { ServerStyleSheets } from '@material-ui/styles';
+import { RenderPageResult } from 'next/dist/next-server/lib/utils';
 import Document, { DocumentContext, Head, Main, NextScript } from 'next/document';
 import React from 'react';
 import { ServerStyleSheet } from 'styled-components';
-import flush from 'styled-jsx/server';
 
 export default class SkoleDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
-    const sheet = new ServerStyleSheet();
-    const sheets = new ServerStyleSheets();
-    const originalRenderPage = ctx.renderPage;
-
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: (App: any) => (
-            props: any // eslint-disable-line
-          ) => sheet.collectStyles(sheets.collect(<App {...props} />))
-        });
-
-      const initialProps = await Document.getInitialProps(ctx);
-
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheets.getStyleElement()}
-            {sheet.getStyleElement()}
-            {flush() || null}
-          </>
-        )
-      };
-    } finally {
-      sheet.seal();
-    }
-  }
-
-  render() {
+  render(): JSX.Element {
     return (
       <html lang="en">
         <Head>
@@ -54,3 +23,33 @@ export default class SkoleDocument extends Document {
     );
   }
 }
+
+// eslint-disable-next-line
+SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<any> => {
+  const styledComponentsSheet = new ServerStyleSheet();
+  const materialSheets = new ServerStyleSheets();
+  const originalRenderPage = ctx.renderPage;
+
+  try {
+    ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> =>
+      originalRenderPage({
+        enhanceApp: App => (
+          props: any // eslint-disable-line
+          // eslint-disable-next-line
+        ): any => styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />))
+      });
+    const initialProps = await Document.getInitialProps(ctx);
+    return {
+      ...initialProps,
+      styles: (
+        <>
+          {initialProps.styles}
+          {materialSheets.getStyleElement()}
+          {styledComponentsSheet.getStyleElement()}
+        </>
+      )
+    };
+  } finally {
+    styledComponentsSheet.seal();
+  }
+};
