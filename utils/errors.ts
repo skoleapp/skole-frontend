@@ -13,8 +13,8 @@ export const createFormErrors = (errors: any): FormErrors => {
     serverNotFound: ''
   };
 
-  if (!R.isEmpty({ ...errors })) {
-    if (errors.networkError && errors.networkError.name === 'ServerError') {
+  if (!R.isEmpty(errors)) {
+    if (errors.networkError) {
       formErrors.general = networkErrorMessage;
     } else if (errors.graphQLErrors && errors.graphQLErrors.length > 0) {
       errors.graphQLErrors.map((e: any) => {
