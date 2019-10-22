@@ -1,8 +1,9 @@
+import { Button } from '@material-ui/core';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { User } from '../../interfaces';
-import { Button, Card, H3, Text } from '../atoms';
+import { Card, H3, Text } from '../atoms';
 
 const StyledImage = styled.img`
   height: 10rem;
@@ -34,7 +35,9 @@ export const UserInfoCard: React.FC<User> = ({
       <Text>Language: {language}</Text>
     </InfoSection>
     <Link href={`/user/${id}/edit`}>
-      <Button>edit account</Button>
+      <Button variant="contained" color="primary" fullWidth>
+        edit account
+      </Button>
     </Link>
   </Card>
 );

@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
 import React from 'react';
+import { withApollo } from 'react-apollo';
 import { getUser, getUserMe } from '../../../actions';
 import { MainLayout, NotFoundCard, UserInfoCard } from '../../../components';
 import { SkoleContext, UserPageInitialProps } from '../../../interfaces';
-import { withApollo } from '../../../lib';
 import { userNotFoundText } from '../../../utils';
 
 const UserPage: NextPage<any> = ({ user }) => (

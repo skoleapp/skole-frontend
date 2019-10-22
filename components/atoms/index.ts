@@ -1,6 +1,5 @@
 export { Anchor } from './Anchor';
 export { AnimatedDiv } from './AnimatedDiv';
-export * from './buttons';
 export { Card } from './Card';
 export * from './forms';
 export * from './headers';

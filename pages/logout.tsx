@@ -1,7 +1,8 @@
+import { Button } from '@material-ui/core';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
-import { Anchor, Button, Card, H2, MainLayout } from '../components';
+import { Anchor, Card, H2, MainLayout } from '../components';
 import { SkoleContext } from '../interfaces';
 import { redirect, withAuthSync } from '../lib';
 
@@ -11,7 +12,9 @@ const LogoutPage: NextPage = () => (
       <H2>You have been logged out!</H2>
       <Link href="/login">
         <Anchor>
-          <Button>log back in</Button>
+          <Button variant="contained" color="primary">
+            log back in
+          </Button>
         </Anchor>
       </Link>
     </Card>

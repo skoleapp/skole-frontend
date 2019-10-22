@@ -1,40 +1,37 @@
+import { Button } from '@material-ui/core';
 import React, { Dispatch, SetStateAction } from 'react';
 import { FeedbackType } from '../../types';
-import { FeedbackButton } from '../atoms';
 
 export interface Props {
   setRate: Dispatch<SetStateAction<FeedbackType>>;
   rate: FeedbackType;
 }
 
-export const FeedbackButtonSection: React.FC<Props> = ({ rate, setRate }) => (
+export const FeedbackButtonSection: React.FC<Props> = ({ setRate }) => (
   <>
-    <FeedbackButton
+    <Button
       value="good"
-      type="button"
-      selected={rate === 'good'}
+      // selected={rate === 'good'}
       onClick={(): void => setRate('good')}
-      color="var(--success)"
+      color="primary"
     >
       good
-    </FeedbackButton>
-    <FeedbackButton
+    </Button>
+    <Button
       value="neutral"
-      type="button"
-      selected={rate === 'neutral'}
+      // selected={rate === 'neutral'}
       onClick={(): void => setRate('neutral')}
-      color="var(--warning)"
+      color="primary"
     >
       neutral
-    </FeedbackButton>
-    <FeedbackButton
+    </Button>
+    <Button
       value="bad"
-      type="button"
-      selected={rate === 'bad'}
+      // selected={rate === 'bad'}
       onClick={(): void => setRate('bad')}
-      color="var(--danger)"
+      color="primary"
     >
       bad
-    </FeedbackButton>
+    </Button>
   </>
 );
