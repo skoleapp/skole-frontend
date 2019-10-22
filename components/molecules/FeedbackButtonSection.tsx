@@ -14,6 +14,7 @@ export const FeedbackButtonSection: React.FC<Props> = ({ rate, setRate }) => (
       type="button"
       selected={rate === 'good'}
       onClick={(): void => setRate('good')}
+      color="var(--success)"
     >
       good
     </FeedbackButton>
@@ -22,6 +23,7 @@ export const FeedbackButtonSection: React.FC<Props> = ({ rate, setRate }) => (
       type="button"
       selected={rate === 'neutral'}
       onClick={(): void => setRate('neutral')}
+      color="var(--warning)"
     >
       neutral
     </FeedbackButton>
@@ -30,6 +32,7 @@ export const FeedbackButtonSection: React.FC<Props> = ({ rate, setRate }) => (
       type="button"
       selected={rate === 'bad'}
       onClick={(): void => setRate('bad')}
+      color="var(--danger)"
     >
       bad
     </FeedbackButton>
