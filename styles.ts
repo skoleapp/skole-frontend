@@ -1,15 +1,26 @@
+import { createMuiTheme } from '@material-ui/core';
 import { createGlobalStyle } from 'styled-components';
+
+const primary = 'rgb(173, 54, 54)';
+
+export const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: primary
+    }
+  }
+});
 
 export const GlobalStyle = createGlobalStyle`
     // Keyframes
     @keyframes fadeIn {
         from {
-        opacity: 0;
-        visibility: hidden;
+            opacity: 0;
+            visibility: hidden;
         }
         to {
-        opacity: 1;
-        visibility: visible;
+            opacity: 1;
+            visibility: visible;
         }
     }
     
@@ -30,7 +41,7 @@ export const GlobalStyle = createGlobalStyle`
         --secondary-bg: url('images/background.jpg');
       
         /* Colors */
-        --primary: rgb(173, 54, 54);
+        --primary: ${primary};
         --secondary: rgba(250, 242, 222);
       
         --white: #ffffff;
