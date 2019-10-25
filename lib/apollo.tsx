@@ -9,8 +9,8 @@ import React from 'react';
 import { SkoleContext } from '../interfaces';
 import { getToken } from './getToken';
 
-export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
-  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: any) => {
+export const withApollo = (PageComponent: any, { ssr = true } = {}): any => {
+  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: any): any => {
     const client = apolloClient || initApolloClient(apolloState, { getToken });
     return (
       <ApolloProvider client={client}>
@@ -30,7 +30,7 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async (ctx: SkoleContext) => {
+    WithApollo.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
       const { AppTree } = ctx;
       const apolloClient = (ctx.apolloClient = initApolloClient(
         {},
