@@ -1,6 +1,6 @@
 import React from 'react';
 import { H1, MainLayout, Text } from '../components';
-import { withAuthSync } from '../lib';
+import { withApollo } from '../lib';
 
 const CreateCoursePage: React.FC = () => (
   <MainLayout title="Create Course">
@@ -9,4 +9,4 @@ const CreateCoursePage: React.FC = () => (
   </MainLayout>
 );
 
-export default withAuthSync(CreateCoursePage);
+export default withApollo(CreateCoursePage);

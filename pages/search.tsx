@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { H1, MainLayout, Text } from '../components';
-import { withAuthSync } from '../lib';
+import { withApollo } from '../lib';
 
 const SearchPage: NextPage = () => (
   <MainLayout title="Search">
@@ -10,4 +10,4 @@ const SearchPage: NextPage = () => (
   </MainLayout>
 );
 
-export default withAuthSync(SearchPage);
+export default withApollo(SearchPage);

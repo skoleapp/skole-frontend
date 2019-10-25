@@ -1,6 +1,6 @@
 import React from 'react';
 import { H1, MainLayout } from '../components';
-import { withAuthSync } from '../lib';
+import { withApollo } from '../lib';
 
 const UploadResourcePage: React.FC = () => (
   <MainLayout title="Upload Resource">
@@ -8,4 +8,4 @@ const UploadResourcePage: React.FC = () => (
   </MainLayout>
 );
 
-export default withAuthSync(UploadResourcePage);
+export default withApollo(UploadResourcePage);

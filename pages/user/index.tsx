@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { H1, MainLayout, Text } from '../../components';
+import { withApollo } from '../../lib';
 
 const UserListPage: NextPage = () => (
   <MainLayout title="User List">
@@ -9,4 +10,4 @@ const UserListPage: NextPage = () => (
   </MainLayout>
 );
 
-export default UserListPage;
+export default withApollo(UserListPage);
