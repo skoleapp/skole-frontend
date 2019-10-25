@@ -21,7 +21,7 @@ export interface UserInfo {
 }
 
 export interface UserPageInitialProps {
-  user?: User;
+  user: User | null;
 }
 
 export interface IconProps {

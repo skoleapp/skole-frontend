@@ -39,13 +39,13 @@ const validationSchema = Yup.object().shape({
 
 export const RegisterCard: React.FC = () => {
   const client = useApolloClient();
-  const ref = useRef<any>(); // eslint-disable-line
+  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
   const dispatch = useDispatch();
 
   // eslint-disable-next-line
   const onCompleted = (data: any) => {
     if (data.register.errors) {
-      return onError(data.register.errors);
+      return onError(data.register.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
     }
 
     dispatch(login({ client, ...data.login }));
@@ -56,7 +56,7 @@ export const RegisterCard: React.FC = () => {
   const onError = (errors: any) => {
     const formErrors = createFormErrors(errors);
     Object.keys(formErrors).forEach(
-      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line
+      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
     );
   };
 

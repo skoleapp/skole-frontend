@@ -24,7 +24,7 @@ export default class SkoleDocument extends Document {
   }
 }
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<any> => {
   const styledComponentsSheet = new ServerStyleSheet();
   const materialSheets = new ServerStyleSheets();
@@ -34,8 +34,8 @@ SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<any> => {
     ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> =>
       originalRenderPage({
         enhanceApp: App => (
-          props: any // eslint-disable-line
-          // eslint-disable-next-line
+          props: any // eslint-disable-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ): any => styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />))
       });
     const initialProps = await Document.getInitialProps(ctx);

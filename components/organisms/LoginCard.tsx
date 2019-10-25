@@ -25,18 +25,18 @@ const validationSchema = Yup.object().shape({
 
 export const LoginCard: React.FC = () => {
   const client = useApolloClient();
-  const ref = useRef<any>(); // eslint-disable-line
+  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
   const dispatch = useDispatch();
 
   // eslint-disable-next-line
   const onCompleted = (data: any) => dispatch(login({ client, ...data.login }));
 
   // Create form errors and show them in the form accordingly.
-  // eslint-disable-next-line
-  const onError = (errors: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onError = (errors: any): void => {
     const formErrors = createFormErrors(errors);
     Object.keys(formErrors).forEach(
-      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line
+      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
     );
   };
 

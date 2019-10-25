@@ -7,12 +7,12 @@ import { UserDocument, UserMeDocument } from '../generated/graphql';
 import { User } from '../interfaces';
 import { CLEAR_USER_ME, SET_USER_ME } from './types';
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setUserMe: any = (userMe: User) => (dispatch: Dispatch<AnyAction>): void =>
   dispatch({ type: SET_USER_ME, payload: userMe });
 
 interface LoginParams {
-  client: ApolloClient<any>; // eslint-disable-line
+  client: ApolloClient<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   token: string;
   user: User;
 }
@@ -33,7 +33,7 @@ interface UserMe {
   userMe: User | null;
 }
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getUserMe = async (apolloClient: ApolloClient<any>): Promise<UserMe> => {
   try {
     const { data } = await apolloClient.query({ query: UserMeDocument });
@@ -47,7 +47,7 @@ interface PublicUser {
   user: User | null;
 }
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getUser = async (id: number, apolloClient: ApolloClient<any>): Promise<PublicUser> => {
   try {
     const { data } = await apolloClient.query({ variables: { id }, query: UserDocument });
@@ -57,7 +57,7 @@ export const getUser = async (id: number, apolloClient: ApolloClient<any>): Prom
   }
 };
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const logout: any = (apolloClient: ApolloClient<any>) => (
   dispatch: Dispatch<AnyAction>
 ): void => {

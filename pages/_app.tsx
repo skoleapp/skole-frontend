@@ -17,10 +17,10 @@ import { getToken } from '../lib/getToken';
 import { GlobalStyle, theme } from '../styles';
 
 interface Props {
-  Component: NextPage<any>; // eslint-disable-line
+  Component: NextPage<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   pageProps: NextPageContext;
   store: Store;
-  apolloClient: ApolloClient<any>; // eslint-disable-line
+  apolloClient: ApolloClient<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   userMe?: User;
   reduxStore: Store;
 }
@@ -59,7 +59,7 @@ class SkoleApp extends App<Props> {
   }
 }
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 SkoleApp.getInitialProps = async ({ Component, ctx }: any): Promise<any> => {
   let pageProps = {};
 

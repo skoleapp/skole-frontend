@@ -8,16 +8,12 @@ interface UseHandleClickOutside {
   toggleSelf: () => Dispatch<AnyAction>;
 }
 
-/*
- * This is a dynamic hook for handling click events outside
- * the given element for all widgets throughout the app.
- */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useHandleClickOutside = (
-  action: any,
+  action: any, // eslint-disable-line @typescript-eslint/no-explicit-any
   elementState: boolean
 ): UseHandleClickOutside => {
-  const node = useRef<any>(); // eslint-disable-line
+  const node = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
   const { authMenuOpen, searchInputOpen } = useSelector((state: State) => state.ui);
   const dispatch = useDispatch();
 
@@ -40,5 +36,5 @@ export const useHandleClickOutside = (
     };
   }, [authMenuOpen, searchInputOpen]);
 
-  return { node, toggleSelf: () => dispatch(action(!elementState)) };
+  return { node, toggleSelf: (): Dispatch<AnyAction> => dispatch(action(!elementState)) };
 };

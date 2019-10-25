@@ -18,7 +18,7 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<UserPageInitialPro
 
   // Use public or private profile based on query.
   if (userMe && query.id !== userMe.id) {
-    const { user } = await getUser(query.id as any, apolloClient); // eslint-disable-line
+    const { user } = await getUser(query.id as any, apolloClient); // eslint-disable-line @typescript-eslint/no-explicit-any
     return { user };
   } else {
     return { user: userMe };
