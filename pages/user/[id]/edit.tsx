@@ -33,8 +33,8 @@ const EditUserPage: NextPage<Props> = ({ user }) => {
 };
 
 EditUserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
-  const { store, query, apolloClient } = ctx;
-  const { userMe } = await store.dispatch(getUserMe(apolloClient));
+  const { query, apolloClient } = ctx;
+  const { userMe } = await getUserMe(apolloClient);
 
   if (userMe && query.id !== userMe.id) {
     return redirect(ctx, `/user/${query.id}`); // Redirect to public user profile page if not own profile.
