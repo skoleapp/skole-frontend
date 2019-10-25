@@ -81,10 +81,9 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}): any => {
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
-const initApolloClient = (
-  initState: any, // eslint-disable-line @typescript-eslint/no-explicit-any
-  { getToken }: any // eslint-disable-line @typescript-eslint/no-explicit-any
-): ApolloClient<NormalizedCacheObject> | null => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const initApolloClient = (initState: any, { getToken }: any): any => {
+  /* eslint-enable */
   if (typeof window === 'undefined') {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return createApolloClient(initState, { getToken });
