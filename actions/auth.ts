@@ -5,7 +5,7 @@ import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserDocument, UserMeDocument } from '../generated/graphql';
 import { User } from '../interfaces';
-import { LOGOUT, SET_USER_ME } from './types';
+import { CLEAR_USER_ME, SET_USER_ME } from './types';
 
 // eslint-disable-next-line
 export const setUserMe: any = (userMe: User) => (dispatch: Dispatch<AnyAction>): void =>
@@ -66,6 +66,6 @@ export const logout: any = (apolloClient: ApolloClient<any>) => (
     path: '/'
   });
 
-  dispatch({ type: LOGOUT });
+  dispatch({ type: CLEAR_USER_ME });
   apolloClient.cache.reset().then(() => Router.push('/logout'));
 };
