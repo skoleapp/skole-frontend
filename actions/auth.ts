@@ -5,10 +5,14 @@ import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserDocument, UserMeDocument } from '../generated/graphql';
 import { User } from '../interfaces';
-import { LOGOUT, SET_USER } from './types';
+import { LOGOUT, SET_USER_ME } from './types';
+
+// eslint-disable-next-line
+export const setUserMe: any = (userMe: User) => (dispatch: Dispatch<AnyAction>): void =>
+  dispatch({ type: SET_USER_ME, payload: userMe });
 
 interface LoginParams {
-  client: ApolloClient<any>;
+  client: ApolloClient<any>; // eslint-disable-line
   token: string;
   user: User;
 }
@@ -16,32 +20,35 @@ interface LoginParams {
 export const login = ({ client, token, user }: LoginParams) => (
   dispatch: Dispatch<AnyAction>
 ): void => {
-  // Store the token in cookie.
   document.cookie = cookie.serialize('token', token, {
     maxAge: 30 * 24 * 60 * 60, // 30 days
-    path: '/' // Make cookie available for all routes underneath "/".
+    path: '/'
   });
 
-  dispatch({ type: SET_USER, payload: { ...user } });
-
-  // Force a reload of all the current queries now that the user is logged in.
+  dispatch(setUserMe(user));
   client.cache.reset().then(() => Router.push('/'));
 };
 
-export const getUserMe: any = (apolloClient: ApolloClient<any>) => async (
-  dispatch: Dispatch<AnyAction>
-) => {
+interface UserMe {
+  userMe: User | null;
+}
+
+// eslint-disable-next-line
+export const getUserMe = async (apolloClient: ApolloClient<any>): Promise<UserMe> => {
   try {
     const { data } = await apolloClient.query({ query: UserMeDocument });
-    const { userMe } = data;
-    dispatch({ type: SET_USER, payload: { ...userMe } });
-    return { userMe };
+    return { userMe: data.user };
   } catch {
     return { userMe: null };
   }
 };
 
-export const getUser = async (id: number, apolloClient: ApolloClient<any>) => {
+interface PublicUser {
+  user: User | null;
+}
+
+// eslint-disable-next-line
+export const getUser = async (id: number, apolloClient: ApolloClient<any>): Promise<PublicUser> => {
   try {
     const { data } = await apolloClient.query({ variables: { id }, query: UserDocument });
     return { user: data.user };
@@ -50,14 +57,15 @@ export const getUser = async (id: number, apolloClient: ApolloClient<any>) => {
   }
 };
 
-export const logout: any = (apolloClient: ApolloClient<any>) => (dispatch: Dispatch<AnyAction>) => {
-  dispatch({ type: LOGOUT }); // Clear store.
-
+// eslint-disable-next-line
+export const logout: any = (apolloClient: ApolloClient<any>) => (
+  dispatch: Dispatch<AnyAction>
+): void => {
   document.cookie = cookie.serialize('token', '', {
-    maxAge: -1, // Expire the cookie immediately
-    path: '/' // Make cookie available for all routes underneath "/".
+    maxAge: -1,
+    path: '/'
   });
 
-  // Force a reload of all the current queries.
+  dispatch({ type: LOGOUT });
   apolloClient.cache.reset().then(() => Router.push('/logout'));
 };
