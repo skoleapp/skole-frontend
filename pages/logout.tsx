@@ -2,9 +2,10 @@ import { Button } from '@material-ui/core';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
+import { getUserMe } from '../actions';
 import { Anchor, Card, H2, MainLayout } from '../components';
 import { SkoleContext } from '../interfaces';
-import { redirect, withAuthSync } from '../lib';
+import { redirect, withApollo } from '../lib';
 
 const LogoutPage: NextPage = () => (
   <MainLayout title="Login">
@@ -22,13 +23,13 @@ const LogoutPage: NextPage = () => (
 );
 
 LogoutPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
-  const { authenticated } = ctx.store.getState().auth;
+  const { userMe } = await getUserMe(ctx.apolloClient);
 
-  if (authenticated) {
+  if (userMe) {
     redirect(ctx, '/');
   }
 
   return {};
 };
 
-export default withAuthSync(LogoutPage);
+export default withApollo(LogoutPage);

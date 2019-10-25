@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
 import React from 'react';
+import { getUserMe } from '../actions';
 import { MainLayout, RegisterCard } from '../components';
 import { SkoleContext } from '../interfaces';
-import { redirect, withAuthSync } from '../lib';
+import { redirect, withApollo } from '../lib';
 
 const RegisterPage: NextPage = () => (
   <MainLayout title="Register">
@@ -11,13 +12,13 @@ const RegisterPage: NextPage = () => (
 );
 
 RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
-  const { authenticated } = ctx.store.getState().auth;
+  const { userMe } = await getUserMe(ctx.apolloClient);
 
-  if (authenticated) {
+  if (userMe) {
     redirect(ctx, '/');
   }
 
   return {};
 };
 
-export default withAuthSync(RegisterPage);
+export default withApollo(RegisterPage);

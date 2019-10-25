@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
 import React from 'react';
+import { getUserMe } from '../actions';
 import { LoginCard, MainLayout } from '../components';
 import { SkoleContext } from '../interfaces';
-import { redirect, withAuthSync } from '../lib';
+import { redirect, withApollo } from '../lib';
 
 const LoginPage: NextPage = () => (
   <MainLayout title="Login">
@@ -11,13 +12,13 @@ const LoginPage: NextPage = () => (
 );
 
 LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
-  const { authenticated } = ctx.store.getState().auth;
+  const { userMe } = await getUserMe(ctx.apolloClient);
 
-  if (authenticated) {
+  if (userMe) {
     redirect(ctx, '/');
   }
 
   return {};
 };
 
-export default withAuthSync(LoginPage);
+export default withApollo(LoginPage);
