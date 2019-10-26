@@ -29,7 +29,7 @@ export const FeedbackCard: React.FC = () => {
       <Typography variant="h5">Leave Feedback</Typography>
       {!submitted ? (
         <>
-          <FeedbackButtonSection rate={rate} setRate={setRate} />
+          <FeedbackButtonSection setRate={setRate} />
           <Formik
             onSubmit={onSubmit}
             initialValues={initialValues}

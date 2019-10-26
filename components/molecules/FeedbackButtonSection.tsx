@@ -5,34 +5,18 @@ import styled from 'styled-components';
 
 export interface Props {
   setRate: Dispatch<SetStateAction<FeedbackType>>;
-  rate: FeedbackType;
 }
 
 export const FeedbackButtonSection: React.FC<Props> = ({ setRate }) => (
   <StyledFeedButtonSection>
     <ButtonGroup fullWidth aria-label="full width outlined button group">
-      <Button
-        value="Good"
-        // selected={rate === 'good'}
-        onClick={(): void => setRate('good')}
-        color="primary"
-      >
+      <Button value="Good" onClick={(): void => setRate('good')} color="primary">
         good
       </Button>
-      <Button
-        value="Neutral"
-        // selected={rate === 'neutral'}
-        onClick={(): void => setRate('neutral')}
-        color="primary"
-      >
+      <Button value="Neutral" onClick={(): void => setRate('neutral')} color="primary">
         neutral
       </Button>
-      <Button
-        value="Bad"
-        // selected={rate === 'bad'}
-        onClick={(): void => setRate('bad')}
-        color="primary"
-      >
+      <Button value="Bad" onClick={(): void => setRate('bad')} color="primary">
         bad
       </Button>
     </ButtonGroup>
