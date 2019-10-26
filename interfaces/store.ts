@@ -19,13 +19,7 @@ export interface UIState {
   searchInputOpen: boolean;
 }
 
-export interface SearchState {
-  results: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  loading: boolean | null;
-}
-
 export interface State {
   auth: AuthState;
   ui: UIState;
-  search: SearchState;
 }

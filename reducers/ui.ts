@@ -7,20 +7,20 @@ import {
 } from '../actions';
 import { UIState } from '../interfaces';
 
-const initialState: UIState = {
+export const initialUIState: UIState = {
   menuOpen: false,
   authMenuOpen: false,
   searchInputOpen: false
 };
 
-export default (state = initialState, action: AnyAction): UIState => {
+export default (state = initialUIState, action: AnyAction): UIState => {
   switch (action.type) {
     case TOGGLE_MENU:
       return { ...state, menuOpen: action.payload };
     case TOGGLE_DESKTOP_MENU_DROPDOWN:
       return { ...state, authMenuOpen: action.payload };
     case CLOSE_WIDGETS:
-      return { ...initialState };
+      return { ...initialUIState };
     case TOGGLE_SEARCH_INPUT:
       return { ...state, searchInputOpen: action.payload };
     default:

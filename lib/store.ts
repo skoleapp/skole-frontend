@@ -1,7 +1,13 @@
 import { applyMiddleware, createStore, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import { rootReducer } from '../reducers';
+import { State } from '../interfaces';
+import { initialAuthState, initialUIState, rootReducer } from '../reducers';
 
-export const initStore = (): Store =>
-  createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+const initialState: State = {
+  auth: initialAuthState,
+  ui: initialUIState
+};
+
+export const initStore = (preloadedState = initialState): Store =>
+  createStore(rootReducer, preloadedState, composeWithDevTools(applyMiddleware(thunk)));
