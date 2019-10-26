@@ -27,6 +27,11 @@ export const FormSubmitSection: React.ComponentType<FormSubmitSectionProps> = ({
 );
 
 const StyledFormSubmitSection = styled(FormControl)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   button {
     margin: 1.5rem 0;
   }
