@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { LandingPage, MainLayout } from '../components';
-import { withApollo } from '../lib';
+import { LandingPageContent, MainLayout } from '../components';
+import { withAuth } from '../lib/withAuth';
 
 const IndexPage: NextPage = () => (
   <MainLayout title="Home" secondary>
-    <LandingPage />
+    <LandingPageContent />
   </MainLayout>
 );
 
-export default withApollo(IndexPage);
+export default withAuth(IndexPage);

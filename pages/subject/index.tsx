@@ -1,11 +1,12 @@
+import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout, Text } from '../../components';
+import { MainLayout } from '../../components';
 
 const SubjectListPage: NextPage = () => (
   <MainLayout title="Subject List">
-    <H1>Subject List</H1>
-    <Text>Here will be list of all subjects.</Text>
+    <Typography variant="h3">Subject List</Typography>
+    <Typography variant="body1">Here will be list of all subjects.</Typography>
   </MainLayout>
 );
 

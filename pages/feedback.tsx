@@ -1,6 +1,6 @@
 import React from 'react';
 import { FeedbackCard, MainLayout } from '../components';
-import { withApollo } from '../lib';
+import { withAuth } from '../lib';
 
 const FeedbackPage: React.FC = () => (
   <MainLayout title="Leave Feedback">
@@ -8,4 +8,4 @@ const FeedbackPage: React.FC = () => (
   </MainLayout>
 );
 
-export default withApollo(FeedbackPage);
+export default withAuth(FeedbackPage);

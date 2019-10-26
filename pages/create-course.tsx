@@ -1,12 +1,13 @@
+import { Typography } from '@material-ui/core';
 import React from 'react';
-import { H1, MainLayout, Text } from '../components';
-import { withApollo } from '../lib';
+import { MainLayout, Text } from '../components';
+import { withAuth } from '../lib';
 
 const CreateCoursePage: React.FC = () => (
   <MainLayout title="Create Course">
-    <H1>Create Course</H1>
+    <Typography variant="h3">Create Course</Typography>
     <Text>Course creation form will be shown here.</Text>
   </MainLayout>
 );
 
-export default withApollo(CreateCoursePage);
+export default withAuth(CreateCoursePage);

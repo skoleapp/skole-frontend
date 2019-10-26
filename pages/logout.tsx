@@ -1,16 +1,14 @@
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
-import { getUserMe } from '../actions';
-import { Anchor, Card, H2, MainLayout } from '../components';
-import { SkoleContext } from '../interfaces';
-import { redirect, withApollo } from '../lib';
+import { Anchor, Card, MainLayout } from '../components';
+import { withPublic } from '../lib';
 
 const LogoutPage: NextPage = () => (
   <MainLayout title="Login">
     <Card>
-      <H2>You have been logged out!</H2>
+      <Typography variant="h3">You have been logged out!</Typography>
       <Link href="/login">
         <Anchor>
           <Button variant="contained" color="primary">
@@ -22,14 +20,4 @@ const LogoutPage: NextPage = () => (
   </MainLayout>
 );
 
-LogoutPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
-  const { userMe } = await getUserMe(ctx.apolloClient);
-
-  if (userMe) {
-    redirect(ctx, '/');
-  }
-
-  return {};
-};
-
-export default withApollo(LogoutPage);
+export default withPublic(LogoutPage);

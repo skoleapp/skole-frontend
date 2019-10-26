@@ -1,10 +1,11 @@
+import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout, Text } from '../../components';
+import { MainLayout, Text } from '../../components';
 
 const CourseListPage: NextPage = () => (
   <MainLayout title="Course List">
-    <H1>Course List</H1>
+    <Typography variant="h3">Course List</Typography>
     <Text>Here will be list of all courses.</Text>
   </MainLayout>
 );

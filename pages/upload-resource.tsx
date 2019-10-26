@@ -1,11 +1,12 @@
+import { Typography } from '@material-ui/core';
 import React from 'react';
-import { H1, MainLayout } from '../components';
-import { withApollo } from '../lib';
+import { MainLayout } from '../components';
+import { withAuth } from '../lib';
 
 const UploadResourcePage: React.FC = () => (
   <MainLayout title="Upload Resource">
-    <H1>Upload Resource</H1>
+    <Typography variant="h3">Upload Resource</Typography>
   </MainLayout>
 );
 
-export default withApollo(UploadResourcePage);
+export default withAuth(UploadResourcePage);
