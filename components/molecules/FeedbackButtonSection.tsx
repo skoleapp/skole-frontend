@@ -1,37 +1,34 @@
-import { Button } from '@material-ui/core';
+import { Button, ButtonGroup } from '@material-ui/core';
 import React, { Dispatch, SetStateAction } from 'react';
 import { FeedbackType } from '../../types';
+import styled from 'styled-components';
 
 export interface Props {
   setRate: Dispatch<SetStateAction<FeedbackType>>;
-  rate: FeedbackType;
 }
 
 export const FeedbackButtonSection: React.FC<Props> = ({ setRate }) => (
-  <>
-    <Button
-      value="good"
-      // selected={rate === 'good'}
-      onClick={(): void => setRate('good')}
-      color="primary"
-    >
-      good
-    </Button>
-    <Button
-      value="neutral"
-      // selected={rate === 'neutral'}
-      onClick={(): void => setRate('neutral')}
-      color="primary"
-    >
-      neutral
-    </Button>
-    <Button
-      value="bad"
-      // selected={rate === 'bad'}
-      onClick={(): void => setRate('bad')}
-      color="primary"
-    >
-      bad
-    </Button>
-  </>
+  <StyledFeedButtonSection>
+    <ButtonGroup fullWidth aria-label="full width outlined button group">
+      <Button value="Good" onClick={(): void => setRate('good')} color="primary">
+        good
+      </Button>
+      <Button value="Neutral" onClick={(): void => setRate('neutral')} color="primary">
+        neutral
+      </Button>
+      <Button value="Bad" onClick={(): void => setRate('bad')} color="primary">
+        bad
+      </Button>
+    </ButtonGroup>
+  </StyledFeedButtonSection>
 );
+
+const StyledFeedButtonSection = styled.div`
+  button {
+    margin-top: 1rem;
+    &:focus {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+  }
+`;
