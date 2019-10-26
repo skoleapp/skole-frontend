@@ -52,8 +52,8 @@ export const GlobalStyle = createGlobalStyle`
         --danger: red;
         
         // Animations
-        --scale: scale(1.02);
-        --transition: all 0.1s ease-in;
+        --scale: scale(1.04);
+        --transition: all 0.15s ease-in;
         --menu-speed: 0.3s;
         --fade-in: fadeIn 0.25s forwards;
         --fade-out: fadeOut 0.25s forwards;
@@ -88,8 +88,7 @@ export const GlobalStyle = createGlobalStyle`
         }
 
         .spinner-icon {
-            border-top-color: var(--white);
-            border-left-color: var(--white);
+           display: none; 
         }
     }
 `;
