@@ -1,15 +1,20 @@
+import { Card, Typography } from '@material-ui/core';
 import { SvgIconComponent } from '@material-ui/icons';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import { Card } from './Card';
 import { ShortcutIcon } from './icons';
 
-const StyledCard = styled(Card)`
-  height: 12rem;
-  width: 12rem;
+const StyledShortcut = styled(Card)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 10rem;
+  width: 10rem;
   font-size: 1.5rem;
   margin: 1rem;
+  padding: 0.5rem;
 
   &:hover {
     transition: var(--transition);
@@ -26,9 +31,9 @@ interface ShortcutProps {
 
 export const Shortcut: React.FC<ShortcutProps> = ({ text, icon, href }) => (
   <Link href={href}>
-    <StyledCard>
+    <StyledShortcut>
       <ShortcutIcon icon={icon} />
-      <p>{text}</p>
-    </StyledCard>
+      <Typography variant="body1">{text}</Typography>
+    </StyledShortcut>
   </Link>
 );
