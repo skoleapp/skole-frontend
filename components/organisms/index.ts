@@ -2,7 +2,7 @@ export { AuthMenu } from './AuthMenu';
 export { EditUserCard } from './EditUserCard';
 export { ErrorPage } from './ErrorPage';
 export { FeedbackCard } from './FeedbackCard';
-export { LandingPage } from './LandingPage';
+export { LandingPageContent } from './LandingPageContent';
 export { LoginCard } from './LoginCard';
 export { NotFoundCard } from './NotFoundCard';
 export { RegisterCard } from './RegisterCard';
