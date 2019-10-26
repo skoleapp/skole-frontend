@@ -14,7 +14,6 @@ const StyledBottomNavbar = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
-  border-top: 0.05rem solid var(--primary);
 
   @media only screen and (min-width: ${SM}) {
     display: none;

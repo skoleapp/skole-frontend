@@ -19,7 +19,6 @@ const StyledLogo = styled.div`
     font-family: 'Ubuntu Mono', monospace !important;
     color: var(--secondary);
     font-size: 1.75rem;
-    text-shadow: var(--text-shadow);
     letter-spacing: 0;
     cursor: pointer;
     width: 6rem;

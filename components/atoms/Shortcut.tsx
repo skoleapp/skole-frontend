@@ -14,11 +14,11 @@ const StyledShortcut = styled(Card)`
   font-size: 1.5rem;
   margin: 1rem;
   padding: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
 
   &:hover {
-    transition: var(--transition);
-    transform: var(--scale);
-    cursor: pointer;
+    background-color: var(--light-opacity);
   }
 `;
 
