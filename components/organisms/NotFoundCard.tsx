@@ -9,9 +9,9 @@ interface Props {
 export const NotFoundCard: React.FC<Props> = ({ text }) => (
   <Card>
     {text ? (
-      <Typography variant="h3">{text}</Typography>
+      <Typography variant="h5">{text}</Typography>
     ) : (
-      <Typography variant="h3">The page you were looking for was not found...</Typography>
+      <Typography variant="h5">The page you were looking for was not found...</Typography>
     )}
   </Card>
 );

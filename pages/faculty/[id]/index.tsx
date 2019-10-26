@@ -5,7 +5,7 @@ import { MainLayout } from '../../../components';
 
 const FacultyDetailPage: NextPage = () => (
   <MainLayout title="Faculty Detail">
-    <Typography variant="h3">Faculty Detail</Typography>
+    <Typography variant="h5">Faculty Detail</Typography>
     <Typography variant="body1">Here will be faculty detail with a list of facilities.</Typography>
   </MainLayout>
 );

@@ -25,7 +25,7 @@ export const FeedbackCard: React.FC = () => {
 
   return (
     <>
-      <Typography variant="h3">Leave Feedback</Typography>
+      <Typography variant="h5">Leave Feedback</Typography>
       {!submitted ? (
         <>
           <FeedbackButtonSection rate={rate} setRate={setRate} />

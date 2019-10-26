@@ -27,10 +27,7 @@ export const EditUserForm: React.ComponentType<FormikProps<User>> = props => (
       component={SelectFormField}
       options={languageOptions}
       label="Language"
-    >
-      <option value="english">English</option>
-      <option value="finnish">Finnish</option>
-    </Field>
+    />
     <FormSubmitSection submitButtonText="save" {...props} />
     <Link href={`/user/${props.values.id}`} color="primary">
       Back to Account

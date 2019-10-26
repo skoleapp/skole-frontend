@@ -5,7 +5,7 @@ import { withAuth } from '../lib';
 
 const CreateCoursePage: React.FC = () => (
   <MainLayout title="Create Course">
-    <Typography variant="h3">Create Course</Typography>
+    <Typography variant="h5">Create Course</Typography>
     <Text>Course creation form will be shown here.</Text>
   </MainLayout>
 );

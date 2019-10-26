@@ -6,7 +6,7 @@ import { withAuth } from '../../lib';
 
 const UserListPage: NextPage = () => (
   <MainLayout title="User List">
-    <Typography variant="h3">User List</Typography>
+    <Typography variant="h5">User List</Typography>
     <Typography variant="body1">
       Here will be a list of public user profiles, a leaderboard maybe?
     </Typography>

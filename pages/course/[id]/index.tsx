@@ -5,7 +5,7 @@ import { MainLayout, Text } from '../../../components';
 
 const CourseDetailPage: NextPage = () => (
   <MainLayout title="Course Detail">
-    <Typography variant="h3">Course Detail</Typography>
+    <Typography variant="h5">Course Detail</Typography>
     <Text>Here will be course detail.</Text>
   </MainLayout>
 );

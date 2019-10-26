@@ -5,7 +5,7 @@ import { withAuth } from '../lib';
 
 const UploadResourcePage: React.FC = () => (
   <MainLayout title="Upload Resource">
-    <Typography variant="h3">Upload Resource</Typography>
+    <Typography variant="h5">Upload Resource</Typography>
   </MainLayout>
 );
 

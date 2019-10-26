@@ -25,7 +25,7 @@ export const UserInfoCard: React.FC<User> = ({
   language
 }) => (
   <Card>
-    <Typography variant="h3">{title}</Typography>
+    <Typography variant="h5">{title}</Typography>
     <StyledImage src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
     <InfoSection>
       <Text>Username: {username}</Text>

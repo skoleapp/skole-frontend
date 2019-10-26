@@ -4,6 +4,7 @@ export { ErrorPage } from './ErrorPage';
 export { FeedbackCard } from './FeedbackCard';
 export { LandingPageContent } from './LandingPageContent';
 export { LoginCard } from './LoginCard';
+export { LogoutCard } from './LogoutCard';
 export { NotFoundCard } from './NotFoundCard';
 export { RegisterCard } from './RegisterCard';
 export { SearchWidget } from './SearchWidget';
