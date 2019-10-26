@@ -1,10 +1,10 @@
 import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { MainLayout } from '../../../components';
+import { Layout } from '../../../components';
 
 export const CoursesPage: NextPage = () => (
-  <MainLayout>
+  <Layout>
     <Typography variant="h5">Courses of a user</Typography>
-  </MainLayout>
+  </Layout>
 );

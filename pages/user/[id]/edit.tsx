@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { EditUserCard, MainLayout, NotFoundCard } from '../../../components';
+import { EditUserCard, Layout, NotFoundCard } from '../../../components';
 import { State } from '../../../interfaces';
 import { withPrivate } from '../../../lib';
 import { userNotFoundText } from '../../../utils';
@@ -20,13 +20,13 @@ const EditUserPage: NextPage = () => {
   };
 
   return (
-    <MainLayout title="Edit User">
+    <Layout title="Edit User">
       {user ? (
         <EditUserCard initialValues={initialValues} />
       ) : (
         <NotFoundCard text={userNotFoundText} />
       )}
-    </MainLayout>
+    </Layout>
   );
 };
 

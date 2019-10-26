@@ -1,13 +1,13 @@
 import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { MainLayout, Text } from '../../components';
+import { Layout } from '../../components';
 
 const FacilityListPage: NextPage = () => (
-  <MainLayout title="Facility List">
+  <Layout title="Facility List">
     <Typography variant="h5">Facility List</Typography>
-    <Text>Here will be list of facilities.</Text>
-  </MainLayout>
+    <Typography variant="body1">Here will be list of facilities.</Typography>
+  </Layout>
 );
 
 export default FacilityListPage;

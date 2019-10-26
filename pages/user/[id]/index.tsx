@@ -1,16 +1,16 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { getUser, getUserMe } from '../../../actions';
-import { MainLayout, NotFoundCard, UserInfoCard } from '../../../components';
+import { Layout, NotFoundCard, UserInfoCard } from '../../../components';
 import { SkoleContext, UserPageProps } from '../../../interfaces';
 import { withAuth } from '../../../lib';
 import { userNotFoundText } from '../../../utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const UserPage: NextPage<any> = ({ user }) => (
-  <MainLayout title="User">
+  <Layout title="User">
     {user ? <UserInfoCard {...user} /> : <NotFoundCard text={userNotFoundText} />}
-  </MainLayout>
+  </Layout>
 );
 
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<UserPageProps> => {

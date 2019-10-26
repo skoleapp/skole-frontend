@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { LogoutCard, MainLayout } from '../components';
+import { Layout, LogoutCard } from '../components';
 import { withPublic } from '../lib';
 
 const LogoutPage: NextPage = () => (
-  <MainLayout title="Login">
+  <Layout title="Login">
     <LogoutCard />
-  </MainLayout>
+  </Layout>
 );
 
 export default withPublic(LogoutPage);

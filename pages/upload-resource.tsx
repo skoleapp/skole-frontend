@@ -1,12 +1,12 @@
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { MainLayout } from '../components';
+import { Layout } from '../components';
 import { withAuth } from '../lib';
 
 const UploadResourcePage: React.FC = () => (
-  <MainLayout title="Upload Resource">
+  <Layout title="Upload Resource">
     <Typography variant="h5">Upload Resource</Typography>
-  </MainLayout>
+  </Layout>
 );
 
 export default withAuth(UploadResourcePage);

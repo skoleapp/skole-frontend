@@ -1,13 +1,15 @@
 import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { MainLayout, Text } from '../../../components';
+import { Layout } from '../../../components';
 
 const FacilityDetailPage: NextPage = () => (
-  <MainLayout title="Facility Detail">
+  <Layout title="Facility Detail">
     <Typography variant="h5">Facility Detail</Typography>
-    <Text>Here will be facility detail with a list of courses provided by that facility.</Text>
-  </MainLayout>
+    <Typography variant="body1">
+      Here will be facility detail with a list of courses provided by that facility.
+    </Typography>
+  </Layout>
 );
 
 export default FacilityDetailPage;

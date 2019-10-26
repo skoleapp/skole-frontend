@@ -1,13 +1,13 @@
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { MainLayout, Text } from '../components';
+import { Layout, Text } from '../components';
 import { withAuth } from '../lib';
 
 const CreateCoursePage: React.FC = () => (
-  <MainLayout title="Create Course">
+  <Layout title="Create Course">
     <Typography variant="h5">Create Course</Typography>
     <Text>Course creation form will be shown here.</Text>
-  </MainLayout>
+  </Layout>
 );
 
 export default withAuth(CreateCoursePage);

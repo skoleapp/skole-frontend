@@ -1,14 +1,14 @@
 import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { MainLayout } from '../../components';
+import { Layout } from '../../components';
 import { withAuth } from '../../lib';
 
 const SchoolListPage: NextPage = () => (
-  <MainLayout title="School List">
+  <Layout title="School List">
     <Typography variant="h5">School List</Typography>
     <Typography variant="body1">Here will be list of all schools.</Typography>
-  </MainLayout>
+  </Layout>
 );
 
 export default withAuth(SchoolListPage);

@@ -1,11 +1,11 @@
 import React from 'react';
-import { FeedbackCard, MainLayout } from '../components';
+import { FeedbackCard, Layout } from '../components';
 import { withAuth } from '../lib';
 
 const FeedbackPage: React.FC = () => (
-  <MainLayout title="Leave Feedback">
+  <Layout title="Leave Feedback">
     <FeedbackCard />
-  </MainLayout>
+  </Layout>
 );
 
 export default withAuth(FeedbackPage);
