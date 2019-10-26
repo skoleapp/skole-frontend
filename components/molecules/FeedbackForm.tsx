@@ -2,13 +2,13 @@ import { Button } from '@material-ui/core';
 import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
 import { FeedbackFormValues } from '../../interfaces';
-import { Textarea } from '../atoms';
+import { TextareaFormField } from '../atoms';
 
 export const FeedbackForm: React.ComponentType<FormikProps<FeedbackFormValues>> = () => (
   <Form>
     <Field
       name="comment"
-      component={Textarea}
+      component={TextareaFormField}
       placeholder="Tell us how we can improve our company."
       label="Comment"
     />

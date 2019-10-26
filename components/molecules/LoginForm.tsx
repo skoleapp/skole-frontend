@@ -1,24 +1,22 @@
-import { Field, FormikProps } from 'formik';
+import { Link } from '@material-ui/core';
+import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
 import { LoginFormValues } from '../../interfaces';
-import { Form, FormLinkSection, FormSubmitSection, TextInputFormField } from '../atoms';
+import { FormSubmitSection, TextFormField } from '../atoms';
 
 export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
-  <Form {...props}>
-    <Field
-      placeholder="example@skole.com"
-      name="email"
-      component={TextInputFormField}
-      label="Email"
-    />
+  <Form>
+    <Field placeholder="example@skole.com" name="email" component={TextFormField} label="Email" />
     <Field
       placeholder="Password"
       name="password"
-      component={TextInputFormField}
+      component={TextFormField}
       label="Password"
       type="password"
     />
     <FormSubmitSection submitButtonText="login" {...props} />
-    <FormLinkSection href="/register" text="New User?" />
+    <Link href="/register" color="primary">
+      New User?
+    </Link>
   </Form>
 );
