@@ -3,7 +3,6 @@ import { SvgIconComponent } from '@material-ui/icons';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import { ShortcutIcon } from './icons';
 
 const StyledShortcut = styled(Card)`
   display: flex;
@@ -29,10 +28,10 @@ interface ShortcutProps {
   href: string;
 }
 
-export const Shortcut: React.FC<ShortcutProps> = ({ text, icon, href }) => (
+export const Shortcut: React.FC<ShortcutProps> = ({ text, icon: Icon, href }) => (
   <Link href={href}>
     <StyledShortcut>
-      <ShortcutIcon icon={icon} />
+      <Icon />
       <Typography variant="body1">{text}</Typography>
     </StyledShortcut>
   </Link>
