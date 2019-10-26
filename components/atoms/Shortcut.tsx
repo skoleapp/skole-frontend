@@ -9,16 +9,16 @@ const StyledShortcut = styled(Card)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 10rem;
-  width: 10rem;
+  height: 12rem;
+  width: 12rem;
   font-size: 1.5rem;
   margin: 1rem;
   padding: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
 
   &:hover {
-    transition: var(--transition);
-    transform: var(--scale);
-    cursor: pointer;
+    background-color: var(--light-opacity);
   }
 `;
 

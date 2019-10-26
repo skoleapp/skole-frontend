@@ -49,27 +49,11 @@ export const GlobalStyle = createGlobalStyle`
       
         --white: #ffffff;
         --black: #000000;
-      
-        --success: lightgreen;
-        --warning: yellow;
-        --danger: red;
+
+        --light-opacity: rgba(0, 0, 0, 0.15);
         
-        // Animations
-        --scale: scale(1.04);
+        // Misc 
         --transition: all 0.15s ease-in;
-        --menu-speed: 0.3s;
-        --fade-in: fadeIn 0.25s forwards;
-        --fade-out: fadeOut 0.25s forwards;
-      
-        // Shadows
-        --text-shadow: 0 0 0.05rem var(--black);
-        --box-shadow: 0 0 0.25rem 0.01rem var(--black);
-      
-        // Borders
-        --primary-border: 0.1rem solid var(--primary);
-        --secondary-border: 0.1rem solid var(--secondary);
-        --black-border: 0.1rem solid var(--black);
-        --white-border: 0.1rem solid var(--white);
         --border-radius: 0.5rem;
     }
 
