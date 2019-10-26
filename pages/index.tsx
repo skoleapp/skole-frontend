@@ -4,7 +4,7 @@ import { LandingPageContent, MainLayout } from '../components';
 import { withAuth } from '../lib/withAuth';
 
 const IndexPage: NextPage = () => (
-  <MainLayout title="Home" secondary>
+  <MainLayout title="Home">
     <LandingPageContent />
   </MainLayout>
 );

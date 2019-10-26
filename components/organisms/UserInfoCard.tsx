@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { User } from '../../interfaces';
-import { Card, Text } from '../atoms';
+import { Card } from '../atoms';
 
 const StyledImage = styled.img`
   height: 10rem;
@@ -28,11 +28,11 @@ export const UserInfoCard: React.FC<User> = ({
     <Typography variant="h5">{title}</Typography>
     <StyledImage src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
     <InfoSection>
-      <Text>Username: {username}</Text>
-      <Text>Email: {email}</Text>
-      <Text>Bio: {bio}</Text>
-      <Text>Points: {points}</Text>
-      <Text>Language: {language}</Text>
+      <Typography variant="body1">Username: {username}</Typography>
+      <Typography variant="body1">Email: {email}</Typography>
+      <Typography variant="body1">Bio: {bio}</Typography>
+      <Typography variant="body1">Points: {points}</Typography>
+      <Typography variant="body1">Language: {language}</Typography>
     </InfoSection>
     <Link href={`/user/${id}/edit`}>
       <Button variant="contained" color="primary" fullWidth>

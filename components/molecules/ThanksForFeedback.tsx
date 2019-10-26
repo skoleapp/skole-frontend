@@ -1,15 +1,12 @@
-import { Button } from '@material-ui/core';
-import Link from 'next/link';
+import { Button, Typography } from '@material-ui/core';
+import Router from 'next/router';
 import React from 'react';
-import { Text } from '../atoms';
 
 export const ThanksForFeedback: React.FC = () => (
   <>
-    <Text>Thank you for your feedback!</Text>
-    <Link href="/">
-      <Button variant="contained" color="primary">
-        back to home
-      </Button>
-    </Link>
+    <Typography variant="h3">Thank you for your feedback!</Typography>
+    <Button variant="contained" color="primary" onClick={(): Promise<boolean> => Router.push('/')}>
+      back to home
+    </Button>
   </>
 );
