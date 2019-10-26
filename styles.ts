@@ -44,8 +44,7 @@ export const GlobalStyle = createGlobalStyle`
 
     :root {
         /* Backgrounds */
-        --primary-bg: var(--secondary);
-        --secondary-bg: url('images/background.jpg');
+        --background: var(--secondary);
       
         /* Colors */
         --primary: ${primary};
