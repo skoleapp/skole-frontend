@@ -2,6 +2,7 @@ import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { Layout } from '../../../components';
+import { withAuth } from '../../../lib';
 
 const CourseDetailPage: NextPage = () => (
   <Layout title="Course Detail">
@@ -10,4 +11,4 @@ const CourseDetailPage: NextPage = () => (
   </Layout>
 );
 
-export default CourseDetailPage;
+export default withAuth(CourseDetailPage);

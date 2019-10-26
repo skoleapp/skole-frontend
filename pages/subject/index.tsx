@@ -2,6 +2,7 @@ import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { Layout } from '../../components';
+import { withAuth } from '../../lib';
 
 const SubjectListPage: NextPage = () => (
   <Layout title="Subject List">
@@ -10,4 +11,4 @@ const SubjectListPage: NextPage = () => (
   </Layout>
 );
 
-export default SubjectListPage;
+export default withAuth(SubjectListPage);
