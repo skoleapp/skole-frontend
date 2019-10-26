@@ -2,7 +2,7 @@ import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { AccountCircle, PermIdentity } from '@material-ui/icons';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import RestoreIcon from '@material-ui/icons/Restore';
+import SearchIcon from '@material-ui/icons/Search';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -33,10 +33,13 @@ export const BottomNavbar: React.FC = () => {
         showLabels
         className="root"
       >
-        <BottomNavigationAction icon={<RestoreIcon />} />
+        <BottomNavigationAction
+          onClick={(): Promise<boolean> => Router.push('/search')}
+          icon={<SearchIcon />}
+        />
         <BottomNavigationAction icon={<LocationOnIcon />} />
         {authenticated ? (
-          <>
+          <div>
             <BottomNavigationAction
               onClick={(): Promise<boolean> => Router.push(`/user/${user.id}`)}
               icon={<FavoriteIcon />}
@@ -45,7 +48,7 @@ export const BottomNavbar: React.FC = () => {
               onClick={(): Promise<boolean> => Router.push(`/user/${user.id}`)}
               icon={<AccountCircle />}
             />
-          </>
+          </div>
         ) : (
           <BottomNavigationAction
             onClick={(): Promise<boolean> => Router.push('/login')}
