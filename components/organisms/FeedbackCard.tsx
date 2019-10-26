@@ -1,11 +1,13 @@
-import { Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { Formik } from 'formik';
+import Router from 'next/router';
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import * as Yup from 'yup';
 import { FeedbackFormValues } from '../../interfaces';
 import { FeedbackType } from '../../types';
-import { FeedbackButtonSection, FeedbackForm, ThanksForFeedback } from '../molecules';
 import { Card } from '../atoms';
+import { FeedbackButtonSection, FeedbackForm } from '../molecules';
 
 const initialValues = {
   comment: ''
@@ -25,10 +27,10 @@ export const FeedbackCard: React.FC = () => {
   };
 
   return (
-    <Card>
-      <Typography variant="h5">Leave Feedback</Typography>
+    <StyledFeedbackCard>
       {!submitted ? (
         <>
+          <Typography variant="h5">Leave feedback</Typography>
           <FeedbackButtonSection setRate={setRate} />
           <Formik
             onSubmit={onSubmit}
@@ -38,8 +40,24 @@ export const FeedbackCard: React.FC = () => {
           />
         </>
       ) : (
-        <ThanksForFeedback />
+        <>
+          <Typography variant="h5">Thank you for your feedback!</Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={(): Promise<boolean> => Router.push('/')}
+            className="back-to-home-button"
+          >
+            back to home
+          </Button>
+        </>
       )}
-    </Card>
+    </StyledFeedbackCard>
   );
 };
+
+const StyledFeedbackCard = styled(Card)`
+  .back-to-home-button {
+    margin-top: 1rem;
+  }
+`;

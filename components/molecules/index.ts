@@ -4,4 +4,3 @@ export { FeedbackForm } from './FeedbackForm';
 export { LoginForm } from './LoginForm';
 export { PublicAuthButtons } from './PublicAuthButtons';
 export { RegisterForm } from './RegisterForm';
-export { ThanksForFeedback } from './ThanksForFeedback';
