@@ -1,9 +1,9 @@
+import { Typography } from '@material-ui/core';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { FeedbackFormValues } from '../../interfaces';
 import { FeedbackType } from '../../types';
-import { H1 } from '../atoms';
 import { FeedbackButtonSection, FeedbackForm, ThanksForFeedback } from '../molecules';
 
 const initialValues = {
@@ -25,7 +25,7 @@ export const FeedbackCard: React.FC = () => {
 
   return (
     <>
-      <H1>Leave Feedback</H1>
+      <Typography variant="h3">Leave Feedback</Typography>
       {!submitted ? (
         <>
           <FeedbackButtonSection rate={rate} setRate={setRate} />
