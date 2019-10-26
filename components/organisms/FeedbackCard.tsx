@@ -5,13 +5,14 @@ import * as Yup from 'yup';
 import { FeedbackFormValues } from '../../interfaces';
 import { FeedbackType } from '../../types';
 import { FeedbackButtonSection, FeedbackForm, ThanksForFeedback } from '../molecules';
+import { Card } from '../atoms';
 
 const initialValues = {
   comment: ''
 };
 
 const validationSchema = Yup.object().shape({
-  comment: Yup.string().required('Please tell us some details about your feedback :)')
+  comment: Yup.string().required('Please tell us some details about your feedback.')
 });
 
 export const FeedbackCard: React.FC = () => {
@@ -24,7 +25,7 @@ export const FeedbackCard: React.FC = () => {
   };
 
   return (
-    <>
+    <Card>
       <Typography variant="h5">Leave Feedback</Typography>
       {!submitted ? (
         <>
@@ -39,6 +40,6 @@ export const FeedbackCard: React.FC = () => {
       ) : (
         <ThanksForFeedback />
       )}
-    </>
+    </Card>
   );
 };
