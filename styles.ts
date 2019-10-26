@@ -43,9 +43,6 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     :root {
-        /* Backgrounds */
-        --background: var(--secondary);
-      
         /* Colors */
         --primary: ${primary};
         --secondary: rgba(250, 242, 222);
