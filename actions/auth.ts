@@ -37,7 +37,7 @@ interface UserMe {
 export const getUserMe = async (apolloClient: ApolloClient<any>): Promise<UserMe> => {
   try {
     const { data } = await apolloClient.query({ query: UserMeDocument });
-    return { userMe: data.user };
+    return { userMe: data.userMe };
   } catch {
     return { userMe: null };
   }
