@@ -20,7 +20,7 @@ export interface UserInfo {
   language: string | null;
 }
 
-export interface UserPageInitialProps {
+export interface UserPageProps {
   user: User | null;
 }
 

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State } from '../../interfaces';
 import { Container } from '../containers';
-import { Footer, Head, MobileMenu, Navbar } from '../layout';
+import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
 
 interface StyledMainLayoutProps {
   secondary?: boolean;
@@ -30,9 +30,9 @@ export const MainLayout: React.FC<Props> = ({ title, children, secondary }) => {
   return (
     <StyledMainLayout secondary={secondary} menuOpen={menuOpen}>
       <Head title={title} />
-      <Navbar />
-      <MobileMenu />
+      <TopNavbar />
       <Container>{children}</Container>
+      <BottomNavbar />
       <Footer />
     </StyledMainLayout>
   );

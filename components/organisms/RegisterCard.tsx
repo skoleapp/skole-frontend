@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import React, { useRef } from 'react';
 import { useApolloClient } from 'react-apollo';
@@ -7,7 +8,7 @@ import { login } from '../../actions';
 import { useRegisterMutation } from '../../generated/graphql';
 import { RegisterFormValues } from '../../interfaces';
 import { createFormErrors } from '../../utils';
-import { Card, H1 } from '../atoms';
+import { Card } from '../atoms';
 import { RegisterForm } from '../molecules';
 
 const initialValues = {
@@ -73,7 +74,7 @@ export const RegisterCard: React.FC = () => {
 
   return (
     <Card>
-      <H1>Register</H1>
+      <Typography variant="h5">register</Typography>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

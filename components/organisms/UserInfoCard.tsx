@@ -1,9 +1,9 @@
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { User } from '../../interfaces';
-import { Card, H3, Text } from '../atoms';
+import { Card, Text } from '../atoms';
 
 const StyledImage = styled.img`
   height: 10rem;
@@ -25,7 +25,7 @@ export const UserInfoCard: React.FC<User> = ({
   language
 }) => (
   <Card>
-    <H3>{title}</H3>
+    <Typography variant="h3">{title}</Typography>
     <StyledImage src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
     <InfoSection>
       <Text>Username: {username}</Text>
