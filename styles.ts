@@ -2,12 +2,19 @@ import { createMuiTheme } from '@material-ui/core';
 import { createGlobalStyle } from 'styled-components';
 
 const primary = 'rgb(173, 54, 54)';
+const white = '#ffffff';
 
 export const theme = createMuiTheme({
   palette: {
     primary: {
       main: primary
+    },
+    secondary: {
+      main: white
     }
+  },
+  typography: {
+    fontSize: 14
   }
 });
 
