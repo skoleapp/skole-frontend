@@ -13,13 +13,6 @@ export interface AuthState {
   authenticated: boolean | null;
 }
 
-export interface UIState {
-  menuOpen: boolean;
-  authMenuOpen: boolean;
-  searchInputOpen: boolean;
-}
-
 export interface State {
   auth: AuthState;
-  ui: UIState;
 }
