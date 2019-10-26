@@ -4,7 +4,7 @@ import { XS } from '../../utils';
 
 export const StyledCard = styled(Card)`
   padding: 1rem;
-  // margin: 0 1rem;
+  margin: 0 1rem;
   max-width: 25rem;
 
   @media screen and (min-width: ${XS}) {
