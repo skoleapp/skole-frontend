@@ -1,13 +1,16 @@
+import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout, Text } from '../../components';
-import { withApollo } from '../../lib';
+import { MainLayout } from '../../components';
+import { withAuth } from '../../lib';
 
 const UserListPage: NextPage = () => (
   <MainLayout title="User List">
-    <H1>User List</H1>
-    <Text>Here will be a list of public user profiles, a leaderboard maybe?</Text>
+    <Typography variant="h3">User List</Typography>
+    <Typography variant="body1">
+      Here will be a list of public user profiles, a leaderboard maybe?
+    </Typography>
   </MainLayout>
 );
 
-export default withApollo(UserListPage);
+export default withAuth(UserListPage);

@@ -2,27 +2,28 @@ import { NextPage } from 'next';
 import React from 'react';
 import { getUser, getUserMe } from '../../../actions';
 import { MainLayout, NotFoundCard, UserInfoCard } from '../../../components';
-import { SkoleContext, UserPageInitialProps } from '../../../interfaces';
-import { withApollo } from '../../../lib';
+import { SkoleContext, UserPageProps } from '../../../interfaces';
+import { withAuth } from '../../../lib';
 import { userNotFoundText } from '../../../utils';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const UserPage: NextPage<any> = ({ user }) => (
   <MainLayout title="User">
     {user ? <UserInfoCard {...user} /> : <NotFoundCard text={userNotFoundText} />}
   </MainLayout>
 );
 
-UserPage.getInitialProps = async (ctx: SkoleContext): Promise<UserPageInitialProps> => {
+UserPage.getInitialProps = async (ctx: SkoleContext): Promise<UserPageProps> => {
   const { query, apolloClient } = ctx;
   const { userMe } = await getUserMe(apolloClient);
 
   // Use public or private profile based on query.
-  if (userMe && query.id !== userMe.id) {
+  if (userMe && query.id === userMe.id) {
+    return { user: userMe };
+  } else {
     const { user } = await getUser(query.id as any, apolloClient); // eslint-disable-line @typescript-eslint/no-explicit-any
     return { user };
-  } else {
-    return { user: userMe };
   }
 };
 
-export default withApollo(UserPage);
+export default withAuth(UserPage);
