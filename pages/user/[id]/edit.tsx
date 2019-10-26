@@ -7,7 +7,7 @@ import { withPrivate } from '../../../lib';
 import { userNotFoundText } from '../../../utils';
 
 const EditUserPage: NextPage = () => {
-  const { user } = useSelector((state: State) => state.auth);
+  const { user, authenticated } = useSelector((state: State) => state.auth);
 
   const initialValues = {
     id: (user && user.id) || '',
@@ -21,7 +21,7 @@ const EditUserPage: NextPage = () => {
 
   return (
     <Layout title="Edit User">
-      {user ? (
+      {authenticated ? (
         <EditUserCard initialValues={initialValues} />
       ) : (
         <NotFoundCard text={userNotFoundText} />

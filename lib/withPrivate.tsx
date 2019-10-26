@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { getUserMe } from '../actions';
+import { getUserMe, setUserMe } from '../actions';
 import { SkoleContext } from '../interfaces';
 import { withApollo } from './apollo';
 import { getToken } from './getToken';
@@ -13,7 +13,7 @@ export const withPrivate = (WrappedComponent: NextPage): any => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Wrapper.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
-    const { req, apolloClient } = ctx;
+    const { req, apolloClient, reduxStore } = ctx;
     const token = getToken(req);
 
     if (token) {
@@ -21,7 +21,11 @@ export const withPrivate = (WrappedComponent: NextPage): any => {
 
       if (!userMe) {
         redirect(ctx, '/login');
+      } else {
+        await reduxStore.dispatch(setUserMe(userMe));
       }
+    } else {
+      redirect(ctx, '/login');
     }
 
     const componentProps =
