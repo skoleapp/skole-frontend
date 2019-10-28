@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-
 import * as R from 'ramda';
 import { Anchor } from '../atoms';
 import Router from 'next/router';
-
 import { withStyles } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { Universities, AMKs, HighSchools } from '../../utils/schools';
 
