@@ -9,8 +9,11 @@ import React from 'react';
 import { SkoleContext } from '../interfaces';
 import { getToken } from './getToken';
 
-export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
-  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: any) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const withApollo = (PageComponent: any, { ssr = true } = {}): any => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: any): any => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const client = apolloClient || initApolloClient(apolloState, { getToken });
     return (
       <ApolloProvider client={client}>
@@ -30,8 +33,9 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async (ctx: SkoleContext) => {
+    WithApollo.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
       const { AppTree } = ctx;
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       const apolloClient = (ctx.apolloClient = initApolloClient(
         {},
         {
@@ -77,28 +81,31 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}) => {
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
-// eslint-disable-next-line
-const initApolloClient = (initState: any, { getToken }: any) => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const initApolloClient = (initState: any, { getToken }: any): any => {
+  /* eslint-enable */
   if (typeof window === 'undefined') {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return createApolloClient(initState, { getToken });
   }
 
   if (!apolloClient) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     apolloClient = createApolloClient(initState, { getToken });
   }
 
   return apolloClient;
 };
 
-// eslint-disable-next-line
-const createApolloClient = (initialState = {}, { getToken }: any) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const createApolloClient = (initialState = {}, { getToken }: any): any => {
   const httpLink = new HttpLink({
     uri: 'http://localhost:8000/graphql/',
     credentials: 'include',
     fetch
   });
 
-  const authLink = setContext((_request, { headers }) => {
+  const authLink = setContext((_req, { headers }) => {
     const token = getToken();
     return {
       headers: {

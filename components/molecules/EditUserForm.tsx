@@ -1,25 +1,36 @@
-import { Field, FormikProps } from 'formik';
+import { Link } from '@material-ui/core';
+import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
 import { User } from '../../interfaces';
-import {
-  Form,
-  FormLinkSection,
-  FormSubmitSection,
-  SelectFormField,
-  TextInputFormField
-} from '../atoms';
+import { FormSubmitSection, SelectFormField, TextFormField } from '../atoms';
+
+const languageOptions = [
+  {
+    value: 'english',
+    label: 'english'
+  },
+  {
+    value: 'finnish',
+    label: 'finnish'
+  }
+];
 
 export const EditUserForm: React.ComponentType<FormikProps<User>> = props => (
-  <Form {...props}>
-    <Field placeholder="Title" name="title" component={TextInputFormField} label="Title" />
-    <Field placeholder="Username" name="username" component={TextInputFormField} label="Username" />
-    <Field placeholder="Email" name="email" component={TextInputFormField} label="Email" />
-    <Field placeholder="Bio" name="bio" component={TextInputFormField} label="Bio" />
-    <Field placeholder="Language" name="language" component={SelectFormField} label="Language">
-      <option value="english">English</option>
-      <option value="finnish">Finnish</option>
-    </Field>
+  <Form>
+    <Field placeholder="Title" name="title" component={TextFormField} label="Title" />
+    <Field placeholder="Username" name="username" component={TextFormField} label="Username" />
+    <Field placeholder="Email" name="email" component={TextFormField} label="Email" />
+    <Field placeholder="Bio" name="bio" component={TextFormField} label="Bio" />
+    <Field
+      placeholder="Language"
+      name="language"
+      component={SelectFormField}
+      options={languageOptions}
+      label="Language"
+    />
     <FormSubmitSection submitButtonText="save" {...props} />
-    <FormLinkSection href={`/user/${props.values.id}`} text="Back to Account" />
+    <Link href={`/user/${props.values.id}`} color="primary">
+      Back to Account
+    </Link>
   </Form>
 );

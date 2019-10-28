@@ -1,12 +1,14 @@
+import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout, Text } from '../../components';
+import { Layout } from '../../components';
+import { withAuth } from '../../lib';
 
 const SchoolListPage: NextPage = () => (
-  <MainLayout title="School List">
-    <H1>School List</H1>
-    <Text>Here will be list of all schools.</Text>
-  </MainLayout>
+  <Layout title="School List">
+    <Typography variant="h5">School List</Typography>
+    <Typography variant="body1">Here will be list of all schools.</Typography>
+  </Layout>
 );
 
-export default SchoolListPage;
+export default withAuth(SchoolListPage);

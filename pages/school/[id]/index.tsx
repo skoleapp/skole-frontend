@@ -1,12 +1,16 @@
+import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout, Text } from '../../../components';
+import { Layout } from '../../../components';
+import { withAuth } from '../../../lib';
 
 const SchoolDetailPage: NextPage = () => (
-  <MainLayout title="School Detail">
-    <H1>School Detail</H1>
-    <Text>Here will be school detail with a list of faculties of that school.</Text>
-  </MainLayout>
+  <Layout title="School Detail">
+    <Typography variant="h5">School Detail</Typography>
+    <Typography variant="body1">
+      Here will be school detail with a list of faculties of that school.
+    </Typography>
+  </Layout>
 );
 
-export default SchoolDetailPage;
+export default withAuth(SchoolDetailPage);

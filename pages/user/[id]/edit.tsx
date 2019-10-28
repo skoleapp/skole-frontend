@@ -1,14 +1,14 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { EditUserCard, MainLayout } from '../../../components';
-import { SkoleContext, User, UserPageInitialProps } from '../../../interfaces';
-import { redirect, withAuthSync } from '../../../lib';
+import { useSelector } from 'react-redux';
+import { EditUserCard, Layout, NotFoundCard } from '../../../components';
+import { State } from '../../../interfaces';
+import { withPrivate } from '../../../lib';
+import { userNotFoundText } from '../../../utils';
 
-interface Props {
-  user?: User;
-}
+const EditUserPage: NextPage = () => {
+  const { user, authenticated } = useSelector((state: State) => state.auth);
 
-const EditUserPage: NextPage<Props> = ({ user }) => {
   const initialValues = {
     id: (user && user.id) || '',
     title: (user && user.title) || '',
@@ -20,25 +20,14 @@ const EditUserPage: NextPage<Props> = ({ user }) => {
   };
 
   return (
-    <MainLayout title="Edit User">
-      <EditUserCard initialValues={initialValues} />
-    </MainLayout>
+    <Layout title="Edit User">
+      {authenticated ? (
+        <EditUserCard initialValues={initialValues} />
+      ) : (
+        <NotFoundCard text={userNotFoundText} />
+      )}
+    </Layout>
   );
 };
 
-EditUserPage.getInitialProps = async (ctx: SkoleContext): Promise<UserPageInitialProps> => {
-  const { store, query } = ctx;
-  const { authenticated, user } = store.getState().auth;
-
-  if (query.id !== user.id) {
-    redirect(ctx, `/user/${query.id}`); // Redirect to public user profile page if not own profile.
-  } else {
-    if (authenticated) {
-      return { user };
-    }
-  }
-
-  return {};
-};
-
-export default withAuthSync(EditUserPage);
+export default withPrivate(EditUserPage);

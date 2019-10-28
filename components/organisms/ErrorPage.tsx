@@ -1,4 +1,6 @@
+import { Typography } from '@material-ui/core';
 import React from 'react';
-import { H1 } from '../atoms';
 
-export const ErrorPage: React.FC = () => <H1>Something went wrong...</H1>;
+export const ErrorPage: React.FC = () => (
+  <Typography variant="h5">Something went wrong...</Typography>
+);

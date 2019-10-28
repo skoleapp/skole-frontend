@@ -1,7 +1,8 @@
+import { Typography } from '@material-ui/core';
 import { Formik } from 'formik';
 import React from 'react';
 import { User } from '../../interfaces';
-import { Card, H1 } from '../atoms';
+import { Card } from '../atoms';
 import { EditUserForm } from '../molecules';
 
 interface Props {
@@ -21,7 +22,7 @@ export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
 
   return (
     <Card>
-      <H1>Edit Account</H1>
+      <Typography variant="h5">Edit Account</Typography>
       <Formik component={EditUserForm} initialValues={initialValues} onSubmit={onSubmit} />
     </Card>
   );

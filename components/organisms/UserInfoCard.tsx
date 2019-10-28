@@ -1,41 +1,42 @@
-import Link from 'next/link';
+import { Avatar, Button, Typography } from '@material-ui/core';
+import Router from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 import { User } from '../../interfaces';
-import avatar from '../../static/images/avatar.jpg';
-import { Button, Card, H3, Text } from '../atoms';
+import { Card } from '../atoms';
 
-const StyledImage = styled.img`
-  height: 10rem;
-  width: 10rem;
-  border-radius: 0.5rem;
-`;
-
-const InfoSection = styled.div`
-  margin-top: 1rem;
-`;
-
-export const UserInfoCard: React.FC<User> = ({
-  id,
-  title,
-  username,
-  email,
-  bio,
-  points,
-  language
-}) => (
-  <Card>
-    <H3>{title}</H3>
-    <StyledImage src={avatar} />
-    <InfoSection>
-      <Text>Username: {username}</Text>
-      <Text>Email: {email}</Text>
-      <Text>Bio: {bio}</Text>
-      <Text>Points: {points}</Text>
-      <Text>Language: {language}</Text>
-    </InfoSection>
-    <Link href={`/user/${id}/edit`}>
-      <Button>edit account</Button>
-    </Link>
-  </Card>
+export const UserInfoCard: React.FC<User> = ({ id, title, username, bio, points }) => (
+  <StyledCard>
+    <Typography variant="h5">{title}</Typography>
+    <Avatar src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
+    <div className="info-section">
+      <Typography variant="body1">{username}</Typography>
+      <Typography variant="body1">Bio: {bio}</Typography>
+      <Typography variant="body1">Points: {points}</Typography>
+    </div>
+    <Button
+      onClick={(): Promise<boolean> => Router.push(`/user/${id}/edit`)}
+      variant="contained"
+      color="primary"
+      fullWidth
+    >
+      edit account
+    </Button>
+  </StyledCard>
 );
+
+const StyledCard = styled(Card)`
+  .info-section {
+    margin-top: 1rem;
+
+    p {
+      margin: 0.5rem 0;
+    }
+  }
+
+  .MuiAvatar-root {
+    margin: 0 auto;
+    width: 10rem;
+    height: 10rem;
+  }
+`;

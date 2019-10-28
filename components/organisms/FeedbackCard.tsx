@@ -1,17 +1,20 @@
+import { Button, Typography } from '@material-ui/core';
 import { Formik } from 'formik';
+import Router from 'next/router';
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import * as Yup from 'yup';
 import { FeedbackFormValues } from '../../interfaces';
 import { FeedbackType } from '../../types';
-import { H1 } from '../atoms';
-import { FeedbackButtonSection, FeedbackForm, ThanksForFeedback } from '../molecules';
+import { Card } from '../atoms';
+import { FeedbackButtonSection, FeedbackForm } from '../molecules';
 
 const initialValues = {
   comment: ''
 };
 
 const validationSchema = Yup.object().shape({
-  comment: Yup.string().required('Please tell us some details about your feedback :)')
+  comment: Yup.string().required('Please tell us some details about your feedback.')
 });
 
 export const FeedbackCard: React.FC = () => {
@@ -24,11 +27,11 @@ export const FeedbackCard: React.FC = () => {
   };
 
   return (
-    <>
-      <H1>Leave Feedback</H1>
+    <StyledFeedbackCard>
       {!submitted ? (
         <>
-          <FeedbackButtonSection rate={rate} setRate={setRate} />
+          <Typography variant="h5">Leave feedback</Typography>
+          <FeedbackButtonSection setRate={setRate} />
           <Formik
             onSubmit={onSubmit}
             initialValues={initialValues}
@@ -37,8 +40,24 @@ export const FeedbackCard: React.FC = () => {
           />
         </>
       ) : (
-        <ThanksForFeedback />
+        <>
+          <Typography variant="h5">Thank you for your feedback!</Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={(): Promise<boolean> => Router.push('/')}
+            className="back-to-home-button"
+          >
+            back to home
+          </Button>
+        </>
       )}
-    </>
+    </StyledFeedbackCard>
   );
 };
+
+const StyledFeedbackCard = styled(Card)`
+  .back-to-home-button {
+    margin-top: 1rem;
+  }
+`;

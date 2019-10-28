@@ -1,12 +1,13 @@
+import { Typography } from '@material-ui/core';
 import React from 'react';
-import { H1, MainLayout, Text } from '../components';
-import { withAuthSync } from '../lib';
+import { Layout } from '../components';
+import { withAuth } from '../lib';
 
 const CreateCoursePage: React.FC = () => (
-  <MainLayout title="Create Course">
-    <H1>Create Course</H1>
-    <Text>Course creation form will be shown here.</Text>
-  </MainLayout>
+  <Layout title="Create Course">
+    <Typography variant="h5">Create Course</Typography>
+    <Typography variant="body1">Course creation form will be shown here.</Typography>
+  </Layout>
 );
 
-export default withAuthSync(CreateCoursePage);
+export default withAuth(CreateCoursePage);

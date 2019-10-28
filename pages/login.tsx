@@ -1,23 +1,12 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { LoginCard, MainLayout } from '../components';
-import { SkoleContext } from '../interfaces';
-import { redirect, withAuthSync } from '../lib';
+import { Layout, LoginCard } from '../components';
+import { withPublic } from '../lib';
 
 const LoginPage: NextPage = () => (
-  <MainLayout title="Login">
+  <Layout title="Login">
     <LoginCard />
-  </MainLayout>
+  </Layout>
 );
 
-LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
-  const { authenticated } = ctx.store.getState().auth;
-
-  if (authenticated) {
-    redirect(ctx, '/');
-  }
-
-  return {};
-};
-
-export default withAuthSync(LoginPage);
+export default withPublic(LoginPage);

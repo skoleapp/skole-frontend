@@ -1,58 +1,51 @@
+import { CssBaseline } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
 import { NextPage, NextPageContext } from 'next';
-import withRedux from 'next-redux-wrapper';
 import App from 'next/app';
-import { AppContextType } from 'next/dist/next-server/lib/utils';
-import Router, { Router as RouterType } from 'next/router';
+import Router from 'next/router';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import React from 'react';
-import { Provider as StoreProvider } from 'react-redux';
-import { Store } from 'redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { LoadingScreen } from '../components/layout';
-import { initStore, withApollo } from '../lib';
-import '../static/styles';
+import { GlobalStyle, theme } from '../styles';
 
 interface Props {
-  Component: NextPage<any>;
+  Component: NextPage<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   pageProps: NextPageContext;
-  store: Store;
 }
 
-class SkoleApp extends App<Props> {
-  static async getInitialProps({ Component, ctx }: AppContextType<RouterType>) {
-    let pageProps = {};
+export default class SkoleApp extends App<Props> {
+  componentDidMount(): void {
+    const jssStyles = document.querySelector('#jss-server-side');
 
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
     }
-
-    return { pageProps };
   }
 
-  state = {
-    redirect: false
-  };
+  render(): JSX.Element {
+    const { Component, pageProps } = this.props;
 
-  render() {
-    const { Component, store, pageProps } = this.props;
-
-    Router.events.on('routeChangeStart', () => this.setState({ ...this.state, redirect: true }));
-    Router.events.on('routeChangeError', () => this.setState({ ...this.state, redirect: false }));
-    Router.events.on('routeChangeComplete', () =>
-      this.setState({ ...this.state, redirect: false })
-    );
-
-    if (this.state.redirect) {
-      return <LoadingScreen />;
-    }
+    Router.events.on('routeChangeStart', () => NProgress.start());
+    Router.events.on('routeChangeComplete', () => NProgress.done());
+    Router.events.on('routeChangeError', () => NProgress.done());
 
     return (
-      <StoreProvider store={store}>
-        <PersistGate persistor={(store as any).__PERSISTOR} loading={null}>
-          <Component {...pageProps} />
-        </PersistGate>
-      </StoreProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </ThemeProvider>
     );
   }
 }
 
-export default withApollo(withRedux(initStore)(SkoleApp));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+SkoleApp.getInitialProps = async ({ Component, ctx }: any): Promise<any> => {
+  let pageProps = {};
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return { pageProps };
+};
