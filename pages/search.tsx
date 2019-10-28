@@ -1,13 +1,14 @@
+import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout, Text } from '../components';
-import { withAuthSync } from '../lib';
+import { Layout } from '../components';
+import { withAuth } from '../lib';
 
 const SearchPage: NextPage = () => (
-  <MainLayout title="Search">
-    <H1>Search</H1>
-    <Text>Search results will be show here.</Text>
-  </MainLayout>
+  <Layout title="Search">
+    <Typography variant="h5">Search</Typography>
+    <Typography variant="body1">Search results will be show here.</Typography>
+  </Layout>
 );
 
-export default withAuthSync(SearchPage);
+export default withAuth(SearchPage);

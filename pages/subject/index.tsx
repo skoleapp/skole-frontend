@@ -1,12 +1,14 @@
+import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout, Text } from '../../components';
+import { Layout } from '../../components';
+import { withAuth } from '../../lib';
 
 const SubjectListPage: NextPage = () => (
-  <MainLayout title="Subject List">
-    <H1>Subject List</H1>
-    <Text>Here will be list of all subjects.</Text>
-  </MainLayout>
+  <Layout title="Subject List">
+    <Typography variant="h5">Subject List</Typography>
+    <Typography variant="body1">Here will be list of all subjects.</Typography>
+  </Layout>
 );
 
-export default SubjectListPage;
+export default withAuth(SubjectListPage);

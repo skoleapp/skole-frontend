@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import * as R from 'ramda';
-import { Anchor } from '../atoms';
 import Router from 'next/router';
 import { withStyles } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -8,6 +7,7 @@ import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { Universities, AMKs, HighSchools } from '../../utils/schools';
+import { Link } from '@material-ui/core';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -48,9 +48,9 @@ interface SchoolRowProps {
   index: number;
   school: any;
   handleSchoolSelection: (index: number) => void;
-  selectedSchool: number | null;
-  selectedFaculty: number | null;
-  setFoo: (any) => void;
+  selectedSchool: number;
+  selectedFaculty: number;
+  setFoo: (arg0: any) => void;
   foo: any;
 }
 interface FacultyRowProps {
@@ -58,7 +58,7 @@ interface FacultyRowProps {
   index: number;
   faculty: any;
   handleFacultySelection: (index: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  selectedFaculty: number | null;
+  selectedFaculty: number;
 }
 
 const handleFacilityClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
@@ -88,12 +88,12 @@ const FacultyRow: React.FC<FacultyRowProps> = ({
         <ul>
           {facilities.map((facility: any, index: number) => (
             <li style={{ margin: 10 }} key={index}>
-              <Anchor
+              <Link
                 href={R.prop('href', facility)}
-                onClick={e => handleFacilityClick(e, R.prop('href', facility))}
+                onClick={(e: any) => handleFacilityClick(e, R.prop('href', facility))}
               >
                 {R.prop('id', facility)}
-              </Anchor>
+              </Link>
             </li>
           ))}
         </ul>
@@ -161,32 +161,33 @@ export const ListingPage: React.FC = () => {
   const [foo, setFoo] = useState({
     selectedSchoolTypeString: 'University',
     selectedSchoolType: Universities,
-    selectedSchool: null,
-    selectedFaculty: null
+    selectedSchool: -1,
+    selectedFaculty: -1
   });
 
-  const handleSwitch = (event: React.MouseEvent<HTMLElement>, newSchoolType: any) => {
+  const handleSwitch = (_event: React.MouseEvent<HTMLElement, MouseEvent>, newSchoolType: any) => {
+    console.log(newSchoolType);
     switch (newSchoolType) {
       case 'University': {
         return setFoo({
-          selectedSchool: null,
-          selectedFaculty: null,
+          selectedSchool: -1,
+          selectedFaculty: -1,
           selectedSchoolTypeString: newSchoolType,
           selectedSchoolType: Universities
         });
       }
       case 'AMKs': {
         return setFoo({
-          selectedSchool: null,
-          selectedFaculty: null,
+          selectedSchool: -1,
+          selectedFaculty: -1,
           selectedSchoolTypeString: newSchoolType,
           selectedSchoolType: AMKs
         });
       }
       case 'HighSchools': {
         return setFoo({
-          selectedSchool: null,
-          selectedFaculty: null,
+          selectedSchool: -1,
+          selectedFaculty: -1,
           selectedSchoolTypeString: newSchoolType,
           selectedSchoolType: HighSchools
         });
@@ -200,7 +201,7 @@ export const ListingPage: React.FC = () => {
 
   const handleSchoolSelection = (index: number) => {
     index === selectedSchool
-      ? setFoo({ ...foo, selectedSchool: null })
+      ? setFoo({ ...foo, selectedSchool: -1 })
       : setFoo({ ...foo, selectedSchool: index });
   };
 

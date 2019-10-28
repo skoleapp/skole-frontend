@@ -1,22 +1,17 @@
-import { Field, FormikProps } from 'formik';
+import { Link } from '@material-ui/core';
+import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
 import { RegisterFormValues } from '../../interfaces';
-import {
-  CheckboxFormField,
-  Form,
-  FormLinkSection,
-  FormSubmitSection,
-  TextInputFormField
-} from '../atoms';
+import { CheckboxFormField, FormSubmitSection, TextFormField } from '../atoms';
 
 export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> = props => (
-  <Form {...props}>
-    <Field placeholder="Username" name="username" component={TextInputFormField} label="Username" />
-    <Field placeholder="Email" name="email" component={TextInputFormField} label="Email" />
+  <Form>
+    <Field placeholder="Username" name="username" component={TextFormField} label="Username" />
+    <Field placeholder="Email" name="email" component={TextFormField} label="Email" />
     <Field
       placeholder="Password"
       name="password"
-      component={TextInputFormField}
+      component={TextFormField}
       label="Password"
       type="password"
     />
@@ -24,11 +19,13 @@ export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> 
       placeholder="Confirm password"
       name="confirmPassword"
       type="password"
-      component={TextInputFormField}
+      component={TextFormField}
       label="Confirm Password"
     />
     <Field name="agreeToTerms" component={CheckboxFormField} label="Agree to Terms" />
     <FormSubmitSection submitButtonText="register" {...props} />
-    <FormLinkSection href="/login" text="Already a user?" />
+    <Link href="/login" color="primary">
+      Already a user?
+    </Link>
   </Form>
 );

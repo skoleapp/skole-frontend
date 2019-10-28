@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { LandingPage, MainLayout } from '../components';
-import { withAuthSync } from '../lib';
+import { LandingPageContent, Layout } from '../components';
+import { withAuth } from '../lib/withAuth';
 
 const IndexPage: NextPage = () => (
-  <MainLayout title="Home" secondary>
-    <LandingPage />
-  </MainLayout>
+  <Layout title="Home">
+    <LandingPageContent />
+  </Layout>
 );
 
-export default withAuthSync(IndexPage);
+export default withAuth(IndexPage);

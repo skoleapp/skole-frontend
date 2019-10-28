@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import React, { useRef } from 'react';
 import { useApolloClient } from 'react-apollo';
@@ -7,7 +8,7 @@ import { login } from '../../actions';
 import { useRegisterMutation } from '../../generated/graphql';
 import { RegisterFormValues } from '../../interfaces';
 import { createFormErrors } from '../../utils';
-import { Card, H1 } from '../atoms';
+import { Card } from '../atoms';
 import { RegisterForm } from '../molecules';
 
 const initialValues = {
@@ -39,13 +40,13 @@ const validationSchema = Yup.object().shape({
 
 export const RegisterCard: React.FC = () => {
   const client = useApolloClient();
-  const ref = useRef<any>(); // eslint-disable-line
+  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
   const dispatch = useDispatch();
 
   // eslint-disable-next-line
   const onCompleted = (data: any) => {
     if (data.register.errors) {
-      return onError(data.register.errors);
+      return onError(data.register.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
     }
 
     dispatch(login({ client, ...data.login }));
@@ -56,7 +57,7 @@ export const RegisterCard: React.FC = () => {
   const onError = (errors: any) => {
     const formErrors = createFormErrors(errors);
     Object.keys(formErrors).forEach(
-      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line
+      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
     );
   };
 
@@ -73,7 +74,7 @@ export const RegisterCard: React.FC = () => {
 
   return (
     <Card>
-      <H1>Register</H1>
+      <Typography variant="h5">register</Typography>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

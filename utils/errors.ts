@@ -1,7 +1,8 @@
-const R = require('ramda');
+import * as R from 'ramda';
 import { FormErrors } from '../interfaces';
+import { networkErrorMessage } from './messages';
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createFormErrors = (errors: any): FormErrors => {
   const formErrors = {
     username: '',
@@ -12,21 +13,23 @@ export const createFormErrors = (errors: any): FormErrors => {
     serverNotFound: ''
   };
 
-  if (!R.isEmpty({ ...errors })) {
-    if (errors.networkError && errors.networkError.name === 'ServerError') {
-      formErrors.general = errors.message;
+  if (!R.isEmpty(errors)) {
+    if (errors.networkError) {
+      formErrors.general = networkErrorMessage;
     } else if (errors.graphQLErrors && errors.graphQLErrors.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       errors.graphQLErrors.map((e: any) => {
         if (e.field) {
-          (formErrors as any)[e.field] = e.message;
+          (formErrors as any)[e.field] = e.message; // eslint-disable-line @typescript-eslint/no-explicit-any
         } else {
           formErrors.general = e.message;
         }
       });
     } else {
+      // eslint-disable-next-line
       errors.map((e: any) => {
         if (e.field) {
-          (formErrors as any)[e.field] = e.messages.join();
+          (formErrors as any)[e.field] = e.messages.join(); // eslint-disable-line @typescript-eslint/no-explicit-any
         } else {
           formErrors.general = e.messages.join();
         }

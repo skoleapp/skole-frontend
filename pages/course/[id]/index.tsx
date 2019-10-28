@@ -1,12 +1,14 @@
+import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { H1, MainLayout, Text } from '../../../components';
+import { Layout } from '../../../components';
+import { withAuth } from '../../../lib';
 
 const CourseDetailPage: NextPage = () => (
-  <MainLayout title="Course Detail">
-    <H1>Course Detail</H1>
-    <Text>Here will be course detail.</Text>
-  </MainLayout>
+  <Layout title="Course Detail">
+    <Typography variant="h5">Course Detail</Typography>
+    <Typography variant="body1">Here will be course detail.</Typography>
+  </Layout>
 );
 
-export default CourseDetailPage;
+export default withAuth(CourseDetailPage);
