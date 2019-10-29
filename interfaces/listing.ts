@@ -14,7 +14,7 @@ export interface FacultyRowProps {
 }
 export interface ListingToolboxProps extends SchoolProps {
   search: string;
-  setSearch: (value: string) => void;
+  handleSearch: (value: string) => void;
   selectedSchoolType: any;
   handleSwitch: (_event: React.MouseEvent<HTMLElement, MouseEvent>, newSchoolType: any) => void;
 }

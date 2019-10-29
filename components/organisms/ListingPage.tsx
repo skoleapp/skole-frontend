@@ -21,6 +21,10 @@ export const ListingPage: React.FC<SchoolProps> = ({ Universities, UAS, HighScho
     }
   };
 
+  const handleSearch = (value: any) => {
+    setSearch(value);
+  };
+
   const handleSchoolSelection = (index: number) => {
     index === selectedSchool ? setSelectedSchool(-1) : setSelectedSchool(index);
   };
@@ -30,7 +34,7 @@ export const ListingPage: React.FC<SchoolProps> = ({ Universities, UAS, HighScho
     <div style={{ marginTop: '20px', border: '2px solid #e0e0e0' }}>
       <ListingToolbox
         search={search}
-        setSearch={setSearch}
+        handleSearch={handleSearch}
         handleSwitch={handleSwitch}
         selectedSchoolType={selectedSchoolType}
         Universities={Universities}

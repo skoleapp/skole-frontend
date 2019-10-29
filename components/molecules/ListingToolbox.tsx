@@ -5,7 +5,7 @@ import { ListingToolboxProps } from '../../interfaces';
 
 export const ListingToolbox: React.FC<ListingToolboxProps> = ({
   search,
-  setSearch,
+  handleSearch,
   selectedSchoolType,
   handleSwitch,
   Universities,
@@ -17,7 +17,7 @@ export const ListingToolbox: React.FC<ListingToolboxProps> = ({
     <div style={{ width: '100%', display: 'flex' }}>
       <input
         value={search}
-        onChange={e => setSearch(e.currentTarget.value)}
+        onChange={e => handleSearch(e.currentTarget.value)}
         style={{ flex: '0 0 30%' }}
       ></input>
       <ToggleButtonGroup
