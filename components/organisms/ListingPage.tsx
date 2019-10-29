@@ -15,25 +15,9 @@ export const ListingPage: React.FC<SchoolProps> = ({ Universities, UAS, HighScho
   };
 
   const handleSwitch = (_event: React.MouseEvent<HTMLElement, MouseEvent>, newSchoolType: any) => {
-    switch (newSchoolType) {
-      case 'University': {
-        resetTable();
-        setSelectedSchoolType(Universities);
-        return;
-      }
-      case 'UAS': {
-        resetTable();
-        setSelectedSchoolType(UAS);
-        return;
-      }
-      case 'HighSchools': {
-        resetTable();
-        setSelectedSchoolType(HighSchools);
-        return;
-      }
-      default: {
-        return null;
-      }
+    resetTable();
+    if (!!newSchoolType) {
+      setSelectedSchoolType(newSchoolType);
     }
   };
 
@@ -49,6 +33,9 @@ export const ListingPage: React.FC<SchoolProps> = ({ Universities, UAS, HighScho
         setSearch={setSearch}
         handleSwitch={handleSwitch}
         selectedSchoolType={selectedSchoolType}
+        Universities={Universities}
+        UAS={UAS}
+        HighSchools={HighSchools}
       />
       {selectedSchoolType.map((school: any, index: number) => (
         <ListingRows

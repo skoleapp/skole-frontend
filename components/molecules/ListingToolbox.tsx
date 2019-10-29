@@ -7,7 +7,10 @@ export const ListingToolbox: React.FC<ListingToolboxProps> = ({
   search,
   setSearch,
   selectedSchoolType,
-  handleSwitch
+  handleSwitch,
+  Universities,
+  UAS,
+  HighSchools
 }) => {
   return (
     //fix these ugly containers and the input jeez
@@ -28,13 +31,13 @@ export const ListingToolbox: React.FC<ListingToolboxProps> = ({
         exclusive
         onChange={handleSwitch}
       >
-        <ToggleButton style={{ width: '100%' }} value="University">
+        <ToggleButton style={{ width: '100%' }} value={Universities}>
           <Typography>Universities</Typography>
         </ToggleButton>
-        <ToggleButton style={{ width: '100%' }} value="AMKs">
+        <ToggleButton style={{ width: '100%' }} value={UAS}>
           <Typography>Universities of Applied Sciences</Typography>
         </ToggleButton>
-        <ToggleButton style={{ width: '100%' }} value="HighSchools">
+        <ToggleButton style={{ width: '100%' }} value={HighSchools}>
           <Typography>High Schools</Typography>
         </ToggleButton>
       </ToggleButtonGroup>

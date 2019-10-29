@@ -12,7 +12,7 @@ export interface FacultyRowProps {
   handleFacultySelection: (index: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   selectedFaculty: number;
 }
-export interface ListingToolboxProps {
+export interface ListingToolboxProps extends SchoolProps {
   search: string;
   setSearch: (value: string) => void;
   selectedSchoolType: any;
