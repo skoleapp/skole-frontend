@@ -52,7 +52,7 @@ export const Universities = [
   }
 ];
 
-export const AMKs = [
+export const UAS = [
   {
     id: 'Joku AMK',
     faculty: [

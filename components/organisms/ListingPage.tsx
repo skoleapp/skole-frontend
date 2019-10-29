@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { ListingToolbox } from '../molecules/ListingToolbox';
 import { ListingRows } from '../molecules/ListingRows';
+import { SchoolProps } from '../../interfaces';
 
-//mock-data in json format
-import { Universities, AMKs, HighSchools } from '../../utils/schools';
-
-export const ListingPage: React.FC = () => {
+export const ListingPage: React.FC<SchoolProps> = ({ Universities, UAS, HighSchools }) => {
   const [search, setSearch] = useState();
   const [selectedSchool, setSelectedSchool] = useState(-1);
   const [selectedFaculty, setSelectedFaculty] = useState(-1);
@@ -23,9 +21,9 @@ export const ListingPage: React.FC = () => {
         setSelectedSchoolType(Universities);
         return;
       }
-      case 'AMKs': {
+      case 'UAS': {
         resetTable();
-        setSelectedSchoolType(AMKs);
+        setSelectedSchoolType(UAS);
         return;
       }
       case 'HighSchools': {

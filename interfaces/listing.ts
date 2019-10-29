@@ -18,3 +18,9 @@ export interface ListingToolboxProps {
   selectedSchoolType: any;
   handleSwitch: (_event: React.MouseEvent<HTMLElement, MouseEvent>, newSchoolType: any) => void;
 }
+
+export interface SchoolProps {
+  Universities: any;
+  UAS: any;
+  HighSchools: any;
+}
