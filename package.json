@@ -13,18 +13,16 @@
   "scripts": {
     "dev": "next",
     "lint": "eslint . --ext .js,.tsx,.ts",
-    "test": "jest --watch",
     "gen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.2",
-    "@apollo/react-ssr": "^3.1.2",
     "@emotion/core": "^10.0.17",
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
     "@zeit/next-css": "^1.0.1",
-    "@zeit/next-typescript": "^1.1.1",
-    "apollo-boost": "^0.4.4",
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
     "apollo-link-context": "^1.0.19",
     "apollo-link-http": "^1.5.16",
     "cookie": "^0.4.0",
@@ -39,7 +37,6 @@
     "react-apollo": "^3.1.2",
     "react-dom": "^16.9.0",
     "react-redux": "^7.1.1",
-    "react-spinners": "^0.6.1",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.3.2",
@@ -52,9 +49,6 @@
     "@graphql-codegen/typescript-operations": "1.7.0",
     "@graphql-codegen/typescript-react-apollo": "1.7.0",
     "@types/cookie": "^0.3.3",
-    "@types/enzyme": "^3.10.3",
-    "@types/enzyme-adapter-react-16": "^1.0.5",
-    "@types/jest": "^24.0.18",
     "@types/next": "^8.0.6",
     "@types/nprogress": "^0.2.0",
     "@types/ramda": "^0.26.33",
@@ -68,21 +62,13 @@
     "@typescript-eslint/parser": "^2.0.0",
     "@zeit/next-css": "^1.0.1",
     "babel-plugin-styled-components": "^1.10.6",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.14.3",
-    "jest": "^24.9.0",
-    "jest-environment-enzyme": "^7.1.0",
-    "jest-enzyme": "^7.1.0",
     "prettier": "^1.18.2",
     "redux-devtools-extension": "^2.13.8",
     "typescript": "^3.6.2"
-  },
-  "jest": {
-    "testEnvironment": "enzyme"
   }
 }
