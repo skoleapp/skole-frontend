@@ -10,16 +10,6 @@ import styled from 'styled-components';
 import { State } from '../../interfaces';
 import { breakpoints } from '../../styles';
 
-const StyledBottomNavbar = styled.div`
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-
-  @media only screen and (min-width: ${breakpoints.SM}) {
-    display: none;
-  }
-`;
-
 export const BottomNavbar: React.FC = () => {
   const [value, setValue] = useState(0);
   const { user, authenticated } = useSelector((state: State) => state.auth);
@@ -58,3 +48,13 @@ export const BottomNavbar: React.FC = () => {
     </StyledBottomNavbar>
   );
 };
+
+const StyledBottomNavbar = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  @media only screen and (min-width: ${breakpoints.SM}) {
+    display: none;
+  }
+`;

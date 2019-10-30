@@ -2,7 +2,7 @@ import { Link } from '@material-ui/core';
 import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
 import { UserMe } from '../../interfaces';
-import { FormSubmitSection, SelectFormField, TextFormField } from '../atoms';
+import { FormSubmitSection, SelectFormField, TextFormField } from '../form-fields';
 
 const languageOptions = [
   {
