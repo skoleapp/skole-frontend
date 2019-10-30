@@ -6,7 +6,7 @@ import { Store } from 'redux';
 export interface SkoleContext extends NextPageContext {
   apolloClient: ApolloClient<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   reduxStore: Store;
-  userMe: User;
+  userMe: UserMe;
 }
 
 export interface FormErrors {
@@ -35,10 +35,6 @@ export interface LoginFormValues {
 export interface FormFieldProps {
   field: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
   label: string;
-}
-
-export interface SearchFormProps {
-  search: string;
 }
 
 export interface FeedbackFormValues {
@@ -73,33 +69,6 @@ export interface State {
   auth: AuthState;
 }
 
-export interface WidgetOpenProps {
-  open: boolean;
-}
-
-export type Variant = 'white' | 'red' | undefined;
-
-export interface VariantProps {
-  variant?: Variant;
-}
-
-export interface UserMeInfo {
-  title?: string | null;
-  username: string | null;
-  email: string | null;
-  bio: string | null;
-  points: number | null;
-  language: string | null;
-}
-
-export interface PublicUserInfo {
-  title?: string | null;
-  username: string | null;
-  bio: string | null;
-  points: number | null;
-  language: string | null;
-}
-
 export interface UserPageProps {
   user: PublicUser | null;
 }
@@ -108,3 +77,5 @@ export interface IconProps {
   icon: SvgIconComponent;
   onClick?: () => void;
 }
+
+export type FeedbackType = 'bad' | 'neutral' | 'good' | '';
