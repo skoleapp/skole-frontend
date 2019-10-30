@@ -4,24 +4,6 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledShortcut = styled(Card)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 12rem;
-  width: 12rem;
-  font-size: 1.5rem;
-  margin: 1rem;
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: var(--transition);
-
-  &:hover {
-    background-color: var(--light-opacity);
-  }
-`;
-
 interface ShortcutProps {
   text: string;
   icon: SvgIconComponent;
@@ -36,3 +18,21 @@ export const Shortcut: React.FC<ShortcutProps> = ({ text, icon: Icon, href }) =>
     </StyledShortcut>
   </Link>
 );
+
+const StyledShortcut = styled(Card)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 14rem;
+  width: 14rem;
+  font-size: 1.5rem;
+  margin: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+
+  &:hover {
+    background-color: var(--light-opacity);
+  }
+`;
