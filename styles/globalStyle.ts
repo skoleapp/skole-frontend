@@ -1,22 +1,5 @@
-import { createMuiTheme } from '@material-ui/core';
 import { createGlobalStyle } from 'styled-components';
-
-const primary = 'rgb(173, 54, 54)';
-const white = '#ffffff';
-
-export const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: primary
-    },
-    secondary: {
-      main: white
-    }
-  },
-  typography: {
-    fontSize: 14
-  }
-});
+import { colors } from './colors';
 
 export const GlobalStyle = createGlobalStyle`
     // Keyframes
@@ -44,11 +27,11 @@ export const GlobalStyle = createGlobalStyle`
 
     :root {
         /* Colors */
-        --primary: ${primary};
-        --secondary: rgba(250, 242, 222);
+        --primary: ${colors.primary};
+        --secondary: ${colors.secondary};
       
-        --white: #ffffff;
-        --black: #000000;
+        --white: ${colors.white};
+        --black: ${colors.white};
 
         --light-opacity: rgba(0, 0, 0, 0.15);
         
