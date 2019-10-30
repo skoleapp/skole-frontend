@@ -22,8 +22,6 @@ export const AuthMenu: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const handleRedirect = (url: string): Promise<boolean> => Router.push(url);
-
   const handleLogout = (): void => {
     handleClose();
     dispatch(logout(apolloClient));
@@ -55,8 +53,10 @@ export const AuthMenu: React.FC = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => handleRedirect('/account')}>Account</MenuItem>
-        <MenuItem onClick={() => handleRedirect('/account/courses')}>My Courses</MenuItem>
+        <MenuItem onClick={(): Promise<boolean> => Router.push('/account')}>Account</MenuItem>
+        <MenuItem onClick={(): Promise<boolean> => Router.push('/account/courses')}>
+          My Courses
+        </MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </StyledAuthMenu>
