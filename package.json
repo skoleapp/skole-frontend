@@ -69,6 +69,7 @@
     "eslint-plugin-react": "^7.14.3",
     "prettier": "^1.18.2",
     "redux-devtools-extension": "^2.13.8",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.2",
+    "webpackbar": "^4.0.0"
   }
 }

@@ -1,4 +1,3 @@
-import { SvgIconComponent } from '@material-ui/icons';
 import ApolloClient from 'apollo-client';
 import { NextPageContext } from 'next';
 import { Store } from 'redux';
@@ -32,11 +31,6 @@ export interface LoginFormValues {
   general: string;
 }
 
-export interface FormFieldProps {
-  field: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
-  label: string;
-}
-
 export interface FeedbackFormValues {
   comment: string;
 }
@@ -52,12 +46,11 @@ export interface UserMe {
 }
 
 export interface PublicUser {
-  id: string | null;
-  username: string | null;
+  id: string;
+  username: string;
   title: string | null;
   bio: string | null;
-  points: number | null;
-  language: string | null;
+  points: number;
 }
 
 export interface AuthState {
@@ -67,15 +60,6 @@ export interface AuthState {
 
 export interface State {
   auth: AuthState;
-}
-
-export interface UserPageProps {
-  user: PublicUser | null;
-}
-
-export interface IconProps {
-  icon: SvgIconComponent;
-  onClick?: () => void;
 }
 
 export type FeedbackType = 'bad' | 'neutral' | 'good' | '';

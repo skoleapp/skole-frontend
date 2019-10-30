@@ -4,6 +4,7 @@ import Router from 'next/router';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserDocument, UserMeDocument } from '../generated/graphql';
+import { PublicUser, UserMe } from '../interfaces';
 import { CLEAR_USER_ME, SET_USER_ME } from './types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,12 +29,12 @@ export const login = ({ client, token, user }: LoginParams) => (
   client.cache.reset().then(() => Router.push('/'));
 };
 
-interface UserMe {
+interface UserMeObj {
   userMe: UserMe | null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getUserMe = async (apolloClient: ApolloClient<any>): Promise<UserMe> => {
+export const getUserMe = async (apolloClient: ApolloClient<any>): Promise<UserMeObj> => {
   try {
     const { data } = await apolloClient.query({ query: UserMeDocument });
     return { userMe: data.userMe };
@@ -42,12 +43,15 @@ export const getUserMe = async (apolloClient: ApolloClient<any>): Promise<UserMe
   }
 };
 
-interface PublicUser {
+interface PublicUserObj {
   user: PublicUser | null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getUser = async (id: number, apolloClient: ApolloClient<any>): Promise<PublicUser> => {
+export const getUser = async (
+  id: string,
+  apolloClient: ApolloClient<any>
+): Promise<PublicUserObj> => {
   try {
     const { data } = await apolloClient.query({ variables: { id }, query: UserDocument });
     return { user: data.user };
