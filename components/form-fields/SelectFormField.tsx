@@ -29,7 +29,13 @@ export const SelectFormField: React.FC<Props> = ({ field, form, label, options, 
 const StyledSelectFormField = styled.div`
   margin-top: 1rem;
 
-  label {
+  label,
+  .MuiSelect-select {
     text-align: left;
+  }
+
+  label {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
   }
 `;

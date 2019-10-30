@@ -35,7 +35,7 @@ export const UserListTable: React.FC<Props> = ({ users }) => (
                   <Avatar src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
                   <Typography variant="subtitle1">{user.username}</Typography>
                 </TableCell>
-                <TableCell>{user.points}</TableCell>
+                <TableCell align="right">{user.points}</TableCell>
               </TableRow>
             </Link>
           ))}

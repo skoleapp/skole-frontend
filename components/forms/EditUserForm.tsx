@@ -6,11 +6,11 @@ import { FormSubmitSection, SelectFormField, TextFormField } from '../form-field
 
 const languageOptions = [
   {
-    value: 'english',
+    value: 'ENGLISH',
     label: 'english'
   },
   {
-    value: 'finnish',
+    value: 'FINNISH',
     label: 'finnish'
   }
 ];
