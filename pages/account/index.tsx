@@ -1,0 +1,18 @@
+import { NextPage } from 'next';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Layout, UserInfoCard } from '../../components';
+import { State } from '../../interfaces';
+import { withPrivate } from '../../lib';
+
+const AccountPage: NextPage = () => {
+  const { user } = useSelector((state: State) => state.auth);
+
+  return (
+    <Layout title="Account">
+      <UserInfoCard {...user} />
+    </Layout>
+  );
+};
+
+export default withPrivate(AccountPage);

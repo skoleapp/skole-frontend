@@ -8,8 +8,8 @@ import { login } from '../../actions';
 import { useRegisterMutation } from '../../generated/graphql';
 import { RegisterFormValues } from '../../interfaces';
 import { createFormErrors } from '../../utils';
-import { Card } from '../atoms';
-import { RegisterForm } from '../molecules';
+import { Card } from '../containers';
+import { RegisterForm } from '../forms';
 
 const initialValues = {
   username: '',
@@ -52,7 +52,6 @@ export const RegisterCard: React.FC = () => {
     dispatch(login({ client, ...data.login }));
   };
 
-  // Create form errors and show them in the form accordingly.
   // eslint-disable-next-line
   const onError = (errors: any) => {
     const formErrors = createFormErrors(errors);
@@ -74,7 +73,7 @@ export const RegisterCard: React.FC = () => {
 
   return (
     <Card>
-      <Typography variant="h5">register</Typography>
+      <Typography variant="h5">Register</Typography>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

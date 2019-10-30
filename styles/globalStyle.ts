@@ -33,6 +33,9 @@ export const GlobalStyle = createGlobalStyle`
         --white: ${colors.white};
         --black: ${colors.white};
 
+        --success: ${colors.success};
+        --danger: ${colors.danger};
+
         --light-opacity: rgba(0, 0, 0, 0.15);
         
         // Misc 

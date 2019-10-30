@@ -1,7 +1,7 @@
+import { Container } from '@material-ui/core';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { breakpoints } from '../../styles';
-import { Container } from '../containers';
 import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
 
 interface Props {
@@ -21,6 +21,12 @@ export const Layout: React.FC<Props> = ({ title, children }) => (
 
 const StyledLayout = styled.div`
   background-color: var(--secondary);
+  text-align: center;
+
+  .MuiContainer-root {
+    min-height: 100vh;
+    padding: 1rem;
+  }
 
   @media only screen and (max-width: ${breakpoints.SM}) {
     padding-bottom: 3rem;

@@ -4,10 +4,10 @@ import React from 'react';
 import { Layout } from '../../../components';
 import { withPrivate } from '../../../lib';
 
-export const CoursesPage: NextPage = () => (
+export const OwnCoursesListPage: NextPage = () => (
   <Layout>
-    <Typography variant="h5">Courses of a user</Typography>
+    <Typography variant="h5">Lists of own courses.</Typography>
   </Layout>
 );
 
-export default withPrivate(CoursesPage);
+export default withPrivate(OwnCoursesListPage);
