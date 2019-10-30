@@ -1,4 +1,3 @@
-import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { Layout, NotFoundCard, UserListTable } from '../../components';
@@ -14,7 +13,6 @@ interface Props {
 
 const UserListPage: NextPage<Props> = ({ users }) => (
   <Layout title="User List">
-    <Typography variant="h5">User List</Typography>
     {users ? <UserListTable users={users} /> : <NotFoundCard text={noUsersText} />}
   </Layout>
 );

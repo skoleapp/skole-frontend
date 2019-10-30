@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { getUser } from '../../../actions';
+import { getUser, getUserMe } from '../../../actions';
 import { Layout, NotFoundCard, UserInfoCard } from '../../../components';
 import { PublicUser, SkoleContext } from '../../../interfaces';
-import { withAuth } from '../../../lib';
+import { redirect, withAuth } from '../../../lib';
 import { userNotFoundText } from '../../../utils';
 
 interface Props {
@@ -18,6 +18,12 @@ const UserPage: NextPage<Props> = ({ user }) => (
 
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   const { query, apolloClient } = ctx;
+  const { userMe } = await getUserMe(apolloClient);
+
+  if (userMe && userMe.id === query.id) {
+    redirect(ctx, '/account');
+  }
+
   const { user } = await getUser(query.id as string, apolloClient); // eslint-disable-line @typescript-eslint/no-explicit-any
   return { user };
 };
