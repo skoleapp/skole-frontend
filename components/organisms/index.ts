@@ -9,3 +9,4 @@ export { NotFoundCard } from './NotFoundCard';
 export { RegisterCard } from './RegisterCard';
 export { SearchWidget } from './SearchWidget';
 export { UserInfoCard } from './UserInfoCard';
+export { UserListTable } from './UserListTable';

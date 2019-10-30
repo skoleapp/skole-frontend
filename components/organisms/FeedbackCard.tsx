@@ -1,12 +1,13 @@
 import { Button, Typography } from '@material-ui/core';
 import { Formik } from 'formik';
-import Router from 'next/router';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { FeedbackFormValues, FeedbackType } from '../../interfaces';
-import { Card } from '../atoms';
-import { FeedbackButtonSection, FeedbackForm } from '../molecules';
+import { Card } from '../containers';
+import { FeedbackForm } from '../forms';
+import { FeedbackButtonSection } from '../molecules';
 
 const initialValues = {
   comment: ''
@@ -20,6 +21,7 @@ export const FeedbackCard: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [rate, setRate] = useState<FeedbackType>('');
 
+  // TODO: Finish this.
   const onSubmit = async (values: FeedbackFormValues): Promise<void> => {
     console.log({ ...values, rate });
     setSubmitted(true);
@@ -29,7 +31,7 @@ export const FeedbackCard: React.FC = () => {
     <StyledFeedbackCard>
       {!submitted ? (
         <>
-          <Typography variant="h5">Leave feedback</Typography>
+          <Typography variant="h5">Feedback</Typography>
           <FeedbackButtonSection setRate={setRate} />
           <Formik
             onSubmit={onSubmit}
@@ -41,14 +43,11 @@ export const FeedbackCard: React.FC = () => {
       ) : (
         <>
           <Typography variant="h5">Thank you for your feedback!</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={(): Promise<boolean> => Router.push('/')}
-            className="back-to-home-button"
-          >
-            back to home
-          </Button>
+          <Link href="/">
+            <Button variant="contained" color="primary" className="back-to-home-button">
+              back to home
+            </Button>
+          </Link>
         </>
       )}
     </StyledFeedbackCard>
