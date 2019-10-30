@@ -4,8 +4,7 @@ import Router from 'next/router';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import * as Yup from 'yup';
-import { FeedbackFormValues } from '../../interfaces';
-import { FeedbackType } from '../../types';
+import { FeedbackFormValues, FeedbackType } from '../../interfaces';
 import { Card } from '../atoms';
 import { FeedbackButtonSection, FeedbackForm } from '../molecules';
 

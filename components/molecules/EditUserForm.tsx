@@ -1,7 +1,7 @@
 import { Link } from '@material-ui/core';
 import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
-import { User } from '../../interfaces';
+import { UserMe } from '../../interfaces';
 import { FormSubmitSection, SelectFormField, TextFormField } from '../atoms';
 
 const languageOptions = [
@@ -15,7 +15,7 @@ const languageOptions = [
   }
 ];
 
-export const EditUserForm: React.ComponentType<FormikProps<User>> = props => (
+export const EditUserForm: React.ComponentType<FormikProps<UserMe>> = props => (
   <Form>
     <Field placeholder="Title" name="title" component={TextFormField} label="Title" />
     <Field placeholder="Username" name="username" component={TextFormField} label="Username" />

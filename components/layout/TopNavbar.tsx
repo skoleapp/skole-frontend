@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State } from '../../interfaces';
-import { SM } from '../../utils';
+import { breakpoints } from '../../styles';
 import { Logo } from '../atoms';
 import { PublicAuthButtons } from '../molecules';
 import { AuthMenu, SearchWidget } from '../organisms';
@@ -18,7 +18,7 @@ const StyledTopNavbar = styled.div`
   .public-auth-buttons {
     display: none !important;
 
-    @media only screen and (min-width: ${SM}) {
+    @media only screen and (min-width: ${breakpoints.SM}) {
       display: flex !important;
     }
   }

@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import { SM } from '../../utils';
+import { breakpoints } from '../../styles';
 
 export const Logo: React.FC = () => (
   <StyledLogo className="logo">
@@ -24,7 +24,7 @@ const StyledLogo = styled.div`
     width: 6rem;
     text-align: center;
 
-    @media only screen and (max-width: ${SM}) {
+    @media only screen and (max-width: ${breakpoints.SM}) {
       margin: 0 auto;
     }
   }

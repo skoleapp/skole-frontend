@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { SM } from '../../utils';
+import { breakpoints } from '../../styles';
 import { Container } from '../containers';
 import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
 
@@ -22,7 +22,7 @@ export const Layout: React.FC<Props> = ({ title, children }) => (
 const StyledLayout = styled.div`
   background-color: var(--secondary);
 
-  @media only screen and (max-width: ${SM}) {
+  @media only screen and (max-width: ${breakpoints.SM}) {
     padding-bottom: 3rem;
   }
 `;

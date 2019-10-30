@@ -1,12 +1,12 @@
 import { Typography } from '@material-ui/core';
 import { Formik } from 'formik';
 import React from 'react';
-import { User } from '../../interfaces';
+import { UserMe } from '../../interfaces';
 import { Card } from '../atoms';
 import { EditUserForm } from '../molecules';
 
 interface Props {
-  initialValues: User;
+  initialValues: UserMe;
 }
 
 export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
@@ -16,7 +16,7 @@ export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
    * If the request is successful, update the store.
    * Otherwise display errors in the form accordingly.
    */
-  const onSubmit = (values: User): void => {
+  const onSubmit = (values: UserMe): void => {
     console.log('Submit!', values);
   };
 

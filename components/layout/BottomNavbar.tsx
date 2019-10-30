@@ -8,14 +8,14 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { State } from '../../interfaces';
-import { SM } from '../../utils';
+import { breakpoints } from '../../styles';
 
 const StyledBottomNavbar = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
 
-  @media only screen and (min-width: ${SM}) {
+  @media only screen and (min-width: ${breakpoints.SM}) {
     display: none;
   }
 `;

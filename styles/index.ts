@@ -1,3 +1,3 @@
-export { breakPoints } from './breakPoints';
+export { breakpoints } from './breakpoints';
 export { GlobalStyle } from './globalStyle';
 export { theme } from './theme';
