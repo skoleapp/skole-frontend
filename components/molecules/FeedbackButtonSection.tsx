@@ -1,7 +1,7 @@
 import { Button, ButtonGroup } from '@material-ui/core';
 import React, { Dispatch, SetStateAction } from 'react';
-import { FeedbackType } from '../../types';
 import styled from 'styled-components';
+import { FeedbackType } from '../../interfaces';
 
 export interface Props {
   setRate: Dispatch<SetStateAction<FeedbackType>>;

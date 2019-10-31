@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { Card } from '../atoms';
+import { Card } from '../containers';
 
 interface Props {
   text?: string;
@@ -8,10 +8,8 @@ interface Props {
 
 export const NotFoundCard: React.FC<Props> = ({ text }) => (
   <Card>
-    {text ? (
-      <Typography variant="h5">{text}</Typography>
-    ) : (
-      <Typography variant="h5">The page you were looking for was not found...</Typography>
-    )}
+    <Typography variant="h5">
+      {text ? text : 'The page you were looking for was not found...'}
+    </Typography>
   </Card>
 );

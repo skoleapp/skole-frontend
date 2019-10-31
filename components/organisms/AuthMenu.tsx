@@ -4,17 +4,11 @@ import { AccountCircle } from '@material-ui/icons';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { logout } from '../../actions';
-import { State } from '../../interfaces';
-
-const StyledAuthMenu = styled.div`
-  margin-left: 1.5rem;
-`;
 
 export const AuthMenu: React.FC = () => {
-  const { id } = useSelector((state: State) => state.auth.user);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -31,10 +25,6 @@ export const AuthMenu: React.FC = () => {
   const handleLogout = (): void => {
     handleClose();
     dispatch(logout(apolloClient));
-  };
-
-  const handleClick = (url: string): void => {
-    Router.push(url);
   };
 
   return (
@@ -63,10 +53,16 @@ export const AuthMenu: React.FC = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={(): void => handleClick(`/user/${id}`)}>Account</MenuItem>
-        <MenuItem onClick={(): void => handleClick(`/user/${id}/courses`)}>My Courses</MenuItem>
+        <MenuItem onClick={(): Promise<boolean> => Router.push('/account')}>Account</MenuItem>
+        <MenuItem onClick={(): Promise<boolean> => Router.push('/account/courses')}>
+          My Courses
+        </MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </StyledAuthMenu>
   );
 };
+
+const StyledAuthMenu = styled.div`
+  margin-left: 1.5rem;
+`;
