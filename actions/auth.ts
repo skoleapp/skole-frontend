@@ -26,7 +26,7 @@ export const login = ({ client, token, user }: LoginParams) => (
   });
 
   dispatch(setUserMe(user));
-  client.cache.reset().then(() => Router.push('/'));
+  client.cache.reset().then(() => Router.push('/account'));
 };
 
 interface UserMeObj {
