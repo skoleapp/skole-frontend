@@ -1,0 +1,36 @@
+mutation UpdateUser(
+  $username: String!
+  $email: String!
+  $title: String
+  $bio: String
+  $avatar: String
+  $language: String!
+) {
+  updateUser(
+    input: {
+      username: $username
+      email: $email
+      title: $title
+      bio: $bio
+      avatar: $avatar
+      language: $language
+    }
+  ) {
+    user {
+      id
+      username
+      email
+      title
+      bio
+      avatar
+      points
+      language
+      created
+    }
+
+    errors {
+      field
+      messages
+    }
+  }
+}
