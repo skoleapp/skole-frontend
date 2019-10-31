@@ -2,6 +2,7 @@ import { FormHelperText, InputLabel, MenuItem, Select } from '@material-ui/core'
 import { FieldProps, getIn } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
+import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends FieldProps {
   label: string;
@@ -21,7 +22,7 @@ export const SelectFormField: React.FC<Props> = ({ field, form, label, options, 
           </MenuItem>
         ))}
       </Select>
-      <FormHelperText>{errorText}</FormHelperText>
+      <FormHelperText component={FormErrorMessage}>{errorText}</FormHelperText>
     </StyledSelectFormField>
   );
 };
