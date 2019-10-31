@@ -69,3 +69,11 @@ export interface PasswordForm {
   newPassword: string;
   confirmNewPassword: string;
 }
+
+export interface UpdateUserForm {
+  username: string;
+  email: string;
+  title: string;
+  bio: string;
+  language: string;
+}

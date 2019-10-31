@@ -1,21 +1,21 @@
 import { Link } from '@material-ui/core';
 import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
-import { UserMe } from '../../interfaces';
+import { UpdateUserForm } from '../../interfaces';
 import { FormSubmitSection, SelectFormField, TextFormField } from '../form-fields';
 
 const languageOptions = [
   {
-    value: 'ENGLISH',
-    label: 'english'
+    value: 'English',
+    label: 'English'
   },
   {
-    value: 'FINNISH',
-    label: 'finnish'
+    value: 'Finnish',
+    label: 'Finnish'
   }
 ];
 
-export const EditUserForm: React.ComponentType<FormikProps<UserMe>> = props => (
+export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = props => (
   <Form>
     <Field placeholder="Title" name="title" component={TextFormField} label="Title" />
     <Field placeholder="Username" name="username" component={TextFormField} label="Username" />
