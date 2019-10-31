@@ -2,7 +2,6 @@ import { Button, Typography } from '@material-ui/core';
 import { Formik } from 'formik';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import * as Yup from 'yup';
 import { FeedbackFormValues, FeedbackType } from '../../interfaces';
 import { Card } from '../containers';
@@ -28,7 +27,7 @@ export const FeedbackCard: React.FC = () => {
   };
 
   return (
-    <StyledFeedbackCard>
+    <Card>
       {!submitted ? (
         <>
           <Typography variant="h5">Feedback</Typography>
@@ -44,18 +43,12 @@ export const FeedbackCard: React.FC = () => {
         <>
           <Typography variant="h5">Thank you for your feedback!</Typography>
           <Link href="/">
-            <Button variant="contained" color="primary" className="back-to-home-button">
+            <Button variant="contained" color="primary">
               back to home
             </Button>
           </Link>
         </>
       )}
-    </StyledFeedbackCard>
+    </Card>
   );
 };
-
-const StyledFeedbackCard = styled(Card)`
-  .back-to-home-button {
-    margin-top: 1rem;
-  }
-`;

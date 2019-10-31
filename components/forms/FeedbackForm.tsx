@@ -12,7 +12,7 @@ export const FeedbackForm: React.ComponentType<FormikProps<FeedbackFormValues>> 
       placeholder="Tell us how we can improve our company."
       label="Comment"
     />
-    <Button variant="contained" color="primary" type="submit">
+    <Button fullWidth variant="contained" color="primary" type="submit">
       submit
     </Button>
   </Form>

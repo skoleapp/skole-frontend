@@ -3,7 +3,6 @@ import { Formik, FormikActions } from 'formik';
 import Link from 'next/link';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import * as Yup from 'yup';
 import { setUserMe } from '../../actions';
 import { useUpdateUserMutation } from '../../generated/graphql';
@@ -75,7 +74,7 @@ export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
 
   if (completed) {
     return (
-      <CompletedCard>
+      <Card>
         <Typography variant="h5">Account Edited!</Typography>
         <Link href="/account">
           <Button fullWidth variant="outlined" color="primary">
@@ -90,7 +89,7 @@ export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
         >
           Edit Again
         </Button>
-      </CompletedCard>
+      </Card>
     );
   }
 
@@ -107,9 +106,3 @@ export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
     </Card>
   );
 };
-
-const CompletedCard = styled(Card)`
-  button {
-    margin-top: 1rem;
-  }
-`;

@@ -2,7 +2,6 @@ import { Button, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import Link from 'next/link';
 import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
 import * as Yup from 'yup';
 import { Card } from '../../components';
 import { useChangePasswordMutation } from '../../generated/graphql';
@@ -64,14 +63,14 @@ export const ChangePasswordCard: React.FC = () => {
 
   if (completed) {
     return (
-      <CompletedCard>
+      <Card>
         <Typography variant="h5">Password Changed!</Typography>
         <Link href="/account">
           <Button variant="contained" color="primary">
             Back to Account
           </Button>
         </Link>
-      </CompletedCard>
+      </Card>
     );
   }
 
@@ -88,9 +87,3 @@ export const ChangePasswordCard: React.FC = () => {
     </Card>
   );
 };
-
-const CompletedCard = styled(Card)`
-  button {
-    margin: 1rem 0;
-  }
-`;
