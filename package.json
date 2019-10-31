@@ -13,7 +13,9 @@
   "scripts": {
     "dev": "next",
     "lint": "eslint . --ext .js,.tsx,.ts",
-    "gen": "graphql-codegen --config codegen.yml"
+    "gen": "graphql-codegen --config codegen.yml",
+    "prod": "NODE_ENV=production node server.js",
+    "build": "next build"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.2",
@@ -70,6 +72,7 @@
     "prettier": "^1.18.2",
     "redux-devtools-extension": "^2.13.8",
     "typescript": "^3.6.2",
+    "webpack-cli": "^3.3.10",
     "webpackbar": "^4.0.0"
   }
 }
