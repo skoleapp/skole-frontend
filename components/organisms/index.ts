@@ -1,4 +1,6 @@
+export { AccountMenu } from './AccountMenu';
 export { AuthMenu } from './AuthMenu';
+export { ChangePasswordCard } from './ChangePasswordCard';
 export { EditUserCard } from './EditUserCard';
 export { ErrorPage } from './ErrorPage';
 export { FeedbackCard } from './FeedbackCard';
@@ -9,3 +11,4 @@ export { NotFoundCard } from './NotFoundCard';
 export { RegisterCard } from './RegisterCard';
 export { SearchWidget } from './SearchWidget';
 export { UserInfoCard } from './UserInfoCard';
+export { UserListTable } from './UserListTable';

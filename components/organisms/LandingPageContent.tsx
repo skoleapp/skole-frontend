@@ -4,19 +4,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Shortcut } from '../atoms';
 
-const StyledLandingPageContent = styled.div`
-  h5 {
-    margin: 1rem 0;
-  }
-
-  .shortcuts {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
-    margin-top: 2rem;
-  }
-`;
-
 export const LandingPageContent: React.FC = () => (
   <StyledLandingPageContent>
     <Typography variant="h5">What would you like to do?</Typography>
@@ -28,3 +15,15 @@ export const LandingPageContent: React.FC = () => (
     </div>
   </StyledLandingPageContent>
 );
+
+const StyledLandingPageContent = styled.div`
+  h5 {
+    margin: 2rem 0;
+  }
+
+  .shortcuts {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+  }
+`;

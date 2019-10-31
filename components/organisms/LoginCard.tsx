@@ -8,8 +8,8 @@ import { login } from '../../actions';
 import { useLoginMutation } from '../../generated/graphql';
 import { LoginFormValues } from '../../interfaces';
 import { createFormErrors } from '../../utils';
-import { Card } from '../atoms';
-import { LoginForm } from '../molecules';
+import { Card } from '../containers';
+import { LoginForm } from '../forms';
 
 const initialValues = {
   email: '',
@@ -32,7 +32,6 @@ export const LoginCard: React.FC = () => {
   // eslint-disable-next-line
   const onCompleted = (data: any) => dispatch(login({ client, ...data.login }));
 
-  // Create form errors and show them in the form accordingly.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onError = (errors: any): void => {
     const formErrors = createFormErrors(errors);
@@ -43,7 +42,7 @@ export const LoginCard: React.FC = () => {
 
   const [loginMutation] = useLoginMutation({ onCompleted, onError });
 
-  const onSubmit = async (
+  const handleSubmit = async (
     values: LoginFormValues,
     actions: FormikActions<LoginFormValues>
   ): Promise<void> => {
@@ -54,11 +53,11 @@ export const LoginCard: React.FC = () => {
 
   return (
     <Card>
-      <Typography variant="h5">login</Typography>
+      <Typography variant="h5">Login</Typography>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         component={LoginForm}
         ref={ref}
       />
