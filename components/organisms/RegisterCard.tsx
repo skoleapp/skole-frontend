@@ -62,7 +62,7 @@ export const RegisterCard: React.FC = () => {
 
   const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
-  const onSubmit = async (
+  const handleSubmit = async (
     values: RegisterFormValues,
     actions: FormikActions<RegisterFormValues>
   ): Promise<void> => {
@@ -77,7 +77,7 @@ export const RegisterCard: React.FC = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         component={RegisterForm}
         ref={ref}
       />

@@ -42,7 +42,7 @@ export const LoginCard: React.FC = () => {
 
   const [loginMutation] = useLoginMutation({ onCompleted, onError });
 
-  const onSubmit = async (
+  const handleSubmit = async (
     values: LoginFormValues,
     actions: FormikActions<LoginFormValues>
   ): Promise<void> => {
@@ -57,7 +57,7 @@ export const LoginCard: React.FC = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         component={LoginForm}
         ref={ref}
       />
