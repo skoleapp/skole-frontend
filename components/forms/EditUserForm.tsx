@@ -29,7 +29,7 @@ export const EditUserForm: React.ComponentType<FormikProps<UserMe>> = props => (
       label="Language"
     />
     <FormSubmitSection submitButtonText="save" {...props} />
-    <Link href={`/user/${props.values.id}`} color="primary">
+    <Link href="/account" color="primary">
       Back to Account
     </Link>
   </Form>

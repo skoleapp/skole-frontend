@@ -23,6 +23,9 @@ export const AccountMenu: React.FC = () => {
           <MenuItem onClick={(): Promise<boolean> => Router.push('/account/courses')}>
             My Courses
           </MenuItem>
+          <MenuItem onClick={(): Promise<boolean> => Router.push('/account/change-password')}>
+            Change Password
+          </MenuItem>
         </MenuList>
       </Paper>
       <Button
