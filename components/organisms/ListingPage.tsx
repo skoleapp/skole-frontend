@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { ListingToolbox } from '../molecules/ListingToolbox';
-import { ListingRows } from '../molecules/ListingRows';
+import { SchoolRows } from '../molecules/SchoolRows';
 import { SchoolProps } from '../../interfaces';
+import styled from 'styled-components';
 
 export const ListingPage: React.FC<SchoolProps> = ({ Universities, UAS, HighSchools }) => {
   const [search, setSearch] = useState();
   const [selectedSchool, setSelectedSchool] = useState(-1);
-  const [selectedFaculty, setSelectedFaculty] = useState(-1);
   const [selectedSchoolType, setSelectedSchoolType] = useState(Universities);
 
   const resetTable = () => {
     setSelectedSchool(-1);
-    setSelectedFaculty(-1);
   };
 
   const handleSwitch = (_event: React.MouseEvent<HTMLElement, MouseEvent>, newSchoolType: any) => {
@@ -30,8 +29,7 @@ export const ListingPage: React.FC<SchoolProps> = ({ Universities, UAS, HighScho
   };
 
   return (
-    // todo: fix styling
-    <div style={{ marginTop: '20px', border: '2px solid #e0e0e0' }}>
+    <StyledListingContainer>
       <ListingToolbox
         search={search}
         handleSearch={handleSearch}
@@ -42,16 +40,19 @@ export const ListingPage: React.FC<SchoolProps> = ({ Universities, UAS, HighScho
         HighSchools={HighSchools}
       />
       {selectedSchoolType.map((school: any, index: number) => (
-        <ListingRows
+        <SchoolRows
           key={index}
           school={school}
           index={index}
           handleSchoolSelection={handleSchoolSelection}
           selectedSchool={selectedSchool}
-          selectedFaculty={selectedFaculty}
-          setSelectedFaculty={setSelectedFaculty}
         />
       ))}
-    </div>
+    </StyledListingContainer>
   );
 };
+
+const StyledListingContainer = styled.div`
+  margin-top: 1rem;
+  border: 2px solid #e0e0e0;
+`;

@@ -2,6 +2,7 @@ import React from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { Typography } from '@material-ui/core';
 import { ListingToolboxProps } from '../../interfaces';
+import styled from 'styled-components';
 
 export const ListingToolbox: React.FC<ListingToolboxProps> = ({
   search,
@@ -13,8 +14,7 @@ export const ListingToolbox: React.FC<ListingToolboxProps> = ({
   HighSchools
 }) => {
   return (
-    //fix these ugly containers and the input jeez
-    <div style={{ width: '100%', display: 'flex' }}>
+    <StyledToolboxContainer>
       <input
         value={search}
         onChange={e => handleSearch(e.currentTarget.value)}
@@ -41,6 +41,11 @@ export const ListingToolbox: React.FC<ListingToolboxProps> = ({
           <Typography>High Schools</Typography>
         </ToggleButton>
       </ToggleButtonGroup>
-    </div>
+    </StyledToolboxContainer>
   );
 };
+
+const StyledToolboxContainer = styled.div`
+  width: '100%';
+  display: flex;
+`;

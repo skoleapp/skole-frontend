@@ -7,7 +7,7 @@ import { withAuth } from '../lib';
 const SearchPage: NextPage = () => (
   <Layout title="Search">
     <Typography variant="h5">Search</Typography>
-    <Typography variant="body1">Search results will be show here.</Typography>
+    <Typography variant="body1">Search results will be shown here.</Typography>
   </Layout>
 );
 

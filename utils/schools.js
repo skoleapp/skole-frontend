@@ -1,117 +1,259 @@
 export const Universities = [
   {
-    id: 'Turun yliopisto',
-    faculty: [
-      { id: 'Humanistinen tiedekunta', facility: [] },
-      { id: 'Kasvatustieteiden tiedekunta', facility: [] },
-      {
-        id: 'Luonnontieteiden ja tekniikan tiedekunta',
-        facility: [
-          { id: 'Biokemian laitos', href: 'dtek609_kallu' },
-          { id: 'Biologian laitos' },
-          { id: 'Fysiikan ja tähtitieteen laitos' },
-          { id: 'Kemian laitos' },
-          { id: 'Maantieteen ja geologian laitos' },
-          { id: 'Matematiikan ja tilastotieteen laitos' },
-          { id: 'Tulevaisuuden teknologioiden laitos' }
-        ]
-      },
-      { id: 'Lääketieteellinen tiedekunta', facility: [] },
-      { id: 'Oikeustieteellinen tiedekunta', facility: [] },
-      { id: 'Turun kauppakorkeakoulu', facility: [] },
-      { id: 'Yhteiskuntatieteellinen tiedekunta', facility: [] }
+    id: '1',
+    name: 'Turun yliopisto',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
     ]
   },
   {
-    id: 'Åbo Akademi',
-    faculty: [{ id: 'Department of Gender Studies', facility: [{ id: ' ' }] }]
+    id: '2',
+    name: 'Åbo Akademi',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Aalto-yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: '3',
+    name: 'Aalto-yliopisto',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Helsingin yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: '4',
+    name: 'Helsingin yliopisto',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Tampereen teknillinen yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: '5',
+    name: 'Tampereen teknillinen yliopisto',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Oulun yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: '6',
+    name: 'Oulun yliopisto',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Vaasan yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: '7',
+    name: 'Vaasan yliopisto',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Lappeenrannan–Lahden teknillinen yliopisto',
-    faculty: [{ id: 'lute', facility: [{ id: '' }] }, { id: 'kauppis', facility: [{ id: '' }] }]
+    id: '8',
+    name: 'Lappeenrannan–Lahden teknillinen yliopisto',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   }
 ];
 
 export const UAS = [
   {
-    id: 'Joku AMK',
-    faculty: [
-      { id: 'Humanistinen tiedekunta', facility: [] },
-      { id: 'Kasvatustieteiden tiedekunta', facility: [] },
-      {
-        id: 'Luonnontieteiden ja tekniikan tiedekunta',
-        facility: [
-          { id: 'Biokemian laitos', href: 'dtek609_kallu' },
-          { id: 'Biologian laitos' },
-          { id: 'Fysiikan ja tähtitieteen laitos' },
-          { id: 'Kemian laitos' },
-          { id: 'Maantieteen ja geologian laitos' },
-          { id: 'Matematiikan ja tilastotieteen laitos' },
-          { id: 'Tulevaisuuden teknologioiden laitos' }
-        ]
-      },
-      { id: 'Lääketieteellinen tiedekunta', facility: [] },
-      { id: 'Oikeustieteellinen tiedekunta', facility: [] },
-      { id: 'Turun kauppakorkeakoulu', facility: [] },
-      { id: 'Yhteiskuntatieteellinen tiedekunta', facility: [] }
+    id: '1',
+    name: 'Joku AMK',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
     ]
   },
   {
-    id: 'AMK Akademi',
-    faculty: [{ id: 'Department of Gender Studies', facility: [{ id: ' ' }] }]
+    id: '2',
+    name: 'Joku AMK',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Aalto-AMK',
-    faculty: [{ id: '', facility: [{ id: '' }] }, { id: '', facility: [{ id: '' }] }]
+    id: '3',
+    name: 'Joku AMK',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Helsingin AMK',
-    faculty: [{ id: '', facility: [{ id: '' }] }, { id: '', facility: [{ id: '' }] }]
+    id: '4',
+    name: 'Joku AMK',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Tampereen teknillinen AMK',
-    faculty: [{ id: '', facility: [{ id: '' }] }, { id: '', facility: [{ id: '' }] }]
+    id: '5',
+    name: 'Joku AMK',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Oulun AMK',
-    faculty: [{ id: '', facility: [{ id: '' }] }, { id: '', facility: [{ id: '' }] }]
+    id: '6',
+    name: 'Joku AMK',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Vaasan AMK',
-    faculty: [{ id: '', facility: [{ id: '' }] }, { id: '', facility: [{ id: '' }] }]
+    id: '7',
+    name: 'Joku AMK',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Lappeenrannan–Lahden AMK',
-    faculty: [{ id: '', facility: [{ id: '' }] }, { id: '', facility: [{ id: '' }] }]
+    id: '8',
+    name: 'Joku AMK',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   }
 ];
 export const HighSchools = [
   {
-    id: 'Joku lukio :D',
-    faculty: [{ id: 'öö :D', facility: [{ id: ' ' }] }]
+    id: '1',
+    name: 'Joku lukio :D',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   },
   {
-    id: 'Toinen lukio :D',
-    faculty: [{ id: 'ee :D', facility: [{ id: '' }] }]
+    id: '2',
+    name: 'Toinen lukio :D',
+    subjects: [
+      { id: '1', name: 'Tietotekniikka' },
+      { id: '2', name: 'Tietojenkäsittelytiede' },
+      { id: '3', name: 'Konetekniikka' },
+      { id: '4', name: 'Materiaalitekniikka' },
+      { id: '5', name: 'Biotekniikka' },
+      { id: '6', name: 'Fysiikka' },
+      { id: '7', name: 'Matematiikka' },
+      { id: '8', name: 'Kemia' }
+    ]
   }
 ];

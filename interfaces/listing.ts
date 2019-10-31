@@ -1,16 +1,14 @@
 export interface SchoolRowProps {
   index: number;
   school: any;
-  handleSchoolSelection: (index: number) => void;
   selectedSchool: number;
-  selectedFaculty: number;
-  setSelectedFaculty: (index: number) => void;
+  handleSchoolSelection: (index: number) => void;
 }
-export interface FacultyRowProps {
-  index: number;
-  faculty: any;
-  handleFacultySelection: (index: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  selectedFaculty: number;
+export interface SubjectRowProps {
+  index?: number;
+  subject: any;
+  schoolName: string;
+  schoolId: number;
 }
 export interface ListingToolboxProps extends SchoolProps {
   search: string;

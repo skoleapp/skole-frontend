@@ -54,6 +54,7 @@ export const GlobalStyle = createGlobalStyle`
         
         // Misc 
         --transition: all 0.15s ease-in;
+        --slowTransition: all 0.3s ease-in-out;
         --border-radius: 0.5rem;
     }
 
