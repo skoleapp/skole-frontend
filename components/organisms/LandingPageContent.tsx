@@ -18,7 +18,7 @@ export const LandingPageContent: React.FC = () => (
 
 const StyledLandingPageContent = styled.div`
   h5 {
-    margin 2rem 0;
+    margin: 2rem 0;
   }
 
   .shortcuts {
