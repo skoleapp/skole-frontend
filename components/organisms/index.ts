@@ -1,5 +1,6 @@
 export { AccountMenu } from './AccountMenu';
 export { AuthMenu } from './AuthMenu';
+export { ChangePasswordCard } from './ChangePasswordCard';
 export { EditUserCard } from './EditUserCard';
 export { ErrorPage } from './ErrorPage';
 export { FeedbackCard } from './FeedbackCard';

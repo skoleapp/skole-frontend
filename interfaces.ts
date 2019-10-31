@@ -63,3 +63,9 @@ export interface State {
 }
 
 export type FeedbackType = 'bad' | 'neutral' | 'good' | '';
+
+export interface PasswordForm {
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}

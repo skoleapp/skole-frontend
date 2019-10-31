@@ -2,6 +2,14 @@ import * as R from 'ramda';
 import { FormErrors } from '../interfaces';
 import { networkErrorMessage } from './messages';
 
+const snakeToCamel = (str: string): string =>
+  str.replace(/([-_][a-z])/g, group =>
+    group
+      .toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  );
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createFormErrors = (errors: any): FormErrors => {
   const formErrors = {
@@ -9,6 +17,9 @@ export const createFormErrors = (errors: any): FormErrors => {
     email: '',
     password: '',
     confirmPassword: '',
+    oldPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
     general: '',
     serverNotFound: ''
   };
@@ -25,11 +36,11 @@ export const createFormErrors = (errors: any): FormErrors => {
           formErrors.general = e.message;
         }
       });
-    } else {
+    } else if (errors.length) {
       // eslint-disable-next-line
       errors.map((e: any) => {
         if (e.field) {
-          (formErrors as any)[e.field] = e.messages.join(); // eslint-disable-line @typescript-eslint/no-explicit-any
+          (formErrors as any)[snakeToCamel(e.field)] = e.messages.join(); // eslint-disable-line @typescript-eslint/no-explicit-any
         } else {
           formErrors.general = e.messages.join();
         }
