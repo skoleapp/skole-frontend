@@ -10,16 +10,31 @@ const snakeToCamel = (str: string): string =>
       .replace('_', '')
   );
 
+const authForms = {
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+};
+
+const updateUserForm = {
+  title: '',
+  bio: '',
+  language: ''
+};
+
+const changePasswordForm = {
+  oldPassword: '',
+  newPassword: '',
+  confirmNewPassword: ''
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createFormErrors = (errors: any): FormErrors => {
   const formErrors = {
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    oldPassword: '',
-    newPassword: '',
-    confirmNewPassword: '',
+    ...authForms,
+    ...updateUserForm,
+    ...changePasswordForm,
     general: '',
     serverNotFound: ''
   };
