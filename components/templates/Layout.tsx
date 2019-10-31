@@ -1,12 +1,11 @@
 import { Container } from '@material-ui/core';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from '../../styles';
 import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
 
 interface Props {
   title?: string;
-  children?: ReactNode;
 }
 
 export const Layout: React.FC<Props> = ({ title, children }) => (
