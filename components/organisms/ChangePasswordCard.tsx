@@ -33,12 +33,8 @@ export const ChangePasswordCard: React.FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onCompleted = ({ changePassword }: any): void => {
-    console.log(changePassword);
-
     if (changePassword.errors) {
       const formErrors = createFormErrors(changePassword.errors);
-      console.log(formErrors);
-
       Object.keys(formErrors).forEach(
         key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
       );
