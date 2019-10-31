@@ -13,7 +13,7 @@ export const CheckboxFormField: React.FC<Props> = ({ field, label, ...props }) =
   <StyledCheckboxFormField>
     <InputLabel>
       {label}
-      <Checkbox color="primary" {...props} />{' '}
+      <Checkbox color="primary" {...field} {...props} />{' '}
     </InputLabel>
     <ErrorMessage name={field.name} component={FormErrorMessage} />
   </StyledCheckboxFormField>
