@@ -1,3 +1,4 @@
+export { AccountMenu } from './AccountMenu';
 export { AuthMenu } from './AuthMenu';
 export { EditUserCard } from './EditUserCard';
 export { ErrorPage } from './ErrorPage';
