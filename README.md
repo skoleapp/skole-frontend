@@ -1,20 +1,9 @@
-# Skole frontend
+# Skole Frontend
 
-## Requirements
-
-- [Node](https://nodejs.org/en/) (>=8.10)
+### Requirements
+- [Docker](https://www.docker.com/)
+- [Node](https://nodejs.org/en/)
 - [Yarn](https://yarnpkg.com/lang/en/)
 
-## Instructions
-
-- To install dependencies, run:
-
-```console
-$ yarn
-```
-
-- To run project in localhost:3000, run:
-
-```console
-$ yarn dev
-```
+### Setting up dev environment
+More detailed scripts available in package.json file, to start development environment, simply run: `yarn start`
