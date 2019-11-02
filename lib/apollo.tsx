@@ -99,13 +99,17 @@ const initApolloClient = (initState: any, { getToken }: any): any => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createApolloClient = (initialState = {}, { getToken }: any): any => {
+  const isBrowser = typeof window !== 'undefined';
+  const isDocker = process.env.BACKEND_URL === 'http://backend:4000/graphql';
+
   const httpLink = new HttpLink({
-    uri: 'http://localhost:8000/graphql/',
+    uri: isDocker && isBrowser ? 'http://localhost:8000/graphql/' : process.env.API_URL,
     credentials: 'include',
     fetch
   });
 
-  const authLink = setContext((_req, { headers }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const authLink = setContext((_req: any, { headers }: any) => {
     const token = getToken();
     return {
       headers: {
@@ -116,7 +120,8 @@ const createApolloClient = (initialState = {}, { getToken }: any): any => {
   });
 
   return new ApolloClient({
-    ssrMode: typeof window === 'undefined',
+    connectToDevTools: isBrowser,
+    ssrMode: !isBrowser,
     link: authLink.concat(httpLink),
     cache: new InMemoryCache().restore(initialState)
   });
