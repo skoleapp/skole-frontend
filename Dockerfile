@@ -4,6 +4,6 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY package*.json ./
-RUN yarn
+RUN yarn install
 
 CMD [ "yarn", "dev" ]
