@@ -27,5 +27,3 @@ yarn-error.log*
 
 .vscode/
 .vscode
-
-generated/
