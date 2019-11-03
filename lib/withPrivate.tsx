@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { compose } from 'redux';
 import { getUserMe, setUserMe } from '../actions';
 import { SkoleContext } from '../interfaces';
 import { withApollo } from './apollo';
@@ -34,5 +35,8 @@ export const withPrivate = (WrappedComponent: NextPage): any => {
     return { ...componentProps };
   };
 
-  return withApollo(withRedux(Wrapper));
+  return compose(
+    withRedux,
+    withApollo
+  )(Wrapper);
 };

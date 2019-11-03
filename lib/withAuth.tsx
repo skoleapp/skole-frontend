@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { compose } from 'redux';
 import { getUserMe, setUserMe } from '../actions';
 import { SkoleContext } from '../interfaces';
 import { withApollo } from './apollo';
@@ -29,5 +30,8 @@ export const withAuth = (WrappedComponent: NextPage): any => {
     return { ...componentProps };
   };
 
-  return withApollo(withRedux(Wrapper));
+  return compose(
+    withApollo,
+    withRedux
+  )(Wrapper);
 };

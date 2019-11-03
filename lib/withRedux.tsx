@@ -5,6 +5,8 @@ import { Store } from 'redux';
 import { SkoleContext, State } from '../interfaces';
 import { initStore } from './store';
 
+const isServer = typeof window === 'undefined';
+
 /* eslint-disable */
 export const withRedux = (PageComponent: any, { ssr = true } = {}): any => {
   const WithRedux = ({ initialReduxState, ...props }: any): any => {
@@ -55,7 +57,7 @@ let reduxStore: Store;
 
 const getOrInitStore = (initialState?: State): Store => {
   // Always make a new store if server, otherwise state is shared between requests
-  if (typeof window === 'undefined') {
+  if (isServer) {
     return initStore(initialState);
   }
 
