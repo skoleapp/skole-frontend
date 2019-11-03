@@ -41,6 +41,7 @@ export interface UserMe {
   email: string | null;
   title: string | null;
   bio: string | null;
+  avatar: string | null;
   points: number | null;
   language: string | null;
 }
@@ -75,5 +76,6 @@ export interface UpdateUserForm {
   email: string;
   title: string;
   bio: string;
+  avatar: string;
   language: string;
 }

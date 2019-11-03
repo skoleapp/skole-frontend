@@ -122,7 +122,7 @@ export type UpdateUserMutationInput = {
   email: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
-  avatar: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
   language: Scalars['String'];
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -133,7 +133,7 @@ export type UpdateUserMutationPayload = {
   email: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
-  avatar: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
   language: Scalars['String'];
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   user?: Maybe<UserTypePrivate>;
@@ -267,7 +267,7 @@ export type UpdateUserMutationVariables = {
   email: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
-  avatar: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
   language: Scalars['String'];
 };
 
@@ -505,7 +505,7 @@ export const UpdateUserDocument = gql`
     $email: String!
     $title: String
     $bio: String
-    $avatar: String!
+    $avatar: String
     $language: String!
   ) {
     updateUser(

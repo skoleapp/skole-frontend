@@ -9,6 +9,7 @@ export const initialAuthState: AuthState = {
     email: null,
     title: null,
     bio: null,
+    avatar: null,
     points: null,
     language: null
   },
@@ -18,7 +19,7 @@ export const initialAuthState: AuthState = {
 export default (state = initialAuthState, action: AnyAction): AuthState => {
   switch (action.type) {
     case SET_USER_ME: {
-      const { id, username, email, title, bio, points, language } = action.payload;
+      const { id, username, email, title, bio, avatar, points, language } = action.payload;
 
       return {
         ...state,
@@ -29,6 +30,7 @@ export default (state = initialAuthState, action: AnyAction): AuthState => {
           email,
           title,
           bio,
+          avatar,
           points,
           language
         }

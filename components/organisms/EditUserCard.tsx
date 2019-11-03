@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { setUserMe } from '../../actions';
 import { useUpdateUserMutation } from '../../generated/graphql';
-import { UpdateUserForm } from '../../interfaces';
+import { UpdateUserForm, UserMe } from '../../interfaces';
 import { createFormErrors } from '../../utils';
 import { Card } from '../containers';
 import { EditUserForm } from '../forms';
@@ -18,14 +18,14 @@ const validationSchema = Yup.object().shape({
     .email('Invalid email.')
     .required('Email is required.'),
   bio: Yup.string(),
-  language: Yup.string().oneOf(['asd', 'Finnish'], 'Invalid language.')
+  language: Yup.string().oneOf(['ENGLISH', 'FINNISH'], 'Invalid language.')
 });
 
 interface Props {
-  initialValues: UpdateUserForm;
+  user: UserMe;
 }
 
-export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
+export const EditUserCard: React.FC<Props> = ({ user }) => {
   const [completed, setCompleted] = useState(false);
   const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
   const dispatch = useDispatch();
@@ -33,10 +33,7 @@ export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onCompleted = ({ updateUser }: any): void => {
     if (updateUser.errors) {
-      const formErrors = createFormErrors(updateUser.errors);
-      Object.keys(formErrors).forEach(
-        key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
-      );
+      return onError(updateUser.errors);
     } else {
       setCompleted(true);
       dispatch(setUserMe(updateUser.user));
@@ -45,6 +42,7 @@ export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onError = (errors: any): void => {
+    console.log({ ...errors });
     const formErrors = createFormErrors(errors);
     Object.keys(formErrors).forEach(
       key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -57,7 +55,7 @@ export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
     values: UpdateUserForm,
     actions: FormikActions<UpdateUserForm>
   ): Promise<void> => {
-    const { username, email, title, bio, language } = values;
+    const { username, email, title, bio, avatar, language } = values;
 
     await updateUserMutation({
       variables: {
@@ -65,11 +63,24 @@ export const EditUserCard: React.FC<Props> = ({ initialValues }) => {
         email,
         title,
         bio,
+        avatar,
         language: language.toUpperCase()
       }
     });
 
     actions.setSubmitting(false);
+  };
+
+  const initialValues = {
+    id: (user && user.id) || '',
+    title: (user && user.title) || '',
+    username: (user && user.username) || '',
+    email: (user && user.email) || '',
+    bio: (user && user.bio) || '',
+    avatar: (user && user.avatar) || '',
+    language: (user && user.language) || '',
+    points: (user && user.points) || 0,
+    general: ''
   };
 
   if (completed) {

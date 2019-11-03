@@ -6,11 +6,11 @@ import { FormSubmitSection, SelectFormField, TextFormField } from '../form-field
 
 const languageOptions = [
   {
-    value: 'English',
+    value: 'ENGLISH',
     label: 'English'
   },
   {
-    value: 'Finnish',
+    value: 'FINNISH',
     label: 'Finnish'
   }
 ];
@@ -21,6 +21,7 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = pr
     <Field placeholder="Username" name="username" component={TextFormField} label="Username" />
     <Field placeholder="Email" name="email" component={TextFormField} label="Email" />
     <Field placeholder="Bio" name="bio" component={TextFormField} label="Bio" />
+    <Field placeholder="Avatar" name="avatar" component={TextFormField} label="Avatar" />
     <Field
       placeholder="Language"
       name="language"
