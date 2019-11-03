@@ -1,1 +1,1 @@
-# Skole Frontend
+# Skole Frontend :mortar_board:
