@@ -2,7 +2,7 @@ import { Link } from '@material-ui/core';
 import { Field, Form, FormikProps } from 'formik';
 import React from 'react';
 import { UpdateUserForm } from '../../interfaces';
-import { FormSubmitSection, SelectFormField, TextFormField } from '../form-fields';
+import { AvatarFormField, FormSubmitSection, SelectFormField, TextFormField } from '../form-fields';
 
 const languageOptions = [
   {
@@ -17,11 +17,11 @@ const languageOptions = [
 
 export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = props => (
   <Form>
+    <Field name="avatar" component={AvatarFormField} />
     <Field placeholder="Title" name="title" component={TextFormField} label="Title" />
     <Field placeholder="Username" name="username" component={TextFormField} label="Username" />
     <Field placeholder="Email" name="email" component={TextFormField} label="Email" />
     <Field placeholder="Bio" name="bio" component={TextFormField} label="Bio" />
-    <Field placeholder="Avatar" name="avatar" component={TextFormField} label="Avatar" />
     <Field
       placeholder="Language"
       name="language"

@@ -1,9 +1,9 @@
-FROM node:10.16.0
+FROM node:12.13.0-alpine
 
 RUN mkdir /app
 WORKDIR /app
 
-COPY package*.json ./
-RUN yarn install
+COPY package.json yarn.lock ./
+RUN yarn
 
 CMD [ "yarn", "dev" ]

@@ -1,3 +1,4 @@
+export { AvatarFormField } from './AvatarFormField';
 export { CheckboxFormField } from './CheckboxFormField';
 export { FormSubmitSection } from './FormSubmitSection';
 export { SelectFormField } from './SelectFormField';

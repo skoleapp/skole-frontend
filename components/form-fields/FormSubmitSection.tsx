@@ -8,7 +8,7 @@ interface FormSubmitSectionProps extends FormikProps<any> {
   submitButtonText: string;
 }
 
-export const FormSubmitSection: React.ComponentType<FormSubmitSectionProps> = ({
+export const FormSubmitSection: React.FC<FormSubmitSectionProps> = ({
   isSubmitting,
   submitButtonText
 }) => (
