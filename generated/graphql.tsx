@@ -122,23 +122,39 @@ export type UpdateUserMutationInput = {
   email: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
-  avatar?: Maybe<Scalars['String']>;
+  avatar: Scalars['String'];
   language: Scalars['String'];
-  id?: Maybe<Scalars['ID']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
 export type UpdateUserMutationPayload = {
   __typename?: 'UpdateUserMutationPayload';
-  user?: Maybe<UserTypePrivate>;
+  username: Scalars['String'];
+  email: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
+  bio?: Maybe<Scalars['String']>;
+  avatar: Scalars['String'];
+  language: Scalars['String'];
   errors?: Maybe<Array<Maybe<ErrorType>>>;
+  user?: Maybe<UserTypePrivate>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
+
+/** An enumeration. */
+export enum UserLanguage {
+  /** English */
+  English = 'ENGLISH',
+  /** Finnish */
+  Finnish = 'FINNISH',
+  /** Swedish */
+  Swedish = 'SWEDISH'
+}
 
 export type UserTypeChangePassword = {
   __typename?: 'UserTypeChangePassword';
   id: Scalars['ID'];
   modified: Scalars['DateTime'];
+  message?: Maybe<Scalars['String']>;
 };
 
 export type UserTypePrivate = {
@@ -151,7 +167,7 @@ export type UserTypePrivate = {
   avatar?: Maybe<Scalars['String']>;
   points: Scalars['Int'];
   email: Scalars['String'];
-  language?: Maybe<Scalars['String']>;
+  language: UserLanguage;
 };
 
 export type UserTypePublic = {
@@ -169,6 +185,7 @@ export type UserTypeRegister = {
   __typename?: 'UserTypeRegister';
   id: Scalars['ID'];
   created: Scalars['DateTime'];
+  message?: Maybe<Scalars['String']>;
 };
 
 export type ChangePasswordMutationVariables = {
@@ -250,7 +267,7 @@ export type UpdateUserMutationVariables = {
   email: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
-  avatar?: Maybe<Scalars['String']>;
+  avatar: Scalars['String'];
   language: Scalars['String'];
 };
 
@@ -488,7 +505,7 @@ export const UpdateUserDocument = gql`
     $email: String!
     $title: String
     $bio: String
-    $avatar: String
+    $avatar: String!
     $language: String!
   ) {
     updateUser(

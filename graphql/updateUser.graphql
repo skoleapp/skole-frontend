@@ -3,7 +3,7 @@ mutation UpdateUser(
   $email: String!
   $title: String
   $bio: String
-  $avatar: String
+  $avatar: String!
   $language: String!
 ) {
   updateUser(
