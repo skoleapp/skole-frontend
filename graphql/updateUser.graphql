@@ -27,7 +27,6 @@ mutation UpdateUser(
       language
       created
     }
-
     errors {
       field
       messages

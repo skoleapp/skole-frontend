@@ -5,6 +5,7 @@ query UserMe {
     email
     title
     bio
+    avatar
     points
     language
   }

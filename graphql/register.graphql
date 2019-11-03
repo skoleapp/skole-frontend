@@ -1,4 +1,4 @@
-mutation Register($username: String!, $email: String!, $password: String!) {
+mutation SignUp($username: String!, $email: String!, $password: String!) {
   register(input: { username: $username, email: $email, password: $password }) {
     user {
       id
@@ -8,20 +8,6 @@ mutation Register($username: String!, $email: String!, $password: String!) {
     errors {
       field
       messages
-    }
-  }
-
-  login(email: $email, password: $password) {
-    token
-
-    user {
-      id
-      title
-      bio
-      points
-      created
-      email
-      language
     }
   }
 }

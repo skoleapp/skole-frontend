@@ -5,7 +5,7 @@ import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { login } from '../../actions';
-import { useRegisterMutation } from '../../generated/graphql';
+import { useSignUpMutation } from '../../generated/graphql';
 import { RegisterFormValues } from '../../interfaces';
 import { createFormErrors } from '../../utils';
 import { Card } from '../containers';
@@ -60,7 +60,7 @@ export const RegisterCard: React.FC = () => {
     );
   };
 
-  const [registerMutation] = useRegisterMutation({ onCompleted, onError });
+  const [registerMutation] = useSignUpMutation({ onCompleted, onError });
 
   const handleSubmit = async (
     values: RegisterFormValues,
