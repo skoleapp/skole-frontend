@@ -100,7 +100,7 @@ const initApolloClient = (initState: any, { getToken }: any): any => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createApolloClient = (initialState = {}, { getToken }: any): any => {
   const isBrowser = typeof window !== 'undefined';
-  const isDocker = process.env.BACKEND_URL === 'http://backend:4000/graphql';
+  const isDocker = process.env.API_URL === 'http://backend:8000/graphql/';
 
   const httpLink = new HttpLink({
     uri: isDocker && isBrowser ? 'http://localhost:8000/graphql/' : process.env.API_URL,
