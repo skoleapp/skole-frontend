@@ -1,31 +1,36 @@
 import { Link } from '@material-ui/core';
-import { Field, Form, FormikProps } from 'formik';
+import { Field, FormikProps } from 'formik';
+import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { PasswordForm } from '../../interfaces';
-import { FormSubmitSection, TextFormField } from '../form-fields';
+import { Form } from '../containers';
+import { FormSubmitSection } from '../form-fields';
 
 export const ChangePasswordForm: React.ComponentType<FormikProps<PasswordForm>> = props => (
   <Form>
     <Field
       placeholder="Old Password"
       name="oldPassword"
-      component={TextFormField}
+      component={TextField}
       label="Old Password"
       type="password"
+      fullWidth
     />
     <Field
       placeholder="New Password"
       name="newPassword"
-      component={TextFormField}
+      component={TextField}
       label="New Password"
       type="password"
+      fullWidth
     />
     <Field
       placeholder="Confirm New Passsword"
       name="confirmNewPassword"
-      component={TextFormField}
+      component={TextField}
       label="Confirm New Password"
       type="password"
+      fullWidth
     />
     <FormSubmitSection submitButtonText="save" {...props} />
     <Link href="/account" color="primary">
