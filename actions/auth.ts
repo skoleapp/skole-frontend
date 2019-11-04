@@ -63,8 +63,7 @@ export const getUser = async (
   try {
     const { data } = await apolloClient.query({ variables: { id }, query: UserDocument });
     return { user: data.user };
-  } catch (err) {
-    console.log(err);
+  } catch {
     return { user: null };
   }
 };
