@@ -7,7 +7,7 @@ import fetch from 'isomorphic-unfetch';
 import Head from 'next/head';
 import React from 'react';
 import { SkoleContext } from '../interfaces';
-import { getToken } from './getToken';
+import { getToken } from '../utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const withApollo = (PageComponent: any, { ssr = true } = {}): any => {
