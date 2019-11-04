@@ -5,11 +5,14 @@ import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserDocument, UserMeDocument } from '../generated/graphql';
 import { PublicUser, UserMe } from '../interfaces';
-import { CLEAR_USER_ME, SET_USER_ME } from './types';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const setUserMe: any = (userMe: UserMe) => (dispatch: Dispatch<AnyAction>): void =>
-  dispatch({ type: SET_USER_ME, payload: userMe });
+import {
+  GET_USER_ME_ERROR,
+  GET_USER_ME_LOADING,
+  GET_USER_ME_SUCCESS,
+  LOGIN,
+  LOGOUT,
+  UPDATE_USER_ME
+} from './types';
 
 interface LoginParams {
   client: ApolloClient<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -17,7 +20,8 @@ interface LoginParams {
   user: UserMe;
 }
 
-export const login = ({ client, token, user }: LoginParams) => (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const login: any = ({ client, token, user }: LoginParams) => (
   dispatch: Dispatch<AnyAction>
 ): void => {
   document.cookie = cookie.serialize('token', token, {
@@ -25,22 +29,27 @@ export const login = ({ client, token, user }: LoginParams) => (
     path: '/'
   });
 
-  dispatch(setUserMe(user));
+  dispatch({ type: LOGIN, payload: user });
   client.cache.reset().then(() => Router.push('/account'));
 };
 
-interface UserMeObj {
-  userMe: UserMe | null;
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getUserMe = async (apolloClient: ApolloClient<any>): Promise<UserMeObj> => {
+export const getUserMe: any = (apolloClient: ApolloClient<any>) => async (
+  dispatch: Dispatch<AnyAction>
+): Promise<void> => {
+  dispatch({ type: GET_USER_ME_LOADING });
+
   try {
     const { data } = await apolloClient.query({ query: UserMeDocument });
-    return { userMe: data.userMe };
-  } catch {
-    return { userMe: null };
+    dispatch({ type: GET_USER_ME_SUCCESS, payload: data.userMe });
+  } catch (err) {
+    dispatch({ type: GET_USER_ME_ERROR, payload: err });
   }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateUserMe: any = (userMe: UserMe) => (dispatch: Dispatch<AnyAction>) => {
+  dispatch({ type: UPDATE_USER_ME, payload: userMe });
 };
 
 interface PublicUserObj {
@@ -55,7 +64,8 @@ export const getUser = async (
   try {
     const { data } = await apolloClient.query({ variables: { id }, query: UserDocument });
     return { user: data.user };
-  } catch {
+  } catch (err) {
+    console.log(err);
     return { user: null };
   }
 };
@@ -69,6 +79,6 @@ export const logout: any = (apolloClient: ApolloClient<any>) => (
     path: '/'
   });
 
-  dispatch({ type: CLEAR_USER_ME });
+  dispatch({ type: LOGOUT });
   apolloClient.cache.reset().then(() => Router.push('/logout'));
 };
