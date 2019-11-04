@@ -5,7 +5,6 @@ import { UserMeDocument } from '../generated/graphql';
 import { SkoleContext } from '../interfaces';
 import { withApollo } from '../lib/apollo';
 import { withRedux } from '../lib/redux';
-import { getToken } from './getToken';
 import { redirect } from './redirect';
 
 /*
@@ -19,17 +18,14 @@ export const withPublic = (WrappedComponent: NextPage): any => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Wrapper.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
-    const { req, apolloClient, reduxStore } = ctx;
-    const token = getToken(req);
+    const { apolloClient, reduxStore } = ctx;
 
-    if (token) {
+    try {
       const { data } = await apolloClient.query({ query: UserMeDocument });
-
-      if (data.userMe) {
-        redirect(ctx, '/login');
-        await reduxStore.dispatch(updateUserMe(data.userMe));
-      }
-    }
+      const { userMe } = data;
+      redirect(ctx, '/');
+      await reduxStore.dispatch(updateUserMe(userMe));
+    } catch {}
 
     return {};
   };

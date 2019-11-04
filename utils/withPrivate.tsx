@@ -19,15 +19,15 @@ export const withPrivate = (WrappedComponent: NextPage): any => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Wrapper.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
     const { apolloClient, reduxStore } = ctx;
-    const { data } = await apolloClient.query({ query: UserMeDocument });
 
-    if (data.userMe) {
+    try {
+      const { data } = await apolloClient.query({ query: UserMeDocument });
       await reduxStore.dispatch(updateUserMe(data.userMe));
-    } else {
+    } catch {
       redirect(ctx, '/login');
+    } finally {
+      return {};
     }
-
-    return {};
   };
 
   return compose(
