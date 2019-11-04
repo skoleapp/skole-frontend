@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import { setUserMe } from '../../actions';
+import { updateUserMe } from '../../actions';
 import { useUpdateUserMutation } from '../../generated/graphql';
 import { UpdateUserForm, UserMe } from '../../interfaces';
 import { createFormErrors } from '../../utils';
@@ -36,7 +36,7 @@ export const EditUserCard: React.FC<Props> = ({ user }) => {
       return onError(updateUser.errors);
     } else {
       setCompleted(true);
-      dispatch(setUserMe(updateUser.user));
+      dispatch(updateUserMe(updateUser.user));
     }
   };
 
