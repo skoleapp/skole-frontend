@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { getUser, getUserMe } from '../../../actions';
+import { getUser } from '../../../actions';
 import { Layout, NotFoundCard, UserInfoCard } from '../../../components';
+import { UserMeDocument } from '../../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../../interfaces';
-import { redirect, withAuth } from '../../../lib';
-import { userNotFoundText } from '../../../utils';
+import { redirect, userNotFoundText, withAuthSync } from '../../../utils';
 
 interface Props {
   user: PublicUser | null;
@@ -16,16 +16,17 @@ const UserPage: NextPage<Props> = ({ user }) => (
   </Layout>
 );
 
-UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+UserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   const { query, apolloClient } = ctx;
-  const { userMe } = await getUserMe(apolloClient);
+  const { data } = await apolloClient.query({ query: UserMeDocument });
 
-  if (userMe && userMe.id === query.id) {
-    redirect(ctx, '/account');
+  if (data.userMe && data.userMe.id === query.id) {
+    return redirect(ctx, '/account');
   }
 
   const { user } = await getUser(query.id as string, apolloClient); // eslint-disable-line @typescript-eslint/no-explicit-any
   return { user };
 };
 
-export default withAuth(UserPage as NextPage);
+export default withAuthSync(UserPage as NextPage);

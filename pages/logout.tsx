@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { Layout, LogoutCard } from '../components';
-import { withPublic } from '../lib';
+import { withPublic } from '../utils';
 
 const LogoutPage: NextPage = () => (
   <Layout title="Login">

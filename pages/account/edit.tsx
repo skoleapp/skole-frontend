@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { EditUserCard, Layout } from '../../components';
 import { State } from '../../interfaces';
-import { withPrivate } from '../../lib';
+import { withPrivate } from '../../utils';
 
 const EditAccountPage: NextPage = () => {
   const { user } = useSelector((state: State) => state.auth);

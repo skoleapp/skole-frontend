@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { LandingPageContent, Layout } from '../components';
-import { withAuth } from '../lib/withAuth';
+import { withAuthSync } from '../utils';
 
 const IndexPage: NextPage = () => (
   <Layout title="Home">
@@ -9,4 +9,4 @@ const IndexPage: NextPage = () => (
   </Layout>
 );
 
-export default withAuth(IndexPage);
+export default withAuthSync(IndexPage);

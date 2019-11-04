@@ -3,9 +3,7 @@ import React from 'react';
 import { Layout, NotFoundCard, UserListTable } from '../../components';
 import { UserListDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
-import { withAuth } from '../../lib';
-
-const noUsersText = 'No users found.';
+import { withAuthSync } from '../../utils';
 
 interface Props {
   users: PublicUser[] | null;
@@ -13,7 +11,7 @@ interface Props {
 
 const UserListPage: NextPage<Props> = ({ users }) => (
   <Layout title="User List">
-    {users ? <UserListTable users={users} /> : <NotFoundCard text={noUsersText} />}
+    {users ? <UserListTable users={users} /> : <NotFoundCard text="No users found..." />}
   </Layout>
 );
 
@@ -28,4 +26,4 @@ UserListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default withAuth(UserListPage as NextPage);
+export default withAuthSync(UserListPage as NextPage);

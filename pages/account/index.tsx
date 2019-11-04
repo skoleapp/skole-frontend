@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { AccountMenu, Layout } from '../../components';
-import { withPrivate } from '../../lib';
+import { withPrivate } from '../../utils';
 
 const AccountPage: NextPage = () => (
   <Layout title="Account">
