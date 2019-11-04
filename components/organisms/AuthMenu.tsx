@@ -1,7 +1,7 @@
 import { IconButton, MenuItem } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
 import { AccountCircle } from '@material-ui/icons';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
@@ -13,6 +13,7 @@ export const AuthMenu: React.FC = () => {
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
   const apolloClient = useApolloClient();
+  const router = useRouter();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorEl(event.currentTarget);
@@ -53,8 +54,8 @@ export const AuthMenu: React.FC = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={(): Promise<boolean> => Router.push('/account')}>Account</MenuItem>
-        <MenuItem onClick={(): Promise<boolean> => Router.push('/account/courses')}>
+        <MenuItem onClick={(): Promise<boolean> => router.push('/account')}>Account</MenuItem>
+        <MenuItem onClick={(): Promise<boolean> => router.push('/account/courses')}>
           My Courses
         </MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>

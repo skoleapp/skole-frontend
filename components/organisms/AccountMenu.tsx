@@ -1,5 +1,5 @@
 import { Button, MenuItem, MenuList, Paper } from '@material-ui/core';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
@@ -9,21 +9,22 @@ import { logout } from '../../actions';
 export const AccountMenu: React.FC = () => {
   const dispatch = useDispatch();
   const apolloClient = useApolloClient();
+  const router = useRouter();
 
   return (
     <StyledAccountMenu>
       <Paper>
         <MenuList>
-          <MenuItem onClick={(): Promise<boolean> => Router.push('/account/profile')}>
+          <MenuItem onClick={(): Promise<boolean> => router.push('/account/profile')}>
             Profile
           </MenuItem>
-          <MenuItem onClick={(): Promise<boolean> => Router.push('/account/edit')}>
+          <MenuItem onClick={(): Promise<boolean> => router.push('/account/edit')}>
             My Account
           </MenuItem>
-          <MenuItem onClick={(): Promise<boolean> => Router.push('/account/courses')}>
+          <MenuItem onClick={(): Promise<boolean> => router.push('/account/courses')}>
             My Courses
           </MenuItem>
-          <MenuItem onClick={(): Promise<boolean> => Router.push('/account/change-password')}>
+          <MenuItem onClick={(): Promise<boolean> => router.push('/account/change-password')}>
             Change Password
           </MenuItem>
         </MenuList>

@@ -10,7 +10,7 @@ import { redirect } from './redirect';
 /*
  * Pages that are wrapped with this get automatically
  * redirected to home screen if authenticated.
- * Otherwise user will be automatically logged in
+ * Otherwise user will be automatically logged in.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const withPublic = (WrappedComponent: NextPage): any => {
