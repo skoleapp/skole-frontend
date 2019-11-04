@@ -10,4 +10,17 @@ mutation SignUp($username: String!, $email: String!, $password: String!) {
       messages
     }
   }
+
+  login(email: $email, password: $password) {
+    token
+    user {
+      id
+      title
+      bio
+      points
+      created
+      email
+      language
+    }
+  }
 }

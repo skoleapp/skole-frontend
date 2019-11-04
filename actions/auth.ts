@@ -56,10 +56,9 @@ interface PublicUserObj {
   user: PublicUser | null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getUser = async (
   id: string,
-  apolloClient: ApolloClient<any>
+  apolloClient: ApolloClient<any> // eslint-disable-line @typescript-eslint/no-explicit-any
 ): Promise<PublicUserObj> => {
   try {
     const { data } = await apolloClient.query({ variables: { id }, query: UserDocument });

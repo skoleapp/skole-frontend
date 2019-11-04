@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     .email('Invalid email.')
     .required('Email is required.'),
   bio: Yup.string(),
-  language: Yup.string().oneOf(['ENGLISH', 'FINNISH'], 'Invalid language.')
+  language: Yup.string().oneOf(['ENGLISH', 'FINNISH', 'SWEDISH'], 'Invalid language.')
 });
 
 interface Props {

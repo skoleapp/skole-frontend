@@ -251,6 +251,13 @@ export type SignUpMutation = (
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
+  )>, login: Maybe<(
+    { __typename?: 'LoginMutation' }
+    & Pick<LoginMutation, 'token'>
+    & { user: Maybe<(
+      { __typename?: 'UserTypePrivate' }
+      & Pick<UserTypePrivate, 'id' | 'title' | 'bio' | 'points' | 'created' | 'email' | 'language'>
+    )> }
   )> }
 );
 
@@ -392,6 +399,18 @@ export const SignUpDocument = gql`
     errors {
       field
       messages
+    }
+  }
+  login(email: $email, password: $password) {
+    token
+    user {
+      id
+      title
+      bio
+      points
+      created
+      email
+      language
     }
   }
 }
