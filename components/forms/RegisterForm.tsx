@@ -1,28 +1,47 @@
 import { Link } from '@material-ui/core';
-import { Field, Form, FormikProps } from 'formik';
+import { ErrorMessage, Field, FormikProps } from 'formik';
+import { CheckboxWithLabel, TextField } from 'formik-material-ui';
 import React from 'react';
 import { RegisterFormValues } from '../../interfaces';
-import { CheckboxFormField, FormSubmitSection, TextFormField } from '../form-fields';
+import { Form } from '../containers';
+import { FormErrorMessage } from '../containers/FormErrorMessage';
+import { FormSubmitSection } from '../form-fields';
 
-export const RegisterForm: React.ComponentType<FormikProps<RegisterFormValues>> = props => (
+export const RegisterForm: React.FC<FormikProps<RegisterFormValues>> = props => (
   <Form>
-    <Field placeholder="Username" name="username" component={TextFormField} label="Username" />
-    <Field placeholder="Email" name="email" component={TextFormField} label="Email" />
+    <Field
+      placeholder="Username"
+      name="username"
+      component={TextField}
+      label="Username"
+      fullWidth
+    />
+    <Field placeholder="Email" name="email" component={TextField} label="Email" fullWidth />
     <Field
       placeholder="Password"
       name="password"
-      component={TextFormField}
+      component={TextField}
       label="Password"
       type="password"
+      fullWidth
     />
     <Field
       placeholder="Confirm password"
       name="confirmPassword"
       type="password"
-      component={TextFormField}
+      component={TextField}
       label="Confirm Password"
+      fullWidth
     />
-    <Field name="agreeToTerms" component={CheckboxFormField} label="Agree to Terms" />
+    <div className="checkbox-section">
+      <Field
+        name="agreeToTerms"
+        component={CheckboxWithLabel}
+        Label={{ label: 'Agree to Terms' }}
+        color="primary"
+      />
+      <ErrorMessage name="agreeToTerms" component={FormErrorMessage} />
+    </div>
     <FormSubmitSection submitButtonText="register" {...props} />
     <Link href="/login" color="primary">
       Already a user?

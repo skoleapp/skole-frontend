@@ -1,8 +1,11 @@
-import { Link } from '@material-ui/core';
-import { Field, Form, FormikProps } from 'formik';
+import { Avatar, Button, Link } from '@material-ui/core';
+import { ErrorMessage, Field, FormikProps } from 'formik';
+import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { UpdateUserForm } from '../../interfaces';
-import { AvatarFormField, FormSubmitSection, SelectFormField, TextFormField } from '../form-fields';
+import { Form } from '../containers';
+import { FormErrorMessage } from '../containers/FormErrorMessage';
+import { FormSubmitSection, SelectFormField } from '../form-fields';
 
 const languageOptions = [
   {
@@ -17,11 +20,26 @@ const languageOptions = [
 
 export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = props => (
   <Form>
-    <Field name="avatar" component={AvatarFormField} />
-    <Field placeholder="Title" name="title" component={TextFormField} label="Title" />
-    <Field placeholder="Username" name="username" component={TextFormField} label="Username" />
-    <Field placeholder="Email" name="email" component={TextFormField} label="Email" />
-    <Field placeholder="Bio" name="bio" component={TextFormField} label="Bio" />
+    <div className="avatar-section">
+      <Avatar src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
+      <input accept="image/*" id="upload-avatar" type="file" />
+      <label htmlFor="upload-avatar">
+        <Button variant="outlined" color="primary" component="span" fullWidth>
+          upload new avatar
+        </Button>
+      </label>
+      <ErrorMessage name="avatar" component={FormErrorMessage} />
+    </div>
+    <Field placeholder="Title" name="title" component={TextField} label="Title" fullWidth />
+    <Field
+      placeholder="Username"
+      name="username"
+      component={TextField}
+      label="Username"
+      fullWidth
+    />
+    <Field placeholder="Email" name="email" component={TextField} label="Email" fullWidth />
+    <Field placeholder="Bio" name="bio" component={TextField} label="Bio" fullWidth />
     <Field
       placeholder="Language"
       name="language"
