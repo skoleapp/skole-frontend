@@ -4,7 +4,7 @@ import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { LoginFormValues } from '../../interfaces';
 import { Form } from '../containers';
-import { FormSubmitSection } from '../form-fields';
+import { FormSubmitSection } from '../molecules';
 
 export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
   <Form>

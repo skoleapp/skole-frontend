@@ -4,7 +4,7 @@ import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { PasswordForm } from '../../interfaces';
 import { Form } from '../containers';
-import { FormSubmitSection } from '../form-fields';
+import { FormSubmitSection } from '../molecules';
 
 export const ChangePasswordForm: React.ComponentType<FormikProps<PasswordForm>> = props => (
   <Form>

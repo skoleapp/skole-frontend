@@ -5,7 +5,7 @@ import React from 'react';
 import { RegisterFormValues } from '../../interfaces';
 import { Form } from '../containers';
 import { FormErrorMessage } from '../containers/FormErrorMessage';
-import { FormSubmitSection } from '../form-fields';
+import { FormSubmitSection } from '../molecules';
 
 export const RegisterForm: React.FC<FormikProps<RegisterFormValues>> = props => (
   <Form>
