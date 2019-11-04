@@ -57,6 +57,8 @@ export interface PublicUser {
 export interface AuthState {
   user: UserMe;
   authenticated: boolean | null;
+  loading: boolean | null;
+  error: string | null;
 }
 
 export interface State {
