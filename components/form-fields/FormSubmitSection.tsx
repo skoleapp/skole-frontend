@@ -2,7 +2,7 @@ import { Button, CircularProgress, FormControl } from '@material-ui/core';
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import { FormErrorMessage } from './FormErrorMessage';
+import { FormErrorMessage } from '../containers';
 
 interface FormSubmitSectionProps extends FormikProps<any> {
   submitButtonText: string;

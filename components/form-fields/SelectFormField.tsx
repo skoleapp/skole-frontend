@@ -2,7 +2,7 @@ import { FormHelperText, InputLabel, MenuItem, Select } from '@material-ui/core'
 import { FieldProps, getIn } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import { FormErrorMessage } from './FormErrorMessage';
+import { FormErrorMessage } from '../containers';
 
 interface Props extends FieldProps {
   label: string;
