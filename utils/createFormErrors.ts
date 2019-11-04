@@ -1,6 +1,4 @@
-import * as R from 'ramda';
 import { FormErrors } from '../interfaces';
-import { networkErrorMessage } from './messages';
 
 const snakeToCamel = (str: string): string =>
   str.replace(/([-_][a-z])/g, group =>
@@ -35,32 +33,29 @@ export const createFormErrors = (errors: any): FormErrors => {
     ...authForms,
     ...updateUserForm,
     ...changePasswordForm,
-    general: '',
-    serverNotFound: ''
+    general: ''
   };
 
-  if (!R.isEmpty(errors)) {
-    if (errors.networkError) {
-      formErrors.general = networkErrorMessage;
-    } else if (errors.graphQLErrors && errors.graphQLErrors.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      errors.graphQLErrors.map((e: any) => {
-        if (e.field) {
-          (formErrors as any)[e.field] = e.message; // eslint-disable-line @typescript-eslint/no-explicit-any
-        } else {
-          formErrors.general = e.message;
-        }
-      });
-    } else if (errors.length) {
-      // eslint-disable-next-line
-      errors.map((e: any) => {
-        if (e.field) {
-          (formErrors as any)[snakeToCamel(e.field)] = e.messages.join(); // eslint-disable-line @typescript-eslint/no-explicit-any
-        } else {
-          formErrors.general = e.messages.join();
-        }
-      });
-    }
+  if (errors.networkError) {
+    formErrors.general = 'Network error.';
+  }
+
+  if (errors.length) {
+    // eslint-disable-next-line
+    errors.map((e: any) => {
+      if (e.field) {
+        (formErrors as any)[snakeToCamel(e.field)] = e.messages.join(); // eslint-disable-line @typescript-eslint/no-explicit-any
+      } else {
+        formErrors.general = e.messages.join();
+      }
+    });
+  }
+
+  if (errors.graphQLErrors) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    errors.graphQLErrors.map((e: any) => {
+      formErrors.general = e.message;
+    });
   }
 
   return formErrors;

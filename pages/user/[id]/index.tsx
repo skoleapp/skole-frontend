@@ -4,7 +4,7 @@ import { getUser } from '../../../actions';
 import { Layout, NotFoundCard, UserInfoCard } from '../../../components';
 import { UserMeDocument } from '../../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../../interfaces';
-import { redirect, userNotFoundText, withAuthSync } from '../../../utils';
+import { redirect, withAuthSync } from '../../../utils';
 
 interface Props {
   user: PublicUser | null;
@@ -12,7 +12,7 @@ interface Props {
 
 const UserPage: NextPage<Props> = ({ user }) => (
   <Layout title="User">
-    {user ? <UserInfoCard {...user} /> : <NotFoundCard text={userNotFoundText} />}
+    {user ? <UserInfoCard {...user} /> : <NotFoundCard text="User not found..." />}
   </Layout>
 );
 
