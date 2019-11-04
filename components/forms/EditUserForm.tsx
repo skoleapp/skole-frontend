@@ -1,22 +1,11 @@
-import { Avatar, Button, Link } from '@material-ui/core';
+import { Avatar, Button, FormControl, InputLabel, Link, MenuItem } from '@material-ui/core';
 import { ErrorMessage, Field, FormikProps } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { Select, TextField } from 'formik-material-ui';
 import React from 'react';
 import { UpdateUserForm } from '../../interfaces';
 import { Form } from '../containers';
 import { FormErrorMessage } from '../containers/FormErrorMessage';
-import { FormSubmitSection, SelectFormField } from '../form-fields';
-
-const languageOptions = [
-  {
-    value: 'ENGLISH',
-    label: 'English'
-  },
-  {
-    value: 'FINNISH',
-    label: 'Finnish'
-  }
-];
+import { FormSubmitSection } from '../molecules';
 
 export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = props => (
   <Form>
@@ -40,13 +29,15 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = pr
     />
     <Field placeholder="Email" name="email" component={TextField} label="Email" fullWidth />
     <Field placeholder="Bio" name="bio" component={TextField} label="Bio" fullWidth />
-    <Field
-      placeholder="Language"
-      name="language"
-      component={SelectFormField}
-      options={languageOptions}
-      label="Language"
-    />
+    <FormControl fullWidth>
+      <InputLabel htmlFor="language">Language</InputLabel>
+      <Field name="language" component={Select} fullWidth inputProps={{ id: 'language' }}>
+        <MenuItem value="ENGLISH">English</MenuItem>
+        <MenuItem value="FINNISH">Finnish</MenuItem>
+        <MenuItem value="SWEDISH">Swedish</MenuItem>
+      </Field>
+      <ErrorMessage name="language" component={FormErrorMessage} />
+    </FormControl>
     <FormSubmitSection submitButtonText="save" {...props} />
     <Link href="/account" color="primary">
       Back to Account
