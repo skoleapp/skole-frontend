@@ -31,7 +31,7 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = pr
     <Field placeholder="Bio" name="bio" component={TextField} label="Bio" fullWidth />
     <FormControl fullWidth>
       <InputLabel htmlFor="language">Language</InputLabel>
-      <Field name="language" component={Select} fullWidth inputProps={{ id: 'language' }}>
+      <Field name="language" component={Select} inputProps={{ id: 'language' }}>
         <MenuItem value="English">English</MenuItem>
         <MenuItem value="Finnish">Finnish</MenuItem>
         <MenuItem value="Swedish">Swedish</MenuItem>
