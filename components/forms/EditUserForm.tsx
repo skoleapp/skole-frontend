@@ -9,16 +9,25 @@ import { FormSubmitSection } from '../molecules';
 
 export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = props => (
   <Form>
-    <div className="avatar-section">
-      <Avatar src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
+    <Avatar src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
+    <div className="change-avatar">
       <input accept="image/*" id="upload-avatar" type="file" />
       <label htmlFor="upload-avatar">
-        <Button variant="outlined" color="primary" component="span" fullWidth>
-          upload new avatar
+        <Button variant="outlined" color="primary" component="span">
+          change avatar
         </Button>
       </label>
       <ErrorMessage name="avatar" component={FormErrorMessage} />
     </div>
+    <FormControl>
+      <InputLabel htmlFor="language">Language</InputLabel>
+      <Field name="language" component={Select} inputProps={{ id: 'language' }}>
+        <MenuItem value="English">English</MenuItem>
+        <MenuItem value="Finnish">Finnish</MenuItem>
+        <MenuItem value="Swedish">Swedish</MenuItem>
+      </Field>
+      <ErrorMessage name="language" component={FormErrorMessage} />
+    </FormControl>
     <Field placeholder="Title" name="title" component={TextField} label="Title" fullWidth />
     <Field
       placeholder="Username"
@@ -29,15 +38,6 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = pr
     />
     <Field placeholder="Email" name="email" component={TextField} label="Email" fullWidth />
     <Field placeholder="Bio" name="bio" component={TextField} label="Bio" fullWidth />
-    <FormControl fullWidth>
-      <InputLabel htmlFor="language">Language</InputLabel>
-      <Field name="language" component={Select} inputProps={{ id: 'language' }}>
-        <MenuItem value="English">English</MenuItem>
-        <MenuItem value="Finnish">Finnish</MenuItem>
-        <MenuItem value="Swedish">Swedish</MenuItem>
-      </Field>
-      <ErrorMessage name="language" component={FormErrorMessage} />
-    </FormControl>
     <FormSubmitSection submitButtonText="save" {...props} />
     <Link href="/account" color="primary">
       Back to Account

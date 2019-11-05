@@ -8,19 +8,19 @@ export const StyledForm = styled(Form)`
     margin-top: 0.5rem;
   }
 
-  .avatar-section {
-    .MuiAvatar-root {
-      margin: 0 auto;
-      height: 12rem;
-      width: 12rem;
-    }
+  .MuiAvatar-root {
+    margin: 1rem auto;
+    height: 12rem;
+    width: 12rem;
+  }
 
+  .change-avatar {
     input {
       display: none;
     }
 
     .MuiButton-root {
-      margin: 1rem 0;
+      margin: 0.5rem 0;
     }
   }
 
