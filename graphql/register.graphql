@@ -11,7 +11,7 @@ mutation SignUp($username: String!, $email: String!, $password: String!) {
     }
   }
 
-  login(email: $email, password: $password) {
+  login(input: { usernameOrEmail: $email, password: $password }) {
     token
     user {
       id

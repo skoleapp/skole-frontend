@@ -12,15 +12,13 @@ import { Card } from '../containers';
 import { LoginForm } from '../forms';
 
 const initialValues = {
-  email: '',
+  usernameOrEmail: '',
   password: '',
   general: ''
 };
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Invalid email.')
-    .required('Email is required.'),
+  usernameOrEmail: Yup.string().required('Username or email is required.'),
   password: Yup.string().required('Password is required!')
 });
 
@@ -30,7 +28,13 @@ export const LoginCard: React.FC = () => {
   const dispatch = useDispatch();
 
   // eslint-disable-next-line
-  const onCompleted = (data: any) => dispatch(login({ client, ...data.login }));
+  const onCompleted = (data: any) => {
+    if (data.login.errors) {
+      return onError(data.login.errors);
+    }
+
+    dispatch(login({ client, ...data.login }));
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onError = (errors: any): void => {
@@ -46,8 +50,8 @@ export const LoginCard: React.FC = () => {
     values: LoginFormValues,
     actions: FormikActions<LoginFormValues>
   ): Promise<void> => {
-    const { email, password } = values;
-    await loginMutation({ variables: { email, password } });
+    const { usernameOrEmail, password } = values;
+    await loginMutation({ variables: { usernameOrEmail, password } });
     actions.setSubmitting(false);
   };
 

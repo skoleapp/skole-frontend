@@ -10,9 +10,9 @@ export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = prop
   <Form>
     <Field
       placeholder="example@skole.com"
-      name="email"
+      name="usernameOrEmail"
       component={TextField}
-      label="Email"
+      label="Username or Email"
       fullWidth
     />
     <Field

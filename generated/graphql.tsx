@@ -43,16 +43,25 @@ export type ErrorType = {
   messages: Array<Scalars['String']>,
 };
 
-export type LoginMutation = {
-   __typename?: 'LoginMutation',
-  token?: Maybe<Scalars['String']>,
+export type LoginMutationInput = {
+  usernameOrEmail: Scalars['String'],
+  password: Scalars['String'],
+  id?: Maybe<Scalars['ID']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type LoginMutationPayload = {
+   __typename?: 'LoginMutationPayload',
   user?: Maybe<UserTypePrivate>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  token?: Maybe<Scalars['String']>,
+  clientMutationId?: Maybe<Scalars['String']>,
 };
 
 export type Mutation = {
    __typename?: 'Mutation',
   register?: Maybe<RegisterMutationPayload>,
-  login?: Maybe<LoginMutation>,
+  login?: Maybe<LoginMutationPayload>,
   updateUser?: Maybe<UpdateUserMutationPayload>,
   changePassword?: Maybe<ChangePasswordMutationPayload>,
   deleteUser?: Maybe<DeleteUserMutation>,
@@ -65,8 +74,7 @@ export type MutationRegisterArgs = {
 
 
 export type MutationLoginArgs = {
-  email: Scalars['String'],
-  password: Scalars['String']
+  input: LoginMutationInput
 };
 
 
@@ -131,37 +139,21 @@ export type UpdateUserMutationInput = {
   bio?: Maybe<Scalars['String']>,
   avatar?: Maybe<Scalars['String']>,
   language: Scalars['String'],
+  id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
 export type UpdateUserMutationPayload = {
    __typename?: 'UpdateUserMutationPayload',
-  username: Scalars['String'],
-  email: Scalars['String'],
-  title?: Maybe<Scalars['String']>,
-  bio?: Maybe<Scalars['String']>,
-  avatar?: Maybe<Scalars['String']>,
-  language: Scalars['String'],
-  errors?: Maybe<Array<Maybe<ErrorType>>>,
   user?: Maybe<UserTypePrivate>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
-
-/** An enumeration. */
-export enum UserLanguage {
-  /** English */
-  English = 'ENGLISH',
-  /** Finnish */
-  Finnish = 'FINNISH',
-  /** Swedish */
-  Swedish = 'SWEDISH'
-}
 
 export type UserTypeChangePassword = {
    __typename?: 'UserTypeChangePassword',
   id: Scalars['ID'],
   modified: Scalars['DateTime'],
-  message?: Maybe<Scalars['String']>,
 };
 
 export type UserTypePrivate = {
@@ -174,7 +166,7 @@ export type UserTypePrivate = {
   avatar?: Maybe<Scalars['String']>,
   points: Scalars['Int'],
   email: Scalars['String'],
-  language: UserLanguage,
+  language?: Maybe<Scalars['String']>,
 };
 
 export type UserTypePublic = {
@@ -192,7 +184,6 @@ export type UserTypeRegister = {
    __typename?: 'UserTypeRegister',
   id: Scalars['ID'],
   created: Scalars['DateTime'],
-  message?: Maybe<Scalars['String']>,
 };
 
 export type ChangePasswordMutationVariables = {
@@ -216,7 +207,7 @@ export type ChangePasswordMutation = (
 );
 
 export type SignInMutationVariables = {
-  email: Scalars['String'],
+  usernameOrEmail: Scalars['String'],
   password: Scalars['String']
 };
 
@@ -224,12 +215,15 @@ export type SignInMutationVariables = {
 export type SignInMutation = (
   { __typename?: 'Mutation' }
   & { login: Maybe<(
-    { __typename?: 'LoginMutation' }
-    & Pick<LoginMutation, 'token'>
+    { __typename?: 'LoginMutationPayload' }
+    & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserTypePrivate' }
       & Pick<UserTypePrivate, 'id' | 'title' | 'bio' | 'points' | 'created' | 'email' | 'language'>
-    )> }
+    )>, errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
   )> }
 );
 
@@ -252,8 +246,8 @@ export type SignUpMutation = (
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
   )>, login: Maybe<(
-    { __typename?: 'LoginMutation' }
-    & Pick<LoginMutation, 'token'>
+    { __typename?: 'LoginMutationPayload' }
+    & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserTypePrivate' }
       & Pick<UserTypePrivate, 'id' | 'title' | 'bio' | 'points' | 'created' | 'email' | 'language'>
@@ -366,8 +360,8 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = ApolloReactCommon.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const SignInDocument = gql`
-    mutation SignIn($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
+    mutation SignIn($usernameOrEmail: String!, $password: String!) {
+  login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
     token
     user {
       id
@@ -377,6 +371,10 @@ export const SignInDocument = gql`
       created
       email
       language
+    }
+    errors {
+      field
+      messages
     }
   }
 }
@@ -401,7 +399,7 @@ export const SignUpDocument = gql`
       messages
     }
   }
-  login(email: $email, password: $password) {
+  login(input: {usernameOrEmail: $email, password: $password}) {
     token
     user {
       id

@@ -26,7 +26,7 @@ export interface RegisterFormValues {
 }
 
 export interface LoginFormValues {
-  email: string;
+  usernameOrEmail: string;
   password: string;
   general: string;
 }
