@@ -32,9 +32,9 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = pr
     <FormControl fullWidth>
       <InputLabel htmlFor="language">Language</InputLabel>
       <Field name="language" component={Select} fullWidth inputProps={{ id: 'language' }}>
-        <MenuItem value="ENGLISH">English</MenuItem>
-        <MenuItem value="FINNISH">Finnish</MenuItem>
-        <MenuItem value="SWEDISH">Swedish</MenuItem>
+        <MenuItem value="English">English</MenuItem>
+        <MenuItem value="Finnish">Finnish</MenuItem>
+        <MenuItem value="Swedish">Swedish</MenuItem>
       </Field>
       <ErrorMessage name="language" component={FormErrorMessage} />
     </FormControl>

@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     .email('Invalid email.')
     .required('Email is required.'),
   bio: Yup.string(),
-  language: Yup.string().oneOf(['ENGLISH', 'FINNISH', 'SWEDISH'], 'Invalid language.')
+  language: Yup.string().oneOf(['English', 'Finnish', 'Swedish'], 'Invalid language.')
 });
 
 interface Props {
@@ -42,7 +42,6 @@ export const EditUserCard: React.FC<Props> = ({ user }) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onError = (errors: any): void => {
-    console.log({ ...errors });
     const formErrors = createFormErrors(errors);
     Object.keys(formErrors).forEach(
       key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
