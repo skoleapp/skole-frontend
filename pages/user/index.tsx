@@ -1,9 +1,11 @@
 import { NextPage } from 'next';
 import React from 'react';
+import { compose } from 'redux';
+import { updateUserMe } from '../../actions';
 import { Layout, NotFoundCard, UserListTable } from '../../components';
-import { UserListDocument } from '../../generated/graphql';
+import { UserListDocument, UserMeDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
-import { withAuthSync } from '../../utils';
+import { withApollo, withRedux } from '../../lib';
 
 interface Props {
   users: PublicUser[] | null;
@@ -16,7 +18,13 @@ const UserListPage: NextPage<Props> = ({ users }) => (
 );
 
 UserListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  const { apolloClient } = ctx;
+  const { apolloClient, reduxStore } = ctx;
+  const res = await apolloClient.query({ query: UserMeDocument });
+  const { userMe } = res.data;
+
+  if (userMe) {
+    await reduxStore.dispatch(updateUserMe(userMe));
+  }
 
   try {
     const { data } = await apolloClient.query({ query: UserListDocument });
@@ -26,4 +34,7 @@ UserListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default withAuthSync(UserListPage as NextPage);
+export default compose(
+  withRedux,
+  withApollo
+)(UserListPage as NextPage);
