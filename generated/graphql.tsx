@@ -310,7 +310,7 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user: Maybe<(
     { __typename?: 'UserTypePublic' }
-    & Pick<UserTypePublic, 'id' | 'username' | 'title' | 'bio' | 'points' | 'created'>
+    & Pick<UserTypePublic, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'points' | 'created'>
   )> }
 );
 
@@ -321,7 +321,7 @@ export type UserListQuery = (
   { __typename?: 'Query' }
   & { userList: Maybe<Array<Maybe<(
     { __typename?: 'UserTypePublic' }
-    & Pick<UserTypePublic, 'id' | 'username' | 'points'>
+    & Pick<UserTypePublic, 'id' | 'username' | 'points' | 'avatar'>
   )>>> }
 );
 
@@ -491,6 +491,7 @@ export const UserDocument = gql`
     username
     title
     bio
+    avatar
     points
     created
   }
@@ -512,6 +513,7 @@ export const UserListDocument = gql`
     id
     username
     points
+    avatar
   }
 }
     `;

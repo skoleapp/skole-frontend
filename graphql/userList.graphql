@@ -3,5 +3,6 @@ query UserList {
     id
     username
     points
+    avatar
   }
 }
