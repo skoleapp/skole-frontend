@@ -12,6 +12,7 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { PublicUser } from '../../interfaces';
+import { getAvatar } from '../../utils';
 
 interface Props {
   users: PublicUser[];
@@ -32,7 +33,7 @@ export const UserListTable: React.FC<Props> = ({ users }) => (
             <Link href={`/user/${user.id}`} key={i}>
               <TableRow>
                 <TableCell className="main-cell">
-                  <Avatar src={`${process.env.STATIC_URL}${user.avatar}`} />
+                  <Avatar src={getAvatar(user.avatar)} />
                   <Typography variant="subtitle1">{user.username}</Typography>
                 </TableCell>
                 <TableCell align="right">{user.points}</TableCell>

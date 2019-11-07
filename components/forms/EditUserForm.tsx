@@ -3,13 +3,14 @@ import { ErrorMessage, Field, FormikProps } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
 import React from 'react';
 import { UpdateUserForm } from '../../interfaces';
+import { getAvatar } from '../../utils';
 import { Form } from '../containers';
 import { FormErrorMessage } from '../containers/FormErrorMessage';
 import { FormSubmitSection } from '../molecules';
 
 export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = props => (
   <Form>
-    <Avatar src={`${process.env.STATIC_URL}${props.values.avatar}`} />
+    <Avatar src={getAvatar(props.values.avatar)} />
     <div className="change-avatar">
       <input accept="image/*" id="upload-avatar" type="file" />
       <label htmlFor="upload-avatar">
