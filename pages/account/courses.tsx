@@ -1,8 +1,8 @@
 import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { Layout } from '../../../components';
-import { withPrivate } from '../../../utils';
+import { Layout } from '../../components';
+import { withPrivate } from '../../utils';
 
 export const OwnCoursesListPage: NextPage = () => (
   <Layout>

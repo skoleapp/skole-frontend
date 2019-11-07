@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { getUser } from '../../../actions';
-import { Layout, NotFoundCard, UserInfoCard } from '../../../components';
-import { UserMeDocument } from '../../../generated/graphql';
-import { PublicUser, SkoleContext } from '../../../interfaces';
-import { redirect, withAuthSync } from '../../../utils';
+import { getUser } from '../../actions';
+import { Layout, NotFoundCard, UserInfoCard } from '../../components';
+import { UserMeDocument } from '../../generated/graphql';
+import { PublicUser, SkoleContext } from '../../interfaces';
+import { redirect, withAuthSync } from '../../utils';
 
 interface Props {
   user: PublicUser | null;
