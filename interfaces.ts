@@ -44,6 +44,7 @@ export interface PublicUser {
   title: string | null;
   bio: string | null;
   points: number;
+  avatar: string;
 }
 
 export interface AuthState {
