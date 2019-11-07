@@ -1,13 +1,12 @@
 import { Avatar, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
-import { PublicUser, UserMe } from '../../interfaces';
 import { Card } from '../containers';
 
-export const UserInfoCard: React.FC<PublicUser | UserMe> = ({ title, username, bio, points }) => (
+export const UserInfoCard: React.FC<any> = ({ title, username, bio, points, avatar }) => (
   <StyledCard>
     <Typography variant="h5">{title}</Typography>
-    <Avatar src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
+    <Avatar src={`${process.env.STATIC_URL}${avatar}`} />
     <div className="info-section">
       <Typography variant="body1">{username}</Typography>
       <Typography variant="body1">Bio: {bio}</Typography>

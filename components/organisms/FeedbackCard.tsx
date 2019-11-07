@@ -1,12 +1,12 @@
-import { Button, Typography } from '@material-ui/core';
+import { Button, ButtonGroup, Typography } from '@material-ui/core';
 import { Formik } from 'formik';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import * as Yup from 'yup';
 import { FeedbackFormValues, FeedbackType } from '../../interfaces';
 import { Card } from '../containers';
 import { FeedbackForm } from '../forms';
-import { FeedbackButtonSection } from '../molecules';
 
 const initialValues = {
   comment: ''
@@ -27,11 +27,21 @@ export const FeedbackCard: React.FC = () => {
   };
 
   return (
-    <Card>
+    <StyledFeedbackCard>
       {!submitted ? (
         <>
           <Typography variant="h5">Feedback</Typography>
-          <FeedbackButtonSection setRate={setRate} />
+          <ButtonGroup fullWidth aria-label="full width outlined button group">
+            <Button value="Good" onClick={(): void => setRate('good')} color="primary">
+              good
+            </Button>
+            <Button value="Neutral" onClick={(): void => setRate('neutral')} color="primary">
+              neutral
+            </Button>
+            <Button value="Bad" onClick={(): void => setRate('bad')} color="primary">
+              bad
+            </Button>
+          </ButtonGroup>
           <Formik
             onSubmit={onSubmit}
             initialValues={initialValues}
@@ -49,6 +59,15 @@ export const FeedbackCard: React.FC = () => {
           </Link>
         </>
       )}
-    </Card>
+    </StyledFeedbackCard>
   );
 };
+
+const StyledFeedbackCard = styled(Card)`
+  .MuiButtonGroup-root {
+    button:focus {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+  }
+`;

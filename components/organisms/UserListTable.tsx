@@ -32,7 +32,7 @@ export const UserListTable: React.FC<Props> = ({ users }) => (
             <Link href={`/user/${user.id}`} key={i}>
               <TableRow>
                 <TableCell className="main-cell">
-                  <Avatar src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
+                  <Avatar src={`${process.env.STATIC_URL}${user.avatar}`} />
                   <Typography variant="subtitle1">{user.username}</Typography>
                 </TableCell>
                 <TableCell align="right">{user.points}</TableCell>

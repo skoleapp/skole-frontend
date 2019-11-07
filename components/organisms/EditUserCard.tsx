@@ -1,6 +1,5 @@
-import { Button, Typography } from '@material-ui/core';
+import { Button, Link, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
-import Link from 'next/link';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';

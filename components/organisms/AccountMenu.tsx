@@ -15,16 +15,10 @@ export const AccountMenu: React.FC = () => {
     <StyledAccountMenu>
       <Paper>
         <MenuList>
-          <MenuItem onClick={(): Promise<boolean> => router.push('/account/profile')}>
-            Profile
-          </MenuItem>
-          <MenuItem onClick={(): Promise<boolean> => router.push('/account/edit')}>
-            My Account
-          </MenuItem>
-          <MenuItem onClick={(): Promise<boolean> => router.push('/account/courses')}>
-            My Courses
-          </MenuItem>
-          <MenuItem onClick={(): Promise<boolean> => router.push('/account/change-password')}>
+          <MenuItem onClick={() => router.push('/account/profile')}>Profile</MenuItem>
+          <MenuItem onClick={() => router.push('/account/edit')}>Edit Account</MenuItem>
+          <MenuItem onClick={() => router.push('/account/courses')}>My Courses</MenuItem>
+          <MenuItem onClick={() => router.push('/account/change-password')}>
             Change Password
           </MenuItem>
         </MenuList>

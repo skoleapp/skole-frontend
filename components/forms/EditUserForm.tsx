@@ -9,7 +9,7 @@ import { FormSubmitSection } from '../molecules';
 
 export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = props => (
   <Form>
-    <Avatar src="https://myconstructor.gr/img/customers-imgs/avatar.png" />
+    <Avatar src={`${process.env.STATIC_URL}${props.values.avatar}`} />
     <div className="change-avatar">
       <input accept="image/*" id="upload-avatar" type="file" />
       <label htmlFor="upload-avatar">
