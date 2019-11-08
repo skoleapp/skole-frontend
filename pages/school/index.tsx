@@ -2,10 +2,13 @@ import { Paper, TableBody, TableCell, TableHead, TableRow, Typography } from '@m
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
+import { compose } from 'redux';
+import { updateUserMe } from '../../actions';
 import { StyledTable } from '../../components';
 import { Layout, NotFoundCard } from '../../containers';
-import { School } from '../../interfaces';
-import { withAuthSync } from '../../utils';
+import { SchoolListDocument, UserMeDocument } from '../../generated/graphql';
+import { School, SkoleContext } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
 
 interface Props {
   schools: School[] | null;
@@ -17,7 +20,7 @@ const SchoolListPage: NextPage<Props> = ({ schools }) => (
       <StyledTable>
         <TableHead>
           <TableRow>
-            <TableCell></TableCell>
+            <TableCell>Schools</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -40,8 +43,24 @@ const SchoolListPage: NextPage<Props> = ({ schools }) => (
   </Layout>
 );
 
-SchoolListPage.getInitialProps = async () => {
-  return { schools: null };
+SchoolListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+  const { apolloClient, reduxStore } = ctx;
+  const res = await apolloClient.query({ query: UserMeDocument });
+  const { userMe } = res.data;
+
+  if (userMe) {
+    await reduxStore.dispatch(updateUserMe(userMe));
+  }
+
+  try {
+    const { data } = await apolloClient.query({ query: SchoolListDocument });
+    return { schools: data.schoolList };
+  } catch (error) {
+    return { schools: null };
+  }
 };
 
-export default withAuthSync(SchoolListPage as NextPage);
+export default compose(
+  withRedux,
+  withApollo
+)(SchoolListPage as NextPage);

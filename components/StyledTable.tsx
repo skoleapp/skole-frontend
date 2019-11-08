@@ -6,6 +6,10 @@ export const StyledTable = styled(Table)`
     background-color: var(--light-opacity);
   }
 
+  .MuiTableCell-root {
+    cursor: pointer;
+  }
+
   .main-cell {
     display: flex;
     align-items: center;

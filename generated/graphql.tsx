@@ -273,7 +273,7 @@ export type SchoolListQuery = (
   { __typename?: 'Query' }
   & { schoolList: Maybe<Array<Maybe<(
     { __typename?: 'SchoolType' }
-    & Pick<SchoolType, 'name'>
+    & Pick<SchoolType, 'id' | 'schoolType' | 'name'>
   )>>> }
 );
 
@@ -441,6 +441,8 @@ export type SchoolQueryResult = ApolloReactCommon.QueryResult<SchoolQuery, Schoo
 export const SchoolListDocument = gql`
     query SchoolList {
   schoolList {
+    id
+    schoolType
     name
   }
 }

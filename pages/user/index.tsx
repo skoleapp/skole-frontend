@@ -29,7 +29,7 @@ const UserListPage: NextPage<Props> = ({ users }) => (
     {users ? (
       <StyledUserList>
         <Paper>
-          <Table aria-label="simple table">
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Users</TableCell>
