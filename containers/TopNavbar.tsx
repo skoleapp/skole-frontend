@@ -3,10 +3,11 @@ import Link from 'next/link';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { State } from '../../interfaces';
-import { breakpoints } from '../../styles';
-import { Logo } from '../atoms';
-import { AuthMenu, SearchWidget } from '../organisms';
+import { Logo } from '../components';
+import { State } from '../interfaces';
+import { breakpoints } from '../styles';
+import { AuthMenu } from './AuthMenu';
+import { SearchWidget } from './SearchWidget';
 
 export const TopNavbar: React.FC = () => {
   const { authenticated } = useSelector((state: State) => state.auth);

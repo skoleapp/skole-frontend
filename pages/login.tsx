@@ -1,12 +1,74 @@
+import { Typography } from '@material-ui/core';
+import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import React from 'react';
-import { Layout, LoginCard } from '../components';
-import { withPublic } from '../utils';
+import React, { useRef } from 'react';
+import { useApolloClient } from 'react-apollo';
+import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
+import { login } from '../actions';
+import { StyledCard } from '../components';
+import { Layout, LoginForm } from '../containers';
+import { useSignInMutation } from '../generated/graphql';
+import { LoginFormValues } from '../interfaces';
+import { createFormErrors, withPublic } from '../utils';
 
-const LoginPage: NextPage = () => (
-  <Layout title="Login">
-    <LoginCard />
-  </Layout>
-);
+const initialValues = {
+  usernameOrEmail: '',
+  password: '',
+  general: ''
+};
+
+const validationSchema = Yup.object().shape({
+  usernameOrEmail: Yup.string().required('Username or email is required.'),
+  password: Yup.string().required('Password is required!')
+});
+
+const LoginPage: NextPage = () => {
+  const client = useApolloClient();
+  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const dispatch = useDispatch();
+
+  // eslint-disable-next-line
+  const onCompleted = (data: any) => {
+    if (data.login.errors) {
+      return onError(data.login.errors);
+    }
+
+    dispatch(login({ client, ...data.login }));
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onError = (errors: any): void => {
+    const formErrors = createFormErrors(errors);
+    Object.keys(formErrors).forEach(
+      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
+    );
+  };
+
+  const [loginMutation] = useSignInMutation({ onCompleted, onError });
+
+  const handleSubmit = async (
+    values: LoginFormValues,
+    actions: FormikActions<LoginFormValues>
+  ): Promise<void> => {
+    const { usernameOrEmail, password } = values;
+    await loginMutation({ variables: { usernameOrEmail, password } });
+    actions.setSubmitting(false);
+  };
+  return (
+    <Layout title="Login">
+      <StyledCard>
+        <Typography variant="h5">Login</Typography>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+          component={LoginForm}
+          ref={ref}
+        />
+      </StyledCard>
+    </Layout>
+  );
+};
 
 export default withPublic(LoginPage);

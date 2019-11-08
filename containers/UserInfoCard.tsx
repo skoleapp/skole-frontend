@@ -1,11 +1,18 @@
 import { Avatar, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
-import { getAvatar } from '../../utils';
-import { Card } from '../containers';
+import { StyledCard } from '../components';
+import { PublicUser, UserMe } from '../interfaces';
+import { getAvatar } from '../utils';
 
-export const UserInfoCard: React.FC<any> = ({ title, username, bio, points, avatar }) => (
-  <StyledCard>
+export const UserInfoCard: React.FC<PublicUser | UserMe> = ({
+  title,
+  username,
+  bio,
+  points,
+  avatar
+}) => (
+  <StyledUserInfoCard>
     <Typography variant="h5">{title}</Typography>
     <Avatar src={getAvatar(avatar)} />
     <div className="info-section">
@@ -13,10 +20,10 @@ export const UserInfoCard: React.FC<any> = ({ title, username, bio, points, avat
       <Typography variant="body1">Bio: {bio}</Typography>
       <Typography variant="body1">Points: {points}</Typography>
     </div>
-  </StyledCard>
+  </StyledUserInfoCard>
 );
 
-const StyledCard = styled(Card)`
+const StyledUserInfoCard = styled(StyledCard)`
   .info-section {
     margin-top: 1rem;
 

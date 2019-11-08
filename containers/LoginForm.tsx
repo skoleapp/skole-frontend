@@ -2,12 +2,11 @@ import { Link } from '@material-ui/core';
 import { Field, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { LoginFormValues } from '../../interfaces';
-import { Form } from '../containers';
-import { FormSubmitSection } from '../molecules';
+import { FormSubmitSection, StyledForm } from '../components';
+import { LoginFormValues } from '../interfaces';
 
 export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
-  <Form>
+  <StyledForm>
     <Field
       placeholder="example@skole.com"
       name="usernameOrEmail"
@@ -27,5 +26,5 @@ export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = prop
     <Link href="/register" color="primary">
       New User?
     </Link>
-  </Form>
+  </StyledForm>
 );

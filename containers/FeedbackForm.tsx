@@ -2,11 +2,11 @@ import { Button } from '@material-ui/core';
 import { Field, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { FeedbackFormValues } from '../../interfaces';
-import { Form } from '../containers';
+import { StyledForm } from '../components';
+import { FeedbackFormValues } from '../interfaces';
 
 export const FeedbackForm: React.ComponentType<FormikProps<FeedbackFormValues>> = () => (
-  <Form>
+  <StyledForm>
     <Field
       name="comment"
       component={TextField}
@@ -18,5 +18,5 @@ export const FeedbackForm: React.ComponentType<FormikProps<FeedbackFormValues>> 
     <Button fullWidth variant="contained" color="primary" type="submit">
       submit
     </Button>
-  </Form>
+  </StyledForm>
 );

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AnimatedDiv } from './AnimatedDiv';
+import { AnimatedDiv } from '../components';
 
 interface Props {
   time?: number;

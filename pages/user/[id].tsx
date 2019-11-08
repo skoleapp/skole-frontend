@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
 import { getUser, updateUserMe } from '../../actions';
-import { Layout, NotFoundCard, UserInfoCard } from '../../components';
+import { Layout, NotFoundCard, UserInfoCard } from '../../containers';
 import { UserMeDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';

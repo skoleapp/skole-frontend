@@ -1,16 +1,14 @@
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
-import { AccountCircle, Home } from '@material-ui/icons';
-import SearchIcon from '@material-ui/icons/Search';
+import { AccountCircle, Home, Search } from '@material-ui/icons';
 import { useRouter } from 'next/router';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
-import { breakpoints } from '../../styles';
+import { breakpoints } from '../styles';
 
 export const BottomNavbar: React.FC = () => {
-  const [value, setValue] = useState(0);
   const router = useRouter();
 
-  const getValue = () => {
+  const getNavbarValue = () => {
     switch (router.pathname) {
       case '/search': {
         return 0;
@@ -27,9 +25,7 @@ export const BottomNavbar: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    setValue(getValue());
-  }, []);
+  const [value, setValue] = useState(getNavbarValue());
 
   const handleChange = (_e: ChangeEvent<HTMLButtonElement>, newValue: number): void => {
     setValue(newValue);
@@ -40,7 +36,7 @@ export const BottomNavbar: React.FC = () => {
       <BottomNavigation value={value} onChange={handleChange} showLabels>
         <BottomNavigationAction
           onClick={(): Promise<boolean> => router.push('/search')}
-          icon={<SearchIcon />}
+          icon={<Search />}
         />
         <BottomNavigationAction
           onClick={(): Promise<boolean> => router.push('/')}

@@ -2,12 +2,11 @@ import { Link } from '@material-ui/core';
 import { Field, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { PasswordForm } from '../../interfaces';
-import { Form } from '../containers';
-import { FormSubmitSection } from '../molecules';
+import { FormSubmitSection, StyledForm } from '../components';
+import { PasswordForm } from '../interfaces';
 
 export const ChangePasswordForm: React.ComponentType<FormikProps<PasswordForm>> = props => (
-  <Form>
+  <StyledForm>
     <Field
       placeholder="Old Password"
       name="oldPassword"
@@ -36,5 +35,5 @@ export const ChangePasswordForm: React.ComponentType<FormikProps<PasswordForm>> 
     <Link href="/account" color="primary">
       Back to Account
     </Link>
-  </Form>
+  </StyledForm>
 );

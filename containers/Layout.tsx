@@ -1,8 +1,10 @@
 import { Container } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
-import { breakpoints } from '../../styles';
-import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
+import { Footer, Head } from '../components';
+import { breakpoints } from '../styles';
+import { BottomNavbar } from './BottomNavbar';
+import { TopNavbar } from './TopNavbar';
 
 interface Props {
   title?: string;

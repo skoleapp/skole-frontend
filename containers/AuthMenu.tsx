@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { logout } from '../../actions';
+import { logout } from '../actions';
 
 export const AuthMenu: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

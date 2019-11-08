@@ -2,14 +2,12 @@ import { Avatar, Button, FormControl, InputLabel, Link, MenuItem } from '@materi
 import { ErrorMessage, Field, FormikProps } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
 import React from 'react';
-import { UpdateUserForm } from '../../interfaces';
-import { getAvatar } from '../../utils';
-import { Form } from '../containers';
-import { FormErrorMessage } from '../containers/FormErrorMessage';
-import { FormSubmitSection } from '../molecules';
+import { FormErrorMessage, FormSubmitSection, StyledForm } from '../components';
+import { UpdateUserForm } from '../interfaces';
+import { getAvatar } from '../utils';
 
 export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = props => (
-  <Form>
+  <StyledForm>
     <Avatar src={getAvatar(props.values.avatar)} />
     <div className="change-avatar">
       <input accept="image/*" id="upload-avatar" type="file" />
@@ -21,8 +19,8 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = pr
       <ErrorMessage name="avatar" component={FormErrorMessage} />
     </div>
     <FormControl>
-      <InputLabel htmlFor="language">Language</InputLabel>
-      <Field name="language" component={Select} inputProps={{ id: 'language' }}>
+      <InputLabel>Language</InputLabel>
+      <Field name="language" component={Select}>
         <MenuItem value="English">English</MenuItem>
         <MenuItem value="Finnish">Finnish</MenuItem>
         <MenuItem value="Swedish">Swedish</MenuItem>
@@ -43,5 +41,5 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = pr
     <Link href="/account" color="primary">
       Back to Account
     </Link>
-  </Form>
+  </StyledForm>
 );

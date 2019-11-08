@@ -1,6 +1,6 @@
 import { Card } from '@material-ui/core';
 import styled from 'styled-components';
-import { breakpoints } from '../../styles';
+import { breakpoints } from '../styles';
 
 export const StyledCard = styled(Card)`
   padding: 1rem;

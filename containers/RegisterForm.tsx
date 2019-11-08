@@ -2,13 +2,11 @@ import { Link } from '@material-ui/core';
 import { ErrorMessage, Field, FormikProps } from 'formik';
 import { CheckboxWithLabel, TextField } from 'formik-material-ui';
 import React from 'react';
-import { RegisterFormValues } from '../../interfaces';
-import { Form } from '../containers';
-import { FormErrorMessage } from '../containers/FormErrorMessage';
-import { FormSubmitSection } from '../molecules';
+import { FormErrorMessage, FormSubmitSection, StyledForm } from '../components';
+import { RegisterFormValues } from '../interfaces';
 
 export const RegisterForm: React.FC<FormikProps<RegisterFormValues>> = props => (
-  <Form>
+  <StyledForm>
     <Field
       placeholder="Username"
       name="username"
@@ -46,5 +44,5 @@ export const RegisterForm: React.FC<FormikProps<RegisterFormValues>> = props => 
     <Link href="/login" color="primary">
       Already a user?
     </Link>
-  </Form>
+  </StyledForm>
 );
