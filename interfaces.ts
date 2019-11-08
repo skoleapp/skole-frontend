@@ -47,6 +47,13 @@ export interface PublicUser {
   avatar: string;
 }
 
+export interface School {
+  id: string;
+  name: string;
+  city: string;
+  country: string;
+}
+
 export interface AuthState {
   user: UserMe;
   authenticated: boolean | null;
