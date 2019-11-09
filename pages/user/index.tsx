@@ -13,12 +13,11 @@ import Link from 'next/link';
 import React from 'react';
 import { compose } from 'redux';
 import styled from 'styled-components';
-import { updateUserMe } from '../../actions';
 import { Layout, NotFoundCard } from '../../containers';
-import { UserListDocument, UserMeDocument } from '../../generated/graphql';
+import { UserListDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { getAvatar } from '../../utils';
+import { getAvatar, useSSRAuthSync } from '../../utils';
 
 interface Props {
   users: PublicUser[] | null;
@@ -59,16 +58,10 @@ const UserListPage: NextPage<Props> = ({ users }) => (
 );
 
 UserListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  const { apolloClient, reduxStore } = ctx;
-  const res = await apolloClient.query({ query: UserMeDocument });
-  const { userMe } = res.data;
-
-  if (userMe) {
-    await reduxStore.dispatch(updateUserMe(userMe));
-  }
+  await useSSRAuthSync(ctx);
 
   try {
-    const { data } = await apolloClient.query({ query: UserListDocument });
+    const { data } = await ctx.apolloClient.query({ query: UserListDocument });
     return { users: data.userList };
   } catch (error) {
     return { users: null };
