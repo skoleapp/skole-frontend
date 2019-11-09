@@ -9,25 +9,6 @@ export interface SkoleContext extends NextPageContext {
   userMe: UserMe;
 }
 
-export interface RegisterFormValues {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  agreeToTerms: boolean;
-  general: string;
-}
-
-export interface LoginFormValues {
-  usernameOrEmail: string;
-  password: string;
-  general: string;
-}
-
-export interface FeedbackFormValues {
-  comment: string;
-}
-
 export interface UserMe {
   id: string | null;
   username: string | null;
@@ -55,11 +36,23 @@ export enum ShoolType {
 }
 
 export interface School {
-  id: string;
+  id: number;
   schoolType: SchoolType;
   name: string;
   city: string;
   country: string;
+}
+
+export interface Subject {
+  id: number;
+  name: string;
+}
+
+export interface Course {
+  id: number;
+  name: string;
+  code: string;
+  subject: string;
 }
 
 export interface AuthState {
@@ -81,7 +74,7 @@ export interface PasswordForm {
   confirmNewPassword: string;
 }
 
-export interface UpdateUserForm {
+export interface UpdateUserFormValues {
   username: string;
   email: string;
   title: string;
@@ -89,3 +82,24 @@ export interface UpdateUserForm {
   avatar: string;
   language: string;
 }
+
+export interface RegisterFormValues {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  agreeToTerms: boolean;
+  general: string;
+}
+
+export interface LoginFormValues {
+  usernameOrEmail: string;
+  password: string;
+  general: string;
+}
+
+export interface FeedbackFormValues {
+  comment: string;
+}
+
+export type CreateCourseFormValues = Omit<Course, 'id'>;
