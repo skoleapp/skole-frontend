@@ -1,36 +1,49 @@
-import { Paper, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import {
+  Button,
+  Paper,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography
+} from '@material-ui/core';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { compose } from 'redux';
-import { StyledTable } from '../../components';
-import { Layout, NotFoundCard } from '../../containers';
-import { SchoolsDocument } from '../../generated/graphql';
-import { School, SkoleContext } from '../../interfaces';
-import { withApollo, withRedux } from '../../lib';
-import { useSSRAuthSync } from '../../utils';
+import { StyledTable } from '../components';
+import { Layout, NotFoundCard } from '../containers';
+import { SchoolsDocument } from '../generated/graphql';
+import { School, SkoleContext } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
+import { useSSRAuthSync } from '../utils';
 
 interface Props {
   schools: School[] | null;
 }
 
-const SchoolListPage: NextPage<Props> = ({ schools }) => {
-  if (schools) {
+const SchoolPage: NextPage<Props> = ({ schools }) => {
+  if (schools && schools.length) {
     return (
-      <Layout title="School List">
+      <Layout title="Schools">
         <Paper>
           <StyledTable>
             <TableHead>
               <TableRow>
-                <TableCell>Schools</TableCell>
+                <TableCell>
+                  <Typography variant="h6">Schools</Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {schools.map((school: School, i: number) => (
                 <Link href={`/school/${school.id}`} key={i}>
                   <TableRow>
-                    <TableCell className="main-cell">
+                    <TableCell>
                       <Typography variant="subtitle1">{school.name}</Typography>
+                      <Button variant="outlined" color="primary" className="school-type">
+                        {school.schoolType}
+                      </Button>
                     </TableCell>
                   </TableRow>
                 </Link>
@@ -49,7 +62,7 @@ const SchoolListPage: NextPage<Props> = ({ schools }) => {
   }
 };
 
-SchoolListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   await useSSRAuthSync(ctx);
 
   try {
@@ -64,4 +77,4 @@ SchoolListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
 export default compose(
   withRedux,
   withApollo
-)(SchoolListPage as NextPage);
+)(SchoolPage as NextPage);
