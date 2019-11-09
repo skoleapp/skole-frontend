@@ -10,17 +10,17 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserFormValues>
   <StyledForm>
     <Avatar src={getAvatar(props.values.avatar)} />
     <div className="change-avatar">
-      <input accept="image/*" id="upload-avatar" type="file" />
-      <label htmlFor="upload-avatar">
-        <Button variant="outlined" color="primary" component="span">
+      <input accept="image/*" type="file" />
+      <label>
+        <Button variant="outlined" color="primary" component="span" fullWidth>
           change avatar
         </Button>
       </label>
       <ErrorMessage name="avatar" component={FormErrorMessage} />
     </div>
-    <FormControl>
+    <FormControl fullWidth>
       <InputLabel>Language</InputLabel>
-      <Field name="language" component={Select}>
+      <Field name="language" component={Select} fullWidth>
         <MenuItem value="English">English</MenuItem>
         <MenuItem value="Finnish">Finnish</MenuItem>
         <MenuItem value="Swedish">Swedish</MenuItem>

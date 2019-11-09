@@ -9,7 +9,7 @@ export const StyledForm = styled(Form)`
   }
 
   .MuiAvatar-root {
-    margin: 1rem auto;
+    margin: 0 auto;
     height: 12rem;
     width: 12rem;
   }
@@ -18,10 +18,6 @@ export const StyledForm = styled(Form)`
     input {
       display: none;
     }
-
-    .MuiButton-root {
-      margin: 0.5rem 0;
-    }
   }
 
   .MuiInput-inputMultiline {
@@ -29,5 +25,13 @@ export const StyledForm = styled(Form)`
     display: flex;
     align-items: start;
     justify-content: start;
+  }
+
+  .MuiButton-root {
+    margin: 1rem 0;
+  }
+
+  .MuiSelect-root {
+    text-align: left !important;
   }
 `;

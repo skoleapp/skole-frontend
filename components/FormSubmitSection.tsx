@@ -29,8 +29,4 @@ const StyledFormSubmitSection = styled(FormControl)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  button {
-    margin: 1rem 0;
-  }
 `;

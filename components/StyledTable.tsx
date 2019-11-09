@@ -2,20 +2,31 @@ import { Table } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const StyledTable = styled(Table)`
-  tr:hover {
-    background-color: var(--light-opacity);
-  }
+  .MuiTableBody-root {
+    tr {
+      &:hover {
+        background-color: var(--light-opacity);
+      }
 
-  .MuiTableCell-root {
-    cursor: pointer;
-  }
+      .MuiTableCell-root {
+        cursor: pointer;
 
-  .main-cell {
-    display: flex;
-    align-items: center;
+        &.user-cell {
+          display: flex;
+          align-items: center;
 
-    h6 {
-      margin-left: 1rem;
+          h6 {
+            margin-left: 1rem;
+          }
+        }
+
+        .school-type {
+          font-size: 0.75rem;
+          padding: 0 0.35rem;
+          pointer-events: none;
+          margin-top: 0.25rem;
+        }
+      }
     }
   }
 `;
