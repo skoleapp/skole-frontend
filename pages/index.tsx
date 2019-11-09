@@ -14,8 +14,8 @@ const IndexPage: NextPage = () => (
       <div className="shortcuts">
         <Shortcut text="Search Courses" icon={School} href="/search" />
         <Shortcut text="Create Course" icon={LibraryAddSharp} href="/create-course" />
-        <Shortcut text="Browse Schools" icon={House} href="/school" />
         <Shortcut text="Browse Courses" icon={Assessment} href="/course" />
+        <Shortcut text="Browse Schools" icon={House} href="/school" />
         <Shortcut text="Browse Subjects" icon={Subject} href="/subject" />
         <Shortcut text="Leaderboard" icon={Score} href="/user" />
       </div>

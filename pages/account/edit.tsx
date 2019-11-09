@@ -86,7 +86,7 @@ const EditAccountPage: NextPage = () => {
         <StyledCard>
           <Typography variant="h5">Account Edited!</Typography>
           <Link href="/account">
-            <Button fullWidth variant="outlined" color="primary">
+            <Button fullWidth variant="contained" color="primary">
               Back to Account
             </Button>
           </Link>
@@ -104,7 +104,7 @@ const EditAccountPage: NextPage = () => {
   }
 
   return (
-    <Layout title="User Edited">
+    <Layout title="Edit Account">
       <StyledCard>
         <Typography variant="h5">Edit Account</Typography>
         <Formik

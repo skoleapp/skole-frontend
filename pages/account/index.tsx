@@ -5,9 +5,9 @@ import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { logout } from '../../actions';
 import { Layout } from '../../containers';
 import { withPrivate } from '../../utils';
-import logout from '../logout';
 
 const AccountPage: NextPage = () => {
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const AccountPage: NextPage = () => {
             <MenuItem onClick={(): Promise<boolean> => router.push('/account/edit')}>
               Edit Profile
             </MenuItem>
-            <MenuItem onClick={(): Promise<boolean> => router.push('/account/courses')}>
+            <MenuItem onClick={(): Promise<boolean> => router.push('/account/my-courses')}>
               My Courses
             </MenuItem>
             <MenuItem onClick={(): Promise<boolean> => router.push('/account/change-password')}>

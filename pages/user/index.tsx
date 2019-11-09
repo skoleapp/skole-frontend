@@ -1,7 +1,6 @@
 import {
   Avatar,
   Paper,
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -12,7 +11,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { compose } from 'redux';
-import styled from 'styled-components';
+import { StyledTable } from '../../components';
 import { Layout, NotFoundCard } from '../../containers';
 import { UsersDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
@@ -23,41 +22,51 @@ interface Props {
   users: PublicUser[] | null;
 }
 
-const UserListPage: NextPage<Props> = ({ users }) => (
-  <Layout title="User List">
-    {users ? (
-      <StyledUserList>
+const UsersPage: NextPage<Props> = ({ users }) => {
+  if (users) {
+    return (
+      <Layout title="Users">
         <Paper>
-          <Table>
+          <StyledTable>
             <TableHead>
               <TableRow>
-                <TableCell>Users</TableCell>
-                <TableCell align="right">Points</TableCell>
+                <TableCell>
+                  <Typography variant="h6">Users</Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Typography variant="h6">Points</Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users.map((user: PublicUser, i: number) => (
                 <Link href={`/user/${user.id}`} key={i}>
                   <TableRow>
-                    <TableCell className="main-cell">
+                    <TableCell className="user-cell">
                       <Avatar src={getAvatar(user.avatar)} />
                       <Typography variant="subtitle1">{user.username}</Typography>
                     </TableCell>
-                    <TableCell align="right">{user.points}</TableCell>
+                    <TableCell align="right">
+                      <Typography variant="subtitle1">{user.points}</Typography>
+                    </TableCell>
                   </TableRow>
                 </Link>
               ))}
             </TableBody>
-          </Table>
+          </StyledTable>
         </Paper>
-      </StyledUserList>
-    ) : (
-      <NotFoundCard text="No users found..." />
-    )}
-  </Layout>
-);
+      </Layout>
+    );
+  } else {
+    return (
+      <Layout title="No users found">
+        <NotFoundCard text="No users found..." />;
+      </Layout>
+    );
+  }
+};
 
-UserListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   await useSSRAuthSync(ctx);
 
   try {
@@ -69,22 +78,7 @@ UserListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-const StyledUserList = styled.div`
-  tr:hover {
-    background-color: var(--light-opacity);
-  }
-
-  .main-cell {
-    display: flex;
-    align-items: center;
-
-    h6 {
-      margin-left: 1rem;
-    }
-  }
-`;
-
 export default compose(
   withRedux,
   withApollo
-)(UserListPage as NextPage);
+)(UsersPage as NextPage);
