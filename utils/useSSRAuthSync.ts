@@ -4,13 +4,13 @@ import { SkoleContext } from '../interfaces';
 
 export const useSSRAuthSync = async (ctx: SkoleContext) => {
   const { apolloClient, reduxStore } = ctx;
-  const { data } = await apolloClient.query({ query: UserMeDocument });
-  const { userMe } = data;
 
-  if (userMe) {
+  try {
+    const { data } = await apolloClient.query({ query: UserMeDocument });
+    const { userMe } = data;
     await reduxStore.dispatch(updateUserMe(userMe));
     return { userMe };
-  } else {
+  } catch {
     return { userMe: null };
   }
 };
