@@ -21,16 +21,17 @@ interface LoginParams {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const login: any = ({ client, token, user }: LoginParams) => (
+export const login: any = ({ client, token, user }: LoginParams) => async (
   dispatch: Dispatch<AnyAction>
-): void => {
+): Promise<void> => {
   document.cookie = cookie.serialize('token', token, {
     maxAge: 30 * 24 * 60 * 60, // 30 days
     path: '/'
   });
 
   dispatch({ type: LOGIN, payload: user });
-  client.cache.reset().then(() => Router.push('/account'));
+  await client.cache.reset();
+  Router.push('/account');
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,14 +54,15 @@ export const updateUserMe: any = (userMe: UserMe) => (dispatch: Dispatch<AnyActi
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const logout: any = (apolloClient: ApolloClient<any>) => (
+export const logout: any = (apolloClient: ApolloClient<any>) => async (
   dispatch: Dispatch<AnyAction>
-): void => {
+): Promise<void> => {
   document.cookie = cookie.serialize('token', '', {
     maxAge: -1,
     path: '/'
   });
 
   dispatch({ type: LOGOUT });
-  apolloClient.cache.reset().then(() => Router.push('/logout'));
+  await apolloClient.cache.reset();
+  Router.push('/logout');
 };
