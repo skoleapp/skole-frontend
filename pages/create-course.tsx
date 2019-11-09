@@ -1,8 +1,9 @@
-import { Typography } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Button, Typography } from '@material-ui/core';
+import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import React from 'react';
+import React, { useState } from 'react';
 import { compose } from 'redux';
+import * as Yup from 'yup';
 import { StyledCard } from '../components';
 import { CreateCourseForm, Layout } from '../containers';
 import { SchoolsDocument } from '../generated/graphql';
@@ -19,20 +20,49 @@ interface Props {
   data: Data | null;
 }
 
-const initialValues = {
-  name: '',
-  code: '',
-  subject: '',
-  school: ''
-};
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required('Name is required.'),
+  code: Yup.string(),
+  subject: Yup.string().required('Subject is required.'),
+  school: Yup.string().required('School is required.')
+});
 
 const CreateCoursePage: NextPage<Props> = ({ data }) => {
+  const [submitted, setSubmitted] = useState(false);
+
   const handleSubmit = (
-    values: CreateCourseFormValues
-    // actions: FormikActions<CreateCourseFormValues>
+    values: CreateCourseFormValues,
+    actions: FormikActions<CreateCourseFormValues>
   ) => {
     console.log(values);
+    setSubmitted(true);
+    actions.setSubmitting(false);
   };
+
+  const initialValues = {
+    name: '',
+    code: '',
+    subject: '',
+    school: '',
+    general: '',
+    ...data
+  };
+
+  if (submitted) {
+    return (
+      <Layout title="Course Created!">
+        <StyledCard>
+          <Typography variant="h5">Course created!</Typography>
+          <Button variant="contained" color="primary" fullWidth>
+            go to course
+          </Button>
+          <Button variant="outlined" color="primary" fullWidth>
+            back to home
+          </Button>
+        </StyledCard>
+      </Layout>
+    );
+  }
 
   return (
     <Layout title="Create Course">
@@ -42,7 +72,7 @@ const CreateCoursePage: NextPage<Props> = ({ data }) => {
           initialValues={initialValues}
           component={CreateCourseForm}
           onSubmit={handleSubmit}
-          {...data}
+          validationSchema={validationSchema}
         />
       </StyledCard>
     </Layout>
@@ -70,8 +100,10 @@ CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
       }
     ];
 
+    const { schools } = data;
+
     const mockedData = {
-      schools: data.schoolList,
+      schools,
       subjects: subjectList
     };
 
