@@ -3,10 +3,10 @@ import { ErrorMessage, Field, FormikProps } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
 import React from 'react';
 import { FormErrorMessage, FormSubmitSection, StyledForm } from '../components';
-import { UpdateUserForm } from '../interfaces';
+import { UpdateUserFormValues } from '../interfaces';
 import { getAvatar } from '../utils';
 
-export const EditUserForm: React.ComponentType<FormikProps<UpdateUserForm>> = props => (
+export const EditUserForm: React.ComponentType<FormikProps<UpdateUserFormValues>> = props => (
   <StyledForm>
     <Avatar src={getAvatar(props.values.avatar)} />
     <div className="change-avatar">

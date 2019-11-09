@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { Layout } from '../containers';
-import { withAuthSync } from '../utils';
+import { Layout } from '../../../containers';
+import { withAuthSync } from '../../../utils';
 
 const UploadResourcePage: React.FC = () => (
   <Layout title="Upload Resource">

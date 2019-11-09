@@ -89,21 +89,21 @@ export type MutationChangePasswordArgs = {
 
 export type Query = {
    __typename?: 'Query',
-  schoolList?: Maybe<Array<Maybe<SchoolType>>>,
+  schools?: Maybe<Array<Maybe<SchoolType>>>,
   school?: Maybe<SchoolType>,
-  userList?: Maybe<Array<Maybe<UserTypePublic>>>,
+  users?: Maybe<Array<Maybe<UserTypePublic>>>,
   user?: Maybe<UserTypePublic>,
   userMe?: Maybe<UserTypePrivate>,
 };
 
 
 export type QuerySchoolArgs = {
-  id?: Maybe<Scalars['Int']>
+  id: Scalars['Int']
 };
 
 
 export type QueryUserArgs = {
-  id?: Maybe<Scalars['Int']>
+  id: Scalars['Int']
 };
 
 export type RegisterMutationInput = {
@@ -266,12 +266,12 @@ export type SchoolQuery = (
   )> }
 );
 
-export type SchoolListQueryVariables = {};
+export type SchoolsQueryVariables = {};
 
 
-export type SchoolListQuery = (
+export type SchoolsQuery = (
   { __typename?: 'Query' }
-  & { schoolList: Maybe<Array<Maybe<(
+  & { schools: Maybe<Array<Maybe<(
     { __typename?: 'SchoolType' }
     & Pick<SchoolType, 'id' | 'schoolType' | 'name'>
   )>>> }
@@ -314,17 +314,6 @@ export type UserQuery = (
   )> }
 );
 
-export type UserListQueryVariables = {};
-
-
-export type UserListQuery = (
-  { __typename?: 'Query' }
-  & { userList: Maybe<Array<Maybe<(
-    { __typename?: 'UserTypePublic' }
-    & Pick<UserTypePublic, 'id' | 'username' | 'points' | 'avatar'>
-  )>>> }
-);
-
 export type UserMeQueryVariables = {};
 
 
@@ -334,6 +323,17 @@ export type UserMeQuery = (
     { __typename?: 'UserTypePrivate' }
     & Pick<UserTypePrivate, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'language'>
   )> }
+);
+
+export type UsersQueryVariables = {};
+
+
+export type UsersQuery = (
+  { __typename?: 'Query' }
+  & { users: Maybe<Array<Maybe<(
+    { __typename?: 'UserTypePublic' }
+    & Pick<UserTypePublic, 'id' | 'username' | 'points' | 'avatar'>
+  )>>> }
 );
 
 
@@ -441,9 +441,9 @@ export const SchoolDocument = gql`
       
 export type SchoolQueryHookResult = ReturnType<typeof useSchoolQuery>;
 export type SchoolQueryResult = ApolloReactCommon.QueryResult<SchoolQuery, SchoolQueryVariables>;
-export const SchoolListDocument = gql`
-    query SchoolList {
-  schoolList {
+export const SchoolsDocument = gql`
+    query Schools {
+  schools {
     id
     schoolType
     name
@@ -451,15 +451,15 @@ export const SchoolListDocument = gql`
 }
     `;
 
-    export function useSchoolListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolListQuery, SchoolListQueryVariables>) {
-      return ApolloReactHooks.useQuery<SchoolListQuery, SchoolListQueryVariables>(SchoolListDocument, baseOptions);
+    export function useSchoolsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
+      return ApolloReactHooks.useQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
     }
-      export function useSchoolListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolListQuery, SchoolListQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<SchoolListQuery, SchoolListQueryVariables>(SchoolListDocument, baseOptions);
+      export function useSchoolsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
       }
       
-export type SchoolListQueryHookResult = ReturnType<typeof useSchoolListQuery>;
-export type SchoolListQueryResult = ApolloReactCommon.QueryResult<SchoolListQuery, SchoolListQueryVariables>;
+export type SchoolsQueryHookResult = ReturnType<typeof useSchoolsQuery>;
+export type SchoolsQueryResult = ApolloReactCommon.QueryResult<SchoolsQuery, SchoolsQueryVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String, $language: String!) {
   updateUser(input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar, language: $language}) {
@@ -512,26 +512,6 @@ export const UserDocument = gql`
       
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserQueryResult = ApolloReactCommon.QueryResult<UserQuery, UserQueryVariables>;
-export const UserListDocument = gql`
-    query UserList {
-  userList {
-    id
-    username
-    points
-    avatar
-  }
-}
-    `;
-
-    export function useUserListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserListQuery, UserListQueryVariables>) {
-      return ApolloReactHooks.useQuery<UserListQuery, UserListQueryVariables>(UserListDocument, baseOptions);
-    }
-      export function useUserListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserListQuery, UserListQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<UserListQuery, UserListQueryVariables>(UserListDocument, baseOptions);
-      }
-      
-export type UserListQueryHookResult = ReturnType<typeof useUserListQuery>;
-export type UserListQueryResult = ApolloReactCommon.QueryResult<UserListQuery, UserListQueryVariables>;
 export const UserMeDocument = gql`
     query UserMe {
   userMe {
@@ -556,3 +536,23 @@ export const UserMeDocument = gql`
       
 export type UserMeQueryHookResult = ReturnType<typeof useUserMeQuery>;
 export type UserMeQueryResult = ApolloReactCommon.QueryResult<UserMeQuery, UserMeQueryVariables>;
+export const UsersDocument = gql`
+    query Users {
+  users {
+    id
+    username
+    points
+    avatar
+  }
+}
+    `;
+
+    export function useUsersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+      return ApolloReactHooks.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
+    }
+      export function useUsersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
+      }
+      
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
+export type UsersQueryResult = ApolloReactCommon.QueryResult<UsersQuery, UsersQueryVariables>;

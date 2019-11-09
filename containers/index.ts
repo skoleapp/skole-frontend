@@ -1,6 +1,7 @@
 export { AuthMenu } from './AuthMenu';
 export { BottomNavbar } from './BottomNavbar';
 export { ChangePasswordForm } from './ChangePasswordForm';
+export { CreateCourseForm } from './CreateCourseForm';
 export { EditUserForm } from './EditUserForm';
 export { FeedbackForm } from './FeedbackForm';
 export { IntersectingWrapper } from './IntersectingWrapper';

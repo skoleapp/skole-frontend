@@ -14,7 +14,7 @@ import React from 'react';
 import { compose } from 'redux';
 import styled from 'styled-components';
 import { Layout, NotFoundCard } from '../../containers';
-import { UserListDocument } from '../../generated/graphql';
+import { UsersDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { getAvatar, useSSRAuthSync } from '../../utils';
@@ -61,8 +61,9 @@ UserListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   await useSSRAuthSync(ctx);
 
   try {
-    const { data } = await ctx.apolloClient.query({ query: UserListDocument });
-    return { users: data.userList };
+    const { data } = await ctx.apolloClient.query({ query: UsersDocument });
+    const { users } = data;
+    return { users };
   } catch (error) {
     return { users: null };
   }

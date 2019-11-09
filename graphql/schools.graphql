@@ -1,5 +1,5 @@
-query SchoolList {
-  schoolList {
+query Schools {
+  schools {
     id
     schoolType
     name

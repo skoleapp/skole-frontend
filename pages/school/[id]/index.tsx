@@ -2,12 +2,12 @@ import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
-import { StyledCard } from '../../components';
-import { Layout, NotFoundCard } from '../../containers';
-import { SchoolDocument } from '../../generated/graphql';
-import { School, SkoleContext } from '../../interfaces';
-import { withApollo, withRedux } from '../../lib';
-import { useSSRAuthSync } from '../../utils';
+import { StyledCard } from '../../../components';
+import { Layout, NotFoundCard } from '../../../containers';
+import { SchoolDocument } from '../../../generated/graphql';
+import { School, SkoleContext } from '../../../interfaces';
+import { withApollo, withRedux } from '../../../lib';
+import { useSSRAuthSync } from '../../../utils';
 
 interface Props {
   school: School | null;

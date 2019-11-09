@@ -1,5 +1,5 @@
-query UserList {
-  userList {
+query Users {
+  users {
     id
     username
     points

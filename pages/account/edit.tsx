@@ -9,7 +9,7 @@ import { updateUserMe } from '../../actions';
 import { StyledCard } from '../../components';
 import { EditUserForm, Layout } from '../../containers';
 import { useUpdateUserMutation } from '../../generated/graphql';
-import { State, UpdateUserForm } from '../../interfaces';
+import { State, UpdateUserFormValues } from '../../interfaces';
 import { createFormErrors, withPrivate } from '../../utils';
 
 const validationSchema = Yup.object().shape({
@@ -49,8 +49,8 @@ const EditAccountPage: NextPage = () => {
   const [updateUserMutation] = useUpdateUserMutation({ onCompleted, onError });
 
   const handleSubmit = async (
-    values: UpdateUserForm,
-    actions: FormikActions<UpdateUserForm>
+    values: UpdateUserFormValues,
+    actions: FormikActions<UpdateUserFormValues>
   ): Promise<void> => {
     const { username, email, title, bio, avatar, language } = values;
 
