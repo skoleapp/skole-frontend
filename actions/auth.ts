@@ -3,8 +3,8 @@ import cookie from 'cookie';
 import Router from 'next/router';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
-import { UserDocument, UserMeDocument } from '../generated/graphql';
-import { PublicUser, UserMe } from '../interfaces';
+import { UserMeDocument } from '../generated/graphql';
+import { UserMe } from '../interfaces';
 import {
   GET_USER_ME_ERROR,
   GET_USER_ME_LOADING,
@@ -50,22 +50,6 @@ export const getUserMe: any = (apolloClient: ApolloClient<any>) => async (
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const updateUserMe: any = (userMe: UserMe) => (dispatch: Dispatch<AnyAction>) => {
   dispatch({ type: UPDATE_USER_ME, payload: userMe });
-};
-
-interface PublicUserObj {
-  user: PublicUser | null;
-}
-
-export const getUser = async (
-  id: string,
-  apolloClient: ApolloClient<any> // eslint-disable-line @typescript-eslint/no-explicit-any
-): Promise<PublicUserObj> => {
-  try {
-    const { data } = await apolloClient.query({ variables: { id }, query: UserDocument });
-    return { user: data.user };
-  } catch {
-    return { user: null };
-  }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
