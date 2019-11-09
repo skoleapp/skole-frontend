@@ -128,8 +128,6 @@ export type SchoolType = {
   name: Scalars['String'],
   city: Scalars['String'],
   country: Scalars['String'],
-  modified: Scalars['DateTime'],
-  created: Scalars['DateTime'],
 };
 
 export type UpdateUserMutationInput = {
@@ -255,14 +253,16 @@ export type SignUpMutation = (
   )> }
 );
 
-export type SchoolQueryVariables = {};
+export type SchoolQueryVariables = {
+  id: Scalars['Int']
+};
 
 
 export type SchoolQuery = (
   { __typename?: 'Query' }
   & { school: Maybe<(
     { __typename?: 'SchoolType' }
-    & Pick<SchoolType, 'name'>
+    & Pick<SchoolType, 'schoolType' | 'name' | 'city' | 'country'>
   )> }
 );
 
@@ -422,9 +422,12 @@ export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
 export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
 export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
 export const SchoolDocument = gql`
-    query School {
-  school {
+    query School($id: Int!) {
+  school(id: $id) {
+    schoolType
     name
+    city
+    country
   }
 }
     `;
