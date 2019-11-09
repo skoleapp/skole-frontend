@@ -1,6 +1,7 @@
 import ApolloClient from 'apollo-client';
 import { NextPageContext } from 'next';
 import { Store } from 'redux';
+import { SchoolType } from './generated/graphql';
 
 export interface SkoleContext extends NextPageContext {
   apolloClient: ApolloClient<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -47,8 +48,15 @@ export interface PublicUser {
   avatar: string;
 }
 
+export enum ShoolType {
+  University = 'University',
+  UAS = 'University of Applied Sciences',
+  HighSchool = 'High School'
+}
+
 export interface School {
   id: string;
+  schoolType: SchoolType;
   name: string;
   city: string;
   country: string;
