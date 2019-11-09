@@ -48,17 +48,18 @@ const StyledSearchWidget = styled.div`
   }
 
   .search-icon {
-    width: 2rem;
+    width: 2.25rem;
     height: 100%;
     position: absolute;
     pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--secondary);
   }
 
   .input-input {
-    padding-left: 2rem;
+    padding-left: 2.25rem;
     width: 100%;
     color: var(--white);
     margin-top: 0.25rem;
