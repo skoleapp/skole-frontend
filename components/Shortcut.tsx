@@ -6,14 +6,14 @@ import styled from 'styled-components';
 
 interface ShortcutProps {
   text: string;
-  icon: SvgIconComponent;
+  icon?: SvgIconComponent;
   href: string;
 }
 
 export const Shortcut: React.FC<ShortcutProps> = ({ text, icon: Icon, href }) => (
   <Link href={href}>
     <StyledShortcut>
-      <Icon />
+      {Icon && <Icon />}
       <Typography variant="body1">{text}</Typography>
     </StyledShortcut>
   </Link>
