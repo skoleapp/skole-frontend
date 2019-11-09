@@ -33,8 +33,8 @@ const StyledUserInfoCard = styled(StyledCard)`
   }
 
   .MuiAvatar-root {
-    margin: 0 auto;
-    width: 10rem;
-    height: 10rem;
+    margin: 1rem auto;
+    height: 12rem;
+    width: 12rem;
   }
 `;
