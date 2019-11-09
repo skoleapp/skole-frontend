@@ -8,14 +8,6 @@ export interface SkoleContext extends NextPageContext {
   userMe: UserMe;
 }
 
-export interface FormErrors {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  general: string;
-}
-
 export interface RegisterFormValues {
   username: string;
   email: string;
@@ -26,7 +18,7 @@ export interface RegisterFormValues {
 }
 
 export interface LoginFormValues {
-  email: string;
+  usernameOrEmail: string;
   password: string;
   general: string;
 }
@@ -52,11 +44,21 @@ export interface PublicUser {
   title: string | null;
   bio: string | null;
   points: number;
+  avatar: string;
+}
+
+export interface School {
+  id: string;
+  name: string;
+  city: string;
+  country: string;
 }
 
 export interface AuthState {
   user: UserMe;
   authenticated: boolean | null;
+  loading: boolean | null;
+  error: string | null;
 }
 
 export interface State {

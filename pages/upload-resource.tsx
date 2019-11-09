@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import React from 'react';
 import { Layout } from '../components';
-import { withAuth } from '../lib';
+import { withAuthSync } from '../utils';
 
 const UploadResourcePage: React.FC = () => (
   <Layout title="Upload Resource">
@@ -9,4 +9,4 @@ const UploadResourcePage: React.FC = () => (
   </Layout>
 );
 
-export default withAuth(UploadResourcePage);
+export default withAuthSync(UploadResourcePage);

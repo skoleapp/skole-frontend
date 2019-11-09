@@ -1,5 +1,12 @@
 import { AnyAction } from 'redux';
-import { CLEAR_USER_ME, SET_USER_ME } from '../actions';
+import {
+  GET_USER_ME_ERROR,
+  GET_USER_ME_LOADING,
+  GET_USER_ME_SUCCESS,
+  LOGIN,
+  LOGOUT,
+  UPDATE_USER_ME
+} from '../actions';
 import { AuthState } from '../interfaces';
 
 export const initialAuthState: AuthState = {
@@ -13,17 +20,26 @@ export const initialAuthState: AuthState = {
     points: null,
     language: null
   },
-  authenticated: null
+  authenticated: null,
+  loading: null,
+  error: null
 };
 
 export default (state = initialAuthState, action: AnyAction): AuthState => {
   switch (action.type) {
-    case SET_USER_ME: {
+    case GET_USER_ME_LOADING: {
+      return { ...state, loading: true };
+    }
+
+    case GET_USER_ME_SUCCESS:
+    case UPDATE_USER_ME:
+    case LOGIN: {
       const { id, username, email, title, bio, avatar, points, language } = action.payload;
 
       return {
         ...state,
         authenticated: true,
+        loading: false,
         user: {
           id,
           username,
@@ -37,8 +53,13 @@ export default (state = initialAuthState, action: AnyAction): AuthState => {
       };
     }
 
-    case CLEAR_USER_ME:
+    case LOGOUT: {
       return initialAuthState;
+    }
+
+    case GET_USER_ME_ERROR: {
+      return { ...state, loading: false, error: action.payload };
+    }
 
     default:
       return state;

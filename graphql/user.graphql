@@ -4,6 +4,7 @@ query User($id: Int!) {
     username
     title
     bio
+    avatar
     points
     created
   }

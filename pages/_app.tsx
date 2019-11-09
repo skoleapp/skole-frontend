@@ -20,6 +20,8 @@ export default class SkoleApp extends App<Props> {
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
+
+    window.scrollTo(0, 0);
   }
 
   render(): JSX.Element {
@@ -38,14 +40,3 @@ export default class SkoleApp extends App<Props> {
     );
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-SkoleApp.getInitialProps = async ({ Component, ctx }: any): Promise<any> => {
-  let pageProps = {};
-
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx);
-  }
-
-  return { pageProps };
-};

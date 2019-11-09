@@ -1,5 +1,7 @@
 query SchoolList {
   schoolList {
+    id
+    schoolType
     name
   }
 }

@@ -1,11 +1,24 @@
+import {
+  Avatar,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography
+} from '@material-ui/core';
 import { NextPage } from 'next';
+import Link from 'next/link';
 import React from 'react';
-import { Layout, NotFoundCard, UserListTable } from '../../components';
-import { UserListDocument } from '../../generated/graphql';
+import { compose } from 'redux';
+import styled from 'styled-components';
+import { updateUserMe } from '../../actions';
+import { Layout, NotFoundCard } from '../../containers';
+import { UserListDocument, UserMeDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
-import { withAuth } from '../../lib';
-
-const noUsersText = 'No users found.';
+import { withApollo, withRedux } from '../../lib';
+import { getAvatar } from '../../utils';
 
 interface Props {
   users: PublicUser[] | null;
@@ -13,12 +26,46 @@ interface Props {
 
 const UserListPage: NextPage<Props> = ({ users }) => (
   <Layout title="User List">
-    {users ? <UserListTable users={users} /> : <NotFoundCard text={noUsersText} />}
+    {users ? (
+      <StyledUserList>
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Users</TableCell>
+                <TableCell align="right">Points</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map((user: PublicUser, i: number) => (
+                <Link href={`/user/${user.id}`} key={i}>
+                  <TableRow>
+                    <TableCell className="main-cell">
+                      <Avatar src={getAvatar(user.avatar)} />
+                      <Typography variant="subtitle1">{user.username}</Typography>
+                    </TableCell>
+                    <TableCell align="right">{user.points}</TableCell>
+                  </TableRow>
+                </Link>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </StyledUserList>
+    ) : (
+      <NotFoundCard text="No users found..." />
+    )}
   </Layout>
 );
 
 UserListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  const { apolloClient } = ctx;
+  const { apolloClient, reduxStore } = ctx;
+  const res = await apolloClient.query({ query: UserMeDocument });
+  const { userMe } = res.data;
+
+  if (userMe) {
+    await reduxStore.dispatch(updateUserMe(userMe));
+  }
 
   try {
     const { data } = await apolloClient.query({ query: UserListDocument });
@@ -28,4 +75,22 @@ UserListPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default withAuth(UserListPage as NextPage);
+const StyledUserList = styled.div`
+  tr:hover {
+    background-color: var(--light-opacity);
+  }
+
+  .main-cell {
+    display: flex;
+    align-items: center;
+
+    h6 {
+      margin-left: 1rem;
+    }
+  }
+`;
+
+export default compose(
+  withRedux,
+  withApollo
+)(UserListPage as NextPage);

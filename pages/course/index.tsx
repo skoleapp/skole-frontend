@@ -1,14 +1,13 @@
 import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { Layout } from '../../components';
-import { withAuth } from '../../lib';
+import { Layout } from '../../containers';
+import { withAuthSync } from '../../utils';
 
 const CourseListPage: NextPage = () => (
   <Layout title="Course List">
     <Typography variant="h5">Course List</Typography>
-    <Typography variant="body1">Here will be list of all courses.</Typography>
   </Layout>
 );
 
-export default withAuth(CourseListPage);
+export default withAuthSync(CourseListPage);
