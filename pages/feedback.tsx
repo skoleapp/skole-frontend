@@ -10,7 +10,8 @@ import { FeedbackFormValues, FeedbackType } from '../interfaces';
 import { withAuthSync } from '../utils';
 
 const initialValues = {
-  comment: ''
+  comment: '',
+  general: ''
 };
 
 const validationSchema = Yup.object().shape({
@@ -72,7 +73,7 @@ const StyledFeedbackCard = styled(StyledCard)`
   .MuiButtonGroup-root {
     button:focus {
       background-color: var(--primary);
-      color: var(--white);
+      color: var(--secondary);
     }
   }
 `;
