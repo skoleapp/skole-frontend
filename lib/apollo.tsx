@@ -2,7 +2,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { setContext } from 'apollo-link-context';
-import { HttpLink } from 'apollo-link-http';
+import { createUploadLink } from 'apollo-upload-client';
 import fetch from 'isomorphic-unfetch';
 import Head from 'next/head';
 import React from 'react';
@@ -102,7 +102,7 @@ const createApolloClient = (initialState = {}, { getToken }: any): any => {
   const isBrowser = typeof window !== 'undefined';
   const isDocker = process.env.API_URL === 'http://backend:8000/graphql/';
 
-  const httpLink = new HttpLink({
+  const httpLink = createUploadLink({
     uri: isDocker && isBrowser ? 'http://localhost:8000/graphql/' : process.env.API_URL,
     credentials: 'include',
     fetch
