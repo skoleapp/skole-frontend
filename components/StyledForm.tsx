@@ -16,6 +16,7 @@ export const StyledForm = styled(Form)`
 
   .MuiAvatar-root {
     margin: 0 auto;
+    margin-top: 1rem;
     height: 12rem;
     width: 12rem;
   }
