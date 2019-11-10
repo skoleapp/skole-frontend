@@ -8,6 +8,12 @@ export const StyledForm = styled(Form)`
     margin-top: 0.5rem;
   }
 
+  .custom-label {
+    text-align: left;
+    font-size: 0.75rem;
+    margin: 0.15rem 0;
+  }
+
   .MuiAvatar-root {
     margin: 0 auto;
     height: 12rem;
