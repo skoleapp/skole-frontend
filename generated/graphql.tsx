@@ -15,6 +15,12 @@ export type Scalars = {
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
  **/
   DateTime: any,
+  /** 
+ * The `Date` scalar type represents a Date
+   * value as specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+ **/
+  Date: any,
 };
 
 export type ChangePasswordMutationInput = {
@@ -30,6 +36,20 @@ export type ChangePasswordMutationPayload = {
   errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
+
+export type CourseType = {
+   __typename?: 'CourseType',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  code?: Maybe<Scalars['String']>,
+  subject: SubjectType,
+  school: SchoolType,
+  creator?: Maybe<UserTypePublic>,
+  modified: Scalars['DateTime'],
+  created: Scalars['DateTime'],
+  resources?: Maybe<Array<Maybe<ResourceType>>>,
+};
+
 
 
 export type DeleteUserMutation = {
@@ -89,11 +109,25 @@ export type MutationChangePasswordArgs = {
 
 export type Query = {
    __typename?: 'Query',
-  schools?: Maybe<Array<Maybe<SchoolType>>>,
-  school?: Maybe<SchoolType>,
   users?: Maybe<Array<Maybe<UserTypePublic>>>,
   user?: Maybe<UserTypePublic>,
   userMe?: Maybe<UserTypePrivate>,
+  subjectList?: Maybe<Array<Maybe<SubjectType>>>,
+  subject?: Maybe<SubjectType>,
+  schools?: Maybe<Array<Maybe<SchoolType>>>,
+  school?: Maybe<SchoolType>,
+  courseList?: Maybe<Array<Maybe<CourseType>>>,
+  course?: Maybe<CourseType>,
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['Int']
+};
+
+
+export type QuerySubjectArgs = {
+  id?: Maybe<Scalars['Int']>
 };
 
 
@@ -102,8 +136,8 @@ export type QuerySchoolArgs = {
 };
 
 
-export type QueryUserArgs = {
-  id: Scalars['Int']
+export type QueryCourseArgs = {
+  id?: Maybe<Scalars['Int']>
 };
 
 export type RegisterMutationInput = {
@@ -121,6 +155,32 @@ export type RegisterMutationPayload = {
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
+/** An enumeration. */
+export enum ResourceResourceType {
+  /** exam */
+  Exam = 'EXAM',
+  /** note */
+  Note = 'NOTE',
+  /** exercise */
+  Exercise = 'EXERCISE',
+  /** other */
+  Other = 'OTHER'
+}
+
+export type ResourceType = {
+   __typename?: 'ResourceType',
+  id: Scalars['ID'],
+  resourceType: ResourceResourceType,
+  title: Scalars['String'],
+  file: Scalars['String'],
+  date?: Maybe<Scalars['Date']>,
+  course: CourseType,
+  creator?: Maybe<UserTypePublic>,
+  points: Scalars['Int'],
+  modified: Scalars['DateTime'],
+  created: Scalars['DateTime'],
+};
+
 export type SchoolType = {
    __typename?: 'SchoolType',
   id: Scalars['ID'],
@@ -128,6 +188,14 @@ export type SchoolType = {
   name: Scalars['String'],
   city: Scalars['String'],
   country: Scalars['String'],
+  subjects: Array<SubjectType>,
+};
+
+export type SubjectType = {
+   __typename?: 'SubjectType',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  schools: Array<SchoolType>,
 };
 
 export type UpdateUserMutationInput = {
@@ -165,6 +233,7 @@ export type UserTypePrivate = {
   points: Scalars['Int'],
   email: Scalars['String'],
   language?: Maybe<Scalars['String']>,
+  schools: Array<SchoolType>,
 };
 
 export type UserTypePublic = {
