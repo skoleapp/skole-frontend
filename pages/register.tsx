@@ -5,10 +5,10 @@ import React, { useRef } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import { login } from '../actions';
+import { clientLogin } from '../actions';
 import { StyledCard } from '../components';
 import { Layout, RegisterForm } from '../containers';
-import { useSignUpMutation } from '../generated/graphql';
+import { useRegisterMutation } from '../generated/graphql';
 import { RegisterFormValues } from '../interfaces';
 import { createFormErrors, withPublic } from '../utils';
 
@@ -45,12 +45,14 @@ const RegisterPage: NextPage = () => {
   const dispatch = useDispatch();
 
   // eslint-disable-next-line
-  const onCompleted = (data: any) => {
-    if (data.register.errors) {
-      return onError(data.register.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
+  const onCompleted = ({ register, login }: any) => {
+    if (register.errors) {
+      return onError(register.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
+    } else if (login.errors) {
+      return onError(login.errors);
     }
 
-    dispatch(login({ client, ...data.login }));
+    dispatch(clientLogin({ client, ...login }));
   };
 
   // eslint-disable-next-line
@@ -61,7 +63,7 @@ const RegisterPage: NextPage = () => {
     );
   };
 
-  const [registerMutation] = useSignUpMutation({ onCompleted, onError });
+  const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
   const handleSubmit = async (
     values: RegisterFormValues,

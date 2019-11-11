@@ -20,16 +20,17 @@ export default class SkoleApp extends App<Props> {
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
-
-    window.scrollTo(0, 0);
   }
 
   render(): JSX.Element {
     const { Component, pageProps } = this.props;
 
     Router.events.on('routeChangeStart', () => NProgress.start());
-    Router.events.on('routeChangeComplete', () => NProgress.done());
     Router.events.on('routeChangeError', () => NProgress.done());
+    Router.events.on('routeChangeComplete', () => {
+      window.scroll(0, 0);
+      NProgress.done();
+    });
 
     return (
       <ThemeProvider theme={theme}>

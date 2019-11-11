@@ -1,12 +1,11 @@
 import { Button, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import Link from 'next/link';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { updateUserMe } from '../../actions';
-import { StyledCard } from '../../components';
+import { ButtonLink, StyledCard } from '../../components';
 import { EditUserForm, Layout } from '../../containers';
 import { useUpdateUserMutation } from '../../generated/graphql';
 import { State, UpdateUserFormValues } from '../../interfaces';
@@ -85,18 +84,16 @@ const EditAccountPage: NextPage = () => {
       <Layout title="Edit User">
         <StyledCard>
           <Typography variant="h5">Account Edited!</Typography>
-          <Link href="/account">
-            <Button fullWidth variant="contained" color="primary">
-              Back to Account
-            </Button>
-          </Link>
+          <ButtonLink href="/account" fullWidth variant="contained" color="primary">
+            back to account
+          </ButtonLink>
           <Button
             fullWidth
             variant="outlined"
             color="primary"
             onClick={(): void => setCompleted(false)}
           >
-            Edit Again
+            edit again
           </Button>
         </StyledCard>
       </Layout>

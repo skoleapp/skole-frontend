@@ -5,10 +5,10 @@ import React, { useRef } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import { login } from '../actions';
+import { clientLogin } from '../actions';
 import { StyledCard } from '../components';
 import { Layout, LoginForm } from '../containers';
-import { useSignInMutation } from '../generated/graphql';
+import { useLoginMutation } from '../generated/graphql';
 import { LoginFormValues } from '../interfaces';
 import { createFormErrors, withPublic } from '../utils';
 
@@ -29,12 +29,12 @@ const LoginPage: NextPage = () => {
   const dispatch = useDispatch();
 
   // eslint-disable-next-line
-  const onCompleted = (data: any) => {
-    if (data.login.errors) {
-      return onError(data.login.errors);
+  const onCompleted = ({ login }: any) => {
+    if (login.errors) {
+      return onError(login.errors);
     }
 
-    dispatch(login({ client, ...data.login }));
+    dispatch(clientLogin({ client, ...login }));
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,7 +45,7 @@ const LoginPage: NextPage = () => {
     );
   };
 
-  const [loginMutation] = useSignInMutation({ onCompleted, onError });
+  const [loginMutation] = useLoginMutation({ onCompleted, onError });
 
   const handleSubmit = async (
     values: LoginFormValues,
