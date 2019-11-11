@@ -1,33 +1,25 @@
-import {
-  Button,
-  Paper,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography
-} from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { compose } from 'redux';
-import { StyledTable } from '../components';
-import { Layout, NotFoundCard } from '../containers';
-import { SchoolsDocument } from '../generated/graphql';
-import { School, SkoleContext } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
-import { useSSRAuthSync } from '../utils';
+import { LabelTag, StyledTable } from '../../components';
+import { Layout, NotFoundCard } from '../../containers';
+import { SchoolsDocument } from '../../generated/graphql';
+import { School, SkoleContext } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
+import { useSSRAuthSync } from '../../utils';
 
 interface Props {
   schools: School[] | null;
 }
 
-const SchoolPage: NextPage<Props> = ({ schools }) => {
+const SchoolsPage: NextPage<Props> = ({ schools }) => {
   if (schools && schools.length) {
     return (
       <Layout title="Schools">
-        <Paper>
-          <StyledTable>
+        <StyledTable>
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -37,20 +29,18 @@ const SchoolPage: NextPage<Props> = ({ schools }) => {
             </TableHead>
             <TableBody>
               {schools.map((school: School, i: number) => (
-                <Link href={`/school/${school.id}`} key={i}>
+                <Link href={{ pathname: `schools/${school.id}` }} key={i}>
                   <TableRow>
                     <TableCell>
                       <Typography variant="subtitle1">{school.name}</Typography>
-                      <Button variant="outlined" color="primary" className="school-type">
-                        {school.schoolType}
-                      </Button>
+                      <LabelTag text={school.schoolType} />
                     </TableCell>
                   </TableRow>
                 </Link>
               ))}
             </TableBody>
-          </StyledTable>
-        </Paper>
+          </Table>
+        </StyledTable>
       </Layout>
     );
   } else {
@@ -62,19 +52,15 @@ const SchoolPage: NextPage<Props> = ({ schools }) => {
   }
 };
 
-SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+SchoolsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   await useSSRAuthSync(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({ query: SchoolsDocument });
-    const { schools } = data;
-    return { schools };
+    return { schools: data.schools };
   } catch (error) {
     return { schools: null };
   }
 };
 
-export default compose(
-  withRedux,
-  withApollo
-)(SchoolPage as NextPage);
+export default compose(withRedux, withApollo)(SchoolsPage);

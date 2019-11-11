@@ -1,6 +1,6 @@
 import {
   Avatar,
-  Paper,
+  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -26,8 +26,8 @@ const UsersPage: NextPage<Props> = ({ users }) => {
   if (users) {
     return (
       <Layout title="Users">
-        <Paper>
-          <StyledTable>
+        <StyledTable>
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -40,7 +40,7 @@ const UsersPage: NextPage<Props> = ({ users }) => {
             </TableHead>
             <TableBody>
               {users.map((user: PublicUser, i: number) => (
-                <Link href={`/user/${user.id}`} key={i}>
+                <Link href={{ pathname: `/users/${user.id}` }} key={i}>
                   <TableRow>
                     <TableCell className="user-cell">
                       <Avatar src={getAvatar(user.avatar)} />
@@ -53,8 +53,8 @@ const UsersPage: NextPage<Props> = ({ users }) => {
                 </Link>
               ))}
             </TableBody>
-          </StyledTable>
-        </Paper>
+          </Table>
+        </StyledTable>
       </Layout>
     );
   } else {
@@ -78,7 +78,4 @@ UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default compose(
-  withRedux,
-  withApollo
-)(UsersPage as NextPage);
+export default compose(withRedux, withApollo)(UsersPage);
