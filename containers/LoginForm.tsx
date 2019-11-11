@@ -1,8 +1,7 @@
-import { Link } from '@material-ui/core';
 import { Field, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { FormSubmitSection, StyledForm } from '../components';
+import { FormSubmitSection, StyledForm, TextLink } from '../components';
 import { LoginFormValues } from '../interfaces';
 
 export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
@@ -23,8 +22,8 @@ export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = prop
       fullWidth
     />
     <FormSubmitSection submitButtonText="login" {...props} />
-    <Link href="/register" color="primary">
+    <TextLink href="/register" color="primary">
       New User?
-    </Link>
+    </TextLink>
   </StyledForm>
 );

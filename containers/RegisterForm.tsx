@@ -1,8 +1,7 @@
-import { Link } from '@material-ui/core';
 import { ErrorMessage, Field, FormikProps } from 'formik';
 import { CheckboxWithLabel, TextField } from 'formik-material-ui';
 import React from 'react';
-import { FormErrorMessage, FormSubmitSection, StyledForm } from '../components';
+import { FormErrorMessage, FormSubmitSection, StyledForm, TextLink } from '../components';
 import { RegisterFormValues } from '../interfaces';
 
 export const RegisterForm: React.FC<FormikProps<RegisterFormValues>> = props => (
@@ -41,8 +40,8 @@ export const RegisterForm: React.FC<FormikProps<RegisterFormValues>> = props => 
       <ErrorMessage name="agreeToTerms" component={FormErrorMessage} />
     </div>
     <FormSubmitSection submitButtonText="register" {...props} />
-    <Link href="/login" color="primary">
+    <TextLink href="/login" color="primary">
       Already a user?
-    </Link>
+    </TextLink>
   </StyledForm>
 );
