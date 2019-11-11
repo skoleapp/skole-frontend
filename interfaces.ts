@@ -28,6 +28,14 @@ export interface PublicUser {
   avatar: string;
 }
 
+export interface Course {
+  id: number;
+  name: string;
+  code: string;
+  subject: number;
+  school: number;
+}
+
 export interface School {
   id: number;
   schoolType: string;
@@ -41,13 +49,6 @@ export interface School {
 export interface Subject {
   id: number;
   name: string;
-}
-
-export interface Course {
-  id: number;
-  name: string;
-  code: string;
-  subject: string;
 }
 
 export interface AuthState {
@@ -97,4 +98,9 @@ export interface FeedbackFormValues {
   comment: string;
 }
 
-export type CreateCourseFormValues = Omit<Course, 'id'>;
+export interface CreateCourseFormValues {
+  name: string;
+  code: string;
+  subject: string;
+  school: string;
+}
