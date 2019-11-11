@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { ErrorMessage, Field, FormikProps } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
 import React from 'react';
-import { FormErrorMessage, FormSubmitSection, StyledForm } from '../components';
+import { FormErrorMessage, FormSubmitSection, StyledForm, TextLink } from '../components';
 import { CreateCourseFormValues, School, Subject } from '../interfaces';
 
 interface Props extends CreateCourseFormValues {
@@ -55,5 +55,6 @@ export const CreateCourseForm: React.FC<FormikProps<Props>> = props => (
       <ErrorMessage name="school" component={FormErrorMessage} />
     </FormControl>
     <FormSubmitSection submitButtonText="save" {...props} />
+    <TextLink href="/">Back to Home</TextLink>
   </StyledForm>
 );

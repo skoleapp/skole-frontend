@@ -54,7 +54,7 @@ export const AuthMenu: React.FC = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={(): Promise<boolean> => router.push('/account')}>Account</MenuItem>
+        <MenuItem onClick={(): Promise<boolean> => router.push('/account')}>My Account</MenuItem>
         <MenuItem onClick={(): Promise<boolean> => router.push('/account/courses')}>
           My Courses
         </MenuItem>

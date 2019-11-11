@@ -32,6 +32,11 @@ const StyledShortcut = styled(Card)`
   cursor: pointer;
   transition: var(--transition);
 
+  svg {
+    height: 3rem;
+    width: 3rem;
+  }
+
   &:hover {
     background-color: var(--light-opacity);
   }

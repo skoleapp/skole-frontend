@@ -30,6 +30,6 @@ const StyledLayout = styled.div`
   }
 
   @media only screen and (max-width: ${breakpoints.SM}) {
-    padding-bottom: 3.25rem;
+    padding-bottom: 3rem;
   }
 `;

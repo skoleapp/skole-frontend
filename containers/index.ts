@@ -1,6 +1,7 @@
 export { AuthMenu } from './AuthMenu';
 export { BottomNavbar } from './BottomNavbar';
 export { ChangePasswordForm } from './ChangePasswordForm';
+export { CourseSelectFilter } from './CourseSelectFilter';
 export { CreateCourseForm } from './CreateCourseForm';
 export { EditUserForm } from './EditUserForm';
 export { FeedbackForm } from './FeedbackForm';
@@ -11,4 +12,3 @@ export { NotFoundCard } from './NotFoundCard';
 export { RegisterForm } from './RegisterForm';
 export { SearchWidget } from './SearchWidget';
 export { TopNavbar } from './TopNavbar';
-export { UserInfoCard } from './UserInfoCard';

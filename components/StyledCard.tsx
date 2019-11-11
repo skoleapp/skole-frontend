@@ -6,8 +6,23 @@ export const StyledCard = styled(Card)`
   padding: 1rem;
   max-width: 25rem;
 
-  button {
+  .MuiButton-root,
+  .MuiLink-underlineHover {
+    margin: 0.5rem 0 !important;
+  }
+
+  .info-section {
     margin-top: 1rem;
+
+    p {
+      margin: 0.5rem 0;
+    }
+  }
+
+  .MuiAvatar-root {
+    margin: 1rem auto;
+    height: 12rem;
+    width: 12rem;
   }
 
   @media screen and (min-width: ${breakpoints.SM}) {

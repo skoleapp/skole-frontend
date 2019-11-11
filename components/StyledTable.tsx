@@ -1,7 +1,10 @@
-import { Table } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import styled from 'styled-components';
 
-export const StyledTable = styled(Table)`
+export const StyledTable = styled(Paper)`
+  max-width: 35rem;
+  margin: 0 auto;
+
   .MuiTableBody-root {
     tr {
       &:hover {
@@ -19,12 +22,13 @@ export const StyledTable = styled(Table)`
             margin-left: 1rem;
           }
         }
+      }
 
-        .school-type {
-          font-size: 0.75rem;
-          padding: 0 0.35rem;
-          pointer-events: none;
-          margin-top: 0.25rem;
+      td {
+        padding: 0.75rem;
+
+        h6 {
+          font-size: 0.85rem;
         }
       }
     }

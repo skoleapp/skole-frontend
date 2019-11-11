@@ -14,13 +14,6 @@ export const StyledForm = styled(Form)`
     margin: 0.15rem 0;
   }
 
-  .MuiAvatar-root {
-    margin: 0 auto;
-    margin-top: 1rem;
-    height: 12rem;
-    width: 12rem;
-  }
-
   .change-avatar {
     input {
       display: none;
@@ -35,7 +28,7 @@ export const StyledForm = styled(Form)`
   }
 
   .MuiButton-root {
-    margin: 1rem 0;
+    margin: 0.5rem 0;
   }
 
   .MuiSelect-root {

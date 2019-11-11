@@ -1,8 +1,8 @@
-import { Avatar, Button, InputLabel, Link, MenuItem } from '@material-ui/core';
+import { Avatar, Button, InputLabel, MenuItem } from '@material-ui/core';
 import { ErrorMessage, Field, FormikProps } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { FormErrorMessage, FormSubmitSection, StyledForm } from '../components';
+import { FormErrorMessage, FormSubmitSection, StyledForm, TextLink } from '../components';
 import { UpdateUserFormValues } from '../interfaces';
 import { getAvatar } from '../utils';
 
@@ -63,9 +63,9 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserFormValues>
       <Field placeholder="Email" name="email" component={TextField} label="Email" fullWidth />
       <Field placeholder="Bio" name="bio" component={TextField} label="Bio" fullWidth />
       <FormSubmitSection submitButtonText="save" {...props} />
-      <Link href="/account" color="primary">
+      <TextLink href="/account" color="primary">
         Back to Account
-      </Link>
+      </TextLink>
     </StyledForm>
   );
 };
