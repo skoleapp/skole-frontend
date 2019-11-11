@@ -21,7 +21,7 @@ interface LoginParams {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const login: any = ({ client, token, user }: LoginParams) => async (
+export const clientLogin: any = ({ client, token, user }: LoginParams) => async (
   dispatch: Dispatch<AnyAction>
 ): Promise<void> => {
   document.cookie = cookie.serialize('token', token, {
