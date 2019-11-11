@@ -1,0 +1,111 @@
+mutation Register($username: String!, $email: String!, $password: String!) {
+  register(input: { username: $username, email: $email, password: $password }) {
+    user {
+      id
+      created
+    }
+    errors {
+      field
+      messages
+    }
+  }
+  login(input: { usernameOrEmail: $email, password: $password }) {
+    token
+    user {
+      id
+      title
+      bio
+      avatar
+      points
+      created
+      email
+      language
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+
+mutation Login($usernameOrEmail: String!, $password: String!) {
+  login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+    token
+    user {
+      id
+      title
+      bio
+      avatar
+      points
+      created
+      email
+      language
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+
+mutation UpdateUser(
+  $username: String!
+  $email: String!
+  $title: String
+  $bio: String
+  $avatar: String
+  $language: String!
+) {
+  updateUser(
+    input: {
+      username: $username
+      email: $email
+      title: $title
+      bio: $bio
+      avatar: $avatar
+      language: $language
+    }
+  ) {
+    user {
+      id
+      username
+      email
+      title
+      bio
+      avatar
+      points
+      language
+      created
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+
+mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
+  changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
+    user {
+      id
+      modified
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+
+mutation CreateCourse($name: String!, $code: String, $subject: ID!, $school: ID!) {
+  createCourse(input: { name: $name, code: $code, subject: $subject, school: $school }) {
+    course {
+      id
+      name
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
