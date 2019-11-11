@@ -1,9 +1,8 @@
-import { AppBar, Button, Toolbar } from '@material-ui/core';
-import Link from 'next/link';
+import { AppBar, Toolbar } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Logo } from '../components';
+import { ButtonLink, Logo } from '../components';
 import { State } from '../interfaces';
 import { breakpoints } from '../styles';
 import { AuthMenu } from './AuthMenu';
@@ -14,16 +13,12 @@ export const TopNavbar: React.FC = () => {
 
   const renderAuthButtons = (
     <div className="auth-buttons">
-      <Link href="/login">
-        <Button color="secondary" variant="outlined">
-          Login
-        </Button>
-      </Link>
-      <Link href="/register">
-        <Button color="secondary" variant="outlined">
-          Register
-        </Button>
-      </Link>
+      <ButtonLink href="/login" color="secondary" variant="outlined">
+        login
+      </ButtonLink>
+      <ButtonLink href="/register" color="secondary" variant="outlined">
+        Register
+      </ButtonLink>
     </div>
   );
 
