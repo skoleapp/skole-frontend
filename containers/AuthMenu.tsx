@@ -65,5 +65,5 @@ export const AuthMenu: React.FC = () => {
 };
 
 const StyledAuthMenu = styled.div`
-  flex-grow: 0.1;
+  margin: 0 0.5rem;
 `;

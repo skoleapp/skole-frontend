@@ -4,7 +4,10 @@ import { breakpoints } from '../styles';
 
 export const StyledCard = styled(Card)`
   padding: 1rem;
-  max-width: 25rem;
+
+  @media only screen and (min-width: ${breakpoints.SM}) {
+    max-width: 25rem;
+  }
 
   .MuiButton-root,
   .MuiLink-underlineHover {

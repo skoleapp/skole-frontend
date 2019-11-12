@@ -1,9 +1,13 @@
 import { Paper } from '@material-ui/core';
 import styled from 'styled-components';
+import { breakpoints } from '../styles';
 
 export const StyledTable = styled(Paper)`
-  max-width: 35rem;
   margin: 0 auto;
+
+  @media only screen and (min-width: ${breakpoints.SM}) {
+    max-width: 35rem;
+  }
 
   .MuiTableBody-root {
     tr {
