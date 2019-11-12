@@ -40,22 +40,24 @@ export const TopNavbar: React.FC<Props> = ({ backUrl }) => {
 
 const StyledTopNavbar = styled(AppBar)`
   height: 3rem;
+  display: flex;
+  justify-content: center;
 
+  @media only screen and (min-width: ${breakpoints.SM}) {
+    height: 4rem;
+  }
+
+  .search-widget,
   .auth-menu,
-  .search,
-  .input-input,
-  .search-icon,
   .auth-buttons {
-    display: none !important;
-
-    @media only screen and (min-width: ${breakpoints.SM}) {
-      display: block !important;
+    @media only screen and (max-width: ${breakpoints.SM}) {
+      display: none !important;
     }
   }
 
   .auth-buttons {
-    button {
-      margin-left: 1rem;
+    .MuiButton-root {
+      margin: 0 0.5rem;
     }
   }
 `;

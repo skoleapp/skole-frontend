@@ -13,10 +13,11 @@ export const Logo: React.FC = () => (
 );
 
 const StyledLogo = styled.div`
-  flex-grow: 2;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-start;
 
   @media only screen and (max-width: ${breakpoints.SM}) {
-    display: flex;
     justify-content: center;
   }
 
@@ -26,7 +27,6 @@ const StyledLogo = styled.div`
     font-size: 1.75rem;
     letter-spacing: 0;
     cursor: pointer;
-    width: 6rem;
     text-align: center;
   }
 `;

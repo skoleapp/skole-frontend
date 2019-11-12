@@ -13,11 +13,9 @@ export const SearchWidget: React.FC = () => {
   };
 
   return (
-    <StyledSearchWidget className="search">
+    <StyledSearchWidget className="search-widget">
       <form onSubmit={handleSubmit}>
-        <div className="search-icon">
-          <SearchIcon />
-        </div>
+        <SearchIcon className="search-icon" />
         <InputBase
           placeholder="Search…"
           classes={{
@@ -35,37 +33,29 @@ export const SearchWidget: React.FC = () => {
 };
 
 const StyledSearchWidget = styled.div`
-    position: relative;
+  form {
     border-radius: var(--border-radius);
     background-color: rgba(255, 255, 255, 0.15);
-    display: flex !important;
+    display: flex;
     align-items: center;
+    margin: 0 0.5rem;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.25);
     }
 
     .search-icon {
-      width: 2rem;
-      height: 100%;
-      position: absolute;
-      
-      svg {
-        width: 1.75rem;
-        color: var(--secondary);
-        margin-top: 0.25rem;
-      }
+      margin: 0 0.25rem;
+      color: var(--secondary);
     }
 
     .input-input {
       color: var(--white);
       width: 15rem;
-      padding-left: 2rem;
-      padding-top: 0.65rem;
-      height 1rem;
     }
 
     .submit {
       display: none;
     }
+  }
 `;
