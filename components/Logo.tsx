@@ -13,7 +13,12 @@ export const Logo: React.FC = () => (
 );
 
 const StyledLogo = styled.div`
-  flex-grow: 1;
+  flex-grow: 2;
+
+  @media only screen and (max-width: ${breakpoints.SM}) {
+    display: flex;
+    justify-content: center;
+  }
 
   h1 {
     font-family: 'Ubuntu Mono', monospace !important;
@@ -23,9 +28,5 @@ const StyledLogo = styled.div`
     cursor: pointer;
     width: 6rem;
     text-align: center;
-
-    @media only screen and (max-width: ${breakpoints.SM}) {
-      margin: 0 auto;
-    }
   }
 `;

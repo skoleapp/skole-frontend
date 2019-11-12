@@ -18,7 +18,7 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
     const { id, name, schoolType, city, country } = school;
 
     return (
-      <Layout title="School">
+      <Layout title="School" backUrl="/schools">
         <StyledCard>
           <Typography variant="h5">{name}</Typography>
           <div className="info-section">
@@ -37,7 +37,7 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
     );
   } else {
     return (
-      <Layout title="School not found">
+      <Layout title="School not found" backUrl="/schools">
         <NotFoundCard text="School not found..." />
       </Layout>
     );
@@ -62,7 +62,4 @@ SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default compose(
-  withRedux,
-  withApollo
-)(SchoolPage);
+export default compose(withRedux, withApollo)(SchoolPage);

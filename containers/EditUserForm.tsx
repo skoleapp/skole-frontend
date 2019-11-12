@@ -2,7 +2,7 @@ import { Avatar, Button, InputLabel, MenuItem } from '@material-ui/core';
 import { ErrorMessage, Field, FormikProps } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { FormErrorMessage, FormSubmitSection, StyledForm, TextLink } from '../components';
+import { FormErrorMessage, FormSubmitSection, StyledForm } from '../components';
 import { UpdateUserFormValues } from '../interfaces';
 import { getAvatar } from '../utils';
 
@@ -37,7 +37,7 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserFormValues>
           onChange={handleAvatarChange}
         />
         <label htmlFor="avatar-input">
-          <Button variant="outlined" color="primary" component="span" fullWidth>
+          <Button variant="outlined" color="primary" component="span">
             change avatar
           </Button>
         </label>
@@ -63,9 +63,6 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserFormValues>
       <Field placeholder="Email" name="email" component={TextField} label="Email" fullWidth />
       <Field placeholder="Bio" name="bio" component={TextField} label="Bio" fullWidth />
       <FormSubmitSection submitButtonText="save" {...props} />
-      <TextLink href="/account" color="primary">
-        Back to Account
-      </TextLink>
     </StyledForm>
   );
 };

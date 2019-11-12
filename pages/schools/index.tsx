@@ -17,7 +17,7 @@ interface Props {
 const SchoolsPage: NextPage<Props> = ({ schools }) => {
   if (schools && schools.length) {
     return (
-      <Layout title="Schools">
+      <Layout title="Schools" backUrl="/">
         <StyledTable>
           <Table>
             <TableHead>

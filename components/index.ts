@@ -1,4 +1,5 @@
 export { AnimatedDiv } from './AnimatedDiv';
+export { BackArrow } from './BackArrow';
 export { ButtonLink } from './ButtonLink';
 export { Footer } from './Footer';
 export { FormErrorMessage } from './FormErrorMessage';

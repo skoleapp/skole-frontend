@@ -7,13 +7,14 @@ import { BottomNavbar } from './BottomNavbar';
 import { TopNavbar } from './TopNavbar';
 
 interface Props {
-  title?: string;
+  title: string;
+  backUrl?: string;
 }
 
-export const Layout: React.FC<Props> = ({ title, children }) => (
+export const Layout: React.FC<Props> = ({ title, backUrl, children }) => (
   <StyledLayout>
     <Head title={title} />
-    <TopNavbar />
+    <TopNavbar backUrl={backUrl} />
     <Container>{children}</Container>
     <BottomNavbar />
     <Footer />

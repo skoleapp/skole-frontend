@@ -2,13 +2,17 @@ import { AppBar, Toolbar } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { ButtonLink, Logo } from '../components';
+import { BackArrow, ButtonLink, Logo } from '../components';
 import { State } from '../interfaces';
 import { breakpoints } from '../styles';
 import { AuthMenu } from './AuthMenu';
 import { SearchWidget } from './SearchWidget';
 
-export const TopNavbar: React.FC = () => {
+interface Props {
+  backUrl?: string;
+}
+
+export const TopNavbar: React.FC<Props> = ({ backUrl }) => {
   const { authenticated } = useSelector((state: State) => state.auth);
 
   const renderAuthButtons = (
@@ -23,20 +27,19 @@ export const TopNavbar: React.FC = () => {
   );
 
   return (
-    <StyledTopNavbar>
-      <AppBar position="static">
-        <Toolbar>
-          <Logo />
-          <SearchWidget />
-          {authenticated ? <AuthMenu /> : renderAuthButtons}
-        </Toolbar>
-      </AppBar>
+    <StyledTopNavbar position="sticky">
+      <Toolbar variant="dense">
+        {backUrl && <BackArrow backUrl={backUrl} />}
+        <Logo />
+        <SearchWidget />
+        {authenticated ? <AuthMenu /> : renderAuthButtons}
+      </Toolbar>
     </StyledTopNavbar>
   );
 };
 
-const StyledTopNavbar = styled.div`
-  flex-grow: 1;
+const StyledTopNavbar = styled(AppBar)`
+  height: 3rem;
 
   .auth-menu,
   .search,
@@ -46,7 +49,7 @@ const StyledTopNavbar = styled.div`
     display: none !important;
 
     @media only screen and (min-width: ${breakpoints.SM}) {
-      display: flex !important;
+      display: block !important;
     }
   }
 

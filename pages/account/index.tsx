@@ -15,7 +15,7 @@ const AccountPage: NextPage = () => {
   const router = useRouter();
 
   return (
-    <Layout title="Account">
+    <Layout title="Account" backUrl="/">
       <StyledAccountMenu>
         <Paper>
           <MenuList>

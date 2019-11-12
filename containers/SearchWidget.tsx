@@ -35,38 +35,37 @@ export const SearchWidget: React.FC = () => {
 };
 
 const StyledSearchWidget = styled.div`
-  position: relative;
-  border-radius: var(--border-radius);
-  background-color: rgba(255, 255, 255, 0.15);
-  width: 100%;
-  display: flex;
-  align-items: center;
-  width: auto;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.25);
-  }
-
-  .search-icon {
-    width: 2.25rem;
-    height: 100%;
-    position: absolute;
-    pointer-events: none;
-    display: flex;
+    position: relative;
+    border-radius: var(--border-radius);
+    background-color: rgba(255, 255, 255, 0.15);
+    display: flex !important;
     align-items: center;
-    justify-content: center;
-    color: var(--secondary);
-  }
 
-  .input-input {
-    padding-left: 2.25rem;
-    width: 100%;
-    color: var(--white);
-    margin-top: 0.25rem;
-    width: 15rem;
-  }
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
 
-  .submit {
-    display: none;
-  }
+    .search-icon {
+      width: 2rem;
+      height: 100%;
+      position: absolute;
+      
+      svg {
+        width: 1.75rem;
+        color: var(--secondary);
+        margin-top: 0.25rem;
+      }
+    }
+
+    .input-input {
+      color: var(--white);
+      width: 15rem;
+      padding-left: 2rem;
+      padding-top: 0.65rem;
+      height 1rem;
+    }
+
+    .submit {
+      display: none;
+    }
 `;

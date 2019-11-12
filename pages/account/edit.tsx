@@ -101,7 +101,7 @@ const EditAccountPage: NextPage = () => {
   }
 
   return (
-    <Layout title="Edit Account">
+    <Layout title="Edit Account" backUrl="/account">
       <StyledCard>
         <Typography variant="h5">Edit Account</Typography>
         <Formik

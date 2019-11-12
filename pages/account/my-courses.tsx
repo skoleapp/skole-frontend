@@ -5,7 +5,7 @@ import { Layout } from '../../containers';
 import { withPrivate } from '../../utils';
 
 export const MyCoursesPage: NextPage = () => (
-  <Layout>
+  <Layout title="My Courses" backUrl="/account">
     <Typography variant="h5">My Courses</Typography>
   </Layout>
 );

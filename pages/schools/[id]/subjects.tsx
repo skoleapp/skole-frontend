@@ -19,7 +19,7 @@ const SubjectsPage: NextPage<Props> = ({ school }) => {
     const { id, name, subjects } = school;
 
     return (
-      <Layout title={`Subjects in ${name}`}>
+      <Layout title={`Subjects in ${name}`} backUrl={`/schools/${id}`}>
         <StyledTable>
           <Table>
             <TableHead>
@@ -57,7 +57,7 @@ const SubjectsPage: NextPage<Props> = ({ school }) => {
     );
   } else {
     return (
-      <Layout title="School not found">
+      <Layout title="School not found" backUrl="/schools">
         <NotFoundCard text="School not found..." />
       </Layout>
     );
@@ -81,7 +81,4 @@ SubjectsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default compose(
-  withRedux,
-  withApollo
-)(SubjectsPage);
+export default compose(withRedux, withApollo)(SubjectsPage);

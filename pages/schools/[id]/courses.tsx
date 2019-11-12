@@ -26,7 +26,7 @@ const CoursesPage: NextPage<Props> = ({ school, subjects, courses }) => {
     const { name, id } = school;
 
     return (
-      <Layout title={`Courses in ${name}`}>
+      <Layout title={`Courses in ${name}`} backUrl={`/schools/${id}`}>
         <StyledTable>
           <Table>
             <TableHead>
@@ -76,7 +76,7 @@ const CoursesPage: NextPage<Props> = ({ school, subjects, courses }) => {
     );
   } else {
     return (
-      <Layout title="School not found">
+      <Layout title="School not found" backUrl="/schools">
         <NotFoundCard text="School not found..." />;
       </Layout>
     );

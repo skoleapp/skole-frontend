@@ -64,7 +64,7 @@ const ChangePasswordPage: NextPage = () => {
 
   if (completed) {
     return (
-      <Layout title="Change Password">
+      <Layout title="Password Changed!">
         <StyledCard>
           <Typography variant="h5">Password Changed!</Typography>
           <Link href="/account">
@@ -78,16 +78,18 @@ const ChangePasswordPage: NextPage = () => {
   }
 
   return (
-    <StyledCard>
-      <Typography variant="h5">Change Password</Typography>
-      <Formik
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-        component={ChangePasswordForm}
-        validationSchema={validationSchema}
-        ref={ref}
-      />
-    </StyledCard>
+    <Layout title="Change Password" backUrl="/account">
+      <StyledCard>
+        <Typography variant="h5">Change Password</Typography>
+        <Formik
+          onSubmit={handleSubmit}
+          initialValues={initialValues}
+          component={ChangePasswordForm}
+          validationSchema={validationSchema}
+          ref={ref}
+        />
+      </StyledCard>
+    </Layout>
   );
 };
 

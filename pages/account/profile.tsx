@@ -2,7 +2,7 @@ import { Avatar, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { ButtonLink, StyledCard, TextLink } from '../../components';
+import { ButtonLink, StyledCard } from '../../components';
 import { Layout } from '../../containers';
 import { State } from '../../interfaces';
 import { getAvatar, withPrivate } from '../../utils';
@@ -12,7 +12,7 @@ const ProfilePage: NextPage = () => {
   const { title, avatar, username, bio, points } = user;
 
   return (
-    <Layout title="Account">
+    <Layout title="Account" backUrl="/account">
       <StyledCard>
         <Typography variant="h5">{title}</Typography>
         <Avatar src={getAvatar(avatar)} />
@@ -24,7 +24,6 @@ const ProfilePage: NextPage = () => {
         <ButtonLink href="/account/edit" color="primary" variant="outlined" fullWidth>
           edit account
         </ButtonLink>
-        <TextLink href="/account">Back to Account</TextLink>
       </StyledCard>
     </Layout>
   );
