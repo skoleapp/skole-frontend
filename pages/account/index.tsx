@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { logout } from '../../actions';
 import { Layout } from '../../containers';
+import { breakpoints } from '../../styles';
 import { withPrivate } from '../../utils';
 
 const AccountPage: NextPage = () => {
@@ -22,6 +23,9 @@ const AccountPage: NextPage = () => {
             <MenuItem onClick={(): Promise<boolean> => router.push('/account/profile')}>
               Profile
             </MenuItem>
+            <MenuItem onClick={(): Promise<boolean> => router.push('/account/activity')}>
+              Activity
+            </MenuItem>
             <MenuItem onClick={(): Promise<boolean> => router.push('/account/edit')}>
               Edit Profile
             </MenuItem>
@@ -31,6 +35,8 @@ const AccountPage: NextPage = () => {
             <MenuItem onClick={(): Promise<boolean> => router.push('/account/change-password')}>
               Change Password
             </MenuItem>
+            <MenuItem onClick={(): Promise<boolean> => router.push('/feedback')}>Feedback</MenuItem>
+            <MenuItem onClick={(): Promise<boolean> => router.push('/about')}>About</MenuItem>
           </MenuList>
         </Paper>
         <Button
@@ -47,8 +53,11 @@ const AccountPage: NextPage = () => {
 };
 
 const StyledAccountMenu = styled.div`
-  max-width: 25rem;
   margin: 0 auto;
+
+  @media only screen and (min-width: ${breakpoints.SM}) {
+    max-width: 25rem;
+  }
 
   button {
     margin-top: 1rem;
