@@ -5,7 +5,7 @@ import { Layout } from '../containers';
 import { withAuthSync } from '../utils';
 
 const SearchPage: NextPage = () => (
-  <Layout title="Search">
+  <Layout title="Search" backUrl="/">
     <Typography variant="h5">Search</Typography>
   </Layout>
 );

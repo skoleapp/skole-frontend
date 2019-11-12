@@ -75,7 +75,7 @@ const RegisterPage: NextPage = () => {
   };
 
   return (
-    <Layout title="Register">
+    <Layout title="Register" backUrl="/">
       <StyledCard>
         <Typography variant="h5">Register</Typography>
         <Formik

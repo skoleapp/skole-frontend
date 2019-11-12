@@ -6,7 +6,7 @@ import { Layout } from '../containers';
 import { withPublic } from '../utils';
 
 const LogoutPage: NextPage = () => (
-  <Layout title="Logout">
+  <Layout title="Logout" backUrl="/">
     <StyledCard>
       <Typography variant="h5">You have been logged out!</Typography>
       <ButtonLink href="/login" variant="contained" color="primary">

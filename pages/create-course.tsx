@@ -69,7 +69,7 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
     const { name, id } = createdCourse;
 
     return (
-      <Layout title="Course Created!">
+      <Layout title="Course Created!" backUrl="/">
         <StyledCard>
           <Typography variant="h5">{name} created!</Typography>
           <ButtonLink href={`/course/${id}`} variant="contained" color="primary" fullWidth>
@@ -83,16 +83,13 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
           >
             create another course
           </Button>
-          <ButtonLink href="/" variant="outlined" color="primary" fullWidth>
-            back to home
-          </ButtonLink>
         </StyledCard>
       </Layout>
     );
   }
 
   return (
-    <Layout title="Create Course">
+    <Layout title="Create Course" backUrl="/">
       <StyledCard>
         <Typography variant="h5">Create Course</Typography>
         <Formik

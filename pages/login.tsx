@@ -56,7 +56,7 @@ const LoginPage: NextPage = () => {
     actions.setSubmitting(false);
   };
   return (
-    <Layout title="Login">
+    <Layout title="Login" backUrl="/">
       <StyledCard>
         <Typography variant="h5">Login</Typography>
         <Formik

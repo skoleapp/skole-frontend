@@ -29,7 +29,7 @@ const FeedbackPage: React.FC = () => {
 
   if (!submitted) {
     return (
-      <Layout title="Leave Feedback">
+      <Layout title="Leave Feedback" backUrl="/">
         <StyledFeedbackCard>
           <Typography variant="h5">Feedback</Typography>
           <ButtonGroup fullWidth aria-label="full width outlined button group">
@@ -55,7 +55,7 @@ const FeedbackPage: React.FC = () => {
   }
 
   return (
-    <Layout title="Thank you for your feedback!">
+    <Layout title="Thank you for your feedback!" backUrl="/">
       <StyledFeedbackCard>
         <Typography variant="h5">Thank you for your feedback!</Typography>
         <ButtonLink href="/" variant="contained" color="primary">
