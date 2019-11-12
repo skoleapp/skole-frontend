@@ -20,6 +20,7 @@ const StyledBackArrow = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+  margin: 0 0.5rem;
   flex-grow: 0.1;
 
   @media only screen and (max-width: ${breakpoints.SM}) {
