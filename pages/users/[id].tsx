@@ -18,7 +18,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const { title, avatar, username, bio, points } = user;
 
     return (
-      <Layout title="User">
+      <Layout title="User" backUrl="/users">
         <StyledCard>
           <Typography variant="h5">{title}</Typography>
           <Avatar src={getAvatar(avatar)} />
@@ -32,7 +32,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     );
   } else {
     return (
-      <Layout title="User not found">
+      <Layout title="User not found" backUrl="/users">
         <NotFoundCard text="User not found..." />
       </Layout>
     );
@@ -57,7 +57,4 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   }
 };
 
-export default compose(
-  withRedux,
-  withApollo
-)(UserPage);
+export default compose(withRedux, withApollo)(UserPage);

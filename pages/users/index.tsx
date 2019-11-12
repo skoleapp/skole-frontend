@@ -25,7 +25,7 @@ interface Props {
 const UsersPage: NextPage<Props> = ({ users }) => {
   if (users) {
     return (
-      <Layout title="Users">
+      <Layout title="Users" backUrl="/">
         <StyledTable>
           <Table>
             <TableHead>
@@ -59,7 +59,7 @@ const UsersPage: NextPage<Props> = ({ users }) => {
     );
   } else {
     return (
-      <Layout title="No users found">
+      <Layout title="No users found" backUrl="/">
         <NotFoundCard text="No users found..." />;
       </Layout>
     );
