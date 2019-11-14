@@ -51,15 +51,21 @@ export interface Subject {
   name: string;
 }
 
-export interface AuthState {
+export interface Auth {
   user: UserMe;
   authenticated: boolean | null;
   loading: boolean | null;
   error: string | null;
 }
 
+export interface Notifications {
+  open: boolean;
+  message: string | null;
+}
+
 export interface State {
-  auth: AuthState;
+  auth: Auth;
+  notifications: Notifications;
 }
 
 export type FeedbackType = 'bad' | 'neutral' | 'good' | '';
