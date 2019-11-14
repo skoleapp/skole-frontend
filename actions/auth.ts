@@ -5,14 +5,16 @@ import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserMeDocument } from '../generated/graphql';
 import { UserMe } from '../interfaces';
-import {
-  GET_USER_ME_ERROR,
-  GET_USER_ME_LOADING,
-  GET_USER_ME_SUCCESS,
-  LOGIN,
-  LOGOUT,
-  UPDATE_USER_ME
-} from './types';
+import { openNotification } from './notifications';
+
+export const GET_USER_ME_LOADING = 'GET_USER_ME_LOADING';
+export const GET_USER_ME_SUCCESS = 'GET_USER_ME_SUCCESS';
+export const GET_USER_ME_ERROR = 'GET_USER_ME_ERROR';
+
+export const UPDATE_USER_ME = 'UPDATE_USER_ME';
+
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 
 interface LoginParams {
   client: ApolloClient<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -31,7 +33,7 @@ export const clientLogin: any = ({ client, token, user }: LoginParams) => async 
 
   dispatch({ type: LOGIN, payload: user });
   await client.cache.reset();
-  Router.push('/account');
+  Router.push('/');
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,6 +65,6 @@ export const logout: any = (apolloClient: ApolloClient<any>) => async (
   });
 
   dispatch({ type: LOGOUT });
-  await apolloClient.cache.reset();
-  Router.push('/logout');
+  dispatch(openNotification('Logged out!'));
+  apolloClient.cache.reset();
 };
