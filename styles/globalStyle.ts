@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { breakpoints } from './breakpoints';
 import { colors } from './colors';
 
 export const GlobalStyle = createGlobalStyle`
@@ -31,12 +32,14 @@ export const GlobalStyle = createGlobalStyle`
         --secondary: ${colors.secondary};
       
         --white: ${colors.white};
-        --black: ${colors.white};
+        --black: ${colors.black};
+        --grey: ${colors.grey};
 
         --success: ${colors.success};
         --danger: ${colors.danger};
 
         --light-opacity: rgba(0, 0, 0, 0.15);
+        --semi-opacity: rgba(0, 0, 0, 0.5);
         
         // Misc 
         --transition: all 0.15s ease-in;
@@ -54,10 +57,16 @@ export const GlobalStyle = createGlobalStyle`
         .bar {
             height: 0.25rem;
             background: var(--white);
+            top: 3rem;
+
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                top: 4rem;
+            }
         }
 
         .peg {
-            box-shadow: 0 0 10px var(--white), 0 0 5px var(--white);
+            box-shadow: none;
+            transform: none;
         }
 
         .spinner-icon {
