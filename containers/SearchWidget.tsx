@@ -1,5 +1,5 @@
-import { InputBase } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { Box, InputBase } from '@material-ui/core';
+import { Search } from '@material-ui/icons';
 import Router from 'next/router';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
@@ -13,9 +13,9 @@ export const SearchWidget: React.FC = () => {
   };
 
   return (
-    <StyledSearchWidget className="search-widget">
+    <StyledSearchWidget display="flex" alignItems="center">
       <form onSubmit={handleSubmit}>
-        <SearchIcon className="search-icon" />
+        <Search />
         <InputBase
           placeholder="Search…"
           classes={{
@@ -32,20 +32,20 @@ export const SearchWidget: React.FC = () => {
   );
 };
 
-const StyledSearchWidget = styled.div`
+const StyledSearchWidget = styled(Box)`
   form {
     border-radius: var(--border-radius);
     background-color: rgba(255, 255, 255, 0.15);
-    display: flex;
-    align-items: center;
     margin: 0 0.5rem;
+    display: flex;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.25);
     }
 
-    .search-icon {
-      margin: 0 0.25rem;
+    svg {
+      margin: 0.25rem;
+      align-self: center;
       color: var(--secondary);
     }
 
