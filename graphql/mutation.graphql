@@ -86,10 +86,6 @@ mutation UpdateUser(
 
 mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
   changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
-    user {
-      id
-      modified
-    }
     errors {
       field
       messages
@@ -101,7 +97,6 @@ mutation CreateCourse($name: String!, $code: String, $subject: ID!, $school: ID!
   createCourse(input: { name: $name, code: $code, subject: $subject, school: $school }) {
     course {
       id
-      name
     }
     errors {
       field

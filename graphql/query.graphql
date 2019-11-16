@@ -32,16 +32,16 @@ query User($id: Int!) {
   }
 }
 
-query Schools {
-  schools {
+query Schools($schoolType: String, $city: String, $country: String, $name: String) {
+  schools(schoolType: $schoolType, city: $city, country: $country, name: $name) {
     id
     schoolType
     name
   }
 }
 
-query School($id: Int!) {
-  school(id: $id) {
+query School($schoolId: Int) {
+  school(schoolId: $schoolId) {
     id
     schoolType
     name
@@ -50,20 +50,8 @@ query School($id: Int!) {
   }
 }
 
-query SchoolSubjects($id: Int!) {
-  school(id: $id) {
-    id
-    schoolType
-    name
-    subjects {
-      id
-      name
-    }
-  }
-}
-
-query SchoolCourses($id: Int!, $subjectId: Int) {
-  school(id: $id) {
+query SchoolsAndSubjects {
+  schools {
     id
     name
   }
@@ -71,12 +59,20 @@ query SchoolCourses($id: Int!, $subjectId: Int) {
     id
     name
   }
-  courses(subjectId: $subjectId) {
+}
+
+query Courses($schoolId: Int, $subjectId: Int) {
+  courses(schoolId: $schoolId, subjectId: $subjectId) {
+    id
     name
     code
-    subject {
-      name
-    }
+  }
+  school(schoolId: $schoolId) {
+    name
+  }
+  subjects {
+    id
+    name
   }
 }
 
@@ -100,16 +96,5 @@ query Course($id: Int!) {
       resourceType
       title
     }
-  }
-}
-
-query SchoolsAndSubjects {
-  schools {
-    id
-    name
-  }
-  subjects {
-    id
-    name
   }
 }
