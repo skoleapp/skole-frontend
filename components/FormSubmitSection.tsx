@@ -1,7 +1,6 @@
-import { Button, CircularProgress, FormControl } from '@material-ui/core';
+import { Box, Button, CircularProgress, FormControl } from '@material-ui/core';
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
-import styled from 'styled-components';
 import { FormErrorMessage } from './FormErrorMessage';
 
 interface FormSubmitSectionProps extends FormikProps<any> {
@@ -12,21 +11,16 @@ export const FormSubmitSection: React.FC<FormSubmitSectionProps> = ({
   isSubmitting,
   submitButtonText
 }) => (
-  <StyledFormSubmitSection fullWidth>
-    {isSubmitting ? (
-      <CircularProgress color="primary" />
-    ) : (
-      <ErrorMessage name="general" component={FormErrorMessage} />
-    )}
-    <Button type="submit" disabled={isSubmitting} variant="contained" color="primary" fullWidth>
-      {submitButtonText}
-    </Button>
-  </StyledFormSubmitSection>
+  <FormControl fullWidth>
+    <Box display="flex" flexDirection="column" alignItems="center">
+      {isSubmitting ? (
+        <CircularProgress color="primary" />
+      ) : (
+        <ErrorMessage name="general" component={FormErrorMessage} />
+      )}
+      <Button type="submit" disabled={isSubmitting} variant="contained" color="primary" fullWidth>
+        {submitButtonText}
+      </Button>
+    </Box>
+  </FormControl>
 );
-
-const StyledFormSubmitSection = styled(FormControl)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
