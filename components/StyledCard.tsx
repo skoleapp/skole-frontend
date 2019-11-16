@@ -4,31 +4,26 @@ import { breakpoints } from '../styles';
 
 export const StyledCard = styled(Card)`
   padding: 1rem;
+  min-height: 100vh;
 
   @media only screen and (min-width: ${breakpoints.SM}) {
-    max-width: 25rem;
+    max-width: 35rem;
+    margin: 0 auto;
+    min-height: auto;
   }
 
   .MuiButton-root,
-  .MuiLink-underlineHover {
-    margin: 0.5rem 0 !important;
-  }
-
-  .info-section {
-    margin-top: 1rem;
-
-    p {
-      margin: 0.5rem 0;
-    }
+  .MuiDivider-root {
+    margin: 0.5rem 0;
   }
 
   .MuiAvatar-root {
-    margin: 1rem auto;
-    height: 12rem;
-    width: 12rem;
-  }
+    height: 6rem;
+    width: 6rem;
 
-  @media screen and (min-width: ${breakpoints.SM}) {
-    margin: 0 auto;
+    @media only screen and (min-width: ${breakpoints.SM}) {
+      height: 10rem;
+      width: 10rem;
+    }
   }
 `;

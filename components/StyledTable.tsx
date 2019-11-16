@@ -4,9 +4,11 @@ import { breakpoints } from '../styles';
 
 export const StyledTable = styled(Paper)`
   margin: 0 auto;
+  min-height: 100vh;
 
   @media only screen and (min-width: ${breakpoints.SM}) {
     max-width: 35rem;
+    min-height: auto;
   }
 
   .MuiTableBody-root {
