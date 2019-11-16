@@ -1,12 +1,11 @@
-import { Button, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { updateUserMe } from '../../actions';
-import { ButtonLink, StyledCard } from '../../components';
-import { EditUserForm, Layout } from '../../containers';
+import { openNotification, updateUserMe } from '../../actions';
+import { StyledCard } from '../../components';
+import { EditProfileForm, Layout } from '../../containers';
 import { useUpdateUserMutation } from '../../generated/graphql';
 import { State, UpdateUserFormValues } from '../../interfaces';
 import { createFormErrors, withPrivate } from '../../utils';
@@ -21,9 +20,8 @@ const validationSchema = Yup.object().shape({
   language: Yup.string().oneOf(['English', 'Finnish', 'Swedish'], 'Invalid language.')
 });
 
-const EditAccountPage: NextPage = () => {
+const EditProfilePage: NextPage = () => {
   const { user } = useSelector((state: State) => state.auth);
-  const [completed, setCompleted] = useState(false);
   const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
   const dispatch = useDispatch();
 
@@ -32,8 +30,8 @@ const EditAccountPage: NextPage = () => {
     if (updateUser.errors) {
       return onError(updateUser.errors);
     } else {
-      setCompleted(true);
       dispatch(updateUserMe(updateUser.user));
+      dispatch(openNotification('Profile updated!'));
     }
   };
 
@@ -79,33 +77,11 @@ const EditAccountPage: NextPage = () => {
     general: ''
   };
 
-  if (completed) {
-    return (
-      <Layout title="Edit User">
-        <StyledCard>
-          <Typography variant="h5">Account Edited!</Typography>
-          <ButtonLink href="/account" fullWidth variant="contained" color="primary">
-            back to account
-          </ButtonLink>
-          <Button
-            fullWidth
-            variant="outlined"
-            color="primary"
-            onClick={(): void => setCompleted(false)}
-          >
-            edit again
-          </Button>
-        </StyledCard>
-      </Layout>
-    );
-  }
-
   return (
-    <Layout title="Edit Account" backUrl="/account">
+    <Layout title="Edit Profile" backUrl="/profile">
       <StyledCard>
-        <Typography variant="h5">Edit Account</Typography>
         <Formik
-          component={EditUserForm}
+          component={EditProfileForm}
           initialValues={initialValues}
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
@@ -116,4 +92,4 @@ const EditAccountPage: NextPage = () => {
   );
 };
 
-export default withPrivate(EditAccountPage);
+export default withPrivate(EditProfilePage);

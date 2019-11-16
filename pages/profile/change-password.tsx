@@ -1,9 +1,9 @@
-import { Button, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import Link from 'next/link';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
+import { openNotification } from '../../actions';
 import { StyledCard } from '../../components';
 import { ChangePasswordForm, Layout } from '../../containers';
 import { useChangePasswordMutation } from '../../generated/graphql';
@@ -28,8 +28,8 @@ const initialValues = {
 };
 
 const ChangePasswordPage: NextPage = () => {
-  const [completed, setCompleted] = useState(false);
   const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const dispatch = useDispatch();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onCompleted = ({ changePassword }: any): void => {
@@ -39,7 +39,8 @@ const ChangePasswordPage: NextPage = () => {
         key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
       );
     } else {
-      setCompleted(true);
+      ref.current.resetForm();
+      dispatch(openNotification('Password changed!'));
     }
   };
 
@@ -62,25 +63,9 @@ const ChangePasswordPage: NextPage = () => {
     actions.setSubmitting(false);
   };
 
-  if (completed) {
-    return (
-      <Layout title="Password Changed!">
-        <StyledCard>
-          <Typography variant="h5">Password Changed!</Typography>
-          <Link href="/account">
-            <Button variant="contained" color="primary">
-              Back to Account
-            </Button>
-          </Link>
-        </StyledCard>
-      </Layout>
-    );
-  }
-
   return (
-    <Layout title="Change Password" backUrl="/account">
+    <Layout heading="Change Password" title="Change Password" backUrl="/settings">
       <StyledCard>
-        <Typography variant="h5">Change Password</Typography>
         <Formik
           onSubmit={handleSubmit}
           initialValues={initialValues}
