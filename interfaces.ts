@@ -102,4 +102,11 @@ export interface FeedbackFormValues {
   comment: string;
 }
 
+export interface UploadResourceFormValues {
+  title: string;
+  type: string;
+  course: string;
+  resource: string;
+}
+
 export type CreateCourseFormValues = Omit<Course, 'id'>;

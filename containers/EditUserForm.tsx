@@ -18,7 +18,7 @@ export const EditUserForm: React.ComponentType<FormikProps<UpdateUserFormValues>
       </label>
       <ErrorMessage name="avatar" component={FormErrorMessage} />
     </div>
-    <FormControl>
+    <FormControl fullWidth>
       <InputLabel>Language</InputLabel>
       <Field name="language" component={Select}>
         <MenuItem value="English">English</MenuItem>

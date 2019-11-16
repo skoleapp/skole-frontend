@@ -14,7 +14,8 @@ export const StyledForm = styled(Form)`
     width: 12rem;
   }
 
-  .change-avatar {
+  .change-avatar,
+  .upload-resource {
     input {
       display: none;
     }
@@ -29,5 +30,8 @@ export const StyledForm = styled(Form)`
     display: flex;
     align-items: start;
     justify-content: start;
+  }
+  .MuiSelect-selectMenu {
+    text-align: start;
   }
 `;

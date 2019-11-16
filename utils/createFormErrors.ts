@@ -11,6 +11,7 @@ export const createFormErrors = (errors: any): any => {
   let formErrors = {
     general: ''
   };
+  console.log(errors);
 
   if (errors.networkError) {
     formErrors.general = 'Network error.';

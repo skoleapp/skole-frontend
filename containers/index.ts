@@ -12,3 +12,4 @@ export { RegisterForm } from './RegisterForm';
 export { SearchWidget } from './SearchWidget';
 export { TopNavbar } from './TopNavbar';
 export { UserInfoCard } from './UserInfoCard';
+export { UploadResourceForm } from './UploadResourceForm';
