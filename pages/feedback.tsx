@@ -1,9 +1,11 @@
-import { Button, ButtonGroup, Typography } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Button, ButtonGroup, InputLabel } from '@material-ui/core';
+import { Formik, FormikActions } from 'formik';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import * as Yup from 'yup';
-import { ButtonLink, StyledCard } from '../components';
+import { openNotification } from '../actions';
+import { StyledCard } from '../components';
 import { FeedbackForm, Layout } from '../containers';
 import { FeedbackFormValues, FeedbackType } from '../interfaces';
 import { withAuthSync } from '../utils';
@@ -18,49 +20,41 @@ const validationSchema = Yup.object().shape({
 });
 
 const FeedbackPage: React.FC = () => {
-  const [submitted, setSubmitted] = useState(false);
   const [rate, setRate] = useState<FeedbackType>('');
+  const dispatch = useDispatch();
 
   // TODO: Finish this.
-  const onSubmit = async (values: FeedbackFormValues): Promise<void> => {
+  const onSubmit = async (
+    values: FeedbackFormValues,
+    actions: FormikActions<FeedbackFormValues>
+  ): Promise<void> => {
     console.log({ ...values, rate });
-    setSubmitted(true);
+    dispatch(openNotification('Feedback submitted!'));
+    actions.setSubmitting(false);
+    actions.resetForm();
   };
 
-  if (!submitted) {
-    return (
-      <Layout title="Leave Feedback" backUrl="/">
-        <StyledFeedbackCard>
-          <Typography variant="h5">Feedback</Typography>
-          <ButtonGroup fullWidth aria-label="full width outlined button group">
-            <Button value="Good" onClick={(): void => setRate('good')} color="primary">
-              good
-            </Button>
-            <Button value="Neutral" onClick={(): void => setRate('neutral')} color="primary">
-              neutral
-            </Button>
-            <Button value="Bad" onClick={(): void => setRate('bad')} color="primary">
-              bad
-            </Button>
-          </ButtonGroup>
-          <Formik
-            onSubmit={onSubmit}
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            component={FeedbackForm}
-          />
-        </StyledFeedbackCard>
-      </Layout>
-    );
-  }
-
   return (
-    <Layout title="Thank you for your feedback!" backUrl="/">
+    <Layout heading="Feedback" title="Feedback" backUrl="/">
       <StyledFeedbackCard>
-        <Typography variant="h5">Thank you for your feedback!</Typography>
-        <ButtonLink href="/" variant="contained" color="primary">
-          back to home
-        </ButtonLink>
+        <InputLabel>How do you like Skole?</InputLabel>
+        <ButtonGroup fullWidth aria-label="full width outlined button group">
+          <Button value="Good" onClick={(): void => setRate('good')} color="primary">
+            good
+          </Button>
+          <Button value="Neutral" onClick={(): void => setRate('neutral')} color="primary">
+            neutral
+          </Button>
+          <Button value="Bad" onClick={(): void => setRate('bad')} color="primary">
+            bad
+          </Button>
+        </ButtonGroup>
+        <Formik
+          onSubmit={onSubmit}
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          component={FeedbackForm}
+        />
       </StyledFeedbackCard>
     </Layout>
   );
