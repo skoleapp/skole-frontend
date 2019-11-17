@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import authReducer from './auth';
+import { authReducer as auth } from './auth';
+import { notificationReducer as notifications } from './notifications';
 
 export const rootReducer = combineReducers({
-  auth: authReducer
+  auth,
+  notifications
 });
