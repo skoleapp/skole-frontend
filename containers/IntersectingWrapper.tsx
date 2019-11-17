@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AnimatedDiv } from '../components';
+import { AnimatedBox } from '../components';
 
 interface Props {
   time?: number;
@@ -37,8 +37,8 @@ export const IntersectingWrapper: React.FC<Props> = ({ children, time }) => {
   }, [element]);
 
   return (
-    <AnimatedDiv launch={isIntersectingState} time={time} ref={element}>
+    <AnimatedBox launch={isIntersectingState} time={time} ref={element}>
       {children}
-    </AnimatedDiv>
+    </AnimatedBox>
   );
 };
