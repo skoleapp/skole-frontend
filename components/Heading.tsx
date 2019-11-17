@@ -19,13 +19,15 @@ const StyledLogo = styled(Box)`
   text-align: center;
 
   .MuiTypography-h6 {
-    width: 12rem;
+    max-width: 12rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 0 auto;
 
-    @media only screen and (max-width: ${breakpoints.SM}) {
-      margin: 0 auto;
+    @media only screen and (min-width: ${breakpoints.SM}) {
+      max-width: 30rem;
+      margin-left: 0;
     }
   }
 
