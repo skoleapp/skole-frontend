@@ -175,7 +175,7 @@ export type QueryCoursesArgs = {
 
 
 export type QueryCourseArgs = {
-  id?: Maybe<Scalars['Int']>
+  courseId?: Maybe<Scalars['Int']>
 };
 
 export type RegisterMutationInput = {
@@ -508,7 +508,7 @@ export type CoursesSchoolsAndSubjectsQuery = (
 );
 
 export type CourseQueryVariables = {
-  id: Scalars['Int']
+  courseId: Scalars['Int']
 };
 
 
@@ -516,7 +516,7 @@ export type CourseQuery = (
   { __typename?: 'Query' }
   & { course: Maybe<(
     { __typename?: 'CourseType' }
-    & Pick<CourseType, 'name' | 'code' | 'modified' | 'created'>
+    & Pick<CourseType, 'id' | 'name' | 'code' | 'modified' | 'created'>
     & { subject: (
       { __typename?: 'SubjectType' }
       & Pick<SubjectType, 'name'>
@@ -526,10 +526,7 @@ export type CourseQuery = (
     ), creator: Maybe<(
       { __typename?: 'UserTypePublic' }
       & Pick<UserTypePublic, 'username'>
-    )>, resources: Maybe<Array<Maybe<(
-      { __typename?: 'ResourceType' }
-      & Pick<ResourceType, 'id' | 'resourceType' | 'title'>
-    )>>> }
+    )> }
   )> }
 );
 
@@ -827,8 +824,9 @@ export const CoursesSchoolsAndSubjectsDocument = gql`
 export type CoursesSchoolsAndSubjectsQueryHookResult = ReturnType<typeof useCoursesSchoolsAndSubjectsQuery>;
 export type CoursesSchoolsAndSubjectsQueryResult = ApolloReactCommon.QueryResult<CoursesSchoolsAndSubjectsQuery, CoursesSchoolsAndSubjectsQueryVariables>;
 export const CourseDocument = gql`
-    query Course($id: Int!) {
-  course(id: $id) {
+    query Course($courseId: Int!) {
+  course(courseId: $courseId) {
+    id
     name
     code
     subject {
@@ -842,11 +840,6 @@ export const CourseDocument = gql`
     }
     modified
     created
-    resources {
-      id
-      resourceType
-      title
-    }
   }
 }
     `;

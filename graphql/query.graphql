@@ -97,8 +97,9 @@ query CoursesSchoolsAndSubjects(
   }
 }
 
-query Course($id: Int!) {
-  course(id: $id) {
+query Course($courseId: Int!) {
+  course(courseId: $courseId) {
+    id
     name
     code
     subject {
@@ -112,10 +113,5 @@ query Course($id: Int!) {
     }
     modified
     created
-    resources {
-      id
-      resourceType
-      title
-    }
   }
 }
