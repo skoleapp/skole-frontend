@@ -3,13 +3,19 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
-import { openNotification } from '../actions';
+import { openNotification, updateUserMe } from '../actions';
 import { StyledCard } from '../components';
 import { CreateCourseForm, Layout } from '../containers';
-import { SchoolsAndSubjectsDocument, useCreateCourseMutation } from '../generated/graphql';
+import {
+  SchoolsAndSubjectsDocument,
+  useCreateCourseMutation,
+  UserMeDocument
+} from '../generated/graphql';
 import { CreateCourseFormValues, School, SkoleContext, Subject } from '../interfaces';
-import { createFormErrors, useSSRAuthSync, withPrivate } from '../utils';
+import { withApollo, withRedux } from '../lib';
+import { createFormErrors, redirect } from '../utils';
 
 interface Props {
   subjects?: Subject[];
@@ -17,10 +23,10 @@ interface Props {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required.'),
-  code: Yup.string(),
-  subject: Yup.string().required('Subject is required.'),
-  school: Yup.string().required('School is required.')
+  courseName: Yup.string().required('Course name is required.'),
+  courseCode: Yup.string(),
+  subjectId: Yup.string().required('Subject is required.'),
+  schoolId: Yup.string().required('School is required.')
 });
 
 const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
@@ -34,7 +40,7 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
       onError(createCourse.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
     } else {
       dispatch(openNotification('Course created!'));
-      router.push(`/course/${createCourse.course.id}`);
+      router.push(`/courses/${createCourse.course.id}`);
     }
   };
 
@@ -53,19 +59,19 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
     values: CreateCourseFormValues,
     actions: FormikActions<CreateCourseFormValues>
   ) => {
-    const { name, code, school, subject } = values;
-    await createCourseMutation({ variables: { name, code, school, subject } });
+    const { courseName, courseCode, schoolId, subjectId } = values;
+    await createCourseMutation({ variables: { courseName, courseCode, schoolId, subjectId } });
     actions.setSubmitting(false);
   };
 
   const initialValues = {
-    name: '',
-    code: '',
-    subject: '',
-    school: '',
+    courseName: '',
+    courseCode: '',
+    subjectId: '',
+    schoolId: '',
     general: '',
-    schools,
-    subjects
+    schools: schools || [],
+    subjects: subjects || []
   };
 
   return (
@@ -84,18 +90,24 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
 };
 
 CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  await useSSRAuthSync(ctx);
+  const { apolloClient, reduxStore } = ctx;
+
+  try {
+    const res = await apolloClient.query({ query: UserMeDocument });
+    await reduxStore.dispatch(updateUserMe(res.data.userMe));
+  } catch {
+    redirect(ctx, '/login');
+  }
 
   try {
     const { data } = await ctx.apolloClient.query({
       query: SchoolsAndSubjectsDocument
     });
 
-    const { schools, subjects } = data;
-    return { schools, subjects };
-  } catch (err) {
+    return { ...data };
+  } catch {
     return {};
   }
 };
 
-export default withPrivate(CreateCoursePage);
+export default compose(withRedux, withApollo)(CreateCoursePage);
