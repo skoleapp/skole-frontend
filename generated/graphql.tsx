@@ -144,7 +144,7 @@ export type Query = {
 
 
 export type QueryUserArgs = {
-  id: Scalars['Int']
+  userId: Scalars['Int']
 };
 
 
@@ -384,10 +384,10 @@ export type ChangePasswordMutation = (
 );
 
 export type CreateCourseMutationVariables = {
-  name: Scalars['String'],
-  code?: Maybe<Scalars['String']>,
-  subject: Scalars['ID'],
-  school: Scalars['ID']
+  courseName: Scalars['String'],
+  courseCode?: Maybe<Scalars['String']>,
+  subjectId: Scalars['ID'],
+  schoolId: Scalars['ID']
 };
 
 
@@ -428,7 +428,7 @@ export type UsersQuery = (
 );
 
 export type UserQueryVariables = {
-  id: Scalars['Int']
+  userId: Scalars['Int']
 };
 
 
@@ -650,8 +650,8 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = ApolloReactCommon.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateCourseDocument = gql`
-    mutation CreateCourse($name: String!, $code: String, $subject: ID!, $school: ID!) {
-  createCourse(input: {name: $name, code: $code, subject: $subject, school: $school}) {
+    mutation CreateCourse($courseName: String!, $courseCode: String, $subjectId: ID!, $schoolId: ID!) {
+  createCourse(input: {name: $courseName, code: $courseCode, subject: $subjectId, school: $schoolId}) {
     course {
       id
     }
@@ -715,8 +715,8 @@ export const UsersDocument = gql`
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersQueryResult = ApolloReactCommon.QueryResult<UsersQuery, UsersQueryVariables>;
 export const UserDocument = gql`
-    query User($id: Int!) {
-  user(id: $id) {
+    query User($userId: Int!) {
+  user(userId: $userId) {
     id
     username
     title

@@ -93,8 +93,10 @@ mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
   }
 }
 
-mutation CreateCourse($name: String!, $code: String, $subject: ID!, $school: ID!) {
-  createCourse(input: { name: $name, code: $code, subject: $subject, school: $school }) {
+mutation CreateCourse($courseName: String!, $courseCode: String, $subjectId: ID!, $schoolId: ID!) {
+  createCourse(
+    input: { name: $courseName, code: $courseCode, subject: $subjectId, school: $schoolId }
+  ) {
     course {
       id
     }

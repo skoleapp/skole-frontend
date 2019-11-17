@@ -20,8 +20,8 @@ query Users {
   }
 }
 
-query User($id: Int!) {
-  user(id: $id) {
+query User($userId: Int!) {
+  user(userId: $userId) {
     id
     username
     title
