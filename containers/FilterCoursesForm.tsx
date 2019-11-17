@@ -2,9 +2,14 @@ import { Field, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { FormSubmitSection, SchoolField, StyledForm, SubjectField } from '../components';
-import { FilterCoursesFormValues } from '../interfaces';
+import { FilterCoursesFormValues, School, Subject } from '../interfaces';
 
-export const FilterCoursesForm: React.FC<FormikProps<FilterCoursesFormValues>> = props => (
+interface Props extends FormikProps<FilterCoursesFormValues> {
+  subjects: Subject[];
+  schools: School[];
+}
+
+export const FilterCoursesForm: React.FC<Props> = props => (
   <StyledForm>
     <Field
       name="courseName"
