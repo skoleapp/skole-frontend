@@ -20,8 +20,5 @@ export const withAuthSync = (WrappedComponent: NextPage): any => {
     return {};
   };
 
-  return compose(
-    withRedux,
-    withApollo
-  )(Wrapper);
+  return compose(withRedux, withApollo)(Wrapper);
 };

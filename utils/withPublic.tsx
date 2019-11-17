@@ -30,8 +30,5 @@ export const withPublic = (WrappedComponent: NextPage): any => {
     return {};
   };
 
-  return compose(
-    withRedux,
-    withApollo
-  )(Wrapper);
+  return compose(withRedux, withApollo)(Wrapper);
 };
