@@ -1,4 +1,3 @@
-import { Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import React, { useRef } from 'react';
@@ -47,12 +46,12 @@ const RegisterPage: NextPage = () => {
   // eslint-disable-next-line
   const onCompleted = ({ register, login }: any) => {
     if (register.errors) {
-      return onError(register.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
+      onError(register.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
     } else if (login.errors) {
-      return onError(login.errors);
+      onError(login.errors);
+    } else {
+      dispatch(clientLogin({ client, ...login }));
     }
-
-    dispatch(clientLogin({ client, ...login }));
   };
 
   // eslint-disable-next-line
@@ -75,9 +74,8 @@ const RegisterPage: NextPage = () => {
   };
 
   return (
-    <Layout title="Register" backUrl="/">
+    <Layout heading="Register" title="Register" backUrl="/">
       <StyledCard>
-        <Typography variant="h5">Register</Typography>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
