@@ -5,21 +5,21 @@ import { FormSubmitSection, SchoolField, StyledForm, SubjectField } from '../com
 import { CreateCourseFormValues, School, Subject } from '../interfaces';
 
 interface Props extends CreateCourseFormValues {
-  subjects?: Subject[];
-  schools?: School[];
+  subjects: Subject[];
+  schools: School[];
 }
 
 export const CreateCourseForm: React.FC<FormikProps<Props>> = props => (
   <StyledForm>
     <Field
-      name="name"
+      name="courseName"
       placeholder="Course Name"
       label="Course Name"
       component={TextField}
       fullWidth
     />
     <Field
-      name="code"
+      name="courseCode"
       placeholder="Course Code"
       label="Course Code"
       component={TextField}
