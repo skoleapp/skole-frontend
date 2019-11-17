@@ -46,12 +46,15 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   const { query, apolloClient } = ctx;
 
   // Redirect to own profile if id matches logged in user.
-  if (userMe && userMe.id === query.userId) {
+  if (userMe && userMe.id === query.id) {
     return redirect(ctx, '/profile');
   }
 
   try {
-    const { data } = await apolloClient.query({ query: UserDocument, variables: { ...query } });
+    const { data } = await apolloClient.query({
+      query: UserDocument,
+      variables: { userId: query.id }
+    });
     return { ...data };
   } catch {
     return {};

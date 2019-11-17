@@ -60,7 +60,7 @@ SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   try {
     const { data } = await apolloClient.query({
       query: SchoolDocument,
-      variables: { ...query }
+      variables: { schoolId: query.id }
     });
 
     return { ...data };
