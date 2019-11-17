@@ -1,5 +1,3 @@
-import { School } from './school';
-import { Subject } from './subject';
 
 export type FeedbackType = 'bad' | 'neutral' | 'good' | '';
 
@@ -38,10 +36,10 @@ export interface FeedbackFormValues {
 }
 
 export interface CreateCourseFormValues {
-  name: string;
-  code: string;
-  subject: string;
-  school: string;
+  courseName: string;
+  courseCode: string;
+  subjectId: string;
+  schoolId: string;
 }
 
 export interface FilterSchoolsFormValues {
@@ -53,7 +51,6 @@ export interface FilterSchoolsFormValues {
 
 export interface FilterSubjectsFormValues {
   schoolId: string | string[];
-  schools: School[];
 }
 
 export interface FilterCoursesFormValues {
@@ -61,6 +58,4 @@ export interface FilterCoursesFormValues {
   courseCode: string | string[];
   subjectId: string | string[];
   schoolId: string | string[];
-  subjects: Subject[];
-  schools: School[];
 }
