@@ -5,6 +5,7 @@ import React from 'react';
 import { School } from '../interfaces';
 import { FormErrorMessage } from './FormErrorMessage';
 
+// eslint-disable-next-line @eslint-typescript/no-explicit-any
 export const SchoolField: React.FC<FormikProps<any>> = props => (
   <FormControl fullWidth>
     <InputLabel>School</InputLabel>

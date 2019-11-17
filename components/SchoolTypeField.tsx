@@ -5,6 +5,7 @@ import React from 'react';
 import { FormErrorMessage } from './FormErrorMessage';
 
 // TODO: Get school types from backend.
+// eslint-disable-next-line @eslint-typescript/no-explicit-any
 export const SchoolTypeField: React.FC<FormikProps<any>> = () => (
   <FormControl fullWidth>
     <InputLabel>School Type</InputLabel>
