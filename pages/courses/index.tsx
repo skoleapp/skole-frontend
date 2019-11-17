@@ -37,8 +37,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
     values: FilterCoursesFormValues,
     actions: FormikActions<FilterCoursesFormValues>
   ) => {
-    const isNotEmpty = (val: string, key: string) =>
-      key !== 'subjects' && key !== 'schools' && val !== '';
+    const isNotEmpty = (val: string) => val !== '';
     const query: any = R.pickBy(isNotEmpty, values); // eslint-disable-line @eslint/typescript-no-explicit-any
     router.push({ pathname, query });
     actions.setSubmitting(false);

@@ -1,4 +1,3 @@
-
 export type FeedbackType = 'bad' | 'neutral' | 'good' | '';
 
 export interface PasswordForm {
