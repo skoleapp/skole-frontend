@@ -1,9 +1,10 @@
-export { AnimatedDiv } from './AnimatedDiv';
+export { AnimatedBox } from './AnimatedBox';
 export { ButtonLink } from './ButtonLink';
 export { Footer } from './Footer';
 export { FormErrorMessage } from './FormErrorMessage';
 export { FormSubmitSection } from './FormSubmitSection';
 export { HeadComponent as Head } from './Head';
+export { Heading } from './Heading';
 export { IconButtonLink } from './IconButtonLink';
 export { LabelTag } from './LabelTag';
 export { Logo } from './Logo';

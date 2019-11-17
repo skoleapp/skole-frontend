@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, InputLabel } from '@material-ui/core';
+import { Button, ButtonGroup, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -36,9 +36,9 @@ const FeedbackPage: React.FC = () => {
 
   return (
     <Layout heading="Feedback" title="Feedback" backUrl="/">
-      <StyledFeedbackCard>
-        <InputLabel>How do you like Skole?</InputLabel>
-        <ButtonGroup fullWidth aria-label="full width outlined button group">
+      <StyledCard>
+        <Typography variant="h5">How do you like Skole?</Typography>
+        <StyledButtonGroup fullWidth aria-label="full width outlined button group">
           <Button value="Good" onClick={(): void => setRate('good')} color="primary">
             good
           </Button>
@@ -48,21 +48,23 @@ const FeedbackPage: React.FC = () => {
           <Button value="Bad" onClick={(): void => setRate('bad')} color="primary">
             bad
           </Button>
-        </ButtonGroup>
+        </StyledButtonGroup>
         <Formik
           onSubmit={onSubmit}
           initialValues={initialValues}
           validationSchema={validationSchema}
           component={FeedbackForm}
         />
-      </StyledFeedbackCard>
+      </StyledCard>
     </Layout>
   );
 };
 
-const StyledFeedbackCard = styled(StyledCard)`
-  .MuiButtonGroup-root {
-    button:focus {
+const StyledButtonGroup = styled(ButtonGroup)`
+  margin: 0.5rem 0;
+
+  .MuiButton-root {
+    &:focus {
       background-color: var(--primary);
       color: var(--secondary);
     }

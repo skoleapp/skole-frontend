@@ -14,20 +14,12 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useRef } from 'react';
 import { compose } from 'redux';
-import * as Yup from 'yup';
 import { LabelTag, StyledTable } from '../../components';
 import { FilterSchoolsForm, Layout } from '../../containers';
 import { SchoolsDocument } from '../../generated/graphql';
 import { FilterSchoolsFormValues, School, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useSSRAuthSync } from '../../utils';
-
-const validationSchema = Yup.object().shape({
-  schoolType: Yup.string(),
-  city: Yup.string(),
-  country: Yup.string(),
-  name: Yup.string()
-});
 
 interface Props {
   schools?: School[];
@@ -75,7 +67,6 @@ const SchoolsPage: NextPage<Props> = ({ schools }) => {
                 <Formik
                   component={FilterSchoolsForm}
                   onSubmit={handleSubmit}
-                  validationSchema={validationSchema}
                   initialValues={initialValues}
                   ref={ref}
                 />
