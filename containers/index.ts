@@ -1,10 +1,11 @@
-export { AuthMenu } from './AuthMenu';
 export { BottomNavbar } from './BottomNavbar';
 export { ChangePasswordForm } from './ChangePasswordForm';
-export { CourseSelectFilter } from './CourseSelectFilter';
 export { CreateCourseForm } from './CreateCourseForm';
-export { EditUserForm } from './EditUserForm';
+export { EditProfileForm } from './EditProfileForm';
 export { FeedbackForm } from './FeedbackForm';
+export { FilterCoursesForm } from './FilterCoursesForm';
+export { FilterSchoolsForm } from './FilterSchoolsForm';
+export { FilterSubjectsForm } from './FilterSubjectsForm';
 export { IntersectingWrapper } from './IntersectingWrapper';
 export { Layout } from './Layout';
 export { LoginForm } from './LoginForm';

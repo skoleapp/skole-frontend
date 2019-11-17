@@ -22,4 +22,8 @@ export const StyledForm = styled(Form)`
   .MuiButton-root {
     margin: 0.5rem 0;
   }
+
+  .MuiSelect-root {
+    text-align: left;
+  }
 `;

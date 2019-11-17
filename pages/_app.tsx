@@ -28,8 +28,8 @@ export default class SkoleApp extends App<Props> {
     Router.events.on('routeChangeStart', () => NProgress.start());
     Router.events.on('routeChangeError', () => NProgress.done());
     Router.events.on('routeChangeComplete', () => {
-      window.scroll(0, 0);
       NProgress.done();
+      window.scroll(0, 0);
     });
 
     return (

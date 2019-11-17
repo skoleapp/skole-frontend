@@ -2,7 +2,7 @@ import { Course } from './course';
 import { Subject } from './subject';
 
 export interface School {
-  id: number;
+  id: string;
   schoolType: string;
   name: string;
   city: string;
