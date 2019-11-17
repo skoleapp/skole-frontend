@@ -1,9 +1,8 @@
 import { NextPage } from 'next';
 import React from 'react';
-import { compose } from 'redux';
 import { StyledCard } from '../components';
 import { Layout } from '../containers';
-import { withApollo, withRedux } from '../lib';
+import { withAuthSync } from '../utils';
 
 const AboutPage: NextPage = () => (
   <Layout heading="About" title="About" backUrl="/">
@@ -11,4 +10,4 @@ const AboutPage: NextPage = () => (
   </Layout>
 );
 
-export default compose(withRedux, withApollo)(AboutPage);
+export default withAuthSync(AboutPage);
