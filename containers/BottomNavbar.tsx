@@ -1,11 +1,14 @@
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
-import { AccountCircle, Home, Search } from '@material-ui/icons';
+import { AccountCircle, Favorite, Home, Search } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { State } from '../interfaces';
 import { breakpoints } from '../styles';
 
 export const BottomNavbar: React.FC = () => {
+  const { authenticated } = useSelector((state: State) => state.auth);
   const router = useRouter();
 
   const getNavbarValue = () => {
@@ -16,8 +19,11 @@ export const BottomNavbar: React.FC = () => {
       case '/search': {
         return 1;
       }
-      case '/account': {
+      case '/activity': {
         return 2;
+      }
+      case '/profile': {
+        return 3;
       }
       default: {
         return null;
@@ -32,14 +38,20 @@ export const BottomNavbar: React.FC = () => {
   };
 
   return (
-    <StyledBottomNavbar value={value} onChange={handleChange} showLabels>
+    <StyledBottomNavbar value={value} onChange={handleChange}>
       <BottomNavigationAction onClick={(): Promise<boolean> => router.push('/')} icon={<Home />} />
       <BottomNavigationAction
         onClick={(): Promise<boolean> => router.push('/search')}
         icon={<Search />}
       />
+      {authenticated && (
+        <BottomNavigationAction
+          onClick={(): Promise<boolean> => router.push('/profile/activity')}
+          icon={<Favorite />}
+        />
+      )}
       <BottomNavigationAction
-        onClick={(): Promise<boolean> => router.push('/account')}
+        onClick={(): Promise<boolean> => router.push('/profile')}
         icon={<AccountCircle />}
       />
     </StyledBottomNavbar>
@@ -51,6 +63,7 @@ const StyledBottomNavbar = styled(BottomNavigation)`
   bottom: 0;
   width: 100%;
   height: 3rem;
+  border-top: 0.05rem solid var(--grey);
 
   .MuiButtonBase-root,
   .Mui-selected {
