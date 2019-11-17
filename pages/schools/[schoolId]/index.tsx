@@ -10,7 +10,7 @@ import { withApollo, withRedux } from '../../../lib';
 import { useSSRAuthSync } from '../../../utils';
 
 interface Props {
-  school: School | null;
+  school?: School;
 }
 
 const SchoolPage: NextPage<Props> = ({ school }) => {
@@ -18,18 +18,26 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
     const { id, name, schoolType, city, country } = school;
 
     return (
-      <Layout title="School" backUrl="/schools">
+      <Layout heading={name} title={name} backUrl="/schools">
         <StyledCard>
-          <Typography variant="h5">{name}</Typography>
-          <div className="info-section">
-            <Typography variant="body1">Type: {schoolType}</Typography>
-            <Typography variant="body1">City: {city}</Typography>
-            <Typography variant="body1">Country: {country}</Typography>
-          </div>
-          <ButtonLink href={`/schools/${id}/subjects`} variant="outlined" color="primary" fullWidth>
+          <Typography variant="body1">Name: {name}</Typography>
+          <Typography variant="body1">Type: {schoolType}</Typography>
+          <Typography variant="body1">City: {city}</Typography>
+          <Typography variant="body1">Country: {country}</Typography>
+          <ButtonLink
+            href={{ pathname: '/subjects', query: { schoolId: id } }}
+            variant="outlined"
+            color="primary"
+            fullWidth
+          >
             subjects
           </ButtonLink>
-          <ButtonLink href={`/schools/${id}/courses`} variant="outlined" color="primary" fullWidth>
+          <ButtonLink
+            href={{ pathname: '/courses', query: { schoolId: id } }}
+            variant="outlined"
+            color="primary"
+            fullWidth
+          >
             courses
           </ButtonLink>
         </StyledCard>
@@ -50,15 +58,14 @@ SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   const { query, apolloClient } = ctx;
 
   try {
-    const { id } = query;
     const { data } = await apolloClient.query({
       query: SchoolDocument,
-      variables: { id }
+      variables: { ...query }
     });
 
-    return { school: data.school };
+    return { ...data };
   } catch {
-    return { school: null };
+    return {};
   }
 };
 
