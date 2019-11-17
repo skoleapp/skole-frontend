@@ -4,12 +4,11 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
-import { compose } from 'redux';
 import { logout } from '../actions';
 import { StyledCard } from '../components';
 import { Layout } from '../containers';
 import { State } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
+import { withAuthSync } from '../utils';
 
 const SettingsPage: NextPage = () => {
   const { authenticated } = useSelector((state: State) => state.auth);
@@ -84,4 +83,4 @@ const SettingsPage: NextPage = () => {
   );
 };
 
-export default compose(withApollo, withRedux)(SettingsPage);
+export default withAuthSync(SettingsPage);
