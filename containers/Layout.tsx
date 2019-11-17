@@ -35,9 +35,9 @@ const StyledLayout = styled.div`
     @media only screen and (min-width: ${breakpoints.SM}) {
       padding: 1rem;
     }
+  }
 
-    @media only screen and (max-width: ${breakpoints.SM}) {
-      padding-bottom: 3rem;
-    }
+  @media only screen and (max-width: ${breakpoints.SM}) {
+    padding-bottom: 3rem;
   }
 `;

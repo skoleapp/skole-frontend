@@ -20,8 +20,9 @@ const StyledFooter = styled(Box)`
   background: var(--primary);
   color: var(--white);
   padding: 0.5rem 0;
+  height: 8rem;
 
   @media only screen and (max-width: ${breakpoints.SM}) {
-    display: none;
+    display: none !important;
   }
 `;
