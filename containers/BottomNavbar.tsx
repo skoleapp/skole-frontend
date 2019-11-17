@@ -16,11 +16,8 @@ export const BottomNavbar: React.FC = () => {
       case '/search': {
         return 1;
       }
-      case '/activity': {
-        return 2;
-      }
       case '/profile': {
-        return 3;
+        return 2;
       }
       default: {
         return null;
