@@ -1,14 +1,11 @@
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
-import { AccountCircle, Favorite, Home, Search } from '@material-ui/icons';
+import { AccountCircle, Home, Search } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { State } from '../interfaces';
 import { breakpoints } from '../styles';
 
 export const BottomNavbar: React.FC = () => {
-  const { authenticated } = useSelector((state: State) => state.auth);
   const router = useRouter();
 
   const getNavbarValue = () => {
@@ -44,12 +41,6 @@ export const BottomNavbar: React.FC = () => {
         onClick={(): Promise<boolean> => router.push('/search')}
         icon={<Search />}
       />
-      {authenticated && (
-        <BottomNavigationAction
-          onClick={(): Promise<boolean> => router.push('/profile/activity')}
-          icon={<Favorite />}
-        />
-      )}
       <BottomNavigationAction
         onClick={(): Promise<boolean> => router.push('/profile')}
         icon={<AccountCircle />}
