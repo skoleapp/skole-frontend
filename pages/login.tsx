@@ -1,4 +1,3 @@
-import { Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import React, { useRef } from 'react';
@@ -31,10 +30,10 @@ const LoginPage: NextPage = () => {
   // eslint-disable-next-line
   const onCompleted = ({ login }: any) => {
     if (login.errors) {
-      return onError(login.errors);
+      onError(login.errors);
+    } else {
+      dispatch(clientLogin({ client, ...login }));
     }
-
-    dispatch(clientLogin({ client, ...login }));
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,9 +55,8 @@ const LoginPage: NextPage = () => {
     actions.setSubmitting(false);
   };
   return (
-    <Layout title="Login" backUrl="/">
+    <Layout heading="Login" title="Login" backUrl="/">
       <StyledCard>
-        <Typography variant="h5">Login</Typography>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
