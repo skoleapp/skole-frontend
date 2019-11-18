@@ -1,8 +1,13 @@
 import { updateUserMe } from '../actions';
 import { UserMeDocument } from '../generated/graphql';
-import { SkoleContext } from '../interfaces';
+import { SkoleContext, UserMe } from '../interfaces';
 
-export const useSSRAuthSync = async (ctx: SkoleContext) => {
+interface Params {
+  userMe: UserMe | null;
+}
+
+// SSR hook to update and return currently logged in user.
+export const useAuthSync = async (ctx: SkoleContext): Promise<Params> => {
   const { apolloClient, reduxStore } = ctx;
 
   try {

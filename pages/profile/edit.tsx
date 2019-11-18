@@ -2,13 +2,15 @@ import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification, updateUserMe } from '../../actions';
 import { StyledCard } from '../../components';
 import { EditProfileForm, Layout } from '../../containers';
 import { useUpdateUserMutation } from '../../generated/graphql';
-import { State, UpdateUserFormValues } from '../../interfaces';
-import { createFormErrors, withPrivate } from '../../utils';
+import { SkoleContext, State, UpdateUserFormValues } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
+import { createFormErrors, usePrivatePage } from '../../utils';
 
 const validationSchema = Yup.object().shape({
   title: Yup.string(),
@@ -65,15 +67,17 @@ const EditProfilePage: NextPage = () => {
     actions.setSubmitting(false);
   };
 
+  const { id, title, username, email, bio, avatar, language, points } = user;
+
   const initialValues = {
-    id: (user && user.id) || '',
-    title: (user && user.title) || '',
-    username: (user && user.username) || '',
-    email: (user && user.email) || '',
-    bio: (user && user.bio) || '',
-    avatar: (user && user.avatar) || '',
-    language: (user && user.language) || '',
-    points: (user && user.points) || 0,
+    id: id || '',
+    title: title || '',
+    username: username || '',
+    email: email || '',
+    bio: bio || '',
+    avatar: avatar || '',
+    language: language || '',
+    points: points || 0,
     general: ''
   };
 
@@ -92,4 +96,9 @@ const EditProfilePage: NextPage = () => {
   );
 };
 
-export default withPrivate(EditProfilePage);
+EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  await usePrivatePage(ctx);
+  return {};
+};
+
+export default compose(withApollo, withRedux)(EditProfilePage);

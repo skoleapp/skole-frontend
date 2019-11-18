@@ -16,7 +16,7 @@ import { Layout } from '../../containers';
 import { UsersDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { getAvatar, useSSRAuthSync } from '../../utils';
+import { getAvatar, useAuthSync } from '../../utils';
 
 interface Props {
   users?: PublicUser[];
@@ -65,7 +65,7 @@ const LeaderboardPage: NextPage<Props> = ({ users }) => (
 );
 
 LeaderboardPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  await useSSRAuthSync(ctx);
+  await useAuthSync(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({ query: UsersDocument });

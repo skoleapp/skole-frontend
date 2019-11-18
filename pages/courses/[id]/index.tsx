@@ -8,7 +8,7 @@ import { Layout, NotFoundCard } from '../../../containers';
 import { CourseDocument } from '../../../generated/graphql';
 import { Course, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
-import { useSSRAuthSync } from '../../../utils';
+import { useAuthSync } from '../../../utils';
 
 interface Props {
   course?: Course;
@@ -57,7 +57,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
 };
 
 CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  useSSRAuthSync(ctx);
+  await useAuthSync(ctx);
   const { apolloClient, query } = ctx;
 
   try {

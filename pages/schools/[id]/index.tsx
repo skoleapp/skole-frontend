@@ -7,7 +7,7 @@ import { Layout, NotFoundCard } from '../../../containers';
 import { SchoolDocument } from '../../../generated/graphql';
 import { School, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
-import { useSSRAuthSync } from '../../../utils';
+import { useAuthSync } from '../../../utils';
 
 interface Props {
   school?: School;
@@ -54,7 +54,7 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  await useSSRAuthSync(ctx);
+  await useAuthSync(ctx);
   const { query, apolloClient } = ctx;
 
   try {

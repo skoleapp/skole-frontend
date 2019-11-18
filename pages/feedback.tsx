@@ -1,14 +1,17 @@
 import { Button, ButtonGroup, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
+import { NextPage } from 'next';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
 import { StyledCard } from '../components';
 import { FeedbackForm, Layout } from '../containers';
-import { FeedbackFormValues, FeedbackType } from '../interfaces';
-import { withAuthSync } from '../utils';
+import { FeedbackFormValues, FeedbackType, SkoleContext } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
+import { useAuthSync } from '../utils';
 
 const initialValues = {
   comment: '',
@@ -19,7 +22,7 @@ const validationSchema = Yup.object().shape({
   comment: Yup.string().required('Please tell us some details about your feedback.')
 });
 
-const FeedbackPage: React.FC = () => {
+const FeedbackPage: NextPage = () => {
   const [rate, setRate] = useState<FeedbackType>('');
   const dispatch = useDispatch();
 
@@ -71,4 +74,9 @@ const StyledButtonGroup = styled(ButtonGroup)`
   }
 `;
 
-export default withAuthSync(FeedbackPage);
+FeedbackPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  await useAuthSync(ctx);
+  return {};
+};
+
+export default compose(withRedux, withApollo)(FeedbackPage);

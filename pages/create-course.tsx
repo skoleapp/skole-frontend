@@ -5,17 +5,13 @@ import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
-import { openNotification, updateUserMe } from '../actions';
+import { openNotification } from '../actions';
 import { StyledCard } from '../components';
 import { CreateCourseForm, Layout } from '../containers';
-import {
-  SchoolsAndSubjectsDocument,
-  useCreateCourseMutation,
-  UserMeDocument
-} from '../generated/graphql';
+import { SchoolsAndSubjectsDocument, useCreateCourseMutation } from '../generated/graphql';
 import { CreateCourseFormValues, School, SkoleContext, Subject } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
-import { createFormErrors, redirect } from '../utils';
+import { createFormErrors, usePrivatePage } from '../utils';
 
 interface Props {
   subjects?: Subject[];
@@ -90,14 +86,7 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
 };
 
 CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  const { apolloClient, reduxStore } = ctx;
-
-  try {
-    const res = await apolloClient.query({ query: UserMeDocument });
-    await reduxStore.dispatch(updateUserMe(res.data.userMe));
-  } catch {
-    redirect(ctx, '/login');
-  }
+  await usePrivatePage(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({

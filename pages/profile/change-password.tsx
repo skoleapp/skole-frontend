@@ -2,13 +2,15 @@ import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../../actions';
 import { StyledCard } from '../../components';
 import { ChangePasswordForm, Layout } from '../../containers';
 import { useChangePasswordMutation } from '../../generated/graphql';
-import { PasswordForm } from '../../interfaces';
-import { createFormErrors, withPrivate } from '../../utils';
+import { PasswordForm, SkoleContext } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
+import { createFormErrors, usePrivatePage } from '../../utils';
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string().required('Old password is required.'),
@@ -78,4 +80,9 @@ const ChangePasswordPage: NextPage = () => {
   );
 };
 
-export default withPrivate(ChangePasswordPage);
+ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  await usePrivatePage(ctx);
+  return {};
+};
+
+export default compose(withApollo, withRedux)(ChangePasswordPage);

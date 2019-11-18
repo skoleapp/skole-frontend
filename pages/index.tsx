@@ -2,10 +2,13 @@ import { Typography } from '@material-ui/core';
 import { Book, House, LibraryAddSharp, School, Score } from '@material-ui/icons';
 import { NextPage } from 'next';
 import React from 'react';
+import { compose } from 'redux';
 import styled from 'styled-components';
 import { Shortcut } from '../components';
 import { Layout } from '../containers';
-import { withAuthSync } from '../utils';
+import { SkoleContext } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
+import { useAuthSync } from '../utils';
 
 const IndexPage: NextPage = () => (
   <Layout title="Home">
@@ -34,4 +37,9 @@ const StyledLandingPageContent = styled.div`
   }
 `;
 
-export default withAuthSync(IndexPage);
+IndexPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  await useAuthSync(ctx);
+  return {};
+};
+
+export default compose(withRedux, withApollo)(IndexPage);

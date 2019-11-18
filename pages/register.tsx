@@ -3,13 +3,15 @@ import { NextPage } from 'next';
 import React, { useRef } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 import { clientLogin } from '../actions';
 import { StyledCard } from '../components';
 import { Layout, RegisterForm } from '../containers';
 import { useRegisterMutation } from '../generated/graphql';
-import { RegisterFormValues } from '../interfaces';
-import { createFormErrors, withPublic } from '../utils';
+import { RegisterFormValues, SkoleContext } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
+import { createFormErrors, usePublicPage } from '../utils';
 
 const initialValues = {
   username: '',
@@ -88,4 +90,9 @@ const RegisterPage: NextPage = () => {
   );
 };
 
-export default withPublic(RegisterPage);
+RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  await usePublicPage(ctx);
+  return {};
+};
+
+export default compose(withApollo, withRedux)(RegisterPage);

@@ -18,7 +18,7 @@ import { FilterCoursesForm, Layout } from '../../containers';
 import { CoursesSchoolsAndSubjectsDocument } from '../../generated/graphql';
 import { Course, FilterCoursesFormValues, School, SkoleContext, Subject } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { useSSRAuthSync } from '../../utils';
+import { useAuthSync } from '../../utils';
 
 interface Props {
   courses?: Course[];
@@ -104,7 +104,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
 };
 
 CoursesPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  await useSSRAuthSync(ctx);
+  await useAuthSync(ctx);
   const { apolloClient, query } = ctx;
 
   try {

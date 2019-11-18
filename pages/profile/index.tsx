@@ -2,12 +2,14 @@ import { Avatar, Box, Divider, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { compose } from 'redux';
 import { ButtonLink, StyledCard } from '../../components';
 import { Layout } from '../../containers';
-import { State } from '../../interfaces';
-import { getAvatar, withPrivate } from '../../utils';
+import { SkoleContext, State } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
+import { getAvatar, usePrivatePage } from '../../utils';
 
-const AccountPage: NextPage = () => {
+const ProfilePage: NextPage = () => {
   const { user } = useSelector((state: State) => state.auth);
   const { title, avatar, username, bio, points } = user;
 
@@ -38,4 +40,9 @@ const AccountPage: NextPage = () => {
   );
 };
 
-export default withPrivate(AccountPage);
+ProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  await usePrivatePage(ctx);
+  return {};
+};
+
+export default compose(withApollo, withRedux)(ProfilePage);
