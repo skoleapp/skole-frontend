@@ -6,13 +6,13 @@ import { Subject } from '../interfaces';
 import { FormErrorMessage } from './FormErrorMessage';
 
 // eslint-disable-next-line @eslint-typescript/no-explicit-any
-export const SubjectField: React.FC<FormikProps<any>> = props => (
+export const SubjectField: React.FC<FormikProps<any>> = ({ values }) => (
   <FormControl fullWidth>
     <InputLabel>Subject</InputLabel>
     <Field name="subjectId" component={Select} fullWidth>
       <MenuItem value="">---</MenuItem>
-      {props.values.subjects &&
-        props.values.subjects.map(
+      {values.subjects &&
+        values.subjects.map(
           (s: Subject, i: number): JSX.Element => (
             <MenuItem key={i} value={s.id}>
               {s.name}
