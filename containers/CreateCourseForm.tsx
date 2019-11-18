@@ -1,52 +1,32 @@
-import { MenuItem } from '@material-ui/core';
 import { Field, FormikProps } from 'formik';
-import { Select, TextField } from 'formik-material-ui';
+import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { StyledForm } from '../components';
+import { FormSubmitSection, SchoolField, StyledForm, SubjectField } from '../components';
 import { CreateCourseFormValues, School, Subject } from '../interfaces';
 
-interface Props extends FormikProps<CreateCourseFormValues> {
+interface Props extends CreateCourseFormValues {
   subjects: Subject[];
   schools: School[];
 }
 
-export const CreateCourseForm: React.FC<Props> = ({ subjects, schools }) => (
+export const CreateCourseForm: React.FC<FormikProps<Props>> = props => (
   <StyledForm>
     <Field
-      name="name"
+      name="courseName"
       placeholder="Course Name"
       label="Course Name"
       component={TextField}
       fullWidth
     />
     <Field
-      name="code"
+      name="courseCode"
       placeholder="Course Code"
       label="Course Code"
       component={TextField}
       fullWidth
     />
-    <Field name="subject" placeholder="Subject" label="Subject" component={Select} fullWidth>
-      {console.log(subjects)}
-      {subjects &&
-        subjects.map(
-          (s: Subject, i: number): JSX.Element => (
-            <MenuItem key={i} value={s.id}>
-              {s.name}
-            </MenuItem>
-          )
-        )}
-    </Field>
-    <Field name="school" placeholder="School" label="School" component={Select} fullWidth>
-      {schools &&
-        schools.map(
-          (s: School, i: number): JSX.Element => (
-            <MenuItem key={i} value={s.id}>
-              {s.name}
-            </MenuItem>
-          )
-        )}
-    </Field>
-    <Field />
+    <SubjectField {...props} />
+    <SchoolField {...props} />
+    <FormSubmitSection submitButtonText="save" {...props} />
   </StyledForm>
 );

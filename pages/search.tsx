@@ -1,13 +1,21 @@
-import { Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
+import { compose } from 'redux';
+import { StyledCard } from '../components';
 import { Layout } from '../containers';
-import { withAuthSync } from '../utils';
+import { SkoleContext } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
+import { useAuthSync } from '../utils';
 
 const SearchPage: NextPage = () => (
-  <Layout title="Search">
-    <Typography variant="h5">Search</Typography>
+  <Layout heading="Search" title="Search" backUrl="/">
+    <StyledCard>Here will be search...</StyledCard>
   </Layout>
 );
 
-export default withAuthSync(SearchPage);
+SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  await useAuthSync(ctx);
+  return {};
+};
+
+export default compose(withApollo, withRedux)(SearchPage);

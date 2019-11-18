@@ -10,17 +10,17 @@ export const BottomNavbar: React.FC = () => {
 
   const getNavbarValue = () => {
     switch (router.pathname) {
-      case '/search': {
+      case '/': {
         return 0;
       }
-      case '/': {
+      case '/search': {
         return 1;
       }
-      case '/account': {
+      case '/profile': {
         return 2;
       }
       default: {
-        return 0;
+        return null;
       }
     }
   };
@@ -32,32 +32,33 @@ export const BottomNavbar: React.FC = () => {
   };
 
   return (
-    <StyledBottomNavbar>
-      <BottomNavigation value={value} onChange={handleChange} showLabels>
-        <BottomNavigationAction
-          onClick={(): Promise<boolean> => router.push('/search')}
-          icon={<Search />}
-        />
-        <BottomNavigationAction
-          onClick={(): Promise<boolean> => router.push('/')}
-          icon={<Home />}
-        />
-        <BottomNavigationAction
-          onClick={(): Promise<boolean> => router.push('/account')}
-          icon={<AccountCircle />}
-        />{' '}
-      </BottomNavigation>
+    <StyledBottomNavbar value={value} onChange={handleChange}>
+      <BottomNavigationAction onClick={(): Promise<boolean> => router.push('/')} icon={<Home />} />
+      <BottomNavigationAction
+        onClick={(): Promise<boolean> => router.push('/search')}
+        icon={<Search />}
+      />
+      <BottomNavigationAction
+        onClick={(): Promise<boolean> => router.push('/profile')}
+        icon={<AccountCircle />}
+      />
     </StyledBottomNavbar>
   );
 };
 
-const StyledBottomNavbar = styled.div`
+const StyledBottomNavbar = styled(BottomNavigation)`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 3.25rem;
+  height: 3rem;
+  border-top: 0.05rem solid var(--grey);
+
+  .MuiButtonBase-root,
+  .Mui-selected {
+    padding: 0 !important;
+  }
 
   @media only screen and (min-width: ${breakpoints.SM}) {
-    display: none;
+    display: none !important;
   }
 `;

@@ -5,14 +5,16 @@ import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserMeDocument } from '../generated/graphql';
 import { UserMe } from '../interfaces';
-import {
-  GET_USER_ME_ERROR,
-  GET_USER_ME_LOADING,
-  GET_USER_ME_SUCCESS,
-  LOGIN,
-  LOGOUT,
-  UPDATE_USER_ME
-} from './types';
+import { openNotification } from './notifications';
+
+export const GET_USER_ME_LOADING = 'GET_USER_ME_LOADING';
+export const GET_USER_ME_SUCCESS = 'GET_USER_ME_SUCCESS';
+export const GET_USER_ME_ERROR = 'GET_USER_ME_ERROR';
+
+export const UPDATE_USER_ME = 'UPDATE_USER_ME';
+
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 
 interface LoginParams {
   client: ApolloClient<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -21,16 +23,17 @@ interface LoginParams {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const login: any = ({ client, token, user }: LoginParams) => (
+export const clientLogin: any = ({ client, token, user }: LoginParams) => async (
   dispatch: Dispatch<AnyAction>
-): void => {
+): Promise<void> => {
   document.cookie = cookie.serialize('token', token, {
     maxAge: 30 * 24 * 60 * 60, // 30 days
     path: '/'
   });
 
   dispatch({ type: LOGIN, payload: user });
-  client.cache.reset().then(() => Router.push('/account'));
+  await client.cache.reset();
+  Router.push('/');
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,14 +56,15 @@ export const updateUserMe: any = (userMe: UserMe) => (dispatch: Dispatch<AnyActi
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const logout: any = (apolloClient: ApolloClient<any>) => (
+export const logout: any = (apolloClient: ApolloClient<any>) => async (
   dispatch: Dispatch<AnyAction>
-): void => {
+): Promise<void> => {
   document.cookie = cookie.serialize('token', '', {
     maxAge: -1,
     path: '/'
   });
 
   dispatch({ type: LOGOUT });
-  apolloClient.cache.reset().then(() => Router.push('/logout'));
+  dispatch(openNotification('Logged out!'));
+  apolloClient.cache.reset();
 };

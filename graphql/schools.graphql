@@ -1,7 +1,0 @@
-query Schools {
-  schools {
-    id
-    schoolType
-    name
-  }
-}

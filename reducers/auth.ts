@@ -7,9 +7,9 @@ import {
   LOGOUT,
   UPDATE_USER_ME
 } from '../actions';
-import { AuthState } from '../interfaces';
+import { Auth } from '../interfaces';
 
-export const initialAuthState: AuthState = {
+export const initialState: Auth = {
   user: {
     id: null,
     username: null,
@@ -25,7 +25,7 @@ export const initialAuthState: AuthState = {
   error: null
 };
 
-export default (state = initialAuthState, action: AnyAction): AuthState => {
+export const authReducer = (state = initialState, action: AnyAction): Auth => {
   switch (action.type) {
     case GET_USER_ME_LOADING: {
       return { ...state, loading: true };
@@ -54,7 +54,7 @@ export default (state = initialAuthState, action: AnyAction): AuthState => {
     }
 
     case LOGOUT: {
-      return initialAuthState;
+      return initialState;
     }
 
     case GET_USER_ME_ERROR: {

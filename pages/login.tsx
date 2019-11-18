@@ -1,16 +1,17 @@
-import { Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import React, { useRef } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
-import { login } from '../actions';
+import { clientLogin } from '../actions';
 import { StyledCard } from '../components';
 import { Layout, LoginForm } from '../containers';
-import { useSignInMutation } from '../generated/graphql';
-import { LoginFormValues } from '../interfaces';
-import { createFormErrors, withPublic } from '../utils';
+import { useLoginMutation } from '../generated/graphql';
+import { LoginFormValues, SkoleContext } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
+import { createFormErrors, usePublicPage } from '../utils';
 
 const initialValues = {
   usernameOrEmail: '',
@@ -29,12 +30,12 @@ const LoginPage: NextPage = () => {
   const dispatch = useDispatch();
 
   // eslint-disable-next-line
-  const onCompleted = (data: any) => {
-    if (data.login.errors) {
-      return onError(data.login.errors);
+  const onCompleted = ({ login }: any) => {
+    if (login.errors) {
+      onError(login.errors);
+    } else {
+      dispatch(clientLogin({ client, ...login }));
     }
-
-    dispatch(login({ client, ...data.login }));
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,7 +46,7 @@ const LoginPage: NextPage = () => {
     );
   };
 
-  const [loginMutation] = useSignInMutation({ onCompleted, onError });
+  const [loginMutation] = useLoginMutation({ onCompleted, onError });
 
   const handleSubmit = async (
     values: LoginFormValues,
@@ -56,9 +57,8 @@ const LoginPage: NextPage = () => {
     actions.setSubmitting(false);
   };
   return (
-    <Layout title="Login">
+    <Layout heading="Login" title="Login" backUrl="/">
       <StyledCard>
-        <Typography variant="h5">Login</Typography>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -71,4 +71,9 @@ const LoginPage: NextPage = () => {
   );
 };
 
-export default withPublic(LoginPage);
+LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  await usePublicPage(ctx);
+  return {};
+};
+
+export default compose(withApollo, withRedux)(LoginPage);

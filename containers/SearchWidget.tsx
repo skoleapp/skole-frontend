@@ -1,5 +1,5 @@
-import { InputBase } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { Box, InputBase } from '@material-ui/core';
+import { Search } from '@material-ui/icons';
 import Router from 'next/router';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
@@ -13,11 +13,9 @@ export const SearchWidget: React.FC = () => {
   };
 
   return (
-    <StyledSearchWidget className="search">
+    <StyledSearchWidget display="flex" alignItems="center">
       <form onSubmit={handleSubmit}>
-        <div className="search-icon">
-          <SearchIcon />
-        </div>
+        <Search />
         <InputBase
           placeholder="Search…"
           classes={{
@@ -34,38 +32,30 @@ export const SearchWidget: React.FC = () => {
   );
 };
 
-const StyledSearchWidget = styled.div`
-  position: relative;
-  border-radius: var(--border-radius);
-  background-color: rgba(255, 255, 255, 0.15);
-  width: 100%;
-  display: flex;
-  align-items: center;
-  width: auto;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.25);
-  }
-
-  .search-icon {
-    width: 2rem;
-    height: 100%;
-    position: absolute;
-    pointer-events: none;
+const StyledSearchWidget = styled(Box)`
+  form {
+    border-radius: var(--border-radius);
+    background-color: rgba(255, 255, 255, 0.15);
+    margin: 0 0.5rem;
     display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
-  .input-input {
-    padding-left: 2rem;
-    width: 100%;
-    color: var(--white);
-    margin-top: 0.25rem;
-    width: 15rem;
-  }
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
 
-  .submit {
-    display: none;
+    svg {
+      margin: 0.25rem;
+      align-self: center;
+      color: var(--secondary);
+    }
+
+    .input-input {
+      color: var(--white);
+      width: 15rem;
+    }
+
+    .submit {
+      display: none;
+    }
   }
 `;

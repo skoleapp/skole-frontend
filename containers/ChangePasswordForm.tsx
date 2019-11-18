@@ -1,4 +1,3 @@
-import { Link } from '@material-ui/core';
 import { Field, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
@@ -32,8 +31,5 @@ export const ChangePasswordForm: React.ComponentType<FormikProps<PasswordForm>> 
       fullWidth
     />
     <FormSubmitSection submitButtonText="save" {...props} />
-    <Link href="/account" color="primary">
-      Back to Account
-    </Link>
   </StyledForm>
 );

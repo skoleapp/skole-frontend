@@ -1,22 +1,28 @@
-import { Link, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
+import { breakpoints } from '../styles';
+import { TextLink } from './TextLink';
 
 export const Footer: React.FC = () => (
-  <StyledFooter>
-    <Typography variant="h6">© {new Date().getFullYear()} Skole Ltd.</Typography>
-    <Link href="/feedback" color="secondary">
+  <StyledFooter display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+    <Typography variant="subtitle1">© {new Date().getFullYear()} Skole Ltd.</Typography>
+    <TextLink href="/feedback" color="secondary">
       Feedback
-    </Link>
+    </TextLink>
+    <TextLink href="/about" color="secondary">
+      About
+    </TextLink>
   </StyledFooter>
 );
 
-const StyledFooter = styled.div`
-  height: 8rem;
+const StyledFooter = styled(Box)`
   background: var(--primary);
   color: var(--white);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding: 0.5rem 0;
+  height: 8rem;
+
+  @media only screen and (max-width: ${breakpoints.SM}) {
+    display: none !important;
+  }
 `;

@@ -1,63 +1,78 @@
-import { AppBar, Button, Toolbar } from '@material-ui/core';
-import Link from 'next/link';
+import { AppBar, Box, Toolbar } from '@material-ui/core';
+import { AccountCircle, ArrowBack, Settings } from '@material-ui/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Logo } from '../components';
+import { ButtonLink, Heading, IconButtonLink, Logo } from '../components';
 import { State } from '../interfaces';
 import { breakpoints } from '../styles';
-import { AuthMenu } from './AuthMenu';
 import { SearchWidget } from './SearchWidget';
 
-export const TopNavbar: React.FC = () => {
+interface Props {
+  heading?: string;
+  backUrl?: string;
+}
+
+export const TopNavbar: React.FC<Props> = ({ heading, backUrl }) => {
   const { authenticated } = useSelector((state: State) => state.auth);
 
-  const renderAuthButtons = (
-    <div className="auth-buttons">
-      <Link href="/login">
-        <Button color="secondary" variant="outlined">
-          Login
-        </Button>
-      </Link>
-      <Link href="/register">
-        <Button color="secondary" variant="outlined">
-          Register
-        </Button>
-      </Link>
-    </div>
-  );
-
   return (
-    <StyledTopNavbar>
-      <AppBar position="static">
-        <Toolbar>
-          <Logo />
+    <StyledTopNavbar position="sticky">
+      <Toolbar variant="dense">
+        {backUrl && <IconButtonLink icon={ArrowBack} href={backUrl} id="back" color="secondary" />}
+        {heading ? <Heading text={heading} /> : <Logo />}
+        <Box className="desktop-content">
           <SearchWidget />
-          {authenticated ? <AuthMenu /> : renderAuthButtons}
-        </Toolbar>
-      </AppBar>
+          {authenticated ? (
+            <IconButtonLink icon={AccountCircle} href="/profile" color="secondary" />
+          ) : (
+            <>
+              <ButtonLink href="/login" color="secondary" variant="outlined">
+                login
+              </ButtonLink>
+              <ButtonLink href="/register" color="secondary" variant="outlined">
+                Register
+              </ButtonLink>
+            </>
+          )}
+        </Box>
+        <IconButtonLink icon={Settings} href="/settings" id="settings" color="secondary" />
+      </Toolbar>
     </StyledTopNavbar>
   );
 };
 
-const StyledTopNavbar = styled.div`
-  flex-grow: 1;
+const StyledTopNavbar = styled(AppBar)`
+  height: 3rem;
+  display: flex;
+  justify-content: center;
 
-  .auth-menu,
-  .search,
-  .input-input,
-  .search-icon,
-  .auth-buttons {
-    display: none !important;
+  @media only screen and (min-width: ${breakpoints.MD}) {
+    height: 4rem;
+  }
 
-    @media only screen and (min-width: ${breakpoints.SM}) {
-      display: flex !important;
+  .desktop-content {
+    display: flex;
+
+    @media only screen and (max-width: ${breakpoints.MD}) {
+      display: none !important;
     }
   }
 
-  .auth-buttons {
-    button {
-      margin-left: 1rem;
+  .MuiButton-root,
+  .MuiIconButton-root {
+    margin: 0 0.5rem;
+
+    @media only screen and (max-width: ${breakpoints.SM}) {
+      position: absolute;
+
+      &#back {
+        left: 0;
+      }
+
+      &#settings {
+        right: 0;
+      }
     }
   }
 `;

@@ -1,48 +1,84 @@
-import { Typography } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
+import * as Yup from 'yup';
+import { openNotification } from '../actions';
 import { StyledCard } from '../components';
 import { CreateCourseForm, Layout } from '../containers';
-import { SchoolsDocument } from '../generated/graphql';
+import { SchoolsAndSubjectsDocument, useCreateCourseMutation } from '../generated/graphql';
 import { CreateCourseFormValues, School, SkoleContext, Subject } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
-import { useSSRAuthSync } from '../utils';
-
-interface Data {
-  subjects: Subject[];
-  schools: School[];
-}
+import { createFormErrors, usePrivatePage } from '../utils';
 
 interface Props {
-  data: Data | null;
+  subjects?: Subject[];
+  schools?: School[];
 }
 
-const initialValues = {
-  name: '',
-  code: '',
-  subject: '',
-  school: ''
-};
+const validationSchema = Yup.object().shape({
+  courseName: Yup.string().required('Course name is required.'),
+  courseCode: Yup.string(),
+  subjectId: Yup.string().required('Subject is required.'),
+  schoolId: Yup.string().required('School is required.')
+});
 
-const CreateCoursePage: NextPage<Props> = ({ data }) => {
-  const handleSubmit = (
-    values: CreateCourseFormValues
-    // actions: FormikActions<CreateCourseFormValues>
+const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
+  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  // eslint-disable-next-line
+  const onCompleted = ({ createCourse }: any) => {
+    if (!!createCourse.errors) {
+      onError(createCourse.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
+    } else {
+      dispatch(openNotification('Course created!'));
+      router.push(`/courses/${createCourse.course.id}`);
+    }
+  };
+
+  // eslint-disable-next-line
+  const onError = (errors: any) => {
+    console.log({ ...errors });
+    const formErrors = createFormErrors(errors);
+    Object.keys(formErrors).forEach(
+      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
+    );
+  };
+
+  const [createCourseMutation] = useCreateCourseMutation({ onCompleted, onError });
+
+  const handleSubmit = async (
+    values: CreateCourseFormValues,
+    actions: FormikActions<CreateCourseFormValues>
   ) => {
-    console.log(values);
+    const { courseName, courseCode, schoolId, subjectId } = values;
+    await createCourseMutation({ variables: { courseName, courseCode, schoolId, subjectId } });
+    actions.setSubmitting(false);
+  };
+
+  const initialValues = {
+    courseName: '',
+    courseCode: '',
+    subjectId: '',
+    schoolId: '',
+    general: '',
+    schools: schools || [],
+    subjects: subjects || []
   };
 
   return (
-    <Layout title="Create Course">
+    <Layout heading="Create Course" title="Create Course" backUrl="/">
       <StyledCard>
-        <Typography variant="h5">Create Course</Typography>
         <Formik
           initialValues={initialValues}
           component={CreateCourseForm}
           onSubmit={handleSubmit}
-          {...data}
+          validationSchema={validationSchema}
+          ref={ref}
         />
       </StyledCard>
     </Layout>
@@ -50,38 +86,17 @@ const CreateCoursePage: NextPage<Props> = ({ data }) => {
 };
 
 CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-  await useSSRAuthSync(ctx);
+  await usePrivatePage(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({
-      // query: SubjectListDocument
-      query: SchoolsDocument
+      query: SchoolsAndSubjectsDocument
     });
 
-    // Use mocked data for now.
-    const subjectList = [
-      {
-        id: 0,
-        name: 'Computer Engineering'
-      },
-      {
-        id: 2,
-        name: 'Computer Science'
-      }
-    ];
-
-    const mockedData = {
-      schools: data.schoolList,
-      subjects: subjectList
-    };
-
-    return { data: mockedData };
+    return { ...data };
   } catch {
-    return { data: null };
+    return {};
   }
 };
 
-export default compose(
-  withRedux,
-  withApollo
-)(CreateCoursePage);
+export default compose(withRedux, withApollo)(CreateCoursePage);

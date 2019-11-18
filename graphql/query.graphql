@@ -1,0 +1,117 @@
+query UserMe {
+  userMe {
+    id
+    username
+    email
+    title
+    bio
+    avatar
+    points
+    language
+  }
+}
+
+query Users {
+  users {
+    id
+    username
+    points
+    avatar
+  }
+}
+
+query User($userId: Int!) {
+  user(userId: $userId) {
+    id
+    username
+    title
+    bio
+    avatar
+    points
+    created
+  }
+}
+
+query Schools(
+  $schoolType: String
+  $schoolName: String
+  $schoolCity: String
+  $schoolCountry: String
+) {
+  schools(
+    schoolType: $schoolType
+    schoolName: $schoolName
+    schoolCity: $schoolCity
+    schoolCountry: $schoolCountry
+  ) {
+    id
+    schoolType
+    name
+  }
+}
+
+query School($schoolId: Int) {
+  school(schoolId: $schoolId) {
+    id
+    schoolType
+    name
+    city
+    country
+  }
+}
+
+query SchoolsAndSubjects($schoolId: String) {
+  schools {
+    id
+    name
+  }
+  subjects(schoolId: $schoolId) {
+    id
+    name
+  }
+}
+
+query CoursesSchoolsAndSubjects(
+  $courseName: String
+  $courseCode: String
+  $schoolId: Int
+  $subjectId: Int
+) {
+  courses(
+    courseName: $courseName
+    courseCode: $courseCode
+    schoolId: $schoolId
+    subjectId: $subjectId
+  ) {
+    id
+    name
+    code
+  }
+  schools {
+    name
+    id
+  }
+  subjects {
+    id
+    name
+  }
+}
+
+query Course($courseId: Int!) {
+  course(courseId: $courseId) {
+    id
+    name
+    code
+    subject {
+      name
+    }
+    school {
+      name
+    }
+    creator {
+      username
+    }
+    modified
+    created
+  }
+}

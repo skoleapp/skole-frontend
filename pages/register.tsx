@@ -1,16 +1,17 @@
-import { Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import React, { useRef } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
-import { login } from '../actions';
+import { clientLogin } from '../actions';
 import { StyledCard } from '../components';
 import { Layout, RegisterForm } from '../containers';
-import { useSignUpMutation } from '../generated/graphql';
-import { RegisterFormValues } from '../interfaces';
-import { createFormErrors, withPublic } from '../utils';
+import { useRegisterMutation } from '../generated/graphql';
+import { RegisterFormValues, SkoleContext } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
+import { createFormErrors, usePublicPage } from '../utils';
 
 const initialValues = {
   username: '',
@@ -45,12 +46,14 @@ const RegisterPage: NextPage = () => {
   const dispatch = useDispatch();
 
   // eslint-disable-next-line
-  const onCompleted = (data: any) => {
-    if (data.register.errors) {
-      return onError(data.register.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
+  const onCompleted = ({ register, login }: any) => {
+    if (register.errors) {
+      onError(register.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
+    } else if (login.errors) {
+      onError(login.errors);
+    } else {
+      dispatch(clientLogin({ client, ...login }));
     }
-
-    dispatch(login({ client, ...data.login }));
   };
 
   // eslint-disable-next-line
@@ -61,7 +64,7 @@ const RegisterPage: NextPage = () => {
     );
   };
 
-  const [registerMutation] = useSignUpMutation({ onCompleted, onError });
+  const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
   const handleSubmit = async (
     values: RegisterFormValues,
@@ -73,9 +76,8 @@ const RegisterPage: NextPage = () => {
   };
 
   return (
-    <Layout title="Register">
+    <Layout heading="Register" title="Register" backUrl="/">
       <StyledCard>
-        <Typography variant="h5">Register</Typography>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -88,4 +90,9 @@ const RegisterPage: NextPage = () => {
   );
 };
 
-export default withPublic(RegisterPage);
+RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+  await usePublicPage(ctx);
+  return {};
+};
+
+export default compose(withApollo, withRedux)(RegisterPage);

@@ -14,9 +14,7 @@ export const createFormErrors = (errors: any): any => {
 
   if (errors.networkError) {
     formErrors.general = 'Network error.';
-  }
-
-  if (errors.length) {
+  } else if (errors.length) {
     // eslint-disable-next-line
     errors.map((e: any) => {
       if (e.field === '__all__') {
@@ -27,6 +25,8 @@ export const createFormErrors = (errors: any): any => {
         formErrors.general = e.messages.join();
       }
     });
+  } else {
+    formErrors.general = 'Encountered unexpected error.';
   }
 
   return formErrors;

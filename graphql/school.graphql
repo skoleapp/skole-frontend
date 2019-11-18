@@ -1,8 +1,0 @@
-query School($id: Int!) {
-  school(id: $id) {
-    schoolType
-    name
-    city
-    country
-  }
-}
