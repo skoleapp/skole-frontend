@@ -1,7 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
-import { TextLink } from './TextLink';
+import { TextLink } from '.';
 
 export const Footer: React.FC = () => (
   <StyledFooter
