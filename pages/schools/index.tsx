@@ -1,51 +1,49 @@
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography
-} from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import React, { useRef } from 'react';
+import React from 'react';
 import { compose } from 'redux';
-import { LabelTag, StyledTable } from '../../components';
-import { FilterSchoolsForm, Layout } from '../../containers';
+import {
+  ClearFiltersButton,
+  DesktopFilters,
+  FilterButton,
+  FilterSchoolsForm,
+  LabelTag,
+  Layout,
+  MobileFilters,
+  StyledTable
+} from '../../components';
 import { SchoolsDocument } from '../../generated/graphql';
 import { FilterSchoolsFormValues, School, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { useAuthSync } from '../../utils';
+import { useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
+
+const filterTitle = 'Filter Schools';
 
 interface Props {
   schools?: School[];
 }
 
 const SchoolsPage: NextPage<Props> = ({ schools }) => {
+  const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const router = useRouter();
   const { query, pathname } = router;
-  const ref = useRef<any>(); // eslint-disable-line @eslint/typescript-no-explicit-any
   const { schoolType, schoolCity, schoolCountry, schoolName } = query;
+  const { ref, resetForm } = useForm();
 
   // Pick non-empty values and reload the page with new query params.
   const handleSubmit = (
     values: FilterSchoolsFormValues,
     actions: FormikActions<FilterSchoolsFormValues>
   ) => {
-    const isNotEmpty = (val: string) => val !== '';
-    const query: any = R.pickBy(isNotEmpty, values); // eslint-disable-line @eslint/typescript-no-explicit-any
+    const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, values);
     router.push({ pathname, query });
     actions.setSubmitting(false);
-  };
-
-  // Wait for the router to clear the query params, then reset the form.
-  const handleClearFilters = async () => {
-    await router.push(pathname);
-    ref.current.resetForm();
+    setFiltersOpen(false);
   };
 
   // Pre-load query params to the form.
@@ -56,23 +54,28 @@ const SchoolsPage: NextPage<Props> = ({ schools }) => {
     schoolCountry: schoolCountry || ''
   };
 
+  const renderFilterForm = (
+    <Formik
+      component={FilterSchoolsForm}
+      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      ref={ref}
+    />
+  );
+
   return (
     <Layout heading="Schools" title="Schools" backUrl="/">
+      <DesktopFilters title="Filter Schools">
+        {renderFilterForm}
+        <ClearFiltersButton resetForm={resetForm} />
+      </DesktopFilters>
       <StyledTable>
         <Table>
-          <TableHead>
+          <TableHead className="mobile-only">
             <TableRow>
-              <TableCell align="center">
-                <Typography variant="h6">Filter Schools</Typography>
-                <Formik
-                  component={FilterSchoolsForm}
-                  onSubmit={handleSubmit}
-                  initialValues={initialValues}
-                  ref={ref}
-                />
-                <Button variant="outlined" color="primary" fullWidth onClick={handleClearFilters}>
-                  clear filters
-                </Button>
+              <TableCell>
+                <FilterButton toggleFilters={toggleFilters} />
+                <ClearFiltersButton resetForm={resetForm} />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -98,6 +101,9 @@ const SchoolsPage: NextPage<Props> = ({ schools }) => {
           </TableBody>
         </Table>
       </StyledTable>
+      <MobileFilters title={filterTitle} filtersOpen={filtersOpen} toggleFilters={toggleFilters}>
+        {renderFilterForm}
+      </MobileFilters>
     </Layout>
   );
 };

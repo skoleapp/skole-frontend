@@ -7,7 +7,6 @@ query UserMe {
     bio
     avatar
     points
-    language
   }
 }
 

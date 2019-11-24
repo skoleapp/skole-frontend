@@ -10,17 +10,17 @@ export type Scalars = {
   Int: number,
   Float: number,
   /** 
- * The `DateTime` scalar type represents a DateTime
-   * value as specified by
-   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
- **/
-  DateTime: any,
-  /** 
  * The `Date` scalar type represents a Date
    * value as specified by
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
  **/
   Date: any,
+  /** 
+ * The `DateTime` scalar type represents a DateTime
+   * value as specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+ **/
+  DateTime: any,
 };
 
 export type ChangePasswordMutationInput = {
@@ -132,6 +132,7 @@ export type MutationChangePasswordArgs = {
 
 export type Query = {
    __typename?: 'Query',
+  resource?: Maybe<ResourceType>,
   users?: Maybe<Array<Maybe<UserTypePublic>>>,
   user?: Maybe<UserTypePublic>,
   userMe?: Maybe<UserTypePrivate>,
@@ -140,6 +141,11 @@ export type Query = {
   school?: Maybe<SchoolType>,
   courses?: Maybe<Array<Maybe<CourseType>>>,
   course?: Maybe<CourseType>,
+};
+
+
+export type QueryResourceArgs = {
+  resourceId: Scalars['Int']
 };
 
 
@@ -241,7 +247,6 @@ export type UpdateUserMutationInput = {
   title?: Maybe<Scalars['String']>,
   bio?: Maybe<Scalars['String']>,
   avatar?: Maybe<Scalars['String']>,
-  language: Scalars['String'],
   id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -269,8 +274,8 @@ export type UserTypePrivate = {
   avatar?: Maybe<Scalars['String']>,
   points: Scalars['Int'],
   email: Scalars['String'],
-  language?: Maybe<Scalars['String']>,
   schools: Array<SchoolType>,
+  language?: Maybe<Scalars['String']>,
 };
 
 export type UserTypePublic = {
@@ -313,7 +318,7 @@ export type RegisterMutation = (
     & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserTypePrivate' }
-      & Pick<UserTypePrivate, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email' | 'language'>
+      & Pick<UserTypePrivate, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email'>
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -334,7 +339,7 @@ export type LoginMutation = (
     & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserTypePrivate' }
-      & Pick<UserTypePrivate, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email' | 'language'>
+      & Pick<UserTypePrivate, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email'>
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -347,8 +352,7 @@ export type UpdateUserMutationVariables = {
   email: Scalars['String'],
   title?: Maybe<Scalars['String']>,
   bio?: Maybe<Scalars['String']>,
-  avatar?: Maybe<Scalars['String']>,
-  language: Scalars['String']
+  avatar?: Maybe<Scalars['String']>
 };
 
 
@@ -358,7 +362,7 @@ export type UpdateUserMutation = (
     { __typename?: 'UpdateUserMutationPayload' }
     & { user: Maybe<(
       { __typename?: 'UserTypePrivate' }
-      & Pick<UserTypePrivate, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'language' | 'created'>
+      & Pick<UserTypePrivate, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'created'>
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -412,7 +416,7 @@ export type UserMeQuery = (
   { __typename?: 'Query' }
   & { userMe: Maybe<(
     { __typename?: 'UserTypePrivate' }
-    & Pick<UserTypePrivate, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'language'>
+    & Pick<UserTypePrivate, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points'>
   )> }
 );
 
@@ -553,7 +557,6 @@ export const RegisterDocument = gql`
       points
       created
       email
-      language
     }
     errors {
       field
@@ -582,7 +585,6 @@ export const LoginDocument = gql`
       points
       created
       email
-      language
     }
     errors {
       field
@@ -600,8 +602,8 @@ export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String, $language: String!) {
-  updateUser(input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar, language: $language}) {
+    mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String) {
+  updateUser(input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar}) {
     user {
       id
       username
@@ -610,7 +612,6 @@ export const UpdateUserDocument = gql`
       bio
       avatar
       points
-      language
       created
     }
     errors {
@@ -677,7 +678,6 @@ export const UserMeDocument = gql`
     bio
     avatar
     points
-    language
   }
 }
     `;
