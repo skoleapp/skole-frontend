@@ -30,26 +30,23 @@ SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<any> => {
   const materialSheets = new ServerStyleSheets();
   const originalRenderPage = ctx.renderPage;
 
-  try {
-    ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> =>
-      originalRenderPage({
-        enhanceApp: App => (
-          props: any // eslint-disable-line @typescript-eslint/no-explicit-any
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ): any => styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />))
-      });
-    const initialProps = await Document.getInitialProps(ctx);
-    return {
-      ...initialProps,
-      styles: (
-        <>
-          {initialProps.styles}
-          {materialSheets.getStyleElement()}
-          {styledComponentsSheet.getStyleElement()}
-        </>
-      )
-    };
-  } finally {
-    styledComponentsSheet.seal();
-  }
+  ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> => {
+    return originalRenderPage({
+      enhanceApp: App => (
+        props: any // eslint-disable-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ): any => styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />))
+    });
+  };
+
+  const initialProps = await Document.getInitialProps(ctx);
+
+  return {
+    ...initialProps,
+    styles: [
+      ...React.Children.toArray(initialProps.styles),
+      materialSheets.getStyleElement(),
+      styledComponentsSheet.getStyleElement()
+    ]
+  };
 };

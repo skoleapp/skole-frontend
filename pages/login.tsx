@@ -1,17 +1,17 @@
+import { CardContent, CardHeader } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { clientLogin } from '../actions';
-import { StyledCard } from '../components';
-import { Layout, LoginForm } from '../containers';
+import { Layout, LoginForm, StyledCard } from '../components';
 import { useLoginMutation } from '../generated/graphql';
-import { LoginFormValues, SkoleContext } from '../interfaces';
+import { FormCompleted, LoginFormValues, SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
-import { createFormErrors, usePublicPage } from '../utils';
+import { useForm, usePublicPage } from '../utils';
 
 const initialValues = {
   usernameOrEmail: '',
@@ -26,24 +26,15 @@ const validationSchema = Yup.object().shape({
 
 const LoginPage: NextPage = () => {
   const client = useApolloClient();
-  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
   const dispatch = useDispatch();
+  const { ref, onError } = useForm();
 
-  // eslint-disable-next-line
-  const onCompleted = ({ login }: any) => {
+  const onCompleted = ({ login }: FormCompleted) => {
     if (login.errors) {
       onError(login.errors);
     } else {
       dispatch(clientLogin({ client, ...login }));
     }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onError = (errors: any): void => {
-    const formErrors = createFormErrors(errors);
-    Object.keys(formErrors).forEach(
-      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
-    );
   };
 
   const [loginMutation] = useLoginMutation({ onCompleted, onError });
@@ -57,15 +48,18 @@ const LoginPage: NextPage = () => {
     actions.setSubmitting(false);
   };
   return (
-    <Layout heading="Login" title="Login" backUrl="/">
+    <Layout title="Login" backUrl="/">
       <StyledCard>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-          component={LoginForm}
-          ref={ref}
-        />
+        <CardHeader title="Login" />
+        <CardContent>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            component={LoginForm}
+            ref={ref}
+          />
+        </CardContent>
       </StyledCard>
     </Layout>
   );

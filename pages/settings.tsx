@@ -1,54 +1,106 @@
-import { Button, Divider, MenuItem, MenuList } from '@material-ui/core';
+import { Button, CardContent, Divider, MenuItem, MenuList, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
-import { logout } from '../actions';
-import { StyledCard } from '../components';
-import { Layout } from '../containers';
+import styled from 'styled-components';
+import { logout, openNotification } from '../actions';
+import { Layout, StyledCard } from '../components';
 import { SkoleContext, State } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 
+const menuItems = {
+  account: [
+    {
+      text: 'Edit Profile',
+      href: '/profile/edit'
+    },
+    {
+      text: 'Change Password',
+      href: '/profile/change-password'
+    }
+  ],
+  language: [
+    {
+      value: 'English'
+    },
+    {
+      value: 'Finnish'
+    },
+    {
+      value: 'Swedish'
+    }
+  ],
+  about: [
+    {
+      text: 'About',
+      href: '/about'
+    },
+    {
+      text: 'Contact',
+      href: '/contact'
+    }
+  ]
+};
+
 const SettingsPage: NextPage = () => {
   const { authenticated } = useSelector((state: State) => state.auth);
-  const dispatch = useDispatch();
   const apolloClient = useApolloClient();
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const renderFeedbackMenuItem = (
-    <MenuItem onClick={(): Promise<boolean> => router.push('/feedback')}>Feedback</MenuItem>
+  // TODO: Implement actual logic with cookies.
+  const handleLanguageSelect = (value: string) => () => {
+    dispatch(openNotification(`Language set to ${value}`));
+  };
+
+  const renderMenuSubHeader = (text: string) => (
+    <Typography variant="subtitle1" align="left">
+      {text}
+    </Typography>
   );
 
-  const renderAboutMenuItem = (
-    <MenuItem onClick={(): Promise<boolean> => router.push('/about')}>About</MenuItem>
-  );
-
-  const renderEditProfileMenuItem = (
-    <MenuItem onClick={(): Promise<boolean> => router.push('/profile/edit')}>Edit Profile</MenuItem>
-  );
-
-  const renderChangePasswordMenuItem = (
-    <MenuItem onClick={(): Promise<boolean> => router.push('/profile/change-password')}>
-      Change Password
+  const renderAccountMenuItems = menuItems.account.map((m, i) => (
+    <MenuItem key={i} onClick={(): Promise<boolean> => router.push(m.href)}>
+      {m.text}
     </MenuItem>
-  );
+  ));
+
+  const renderLanguageMenuItems = menuItems.language.map((m, i) => (
+    <MenuItem key={i} onClick={handleLanguageSelect(m.value)}>
+      {m.value}
+    </MenuItem>
+  ));
+
+  const renderAboutMenuItems = menuItems.about.map((m, i) => (
+    <MenuItem key={i} onClick={(): Promise<boolean> => router.push(m.href)}>
+      {m.text}
+    </MenuItem>
+  ));
 
   const renderAuthenticatedMenuList = (
     <MenuList>
-      {renderChangePasswordMenuItem}
-      {renderEditProfileMenuItem}
-      {renderFeedbackMenuItem}
-      {renderAboutMenuItem}
+      {renderMenuSubHeader('Account')}
+      {renderAccountMenuItems}
+      <Divider />
+      {renderMenuSubHeader('Language')}
+      {renderLanguageMenuItems}
+      <Divider />
+      {renderMenuSubHeader('About')}
+      {renderAboutMenuItems}
     </MenuList>
   );
 
   const renderUnAuthenticatedMenuList = (
     <MenuList>
-      {renderFeedbackMenuItem}
-      {renderAboutMenuItem}
+      {renderMenuSubHeader('Language')}
+      {renderLanguageMenuItems}
+      <Divider />
+      {renderMenuSubHeader('About')}
+      {renderAboutMenuItems}
     </MenuList>
   );
 
@@ -76,14 +128,27 @@ const SettingsPage: NextPage = () => {
 
   return (
     <Layout heading="Settings" title="Settings" backUrl="/">
-      <StyledCard>
-        {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
+      <StyledSettings>
+        <CardContent>
+          {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
+        </CardContent>
         <Divider />
-        {authenticated ? renderLogoutButton : renderLoginButton}
-      </StyledCard>
+        <CardContent>{authenticated ? renderLogoutButton : renderLoginButton}</CardContent>
+      </StyledSettings>
     </Layout>
   );
 };
+
+const StyledSettings = styled(StyledCard)`
+  .MuiList-root {
+    outline: none;
+  }
+
+  .MuiTypography-subtitle1 {
+    margin-left: 1rem !important;
+    color: var(--grey);
+  }
+`;
 
 SettingsPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await useAuthSync(ctx);

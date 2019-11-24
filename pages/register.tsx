@@ -1,17 +1,17 @@
+import { CardContent, CardHeader } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { clientLogin } from '../actions';
-import { StyledCard } from '../components';
-import { Layout, RegisterForm } from '../containers';
+import { Layout, RegisterForm, StyledCard } from '../components';
 import { useRegisterMutation } from '../generated/graphql';
-import { RegisterFormValues, SkoleContext } from '../interfaces';
+import { FormCompleted, RegisterFormValues, SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
-import { createFormErrors, usePublicPage } from '../utils';
+import { useForm, usePublicPage } from '../utils';
 
 const initialValues = {
   username: '',
@@ -42,26 +42,17 @@ const validationSchema = Yup.object().shape({
 
 const RegisterPage: NextPage = () => {
   const client = useApolloClient();
-  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const { ref, onError } = useForm();
   const dispatch = useDispatch();
 
-  // eslint-disable-next-line
-  const onCompleted = ({ register, login }: any) => {
+  const onCompleted = ({ register, login }: FormCompleted) => {
     if (register.errors) {
-      onError(register.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
+      onError(register.errors);
     } else if (login.errors) {
       onError(login.errors);
     } else {
       dispatch(clientLogin({ client, ...login }));
     }
-  };
-
-  // eslint-disable-next-line
-  const onError = (errors: any) => {
-    const formErrors = createFormErrors(errors);
-    Object.keys(formErrors).forEach(
-      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
-    );
   };
 
   const [registerMutation] = useRegisterMutation({ onCompleted, onError });
@@ -76,15 +67,18 @@ const RegisterPage: NextPage = () => {
   };
 
   return (
-    <Layout heading="Register" title="Register" backUrl="/">
+    <Layout title="Register" backUrl="/">
       <StyledCard>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-          component={RegisterForm}
-          ref={ref}
-        />
+        <CardHeader title="Register" />
+        <CardContent>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            component={RegisterForm}
+            ref={ref}
+          />
+        </CardContent>
       </StyledCard>
     </Layout>
   );

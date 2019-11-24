@@ -1,17 +1,17 @@
+import { CardContent, CardHeader } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
-import { StyledCard } from '../components';
-import { CreateCourseForm, Layout } from '../containers';
+import { CreateCourseForm, Layout, StyledCard } from '../components';
 import { SchoolsAndSubjectsDocument, useCreateCourseMutation } from '../generated/graphql';
 import { CreateCourseFormValues, School, SkoleContext, Subject } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
-import { createFormErrors, usePrivatePage } from '../utils';
+import { useForm, usePrivatePage } from '../utils';
 
 interface Props {
   subjects?: Subject[];
@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
-  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const { ref, onError } = useForm();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -38,15 +38,6 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
       dispatch(openNotification('Course created!'));
       router.push(`/courses/${createCourse.course.id}`);
     }
-  };
-
-  // eslint-disable-next-line
-  const onError = (errors: any) => {
-    console.log({ ...errors });
-    const formErrors = createFormErrors(errors);
-    Object.keys(formErrors).forEach(
-      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
-    );
   };
 
   const [createCourseMutation] = useCreateCourseMutation({ onCompleted, onError });
@@ -71,15 +62,18 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
   };
 
   return (
-    <Layout heading="Create Course" title="Create Course" backUrl="/">
+    <Layout title="Create Course" backUrl="/">
       <StyledCard>
-        <Formik
-          initialValues={initialValues}
-          component={CreateCourseForm}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-          ref={ref}
-        />
+        <CardHeader title="Create Course" />
+        <CardContent>
+          <Formik
+            initialValues={initialValues}
+            component={CreateCourseForm}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+            ref={ref}
+          />
+        </CardContent>
       </StyledCard>
     </Layout>
   );

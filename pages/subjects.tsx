@@ -3,15 +3,24 @@ import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
-import { StyledTable } from '../components';
-import { FilterSubjectsForm, Layout } from '../containers';
+import {
+  DesktopFilters,
+  FilterButton,
+  FilterSubjectsForm,
+  Layout,
+  StyledTable
+} from '../components';
+import { MobileFilters } from '../components/MobileFilters';
 import { SchoolsAndSubjectsDocument } from '../generated/graphql';
 import { FilterSubjectsFormValues, School, SkoleContext, Subject } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
-import { useAuthSync } from '../utils';
+import { useAuthSync, useFilters, valNotEmpty } from '../utils';
+
+const filterTitle = 'Filter Subjects';
 
 interface Props {
   schools?: School[];
@@ -19,6 +28,7 @@ interface Props {
 }
 
 const SubjectsPage: NextPage<Props> = ({ schools, subjects }) => {
+  const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const router = useRouter();
   const { query, pathname } = router;
   const { schoolId } = query;
@@ -28,10 +38,12 @@ const SubjectsPage: NextPage<Props> = ({ schools, subjects }) => {
     values: FilterSubjectsFormValues,
     actions: FormikActions<FilterSubjectsFormValues>
   ) => {
-    const isNotEmpty = (val: string) => val !== '';
-    const query: any = R.pickBy(isNotEmpty, values); // eslint-disable-line @eslint/typescript-no-explicit-any
+    const { schoolId } = values;
+    const filteredValues = { schoolId };
+    const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
     router.push({ pathname, query });
     actions.setSubmitting(false);
+    setFiltersOpen(false);
   };
 
   // Pre-load query params to the form.
@@ -40,19 +52,19 @@ const SubjectsPage: NextPage<Props> = ({ schools, subjects }) => {
     schools: schools || []
   };
 
+  const renderFilterForm = (
+    <Formik component={FilterSubjectsForm} onSubmit={handleSubmit} initialValues={initialValues} />
+  );
+
   return (
     <Layout heading="Subjects" title="Subjects" backUrl="/">
+      <DesktopFilters title={filterTitle}>{renderFilterForm}</DesktopFilters>
       <StyledTable>
         <Table>
-          <TableHead>
+          <TableHead className="mobile-only">
             <TableRow>
-              <TableCell align="center">
-                <Typography variant="h6">Filter Subjects</Typography>
-                <Formik
-                  component={FilterSubjectsForm}
-                  onSubmit={handleSubmit}
-                  initialValues={initialValues}
-                />
+              <TableCell>
+                <FilterButton toggleFilters={toggleFilters} />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -83,6 +95,9 @@ const SubjectsPage: NextPage<Props> = ({ schools, subjects }) => {
           </TableBody>
         </Table>
       </StyledTable>
+      <MobileFilters title={filterTitle} filtersOpen={filtersOpen} toggleFilters={toggleFilters}>
+        {renderFilterForm}
+      </MobileFilters>
     </Layout>
   );
 };

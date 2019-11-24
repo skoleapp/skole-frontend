@@ -1,40 +1,53 @@
-import { Typography } from '@material-ui/core';
-import { Book, House, LibraryAddSharp, School, Score } from '@material-ui/icons';
+import { Box, Grid, Typography } from '@material-ui/core';
+import {
+  CloudUploadOutlined,
+  HouseOutlined,
+  LibraryAddOutlined,
+  SchoolOutlined,
+  ScoreOutlined,
+  SubjectOutlined
+} from '@material-ui/icons';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
 import styled from 'styled-components';
-import { Shortcut } from '../components';
-import { Layout } from '../containers';
+import { ButtonLink, Layout, Shortcut } from '../components';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 
 const IndexPage: NextPage = () => (
   <Layout title="Home">
-    <StyledLandingPageContent>
-      <Typography variant="h5">What would you like to do?</Typography>
-      <div className="shortcuts">
-        <Shortcut text="Browse Schools" icon={House} href="/schools" />
-        <Shortcut text="Browse Courses" icon={School} href="/courses" />
-        <Shortcut text="Browse Subjects" icon={Book} href="/subjects" />
-        <Shortcut text="Create Course" icon={LibraryAddSharp} href="/create-course" />
-        <Shortcut text="Leaderboard" icon={Score} href="/leaderboard" />
-      </div>
-    </StyledLandingPageContent>
+    <Box marginY="1rem">
+      <Typography variant="h5">Learn with Skole community!</Typography>
+    </Box>
+    <Grid container>
+      <ShortcutsRow item xs={12}>
+        <Shortcut text="Courses" icon={SchoolOutlined} href="/courses" />
+        <Shortcut text="Schools" icon={HouseOutlined} href="/schools" />
+        <Shortcut text="Subjects" icon={SubjectOutlined} href="/subjects" />
+      </ShortcutsRow>
+      <ShortcutsRow item xs={12}>
+        <Shortcut text="Upload Resource" icon={CloudUploadOutlined} href="/upload-resource" />
+        <Shortcut text="Create Course" icon={LibraryAddOutlined} href="/create-course" />
+        <Shortcut text="Leaderboard" icon={ScoreOutlined} href="/leaderboard" />
+      </ShortcutsRow>
+    </Grid>
+    <Box marginY="1rem">
+      <Typography variant="h6" gutterBottom>
+        Is your school or subject not listed?
+      </Typography>
+      <ButtonLink href="/contact" variant="contained" color="primary">
+        Contact us!
+      </ButtonLink>
+    </Box>
   </Layout>
 );
 
-const StyledLandingPageContent = styled.div`
-  h5 {
-    margin: 1rem 0;
-  }
-
-  .shortcuts {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
-  }
+const ShortcutsRow = styled(Grid)`
+  display: flex;
+  justify-content: center;
+  flex-flow: row wrap;
 `;
 
 IndexPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
