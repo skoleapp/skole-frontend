@@ -1,13 +1,17 @@
-const snakeToCamel = (str: string): string =>
-  str.replace(/([-_][a-z])/g, group =>
+import { useRef } from 'react';
+import { FormErrors } from '../interfaces';
+
+const snakeToCamel = (str: string): string => {
+  return str.replace(/([-_][a-z])/g, group =>
     group
       .toUpperCase()
       .replace('-', '')
       .replace('_', '')
   );
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const createFormErrors = (errors: any): any => {
+const createFormErrors = (errors: any): any => {
   let formErrors = {
     general: ''
   };
@@ -30,4 +34,19 @@ export const createFormErrors = (errors: any): any => {
   }
 
   return formErrors;
+};
+
+export const useForm = () => {
+  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  const onError = (errors: FormErrors) => {
+    const formErrors = createFormErrors(errors);
+    Object.keys(formErrors).forEach(
+      key => ref && ref.current && ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
+    );
+  };
+
+  const resetForm = () => ref && ref.current && ref.current.resetForm();
+
+  return { ref, onError, resetForm };
 };
