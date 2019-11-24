@@ -2,8 +2,8 @@ import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { ErrorMessage, Field, FormikProps } from 'formik';
 import { Select } from 'formik-material-ui';
 import React from 'react';
+import { FormErrorMessage } from '.';
 import { Subject } from '../interfaces';
-import { FormErrorMessage } from './FormErrorMessage';
 
 // eslint-disable-next-line @eslint-typescript/no-explicit-any
 export const SubjectField: React.FC<FormikProps<any>> = ({ values }) => (

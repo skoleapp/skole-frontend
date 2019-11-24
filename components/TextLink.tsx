@@ -1,4 +1,4 @@
-import { Link as MaterialLink } from '@material-ui/core';
+import { Box, Link as MaterialLink } from '@material-ui/core';
 import { LinkProps as MaterialLinkProps } from '@material-ui/core/Link';
 import Link, { LinkProps } from 'next/link';
 import React from 'react';
@@ -14,9 +14,7 @@ export const TextLink: React.FC<Props> = ({ href, children, ...props }) => (
   </StyledTextLink>
 );
 
-const StyledTextLink = styled.div`
-  margin: 0.25rem 0;
-
+const StyledTextLink = styled(Box)`
   .MuiLink-root {
     cursor: pointer;
   }

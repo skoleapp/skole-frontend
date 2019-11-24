@@ -4,17 +4,24 @@ import { breakpoints } from '../styles';
 
 export const StyledTable = styled(Paper)`
   margin: 0 auto;
-  min-height: 100vh;
+  width: 100%;
+
+  @media only screen and (max-width: ${breakpoints.SM}) {
+    flex-grow: 1;
+  }
 
   @media only screen and (min-width: ${breakpoints.SM}) {
     max-width: 35rem;
-    min-height: auto;
+  }
+
+  .MuiButton-root {
+    margin-top: 0.5rem;
   }
 
   .MuiTableBody-root {
     tr {
       &:hover {
-        background-color: var(--light-opacity);
+        background-color: var(--dark-opacity);
       }
 
       .MuiTableCell-root {
