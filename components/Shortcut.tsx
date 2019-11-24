@@ -1,43 +1,46 @@
-import { Card, Typography } from '@material-ui/core';
+import { Card, CardContent, Typography } from '@material-ui/core';
 import { SvgIconComponent } from '@material-ui/icons';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 
-interface ShortcutProps {
+interface Props {
   text: string;
-  icon?: SvgIconComponent;
+  icon: SvgIconComponent;
   href: string;
 }
 
-export const Shortcut: React.FC<ShortcutProps> = ({ text, icon: Icon, href }) => (
+export const Shortcut: React.FC<Props> = ({ text, icon: Icon, href }) => (
   <Link href={href}>
     <StyledShortcut>
-      {Icon && <Icon />}
-      <Typography variant="body1">{text}</Typography>
+      <CardContent>
+        <Icon />
+        <Typography variant="h6">{text}</Typography>
+      </CardContent>
     </StyledShortcut>
   </Link>
 );
 
 const StyledShortcut = styled(Card)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   height: 14rem;
   width: 14rem;
-  font-size: 1.5rem;
-  margin: 1rem;
-  padding: 0.5rem;
+  margin: 0.5rem;
   cursor: pointer;
-  transition: var(--transition);
 
-  svg {
-    height: 3rem;
-    width: 3rem;
+  .MuiCardContent-root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    .MuiSvgIcon-root {
+      height: 5rem;
+      width: 5rem;
+    }
   }
 
   &:hover {
-    background-color: var(--light-opacity);
+    background-color: var(--dark-opacity);
   }
 `;

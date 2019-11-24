@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { ErrorMessage, Field, FormikProps } from 'formik';
 import { Select } from 'formik-material-ui';
 import React from 'react';
-import { FormErrorMessage } from './FormErrorMessage';
+import { FormErrorMessage } from '.';
 
 // TODO: Get school types from backend.
 // eslint-disable-next-line @eslint-typescript/no-explicit-any

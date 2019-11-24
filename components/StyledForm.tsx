@@ -6,7 +6,11 @@ export const StyledForm = styled(Form)`
     margin-top: 0.5rem;
   }
 
-  .change-avatar {
+  .file-input {
+    label {
+      width: 100%;
+    }
+
     input {
       display: none;
     }
@@ -17,10 +21,6 @@ export const StyledForm = styled(Form)`
     display: flex;
     align-items: start;
     justify-content: start;
-  }
-
-  .MuiButton-root {
-    margin: 0.5rem 0;
   }
 
   .MuiSelect-root {

@@ -3,27 +3,32 @@ import styled from 'styled-components';
 import { breakpoints } from '../styles';
 
 export const StyledCard = styled(Card)`
-  padding: 1rem;
-  min-height: 100vh;
+  margin: 0 auto;
+  width: 100%;
+
+  @media only screen and (max-width: ${breakpoints.SM}) {
+    flex-grow: 1;
+  }
 
   @media only screen and (min-width: ${breakpoints.SM}) {
     max-width: 35rem;
-    margin: 0 auto;
-    min-height: auto;
   }
 
-  .MuiButton-root,
-  .MuiDivider-root {
-    margin: 0.5rem 0;
+  .MuiCardHeader-title {
+    text-align: center;
+  }
+
+  .MuiButton-root {
+    margin-top: 0.5rem;
   }
 
   .MuiAvatar-root {
-    height: 6rem;
-    width: 6rem;
+    height: 8rem;
+    width: 8rem;
 
     @media only screen and (min-width: ${breakpoints.SM}) {
-      height: 10rem;
-      width: 10rem;
+      height: 12rem;
+      width: 12rem;
     }
   }
 `;
