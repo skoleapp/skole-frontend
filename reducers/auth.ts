@@ -17,8 +17,7 @@ export const initialState: Auth = {
     title: null,
     bio: null,
     avatar: null,
-    points: null,
-    language: null
+    points: null
   },
   authenticated: null,
   loading: null,
@@ -34,7 +33,7 @@ export const authReducer = (state = initialState, action: AnyAction): Auth => {
     case GET_USER_ME_SUCCESS:
     case UPDATE_USER_ME:
     case LOGIN: {
-      const { id, username, email, title, bio, avatar, points, language } = action.payload;
+      const { id, username, email, title, bio, avatar, points } = action.payload;
 
       return {
         ...state,
@@ -47,8 +46,7 @@ export const authReducer = (state = initialState, action: AnyAction): Auth => {
           title,
           bio,
           avatar,
-          points,
-          language
+          points
         }
       };
     }

@@ -1,16 +1,17 @@
+import { CardContent, CardHeader } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import React, { useRef } from 'react';
+import { useRouter } from 'next/router';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../../actions';
-import { StyledCard } from '../../components';
-import { ChangePasswordForm, Layout } from '../../containers';
+import { ChangePasswordForm, Layout, StyledCard } from '../../components';
 import { useChangePasswordMutation } from '../../generated/graphql';
-import { PasswordForm, SkoleContext } from '../../interfaces';
+import { FormCompleted, PasswordForm, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { createFormErrors, usePrivatePage } from '../../utils';
+import { useForm, usePrivatePage } from '../../utils';
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string().required('Old password is required.'),
@@ -30,28 +31,17 @@ const initialValues = {
 };
 
 const ChangePasswordPage: NextPage = () => {
-  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const { ref, onError } = useForm();
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onCompleted = ({ changePassword }: any): void => {
+  const onCompleted = ({ changePassword }: FormCompleted): void => {
     if (changePassword.errors) {
-      const formErrors = createFormErrors(changePassword.errors);
-      Object.keys(formErrors).forEach(
-        key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
-      );
+      onError(changePassword.errors);
     } else {
-      ref.current.resetForm();
       dispatch(openNotification('Password changed!'));
+      router.push('/profile');
     }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onError = (errors: any): void => {
-    const formErrors = createFormErrors(errors);
-    Object.keys(formErrors).forEach(
-      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
-    );
   };
 
   const [loginMutation] = useChangePasswordMutation({ onCompleted, onError });
@@ -66,15 +56,18 @@ const ChangePasswordPage: NextPage = () => {
   };
 
   return (
-    <Layout heading="Change Password" title="Change Password" backUrl="/settings">
+    <Layout title="Change Password" backUrl="/settings">
       <StyledCard>
-        <Formik
-          onSubmit={handleSubmit}
-          initialValues={initialValues}
-          component={ChangePasswordForm}
-          validationSchema={validationSchema}
-          ref={ref}
-        />
+        <CardHeader title="Change Password" />
+        <CardContent>
+          <Formik
+            onSubmit={handleSubmit}
+            initialValues={initialValues}
+            component={ChangePasswordForm}
+            validationSchema={validationSchema}
+            ref={ref}
+          />
+        </CardContent>
       </StyledCard>
     </Layout>
   );

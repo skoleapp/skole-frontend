@@ -2,8 +2,7 @@ import { Avatar, Box, Divider, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
-import { StyledCard } from '../../components';
-import { Layout, NotFoundCard } from '../../containers';
+import { Layout, NotFound, StyledCard } from '../../components';
 import { UserDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
@@ -38,11 +37,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
       </Layout>
     );
   } else {
-    return (
-      <Layout title="User not found" backUrl="/leaderboard">
-        <NotFoundCard text="User not found..." />
-      </Layout>
-    );
+    return <NotFound title="User not found..." />;
   }
 };
 

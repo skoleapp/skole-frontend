@@ -38,8 +38,7 @@ export const GlobalStyle = createGlobalStyle`
         --success: ${colors.success};
         --danger: ${colors.danger};
 
-        --light-opacity: rgba(0, 0, 0, 0.15);
-        --semi-opacity: rgba(0, 0, 0, 0.5);
+        --dark-opacity: rgba(0, 0, 0, 0.15);
         
         // Misc 
         --transition: all 0.15s ease-in;
@@ -50,6 +49,18 @@ export const GlobalStyle = createGlobalStyle`
     body {
         background: var(--secondary);
         font-family: 'Roboto', sans-serif;
+
+        .desktop-only {
+            @media only screen and (max-width: ${breakpoints.SM}) {
+                display: none;
+            }
+        }
+
+        .mobile-only {
+            @media only screen and (min-width: ${breakpoints.SM}) {
+                display: none;
+            }
+        }
     }
 
     // NProgress
@@ -57,10 +68,11 @@ export const GlobalStyle = createGlobalStyle`
         .bar {
             height: 0.25rem;
             background: var(--white);
-            top: 3rem;
+            top: 2.75rem;
+            z-index: 1101;
 
             @media only screen and (min-width: ${breakpoints.MD}) {
-                top: 4rem;
+                top: 3.75rem;
             }
         }
 
