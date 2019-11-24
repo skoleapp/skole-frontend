@@ -1,24 +1,27 @@
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography
-} from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import React, { useRef } from 'react';
+import React from 'react';
 import { compose } from 'redux';
-import { LabelTag, StyledTable } from '../../components';
-import { FilterCoursesForm, Layout } from '../../containers';
+import {
+  ClearFiltersButton,
+  DesktopFilters,
+  FilterButton,
+  FilterCoursesForm,
+  LabelTag,
+  Layout,
+  MobileFilters,
+  StyledTable
+} from '../../components';
 import { CoursesSchoolsAndSubjectsDocument } from '../../generated/graphql';
 import { Course, FilterCoursesFormValues, School, SkoleContext, Subject } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { useAuthSync } from '../../utils';
+import { useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
+
+const filterTitle = 'Filter Courses';
 
 interface Props {
   courses?: Course[];
@@ -30,23 +33,20 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
   const router = useRouter();
   const { query, pathname } = router;
   const { courseName, courseCode, subjectId, schoolId } = query;
-  const ref = useRef<any>(); // eslint-disable-line @eslint/typescript-no-explicit-any
+  const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
+  const { ref, resetForm } = useForm();
 
   // Pick non-empty values and reload the page with new query params.
-  const handleSubmit = (
+  const handleSubmit = async (
     values: FilterCoursesFormValues,
     actions: FormikActions<FilterCoursesFormValues>
   ) => {
-    const isNotEmpty = (val: string) => val !== '';
-    const query: any = R.pickBy(isNotEmpty, values); // eslint-disable-line @eslint/typescript-no-explicit-any
+    const { courseName, courseCode, schoolId, subjectId } = values;
+    const filteredValues = { courseName, courseCode, schoolId, subjectId };
+    const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
     router.push({ pathname, query });
     actions.setSubmitting(false);
-  };
-
-  // Wait for the router to clear the query params, then reset the form.
-  const handleClearFilters = async () => {
-    await router.push(pathname);
-    ref.current.resetForm();
+    setFiltersOpen(false);
   };
 
   // Pre-load query params to the form.
@@ -59,23 +59,28 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
     schools: schools || []
   };
 
+  const renderFilterForm = (
+    <Formik
+      component={FilterCoursesForm}
+      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      ref={ref}
+    />
+  );
+
   return (
     <Layout heading="Courses" title="Courses" backUrl="/">
+      <DesktopFilters title={filterTitle}>
+        {renderFilterForm}
+        <ClearFiltersButton resetForm={resetForm} />
+      </DesktopFilters>
       <StyledTable>
         <Table>
-          <TableHead>
+          <TableHead className="mobile-only">
             <TableRow>
-              <TableCell align="center">
-                <Typography variant="h6">Filter Courses</Typography>
-                <Formik
-                  component={FilterCoursesForm}
-                  onSubmit={handleSubmit}
-                  initialValues={initialValues}
-                  ref={ref}
-                />
-                <Button variant="outlined" color="primary" fullWidth onClick={handleClearFilters}>
-                  clear filters
-                </Button>
+              <TableCell>
+                <FilterButton toggleFilters={toggleFilters} />
+                <ClearFiltersButton resetForm={resetForm} />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -99,6 +104,9 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
           </TableBody>
         </Table>
       </StyledTable>
+      <MobileFilters title={filterTitle} filtersOpen={filtersOpen} toggleFilters={toggleFilters}>
+        {renderFilterForm}
+      </MobileFilters>
     </Layout>
   );
 };

@@ -1,10 +1,10 @@
-import { Typography } from '@material-ui/core';
+import { CardContent, CardHeader, Typography } from '@material-ui/core';
 import moment from 'moment';
 import { NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
-import { ButtonLink, StyledCard } from '../../../components';
-import { Layout, NotFoundCard } from '../../../containers';
+import { ButtonLink, Layout, NotFound, StyledCard } from '../../../components';
 import { CourseDocument } from '../../../generated/graphql';
 import { Course, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
@@ -16,43 +16,50 @@ interface Props {
 
 const CourseDetailPage: NextPage<Props> = ({ course }) => {
   if (course) {
-    const { id, name, code, subject, school, creator, created, modified } = course;
+    const codeName = `${course.code} ${course.name}`;
+    const name: string = R.propOr('N/A', 'name', course); // Need to cast to string.
+    const code = R.propOr('N/A', 'code', course);
+    const subjectName = R.propOr('N/A', 'name', course.subject);
+    const schoolName = R.propOr('N/A', 'name', course.school);
+    const creatorName = R.propOr('N/A', 'username', course.creator);
+    const created = moment(course.created).format('LL');
+    const modified = moment(course.modified).format('LL');
 
     return (
-      <Layout heading={`${code} ${name}`} title={`${code} ${name}`} backUrl="/courses">
+      <Layout heading={codeName} title={codeName} backUrl="/courses">
         <StyledCard>
-          <Typography variant="body1">Name: {name}</Typography>
-          <Typography variant="body1">Code: {code}</Typography>
-          <Typography variant="body1">Subject: {subject.name}</Typography>
-          <Typography variant="body1">School: {school.name}</Typography>
-          <Typography variant="body1">Creator: {creator.username}</Typography>
-          <Typography variant="body1">Created: {moment(created).format('LL')}</Typography>
-          <Typography variant="body1">Updated: {moment(modified).format('LL')}</Typography>
-          <ButtonLink
-            href={`/courses/${id}/resources`}
-            variant="outlined"
-            color="primary"
-            fullWidth
-          >
-            resources
-          </ButtonLink>
-          <ButtonLink
-            href={`/courses/${id}/discussion`}
-            variant="outlined"
-            color="primary"
-            fullWidth
-          >
-            discussion
-          </ButtonLink>
+          <CardHeader title={name} />
+          <CardContent>
+            <Typography variant="body1">Code: {code}</Typography>
+            <Typography variant="body1">Subject: {subjectName}</Typography>
+            <Typography variant="body1">School: {schoolName}</Typography>
+            <Typography variant="body1">Creator: {creatorName}</Typography>
+            <Typography variant="body1">Created: {created}</Typography>
+            <Typography variant="body1">Modified: {modified}</Typography>
+          </CardContent>
+          <CardContent>
+            <ButtonLink
+              href={`/courses/${course.id}/resources`}
+              variant="outlined"
+              color="primary"
+              fullWidth
+            >
+              resources
+            </ButtonLink>
+            <ButtonLink
+              href={`/courses/${course.id}/discussion`}
+              variant="outlined"
+              color="primary"
+              fullWidth
+            >
+              discussion
+            </ButtonLink>
+          </CardContent>
         </StyledCard>
       </Layout>
     );
   } else {
-    return (
-      <Layout title="Course not found" backUrl="/courses">
-        <NotFoundCard text="Course not found..." />
-      </Layout>
-    );
+    return <NotFound title="Course not found..." />;
   }
 };
 
