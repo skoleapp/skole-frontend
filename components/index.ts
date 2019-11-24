@@ -22,7 +22,7 @@ export { Layout } from './Layout';
 export { LoginForm } from './LoginForm';
 export { Logo } from './Logo';
 export { MobileFilters } from './MobileFilters';
-export { NotFoundCard } from './NotFoundCard';
+export { NotFound } from './NotFound';
 export { Notifications } from './Notifications';
 export { RegisterForm } from './RegisterForm';
 export { ResourceTypeField } from './ResourceTypeField';
