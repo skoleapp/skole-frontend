@@ -15,11 +15,7 @@ import styled from 'styled-components';
 import { PublicUser } from '../interfaces';
 import { getAvatar } from '../utils';
 
-interface Props extends Omit<PublicUser, 'id'> {
-  isPrivate?: boolean;
-}
-
-export const UserProfileCardContent: React.FC<Props> = ({
+export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
   avatar,
   username,
   title,
@@ -47,7 +43,7 @@ export const UserProfileCardContent: React.FC<Props> = ({
               <ScoreOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={`Points: ${points}`} />
+          <ListItemText>Points: {points}</ListItemText>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -55,7 +51,7 @@ export const UserProfileCardContent: React.FC<Props> = ({
               <SchoolOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={`Courses: ${courses}`} />
+          <ListItemText>Courses: {courses}</ListItemText>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -63,7 +59,7 @@ export const UserProfileCardContent: React.FC<Props> = ({
               <CloudUploadOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={`Resources: ${resources}`} />
+          <ListItemText>Resources: {resources}</ListItemText>
         </ListItem>
       </StyledAccountInfoList>
     </CardContent>
