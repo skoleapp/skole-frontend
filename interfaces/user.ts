@@ -3,6 +3,8 @@ export interface PublicUser {
   username: string;
   title: string | null;
   bio: string | null;
-  points: number;
   avatar: string;
+  points: number;
+  courses: number;
+  resources: number;
 }

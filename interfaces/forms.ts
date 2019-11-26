@@ -56,5 +56,12 @@ export interface FilterCoursesFormValues {
   schoolId: string | string[];
 }
 
+export interface UploadResourceFormValues {
+  resourceTitle: string;
+  resourceType: string;
+  courseId: string;
+  resource: string;
+}
+
 export type FormErrors = any;
 export type FormCompleted = any;
