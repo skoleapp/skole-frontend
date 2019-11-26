@@ -1,4 +1,5 @@
 export { getAvatar } from './getAvatar';
+export { getFullCourseName } from './getFullCourseName';
 export { getToken } from './getToken';
 export { redirect } from './redirect';
 export { useAuthSync } from './useAuthSync';

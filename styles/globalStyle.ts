@@ -61,6 +61,10 @@ export const GlobalStyle = createGlobalStyle`
                 display: none;
             }
         }
+
+        .flex-flow {
+            flex-flow: row wrap;
+        }
     }
 
     // NProgress
