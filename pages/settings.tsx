@@ -1,4 +1,12 @@
-import { Button, CardContent, Divider, MenuItem, MenuList, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  CardContent,
+  Divider,
+  MenuItem,
+  MenuList,
+  Typography
+} from '@material-ui/core';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -58,9 +66,11 @@ const SettingsPage: NextPage = () => {
   };
 
   const renderMenuSubHeader = (text: string) => (
-    <Typography variant="subtitle1" align="left">
-      {text}
-    </Typography>
+    <Box marginLeft="1rem">
+      <Typography variant="subtitle1" align="left" color="textSecondary">
+        {text}
+      </Typography>
+    </Box>
   );
 
   const renderAccountMenuItems = menuItems.account.map((m, i) => (
@@ -142,11 +152,6 @@ const SettingsPage: NextPage = () => {
 const StyledSettings = styled(StyledCard)`
   .MuiList-root {
     outline: none;
-  }
-
-  .MuiTypography-subtitle1 {
-    margin-left: 1rem !important;
-    color: var(--grey);
   }
 `;
 
