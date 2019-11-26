@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { openNotification, updateUserMe } from '../../actions';
 import { EditProfileForm, Layout, StyledCard } from '../../components';
 import { useUpdateUserMutation } from '../../generated/graphql';
-import { SkoleContext, State, UpdateUserFormValues } from '../../interfaces';
+import { FormCompleted, SkoleContext, State, UpdateUserFormValues } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
 
@@ -26,7 +26,7 @@ const EditProfilePage: NextPage = () => {
   const { ref, onError } = useForm();
   const dispatch = useDispatch();
 
-  const onCompleted = ({ updateUser }: any): void => {
+  const onCompleted = ({ updateUser }: FormCompleted): void => {
     if (updateUser.errors) {
       return onError(updateUser.errors);
     } else {
@@ -56,16 +56,13 @@ const EditProfilePage: NextPage = () => {
     actions.setSubmitting(false);
   };
 
-  const { id, title, username, email, bio, avatar, points } = user;
-
   const initialValues = {
-    id: id || '',
-    title: title || '',
-    username: username || '',
-    email: email || '',
-    bio: bio || '',
-    avatar: avatar || '',
-    points: points || 0,
+    id: user.id || '',
+    title: user.title || '',
+    username: user.username || '',
+    email: user.email || '',
+    bio: user.bio || '',
+    avatar: user.avatar || '',
     general: ''
   };
 

@@ -42,10 +42,10 @@ const LeaderboardPage: NextPage<Props> = ({ users }) => (
                 <TableRow>
                   <TableCell className="user-cell">
                     <Avatar src={getAvatar(user.avatar)} />
-                    <Typography variant="subtitle1">{user.username}</Typography>
+                    <Typography variant="subtitle1">{user.username || 'N/A'}</Typography>
                   </TableCell>
                   <TableCell align="right">
-                    <Typography variant="subtitle1">{user.points}</Typography>
+                    <Typography variant="subtitle1">{user.points || 0}</Typography>
                   </TableCell>
                 </TableRow>
               </Link>

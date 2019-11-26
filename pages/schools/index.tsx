@@ -12,7 +12,6 @@ import {
   DesktopFilters,
   FilterButton,
   FilterSchoolsForm,
-  LabelTag,
   Layout,
   MobileFilters,
   StyledTable
@@ -32,7 +31,6 @@ const SchoolsPage: NextPage<Props> = ({ schools }) => {
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const router = useRouter();
   const { query, pathname } = router;
-  const { schoolType, schoolCity, schoolCountry, schoolName } = query;
   const { ref, resetForm } = useForm();
 
   // Pick non-empty values and reload the page with new query params.
@@ -48,10 +46,10 @@ const SchoolsPage: NextPage<Props> = ({ schools }) => {
 
   // Pre-load query params to the form.
   const initialValues = {
-    schoolType: schoolType || '',
-    schoolName: schoolName || '',
-    schoolCity: schoolCity || '',
-    schoolCountry: schoolCountry || ''
+    schoolType: query.schoolType || '',
+    schoolName: query.schoolName || '',
+    schoolCity: query.schoolCity || '',
+    schoolCountry: query.schoolCountry || ''
   };
 
   const renderFilterForm = (
@@ -85,8 +83,7 @@ const SchoolsPage: NextPage<Props> = ({ schools }) => {
                 <Link href={`/schools/${school.id}`} key={i}>
                   <TableRow>
                     <TableCell>
-                      <Typography variant="subtitle1">{school.name}</Typography>
-                      <LabelTag text={school.schoolType} />
+                      <Typography variant="subtitle1">{school.name || 'N/A'}</Typography>
                     </TableCell>
                   </TableRow>
                 </Link>
