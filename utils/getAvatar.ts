@@ -1,6 +1,8 @@
 export const getAvatar = (avatar: string | null): string => {
-  const baseURL = process.env.STATIC_URL;
-  return baseURL && avatar
-    ? baseURL.concat(avatar)
-    : 'http://localhost:8000/static/default_avatar.jpg';
+  const mediaURL = process.env.MEDIA_URL;
+  const staticURL = process.env.STATIC_URL;
+
+  return mediaURL && avatar && avatar !== 'default_avatar.jpg'
+    ? mediaURL.concat(avatar)
+    : staticURL + '/default_avatar.jpg';
 };
