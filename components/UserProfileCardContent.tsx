@@ -12,7 +12,6 @@ import {
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
-import { ButtonLink, StyledCard } from '.';
 import { PublicUser } from '../interfaces';
 import { getAvatar } from '../utils';
 
@@ -20,15 +19,14 @@ interface Props extends Omit<PublicUser, 'id'> {
   isPrivate?: boolean;
 }
 
-export const ProfileCard: React.FC<Props> = ({
+export const UserProfileCardContent: React.FC<Props> = ({
   avatar,
   username,
   title,
   bio,
   points,
   courses,
-  resources,
-  isPrivate
+  resources
 }) => {
   const renderAvatarSection = (
     <CardContent>
@@ -57,7 +55,7 @@ export const ProfileCard: React.FC<Props> = ({
               <SchoolOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={`Course: ${courses}`} />
+          <ListItemText primary={`Courses: ${courses}`} />
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -65,7 +63,7 @@ export const ProfileCard: React.FC<Props> = ({
               <CloudUploadOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={`Resource: ${resources}`} />
+          <ListItemText primary={`Resources: ${resources}`} />
         </ListItem>
       </StyledAccountInfoList>
     </CardContent>
@@ -111,16 +109,8 @@ export const ProfileCard: React.FC<Props> = ({
     </CardContent>
   );
 
-  const renderEditProfileSection = isPrivate && (
-    <CardContent>
-      <ButtonLink href="/profile/edit" color="primary" variant="outlined" fullWidth>
-        edit profile
-      </ButtonLink>
-    </CardContent>
-  );
-
   return (
-    <StyledCard>
+    <>
       {renderTopSection}
       <Divider />
       {renderBioSection}
@@ -128,9 +118,7 @@ export const ProfileCard: React.FC<Props> = ({
       {renderCoursesSection}
       <Divider />
       {renderResourcesSection}
-      <Divider />
-      {renderEditProfileSection}
-    </StyledCard>
+    </>
   );
 };
 
