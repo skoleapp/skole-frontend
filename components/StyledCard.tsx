@@ -22,7 +22,7 @@ export const StyledCard = styled(Card)`
     margin-top: 0.5rem;
   }
 
-  .MuiAvatar-root {
+  .main-avatar {
     height: 8rem;
     width: 8rem;
 
