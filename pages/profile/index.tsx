@@ -1,43 +1,36 @@
-import { Avatar, Box, CardContent, CardHeader, Typography } from '@material-ui/core';
+import { CardContent, Divider } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
-import { ButtonLink, Layout, StyledCard } from '../../components';
+import { ButtonLink, Layout, StyledCard, UserProfileCardContent } from '../../components';
 import { SkoleContext, State } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { getAvatar, usePrivatePage } from '../../utils';
+import { usePrivatePage } from '../../utils';
 
 const ProfilePage: NextPage = () => {
   const { user } = useSelector((state: State) => state.auth);
-  const { title, avatar, username, bio, points } = user;
+
+  const userProfileProps = {
+    username: user.username || 'Username N/A',
+    avatar: user.avatar || '',
+    title: user.title || 'Title N/A',
+    bio: user.bio || 'Bio N/A',
+    points: user.points || 0,
+    courses: 0,
+    resources: 0
+  };
 
   return (
     <Layout heading="Profile" title="Profile" backUrl="/">
       <StyledCard>
+        <UserProfileCardContent {...userProfileProps} />
+        <Divider />
         <CardContent>
-          <Box display="flex" alignItems="center" justifyContent="space-around">
-            <Avatar src={getAvatar(avatar)} />
-            <Box display="flex" flexDirection="column">
-              <Typography variant="body1">{username}</Typography>
-              <ButtonLink href="/profile/edit" color="primary" variant="outlined" fullWidth>
-                edit profile
-              </ButtonLink>
-            </Box>
-          </Box>
+          <ButtonLink href="/profile/edit" color="primary" variant="outlined" fullWidth>
+            edit profile
+          </ButtonLink>
         </CardContent>
-        <CardContent>
-          <Box display="flex" flexDirection="column" alignItems="flex-start">
-            <Typography variant="body1">{title || 'No Title'}</Typography>
-            <Typography variant="body2">{bio || 'No bio'}</Typography>
-            <Typography variant="body2">Points: {points}</Typography>
-          </Box>
-        </CardContent>
-        <CardHeader>
-          <Box display="flex" flexDirection="column" alignItems="flex-start">
-            My courses will show here...
-          </Box>
-        </CardHeader>
       </StyledCard>
     </Layout>
   );
