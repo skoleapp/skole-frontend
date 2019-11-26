@@ -1,8 +1,8 @@
-import { CardContent, CardHeader, Typography } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
-import { ButtonLink, Layout, NotFound, StyledCard } from '../../../components';
+import { ButtonLink, Layout, NotFound, StyledCard, TextLink } from '../../../components';
 import { SchoolDocument } from '../../../generated/graphql';
 import { School, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
@@ -14,18 +14,42 @@ interface Props {
 
 const SchoolPage: NextPage<Props> = ({ school }) => {
   if (school) {
-    const { id, name, schoolType, city, country } = school;
+    const schoolName = school.name || 'N/A';
+    const schoolType = school.schoolType || 'N/A';
+    const schoolCity = school.city || 'N/A';
+    const schoolCountry = school.country || 'N/A';
 
     return (
-      <Layout heading={name} title={name} backUrl="/schools">
+      <Layout heading={schoolName} title={schoolName} backUrl="/schools">
         <StyledCard>
-          <CardHeader title={name} />
+          <CardHeader title={schoolName} />
+          <Divider />
           <CardContent>
-            <Typography variant="body1">Type: {schoolType}</Typography>
-            <Typography variant="body1">City: {city}</Typography>
-            <Typography variant="body1">Country: {country}</Typography>
+            <Box textAlign="left">
+              <Typography variant="body1">
+                School Type:{' '}
+                <TextLink href={{ pathname: '/schools', query: { schoolType } }} color="primary">
+                  {schoolType}
+                </TextLink>
+              </Typography>
+              <Typography variant="body1">
+                School City:{' '}
+                <TextLink href={{ pathname: '/schools', query: { schoolCity } }} color="primary">
+                  {schoolCity}
+                </TextLink>
+              </Typography>
+              <Typography variant="body1">
+                School Country:{' '}
+                <TextLink href={{ pathname: '/schools', query: { schoolCountry } }} color="primary">
+                  {schoolCountry}
+                </TextLink>
+              </Typography>
+            </Box>
+          </CardContent>
+          <Divider />
+          <CardContent>
             <ButtonLink
-              href={{ pathname: '/subjects', query: { schoolId: id } }}
+              href={{ pathname: '/subjects', query: { schoolId: school.id } }}
               variant="outlined"
               color="primary"
               fullWidth
@@ -33,7 +57,7 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
               subjects
             </ButtonLink>
             <ButtonLink
-              href={{ pathname: '/courses', query: { schoolId: id } }}
+              href={{ pathname: '/courses', query: { schoolId: school.id } }}
               variant="outlined"
               color="primary"
               fullWidth
