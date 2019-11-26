@@ -11,7 +11,6 @@ import {
   DesktopFilters,
   FilterButton,
   FilterCoursesForm,
-  LabelTag,
   Layout,
   MobileFilters,
   StyledTable
@@ -19,9 +18,7 @@ import {
 import { CoursesSchoolsAndSubjectsDocument } from '../../generated/graphql';
 import { Course, FilterCoursesFormValues, School, SkoleContext, Subject } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
-
-const filterTitle = 'Filter Courses';
+import { getFullCourseName, useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
 
 interface Props {
   courses?: Course[];
@@ -32,7 +29,6 @@ interface Props {
 const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
   const router = useRouter();
   const { query, pathname } = router;
-  const { courseName, courseCode, subjectId, schoolId } = query;
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const { ref, resetForm } = useForm();
 
@@ -51,13 +47,15 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
 
   // Pre-load query params to the form.
   const initialValues = {
-    courseName: courseName || '',
-    courseCode: courseCode || '',
-    subjectId: subjectId || '',
-    schoolId: schoolId || '',
+    courseName: query.courseName || '',
+    courseCode: query.courseCode || '',
+    subjectId: query.subjectId || '',
+    schoolId: query.schoolId || '',
     subjects: subjects || [],
     schools: schools || []
   };
+
+  const filterTitle = 'Filter Courses';
 
   const renderFilterForm = (
     <Formik
@@ -89,8 +87,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
               courses.map((course: Course, i: number) => (
                 <TableRow key={i} onClick={() => router.push(`/courses/${course.id}`)}>
                   <TableCell>
-                    <Typography variant="subtitle1">{course.name}</Typography>
-                    {course.code && <LabelTag text={course.code} />}
+                    <Typography variant="subtitle1">{getFullCourseName(course)}</Typography>
                   </TableCell>
                 </TableRow>
               ))
