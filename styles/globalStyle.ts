@@ -65,6 +65,10 @@ export const GlobalStyle = createGlobalStyle`
         .flex-flow {
             flex-flow: row wrap;
         }
+
+        .MuiLink-root {
+            cursor: pointer;
+        }
     }
 
     // NProgress

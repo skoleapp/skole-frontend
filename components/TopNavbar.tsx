@@ -44,10 +44,10 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl }) => {
           <IconButtonLink icon={AccountCircle} href="/profile" color="secondary" />
         ) : (
           <>
-            <ButtonLink href="/login" color="secondary" variant="outlined">
+            <ButtonLink href="/login" color="secondary">
               login
             </ButtonLink>
-            <ButtonLink href="/register" color="secondary" variant="outlined">
+            <ButtonLink href="/register" color="secondary">
               Register
             </ButtonLink>
           </>

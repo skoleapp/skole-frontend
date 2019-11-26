@@ -82,6 +82,15 @@ mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
   }
 }
 
+mutation DeleteAccount($password: String!) {
+  deleteUser(input: { password: $password }) {
+    errors {
+      field
+      messages
+    }
+  }
+}
+
 mutation CreateCourse($courseName: String!, $courseCode: String, $subjectId: ID!, $schoolId: ID!) {
   createCourse(
     input: { name: $courseName, code: $courseCode, subject: $subjectId, school: $schoolId }

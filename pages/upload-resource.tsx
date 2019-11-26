@@ -11,7 +11,7 @@ import { Layout, StyledCard } from '../components';
 import { UploadResourceForm } from '../components/UploadResourceForm';
 import { SkoleContext, UploadResourceFormValues } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
-import { useAuthSync } from '../utils';
+import { useAuthSync, useForm } from '../utils';
 
 const validationSchema = Yup.object().shape({
   resourceTitle: Yup.string().required('Resource title is required.'),
@@ -31,9 +31,12 @@ const initialValues = {
 const UploadResourcePage: NextPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { ref, setSubmitting, resetForm } = useForm();
 
   const handleSubmit = (values: UploadResourceFormValues) => {
     console.log(values);
+    setSubmitting(false);
+    resetForm();
     dispatch(openNotification('Resource uploaded!'));
     router.push('/');
   };
@@ -48,6 +51,7 @@ const UploadResourcePage: NextPage = () => {
             onSubmit={handleSubmit}
             initialValues={initialValues}
             validationSchema={validationSchema}
+            ref={ref}
           />
         </CardContent>
       </StyledCard>

@@ -1,5 +1,5 @@
 import { CardContent, CardHeader } from '@material-ui/core';
-import { Formik, FormikActions } from 'formik';
+import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -31,7 +31,7 @@ const initialValues = {
 };
 
 const ChangePasswordPage: NextPage = () => {
-  const { ref, onError } = useForm();
+  const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -39,6 +39,7 @@ const ChangePasswordPage: NextPage = () => {
     if (changePassword.errors) {
       onError(changePassword.errors);
     } else {
+      resetForm();
       dispatch(openNotification('Password changed!'));
       router.push('/profile');
     }
@@ -46,13 +47,10 @@ const ChangePasswordPage: NextPage = () => {
 
   const [loginMutation] = useChangePasswordMutation({ onCompleted, onError });
 
-  const handleSubmit = async (
-    values: PasswordForm,
-    actions: FormikActions<PasswordForm>
-  ): Promise<void> => {
+  const handleSubmit = async (values: PasswordForm): Promise<void> => {
     const { oldPassword, newPassword } = values;
     await loginMutation({ variables: { oldPassword, newPassword } });
-    actions.setSubmitting(false);
+    setSubmitting(false);
   };
 
   return (

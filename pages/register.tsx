@@ -1,5 +1,5 @@
 import { CardContent, CardHeader } from '@material-ui/core';
-import { Formik, FormikActions } from 'formik';
+import { Formik } from 'formik';
 import { NextPage } from 'next';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
@@ -18,8 +18,7 @@ const initialValues = {
   email: '',
   password: '',
   confirmPassword: '',
-  agreeToTerms: false,
-  general: ''
+  eneral: ''
 };
 
 const validationSchema = Yup.object().shape({
@@ -32,17 +31,12 @@ const validationSchema = Yup.object().shape({
     .required('Password is required.'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords do not match.')
-    .required('Confirm password is required.'),
-  agreeToTerms: Yup.boolean().test(
-    'is-true',
-    'You must agree to the terms and conditions to continue',
-    (value: boolean) => value === true
-  )
+    .required('Confirm password is required.')
 });
 
 const RegisterPage: NextPage = () => {
   const client = useApolloClient();
-  const { ref, onError } = useForm();
+  const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
 
   const onCompleted = ({ register, login }: FormCompleted) => {
@@ -51,19 +45,17 @@ const RegisterPage: NextPage = () => {
     } else if (login.errors) {
       onError(login.errors);
     } else {
+      resetForm();
       dispatch(clientLogin({ client, ...login }));
     }
   };
 
   const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
-  const handleSubmit = async (
-    values: RegisterFormValues,
-    actions: FormikActions<RegisterFormValues>
-  ): Promise<void> => {
+  const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
     const { username, email, password } = values;
     await registerMutation({ variables: { username, email, password } });
-    actions.setSubmitting(false);
+    setSubmitting(false);
   };
 
   return (

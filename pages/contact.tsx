@@ -10,7 +10,7 @@ import { openNotification } from '../actions';
 import { ContactForm, Layout, StyledCard } from '../components';
 import { ContactFormValues, SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
-import { useAuthSync } from '../utils';
+import { useAuthSync, useForm } from '../utils';
 
 const initialValues = {
   contactType: '',
@@ -26,10 +26,12 @@ const validationSchema = Yup.object().shape({
 const ContactPage: NextPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { ref, resetForm } = useForm();
 
   // TODO: Finish this.
   const handleSubmit = async (values: ContactFormValues): Promise<void> => {
     console.log(values);
+    resetForm();
     dispatch(openNotification('Message submitted!'));
     router.push('/');
   };
@@ -44,6 +46,7 @@ const ContactPage: NextPage = () => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             component={ContactForm}
+            ref={ref}
           />
         </CardContent>
       </StyledCard>

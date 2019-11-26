@@ -40,7 +40,7 @@ const IndexPage: NextPage = () => (
       <Typography variant="h6" gutterBottom>
         Is your school or subject not listed?
       </Typography>
-      <ButtonLink href="/contact" variant="contained" color="primary">
+      <ButtonLink href="/contact" variant="outlined" color="primary">
         Contact us!
       </ButtonLink>
     </Box>

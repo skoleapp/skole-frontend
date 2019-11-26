@@ -29,6 +29,10 @@ const menuItems = {
     {
       text: 'Change Password',
       href: '/profile/change-password'
+    },
+    {
+      text: 'Delete Account',
+      href: '/profile/delete-account'
     }
   ],
   language: [

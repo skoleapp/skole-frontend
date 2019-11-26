@@ -1,4 +1,6 @@
 export type FeedbackType = 'bad' | 'neutral' | 'good' | '';
+export type FormErrors = any;
+export type FormCompleted = any;
 
 export interface PasswordForm {
   oldPassword: string;
@@ -19,7 +21,6 @@ export interface RegisterFormValues {
   email: string;
   password: string;
   confirmPassword: string;
-  agreeToTerms: boolean;
 }
 
 export interface LoginFormValues {
@@ -63,5 +64,6 @@ export interface UploadResourceFormValues {
   resource: string;
 }
 
-export type FormErrors = any;
-export type FormCompleted = any;
+export interface DeleteAccountFormValues {
+  password: string;
+}

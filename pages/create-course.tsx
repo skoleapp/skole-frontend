@@ -32,7 +32,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
-  const { ref, onError } = useForm();
+  const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -40,6 +40,7 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
     if (!!createCourse.errors) {
       onError(createCourse.errors);
     } else {
+      resetForm();
       dispatch(openNotification('Course created!'));
       router.push(`/courses/${createCourse.course.id}`);
     }
@@ -50,6 +51,7 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
   const handleSubmit = (values: CreateCourseFormValues) => {
     const { courseName, courseCode, schoolId, subjectId } = values;
     createCourseMutation({ variables: { courseName, courseCode, schoolId, subjectId } });
+    setSubmitting(false);
   };
 
   const initialValues = {

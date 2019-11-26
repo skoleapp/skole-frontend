@@ -1,5 +1,5 @@
 import { CardContent, CardHeader } from '@material-ui/core';
-import { Formik, FormikActions } from 'formik';
+import { Formik } from 'formik';
 import { NextPage } from 'next';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
 const LoginPage: NextPage = () => {
   const client = useApolloClient();
   const dispatch = useDispatch();
-  const { ref, onError } = useForm();
+  const { ref, setSubmitting, resetForm, onError } = useForm();
 
   const onCompleted = ({ login }: FormCompleted) => {
     if (login.errors) {
@@ -39,13 +39,11 @@ const LoginPage: NextPage = () => {
 
   const [loginMutation] = useLoginMutation({ onCompleted, onError });
 
-  const handleSubmit = async (
-    values: LoginFormValues,
-    actions: FormikActions<LoginFormValues>
-  ): Promise<void> => {
+  const handleSubmit = async (values: LoginFormValues): Promise<void> => {
     const { usernameOrEmail, password } = values;
     await loginMutation({ variables: { usernameOrEmail, password } });
-    actions.setSubmitting(false);
+    setSubmitting(false);
+    resetForm();
   };
   return (
     <Layout title="Login" backUrl="/">
