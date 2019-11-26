@@ -1,5 +1,5 @@
 import { CardContent, CardHeader } from '@material-ui/core';
-import { Formik, FormikActions } from 'formik';
+import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -9,7 +9,13 @@ import * as Yup from 'yup';
 import { openNotification } from '../actions';
 import { CreateCourseForm, Layout, StyledCard } from '../components';
 import { SchoolsAndSubjectsDocument, useCreateCourseMutation } from '../generated/graphql';
-import { CreateCourseFormValues, School, SkoleContext, Subject } from '../interfaces';
+import {
+  CreateCourseFormValues,
+  FormCompleted,
+  School,
+  SkoleContext,
+  Subject
+} from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useForm, usePrivatePage } from '../utils';
 
@@ -30,10 +36,9 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // eslint-disable-next-line
-  const onCompleted = ({ createCourse }: any) => {
+  const onCompleted = ({ createCourse }: FormCompleted) => {
     if (!!createCourse.errors) {
-      onError(createCourse.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
+      onError(createCourse.errors);
     } else {
       dispatch(openNotification('Course created!'));
       router.push(`/courses/${createCourse.course.id}`);
@@ -42,13 +47,9 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
 
   const [createCourseMutation] = useCreateCourseMutation({ onCompleted, onError });
 
-  const handleSubmit = async (
-    values: CreateCourseFormValues,
-    actions: FormikActions<CreateCourseFormValues>
-  ) => {
+  const handleSubmit = (values: CreateCourseFormValues) => {
     const { courseName, courseCode, schoolId, subjectId } = values;
-    await createCourseMutation({ variables: { courseName, courseCode, schoolId, subjectId } });
-    actions.setSubmitting(false);
+    createCourseMutation({ variables: { courseName, courseCode, schoolId, subjectId } });
   };
 
   const initialValues = {
