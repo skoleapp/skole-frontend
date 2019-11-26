@@ -27,7 +27,7 @@ export const EditProfileForm: React.ComponentType<FormikProps<UpdateUserFormValu
     <StyledForm>
       <FormControl fullWidth>
         <Box display="flex" flexDirection="column" alignItems="center" className="file-input">
-          <Avatar src={avatar ? preview : getAvatar(props.values.avatar)} />
+          <Avatar className="main-avatar" src={avatar ? preview : getAvatar(props.values.avatar)} />
           <Field
             value=""
             name="avatar"
@@ -37,11 +37,13 @@ export const EditProfileForm: React.ComponentType<FormikProps<UpdateUserFormValu
             component="input"
             onChange={handleAvatarChange}
           />
-          <label htmlFor="avatar-input">
-            <Button variant="outlined" color="primary" component="span" fullWidth>
-              change avatar
-            </Button>
-          </label>
+          <Box marginTop="0.5rem">
+            <label htmlFor="avatar-input">
+              <Button variant="outlined" color="primary" component="span">
+                change avatar
+              </Button>
+            </label>
+          </Box>
           <ErrorMessage name="avatar" component={FormErrorMessage} />
         </Box>
       </FormControl>
