@@ -523,13 +523,13 @@ export type CourseQuery = (
     & Pick<CourseType, 'id' | 'name' | 'code' | 'modified' | 'created'>
     & { subject: (
       { __typename?: 'SubjectType' }
-      & Pick<SubjectType, 'name'>
+      & Pick<SubjectType, 'id' | 'name'>
     ), school: (
       { __typename?: 'SchoolType' }
-      & Pick<SchoolType, 'name'>
+      & Pick<SchoolType, 'id' | 'name'>
     ), creator: Maybe<(
       { __typename?: 'UserTypePublic' }
-      & Pick<UserTypePublic, 'username'>
+      & Pick<UserTypePublic, 'id' | 'username'>
     )> }
   )> }
 );
@@ -830,12 +830,15 @@ export const CourseDocument = gql`
     name
     code
     subject {
+      id
       name
     }
     school {
+      id
       name
     }
     creator {
+      id
       username
     }
     modified

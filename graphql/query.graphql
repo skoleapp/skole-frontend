@@ -102,12 +102,15 @@ query Course($courseId: Int!) {
     name
     code
     subject {
+      id
       name
     }
     school {
+      id
       name
     }
     creator {
+      id
       username
     }
     modified
