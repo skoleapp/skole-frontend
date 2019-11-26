@@ -1,12 +1,11 @@
-import { Avatar, Box, Divider, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
-import { Layout, NotFound, StyledCard } from '../../components';
+import { Layout, NotFound, StyledCard, UserProfileCardContent } from '../../components';
 import { UserDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { getAvatar, redirect, useAuthSync } from '../../utils';
+import { redirect, useAuthSync } from '../../utils';
 
 interface Props {
   user?: PublicUser;
@@ -14,25 +13,22 @@ interface Props {
 
 const UserPage: NextPage<Props> = ({ user }) => {
   if (user) {
-    const { username, avatar, title, bio, points } = user;
+    const username = user.username || 'Username N/A';
+
+    const userProfileProps = {
+      username,
+      avatar: user.avatar || '',
+      title: user.title || 'Title N/A',
+      bio: user.bio || 'Bio N/A',
+      points: user.points || 0,
+      courses: 0,
+      resources: 0
+    };
 
     return (
       <Layout heading={username} title={username} backUrl="/leaderboard">
         <StyledCard>
-          <Box display="flex" alignItems="center" justifyContent="space-around">
-            <Avatar src={getAvatar(avatar)} />
-            <Typography variant="body1">{username}</Typography>
-          </Box>
-          <Divider />
-          <Box display="flex" flexDirection="column" alignItems="flex-start">
-            <Typography variant="body1">{title}</Typography>
-            <Typography variant="body2">{bio}</Typography>
-            <Typography variant="body2">Points: {points}</Typography>
-          </Box>
-          <Divider />
-          <Box display="flex" flexDirection="column" alignItems="flex-start">
-            Users courses will show here...
-          </Box>
+          <UserProfileCardContent {...userProfileProps} />
         </StyledCard>
       </Layout>
     );
