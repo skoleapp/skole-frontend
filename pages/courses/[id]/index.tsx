@@ -1,14 +1,13 @@
-import { CardContent, CardHeader, Typography } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Typography } from '@material-ui/core';
 import moment from 'moment';
 import { NextPage } from 'next';
-import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
-import { ButtonLink, Layout, NotFound, StyledCard } from '../../../components';
+import { ButtonLink, Layout, NotFound, StyledCard, TextLink } from '../../../components';
 import { CourseDocument } from '../../../generated/graphql';
 import { Course, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
-import { useAuthSync } from '../../../utils';
+import { getFullCourseName, useAuthSync } from '../../../utils';
 
 interface Props {
   course?: Course;
@@ -16,27 +15,49 @@ interface Props {
 
 const CourseDetailPage: NextPage<Props> = ({ course }) => {
   if (course) {
-    const codeName = `${course.code} ${course.name}`;
-    const name: string = R.propOr('N/A', 'name', course); // Need to cast to string.
-    const code = R.propOr('N/A', 'code', course);
-    const subjectName = R.propOr('N/A', 'name', course.subject);
-    const schoolName = R.propOr('N/A', 'name', course.school);
-    const creatorName = R.propOr('N/A', 'username', course.creator);
+    const { subject, school, creator } = course;
+    const fullName = getFullCourseName(course);
+    const courseCode = course.code || 'N/A';
+    const subjectName = subject.name || 'N/A';
+    const schoolName = school.name || 'N/A';
+    const creatorName = creator.username || 'N/A';
     const created = moment(course.created).format('LL');
     const modified = moment(course.modified).format('LL');
 
     return (
-      <Layout heading={codeName} title={codeName} backUrl="/courses">
+      <Layout heading={fullName} title={fullName} backUrl="/courses">
         <StyledCard>
-          <CardHeader title={name} />
+          <CardHeader title={fullName} />
+          <Divider />
           <CardContent>
-            <Typography variant="body1">Code: {code}</Typography>
-            <Typography variant="body1">Subject: {subjectName}</Typography>
-            <Typography variant="body1">School: {schoolName}</Typography>
-            <Typography variant="body1">Creator: {creatorName}</Typography>
-            <Typography variant="body1">Created: {created}</Typography>
-            <Typography variant="body1">Modified: {modified}</Typography>
+            <Box textAlign="left">
+              <Typography variant="body1">Code: {courseCode}</Typography>
+              <Typography variant="body1">
+                Subject:{' '}
+                <TextLink
+                  href={{ pathname: '/courses', query: { subjectId: subject.id } }}
+                  color="primary"
+                >
+                  {subjectName}
+                </TextLink>
+              </Typography>
+              <Typography variant="body1">
+                School:{' '}
+                <TextLink href={`/schools/${school.id}`} color="primary">
+                  {schoolName}
+                </TextLink>
+              </Typography>
+              <Typography variant="body1">
+                Creator:{' '}
+                <TextLink href={`/users/${creator.id}`} color="primary">
+                  {creatorName}
+                </TextLink>
+              </Typography>
+              <Typography variant="body1">Created: {created}</Typography>
+              <Typography variant="body1">Modified: {modified}</Typography>
+            </Box>
           </CardContent>
+          <Divider />
           <CardContent>
             <ButtonLink
               href={`/courses/${course.id}/resources`}
