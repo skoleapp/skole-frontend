@@ -33,7 +33,7 @@ export const clientLogin: any = ({ client, token, user }: LoginParams) => async 
 
   dispatch({ type: LOGIN, payload: user });
   await client.cache.reset();
-  Router.push('/');
+  Router.push('/profile');
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,5 +66,6 @@ export const logout: any = (apolloClient: ApolloClient<any>) => async (
 
   dispatch({ type: LOGOUT });
   dispatch(openNotification('Logged out!'));
-  apolloClient.cache.reset();
+  await apolloClient.cache.reset();
+  Router.push('/login');
 };
