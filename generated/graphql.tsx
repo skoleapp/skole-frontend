@@ -69,9 +69,18 @@ export type CreateCourseMutationPayload = {
 
 
 
-export type DeleteUserMutation = {
-   __typename?: 'DeleteUserMutation',
+export type DeleteUserMutationInput = {
+  password: Scalars['String'],
+  id?: Maybe<Scalars['ID']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type DeleteUserMutationPayload = {
+   __typename?: 'DeleteUserMutationPayload',
+  user?: Maybe<UserTypePrivate>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
   message?: Maybe<Scalars['String']>,
+  clientMutationId?: Maybe<Scalars['String']>,
 };
 
 export type ErrorType = {
@@ -102,7 +111,7 @@ export type Mutation = {
   login?: Maybe<LoginMutationPayload>,
   updateUser?: Maybe<UpdateUserMutationPayload>,
   changePassword?: Maybe<ChangePasswordMutationPayload>,
-  deleteUser?: Maybe<DeleteUserMutation>,
+  deleteUser?: Maybe<DeleteUserMutationPayload>,
 };
 
 
@@ -128,6 +137,11 @@ export type MutationUpdateUserArgs = {
 
 export type MutationChangePasswordArgs = {
   input: ChangePasswordMutationInput
+};
+
+
+export type MutationDeleteUserArgs = {
+  input: DeleteUserMutationInput
 };
 
 export type Query = {
@@ -275,7 +289,6 @@ export type UserTypePrivate = {
   points: Scalars['Int'],
   email: Scalars['String'],
   schools: Array<SchoolType>,
-  language?: Maybe<Scalars['String']>,
 };
 
 export type UserTypePublic = {
@@ -380,6 +393,22 @@ export type ChangePasswordMutation = (
   { __typename?: 'Mutation' }
   & { changePassword: Maybe<(
     { __typename?: 'ChangePasswordMutationPayload' }
+    & { errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
+  )> }
+);
+
+export type DeleteAccountMutationVariables = {
+  password: Scalars['String']
+};
+
+
+export type DeleteAccountMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteUser: Maybe<(
+    { __typename?: 'DeleteUserMutationPayload' }
     & { errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -647,6 +676,24 @@ export type ChangePasswordMutationFn = ApolloReactCommon.MutationFunction<Change
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = ApolloReactCommon.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export const DeleteAccountDocument = gql`
+    mutation DeleteAccount($password: String!) {
+  deleteUser(input: {password: $password}) {
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type DeleteAccountMutationFn = ApolloReactCommon.MutationFunction<DeleteAccountMutation, DeleteAccountMutationVariables>;
+
+    export function useDeleteAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteAccountMutation, DeleteAccountMutationVariables>) {
+      return ApolloReactHooks.useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(DeleteAccountDocument, baseOptions);
+    }
+export type DeleteAccountMutationHookResult = ReturnType<typeof useDeleteAccountMutation>;
+export type DeleteAccountMutationResult = ApolloReactCommon.MutationResult<DeleteAccountMutation>;
+export type DeleteAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteAccountMutation, DeleteAccountMutationVariables>;
 export const CreateCourseDocument = gql`
     mutation CreateCourse($courseName: String!, $courseCode: String, $subjectId: ID!, $schoolId: ID!) {
   createCourse(input: {name: $courseName, code: $courseCode, subject: $subjectId, school: $schoolId}) {
