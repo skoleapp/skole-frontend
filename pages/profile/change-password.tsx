@@ -35,13 +35,13 @@ const ChangePasswordPage: NextPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const onCompleted = ({ changePassword }: FormCompleted): void => {
+  const onCompleted = async ({ changePassword }: FormCompleted): Promise<void> => {
     if (changePassword.errors) {
       onError(changePassword.errors);
     } else {
       resetForm();
       dispatch(openNotification('Password changed!'));
-      router.push('/profile');
+      await router.push('/profile');
     }
   };
 
