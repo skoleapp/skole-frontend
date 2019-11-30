@@ -25,7 +25,7 @@ const initialValues = {
   resourceType: '',
   courseId: '',
   resource: '',
-  resourceParts: 0,
+  resourceParts: null,
   general: ''
 };
 
