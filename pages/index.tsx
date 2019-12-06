@@ -41,7 +41,7 @@ const IndexPage: NextPage = () => (
         Is your school or subject not listed?
       </Typography>
       <ButtonLink href="/contact" variant="outlined" color="primary">
-        Contact us!
+        contact us!
       </ButtonLink>
     </Box>
   </Layout>
