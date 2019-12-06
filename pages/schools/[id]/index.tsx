@@ -1,8 +1,15 @@
-import { Box, CardContent, CardHeader, Divider, Typography } from '@material-ui/core';
+import { Box, CardHeader, Divider, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
-import { ButtonLink, Layout, NotFound, StyledCard, TextLink } from '../../../components';
+import {
+  ButtonLink,
+  Layout,
+  NotFound,
+  SlimCardContent,
+  StyledCard,
+  TextLink
+} from '../../../components';
 import { SchoolDocument } from '../../../generated/graphql';
 import { School, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
@@ -24,7 +31,7 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
         <StyledCard>
           <CardHeader title={schoolName} />
           <Divider />
-          <CardContent>
+          <SlimCardContent>
             <Box textAlign="left">
               <Typography variant="body1">
                 School Type:{' '}
@@ -45,9 +52,9 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
                 </TextLink>
               </Typography>
             </Box>
-          </CardContent>
+          </SlimCardContent>
           <Divider />
-          <CardContent>
+          <SlimCardContent>
             <ButtonLink
               href={{ pathname: '/subjects', query: { schoolId: school.id } }}
               variant="outlined"
@@ -64,7 +71,7 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
             >
               courses
             </ButtonLink>
-          </CardContent>
+          </SlimCardContent>
         </StyledCard>
       </Layout>
     );

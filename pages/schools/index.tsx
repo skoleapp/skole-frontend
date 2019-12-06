@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
-import { Formik, FormikActions } from 'formik';
+import { Formik } from 'formik';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -31,16 +31,13 @@ const SchoolsPage: NextPage<Props> = ({ schools }) => {
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const router = useRouter();
   const { query, pathname } = router;
-  const { ref, resetForm } = useForm();
+  const { ref, setSubmitting, resetForm } = useForm();
 
   // Pick non-empty values and reload the page with new query params.
-  const handleSubmit = (
-    values: FilterSchoolsFormValues,
-    actions: FormikActions<FilterSchoolsFormValues>
-  ) => {
+  const handleSubmit = async (values: FilterSchoolsFormValues) => {
     const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, values);
-    router.push({ pathname, query });
-    actions.setSubmitting(false);
+    await router.push({ pathname, query });
+    setSubmitting(false);
     setFiltersOpen(false);
   };
 
