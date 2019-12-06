@@ -1,4 +1,4 @@
-import { CardContent, CardHeader } from '@material-ui/core';
+import { Box, CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import React from 'react';
@@ -6,12 +6,12 @@ import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
-import { clientLogin } from '../actions';
-import { Layout, LoginForm, StyledCard } from '../components';
-import { useLoginMutation } from '../generated/graphql';
-import { FormCompleted, LoginFormValues, SkoleContext } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
-import { useForm, usePublicPage } from '../utils';
+import { clientLogin } from '../../actions';
+import { Layout, LoginForm, SlimCardContent, StyledCard, TextLink } from '../../components';
+import { useLoginMutation } from '../../generated/graphql';
+import { FormCompleted, LoginFormValues, SkoleContext } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
+import { useForm, usePublicPage } from '../../utils';
 
 const initialValues = {
   usernameOrEmail: '',
@@ -29,10 +29,11 @@ const LoginPage: NextPage = () => {
   const dispatch = useDispatch();
   const { ref, setSubmitting, resetForm, onError } = useForm();
 
-  const onCompleted = ({ login }: FormCompleted) => {
+  const onCompleted = ({ login }: FormCompleted): void => {
     if (login.errors) {
       onError(login.errors);
     } else {
+      resetForm();
       dispatch(clientLogin({ client, ...login }));
     }
   };
@@ -43,13 +44,13 @@ const LoginPage: NextPage = () => {
     const { usernameOrEmail, password } = values;
     await loginMutation({ variables: { usernameOrEmail, password } });
     setSubmitting(false);
-    resetForm();
   };
+
   return (
     <Layout title="Login" backUrl="/">
       <StyledCard>
         <CardHeader title="Login" />
-        <CardContent>
+        <SlimCardContent>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -57,7 +58,15 @@ const LoginPage: NextPage = () => {
             component={LoginForm}
             ref={ref}
           />
-        </CardContent>
+        </SlimCardContent>
+        <SlimCardContent>
+          <Box>
+            <TextLink href="/auth/register">New user?</TextLink>
+          </Box>
+          <Box>
+            <TextLink href="/auth/forgot-password">Forgot password?</TextLink>
+          </Box>
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );

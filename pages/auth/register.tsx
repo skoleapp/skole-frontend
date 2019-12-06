@@ -1,4 +1,4 @@
-import { CardContent, CardHeader } from '@material-ui/core';
+import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import React from 'react';
@@ -6,19 +6,19 @@ import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
-import { clientLogin } from '../actions';
-import { Layout, RegisterForm, StyledCard } from '../components';
-import { useRegisterMutation } from '../generated/graphql';
-import { FormCompleted, RegisterFormValues, SkoleContext } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
-import { useForm, usePublicPage } from '../utils';
+import { clientLogin } from '../../actions';
+import { Layout, RegisterForm, SlimCardContent, StyledCard, TextLink } from '../../components';
+import { useRegisterMutation } from '../../generated/graphql';
+import { FormCompleted, RegisterFormValues, SkoleContext } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
+import { useForm, usePublicPage } from '../../utils';
 
 const initialValues = {
   username: '',
   email: '',
   password: '',
   confirmPassword: '',
-  eneral: ''
+  general: ''
 };
 
 const validationSchema = Yup.object().shape({
@@ -39,7 +39,7 @@ const RegisterPage: NextPage = () => {
   const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
 
-  const onCompleted = ({ register, login }: FormCompleted) => {
+  const onCompleted = ({ register, login }: FormCompleted): void => {
     if (register.errors) {
       onError(register.errors);
     } else if (login.errors) {
@@ -62,7 +62,7 @@ const RegisterPage: NextPage = () => {
     <Layout title="Register" backUrl="/">
       <StyledCard>
         <CardHeader title="Register" />
-        <CardContent>
+        <SlimCardContent>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -70,7 +70,10 @@ const RegisterPage: NextPage = () => {
             component={RegisterForm}
             ref={ref}
           />
-        </CardContent>
+        </SlimCardContent>
+        <SlimCardContent>
+          <TextLink href="/auth/login">Already a user?</TextLink>
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );
