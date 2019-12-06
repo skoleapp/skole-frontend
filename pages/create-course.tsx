@@ -1,4 +1,4 @@
-import { CardContent, CardHeader } from '@material-ui/core';
+import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
-import { CreateCourseForm, Layout, StyledCard } from '../components';
+import { CreateCourseForm, Layout, SlimCardContent, StyledCard } from '../components';
 import { SchoolsAndSubjectsDocument, useCreateCourseMutation } from '../generated/graphql';
 import {
   CreateCourseFormValues,
@@ -36,13 +36,13 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const onCompleted = ({ createCourse }: FormCompleted) => {
+  const onCompleted = async ({ createCourse }: FormCompleted) => {
     if (!!createCourse.errors) {
       onError(createCourse.errors);
     } else {
       resetForm();
       dispatch(openNotification('Course created!'));
-      router.push(`/courses/${createCourse.course.id}`);
+      await router.push(`/courses/${createCourse.course.id}`);
     }
   };
 
@@ -68,7 +68,7 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
     <Layout title="Create Course" backUrl="/">
       <StyledCard>
         <CardHeader title="Create Course" />
-        <CardContent>
+        <SlimCardContent>
           <Formik
             initialValues={initialValues}
             component={CreateCourseForm}
@@ -76,7 +76,7 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
             validationSchema={validationSchema}
             ref={ref}
           />
-        </CardContent>
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );
