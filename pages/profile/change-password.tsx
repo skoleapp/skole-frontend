@@ -1,4 +1,4 @@
-import { CardContent, CardHeader } from '@material-ui/core';
+import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../../actions';
-import { ChangePasswordForm, Layout, StyledCard } from '../../components';
+import { ChangePasswordForm, Layout, SlimCardContent, StyledCard } from '../../components';
 import { useChangePasswordMutation } from '../../generated/graphql';
 import { FormCompleted, PasswordForm, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
@@ -57,7 +57,7 @@ const ChangePasswordPage: NextPage = () => {
     <Layout title="Change Password" backUrl="/settings">
       <StyledCard>
         <CardHeader title="Change Password" />
-        <CardContent>
+        <SlimCardContent>
           <Formik
             onSubmit={handleSubmit}
             initialValues={initialValues}
@@ -65,7 +65,7 @@ const ChangePasswordPage: NextPage = () => {
             validationSchema={validationSchema}
             ref={ref}
           />
-        </CardContent>
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );

@@ -1,4 +1,4 @@
-import { CardContent, CardHeader } from '@material-ui/core';
+import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -7,8 +7,7 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
-import { Layout, StyledCard } from '../components';
-import { UploadResourceForm } from '../components/UploadResourceForm';
+import { Layout, SlimCardContent, StyledCard, UploadResourceForm } from '../components';
 import { SkoleContext, UploadResourceFormValues } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useForm } from '../utils';
@@ -34,19 +33,19 @@ const UploadResourcePage: NextPage = () => {
   const router = useRouter();
   const { ref, setSubmitting, resetForm } = useForm();
 
-  const handleSubmit = (values: UploadResourceFormValues) => {
+  const handleSubmit = async (values: UploadResourceFormValues) => {
     console.log(values);
     setSubmitting(false);
     resetForm();
     dispatch(openNotification('Resource uploaded!'));
-    router.push('/');
+    await router.push('/');
   };
 
   return (
     <Layout title="Upload Resource" backUrl="/">
       <StyledCard>
         <CardHeader title="Upload Resource" />
-        <CardContent>
+        <SlimCardContent>
           <Formik
             component={UploadResourceForm}
             onSubmit={handleSubmit}
@@ -54,7 +53,7 @@ const UploadResourcePage: NextPage = () => {
             validationSchema={validationSchema}
             ref={ref}
           />
-        </CardContent>
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );

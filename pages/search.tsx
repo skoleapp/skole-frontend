@@ -2,7 +2,7 @@ import { CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
-import { Layout, StyledCard } from '../components';
+import { Layout, SlimCardContent, StyledCard } from '../components';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
@@ -10,7 +10,8 @@ import { useAuthSync } from '../utils';
 const SearchPage: NextPage = () => (
   <Layout heading="Search" title="Search" backUrl="/">
     <StyledCard>
-      <CardHeader title="Here will be search..." />
+      <CardHeader title="Search" />
+      <SlimCardContent>Here will be search results...</SlimCardContent>
     </StyledCard>
   </Layout>
 );

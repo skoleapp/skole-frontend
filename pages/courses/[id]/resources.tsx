@@ -1,9 +1,9 @@
-import { CardContent, CardHeader } from '@material-ui/core';
+import { CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { compose } from 'redux';
-import { ButtonLink, Layout, StyledCard } from '../../../components';
+import { ButtonLink, Layout, SlimCardContent, StyledCard } from '../../../components';
 import { SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
@@ -16,7 +16,8 @@ const ResourcesPage: NextPage = () => {
     <Layout heading="Resources" title="Resources" backUrl={`/courses/${id}`}>
       <StyledCard>
         <CardHeader title="Resources" />
-        <CardContent>
+        <SlimCardContent>Here will be course resources...</SlimCardContent>
+        <SlimCardContent>
           <ButtonLink
             href={{ pathname: '/upload-resource', query: { courseId: id } }}
             variant="outlined"
@@ -25,7 +26,7 @@ const ResourcesPage: NextPage = () => {
           >
             upload resource
           </ButtonLink>
-        </CardContent>
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );

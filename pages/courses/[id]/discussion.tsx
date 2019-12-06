@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { compose } from 'redux';
-import { Layout, StyledCard } from '../../../components';
+import { Layout, SlimCardContent, StyledCard } from '../../../components';
 import { SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
@@ -15,7 +15,8 @@ const CourseDiscussion: NextPage = () => {
   return (
     <Layout heading="Discussion" title="Discussion" backUrl={`/courses/${id}`}>
       <StyledCard>
-        <CardHeader title="Course discussion will be here..." />
+        <CardHeader title="Discussion" />
+        <SlimCardContent>Course discussion will be here...</SlimCardContent>
       </StyledCard>
     </Layout>
   );

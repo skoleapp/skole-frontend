@@ -1,9 +1,16 @@
-import { Box, CardContent, CardHeader, Divider, Typography } from '@material-ui/core';
+import { Box, CardHeader, Divider, Typography } from '@material-ui/core';
 import moment from 'moment';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
-import { ButtonLink, Layout, NotFound, StyledCard, TextLink } from '../../../components';
+import {
+  ButtonLink,
+  Layout,
+  NotFound,
+  SlimCardContent,
+  StyledCard,
+  TextLink
+} from '../../../components';
 import { CourseDocument } from '../../../generated/graphql';
 import { Course, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
@@ -29,7 +36,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         <StyledCard>
           <CardHeader title={fullName} />
           <Divider />
-          <CardContent>
+          <SlimCardContent>
             <Box textAlign="left">
               <Typography variant="body1">Code: {courseCode}</Typography>
               <Typography variant="body1">
@@ -56,9 +63,9 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
               <Typography variant="body1">Created: {created}</Typography>
               <Typography variant="body1">Modified: {modified}</Typography>
             </Box>
-          </CardContent>
+          </SlimCardContent>
           <Divider />
-          <CardContent>
+          <SlimCardContent>
             <ButtonLink
               href={`/courses/${course.id}/resources`}
               variant="outlined"
@@ -75,7 +82,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             >
               discussion
             </ButtonLink>
-          </CardContent>
+          </SlimCardContent>
         </StyledCard>
       </Layout>
     );

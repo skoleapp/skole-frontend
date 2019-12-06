@@ -1,9 +1,15 @@
-import { CardContent, Divider } from '@material-ui/core';
+import { Divider } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
-import { ButtonLink, Layout, StyledCard, UserProfileCardContent } from '../../components';
+import {
+  ButtonLink,
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  UserProfileCardContent
+} from '../../components';
 import { SkoleContext, State } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { usePrivatePage } from '../../utils';
@@ -26,11 +32,11 @@ const ProfilePage: NextPage = () => {
       <StyledCard>
         <UserProfileCardContent {...userProfileProps} />
         <Divider />
-        <CardContent>
+        <SlimCardContent>
           <ButtonLink href="/profile/edit" color="primary" variant="outlined" fullWidth>
             edit profile
           </ButtonLink>
-        </CardContent>
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );

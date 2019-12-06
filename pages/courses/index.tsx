@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
-import { Formik, FormikActions } from 'formik';
+import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
@@ -13,6 +13,7 @@ import {
   FilterCoursesForm,
   Layout,
   MobileFilters,
+  StyledForm,
   StyledTable
 } from '../../components';
 import { CoursesSchoolsAndSubjectsDocument } from '../../generated/graphql';
@@ -30,18 +31,15 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
   const router = useRouter();
   const { query, pathname } = router;
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
-  const { ref, resetForm } = useForm();
+  const { ref, setSubmitting, resetForm } = useForm();
 
   // Pick non-empty values and reload the page with new query params.
-  const handleSubmit = async (
-    values: FilterCoursesFormValues,
-    actions: FormikActions<FilterCoursesFormValues>
-  ) => {
+  const handleSubmit = async (values: FilterCoursesFormValues): Promise<void> => {
     const { courseName, courseCode, schoolId, subjectId } = values;
     const filteredValues = { courseName, courseCode, schoolId, subjectId };
     const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
-    router.push({ pathname, query });
-    actions.setSubmitting(false);
+    await router.push({ pathname, query });
+    setSubmitting(false);
     setFiltersOpen(false);
   };
 
@@ -77,8 +75,10 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
           <TableHead className="mobile-only">
             <TableRow>
               <TableCell>
-                <FilterButton toggleFilters={toggleFilters} />
-                <ClearFiltersButton resetForm={resetForm} />
+                <StyledForm>
+                  <FilterButton toggleFilters={toggleFilters} />
+                  <ClearFiltersButton resetForm={resetForm} />
+                </StyledForm>
               </TableCell>
             </TableRow>
           </TableHead>

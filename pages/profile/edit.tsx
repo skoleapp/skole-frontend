@@ -1,4 +1,4 @@
-import { CardContent, CardHeader } from '@material-ui/core';
+import { CardHeader } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
 import React from 'react';
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification, updateUserMe } from '../../actions';
-import { EditProfileForm, Layout, StyledCard } from '../../components';
+import { EditProfileForm, Layout, SlimCardContent, StyledCard } from '../../components';
 import { useUpdateUserMutation } from '../../generated/graphql';
 import { FormCompleted, SkoleContext, State, UpdateUserFormValues } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
@@ -70,7 +70,7 @@ const EditProfilePage: NextPage = () => {
     <Layout title="Edit Profile" backUrl="/profile">
       <StyledCard>
         <CardHeader title="Edit Profile" />
-        <CardContent>
+        <SlimCardContent>
           <Formik
             component={EditProfileForm}
             initialValues={initialValues}
@@ -78,7 +78,7 @@ const EditProfilePage: NextPage = () => {
             validationSchema={validationSchema}
             ref={ref}
           />
-        </CardContent>
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );
