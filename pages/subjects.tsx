@@ -12,9 +12,9 @@ import {
   FilterButton,
   FilterSubjectsForm,
   Layout,
+  MobileFilters,
   StyledTable
 } from '../components';
-import { MobileFilters } from '../components/MobileFilters';
 import { SchoolsAndSubjectsDocument } from '../generated/graphql';
 import { FilterSubjectsFormValues, School, SkoleContext, Subject } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
@@ -34,14 +34,14 @@ const SubjectsPage: NextPage<Props> = ({ schools, subjects }) => {
   const { schoolId } = query;
 
   // Pick non-empty values and reload the page with new query params.
-  const handleSubmit = (
+  const handleSubmit = async (
     values: FilterSubjectsFormValues,
     actions: FormikActions<FilterSubjectsFormValues>
   ) => {
     const { schoolId } = values;
     const filteredValues = { schoolId };
     const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
-    router.push({ pathname, query });
+    await router.push({ pathname, query });
     actions.setSubmitting(false);
     setFiltersOpen(false);
   };
