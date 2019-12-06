@@ -10,8 +10,8 @@ query UserMe {
   }
 }
 
-query Users {
-  users {
+query Leaderboard {
+  leaderboard {
     id
     username
     points

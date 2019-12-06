@@ -45,7 +45,6 @@ export type CourseType = {
   subject: SubjectType,
   school: SchoolType,
   creator?: Maybe<UserTypePublic>,
-  points: Scalars['Int'],
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
   resources?: Maybe<Array<Maybe<ResourceType>>>,
@@ -146,11 +145,13 @@ export type MutationDeleteUserArgs = {
 
 export type Query = {
    __typename?: 'Query',
+  resourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>,
   resource?: Maybe<ResourceType>,
-  users?: Maybe<Array<Maybe<UserTypePublic>>>,
+  leaderboard?: Maybe<Array<Maybe<UserTypePublic>>>,
   user?: Maybe<UserTypePublic>,
   userMe?: Maybe<UserTypePrivate>,
   subjects?: Maybe<Array<Maybe<SubjectType>>>,
+  schoolTypes?: Maybe<Array<Maybe<SchoolTypeObjectType>>>,
   schools?: Maybe<Array<Maybe<SchoolType>>>,
   school?: Maybe<SchoolType>,
   courses?: Maybe<Array<Maybe<CourseType>>>,
@@ -213,30 +214,23 @@ export type RegisterMutationPayload = {
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
-/** An enumeration. */
-export enum ResourceResourceType {
-  /** exam */
-  Exam = 'EXAM',
-  /** note */
-  Note = 'NOTE',
-  /** exercise */
-  Exercise = 'EXERCISE',
-  /** other */
-  Other = 'OTHER'
-}
-
 export type ResourceType = {
    __typename?: 'ResourceType',
   id: Scalars['ID'],
-  resourceType: ResourceResourceType,
+  resourceType: ResourceTypeObjectType,
   title: Scalars['String'],
   file: Scalars['String'],
-  date?: Maybe<Scalars['Date']>,
+  date: Scalars['Date'],
   course: CourseType,
   creator?: Maybe<UserTypePublic>,
-  points: Scalars['Int'],
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
+  points?: Maybe<Scalars['Int']>,
+};
+
+export type ResourceTypeObjectType = {
+   __typename?: 'ResourceTypeObjectType',
+  name: Scalars['String'],
 };
 
 export type SchoolType = {
@@ -244,9 +238,14 @@ export type SchoolType = {
   id: Scalars['ID'],
   schoolType?: Maybe<Scalars['String']>,
   name: Scalars['String'],
-  city: Scalars['String'],
-  country: Scalars['String'],
+  city?: Maybe<Scalars['String']>,
   subjects?: Maybe<Array<Maybe<SubjectType>>>,
+  country?: Maybe<Scalars['String']>,
+};
+
+export type SchoolTypeObjectType = {
+   __typename?: 'SchoolTypeObjectType',
+  name: Scalars['String'],
 };
 
 export type SubjectType = {
@@ -286,9 +285,10 @@ export type UserTypePrivate = {
   title?: Maybe<Scalars['String']>,
   bio?: Maybe<Scalars['String']>,
   avatar?: Maybe<Scalars['String']>,
-  points: Scalars['Int'],
   email: Scalars['String'],
   schools: Array<SchoolType>,
+  avatarThumbnail?: Maybe<Scalars['String']>,
+  points?: Maybe<Scalars['Int']>,
 };
 
 export type UserTypePublic = {
@@ -299,7 +299,8 @@ export type UserTypePublic = {
   title?: Maybe<Scalars['String']>,
   bio?: Maybe<Scalars['String']>,
   avatar?: Maybe<Scalars['String']>,
-  points: Scalars['Int'],
+  avatarThumbnail?: Maybe<Scalars['String']>,
+  points?: Maybe<Scalars['Int']>,
 };
 
 export type UserTypeRegister = {
@@ -449,12 +450,12 @@ export type UserMeQuery = (
   )> }
 );
 
-export type UsersQueryVariables = {};
+export type LeaderboardQueryVariables = {};
 
 
-export type UsersQuery = (
+export type LeaderboardQuery = (
   { __typename?: 'Query' }
-  & { users: Maybe<Array<Maybe<(
+  & { leaderboard: Maybe<Array<Maybe<(
     { __typename?: 'UserTypePublic' }
     & Pick<UserTypePublic, 'id' | 'username' | 'points' | 'avatar'>
   )>>> }
@@ -738,9 +739,9 @@ export const UserMeDocument = gql`
       
 export type UserMeQueryHookResult = ReturnType<typeof useUserMeQuery>;
 export type UserMeQueryResult = ApolloReactCommon.QueryResult<UserMeQuery, UserMeQueryVariables>;
-export const UsersDocument = gql`
-    query Users {
-  users {
+export const LeaderboardDocument = gql`
+    query Leaderboard {
+  leaderboard {
     id
     username
     points
@@ -749,15 +750,15 @@ export const UsersDocument = gql`
 }
     `;
 
-    export function useUsersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
-      return ApolloReactHooks.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
+    export function useLeaderboardQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<LeaderboardQuery, LeaderboardQueryVariables>) {
+      return ApolloReactHooks.useQuery<LeaderboardQuery, LeaderboardQueryVariables>(LeaderboardDocument, baseOptions);
     }
-      export function useUsersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
+      export function useLeaderboardLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<LeaderboardQuery, LeaderboardQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<LeaderboardQuery, LeaderboardQueryVariables>(LeaderboardDocument, baseOptions);
       }
       
-export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
-export type UsersQueryResult = ApolloReactCommon.QueryResult<UsersQuery, UsersQueryVariables>;
+export type LeaderboardQueryHookResult = ReturnType<typeof useLeaderboardQuery>;
+export type LeaderboardQueryResult = ApolloReactCommon.QueryResult<LeaderboardQuery, LeaderboardQueryVariables>;
 export const UserDocument = gql`
     query User($userId: Int!) {
   user(userId: $userId) {
