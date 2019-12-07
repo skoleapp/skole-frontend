@@ -22,6 +22,10 @@ const IndexPage: NextPage = ({ t }) => (
         <Shortcut text={t('Create Course')} icon={LibraryAddSharp} href="/create-course" />
         <Shortcut text={t('Leaderboard')} icon={Score} href="/leaderboard" />
       </div>
+      <button
+        type="button"
+        onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'fi' : 'en')}
+      ></button>
     </StyledLandingPageContent>
   </Layout>
 );

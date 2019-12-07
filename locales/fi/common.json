@@ -1,3 +1,8 @@
 {
-  "test": "Translations work!, fi"
+  "What would you like to do?": "Mitä haluaisit tehdä?",
+  "Browse Schools": "Selaa Kouluja",
+  "Browse Courses": "Selaa Kursseja",
+  "Browse Subjects": "Selaa Kouluaineita",
+  "Create Course": "Lisää Kurssi",
+  "Leaderboard": "Pistetilasto"
 }
