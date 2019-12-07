@@ -14,7 +14,7 @@ export const Shortcut: React.FC<Props> = ({ text, icon: Icon, href }) => (
   <Link href={href}>
     <StyledShortcut>
       <CardContent>
-        <Icon />
+        <Icon color="primary" />
         <Typography variant="h6">{text}</Typography>
       </CardContent>
     </StyledShortcut>
