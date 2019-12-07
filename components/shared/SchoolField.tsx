@@ -1,25 +1,26 @@
-import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
-import { ErrorMessage, Field, FormikProps } from 'formik';
-import { Select } from 'formik-material-ui';
+import { FormikProps } from 'formik';
 import React from 'react';
-import { FormErrorMessage } from '.';
 import { School } from '../../interfaces';
+import { useAutoCompleteField } from '../../utils';
 
 // eslint-disable-next-line @eslint-typescript/no-explicit-any
-export const SchoolField: React.FC<FormikProps<any>> = ({ values }) => (
-  <FormControl fullWidth>
-    <InputLabel>School</InputLabel>
-    <Field name="schoolId" component={Select} placeholder="test" fullWidth>
-      <MenuItem value="">---</MenuItem>
-      {values.schools &&
-        values.schools.map(
-          (s: School, i: number): JSX.Element => (
-            <MenuItem key={i} value={s.id}>
-              {s.name}
-            </MenuItem>
-          )
-        )}
-    </Field>
-    <ErrorMessage name="schoolId" component={FormErrorMessage} />
-  </FormControl>
-);
+export const SchoolField: React.FC<FormikProps<any>> = props => {
+  const { schools, schoolId } = props.initialValues;
+  const options = schools;
+  const school = schools.find((s: School) => s.id === schoolId);
+  const initialValue = (school && school.name) || '';
+  const dataKey = 'id';
+  const fieldName = 'schoolId';
+  const label = 'School';
+
+  const { renderAutoCompleteField } = useAutoCompleteField({
+    ...props,
+    options,
+    initialValue,
+    dataKey,
+    fieldName,
+    label
+  });
+
+  return renderAutoCompleteField;
+};

@@ -1,20 +1,26 @@
-import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
-import { ErrorMessage, Field, FormikProps } from 'formik';
-import { Select } from 'formik-material-ui';
+import { FormikProps } from 'formik';
 import React from 'react';
-import { FormErrorMessage } from '.';
+import { ResourceType } from '../../interfaces';
+import { useAutoCompleteField } from '../../utils';
 
-// TODO: Get resource types from backend.
 // eslint-disable-next-line @eslint-typescript/no-explicit-any
-export const ResourceTypeField: React.FC<FormikProps<any>> = () => (
-  <FormControl fullWidth>
-    <InputLabel>Resource Type</InputLabel>
-    <Field name="resourceType" component={Select}>
-      <MenuItem value="">---</MenuItem>
-      <MenuItem value="Exam">Exam</MenuItem>
-      <MenuItem value="Note">Note</MenuItem>
-      <MenuItem value="Other">Other</MenuItem>
-    </Field>
-    <ErrorMessage name="resourceType" component={FormErrorMessage} />
-  </FormControl>
-);
+export const ResourceTypeField: React.FC<FormikProps<any>> = props => {
+  const { resourceTypes, resourceType } = props.initialValues;
+  const options = resourceTypes;
+  const selectedResourceType = resourceTypes.find((r: ResourceType) => r.name === resourceType);
+  const initialValue = (selectedResourceType && selectedResourceType.name) || '';
+  const dataKey = 'resourceType';
+  const fieldName = 'resourceType';
+  const label = 'Resource Type';
+
+  const { renderAutoCompleteField } = useAutoCompleteField({
+    ...props,
+    options,
+    initialValue,
+    dataKey,
+    fieldName,
+    label
+  });
+
+  return renderAutoCompleteField;
+};
