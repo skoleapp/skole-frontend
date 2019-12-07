@@ -14,6 +14,7 @@ export { SlimCardContent } from './SlimCardContent';
 export { StyledCard } from './StyledCard';
 export { StyledDialog } from './StyledDialog';
 export { StyledForm } from './StyledForm';
+export { StyledList } from './StyledList';
 export { StyledTable } from './StyledTable';
 export { SubjectField } from './SubjectField';
 export { TextLink } from './TextLink';
