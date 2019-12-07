@@ -1,3 +1,4 @@
+import { Resource } from './resources';
 import { School } from './school';
 import { Subject } from './subject';
 import { PublicUser } from './user';
@@ -11,4 +12,6 @@ export interface Course {
   creator: PublicUser;
   created: string;
   modified: string;
+  resources: Resource[];
+  points: number;
 }
