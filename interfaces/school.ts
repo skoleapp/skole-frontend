@@ -11,6 +11,6 @@ export interface School {
   name: string;
   city: string;
   country: string;
-  subjects: Subject[] | null;
-  courses: Course[] | null;
+  subjects: Subject[];
+  courses: Course[];
 }
