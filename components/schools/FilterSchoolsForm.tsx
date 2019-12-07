@@ -1,10 +1,15 @@
 import { Field, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
+import { SchoolType } from '../../generated/graphql';
 import { FilterSchoolsFormValues } from '../../interfaces';
 import { FormSubmitSection, SchoolTypeField, StyledForm } from '../shared';
 
-export const FilterSchoolsForm: React.FC<FormikProps<FilterSchoolsFormValues>> = props => (
+interface Props extends FormikProps<FilterSchoolsFormValues> {
+  schoolTypes: SchoolType[];
+}
+
+export const FilterSchoolsForm: React.FC<Props> = props => (
   <StyledForm>
     <SchoolTypeField {...props} />
     <Field

@@ -1,15 +1,15 @@
 import { Field, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { FormSubmitSection, SchoolField, StyledForm, SubjectField } from '../shared';
 import { CreateCourseFormValues, School, Subject } from '../../interfaces';
+import { FormSubmitSection, SchoolField, StyledForm, SubjectField } from '../shared';
 
-interface Props extends CreateCourseFormValues {
+interface Props extends FormikProps<CreateCourseFormValues> {
   subjects: Subject[];
   schools: School[];
 }
 
-export const CreateCourseForm: React.FC<FormikProps<Props>> = props => (
+export const CreateCourseForm: React.FC<Props> = props => (
   <StyledForm>
     <Field
       name="courseName"
