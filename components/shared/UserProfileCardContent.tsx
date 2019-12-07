@@ -3,7 +3,6 @@ import {
   Box,
   CardContent,
   Divider,
-  List,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -11,9 +10,9 @@ import {
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import React from 'react';
-import styled from 'styled-components';
 import { PublicUser } from '../../interfaces';
 import { getAvatar } from '../../utils';
+import { StyledList } from './StyledList';
 
 export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
   avatar,
@@ -36,7 +35,7 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
 
   const renderAccountInfoList = (
     <CardContent>
-      <StyledAccountInfoList>
+      <StyledList>
         <ListItem>
           <ListItemAvatar>
             <Avatar>
@@ -61,7 +60,7 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
           </ListItemAvatar>
           <ListItemText>Resources: {resources}</ListItemText>
         </ListItem>
-      </StyledAccountInfoList>
+      </StyledList>
     </CardContent>
   );
 
@@ -117,9 +116,3 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
     </>
   );
 };
-
-const StyledAccountInfoList = styled(List)`
-  .MuiAvatar-root {
-    background-color: var(--primary);
-  }
-`;
