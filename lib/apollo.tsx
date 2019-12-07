@@ -1,19 +1,29 @@
 import { ApolloProvider } from '@apollo/react-hooks';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
+import { GraphQLRequest } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
+import { HttpConfig } from 'apollo-link-http-common';
 import { createUploadLink } from 'apollo-upload-client';
+import { IncomingMessage } from 'http';
 import fetch from 'isomorphic-unfetch';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import { SkoleContext } from '../interfaces';
+import { WithApolloClient } from 'react-apollo';
 import { getToken } from '../utils';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const withApollo = (PageComponent: any, { ssr = true } = {}): any => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const WithApollo = ({ apolloClient, apolloState, ...pageProps }: any): any => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+interface GetToken {
+  getToken: (req?: IncomingMessage) => string;
+}
+
+/* eslint-disable*/
+export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): NextPage => {
+  const WithApollo = ({
+    apolloClient,
+    apolloState,
+    ...pageProps
+  }: WithApolloClient<any>): WithApolloClient<any> => {
     const client = apolloClient || initApolloClient(apolloState, { getToken });
     return (
       <ApolloProvider client={client}>
@@ -21,6 +31,7 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}): any => {
       </ApolloProvider>
     );
   };
+  /* eslint-enable */
 
   if (process.env.NODE_ENV !== 'production') {
     const displayName = PageComponent.displayName || PageComponent.name || 'Component';
@@ -33,14 +44,11 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}): any => {
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
+    WithApollo.getInitialProps = async (ctx: WithApolloClient<any>): Promise<any> => {
       const { AppTree } = ctx;
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       const apolloClient = (ctx.apolloClient = initApolloClient(
         {},
-        {
-          getToken: () => getToken(ctx.req)
-        }
+        { getToken: () => getToken(ctx.req) }
       ));
       const pageProps = PageComponent.getInitialProps
         ? await PageComponent.getInitialProps(ctx)
@@ -67,7 +75,7 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}): any => {
         Head.rewind();
       }
 
-      const apolloState = apolloClient.cache.extract();
+      const apolloState = apolloClient && apolloClient.cache.extract();
 
       return {
         ...pageProps,
@@ -81,36 +89,37 @@ export const withApollo = (PageComponent: any, { ssr = true } = {}): any => {
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const initApolloClient = (initState: any, { getToken }: any): any => {
-  /* eslint-enable */
+const initApolloClient = (
+  initState = {},
+  { getToken }: GetToken
+): ApolloClient<NormalizedCacheObject> | null => {
   if (typeof window === 'undefined') {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return createApolloClient(initState, { getToken });
   }
 
   if (!apolloClient) {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     apolloClient = createApolloClient(initState, { getToken });
   }
 
   return apolloClient;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createApolloClient = (initialState = {}, { getToken }: any): any => {
+const createApolloClient = (
+  initialState = {},
+  { getToken }: GetToken
+): ApolloClient<NormalizedCacheObject> => {
   const isBrowser = typeof window !== 'undefined';
   const isDocker = process.env.API_URL === 'http://backend:8000/graphql/';
 
   const httpLink = createUploadLink({
     uri: isDocker && isBrowser ? 'http://localhost:8000/graphql/' : process.env.API_URL,
-    credentials: 'include',
+    credentials: 'same-origin',
     fetch
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const authLink = setContext((_req: any, { headers }: any) => {
+  const authLink = setContext((_req: GraphQLRequest, { headers }: HttpConfig) => {
     const token = getToken();
+
     return {
       headers: {
         ...headers,

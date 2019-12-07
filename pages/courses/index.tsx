@@ -1,24 +1,25 @@
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography
-} from '@material-ui/core';
-import { Formik, FormikActions } from 'formik';
+import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import React, { useRef } from 'react';
+import React from 'react';
 import { compose } from 'redux';
-import { LabelTag, StyledTable } from '../../components';
-import { FilterCoursesForm, Layout } from '../../containers';
-import { CoursesSchoolsAndSubjectsDocument } from '../../generated/graphql';
+import {
+  ClearFiltersButton,
+  DesktopFilters,
+  FilterButton,
+  FilterCoursesForm,
+  Layout,
+  MobileFilters,
+  StyledForm,
+  StyledTable
+} from '../../components';
+import { FilterCoursesDocument } from '../../generated/graphql';
 import { Course, FilterCoursesFormValues, School, SkoleContext, Subject } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { useAuthSync } from '../../utils';
+import { getFullCourseName, useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
 
 interface Props {
   courses?: Course[];
@@ -29,53 +30,55 @@ interface Props {
 const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
   const router = useRouter();
   const { query, pathname } = router;
-  const { courseName, courseCode, subjectId, schoolId } = query;
-  const ref = useRef<any>(); // eslint-disable-line @eslint/typescript-no-explicit-any
+  const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
+  const { ref, setSubmitting, resetForm } = useForm();
 
   // Pick non-empty values and reload the page with new query params.
-  const handleSubmit = (
-    values: FilterCoursesFormValues,
-    actions: FormikActions<FilterCoursesFormValues>
-  ) => {
-    const isNotEmpty = (val: string) => val !== '';
-    const query: any = R.pickBy(isNotEmpty, values); // eslint-disable-line @eslint/typescript-no-explicit-any
-    router.push({ pathname, query });
-    actions.setSubmitting(false);
-  };
-
-  // Wait for the router to clear the query params, then reset the form.
-  const handleClearFilters = async () => {
-    await router.push(pathname);
-    ref.current.resetForm();
+  const handleSubmit = async (values: FilterCoursesFormValues): Promise<void> => {
+    const { courseName, courseCode, schoolId, subjectId } = values;
+    const filteredValues = { courseName, courseCode, schoolId, subjectId };
+    const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
+    await router.push({ pathname, query });
+    setSubmitting(false);
+    setFiltersOpen(false);
   };
 
   // Pre-load query params to the form.
   const initialValues = {
-    courseName: courseName || '',
-    courseCode: courseCode || '',
-    subjectId: subjectId || '',
-    schoolId: schoolId || '',
-    subjects: subjects || [],
-    schools: schools || []
+    courseName: query.courseName || '',
+    courseCode: query.courseCode || '',
+    subjectId: query.subjectId || '',
+    schoolId: query.schoolId || '',
+    schools: schools || [],
+    subjects: subjects || []
   };
+
+  const filterTitle = 'Filter Courses';
+
+  const renderFilterForm = (
+    <Formik
+      component={FilterCoursesForm}
+      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      ref={ref}
+    />
+  );
 
   return (
     <Layout heading="Courses" title="Courses" backUrl="/">
+      <DesktopFilters title={filterTitle}>
+        {renderFilterForm}
+        <ClearFiltersButton resetForm={resetForm} />
+      </DesktopFilters>
       <StyledTable>
         <Table>
-          <TableHead>
+          <TableHead className="mobile-only">
             <TableRow>
-              <TableCell align="center">
-                <Typography variant="h6">Filter Courses</Typography>
-                <Formik
-                  component={FilterCoursesForm}
-                  onSubmit={handleSubmit}
-                  initialValues={initialValues}
-                  ref={ref}
-                />
-                <Button variant="outlined" color="primary" fullWidth onClick={handleClearFilters}>
-                  clear filters
-                </Button>
+              <TableCell>
+                <StyledForm>
+                  <FilterButton toggleFilters={toggleFilters} />
+                  <ClearFiltersButton resetForm={resetForm} />
+                </StyledForm>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -84,8 +87,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
               courses.map((course: Course, i: number) => (
                 <TableRow key={i} onClick={() => router.push(`/courses/${course.id}`)}>
                   <TableCell>
-                    <Typography variant="subtitle1">{course.name}</Typography>
-                    {course.code && <LabelTag text={course.code} />}
+                    <Typography variant="subtitle1">{getFullCourseName(course)}</Typography>
                   </TableCell>
                 </TableRow>
               ))
@@ -99,6 +101,9 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
           </TableBody>
         </Table>
       </StyledTable>
+      <MobileFilters title={filterTitle} filtersOpen={filtersOpen} toggleFilters={toggleFilters}>
+        {renderFilterForm}
+      </MobileFilters>
     </Layout>
   );
 };
@@ -109,7 +114,7 @@ CoursesPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
 
   try {
     const { data } = await apolloClient.query({
-      query: CoursesSchoolsAndSubjectsDocument,
+      query: FilterCoursesDocument,
       variables: { ...query }
     });
 

@@ -19,7 +19,6 @@ mutation Register($username: String!, $email: String!, $password: String!) {
       points
       created
       email
-      language
     }
     errors {
       field
@@ -39,7 +38,6 @@ mutation Login($usernameOrEmail: String!, $password: String!) {
       points
       created
       email
-      language
     }
     errors {
       field
@@ -54,17 +52,9 @@ mutation UpdateUser(
   $title: String
   $bio: String
   $avatar: String
-  $language: String!
 ) {
   updateUser(
-    input: {
-      username: $username
-      email: $email
-      title: $title
-      bio: $bio
-      avatar: $avatar
-      language: $language
-    }
+    input: { username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar }
   ) {
     user {
       id
@@ -74,7 +64,6 @@ mutation UpdateUser(
       bio
       avatar
       points
-      language
       created
     }
     errors {
@@ -86,6 +75,15 @@ mutation UpdateUser(
 
 mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
   changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
+    errors {
+      field
+      messages
+    }
+  }
+}
+
+mutation DeleteAccount($password: String!) {
+  deleteUser(input: { password: $password }) {
     errors {
       field
       messages

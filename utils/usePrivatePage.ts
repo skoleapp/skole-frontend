@@ -7,9 +7,9 @@ import { useAuthSync } from './useAuthSync';
 export const usePrivatePage = async (ctx: SkoleContext): Promise<void> => {
   const { userMe } = await useAuthSync(ctx);
 
-  if (userMe) {
+  if (!!userMe) {
     await ctx.reduxStore.dispatch(updateUserMe(userMe));
   } else {
-    redirect(ctx, '/login');
+    redirect(ctx, '/auth/login');
   }
 };

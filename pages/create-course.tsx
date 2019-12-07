@@ -1,22 +1,23 @@
-import { Formik, FormikActions } from 'formik';
+import { CardHeader } from '@material-ui/core';
+import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
-import { StyledCard } from '../components';
-import { CreateCourseForm, Layout } from '../containers';
-import { SchoolsAndSubjectsDocument, useCreateCourseMutation } from '../generated/graphql';
-import { CreateCourseFormValues, School, SkoleContext, Subject } from '../interfaces';
+import { CreateCourseForm, Layout, SlimCardContent, StyledCard } from '../components';
+import { CreateCourseFormDataDocument, useCreateCourseMutation } from '../generated/graphql';
+import {
+  CreateCourseFormValues,
+  FormCompleted,
+  School,
+  SkoleContext,
+  Subject
+} from '../interfaces';
 import { withApollo, withRedux } from '../lib';
-import { createFormErrors, usePrivatePage } from '../utils';
-
-interface Props {
-  subjects?: Subject[];
-  schools?: School[];
-}
+import { useForm, usePrivatePage } from '../utils';
 
 const validationSchema = Yup.object().shape({
   courseName: Yup.string().required('Course name is required.'),
@@ -25,39 +26,32 @@ const validationSchema = Yup.object().shape({
   schoolId: Yup.string().required('School is required.')
 });
 
-const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
-  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+interface Props {
+  subjects?: Subject[];
+  schools?: School[];
+}
+
+const CreateCoursePage: NextPage<Props> = ({ subjects, schools }) => {
+  const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // eslint-disable-next-line
-  const onCompleted = ({ createCourse }: any) => {
+  const onCompleted = async ({ createCourse }: FormCompleted) => {
     if (!!createCourse.errors) {
-      onError(createCourse.errors); // eslint-disable-line @typescript-eslint/no-use-before-define
+      onError(createCourse.errors);
     } else {
+      resetForm();
       dispatch(openNotification('Course created!'));
-      router.push(`/courses/${createCourse.course.id}`);
+      await router.push(`/courses/${createCourse.course.id}`);
     }
-  };
-
-  // eslint-disable-next-line
-  const onError = (errors: any) => {
-    console.log({ ...errors });
-    const formErrors = createFormErrors(errors);
-    Object.keys(formErrors).forEach(
-      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
-    );
   };
 
   const [createCourseMutation] = useCreateCourseMutation({ onCompleted, onError });
 
-  const handleSubmit = async (
-    values: CreateCourseFormValues,
-    actions: FormikActions<CreateCourseFormValues>
-  ) => {
+  const handleSubmit = (values: CreateCourseFormValues) => {
     const { courseName, courseCode, schoolId, subjectId } = values;
-    await createCourseMutation({ variables: { courseName, courseCode, schoolId, subjectId } });
-    actions.setSubmitting(false);
+    createCourseMutation({ variables: { courseName, courseCode, schoolId, subjectId } });
+    setSubmitting(false);
   };
 
   const initialValues = {
@@ -66,20 +60,23 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
     subjectId: '',
     schoolId: '',
     general: '',
-    schools: schools || [],
-    subjects: subjects || []
+    subjects: subjects || [],
+    schools: schools || []
   };
 
   return (
-    <Layout heading="Create Course" title="Create Course" backUrl="/">
+    <Layout title="Create Course" backUrl="/">
       <StyledCard>
-        <Formik
-          initialValues={initialValues}
-          component={CreateCourseForm}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-          ref={ref}
-        />
+        <CardHeader title="Create Course" />
+        <SlimCardContent>
+          <Formik
+            initialValues={initialValues}
+            component={CreateCourseForm}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+            ref={ref}
+          />
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );
@@ -89,10 +86,7 @@ CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
   await usePrivatePage(ctx);
 
   try {
-    const { data } = await ctx.apolloClient.query({
-      query: SchoolsAndSubjectsDocument
-    });
-
+    const { data } = await ctx.apolloClient.query({ query: CreateCourseFormDataDocument });
     return { ...data };
   } catch {
     return {};

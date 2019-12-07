@@ -1,17 +1,26 @@
+import { CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { compose } from 'redux';
-import { StyledCard } from '../../../components';
-import { Layout } from '../../../containers';
+import { Layout, SlimCardContent, StyledCard } from '../../../components';
 import { SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
 
-const CourseDiscussion: NextPage = () => (
-  <Layout heading="Course Discussion" title="Course Discussion" backUrl="/courses">
-    <StyledCard>Course discussion will be here...</StyledCard>
-  </Layout>
-);
+const CourseDiscussion: NextPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
+  return (
+    <Layout heading="Discussion" title="Discussion" backUrl={`/courses/${id}`}>
+      <StyledCard>
+        <CardHeader title="Discussion" />
+        <SlimCardContent>Course discussion will be here...</SlimCardContent>
+      </StyledCard>
+    </Layout>
+  );
+};
 
 CourseDiscussion.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await useAuthSync(ctx);

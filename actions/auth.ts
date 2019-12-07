@@ -10,9 +10,7 @@ import { openNotification } from './notifications';
 export const GET_USER_ME_LOADING = 'GET_USER_ME_LOADING';
 export const GET_USER_ME_SUCCESS = 'GET_USER_ME_SUCCESS';
 export const GET_USER_ME_ERROR = 'GET_USER_ME_ERROR';
-
 export const UPDATE_USER_ME = 'UPDATE_USER_ME';
-
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
@@ -33,7 +31,7 @@ export const clientLogin: any = ({ client, token, user }: LoginParams) => async 
 
   dispatch({ type: LOGIN, payload: user });
   await client.cache.reset();
-  Router.push('/');
+  await Router.push('/profile');
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,7 +49,7 @@ export const getUserMe: any = (apolloClient: ApolloClient<any>) => async (
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const updateUserMe: any = (userMe: UserMe) => (dispatch: Dispatch<AnyAction>) => {
+export const updateUserMe: any = (userMe: UserMe) => (dispatch: Dispatch<AnyAction>): void => {
   dispatch({ type: UPDATE_USER_ME, payload: userMe });
 };
 
@@ -66,5 +64,6 @@ export const logout: any = (apolloClient: ApolloClient<any>) => async (
 
   dispatch({ type: LOGOUT });
   dispatch(openNotification('Logged out!'));
-  apolloClient.cache.reset();
+  await apolloClient.cache.reset();
+  await Router.push('/auth/login');
 };

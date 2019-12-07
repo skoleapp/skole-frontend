@@ -1,9 +1,15 @@
-import { Typography } from '@material-ui/core';
+import { Box, CardHeader, Divider, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
-import { ButtonLink, StyledCard } from '../../../components';
-import { Layout, NotFoundCard } from '../../../containers';
+import {
+  ButtonLink,
+  Layout,
+  NotFound,
+  SlimCardContent,
+  StyledCard,
+  TextLink
+} from '../../../components';
 import { SchoolDocument } from '../../../generated/graphql';
 import { School, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
@@ -15,44 +21,65 @@ interface Props {
 
 const SchoolPage: NextPage<Props> = ({ school }) => {
   if (school) {
-    const { id, name, schoolType, city, country } = school;
+    const schoolName = school.name || 'N/A';
+    const schoolType = school.schoolType || 'N/A';
+    const schoolCity = school.city || 'N/A';
+    const schoolCountry = school.country || 'N/A';
 
     return (
-      <Layout heading={name} title={name} backUrl="/schools">
+      <Layout heading={schoolName} title={schoolName} backUrl="/schools">
         <StyledCard>
-          <Typography variant="body1">Name: {name}</Typography>
-          <Typography variant="body1">Type: {schoolType}</Typography>
-          <Typography variant="body1">City: {city}</Typography>
-          <Typography variant="body1">Country: {country}</Typography>
-          <ButtonLink
-            href={{ pathname: '/subjects', query: { schoolId: id } }}
-            variant="outlined"
-            color="primary"
-            fullWidth
-          >
-            subjects
-          </ButtonLink>
-          <ButtonLink
-            href={{ pathname: '/courses', query: { schoolId: id } }}
-            variant="outlined"
-            color="primary"
-            fullWidth
-          >
-            courses
-          </ButtonLink>
+          <CardHeader title={schoolName} />
+          <Divider />
+          <SlimCardContent>
+            <Box textAlign="left">
+              <Typography variant="body1">
+                School Type:{' '}
+                <TextLink href={{ pathname: '/schools', query: { schoolType } }} color="primary">
+                  {schoolType}
+                </TextLink>
+              </Typography>
+              <Typography variant="body1">
+                School City:{' '}
+                <TextLink href={{ pathname: '/schools', query: { schoolCity } }} color="primary">
+                  {schoolCity}
+                </TextLink>
+              </Typography>
+              <Typography variant="body1">
+                School Country:{' '}
+                <TextLink href={{ pathname: '/schools', query: { schoolCountry } }} color="primary">
+                  {schoolCountry}
+                </TextLink>
+              </Typography>
+            </Box>
+          </SlimCardContent>
+          <Divider />
+          <SlimCardContent>
+            <ButtonLink
+              href={{ pathname: '/subjects', query: { schoolId: school.id } }}
+              variant="outlined"
+              color="primary"
+              fullWidth
+            >
+              subjects
+            </ButtonLink>
+            <ButtonLink
+              href={{ pathname: '/courses', query: { schoolId: school.id } }}
+              variant="outlined"
+              color="primary"
+              fullWidth
+            >
+              courses
+            </ButtonLink>
+          </SlimCardContent>
         </StyledCard>
       </Layout>
     );
   } else {
-    return (
-      <Layout title="School not found" backUrl="/schools">
-        <NotFoundCard text="School not found..." />
-      </Layout>
-    );
+    return <NotFound title="School not found..." />;
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   await useAuthSync(ctx);
   const { query, apolloClient } = ctx;
