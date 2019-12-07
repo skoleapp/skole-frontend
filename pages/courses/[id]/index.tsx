@@ -1,4 +1,4 @@
-import { Box, CardHeader, Divider, Typography } from '@material-ui/core';
+import { CardHeader, Divider, Typography } from '@material-ui/core';
 import moment from 'moment';
 import { NextPage } from 'next';
 import React from 'react';
@@ -37,32 +37,30 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
           <CardHeader title={fullName} />
           <Divider />
           <SlimCardContent>
-            <Box textAlign="left">
-              <Typography variant="body1">Code: {courseCode}</Typography>
-              <Typography variant="body1">
-                Subject:{' '}
-                <TextLink
-                  href={{ pathname: '/courses', query: { subjectId: subject.id } }}
-                  color="primary"
-                >
-                  {subjectName}
-                </TextLink>
-              </Typography>
-              <Typography variant="body1">
-                School:{' '}
-                <TextLink href={`/schools/${school.id}`} color="primary">
-                  {schoolName}
-                </TextLink>
-              </Typography>
-              <Typography variant="body1">
-                Creator:{' '}
-                <TextLink href={`/users/${creator.id}`} color="primary">
-                  {creatorName}
-                </TextLink>
-              </Typography>
-              <Typography variant="body1">Created: {created}</Typography>
-              <Typography variant="body1">Modified: {modified}</Typography>
-            </Box>
+            <Typography variant="body1">Code: {courseCode}</Typography>
+            <Typography variant="body1">
+              Subject:{' '}
+              <TextLink
+                href={{ pathname: '/courses', query: { subjectId: subject.id } }}
+                color="primary"
+              >
+                {subjectName}
+              </TextLink>
+            </Typography>
+            <Typography variant="body1">
+              School:{' '}
+              <TextLink href={`/schools/${school.id}`} color="primary">
+                {schoolName}
+              </TextLink>
+            </Typography>
+            <Typography variant="body1">
+              Creator:{' '}
+              <TextLink href={`/users/${creator.id}`} color="primary">
+                {creatorName}
+              </TextLink>
+            </Typography>
+            <Typography variant="body1">Created: {created}</Typography>
+            <Typography variant="body1">Modified: {modified}</Typography>
           </SlimCardContent>
           <Divider />
           <SlimCardContent>

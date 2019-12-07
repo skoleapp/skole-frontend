@@ -1,4 +1,4 @@
-import { Box, CardHeader, Divider, Typography } from '@material-ui/core';
+import { CardHeader, Divider, Typography } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
@@ -32,26 +32,24 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
           <CardHeader title={schoolName} />
           <Divider />
           <SlimCardContent>
-            <Box textAlign="left">
-              <Typography variant="body1">
-                School Type:{' '}
-                <TextLink href={{ pathname: '/schools', query: { schoolType } }} color="primary">
-                  {schoolType}
-                </TextLink>
-              </Typography>
-              <Typography variant="body1">
-                School City:{' '}
-                <TextLink href={{ pathname: '/schools', query: { schoolCity } }} color="primary">
-                  {schoolCity}
-                </TextLink>
-              </Typography>
-              <Typography variant="body1">
-                School Country:{' '}
-                <TextLink href={{ pathname: '/schools', query: { schoolCountry } }} color="primary">
-                  {schoolCountry}
-                </TextLink>
-              </Typography>
-            </Box>
+            <Typography variant="body1">
+              School Type:{' '}
+              <TextLink href={{ pathname: '/schools', query: { schoolType } }} color="primary">
+                {schoolType}
+              </TextLink>
+            </Typography>
+            <Typography variant="body1">
+              School City:{' '}
+              <TextLink href={{ pathname: '/schools', query: { schoolCity } }} color="primary">
+                {schoolCity}
+              </TextLink>
+            </Typography>
+            <Typography variant="body1">
+              School Country:{' '}
+              <TextLink href={{ pathname: '/schools', query: { schoolCountry } }} color="primary">
+                {schoolCountry}
+              </TextLink>
+            </Typography>
           </SlimCardContent>
           <Divider />
           <SlimCardContent>
