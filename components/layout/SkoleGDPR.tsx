@@ -85,7 +85,7 @@ export const SkoleGDPR: React.FC = () => {
             Privacy Policy
           </Typography>
           <DialogContentText>
-            You read and agreed to our <TextLink href="/privacy-policy">Privacy Policy</TextLink>.
+            You read and agreed to our <TextLink href="/privacy">Privacy Policy</TextLink>.
           </DialogContentText>
         </Box>
         <Box textAlign="left">
@@ -93,8 +93,7 @@ export const SkoleGDPR: React.FC = () => {
             Terms and Conditions
           </Typography>
           <DialogContentText>
-            You read and agreed to our{' '}
-            <TextLink href="/privacy-policy">Terms and Conditions</TextLink>.
+            You read and agreed to our <TextLink href="/terms">Terms and Conditions</TextLink>.
           </DialogContentText>
         </Box>
         <Box textAlign="left">
