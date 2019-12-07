@@ -8,7 +8,8 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
 import { Layout, SlimCardContent, StyledCard, UploadResourceForm } from '../components';
-import { SkoleContext, UploadResourceFormValues } from '../interfaces';
+import { UploadResourceFormDataDocument } from '../generated/graphql';
+import { Course, ResourceType, SkoleContext, UploadResourceFormValues } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useForm } from '../utils';
 
@@ -19,16 +20,12 @@ const validationSchema = Yup.object().shape({
   resource: Yup.string().required('Resource is required.')
 });
 
-const initialValues = {
-  resourceTitle: '',
-  resourceType: '',
-  courseId: '',
-  resource: '',
-  resourceParts: null,
-  general: ''
-};
+interface Props {
+  resourceTypes?: ResourceType[];
+  courses?: Course[];
+}
 
-const UploadResourcePage: NextPage = () => {
+const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { ref, setSubmitting, resetForm } = useForm();
@@ -39,6 +36,17 @@ const UploadResourcePage: NextPage = () => {
     resetForm();
     dispatch(openNotification('Resource uploaded!'));
     await router.push('/');
+  };
+
+  const initialValues = {
+    resourceTitle: '',
+    resourceType: '',
+    courseId: '',
+    resource: '',
+    resourceParts: null,
+    general: '',
+    resourceTypes: resourceTypes || '',
+    courses: courses || ''
   };
 
   return (
@@ -59,9 +67,15 @@ const UploadResourcePage: NextPage = () => {
   );
 };
 
-UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   await useAuthSync(ctx);
-  return {};
+
+  try {
+    const { data } = await ctx.apolloClient.query({ query: UploadResourceFormDataDocument });
+    return { ...data };
+  } catch {
+    return {};
+  }
 };
 
 export default compose(withApollo, withRedux)(UploadResourcePage);

@@ -13,7 +13,7 @@ import { AddCircleOutline, DeleteOutline } from '@material-ui/icons';
 import { ErrorMessage, Field, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React, { ChangeEvent, useState } from 'react';
-import { UploadResourceFormValues } from '../../interfaces';
+import { Course, ResourceType, UploadResourceFormValues } from '../../interfaces';
 import {
   CourseField,
   FormErrorMessage,
@@ -27,7 +27,12 @@ interface ResourcePart {
   number: string;
 }
 
-export const UploadResourceForm: React.FC<FormikProps<UploadResourceFormValues>> = props => {
+interface Props extends FormikProps<UploadResourceFormValues> {
+  resourceTypes: ResourceType[];
+  courses: Course[];
+}
+
+export const UploadResourceForm: React.FC<Props> = props => {
   const [uploaded, setUploaded] = useState(false);
   const [amountOfExercises, setAmountOfExercises] = useState('0');
   const [resourceParts, setResourceParts] = useState<ResourcePart[]>([]);
