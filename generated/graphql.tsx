@@ -48,6 +48,7 @@ export type CourseType = {
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
   resources?: Maybe<Array<Maybe<ResourceType>>>,
+  points?: Maybe<Scalars['Int']>,
 };
 
 export type CreateCourseMutationInput = {
@@ -217,11 +218,10 @@ export type RegisterMutationPayload = {
 export type ResourceType = {
    __typename?: 'ResourceType',
   id: Scalars['ID'],
-  resourceType: ResourceTypeObjectType,
+  resourceType?: Maybe<Scalars['String']>,
   title: Scalars['String'],
   file: Scalars['String'],
   date: Scalars['Date'],
-  course: CourseType,
   creator?: Maybe<UserTypePublic>,
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
@@ -474,7 +474,7 @@ export type UserQuery = (
   )> }
 );
 
-export type SchoolsQueryVariables = {
+export type FilterSchoolsQueryVariables = {
   schoolType?: Maybe<Scalars['String']>,
   schoolName?: Maybe<Scalars['String']>,
   schoolCity?: Maybe<Scalars['String']>,
@@ -482,11 +482,14 @@ export type SchoolsQueryVariables = {
 };
 
 
-export type SchoolsQuery = (
+export type FilterSchoolsQuery = (
   { __typename?: 'Query' }
   & { schools: Maybe<Array<Maybe<(
     { __typename?: 'SchoolType' }
     & Pick<SchoolType, 'id' | 'schoolType' | 'name'>
+  )>>>, schoolTypes: Maybe<Array<Maybe<(
+    { __typename?: 'SchoolTypeObjectType' }
+    & Pick<SchoolTypeObjectType, 'name'>
   )>>> }
 );
 
@@ -503,23 +506,34 @@ export type SchoolQuery = (
   )> }
 );
 
-export type SchoolsAndSubjectsQueryVariables = {
+export type SchoolTypesQueryVariables = {};
+
+
+export type SchoolTypesQuery = (
+  { __typename?: 'Query' }
+  & { schoolTypes: Maybe<Array<Maybe<(
+    { __typename?: 'SchoolTypeObjectType' }
+    & Pick<SchoolTypeObjectType, 'name'>
+  )>>> }
+);
+
+export type FilterSubjectsQueryVariables = {
   schoolId?: Maybe<Scalars['String']>
 };
 
 
-export type SchoolsAndSubjectsQuery = (
+export type FilterSubjectsQuery = (
   { __typename?: 'Query' }
-  & { schools: Maybe<Array<Maybe<(
-    { __typename?: 'SchoolType' }
-    & Pick<SchoolType, 'id' | 'name'>
-  )>>>, subjects: Maybe<Array<Maybe<(
+  & { subjects: Maybe<Array<Maybe<(
     { __typename?: 'SubjectType' }
     & Pick<SubjectType, 'id' | 'name'>
+  )>>>, schools: Maybe<Array<Maybe<(
+    { __typename?: 'SchoolType' }
+    & Pick<SchoolType, 'id' | 'name'>
   )>>> }
 );
 
-export type CoursesSchoolsAndSubjectsQueryVariables = {
+export type FilterCoursesQueryVariables = {
   courseName?: Maybe<Scalars['String']>,
   courseCode?: Maybe<Scalars['String']>,
   schoolId?: Maybe<Scalars['Int']>,
@@ -527,14 +541,14 @@ export type CoursesSchoolsAndSubjectsQueryVariables = {
 };
 
 
-export type CoursesSchoolsAndSubjectsQuery = (
+export type FilterCoursesQuery = (
   { __typename?: 'Query' }
   & { courses: Maybe<Array<Maybe<(
     { __typename?: 'CourseType' }
     & Pick<CourseType, 'id' | 'name' | 'code'>
   )>>>, schools: Maybe<Array<Maybe<(
     { __typename?: 'SchoolType' }
-    & Pick<SchoolType, 'name' | 'id'>
+    & Pick<SchoolType, 'id' | 'name'>
   )>>>, subjects: Maybe<Array<Maybe<(
     { __typename?: 'SubjectType' }
     & Pick<SubjectType, 'id' | 'name'>
@@ -562,6 +576,45 @@ export type CourseQuery = (
       & Pick<UserTypePublic, 'id' | 'username'>
     )> }
   )> }
+);
+
+export type ResourceTypesQueryVariables = {};
+
+
+export type ResourceTypesQuery = (
+  { __typename?: 'Query' }
+  & { resourceTypes: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'name'>
+  )>>> }
+);
+
+export type UploadResourceFormDataQueryVariables = {};
+
+
+export type UploadResourceFormDataQuery = (
+  { __typename?: 'Query' }
+  & { resourceTypes: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'name'>
+  )>>>, courses: Maybe<Array<Maybe<(
+    { __typename?: 'CourseType' }
+    & Pick<CourseType, 'id' | 'name'>
+  )>>> }
+);
+
+export type CreateCourseFormDataQueryVariables = {};
+
+
+export type CreateCourseFormDataQuery = (
+  { __typename?: 'Query' }
+  & { subjects: Maybe<Array<Maybe<(
+    { __typename?: 'SubjectType' }
+    & Pick<SubjectType, 'id' | 'name'>
+  )>>>, schools: Maybe<Array<Maybe<(
+    { __typename?: 'SchoolType' }
+    & Pick<SchoolType, 'id' | 'name'>
+  )>>> }
 );
 
 
@@ -782,25 +835,28 @@ export const UserDocument = gql`
       
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserQueryResult = ApolloReactCommon.QueryResult<UserQuery, UserQueryVariables>;
-export const SchoolsDocument = gql`
-    query Schools($schoolType: String, $schoolName: String, $schoolCity: String, $schoolCountry: String) {
+export const FilterSchoolsDocument = gql`
+    query FilterSchools($schoolType: String, $schoolName: String, $schoolCity: String, $schoolCountry: String) {
   schools(schoolType: $schoolType, schoolName: $schoolName, schoolCity: $schoolCity, schoolCountry: $schoolCountry) {
     id
     schoolType
     name
   }
+  schoolTypes {
+    name
+  }
 }
     `;
 
-    export function useSchoolsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
-      return ApolloReactHooks.useQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+    export function useFilterSchoolsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FilterSchoolsQuery, FilterSchoolsQueryVariables>) {
+      return ApolloReactHooks.useQuery<FilterSchoolsQuery, FilterSchoolsQueryVariables>(FilterSchoolsDocument, baseOptions);
     }
-      export function useSchoolsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+      export function useFilterSchoolsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FilterSchoolsQuery, FilterSchoolsQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<FilterSchoolsQuery, FilterSchoolsQueryVariables>(FilterSchoolsDocument, baseOptions);
       }
       
-export type SchoolsQueryHookResult = ReturnType<typeof useSchoolsQuery>;
-export type SchoolsQueryResult = ApolloReactCommon.QueryResult<SchoolsQuery, SchoolsQueryVariables>;
+export type FilterSchoolsQueryHookResult = ReturnType<typeof useFilterSchoolsQuery>;
+export type FilterSchoolsQueryResult = ApolloReactCommon.QueryResult<FilterSchoolsQuery, FilterSchoolsQueryVariables>;
 export const SchoolDocument = gql`
     query School($schoolId: Int) {
   school(schoolId: $schoolId) {
@@ -822,38 +878,55 @@ export const SchoolDocument = gql`
       
 export type SchoolQueryHookResult = ReturnType<typeof useSchoolQuery>;
 export type SchoolQueryResult = ApolloReactCommon.QueryResult<SchoolQuery, SchoolQueryVariables>;
-export const SchoolsAndSubjectsDocument = gql`
-    query SchoolsAndSubjects($schoolId: String) {
-  schools {
+export const SchoolTypesDocument = gql`
+    query SchoolTypes {
+  schoolTypes {
+    name
+  }
+}
+    `;
+
+    export function useSchoolTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
+      return ApolloReactHooks.useQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
+    }
+      export function useSchoolTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
+      }
+      
+export type SchoolTypesQueryHookResult = ReturnType<typeof useSchoolTypesQuery>;
+export type SchoolTypesQueryResult = ApolloReactCommon.QueryResult<SchoolTypesQuery, SchoolTypesQueryVariables>;
+export const FilterSubjectsDocument = gql`
+    query FilterSubjects($schoolId: String) {
+  subjects(schoolId: $schoolId) {
     id
     name
   }
-  subjects(schoolId: $schoolId) {
+  schools {
     id
     name
   }
 }
     `;
 
-    export function useSchoolsAndSubjectsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolsAndSubjectsQuery, SchoolsAndSubjectsQueryVariables>) {
-      return ApolloReactHooks.useQuery<SchoolsAndSubjectsQuery, SchoolsAndSubjectsQueryVariables>(SchoolsAndSubjectsDocument, baseOptions);
+    export function useFilterSubjectsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FilterSubjectsQuery, FilterSubjectsQueryVariables>) {
+      return ApolloReactHooks.useQuery<FilterSubjectsQuery, FilterSubjectsQueryVariables>(FilterSubjectsDocument, baseOptions);
     }
-      export function useSchoolsAndSubjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolsAndSubjectsQuery, SchoolsAndSubjectsQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<SchoolsAndSubjectsQuery, SchoolsAndSubjectsQueryVariables>(SchoolsAndSubjectsDocument, baseOptions);
+      export function useFilterSubjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FilterSubjectsQuery, FilterSubjectsQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<FilterSubjectsQuery, FilterSubjectsQueryVariables>(FilterSubjectsDocument, baseOptions);
       }
       
-export type SchoolsAndSubjectsQueryHookResult = ReturnType<typeof useSchoolsAndSubjectsQuery>;
-export type SchoolsAndSubjectsQueryResult = ApolloReactCommon.QueryResult<SchoolsAndSubjectsQuery, SchoolsAndSubjectsQueryVariables>;
-export const CoursesSchoolsAndSubjectsDocument = gql`
-    query CoursesSchoolsAndSubjects($courseName: String, $courseCode: String, $schoolId: Int, $subjectId: Int) {
+export type FilterSubjectsQueryHookResult = ReturnType<typeof useFilterSubjectsQuery>;
+export type FilterSubjectsQueryResult = ApolloReactCommon.QueryResult<FilterSubjectsQuery, FilterSubjectsQueryVariables>;
+export const FilterCoursesDocument = gql`
+    query FilterCourses($courseName: String, $courseCode: String, $schoolId: Int, $subjectId: Int) {
   courses(courseName: $courseName, courseCode: $courseCode, schoolId: $schoolId, subjectId: $subjectId) {
     id
     name
     code
   }
   schools {
-    name
     id
+    name
   }
   subjects {
     id
@@ -862,15 +935,15 @@ export const CoursesSchoolsAndSubjectsDocument = gql`
 }
     `;
 
-    export function useCoursesSchoolsAndSubjectsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CoursesSchoolsAndSubjectsQuery, CoursesSchoolsAndSubjectsQueryVariables>) {
-      return ApolloReactHooks.useQuery<CoursesSchoolsAndSubjectsQuery, CoursesSchoolsAndSubjectsQueryVariables>(CoursesSchoolsAndSubjectsDocument, baseOptions);
+    export function useFilterCoursesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FilterCoursesQuery, FilterCoursesQueryVariables>) {
+      return ApolloReactHooks.useQuery<FilterCoursesQuery, FilterCoursesQueryVariables>(FilterCoursesDocument, baseOptions);
     }
-      export function useCoursesSchoolsAndSubjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CoursesSchoolsAndSubjectsQuery, CoursesSchoolsAndSubjectsQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<CoursesSchoolsAndSubjectsQuery, CoursesSchoolsAndSubjectsQueryVariables>(CoursesSchoolsAndSubjectsDocument, baseOptions);
+      export function useFilterCoursesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FilterCoursesQuery, FilterCoursesQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<FilterCoursesQuery, FilterCoursesQueryVariables>(FilterCoursesDocument, baseOptions);
       }
       
-export type CoursesSchoolsAndSubjectsQueryHookResult = ReturnType<typeof useCoursesSchoolsAndSubjectsQuery>;
-export type CoursesSchoolsAndSubjectsQueryResult = ApolloReactCommon.QueryResult<CoursesSchoolsAndSubjectsQuery, CoursesSchoolsAndSubjectsQueryVariables>;
+export type FilterCoursesQueryHookResult = ReturnType<typeof useFilterCoursesQuery>;
+export type FilterCoursesQueryResult = ApolloReactCommon.QueryResult<FilterCoursesQuery, FilterCoursesQueryVariables>;
 export const CourseDocument = gql`
     query Course($courseId: Int!) {
   course(courseId: $courseId) {
@@ -904,3 +977,63 @@ export const CourseDocument = gql`
       
 export type CourseQueryHookResult = ReturnType<typeof useCourseQuery>;
 export type CourseQueryResult = ApolloReactCommon.QueryResult<CourseQuery, CourseQueryVariables>;
+export const ResourceTypesDocument = gql`
+    query ResourceTypes {
+  resourceTypes {
+    name
+  }
+}
+    `;
+
+    export function useResourceTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
+      return ApolloReactHooks.useQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+    }
+      export function useResourceTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+      }
+      
+export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQuery>;
+export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
+export const UploadResourceFormDataDocument = gql`
+    query UploadResourceFormData {
+  resourceTypes {
+    name
+  }
+  courses {
+    id
+    name
+  }
+}
+    `;
+
+    export function useUploadResourceFormDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UploadResourceFormDataQuery, UploadResourceFormDataQueryVariables>) {
+      return ApolloReactHooks.useQuery<UploadResourceFormDataQuery, UploadResourceFormDataQueryVariables>(UploadResourceFormDataDocument, baseOptions);
+    }
+      export function useUploadResourceFormDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UploadResourceFormDataQuery, UploadResourceFormDataQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<UploadResourceFormDataQuery, UploadResourceFormDataQueryVariables>(UploadResourceFormDataDocument, baseOptions);
+      }
+      
+export type UploadResourceFormDataQueryHookResult = ReturnType<typeof useUploadResourceFormDataQuery>;
+export type UploadResourceFormDataQueryResult = ApolloReactCommon.QueryResult<UploadResourceFormDataQuery, UploadResourceFormDataQueryVariables>;
+export const CreateCourseFormDataDocument = gql`
+    query CreateCourseFormData {
+  subjects {
+    id
+    name
+  }
+  schools {
+    id
+    name
+  }
+}
+    `;
+
+    export function useCreateCourseFormDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CreateCourseFormDataQuery, CreateCourseFormDataQueryVariables>) {
+      return ApolloReactHooks.useQuery<CreateCourseFormDataQuery, CreateCourseFormDataQueryVariables>(CreateCourseFormDataDocument, baseOptions);
+    }
+      export function useCreateCourseFormDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CreateCourseFormDataQuery, CreateCourseFormDataQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<CreateCourseFormDataQuery, CreateCourseFormDataQueryVariables>(CreateCourseFormDataDocument, baseOptions);
+      }
+      
+export type CreateCourseFormDataQueryHookResult = ReturnType<typeof useCreateCourseFormDataQuery>;
+export type CreateCourseFormDataQueryResult = ApolloReactCommon.QueryResult<CreateCourseFormDataQuery, CreateCourseFormDataQueryVariables>;
