@@ -3,6 +3,7 @@ export { getFullCourseName } from './getFullCourseName';
 export { getToken } from './getToken';
 export { redirect } from './redirect';
 export { useAuthSync } from './useAuthSync';
+export { useAutoCompleteField } from './useAutoCompleteField';
 export { useFilters } from './useFilters';
 export { useForm } from './useForm';
 export { usePrivatePage } from './usePrivatePage';
