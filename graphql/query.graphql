@@ -59,6 +59,14 @@ query School($schoolId: Int) {
     name
     city
     country
+    courses {
+      id
+      name
+    }
+    subjects {
+      id
+      name
+    }
   }
 }
 
@@ -117,8 +125,14 @@ query Course($courseId: Int!) {
       id
       username
     }
+    resources {
+      id
+      title
+      points
+    }
     modified
     created
+    points
   }
 }
 
