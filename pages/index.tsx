@@ -9,25 +9,18 @@ import { Layout } from '../containers';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
-import { i18n, Link, withTranslation } from '../i18n';
-
-console.log(i18n);
+import { i18n, Link, withTranslation, Router } from '../i18n';
 
 const IndexPage: NextPage = ({ t }) => (
   <Layout title="Home">
     <StyledLandingPageContent>
-      <Typography variant="h5">What would you like to do?</Typography>
-      <Typography variant="h5">{t('test')}</Typography>
+      <Typography variant="h5">{t('What would you like to do?')}</Typography>
       <div className="shortcuts">
-        <button
-          type="button"
-          onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'fi' : 'en')}
-        />
-        <Shortcut text="Browse Schools" icon={House} href="/schools" />
-        <Shortcut text="Browse Courses" icon={School} href="/courses" />
-        <Shortcut text="Browse Subjects" icon={Book} href="/subjects" />
-        <Shortcut text="Create Course" icon={LibraryAddSharp} href="/create-course" />
-        <Shortcut text="Leaderboard" icon={Score} href="/leaderboard" />
+        <Shortcut text={t('Browse Schools')} icon={House} href="/schools" />
+        <Shortcut text={t('Browse Courses')} icon={School} href="/courses" />
+        <Shortcut text={t('Browse Subjects')} icon={Book} href="/subjects" />
+        <Shortcut text={t('Create Course')} icon={LibraryAddSharp} href="/create-course" />
+        <Shortcut text={t('Leaderboard')} icon={Score} href="/leaderboard" />
       </div>
     </StyledLandingPageContent>
   </Layout>
