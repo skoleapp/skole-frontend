@@ -239,8 +239,9 @@ export type SchoolType = {
   schoolType?: Maybe<Scalars['String']>,
   name: Scalars['String'],
   city?: Maybe<Scalars['String']>,
-  subjects?: Maybe<Array<Maybe<SubjectType>>>,
   country?: Maybe<Scalars['String']>,
+  subjects?: Maybe<Array<Maybe<SubjectType>>>,
+  courses?: Maybe<Array<Maybe<CourseType>>>,
 };
 
 export type SchoolTypeObjectType = {
@@ -503,6 +504,13 @@ export type SchoolQuery = (
   & { school: Maybe<(
     { __typename?: 'SchoolType' }
     & Pick<SchoolType, 'id' | 'schoolType' | 'name' | 'city' | 'country'>
+    & { courses: Maybe<Array<Maybe<(
+      { __typename?: 'CourseType' }
+      & Pick<CourseType, 'id' | 'name'>
+    )>>>, subjects: Maybe<Array<Maybe<(
+      { __typename?: 'SubjectType' }
+      & Pick<SubjectType, 'id' | 'name'>
+    )>>> }
   )> }
 );
 
@@ -564,7 +572,7 @@ export type CourseQuery = (
   { __typename?: 'Query' }
   & { course: Maybe<(
     { __typename?: 'CourseType' }
-    & Pick<CourseType, 'id' | 'name' | 'code' | 'modified' | 'created'>
+    & Pick<CourseType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'points'>
     & { subject: (
       { __typename?: 'SubjectType' }
       & Pick<SubjectType, 'id' | 'name'>
@@ -574,7 +582,10 @@ export type CourseQuery = (
     ), creator: Maybe<(
       { __typename?: 'UserTypePublic' }
       & Pick<UserTypePublic, 'id' | 'username'>
-    )> }
+    )>, resources: Maybe<Array<Maybe<(
+      { __typename?: 'ResourceType' }
+      & Pick<ResourceType, 'id' | 'title' | 'points'>
+    )>>> }
   )> }
 );
 
@@ -865,6 +876,14 @@ export const SchoolDocument = gql`
     name
     city
     country
+    courses {
+      id
+      name
+    }
+    subjects {
+      id
+      name
+    }
   }
 }
     `;
@@ -962,8 +981,14 @@ export const CourseDocument = gql`
       id
       username
     }
+    resources {
+      id
+      title
+      points
+    }
     modified
     created
+    points
   }
 }
     `;
