@@ -59,7 +59,7 @@ export const Footer: React.FC = () => (
 
 const StyledFooter = styled(Grid)`
   position: absolute;
-  bottom: 0;
+  bottom: -10rem;
   height: 10rem;
   display: flex;
   justify-content: center;
