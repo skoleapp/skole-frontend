@@ -9,12 +9,20 @@ import { Layout } from '../containers';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
+import { i18n, Link, withTranslation } from '../i18n';
 
-const IndexPage: NextPage = () => (
+console.log(i18n);
+
+const IndexPage: NextPage = ({ t }) => (
   <Layout title="Home">
     <StyledLandingPageContent>
       <Typography variant="h5">What would you like to do?</Typography>
+      <Typography variant="h5">{t('test')}</Typography>
       <div className="shortcuts">
+        <button
+          type="button"
+          onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'fi' : 'en')}
+        />
         <Shortcut text="Browse Schools" icon={House} href="/schools" />
         <Shortcut text="Browse Courses" icon={School} href="/courses" />
         <Shortcut text="Browse Subjects" icon={Book} href="/subjects" />
@@ -39,7 +47,7 @@ const StyledLandingPageContent = styled.div`
 
 IndexPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withRedux, withApollo)(IndexPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(IndexPage);
