@@ -1,4 +1,6 @@
 export type FeedbackType = 'bad' | 'neutral' | 'good' | '';
+export type FormErrors = any;
+export type FormCompleted = any;
 
 export interface PasswordForm {
   oldPassword: string;
@@ -12,7 +14,6 @@ export interface UpdateUserFormValues {
   title: string;
   bio: string;
   avatar: string;
-  language: string;
 }
 
 export interface RegisterFormValues {
@@ -20,14 +21,11 @@ export interface RegisterFormValues {
   email: string;
   password: string;
   confirmPassword: string;
-  agreeToTerms: boolean;
-  general: string;
 }
 
 export interface LoginFormValues {
   usernameOrEmail: string;
   password: string;
-  general: string;
 }
 
 export interface FeedbackFormValues {
@@ -57,4 +55,15 @@ export interface FilterCoursesFormValues {
   courseCode: string | string[];
   subjectId: string | string[];
   schoolId: string | string[];
+}
+
+export interface UploadResourceFormValues {
+  resourceTitle: string;
+  resourceType: string;
+  courseId: string;
+  resource: string;
+}
+
+export interface DeleteAccountFormValues {
+  password: string;
 }

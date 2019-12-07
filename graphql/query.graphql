@@ -7,12 +7,11 @@ query UserMe {
     bio
     avatar
     points
-    language
   }
 }
 
-query Users {
-  users {
+query Leaderboard {
+  leaderboard {
     id
     username
     points
@@ -32,7 +31,7 @@ query User($userId: Int!) {
   }
 }
 
-query Schools(
+query FilterSchools(
   $schoolType: String
   $schoolName: String
   $schoolCity: String
@@ -48,6 +47,9 @@ query Schools(
     schoolType
     name
   }
+  schoolTypes {
+    name
+  }
 }
 
 query School($schoolId: Int) {
@@ -60,23 +62,24 @@ query School($schoolId: Int) {
   }
 }
 
-query SchoolsAndSubjects($schoolId: String) {
-  schools {
+query SchoolTypes {
+  schoolTypes {
+    name
+  }
+}
+
+query FilterSubjects($schoolId: String) {
+  subjects(schoolId: $schoolId) {
     id
     name
   }
-  subjects(schoolId: $schoolId) {
+  schools {
     id
     name
   }
 }
 
-query CoursesSchoolsAndSubjects(
-  $courseName: String
-  $courseCode: String
-  $schoolId: Int
-  $subjectId: Int
-) {
+query FilterCourses($courseName: String, $courseCode: String, $schoolId: Int, $subjectId: Int) {
   courses(
     courseName: $courseName
     courseCode: $courseCode
@@ -88,8 +91,8 @@ query CoursesSchoolsAndSubjects(
     code
   }
   schools {
-    name
     id
+    name
   }
   subjects {
     id
@@ -103,15 +106,45 @@ query Course($courseId: Int!) {
     name
     code
     subject {
+      id
       name
     }
     school {
+      id
       name
     }
     creator {
+      id
       username
     }
     modified
     created
+  }
+}
+
+query ResourceTypes {
+  resourceTypes {
+    name
+  }
+}
+
+query UploadResourceFormData {
+  resourceTypes {
+    name
+  }
+  courses {
+    id
+    name
+  }
+}
+
+query CreateCourseFormData {
+  subjects {
+    id
+    name
+  }
+  schools {
+    id
+    name
   }
 }

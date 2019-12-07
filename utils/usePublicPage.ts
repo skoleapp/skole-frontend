@@ -7,7 +7,7 @@ import { useAuthSync } from './useAuthSync';
 export const usePublicPage = async (ctx: SkoleContext) => {
   const { userMe } = await useAuthSync(ctx);
 
-  if (userMe) {
+  if (!!userMe) {
     await ctx.reduxStore.dispatch(updateUserMe(userMe));
     redirect(ctx, '/');
   }

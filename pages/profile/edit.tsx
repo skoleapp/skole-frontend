@@ -1,16 +1,16 @@
+import { CardHeader } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification, updateUserMe } from '../../actions';
-import { StyledCard } from '../../components';
-import { EditProfileForm, Layout } from '../../containers';
+import { EditProfileForm, Layout, SlimCardContent, StyledCard } from '../../components';
 import { useUpdateUserMutation } from '../../generated/graphql';
-import { SkoleContext, State, UpdateUserFormValues } from '../../interfaces';
+import { FormCompleted, SkoleContext, State, UpdateUserFormValues } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
-import { createFormErrors, usePrivatePage } from '../../utils';
+import { useForm, usePrivatePage } from '../../utils';
 
 const validationSchema = Yup.object().shape({
   title: Yup.string(),
@@ -18,17 +18,15 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email.')
     .required('Email is required.'),
-  bio: Yup.string(),
-  language: Yup.string().oneOf(['English', 'Finnish', 'Swedish'], 'Invalid language.')
+  bio: Yup.string()
 });
 
 const EditProfilePage: NextPage = () => {
   const { user } = useSelector((state: State) => state.auth);
-  const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const { ref, onError } = useForm();
   const dispatch = useDispatch();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onCompleted = ({ updateUser }: any): void => {
+  const onCompleted = ({ updateUser }: FormCompleted): void => {
     if (updateUser.errors) {
       return onError(updateUser.errors);
     } else {
@@ -37,21 +35,13 @@ const EditProfilePage: NextPage = () => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onError = (errors: any): void => {
-    const formErrors = createFormErrors(errors);
-    Object.keys(formErrors).forEach(
-      key => ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
-    );
-  };
-
   const [updateUserMutation] = useUpdateUserMutation({ onCompleted, onError });
 
   const handleSubmit = async (
     values: UpdateUserFormValues,
     actions: FormikActions<UpdateUserFormValues>
   ): Promise<void> => {
-    const { username, email, title, bio, avatar, language } = values;
+    const { username, email, title, bio, avatar } = values;
 
     await updateUserMutation({
       variables: {
@@ -59,38 +49,36 @@ const EditProfilePage: NextPage = () => {
         email,
         title,
         bio,
-        avatar,
-        language: language.toUpperCase()
+        avatar
       }
     });
 
     actions.setSubmitting(false);
   };
 
-  const { id, title, username, email, bio, avatar, language, points } = user;
-
   const initialValues = {
-    id: id || '',
-    title: title || '',
-    username: username || '',
-    email: email || '',
-    bio: bio || '',
-    avatar: avatar || '',
-    language: language || '',
-    points: points || 0,
+    id: user.id || '',
+    title: user.title || '',
+    username: user.username || '',
+    email: user.email || '',
+    bio: user.bio || '',
+    avatar: user.avatar || '',
     general: ''
   };
 
   return (
     <Layout title="Edit Profile" backUrl="/profile">
       <StyledCard>
-        <Formik
-          component={EditProfileForm}
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-          ref={ref}
-        />
+        <CardHeader title="Edit Profile" />
+        <SlimCardContent>
+          <Formik
+            component={EditProfileForm}
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+            ref={ref}
+          />
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );

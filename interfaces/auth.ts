@@ -6,7 +6,6 @@ export interface UserMe {
   bio: string | null;
   avatar: string | null;
   points: number | null;
-  language: string | null;
 }
 
 export interface Auth {
