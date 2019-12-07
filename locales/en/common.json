@@ -1,8 +1,12 @@
 {
-  "What would you like to do?": "What would you like to do?",
-  "Browse Schools": "Browse Schools",
-  "Browse Courses": "Browse Courses",
-  "Browse Subjects": "Browse Subjects",
+  "Learn with Skole community!": "Learn with Skole community!",
+  "Courses": "Courses",
+  "Schools": "Schools",
+  "Subjects": "Subjects",
+  "Upload Resource": "Upload Resource",
   "Create Course": "Create Course",
-  "Leaderboard": "Leaderboard"
+  "Leaderboard": "Leaderboard",
+  "Is your school or subject not listed?": "Is your school or subject not listed?",
+  "contactUs": "contact us!",
+  "No schools": "No schools"
 }

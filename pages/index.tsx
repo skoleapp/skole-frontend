@@ -14,26 +14,30 @@ import { ButtonLink, Layout, Shortcut } from '../components';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
-import { i18n, Link, withTranslation, Router } from '../i18n';
+import { i18n, withTranslation } from '../i18n';
 
 const IndexPage: NextPage = ({ t }) => (
   <Layout title="Home">
     <Box marginY="1rem">
-      <Typography variant="h5">Learn with Skole community!</Typography>
+      <Typography variant="h5">{t('Learn with Skole community!')}</Typography>
     </Box>
     <Grid container>
       <Grid item xs={12}>
         <Box className="flex-flow" display="flex" justifyContent="center">
-          <Shortcut text="Courses" icon={SchoolOutlined} href="/courses" />
-          <Shortcut text="Schools" icon={HouseOutlined} href="/schools" />
-          <Shortcut text="Subjects" icon={SubjectOutlined} href="/subjects" />
+          <Shortcut text={t('Courses')} icon={SchoolOutlined} href="/courses" />
+          <Shortcut text={t('Schools')} icon={HouseOutlined} href="/schools" />
+          <Shortcut text={t('Subjects')} icon={SubjectOutlined} href="/subjects" />
         </Box>
       </Grid>
       <Grid item xs={12}>
         <Box className="flex-flow" display="flex" justifyContent="center">
-          <Shortcut text="Upload Resource" icon={CloudUploadOutlined} href="/upload-resource" />
-          <Shortcut text="Create Course" icon={LibraryAddOutlined} href="/create-course" />
-          <Shortcut text="Leaderboard" icon={ScoreOutlined} href="/leaderboard" />
+          <Shortcut
+            text={t('Upload Resource')}
+            icon={CloudUploadOutlined}
+            href="/upload-resource"
+          />
+          <Shortcut text={t('Create Course')} icon={LibraryAddOutlined} href="/create-course" />
+          <Shortcut text={t('Leaderboard')} icon={ScoreOutlined} href="/leaderboard" />
         </Box>
       </Grid>
     </Grid>
@@ -43,10 +47,10 @@ const IndexPage: NextPage = ({ t }) => (
     ></button>
     <Box marginY="1rem">
       <Typography variant="h6" gutterBottom>
-        Is your school or subject not listed?
+        {t('Is your school or subject not listed?')}
       </Typography>
       <ButtonLink href="/contact" variant="outlined" color="primary">
-        contact us!
+        {t('contactUs')}
       </ButtonLink>
     </Box>
   </Layout>

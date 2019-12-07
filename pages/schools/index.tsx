@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React from 'react';
+import { withTranslation } from '../../i18n';
 import { compose } from 'redux';
 import {
   ClearFiltersButton,
@@ -28,7 +29,7 @@ interface Props {
   schoolTypes?: SchoolType[];
 }
 
-const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes }) => {
+const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const router = useRouter();
   const { query, pathname } = router;
@@ -92,7 +93,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes }) => {
             ) : (
               <TableRow>
                 <TableCell>
-                  <Typography variant="subtitle1">No schools...</Typography>
+                  <Typography variant="subtitle1">{t('No schools...')}</Typography>
                 </TableCell>
               </TableRow>
             )}
@@ -115,10 +116,10 @@ SchoolsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
       query: FilterSchoolsDocument,
       variables: { ...query }
     });
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch (err) {
     return {};
   }
 };
 
-export default compose(withRedux, withApollo)(SchoolsPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(SchoolsPage);

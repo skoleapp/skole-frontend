@@ -18,8 +18,9 @@ import { Layout, SlimCardContent, StyledCard } from '../components';
 import { SkoleContext, State } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
+import { i18n, withTranslation } from '../i18n';
 
-const SettingsPage: NextPage = () => {
+const SettingsPage: NextPage = ({ t }) => {
   const { authenticated } = useSelector((state: State) => state.auth);
   const apolloClient = useApolloClient();
   const router = useRouter();
@@ -27,7 +28,8 @@ const SettingsPage: NextPage = () => {
 
   // TODO: Implement actual logic with cookies.
   const handleLanguageSelect = (value: string) => () => {
-    dispatch(openNotification(`Language set to ${value}`));
+    i18n.changeLanguage(value);
+    dispatch(openNotification(`Language set to ${t(value)}`));
   };
 
   const handleRedirect = (href: string) => (): Promise<boolean> => router.push(href);
@@ -145,13 +147,13 @@ const menuItems = {
   ],
   language: [
     {
-      value: 'English'
+      value: 'en'
     },
     {
-      value: 'Finnish'
+      value: 'fi'
     },
     {
-      value: 'Swedish'
+      value: 'se'
     }
   ],
   about: [
@@ -181,4 +183,4 @@ SettingsPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withRedux, withApollo)(SettingsPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(SettingsPage);

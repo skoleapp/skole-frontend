@@ -1,8 +1,12 @@
 {
-  "What would you like to do?": "Mitä haluaisit tehdä?",
-  "Browse Schools": "Selaa Kouluja",
-  "Browse Courses": "Selaa Kursseja",
-  "Browse Subjects": "Selaa Kouluaineita",
+  "Learn with Skole community!": "Opi skole-yhteisön kanssa!",
+  "Courses": "Kurssit",
+  "Schools": "Koulut",
+  "Subjects": "Kouluaineet",
+  "Upload Resource": "Lisää Resurssi",
   "Create Course": "Lisää Kurssi",
-  "Leaderboard": "Pistetilasto"
+  "Leaderboard": "Pistetilasto",
+  "Is your school or subject not listed?": "Eikö kouluasi tai kouluainettasi ole listattuna?",
+  "contactUs": "ota meihin yhteyttä!",
+  "No schools": "Ei kouluja"
 }
