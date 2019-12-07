@@ -26,11 +26,15 @@ const StyledLayout = styled(Box)`
   background-color: var(--secondary);
   text-align: center;
   min-height: 100vh;
+  position: relative;
+
+  @media only screen and (min-width: ${breakpoints.SM}) {
+    padding-bottom: 10rem; /* Height of footer */
+  }
 
   .MuiContainer-root {
     padding: 0.5rem;
-    flex-grow: 1;
-    margin-bottom: 10rem;
+    height: 100%;
 
     @media only screen and (min-width: ${breakpoints.SM}) {
       padding: 1rem;
