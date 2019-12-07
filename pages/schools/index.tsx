@@ -16,7 +16,7 @@ import {
   MobileFilters,
   StyledTable
 } from '../../components';
-import { SchoolsDocument } from '../../generated/graphql';
+import { FilterSchoolsDocument, SchoolType } from '../../generated/graphql';
 import { FilterSchoolsFormValues, School, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
@@ -25,9 +25,10 @@ const filterTitle = 'Filter Schools';
 
 interface Props {
   schools?: School[];
+  schoolTypes?: SchoolType[];
 }
 
-const SchoolsPage: NextPage<Props> = ({ schools }) => {
+const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes }) => {
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const router = useRouter();
   const { query, pathname } = router;
@@ -35,7 +36,9 @@ const SchoolsPage: NextPage<Props> = ({ schools }) => {
 
   // Pick non-empty values and reload the page with new query params.
   const handleSubmit = async (values: FilterSchoolsFormValues) => {
-    const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, values);
+    const { schoolType, schoolName, schoolCity, schoolCountry } = values;
+    const filteredValues = { schoolType, schoolName, schoolCity, schoolCountry };
+    const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
     await router.push({ pathname, query });
     setSubmitting(false);
     setFiltersOpen(false);
@@ -46,7 +49,8 @@ const SchoolsPage: NextPage<Props> = ({ schools }) => {
     schoolType: query.schoolType || '',
     schoolName: query.schoolName || '',
     schoolCity: query.schoolCity || '',
-    schoolCountry: query.schoolCountry || ''
+    schoolCountry: query.schoolCountry || '',
+    schoolTypes: schoolTypes || []
   };
 
   const renderFilterForm = (
@@ -107,9 +111,12 @@ SchoolsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   const { query, apolloClient } = ctx;
 
   try {
-    const { data } = await apolloClient.query({ query: SchoolsDocument, variables: { ...query } });
+    const { data } = await apolloClient.query({
+      query: FilterSchoolsDocument,
+      variables: { ...query }
+    });
     return { ...data };
-  } catch {
+  } catch (err) {
     return {};
   }
 };

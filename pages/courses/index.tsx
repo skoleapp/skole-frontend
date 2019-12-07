@@ -16,7 +16,7 @@ import {
   StyledForm,
   StyledTable
 } from '../../components';
-import { CoursesSchoolsAndSubjectsDocument } from '../../generated/graphql';
+import { FilterCoursesDocument } from '../../generated/graphql';
 import { Course, FilterCoursesFormValues, School, SkoleContext, Subject } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { getFullCourseName, useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
@@ -49,8 +49,8 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
     courseCode: query.courseCode || '',
     subjectId: query.subjectId || '',
     schoolId: query.schoolId || '',
-    subjects: subjects || [],
-    schools: schools || []
+    schools: schools || [],
+    subjects: subjects || []
   };
 
   const filterTitle = 'Filter Courses';
@@ -114,7 +114,7 @@ CoursesPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
 
   try {
     const { data } = await apolloClient.query({
-      query: CoursesSchoolsAndSubjectsDocument,
+      query: FilterCoursesDocument,
       variables: { ...query }
     });
 

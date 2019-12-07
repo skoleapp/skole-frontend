@@ -15,7 +15,7 @@ import {
   MobileFilters,
   StyledTable
 } from '../components';
-import { SchoolsAndSubjectsDocument } from '../generated/graphql';
+import { FilterSubjectsDocument } from '../generated/graphql';
 import { FilterSubjectsFormValues, School, SkoleContext, Subject } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useFilters, valNotEmpty } from '../utils';
@@ -23,11 +23,11 @@ import { useAuthSync, useFilters, valNotEmpty } from '../utils';
 const filterTitle = 'Filter Subjects';
 
 interface Props {
-  schools?: School[];
   subjects?: Subject[];
+  schools?: School[];
 }
 
-const SubjectsPage: NextPage<Props> = ({ schools, subjects }) => {
+const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const router = useRouter();
   const { query, pathname } = router;
@@ -108,13 +108,12 @@ SubjectsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
 
   try {
     const { data } = await apolloClient.query({
-      query: SchoolsAndSubjectsDocument,
+      query: FilterSubjectsDocument,
       variables: { ...query }
     });
 
-    const { schools, subjects } = data;
-    return { schools, subjects };
-  } catch (error) {
+    return { ...data };
+  } catch {
     return {};
   }
 };

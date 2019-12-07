@@ -8,7 +8,7 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
 import { CreateCourseForm, Layout, SlimCardContent, StyledCard } from '../components';
-import { SchoolsAndSubjectsDocument, useCreateCourseMutation } from '../generated/graphql';
+import { CreateCourseFormDataDocument, useCreateCourseMutation } from '../generated/graphql';
 import {
   CreateCourseFormValues,
   FormCompleted,
@@ -19,11 +19,6 @@ import {
 import { withApollo, withRedux } from '../lib';
 import { useForm, usePrivatePage } from '../utils';
 
-interface Props {
-  subjects?: Subject[];
-  schools?: School[];
-}
-
 const validationSchema = Yup.object().shape({
   courseName: Yup.string().required('Course name is required.'),
   courseCode: Yup.string(),
@@ -31,7 +26,12 @@ const validationSchema = Yup.object().shape({
   schoolId: Yup.string().required('School is required.')
 });
 
-const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
+interface Props {
+  subjects?: Subject[];
+  schools?: School[];
+}
+
+const CreateCoursePage: NextPage<Props> = ({ subjects, schools }) => {
   const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -60,8 +60,8 @@ const CreateCoursePage: NextPage<Props> = ({ schools, subjects }) => {
     subjectId: '',
     schoolId: '',
     general: '',
-    schools: schools || [],
-    subjects: subjects || []
+    subjects: subjects || [],
+    schools: schools || []
   };
 
   return (
@@ -86,10 +86,7 @@ CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
   await usePrivatePage(ctx);
 
   try {
-    const { data } = await ctx.apolloClient.query({
-      query: SchoolsAndSubjectsDocument
-    });
-
+    const { data } = await ctx.apolloClient.query({ query: CreateCourseFormDataDocument });
     return { ...data };
   } catch {
     return {};
