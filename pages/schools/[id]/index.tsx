@@ -1,4 +1,15 @@
-import { CardHeader, Divider, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  CardContent,
+  CardHeader,
+  Divider,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography
+} from '@material-ui/core';
+import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
 import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
@@ -8,6 +19,7 @@ import {
   NotFound,
   SlimCardContent,
   StyledCard,
+  StyledList,
   TextLink
 } from '../../../components';
 import { SchoolDocument } from '../../../generated/graphql';
@@ -25,32 +37,71 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
     const schoolType = school.schoolType || 'N/A';
     const schoolCity = school.city || 'N/A';
     const schoolCountry = school.country || 'N/A';
+    const schoolCourses = school.courses.length;
+    const schoolSubjects = school.subjects.length;
+
+    const renderGeneralSchoolInfo = (
+      <CardContent>
+        <Box textAlign="left">
+          <Typography variant="body1">
+            School Type:{' '}
+            <TextLink href={{ pathname: '/schools', query: { schoolType } }} color="primary">
+              {schoolType}
+            </TextLink>
+          </Typography>
+          <Typography variant="body1">
+            School City:{' '}
+            <TextLink href={{ pathname: '/schools', query: { schoolCity } }} color="primary">
+              {schoolCity}
+            </TextLink>
+          </Typography>
+          <Typography variant="body1">
+            School Country:{' '}
+            <TextLink href={{ pathname: '/schools', query: { schoolCountry } }} color="primary">
+              {schoolCountry}
+            </TextLink>
+          </Typography>
+        </Box>
+      </CardContent>
+    );
+
+    const renderSchoolInfoList = (
+      <CardContent>
+        <StyledList>
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar>
+                <SchoolOutlined />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText>Courses: {schoolCourses}</ListItemText>
+          </ListItem>
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar>
+                <SubjectOutlined />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText>Subjects: {schoolSubjects}</ListItemText>
+          </ListItem>
+        </StyledList>
+      </CardContent>
+    );
 
     return (
       <Layout heading={schoolName} title={schoolName} backUrl="/schools">
         <StyledCard>
           <CardHeader title={schoolName} />
           <Divider />
-          <SlimCardContent>
-            <Typography variant="body1">
-              School Type:{' '}
-              <TextLink href={{ pathname: '/schools', query: { schoolType } }} color="primary">
-                {schoolType}
-              </TextLink>
-            </Typography>
-            <Typography variant="body1">
-              School City:{' '}
-              <TextLink href={{ pathname: '/schools', query: { schoolCity } }} color="primary">
-                {schoolCity}
-              </TextLink>
-            </Typography>
-            <Typography variant="body1">
-              School Country:{' '}
-              <TextLink href={{ pathname: '/schools', query: { schoolCountry } }} color="primary">
-                {schoolCountry}
-              </TextLink>
-            </Typography>
-          </SlimCardContent>
+          <Box
+            className="flex-flow"
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
+          >
+            {renderGeneralSchoolInfo}
+            {renderSchoolInfoList}
+          </Box>
           <Divider />
           <SlimCardContent>
             <ButtonLink
