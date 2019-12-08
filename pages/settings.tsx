@@ -8,7 +8,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { NextPage } from 'next';
-import { Router } from '../../i18n';
+import { Router } from '../i18n';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
