@@ -21,6 +21,7 @@ import { FilterCoursesDocument } from '../../generated/graphql';
 import { Course, FilterCoursesFormValues, School, SkoleContext, Subject } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { getFullCourseName, useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
+import { useRouter } from 'next/router';
 
 interface Props {
   courses?: Course[];
@@ -29,7 +30,9 @@ interface Props {
 }
 
 const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
-  const { query, pathname } = Router;
+  const useNextRouter = useRouter();
+
+  const { query, pathname } = useNextRouter;
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const { ref, setSubmitting, resetForm } = useForm();
 

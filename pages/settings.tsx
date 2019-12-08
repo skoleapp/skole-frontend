@@ -182,7 +182,7 @@ const menuItems = {
 
 SettingsPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(SettingsPage);

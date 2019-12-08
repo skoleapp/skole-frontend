@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { Link } from '../../i18n';
 import { Router } from '../../i18n';
+import { useRouter } from 'next/router';
 
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
@@ -31,8 +32,9 @@ interface Props {
 }
 
 const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
+  const useNextRouter = useRouter();
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
-  const { query, pathname } = Router;
+  const { query, pathname } = useNextRouter;
   const { ref, setSubmitting, resetForm } = useForm();
 
   // Pick non-empty values and reload the page with new query params.

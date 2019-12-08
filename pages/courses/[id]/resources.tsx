@@ -1,6 +1,6 @@
 import { CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
-import { Router } from '../../../i18n';
+import { useRouter } from 'next/router';
 
 import React from 'react';
 import { compose } from 'redux';
@@ -10,7 +10,8 @@ import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
 
 const ResourcesPage: NextPage = () => {
-  const { id } = Router.query;
+  const useNextRouter = useRouter();
+  const { id } = useNextRouter.query;
 
   return (
     <Layout heading="Resources" title="Resources" backUrl={`/courses/${id}`}>
