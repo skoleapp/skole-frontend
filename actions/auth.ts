@@ -4,24 +4,21 @@ import Router from 'next/router';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserMeDocument } from '../generated/graphql';
-import { UserMe } from '../interfaces';
+import { User } from '../interfaces';
 import { openNotification } from './notifications';
 
-export const GET_USER_ME_LOADING = 'GET_USER_ME_LOADING';
-export const GET_USER_ME_SUCCESS = 'GET_USER_ME_SUCCESS';
-export const GET_USER_ME_ERROR = 'GET_USER_ME_ERROR';
-export const UPDATE_USER_ME = 'UPDATE_USER_ME';
-export const LOGIN = 'LOGIN';
-export const LOGOUT = 'LOGOUT';
+export const AUTHENTICATE = 'AUTHENTICATED';
+export const RE_AUTHENTICATE = 'REAUTHENTICATED';
+export const DE_AUTHENTICATE = 'DEAUTHENTICATED';
 
 interface LoginParams {
   client: ApolloClient<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   token: string;
-  user: UserMe;
+  user: User;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const clientLogin: any = ({ client, token, user }: LoginParams) => async (
+export const authenticate: any = ({ client, token, user }: LoginParams) => async (
   dispatch: Dispatch<AnyAction>
 ): Promise<void> => {
   document.cookie = cookie.serialize('token', token, {
@@ -29,7 +26,7 @@ export const clientLogin: any = ({ client, token, user }: LoginParams) => async 
     path: '/'
   });
 
-  dispatch({ type: LOGIN, payload: user });
+  dispatch({ type: AUTHENTICATE, payload: user });
   await client.cache.reset();
   await Router.push('/profile');
 };
@@ -38,23 +35,17 @@ export const clientLogin: any = ({ client, token, user }: LoginParams) => async 
 export const getUserMe: any = (apolloClient: ApolloClient<any>) => async (
   dispatch: Dispatch<AnyAction>
 ): Promise<void> => {
-  dispatch({ type: GET_USER_ME_LOADING });
-
-  try {
-    const { data } = await apolloClient.query({ query: UserMeDocument });
-    dispatch({ type: GET_USER_ME_SUCCESS, payload: data.userMe });
-  } catch (err) {
-    dispatch({ type: GET_USER_ME_ERROR, payload: err });
-  }
+  const { data } = await apolloClient.query({ query: UserMeDocument });
+  dispatch({ type: AUTHENTICATE, payload: data.userMe });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const updateUserMe: any = (userMe: UserMe) => (dispatch: Dispatch<AnyAction>): void => {
-  dispatch({ type: UPDATE_USER_ME, payload: userMe });
+export const reAuthenticate: any = (userMe: User) => (dispatch: Dispatch<AnyAction>): void => {
+  dispatch({ type: RE_AUTHENTICATE, payload: userMe });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const logout: any = (apolloClient: ApolloClient<any>) => async (
+export const deAuthenticate: any = (apolloClient: ApolloClient<any>) => async (
   dispatch: Dispatch<AnyAction>
 ): Promise<void> => {
   document.cookie = cookie.serialize('token', '', {
@@ -62,7 +53,7 @@ export const logout: any = (apolloClient: ApolloClient<any>) => async (
     path: '/'
   });
 
-  dispatch({ type: LOGOUT });
+  dispatch({ type: DE_AUTHENTICATE });
   dispatch(openNotification('Logged out!'));
   await apolloClient.cache.reset();
   await Router.push('/auth/login');
