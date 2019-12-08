@@ -20,7 +20,7 @@ import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 import { i18n, withTranslation } from '../i18n';
 
-const SettingsPage: NextPage = ({ t }) => {
+const SettingsPage: NextPage = ({ t }: any) => {
   const { authenticated } = useSelector((state: State) => state.auth);
   const apolloClient = useApolloClient();
   const dispatch = useDispatch();

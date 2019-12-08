@@ -31,7 +31,7 @@ interface Props {
   schoolTypes?: SchoolType[];
 }
 
-const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
+const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }: any) => {
   const useNextRouter = useRouter();
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const { query, pathname } = useNextRouter;

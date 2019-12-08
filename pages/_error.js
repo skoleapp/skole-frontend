@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { withTranslation } from '../i18n';
 
@@ -18,15 +17,6 @@ Error.getInitialProps = async ({ res, err }) => {
     namespacesRequired: ['common'],
     statusCode
   };
-};
-
-Error.defaultProps = {
-  statusCode: null
-};
-
-Error.propTypes = {
-  statusCode: PropTypes.number,
-  t: PropTypes.func.isRequired
 };
 
 export default withTranslation('common')(Error);

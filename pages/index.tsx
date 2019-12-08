@@ -16,7 +16,7 @@ import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 import { i18n, withTranslation } from '../i18n';
 
-const IndexPage: NextPage = ({ t }) => (
+const IndexPage: NextPage = ({ t }: any) => (
   <Layout title="Home">
     <Box marginY="1rem">
       <Typography variant="h5">{t('Learn with Skole community!')}</Typography>
