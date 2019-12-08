@@ -1,7 +1,8 @@
 import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { Router } from '../../i18n';
+
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
@@ -33,7 +34,6 @@ const initialValues = {
 const ChangePasswordPage: NextPage = () => {
   const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const onCompleted = async ({ changePassword }: FormCompleted): Promise<void> => {
     if (changePassword.errors) {
@@ -41,7 +41,7 @@ const ChangePasswordPage: NextPage = () => {
     } else {
       resetForm();
       dispatch(openNotification('Password changed!'));
-      await router.push('/profile');
+      await Router.push('/profile');
     }
   };
 

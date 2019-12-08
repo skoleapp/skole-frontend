@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core';
-import { useRouter } from 'next/router';
+import { Router } from '../../i18n';
 import React from 'react';
 
 interface Props {
@@ -7,11 +7,9 @@ interface Props {
 }
 
 export const ClearFiltersButton: React.FC<Props> = ({ resetForm }) => {
-  const router = useRouter();
-
   // Clear the query params and reset form.
   const handleClearFilters = async () => {
-    await router.push(router.pathname);
+    await Router.push(Router.pathname);
     resetForm();
   };
 

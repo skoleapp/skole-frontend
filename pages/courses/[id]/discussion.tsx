@@ -1,6 +1,7 @@
 import { CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { Router } from '../../i18n';
+
 import React from 'react';
 import { compose } from 'redux';
 import { Layout, SlimCardContent, StyledCard } from '../../../components';
@@ -9,8 +10,7 @@ import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
 
 const CourseDiscussion: NextPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
+  const { id } = Router.query;
 
   return (
     <Layout heading="Discussion" title="Discussion" backUrl={`/courses/${id}`}>

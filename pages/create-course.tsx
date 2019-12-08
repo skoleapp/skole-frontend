@@ -1,7 +1,8 @@
 import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { Router } from '../i18n';
+
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
@@ -34,7 +35,6 @@ interface Props {
 const CreateCoursePage: NextPage<Props> = ({ subjects, schools }) => {
   const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const onCompleted = async ({ createCourse }: FormCompleted) => {
     if (!!createCourse.errors) {
@@ -42,7 +42,7 @@ const CreateCoursePage: NextPage<Props> = ({ subjects, schools }) => {
     } else {
       resetForm();
       dispatch(openNotification('Course created!'));
-      await router.push(`/courses/${createCourse.course.id}`);
+      await Router.push(`/courses/${createCourse.course.id}`);
     }
   };
 

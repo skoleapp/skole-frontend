@@ -2,7 +2,8 @@ import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { NextPage, NextPageContext } from 'next';
 import App from 'next/app';
-import Router from 'next/router';
+import { Router } from '../i18n';
+
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import React from 'react';

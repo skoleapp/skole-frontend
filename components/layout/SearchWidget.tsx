@@ -1,16 +1,16 @@
 import { Box, InputBase } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
-import { useRouter } from 'next/router';
+import { Router } from '../../i18n';
+
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
 
 export const SearchWidget: React.FC = () => {
   const [search, setSearch] = useState('');
-  const router = useRouter();
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    router.push({ pathname: '/search', query: { search } });
+    Router.push({ pathname: '/search', query: { search } });
   };
 
   return (

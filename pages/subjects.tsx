@@ -1,8 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { Link } from '../i18n';
+import { Router } from '../i18n';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React from 'react';
@@ -29,8 +29,7 @@ interface Props {
 
 const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
-  const router = useRouter();
-  const { query, pathname } = router;
+  const { query, pathname } = Router;
   const { schoolId } = query;
 
   // Pick non-empty values and reload the page with new query params.
@@ -41,7 +40,7 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
     const { schoolId } = values;
     const filteredValues = { schoolId };
     const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
-    await router.push({ pathname, query });
+    await Router.push({ pathname, query });
     actions.setSubmitting(false);
     setFiltersOpen(false);
   };

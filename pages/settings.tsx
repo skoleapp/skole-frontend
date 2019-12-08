@@ -8,7 +8,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { Router } from '../../i18n';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +23,6 @@ import { i18n, withTranslation } from '../i18n';
 const SettingsPage: NextPage = ({ t }) => {
   const { authenticated } = useSelector((state: State) => state.auth);
   const apolloClient = useApolloClient();
-  const router = useRouter();
   const dispatch = useDispatch();
 
   // TODO: Implement actual logic with cookies.
@@ -32,7 +31,7 @@ const SettingsPage: NextPage = ({ t }) => {
     dispatch(openNotification(`Language set to ${t(value)}`));
   };
 
-  const handleRedirect = (href: string) => (): Promise<boolean> => router.push(href);
+  const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
   const renderMenuSubHeader = (text: string) => (
     <Box marginLeft="1rem">
@@ -50,7 +49,7 @@ const SettingsPage: NextPage = ({ t }) => {
 
   const renderLanguageMenuItems = menuItems.language.map((m, i) => (
     <MenuItem key={i} onClick={handleLanguageSelect(m.value)}>
-      {m.value}
+      {m.title}
     </MenuItem>
   ));
 
@@ -100,7 +99,7 @@ const SettingsPage: NextPage = ({ t }) => {
       fullWidth
       variant="outlined"
       color="primary"
-      onClick={(): Promise<boolean> => router.push('/auth/login')}
+      onClick={(): Promise<boolean> => Router.push('/auth/login')}
     >
       login
     </Button>
@@ -147,12 +146,15 @@ const menuItems = {
   ],
   language: [
     {
+      title: 'English',
       value: 'en'
     },
     {
+      title: 'Finnish',
       value: 'fi'
     },
     {
+      title: 'Swedish',
       value: 'se'
     }
   ],

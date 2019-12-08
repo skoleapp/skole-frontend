@@ -1,7 +1,8 @@
 import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { Router } from '../i18n';
+
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
@@ -27,7 +28,6 @@ interface Props {
 
 const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
   const dispatch = useDispatch();
-  const router = useRouter();
   const { ref, setSubmitting, resetForm } = useForm();
 
   const handleSubmit = async (values: UploadResourceFormValues) => {
@@ -35,7 +35,7 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
     setSubmitting(false);
     resetForm();
     dispatch(openNotification('Resource uploaded!'));
-    await router.push('/');
+    await Router.push('/');
   };
 
   const initialValues = {

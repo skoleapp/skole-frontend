@@ -1,7 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { Router } from '../../i18n';
+
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React from 'react';
@@ -28,8 +29,7 @@ interface Props {
 }
 
 const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
-  const router = useRouter();
-  const { query, pathname } = router;
+  const { query, pathname } = Router;
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const { ref, setSubmitting, resetForm } = useForm();
 
@@ -38,7 +38,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
     const { courseName, courseCode, schoolId, subjectId } = values;
     const filteredValues = { courseName, courseCode, schoolId, subjectId };
     const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
-    await router.push({ pathname, query });
+    await Router.push({ pathname, query });
     setSubmitting(false);
     setFiltersOpen(false);
   };
@@ -85,7 +85,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
           <TableBody>
             {courses && courses.length ? (
               courses.map((course: Course, i: number) => (
-                <TableRow key={i} onClick={() => router.push(`/courses/${course.id}`)}>
+                <TableRow key={i} onClick={() => Router.push(`/courses/${course.id}`)}>
                   <TableCell>
                     <Typography variant="subtitle1">{getFullCourseName(course)}</Typography>
                   </TableCell>
