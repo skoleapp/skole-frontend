@@ -155,7 +155,7 @@ const menuItems = {
     },
     {
       title: 'Swedish',
-      value: 'se'
+      value: 'sv'
     }
   ],
   about: [
