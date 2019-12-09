@@ -28,7 +28,7 @@ const SettingsPage: NextPage = ({ t }: any) => {
   // TODO: Implement actual logic with cookies.
   const handleLanguageSelect = (value: string) => () => {
     i18n.changeLanguage(value);
-    dispatch(openNotification(`Language set to ${t(value)}`));
+    dispatch(openNotification(t('textLanguageSetTo') + t(value)));
   };
 
   const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
@@ -36,60 +36,60 @@ const SettingsPage: NextPage = ({ t }: any) => {
   const renderMenuSubHeader = (text: string) => (
     <Box marginLeft="1rem">
       <Typography variant="subtitle1" align="left" color="textSecondary">
-        {text}
+        {t(text)}
       </Typography>
     </Box>
   );
 
   const renderAccountMenuItems = menuItems.account.map((m, i) => (
     <MenuItem key={i} onClick={handleRedirect(m.href)}>
-      {m.text}
+      {t(m.text)}
     </MenuItem>
   ));
 
   const renderLanguageMenuItems = menuItems.language.map((m, i) => (
     <MenuItem key={i} onClick={handleLanguageSelect(m.value)}>
-      {m.title}
+      {t(m.value)}
     </MenuItem>
   ));
 
   const renderAboutMenuItems = menuItems.about.map((m, i) => (
     <MenuItem key={i} onClick={handleRedirect(m.href)}>
-      {m.text}
+      {t(m.text)}
     </MenuItem>
   ));
 
   const renderLegalItems = menuItems.legal.map((m, i) => (
     <MenuItem key={i} onClick={handleRedirect(m.href)}>
-      {m.text}
+      {t(m.text)}
     </MenuItem>
   ));
 
   const renderAuthenticatedMenuList = (
     <MenuList>
-      {renderMenuSubHeader('Account')}
+      {renderMenuSubHeader(t('headerAccount'))}
       {renderAccountMenuItems}
       <Divider />
-      {renderMenuSubHeader('Language')}
+      {renderMenuSubHeader(t('headerLanguage'))}
       {renderLanguageMenuItems}
       <Divider />
-      {renderMenuSubHeader('About')}
+      {renderMenuSubHeader(t('headerAbout'))}
       {renderAboutMenuItems}
       <Divider />
-      {renderMenuSubHeader('Legal')}
+      {renderMenuSubHeader(t('headerLegal'))}
       {renderLegalItems}
     </MenuList>
   );
 
   const renderUnAuthenticatedMenuList = (
     <MenuList>
-      {renderMenuSubHeader('Language')}
+      {renderMenuSubHeader(t('headerLanguage'))}
       {renderLanguageMenuItems}
       <Divider />
-      {renderMenuSubHeader('About')}
+      {renderMenuSubHeader('Skole')}
       {renderAboutMenuItems}
       <Divider />
-      {renderMenuSubHeader('Legal')}
+      {renderMenuSubHeader(t('headerLegal'))}
       {renderLegalItems}
     </MenuList>
   );
@@ -101,7 +101,7 @@ const SettingsPage: NextPage = ({ t }: any) => {
       color="primary"
       onClick={(): Promise<boolean> => Router.push('/auth/login')}
     >
-      login
+      {t('buttonLogin')}
     </Button>
   );
 
@@ -112,7 +112,7 @@ const SettingsPage: NextPage = ({ t }: any) => {
       color="primary"
       onClick={(): Promise<boolean> => dispatch(logout(apolloClient))}
     >
-      logout
+      {t('buttonLogin')}
     </Button>
   );
 
@@ -132,15 +132,15 @@ const SettingsPage: NextPage = ({ t }: any) => {
 const menuItems = {
   account: [
     {
-      text: 'Edit Profile',
+      text: 'buttonEditProfile',
       href: '/profile/edit'
     },
     {
-      text: 'Change Password',
+      text: 'buttonChangePassword',
       href: '/profile/change-password'
     },
     {
-      text: 'Delete Account',
+      text: 'buttonDeleteAccount',
       href: '/profile/delete-account'
     }
   ],
@@ -160,21 +160,21 @@ const menuItems = {
   ],
   about: [
     {
-      text: 'About',
+      text: 'buttonAbout',
       href: '/about'
     },
     {
-      text: 'Contact',
+      text: 'buttonContact',
       href: '/contact'
     }
   ],
   legal: [
     {
-      text: 'Terms',
+      text: 'buttonTerms',
       href: '/terms'
     },
     {
-      text: 'Privacy',
+      text: 'buttonPrivacy',
       href: '/privacy'
     }
   ]

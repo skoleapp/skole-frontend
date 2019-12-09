@@ -1,12 +1,1 @@
-{
-  "Learn with Skole community!": "Opi yhdessä Skole-yhteisön!",
-  "Courses": "Kurssit",
-  "Schools": "Koulut",
-  "Subjects": "Kouluaineet",
-  "Upload Resource": "Lisää Resurssi",
-  "Create Course": "Lisää Kurssi",
-  "Leaderboard": "Pistetilastot",
-  "Is your school or subject not listed?": "Eikö kouluasi tai kouluainettasi ole listattuna?",
-  "contactUs": "ota meihin yhteyttä!",
-  "No schools": "Ei kouluja..."
-}
+{"Learn with Skole community!":"Opi yhdessä Skole-yhteisön kanssa!","Courses":"Kurssit","Schools":"Koulut","Subjects":"Kouluaineet","Upload Resource":"Lisää Resurssi","Create Course":"Lisää Kurssi","Leaderboard":"Pistetilastot","Is your school or subject not listed?":"Eikö kouluasi tai kouluainettasi ole listattuna?","contactUs":"ota meihin yhteyttä!","No schools":"Ei kouluja...","en":"Englanti","sv":"Ruotsi","fi":"Suomi","buttonLogin":"Kirjaudu","buttonEditProfile":"Muokkaa käyttäjätiliä","buttonChangePassword":"Vaihda salasana","buttonDeleteAccount":"Poista käyttäjätili","buttonAbout":"Meistä","buttonContact":"Ota yhteyttä","buttonTerms":"Käyttöehdot","buttonPrivacy":"Yksityisyys","headerAccount":"Käyttäjätili","headerLanguage":"Kieli","headerAbout":"Meistä","headerLegal":"Lailliset","textLanguageSetTo":"Kieli vaihdettu:"}
