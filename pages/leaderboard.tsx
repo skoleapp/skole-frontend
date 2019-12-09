@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Avatar,
   Table,
@@ -9,8 +10,6 @@ import {
 } from '@material-ui/core';
 import { NextPage } from 'next';
 import { Link } from '../i18n';
-
-import React from 'react';
 import { compose } from 'redux';
 import { Layout, StyledTable } from '../components';
 import { LeaderboardDocument } from '../generated/graphql';

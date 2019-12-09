@@ -1,9 +1,8 @@
+import React from 'react';
 import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { Router } from '../../i18n';
-
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';

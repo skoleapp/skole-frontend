@@ -1,13 +1,12 @@
+import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { Link } from '../../i18n';
 import { Router } from '../../i18n';
 import { useRouter } from 'next/router';
-
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import React from 'react';
 import { withTranslation } from '../../i18n';
 import { compose } from 'redux';
 import {
@@ -32,9 +31,9 @@ interface Props {
 }
 
 const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }: any) => {
-  const useNextRouter = useRouter();
+  const router = useRouter();
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
-  const { query, pathname } = useNextRouter;
+  const { query, pathname } = router;
   const { ref, setSubmitting, resetForm } = useForm();
 
   // Pick non-empty values and reload the page with new query params.
