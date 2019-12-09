@@ -25,7 +25,6 @@ const SettingsPage: NextPage = ({ t }: any) => {
   const apolloClient = useApolloClient();
   const dispatch = useDispatch();
 
-  // TODO: Implement actual logic with cookies.
   const handleLanguageSelect = (value: string) => () => {
     i18n.changeLanguage(value);
     dispatch(openNotification(t('textLanguageSetTo') + ' ' + t(value)));
