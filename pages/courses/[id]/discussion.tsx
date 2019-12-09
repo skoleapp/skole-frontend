@@ -7,6 +7,7 @@ import { Layout, SlimCardContent, StyledCard } from '../../../components';
 import { SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
+import { withTranslation } from '../../../i18n';
 
 const CourseDiscussion: NextPage = () => {
   const router = useRouter();
@@ -27,4 +28,4 @@ CourseDiscussion.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(CourseDiscussion);
+export default compose(withRedux, withApollo, withTranslation('common'))(CourseDiscussion);

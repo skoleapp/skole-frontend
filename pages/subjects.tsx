@@ -20,6 +20,7 @@ import { FilterSubjectsDocument } from '../generated/graphql';
 import { FilterSubjectsFormValues, School, SkoleContext, Subject } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useFilters, valNotEmpty } from '../utils';
+import { withTranslation } from '../i18n';
 
 const filterTitle = 'Filter Subjects';
 
@@ -30,8 +31,8 @@ interface Props {
 
 const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
-  const useNextRouter = useRouter();
-  const { query, pathname } = useNextRouter;
+  const router = useRouter();
+  const { query, pathname } = router;
   const { schoolId } = query;
 
   // Pick non-empty values and reload the page with new query params.
@@ -119,4 +120,4 @@ SubjectsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default compose(withRedux, withApollo)(SubjectsPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(SubjectsPage);

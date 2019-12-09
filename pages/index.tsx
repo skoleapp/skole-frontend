@@ -14,7 +14,7 @@ import { ButtonLink, Layout, Shortcut } from '../components';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
-import { i18n, withTranslation } from '../i18n';
+import { withTranslation } from '../i18n';
 
 const IndexPage: NextPage = ({ t }: any) => (
   <Layout title="Home">
@@ -41,10 +41,6 @@ const IndexPage: NextPage = ({ t }: any) => (
         </Box>
       </Grid>
     </Grid>
-    <button
-      type="button"
-      onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'fi' : 'en')}
-    ></button>
     <Box marginY="1rem">
       <Typography variant="h6" gutterBottom>
         {t('Is your school or subject not listed?')}

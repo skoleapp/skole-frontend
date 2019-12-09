@@ -13,6 +13,7 @@ import {
 import { SkoleContext, State } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { usePrivatePage } from '../../utils';
+import { withTranslation } from '../../i18n';
 
 const ProfilePage: NextPage = () => {
   const { user } = useSelector((state: State) => state.auth);
@@ -47,4 +48,4 @@ ProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(ProfilePage);
+export default compose(withRedux, withApollo, withTranslation('common'))(ProfilePage);

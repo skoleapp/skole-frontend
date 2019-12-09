@@ -12,6 +12,7 @@ import { useChangePasswordMutation } from '../../generated/graphql';
 import { FormCompleted, PasswordForm, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
+import { withTranslation } from '../../i18n';
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string().required('Old password is required.'),
@@ -75,4 +76,4 @@ ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(ChangePasswordPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(ChangePasswordPage);

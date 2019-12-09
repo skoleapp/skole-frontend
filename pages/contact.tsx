@@ -10,6 +10,7 @@ import { ContactForm, Layout, SlimCardContent, StyledCard } from '../components'
 import { ContactFormValues, SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useForm } from '../utils';
+import { withTranslation } from '../i18n';
 
 const initialValues = {
   contactType: '',
@@ -60,4 +61,4 @@ ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withRedux, withApollo)(ContactPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(ContactPage);

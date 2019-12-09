@@ -12,6 +12,7 @@ import { useLoginMutation } from '../../generated/graphql';
 import { FormCompleted, LoginFormValues, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePublicPage } from '../../utils';
+import { withTranslation } from '../../i18n';
 
 const initialValues = {
   usernameOrEmail: '',
@@ -77,4 +78,4 @@ LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(LoginPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(LoginPage);

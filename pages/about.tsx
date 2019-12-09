@@ -6,6 +6,7 @@ import { Layout, SlimCardContent, StyledCard } from '../components';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
+import { withTranslation } from '../i18n';
 
 const AboutPage: NextPage = () => (
   <Layout heading="About" title="About" backUrl="/">
@@ -21,4 +22,4 @@ AboutPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(AboutPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(AboutPage);

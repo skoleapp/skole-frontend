@@ -7,7 +7,6 @@ import { Router } from '../../i18n';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import { withTranslation } from '../../i18n';
 import { compose } from 'redux';
 import {
   ClearFiltersButton,
@@ -22,6 +21,7 @@ import { FilterSchoolsDocument, SchoolType } from '../../generated/graphql';
 import { FilterSchoolsFormValues, School, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
+import { withTranslation } from '../../i18n';
 
 const filterTitle = 'Filter Schools';
 

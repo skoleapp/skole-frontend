@@ -11,6 +11,7 @@ import { useUpdateUserMutation } from '../../generated/graphql';
 import { FormCompleted, SkoleContext, State, UpdateUserFormValues } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
+import { withTranslation } from '../../i18n';
 
 const validationSchema = Yup.object().shape({
   title: Yup.string(),
@@ -89,4 +90,4 @@ EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(EditProfilePage);
+export default compose(withRedux, withApollo, withTranslation('common'))(EditProfilePage);

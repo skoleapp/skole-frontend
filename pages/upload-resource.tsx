@@ -2,7 +2,6 @@ import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { Router } from '../i18n';
-
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
@@ -13,6 +12,7 @@ import { UploadResourceFormDataDocument } from '../generated/graphql';
 import { Course, ResourceType, SkoleContext, UploadResourceFormValues } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useForm } from '../utils';
+import { withTranslation } from '../i18n';
 
 const validationSchema = Yup.object().shape({
   resourceTitle: Yup.string().required('Resource title is required.'),
@@ -78,4 +78,4 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
   }
 };
 
-export default compose(withApollo, withRedux)(UploadResourcePage);
+export default compose(withRedux, withApollo, withTranslation('common'))(UploadResourcePage);

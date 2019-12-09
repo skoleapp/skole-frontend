@@ -4,6 +4,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { Layout, StyledCard } from '../../components';
 import { withApollo, withRedux } from '../../lib';
+import { withTranslation } from '../../i18n';
 
 const ForgotPasswordPage: NextPage = () => (
   <Layout title="Forgot Password?" backUrl="/auth/login">
@@ -14,4 +15,4 @@ const ForgotPasswordPage: NextPage = () => (
   </Layout>
 );
 
-export default compose(withApollo, withRedux)(ForgotPasswordPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(ForgotPasswordPage);

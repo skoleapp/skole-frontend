@@ -12,6 +12,7 @@ import { useRegisterMutation } from '../../generated/graphql';
 import { FormCompleted, RegisterFormValues, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePublicPage } from '../../utils';
+import { withTranslation } from '../../../i18n';
 
 const initialValues = {
   username: '',
@@ -84,4 +85,4 @@ RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(RegisterPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(RegisterPage);

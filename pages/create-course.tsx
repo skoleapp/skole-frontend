@@ -18,6 +18,7 @@ import {
 } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useForm, usePrivatePage } from '../utils';
+import { withTranslation } from '../i18n';
 
 const validationSchema = Yup.object().shape({
   courseName: Yup.string().required('Course name is required.'),
@@ -92,4 +93,4 @@ CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
   }
 };
 
-export default compose(withRedux, withApollo)(CreateCoursePage);
+export default compose(withRedux, withApollo, withTranslation('common'))(CreateCoursePage);

@@ -16,6 +16,7 @@ import { LeaderboardDocument } from '../generated/graphql';
 import { PublicUser, SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { getAvatar, useAuthSync } from '../utils';
+import { withTranslation } from '../i18n';
 
 interface Props {
   leaderboard?: PublicUser[];
@@ -74,4 +75,4 @@ LeaderboardPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default compose(withRedux, withApollo)(LeaderboardPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(LeaderboardPage);

@@ -15,6 +15,7 @@ import { CourseDocument } from '../../../generated/graphql';
 import { Course, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
 import { getFullCourseName, useAuthSync } from '../../../utils';
+import { withTranslation } from '../../../i18n';
 
 interface Props {
   course?: Course;
@@ -107,4 +108,4 @@ CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
   }
 };
 
-export default compose(withApollo, withRedux)(CourseDetailPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(CourseDetailPage);

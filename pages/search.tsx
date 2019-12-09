@@ -6,6 +6,7 @@ import { Layout, SlimCardContent, StyledCard } from '../components';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
+import { withTranslation } from '../i18n';
 
 const SearchPage: NextPage = () => (
   <Layout heading="Search" title="Search" backUrl="/">
@@ -21,4 +22,4 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(SearchPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(SearchPage);

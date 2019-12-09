@@ -22,6 +22,7 @@ import { Course, FilterCoursesFormValues, School, SkoleContext, Subject } from '
 import { withApollo, withRedux } from '../../lib';
 import { getFullCourseName, useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
 import { useRouter } from 'next/router';
+import { withTranslation } from '../../../i18n';
 
 interface Props {
   courses?: Course[];
@@ -30,9 +31,9 @@ interface Props {
 }
 
 const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
-  const useNextRouter = useRouter();
+  const router = useRouter();
 
-  const { query, pathname } = useNextRouter;
+  const { query, pathname } = router;
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const { ref, setSubmitting, resetForm } = useForm();
 
@@ -127,4 +128,4 @@ CoursesPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default compose(withRedux, withApollo)(CoursesPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(CoursesPage);

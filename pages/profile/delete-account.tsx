@@ -25,6 +25,7 @@ import { useDeleteAccountMutation } from '../../generated/graphql';
 import { DeleteAccountFormValues, FormCompleted, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
+import { withTranslation } from '../../i18n';
 
 const initialValues = {
   password: '',
@@ -119,4 +120,4 @@ DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withRedux, withApollo)(DeleteAccountPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(DeleteAccountPage);

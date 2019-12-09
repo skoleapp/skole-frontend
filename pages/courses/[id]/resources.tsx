@@ -7,6 +7,7 @@ import { ButtonLink, Layout, SlimCardContent, StyledCard } from '../../../compon
 import { SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
+import { withTranslation } from '../../../i18n';
 
 const ResourcesPage: NextPage = () => {
   const router = useRouter();
@@ -37,4 +38,4 @@ ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(ResourcesPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(ResourcesPage);

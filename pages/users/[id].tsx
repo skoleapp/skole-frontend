@@ -6,6 +6,7 @@ import { UserDocument } from '../../generated/graphql';
 import { PublicUser, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { redirect, useAuthSync } from '../../utils';
+import { withTranslation } from '../../i18n';
 
 interface Props {
   user?: PublicUser;
@@ -58,4 +59,4 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   }
 };
 
-export default compose(withRedux, withApollo)(UserPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(UserPage);
