@@ -22,7 +22,7 @@ import { Course, FilterCoursesFormValues, School, SkoleContext, Subject } from '
 import { withApollo, withRedux } from '../../lib';
 import { getFullCourseName, useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
 import { useRouter } from 'next/router';
-import { withTranslation } from '../../../i18n';
+import { withTranslation } from '../../i18n';
 
 interface Props {
   courses?: Course[];

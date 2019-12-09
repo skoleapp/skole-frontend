@@ -1,6 +1,8 @@
 const NextI18Next = require('next-i18next').default;
 
-module.exports = new NextI18Next({
+const languages = ['fi', 'en', 'sv'];
+
+const options = {
   defaultLanguage: 'fi',
   otherLanguages: ['en', 'sv'],
   localePath: 'locales',
@@ -8,4 +10,10 @@ module.exports = new NextI18Next({
     en: 'en',
     sv: 'sv'
   }
-});
+};
+
+const NextI18NextInstance = new NextI18Next(options);
+
+NextI18NextInstance.i18n.languages = languages;
+
+module.exports = NextI18NextInstance;

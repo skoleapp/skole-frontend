@@ -28,7 +28,7 @@ const SettingsPage: NextPage = ({ t }: any) => {
   // TODO: Implement actual logic with cookies.
   const handleLanguageSelect = (value: string) => () => {
     i18n.changeLanguage(value);
-    dispatch(openNotification(t('textLanguageSetTo') + t(value)));
+    dispatch(openNotification(t('textLanguageSetTo') + ' ' + t(value)));
   };
 
   const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
