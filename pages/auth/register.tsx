@@ -12,7 +12,7 @@ import { useRegisterMutation } from '../../generated/graphql';
 import { FormCompleted, RegisterFormValues, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePublicPage } from '../../utils';
-import { withTranslation } from '../../../i18n';
+import { withTranslation } from '../../i18n';
 
 const initialValues = {
   username: '',
