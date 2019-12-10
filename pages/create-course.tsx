@@ -30,9 +30,10 @@ const validationSchema = Yup.object().shape({
 interface Props {
   subjects?: Subject[];
   schools?: School[];
+  t: (value: string) => any;
 }
 
-const CreateCoursePage: NextPage<Props> = ({ subjects, schools }) => {
+const CreateCoursePage: NextPage<Props> = ({ subjects, schools, t }) => {
   const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
 
@@ -65,9 +66,9 @@ const CreateCoursePage: NextPage<Props> = ({ subjects, schools }) => {
   };
 
   return (
-    <Layout title="Create Course" backUrl="/">
+    <Layout t={t} title={t('titleCreateCourse')} backUrl="/">
       <StyledCard>
-        <CardHeader title="Create Course" />
+        <CardHeader title={t('headerCreateCourse')} />
         <SlimCardContent>
           <Formik
             initialValues={initialValues}
@@ -82,14 +83,14 @@ const CreateCoursePage: NextPage<Props> = ({ subjects, schools }) => {
   );
 };
 
-CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await usePrivatePage(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({ query: CreateCourseFormDataDocument });
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 

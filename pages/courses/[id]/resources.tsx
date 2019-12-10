@@ -14,9 +14,14 @@ const ResourcesPage: NextPage = ({ t }: any) => {
   const { id } = router.query;
 
   return (
-    <Layout t={t} heading="Resources" title="Resources" backUrl={`/courses/${id}`}>
+    <Layout
+      t={t}
+      heading={t('headerResources')}
+      title={t('titleResources')}
+      backUrl={`/courses/${id}`}
+    >
       <StyledCard>
-        <CardHeader title="Resources" />
+        <CardHeader title={'headerResources'} />
         <SlimCardContent>Here will be course resources...</SlimCardContent>
         <SlimCardContent>
           <ButtonLink
@@ -25,7 +30,7 @@ const ResourcesPage: NextPage = ({ t }: any) => {
             color="primary"
             fullWidth
           >
-            upload resource
+            {t('buttonUploadResources')}
           </ButtonLink>
         </SlimCardContent>
       </StyledCard>

@@ -35,7 +35,7 @@ const UserPage: NextPage<Props> = ({ user, t }) => {
       </Layout>
     );
   } else {
-    return <NotFound t={t} title="User not found..." />;
+    return <NotFound t={t} title={t('titleUserNotFound')} />;
   }
 };
 

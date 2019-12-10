@@ -17,7 +17,7 @@ import { useAuthSync } from '../utils';
 import { withTranslation } from '../i18n';
 
 const IndexPage: NextPage = ({ t }: any) => (
-  <Layout t={t} title={t('headerHome')}>
+  <Layout t={t} title={t('titleHome')}>
     <Box marginY="1rem">
       <Typography variant="h5">{t('Learn with Skole community!')}</Typography>
     </Box>

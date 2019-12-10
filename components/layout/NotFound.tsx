@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const NotFound: React.FC<Props> = ({ title, t }) => (
-  <Layout t={t} title="Not found..." backUrl="/">
+  <Layout t={t} title={t('titleNotFound')} backUrl="/">
     <StyledCard>
       <CardHeader title={title} />
     </StyledCard>

@@ -68,9 +68,9 @@ const EditProfilePage: NextPage = ({ t }: any) => {
   };
 
   return (
-    <Layout t={t} title="Edit Profile" backUrl="/profile">
+    <Layout t={t} title={t('titleEditProfile')} backUrl="/profile">
       <StyledCard>
-        <CardHeader title="Edit Profile" />
+        <CardHeader title={t('headerEditProfile')} />
         <SlimCardContent>
           <Formik
             component={EditProfileForm}

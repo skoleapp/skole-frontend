@@ -11,10 +11,12 @@ interface Props {
 }
 
 const ForgotPasswordPage: NextPage<Props> = ({ t }) => (
-  <Layout t={t} title="Forgot Password?" backUrl="/auth/login">
+  <Layout t={t} title={t('titleForgotPassword')} backUrl="/auth/login">
     <StyledCard>
-      <CardHeader title="Forgot Password?" />
-      <CardContent>Here will be forgot password form...</CardContent>
+      <CardHeader title={t('headerForgotPassword')} />
+      <CardContent>
+        Forgot your password form will be chilling here someday in year 2021...
+      </CardContent>
     </StyledCard>
   </Layout>
 );

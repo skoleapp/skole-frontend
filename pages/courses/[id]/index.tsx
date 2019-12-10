@@ -89,7 +89,7 @@ const CourseDetailPage: NextPage<Props> = ({ course, t }) => {
       </Layout>
     );
   } else {
-    return <NotFound t={t} title="Course not found..." />;
+    return <NotFound t={t} title={t('titleCourseNotFound')} />;
   }
 };
 

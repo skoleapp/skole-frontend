@@ -7,9 +7,9 @@ import { withApollo, withRedux } from '../lib';
 import { withTranslation } from '../i18n';
 
 const PrivacyPage: NextPage = ({ t }: any) => (
-  <Layout t={t} title="Privacy" heading="Privacy" backUrl="/">
+  <Layout t={t} title={t('titlePrivacy')} heading={t('headerPrivacy')} backUrl="/">
     <StyledCard>
-      <CardHeader title="Skole Privacy Policy" />
+      <CardHeader title={t('headerSkolePrivacyPolicy')} />
       <CardContent>Here will be privacy policy...</CardContent>
     </StyledCard>
   </Layout>

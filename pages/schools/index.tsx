@@ -67,8 +67,8 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
   );
 
   return (
-    <Layout t={t} heading="Schools" title="Schools" backUrl="/">
-      <DesktopFilters title="Filter Schools">
+    <Layout t={t} heading={t('headerSchools')} title={t('titleSchools')} backUrl="/">
+      <DesktopFilters title={t('headerFilterSchools')}>
         {renderFilterForm}
         <ClearFiltersButton resetForm={resetForm} />
       </DesktopFilters>

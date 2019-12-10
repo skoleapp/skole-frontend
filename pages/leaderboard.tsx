@@ -24,16 +24,16 @@ interface Props {
 }
 
 const LeaderboardPage: NextPage<Props> = ({ leaderboard, t }) => (
-  <Layout t={t} heading="Leaderboard" title="Leaderboard" backUrl="/">
+  <Layout t={t} heading={t('headerLeaderboard')} title={t('titleLeaderboard')} backUrl="/">
     <StyledTable>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography variant="h6">Users</Typography>
+              <Typography variant="h6">{t('headerUser')}</Typography>
             </TableCell>
             <TableCell align="right">
-              <Typography variant="h6">Points</Typography>
+              <Typography variant="h6">{t('headerPoints')}</Typography>
             </TableCell>
           </TableRow>
         </TableHead>
@@ -55,7 +55,7 @@ const LeaderboardPage: NextPage<Props> = ({ leaderboard, t }) => (
           ) : (
             <TableRow>
               <TableCell className="user-cell">
-                <Typography variant="subtitle1">No users found...</Typography>
+                <Typography variant="subtitle1">{t('textNoUsersFound')}</Typography>
               </TableCell>
             </TableRow>
           )}

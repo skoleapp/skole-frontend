@@ -39,9 +39,9 @@ const ContactPage: NextPage = ({ t }: any) => {
   };
 
   return (
-    <Layout t={t} title="Contact" backUrl="/">
+    <Layout t={t} title={t('titleContact')} backUrl="/">
       <StyledCard>
-        <CardHeader title="Contact" />
+        <CardHeader title={t('headerContact')} />
         <SlimCardContent>
           <Formik
             onSubmit={handleSubmit}

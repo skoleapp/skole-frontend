@@ -7,10 +7,10 @@ import { withApollo, withRedux } from '../../lib';
 import { withTranslation } from '../../i18n';
 
 const ResetPasswordPage: NextPage = ({ t }: any) => (
-  <Layout t={t} title="Reset Password?" backUrl="/auth/login">
+  <Layout t={t} title={t('titleResetPassword')} backUrl="/auth/login">
     <StyledCard>
-      <CardHeader title="Forgot Password?" />
-      <CardContent>Here will be reset password content...</CardContent>
+      <CardHeader title={t('headerResetPassword')} />
+      <CardContent>Here will be a reset password form...</CardContent>
     </StyledCard>
   </Layout>
 );

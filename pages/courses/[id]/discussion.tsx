@@ -14,9 +14,14 @@ const CourseDiscussion: NextPage = ({ t }: any) => {
   const { id } = router.query;
 
   return (
-    <Layout t={t} heading="Discussion" title="Discussion" backUrl={`/courses/${id}`}>
+    <Layout
+      t={t}
+      heading={t('headerDiscussion')}
+      title={t('titleDiscussion')}
+      backUrl={`/courses/${id}`}
+    >
       <StyledCard>
-        <CardHeader title="Discussion" />
+        <CardHeader title={t('titleDiscussion')} />
         <SlimCardContent>Course discussion will be here...</SlimCardContent>
       </StyledCard>
     </Layout>

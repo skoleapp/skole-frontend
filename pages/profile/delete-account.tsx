@@ -75,7 +75,7 @@ export const DeleteAccountPage: NextPage = ({ t }: any) => {
 
   const renderCard = (
     <StyledCard>
-      <CardHeader title="Delete Account" />
+      <CardHeader title={t('headerDeleteAccount')} />
       <SlimCardContent>
         <Formik
           component={DeleteAccountForm}
@@ -108,7 +108,7 @@ export const DeleteAccountPage: NextPage = ({ t }: any) => {
   );
 
   return (
-    <Layout t={t} title="Delete Account" backUrl="/settings">
+    <Layout t={t} title={t('titleDeleteAccount')} backUrl="/settings">
       {renderCard}
       {renderDialog}
     </Layout>

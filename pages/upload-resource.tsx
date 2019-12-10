@@ -51,9 +51,9 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses, t }) => {
   };
 
   return (
-    <Layout t={t} title="Upload Resource" backUrl="/">
+    <Layout t={t} title={t('titleUploadResource')} backUrl="/">
       <StyledCard>
-        <CardHeader title="Upload Resource" />
+        <CardHeader title={t('headerUploadResource')} />
         <SlimCardContent>
           <Formik
             component={UploadResourceForm}

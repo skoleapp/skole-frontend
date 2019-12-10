@@ -78,7 +78,7 @@ const SchoolPage: NextPage<Props> = ({ school, t }) => {
       </Layout>
     );
   } else {
-    return <NotFound t={t} title="School not found..." />;
+    return <NotFound t={t} title={t('titleSchoolNotFound')} />;
   }
 };
 

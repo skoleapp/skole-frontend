@@ -54,9 +54,9 @@ const ChangePasswordPage: NextPage = ({ t }: any) => {
   };
 
   return (
-    <Layout t={t} title="Change Password" backUrl="/settings">
+    <Layout t={t} title={t('titleChangePassword')} backUrl="/settings">
       <StyledCard>
-        <CardHeader title="Change Password" />
+        <CardHeader title={t('headerChangePassword')} />
         <SlimCardContent>
           <Formik
             onSubmit={handleSubmit}

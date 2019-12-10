@@ -7,10 +7,12 @@ import { withApollo, withRedux } from '../lib';
 import { withTranslation } from '../i18n';
 
 const TermsPage: NextPage = ({ t }: any) => (
-  <Layout t={t} title="Terms" heading="Terms" backUrl="/">
+  <Layout t={t} title={t('headerTerms')} heading={t('headerTerms')} backUrl="/">
     <StyledCard>
-      <CardHeader title="Skole Terms and Conditions" />
-      <CardContent>Here will be Terms and Conditions...</CardContent>
+      <CardHeader title={t('headerSkoleTermsAndConditions')} />
+      <CardContent>
+        By using Skole you pinky swear that you will not post anything naughty
+      </CardContent>
     </StyledCard>
   </Layout>
 );

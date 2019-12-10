@@ -13,10 +13,10 @@ interface Props {
 }
 
 const AboutPage: NextPage<Props> = ({ t }) => (
-  <Layout t={t} heading="About" title="About" backUrl="/">
+  <Layout t={t} heading="About" title={t('titleAbout')} backUrl="/">
     <StyledCard>
-      <CardHeader title="About" />
-      <SlimCardContent>Here will wil about content...</SlimCardContent>
+      <CardHeader title={t('titleAbout')} />
+      <SlimCardContent>About about about about.</SlimCardContent>
     </StyledCard>
   </Layout>
 );
