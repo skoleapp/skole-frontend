@@ -5,23 +5,21 @@ import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
 
 export const SearchWidget: React.FC = () => {
-  const [search, setSearch] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    router.push({ pathname: '/search', query: { search } });
+    router.push({ pathname: '/search', query: { courseName: searchValue } });
   };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
 
   return (
     <form onSubmit={handleSubmit}>
       <StyledSearchWidget display="flex" alignItems="center">
         <Search />
-        <InputBase
-          placeholder="Search…"
-          onChange={(e: ChangeEvent<HTMLInputElement>): void => setSearch(e.target.value)}
-          value={search}
-        />
+        <InputBase placeholder="Search Courses..." onChange={handleChange} value={searchValue} />
         <input type="submit" value="Submit" />
       </StyledSearchWidget>
     </form>
