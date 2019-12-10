@@ -16,7 +16,7 @@ const ResourcesPage: NextPage = ({ t }: any) => {
   return (
     <Layout
       t={t}
-      heading={t('headerResources')}
+      heading={t('headingResources')}
       title={t('titleResources')}
       backUrl={`/courses/${id}`}
     >

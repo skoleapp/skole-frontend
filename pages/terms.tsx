@@ -7,7 +7,7 @@ import { withApollo, withRedux } from '../lib';
 import { withTranslation } from '../i18n';
 
 const TermsPage: NextPage = ({ t }: any) => (
-  <Layout t={t} title={t('headerTerms')} heading={t('headerTerms')} backUrl="/">
+  <Layout t={t} title={t('headerTerms')} heading={t('headingTerms')} backUrl="/">
     <StyledCard>
       <CardHeader title={t('headerSkoleTermsAndConditions')} />
       <CardContent>

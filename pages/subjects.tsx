@@ -60,7 +60,7 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools, t }) => {
   );
 
   return (
-    <Layout t={t} heading={t('headerSubjects')} title={t('titleSubjects')} backUrl="/">
+    <Layout t={t} heading={t('headingSubjects')} title={t('titleSubjects')} backUrl="/">
       <DesktopFilters title={filterTitle}>{renderFilterForm}</DesktopFilters>
       <StyledTable>
         <Table>

@@ -16,7 +16,7 @@ const CourseDiscussion: NextPage = ({ t }: any) => {
   return (
     <Layout
       t={t}
-      heading={t('headerDiscussion')}
+      heading={t('headingDiscussion')}
       title={t('titleDiscussion')}
       backUrl={`/courses/${id}`}
     >

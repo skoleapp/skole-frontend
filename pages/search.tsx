@@ -9,7 +9,7 @@ import { useAuthSync } from '../utils';
 import { withTranslation } from '../i18n';
 
 const SearchPage: NextPage = ({ t }: any) => (
-  <Layout t={t} heading={t('headerSearch')} title={t('titleSearch')} backUrl="/">
+  <Layout t={t} heading={t('headingSearch')} title={t('titleSearch')} backUrl="/">
     <StyledCard>
       <CardHeader title={t('headerSearch')} />
       <SlimCardContent>Here will be search results...</SlimCardContent>

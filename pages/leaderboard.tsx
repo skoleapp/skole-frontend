@@ -24,7 +24,7 @@ interface Props {
 }
 
 const LeaderboardPage: NextPage<Props> = ({ leaderboard, t }) => (
-  <Layout t={t} heading={t('headerLeaderboard')} title={t('titleLeaderboard')} backUrl="/">
+  <Layout t={t} heading={t('headingLeaderboard')} title={t('titleLeaderboard')} backUrl="/">
     <StyledTable>
       <Table>
         <TableHead>
