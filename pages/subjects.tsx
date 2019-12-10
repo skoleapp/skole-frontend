@@ -27,9 +27,10 @@ const filterTitle = 'Filter Subjects';
 interface Props {
   subjects?: Subject[];
   schools?: School[];
+  t: (value: string) => any;
 }
 
-const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
+const SubjectsPage: NextPage<Props> = ({ subjects, schools, t }) => {
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const router = useRouter();
   const { query, pathname } = router;
@@ -59,7 +60,7 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
   );
 
   return (
-    <Layout heading="Subjects" title="Subjects" backUrl="/">
+    <Layout t={t} heading="Subjects" title="Subjects" backUrl="/">
       <DesktopFilters title={filterTitle}>{renderFilterForm}</DesktopFilters>
       <StyledTable>
         <Table>
@@ -104,7 +105,7 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
   );
 };
 
-SubjectsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+SubjectsPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
   const { apolloClient, query } = ctx;
 
@@ -114,9 +115,9 @@ SubjectsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
       variables: { ...query }
     });
 
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 

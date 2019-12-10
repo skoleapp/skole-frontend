@@ -9,12 +9,12 @@ import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
 import { withTranslation } from '../../../i18n';
 
-const CourseDiscussion: NextPage = () => {
+const CourseDiscussion: NextPage = ({ t }: any) => {
   const router = useRouter();
   const { id } = router.query;
 
   return (
-    <Layout heading="Discussion" title="Discussion" backUrl={`/courses/${id}`}>
+    <Layout t={t} heading="Discussion" title="Discussion" backUrl={`/courses/${id}`}>
       <StyledCard>
         <CardHeader title="Discussion" />
         <SlimCardContent>Course discussion will be here...</SlimCardContent>
@@ -25,7 +25,7 @@ const CourseDiscussion: NextPage = () => {
 
 CourseDiscussion.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(CourseDiscussion);

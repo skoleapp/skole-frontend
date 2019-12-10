@@ -18,9 +18,10 @@ import { withTranslation } from '../../../i18n';
 
 interface Props {
   school?: School;
+  t: (value: string) => any;
 }
 
-const SchoolPage: NextPage<Props> = ({ school }) => {
+const SchoolPage: NextPage<Props> = ({ school, t }) => {
   if (school) {
     const schoolName = school.name || 'N/A';
     const schoolType = school.schoolType || 'N/A';
@@ -28,7 +29,7 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
     const schoolCountry = school.country || 'N/A';
 
     return (
-      <Layout heading={schoolName} title={schoolName} backUrl="/schools">
+      <Layout t={t} heading={schoolName} title={schoolName} backUrl="/schools">
         <StyledCard>
           <CardHeader title={schoolName} />
           <Divider />
@@ -77,11 +78,11 @@ const SchoolPage: NextPage<Props> = ({ school }) => {
       </Layout>
     );
   } else {
-    return <NotFound title="School not found..." />;
+    return <NotFound t={t} title="School not found..." />;
   }
 };
 
-SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
   const { query, apolloClient } = ctx;
 
@@ -91,9 +92,9 @@ SchoolPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
       variables: { schoolId: query.id }
     });
 
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 

@@ -34,8 +34,10 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], 'Passwords do not match.')
     .required('Confirm password is required.')
 });
-
-const RegisterPage: NextPage = () => {
+interface Props {
+  t: (value: string) => any;
+}
+const RegisterPage: NextPage<Props> = ({ t }) => {
   const client = useApolloClient();
   const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
@@ -60,7 +62,7 @@ const RegisterPage: NextPage = () => {
   };
 
   return (
-    <Layout title="Register" backUrl="/">
+    <Layout t={t} title="Register" backUrl="/">
       <StyledCard>
         <CardHeader title="Register" />
         <SlimCardContent>
@@ -80,9 +82,9 @@ const RegisterPage: NextPage = () => {
   );
 };
 
-RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await usePublicPage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(RegisterPage);

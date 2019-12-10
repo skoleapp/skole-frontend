@@ -116,7 +116,7 @@ const SettingsPage: NextPage = ({ t }: any) => {
   );
 
   return (
-    <Layout heading="Settings" title="Settings" backUrl="/">
+    <Layout t={t} heading="Settings" title="Settings" backUrl="/">
       <StyledCard>
         <CardContent>
           {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}

@@ -6,8 +6,8 @@ import { Layout, StyledCard } from '../components';
 import { withApollo, withRedux } from '../lib';
 import { withTranslation } from '../i18n';
 
-const TermsPage: NextPage = () => (
-  <Layout title="Terms" heading="Terms" backUrl="/">
+const TermsPage: NextPage = ({ t }: any) => (
+  <Layout t={t} title="Terms" heading="Terms" backUrl="/">
     <StyledCard>
       <CardHeader title="Skole Terms and Conditions" />
       <CardContent>Here will be Terms and Conditions...</CardContent>

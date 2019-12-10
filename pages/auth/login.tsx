@@ -25,7 +25,11 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Password is required!')
 });
 
-const LoginPage: NextPage = () => {
+interface Props {
+  t: (value: string) => any;
+}
+
+const LoginPage: NextPage<Props> = ({ t }) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
   const { ref, setSubmitting, resetForm, onError } = useForm();
@@ -48,7 +52,7 @@ const LoginPage: NextPage = () => {
   };
 
   return (
-    <Layout title="Login" backUrl="/">
+    <Layout t={t} title="Login" backUrl="/">
       <StyledCard>
         <CardHeader title="Login" />
         <SlimCardContent>
@@ -73,9 +77,9 @@ const LoginPage: NextPage = () => {
   );
 };
 
-LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await usePublicPage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(LoginPage);

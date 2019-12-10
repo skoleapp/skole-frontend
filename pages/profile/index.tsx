@@ -15,7 +15,7 @@ import { withApollo, withRedux } from '../../lib';
 import { usePrivatePage } from '../../utils';
 import { withTranslation } from '../../i18n';
 
-const ProfilePage: NextPage = () => {
+const ProfilePage: NextPage = ({ t }: any) => {
   const { user } = useSelector((state: State) => state.auth);
 
   const userProfileProps = {
@@ -29,7 +29,7 @@ const ProfilePage: NextPage = () => {
   };
 
   return (
-    <Layout heading="Profile" title="Profile" backUrl="/">
+    <Layout t={t} heading="Profile" title="Profile" backUrl="/">
       <StyledCard>
         <UserProfileCardContent {...userProfileProps} />
         <Divider />
@@ -43,9 +43,9 @@ const ProfilePage: NextPage = () => {
   );
 };
 
-ProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await usePrivatePage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(ProfilePage);

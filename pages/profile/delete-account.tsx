@@ -41,7 +41,7 @@ const initialDialogState = {
   open: false
 };
 
-export const DeleteAccountPage: NextPage = () => {
+export const DeleteAccountPage: NextPage = ({ t }: any) => {
   const [dialog, setDialog] = useState(initialDialogState);
   const { ref, setSubmitting, resetForm, onError } = useForm();
   const dispatch = useDispatch();
@@ -108,7 +108,7 @@ export const DeleteAccountPage: NextPage = () => {
   );
 
   return (
-    <Layout title="Delete Account" backUrl="/settings">
+    <Layout t={t} title="Delete Account" backUrl="/settings">
       {renderCard}
       {renderDialog}
     </Layout>
@@ -117,7 +117,7 @@ export const DeleteAccountPage: NextPage = () => {
 
 DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await usePrivatePage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(DeleteAccountPage);

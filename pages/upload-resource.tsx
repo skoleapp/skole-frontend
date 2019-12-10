@@ -24,9 +24,10 @@ const validationSchema = Yup.object().shape({
 interface Props {
   resourceTypes?: ResourceType[];
   courses?: Course[];
+  t: (value: string) => any;
 }
 
-const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
+const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses, t }) => {
   const dispatch = useDispatch();
   const { ref, setSubmitting, resetForm } = useForm();
 
@@ -50,7 +51,7 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
   };
 
   return (
-    <Layout title="Upload Resource" backUrl="/">
+    <Layout t={t} title="Upload Resource" backUrl="/">
       <StyledCard>
         <CardHeader title="Upload Resource" />
         <SlimCardContent>
@@ -67,14 +68,14 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
   );
 };
 
-UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({ query: UploadResourceFormDataDocument });
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 

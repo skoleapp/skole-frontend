@@ -8,8 +8,8 @@ import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 import { withTranslation } from '../i18n';
 
-const SearchPage: NextPage = () => (
-  <Layout heading="Search" title="Search" backUrl="/">
+const SearchPage: NextPage = ({ t }: any) => (
+  <Layout t={t} heading="Search" title="Search" backUrl="/">
     <StyledCard>
       <CardHeader title="Search" />
       <SlimCardContent>Here will be search results...</SlimCardContent>
@@ -19,7 +19,7 @@ const SearchPage: NextPage = () => (
 
 SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(SearchPage);

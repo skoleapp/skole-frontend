@@ -20,10 +20,11 @@ import { withTranslation } from '../i18n';
 
 interface Props {
   leaderboard?: PublicUser[];
+  t: (value: string) => any;
 }
 
-const LeaderboardPage: NextPage<Props> = ({ leaderboard }) => (
-  <Layout heading="Leaderboard" title="Leaderboard" backUrl="/">
+const LeaderboardPage: NextPage<Props> = ({ leaderboard, t }) => (
+  <Layout t={t} heading="Leaderboard" title="Leaderboard" backUrl="/">
     <StyledTable>
       <Table>
         <TableHead>
@@ -64,14 +65,14 @@ const LeaderboardPage: NextPage<Props> = ({ leaderboard }) => (
   </Layout>
 );
 
-LeaderboardPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+LeaderboardPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({ query: LeaderboardDocument });
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 

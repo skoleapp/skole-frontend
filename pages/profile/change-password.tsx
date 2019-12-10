@@ -31,7 +31,7 @@ const initialValues = {
   general: ''
 };
 
-const ChangePasswordPage: NextPage = () => {
+const ChangePasswordPage: NextPage = ({ t }: any) => {
   const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
 
@@ -54,7 +54,7 @@ const ChangePasswordPage: NextPage = () => {
   };
 
   return (
-    <Layout title="Change Password" backUrl="/settings">
+    <Layout t={t} title="Change Password" backUrl="/settings">
       <StyledCard>
         <CardHeader title="Change Password" />
         <SlimCardContent>
@@ -71,9 +71,9 @@ const ChangePasswordPage: NextPage = () => {
   );
 };
 
-ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await usePrivatePage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(ChangePasswordPage);

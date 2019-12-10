@@ -1,14 +1,15 @@
 const NextI18Next = require('next-i18next').default;
 
-const languages = ['fi', 'en', 'sv'];
+const languages = ['en', 'sv', 'fi'];
 
 const options = {
-  defaultLanguage: 'fi',
-  otherLanguages: ['en', 'sv'],
+  defaultLanguage: 'en',
+  otherLanguages: ['sv', 'fi'],
   localePath: 'locales',
   localeSubpaths: {
     en: 'en',
-    sv: 'sv'
+    sv: 'sv',
+    fi: 'fi'
   }
 };
 

@@ -8,15 +8,16 @@ interface Props {
   title: string;
   heading?: string;
   backUrl?: string;
+  t: (value: string) => any;
 }
 
-export const Layout: React.FC<Props> = ({ title, heading, backUrl, children }) => (
+export const Layout: React.FC<Props> = ({ title, heading, backUrl, children, t }) => (
   <StyledLayout>
     <Head title={title} />
     <TopNavbar heading={heading} backUrl={backUrl} />
     <Container>{children}</Container>
     <BottomNavbar />
-    <Footer />
+    <Footer t={t} />
     <Notifications />
     <SkoleGDPR />
   </StyledLayout>

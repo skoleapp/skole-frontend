@@ -8,8 +8,12 @@ import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 import { withTranslation } from '../i18n';
 
-const AboutPage: NextPage = () => (
-  <Layout heading="About" title="About" backUrl="/">
+interface Props {
+  t: (value: string) => any;
+}
+
+const AboutPage: NextPage<Props> = ({ t }) => (
+  <Layout t={t} heading="About" title="About" backUrl="/">
     <StyledCard>
       <CardHeader title="About" />
       <SlimCardContent>Here will wil about content...</SlimCardContent>
@@ -17,9 +21,9 @@ const AboutPage: NextPage = () => (
   </Layout>
 );
 
-AboutPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+AboutPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(AboutPage);

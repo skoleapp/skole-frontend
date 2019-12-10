@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
   message: Yup.string().required('Message is required.')
 });
 
-const ContactPage: NextPage = () => {
+const ContactPage: NextPage = ({ t }: any) => {
   const dispatch = useDispatch();
   const { ref, resetForm } = useForm();
 
@@ -39,7 +39,7 @@ const ContactPage: NextPage = () => {
   };
 
   return (
-    <Layout title="Contact" backUrl="/">
+    <Layout t={t} title="Contact" backUrl="/">
       <StyledCard>
         <CardHeader title="Contact" />
         <SlimCardContent>
@@ -58,7 +58,7 @@ const ContactPage: NextPage = () => {
 
 ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(ContactPage);

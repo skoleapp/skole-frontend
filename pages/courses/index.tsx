@@ -28,9 +28,10 @@ interface Props {
   courses?: Course[];
   schools?: School[];
   subjects?: Subject[];
+  t: (value: string) => any;
 }
 
-const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
+const CoursesPage: NextPage<Props> = ({ courses, schools, subjects, t }) => {
   const router = useRouter();
 
   const { query, pathname } = router;
@@ -69,7 +70,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
   );
 
   return (
-    <Layout heading="Courses" title="Courses" backUrl="/">
+    <Layout t={t} heading="Courses" title="Courses" backUrl="/">
       <DesktopFilters title={filterTitle}>
         {renderFilterForm}
         <ClearFiltersButton resetForm={resetForm} />
@@ -112,7 +113,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects }) => {
   );
 };
 
-CoursesPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+CoursesPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
   const { apolloClient, query } = ctx;
 
@@ -122,9 +123,9 @@ CoursesPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
       variables: { ...query }
     });
 
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 

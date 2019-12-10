@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
   bio: Yup.string()
 });
 
-const EditProfilePage: NextPage = () => {
+const EditProfilePage: NextPage = ({ t }: any) => {
   const { user } = useSelector((state: State) => state.auth);
   const { ref, onError } = useForm();
   const dispatch = useDispatch();
@@ -68,7 +68,7 @@ const EditProfilePage: NextPage = () => {
   };
 
   return (
-    <Layout title="Edit Profile" backUrl="/profile">
+    <Layout t={t} title="Edit Profile" backUrl="/profile">
       <StyledCard>
         <CardHeader title="Edit Profile" />
         <SlimCardContent>
@@ -87,7 +87,7 @@ const EditProfilePage: NextPage = () => {
 
 EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await usePrivatePage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(EditProfilePage);

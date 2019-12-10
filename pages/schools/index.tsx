@@ -22,15 +22,17 @@ import { FilterSchoolsFormValues, School, SkoleContext } from '../../interfaces'
 import { withApollo, withRedux } from '../../lib';
 import { useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
 import { withTranslation } from '../../i18n';
+import { Trans } from 'next-i18next';
 
 const filterTitle = 'Filter Schools';
 
 interface Props {
   schools?: School[];
   schoolTypes?: SchoolType[];
+  t: (value: string) => any;
 }
 
-const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }: any) => {
+const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
   const router = useRouter();
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const { query, pathname } = router;
@@ -65,7 +67,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }: any) => {
   );
 
   return (
-    <Layout heading="Schools" title="Schools" backUrl="/">
+    <Layout t={t} heading="Schools" title="Schools" backUrl="/">
       <DesktopFilters title="Filter Schools">
         {renderFilterForm}
         <ClearFiltersButton resetForm={resetForm} />
@@ -108,7 +110,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }: any) => {
   );
 };
 
-SchoolsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+SchoolsPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
   const { query, apolloClient } = ctx;
 
@@ -119,7 +121,7 @@ SchoolsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     });
     return { ...data, namespacesRequired: ['common'] };
   } catch (err) {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 

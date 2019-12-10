@@ -10,9 +10,10 @@ import { withTranslation } from '../../i18n';
 
 interface Props {
   user?: PublicUser;
+  t: (value: string) => any;
 }
 
-const UserPage: NextPage<Props> = ({ user }) => {
+const UserPage: NextPage<Props> = ({ user, t }) => {
   if (user) {
     const username = user.username || 'Username N/A';
 
@@ -27,14 +28,14 @@ const UserPage: NextPage<Props> = ({ user }) => {
     };
 
     return (
-      <Layout heading={username} title={username} backUrl="/leaderboard">
+      <Layout t={t} heading={username} title={username} backUrl="/leaderboard">
         <StyledCard>
           <UserProfileCardContent {...userProfileProps} />
         </StyledCard>
       </Layout>
     );
   } else {
-    return <NotFound title="User not found..." />;
+    return <NotFound t={t} title="User not found..." />;
   }
 };
 
@@ -53,9 +54,9 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
       query: UserDocument,
       variables: { userId: query.id }
     });
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 

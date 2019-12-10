@@ -9,12 +9,12 @@ import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
 import { withTranslation } from '../../../i18n';
 
-const ResourcesPage: NextPage = () => {
+const ResourcesPage: NextPage = ({ t }: any) => {
   const router = useRouter();
   const { id } = router.query;
 
   return (
-    <Layout heading="Resources" title="Resources" backUrl={`/courses/${id}`}>
+    <Layout t={t} heading="Resources" title="Resources" backUrl={`/courses/${id}`}>
       <StyledCard>
         <CardHeader title="Resources" />
         <SlimCardContent>Here will be course resources...</SlimCardContent>
@@ -33,9 +33,9 @@ const ResourcesPage: NextPage = () => {
   );
 };
 
-ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
 export default compose(withRedux, withApollo, withTranslation('common'))(ResourcesPage);
