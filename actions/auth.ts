@@ -54,7 +54,7 @@ export const deAuthenticate: any = (apolloClient: ApolloClient<any>) => async (
   });
 
   dispatch({ type: DE_AUTHENTICATE });
-  dispatch(openNotification('Logged out!'));
+  dispatch(openNotification('Signed out!'));
   await apolloClient.cache.reset();
-  await Router.push('/auth/login');
+  await Router.push('/auth/sign-in');
 };
