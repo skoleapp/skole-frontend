@@ -1,51 +1,46 @@
 import { Autocomplete, RenderInputParams } from '@material-ui/lab';
-import { Field, FormikProps } from 'formik';
+import { Field, FormikProps, FormikValues } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { useRouter } from 'next/router';
-import * as R from 'ramda';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import {
+  City,
+  Country,
   Course,
-  CreateCourseFormValues,
   FilterSearchResultsFormValues,
+  ResourceType,
   School,
-  Subject
+  Subject,
+  UploadResourceFormValues
 } from '../../interfaces';
 
-interface Props extends FormikProps<FilterSearchResultsFormValues | CreateCourseFormValues> {
-  options?: School[] | Subject[];
-  initialValue?: School | Subject;
+type Forms = FilterSearchResultsFormValues | UploadResourceFormValues;
+type Options = School | Subject | Course | ResourceType | City | Country;
+
+interface Props<F, O> extends FormikProps<F> {
+  options?: O[];
   fieldName: string;
+  optionKey: string;
   label: string;
 }
 
-export const AutoCompleteField: React.FC<Props> = ({
-  setFieldValue,
+export const AutoCompleteField: React.FC<Props<Forms, Options>> = ({
+  values,
   options,
-  initialValue,
   fieldName,
-  label
+  optionKey,
+  label,
+  setFieldValue
 }) => {
-  const router = useRouter();
-  const [inputValue, setInputValue] = useState(R.propOr('', 'name', initialValue));
-
-  useEffect(() => {
-    initialValue ? setInputValue(initialValue.name) : setInputValue('');
-  }, [router.query]);
-
-  const handleChange = (_e: ChangeEvent<{}>, val: Course) => {
-    val ? setFieldValue(fieldName, val.id) : setFieldValue(fieldName, '');
+  const handleChange = <T extends Options>(_e: ChangeEvent<{}>, val: T) => {
+    val ? setFieldValue(fieldName, val[optionKey as keyof T]) : setFieldValue(fieldName, '');
   };
-
-  const handleInputChange = (_e: ChangeEvent<{}>, val: string) => setInputValue(val);
 
   return (
     <Autocomplete
       getOptionLabel={option => option.name}
       options={options}
       onChange={handleChange}
-      inputValue={inputValue}
-      onInputChange={handleInputChange}
+      inputValue={(values as FormikValues)[fieldName]}
       renderInput={(params: RenderInputParams) => (
         <Field {...params} component={TextField} name={fieldName} label={label} fullWidth />
       )}
