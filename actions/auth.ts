@@ -11,14 +11,14 @@ export const AUTHENTICATE = 'AUTHENTICATED';
 export const RE_AUTHENTICATE = 'REAUTHENTICATED';
 export const DE_AUTHENTICATE = 'DEAUTHENTICATED';
 
-interface LoginParams {
+interface SignInParams {
   client: ApolloClient<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   token: string;
   user: User;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const authenticate: any = ({ client, token, user }: LoginParams) => async (
+export const authenticate: any = ({ client, token, user }: SignInParams) => async (
   dispatch: Dispatch<AnyAction>
 ): Promise<void> => {
   document.cookie = cookie.serialize('token', token, {
