@@ -4,7 +4,7 @@ import React from 'react';
 import { LoginFormValues } from '../../interfaces';
 import { FormSubmitSection, StyledForm } from '../shared';
 
-export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
+export const SignInForm: React.ComponentType<FormikProps<LoginFormValues>> = props => (
   <StyledForm>
     <Field
       placeholder="example@skole.io"
@@ -21,6 +21,6 @@ export const LoginForm: React.ComponentType<FormikProps<LoginFormValues>> = prop
       type="password"
       fullWidth
     />
-    <FormSubmitSection submitButtonText="login" {...props} />
+    <FormSubmitSection submitButtonText="sign in" {...props} />
   </StyledForm>
 );

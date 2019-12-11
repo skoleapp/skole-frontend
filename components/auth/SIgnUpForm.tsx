@@ -5,7 +5,7 @@ import React from 'react';
 import { RegisterFormValues } from '../../interfaces';
 import { FormSubmitSection, StyledForm } from '../shared';
 
-export const RegisterForm: React.FC<FormikProps<RegisterFormValues>> = props => (
+export const SignUpForm: React.FC<FormikProps<RegisterFormValues>> = props => (
   <StyledForm>
     <Field
       placeholder="Username"
@@ -40,7 +40,7 @@ export const RegisterForm: React.FC<FormikProps<RegisterFormValues>> = props => 
     <FormControl fullWidth>
       <Box marginTop="0.5rem">
         <Typography variant="body2" color="textSecondary">
-          By registering you agree to our{' '}
+          By signing up you agree to our{' '}
           <Link href="/terms" target="_blank">
             Terms
           </Link>
@@ -48,6 +48,6 @@ export const RegisterForm: React.FC<FormikProps<RegisterFormValues>> = props => 
         </Typography>
       </Box>
     </FormControl>
-    <FormSubmitSection submitButtonText="register" {...props} />
+    <FormSubmitSection submitButtonText="sign up" {...props} />
   </StyledForm>
 );
