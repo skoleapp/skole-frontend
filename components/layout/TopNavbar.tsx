@@ -11,9 +11,10 @@ import { ButtonLink, IconButtonLink } from '../shared';
 interface Props {
   heading?: string;
   backUrl?: string;
+  t: (value: string) => any;
 }
 
-export const TopNavbar: React.FC<Props> = ({ heading, backUrl }) => {
+export const TopNavbar: React.FC<Props> = ({ heading, backUrl, t }) => {
   const { authenticated } = useSelector((state: State) => state.auth);
 
   const renderLeftSection = (
@@ -40,16 +41,16 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl }) => {
   const renderRightSection = (
     <>
       <Box className="desktop-only" display="flex" alignItems="center">
-        <SearchWidget />
+        <SearchWidget t={t} />
         {authenticated ? (
           <IconButtonLink icon={AccountCircle} href="/profile" color="secondary" />
         ) : (
           <>
             <ButtonLink href="/auth/login" color="secondary">
-              login
+              {t('buttonSignIn')}
             </ButtonLink>
             <ButtonLink href="/auth/register" color="secondary">
-              Register
+              {t('buttonRegister')}
             </ButtonLink>
           </>
         )}

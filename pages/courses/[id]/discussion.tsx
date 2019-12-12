@@ -22,7 +22,7 @@ const CourseDiscussion: NextPage = ({ t }: any) => {
     >
       <StyledCard>
         <CardHeader title={t('titleDiscussion')} />
-        <SlimCardContent>Course discussion will be here...</SlimCardContent>
+        <SlimCardContent>--Course Discussion--</SlimCardContent>
       </StyledCard>
     </Layout>
   );

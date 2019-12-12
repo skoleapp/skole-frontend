@@ -4,9 +4,10 @@ import React from 'react';
 
 interface Props {
   resetForm: () => void;
+  title: string;
 }
 
-export const ClearFiltersButton: React.FC<Props> = ({ resetForm }) => {
+export const ClearFiltersButton: React.FC<Props> = ({ resetForm, title }) => {
   // Clear the query params and reset form.
   const handleClearFilters = async () => {
     await Router.push(Router.pathname);
@@ -15,7 +16,7 @@ export const ClearFiltersButton: React.FC<Props> = ({ resetForm }) => {
 
   return (
     <Button variant="outlined" color="primary" fullWidth onClick={handleClearFilters}>
-      clear filters
+      {title}
     </Button>
   );
 };

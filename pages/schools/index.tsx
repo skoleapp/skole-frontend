@@ -22,7 +22,6 @@ import { FilterSchoolsFormValues, School, SkoleContext } from '../../interfaces'
 import { withApollo, withRedux } from '../../lib';
 import { useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
 import { withTranslation } from '../../i18n';
-import { Trans } from 'next-i18next';
 
 const filterTitle = 'Filter Schools';
 
@@ -70,7 +69,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
     <Layout t={t} heading={t('headingSchools')} title={t('titleSchools')} backUrl="/">
       <DesktopFilters title={t('headerFilterSchools')}>
         {renderFilterForm}
-        <ClearFiltersButton resetForm={resetForm} />
+        <ClearFiltersButton title={t('buttonClearFilters')} resetForm={resetForm} />
       </DesktopFilters>
       <StyledTable>
         <Table>
@@ -78,7 +77,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
             <TableRow>
               <TableCell>
                 <FilterButton toggleFilters={toggleFilters} />
-                <ClearFiltersButton resetForm={resetForm} />
+                <ClearFiltersButton title={t('buttonClearFilters')} resetForm={resetForm} />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -96,7 +95,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
             ) : (
               <TableRow>
                 <TableCell>
-                  <Typography variant="subtitle1">{t('No schools...')}</Typography>
+                  <Typography variant="subtitle1">{t('textNoSchools')}</Typography>
                 </TableCell>
               </TableRow>
             )}

@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import { NextPage } from 'next';
 import { Router } from '../../i18n';
 
@@ -11,11 +11,13 @@ import {
   ClearFiltersButton,
   DesktopFilters,
   FilterButton,
-  FilterCoursesForm,
   Layout,
   MobileFilters,
   StyledForm,
-  StyledTable
+  StyledTable,
+  SchoolField,
+  SubjectField,
+  FormSubmitSection
 } from '../../components';
 import { FilterCoursesDocument } from '../../generated/graphql';
 import { Course, FilterCoursesFormValues, School, SkoleContext, Subject } from '../../interfaces';
@@ -23,6 +25,7 @@ import { withApollo, withRedux } from '../../lib';
 import { getFullCourseName, useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
 import { useRouter } from 'next/router';
 import { withTranslation } from '../../i18n';
+import { TextField } from 'formik-material-ui';
 
 interface Props {
   courses?: Course[];
@@ -61,19 +64,36 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects, t }) => {
   const filterTitle = 'Filter Courses';
 
   const renderFilterForm = (
-    <Formik
-      component={FilterCoursesForm}
-      onSubmit={handleSubmit}
-      initialValues={initialValues}
-      ref={ref}
-    />
+    <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
+      {props => (
+        <StyledForm>
+          <Field
+            name="courseName"
+            component={TextField}
+            label={t('fieldCourseName')}
+            placeholder={t('fieldCourseName')}
+            fullWidth
+          />
+          <Field
+            name="courseCode"
+            component={TextField}
+            label={t('fieldCourseCode')}
+            placeholder={t('fieldCourseName')}
+            fullWidth
+          />
+          <SchoolField {...props} />
+          <SubjectField {...props} />
+          <FormSubmitSection submitButtonText={t('buttonApplyFilters')} {...props} />
+        </StyledForm>
+      )}
+    </Formik>
   );
 
   return (
     <Layout t={t} heading={'headerCourses'} title={t('titleCourses')} backUrl="/">
       <DesktopFilters title={filterTitle}>
         {renderFilterForm}
-        <ClearFiltersButton resetForm={resetForm} />
+        <ClearFiltersButton title={t('buttonClearFilters')} resetForm={resetForm} />
       </DesktopFilters>
       <StyledTable>
         <Table>
@@ -82,7 +102,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects, t }) => {
               <TableCell>
                 <StyledForm>
                   <FilterButton toggleFilters={toggleFilters} />
-                  <ClearFiltersButton resetForm={resetForm} />
+                  <ClearFiltersButton title={t('buttonClearFilters')} resetForm={resetForm} />
                 </StyledForm>
               </TableCell>
             </TableRow>
@@ -99,7 +119,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects, t }) => {
             ) : (
               <TableRow>
                 <TableCell>
-                  <Typography variant="subtitle1">No courses...</Typography>
+                  <Typography variant="subtitle1">{t('textNoCourses')}</Typography>
                 </TableCell>
               </TableRow>
             )}

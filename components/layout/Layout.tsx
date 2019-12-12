@@ -14,12 +14,12 @@ interface Props {
 export const Layout: React.FC<Props> = ({ title, heading, backUrl, children, t }) => (
   <StyledLayout>
     <Head title={title} />
-    <TopNavbar heading={heading} backUrl={backUrl} />
+    <TopNavbar heading={heading} backUrl={backUrl} t={t} />
     <Container>{children}</Container>
     <BottomNavbar />
     <Footer t={t} />
     <Notifications />
-    <SkoleGDPR />
+    <SkoleGDPR t={t} />
   </StyledLayout>
 );
 

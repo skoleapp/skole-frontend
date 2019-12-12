@@ -5,7 +5,11 @@ import { Router } from '../../i18n';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
 
-export const SearchWidget: React.FC = () => {
+interface Props {
+  t: (value: string) => any;
+}
+
+export const SearchWidget: React.FC<Props> = ({ t }) => {
   const [search, setSearch] = useState('');
 
   const handleSubmit = (e: SyntheticEvent): void => {
@@ -18,7 +22,7 @@ export const SearchWidget: React.FC = () => {
       <StyledSearchWidget display="flex" alignItems="center">
         <Search />
         <InputBase
-          placeholder="Search…"
+          placeholder={t('placeholderSearch')}
           onChange={(e: ChangeEvent<HTMLInputElement>): void => setSearch(e.target.value)}
           value={search}
         />

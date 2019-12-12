@@ -14,7 +14,11 @@ import styled from 'styled-components';
 import { breakpoints } from '../../styles';
 import { StyledDialog, TextLink } from '../shared';
 
-export const SkoleGDPR: React.FC = () => {
+interface Props {
+  t: (value: string) => any;
+}
+
+export const SkoleGDPR: React.FC<Props> = ({ t }) => {
   const [consent, setConsent] = useState(true);
   const [privacyPreferencesOpen, setPrivacyPreferencesOpen] = useState(false);
 
@@ -53,10 +57,10 @@ export const SkoleGDPR: React.FC = () => {
       </Box>
       <Box className="flex-flow" margin="0.5rem">
         <Button onClick={openPrivacyPreferences} color="secondary" fullWidth>
-          privacy preferences
+          {t('buttonPrivacyPreferences')}
         </Button>
         <Button onClick={handleConsent} startIcon={<CheckOutlined />} variant="contained" fullWidth>
-          i agree
+          {t('buttonIAgree')}
         </Button>
       </Box>
     </>
@@ -110,7 +114,7 @@ export const SkoleGDPR: React.FC = () => {
       </DialogContent>
       <DialogActions>
         <Button onClick={savePrivacyPreferences} variant="contained" color="primary" autoFocus>
-          save preferences
+          {t('buttonSavePreferences')}
         </Button>
       </DialogActions>
     </StyledDialog>

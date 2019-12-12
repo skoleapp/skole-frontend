@@ -31,11 +31,11 @@ const ProfilePage: NextPage = ({ t }: any) => {
   return (
     <Layout t={t} heading={t('headingProfile')} title={t('titleProfile')} backUrl="/">
       <StyledCard>
-        <UserProfileCardContent {...userProfileProps} />
+        <UserProfileCardContent t={t} {...userProfileProps} />
         <Divider />
         <SlimCardContent>
           <ButtonLink href="/profile/edit" color="primary" variant="outlined" fullWidth>
-            edit profile
+            {t('buttonEditProfile')}
           </ButtonLink>
         </SlimCardContent>
       </StyledCard>

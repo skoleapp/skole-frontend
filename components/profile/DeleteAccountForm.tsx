@@ -4,16 +4,23 @@ import React from 'react';
 import { DeleteAccountFormValues } from '../../interfaces';
 import { FormSubmitSection, StyledForm } from '../shared';
 
-export const DeleteAccountForm: React.FC<FormikProps<DeleteAccountFormValues>> = props => (
-  <StyledForm>
-    <Field
-      name="password"
-      label="Password"
-      placeholder="Password"
-      component={TextField}
-      fullWidth
-      type="password"
-    />
-    <FormSubmitSection submitButtonText="delete account" {...props} />
-  </StyledForm>
-);
+interface Props extends FormikProps<DeleteAccountFormValues> {
+  t: (value: string) => any;
+}
+
+export const DeleteAccountForm: React.FC<Props> = props => {
+  const t = props.t;
+  return (
+    <StyledForm>
+      <Field
+        name="password"
+        label={t('fieldPassword')}
+        placeholder={t('fieldPassword')}
+        component={TextField}
+        fullWidth
+        type="password"
+      />
+      <FormSubmitSection submitButtonText={t('buttonDeleteAccount')} {...props} />
+    </StyledForm>
+  );
+};

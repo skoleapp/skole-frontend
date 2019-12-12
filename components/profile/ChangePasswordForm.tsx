@@ -4,32 +4,39 @@ import React from 'react';
 import { FormSubmitSection, StyledForm } from '../shared';
 import { PasswordForm } from '../../interfaces';
 
-export const ChangePasswordForm: React.ComponentType<FormikProps<PasswordForm>> = props => (
-  <StyledForm>
-    <Field
-      placeholder="Old Password"
-      name="oldPassword"
-      component={TextField}
-      label="Old Password"
-      type="password"
-      fullWidth
-    />
-    <Field
-      placeholder="New Password"
-      name="newPassword"
-      component={TextField}
-      label="New Password"
-      type="password"
-      fullWidth
-    />
-    <Field
-      placeholder="Confirm New Passsword"
-      name="confirmNewPassword"
-      component={TextField}
-      label="Confirm New Password"
-      type="password"
-      fullWidth
-    />
-    <FormSubmitSection submitButtonText="save" {...props} />
-  </StyledForm>
-);
+interface Props extends FormikProps<PasswordForm> {
+  t: (value: string) => any;
+}
+
+export const ChangePasswordForm: React.FC<Props> = props => {
+  const t = props.t;
+  return (
+    <StyledForm>
+      <Field
+        placeholder={t('fieldOldPassword')}
+        name="oldPassword"
+        component={TextField}
+        label={t('fieldOldPassword')}
+        type="password"
+        fullWidth
+      />
+      <Field
+        placeholder={t('fieldNewPassword')}
+        name="newPassword"
+        component={TextField}
+        label={t('fieldNewPassword')}
+        type="password"
+        fullWidth
+      />
+      <Field
+        placeholder={t('fieldConfirmNewPassword')}
+        name="confirmNewPassword"
+        component={TextField}
+        label={t('fieldConfirmNewPassword')}
+        type="password"
+        fullWidth
+      />
+      <FormSubmitSection submitButtonText={t('buttonSave')} {...props} />
+    </StyledForm>
+  );
+};

@@ -30,12 +30,14 @@ interface ResourcePart {
 interface Props extends FormikProps<UploadResourceFormValues> {
   resourceTypes: ResourceType[];
   courses: Course[];
+  t: (value: string) => any;
 }
 
 export const UploadResourceForm: React.FC<Props> = props => {
   const [uploaded, setUploaded] = useState(false);
   const [amountOfExercises, setAmountOfExercises] = useState('0');
   const [resourceParts, setResourceParts] = useState<ResourcePart[]>([]);
+  const t = props.t;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFileChange = (e: ChangeEvent<any>) => {
@@ -102,8 +104,8 @@ export const UploadResourceForm: React.FC<Props> = props => {
   const renderResourceTitle = (
     <Field
       name="resourceTitle"
-      placeholder="Resource Title"
-      label="Resource Title"
+      placeholder={t('fieldResourceTitle')}
+      label={t('fieldResourceTitle')}
       component={TextField}
       fullWidth
     />
@@ -113,7 +115,7 @@ export const UploadResourceForm: React.FC<Props> = props => {
     <FormControl fullWidth>
       <Box marginTop="1rem">
         <Typography variant="body2" color="textSecondary">
-          You can add exercise numbers to your resource to allow more detailed discussion.
+          {t('textYouCanAddExerciseNumbersToYourResourceToAllowMoreDetailedDiscussion')}
         </Typography>
       </Box>
     </FormControl>
@@ -122,7 +124,7 @@ export const UploadResourceForm: React.FC<Props> = props => {
   const renderExercises = (
     <Box marginTop="0.5rem" display="flex" justifyContent="center" alignItems="center">
       <FormControl fullWidth>
-        <InputLabel>Exercises</InputLabel>
+        <InputLabel>{t('headerExcercises')}</InputLabel>
         <Select onChange={handleExercisesChange} value={amountOfExercises} fullWidth>
           {exerciseOptions.map((o, i) => (
             <MenuItem key={i} value={o.value}>
@@ -140,10 +142,12 @@ export const UploadResourceForm: React.FC<Props> = props => {
   const renderResourceParts = resourceParts.map((r: ResourcePart, i: number) => (
     <Box key={i} marginTop="0.5rem" display="flex" justifyContent="center">
       <FormControl fullWidth>
-        <InputLabel>Exercise {r.number}: Exercise Number</InputLabel>
+        <InputLabel>
+          {t('headerExcercise')} {r.number}: {t('headerExcerciseNumber')}
+        </InputLabel>
         <Input
           type="number"
-          placeholder="Exercise Number"
+          placeholder={t('fieldExcerciseNumber')}
           value={r.number}
           onChange={handleResourcePartChange(r.index)}
           fullWidth
@@ -169,7 +173,7 @@ export const UploadResourceForm: React.FC<Props> = props => {
         />
         <label htmlFor="upload-resource">
           <Button variant="outlined" color="primary" component="span" fullWidth>
-            {uploaded ? 'uploaded' : 'upload resource'}
+            {uploaded ? t('textUploaded') : t('buttonUploadResource')}
           </Button>
         </label>
         <ErrorMessage name="resource" component={FormErrorMessage} />
@@ -186,7 +190,7 @@ export const UploadResourceForm: React.FC<Props> = props => {
       {renderExercises}
       {renderResourceParts}
       {renderUploadResourceField}
-      <FormSubmitSection submitButtonText="submit" {...props} />
+      <FormSubmitSection submitButtonText={t('buttonSubmit')} {...props} />
     </StyledForm>
   );
 };

@@ -1,13 +1,21 @@
 import React from 'react';
 import { CardHeader } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import { NextPage } from 'next';
 import { Router } from '../i18n';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
-import { CreateCourseForm, Layout, SlimCardContent, StyledCard } from '../components';
+import {
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  StyledForm,
+  SubjectField,
+  SchoolField,
+  FormSubmitSection
+} from '../components';
 import { CreateCourseFormDataDocument, useCreateCourseMutation } from '../generated/graphql';
 import {
   CreateCourseFormValues,
@@ -19,6 +27,7 @@ import {
 import { withApollo, withRedux } from '../lib';
 import { useForm, usePrivatePage } from '../utils';
 import { withTranslation } from '../i18n';
+import { TextField } from 'formik-material-ui';
 
 const validationSchema = Yup.object().shape({
   courseName: Yup.string().required('Course name is required.'),
@@ -72,11 +81,32 @@ const CreateCoursePage: NextPage<Props> = ({ subjects, schools, t }) => {
         <SlimCardContent>
           <Formik
             initialValues={initialValues}
-            component={CreateCourseForm}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
             ref={ref}
-          />
+          >
+            {props => (
+              <StyledForm>
+                <Field
+                  name="courseName"
+                  placeholder={t('fieldCourseName')}
+                  label={t('fieldCourseName')}
+                  component={TextField}
+                  fullWidth
+                />
+                <Field
+                  name="courseCode"
+                  label={t('fieldCourseCode')}
+                  placeholder={t('fieldCourseCode')}
+                  component={TextField}
+                  fullWidth
+                />
+                <SubjectField {...props} />
+                <SchoolField {...props} />
+                <FormSubmitSection submitButtonText={t('buttonSave')} {...props} />
+              </StyledForm>
+            )}
+          </Formik>
         </SlimCardContent>
       </StyledCard>
     </Layout>

@@ -15,14 +15,19 @@ import styled from 'styled-components';
 import { PublicUser } from '../../interfaces';
 import { getAvatar } from '../../utils';
 
-export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
+interface Props extends Omit<PublicUser, 'id'> {
+  t: (value: string) => any;
+}
+
+export const UserProfileCardContent: React.FC<Props> = ({
   avatar,
   username,
   title,
   bio,
   points,
   courses,
-  resources
+  resources,
+  t
 }) => {
   const renderAvatarSection = (
     <CardContent>
@@ -43,7 +48,9 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
               <ScoreOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>Points: {points}</ListItemText>
+          <ListItemText>
+            {t('headerPoints')}: {points}
+          </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -51,7 +58,9 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
               <SchoolOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>Courses: {courses}</ListItemText>
+          <ListItemText>
+            {t('headerCourses')}: {courses}
+          </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -59,7 +68,9 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
               <CloudUploadOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>Resources: {resources}</ListItemText>
+          <ListItemText>
+            {t('headerResources')}: {resources}
+          </ListItemText>
         </ListItem>
       </StyledAccountInfoList>
     </CardContent>
@@ -76,7 +87,7 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
     <CardContent>
       <Box textAlign="left">
         <Typography variant="body2" color="textSecondary">
-          Bio
+          {t('headerBio')}
         </Typography>
         <Typography variant="body1">{bio}</Typography>
       </Box>
@@ -87,9 +98,9 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
     <CardContent>
       <Box textAlign="left">
         <Typography variant="body2" color="textSecondary">
-          Courses
+          {t('headerCourses')}
         </Typography>
-        <Typography variant="body1">Courses will show here...</Typography>
+        <Typography variant="body1">--Course stuff--</Typography>
       </Box>
     </CardContent>
   );
@@ -98,9 +109,9 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
     <CardContent>
       <Box textAlign="left">
         <Typography variant="body2" color="textSecondary">
-          Resources
+          {t('headerResources')}
         </Typography>
-        <Typography variant="body1">Resources will show here...</Typography>
+        <Typography variant="body1">--Resource stuff--</Typography>
       </Box>
     </CardContent>
   );

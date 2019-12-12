@@ -7,32 +7,35 @@ import { FormSubmitSection, SchoolTypeField, StyledForm } from '../shared';
 
 interface Props extends FormikProps<FilterSchoolsFormValues> {
   schoolTypes: SchoolType[];
+  t: (value: string) => any;
 }
 
-export const FilterSchoolsForm: React.FC<Props> = props => (
-  <StyledForm>
-    <SchoolTypeField {...props} />
-    <Field
-      name="schoolName"
-      component={TextField}
-      label="School Name"
-      placeholder="School Name"
-      fullWidth
-    />
-    <Field
-      name="schoolCity"
-      component={TextField}
-      label="School City"
-      placeholder="School City"
-      fullWidth
-    />
-    <Field
-      name="schoolCountry"
-      component={TextField}
-      label="School Country"
-      placeholder="School Country"
-      fullWidth
-    />
-    <FormSubmitSection submitButtonText="apply filters" {...props} />
-  </StyledForm>
-);
+export const FilterSchoolsForm: React.FC<Props> = props => {
+  const t = props.t;
+  return (
+    <StyledForm>
+      <SchoolTypeField {...props} />
+      <Field
+        name="schoolName"
+        component={TextField}
+        label={t('fieldSchoolName')}
+        placeholder={t('fieldSchoolName')}
+        fullWidth
+      />
+      <Field
+        name="schoolCity"
+        label={t('fieldSchoolCity')}
+        placeholder={t('fieldSchoolCity')}
+        fullWidth
+      />
+      <Field
+        name="schoolCountry"
+        component={TextField}
+        label={t('fieldSchoolCountry')}
+        placeholder={t('fieldSchoolCountry')}
+        fullWidth
+      />
+      <FormSubmitSection submitButtonText={t('buttonApplyFilters')} {...props} />
+    </StyledForm>
+  );
+};
