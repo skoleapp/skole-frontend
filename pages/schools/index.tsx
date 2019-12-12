@@ -76,7 +76,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
           <TableHead className="mobile-only">
             <TableRow>
               <TableCell>
-                <FilterButton toggleFilters={toggleFilters} />
+                <FilterButton title={t('buttonFilter')} toggleFilters={toggleFilters} />
                 <ClearFiltersButton title={t('buttonClearFilters')} resetForm={resetForm} />
               </TableCell>
             </TableRow>
@@ -102,7 +102,12 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
           </TableBody>
         </Table>
       </StyledTable>
-      <MobileFilters title={filterTitle} filtersOpen={filtersOpen} toggleFilters={toggleFilters}>
+      <MobileFilters
+        t={t}
+        title={filterTitle}
+        filtersOpen={filtersOpen}
+        toggleFilters={toggleFilters}
+      >
         {renderFilterForm}
       </MobileFilters>
     </Layout>

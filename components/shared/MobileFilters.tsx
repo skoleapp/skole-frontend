@@ -5,9 +5,16 @@ import { UseFilters } from '../../interfaces';
 
 interface Props extends Omit<UseFilters, 'setFiltersOpen'> {
   title: string;
+  t: (value: string) => any;
 }
 
-export const MobileFilters: React.FC<Props> = ({ title, filtersOpen, toggleFilters, children }) => (
+export const MobileFilters: React.FC<Props> = ({
+  title,
+  filtersOpen,
+  toggleFilters,
+  children,
+  t
+}) => (
   <SwipeableDrawer
     className="mobile-only"
     anchor="bottom"
@@ -20,7 +27,7 @@ export const MobileFilters: React.FC<Props> = ({ title, filtersOpen, toggleFilte
       <CardContent>
         {children}
         <Button variant="outlined" color="primary" fullWidth onClick={toggleFilters(!filtersOpen)}>
-          cancel
+          {t('buttonCancel')}
         </Button>
       </CardContent>
     </StyledCard>
