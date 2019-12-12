@@ -4,9 +4,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  TextField
 } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import { NextPage } from 'next';
 import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
@@ -19,7 +20,9 @@ import {
   Layout,
   SlimCardContent,
   StyledCard,
-  StyledDialog
+  StyledDialog,
+  StyledForm,
+  FormSubmitSection
 } from '../../components';
 import { useDeleteAccountMutation } from '../../generated/graphql';
 import { DeleteAccountFormValues, FormCompleted, SkoleContext } from '../../interfaces';
@@ -78,12 +81,25 @@ export const DeleteAccountPage: NextPage = ({ t }: any) => {
       <CardHeader title={t('headerDeleteAccount')} />
       <SlimCardContent>
         <Formik
-          component={DeleteAccountForm}
           onSubmit={handleSubmit}
           initialValues={initialValues}
           validationSchema={validationSchema}
           ref={ref}
-        />
+        >
+          {props => (
+            <StyledForm>
+              <Field
+                name="password"
+                label={t('fieldPassword')}
+                placeholder={t('fieldPassword')}
+                component={TextField}
+                fullWidth
+                type="password"
+              />
+              <FormSubmitSection submitButtonText={t('buttonDeleteAccount')} {...props} />
+            </StyledForm>
+          )}
+        </Formik>
       </SlimCardContent>
     </StyledCard>
   );

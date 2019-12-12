@@ -1,6 +1,14 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
-import { Formik } from 'formik';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  TextField
+} from '@material-ui/core';
+import { Formik, Field } from 'formik';
 import { NextPage } from 'next';
 import { Link } from '../../i18n';
 import { Router } from '../../i18n';
@@ -12,10 +20,12 @@ import {
   ClearFiltersButton,
   DesktopFilters,
   FilterButton,
-  FilterSchoolsForm,
   Layout,
   MobileFilters,
-  StyledTable
+  StyledTable,
+  StyledForm,
+  SchoolTypeField,
+  FormSubmitSection
 } from '../../components';
 import { FilterSchoolsDocument, SchoolType } from '../../generated/graphql';
 import { FilterSchoolsFormValues, School, SkoleContext } from '../../interfaces';
@@ -57,12 +67,34 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
   };
 
   const renderFilterForm = (
-    <Formik
-      component={FilterSchoolsForm}
-      onSubmit={handleSubmit}
-      initialValues={initialValues}
-      ref={ref}
-    />
+    <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
+      {props => (
+        <StyledForm>
+          <SchoolTypeField {...props} />
+          <Field
+            name="schoolName"
+            component={TextField}
+            label={t('fieldSchoolName')}
+            placeholder={t('fieldSchoolName')}
+            fullWidth
+          />
+          <Field
+            name="schoolCity"
+            label={t('fieldSchoolCity')}
+            placeholder={t('fieldSchoolCity')}
+            fullWidth
+          />
+          <Field
+            name="schoolCountry"
+            component={TextField}
+            label={t('fieldSchoolCountry')}
+            placeholder={t('fieldSchoolCountry')}
+            fullWidth
+          />
+          <FormSubmitSection submitButtonText={t('buttonApplyFilters')} {...props} />
+        </StyledForm>
+      )}
+    </Formik>
   );
 
   return (

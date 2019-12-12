@@ -14,14 +14,7 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
-import {
-  ContactForm,
-  Layout,
-  SlimCardContent,
-  StyledCard,
-  StyledForm,
-  FormErrorMessage
-} from '../components';
+import { Layout, SlimCardContent, StyledCard, StyledForm, FormErrorMessage } from '../components';
 import { ContactFormValues, SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useForm } from '../utils';
@@ -64,7 +57,7 @@ const ContactPage: NextPage = ({ t }: any) => {
             validationSchema={validationSchema}
             ref={ref}
           >
-            {props => (
+            {() => (
               <StyledForm>
                 <FormControl fullWidth>
                   <InputLabel>Type</InputLabel>

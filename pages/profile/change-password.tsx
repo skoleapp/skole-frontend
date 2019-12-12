@@ -1,13 +1,20 @@
 import React from 'react';
-import { CardHeader } from '@material-ui/core';
-import { Formik } from 'formik';
+import { CardHeader, TextField } from '@material-ui/core';
+import { Formik, Field } from 'formik';
 import { NextPage } from 'next';
 import { Router } from '../../i18n';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../../actions';
-import { ChangePasswordForm, Layout, SlimCardContent, StyledCard } from '../../components';
+import {
+  ChangePasswordForm,
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  StyledForm,
+  FormSubmitSection
+} from '../../components';
 import { useChangePasswordMutation } from '../../generated/graphql';
 import { FormCompleted, PasswordForm, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
@@ -61,10 +68,39 @@ const ChangePasswordPage: NextPage = ({ t }: any) => {
           <Formik
             onSubmit={handleSubmit}
             initialValues={initialValues}
-            component={ChangePasswordForm}
             validationSchema={validationSchema}
             ref={ref}
-          />
+          >
+            {props => (
+              <StyledForm>
+                <Field
+                  placeholder={t('fieldOldPassword')}
+                  name="oldPassword"
+                  component={TextField}
+                  label={t('fieldOldPassword')}
+                  type="password"
+                  fullWidth
+                />
+                <Field
+                  placeholder={t('fieldNewPassword')}
+                  name="newPassword"
+                  component={TextField}
+                  label={t('fieldNewPassword')}
+                  type="password"
+                  fullWidth
+                />
+                <Field
+                  placeholder={t('fieldConfirmNewPassword')}
+                  name="confirmNewPassword"
+                  component={TextField}
+                  label={t('fieldConfirmNewPassword')}
+                  type="password"
+                  fullWidth
+                />
+                <FormSubmitSection submitButtonText={t('buttonSave')} {...props} />
+              </StyledForm>
+            )}
+          </Formik>
         </SlimCardContent>
       </StyledCard>
     </Layout>
