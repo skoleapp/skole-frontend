@@ -11,10 +11,12 @@ import { compose } from 'redux';
 import {
   DesktopFilters,
   FilterButton,
-  FilterSubjectsForm,
   Layout,
   MobileFilters,
-  StyledTable
+  StyledTable,
+  StyledForm,
+  SchoolField,
+  FormSubmitSection
 } from '../components';
 import { FilterSubjectsDocument } from '../generated/graphql';
 import { FilterSubjectsFormValues, School, SkoleContext, Subject } from '../interfaces';
@@ -56,7 +58,14 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools, t }) => {
   };
 
   const renderFilterForm = (
-    <Formik component={FilterSubjectsForm} onSubmit={handleSubmit} initialValues={initialValues} />
+    <Formik onSubmit={handleSubmit} initialValues={initialValues}>
+      {props => (
+        <StyledForm>
+          <SchoolField {...props} />
+          <FormSubmitSection submitButtonText={t('buttonApply')} {...props} />
+        </StyledForm>
+      )}
+    </Formik>
   );
 
   return (
@@ -91,7 +100,7 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools, t }) => {
             ) : (
               <TableRow>
                 <TableCell>
-                  <Typography variant="subtitle1">No subjects...</Typography>
+                  <Typography variant="subtitle1">{t('textNoSubjects')}</Typography>
                 </TableCell>
               </TableRow>
             )}
