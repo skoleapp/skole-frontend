@@ -62,7 +62,6 @@ const ContactPage: NextPage = ({ t }: any) => {
             onSubmit={handleSubmit}
             initialValues={initialValues}
             validationSchema={validationSchema}
-            component={ContactForm}
             ref={ref}
           >
             {props => (
