@@ -1,25 +1,30 @@
-import { AppBar, Box, Toolbar } from '@material-ui/core';
+import { AppBar, Box, IconButton, Toolbar } from '@material-ui/core';
 import { AccountCircle, ArrowBack, CloudUpload, Settings } from '@material-ui/icons';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Heading, Logo, SearchWidget } from '.';
+import { Heading, Logo, TopNavbarSearchWidget } from '.';
 import { State } from '../../interfaces';
 import { breakpoints } from '../../styles';
 import { ButtonLink, IconButtonLink } from '../shared';
 
 interface Props {
   heading?: string;
-  backUrl?: string;
+  backUrl?: boolean;
+  disableSearch?: boolean;
 }
 
-export const TopNavbar: React.FC<Props> = ({ heading, backUrl }) => {
+export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch }) => {
   const { authenticated } = useSelector((state: State) => state.auth);
+  const router = useRouter();
 
   const renderLeftSection = (
     <>
       {backUrl ? (
-        <IconButtonLink icon={ArrowBack} href={backUrl} color="secondary" />
+        <IconButton className="mobile-only" onClick={() => router.back()} color="secondary">
+          <ArrowBack />
+        </IconButton>
       ) : (
         <IconButtonLink
           className="mobile-only"
@@ -40,16 +45,16 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl }) => {
   const renderRightSection = (
     <>
       <Box className="desktop-only" display="flex" alignItems="center">
-        <SearchWidget />
+        {!disableSearch && <TopNavbarSearchWidget />}
         {authenticated ? (
           <IconButtonLink icon={AccountCircle} href="/profile" color="secondary" />
         ) : (
           <>
-            <ButtonLink href="/auth/login" color="secondary">
-              login
+            <ButtonLink href="/auth/sign-in" color="secondary">
+              sign in
             </ButtonLink>
-            <ButtonLink href="/auth/register" color="secondary">
-              Register
+            <ButtonLink href="/auth/sign-up" color="secondary">
+              sign up
             </ButtonLink>
           </>
         )}
