@@ -25,6 +25,7 @@ export const FilterSchoolsForm: React.FC<Props> = props => {
       <Field
         name="schoolCity"
         label={t('fieldSchoolCity')}
+        component={TextField}
         placeholder={t('fieldSchoolCity')}
         fullWidth
       />
