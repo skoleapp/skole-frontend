@@ -16,7 +16,6 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 import { logout } from '../../actions';
 import {
-  DeleteAccountForm,
   Layout,
   SlimCardContent,
   StyledCard,

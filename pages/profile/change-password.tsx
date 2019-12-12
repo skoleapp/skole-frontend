@@ -8,7 +8,6 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../../actions';
 import {
-  ChangePasswordForm,
   Layout,
   SlimCardContent,
   StyledCard,
