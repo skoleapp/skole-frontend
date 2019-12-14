@@ -21,7 +21,7 @@ const ResourcesPage: NextPage = ({ t }: any) => {
       backUrl={`/courses/${id}`}
     >
       <StyledCard>
-        <CardHeader title={'headerResources'} />
+        <CardHeader title={t('headerResources')} />
         <SlimCardContent>Here will be course resources...</SlimCardContent>
         <SlimCardContent>
           <ButtonLink
