@@ -35,7 +35,7 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object().shape({
-  password: Yup.string().required('Password is required.')
+  password: Yup.string().required('fieldPasswordRequired')
 });
 
 const initialDialogState = {
@@ -45,7 +45,7 @@ const initialDialogState = {
 
 export const DeleteAccountPage: NextPage = ({ t }: any) => {
   const [dialog, setDialog] = useState(initialDialogState);
-  const { ref, setSubmitting, resetForm, onError } = useForm();
+  const { ref, setSubmitting, resetForm, onError } = useForm(t);
   const dispatch = useDispatch();
   const apolloClient = useApolloClient();
 

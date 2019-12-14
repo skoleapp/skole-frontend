@@ -61,7 +61,7 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools, t }) => {
     <Formik onSubmit={handleSubmit} initialValues={initialValues}>
       {props => (
         <StyledForm>
-          <SchoolField {...props} />
+          <SchoolField {...props} t={t} />
           <FormSubmitSection submitButtonText={t('buttonApply')} {...props} />
         </StyledForm>
       )}

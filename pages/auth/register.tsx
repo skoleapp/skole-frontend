@@ -31,23 +31,23 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required('Username is required.'),
+  username: Yup.string().required('fieldUsernameRequired'),
   email: Yup.string()
-    .email('Invalid email.')
-    .required('Email is required.'),
+    .email('fieldEmailInvalid')
+    .required('fieldEmailRequired'),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters long.')
-    .required('Password is required.'),
+    .min(6, 'textPasswordMustBeAtleast')
+    .required('fieldPasswordRequired'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords do not match.')
-    .required('Please confirm your password.')
+    .oneOf([Yup.ref('password'), null], 'fieldPasswordsDoNotMatch')
+    .required('fieldPleaseConfirmPassword')
 });
 interface Props {
   t: (value: string) => any;
 }
 const RegisterPage: NextPage<Props> = ({ t }) => {
   const client = useApolloClient();
-  const { ref, resetForm, setSubmitting, onError } = useForm();
+  const { ref, resetForm, setSubmitting, onError } = useForm(t);
   const dispatch = useDispatch();
 
   const onCompleted = ({ register, login }: FormCompleted): void => {

@@ -21,13 +21,13 @@ import { useForm, usePrivatePage } from '../../utils';
 import { withTranslation } from '../../i18n';
 
 const validationSchema = Yup.object().shape({
-  oldPassword: Yup.string().required('Old password is required.'),
+  oldPassword: Yup.string().required('fieldOldPasswordRequired'),
   newPassword: Yup.string()
-    .min(6, 'Password must be at least 6 characters long.')
-    .required('New password is required.'),
+    .min(6, 'textPasswordMustBeAtleast')
+    .required('fieldNewPasswordRequired'),
   confirmNewPassword: Yup.string()
-    .oneOf([Yup.ref('newPassword'), null], 'Passwords do not match.')
-    .required('Confirm new password is required.')
+    .oneOf([Yup.ref('newPassword'), null], 'fieldPasswordsDoNotMatch')
+    .required('fieldConfirmPasswordRequired')
 });
 
 const initialValues = {
@@ -38,7 +38,7 @@ const initialValues = {
 };
 
 const ChangePasswordPage: NextPage = ({ t }: any) => {
-  const { ref, resetForm, setSubmitting, onError } = useForm();
+  const { ref, resetForm, setSubmitting, onError } = useForm(t);
   const dispatch = useDispatch();
 
   const onCompleted = async ({ changePassword }: FormCompleted): Promise<void> => {
@@ -46,7 +46,7 @@ const ChangePasswordPage: NextPage = ({ t }: any) => {
       onError(changePassword.errors);
     } else {
       resetForm();
-      dispatch(openNotification('Password changed!'));
+      dispatch(openNotification(t('textPasswordChanged')));
       await Router.push('/profile');
     }
   };

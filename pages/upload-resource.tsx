@@ -15,10 +15,10 @@ import { useAuthSync, useForm } from '../utils';
 import { withTranslation } from '../i18n';
 
 const validationSchema = Yup.object().shape({
-  resourceTitle: Yup.string().required('Resource title is required.'),
-  resourceType: Yup.string().required('Resource type is required.'),
-  courseId: Yup.string().required('Course is required.'),
-  resource: Yup.string().required('Resource is required.')
+  resourceTitle: Yup.string().required('fieldResourceTitleRequired'),
+  resourceType: Yup.string().required('fieldResourceTypeRequired'),
+  courseId: Yup.string().required('fieldCourseRequired'),
+  resource: Yup.string().required('fieldResourceRequired')
 });
 
 interface Props {
@@ -29,13 +29,13 @@ interface Props {
 
 const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses, t }) => {
   const dispatch = useDispatch();
-  const { ref, setSubmitting, resetForm } = useForm();
+  const { ref, setSubmitting, resetForm } = useForm(t);
 
   const handleSubmit = async (values: UploadResourceFormValues) => {
     console.log(values);
     setSubmitting(false);
     resetForm();
-    dispatch(openNotification('Resource uploaded!'));
+    dispatch(openNotification(t('textResourceUploaded')));
     await Router.push('/');
   };
 
@@ -56,11 +56,18 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses, t }) => {
         <CardHeader title={t('headerUploadResource')} />
         <SlimCardContent>
           <Formik
-            component={UploadResourceForm}
             onSubmit={handleSubmit}
             initialValues={initialValues}
             validationSchema={validationSchema}
             ref={ref}
+            render={props => (
+              <UploadResourceForm
+                {...props}
+                resourceTypes={resourceTypes}
+                courses={courses}
+                t={t}
+              />
+            )}
           />
         </SlimCardContent>
       </StyledCard>

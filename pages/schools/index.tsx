@@ -45,7 +45,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
   const router = useRouter();
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const { query, pathname } = router;
-  const { ref, setSubmitting, resetForm } = useForm();
+  const { ref, setSubmitting, resetForm } = useForm(t);
 
   // Pick non-empty values and reload the page with new query params.
   const handleSubmit = async (values: FilterSchoolsFormValues) => {
@@ -70,7 +70,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
     <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
       {props => (
         <StyledForm>
-          <SchoolTypeField {...props} />
+          <SchoolTypeField {...props} t={t} />
           <Field
             name="schoolName"
             component={TextField}

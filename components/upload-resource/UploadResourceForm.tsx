@@ -28,8 +28,8 @@ interface ResourcePart {
 }
 
 interface Props extends FormikProps<UploadResourceFormValues> {
-  resourceTypes: ResourceType[];
-  courses: Course[];
+  resourceTypes?: ResourceType[];
+  courses?: Course[];
   t: (value: string) => any;
 }
 
@@ -184,8 +184,8 @@ export const UploadResourceForm: React.FC<Props> = props => {
   return (
     <StyledForm>
       {renderResourceTitle}
-      <ResourceTypeField {...props} />
-      <CourseField {...props} />
+      <ResourceTypeField {...props} t={t} />
+      <CourseField {...props} t={t} />
       {renderExercisesText}
       {renderExercises}
       {renderResourceParts}

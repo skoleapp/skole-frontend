@@ -28,22 +28,22 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object().shape({
-  contactType: Yup.string().required('Contact type is required.'),
+  contactType: Yup.string().required('fieldContactTypeRequired'),
   email: Yup.string()
-    .email('Invalid email')
-    .required('Email is required.'),
-  message: Yup.string().required('Message is required.')
+    .email('fieldEmailInvalid')
+    .required('fieldEmailRequired'),
+  message: Yup.string().required('fieldMessageRequired')
 });
 
 const ContactPage: NextPage = ({ t }: any) => {
   const dispatch = useDispatch();
-  const { ref, resetForm } = useForm();
+  const { ref, resetForm } = useForm(t);
 
   // TODO: Finish this.
   const handleSubmit = (values: ContactFormValues): void => {
     console.log(values);
     resetForm();
-    dispatch(openNotification('Message submitted!'));
+    dispatch(openNotification(t('textMessageSubmitted')));
   };
 
   return (

@@ -15,16 +15,16 @@ import { withTranslation } from '../../i18n';
 
 const validationSchema = Yup.object().shape({
   title: Yup.string(),
-  username: Yup.string().required('Username is required.'),
+  username: Yup.string().required('fieldUsernameRequired'),
   email: Yup.string()
-    .email('Invalid email.')
-    .required('Email is required.'),
+    .email('fieldEmailInvalid')
+    .required('fieldEmailRequired'),
   bio: Yup.string()
 });
 
 const EditProfilePage: NextPage = ({ t }: any) => {
   const { user } = useSelector((state: State) => state.auth);
-  const { ref, onError } = useForm();
+  const { ref, onError } = useForm(t);
   const dispatch = useDispatch();
 
   const onCompleted = ({ updateUser }: FormCompleted): void => {
@@ -32,7 +32,7 @@ const EditProfilePage: NextPage = ({ t }: any) => {
       return onError(updateUser.errors);
     } else {
       dispatch(updateUserMe(updateUser.user));
-      dispatch(openNotification('Profile updated!'));
+      dispatch(openNotification(t('textProfileUpdated')));
     }
   };
 
@@ -73,11 +73,11 @@ const EditProfilePage: NextPage = ({ t }: any) => {
         <CardHeader title={t('headerEditProfile')} />
         <SlimCardContent>
           <Formik
-            component={EditProfileForm}
             initialValues={initialValues}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
             ref={ref}
+            render={props => <EditProfileForm {...props} t={t} />}
           />
         </SlimCardContent>
       </StyledCard>

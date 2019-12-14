@@ -39,7 +39,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects, t }) => {
 
   const { query, pathname } = router;
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
-  const { ref, setSubmitting, resetForm } = useForm();
+  const { ref, setSubmitting, resetForm } = useForm(t);
 
   // Pick non-empty values and reload the page with new query params.
   const handleSubmit = async (values: FilterCoursesFormValues): Promise<void> => {
@@ -81,8 +81,8 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects, t }) => {
             placeholder={t('fieldCourseName')}
             fullWidth
           />
-          <SchoolField {...props} />
-          <SubjectField {...props} />
+          <SchoolField {...props} t={t} />
+          <SubjectField {...props} t={t} />
           <FormSubmitSection submitButtonText={t('buttonApplyFilters')} {...props} />
         </StyledForm>
       )}
@@ -90,7 +90,7 @@ const CoursesPage: NextPage<Props> = ({ courses, schools, subjects, t }) => {
   );
 
   return (
-    <Layout t={t} heading={'headerCourses'} title={t('titleCourses')} backUrl="/">
+    <Layout t={t} heading={t('headerCourses')} title={t('titleCourses')} backUrl="/">
       <DesktopFilters title={filterTitle}>
         {renderFilterForm}
         <ClearFiltersButton title={t('buttonClearFilters')} resetForm={resetForm} />

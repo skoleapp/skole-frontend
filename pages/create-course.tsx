@@ -30,10 +30,10 @@ import { withTranslation } from '../i18n';
 import { TextField } from 'formik-material-ui';
 
 const validationSchema = Yup.object().shape({
-  courseName: Yup.string().required('Course name is required.'),
+  courseName: Yup.string().required('fieldCourseNameRequired'),
   courseCode: Yup.string(),
-  subjectId: Yup.string().required('Subject is required.'),
-  schoolId: Yup.string().required('School is required.')
+  subjectId: Yup.string().required('fieldSubjectRequired'),
+  schoolId: Yup.string().required('fieldSchoolRequired')
 });
 
 interface Props {
@@ -43,7 +43,7 @@ interface Props {
 }
 
 const CreateCoursePage: NextPage<Props> = ({ subjects, schools, t }) => {
-  const { ref, resetForm, setSubmitting, onError } = useForm();
+  const { ref, resetForm, setSubmitting, onError } = useForm(t);
   const dispatch = useDispatch();
 
   const onCompleted = async ({ createCourse }: FormCompleted) => {
@@ -51,7 +51,7 @@ const CreateCoursePage: NextPage<Props> = ({ subjects, schools, t }) => {
       onError(createCourse.errors);
     } else {
       resetForm();
-      dispatch(openNotification('Course created!'));
+      dispatch(openNotification(t('textCourseCreated')));
       await Router.push(`/courses/${createCourse.course.id}`);
     }
   };
@@ -101,8 +101,8 @@ const CreateCoursePage: NextPage<Props> = ({ subjects, schools, t }) => {
                   component={TextField}
                   fullWidth
                 />
-                <SubjectField {...props} />
-                <SchoolField {...props} />
+                <SubjectField {...props} t={t} />
+                <SchoolField {...props} t={t} />
                 <FormSubmitSection submitButtonText={t('buttonSave')} {...props} />
               </StyledForm>
             )}

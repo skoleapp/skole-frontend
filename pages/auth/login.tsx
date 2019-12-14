@@ -29,8 +29,8 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object().shape({
-  usernameOrEmail: Yup.string().required('Username or email is required.'),
-  password: Yup.string().required('Password is required!')
+  usernameOrEmail: Yup.string().required('fieldUsernameOrEmailRequired'),
+  password: Yup.string().required('fieldPasswordRequired')
 });
 
 interface Props {
@@ -40,7 +40,7 @@ interface Props {
 const LoginPage: NextPage<Props> = ({ t }) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
-  const { ref, setSubmitting, resetForm, onError } = useForm();
+  const { ref, setSubmitting, resetForm, onError } = useForm(t);
 
   const onCompleted = ({ login }: FormCompleted): void => {
     if (login.errors) {
