@@ -11,19 +11,11 @@ import { useUpdateUserMutation } from '../../generated/graphql';
 import { FormCompleted, SkoleContext, State, UpdateUserFormValues } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
+import { withTranslation } from '../../i18n';
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string(),
-  username: Yup.string().required('Username is required.'),
-  email: Yup.string()
-    .email('Invalid email.')
-    .required('Email is required.'),
-  bio: Yup.string()
-});
-
-const EditProfilePage: NextPage = () => {
+const EditProfilePage: NextPage = ({ t }: any) => {
   const { user } = useSelector((state: State) => state.auth);
-  const { ref, onError } = useForm();
+  const { ref, onError } = useForm(t);
   const dispatch = useDispatch();
 
   const onCompleted = ({ updateUser }: FormCompleted): void => {
@@ -31,7 +23,7 @@ const EditProfilePage: NextPage = () => {
       return onError(updateUser.errors);
     } else {
       dispatch(updateUserMe(updateUser.user));
-      dispatch(openNotification('Profile updated!'));
+      dispatch(openNotification(t('textProfileUpdated')));
     }
   };
 
@@ -66,17 +58,26 @@ const EditProfilePage: NextPage = () => {
     general: ''
   };
 
+  const validationSchema = Yup.object().shape({
+    title: Yup.string(),
+    username: Yup.string().required(t('fieldUsernameRequired')),
+    email: Yup.string()
+      .email(t('fieldEmailInvalid'))
+      .required(t('fieldEmailRequired')),
+    bio: Yup.string()
+  });
+
   return (
-    <Layout title="Edit Profile" backUrl="/profile">
+    <Layout t={t} title={t('titleEditProfile')} backUrl="/profile">
       <StyledCard>
-        <CardHeader title="Edit Profile" />
+        <CardHeader title={t('headerEditProfile')} />
         <SlimCardContent>
           <Formik
-            component={EditProfileForm}
             initialValues={initialValues}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
             ref={ref}
+            render={props => <EditProfileForm {...props} t={t} />}
           />
         </SlimCardContent>
       </StyledCard>
@@ -86,7 +87,7 @@ const EditProfilePage: NextPage = () => {
 
 EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await usePrivatePage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withApollo, withRedux)(EditProfilePage);
+export default compose(withRedux, withApollo, withTranslation('common'))(EditProfilePage);

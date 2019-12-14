@@ -1,6 +1,6 @@
 import { Card, CardContent, Typography } from '@material-ui/core';
 import { SvgIconComponent } from '@material-ui/icons';
-import Link from 'next/link';
+import { Link } from '../../i18n';
 import React from 'react';
 import styled from 'styled-components';
 

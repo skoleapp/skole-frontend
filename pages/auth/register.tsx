@@ -1,5 +1,5 @@
-import { CardHeader } from '@material-ui/core';
-import { Formik } from 'formik';
+import { CardHeader, FormControl, Box, Typography } from '@material-ui/core';
+import { Formik, Field } from 'formik';
 import { NextPage } from 'next';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
@@ -7,11 +7,20 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { clientLogin } from '../../actions';
-import { Layout, RegisterForm, SlimCardContent, StyledCard, TextLink } from '../../components';
+import {
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  TextLink,
+  StyledForm,
+  FormSubmitSection
+} from '../../components';
 import { useRegisterMutation } from '../../generated/graphql';
 import { FormCompleted, RegisterFormValues, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePublicPage } from '../../utils';
+import { withTranslation, Link } from '../../i18n';
+import { TextField } from 'formik-material-ui';
 
 const initialValues = {
   username: '',
@@ -21,22 +30,12 @@ const initialValues = {
   general: ''
 };
 
-const validationSchema = Yup.object().shape({
-  username: Yup.string().required('Username is required.'),
-  email: Yup.string()
-    .email('Invalid email.')
-    .required('Email is required.'),
-  password: Yup.string()
-    .min(6, 'Password must be at least 6 characters long.')
-    .required('Password is required.'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords do not match.')
-    .required('Confirm password is required.')
-});
-
-const RegisterPage: NextPage = () => {
+interface Props {
+  t: (value: string) => any;
+}
+const RegisterPage: NextPage<Props> = ({ t }) => {
   const client = useApolloClient();
-  const { ref, resetForm, setSubmitting, onError } = useForm();
+  const { ref, resetForm, setSubmitting, onError } = useForm(t);
   const dispatch = useDispatch();
 
   const onCompleted = ({ register, login }: FormCompleted): void => {
@@ -58,30 +57,86 @@ const RegisterPage: NextPage = () => {
     setSubmitting(false);
   };
 
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required(t('fieldUsernameRequired')),
+    email: Yup.string()
+      .email(t('fieldEmailInvalid'))
+      .required(t('fieldEmailRequired')),
+    password: Yup.string()
+      .min(6, t('textPasswordMustBeAtleast'))
+      .required(t('fieldPasswordRequired')),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], t('fieldPasswordsDoNotMatch'))
+      .required(t('fieldPleaseConfirmPassword'))
+  });
+
   return (
-    <Layout title="Register" backUrl="/">
+    <Layout t={t} title={t('headerRegister')} backUrl="/">
       <StyledCard>
-        <CardHeader title="Register" />
+        <CardHeader title={t('headerRegister')} />
         <SlimCardContent>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
-            component={RegisterForm}
             ref={ref}
-          />
+          >
+            {props => (
+              <StyledForm>
+                <Field
+                  placeholder={t('fieldUsername')}
+                  name="username"
+                  component={TextField}
+                  label={t('fieldUsername')}
+                  fullWidth
+                />
+                <Field
+                  placeholder={t('example@skole.io')}
+                  name="email"
+                  component={TextField}
+                  label={t('fieldEmail')}
+                  fullWidth
+                />
+                <Field
+                  placeholder={t('fieldPassword')}
+                  name="password"
+                  component={TextField}
+                  label={t('fieldPassword')}
+                  type="password"
+                  fullWidth
+                />
+                <Field
+                  placeholder={t('fieldConfirmPassword')}
+                  name="confirmPassword"
+                  type="password"
+                  component={TextField}
+                  label={t('fieldConfirmPassword')}
+                  fullWidth
+                />
+                <FormControl fullWidth>
+                  <Box marginTop="0.5rem">
+                    <Typography variant="body2" color="textSecondary">
+                      {t('textByRegisteringYouAgreeToOur') + ' '}
+                      <Link href="/terms">{t('buttonTerms')}</Link>.
+                    </Typography>
+                  </Box>
+                </FormControl>
+                <FormSubmitSection submitButtonText={t('buttonRegister')} {...props} />
+              </StyledForm>
+            )}
+          </Formik>
         </SlimCardContent>
         <SlimCardContent>
-          <TextLink href="/auth/login">Already a user?</TextLink>
+          <TextLink href="/auth/login">{t('textAlreadyAUser?')}</TextLink>
         </SlimCardContent>
       </StyledCard>
     </Layout>
   );
 };
 
-RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await usePublicPage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withApollo, withRedux)(RegisterPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(RegisterPage);

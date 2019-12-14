@@ -6,19 +6,24 @@ import { Layout, SlimCardContent, StyledCard } from '../components';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
+import { withTranslation } from '../i18n';
 
-const AboutPage: NextPage = () => (
-  <Layout heading="About" title="About" backUrl="/">
+interface Props {
+  t: (value: string) => any;
+}
+
+const AboutPage: NextPage<Props> = ({ t }) => (
+  <Layout t={t} heading="About" title={t('titleAbout')} backUrl="/">
     <StyledCard>
-      <CardHeader title="About" />
-      <SlimCardContent>Here will wil about content...</SlimCardContent>
+      <CardHeader title={t('titleAbout')} />
+      <SlimCardContent>About about about about.</SlimCardContent>
     </StyledCard>
   </Layout>
 );
 
-AboutPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+AboutPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withApollo, withRedux)(AboutPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(AboutPage);

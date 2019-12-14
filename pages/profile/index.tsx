@@ -13,8 +13,9 @@ import {
 import { SkoleContext, State } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { usePrivatePage } from '../../utils';
+import { withTranslation } from '../../i18n';
 
-const ProfilePage: NextPage = () => {
+const ProfilePage: NextPage = ({ t }: any) => {
   const { user } = useSelector((state: State) => state.auth);
 
   const userProfileProps = {
@@ -28,13 +29,13 @@ const ProfilePage: NextPage = () => {
   };
 
   return (
-    <Layout heading="Profile" title="Profile" backUrl="/">
+    <Layout t={t} heading={t('headingProfile')} title={t('titleProfile')} backUrl="/">
       <StyledCard>
-        <UserProfileCardContent {...userProfileProps} />
+        <UserProfileCardContent t={t} {...userProfileProps} />
         <Divider />
         <SlimCardContent>
           <ButtonLink href="/profile/edit" color="primary" variant="outlined" fullWidth>
-            edit profile
+            {t('buttonEditProfile')}
           </ButtonLink>
         </SlimCardContent>
       </StyledCard>
@@ -42,9 +43,9 @@ const ProfilePage: NextPage = () => {
   );
 };
 
-ProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await usePrivatePage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withApollo, withRedux)(ProfilePage);
+export default compose(withRedux, withApollo, withTranslation('common'))(ProfilePage);

@@ -4,14 +4,15 @@ import React from 'react';
 import { compose } from 'redux';
 import { Layout, StyledCard } from '../components';
 import { withApollo, withRedux } from '../lib';
+import { withTranslation } from '../i18n';
 
-const PrivacyPage: NextPage = () => (
-  <Layout title="Privacy" heading="Privacy" backUrl="/">
+const PrivacyPage: NextPage = ({ t }: any) => (
+  <Layout t={t} title={t('titlePrivacy')} heading={t('headingPrivacy')} backUrl="/">
     <StyledCard>
-      <CardHeader title="Skole Privacy Policy" />
+      <CardHeader title={t('headerSkolePrivacyPolicy')} />
       <CardContent>Here will be privacy policy...</CardContent>
     </StyledCard>
   </Layout>
 );
 
-export default compose(withRedux, withApollo)(PrivacyPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(PrivacyPage);

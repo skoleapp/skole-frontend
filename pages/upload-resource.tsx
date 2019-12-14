@@ -1,7 +1,7 @@
 import { CardHeader } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { Router } from '../i18n';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
@@ -12,30 +12,24 @@ import { UploadResourceFormDataDocument } from '../generated/graphql';
 import { Course, ResourceType, SkoleContext, UploadResourceFormValues } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useForm } from '../utils';
-
-const validationSchema = Yup.object().shape({
-  resourceTitle: Yup.string().required('Resource title is required.'),
-  resourceType: Yup.string().required('Resource type is required.'),
-  courseId: Yup.string().required('Course is required.'),
-  resource: Yup.string().required('Resource is required.')
-});
+import { withTranslation } from '../i18n';
 
 interface Props {
   resourceTypes?: ResourceType[];
   courses?: Course[];
+  t: (value: string) => any;
 }
 
-const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
+const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses, t }) => {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const { ref, setSubmitting, resetForm } = useForm();
+  const { ref, setSubmitting, resetForm } = useForm(t);
 
   const handleSubmit = async (values: UploadResourceFormValues) => {
     console.log(values);
     setSubmitting(false);
     resetForm();
-    dispatch(openNotification('Resource uploaded!'));
-    await router.push('/');
+    dispatch(openNotification(t('textResourceUploaded')));
+    await Router.push('/');
   };
 
   const initialValues = {
@@ -49,17 +43,31 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
     courses: courses || ''
   };
 
+  const validationSchema = Yup.object().shape({
+    resourceTitle: Yup.string().required(t('fieldResourceTitleRequired')),
+    resourceType: Yup.string().required(t('fieldResourceTypeRequired')),
+    courseId: Yup.string().required(t('fieldCourseRequired')),
+    resource: Yup.string().required(t('fieldResourceRequired'))
+  });
+
   return (
-    <Layout title="Upload Resource" backUrl="/">
+    <Layout t={t} title={t('titleUploadResource')} backUrl="/">
       <StyledCard>
-        <CardHeader title="Upload Resource" />
+        <CardHeader title={t('headerUploadResource')} />
         <SlimCardContent>
           <Formik
-            component={UploadResourceForm}
             onSubmit={handleSubmit}
             initialValues={initialValues}
             validationSchema={validationSchema}
             ref={ref}
+            render={props => (
+              <UploadResourceForm
+                {...props}
+                resourceTypes={resourceTypes}
+                courses={courses}
+                t={t}
+              />
+            )}
           />
         </SlimCardContent>
       </StyledCard>
@@ -67,15 +75,15 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
   );
 };
 
-UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({ query: UploadResourceFormDataDocument });
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 
-export default compose(withApollo, withRedux)(UploadResourcePage);
+export default compose(withRedux, withApollo, withTranslation('common'))(UploadResourcePage);

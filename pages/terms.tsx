@@ -4,14 +4,17 @@ import React from 'react';
 import { compose } from 'redux';
 import { Layout, StyledCard } from '../components';
 import { withApollo, withRedux } from '../lib';
+import { withTranslation } from '../i18n';
 
-const TermsPage: NextPage = () => (
-  <Layout title="Terms" heading="Terms" backUrl="/">
+const TermsPage: NextPage = ({ t }: any) => (
+  <Layout t={t} title={t('headerTerms')} heading={t('headingTerms')} backUrl="/">
     <StyledCard>
-      <CardHeader title="Skole Terms and Conditions" />
-      <CardContent>Here will be Terms and Conditions...</CardContent>
+      <CardHeader title={t('headerSkoleTermsAndConditions')} />
+      <CardContent>
+        By using Skole you pinky swear that you will not post anything naughty
+      </CardContent>
     </StyledCard>
   </Layout>
 );
 
-export default compose(withRedux, withApollo)(TermsPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(TermsPage);

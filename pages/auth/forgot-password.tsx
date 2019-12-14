@@ -4,14 +4,21 @@ import React from 'react';
 import { compose } from 'redux';
 import { Layout, StyledCard } from '../../components';
 import { withApollo, withRedux } from '../../lib';
+import { withTranslation } from '../../i18n';
 
-const ForgotPasswordPage: NextPage = () => (
-  <Layout title="Forgot Password?" backUrl="/auth/login">
+interface Props {
+  t: (value: string) => any;
+}
+
+const ForgotPasswordPage: NextPage<Props> = ({ t }) => (
+  <Layout t={t} title={t('titleForgotPassword')} backUrl="/auth/login">
     <StyledCard>
-      <CardHeader title="Forgot Password?" />
-      <CardContent>Here will be forgot password form...</CardContent>
+      <CardHeader title={t('headerForgotPassword')} />
+      <CardContent>
+        Forgot your password form will be chilling here someday in year 2021...
+      </CardContent>
     </StyledCard>
   </Layout>
 );
 
-export default compose(withApollo, withRedux)(ForgotPasswordPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(ForgotPasswordPage);

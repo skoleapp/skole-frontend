@@ -6,11 +6,12 @@ import { Layout, SlimCardContent, StyledCard } from '../components';
 import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
+import { withTranslation } from '../i18n';
 
-const SearchPage: NextPage = () => (
-  <Layout heading="Search" title="Search" backUrl="/">
+const SearchPage: NextPage = ({ t }: any) => (
+  <Layout t={t} heading={t('headingSearch')} title={t('titleSearch')} backUrl="/">
     <StyledCard>
-      <CardHeader title="Search" />
+      <CardHeader title={t('headerSearch')} />
       <SlimCardContent>Here will be search results...</SlimCardContent>
     </StyledCard>
   </Layout>
@@ -18,7 +19,7 @@ const SearchPage: NextPage = () => (
 
 SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withApollo, withRedux)(SearchPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(SearchPage);

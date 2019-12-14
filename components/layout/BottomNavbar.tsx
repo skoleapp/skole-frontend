@@ -1,6 +1,7 @@
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { AccountCircle, Home, Search } from '@material-ui/icons';
 import { useRouter } from 'next/router';
+import { Router } from '../../i18n';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { breakpoints } from '../../styles';
@@ -31,7 +32,7 @@ export const BottomNavbar: React.FC = () => {
     setValue(newValue);
   };
 
-  const handleRedirect = (href: string) => (): Promise<boolean> => router.push(href);
+  const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
   return (
     <StyledBottomNavbar value={value} onChange={handleChange}>

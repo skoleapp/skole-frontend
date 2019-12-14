@@ -7,9 +7,15 @@ import { UpdateUserFormValues } from '../../interfaces';
 import { getAvatar } from '../../utils';
 import { FormErrorMessage, FormSubmitSection, StyledForm } from '../shared';
 
-export const EditProfileForm: React.ComponentType<FormikProps<UpdateUserFormValues>> = props => {
+interface Props extends FormikProps<UpdateUserFormValues> {
+  t: (value: string) => any;
+}
+
+export const EditProfileForm: React.ComponentType<Props> = props => {
   const [avatar, setAvatar] = useState();
   const [preview, setPreview] = useState();
+
+  const t = props.t;
 
   useEffect(() => {
     const objectUrl = avatar && URL.createObjectURL(avatar);
@@ -40,24 +46,43 @@ export const EditProfileForm: React.ComponentType<FormikProps<UpdateUserFormValu
           <Box marginTop="0.5rem">
             <label htmlFor="avatar-input">
               <Button variant="outlined" color="primary" component="span">
-                change avatar
+                {t('buttonChangeAvatar')}
               </Button>
             </label>
           </Box>
           <ErrorMessage name="avatar" component={FormErrorMessage} />
         </Box>
       </FormControl>
-      <Field placeholder="Title" name="title" component={TextField} label="Title" fullWidth />
       <Field
-        placeholder="Username"
-        name="username"
+        placeholder={t('fieldTitle')}
+        name="title"
         component={TextField}
-        label="Username"
+        label={t('fieldTitle')}
         fullWidth
       />
-      <Field placeholder="Email" name="email" component={TextField} label="Email" fullWidth />
-      <Field placeholder="Bio" name="bio" component={TextField} label="Bio" multiline fullWidth />
-      <FormSubmitSection submitButtonText="save" {...props} />
+      <Field
+        placeholder={t('fieldUsername')}
+        name="username"
+        component={TextField}
+        label={t('fieldUsername')}
+        fullWidth
+      />
+      <Field
+        placeholder={t('fieldEmail')}
+        name="email"
+        component={TextField}
+        label={t('fieldEmail')}
+        fullWidth
+      />
+      <Field
+        placeholder={t('fieldBio')}
+        name="bio"
+        component={TextField}
+        label={t('fieldBio')}
+        multiline
+        fullWidth
+      />
+      <FormSubmitSection submitButtonText={t('buttonSave')} {...props} />
     </StyledForm>
   );
 };

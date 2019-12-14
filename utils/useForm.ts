@@ -11,13 +11,13 @@ const snakeToCamel = (str: string): string => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createFormErrors = (errors: any): any => {
+const createFormErrors = ({ errors, t }: any) => {
   let formErrors = {
     general: ''
   };
 
   if (errors.networkError) {
-    formErrors.general = 'Network error.';
+    formErrors.general = t('textNetworkError');
   } else if (errors.length) {
     // eslint-disable-next-line
     errors.map((e: any) => {
@@ -30,20 +30,20 @@ const createFormErrors = (errors: any): any => {
       }
     });
   } else {
-    formErrors.general = 'Encountered unexpected error.';
+    formErrors.general = t('textUnexpectedError');
   }
 
   return formErrors;
 };
 
-export const useForm = () => {
+export const useForm = (t: any) => {
   const ref = useRef<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   const onError = (errors: FormErrors) => {
-    const formErrors = createFormErrors(errors);
+    const formErrors = createFormErrors({ errors, t });
 
     Object.keys(formErrors).forEach(
-      key => ref && ref.current && ref.current.setFieldError(key, (formErrors as any)[key]) // eslint-disable-line @typescript-eslint/no-explicit-any
+      key => ref && ref.current && ref.current.setFieldError(key, (formErrors as any)([key])) // eslint-disable-line @typescript-eslint/no-explicit-any
     );
   };
 

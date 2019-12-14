@@ -1,5 +1,5 @@
 import { Box, CardHeader } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import { NextPage } from 'next';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
@@ -7,11 +7,20 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { clientLogin } from '../../actions';
-import { Layout, LoginForm, SlimCardContent, StyledCard, TextLink } from '../../components';
+import {
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  TextLink,
+  StyledForm,
+  FormSubmitSection
+} from '../../components';
 import { useLoginMutation } from '../../generated/graphql';
 import { FormCompleted, LoginFormValues, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePublicPage } from '../../utils';
+import { withTranslation } from '../../i18n';
+import { TextField } from 'formik-material-ui';
 
 const initialValues = {
   usernameOrEmail: '',
@@ -19,15 +28,19 @@ const initialValues = {
   general: ''
 };
 
-const validationSchema = Yup.object().shape({
-  usernameOrEmail: Yup.string().required('Username or email is required.'),
-  password: Yup.string().required('Password is required!')
-});
+interface Props {
+  t: (value: string) => any;
+}
 
-const LoginPage: NextPage = () => {
+const LoginPage: NextPage<Props> = ({ t }) => {
   const client = useApolloClient();
   const dispatch = useDispatch();
-  const { ref, setSubmitting, resetForm, onError } = useForm();
+  const { ref, setSubmitting, resetForm, onError } = useForm(t);
+
+  const validationSchema = Yup.object().shape({
+    usernameOrEmail: Yup.string().required(t('fieldUsernameOrEmailRequired')),
+    password: Yup.string().required(t('fieldPasswordRequired'))
+  });
 
   const onCompleted = ({ login }: FormCompleted): void => {
     if (login.errors) {
@@ -47,24 +60,44 @@ const LoginPage: NextPage = () => {
   };
 
   return (
-    <Layout title="Login" backUrl="/">
+    <Layout t={t} title={t('headerLogin')} backUrl="/">
       <StyledCard>
-        <CardHeader title="Login" />
+        <CardHeader title={t('headerLogin')} />
         <SlimCardContent>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
-            component={LoginForm}
             ref={ref}
-          />
+          >
+            {props => (
+              <StyledForm>
+                <Field
+                  placeholder={t('example@skole.io')}
+                  name={t('fieldUsernameOrEmail')}
+                  component={TextField}
+                  label={t('fieldUsernameOrEmail')}
+                  fullWidth
+                />
+                <Field
+                  placeholder={t('fieldPassword')}
+                  name="password"
+                  component={TextField}
+                  label={t('fieldPassword')}
+                  type="password"
+                  fullWidth
+                />
+                <FormSubmitSection submitButtonText={t('buttonSignIn')} {...props} />
+              </StyledForm>
+            )}
+          </Formik>
         </SlimCardContent>
         <SlimCardContent>
           <Box>
-            <TextLink href="/auth/register">New user?</TextLink>
+            <TextLink href="/auth/register">{t('textNewUser?')}</TextLink>
           </Box>
           <Box>
-            <TextLink href="/auth/forgot-password">Forgot password?</TextLink>
+            <TextLink href="/auth/forgot-password">{t('textForgotPassword?')}</TextLink>
           </Box>
         </SlimCardContent>
       </StyledCard>
@@ -72,9 +105,9 @@ const LoginPage: NextPage = () => {
   );
 };
 
-LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await usePublicPage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withApollo, withRedux)(LoginPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(LoginPage);

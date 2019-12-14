@@ -8,7 +8,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { Router } from '../i18n';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,77 +18,77 @@ import { Layout, SlimCardContent, StyledCard } from '../components';
 import { SkoleContext, State } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
+import { i18n, withTranslation } from '../i18n';
 
-const SettingsPage: NextPage = () => {
+const SettingsPage: NextPage = ({ t }: any) => {
   const { authenticated } = useSelector((state: State) => state.auth);
   const apolloClient = useApolloClient();
-  const router = useRouter();
   const dispatch = useDispatch();
 
-  // TODO: Implement actual logic with cookies.
   const handleLanguageSelect = (value: string) => () => {
-    dispatch(openNotification(`Language set to ${value}`));
+    i18n.changeLanguage(value);
+    dispatch(openNotification(t('textLanguageSetTo') + ' ' + t(value)));
   };
 
-  const handleRedirect = (href: string) => (): Promise<boolean> => router.push(href);
+  const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
   const renderMenuSubHeader = (text: string) => (
     <Box marginLeft="1rem">
       <Typography variant="subtitle1" align="left" color="textSecondary">
-        {text}
+        {t(text)}
       </Typography>
     </Box>
   );
 
   const renderAccountMenuItems = menuItems.account.map((m, i) => (
     <MenuItem key={i} onClick={handleRedirect(m.href)}>
-      {m.text}
+      {t(m.text)}
     </MenuItem>
   ));
 
   const renderLanguageMenuItems = menuItems.language.map((m, i) => (
     <MenuItem key={i} onClick={handleLanguageSelect(m.value)}>
-      {m.value}
+      {t(m.value)}
     </MenuItem>
   ));
 
   const renderAboutMenuItems = menuItems.about.map((m, i) => (
     <MenuItem key={i} onClick={handleRedirect(m.href)}>
-      {m.text}
+      {t(m.text)}
     </MenuItem>
   ));
 
   const renderLegalItems = menuItems.legal.map((m, i) => (
     <MenuItem key={i} onClick={handleRedirect(m.href)}>
-      {m.text}
+      {t(m.text)}
     </MenuItem>
   ));
 
   const renderAuthenticatedMenuList = (
     <MenuList>
-      {renderMenuSubHeader('Account')}
+      {renderMenuSubHeader(t('headerAccount'))}
       {renderAccountMenuItems}
       <Divider />
-      {renderMenuSubHeader('Language')}
+      {renderMenuSubHeader(t('headerLanguage'))}
       {renderLanguageMenuItems}
       <Divider />
-      {renderMenuSubHeader('About')}
+      {renderMenuSubHeader(t('headerAbout'))}
       {renderAboutMenuItems}
       <Divider />
-      {renderMenuSubHeader('Legal')}
+      {renderMenuSubHeader(t('headerLegal'))}
       {renderLegalItems}
     </MenuList>
   );
 
   const renderUnAuthenticatedMenuList = (
     <MenuList>
-      {renderMenuSubHeader('Language')}
+      {renderMenuSubHeader(t('headerLanguage'))}
       {renderLanguageMenuItems}
       <Divider />
-      {renderMenuSubHeader('About')}
+      {renderMenuSubHeader('Skole')}
       {renderAboutMenuItems}
       <Divider />
-      {renderMenuSubHeader('Legal')}
+      {renderMenuSubHeader(t('headerLegal'))}
       {renderLegalItems}
     </MenuList>
   );
@@ -98,9 +98,9 @@ const SettingsPage: NextPage = () => {
       fullWidth
       variant="outlined"
       color="primary"
-      onClick={(): Promise<boolean> => router.push('/auth/login')}
+      onClick={(): Promise<boolean> => Router.push('/auth/login')}
     >
-      login
+      {t('buttonSignIn')}
     </Button>
   );
 
@@ -111,12 +111,12 @@ const SettingsPage: NextPage = () => {
       color="primary"
       onClick={(): Promise<boolean> => dispatch(logout(apolloClient))}
     >
-      logout
+      {t('buttonSignOut')}
     </Button>
   );
 
   return (
-    <Layout heading="Settings" title="Settings" backUrl="/">
+    <Layout t={t} heading={t('headingSettings')} title={t('titleSettings')} backUrl="/">
       <StyledCard>
         <CardContent>
           {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
@@ -131,46 +131,49 @@ const SettingsPage: NextPage = () => {
 const menuItems = {
   account: [
     {
-      text: 'Edit Profile',
+      text: 'buttonEditProfile',
       href: '/profile/edit'
     },
     {
-      text: 'Change Password',
+      text: 'buttonChangePassword',
       href: '/profile/change-password'
     },
     {
-      text: 'Delete Account',
+      text: 'buttonDeleteAccount',
       href: '/profile/delete-account'
     }
   ],
   language: [
     {
-      value: 'English'
+      title: 'English',
+      value: 'en'
     },
     {
-      value: 'Finnish'
+      title: 'Finnish',
+      value: 'fi'
     },
     {
-      value: 'Swedish'
+      title: 'Swedish',
+      value: 'sv'
     }
   ],
   about: [
     {
-      text: 'About',
+      text: 'buttonAbout',
       href: '/about'
     },
     {
-      text: 'Contact',
+      text: 'buttonContact',
       href: '/contact'
     }
   ],
   legal: [
     {
-      text: 'Terms',
+      text: 'buttonTerms',
       href: '/terms'
     },
     {
-      text: 'Privacy',
+      text: 'buttonPrivacy',
       href: '/privacy'
     }
   ]
@@ -178,7 +181,7 @@ const menuItems = {
 
 SettingsPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withRedux, withApollo)(SettingsPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(SettingsPage);

@@ -1,45 +1,58 @@
-import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
-import { Formik } from 'formik';
+import React from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  TextField
+} from '@material-ui/core';
+import { Formik, Field } from 'formik';
 import { NextPage } from 'next';
-import Link from 'next/link';
+import { Link } from '../../i18n';
+import { Router } from '../../i18n';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import React from 'react';
 import { compose } from 'redux';
 import {
   ClearFiltersButton,
   DesktopFilters,
   FilterButton,
-  FilterSchoolsForm,
   Layout,
   MobileFilters,
-  StyledTable
+  StyledTable,
+  StyledForm,
+  SchoolTypeField,
+  FormSubmitSection
 } from '../../components';
 import { FilterSchoolsDocument, SchoolType } from '../../generated/graphql';
 import { FilterSchoolsFormValues, School, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useAuthSync, useFilters, useForm, valNotEmpty } from '../../utils';
+import { withTranslation } from '../../i18n';
 
 const filterTitle = 'Filter Schools';
 
 interface Props {
   schools?: School[];
   schoolTypes?: SchoolType[];
+  t: (value: string) => any;
 }
 
-const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes }) => {
-  const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
+const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
   const router = useRouter();
+  const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const { query, pathname } = router;
-  const { ref, setSubmitting, resetForm } = useForm();
+  const { ref, setSubmitting, resetForm } = useForm(t);
 
   // Pick non-empty values and reload the page with new query params.
   const handleSubmit = async (values: FilterSchoolsFormValues) => {
     const { schoolType, schoolName, schoolCity, schoolCountry } = values;
     const filteredValues = { schoolType, schoolName, schoolCity, schoolCountry };
     const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
-    await router.push({ pathname, query });
+    await Router.push({ pathname, query });
     setSubmitting(false);
     setFiltersOpen(false);
   };
@@ -54,27 +67,50 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes }) => {
   };
 
   const renderFilterForm = (
-    <Formik
-      component={FilterSchoolsForm}
-      onSubmit={handleSubmit}
-      initialValues={initialValues}
-      ref={ref}
-    />
+    <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
+      {props => (
+        <StyledForm>
+          <SchoolTypeField {...props} t={t} />
+          <Field
+            name="schoolName"
+            component={TextField}
+            label={t('fieldSchoolName')}
+            placeholder={t('fieldSchoolName')}
+            fullWidth
+          />
+          <Field
+            name="schoolCity"
+            label={t('fieldSchoolCity')}
+            component={TextField}
+            placeholder={t('fieldSchoolCity')}
+            fullWidth
+          />
+          <Field
+            name="schoolCountry"
+            component={TextField}
+            label={t('fieldSchoolCountry')}
+            placeholder={t('fieldSchoolCountry')}
+            fullWidth
+          />
+          <FormSubmitSection submitButtonText={t('buttonApplyFilters')} {...props} />
+        </StyledForm>
+      )}
+    </Formik>
   );
 
   return (
-    <Layout heading="Schools" title="Schools" backUrl="/">
-      <DesktopFilters title="Filter Schools">
+    <Layout t={t} heading={t('headingSchools')} title={t('titleSchools')} backUrl="/">
+      <DesktopFilters title={t('headerFilterSchools')}>
         {renderFilterForm}
-        <ClearFiltersButton resetForm={resetForm} />
+        <ClearFiltersButton title={t('buttonClearFilters')} resetForm={resetForm} />
       </DesktopFilters>
       <StyledTable>
         <Table>
           <TableHead className="mobile-only">
             <TableRow>
               <TableCell>
-                <FilterButton toggleFilters={toggleFilters} />
-                <ClearFiltersButton resetForm={resetForm} />
+                <FilterButton title={t('buttonFilter')} toggleFilters={toggleFilters} />
+                <ClearFiltersButton title={t('buttonClearFilters')} resetForm={resetForm} />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -92,21 +128,26 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes }) => {
             ) : (
               <TableRow>
                 <TableCell>
-                  <Typography variant="subtitle1">No schools...</Typography>
+                  <Typography variant="subtitle1">{t('textNoSchools')}</Typography>
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </StyledTable>
-      <MobileFilters title={filterTitle} filtersOpen={filtersOpen} toggleFilters={toggleFilters}>
+      <MobileFilters
+        t={t}
+        title={filterTitle}
+        filtersOpen={filtersOpen}
+        toggleFilters={toggleFilters}
+      >
         {renderFilterForm}
       </MobileFilters>
     </Layout>
   );
 };
 
-SchoolsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+SchoolsPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
   const { query, apolloClient } = ctx;
 
@@ -115,10 +156,10 @@ SchoolsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
       query: FilterSchoolsDocument,
       variables: { ...query }
     });
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch (err) {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 
-export default compose(withRedux, withApollo)(SchoolsPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(SchoolsPage);

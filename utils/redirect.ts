@@ -1,4 +1,4 @@
-import Router from 'next/router';
+import { Router } from '../i18n';
 import { SkoleContext } from '../interfaces';
 
 // Redirect either on the server or in the browser.

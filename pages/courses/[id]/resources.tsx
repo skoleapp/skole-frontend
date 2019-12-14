@@ -1,21 +1,27 @@
+import React from 'react';
 import { CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
 import { compose } from 'redux';
 import { ButtonLink, Layout, SlimCardContent, StyledCard } from '../../../components';
 import { SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
+import { withTranslation } from '../../../i18n';
 
-const ResourcesPage: NextPage = () => {
+const ResourcesPage: NextPage = ({ t }: any) => {
   const router = useRouter();
   const { id } = router.query;
 
   return (
-    <Layout heading="Resources" title="Resources" backUrl={`/courses/${id}`}>
+    <Layout
+      t={t}
+      heading={t('headingResources')}
+      title={t('titleResources')}
+      backUrl={`/courses/${id}`}
+    >
       <StyledCard>
-        <CardHeader title="Resources" />
+        <CardHeader title={t('headerResources')} />
         <SlimCardContent>Here will be course resources...</SlimCardContent>
         <SlimCardContent>
           <ButtonLink
@@ -24,7 +30,7 @@ const ResourcesPage: NextPage = () => {
             color="primary"
             fullWidth
           >
-            upload resource
+            {t('buttonUploadResources')}
           </ButtonLink>
         </SlimCardContent>
       </StyledCard>
@@ -32,9 +38,9 @@ const ResourcesPage: NextPage = () => {
   );
 };
 
-ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withApollo, withRedux)(ResourcesPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(ResourcesPage);

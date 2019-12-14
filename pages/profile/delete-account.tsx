@@ -4,9 +4,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  TextField
 } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import { NextPage } from 'next';
 import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
@@ -15,34 +16,32 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 import { logout } from '../../actions';
 import {
-  DeleteAccountForm,
   Layout,
   SlimCardContent,
   StyledCard,
-  StyledDialog
+  StyledDialog,
+  StyledForm,
+  FormSubmitSection
 } from '../../components';
 import { useDeleteAccountMutation } from '../../generated/graphql';
 import { DeleteAccountFormValues, FormCompleted, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
+import { withTranslation } from '../../i18n';
 
 const initialValues = {
   password: '',
   general: ''
 };
 
-const validationSchema = Yup.object().shape({
-  password: Yup.string().required('Password is required.')
-});
-
 const initialDialogState = {
   password: '',
   open: false
 };
 
-export const DeleteAccountPage: NextPage = () => {
+export const DeleteAccountPage: NextPage = ({ t }: any) => {
   const [dialog, setDialog] = useState(initialDialogState);
-  const { ref, setSubmitting, resetForm, onError } = useForm();
+  const { ref, setSubmitting, resetForm, onError } = useForm(t);
   const dispatch = useDispatch();
   const apolloClient = useApolloClient();
 
@@ -71,18 +70,34 @@ export const DeleteAccountPage: NextPage = () => {
     await deleteAccountMutation({ variables: { password } });
     setSubmitting(false);
   };
+  const validationSchema = Yup.object().shape({
+    password: Yup.string().required(t('fieldPasswordRequired'))
+  });
 
   const renderCard = (
     <StyledCard>
-      <CardHeader title="Delete Account" />
+      <CardHeader title={t('headerDeleteAccount')} />
       <SlimCardContent>
         <Formik
-          component={DeleteAccountForm}
           onSubmit={handleSubmit}
           initialValues={initialValues}
           validationSchema={validationSchema}
           ref={ref}
-        />
+        >
+          {props => (
+            <StyledForm>
+              <Field
+                name="password"
+                label={t('fieldPassword')}
+                placeholder={t('fieldPassword')}
+                component={TextField}
+                fullWidth
+                type="password"
+              />
+              <FormSubmitSection submitButtonText={t('buttonDeleteAccount')} {...props} />
+            </StyledForm>
+          )}
+        </Formik>
       </SlimCardContent>
     </StyledCard>
   );
@@ -107,7 +122,7 @@ export const DeleteAccountPage: NextPage = () => {
   );
 
   return (
-    <Layout title="Delete Account" backUrl="/settings">
+    <Layout t={t} title={t('titleDeleteAccount')} backUrl="/settings">
       {renderCard}
       {renderDialog}
     </Layout>
@@ -116,7 +131,7 @@ export const DeleteAccountPage: NextPage = () => {
 
 DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   await usePrivatePage(ctx);
-  return {};
+  return { namespacesRequired: ['common'] };
 };
 
-export default compose(withRedux, withApollo)(DeleteAccountPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(DeleteAccountPage);

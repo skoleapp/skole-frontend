@@ -2,18 +2,20 @@ import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { NextPage, NextPageContext } from 'next';
 import App from 'next/app';
-import Router from 'next/router';
+import { Router } from '../i18n';
+
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import React from 'react';
 import { GlobalStyle, theme } from '../styles';
+import { appWithTranslation } from '../i18n';
 
 interface Props {
   Component: NextPage<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   pageProps: NextPageContext;
 }
 
-export default class SkoleApp extends App<Props> {
+class SkoleApp extends App<Props> {
   componentDidMount(): void {
     const jssStyles = document.querySelector('#jss-server-side');
 
@@ -41,3 +43,4 @@ export default class SkoleApp extends App<Props> {
     );
   }
 }
+export default appWithTranslation(SkoleApp);

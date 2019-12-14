@@ -1,7 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Formik, FormikActions } from 'formik';
 import { NextPage } from 'next';
-import Link from 'next/link';
+import { Link } from '../i18n';
+import { Router } from '../i18n';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
@@ -10,24 +11,28 @@ import { compose } from 'redux';
 import {
   DesktopFilters,
   FilterButton,
-  FilterSubjectsForm,
   Layout,
   MobileFilters,
-  StyledTable
+  StyledTable,
+  StyledForm,
+  SchoolField,
+  FormSubmitSection
 } from '../components';
 import { FilterSubjectsDocument } from '../generated/graphql';
 import { FilterSubjectsFormValues, School, SkoleContext, Subject } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useFilters, valNotEmpty } from '../utils';
+import { withTranslation } from '../i18n';
 
 const filterTitle = 'Filter Subjects';
 
 interface Props {
   subjects?: Subject[];
   schools?: School[];
+  t: (value: string) => any;
 }
 
-const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
+const SubjectsPage: NextPage<Props> = ({ subjects, schools, t }) => {
   const { filtersOpen, setFiltersOpen, toggleFilters } = useFilters();
   const router = useRouter();
   const { query, pathname } = router;
@@ -41,7 +46,7 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
     const { schoolId } = values;
     const filteredValues = { schoolId };
     const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
-    await router.push({ pathname, query });
+    await Router.push({ pathname, query });
     actions.setSubmitting(false);
     setFiltersOpen(false);
   };
@@ -53,18 +58,25 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
   };
 
   const renderFilterForm = (
-    <Formik component={FilterSubjectsForm} onSubmit={handleSubmit} initialValues={initialValues} />
+    <Formik onSubmit={handleSubmit} initialValues={initialValues}>
+      {props => (
+        <StyledForm>
+          <SchoolField {...props} t={t} />
+          <FormSubmitSection submitButtonText={t('buttonApply')} {...props} />
+        </StyledForm>
+      )}
+    </Formik>
   );
 
   return (
-    <Layout heading="Subjects" title="Subjects" backUrl="/">
+    <Layout t={t} heading={t('headingSubjects')} title={t('titleSubjects')} backUrl="/">
       <DesktopFilters title={filterTitle}>{renderFilterForm}</DesktopFilters>
       <StyledTable>
         <Table>
           <TableHead className="mobile-only">
             <TableRow>
               <TableCell>
-                <FilterButton toggleFilters={toggleFilters} />
+                <FilterButton title={t('buttonFilter')} toggleFilters={toggleFilters} />
               </TableCell>
             </TableRow>
           </TableHead>
@@ -88,21 +100,26 @@ const SubjectsPage: NextPage<Props> = ({ subjects, schools }) => {
             ) : (
               <TableRow>
                 <TableCell>
-                  <Typography variant="subtitle1">No subjects...</Typography>
+                  <Typography variant="subtitle1">{t('textNoSubjects')}</Typography>
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </StyledTable>
-      <MobileFilters title={filterTitle} filtersOpen={filtersOpen} toggleFilters={toggleFilters}>
+      <MobileFilters
+        t={t}
+        title={filterTitle}
+        filtersOpen={filtersOpen}
+        toggleFilters={toggleFilters}
+      >
         {renderFilterForm}
       </MobileFilters>
     </Layout>
   );
 };
 
-SubjectsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+SubjectsPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
   const { apolloClient, query } = ctx;
 
@@ -112,10 +129,10 @@ SubjectsPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
       variables: { ...query }
     });
 
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 
-export default compose(withRedux, withApollo)(SubjectsPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(SubjectsPage);

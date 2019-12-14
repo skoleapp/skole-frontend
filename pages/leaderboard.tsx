@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Avatar,
   Table,
@@ -8,30 +9,31 @@ import {
   Typography
 } from '@material-ui/core';
 import { NextPage } from 'next';
-import Link from 'next/link';
-import React from 'react';
+import { Link } from '../i18n';
 import { compose } from 'redux';
 import { Layout, StyledTable } from '../components';
 import { LeaderboardDocument } from '../generated/graphql';
 import { PublicUser, SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { getAvatar, useAuthSync } from '../utils';
+import { withTranslation } from '../i18n';
 
 interface Props {
   leaderboard?: PublicUser[];
+  t: (value: string) => any;
 }
 
-const LeaderboardPage: NextPage<Props> = ({ leaderboard }) => (
-  <Layout heading="Leaderboard" title="Leaderboard" backUrl="/">
+const LeaderboardPage: NextPage<Props> = ({ leaderboard, t }) => (
+  <Layout t={t} heading={t('headingLeaderboard')} title={t('titleLeaderboard')} backUrl="/">
     <StyledTable>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>
-              <Typography variant="h6">Users</Typography>
+              <Typography variant="h6">{t('headerUser')}</Typography>
             </TableCell>
             <TableCell align="right">
-              <Typography variant="h6">Points</Typography>
+              <Typography variant="h6">{t('headerPoints')}</Typography>
             </TableCell>
           </TableRow>
         </TableHead>
@@ -53,7 +55,7 @@ const LeaderboardPage: NextPage<Props> = ({ leaderboard }) => (
           ) : (
             <TableRow>
               <TableCell className="user-cell">
-                <Typography variant="subtitle1">No users found...</Typography>
+                <Typography variant="subtitle1">{t('textNoUsersFound')}</Typography>
               </TableCell>
             </TableRow>
           )}
@@ -63,15 +65,15 @@ const LeaderboardPage: NextPage<Props> = ({ leaderboard }) => (
   </Layout>
 );
 
-LeaderboardPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+LeaderboardPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
   await useAuthSync(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({ query: LeaderboardDocument });
-    return { ...data };
+    return { ...data, namespacesRequired: ['common'] };
   } catch {
-    return {};
+    return { namespacesRequired: ['common'] };
   }
 };
 
-export default compose(withRedux, withApollo)(LeaderboardPage);
+export default compose(withRedux, withApollo, withTranslation('common'))(LeaderboardPage);

@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-client';
 import cookie from 'cookie';
-import Router from 'next/router';
+import { Router } from '../i18n';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserMeDocument } from '../generated/graphql';
