@@ -13,15 +13,6 @@ import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
 import { withTranslation } from '../../i18n';
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string(),
-  username: Yup.string().required('fieldUsernameRequired'),
-  email: Yup.string()
-    .email('fieldEmailInvalid')
-    .required('fieldEmailRequired'),
-  bio: Yup.string()
-});
-
 const EditProfilePage: NextPage = ({ t }: any) => {
   const { user } = useSelector((state: State) => state.auth);
   const { ref, onError } = useForm(t);
@@ -66,6 +57,15 @@ const EditProfilePage: NextPage = ({ t }: any) => {
     avatar: user.avatar || '',
     general: ''
   };
+
+  const validationSchema = Yup.object().shape({
+    title: Yup.string(),
+    username: Yup.string().required(t('fieldUsernameRequired')),
+    email: Yup.string()
+      .email(t('fieldEmailInvalid'))
+      .required(t('fieldEmailRequired')),
+    bio: Yup.string()
+  });
 
   return (
     <Layout t={t} title={t('titleEditProfile')} backUrl="/profile">

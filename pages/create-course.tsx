@@ -29,13 +29,6 @@ import { useForm, usePrivatePage } from '../utils';
 import { withTranslation } from '../i18n';
 import { TextField } from 'formik-material-ui';
 
-const validationSchema = Yup.object().shape({
-  courseName: Yup.string().required('fieldCourseNameRequired'),
-  courseCode: Yup.string(),
-  subjectId: Yup.string().required('fieldSubjectRequired'),
-  schoolId: Yup.string().required('fieldSchoolRequired')
-});
-
 interface Props {
   subjects?: Subject[];
   schools?: School[];
@@ -73,6 +66,13 @@ const CreateCoursePage: NextPage<Props> = ({ subjects, schools, t }) => {
     subjects: subjects || [],
     schools: schools || []
   };
+
+  const validationSchema = Yup.object().shape({
+    courseName: Yup.string().required(t('fieldCourseNameRequired')),
+    courseCode: Yup.string(),
+    subjectId: Yup.string().required(t('fieldSubjectRequired')),
+    schoolId: Yup.string().required(t('fieldSchoolRequired'))
+  });
 
   return (
     <Layout t={t} title={t('titleCreateCourse')} backUrl="/">

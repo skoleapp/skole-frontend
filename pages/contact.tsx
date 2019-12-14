@@ -27,14 +27,6 @@ const initialValues = {
   general: ''
 };
 
-const validationSchema = Yup.object().shape({
-  contactType: Yup.string().required('fieldContactTypeRequired'),
-  email: Yup.string()
-    .email('fieldEmailInvalid')
-    .required('fieldEmailRequired'),
-  message: Yup.string().required('fieldMessageRequired')
-});
-
 const ContactPage: NextPage = ({ t }: any) => {
   const dispatch = useDispatch();
   const { ref, resetForm } = useForm(t);
@@ -45,6 +37,13 @@ const ContactPage: NextPage = ({ t }: any) => {
     resetForm();
     dispatch(openNotification(t('textMessageSubmitted')));
   };
+  const validationSchema = Yup.object().shape({
+    contactType: Yup.string().required(t('fieldContactTypeRequired')),
+    email: Yup.string()
+      .email(t('fieldEmailInvalid'))
+      .required(t('fieldEmailRequired')),
+    message: Yup.string().required(t('fieldMessageRequired'))
+  });
 
   return (
     <Layout t={t} title={t('titleContact')} backUrl="/">

@@ -100,7 +100,7 @@ const SettingsPage: NextPage = ({ t }: any) => {
       color="primary"
       onClick={(): Promise<boolean> => Router.push('/auth/login')}
     >
-      {t('buttonLogin')}
+      {t('buttonSignIn')}
     </Button>
   );
 
@@ -111,7 +111,7 @@ const SettingsPage: NextPage = ({ t }: any) => {
       color="primary"
       onClick={(): Promise<boolean> => dispatch(logout(apolloClient))}
     >
-      {t('buttonLogin')}
+      {t('buttonSignOut')}
     </Button>
   );
 

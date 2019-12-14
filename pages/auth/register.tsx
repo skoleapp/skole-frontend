@@ -30,18 +30,6 @@ const initialValues = {
   general: ''
 };
 
-const validationSchema = Yup.object().shape({
-  username: Yup.string().required('fieldUsernameRequired'),
-  email: Yup.string()
-    .email('fieldEmailInvalid')
-    .required('fieldEmailRequired'),
-  password: Yup.string()
-    .min(6, 'textPasswordMustBeAtleast')
-    .required('fieldPasswordRequired'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'fieldPasswordsDoNotMatch')
-    .required('fieldPleaseConfirmPassword')
-});
 interface Props {
   t: (value: string) => any;
 }
@@ -68,6 +56,19 @@ const RegisterPage: NextPage<Props> = ({ t }) => {
     await registerMutation({ variables: { username, email, password } });
     setSubmitting(false);
   };
+
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required(t('fieldUsernameRequired')),
+    email: Yup.string()
+      .email(t('fieldEmailInvalid'))
+      .required(t('fieldEmailRequired')),
+    password: Yup.string()
+      .min(6, t('textPasswordMustBeAtleast'))
+      .required(t('fieldPasswordRequired')),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], t('fieldPasswordsDoNotMatch'))
+      .required(t('fieldPleaseConfirmPassword'))
+  });
 
   return (
     <Layout t={t} title={t('headerRegister')} backUrl="/">

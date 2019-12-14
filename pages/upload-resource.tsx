@@ -14,13 +14,6 @@ import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useForm } from '../utils';
 import { withTranslation } from '../i18n';
 
-const validationSchema = Yup.object().shape({
-  resourceTitle: Yup.string().required('fieldResourceTitleRequired'),
-  resourceType: Yup.string().required('fieldResourceTypeRequired'),
-  courseId: Yup.string().required('fieldCourseRequired'),
-  resource: Yup.string().required('fieldResourceRequired')
-});
-
 interface Props {
   resourceTypes?: ResourceType[];
   courses?: Course[];
@@ -49,6 +42,13 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses, t }) => {
     resourceTypes: resourceTypes || '',
     courses: courses || ''
   };
+
+  const validationSchema = Yup.object().shape({
+    resourceTitle: Yup.string().required(t('fieldResourceTitleRequired')),
+    resourceType: Yup.string().required(t('fieldResourceTypeRequired')),
+    courseId: Yup.string().required(t('fieldCourseRequired')),
+    resource: Yup.string().required(t('fieldResourceRequired'))
+  });
 
   return (
     <Layout t={t} title={t('titleUploadResource')} backUrl="/">

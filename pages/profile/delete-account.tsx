@@ -34,10 +34,6 @@ const initialValues = {
   general: ''
 };
 
-const validationSchema = Yup.object().shape({
-  password: Yup.string().required('fieldPasswordRequired')
-});
-
 const initialDialogState = {
   password: '',
   open: false
@@ -74,6 +70,9 @@ export const DeleteAccountPage: NextPage = ({ t }: any) => {
     await deleteAccountMutation({ variables: { password } });
     setSubmitting(false);
   };
+  const validationSchema = Yup.object().shape({
+    password: Yup.string().required(t('fieldPasswordRequired'))
+  });
 
   const renderCard = (
     <StyledCard>

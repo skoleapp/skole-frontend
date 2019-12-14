@@ -20,16 +20,6 @@ import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
 import { withTranslation } from '../../i18n';
 
-const validationSchema = Yup.object().shape({
-  oldPassword: Yup.string().required('fieldOldPasswordRequired'),
-  newPassword: Yup.string()
-    .min(6, 'textPasswordMustBeAtleast')
-    .required('fieldNewPasswordRequired'),
-  confirmNewPassword: Yup.string()
-    .oneOf([Yup.ref('newPassword'), null], 'fieldPasswordsDoNotMatch')
-    .required('fieldConfirmPasswordRequired')
-});
-
 const initialValues = {
   oldPassword: '',
   newPassword: '',
@@ -58,6 +48,16 @@ const ChangePasswordPage: NextPage = ({ t }: any) => {
     await loginMutation({ variables: { oldPassword, newPassword } });
     setSubmitting(false);
   };
+
+  const validationSchema = Yup.object().shape({
+    oldPassword: Yup.string().required(t('fieldOldPasswordRequired')),
+    newPassword: Yup.string()
+      .min(6, t('textPasswordMustBeAtleast'))
+      .required(t('fieldNewPasswordRequired')),
+    confirmNewPassword: Yup.string()
+      .oneOf([Yup.ref('newPassword'), null], t('fieldPasswordsDoNotMatch'))
+      .required(t('fieldConfirmPasswordRequired'))
+  });
 
   return (
     <Layout t={t} title={t('titleChangePassword')} backUrl="/settings">
