@@ -30,7 +30,7 @@ const UserPage: NextPage<Props> = ({ user, t }) => {
     return (
       <Layout t={t} heading={username} title={username} backUrl="/leaderboard">
         <StyledCard>
-          <UserProfileCardContent {...userProfileProps} />
+          <UserProfileCardContent t={t} {...userProfileProps} />
         </StyledCard>
       </Layout>
     );
