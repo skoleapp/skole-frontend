@@ -87,7 +87,7 @@ const LoginPage: NextPage<Props> = ({ t }) => {
                   type="password"
                   fullWidth
                 />
-                <FormSubmitSection submitButtonText={t('buttonRegister')} {...props} />
+                <FormSubmitSection submitButtonText={t('buttonSignIn')} {...props} />
               </StyledForm>
             )}
           </Formik>
