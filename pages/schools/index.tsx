@@ -81,6 +81,7 @@ const SchoolsPage: NextPage<Props> = ({ schools, schoolTypes, t }) => {
           <Field
             name="schoolCity"
             label={t('fieldSchoolCity')}
+            component={TextField}
             placeholder={t('fieldSchoolCity')}
             fullWidth
           />

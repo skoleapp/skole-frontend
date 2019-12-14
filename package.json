@@ -9,6 +9,7 @@
     "dev": "node index.js",
     "start": "node index.js",
     "build": "next build",
+    "prod": "NODE_ENV=production node index.js",
     "type-check": "tsc",
     "lint": "eslint . --ext .js,.tsx,.ts",
     "gen": "graphql-codegen --config codegen.yml"
