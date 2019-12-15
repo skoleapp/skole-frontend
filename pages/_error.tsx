@@ -8,6 +8,7 @@ interface ErrorProps {
   t?: any;
 }
 
+//TODO: Fix so that statusCode will show up, add translation and prettify the page
 const ErrorPage: NextPage<ErrorProps> = ({ statusCode, t }) => {
   return <p>{statusCode ? t('error-with-status', { statusCode }) : t('error-without-status')}</p>;
 };
