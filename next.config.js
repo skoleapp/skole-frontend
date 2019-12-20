@@ -7,8 +7,7 @@ module.exports = withAssetsImport(
     target: 'serverless',
     env: {
       API_URL: process.env.API_URL,
-      STATIC_URL: process.env.STATIC_URL,
-      MEDIA_URL: process.env.MEDIA_URL
+      BACKEND_URL: process.env.BACKEND_URL
     },
     webpackDevMiddleware: config => {
       config.watchOptions = {
