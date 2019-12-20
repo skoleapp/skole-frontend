@@ -1,1 +1,0 @@
-export { UploadResourceForm } from './UploadResourceForm';
