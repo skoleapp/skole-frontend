@@ -5,6 +5,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Heading, Logo, TopNavbarSearchWidget } from '.';
+import { useTranslation } from '../../i18n';
 import { State } from '../../interfaces';
 import { breakpoints } from '../../styles';
 import { ButtonLink, IconButtonLink } from '../shared';
@@ -18,6 +19,7 @@ interface Props {
 export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch }) => {
   const { authenticated } = useSelector((state: State) => state.auth);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const renderLeftSection = (
     <>
@@ -54,10 +56,10 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch }) 
         ) : (
           <>
             <ButtonLink href="/auth/sign-in" color="secondary">
-              sign in
+              {t('common:signIn')}
             </ButtonLink>
             <ButtonLink href="/auth/sign-up" color="secondary">
-              sign up
+              {t('common:signUp')}
             </ButtonLink>
           </>
         )}
