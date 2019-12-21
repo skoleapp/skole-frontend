@@ -1,0 +1,11 @@
+{
+  "usernameRequired": "Käyttäjänimi vaadittu.",
+  "invalidEmail": "Virheellinen sähköposti.",
+  "emailRequired": "Sähköposti vaadittu.",
+  "passwordTooShort": "Salasanan tulee olla vähintään 6 merkkiä pitkä.",
+  "passwordsNotMatch": "Salasanat eivät ole samat.",
+  "confirmPasswordRequired": "Salasanan vahvistus vaadittu.",
+  "bySigninUp": "Rekisteröitymällä hyväksyt",
+  "terms": "käyttöehdot",
+  "alreadyHaveAccount": "Onko sinulla jo tili?"
+}

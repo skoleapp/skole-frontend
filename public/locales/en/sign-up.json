@@ -1,0 +1,11 @@
+{
+  "usernameRequired": "Username is required.",
+  "invalidEmail": "Invalid email.",
+  "emailRequired": "Email is required.",
+  "passwordTooShort": "Password must be at least 6 characters long.",
+  "passwordsNotMatch": "Passwords do not match.",
+  "confirmPasswordRequired": "Confirm password is required.",
+  "bySigninUp": "By signing up you agree to our",
+  "terms": "Terms",
+  "alreadyHaveAccount": "Already have an account?"
+}

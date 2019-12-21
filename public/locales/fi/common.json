@@ -1,0 +1,11 @@
+{
+  "searchCourses": "Hae kursseja...",
+  "signIn": "Kirjaudu sisään",
+  "signUp": "Rekisteröidy",
+  "signOut": "Kirjaudu ulos",
+  "passwordRequired": "Salasana vaadittu.",
+  "username": "Käyttätunnus",
+  "email": "Sähköposti",
+  "password": "Salasana",
+  "confirmPassword": "Vahvista salasana"
+}

@@ -1,11 +1,9 @@
 import { Box, CardHeader, Divider } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 import { authenticate } from '../../actions';
 import {
@@ -18,8 +16,14 @@ import {
   TextLink
 } from '../../components';
 import { useSignInMutation } from '../../generated/graphql';
-import { FormCompleted, SignInFormValues, SkoleContext } from '../../interfaces';
-import { withApollo, withRedux } from '../../lib';
+import { includeDefaultNamespaces, useTranslation } from '../../i18n';
+import {
+  FormCompleted,
+  I18nPage,
+  I18nProps,
+  SignInFormValues,
+  SkoleContext
+} from '../../interfaces';
 import { useForm, usePublicPage } from '../../utils';
 
 const initialValues = {
@@ -28,15 +32,16 @@ const initialValues = {
   general: ''
 };
 
-const validationSchema = Yup.object().shape({
-  usernameOrEmail: Yup.string().required('Username or email is required.'),
-  password: Yup.string().required('Password is required!')
-});
-
-const SignInPage: NextPage = () => {
+const SignInPage: I18nPage = () => {
   const client = useApolloClient();
   const dispatch = useDispatch();
   const { ref, setSubmitting, resetForm, onError } = useForm();
+  const { t } = useTranslation();
+
+  const validationSchema = Yup.object().shape({
+    usernameOrEmail: Yup.string().required(t('sign-in:usernameOrEmailRequired')),
+    password: Yup.string().required(t('common:passwordRequired'))
+  });
 
   const onCompleted = ({ signIn }: FormCompleted): void => {
     if (signIn.errors) {
@@ -58,28 +63,28 @@ const SignInPage: NextPage = () => {
   const renderForm = (props: FormikProps<SignInFormValues>) => (
     <StyledForm>
       <Field
-        placeholder="example@skole.io"
+        placeholder={t('sign-in:usernameOrEmail')}
         name="usernameOrEmail"
         component={TextField}
-        label="Username or Email"
+        label={t('sign-in:usernameOrEmail')}
         fullWidth
       />
       <Field
-        placeholder="Password"
+        placeholder={t('common:password')}
         name="password"
         component={TextField}
-        label="Password"
+        label={t('common:password')}
         type="password"
         fullWidth
       />
-      <FormSubmitSection submitButtonText="sign in" {...props} />
+      <FormSubmitSection submitButtonText={t('common:signIn')} {...props} />
     </StyledForm>
   );
 
   return (
-    <Layout title="Sign In" backUrl>
+    <Layout title={t('common:signIn')} backUrl>
       <StyledCard>
-        <CardHeader title="Sign In" />
+        <CardHeader title={t('common:signIn')} />
         <SlimCardContent>
           <Formik
             initialValues={initialValues}
@@ -94,19 +99,22 @@ const SignInPage: NextPage = () => {
           </Box>
           <Box marginY="0.5rem">
             <ButtonLink href="/auth/sign-up" variant="outlined" color="primary" fullWidth>
-              create account
+              {t('sign-in:createAccount')}
             </ButtonLink>
           </Box>
-          <TextLink href="/auth/forgot-password">Forgot password?</TextLink>
+          <TextLink href="/auth/forgot-password">{t('sign-in:forgotPassword')}</TextLink>
         </SlimCardContent>
       </StyledCard>
     </Layout>
   );
 };
 
-SignInPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+SignInPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await usePublicPage(ctx);
-  return {};
+
+  return {
+    namespacesRequired: includeDefaultNamespaces(['sign-in'])
+  };
 };
 
-export default compose(withApollo, withRedux)(SignInPage);
+export default SignInPage;
