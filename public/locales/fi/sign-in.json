@@ -1,8 +1,6 @@
 {
   "usernameOrEmail": "Käyttäjätunnus tai sähköposti",
   "usernameOrEmailRequired": "Käyttäjätunnus tai sähköposti vaadittu.",
-  "password": "Salasana",
-  "passwordRequired": "Salasana vaadittu.",
   "createAccount": "Luo tili",
   "forgotPassword": "Unohditko salasanasi?"
 }
