@@ -9,20 +9,21 @@ import {
 } from '@material-ui/core';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
-import { Layout, StyledTable } from '../components';
-import { LeaderboardDocument } from '../generated/graphql';
-import { PublicUser, SkoleContext } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
-import { getAvatar, useAuthSync } from '../utils';
+import { Layout, StyledTable } from '../../components';
+import { UsersDocument } from '../../generated/graphql';
+import { SkoleContext, User } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
+import { useAuthSync } from '../../utils';
 
 interface Props {
-  leaderboard?: PublicUser[];
+  users?: User[];
 }
 
-const LeaderboardPage: NextPage<Props> = ({ leaderboard }) => (
-  <Layout heading="Leaderboard" title="Leaderboard" backUrl="/">
+const UsersPage: NextPage<Props> = ({ users }) => (
+  <Layout heading="Users" title="Users" backUrl>
     <StyledTable>
       <Table>
         <TableHead>
@@ -36,16 +37,16 @@ const LeaderboardPage: NextPage<Props> = ({ leaderboard }) => (
           </TableRow>
         </TableHead>
         <TableBody>
-          {leaderboard && leaderboard.length ? (
-            leaderboard.map((user: PublicUser, i: number) => (
+          {users && users.length ? (
+            users.map((user: User, i: number) => (
               <Link href={{ pathname: `/users/${user.id}` }} key={i}>
                 <TableRow>
                   <TableCell className="user-cell">
-                    <Avatar src={getAvatar(user.avatar)} />
+                    <Avatar src={process.env.BACKEND_URL + user.avatarThumbnail} />
                     <Typography variant="subtitle1">{user.username || 'N/A'}</Typography>
                   </TableCell>
                   <TableCell align="right">
-                    <Typography variant="subtitle1">{user.points || 0}</Typography>
+                    <Typography variant="subtitle1">{R.propOr('N/A', 'points', user)}</Typography>
                   </TableCell>
                 </TableRow>
               </Link>
@@ -63,15 +64,15 @@ const LeaderboardPage: NextPage<Props> = ({ leaderboard }) => (
   </Layout>
 );
 
-LeaderboardPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   await useAuthSync(ctx);
 
   try {
-    const { data } = await ctx.apolloClient.query({ query: LeaderboardDocument });
+    const { data } = await ctx.apolloClient.query({ query: UsersDocument });
     return { ...data };
   } catch {
     return {};
   }
 };
 
-export default compose(withRedux, withApollo)(LeaderboardPage);
+export default compose(withRedux, withApollo)(UsersPage);
