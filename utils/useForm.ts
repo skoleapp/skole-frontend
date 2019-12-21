@@ -48,7 +48,12 @@ export const useForm = () => {
   };
 
   const setSubmitting = (value: boolean) => ref && ref.current && ref.current.setSubmitting(value);
+
   const resetForm = () => ref && ref.current && ref.current.resetForm();
 
-  return { ref, onError, setSubmitting, resetForm };
+  const setFieldValue = (fieldName: string, value: any) => {
+    ref && ref.current && ref.current.setFieldValue(fieldName, value);
+  };
+
+  return { ref, onError, setSubmitting, resetForm, setFieldValue };
 };
