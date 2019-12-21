@@ -38,7 +38,10 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch }) 
 
   const renderMidSection = (
     <Box className="text-section" display="flex" justifyContent="center">
-      {heading ? <Heading text={heading} /> : <Logo />}
+      <Box className="desktop-only">
+        <Logo />
+      </Box>
+      <Box className="mobile-only">{heading ? <Heading text={heading} /> : <Logo />}</Box>
     </Box>
   );
 
