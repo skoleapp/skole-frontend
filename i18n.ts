@@ -9,7 +9,8 @@ export const nextI18next = new NextI18Next({
     en: 'en',
     fi: 'fi',
     sv: 'sv'
-  }
+  },
+  fallbackLng: 'en'
 });
 
 export const includeDefaultNamespaces = (namespaces: string[]) =>
