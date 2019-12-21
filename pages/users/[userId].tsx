@@ -1,14 +1,15 @@
 import { NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
 import { Layout, NotFound, StyledCard, UserProfileCardContent } from '../../components';
 import { UserDocument } from '../../generated/graphql';
-import { PublicUser, SkoleContext } from '../../interfaces';
+import { SkoleContext, User } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { redirect, useAuthSync } from '../../utils';
 
 interface Props {
-  user?: PublicUser;
+  user?: User;
 }
 
 const UserPage: NextPage<Props> = ({ user }) => {
@@ -20,13 +21,13 @@ const UserPage: NextPage<Props> = ({ user }) => {
       avatar: user.avatar || '',
       title: user.title || 'Title N/A',
       bio: user.bio || 'Bio N/A',
-      points: user.points || 0,
-      courses: 0,
-      resources: 0
+      points: R.propOr('N/A', 'points', user) as number | string,
+      courseCount: R.propOr('N/A', 'courseCount', user) as number | string,
+      resourceCount: R.propOr('N/A', 'resourceCount', user) as number | string
     };
 
     return (
-      <Layout heading={username} title={username} backUrl="/leaderboard">
+      <Layout heading={username} title={username} backUrl>
         <StyledCard>
           <UserProfileCardContent {...userProfileProps} />
         </StyledCard>
@@ -37,20 +38,21 @@ const UserPage: NextPage<Props> = ({ user }) => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-UserPage.getInitialProps = async (ctx: SkoleContext): Promise<any> => {
+UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props | {}> => {
   const { query, apolloClient } = ctx;
   const { userMe } = await useAuthSync(ctx);
+  const { userId } = query;
 
-  // Redirect to own profile if id matches logged in user.
-  if (userMe && userMe.id === query.id) {
-    return redirect(ctx, '/profile');
+  // Redirect to own profile if id matches signed in user.
+  if (userMe && userMe.id === userId) {
+    redirect(ctx, '/profile');
+    return {};
   }
 
   try {
     const { data } = await apolloClient.query({
       query: UserDocument,
-      variables: { userId: query.id }
+      variables: { userId }
     });
     return { ...data };
   } catch {
