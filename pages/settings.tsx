@@ -7,86 +7,84 @@ import {
   MenuList,
   Typography
 } from '@material-ui/core';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
-import { deAuthenticate, openNotification } from '../actions';
+import { deAuthenticate } from '../actions';
 import { Layout, SlimCardContent, StyledCard } from '../components';
-import { SkoleContext, State } from '../interfaces';
+import { i18n, includeDefaultNamespaces, Router, useTranslation } from '../i18n';
+import { I18nPage, I18nProps, SkoleContext, State } from '../interfaces';
 import { useAuthSync } from '../utils';
 
-const SettingsPage: NextPage = () => {
+const SettingsPage: I18nPage = () => {
   const { authenticated } = useSelector((state: State) => state.auth);
   const apolloClient = useApolloClient();
-  const router = useRouter();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
-  // TODO: Implement actual logic with cookies.
   const handleLanguageSelect = (value: string) => () => {
-    dispatch(openNotification(`Language set to ${value}`));
+    i18n.changeLanguage(value);
   };
 
-  const handleRedirect = (href: string) => (): Promise<boolean> => router.push(href);
+  const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
   const renderMenuSubHeader = (text: string) => (
     <Box marginLeft="1rem">
       <Typography variant="subtitle1" align="left" color="textSecondary">
-        {text}
+        {t(text)}
       </Typography>
     </Box>
   );
 
   const renderAccountMenuItems = menuItems.account.map((m, i) => (
     <MenuItem key={i} onClick={handleRedirect(m.href)}>
-      {m.text}
+      {t(m.text)}
     </MenuItem>
   ));
 
   const renderLanguageMenuItems = menuItems.language.map((m, i) => (
     <MenuItem key={i} onClick={handleLanguageSelect(m.value)}>
-      {m.value}
+      {t(m.title)}
     </MenuItem>
   ));
 
   const renderAboutMenuItems = menuItems.about.map((m, i) => (
     <MenuItem key={i} onClick={handleRedirect(m.href)}>
-      {m.text}
+      {t(m.text)}
     </MenuItem>
   ));
 
   const renderLegalItems = menuItems.legal.map((m, i) => (
     <MenuItem key={i} onClick={handleRedirect(m.href)}>
-      {m.text}
+      {t(m.text)}
     </MenuItem>
   ));
 
   const renderAuthenticatedMenuList = (
     <MenuList>
-      {renderMenuSubHeader('Account')}
+      {renderMenuSubHeader('settings:account')}
       {renderAccountMenuItems}
       <Divider />
-      {renderMenuSubHeader('Language')}
+      {renderMenuSubHeader('common:language')}
       {renderLanguageMenuItems}
       <Divider />
-      {renderMenuSubHeader('About')}
+      {renderMenuSubHeader('common:about')}
       {renderAboutMenuItems}
       <Divider />
-      {renderMenuSubHeader('Legal')}
+      {renderMenuSubHeader('common:legal')}
       {renderLegalItems}
     </MenuList>
   );
 
   const renderUnAuthenticatedMenuList = (
     <MenuList>
-      {renderMenuSubHeader('Language')}
+      {renderMenuSubHeader('common:language')}
       {renderLanguageMenuItems}
       <Divider />
-      {renderMenuSubHeader('About')}
+      {renderMenuSubHeader('common:about')}
       {renderAboutMenuItems}
       <Divider />
-      {renderMenuSubHeader('Legal')}
+      {renderMenuSubHeader('common:legal')}
       {renderLegalItems}
     </MenuList>
   );
@@ -96,9 +94,9 @@ const SettingsPage: NextPage = () => {
       fullWidth
       variant="outlined"
       color="primary"
-      onClick={(): Promise<boolean> => router.push('/auth/sign-in')}
+      onClick={(): Promise<boolean> => Router.push('/auth/sign-in')}
     >
-      sign in
+      {t('common:signIn')}
     </Button>
   );
 
@@ -109,12 +107,12 @@ const SettingsPage: NextPage = () => {
       color="primary"
       onClick={(): Promise<boolean> => dispatch(deAuthenticate(apolloClient))}
     >
-      sign out
+      {t('common:signOut')}
     </Button>
   );
 
   return (
-    <Layout heading="Settings" title="Settings" backUrl>
+    <Layout heading={t('settings:settings')} title={t('settings:settings')} backUrl>
       <StyledCard>
         <CardContent>
           {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
@@ -131,54 +129,60 @@ const SettingsPage: NextPage = () => {
 const menuItems = {
   account: [
     {
-      text: 'Edit Profile',
+      text: 'settings:editProfile',
       href: '/profile/edit'
     },
     {
-      text: 'Change Password',
+      text: 'settings:changePassword',
       href: '/profile/change-password'
     },
     {
-      text: 'Delete Account',
+      text: 'settings:deleteAccount',
       href: '/profile/delete-account'
     }
   ],
   language: [
     {
-      value: 'English'
+      title: 'common:english',
+      value: 'en'
     },
     {
-      value: 'Finnish'
+      title: 'common:finnish',
+      value: 'fi'
     },
     {
-      value: 'Swedish'
+      title: 'common:swedish',
+      value: 'sv'
     }
   ],
   about: [
     {
-      text: 'About',
+      text: 'common:about',
       href: '/about'
     },
     {
-      text: 'Contact',
+      text: 'common:contact',
       href: '/contact'
     }
   ],
   legal: [
     {
-      text: 'Terms',
+      text: 'common:terms',
       href: '/terms'
     },
     {
-      text: 'Privacy',
+      text: 'common:privacy',
       href: '/privacy'
     }
   ]
 };
 
-SettingsPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+SettingsPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await useAuthSync(ctx);
-  return {};
+
+  return {
+    namespacesRequired: includeDefaultNamespaces(['settings'])
+  };
 };
 
 export default SettingsPage;
