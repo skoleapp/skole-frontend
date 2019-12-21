@@ -15,4 +15,4 @@ export const includeDefaultNamespaces = (namespaces: string[]) =>
 nextI18next.i18n.languages = ['en', 'fi', 'sv'];
 
 export const useTranslation = originalUseTranslation;
-export const { appWithTranslation, Router, i18n } = nextI18next;
+export const { appWithTranslation, Router, i18n, Link } = nextI18next;
