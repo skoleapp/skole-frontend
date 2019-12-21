@@ -1,12 +1,20 @@
-import { CardHeader } from '@material-ui/core';
-import { Formik } from 'formik';
+import { CardHeader, FormControl, InputLabel, MenuItem, TextField } from '@material-ui/core';
+import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
+import { Select } from 'formik-material-ui';
 import { NextPage } from 'next';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
-import { ContactForm, Layout, SlimCardContent, StyledCard } from '../components';
+import {
+  FormErrorMessage,
+  FormSubmitSection,
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  StyledForm
+} from '../components';
 import { ContactFormValues, SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useForm } from '../utils';
@@ -37,8 +45,40 @@ const ContactPage: NextPage = () => {
     dispatch(openNotification('Message submitted!'));
   };
 
+  const renderForm = (props: FormikProps<ContactFormValues>) => (
+    <StyledForm>
+      <FormControl fullWidth>
+        <InputLabel>Type</InputLabel>
+        <Field name="contactType" component={Select} fullWidth>
+          <MenuItem value="">---</MenuItem>
+          <MenuItem value="feedback">Feedback</MenuItem>
+          <MenuItem value="requestSchool">Request New School</MenuItem>
+          <MenuItem value="requestSubject">Request New Subject</MenuItem>
+          <MenuItem value="businessInquiry">Business Inquiry</MenuItem>
+        </Field>
+        <ErrorMessage name="contactType" component={FormErrorMessage} />
+      </FormControl>
+      <Field
+        name="email"
+        component={TextField}
+        label="Email"
+        placeholder="example@skole.io"
+        fullWidth
+      />
+      <Field
+        name="message"
+        component={TextField}
+        placeholder="Message"
+        label="Message"
+        fullWidth
+        multiline
+      />
+      <FormSubmitSection submitButtonText="save" {...props} />
+    </StyledForm>
+  );
+
   return (
-    <Layout title="Contact" backUrl="/">
+    <Layout title="Contact" backUrl>
       <StyledCard>
         <CardHeader title="Contact" />
         <SlimCardContent>
@@ -46,9 +86,10 @@ const ContactPage: NextPage = () => {
             onSubmit={handleSubmit}
             initialValues={initialValues}
             validationSchema={validationSchema}
-            component={ContactForm}
             ref={ref}
-          />
+          >
+            {renderForm}
+          </Formik>
         </SlimCardContent>
       </StyledCard>
     </Layout>

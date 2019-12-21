@@ -8,7 +8,7 @@ import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 
 const AboutPage: NextPage = () => (
-  <Layout heading="About" title="About" backUrl="/">
+  <Layout heading="About" title="About" backUrl>
     <StyledCard>
       <CardHeader title="About" />
       <SlimCardContent>Here will wil about content...</SlimCardContent>

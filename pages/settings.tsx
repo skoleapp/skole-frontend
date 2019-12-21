@@ -13,7 +13,7 @@ import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
-import { logout, openNotification } from '../actions';
+import { deAuthenticate, openNotification } from '../actions';
 import { Layout, SlimCardContent, StyledCard } from '../components';
 import { SkoleContext, State } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
@@ -93,36 +93,38 @@ const SettingsPage: NextPage = () => {
     </MenuList>
   );
 
-  const renderLoginButton = (
+  const renderSignInButton = (
     <Button
       fullWidth
       variant="outlined"
       color="primary"
-      onClick={(): Promise<boolean> => router.push('/auth/login')}
+      onClick={(): Promise<boolean> => router.push('/auth/sign-in')}
     >
-      login
+      sign in
     </Button>
   );
 
-  const renderLogoutButton = (
+  const renderSignOutButton = (
     <Button
       fullWidth
       variant="outlined"
       color="primary"
-      onClick={(): Promise<boolean> => dispatch(logout(apolloClient))}
+      onClick={(): Promise<boolean> => dispatch(deAuthenticate(apolloClient))}
     >
-      logout
+      sign out
     </Button>
   );
 
   return (
-    <Layout heading="Settings" title="Settings" backUrl="/">
+    <Layout heading="Settings" title="Settings" backUrl>
       <StyledCard>
         <CardContent>
           {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
         </CardContent>
         <Divider />
-        <SlimCardContent>{authenticated ? renderLogoutButton : renderLoginButton}</SlimCardContent>
+        <SlimCardContent>
+          {authenticated ? renderSignOutButton : renderSignInButton}
+        </SlimCardContent>
       </StyledCard>
     </Layout>
   );
