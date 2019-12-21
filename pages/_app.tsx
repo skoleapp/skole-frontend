@@ -6,6 +6,9 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import React from 'react';
+import { compose } from 'redux';
+import { appWithTranslation } from '../i18n';
+import { withApollo, withRedux } from '../lib';
 import { GlobalStyle, theme } from '../styles';
 
 interface Props {
@@ -13,7 +16,7 @@ interface Props {
   pageProps: NextPageContext;
 }
 
-export default class SkoleApp extends App<Props> {
+class SkoleApp extends App<Props> {
   componentDidMount(): void {
     const jssStyles = document.querySelector('#jss-server-side');
 
@@ -41,3 +44,5 @@ export default class SkoleApp extends App<Props> {
     );
   }
 }
+
+export default compose(appWithTranslation, withRedux, withApollo)(SkoleApp);
