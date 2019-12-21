@@ -145,9 +145,10 @@ CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
   const { apolloClient, query } = ctx;
 
   try {
+    const { courseId } = query;
     const { data } = await apolloClient.query({
       query: CourseDetailDocument,
-      variables: { courseId: query.id }
+      variables: { courseId }
     });
 
     return { ...data };

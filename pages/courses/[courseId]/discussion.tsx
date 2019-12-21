@@ -8,9 +8,9 @@ import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
 
 const CourseDiscussion: NextPage = () => (
-  <Layout heading="Discussion" title="Discussion" backUrl>
+  <Layout heading="Course Discussion" title="Course Discussion" backUrl>
     <StyledCard>
-      <CardHeader title="Discussion" />
+      <CardHeader title="Course Discussion" />
       <SlimCardContent>Course discussion will be here...</SlimCardContent>
     </StyledCard>
   </Layout>

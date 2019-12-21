@@ -20,11 +20,11 @@ import {
   SlimCardContent,
   StyledCard,
   StyledTable
-} from '../../../components';
-import { CourseDocument } from '../../../generated/graphql';
-import { Course, Resource, SkoleContext } from '../../../interfaces';
-import { withApollo, withRedux } from '../../../lib';
-import { getFullCourseName, useAuthSync } from '../../../utils';
+} from '../../../../components';
+import { CourseDetailDocument } from '../../../../generated/graphql';
+import { Course, Resource, SkoleContext } from '../../../../interfaces';
+import { withApollo, withRedux } from '../../../../lib';
+import { getFullCourseName, useAuthSync } from '../../../../utils';
 
 interface Props {
   course?: Course;
@@ -69,7 +69,10 @@ const ResourcesPage: NextPage<Props> = ({ course }) => {
             <TableBody>
               {resources && resources.length ? (
                 resources.map((r: Resource, i: number) => (
-                  <TableRow key={i} onClick={() => router.push(`/resources/${r.id}`)}>
+                  <TableRow
+                    key={i}
+                    onClick={() => router.push(`/courses/${course.id}/resources/${r.id}`)}
+                  >
                     <TableCell>
                       <Typography variant="subtitle1">{r.title || 'N/A'}</Typography>
                     </TableCell>
@@ -100,9 +103,10 @@ ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   const { apolloClient, query } = ctx;
 
   try {
+    const { courseId } = query;
     const { data } = await apolloClient.query({
-      query: CourseDocument,
-      variables: { courseId: query.id }
+      query: CourseDetailDocument,
+      variables: { courseId }
     });
 
     return { ...data };
