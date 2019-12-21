@@ -21,11 +21,7 @@ const SettingsPage: I18nPage = () => {
   const apolloClient = useApolloClient();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
-  const handleLanguageSelect = (value: string) => () => {
-    i18n.changeLanguage(value);
-  };
-
+  const handleLanguageSelect = (value: string) => () => i18n.changeLanguage(value);
   const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
   const renderMenuSubHeader = (text: string) => (
