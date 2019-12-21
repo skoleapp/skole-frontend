@@ -36,7 +36,7 @@ import { useForm, usePrivatePage } from '../utils';
 const validationSchema = Yup.object().shape({
   resourceTitle: Yup.string().required('Resource title is required.'),
   resourceType: Yup.string().required('Resource type is required.'),
-  courseId: Yup.string().required('Course is required.'),
+  course: Yup.string().required('Course is required.'),
   resource: Yup.string().required('Resource is required.')
 });
 
@@ -66,7 +66,7 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
   const initialValues = {
     resourceTitle: '',
     resourceType: '',
-    courseId: (router.query.courseId as string) || '',
+    course: (router.query.courseId as string) || '',
     resource: '',
     resourceParts: null,
     general: ''
@@ -153,7 +153,7 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
           <MenuItem value="">---</MenuItem>
           {resourceTypes &&
             resourceTypes.map((r: ResourceType, i: number) => (
-              <MenuItem key={i} value={r.name}>
+              <MenuItem key={i} value={r.id}>
                 {r.name}
               </MenuItem>
             ))}
@@ -161,7 +161,7 @@ const UploadResourcePage: NextPage<Props> = ({ resourceTypes, courses }) => {
       </FormControl>
       <FormControl fullWidth>
         <InputLabel>Course</InputLabel>
-        <Field name="courseId" component={Select}>
+        <Field name="course" component={Select}>
           <MenuItem value="">---</MenuItem>
           {courses &&
             courses.map((c: Course, i: number) => (
