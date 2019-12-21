@@ -43,10 +43,12 @@ SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<any> => {
 
   return {
     ...initialProps,
-    styles: [
-      ...React.Children.toArray(initialProps.styles),
-      materialSheets.getStyleElement(),
-      styledComponentsSheet.getStyleElement()
-    ]
+    styles: (
+      <>
+        {initialProps.styles}
+        {styledComponentsSheet.getStyleElement()}
+        {materialSheets.getStyleElement()}
+      </>
+    )
   };
 };

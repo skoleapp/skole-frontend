@@ -6,6 +6,7 @@ export * from './country';
 export * from './course';
 export * from './filters';
 export * from './forms';
+export * from './i18n';
 export * from './notifications';
 export * from './resources';
 export * from './school';
