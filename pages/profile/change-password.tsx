@@ -1,5 +1,6 @@
 import { CardHeader } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Field, Formik, FormikProps } from 'formik';
+import { TextField } from 'formik-material-ui';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -7,7 +8,13 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../../actions';
-import { ChangePasswordForm, Layout, SlimCardContent, StyledCard } from '../../components';
+import {
+  FormSubmitSection,
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  StyledForm
+} from '../../components';
 import { useChangePasswordMutation } from '../../generated/graphql';
 import { FormCompleted, PasswordForm, SkoleContext } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
@@ -45,26 +52,57 @@ const ChangePasswordPage: NextPage = () => {
     }
   };
 
-  const [loginMutation] = useChangePasswordMutation({ onCompleted, onError });
+  const [changePasswordMutation] = useChangePasswordMutation({ onCompleted, onError });
 
   const handleSubmit = async (values: PasswordForm): Promise<void> => {
     const { oldPassword, newPassword } = values;
-    await loginMutation({ variables: { oldPassword, newPassword } });
+    await changePasswordMutation({ variables: { oldPassword, newPassword } });
     setSubmitting(false);
   };
 
+  const renderForm = (props: FormikProps<PasswordForm>) => (
+    <StyledForm>
+      <Field
+        placeholder="Old Password"
+        name="oldPassword"
+        component={TextField}
+        label="Old Password"
+        type="password"
+        fullWidth
+      />
+      <Field
+        placeholder="New Password"
+        name="newPassword"
+        component={TextField}
+        label="New Password"
+        type="password"
+        fullWidth
+      />
+      <Field
+        placeholder="Confirm New Passsword"
+        name="confirmNewPassword"
+        component={TextField}
+        label="Confirm New Password"
+        type="password"
+        fullWidth
+      />
+      <FormSubmitSection submitButtonText="save" {...props} />
+    </StyledForm>
+  );
+
   return (
-    <Layout title="Change Password" backUrl="/settings">
+    <Layout title="Change Password" backUrl>
       <StyledCard>
         <CardHeader title="Change Password" />
         <SlimCardContent>
           <Formik
             onSubmit={handleSubmit}
             initialValues={initialValues}
-            component={ChangePasswordForm}
             validationSchema={validationSchema}
             ref={ref}
-          />
+          >
+            {renderForm}
+          </Formik>
         </SlimCardContent>
       </StyledCard>
     </Layout>

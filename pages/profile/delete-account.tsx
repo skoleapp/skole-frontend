@@ -6,20 +6,22 @@ import {
   DialogContentText,
   DialogTitle
 } from '@material-ui/core';
-import { Formik } from 'formik';
+import { Field, Formik, FormikProps } from 'formik';
+import { TextField } from 'formik-material-ui';
 import { NextPage } from 'next';
 import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
-import { logout } from '../../actions';
+import { deAuthenticate } from '../../actions';
 import {
-  DeleteAccountForm,
+  FormSubmitSection,
   Layout,
   SlimCardContent,
   StyledCard,
-  StyledDialog
+  StyledDialog,
+  StyledForm
 } from '../../components';
 import { useDeleteAccountMutation } from '../../generated/graphql';
 import { DeleteAccountFormValues, FormCompleted, SkoleContext } from '../../interfaces';
@@ -51,7 +53,7 @@ export const DeleteAccountPage: NextPage = () => {
       onError(deleteUser.errors);
     } else {
       resetForm();
-      dispatch(logout(apolloClient));
+      dispatch(deAuthenticate(apolloClient));
     }
   };
 
@@ -72,17 +74,32 @@ export const DeleteAccountPage: NextPage = () => {
     setSubmitting(false);
   };
 
+  const renderForm = (props: FormikProps<DeleteAccountFormValues>) => (
+    <StyledForm>
+      <Field
+        name="password"
+        label="Password"
+        placeholder="Password"
+        component={TextField}
+        fullWidth
+        type="password"
+      />
+      <FormSubmitSection submitButtonText="delete account" {...props} />
+    </StyledForm>
+  );
+
   const renderCard = (
     <StyledCard>
       <CardHeader title="Delete Account" />
       <SlimCardContent>
         <Formik
-          component={DeleteAccountForm}
           onSubmit={handleSubmit}
           initialValues={initialValues}
           validationSchema={validationSchema}
           ref={ref}
-        />
+        >
+          {renderForm}
+        </Formik>
       </SlimCardContent>
     </StyledCard>
   );
@@ -107,7 +124,7 @@ export const DeleteAccountPage: NextPage = () => {
   );
 
   return (
-    <Layout title="Delete Account" backUrl="/settings">
+    <Layout title="Delete Account" backUrl>
       {renderCard}
       {renderDialog}
     </Layout>
