@@ -1,0 +1,11 @@
+{
+  "searchCourses": "Search Courses...",
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "signOut": "Sign Out",
+  "passwordRequired": "Password is required.",
+  "username": "Username",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confirm Password"
+}

@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const useSearch = () => {
   const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
-  const placeholder = 'Search Courses...';
+  const { t } = useTranslation();
+  const placeholder = t('searchCourses');
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
