@@ -17,7 +17,6 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
 import {
@@ -30,7 +29,6 @@ import {
 } from '../components';
 import { UploadResourceInitialDataDocument } from '../generated/graphql';
 import { Course, ResourceType, SkoleContext, UploadResourceFormValues } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
 import { useForm, usePrivatePage } from '../utils';
 
 const validationSchema = Yup.object().shape({
@@ -318,4 +316,4 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
   }
 };
 
-export default compose(withApollo, withRedux)(UploadResourcePage);
+export default UploadResourcePage;

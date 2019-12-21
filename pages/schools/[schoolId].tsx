@@ -11,7 +11,6 @@ import {
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
 import { NextPage } from 'next';
 import React from 'react';
-import { compose } from 'redux';
 import {
   ButtonLink,
   Layout,
@@ -23,7 +22,6 @@ import {
 } from '../../components';
 import { SchoolDetailDocument } from '../../generated/graphql';
 import { School, SkoleContext } from '../../interfaces';
-import { withApollo, withRedux } from '../../lib';
 import { useAuthSync } from '../../utils';
 
 interface Props {
@@ -146,4 +144,4 @@ SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
   }
 };
 
-export default compose(withApollo, withRedux)(SchoolDetailPage);
+export default SchoolDetailPage;

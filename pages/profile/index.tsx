@@ -3,7 +3,6 @@ import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { compose } from 'redux';
 import {
   ButtonLink,
   Layout,
@@ -13,7 +12,6 @@ import {
   UserProfileCardContent
 } from '../../components';
 import { SkoleContext, State } from '../../interfaces';
-import { withApollo, withRedux } from '../../lib';
 import { usePrivatePage } from '../../utils';
 
 const ProfilePage: NextPage = () => {
@@ -53,4 +51,4 @@ ProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(ProfilePage);
+export default ProfilePage;

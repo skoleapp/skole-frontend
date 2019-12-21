@@ -1,9 +1,7 @@
 import { CardContent, CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { compose } from 'redux';
 import { Layout, StyledCard } from '../components';
-import { withApollo, withRedux } from '../lib';
 
 const TermsPage: NextPage = () => (
   <Layout title="Terms" heading="Terms" backUrl>
@@ -14,4 +12,4 @@ const TermsPage: NextPage = () => (
   </Layout>
 );
 
-export default compose(withRedux, withApollo)(TermsPage);
+export default TermsPage;

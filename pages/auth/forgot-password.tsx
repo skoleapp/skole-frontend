@@ -1,9 +1,7 @@
 import { CardContent, CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { compose } from 'redux';
 import { Layout, StyledCard } from '../../components';
-import { withApollo, withRedux } from '../../lib';
 
 const ForgotPasswordPage: NextPage = () => (
   <Layout title="Forgot Password?" backUrl>
@@ -14,4 +12,4 @@ const ForgotPasswordPage: NextPage = () => (
   </Layout>
 );
 
-export default compose(withApollo, withRedux)(ForgotPasswordPage);
+export default ForgotPasswordPage;

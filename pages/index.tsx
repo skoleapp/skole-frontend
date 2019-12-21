@@ -6,12 +6,10 @@ import {
   SupervisedUserCircleOutlined
 } from '@material-ui/icons';
 import React from 'react';
-import { compose } from 'redux';
 import styled from 'styled-components';
 import { ButtonLink, LandingPageSearchWidget, Layout, Shortcut } from '../components';
 import { includeDefaultNamespaces, useTranslation } from '../i18n';
 import { I18nPage, I18nProps, SkoleContext } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 
 const IndexPage: I18nPage = () => {
@@ -59,7 +57,7 @@ const IndexPage: I18nPage = () => {
 
 const StyledIndexPage = styled(Box)`
   h1 {
-    font-size: 2.25rem;
+    font-size: 2rem;
   }
 `;
 
@@ -71,4 +69,4 @@ IndexPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   };
 };
 
-export default compose(withRedux, withApollo)(IndexPage);
+export default IndexPage;

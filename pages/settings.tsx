@@ -12,11 +12,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
-import { compose } from 'redux';
 import { deAuthenticate, openNotification } from '../actions';
 import { Layout, SlimCardContent, StyledCard } from '../components';
 import { SkoleContext, State } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 
 const SettingsPage: NextPage = () => {
@@ -183,4 +181,4 @@ SettingsPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withRedux, withApollo)(SettingsPage);
+export default SettingsPage;

@@ -5,7 +5,6 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
 import {
@@ -24,7 +23,6 @@ import {
   SkoleContext,
   Subject
 } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
 import { useForm, usePrivatePage } from '../utils';
 
 const validationSchema = Yup.object().shape({
@@ -146,4 +144,4 @@ CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
   }
 };
 
-export default compose(withRedux, withApollo)(CreateCoursePage);
+export default CreateCoursePage;

@@ -11,11 +11,9 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 import { Layout, StyledTable } from '../../components';
 import { UsersDocument } from '../../generated/graphql';
 import { SkoleContext, User } from '../../interfaces';
-import { withApollo, withRedux } from '../../lib';
 import { useAuthSync } from '../../utils';
 
 interface Props {
@@ -75,4 +73,4 @@ UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   }
 };
 
-export default compose(withRedux, withApollo)(UsersPage);
+export default UsersPage;

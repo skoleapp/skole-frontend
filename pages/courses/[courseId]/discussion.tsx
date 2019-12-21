@@ -1,10 +1,8 @@
 import { CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { compose } from 'redux';
 import { Layout, SlimCardContent, StyledCard } from '../../../components';
 import { SkoleContext } from '../../../interfaces';
-import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
 
 const CourseDiscussion: NextPage = () => (
@@ -21,4 +19,4 @@ CourseDiscussion.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default compose(withApollo, withRedux)(CourseDiscussion);
+export default CourseDiscussion;

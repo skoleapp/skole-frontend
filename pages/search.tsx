@@ -14,12 +14,10 @@ import {
 } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 import {
   FormSubmitSection,
   Layout,
@@ -29,16 +27,18 @@ import {
   StyledTable
 } from '../components';
 import { SchoolType, SearchDocument } from '../generated/graphql';
+import { includeDefaultNamespaces } from '../i18n';
 import {
   City,
   Country,
   Course,
   FilterSearchResultsFormValues,
+  I18nPage,
+  I18nProps,
   School,
   SkoleContext,
   Subject
 } from '../interfaces';
-import { withApollo, withRedux } from '../lib';
 import { getFullCourseName, useAuthSync, useForm, valNotEmpty } from '../utils';
 
 interface Props {
@@ -50,7 +50,7 @@ interface Props {
   cities?: City[];
 }
 
-const SearchPage: NextPage<Props> = ({
+const SearchPage: I18nPage<Props> = ({
   courses,
   schools,
   subjects,
@@ -236,7 +236,7 @@ const SearchPage: NextPage<Props> = ({
   );
 };
 
-SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await useAuthSync(ctx);
   const { apolloClient, query } = ctx;
 
@@ -246,10 +246,10 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
       variables: { ...query }
     });
 
-    return { ...data };
+    return { ...data, namespacesRequired: includeDefaultNamespaces(['search']) };
   } catch {
-    return {};
+    return { namespacesRequired: includeDefaultNamespaces(['search']) };
   }
 };
 
-export default compose(withRedux, withApollo)(SearchPage);
+export default SearchPage;

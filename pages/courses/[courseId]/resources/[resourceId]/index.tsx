@@ -1,10 +1,8 @@
 import { CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
-import { compose } from 'redux';
 import { Layout, SlimCardContent, StyledCard } from '../../../../../components';
 import { SkoleContext } from '../../../../../interfaces';
-import { withApollo, withRedux } from '../../../../../lib';
 import { useAuthSync } from '../../../../../utils';
 
 const ResourceDetailPage: NextPage = () => (
@@ -21,4 +19,4 @@ ResourceDetailPage.getInitialProps = async (ctx: SkoleContext) => {
   return {};
 };
 
-export default compose(withRedux, withApollo)(ResourceDetailPage);
+export default ResourceDetailPage;

@@ -13,7 +13,6 @@ import moment from 'moment';
 import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 import {
   ButtonLink,
   Layout,
@@ -25,7 +24,6 @@ import {
 } from '../../../components';
 import { CourseDetailDocument } from '../../../generated/graphql';
 import { Course, SkoleContext } from '../../../interfaces';
-import { withApollo, withRedux } from '../../../lib';
 import { getFullCourseName, useAuthSync } from '../../../utils';
 
 interface Props {
@@ -157,4 +155,4 @@ CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
   }
 };
 
-export default compose(withApollo, withRedux)(CourseDetailPage);
+export default CourseDetailPage;
