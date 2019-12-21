@@ -10,22 +10,30 @@ import {
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import React from 'react';
-import { PublicUser } from '../../interfaces';
-import { getAvatar } from '../../utils';
 import { StyledList } from './StyledList';
 
-export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
+interface Props {
+  username: string;
+  title: string;
+  bio: string;
+  avatar: string;
+  points: number | string;
+  courseCount: number | string;
+  resourceCount: number | string;
+}
+
+export const UserProfileCardContent: React.FC<Props> = ({
   avatar,
   username,
   title,
   bio,
   points,
-  courses,
-  resources
+  courseCount,
+  resourceCount
 }) => {
   const renderAvatarSection = (
     <CardContent>
-      <Avatar className="main-avatar" src={getAvatar(avatar)} />
+      <Avatar className="main-avatar" src={process.env.BACKEND_URL + avatar} />
       <Typography variant="body1">{username}</Typography>
       <Typography variant="body2" color="textSecondary">
         {title}
@@ -50,7 +58,7 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
               <SchoolOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>Courses: {courses}</ListItemText>
+          <ListItemText>Courses: {courseCount}</ListItemText>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -58,7 +66,7 @@ export const UserProfileCardContent: React.FC<Omit<PublicUser, 'id'>> = ({
               <CloudUploadOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>Resources: {resources}</ListItemText>
+          <ListItemText>Resources: {resourceCount}</ListItemText>
         </ListItem>
       </StyledList>
     </CardContent>
