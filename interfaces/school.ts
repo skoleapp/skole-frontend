@@ -1,7 +1,5 @@
-import { Course } from './course';
-import { Subject } from './subject';
-
 export interface SchoolType {
+  id: string;
   name: string;
 }
 
@@ -11,6 +9,6 @@ export interface School {
   name: string;
   city: string;
   country: string;
-  subjects: Subject[];
-  courses: Course[];
+  courseCount: number;
+  subjectCount: number;
 }

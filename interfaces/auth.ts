@@ -1,16 +1,6 @@
-export interface UserMe {
-  id: string | null;
-  username: string | null;
-  email: string | null;
-  title: string | null;
-  bio: string | null;
-  avatar: string | null;
-  points: number | null;
-}
+import { User } from './user';
 
 export interface Auth {
-  user: UserMe;
+  user: User | null;
   authenticated: boolean | null;
-  loading: boolean | null;
-  error: string | null;
 }

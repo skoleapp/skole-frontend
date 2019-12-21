@@ -8,7 +8,7 @@ export interface PasswordForm {
   confirmNewPassword: string;
 }
 
-export interface UpdateUserFormValues {
+export interface UpdateProfileFormValues {
   username: string;
   email: string;
   title: string;
@@ -16,51 +16,40 @@ export interface UpdateUserFormValues {
   avatar: string;
 }
 
-export interface RegisterFormValues {
+export interface SignUpFormValues {
   username: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
-export interface LoginFormValues {
+export interface SignInFormValues {
   usernameOrEmail: string;
   password: string;
-}
-
-export interface FeedbackFormValues {
-  comment: string;
 }
 
 export interface CreateCourseFormValues {
   courseName: string;
   courseCode: string;
-  subjectId: string;
-  schoolId: string;
+  subject: string;
+  school: string;
+  general: string;
 }
 
-export interface FilterSchoolsFormValues {
-  schoolType: string | string[];
-  schoolName: string | string[];
-  schoolCity: string | string[];
-  schoolCountry: string | string[];
-}
-
-export interface FilterSubjectsFormValues {
-  schoolId: string | string[];
-}
-
-export interface FilterCoursesFormValues {
-  courseName: string | string[];
-  courseCode: string | string[];
-  subjectId: string | string[];
-  schoolId: string | string[];
+export interface FilterSearchResultsFormValues {
+  courseName: string;
+  courseCode: string;
+  schoolName: string;
+  subjectName: string;
+  schoolType: string;
+  countryName: string;
+  cityName: string;
 }
 
 export interface UploadResourceFormValues {
   resourceTitle: string;
   resourceType: string;
-  courseId: string;
+  course: string;
   resource: string;
 }
 

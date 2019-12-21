@@ -1,7 +1,7 @@
 import { Resource } from './resources';
 import { School } from './school';
 import { Subject } from './subject';
-import { PublicUser } from './user';
+import { User } from './user';
 
 export interface Course {
   id: number;
@@ -9,7 +9,7 @@ export interface Course {
   code: string;
   subject: Subject;
   school: School;
-  creator: PublicUser;
+  creator: User;
   created: string;
   modified: string;
   resources: Resource[];
