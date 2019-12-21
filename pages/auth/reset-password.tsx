@@ -6,7 +6,7 @@ import { Layout, StyledCard } from '../../components';
 import { withApollo, withRedux } from '../../lib';
 
 const ResetPasswordPage: NextPage = () => (
-  <Layout title="Reset Password?" backUrl="/auth/login">
+  <Layout title="Reset Password?" backUrl>
     <StyledCard>
       <CardHeader title="Forgot Password?" />
       <CardContent>Here will be reset password content...</CardContent>

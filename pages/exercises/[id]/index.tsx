@@ -7,18 +7,18 @@ import { SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
 import { useAuthSync } from '../../../utils';
 
-const CourseDiscussion: NextPage = () => (
-  <Layout heading="Discussion" title="Discussion" backUrl>
+const ExerciseDiscussionPage: NextPage = () => (
+  <Layout title="Exercises">
     <StyledCard>
-      <CardHeader title="Discussion" />
-      <SlimCardContent>Course discussion will be here...</SlimCardContent>
+      <CardHeader title="Exercise Discussion" />
+      <SlimCardContent>Here will be exercises discussion...</SlimCardContent>
     </StyledCard>
   </Layout>
 );
 
-CourseDiscussion.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ExerciseDiscussionPage.getInitialProps = async (ctx: SkoleContext) => {
   await useAuthSync(ctx);
   return {};
 };
 
-export default compose(withApollo, withRedux)(CourseDiscussion);
+export default compose(withApollo, withRedux)(ExerciseDiscussionPage);

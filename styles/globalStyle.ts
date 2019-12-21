@@ -20,7 +20,7 @@ export const GlobalStyle = createGlobalStyle`
         
         // Misc 
         --transition: all 0.15s ease-in;
-        --border-radius: 0.5rem;
+        --border-radius: 0.25rem;
     }
 
     html,

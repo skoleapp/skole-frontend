@@ -6,7 +6,7 @@ import { Layout, StyledCard } from '../components';
 import { withApollo, withRedux } from '../lib';
 
 const PrivacyPage: NextPage = () => (
-  <Layout title="Privacy" heading="Privacy" backUrl="/">
+  <Layout title="Privacy" heading="Privacy" backUrl>
     <StyledCard>
       <CardHeader title="Skole Privacy Policy" />
       <CardContent>Here will be privacy policy...</CardContent>

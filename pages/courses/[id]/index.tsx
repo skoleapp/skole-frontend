@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  CardContent,
   CardHeader,
   Divider,
   ListItem,
@@ -12,6 +11,7 @@ import {
 import { CloudUploadOutlined, ScoreOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import { NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
 import {
@@ -23,7 +23,7 @@ import {
   StyledList,
   TextLink
 } from '../../../components';
-import { CourseDocument } from '../../../generated/graphql';
+import { CourseDetailDocument } from '../../../generated/graphql';
 import { Course, SkoleContext } from '../../../interfaces';
 import { withApollo, withRedux } from '../../../lib';
 import { getFullCourseName, useAuthSync } from '../../../utils';
@@ -42,11 +42,11 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const creatorName = creator.username || 'N/A';
     const created = moment(course.created).format('LL');
     const modified = moment(course.modified).format('LL');
-    const points = course.points;
-    const resources = course.resources.length;
+    const points = R.propOr('N/A', 'points', course);
+    const resourceCount = R.propOr('N/A', 'resourceCount', course);
 
     const renderGeneralCourseInfo = (
-      <CardContent>
+      <SlimCardContent>
         <Box textAlign="left">
           <Typography variant="body1">Code: {courseCode}</Typography>
           <Typography variant="body1">
@@ -73,11 +73,11 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
           <Typography variant="body1">Created: {created}</Typography>
           <Typography variant="body1">Modified: {modified}</Typography>
         </Box>
-      </CardContent>
+      </SlimCardContent>
     );
 
     const renderCourseInfoList = (
-      <CardContent>
+      <SlimCardContent>
         <StyledList>
           <ListItem>
             <ListItemAvatar>
@@ -93,14 +93,14 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
                 <CloudUploadOutlined />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText>Resources: {resources}</ListItemText>
+            <ListItemText>Resources: {resourceCount}</ListItemText>
           </ListItem>
         </StyledList>
-      </CardContent>
+      </SlimCardContent>
     );
 
     return (
-      <Layout heading={fullName} title={fullName} backUrl="/courses">
+      <Layout heading={fullName} title={fullName} backUrl>
         <StyledCard>
           <CardHeader title={fullName} />
           <Divider />
@@ -146,7 +146,7 @@ CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
 
   try {
     const { data } = await apolloClient.query({
-      query: CourseDocument,
+      query: CourseDetailDocument,
       variables: { courseId: query.id }
     });
 
