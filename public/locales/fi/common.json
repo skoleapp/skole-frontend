@@ -7,5 +7,14 @@
   "username": "Käyttätunnus",
   "email": "Sähköposti",
   "password": "Salasana",
-  "confirmPassword": "Vahvista salasana"
+  "confirmPassword": "Vahvista salasana",
+  "english": "Englanti",
+  "finnish": "Suomi",
+  "swedish": "Ruotsi",
+  "contact": "Ota yhteyttä",
+  "terms": "Käyttöehdot",
+  "privacy": "Tietosuoja",
+  "language": "Kieli",
+  "about": "Meistä",
+  "legal": "Lailliset"
 }

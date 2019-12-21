@@ -7,5 +7,14 @@
   "username": "Username",
   "email": "Email",
   "password": "Password",
-  "confirmPassword": "Confirm Password"
+  "confirmPassword": "Confirm Password",
+  "english": "English",
+  "finnish": "Finnish",
+  "swedish": "Swedish",
+  "contact": "Contact",
+  "terms": "Terms",
+  "privacy": "Privacy",
+  "language": "Language",
+  "about": "About",
+  "legal": "Legal"
 }

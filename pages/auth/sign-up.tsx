@@ -109,7 +109,7 @@ const SignUpPage: I18nPage = () => {
           <Typography variant="body2" color="textSecondary">
             {t('sign-up:bySigninUp')}{' '}
             <Link href="/terms" target="_blank">
-              {t('sign-up:terms')}
+              {t('common:terms')}
             </Link>
             .
           </Typography>
