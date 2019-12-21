@@ -7,15 +7,17 @@ query UserMe {
     bio
     avatar
     points
+    courseCount
+    resourceCount
   }
 }
 
-query Leaderboard {
-  leaderboard {
+query Users {
+  users {
     id
     username
     points
-    avatar
+    avatarThumbnail
   }
 }
 
@@ -31,68 +33,23 @@ query User($userId: Int!) {
   }
 }
 
-query FilterSchools(
-  $schoolType: String
+query Search(
+  $courseName: String
+  $courseCode: String
   $schoolName: String
-  $schoolCity: String
-  $schoolCountry: String
+  $subjectName: String
+  $schoolType: String
+  $countryName: String
+  $cityName: String
 ) {
-  schools(
-    schoolType: $schoolType
-    schoolName: $schoolName
-    schoolCity: $schoolCity
-    schoolCountry: $schoolCountry
-  ) {
-    id
-    schoolType
-    name
-  }
-  schoolTypes {
-    name
-  }
-}
-
-query School($schoolId: Int) {
-  school(schoolId: $schoolId) {
-    id
-    schoolType
-    name
-    city
-    country
-    courses {
-      id
-      name
-    }
-    subjects {
-      id
-      name
-    }
-  }
-}
-
-query SchoolTypes {
-  schoolTypes {
-    name
-  }
-}
-
-query FilterSubjects($schoolId: String) {
-  subjects(schoolId: $schoolId) {
-    id
-    name
-  }
-  schools {
-    id
-    name
-  }
-}
-
-query FilterCourses($courseName: String, $courseCode: String, $schoolId: Int, $subjectId: Int) {
   courses(
     courseName: $courseName
     courseCode: $courseCode
-    schoolId: $schoolId
-    subjectId: $subjectId
+    schoolName: $schoolName
+    subjectName: $subjectName
+    schoolType: $schoolType
+    countryName: $countryName
+    cityName: $cityName
   ) {
     id
     name
@@ -106,9 +63,21 @@ query FilterCourses($courseName: String, $courseCode: String, $schoolId: Int, $s
     id
     name
   }
+  schoolTypes {
+    id
+    name
+  }
+  countries {
+    id
+    name
+  }
+  cities {
+    id
+    name
+  }
 }
 
-query Course($courseId: Int!) {
+query CourseDetail($courseId: Int!) {
   course(courseId: $courseId) {
     id
     name
@@ -133,18 +102,15 @@ query Course($courseId: Int!) {
     modified
     created
     points
+    resourceCount
   }
 }
 
-query ResourceTypes {
+query UploadResourceInitialData {
   resourceTypes {
+    id
     name
-  }
-}
-
-query UploadResourceFormData {
-  resourceTypes {
-    name
+    hasParts
   }
   courses {
     id
@@ -152,7 +118,7 @@ query UploadResourceFormData {
   }
 }
 
-query CreateCourseFormData {
+query CreateCourseInitialData {
   subjects {
     id
     name
@@ -160,5 +126,17 @@ query CreateCourseFormData {
   schools {
     id
     name
+  }
+}
+
+query SchoolDetail($schoolId: Int!) {
+  school(schoolId: $schoolId) {
+    id
+    name
+    city
+    country
+    schoolType
+    subjectCount
+    courseCount
   }
 }
