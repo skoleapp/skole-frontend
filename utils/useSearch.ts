@@ -6,7 +6,7 @@ export const useSearch = () => {
   const [searchValue, setSearchValue] = useState('');
   const router = useRouter();
   const { t } = useTranslation();
-  const placeholder = t('searchCourses');
+  const placeholder = t('common:searchCourses');
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
