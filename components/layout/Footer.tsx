@@ -1,11 +1,11 @@
 import { Grid, Link as MaterialLink, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
-import { i18n, useTranslation } from '../../i18n';
+import { useTranslation } from '../../i18n';
 import { TextLink } from '../shared';
 
 export const Footer: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const handleLanguageSelect = (value: string) => () => i18n.changeLanguage(value);
 
   return (

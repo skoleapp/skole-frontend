@@ -8,7 +8,7 @@ import { useAuthSync } from '../utils';
 const ErrorPage: I18nPage = () => {
   const { t } = useTranslation();
 
-  return <NotFound title={t('common:notFound')} />;
+  return <NotFound title={t('_error:notFound')} />;
 };
 
 ErrorPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

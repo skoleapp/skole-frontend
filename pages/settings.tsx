@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import { deAuthenticate } from '../actions';
 import { Layout, SlimCardContent, StyledCard } from '../components';
-import { i18n, includeDefaultNamespaces, Router, useTranslation } from '../i18n';
+import { includeDefaultNamespaces, Router, useTranslation } from '../i18n';
 import { I18nPage, I18nProps, SkoleContext, State } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
@@ -22,7 +22,7 @@ const SettingsPage: I18nPage = () => {
   const { authenticated } = useSelector((state: State) => state.auth);
   const apolloClient = useApolloClient();
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const handleLanguageSelect = (value: string) => () => i18n.changeLanguage(value);
   const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 

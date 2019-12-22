@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
-import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from '../../i18n';
 
 export const Logo: React.FC = () => (
   <Link href="/">
