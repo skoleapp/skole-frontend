@@ -12,6 +12,7 @@ import { NextPage } from 'next';
 import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 import { deAuthenticate } from '../../actions';
 import {
@@ -24,6 +25,7 @@ import {
 } from '../../components';
 import { useDeleteAccountMutation } from '../../generated/graphql';
 import { DeleteAccountFormValues, FormCompleted, SkoleContext } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
 
 const initialValues = {
@@ -134,4 +136,4 @@ DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default DeleteAccountPage;
+export default compose(withApollo, withRedux)(DeleteAccountPage);

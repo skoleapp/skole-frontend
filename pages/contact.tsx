@@ -4,6 +4,7 @@ import { Select } from 'formik-material-ui';
 import { NextPage } from 'next';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
 import {
@@ -15,6 +16,7 @@ import {
   StyledForm
 } from '../components';
 import { ContactFormValues, SkoleContext } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
 import { useAuthSync, useForm } from '../utils';
 
 const initialValues = {
@@ -99,4 +101,4 @@ ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default ContactPage;
+export default compose(withApollo, withRedux)(ContactPage);

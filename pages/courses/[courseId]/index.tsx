@@ -13,6 +13,7 @@ import moment from 'moment';
 import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { compose } from 'redux';
 import {
   ButtonLink,
   Layout,
@@ -23,14 +24,18 @@ import {
   TextLink
 } from '../../../components';
 import { CourseDetailDocument } from '../../../generated/graphql';
-import { Course, SkoleContext } from '../../../interfaces';
+import { includeDefaultNamespaces, useTranslation } from '../../../i18n';
+import { Course, I18nProps, SkoleContext } from '../../../interfaces';
+import { withApollo, withRedux } from '../../../lib';
 import { getFullCourseName, useAuthSync } from '../../../utils';
 
-interface Props {
+interface Props extends I18nProps {
   course?: Course;
 }
 
 const CourseDetailPage: NextPage<Props> = ({ course }) => {
+  const { t } = useTranslation();
+
   if (course) {
     const { subject, school, creator } = course;
     const fullName = getFullCourseName(course);
@@ -134,7 +139,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
       </Layout>
     );
   } else {
-    return <NotFound title="Course not found..." />;
+    return <NotFound title={t('course:notFound')} />;
   }
 };
 
@@ -149,10 +154,10 @@ CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
       variables: { courseId }
     });
 
-    return { ...data };
+    return { ...data, namespacesRequired: includeDefaultNamespaces(['course']) };
   } catch {
-    return {};
+    return { namespacesRequired: includeDefaultNamespaces(['course']) };
   }
 };
 
-export default CourseDetailPage;
+export default compose(withApollo, withRedux)(CourseDetailPage);

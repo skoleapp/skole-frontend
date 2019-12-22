@@ -5,11 +5,20 @@ import { NextPage } from 'next';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification, reAuthenticate } from '../../actions';
-import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../../components';
+import {
+  FormErrorMessage,
+  FormSubmitSection,
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  StyledForm
+} from '../../components';
 import { useUpdateUserMutation } from '../../generated/graphql';
 import { FormCompleted, SkoleContext, State, UpdateProfileFormValues } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
 
 const validationSchema = Yup.object().shape({
@@ -143,4 +152,4 @@ EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default EditProfilePage;
+export default compose(withApollo, withRedux)(EditProfilePage);

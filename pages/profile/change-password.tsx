@@ -5,6 +5,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../../actions';
 import {
@@ -16,6 +17,7 @@ import {
 } from '../../components';
 import { useChangePasswordMutation } from '../../generated/graphql';
 import { FormCompleted, PasswordForm, SkoleContext } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
 import { useForm, usePrivatePage } from '../../utils';
 
 const validationSchema = Yup.object().shape({
@@ -112,4 +114,4 @@ ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   return {};
 };
 
-export default ChangePasswordPage;
+export default compose(withApollo, withRedux)(ChangePasswordPage);

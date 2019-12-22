@@ -1,9 +1,11 @@
 import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { compose } from 'redux';
 import { Layout, NotFound, StyledCard, UserProfileCardContent } from '../../components';
 import { UserDocument } from '../../generated/graphql';
 import { SkoleContext, User } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
 import { redirect, useAuthSync } from '../../utils';
 
 interface Props {
@@ -58,4 +60,4 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props | {}> => {
   }
 };
 
-export default UserPage;
+export default compose(withRedux, withApollo)(UserPage);

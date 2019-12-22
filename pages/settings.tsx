@@ -10,10 +10,12 @@ import {
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
+import { compose } from 'redux';
 import { deAuthenticate } from '../actions';
 import { Layout, SlimCardContent, StyledCard } from '../components';
 import { i18n, includeDefaultNamespaces, Router, useTranslation } from '../i18n';
 import { I18nPage, I18nProps, SkoleContext, State } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
 import { useAuthSync } from '../utils';
 
 const SettingsPage: I18nPage = () => {
@@ -181,4 +183,4 @@ SettingsPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => 
   };
 };
 
-export default SettingsPage;
+export default compose(withApollo, withRedux)(SettingsPage);

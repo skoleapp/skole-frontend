@@ -1,8 +1,10 @@
 import { CardContent, CardHeader } from '@material-ui/core';
 import React from 'react';
+import { compose } from 'redux';
 import { Layout, StyledCard } from '../../components';
 import { includeDefaultNamespaces, useTranslation } from '../../i18n';
 import { I18nPage, I18nProps } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
 
 const ResetPasswordPage: I18nPage = () => {
   const { t } = useTranslation();
@@ -23,4 +25,4 @@ ResetPasswordPage.getInitialProps = (): I18nProps => {
   };
 };
 
-export default ResetPasswordPage;
+export default compose(withApollo, withRedux)(ResetPasswordPage);

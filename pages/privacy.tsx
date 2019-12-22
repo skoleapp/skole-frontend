@@ -1,7 +1,9 @@
 import { CardContent, CardHeader } from '@material-ui/core';
 import { NextPage } from 'next';
 import React from 'react';
+import { compose } from 'redux';
 import { Layout, StyledCard } from '../components';
+import { withApollo, withRedux } from '../lib';
 
 const PrivacyPage: NextPage = () => (
   <Layout title="Privacy" heading="Privacy" backUrl>
@@ -12,4 +14,4 @@ const PrivacyPage: NextPage = () => (
   </Layout>
 );
 
-export default PrivacyPage;
+export default compose(withRedux, withApollo)(PrivacyPage);

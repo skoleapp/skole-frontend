@@ -5,6 +5,7 @@ import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 import { authenticate } from '../../actions';
 import {
@@ -24,6 +25,7 @@ import {
   SignUpFormValues,
   SkoleContext
 } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
 import { useForm, usePublicPage } from '../../utils';
 
 const initialValues = {
@@ -152,4 +154,4 @@ SignUpPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   };
 };
 
-export default SignUpPage;
+export default compose(withApollo, withRedux)(SignUpPage);

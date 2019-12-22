@@ -4,6 +4,7 @@ import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 import { authenticate } from '../../actions';
 import {
@@ -24,6 +25,7 @@ import {
   SignInFormValues,
   SkoleContext
 } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
 import { useForm, usePublicPage } from '../../utils';
 
 const initialValues = {
@@ -117,4 +119,4 @@ SignInPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   };
 };
 
-export default SignInPage;
+export default compose(withApollo, withRedux)(SignInPage);

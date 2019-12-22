@@ -12,6 +12,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import { compose } from 'redux';
 import {
   ButtonLink,
   Layout,
@@ -22,6 +23,7 @@ import {
 } from '../../../../components';
 import { CourseDetailDocument } from '../../../../generated/graphql';
 import { Course, Resource, SkoleContext } from '../../../../interfaces';
+import { withApollo, withRedux } from '../../../../lib';
 import { getFullCourseName, useAuthSync } from '../../../../utils';
 
 interface Props {
@@ -113,4 +115,4 @@ ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
   }
 };
 
-export default ResourcesPage;
+export default compose(withApollo, withRedux)(ResourcesPage);

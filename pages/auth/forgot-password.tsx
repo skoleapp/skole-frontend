@@ -1,8 +1,10 @@
 import { CardContent, CardHeader } from '@material-ui/core';
 import React from 'react';
+import { compose } from 'redux';
 import { Layout, StyledCard } from '../../components';
 import { includeDefaultNamespaces, useTranslation } from '../../i18n';
 import { I18nPage, I18nProps, SkoleContext } from '../../interfaces';
+import { withApollo, withRedux } from '../../lib';
 import { usePublicPage } from '../../utils';
 
 const ForgotPasswordPage: I18nPage = () => {
@@ -26,4 +28,4 @@ ForgotPasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProp
   };
 };
 
-export default ForgotPasswordPage;
+export default compose(withApollo, withRedux)(ForgotPasswordPage);
