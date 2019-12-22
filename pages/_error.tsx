@@ -1,6 +1,9 @@
+import { compose } from 'redux';
 import { NotFound } from '../components';
 import { includeDefaultNamespaces, useTranslation } from '../i18n';
-import { I18nPage } from '../interfaces';
+import { I18nPage, I18nProps, SkoleContext } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
+import { useAuthSync } from '../utils';
 
 const ErrorPage: I18nPage = () => {
   const { t } = useTranslation();
@@ -8,10 +11,12 @@ const ErrorPage: I18nPage = () => {
   return <NotFound title={t('common:notFound')} />;
 };
 
-ErrorPage.getInitialProps = () => {
+ErrorPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+  await useAuthSync(ctx);
+
   return {
     namespacesRequired: includeDefaultNamespaces([])
   };
 };
 
-export default ErrorPage;
+export default compose(withApollo, withRedux)(ErrorPage);
