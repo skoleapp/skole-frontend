@@ -6,9 +6,9 @@
   "license": "ISC",
   "author": "Skole Team",
   "scripts": {
-    "dev": "nodemon server.ts",
-    "build": "next build",
-    "start": "NODE_ENV=production node build/server.js",
+    "dev": "nodemon src/server.ts",
+    "build": "next build && rimraf build && tsc --project tsconfig.server.json",
+    "start": "NODE_ENV=production node build/src/server.js",
     "type-check": "tsc",
     "lint": "eslint . --ext .js,.tsx,.ts",
     "gen": "graphql-codegen --config codegen.yml"

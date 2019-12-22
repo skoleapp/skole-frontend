@@ -1,7 +1,7 @@
   
 overwrite: true
 schema: "http://backend:8000/graphql/"
-documents: "graphql/*.graphql"
+documents: "src/graphql/*.graphql"
 generates:
   generated/graphql.tsx:
     plugins:
