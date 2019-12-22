@@ -102,7 +102,7 @@ const SignInPage: I18nPage = () => {
               {t('sign-in:createAccount')}
             </ButtonLink>
           </Box>
-          <TextLink href="/auth/forgot-password">{t('sign-in:forgotPassword')}</TextLink>
+          <TextLink href="/auth/forgot-password">{t('common:forgotPassword')}</TextLink>
         </SlimCardContent>
       </StyledCard>
     </Layout>

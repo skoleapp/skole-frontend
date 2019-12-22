@@ -1,15 +1,26 @@
 import { CardContent, CardHeader } from '@material-ui/core';
-import { NextPage } from 'next';
 import React from 'react';
 import { Layout, StyledCard } from '../../components';
+import { includeDefaultNamespaces, useTranslation } from '../../i18n';
+import { I18nPage, I18nProps } from '../../interfaces';
 
-const ResetPasswordPage: NextPage = () => (
-  <Layout title="Reset Password?" backUrl>
-    <StyledCard>
-      <CardHeader title="Forgot Password?" />
-      <CardContent>Here will be reset password content...</CardContent>
-    </StyledCard>
-  </Layout>
-);
+const ResetPasswordPage: I18nPage = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Layout title={t('common:resetPassword')} backUrl>
+      <StyledCard>
+        <CardHeader title={t('common:resetPassword')} />
+        <CardContent>Here will be reset password content...</CardContent>
+      </StyledCard>
+    </Layout>
+  );
+};
+
+ResetPasswordPage.getInitialProps = (): I18nProps => {
+  return {
+    namespacesRequired: includeDefaultNamespaces([])
+  };
+};
 
 export default ResetPasswordPage;

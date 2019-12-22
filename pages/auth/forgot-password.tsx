@@ -1,15 +1,29 @@
 import { CardContent, CardHeader } from '@material-ui/core';
-import { NextPage } from 'next';
 import React from 'react';
 import { Layout, StyledCard } from '../../components';
+import { includeDefaultNamespaces, useTranslation } from '../../i18n';
+import { I18nPage, I18nProps, SkoleContext } from '../../interfaces';
+import { usePublicPage } from '../../utils';
 
-const ForgotPasswordPage: NextPage = () => (
-  <Layout title="Forgot Password?" backUrl>
-    <StyledCard>
-      <CardHeader title="Forgot Password?" />
-      <CardContent>Here will be forgot password form...</CardContent>
-    </StyledCard>
-  </Layout>
-);
+const ForgotPasswordPage: I18nPage = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Layout title={t('common:forgotPassword')} backUrl>
+      <StyledCard>
+        <CardHeader title={t('common:forgotPassword')} />
+        <CardContent>Here will be forgot password form...</CardContent>
+      </StyledCard>
+    </Layout>
+  );
+};
+
+ForgotPasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+  await usePublicPage(ctx);
+
+  return {
+    namespacesRequired: includeDefaultNamespaces([])
+  };
+};
 
 export default ForgotPasswordPage;
