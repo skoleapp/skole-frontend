@@ -8,6 +8,8 @@
   "email": "Sähköposti",
   "password": "Salasana",
   "confirmPassword": "Vahvista salasana",
+  "forgotPassword": "Unohditko salasanasi?",
+  "resetPassword": "Nollaa salasana",
   "english": "Englanti",
   "finnish": "Suomi",
   "swedish": "Ruotsi",

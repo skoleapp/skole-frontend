@@ -1,0 +1,13 @@
+{
+  "title": "Kurssit",
+  "courseName": "Kurssin nimi",
+  "courseCode": "Kurssikoodi",
+  "school": "Koulu",
+  "subject": "Oppiaine",
+  "schoolType": "Koulutyyppi",
+  "country": "Maa",
+  "city": "Kaupunki",
+  "applyFilters": "Lisää suodattimet",
+  "clearFilters": "Poista suodattimet",
+  "noCourses": "Ei kursseja..."
+}

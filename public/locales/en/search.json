@@ -1,0 +1,13 @@
+{
+  "title": "Courses",
+  "courseName": "Course Name",
+  "courseCode": "Course Code",
+  "school": "School",
+  "subject": "Subject",
+  "schoolType": "School Type",
+  "country": "Country",
+  "city": "City",
+  "applyFilters": "Apply Filters",
+  "clearFilters": "Clear Fliters",
+  "noCourses": "No Courses..."
+}

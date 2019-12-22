@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React from 'react';
+import { compose } from 'redux';
 import {
   FormSubmitSection,
   Layout,
@@ -27,7 +28,7 @@ import {
   StyledTable
 } from '../components';
 import { SchoolType, SearchDocument } from '../generated/graphql';
-import { includeDefaultNamespaces } from '../i18n';
+import { includeDefaultNamespaces, Router, useTranslation } from '../i18n';
 import {
   City,
   Country,
@@ -39,6 +40,7 @@ import {
   SkoleContext,
   Subject
 } from '../interfaces';
+import { withApollo, withRedux } from '../lib';
 import { getFullCourseName, useAuthSync, useForm, valNotEmpty } from '../utils';
 
 interface Props {
@@ -58,9 +60,9 @@ const SearchPage: I18nPage<Props> = ({
   countries,
   cities
 }) => {
-  const router = useRouter();
-  const { query, pathname } = router;
+  const { query, pathname } = useRouter();
   const { ref, setSubmitting, resetForm } = useForm();
+  const { t } = useTranslation();
 
   // Pick non-empty values and reload the page with new query params.
   const handleSubmit = async (values: FilterSearchResultsFormValues): Promise<void> => {
@@ -85,13 +87,13 @@ const SearchPage: I18nPage<Props> = ({
     };
 
     const query: ParsedUrlQueryInput = R.pickBy(valNotEmpty, filteredValues);
-    await router.push({ pathname, query });
+    await Router.push({ pathname, query });
     setSubmitting(false);
   };
 
   // Clear the query params and reset form.
   const handleClearFilters = async () => {
-    await router.push(router.pathname);
+    await Router.push(pathname);
     resetForm();
   };
 
@@ -119,19 +121,19 @@ const SearchPage: I18nPage<Props> = ({
       <Field
         name="courseName"
         component={TextField}
-        label="Course Name"
-        placeholder="Course Name"
+        label={t('search:courseName')}
+        placeholder={t('search:courseName')}
         fullWidth
       />
       <Field
         name="courseCode"
         component={TextField}
-        label="Course Code"
-        placeholder="Course Code"
+        label={t('search:courseCode')}
+        placeholder={t('search:courseCode')}
         fullWidth
       />
       <FormControl fullWidth>
-        <InputLabel>School</InputLabel>
+        <InputLabel>{t('search:school')}</InputLabel>
         <Field component={Select} name="schoolName" fullWidth>
           <MenuItem value="">---</MenuItem>
           {schools &&
@@ -143,7 +145,7 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>Subject</InputLabel>
+        <InputLabel>{t('search:subject')}</InputLabel>
         <Field component={Select} name="subjectName" fullWidth>
           <MenuItem value="">---</MenuItem>
           {subjects &&
@@ -155,7 +157,7 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>School Type</InputLabel>
+        <InputLabel>{t('search:schoolType')}</InputLabel>
         <Field component={Select} name="schoolType" fullWidth>
           <MenuItem value="">---</MenuItem>
           {schoolTypes &&
@@ -167,7 +169,7 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>Country</InputLabel>
+        <InputLabel>{t('search:country')}</InputLabel>
         <Field component={Select} name="countryName" fullWidth>
           <MenuItem value="">---</MenuItem>
           {countries &&
@@ -179,7 +181,7 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>City</InputLabel>
+        <InputLabel>{t('search:city')}</InputLabel>
         <Field component={Select} name="cityName" fullWidth>
           <MenuItem value="">---</MenuItem>
           {cities &&
@@ -191,19 +193,19 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <SlimCardContent>
-        <FormSubmitSection submitButtonText="apply filters" {...props} />
+        <FormSubmitSection submitButtonText={t('search:applyFilters')} {...props} />
         <Button onClick={handleClearFilters} variant="outlined" color="primary" fullWidth>
-          clear filters
+          {t('search:clearFilters')}
         </Button>
       </SlimCardContent>
     </StyledForm>
   );
 
   return (
-    <Layout title="Search" backUrl disableSearch>
+    <Layout title={t('search:title')} backUrl disableSearch>
       <Box marginBottom="0.5rem">
         <StyledCard>
-          <CardHeader title="Courses" />
+          <CardHeader title={t('search:title')} />
           <CardContent>
             <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
               {renderForm}
@@ -216,7 +218,7 @@ const SearchPage: I18nPage<Props> = ({
           <TableBody>
             {courses && courses.length ? (
               courses.map((course: Course, i: number) => (
-                <TableRow key={i} onClick={() => router.push(`/courses/${course.id}`)}>
+                <TableRow key={i} onClick={() => Router.push(`/courses/${course.id}`)}>
                   <TableCell>
                     <Typography variant="subtitle1">{getFullCourseName(course)}</Typography>
                   </TableCell>
@@ -225,7 +227,7 @@ const SearchPage: I18nPage<Props> = ({
             ) : (
               <TableRow>
                 <TableCell>
-                  <Typography variant="subtitle1">No results...</Typography>
+                  <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
                 </TableCell>
               </TableRow>
             )}
@@ -252,4 +254,4 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   }
 };
 
-export default SearchPage;
+export default compose(withApollo, withRedux)(SearchPage);
