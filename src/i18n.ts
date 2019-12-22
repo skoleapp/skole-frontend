@@ -5,7 +5,8 @@ export const nextI18next = new NextI18Next({
   defaultLanguage: 'en',
   otherLanguages: ['fi', 'sv'],
   localePath: typeof window === 'undefined' ? 'public/locales' : 'locales',
-  localeSubpaths: { en: 'en', fi: 'fi', sv: 'sv' }
+  localeSubpaths: { en: 'en', fi: 'fi', sv: 'sv' },
+  fallbackLng: 'en'
 });
 
 nextI18next.i18n.languages = ['en', 'fi', 'sv'];
