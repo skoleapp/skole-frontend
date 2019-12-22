@@ -1,18 +1,17 @@
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
-import { NextPage, NextPageContext } from 'next';
+import { NextPageContext } from 'next';
 import App from 'next/app';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import React from 'react';
-import { compose } from 'redux';
 import { appWithTranslation } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { I18nPage } from '../interfaces';
 import { GlobalStyle, theme } from '../styles';
 
 interface Props {
-  Component: NextPage<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  Component: I18nPage;
   pageProps: NextPageContext;
 }
 
@@ -45,4 +44,4 @@ class SkoleApp extends App<Props> {
   }
 }
 
-export default compose(appWithTranslation, withRedux, withApollo)(SkoleApp);
+export default appWithTranslation(SkoleApp);
