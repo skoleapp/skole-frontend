@@ -1,0 +1,13 @@
+{
+  "notFound": "Kurssia ei löytynyt...",
+  "courseCode": "Kurssikoodi: {{ courseCode }}",
+  "subject": "Oppiaine",
+  "school": "Koulu",
+  "creator": "Luonut",
+  "created": "Luotu",
+  "modified": "Muokattu",
+  "points": "Pisteet: {{ points }}",
+  "resourceCount": "Resurssit: {{ resourceCount }}",
+  "resources": "Resurssit",
+  "discussion": "Keskustelu"
+}

@@ -51,9 +51,9 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const renderGeneralCourseInfo = (
       <SlimCardContent>
         <Box textAlign="left">
-          <Typography variant="body1">Code: {courseCode}</Typography>
+          <Typography variant="body1">{t('course:courseCode', { courseCode })}</Typography>
           <Typography variant="body1">
-            Subject:{' '}
+            {t('course:subject')}:{' '}
             <TextLink
               href={{ pathname: '/courses', query: { subjectId: subject.id } }}
               color="primary"
@@ -62,19 +62,23 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             </TextLink>
           </Typography>
           <Typography variant="body1">
-            School:{' '}
+            {t('course:school')}:{' '}
             <TextLink href={`/schools/${school.id}`} color="primary">
               {schoolName}
             </TextLink>
           </Typography>
           <Typography variant="body1">
-            Creator:{' '}
+            {t('course:creator')}:{' '}
             <TextLink href={`/users/${creator.id}`} color="primary">
               {creatorName}
             </TextLink>
           </Typography>
-          <Typography variant="body1">Created: {created}</Typography>
-          <Typography variant="body1">Modified: {modified}</Typography>
+          <Typography variant="body1">
+            {t('course:created')}: {created}
+          </Typography>
+          <Typography variant="body1">
+            {t('course:modified')}: {modified}
+          </Typography>
         </Box>
       </SlimCardContent>
     );
@@ -88,7 +92,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
                 <ScoreOutlined />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText>Points: {points}</ListItemText>
+            <ListItemText>{t('course:points', { points })}</ListItemText>
           </ListItem>
           <ListItem>
             <ListItemAvatar>
@@ -96,7 +100,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
                 <CloudUploadOutlined />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText>Resources: {resourceCount}</ListItemText>
+            <ListItemText>{t('course:resourceCount', { resourceCount })}</ListItemText>
           </ListItem>
         </StyledList>
       </SlimCardContent>
@@ -124,7 +128,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
               color="primary"
               fullWidth
             >
-              resources
+              {t('course:resources')}
             </ButtonLink>
             <ButtonLink
               href={`/courses/${course.id}/discussion`}
@@ -132,7 +136,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
               color="primary"
               fullWidth
             >
-              discussion
+              {t('course:discussion')}
             </ButtonLink>
           </SlimCardContent>
         </StyledCard>

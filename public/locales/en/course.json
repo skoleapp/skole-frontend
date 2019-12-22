@@ -1,3 +1,13 @@
 {
-  "notFound": "Course not found..."
+  "notFound": "Course not found...",
+  "courseCode": "Code: {{ courseCode }}",
+  "subject": "Subject",
+  "school": "School",
+  "creator": "Creator",
+  "created": "Created",
+  "modified": "Modified",
+  "points": "Points: {{ points }}",
+  "resourceCount": "Resources: {{ resourceCount }}",
+  "resources": "Resources",
+  "discussion": "Discussion"
 }
