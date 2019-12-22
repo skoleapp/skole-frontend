@@ -9,6 +9,14 @@ module.exports = withAssetsImport(
       API_URL: process.env.API_URL,
       BACKEND_URL: process.env.BACKEND_URL
     },
+    webpackDevMiddleware: config => {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300
+      };
+
+      return config;
+    },
     webpack: config => {
       config.plugins.push(
         new WebpackBar({
