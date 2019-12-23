@@ -1,7 +1,7 @@
 import { Grid, Link as MaterialLink, Typography } from '@material-ui/core';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { useTranslation } from '../../i18n';
 import { TextLink } from '../shared';
 
 export const Footer: React.FC = () => {

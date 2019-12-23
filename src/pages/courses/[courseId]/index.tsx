@@ -34,15 +34,16 @@ interface Props extends I18nProps {
 }
 
 const CourseDetailPage: NextPage<Props> = ({ course }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   if (course) {
     const { subject, school, creator } = course;
-    const fullName = getFullCourseName(course);
+    const fullName = getFullCourseName(course); // TODO: Add translations for course names.
     const courseCode = course.code || 'N/A';
-    const subjectName = subject.name || 'N/A';
+    const subjectName = subject.name || 'N/A'; // TODO: Add translations for subject names.
     const schoolName = school.name || 'N/A';
     const creatorName = creator.username || 'N/A';
+    moment.locale(i18n.language); // Set moment language.
     const created = moment(course.created).format('LL');
     const modified = moment(course.modified).format('LL');
     const points = R.propOr('N/A', 'points', course);
