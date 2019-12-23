@@ -8,10 +8,9 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 import { CourseDetailDocument } from '../../../../../generated/graphql';
 import {
@@ -22,7 +21,8 @@ import {
   StyledCard,
   StyledTable
 } from '../../../../components';
-import { Course, Resource, SkoleContext } from '../../../../interfaces';
+import { includeDefaultNamespaces, Router } from '../../../../i18n';
+import { Course, I18nPage, I18nProps, Resource, SkoleContext } from '../../../../interfaces';
 import { withApollo, withRedux } from '../../../../lib';
 import { getFullCourseName, useAuthSync } from '../../../../utils';
 
@@ -30,18 +30,22 @@ interface Props {
   course?: Course;
 }
 
-const ResourcesPage: NextPage<Props> = ({ course }) => {
-  const router = useRouter();
+const ResourcesPage: I18nPage<Props> = ({ course }) => {
+  const { t } = useTranslation();
 
   if (course) {
-    const fullCourseName = getFullCourseName(course);
+    const fullCourseName = getFullCourseName(course); // TODO: Add translations for course names.
     const resources = course.resources || [];
 
     return (
-      <Layout heading="Resources" title={`${fullCourseName} | Resources`} backUrl>
+      <Layout
+        heading={t('course-resources:heading')}
+        title={t('course-resources:title', { fullCourseName })}
+        backUrl
+      >
         <Box marginBottom="0.5rem">
           <StyledCard>
-            <CardHeader title={`${fullCourseName}`} subheader="Resources" />
+            <CardHeader title={fullCourseName} subheader={t('course-resources:subHeader')} />
             <SlimCardContent>
               <ButtonLink
                 href={{ pathname: '/upload-resource', query: { course: course.id || '' } }}
@@ -49,7 +53,7 @@ const ResourcesPage: NextPage<Props> = ({ course }) => {
                 color="primary"
                 fullWidth
               >
-                new resource
+                {t('course-resources:buttonNewResource')}
               </ButtonLink>
             </SlimCardContent>
           </StyledCard>
@@ -59,32 +63,36 @@ const ResourcesPage: NextPage<Props> = ({ course }) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Typography variant="h6">Title</Typography>
+                  <Typography variant="h6">{t('course-resources:tableHeadTitle')}</Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="h6">Points</Typography>
+                  <Typography variant="h6">{t('course-resources:tableHeadPoints')}</Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {resources && resources.length ? (
+              {resources.length ? (
                 resources.map((r: Resource, i: number) => (
                   <TableRow
                     key={i}
-                    onClick={() => router.push(`/courses/${course.id}/resources/${r.id}`)}
+                    onClick={() => Router.push(`/courses/${course.id}/resources/${r.id}`)}
                   >
                     <TableCell>
-                      <Typography variant="subtitle1">{r.title || 'N/A'}</Typography>
+                      <Typography variant="subtitle1">
+                        {R.propOr(t('common:na'), 'title', r)}
+                      </Typography>
                     </TableCell>
                     <TableCell align="right">
-                      <Typography variant="subtitle1">{R.propOr('N/A', 'points', r)}</Typography>
+                      <Typography variant="subtitle1">
+                        {R.propOr(t('common:na'), 'points', r)}
+                      </Typography>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
                   <TableCell>
-                    <Typography variant="subtitle1">No resources...</Typography>
+                    <Typography variant="subtitle1">{t('course-resources:noResources')}</Typography>
                   </TableCell>
                 </TableRow>
               )}
@@ -94,11 +102,11 @@ const ResourcesPage: NextPage<Props> = ({ course }) => {
       </Layout>
     );
   } else {
-    return <NotFound title="Course not found..." />;
+    return <NotFound title={t('course-resources:courseNotFound')} />;
   }
 };
 
-ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await useAuthSync(ctx);
   const { apolloClient, query } = ctx;
 
@@ -109,9 +117,9 @@ ResourcesPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
       variables: { courseId }
     });
 
-    return { ...data };
+    return { ...data, namespacesRequired: includeDefaultNamespaces(['course-resources']) };
   } catch {
-    return {};
+    return { namespacesRequired: includeDefaultNamespaces(['course-resources']) };
   }
 };
 

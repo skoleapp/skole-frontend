@@ -1,0 +1,10 @@
+{
+  "heading": "Resources",
+  "title": "{{ fullCourseName }} | Resources",
+  "subHeader": "Resources",
+  "buttonNewResource": "Add New Resource",
+  "tableHeadTitle": "Title",
+  "tableHeadPoints": "Points",
+  "noResources": "No Resources...",
+  "courseNotFound": "Course not found..."
+}
