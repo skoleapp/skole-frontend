@@ -1,0 +1,15 @@
+{
+  "heading": "Profiili",
+  "title": "Profiili",
+  "usernameNa": "Käyttäjänimi ei saatavilla...",
+  "titleNa": "Otsikko ei saatavilla...",
+  "bioNa": "Kuvaus ei saatavilla...",
+  "buttonEditProfile": "Muokkaa profiilia",
+  "profileNotFound": "Profiilia ei löytynyt...",
+  "points": "Pisteet: {{ points }}",
+  "courseCount": "Kurssit: {{ courseCount }}",
+  "resourceCount": "Resurssit: {{ resourceCount }}",
+  "bio": "Kuvaus",
+  "courses": "Kurssit",
+  "resources": "Resurssit"
+}

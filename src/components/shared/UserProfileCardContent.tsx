@@ -9,28 +9,27 @@ import {
   Typography
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
+import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { User } from '../../interfaces';
 import { StyledList } from './StyledList';
 
 interface Props {
-  username: string;
-  title: string;
-  bio: string;
-  avatar: string;
-  points: number | string;
-  courseCount: number | string;
-  resourceCount: number | string;
+  user: User;
 }
 
-export const UserProfileCardContent: React.FC<Props> = ({
-  avatar,
-  username,
-  title,
-  bio,
-  points,
-  courseCount,
-  resourceCount
-}) => {
+export const UserProfileCardContent: React.FC<Props> = ({ user }) => {
+  const { t } = useTranslation();
+
+  const username = user.username || t('profile:usernameNa');
+  const avatar = user.avatar;
+  const title = user.title || t('profile:titleNa');
+  const bio = user.bio || t('profile:bioNa');
+  const points = R.propOr(t('common:na'), 'points', user);
+  const courseCount = R.propOr(t('common:na'), 'courseCount', user);
+  const resourceCount = R.propOr(t('common:na'), 'resourceCount', user);
+
   const renderAvatarSection = (
     <CardContent>
       <Avatar className="main-avatar" src={process.env.BACKEND_URL + avatar} />
@@ -50,7 +49,7 @@ export const UserProfileCardContent: React.FC<Props> = ({
               <ScoreOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>Points: {points}</ListItemText>
+          <ListItemText>{t('profile:points', { points })}</ListItemText>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -58,7 +57,7 @@ export const UserProfileCardContent: React.FC<Props> = ({
               <SchoolOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>Courses: {courseCount}</ListItemText>
+          <ListItemText>{t('profile:courseCount', { courseCount })}</ListItemText>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -66,7 +65,7 @@ export const UserProfileCardContent: React.FC<Props> = ({
               <CloudUploadOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>Resources: {resourceCount}</ListItemText>
+          <ListItemText>{t('profile:resourceCount', { resourceCount })}</ListItemText>
         </ListItem>
       </StyledList>
     </CardContent>
@@ -83,7 +82,7 @@ export const UserProfileCardContent: React.FC<Props> = ({
     <CardContent>
       <Box textAlign="left">
         <Typography variant="body2" color="textSecondary">
-          Bio
+          {t('profile:bio')}
         </Typography>
         <Typography variant="body1">{bio}</Typography>
       </Box>
@@ -94,7 +93,7 @@ export const UserProfileCardContent: React.FC<Props> = ({
     <CardContent>
       <Box textAlign="left">
         <Typography variant="body2" color="textSecondary">
-          Courses
+          {t('profile:courses')}
         </Typography>
         <Typography variant="body1">Courses will show here...</Typography>
       </Box>
@@ -105,7 +104,7 @@ export const UserProfileCardContent: React.FC<Props> = ({
     <CardContent>
       <Box textAlign="left">
         <Typography variant="body2" color="textSecondary">
-          Resources
+          {t('profile:resources')}
         </Typography>
         <Typography variant="body1">Resources will show here...</Typography>
       </Box>

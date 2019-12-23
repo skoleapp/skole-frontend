@@ -1,7 +1,6 @@
 import { Divider } from '@material-ui/core';
-import { NextPage } from 'next';
-import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
 import {
@@ -12,45 +11,40 @@ import {
   StyledCard,
   UserProfileCardContent
 } from '../../components';
-import { SkoleContext, State } from '../../interfaces';
+import { includeDefaultNamespaces } from '../../i18n';
+import { I18nPage, I18nProps, SkoleContext, State } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
 import { usePrivatePage } from '../../utils';
 
-const ProfilePage: NextPage = () => {
+const ProfilePage: I18nPage = () => {
   const { user } = useSelector((state: State) => state.auth);
+  const { t } = useTranslation();
 
   if (user) {
-    const userProfileProps = {
-      username: user.username || 'Username N/A',
-      avatar: user.avatar,
-      title: user.title || 'Title N/A',
-      bio: user.bio || 'Bio N/A',
-      points: R.propOr('N/A', 'points', user) as number | string,
-      courseCount: R.propOr('N/A', 'courseCount', user) as number | string,
-      resourceCount: R.propOr('N/A', 'resourceCount', user) as number | string
-    };
-
     return (
-      <Layout heading="Profile" title="Profile" backUrl>
+      <Layout heading={t('profile:heading')} title={t('profile:title')} backUrl>
         <StyledCard>
-          <UserProfileCardContent {...userProfileProps} />
+          <UserProfileCardContent user={user} />
           <Divider />
           <SlimCardContent>
             <ButtonLink href="/profile/edit" color="primary" variant="outlined" fullWidth>
-              edit profile
+              {t('profile:buttonEditProfile')}
             </ButtonLink>
           </SlimCardContent>
         </StyledCard>
       </Layout>
     );
   } else {
-    return <NotFound title="Profile not found..." />;
+    return <NotFound title={t('profile:profileNotFound')} />;
   }
 };
 
-ProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await usePrivatePage(ctx);
-  return {};
+
+  return {
+    namespacesRequired: includeDefaultNamespaces(['profile'])
+  };
 };
 
 export default compose(withApollo, withRedux)(ProfilePage);

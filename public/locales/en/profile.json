@@ -1,0 +1,15 @@
+{
+  "heading": "Profile",
+  "title": "Profile",
+  "usernameNa": "Username not available...",
+  "titleNa": "Title not available...",
+  "bioNa": "Bio not available...",
+  "buttonEditProfile": "Edit Profile",
+  "profileNotFound": "Profile not found...",
+  "points": "Points: {{ points }}",
+  "courseCount": "Courses: {{ courseCount }}",
+  "resourceCount": "Resources: {{ resourceCount }}",
+  "bio": "Bio",
+  "courses": "Courses",
+  "resources": "Resources"
+}
