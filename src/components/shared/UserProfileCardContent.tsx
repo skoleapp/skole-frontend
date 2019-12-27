@@ -6,14 +6,32 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Tab,
+  Tabs,
   Typography
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { User } from '../../interfaces';
+import { User } from '../../types';
 import { StyledList } from './StyledList';
+
+interface TabPanelProps {
+  index: number;
+  value: number;
+}
+
+const TabPanel: React.FC<TabPanelProps> = ({ children, value, index, ...props }) => (
+  <Typography
+    // component="div"
+    role="tabpanel"
+    hidden={value !== index}
+    {...props}
+  >
+    {value === index && <Box p={3}>{children}</Box>}
+  </Typography>
+);
 
 interface Props {
   user: User;
@@ -21,14 +39,16 @@ interface Props {
 
 export const UserProfileCardContent: React.FC<Props> = ({ user }) => {
   const { t } = useTranslation();
+  const [value, setValue] = useState(0);
+  const handleChange = (_e: ChangeEvent<{}>, val: number) => setValue(val);
 
-  const username = user.username || t('profile:usernameNa');
+  const username = user.username || t('profile:usernameNA');
   const avatar = user.avatar;
-  const title = user.title || t('profile:titleNa');
-  const bio = user.bio || t('profile:bioNa');
-  const points = R.propOr(t('common:na'), 'points', user);
-  const courseCount = R.propOr(t('common:na'), 'courseCount', user);
-  const resourceCount = R.propOr(t('common:na'), 'resourceCount', user);
+  const title = user.title || t('profile:titleNA');
+  const bio = user.bio || t('profile:bioNA');
+  const points = R.propOr(t('common:NA'), 'points', user);
+  const courseCount = R.propOr(t('common:NA'), 'courseCount', user);
+  const resourceCount = R.propOr(t('common:NA'), 'resourceCount', user);
 
   const renderAvatarSection = (
     <CardContent>
@@ -49,7 +69,7 @@ export const UserProfileCardContent: React.FC<Props> = ({ user }) => {
               <ScoreOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>{t('profile:points', { points })}</ListItemText>
+          <ListItemText>{t('common:points', { points })}</ListItemText>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -57,7 +77,7 @@ export const UserProfileCardContent: React.FC<Props> = ({ user }) => {
               <SchoolOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>{t('profile:courseCount', { courseCount })}</ListItemText>
+          <ListItemText>{t('common:courseCount', { courseCount })}</ListItemText>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -65,7 +85,7 @@ export const UserProfileCardContent: React.FC<Props> = ({ user }) => {
               <CloudUploadOutlined />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText>{t('profile:resourceCount', { resourceCount })}</ListItemText>
+          <ListItemText>{t('common:resourceCount', { resourceCount })}</ListItemText>
         </ListItem>
       </StyledList>
     </CardContent>
@@ -82,32 +102,34 @@ export const UserProfileCardContent: React.FC<Props> = ({ user }) => {
     <CardContent>
       <Box textAlign="left">
         <Typography variant="body2" color="textSecondary">
-          {t('profile:bio')}
+          {t('common:bio')}
         </Typography>
         <Typography variant="body1">{bio}</Typography>
       </Box>
     </CardContent>
   );
 
-  const renderCoursesSection = (
-    <CardContent>
-      <Box textAlign="left">
-        <Typography variant="body2" color="textSecondary">
-          {t('profile:courses')}
-        </Typography>
-        <Typography variant="body1">Courses will show here...</Typography>
-      </Box>
-    </CardContent>
+  const renderTabs = (
+    <Tabs
+      value={value}
+      onChange={handleChange}
+      indicatorColor="primary"
+      textColor="primary"
+      variant="fullWidth"
+    >
+      <Tab label="Courses" />
+      <Tab label="Resources" />
+    </Tabs>
   );
 
-  const renderResourcesSection = (
+  const renderTabContent = (
     <CardContent>
-      <Box textAlign="left">
-        <Typography variant="body2" color="textSecondary">
-          {t('profile:resources')}
-        </Typography>
-        <Typography variant="body1">Resources will show here...</Typography>
-      </Box>
+      <TabPanel value={value} index={0}>
+        Courses will show here...
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        Resources will show here...
+      </TabPanel>
     </CardContent>
   );
 
@@ -117,9 +139,8 @@ export const UserProfileCardContent: React.FC<Props> = ({ user }) => {
       <Divider />
       {renderBioSection}
       <Divider />
-      {renderCoursesSection}
-      <Divider />
-      {renderResourcesSection}
+      {renderTabs}
+      {renderTabContent}
     </>
   );
 };
