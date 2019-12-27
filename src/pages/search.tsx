@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 import { SchoolType, SearchDocument } from '../../generated/graphql';
 import {
@@ -28,7 +29,8 @@ import {
   StyledForm,
   StyledTable
 } from '../components';
-import { includeDefaultNamespaces, Router, useTranslation } from '../i18n';
+import { includeDefaultNamespaces, Router } from '../i18n';
+import { withApollo, withRedux } from '../lib';
 import {
   City,
   Country,
@@ -39,8 +41,7 @@ import {
   School,
   SkoleContext,
   Subject
-} from '../interfaces';
-import { withApollo, withRedux } from '../lib';
+} from '../types';
 import { getFullCourseName, useAuthSync, useForm, valNotEmpty } from '../utils';
 
 interface Props {
@@ -121,19 +122,19 @@ const SearchPage: I18nPage<Props> = ({
       <Field
         name="courseName"
         component={TextField}
-        label={t('search:courseName')}
-        placeholder={t('search:courseName')}
+        label={t('forms:courseName')}
+        placeholder={t('forms:courseName')}
         fullWidth
       />
       <Field
         name="courseCode"
         component={TextField}
-        label={t('search:courseCode')}
-        placeholder={t('search:courseCode')}
+        label={t('forms:courseCode')}
+        placeholder={t('forms:courseCode')}
         fullWidth
       />
       <FormControl fullWidth>
-        <InputLabel>{t('search:school')}</InputLabel>
+        <InputLabel>{t('forms:school')}</InputLabel>
         <Field component={Select} name="schoolName" fullWidth>
           <MenuItem value="">---</MenuItem>
           {schools &&
@@ -145,7 +146,7 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>{t('search:subject')}</InputLabel>
+        <InputLabel>{t('forms:subject')}</InputLabel>
         <Field component={Select} name="subjectName" fullWidth>
           <MenuItem value="">---</MenuItem>
           {subjects &&
@@ -157,7 +158,7 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>{t('search:schoolType')}</InputLabel>
+        <InputLabel>{t('forms:schoolType')}</InputLabel>
         <Field component={Select} name="schoolType" fullWidth>
           <MenuItem value="">---</MenuItem>
           {schoolTypes &&
@@ -169,7 +170,7 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>{t('search:country')}</InputLabel>
+        <InputLabel>{t('forms:country')}</InputLabel>
         <Field component={Select} name="countryName" fullWidth>
           <MenuItem value="">---</MenuItem>
           {countries &&
@@ -181,7 +182,7 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel>{t('search:city')}</InputLabel>
+        <InputLabel>{t('forms:city')}</InputLabel>
         <Field component={Select} name="cityName" fullWidth>
           <MenuItem value="">---</MenuItem>
           {cities &&
@@ -193,9 +194,9 @@ const SearchPage: I18nPage<Props> = ({
         </Field>
       </FormControl>
       <SlimCardContent>
-        <FormSubmitSection submitButtonText={t('search:applyFilters')} {...props} />
+        <FormSubmitSection submitButtonText={t('search:applyFiltersButton')} {...props} />
         <Button onClick={handleClearFilters} variant="outlined" color="primary" fullWidth>
-          {t('search:clearFilters')}
+          {t('search:clearFiltersButton')}
         </Button>
       </SlimCardContent>
     </StyledForm>
@@ -248,9 +249,9 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
       variables: { ...query }
     });
 
-    return { ...data, namespacesRequired: includeDefaultNamespaces(['search']) };
+    return { ...data, namespacesRequired: includeDefaultNamespaces(['search', 'forms']) };
   } catch {
-    return { namespacesRequired: includeDefaultNamespaces(['search']) };
+    return { namespacesRequired: includeDefaultNamespaces(['search', 'forms']) };
   }
 };
 
