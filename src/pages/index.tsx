@@ -6,12 +6,13 @@ import {
   SupervisedUserCircleOutlined
 } from '@material-ui/icons';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 import styled from 'styled-components';
 import { ButtonLink, LandingPageSearchWidget, Layout, Shortcut } from '../components';
-import { includeDefaultNamespaces, useTranslation } from '../i18n';
-import { I18nPage, I18nProps, SkoleContext } from '../interfaces';
+import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync } from '../utils';
 
 const IndexPage: I18nPage = () => {
