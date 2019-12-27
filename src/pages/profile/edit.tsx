@@ -1,9 +1,9 @@
 import { Avatar, Box, Button, CardHeader, FormControl } from '@material-ui/core';
 import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
@@ -17,30 +17,30 @@ import {
   StyledCard,
   StyledForm
 } from '../../components';
-import { FormCompleted, SkoleContext, State, UpdateProfileFormValues } from '../../interfaces';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
+import {
+  FormCompleted,
+  I18nPage,
+  I18nProps,
+  SkoleContext,
+  State,
+  UpdateProfileFormValues
+} from '../../types';
 import { useForm, usePrivatePage } from '../../utils';
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string(),
-  username: Yup.string().required('Username is required.'),
-  email: Yup.string()
-    .email('Invalid email.')
-    .required('Email is required.'),
-  bio: Yup.string()
-});
-
-const EditProfilePage: NextPage = () => {
+const EditProfilePage: I18nPage = () => {
   const { user } = useSelector((state: State) => state.auth);
   const { ref, onError, setSubmitting, setFieldValue } = useForm();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const onCompleted = ({ updateUser }: FormCompleted): void => {
     if (updateUser.errors) {
       return onError(updateUser.errors);
     } else {
       dispatch(reAuthenticate(updateUser.user));
-      dispatch(openNotification('Profile updated!'));
+      dispatch(openNotification(t('notifications:profileUpdated')));
     }
   };
 
@@ -71,6 +71,15 @@ const EditProfilePage: NextPage = () => {
     avatar: R.propOr('', 'avatar', user) as string,
     general: ''
   };
+
+  const validationSchema = Yup.object().shape({
+    title: Yup.string(),
+    username: Yup.string().required(t('validation:usernameRequired')),
+    email: Yup.string()
+      .email(t('validation:invalidEmail'))
+      .required(t('validation:emailRequired')),
+    bio: Yup.string()
+  });
 
   const [avatar, setAvatar] = useState();
   const [preview, setPreview] = useState();
@@ -107,31 +116,50 @@ const EditProfilePage: NextPage = () => {
           <Box marginTop="0.5rem">
             <label htmlFor="avatar-input">
               <Button variant="outlined" color="primary" component="span">
-                change avatar
+                {t('edit-profile:changeAvatarButton')}
               </Button>
             </label>
           </Box>
           <ErrorMessage name="avatar" component={FormErrorMessage} />
         </Box>
       </FormControl>
-      <Field placeholder="Title" name="title" component={TextField} label="Title" fullWidth />
       <Field
-        placeholder="Username"
-        name="username"
+        placeholder={t('forms:title')}
+        name="title"
         component={TextField}
-        label="Username"
+        label={t('forms:title')}
         fullWidth
       />
-      <Field placeholder="Email" name="email" component={TextField} label="Email" fullWidth />
-      <Field placeholder="Bio" name="bio" component={TextField} label="Bio" multiline fullWidth />
-      <FormSubmitSection submitButtonText="save" {...props} />
+      <Field
+        placeholder={t('forms:username')}
+        name="username"
+        component={TextField}
+        label={t('forms:username')}
+        fullWidth
+      />
+      <Field
+        placeholder={t('forms:email')}
+        name="email"
+        component={TextField}
+        label={t('forms:email')}
+        fullWidth
+      />
+      <Field
+        placeholder={t('forms:bio')}
+        name="bio"
+        component={TextField}
+        label={t('forms:bio')}
+        multiline
+        fullWidth
+      />
+      <FormSubmitSection submitButtonText={t('common:save')} {...props} />
     </StyledForm>
   );
 
   return (
-    <Layout title="Edit Profile" backUrl>
+    <Layout title={t('edit-profile:title')} backUrl>
       <StyledCard>
-        <CardHeader title="Edit Profile" />
+        <CardHeader title={t('edit-profile:title')} />
         <SlimCardContent>
           <Formik
             initialValues={initialValues}
@@ -147,9 +175,17 @@ const EditProfilePage: NextPage = () => {
   );
 };
 
-EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await usePrivatePage(ctx);
-  return {};
+
+  return {
+    namespacesRequired: includeDefaultNamespaces([
+      'edit-profile',
+      'forms',
+      'validation',
+      'notifications'
+    ])
+  };
 };
 
 export default compose(withApollo, withRedux)(EditProfilePage);

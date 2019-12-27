@@ -1,9 +1,8 @@
 import { CardHeader } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
@@ -16,19 +15,10 @@ import {
   StyledCard,
   StyledForm
 } from '../../components';
-import { FormCompleted, PasswordForm, SkoleContext } from '../../interfaces';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
+import { FormCompleted, I18nPage, I18nProps, PasswordForm, SkoleContext } from '../../types';
 import { useForm, usePrivatePage } from '../../utils';
-
-const validationSchema = Yup.object().shape({
-  oldPassword: Yup.string().required('Old password is required.'),
-  newPassword: Yup.string()
-    .min(6, 'Password must be at least 6 characters long.')
-    .required('New password is required.'),
-  confirmNewPassword: Yup.string()
-    .oneOf([Yup.ref('newPassword'), null], 'Passwords do not match.')
-    .required('Confirm new password is required.')
-});
 
 const initialValues = {
   oldPassword: '',
@@ -37,18 +27,27 @@ const initialValues = {
   general: ''
 };
 
-const ChangePasswordPage: NextPage = () => {
+const ChangePasswordPage: I18nPage = () => {
   const { ref, resetForm, setSubmitting, onError } = useForm();
   const dispatch = useDispatch();
-  const router = useRouter();
+  const { t } = useTranslation();
+
+  const validationSchema = Yup.object().shape({
+    oldPassword: Yup.string().required(t('validation:oldPasswordRequired')),
+    newPassword: Yup.string()
+      .min(6, t('validation:passwordTooShort'))
+      .required(t('validation:newPasswordRequired')),
+    confirmNewPassword: Yup.string()
+      .oneOf([Yup.ref('newPassword'), null], t('validation:passwordsNotMatch'))
+      .required(t('validation:confirmPasswordRequired'))
+  });
 
   const onCompleted = async ({ changePassword }: FormCompleted): Promise<void> => {
     if (changePassword.errors) {
       onError(changePassword.errors);
     } else {
       resetForm();
-      dispatch(openNotification('Password changed!'));
-      await router.push('/profile');
+      dispatch(openNotification(t('notifications:passwordChanged')));
     }
   };
 
@@ -63,37 +62,37 @@ const ChangePasswordPage: NextPage = () => {
   const renderForm = (props: FormikProps<PasswordForm>) => (
     <StyledForm>
       <Field
-        placeholder="Old Password"
+        placeholder={t('forms:oldPassword')}
         name="oldPassword"
         component={TextField}
-        label="Old Password"
+        label={t('forms:oldPassword')}
         type="password"
         fullWidth
       />
       <Field
-        placeholder="New Password"
+        placeholder={t('forms:newPassword')}
         name="newPassword"
         component={TextField}
-        label="New Password"
+        label={t('forms:newPassword')}
         type="password"
         fullWidth
       />
       <Field
-        placeholder="Confirm New Passsword"
+        placeholder={t('forms:confirmNewPassword')}
         name="confirmNewPassword"
         component={TextField}
-        label="Confirm New Password"
+        label={t('forms:confirmNewPassword')}
         type="password"
         fullWidth
       />
-      <FormSubmitSection submitButtonText="save" {...props} />
+      <FormSubmitSection submitButtonText={t('common:save')} {...props} />
     </StyledForm>
   );
 
   return (
-    <Layout title="Change Password" backUrl>
+    <Layout title={t('change-password:title')} backUrl>
       <StyledCard>
-        <CardHeader title="Change Password" />
+        <CardHeader title={t('change-password:title')} />
         <SlimCardContent>
           <Formik
             onSubmit={handleSubmit}
@@ -109,9 +108,17 @@ const ChangePasswordPage: NextPage = () => {
   );
 };
 
-ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await usePrivatePage(ctx);
-  return {};
+
+  return {
+    namespacesRequired: includeDefaultNamespaces([
+      'change-password',
+      'forms',
+      'validation',
+      'notifications'
+    ])
+  };
 };
 
 export default compose(withApollo, withRedux)(ChangePasswordPage);

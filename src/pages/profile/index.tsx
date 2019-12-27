@@ -12,8 +12,8 @@ import {
   UserProfileCardContent
 } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { usePrivatePage } from '../../utils';
 
 const ProfilePage: I18nPage = () => {
@@ -28,7 +28,7 @@ const ProfilePage: I18nPage = () => {
           <Divider />
           <SlimCardContent>
             <ButtonLink href="/profile/edit" color="primary" variant="outlined" fullWidth>
-              {t('profile:buttonEditProfile')}
+              {t('profile:editProfileButton')}
             </ButtonLink>
           </SlimCardContent>
         </StyledCard>

@@ -1,15 +1,21 @@
 import { CardHeader } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
+import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 import * as Yup from 'yup';
-import { FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../../components';
+import {
+  FormSubmitSection,
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  StyledForm
+} from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { ForgotPasswordFormValues, I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useForm, usePublicPage } from '../../utils';
-import { TextField } from 'formik-material-ui';
 
 const initialValues = {
   email: '',

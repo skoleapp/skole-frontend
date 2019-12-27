@@ -8,9 +8,9 @@ import {
 } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
 import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
@@ -24,8 +24,15 @@ import {
   StyledDialog,
   StyledForm
 } from '../../components';
-import { DeleteAccountFormValues, FormCompleted, SkoleContext } from '../../interfaces';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
+import {
+  DeleteAccountFormValues,
+  FormCompleted,
+  I18nPage,
+  I18nProps,
+  SkoleContext
+} from '../../types';
 import { useForm, usePrivatePage } from '../../utils';
 
 const initialValues = {
@@ -33,20 +40,17 @@ const initialValues = {
   general: ''
 };
 
-const validationSchema = Yup.object().shape({
-  password: Yup.string().required('Password is required.')
-});
-
 const initialDialogState = {
   password: '',
   open: false
 };
 
-export const DeleteAccountPage: NextPage = () => {
+export const DeleteAccountPage: I18nPage = () => {
   const [dialog, setDialog] = useState(initialDialogState);
   const { ref, setSubmitting, resetForm, onError } = useForm();
   const dispatch = useDispatch();
   const apolloClient = useApolloClient();
+  const { t } = useTranslation();
 
   const onCompleted = ({ deleteUser }: FormCompleted): void => {
     if (deleteUser.errors) {
@@ -74,23 +78,27 @@ export const DeleteAccountPage: NextPage = () => {
     setSubmitting(false);
   };
 
+  const validationSchema = Yup.object().shape({
+    password: Yup.string().required(t('validation:passwordRequired'))
+  });
+
   const renderForm = (props: FormikProps<DeleteAccountFormValues>) => (
     <StyledForm>
       <Field
         name="password"
-        label="Password"
-        placeholder="Password"
+        label={t('forms:password')}
+        placeholder={t('forms:password')}
         component={TextField}
         fullWidth
         type="password"
       />
-      <FormSubmitSection submitButtonText="delete account" {...props} />
+      <FormSubmitSection submitButtonText={t('delete-account:submitButton')} {...props} />
     </StyledForm>
   );
 
   const renderCard = (
     <StyledCard>
-      <CardHeader title="Delete Account" />
+      <CardHeader title={t('delete-account:title')} />
       <SlimCardContent>
         <Formik
           onSubmit={handleSubmit}
@@ -106,34 +114,35 @@ export const DeleteAccountPage: NextPage = () => {
 
   const renderDialog = (
     <StyledDialog open={dialog.open} onClose={handleClose}>
-      <DialogTitle>Are you sure you want to delete your account?</DialogTitle>
+      <DialogTitle>{t('delete-account:dialogTitle')}</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          This action cannot be reverted and your account will be lost forever!
-        </DialogContentText>
+        <DialogContentText>{t('delete-account:dialogContentText')}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} variant="outlined" color="primary">
-          cancel
+          {t('common:cancel')}
         </Button>
         <Button onClick={handleSubmitConfirm} variant="contained" color="primary">
-          confirm
+          {t('common:confirm')}
         </Button>
       </DialogActions>
     </StyledDialog>
   );
 
   return (
-    <Layout title="Delete Account" backUrl>
+    <Layout title={t('delete-account:title')} backUrl>
       {renderCard}
       {renderDialog}
     </Layout>
   );
 };
 
-DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await usePrivatePage(ctx);
-  return {};
+
+  return {
+    namespacesRequired: includeDefaultNamespaces(['delete-account', 'forms', 'validation'])
+  };
 };
 
 export default compose(withApollo, withRedux)(DeleteAccountPage);
