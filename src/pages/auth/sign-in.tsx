@@ -3,6 +3,7 @@ import { Field, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
@@ -17,15 +18,9 @@ import {
   StyledForm,
   TextLink
 } from '../../components';
-import { includeDefaultNamespaces, useTranslation } from '../../i18n';
-import {
-  FormCompleted,
-  I18nPage,
-  I18nProps,
-  SignInFormValues,
-  SkoleContext
-} from '../../interfaces';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
+import { FormCompleted, I18nPage, I18nProps, SignInFormValues, SkoleContext } from '../../types';
 import { useForm, usePublicPage } from '../../utils';
 
 const initialValues = {
@@ -41,8 +36,8 @@ const SignInPage: I18nPage = () => {
   const { t } = useTranslation();
 
   const validationSchema = Yup.object().shape({
-    usernameOrEmail: Yup.string().required(t('sign-in:usernameOrEmailRequired')),
-    password: Yup.string().required(t('common:passwordRequired'))
+    usernameOrEmail: Yup.string().required(t('validation:usernameOrEmailRequired')),
+    password: Yup.string().required(t('validation:passwordRequired'))
   });
 
   const onCompleted = ({ signIn }: FormCompleted): void => {
@@ -65,17 +60,17 @@ const SignInPage: I18nPage = () => {
   const renderForm = (props: FormikProps<SignInFormValues>) => (
     <StyledForm>
       <Field
-        placeholder={t('sign-in:usernameOrEmail')}
+        placeholder={t('forms:usernameOrEmail')}
         name="usernameOrEmail"
         component={TextField}
-        label={t('sign-in:usernameOrEmail')}
+        label={t('forms:usernameOrEmail')}
         fullWidth
       />
       <Field
-        placeholder={t('common:password')}
+        placeholder={t('forms:password')}
         name="password"
         component={TextField}
-        label={t('common:password')}
+        label={t('forms:password')}
         type="password"
         fullWidth
       />
@@ -104,7 +99,7 @@ const SignInPage: I18nPage = () => {
               {t('sign-in:createAccount')}
             </ButtonLink>
           </Box>
-          <TextLink href="/auth/forgot-password">{t('common:forgotPassword')}</TextLink>
+          <TextLink href="/auth/forgot-password">{t('sign-in:forgotPassword')}</TextLink>
         </SlimCardContent>
       </StyledCard>
     </Layout>
@@ -115,7 +110,7 @@ SignInPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await usePublicPage(ctx);
 
   return {
-    namespacesRequired: includeDefaultNamespaces(['sign-in'])
+    namespacesRequired: includeDefaultNamespaces(['sign-in', 'validation', 'forms'])
   };
 };
 

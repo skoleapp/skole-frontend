@@ -10,22 +10,16 @@ import * as Yup from 'yup';
 import { useSignUpMutation } from '../../../generated/graphql';
 import { authenticate } from '../../actions';
 import {
+  ButtonLink,
   FormSubmitSection,
   Layout,
   SlimCardContent,
   StyledCard,
-  StyledForm,
-  TextLink
+  StyledForm
 } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
-import {
-  FormCompleted,
-  I18nPage,
-  I18nProps,
-  SignUpFormValues,
-  SkoleContext
-} from '../../interfaces';
 import { withApollo, withRedux } from '../../lib';
+import { FormCompleted, I18nPage, I18nProps, SignUpFormValues, SkoleContext } from '../../types';
 import { useForm, usePublicPage } from '../../utils';
 
 const initialValues = {
@@ -43,16 +37,16 @@ const SignUpPage: I18nPage = () => {
   const { t } = useTranslation();
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required(t('sign-up:usernameRequired')),
+    username: Yup.string().required(t('validation:usernameRequired')),
     email: Yup.string()
-      .email(t('sign-up:invalidEmail'))
-      .required(t('sign-up:emailRequired')),
+      .email(t('validation:invalidEmail'))
+      .required(t('validation:emailRequired')),
     password: Yup.string()
-      .min(6, t('sign-up:passwordTooShort'))
-      .required(t('common:passwordRequired')),
+      .min(6, t('validation:passwordTooShort'))
+      .required(t('validation:passwordRequired')),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('sign-up:passwordsNotMatch'))
-      .required(t('sign-up:confirmPasswordRequired'))
+      .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
+      .required(t('validation:confirmPasswordRequired'))
   });
 
   const onCompleted = ({ signUp, signIn }: FormCompleted): void => {
@@ -77,39 +71,39 @@ const SignUpPage: I18nPage = () => {
   const renderForm = (props: FormikProps<SignUpFormValues>) => (
     <StyledForm>
       <Field
-        placeholder={t('common:username')}
+        placeholder={t('forms:username')}
         name="username"
         component={TextField}
-        label={t('common:username')}
+        label={t('forms:username')}
         fullWidth
       />
       <Field
-        placeholder={t('common:email')}
+        placeholder={t('forms:email')}
         name="email"
         component={TextField}
-        label={t('common:email')}
+        label={t('forms:email')}
         fullWidth
       />
       <Field
-        placeholder={t('common:password')}
+        placeholder={t('forms:password')}
         name="password"
         component={TextField}
-        label={t('common:password')}
+        label={t('forms:password')}
         type="password"
         fullWidth
       />
       <Field
-        placeholder={t('common:confirmPassword')}
+        placeholder={t('forms:confirmPassword')}
         name="confirmPassword"
         type="password"
         component={TextField}
-        label={t('common:confirmPassword')}
+        label={t('forms:confirmPassword')}
         fullWidth
       />
       <FormControl fullWidth>
         <Box marginTop="0.5rem">
           <Typography variant="body2" color="textSecondary">
-            {t('sign-up:bySigninUp')}{' '}
+            {t('sign-up:termsHelpText')}{' '}
             <Link href="/terms" target="_blank">
               {t('common:terms')}
             </Link>
@@ -137,8 +131,10 @@ const SignUpPage: I18nPage = () => {
           <Box marginTop="1rem">
             <Divider />
           </Box>
-          <Box marginTop="0.5rem">
-            <TextLink href="/auth/sign-in">{t('sign-up:alreadyHaveAccount')}</TextLink>
+          <Box marginY="0.5rem">
+            <ButtonLink href="/auth/sign-in" variant="outlined" color="primary" fullWidth>
+              {t('sign-up:alreadyHaveAccount')}
+            </ButtonLink>
           </Box>
         </SlimCardContent>
       </StyledCard>
@@ -150,7 +146,7 @@ SignUpPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await usePublicPage(ctx);
 
   return {
-    namespacesRequired: includeDefaultNamespaces(['sign-up'])
+    namespacesRequired: includeDefaultNamespaces(['sign-up', 'validation', 'forms'])
   };
 };
 
