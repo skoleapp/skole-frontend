@@ -1,13 +1,6 @@
 {
   "title": "Courses",
-  "courseName": "Course Name",
-  "courseCode": "Course Code",
-  "school": "School",
-  "subject": "Subject",
-  "schoolType": "School Type",
-  "country": "Country",
-  "city": "City",
-  "applyFilters": "Apply Filters",
-  "clearFilters": "Clear Fliters",
+  "applyFiltersButton": "Apply Filters",
+  "clearFiltersButton": "Clear Filters",
   "noCourses": "No Courses..."
 }

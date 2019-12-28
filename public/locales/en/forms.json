@@ -1,0 +1,20 @@
+{
+  "usernameOrEmail": "Username or Email",
+  "username": "Username",
+  "email": "Email",
+  "password": "Password",
+  "oldPassword": "Old Password",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm Password",
+  "confirmNewPassword": "Confirm New Password",
+  "title": "Title",
+  "bio": "Bio",
+  "courseName": "Course Name",
+  "courseCode": "Course Code",
+  "school": "School",
+  "subject": "Subject",
+  "schoolType": "School Type",
+  "country": "Country",
+  "city": "City",
+  "searchCourses": "Search Courses..."
+}

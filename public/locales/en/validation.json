@@ -1,0 +1,16 @@
+{
+  "usernameRequired": "Username is required.",
+  "invalidEmail": "Invalid email.",
+  "emailRequired": "Email is required.",
+  "usernameOrEmailRequired": "Username or email is required.",
+  "passwordRequired": "Password is required.",
+  "passwordTooShort": "Password must be at least 6 characters long.",
+  "passwordsNotMatch": "Passwords do not match.",
+  "confirmPasswordRequired": "Password confirmation is required.",
+  "oldPasswordRequired": "Old password is required.",
+  "newPasswordRequired": "New password is required.",
+  "resourceTitleRequired": "Resource title is required.",
+  "resourceTypeRequired": "Resource type is required.",
+  "courseRequired": "Course is required.",
+  "filesRequired": "One or more files required."
+}

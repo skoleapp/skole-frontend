@@ -1,5 +1,4 @@
 {
-  "usernameOrEmail": "Username or Email",
-  "usernameOrEmailRequired": "Username or email is required.",
-  "createAccount": "Create Account"
+  "createAccount": "Create Account",
+  "forgotPassword": "Forgot Password?"
 }
