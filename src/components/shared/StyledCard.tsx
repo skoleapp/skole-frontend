@@ -23,12 +23,8 @@ export const StyledCard = styled(Card)`
   }
 
   .main-avatar {
-    height: 8rem;
-    width: 8rem;
-
-    @media only screen and (min-width: ${breakpoints.SM}) {
-      height: 12rem;
-      width: 12rem;
-    }
+    height: 10rem;
+    width: 10rem;
+    margin: 1rem;
   }
 `;
