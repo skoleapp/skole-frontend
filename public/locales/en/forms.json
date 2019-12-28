@@ -16,5 +16,11 @@
   "schoolType": "School Type",
   "country": "Country",
   "city": "City",
-  "searchCourses": "Search Courses..."
+  "searchCourses": "Search Courses...",
+  "contactType": "Contact Type",
+  "feedback": "Feedback",
+  "requestSchool": "Request New School",
+  "requestSubject": "Request New Subject",
+  "businessInquiry": "Business Inquiry",
+  "message": "Message"
 }

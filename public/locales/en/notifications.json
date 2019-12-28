@@ -1,5 +1,7 @@
 {
   "passwordChanged": "Password changed!",
   "profileUpdated": "Profile updated!",
-  "resourceUploaded": "Resource uploaded!"
+  "resourceUploaded": "Resource uploaded!",
+  "messageSubmitted": "Message submitted!",
+  "courseCreated": "Course created!"
 }

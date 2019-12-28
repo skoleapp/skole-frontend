@@ -12,5 +12,10 @@
   "resourceTitleRequired": "Resource title is required.",
   "resourceTypeRequired": "Resource type is required.",
   "courseRequired": "Course is required.",
-  "filesRequired": "One or more files required."
+  "courseNameRequired": "Course name is required.",
+  "filesRequired": "One or more files required.",
+  "contactTypeRequired": "Contact type is required.",
+  "messageRequired": "Message is required.",
+  "subjectRequired": "Subject is required.",
+  "schoolRequired": "School is required."
 }
