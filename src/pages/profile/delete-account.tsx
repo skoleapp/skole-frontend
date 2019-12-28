@@ -141,7 +141,7 @@ DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps
   await usePrivatePage(ctx);
 
   return {
-    namespacesRequired: includeDefaultNamespaces(['delete-account', 'forms', 'validation'])
+    namespacesRequired: includeDefaultNamespaces(['delete-account'])
   };
 };
 

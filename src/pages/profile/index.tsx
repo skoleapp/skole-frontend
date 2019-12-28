@@ -35,7 +35,7 @@ const ProfilePage: I18nPage = () => {
       </Layout>
     );
   } else {
-    return <NotFound title={t('profile:profileNotFound')} />;
+    return <NotFound title={t('profile:notFound')} />;
   }
 };
 

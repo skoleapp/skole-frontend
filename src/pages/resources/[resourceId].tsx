@@ -19,7 +19,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
   const { t } = useTranslation();
 
   if (resource) {
-    const resourceTitle = resource.title || t('resource:resourceNA');
+    const resourceTitle = resource.title || '-';
     const resourceParts = resource.resourceParts || [];
 
     return (
@@ -55,7 +55,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
       </Layout>
     );
   } else {
-    return <NotFound title={t('resource:resourceNA')} />;
+    return <NotFound title={t('resource:notFound')} />;
   }
 };
 

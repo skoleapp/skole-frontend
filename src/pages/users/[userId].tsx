@@ -1,44 +1,36 @@
-import { NextPage } from 'next';
-import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 import { UserDocument } from '../../../generated/graphql';
 import { Layout, NotFound, StyledCard, UserProfileCardContent } from '../../components';
-import { SkoleContext, User } from '../../interfaces';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext, User } from '../../types';
 import { redirect, useAuthSync } from '../../utils';
 
-interface Props {
+interface Props extends I18nProps {
   user?: User;
 }
 
-const UserPage: NextPage<Props> = ({ user }) => {
-  if (user) {
-    const username = user.username || 'Username N/A';
+const UserPage: I18nPage<Props> = ({ user }) => {
+  const { t } = useTranslation();
 
-    const userProfileProps = {
-      username,
-      avatar: user.avatar || '',
-      title: user.title || 'Title N/A',
-      bio: user.bio || 'Bio N/A',
-      points: R.propOr('N/A', 'points', user) as number | string,
-      courseCount: R.propOr('N/A', 'courseCount', user) as number | string,
-      resourceCount: R.propOr('N/A', 'resourceCount', user) as number | string
-    };
+  if (user) {
+    const username = user.username || '-';
 
     return (
       <Layout heading={username} title={username} backUrl>
         <StyledCard>
-          <UserProfileCardContent {...userProfileProps} />
+          <UserProfileCardContent user={user} />
         </StyledCard>
       </Layout>
     );
   } else {
-    return <NotFound title="User not found..." />;
+    return <NotFound title={t('profile:notFound')} />;
   }
 };
 
-UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props | {}> => {
+UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   const { query, apolloClient } = ctx;
   const { userMe } = await useAuthSync(ctx);
   const { userId } = query;
@@ -46,7 +38,7 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props | {}> => {
   // Redirect to own profile if id matches signed in user.
   if (userMe && userMe.id === userId) {
     redirect(ctx, '/profile');
-    return {};
+    return { namespacesRequired: includeDefaultNamespaces(['profile']) };
   }
 
   try {
@@ -54,9 +46,10 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props | {}> => {
       query: UserDocument,
       variables: { userId }
     });
-    return { ...data };
+
+    return { ...data, namespacesRequired: includeDefaultNamespaces(['profile']) };
   } catch {
-    return {};
+    return { namespacesRequired: includeDefaultNamespaces(['profile']) };
   }
 };
 

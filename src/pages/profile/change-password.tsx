@@ -112,12 +112,7 @@ ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProp
   await usePrivatePage(ctx);
 
   return {
-    namespacesRequired: includeDefaultNamespaces([
-      'change-password',
-      'forms',
-      'validation',
-      'notifications'
-    ])
+    namespacesRequired: includeDefaultNamespaces(['change-password'])
   };
 };
 

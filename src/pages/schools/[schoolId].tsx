@@ -9,8 +9,8 @@ import {
   Typography
 } from '@material-ui/core';
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
-import { NextPage } from 'next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 import { SchoolDetailDocument } from '../../../generated/graphql';
 import {
@@ -22,28 +22,31 @@ import {
   StyledList,
   TextLink
 } from '../../components';
-import { School, SkoleContext } from '../../interfaces';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, School, SkoleContext } from '../../types';
 import { useAuthSync } from '../../utils';
 
-interface Props {
+interface Props extends I18nProps {
   school?: School;
 }
 
-const SchoolDetailPage: NextPage<Props> = ({ school }) => {
+const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
+  const { t } = useTranslation();
+
   if (school) {
-    const schoolName = school.name || 'School Name N/A';
-    const schoolType = school.schoolType || 'N/A';
-    const country = school.country || 'Country N/A';
-    const city = school.city || 'City N/A';
-    const courseCount = school.courseCount || 'N/A';
-    const subjectCount = school.subjectCount || 'N/A';
+    const schoolName = school.name || '-';
+    const schoolType = school.schoolType || '-';
+    const country = school.country || '-';
+    const city = school.city || '-';
+    const courseCount = school.courseCount || '-';
+    const subjectCount = school.subjectCount || '-';
 
     const renderGeneralSchoolInfo = (
       <SlimCardContent>
         <Box textAlign="left">
           <Typography variant="body1">
-            School Type:{' '}
+            {t('common:schoolType')}:{' '}
             <TextLink
               href={{ pathname: '/search', query: { schoolType: school.schoolType || '' } }}
               color="primary"
@@ -52,7 +55,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
             </TextLink>
           </Typography>
           <Typography variant="body1">
-            Country:{' '}
+            {t('common:country')}:{' '}
             <TextLink
               href={{ pathname: '/search', query: { countryName: school.country || '' } }}
               color="primary"
@@ -61,7 +64,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
             </TextLink>
           </Typography>
           <Typography variant="body1">
-            City:{' '}
+            {t('common:city')}:{' '}
             <TextLink
               href={{ pathname: '/search', query: { cityName: school.city || '' } }}
               color="primary"
@@ -82,7 +85,9 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
                 <SchoolOutlined />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText>Courses: {courseCount}</ListItemText>
+            <ListItemText>
+              {t('common:courses')}: {courseCount}
+            </ListItemText>
           </ListItem>
           <ListItem>
             <ListItemAvatar>
@@ -90,7 +95,9 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
                 <SubjectOutlined />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText>Subjects: {subjectCount}</ListItemText>
+            <ListItemText>
+              {t('common:subjects')}: {subjectCount}
+            </ListItemText>
           </ListItem>
         </StyledList>
       </SlimCardContent>
@@ -118,14 +125,14 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
               color="primary"
               fullWidth
             >
-              courses
+              {t('common:courses')}
             </ButtonLink>
           </SlimCardContent>
         </StyledCard>
       </Layout>
     );
   } else {
-    return <NotFound title="Course not found..." />;
+    return <NotFound title={t('school:notFound')} />;
   }
 };
 
@@ -140,9 +147,9 @@ SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
       variables: { schoolId }
     });
 
-    return { ...data };
+    return { ...data, namespacesRequired: includeDefaultNamespaces(['school']) };
   } catch {
-    return {};
+    return { namespacesRequired: includeDefaultNamespaces(['school']) };
   }
 };
 

@@ -3,45 +3,14 @@ import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { useUpdateUserMutation } from '../../../generated/graphql';
-import { openNotification, reAuthenticate } from '../../actions';
-import {
-  FormErrorMessage,
-  FormSubmitSection,
-  Layout,
-  SlimCardContent,
-  StyledCard,
-  StyledForm
-} from '../../components';
+import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import {
-  FormCompleted,
-  I18nPage,
-  I18nProps,
-  SkoleContext,
-  State,
-  UpdateProfileFormValues
-} from '../../types';
-import { useForm, usePrivatePage } from '../../utils';
-
-const EditProfilePage: I18nPage = () => {
-  const { user } = useSelector((state: State) => state.auth);
-  const { ref, onError, setSubmitting, setFieldValue } = useForm();
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
-
-  const onCompleted = ({ updateUser }: FormCompleted): void => {
-    if (updateUser.errors) {
-      return onError(updateUser.errors);
-    } else {
-      dispatch(reAuthenticate(updateUser.user));
-      dispatch(openNotification(t('notifications:profileUpdated')));
-    }
+import { I18nProps, SkoleContext, UpdateProfileFormValues } from '../../types';
+import { usePrivatePage } from '../../utils';
   };
 
   const [updateUserMutation] = useUpdateUserMutation({ onCompleted, onError });
@@ -179,12 +148,7 @@ EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> 
   await usePrivatePage(ctx);
 
   return {
-    namespacesRequired: includeDefaultNamespaces([
-      'edit-profile',
-      'forms',
-      'validation',
-      'notifications'
-    ])
+    namespacesRequired: includeDefaultNamespaces(['edit-profile'])
   };
 };
 
