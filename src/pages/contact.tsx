@@ -1,15 +1,23 @@
-import { CardHeader, FormControl, InputLabel, MenuItem, TextField } from '@material-ui/core';
+import { CardHeader, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
-import { Select } from 'formik-material-ui';
-import { NextPage } from 'next';
+import { Select, TextField } from 'formik-material-ui';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
-import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
+import {
+  FormErrorMessage,
+  FormSubmitSection,
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  StyledForm
+} from '../components';
+import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-import { ContactFormValues, SkoleContext } from '../types';
+import { ContactFormValues, I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useForm } from '../utils';
 
 const initialValues = {
@@ -19,50 +27,51 @@ const initialValues = {
   general: ''
 };
 
-const validationSchema = Yup.object().shape({
-  contactType: Yup.string().required('Contact type is required.'),
-  email: Yup.string()
-    .email('Invalid email')
-    .required('Email is required.'),
-  message: Yup.string().required('Message is required.')
-});
-
-const ContactPage: NextPage = () => {
+const ContactPage: I18nPage = () => {
   const dispatch = useDispatch();
   const { ref, resetForm } = useForm();
+  const { t } = useTranslation();
+
+  const validationSchema = Yup.object().shape({
+    contactType: Yup.string().required(t('validation:contactTypeRequired')),
+    email: Yup.string()
+      .email(t('validation:invalidEmail'))
+      .required(t('validation:emailRequired')),
+    message: Yup.string().required(t('validation:messageRequired'))
+  });
 
   // TODO: Finish this.
   const handleSubmit = (values: ContactFormValues): void => {
     console.log(values);
     resetForm();
-    dispatch(openNotification('Message submitted!'));
+    dispatch(openNotification(t('notifications:messageSubmitted')));
   };
 
   const renderForm = (props: FormikProps<ContactFormValues>) => (
     <StyledForm>
       <FormControl fullWidth>
-        <InputLabel>Type</InputLabel>
+        <InputLabel>{t('forms:contactType')}</InputLabel>
         <Field name="contactType" component={Select} fullWidth>
           <MenuItem value="">---</MenuItem>
           <MenuItem value="feedback">Feedback</MenuItem>
-          <MenuItem value="requestSchool">Request New School</MenuItem>
-          <MenuItem value="requestSubject">Request New Subject</MenuItem>
-          <MenuItem value="businessInquiry">Business Inquiry</MenuItem>
+          <MenuItem value="requestSchool">{t('forms:requestSchool')}</MenuItem>
+          <MenuItem value="requestSubject">{t('forms:requestSubject')}</MenuItem>
+          <MenuItem value="businessInquiry">{t('forms:businessInquiry')}</MenuItem>
         </Field>
         <ErrorMessage name="contactType" component={FormErrorMessage} />
       </FormControl>
       <Field
         name="email"
         component={TextField}
-        label="Email"
-        placeholder="example@skole.io"
+        label={t('forms:email')}
+        placeholder={t('forms:email')}
         fullWidth
       />
       <Field
         name="message"
         component={TextField}
-        placeholder="Message"
-        label="Message"
+        placeholder={t('forms:message')}
+        label={t('forms:message')}
         fullWidth
         multiline
       />
@@ -71,9 +80,9 @@ const ContactPage: NextPage = () => {
   );
 
   return (
-    <Layout title="Contact" backUrl>
+    <Layout title={t('contact:title')} backUrl>
       <StyledCard>
-        <CardHeader title="Contact" />
+        <CardHeader title={t('contact:title')} />
         <SlimCardContent>
           <Formik
             onSubmit={handleSubmit}
@@ -89,9 +98,12 @@ const ContactPage: NextPage = () => {
   );
 };
 
-ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<{}> => {
+ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await useAuthSync(ctx);
-  return {};
+
+  return {
+    namespacesRequired: includeDefaultNamespaces(['contact'])
+  };
 };
 
 export default compose(withApollo, withRedux)(ContactPage);
