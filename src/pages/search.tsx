@@ -1,4 +1,16 @@
-import { Box, Button, CardHeader, FormControl, InputLabel, MenuItem, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  CardHeader,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography
+} from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
@@ -8,10 +20,27 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 import { SchoolType, SearchDocument } from '../../generated/graphql';
-import { FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm, StyledTable } from '../components';
+import {
+  FormSubmitSection,
+  Layout,
+  SlimCardContent,
+  StyledCard,
+  StyledForm,
+  StyledTable
+} from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-import { City, Country, Course, FilterSearchResultsFormValues, I18nPage, I18nProps, School, SkoleContext, Subject } from '../types';
+import {
+  City,
+  Country,
+  Course,
+  FilterSearchResultsFormValues,
+  I18nPage,
+  I18nProps,
+  School,
+  SkoleContext,
+  Subject
+} from '../types';
 import { getFullCourseName, useAuthSync, useForm, valNotEmpty } from '../utils';
 
 interface Props {
@@ -188,10 +217,10 @@ const SearchPage: I18nPage<Props> = ({
         <Table>
           <TableBody>
             {courses && courses.length ? (
-              courses.map((course: Course, i: number) => (
-                <TableRow key={i} onClick={() => Router.push(`/courses/${course.id}`)}>
+              courses.map((c: Course, i: number) => (
+                <TableRow key={i} onClick={() => Router.push(`/courses/${c.id}`)}>
                   <TableCell>
-                    <Typography variant="subtitle1">{getFullCourseName(course)}</Typography>
+                    <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
                   </TableCell>
                 </TableRow>
               ))

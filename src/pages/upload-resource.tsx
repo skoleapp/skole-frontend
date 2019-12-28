@@ -144,21 +144,11 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
     const { data } = await ctx.apolloClient.query({ query: UploadResourceInitialDataDocument });
     return {
       ...data,
-      namespacesRequired: includeDefaultNamespaces([
-        'upload-resource',
-        'forms',
-        'validation',
-        'notifications'
-      ])
+      namespacesRequired: includeDefaultNamespaces(['upload-resource'])
     };
   } catch (err) {
     return {
-      namespacesRequired: includeDefaultNamespaces([
-        'upload-resource',
-        'forms',
-        'validation',
-        'notifications'
-      ])
+      namespacesRequired: includeDefaultNamespaces(['upload-resource'])
     };
   }
 };
