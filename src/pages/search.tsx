@@ -1,17 +1,4 @@
-import {
-  Box,
-  Button,
-  CardContent,
-  CardHeader,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography
-} from '@material-ui/core';
+import { Box, Button, CardHeader, FormControl, InputLabel, MenuItem, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
@@ -21,27 +8,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 import { SchoolType, SearchDocument } from '../../generated/graphql';
-import {
-  FormSubmitSection,
-  Layout,
-  SlimCardContent,
-  StyledCard,
-  StyledForm,
-  StyledTable
-} from '../components';
+import { FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm, StyledTable } from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-import {
-  City,
-  Country,
-  Course,
-  FilterSearchResultsFormValues,
-  I18nPage,
-  I18nProps,
-  School,
-  SkoleContext,
-  Subject
-} from '../types';
+import { City, Country, Course, FilterSearchResultsFormValues, I18nPage, I18nProps, School, SkoleContext, Subject } from '../types';
 import { getFullCourseName, useAuthSync, useForm, valNotEmpty } from '../utils';
 
 interface Props {
@@ -207,11 +177,11 @@ const SearchPage: I18nPage<Props> = ({
       <Box marginBottom="0.5rem">
         <StyledCard>
           <CardHeader title={t('search:title')} />
-          <CardContent>
+          <SlimCardContent>
             <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
               {renderForm}
             </Formik>
-          </CardContent>
+          </SlimCardContent>
         </StyledCard>
       </Box>
       <StyledTable>
