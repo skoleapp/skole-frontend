@@ -7,16 +7,9 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 import { openNotification } from '../actions';
-import {
-  FormErrorMessage,
-  FormSubmitSection,
-  Layout,
-  SlimCardContent,
-  StyledCard,
-  StyledForm
-} from '../components';
-import { ContactFormValues, SkoleContext } from '../interfaces';
+import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
 import { withApollo, withRedux } from '../lib';
+import { ContactFormValues, SkoleContext } from '../types';
 import { useAuthSync, useForm } from '../utils';
 
 const initialValues = {

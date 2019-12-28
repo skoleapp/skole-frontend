@@ -9,22 +9,9 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 import { CreateCourseInitialDataDocument, useCreateCourseMutation } from '../../generated/graphql';
 import { openNotification } from '../actions';
-import {
-  FormErrorMessage,
-  FormSubmitSection,
-  Layout,
-  SlimCardContent,
-  StyledCard,
-  StyledForm
-} from '../components';
-import {
-  CreateCourseFormValues,
-  FormCompleted,
-  School,
-  SkoleContext,
-  Subject
-} from '../interfaces';
+import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
 import { withApollo, withRedux } from '../lib';
+import { CreateCourseFormValues, FormCompleted, School, SkoleContext, Subject } from '../types';
 import { useForm, usePrivatePage } from '../utils';
 
 const validationSchema = Yup.object().shape({

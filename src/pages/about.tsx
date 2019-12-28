@@ -3,8 +3,8 @@ import { NextPage } from 'next';
 import React from 'react';
 import { compose } from 'redux';
 import { Layout, SlimCardContent, StyledCard } from '../components';
-import { SkoleContext } from '../interfaces';
 import { withApollo, withRedux } from '../lib';
+import { SkoleContext } from '../types';
 import { useAuthSync } from '../utils';
 
 const AboutPage: NextPage = () => (

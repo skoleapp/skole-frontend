@@ -9,13 +9,14 @@ import {
 } from '@material-ui/core';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import { deAuthenticate } from '../actions';
 import { Layout, SlimCardContent, StyledCard } from '../components';
-import { includeDefaultNamespaces, Router, useTranslation } from '../i18n';
-import { I18nPage, I18nProps, SkoleContext, State } from '../interfaces';
+import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
+import { I18nPage, I18nProps, SkoleContext, State } from '../types';
 import { useAuthSync } from '../utils';
 
 const SettingsPage: I18nPage = () => {
@@ -110,7 +111,7 @@ const SettingsPage: I18nPage = () => {
   );
 
   return (
-    <Layout heading={t('settings:settings')} title={t('settings:settings')} backUrl>
+    <Layout heading={t('settings:title')} title={t('settings:title')} backUrl>
       <StyledCard>
         <CardContent>
           {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
@@ -141,15 +142,15 @@ const menuItems = {
   ],
   language: [
     {
-      title: 'common:english',
+      title: 'languages:english',
       value: 'en'
     },
     {
-      title: 'common:finnish',
+      title: 'languages:finnish',
       value: 'fi'
     },
     {
-      title: 'common:swedish',
+      title: 'languages:swedish',
       value: 'sv'
     }
   ],

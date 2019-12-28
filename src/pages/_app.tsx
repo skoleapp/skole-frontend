@@ -7,8 +7,8 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import React from 'react';
 import { appWithTranslation } from '../i18n';
-import { I18nPage } from '../interfaces';
 import { GlobalStyle, theme } from '../styles';
+import { I18nPage } from '../types';
 
 interface Props {
   Component: I18nPage;
