@@ -4,8 +4,8 @@ import React, { SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { closeNotification } from '../../actions';
-import { State } from '../../interfaces';
 import { breakpoints } from '../../styles';
+import { State } from '../../types';
 
 export const Notifications: React.FC = () => {
   const { open, message } = useSelector((state: State) => state.notification);
@@ -24,7 +24,7 @@ export const Notifications: React.FC = () => {
         horizontal: 'center'
       }}
       open={open}
-      autoHideDuration={3000}
+      autoHideDuration={2000}
       onClose={handleClose}
       ContentProps={{
         'aria-describedby': 'message-id'

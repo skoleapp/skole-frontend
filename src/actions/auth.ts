@@ -4,7 +4,7 @@ import Router from 'next/router';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { UserMeDocument } from '../../generated/graphql';
-import { User } from '../interfaces';
+import { User } from '../types';
 import { openNotification } from './notifications';
 
 export const AUTHENTICATE = 'AUTHENTICATED';

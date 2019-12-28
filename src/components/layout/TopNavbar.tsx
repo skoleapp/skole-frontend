@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Heading, Logo, TopNavbarSearchWidget } from '.';
-import { State } from '../../interfaces';
 import { breakpoints } from '../../styles';
+import { State } from '../../types';
 import { ButtonLink, IconButtonLink } from '../shared';
 
 interface Props {

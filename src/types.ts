@@ -95,7 +95,7 @@ export interface UploadResourceFormValues {
   resourceTitle: string;
   resourceType: string;
   course: string;
-  resource: string;
+  files: File[];
 }
 
 export interface DeleteAccountFormValues {
@@ -122,9 +122,17 @@ export interface ResourceType {
   name: string;
 }
 
+export interface ResourcePart {
+  id: string;
+  title: string;
+  file: string;
+  text: string;
+}
+
 export interface Resource {
   id: string;
   resourceType: string;
+  resourceParts: ResourcePart[];
   title: string;
   file: string;
   date: string;
@@ -171,6 +179,7 @@ export interface User {
   points: number;
   courseCount: number;
   resourceCount: number;
+  created: Date;
   courses?: Course[];
   resources?: Resource[];
 }

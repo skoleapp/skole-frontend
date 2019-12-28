@@ -36,17 +36,17 @@ export const Footer: React.FC = () => {
           </Grid>
           <Grid item xs={12}>
             <MaterialLink onClick={handleLanguageSelect('en')} color="secondary">
-              {t('common:english')}
+              {t('languages:english')}
             </MaterialLink>
           </Grid>
           <Grid item xs={12}>
             <MaterialLink onClick={handleLanguageSelect('fi')} color="secondary">
-              {t('common:finnish')}
+              {t('languages:finnish')}
             </MaterialLink>
           </Grid>
           <Grid item xs={12}>
             <MaterialLink onClick={handleLanguageSelect('sv')} color="secondary">
-              {t('common:swedish')}
+              {t('languages:swedish')}
             </MaterialLink>
           </Grid>
         </Grid>
