@@ -323,7 +323,9 @@ export type QueryCommentArgs = {
 export type ResourcePartType = {
    __typename?: 'ResourcePartType',
   id: Scalars['ID'],
-  resource?: Maybe<ResourceType>,
+  title?: Maybe<Scalars['String']>,
+  file?: Maybe<Scalars['String']>,
+  text?: Maybe<Scalars['String']>,
 };
 
 export type ResourceType = {
@@ -336,6 +338,7 @@ export type ResourceType = {
   creator?: Maybe<UserType>,
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
+  resourceParts: Array<ResourcePartType>,
   points?: Maybe<Scalars['Int']>,
 };
 
@@ -688,6 +691,26 @@ export type CourseDetailQuery = (
   )> }
 );
 
+export type ResourceDetailQueryVariables = {
+  resourceId: Scalars['Int']
+};
+
+
+export type ResourceDetailQuery = (
+  { __typename?: 'Query' }
+  & { resource: Maybe<(
+    { __typename?: 'ResourceType' }
+    & Pick<ResourceType, 'id' | 'resourceType' | 'title' | 'file' | 'date' | 'created' | 'modified' | 'points'>
+    & { creator: Maybe<(
+      { __typename?: 'UserType' }
+      & Pick<UserType, 'id'>
+    )>, resourceParts: Array<(
+      { __typename?: 'ResourcePartType' }
+      & Pick<ResourcePartType, 'id' | 'title' | 'file' | 'text'>
+    )> }
+  )> }
+);
+
 export type UploadResourceInitialDataQueryVariables = {};
 
 
@@ -1028,6 +1051,40 @@ export const CourseDetailDocument = gql`
       
 export type CourseDetailQueryHookResult = ReturnType<typeof useCourseDetailQuery>;
 export type CourseDetailQueryResult = ApolloReactCommon.QueryResult<CourseDetailQuery, CourseDetailQueryVariables>;
+export const ResourceDetailDocument = gql`
+    query ResourceDetail($resourceId: Int!) {
+  resource(resourceId: $resourceId) {
+    id
+    resourceType
+    title
+    file
+    date
+    created
+    creator {
+      id
+    }
+    modified
+    created
+    points
+    resourceParts {
+      id
+      title
+      file
+      text
+    }
+  }
+}
+    `;
+
+    export function useResourceDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
+      return ApolloReactHooks.useQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
+    }
+      export function useResourceDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
+      }
+      
+export type ResourceDetailQueryHookResult = ReturnType<typeof useResourceDetailQuery>;
+export type ResourceDetailQueryResult = ApolloReactCommon.QueryResult<ResourceDetailQuery, ResourceDetailQueryVariables>;
 export const UploadResourceInitialDataDocument = gql`
     query UploadResourceInitialData {
   resourceTypes {

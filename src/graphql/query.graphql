@@ -106,6 +106,29 @@ query CourseDetail($courseId: Int!) {
   }
 }
 
+query ResourceDetail($resourceId: Int!) {
+  resource(resourceId: $resourceId) {
+    id
+    resourceType
+    title
+    file
+    date
+    created
+    creator {
+      id
+    }
+    modified
+    created
+    points
+    resourceParts {
+      id
+      title
+      file
+      text
+    }
+  }
+}
+
 query UploadResourceInitialData {
   resourceTypes {
     id
