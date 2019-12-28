@@ -146,7 +146,7 @@ SignUpPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
   await usePublicPage(ctx);
 
   return {
-    namespacesRequired: includeDefaultNamespaces(['sign-up', 'validation', 'forms'])
+    namespacesRequired: includeDefaultNamespaces(['sign-up'])
   };
 };
 

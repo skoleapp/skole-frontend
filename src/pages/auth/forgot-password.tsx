@@ -74,7 +74,7 @@ ForgotPasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProp
   await usePublicPage(ctx);
 
   return {
-    namespacesRequired: includeDefaultNamespaces(['forgot-password', 'forms', 'validation'])
+    namespacesRequired: includeDefaultNamespaces(['forgot-password'])
   };
 };
 

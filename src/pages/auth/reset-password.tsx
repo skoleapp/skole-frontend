@@ -85,7 +85,7 @@ const ResetPasswordPage: I18nPage = () => {
 
 ResetPasswordPage.getInitialProps = (): I18nProps => {
   return {
-    namespacesRequired: includeDefaultNamespaces(['reset-password', 'forms', 'validation'])
+    namespacesRequired: includeDefaultNamespaces(['reset-password'])
   };
 };
 
