@@ -1,77 +1,65 @@
-import {
-  Avatar,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography
-} from '@material-ui/core';
-import { NextPage } from 'next';
+import { Avatar, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
 import { UsersDocument } from '../../../generated/graphql';
 import { Layout, StyledTable } from '../../components';
-import { SkoleContext, User } from '../../interfaces';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
+import { SkoleContext, User } from '../../types';
 import { useAuthSync } from '../../utils';
-
-interface Props {
-  users?: User[];
-}
-
-const UsersPage: NextPage<Props> = ({ users }) => (
-  <Layout heading="Users" title="Users" backUrl>
-    <StyledTable>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <Typography variant="h6">Users</Typography>
-            </TableCell>
-            <TableCell align="right">
-              <Typography variant="h6">Points</Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {users && users.length ? (
-            users.map((user: User, i: number) => (
-              <Link href={{ pathname: `/users/${user.id}` }} key={i}>
-                <TableRow>
-                  <TableCell className="user-cell">
-                    <Avatar src={process.env.BACKEND_URL + user.avatarThumbnail} />
-                    <Typography variant="subtitle1">{user.username || 'N/A'}</Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography variant="subtitle1">{R.propOr('N/A', 'points', user)}</Typography>
-                  </TableCell>
-                </TableRow>
-              </Link>
-            ))
-          ) : (
+  return (
+    <Layout heading={t('users:title')} title={t('users:title')} backUrl>
+      <StyledTable>
+        <Table>
+          <TableHead>
             <TableRow>
-              <TableCell className="user-cell">
-                <Typography variant="subtitle1">No users found...</Typography>
+              <TableCell>
+                <Typography variant="h6">{t('common:users')}</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="h6">{t('common:points')}</Typography>
               </TableCell>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </StyledTable>
-  </Layout>
-);
+          </TableHead>
+          <TableBody>
+            {users && users.length ? (
+              users.map((u: User, i: number) => (
+                <Link href={`/users/${u.id}`} key={i}>
+                  <TableRow>
+                    <TableCell className="user-cell">
+                      <Avatar src={process.env.BACKEND_URL + u.avatarThumbnail} />
+                      <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
+                    </TableCell>
+                  </TableRow>
+                </Link>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell className="user-cell">
+                  <Typography variant="subtitle1">{t('users:noUsersFound')}</Typography>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </StyledTable>
+    </Layout>
+  );
+};
 
 UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
   await useAuthSync(ctx);
 
   try {
     const { data } = await ctx.apolloClient.query({ query: UsersDocument });
-    return { ...data };
+    return { ...data, namespacesRequired: includeDefaultNamespaces(['users']) };
   } catch {
-    return {};
+    return { namespacesRequired: includeDefaultNamespaces(['users']) };
   }
 };
 
