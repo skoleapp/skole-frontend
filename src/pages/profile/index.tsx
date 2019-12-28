@@ -22,7 +22,7 @@ const ProfilePage: I18nPage = () => {
 
   if (user) {
     return (
-      <Layout heading={t('profile:heading')} title={t('profile:title')} backUrl>
+      <Layout heading={t('profile:title')} title={t('profile:title')} backUrl>
         <StyledCard>
           <UserProfileCardContent user={user} />
           <Divider />

@@ -60,7 +60,7 @@ const ResetPasswordPage: I18nPage = () => {
         label={t('forms:confirmPassword')}
         fullWidth
       />
-      <FormSubmitSection submitButtonText={t('reset-password:submitButton')} {...props} />
+      <FormSubmitSection submitButtonText={t('common:save')} {...props} />
     </StyledForm>
   );
 

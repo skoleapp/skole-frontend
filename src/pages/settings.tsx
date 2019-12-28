@@ -104,7 +104,7 @@ const SettingsPage: I18nPage = () => {
       fullWidth
       variant="outlined"
       color="primary"
-      onClick={(): Promise<boolean> => dispatch(deAuthenticate(apolloClient))}
+      onClick={() => dispatch(deAuthenticate(apolloClient))}
     >
       {t('common:signOut')}
     </Button>

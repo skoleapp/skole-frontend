@@ -16,7 +16,7 @@ export const useAuthSync = async (ctx: SkoleContext): Promise<Params> => {
     try {
       const { data } = await apolloClient.query({ query: UserMeDocument });
       const { userMe } = data;
-      userMe && (await reduxStore.dispatch(reAuthenticate(userMe)));
+      userMe && (await reduxStore.dispatch(reAuthenticate(userMe) as any));
       return { userMe };
     } catch {
       return {};
