@@ -5,7 +5,7 @@ import { Router } from '../i18n';
 export const useSearch = () => {
   const [searchValue, setSearchValue] = useState('');
   const { t } = useTranslation();
-  const placeholder = t('common:searchCourses');
+  const placeholder = t('forms:searchCourses');
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();

@@ -1,5 +1,5 @@
 import { reAuthenticate } from '../actions';
-import { SkoleContext } from '../interfaces';
+import { SkoleContext } from '../types';
 import { redirect } from './redirect';
 import { useAuthSync } from './useAuthSync';
 

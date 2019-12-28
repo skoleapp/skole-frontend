@@ -1,5 +1,5 @@
 import Router from 'next/router';
-import { SkoleContext } from '../interfaces';
+import { SkoleContext } from '../types';
 
 // Redirect either on the server or in the browser.
 export const redirect = (context: SkoleContext, target: string): void => {

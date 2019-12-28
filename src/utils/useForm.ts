@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { FormErrors } from '../interfaces';
+import { FormErrors } from '../types';
 
 const snakeToCamel = (str: string): string => {
   return str.replace(/([-_][a-z])/g, group =>

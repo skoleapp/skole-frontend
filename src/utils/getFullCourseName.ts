@@ -1,4 +1,4 @@
-import { Course } from '../interfaces';
+import { Course } from '../types';
 
 export const getFullCourseName = (course: Course) => {
   const { code, name } = course;

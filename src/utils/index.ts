@@ -6,4 +6,5 @@ export { useForm } from './useForm';
 export { usePrivatePage } from './usePrivatePage';
 export { usePublicPage } from './usePublicPage';
 export { useSearch } from './useSearch';
+export { useTabs } from './useTabs';
 export { valNotEmpty } from './valNotEmpty';

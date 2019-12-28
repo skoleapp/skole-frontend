@@ -1,6 +1,6 @@
 import { UserMeDocument } from '../../generated/graphql';
 import { reAuthenticate } from '../actions';
-import { SkoleContext, User } from '../interfaces';
+import { SkoleContext, User } from '../types';
 import { getToken } from './getToken';
 
 interface Params {
