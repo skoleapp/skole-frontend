@@ -24,18 +24,15 @@ export default class SkoleDocument extends Document {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<any> => {
+SkoleDocument.getInitialProps = async (ctx: DocumentContext) => {
   const styledComponentsSheet = new ServerStyleSheet();
   const materialSheets = new ServerStyleSheets();
   const originalRenderPage = ctx.renderPage;
 
   ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> => {
     return originalRenderPage({
-      enhanceApp: App => (
-        props: any // eslint-disable-line @typescript-eslint/no-explicit-any
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ): any => styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />))
+      enhanceApp: App => props =>
+        styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />))
     });
   };
 
