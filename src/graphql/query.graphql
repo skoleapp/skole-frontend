@@ -9,6 +9,7 @@ query UserMe {
     points
     courseCount
     resourceCount
+    created
   }
 }
 
@@ -29,6 +30,8 @@ query User($userId: Int!) {
     bio
     avatar
     points
+    courseCount
+    resourceCount
     created
   }
 }

@@ -603,7 +603,7 @@ export type UserMeQuery = (
   { __typename?: 'Query' }
   & { userMe: Maybe<(
     { __typename?: 'UserType' }
-    & Pick<UserType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount'>
+    & Pick<UserType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
   )> }
 );
 
@@ -627,7 +627,7 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user: Maybe<(
     { __typename?: 'UserType' }
-    & Pick<UserType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'points' | 'created'>
+    & Pick<UserType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
   )> }
 );
 
@@ -916,6 +916,7 @@ export const UserMeDocument = gql`
     points
     courseCount
     resourceCount
+    created
   }
 }
     `;
@@ -958,6 +959,8 @@ export const UserDocument = gql`
     bio
     avatar
     points
+    courseCount
+    resourceCount
     created
   }
 }
