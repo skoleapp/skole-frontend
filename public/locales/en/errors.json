@@ -1,0 +1,9 @@
+{
+    "USERNAME_TAKEN_MESSAGE": "This username is taken.",
+    "EMAIL_TAKEN_MESSAGE": "This email is taken.",
+    "EMAIL_INVALID_MESSAGE": "Invalid email.",
+    "INCORRECT_OLD_PASSWORD_MESSAGE": "Old password incorrect.",
+    "INCORRECT_PASSWORD_MESSAGE": "Incorrect password.",
+    "MESSAGE_SENT_ERROR_MESSAGE": "Error while sending message.",
+    "UNABLE_TO_AUTHENTICATE_MESSAGE": "Unable to authenticate with the provided credentials."
+}
