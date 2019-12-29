@@ -11,37 +11,37 @@ import { GlobalStyle, theme } from '../styles';
 import { I18nPage } from '../types';
 
 interface Props {
-  Component: I18nPage;
-  pageProps: NextPageContext;
+    Component: I18nPage;
+    pageProps: NextPageContext;
 }
 
 class SkoleApp extends App<Props> {
-  componentDidMount(): void {
-    const jssStyles = document.querySelector('#jss-server-side');
+    componentDidMount(): void {
+        const jssStyles = document.querySelector('#jss-server-side');
 
-    if (jssStyles && jssStyles.parentNode) {
-      jssStyles.parentNode.removeChild(jssStyles);
+        if (jssStyles && jssStyles.parentNode) {
+            jssStyles.parentNode.removeChild(jssStyles);
+        }
     }
-  }
 
-  render(): JSX.Element {
-    const { Component, pageProps } = this.props;
+    render(): JSX.Element {
+        const { Component, pageProps } = this.props;
 
-    Router.events.on('routeChangeStart', () => NProgress.start());
-    Router.events.on('routeChangeError', () => NProgress.done());
-    Router.events.on('routeChangeComplete', () => {
-      NProgress.done();
-      window.scroll(0, 0);
-    });
+        Router.events.on('routeChangeStart', () => NProgress.start());
+        Router.events.on('routeChangeError', () => NProgress.done());
+        Router.events.on('routeChangeComplete', () => {
+            NProgress.done();
+            window.scroll(0, 0);
+        });
 
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <GlobalStyle />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    );
-  }
+        return (
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <GlobalStyle />
+                <Component {...pageProps} />
+            </ThemeProvider>
+        );
+    }
 }
 
 export default appWithTranslation(SkoleApp);
