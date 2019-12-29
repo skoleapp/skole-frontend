@@ -2,17 +2,24 @@ import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Router } from '../i18n';
 
-export const useSearch = () => {
-  const [searchValue, setSearchValue] = useState('');
-  const { t } = useTranslation();
-  const placeholder = t('forms:searchCourses');
+interface UseSearch {
+    searchValue: string;
+    handleSubmit: (e: SyntheticEvent) => void;
+    handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    placeholder: string;
+}
 
-  const handleSubmit = (e: SyntheticEvent): void => {
-    e.preventDefault();
-    Router.push({ pathname: '/search', query: { courseName: searchValue } });
-  };
+export const useSearch = (): UseSearch => {
+    const [searchValue, setSearchValue] = useState('');
+    const { t } = useTranslation();
+    const placeholder = t('forms:searchCourses');
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
+    const handleSubmit = (e: SyntheticEvent): void => {
+        e.preventDefault();
+        Router.push({ pathname: '/search', query: { courseName: searchValue } });
+    };
 
-  return { searchValue, handleSubmit, handleChange, placeholder };
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
+
+    return { searchValue, handleSubmit, handleChange, placeholder };
 };
