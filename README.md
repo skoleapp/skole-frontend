@@ -6,5 +6,5 @@
 - To run a build for production, run `yarn build`.
 - To run production build, run `yarn start`.
 - To run type-checks, run `yarn type-check`.
-- To run linting, run `yarn lint`.
+- To run linting (preferably outside container), run `yarn lint`.
 - To generate graphql code (inside container), run `yarn gen`.
