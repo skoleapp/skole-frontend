@@ -627,7 +627,7 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user: Maybe<(
     { __typename?: 'UserType' }
-    & Pick<UserType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+    & Pick<UserType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
   )> }
 );
 
@@ -955,6 +955,7 @@ export const UserDocument = gql`
   user(userId: $userId) {
     id
     username
+    email
     title
     bio
     avatar
