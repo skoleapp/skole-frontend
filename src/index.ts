@@ -6,4 +6,3 @@ export * from './reducers';
 export * from './styles';
 export * from './types';
 export * from './utils';
-

@@ -7,17 +7,17 @@ import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync } from '../utils';
 
 const ErrorPage: I18nPage = () => {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  return <NotFound title={t('_error:notFound')} />;
+    return <NotFound title={t('_error:notFound')} />;
 };
 
 ErrorPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-  await useAuthSync(ctx);
+    await useAuthSync(ctx);
 
-  return {
-    namespacesRequired: includeDefaultNamespaces([])
-  };
+    return {
+        namespacesRequired: includeDefaultNamespaces([]),
+    };
 };
 
 export default compose(withApollo, withRedux)(ErrorPage);

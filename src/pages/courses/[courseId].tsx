@@ -19,7 +19,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, ScoreOutlined } from '@material-ui/icons';
-import { CourseDetailDocument, CourseType, ResourceType, ResourceTypeObjectType } from '../../../generated/graphql';
+import { CourseDetailDocument, CourseType, ResourceType } from '../../../generated/graphql';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import {
     Layout,
