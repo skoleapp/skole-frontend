@@ -1,106 +1,96 @@
 mutation SignUp($username: String!, $email: String!, $password: String!) {
-  signUp(input: { username: $username, email: $email, password: $password }) {
-    user {
-      id
-      created
+    signUp(input: { username: $username, email: $email, password: $password }) {
+        user {
+            id
+            created
+        }
+        errors {
+            field
+            messages
+        }
     }
-    errors {
-      field
-      messages
+    signIn(input: { usernameOrEmail: $email, password: $password }) {
+        token
+        user {
+            id
+            title
+            bio
+            avatar
+            points
+            created
+            email
+        }
+        errors {
+            field
+            messages
+        }
     }
-  }
-  signIn(input: { usernameOrEmail: $email, password: $password }) {
-    token
-    user {
-      id
-      title
-      bio
-      avatar
-      points
-      created
-      email
-    }
-    errors {
-      field
-      messages
-    }
-  }
 }
 
 mutation SignIn($usernameOrEmail: String!, $password: String!) {
-  signIn(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
-    token
-    user {
-      id
-      title
-      bio
-      avatar
-      points
-      created
-      email
+    signIn(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+        token
+        user {
+            id
+            title
+            bio
+            avatar
+            points
+            created
+            email
+        }
+        errors {
+            field
+            messages
+        }
     }
-    errors {
-      field
-      messages
-    }
-  }
 }
 
-mutation UpdateUser(
-  $username: String!
-  $email: String!
-  $title: String
-  $bio: String
-  $avatar: String
-) {
-  updateUser(
-    input: { username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar }
-  ) {
-    user {
-      id
-      username
-      email
-      title
-      bio
-      avatar
-      points
-      created
+mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String) {
+    updateUser(input: { username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar }) {
+        user {
+            id
+            username
+            email
+            title
+            bio
+            avatar
+            points
+            created
+        }
+        errors {
+            field
+            messages
+        }
     }
-    errors {
-      field
-      messages
-    }
-  }
 }
 
 mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
-  changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
-    errors {
-      field
-      messages
+    changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
+        errors {
+            field
+            messages
+        }
     }
-  }
 }
 
 mutation DeleteAccount($password: String!) {
-  deleteUser(input: { password: $password }) {
-    errors {
-      field
-      messages
+    deleteUser(input: { password: $password }) {
+        errors {
+            field
+            messages
+        }
     }
-  }
 }
 
 mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
-  createCourse(
-    input: { name: $courseName, code: $courseCode, subject: $subject, school: $school }
-  ) {
-    course {
-      id
+    createCourse(input: { name: $courseName, code: $courseCode, subject: $subject, school: $school }) {
+        course {
+            id
+        }
+        errors {
+            field
+            messages
+        }
     }
-    errors {
-      field
-      messages
-    }
-  }
 }

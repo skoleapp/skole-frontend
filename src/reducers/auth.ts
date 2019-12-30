@@ -1,8 +1,14 @@
-import { AnyAction } from 'redux';
 import { AUTHENTICATE, DE_AUTHENTICATE, RE_AUTHENTICATE } from '../actions';
-import { Auth } from '../types';
 
-export const initialState: Auth = {
+import { AnyAction } from 'redux';
+import { UserType } from '../../generated/graphql';
+
+export interface Auth {
+    user: UserType | null;
+    authenticated: boolean | null;
+}
+
+const initialState: Auth = {
     user: null,
     authenticated: null,
 };

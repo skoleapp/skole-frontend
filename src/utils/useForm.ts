@@ -1,6 +1,9 @@
 import { ApolloError } from 'apollo-client';
-import { FormikActions } from 'formik';
+import { Formik } from 'formik';
+import Maybe from 'graphql/tsutils/Maybe';
 import { MutableRefObject, useRef } from 'react';
+import { ErrorType } from '../../generated/graphql';
+import { i18n } from '../i18n';
 
 const snakeToCamel = (str: string): string => {
     return str.replace(/([-_][a-z])/g, group =>
@@ -11,65 +14,78 @@ const snakeToCamel = (str: string): string => {
     );
 };
 
-interface MutationFormError {
-    field: string;
-    messages: string[];
-}
-
 interface FormErrors {
     [key: string]: string;
 }
 
-const createFormErrors = (errors: ApolloError & MutationFormError[]): FormErrors => {
-    const formErrors = {
-        general: '',
-    };
+type MutationFormError = Pick<ErrorType, 'field' | 'messages'>;
+type MutationErrors = Maybe<{ __typename?: 'ErrorType' | undefined } & MutationFormError>[];
 
-    if (errors.networkError) {
-        formErrors.general = 'Network error.';
-    } else if (errors.length) {
-        errors.map((e: MutationFormError) => {
-            if (e.field === '__all__') {
-                formErrors.general = e.messages.join();
-            } else if (e.field) {
-                (formErrors as any)[snakeToCamel(e.field)] = e.messages.join(); // eslint-disable-line @typescript-eslint/no-explicit-any
-            } else {
-                formErrors.general = e.messages.join();
-            }
-        });
-    } else {
-        formErrors.general = 'Encountered unexpected error.';
-    }
-
-    return formErrors;
-};
-
-interface UseForm {
-    ref: MutableRefObject<FormikActions<{}> | undefined>;
-    onError: (err: ApolloError & MutationFormError[]) => void;
+interface UseForm<T> {
+    ref: MutableRefObject<Formik<T> | null>;
+    handleMutationErrors: (err: MutationErrors) => void;
+    onError: (err: ApolloError) => void;
     setSubmitting: (val: boolean) => void;
     resetForm: () => void;
-    setFieldValue: (fieldName: string, val: string) => void;
+    setFieldValue: (fieldName: string, val: string | File | File[]) => void;
 }
 
-export const useForm = (): UseForm => {
-    const ref = useRef<FormikActions<{}>>();
+export const useForm = <T>(): UseForm<T> => {
+    const ref = useRef<Formik<T>>(null);
 
-    const onError = (err: ApolloError & MutationFormError[]): void => {
-        const formErrors = createFormErrors(err);
-
+    const setFormErrors = (formErrors: FormErrors): void => {
         Object.keys(formErrors).forEach(
             key => ref && ref.current && ref.current.setFieldError(key, (formErrors as FormErrors)[key]),
         );
     };
 
-    const setSubmitting = (val: boolean): void => ref && ref.current && ref.current.setSubmitting(val);
+    // A general error e.g. in the form.
+    const handleMutationErrors = (err: MutationErrors): void => {
+        const formErrors = { general: '' };
 
-    const resetForm = (): void => ref && ref.current && ref.current.resetForm();
+        if (err.length) {
+            (err as MutationFormError[]).map((e: MutationFormError) => {
+                if (e.field === '__all__') {
+                    formErrors.general = i18n.t(`errors:${e.messages.join()}`);
+                } else if (e.field) {
+                    (formErrors as FormErrors)[snakeToCamel(e.field)] = i18n.t(`errors:${e.messages.join()}`);
+                } else {
+                    formErrors.general = i18n.t(`errors:${e.messages.join()}`);
+                }
+            });
+        } else {
+            formErrors.general = 'Encountered unexpected error.';
+        }
 
-    const setFieldValue = (fieldName: string, val: string): void => {
+        setFormErrors(formErrors);
+    };
+
+    // Apollo error e.g. a network error.
+    const onError = (err: ApolloError): void => {
+        const formErrors = { general: '' };
+
+        if (err.networkError) {
+            formErrors.general = 'Network error.';
+        } else {
+            formErrors.general = 'Encountered unexpected error.';
+        }
+
+        setFormErrors(formErrors);
+    };
+
+    const setSubmitting = (val: boolean): void | null => ref && ref.current && ref.current.setSubmitting(val);
+    const resetForm = (): void | null => ref && ref.current && ref.current.resetForm();
+
+    const setFieldValue = (fieldName: string, val: string | File | File[]): void => {
         ref && ref.current && ref.current.setFieldValue(fieldName, val);
     };
 
-    return { ref, onError, setSubmitting, resetForm, setFieldValue };
+    return {
+        ref,
+        handleMutationErrors,
+        onError,
+        setSubmitting,
+        resetForm,
+        setFieldValue,
+    };
 };

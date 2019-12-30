@@ -1,8 +1,13 @@
-import { AnyAction } from 'redux';
 import { CLOSE_NOTIFICATION, OPEN_NOTIFICATION } from '../actions';
-import { Notification } from '../types';
 
-export const initialState: Notification = {
+import { AnyAction } from 'redux';
+
+export interface Notification {
+    open: boolean;
+    message: string | null;
+}
+
+const initialState: Notification = {
     open: false,
     message: null,
 };

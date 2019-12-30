@@ -11,4 +11,3 @@ export { StyledList } from './StyledList';
 export { StyledTable } from './StyledTable';
 export { TabPanel } from './TabPanel';
 export { TextLink } from './TextLink';
-export { UserProfileCardContent } from './UserProfileCardContent';

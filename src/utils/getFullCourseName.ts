@@ -1,6 +1,6 @@
-import { Course } from '../types';
+import { CourseType } from '../../generated/graphql';
 
-export const getFullCourseName = (course: Course): string => {
+export const getFullCourseName = (course: CourseType): string => {
     const { code, name } = course;
 
     if (code && name) {

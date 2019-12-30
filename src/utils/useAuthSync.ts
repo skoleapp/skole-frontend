@@ -1,11 +1,12 @@
+import { UserMeDocument, UserType } from '../../generated/graphql';
+
 import { AnyAction } from 'redux';
-import { UserMeDocument } from '../../generated/graphql';
-import { reAuthenticate } from '../actions';
-import { SkoleContext, User } from '../types';
+import { SkoleContext } from '../types';
 import { getToken } from './getToken';
+import { reAuthenticate } from '../actions';
 
 interface Params {
-    userMe?: User;
+    userMe?: UserType;
 }
 
 // SSR hook to update and return currently signed in user.

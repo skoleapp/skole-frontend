@@ -1,18 +1,20 @@
-import { Avatar, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
-import Link from 'next/link';
 import * as R from 'ramda';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { compose } from 'redux';
-import { UsersDocument } from '../../../generated/graphql';
+
+import { Avatar, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { Layout, StyledTable } from '../../components';
-import { includeDefaultNamespaces } from '../../i18n';
+import { UserType, UsersDocument } from '../../../generated/graphql';
+import { getAvatarThumb, useAuthSync } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext, User } from '../../types';
-import { useAuthSync } from '../../utils';
+
+import Link from 'next/link';
+import React from 'react';
+import { compose } from 'redux';
+import { includeDefaultNamespaces } from '../../i18n';
+import { useTranslation } from 'react-i18next';
 
 interface Props extends I18nProps {
-    users?: User[];
+    users?: UserType[];
 }
 
 const UsersPage: I18nPage<Props> = ({ users }) => {
@@ -34,11 +36,11 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                     </TableHead>
                     <TableBody>
                         {users && users.length ? (
-                            users.map((u: User, i: number) => (
+                            users.map((u: UserType, i: number) => (
                                 <Link href={`/users/${u.id}`} key={i}>
                                     <TableRow>
                                         <TableCell className="user-cell">
-                                            <Avatar src={process.env.BACKEND_URL + u.avatarThumbnail} />
+                                            <Avatar src={getAvatarThumb(u)} />
                                             <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
                                         </TableCell>
                                         <TableCell align="right">

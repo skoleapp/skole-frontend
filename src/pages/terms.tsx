@@ -9,24 +9,24 @@ import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync } from '../utils';
 
 const TermsPage: I18nPage = () => {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  return (
-    <Layout title={t('terms:title')} backUrl>
-      <StyledCard>
-        <CardHeader title={t('terms:title')} />
-        <CardContent>Here will be Terms and Conditions...</CardContent>
-      </StyledCard>
-    </Layout>
-  );
+    return (
+        <Layout title={t('terms:title')} backUrl>
+            <StyledCard>
+                <CardHeader title={t('terms:title')} />
+                <CardContent>Here will be Terms and Conditions...</CardContent>
+            </StyledCard>
+        </Layout>
+    );
 };
 
 TermsPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-  await useAuthSync(ctx);
+    await useAuthSync(ctx);
 
-  return {
-    namespacesRequired: includeDefaultNamespaces(['terms'])
-  };
+    return {
+        namespacesRequired: includeDefaultNamespaces(['terms']),
+    };
 };
 
 export default compose(withApollo, withRedux)(TermsPage);

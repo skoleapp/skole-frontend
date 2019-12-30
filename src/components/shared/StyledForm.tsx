@@ -2,21 +2,21 @@ import { Form } from 'formik';
 import styled from 'styled-components';
 
 export const StyledForm = styled(Form)`
-  .MuiFormControl-root {
-    margin-top: 0.5rem;
-  }
-
-  .file-input {
-    label {
-      width: 100%;
+    .MuiFormControl-root {
+        margin-top: 0.5rem;
     }
 
-    input {
-      display: none;
-    }
-  }
+    .file-input {
+        label {
+            width: 100%;
+        }
 
-  .MuiSelect-root {
-    text-align: left;
-  }
+        input {
+            display: none;
+        }
+    }
+
+    .MuiSelect-root {
+        text-align: left;
+    }
 `;

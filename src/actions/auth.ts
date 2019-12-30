@@ -1,37 +1,34 @@
-import ApolloClient from 'apollo-client';
-import cookie from 'cookie';
-import Router from 'next/router';
-import { Dispatch } from 'react';
+import { SignInMutationPayload, UserType } from '../../generated/graphql';
+
 import { AnyAction } from 'redux';
+import ApolloClient from 'apollo-client';
+import { Dispatch } from 'react';
+import Router from 'next/router';
+import cookie from 'cookie';
 import { i18n } from '../i18n';
-import { User } from '../types';
 import { openNotification } from './notifications';
 
 export const AUTHENTICATE = 'AUTHENTICATED';
-export const RE_AUTHENTICATE = 'REAUTHENTICATED';
-export const DE_AUTHENTICATE = 'DEAUTHENTICATED';
+export const RE_AUTHENTICATE = 'RE_AUTHENTICATED';
+export const DE_AUTHENTICATE = 'DE_AUTHENTICATED';
 
-interface SignInParams {
-    client: ApolloClient<any>;
-    token: string;
-    user: User;
-}
-
-export const authenticate = ({ client, token, user }: SignInParams) => async (
+export const authenticate = (client: ApolloClient<{}>, { token, user }: SignInMutationPayload) => async (
     dispatch: Dispatch<AnyAction>,
 ): Promise<void> => {
-    document.cookie = cookie.serialize('token', token, {
-        maxAge: 30 * 24 * 60 * 60, // 30 days
-        path: '/',
-    });
+    if (token && user) {
+        document.cookie = cookie.serialize('token', token, {
+            maxAge: 30 * 24 * 60 * 60, // 30 days
+            path: '/',
+        });
 
-    dispatch({ type: AUTHENTICATE, payload: user });
-    await client.cache.reset();
-    await Router.push('/profile');
+        dispatch({ type: AUTHENTICATE, payload: user });
+        await client.cache.reset();
+        await Router.push(`/users/${user.id}`);
+    }
 };
 
-export const reAuthenticate = (userMe: User) => (dispatch: Dispatch<AnyAction>): void => {
-    dispatch({ type: RE_AUTHENTICATE, payload: userMe });
+export const reAuthenticate = (user: UserType) => (dispatch: Dispatch<AnyAction>): void => {
+    dispatch({ type: RE_AUTHENTICATE, payload: user });
 };
 
 export const deAuthenticate = (apolloClient: ApolloClient<{}>) => async (
