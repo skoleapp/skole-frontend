@@ -1,6 +1,6 @@
 {
-  "title": "Kurssit",
-  "applyFiltersButton": "Lisää suodattimet",
-  "clearFiltersButton": "Poista suodattimet",
-  "noCourses": "Ei kursseja..."
+    "title": "Kurssit",
+    "applyFiltersButton": "Lisää suodattimet",
+    "clearFiltersButton": "Poista suodattimet",
+    "noCourses": "Ei kursseja..."
 }

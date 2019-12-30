@@ -1,8 +1,8 @@
 {
-  "passwordChanged": "Salasana päivitetty!",
-  "profileUpdated": "Profiili päivitetty!",
-  "resourceUploaded": "Resurssi lisätty!",
-  "messageSubmitted": "Viesti lähetetty!",
-  "courseCreated": "Kurssi luotu!",
-  "signedOut": "Kirjauduttu ulos!"
+    "passwordChanged": "Salasana päivitetty!",
+    "profileUpdated": "Profiili päivitetty!",
+    "resourceUploaded": "Resurssi lisätty!",
+    "messageSubmitted": "Viesti lähetetty!",
+    "courseCreated": "Kurssi luotu!",
+    "signedOut": "Kirjauduttu ulos!"
 }

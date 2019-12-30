@@ -1,6 +1,6 @@
 {
-  "title": "Courses",
-  "applyFiltersButton": "Apply Filters",
-  "clearFiltersButton": "Clear Filters",
-  "noCourses": "No courses..."
+    "title": "Courses",
+    "applyFiltersButton": "Apply Filters",
+    "clearFiltersButton": "Clear Filters",
+    "noCourses": "No courses..."
 }
