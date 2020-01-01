@@ -1,28 +1,31 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 
-import { Box, CardHeader, FormControl, InputLabel, MenuItem } from '@material-ui/core';
-import { CourseType, ResourceTypeObjectType, UploadResourceInitialDataDocument } from '../../generated/graphql';
+import {
+    AutoCompleteField,
+    FormErrorMessage,
+    FormSubmitSection,
+    Layout,
+    SlimCardContent,
+    StyledCard,
+    StyledForm,
+} from '../components';
+import { Box, CardHeader, FormControl } from '@material-ui/core';
+import { CoursesDocument, ResourceTypesDocument } from '../../generated/graphql';
 import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
-import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Select, TextField } from 'formik-material-ui';
 import { useForm, usePrivatePage } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
 import { DropzoneArea } from 'material-ui-dropzone';
 import React from 'react';
+import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../i18n';
 import { openNotification } from '../actions';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
-
-interface Props extends I18nProps {
-    resourceTypes?: ResourceTypeObjectType[];
-    courses?: CourseType[];
-}
 
 export interface UploadResourceFormValues {
     resourceTitle: string;
@@ -31,7 +34,7 @@ export interface UploadResourceFormValues {
     files: File[];
 }
 
-const UploadResourcePage: I18nPage<Props> = ({ resourceTypes, courses }) => {
+const UploadResourcePage: I18nPage<I18nProps> = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { ref, setSubmitting, resetForm, setFieldValue } = useForm<UploadResourceFormValues>();
@@ -66,37 +69,32 @@ const UploadResourcePage: I18nPage<Props> = ({ resourceTypes, courses }) => {
         <StyledForm>
             <Field
                 name="resourceTitle"
-                placeholder="Resource Title"
-                label="Resource Title"
+                label={t('forms:resourceTitle')}
+                placeholder={t('forms:resourceTitle')}
+                variant="outlined"
                 component={TextField}
                 fullWidth
             />
-            <FormControl fullWidth>
-                <InputLabel>Resource Type</InputLabel>
-                <Field name="resourceType" component={Select}>
-                    <MenuItem value="">---</MenuItem>
-                    {resourceTypes &&
-                        resourceTypes.map((r: ResourceTypeObjectType, i: number) => (
-                            <MenuItem key={i} value={r.id}>
-                                {r.name}
-                            </MenuItem>
-                        ))}
-                </Field>
-                <ErrorMessage name="resourceType" component={FormErrorMessage} />
-            </FormControl>
-            <FormControl fullWidth>
-                <InputLabel>Course</InputLabel>
-                <Field name="course" component={Select}>
-                    <MenuItem value="">---</MenuItem>
-                    {courses &&
-                        courses.map((c: CourseType, i: number) => (
-                            <MenuItem key={i} value={c.id}>
-                                {c.name}
-                            </MenuItem>
-                        ))}
-                </Field>
-                <ErrorMessage name="course" component={FormErrorMessage} />
-            </FormControl>
+            <Field
+                name="resourceType"
+                label={t('forms:resourceType')}
+                placeholder={t('forms:resourceType')}
+                dataKey="resourceTypes"
+                document={ResourceTypesDocument}
+                variant="outlined"
+                component={AutoCompleteField}
+                fullWidth
+            />
+            <Field
+                name="course"
+                label={t('forms:course')}
+                placeholder={t('forms:course')}
+                dataKey="courses"
+                document={CoursesDocument}
+                variant="outlined"
+                component={AutoCompleteField}
+                fullWidth
+            />
             <FormControl fullWidth>
                 <Box marginY="1rem">
                     <DropzoneArea
@@ -133,20 +131,12 @@ const UploadResourcePage: I18nPage<Props> = ({ resourceTypes, courses }) => {
     );
 };
 
-UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePrivatePage(ctx);
 
-    try {
-        const { data } = await ctx.apolloClient.query({ query: UploadResourceInitialDataDocument });
-        return {
-            ...data,
-            namespacesRequired: includeDefaultNamespaces(['upload-resource']),
-        };
-    } catch (err) {
-        return {
-            namespacesRequired: includeDefaultNamespaces(['upload-resource']),
-        };
-    }
+    return {
+        namespacesRequired: includeDefaultNamespaces(['upload-resource']),
+    };
 };
 
 export default compose(withApollo, withRedux)(UploadResourcePage);

@@ -22,5 +22,8 @@
     "requestSchool": "Request New School",
     "requestSubject": "Request New Subject",
     "businessInquiry": "Business Inquiry",
-    "message": "Message"
+    "message": "Message",
+    "resourceTitle": "Resource Title",
+    "resourceType": "Resource Type",
+    "course": "Course"
 }

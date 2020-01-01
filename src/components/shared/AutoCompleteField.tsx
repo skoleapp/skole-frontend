@@ -1,6 +1,6 @@
 import { Autocomplete, RenderInputParams } from '@material-ui/lab';
-import { CircularProgress, TextField } from '@material-ui/core';
-import { FieldAttributes, FormikProps } from 'formik';
+import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
+import { FieldAttributes, FormikProps, getIn } from 'formik';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { DocumentNode } from 'graphql';
@@ -10,26 +10,28 @@ import { useApolloClient } from 'react-apollo';
 interface Props {
     field: FieldAttributes<{}>;
     form: FormikProps<{}>;
-    label: string;
-    labelKey: string;
-    placeholder: string;
-    dataKey: string;
+    labelKey: string; // Used to access the label on the object.
+    dataKey: string; // Used to access the data after a successful query.
     document: DocumentNode;
+    disabled?: boolean;
 }
 
-export const AutoCompleteField: React.FC<Props> = <T extends SchoolType>({
+export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends SchoolType>({
     field,
     form,
-    label,
     labelKey = 'name',
-    placeholder,
     dataKey,
     document,
-}: Props) => {
+    helperText,
+    disabled,
+    ...props
+}: Props & TextFieldProps) => {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
     const loading = open && options.length === 0;
     const apolloClient = useApolloClient();
+    const { name, value } = field;
+    const { touched, errors, isSubmitting } = form;
 
     const fetchOptions = async (): Promise<void> => {
         try {
@@ -53,7 +55,7 @@ export const AutoCompleteField: React.FC<Props> = <T extends SchoolType>({
     }, [open]);
 
     const handleAutoCompleteChange = (_e: ChangeEvent<{}>, val: T): void => {
-        !!val ? form.setFieldValue(field.name, val[labelKey as keyof T]) : form.setFieldValue(field.name, '');
+        !!val ? form.setFieldValue(name, val[labelKey as keyof T]) : form.setFieldValue(name, '');
     };
 
     const renderInput = (params: RenderInputParams): JSX.Element => {
@@ -66,12 +68,15 @@ export const AutoCompleteField: React.FC<Props> = <T extends SchoolType>({
             (params.inputProps as ExtendedRenderInputParams).onChange(e);
         };
 
+        const fieldError = getIn(errors, name);
+        const showError = getIn(touched, name) && !!fieldError;
+
         return (
             <TextField
                 {...params}
-                label={label}
-                placeholder={placeholder}
-                fullWidth
+                {...props}
+                error={showError}
+                helperText={showError ? fieldError : helperText}
                 variant="outlined"
                 InputProps={{
                     ...params.InputProps,
@@ -83,6 +88,7 @@ export const AutoCompleteField: React.FC<Props> = <T extends SchoolType>({
                         </>
                     ),
                 }}
+                fullWidth
             />
         );
     };
@@ -95,9 +101,10 @@ export const AutoCompleteField: React.FC<Props> = <T extends SchoolType>({
             getOptionLabel={(option): string => option[labelKey]}
             options={options}
             loading={loading}
-            value={{ [labelKey]: field.value }}
+            value={{ [labelKey]: value }}
             onChange={handleAutoCompleteChange}
             renderInput={renderInput}
+            disabled={disabled != undefined ? disabled : isSubmitting}
         />
     );
 };

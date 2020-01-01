@@ -159,3 +159,17 @@ query Cities {
         name
     }
 }
+
+query ResourceTypes {
+    resourceTypes {
+        id
+        name
+    }
+}
+
+query Courses {
+    courses {
+        id
+        name
+    }
+}

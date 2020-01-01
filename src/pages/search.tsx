@@ -209,9 +209,9 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
             variables: { ...query },
         });
 
-        return { ...data, namespacesRequired: includeDefaultNamespaces(['search', 'forms']) };
+        return { ...data, namespacesRequired: includeDefaultNamespaces(['search']) };
     } catch {
-        return { namespacesRequired: includeDefaultNamespaces(['search', 'forms']) };
+        return { namespacesRequired: includeDefaultNamespaces(['search']) };
     }
 };
 

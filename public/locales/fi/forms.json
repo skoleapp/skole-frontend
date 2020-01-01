@@ -22,5 +22,8 @@
     "requestSchool": "Ehdota uutta koulua",
     "requestSubject": "Ehdota uutta oppiainetta",
     "businessInquiry": "Liiketoiminta",
-    "message": "Viesti"
+    "message": "Viesti",
+    "resourceTitle": "Resurssin Otsikko",
+    "resourceType": "Resurssin Tyyppi",
+    "course": "Kurssi"
 }

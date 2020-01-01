@@ -764,6 +764,28 @@ export type CitiesQuery = (
   )>>> }
 );
 
+export type ResourceTypesQueryVariables = {};
+
+
+export type ResourceTypesQuery = (
+  { __typename?: 'Query' }
+  & { resourceTypes: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+  )>>> }
+);
+
+export type CoursesQueryVariables = {};
+
+
+export type CoursesQuery = (
+  { __typename?: 'Query' }
+  & { courses: Maybe<Array<Maybe<(
+    { __typename?: 'CourseType' }
+    & Pick<CourseType, 'id' | 'name'>
+  )>>> }
+);
+
 
 export const SignUpDocument = gql`
     mutation SignUp($username: String!, $email: String!, $password: String!) {
@@ -1194,3 +1216,39 @@ export const CitiesDocument = gql`
       
 export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
 export type CitiesQueryResult = ApolloReactCommon.QueryResult<CitiesQuery, CitiesQueryVariables>;
+export const ResourceTypesDocument = gql`
+    query ResourceTypes {
+  resourceTypes {
+    id
+    name
+  }
+}
+    `;
+
+    export function useResourceTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
+      return ApolloReactHooks.useQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+    }
+      export function useResourceTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+      }
+      
+export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQuery>;
+export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
+export const CoursesDocument = gql`
+    query Courses {
+  courses {
+    id
+    name
+  }
+}
+    `;
+
+    export function useCoursesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
+      return ApolloReactHooks.useQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
+    }
+      export function useCoursesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
+      }
+      
+export type CoursesQueryHookResult = ReturnType<typeof useCoursesQuery>;
+export type CoursesQueryResult = ApolloReactCommon.QueryResult<CoursesQuery, CoursesQueryVariables>;
