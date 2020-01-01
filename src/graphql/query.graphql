@@ -59,26 +59,6 @@ query Search(
         name
         code
     }
-    schools {
-        id
-        name
-    }
-    subjects {
-        id
-        name
-    }
-    schoolTypes {
-        id
-        name
-    }
-    countries {
-        id
-        name
-    }
-    cities {
-        id
-        name
-    }
 }
 
 query CourseDetail($courseId: Int!) {
@@ -133,29 +113,6 @@ query ResourceDetail($resourceId: Int!) {
     }
 }
 
-query UploadResourceInitialData {
-    resourceTypes {
-        id
-        name
-        hasParts
-    }
-    courses {
-        id
-        name
-    }
-}
-
-query CreateCourseInitialData {
-    subjects {
-        id
-        name
-    }
-    schools {
-        id
-        name
-    }
-}
-
 query SchoolDetail($schoolId: Int!) {
     school(schoolId: $schoolId) {
         id
@@ -165,5 +122,40 @@ query SchoolDetail($schoolId: Int!) {
         schoolType
         subjectCount
         courseCount
+    }
+}
+
+query Schools {
+    schools {
+        id
+        name
+    }
+}
+
+query Subjects {
+    subjects {
+        id
+        name
+    }
+}
+
+query SchoolTypes {
+    schoolTypes {
+        id
+        name
+    }
+}
+
+query Countries {
+    countries {
+        id
+        name
+    }
+}
+
+query Cities {
+    cities {
+        id
+        name
     }
 }
