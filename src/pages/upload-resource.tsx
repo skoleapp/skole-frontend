@@ -67,34 +67,40 @@ const UploadResourcePage: I18nPage<I18nProps> = () => {
 
     const renderForm = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
         <StyledForm>
-            <Field
-                name="resourceTitle"
-                label={t('forms:resourceTitle')}
-                placeholder={t('forms:resourceTitle')}
-                variant="outlined"
-                component={TextField}
-                fullWidth
-            />
-            <Field
-                name="resourceType"
-                label={t('forms:resourceType')}
-                placeholder={t('forms:resourceType')}
-                dataKey="resourceTypes"
-                document={ResourceTypesDocument}
-                variant="outlined"
-                component={AutoCompleteField}
-                fullWidth
-            />
-            <Field
-                name="course"
-                label={t('forms:course')}
-                placeholder={t('forms:course')}
-                dataKey="courses"
-                document={CoursesDocument}
-                variant="outlined"
-                component={AutoCompleteField}
-                fullWidth
-            />
+            <FormControl fullWidth>
+                <Field
+                    name="resourceTitle"
+                    label={t('forms:resourceTitle')}
+                    placeholder={t('forms:resourceTitle')}
+                    variant="outlined"
+                    component={TextField}
+                    fullWidth
+                />
+            </FormControl>
+            <FormControl fullWidth>
+                <Field
+                    name="resourceType"
+                    label={t('forms:resourceType')}
+                    placeholder={t('forms:resourceType')}
+                    dataKey="resourceTypes"
+                    document={ResourceTypesDocument}
+                    variant="outlined"
+                    component={AutoCompleteField}
+                    fullWidth
+                />
+            </FormControl>
+            <FormControl fullWidth>
+                <Field
+                    name="course"
+                    label={t('forms:course')}
+                    placeholder={t('forms:course')}
+                    dataKey="courses"
+                    document={CoursesDocument}
+                    variant="outlined"
+                    component={AutoCompleteField}
+                    fullWidth
+                />
+            </FormControl>
             <FormControl fullWidth>
                 <Box marginY="1rem">
                     <DropzoneArea
