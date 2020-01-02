@@ -1,31 +1,25 @@
 import * as Yup from 'yup';
 
-import { CardHeader, FormControl, InputLabel, MenuItem } from '@material-ui/core';
+import { AutoCompleteField, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
+import { CardHeader, FormControl } from '@material-ui/core';
 import {
-    CreateCourseInitialDataDocument,
     CreateCourseMutation,
-    SchoolType,
-    SubjectType,
+    SchoolsDocument,
+    SubjectsDocument,
     useCreateCourseMutation,
 } from '../../generated/graphql';
-import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
-import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
+import { Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
-import { Select, TextField } from 'formik-material-ui';
 import { useForm, usePrivatePage } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
 import React from 'react';
+import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
 import { openNotification } from '../actions';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-
-interface Props extends I18nProps {
-    subjects?: SubjectType[];
-    schools?: SchoolType[];
-}
 
 export interface CreateCourseFormValues {
     courseName: string;
@@ -35,7 +29,7 @@ export interface CreateCourseFormValues {
     general: string;
 }
 
-const CreateCoursePage: I18nPage<Props> = ({ subjects, schools }) => {
+const CreateCoursePage: I18nPage<I18nProps> = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<CreateCourseFormValues>();
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -70,52 +64,56 @@ const CreateCoursePage: I18nPage<Props> = ({ subjects, schools }) => {
     const initialValues = {
         courseName: '',
         courseCode: '',
-        subject: '',
         school: '',
+        subject: '',
         general: '',
     };
 
     const renderForm = (props: FormikProps<CreateCourseFormValues>): JSX.Element => (
         <StyledForm>
-            <Field
-                name="courseName"
-                placeholder={t('forms:courseName')}
-                label={t('forms:courseName')}
-                component={TextField}
-                fullWidth
-            />
-            <Field
-                name="courseCode"
-                placeholder={t('forms:courseCode')}
-                label={t('forms:courseCode')}
-                component={TextField}
-                fullWidth
-            />
             <FormControl fullWidth>
-                <InputLabel>{t('forms:subject')}</InputLabel>
-                <Field name="subject" component={Select}>
-                    <MenuItem value="">---</MenuItem>
-                    {subjects &&
-                        subjects.map((s: SubjectType, i: number) => (
-                            <MenuItem key={i} value={s.id}>
-                                {s.name}
-                            </MenuItem>
-                        ))}
-                </Field>
-                <ErrorMessage name="subject" component={FormErrorMessage} />
+                <Field
+                    name="courseName"
+                    label={t('forms:courseName')}
+                    placeholder={t('forms:courseName')}
+                    component={TextField}
+                    variant="outlined"
+                    fullWidth
+                />
             </FormControl>
             <FormControl fullWidth>
-                <InputLabel>{t('forms:school')}</InputLabel>
-                <Field name="school" component={Select}>
-                    <MenuItem value="">---</MenuItem>
-                    {schools &&
-                        schools.map((s: SchoolType, i: number) => (
-                            <MenuItem key={i} value={s.id}>
-                                {s.name}
-                            </MenuItem>
-                        ))}
-                </Field>
-                <ErrorMessage name="school" component={FormErrorMessage} />
+                <Field
+                    name="courseCode"
+                    label={t('forms:courseCode')}
+                    placeholder={t('forms:courseCode')}
+                    component={TextField}
+                    variant="outlined"
+                    fullWidth
+                />
+            </FormControl>
+            <FormControl fullWidth>
+                <Field
+                    name="school"
+                    label={t('forms:school')}
+                    placeholder={t('forms:school')}
+                    dataKey="schools"
+                    document={SchoolsDocument}
+                    component={AutoCompleteField}
+                    variant="outlined"
+                    fullWidth
+                />
+            </FormControl>
+            <FormControl fullWidth>
+                <Field
+                    name="subject"
+                    label={t('forms:subject')}
+                    placeholder={t('forms:subject')}
+                    dataKey="subjects"
+                    document={SubjectsDocument}
+                    component={AutoCompleteField}
+                    variant="outlined"
+                    fullWidth
+                />
             </FormControl>
             <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </StyledForm>
@@ -140,15 +138,12 @@ const CreateCoursePage: I18nPage<Props> = ({ subjects, schools }) => {
     );
 };
 
-CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePrivatePage(ctx);
 
-    try {
-        const { data } = await ctx.apolloClient.query({ query: CreateCourseInitialDataDocument });
-        return { ...data, namespacesRequired: includeDefaultNamespaces(['create-course']) };
-    } catch {
-        return { namespacesRequired: includeDefaultNamespaces(['create-course']) };
-    }
+    return {
+        namespacesRequired: includeDefaultNamespaces(['create-course']),
+    };
 };
 
 export default compose(withRedux, withApollo)(CreateCoursePage);

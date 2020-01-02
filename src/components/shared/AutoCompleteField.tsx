@@ -32,6 +32,8 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
     const apolloClient = useApolloClient();
     const { name, value } = field;
     const { touched, errors, isSubmitting } = form;
+    const fieldError = getIn(errors, name);
+    const showError = getIn(touched, name) && !!fieldError;
 
     const fetchOptions = async (): Promise<void> => {
         try {
@@ -68,8 +70,16 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
             (params.inputProps as ExtendedRenderInputParams).onChange(e);
         };
 
-        const fieldError = getIn(errors, name);
-        const showError = getIn(touched, name) && !!fieldError;
+        const inputProps = {
+            ...params.InputProps,
+            onChange,
+            endAdornment: (
+                <>
+                    {loading && <CircularProgress color="primary" size={20} />}
+                    {params.InputProps.endAdornment}
+                </>
+            ),
+        };
 
         return (
             <TextField
@@ -77,18 +87,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
                 {...props}
                 error={showError}
                 helperText={showError ? fieldError : helperText}
-                variant="outlined"
-                InputProps={{
-                    ...params.InputProps,
-                    onChange,
-                    endAdornment: (
-                        <>
-                            {loading && <CircularProgress color="primary" size={20} />}
-                            {params.InputProps.endAdornment}
-                        </>
-                    ),
-                }}
-                fullWidth
+                InputProps={inputProps}
             />
         );
     };
@@ -104,7 +103,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
             value={{ [labelKey]: value }}
             onChange={handleAutoCompleteChange}
             renderInput={renderInput}
-            disabled={disabled != undefined ? disabled : isSubmitting}
+            disabled={disabled !== undefined ? disabled : isSubmitting}
         />
     );
 };

@@ -135,6 +135,8 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
                     dataKey="schools"
                     document={SchoolsDocument}
                     component={AutoCompleteField}
+                    variant="outlined"
+                    fullWidth
                 />
             </FormControl>
             <FormControl fullWidth>
@@ -145,6 +147,8 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
                     dataKey="subjects"
                     document={SubjectsDocument}
                     component={AutoCompleteField}
+                    variant="outlined"
+                    fullWidth
                 />
             </FormControl>
             <FormControl fullWidth>
@@ -155,6 +159,8 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
                     dataKey="schoolTypes"
                     document={SchoolTypesDocument}
                     component={AutoCompleteField}
+                    variant="outlined"
+                    fullWidth
                 />
             </FormControl>
             <FormControl fullWidth>
@@ -165,6 +171,8 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
                     dataKey="countries"
                     document={CountriesDocument}
                     component={AutoCompleteField}
+                    variant="outlined"
+                    fullWidth
                 />
             </FormControl>
             <FormControl fullWidth>
@@ -175,6 +183,8 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
                     dataKey="cities"
                     document={CitiesDocument}
                     component={AutoCompleteField}
+                    variant="outlined"
+                    fullWidth
                 />
             </FormControl>
             <SlimCardContent>
