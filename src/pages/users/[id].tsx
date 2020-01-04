@@ -15,7 +15,7 @@ import {
 import { ButtonLink, Layout, NotFound, StyledCard, StyledList, TabPanel } from '../../components';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { UserDocument, UserType } from '../../../generated/graphql';
+import { UserDetailDocument, UserType } from '../../../generated/graphql';
 import { getAvatar, useAuthSync, useTabs } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
@@ -187,17 +187,17 @@ const StyledUserProfileCardContent = styled(Box)`
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await useAuthSync(ctx);
     const { query, apolloClient } = ctx;
-    const { userId } = query;
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 
     try {
         const { data } = await apolloClient.query({
-            query: UserDocument,
-            variables: { userId },
+            query: UserDetailDocument,
+            variables: query,
         });
 
-        return { ...data, namespacesRequired: includeDefaultNamespaces(['profile']) };
+        return { ...data, ...nameSpaces };
     } catch {
-        return { namespacesRequired: includeDefaultNamespaces(['profile']) };
+        return nameSpaces;
     }
 };
 

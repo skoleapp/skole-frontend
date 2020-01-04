@@ -175,10 +175,7 @@ const EditProfilePage: I18nPage = () => {
 
 EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePrivatePage(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['edit-profile']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['edit-profile']) };
 };
 
 export default compose(withApollo, withRedux)(EditProfilePage);

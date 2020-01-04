@@ -127,10 +127,7 @@ export const DeleteAccountPage: I18nPage = () => {
 
 DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePrivatePage(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['delete-account']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['delete-account']) };
 };
 
 export default compose(withApollo, withRedux)(DeleteAccountPage);

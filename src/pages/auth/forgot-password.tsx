@@ -72,10 +72,7 @@ const ForgotPasswordPage: I18nPage = () => {
 
 ForgotPasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['forgot-password']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['forgot-password']) };
 };
 
 export default compose(withApollo, withRedux)(ForgotPasswordPage);

@@ -146,10 +146,7 @@ const SignUpPage: I18nPage = () => {
 
 SignUpPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['sign-up']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['sign-up']) };
 };
 
 export default compose(withApollo, withRedux)(SignUpPage);

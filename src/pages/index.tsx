@@ -1,19 +1,20 @@
 import { Box, Grid, Typography } from '@material-ui/core';
+import { ButtonLink, LandingPageSearchWidget, Layout, Shortcut } from '../components';
 import {
     CloudUploadOutlined,
     LibraryAddOutlined,
     SchoolOutlined,
     SupervisedUserCircleOutlined,
 } from '@material-ui/icons';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { compose } from 'redux';
-import styled from 'styled-components';
-import { ButtonLink, LandingPageSearchWidget, Layout, Shortcut } from '../components';
-import { includeDefaultNamespaces } from '../i18n';
-import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { withApollo, withRedux } from '../lib';
+
+import React from 'react';
+import { compose } from 'redux';
+import { includeDefaultNamespaces } from '../i18n';
+import styled from 'styled-components';
 import { useAuthSync } from '../utils';
+import { useTranslation } from 'react-i18next';
 
 const IndexPage: I18nPage = () => {
     const { t } = useTranslation();
@@ -62,10 +63,7 @@ const StyledIndexPage = styled(Box)`
 
 IndexPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await useAuthSync(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['index']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['index']) };
 };
 
 export default compose(withApollo, withRedux)(IndexPage);

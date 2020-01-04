@@ -22,8 +22,8 @@ export const BottomNavbar: React.FC = () => {
             case '/search': {
                 return 1;
             }
-            case '/users/[userId]': {
-                if (user && router.query.userId === user.id) {
+            case '/users/[id]': {
+                if (user && router.query.id === user.id) {
                     return 2;
                 }
             }

@@ -24,10 +24,7 @@ const AboutPage: I18nPage = () => {
 
 AboutPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await useAuthSync(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['about']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['about']) };
 };
 
 export default compose(withApollo, withRedux)(AboutPage);

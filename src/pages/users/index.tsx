@@ -65,12 +65,13 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
 
 UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await useAuthSync(ctx);
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
 
     try {
         const { data } = await ctx.apolloClient.query({ query: UsersDocument });
-        return { ...data, namespacesRequired: includeDefaultNamespaces(['users']) };
+        return { ...data, ...nameSpaces };
     } catch {
-        return { namespacesRequired: includeDefaultNamespaces(['users']) };
+        return nameSpaces;
     }
 };
 

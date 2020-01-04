@@ -211,17 +211,17 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await useAuthSync(ctx);
     const { apolloClient, query } = ctx;
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 
     try {
-        const { courseId } = query;
         const { data } = await apolloClient.query({
             query: CourseDetailDocument,
-            variables: { courseId },
+            variables: query,
         });
 
-        return { ...data, namespacesRequired: includeDefaultNamespaces(['course']) };
+        return { ...data, ...nameSpaces };
     } catch {
-        return { namespacesRequired: includeDefaultNamespaces(['course']) };
+        return nameSpaces;
     }
 };
 

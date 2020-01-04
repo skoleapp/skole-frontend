@@ -117,10 +117,7 @@ const SignInPage: I18nPage = () => {
 
 SignInPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['sign-in', 'validation', 'forms']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['sign-in', 'validation', 'forms']) };
 };
 
 export default compose(withApollo, withRedux)(SignInPage);

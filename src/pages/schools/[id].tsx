@@ -129,17 +129,17 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await useAuthSync(ctx);
     const { apolloClient, query } = ctx;
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 
     try {
-        const { schoolId } = query;
         const { data } = await apolloClient.query({
             query: SchoolDetailDocument,
-            variables: { schoolId },
+            variables: query,
         });
 
-        return { ...data, namespacesRequired: includeDefaultNamespaces(['school']) };
+        return { ...data, ...nameSpaces };
     } catch {
-        return { namespacesRequired: includeDefaultNamespaces(['school']) };
+        return nameSpaces;
     }
 };
 

@@ -117,10 +117,7 @@ const SettingsPage: I18nPage = () => {
 
 SettingsPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await useAuthSync(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['settings']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['settings']) };
 };
 
 export default compose(withApollo, withRedux)(SettingsPage);

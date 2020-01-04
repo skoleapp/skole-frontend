@@ -114,10 +114,7 @@ const ChangePasswordPage: I18nPage = () => {
 
 ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePrivatePage(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['change-password']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['change-password']) };
 };
 
 export default compose(withApollo, withRedux)(ChangePasswordPage);

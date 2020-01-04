@@ -101,10 +101,7 @@ const ContactPage: I18nPage = () => {
 
 ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await useAuthSync(ctx);
-
-    return {
-        namespacesRequired: includeDefaultNamespaces(['contact']),
-    };
+    return { namespacesRequired: includeDefaultNamespaces(['contact']) };
 };
 
 export default compose(withApollo, withRedux)(ContactPage);

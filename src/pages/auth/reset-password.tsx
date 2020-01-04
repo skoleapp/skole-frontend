@@ -2,7 +2,8 @@ import * as Yup from 'yup';
 
 import { Field, Formik, FormikProps } from 'formik';
 import { FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../../components';
-import { I18nPage, I18nProps } from '../../types';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { useForm, usePublicPage } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
 import { CardHeader } from '@material-ui/core';
@@ -10,7 +11,6 @@ import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../../i18n';
-import { useForm } from '../../utils';
 import { useTranslation } from 'react-i18next';
 
 const initialValues = {
@@ -84,10 +84,9 @@ const ResetPasswordPage: I18nPage = () => {
     );
 };
 
-ResetPasswordPage.getInitialProps = (): I18nProps => {
-    return {
-        namespacesRequired: includeDefaultNamespaces(['reset-password']),
-    };
+ResetPasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+    await usePublicPage(ctx);
+    return { namespacesRequired: includeDefaultNamespaces(['reset-password']) };
 };
 
 export default compose(withApollo, withRedux)(ResetPasswordPage);

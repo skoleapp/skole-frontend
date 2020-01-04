@@ -64,22 +64,18 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
 ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await useAuthSync(ctx);
+    const { query } = ctx;
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
     try {
-        const { resourceId } = ctx.query;
         const { data } = await ctx.apolloClient.query({
             query: ResourceDetailDocument,
-            variables: { resourceId },
+            variables: query,
         });
 
-        return {
-            ...data,
-            namespacesRequired: includeDefaultNamespaces(['resource']),
-        };
+        return { ...data, ...nameSpaces };
     } catch {
-        return {
-            namespacesRequired: includeDefaultNamespaces(['resource']),
-        };
+        return nameSpaces;
     }
 };
 
