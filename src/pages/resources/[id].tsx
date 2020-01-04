@@ -7,7 +7,6 @@ import { ResourceDetailDocument, ResourcePartType, ResourceType } from '../../..
 import { useAuthSync, useTabs } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
-import Image from 'material-ui-image';
 import React from 'react';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../../i18n';
@@ -29,9 +28,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             <Layout title={resourceTitle} backUrl>
                 <StyledCard>
                     <CardHeader title={resourceTitle} />
-                    <CardContent>
+                    {/* <CardContent>
                         <Image src={process.env.BACKEND_URL + resource.file} />
-                    </CardContent>
+                    </CardContent> */}
                     <Divider />
                     <Tabs
                         value={tabValue}
