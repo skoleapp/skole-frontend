@@ -1,0 +1,48 @@
+query Schools {
+    schools {
+        id
+        name
+    }
+}
+
+query SchoolTypes {
+    schoolTypes {
+        id
+        name
+    }
+}
+
+query Courses {
+    courses {
+        id
+        name
+    }
+}
+
+query Subjects {
+    subjects {
+        id
+        name
+    }
+}
+
+query Countries {
+    countries {
+        id
+        name
+    }
+}
+
+query Cities {
+    cities {
+        id
+        name
+    }
+}
+
+query ResourceTypes {
+    resourceTypes {
+        id
+        name
+    }
+}

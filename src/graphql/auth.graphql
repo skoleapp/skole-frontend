@@ -1,0 +1,80 @@
+mutation SignUp($username: String!, $email: String!, $password: String!) {
+    signUp(input: { username: $username, email: $email, password: $password }) {
+        user {
+            id
+            created
+        }
+        errors {
+            field
+            messages
+        }
+    }
+    signIn(input: { usernameOrEmail: $email, password: $password }) {
+        token
+        user {
+            id
+            title
+            bio
+            avatar
+            points
+            created
+            email
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation SignIn($usernameOrEmail: String!, $password: String!) {
+    signIn(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+        token
+        user {
+            id
+            title
+            bio
+            avatar
+            points
+            created
+            email
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+query UserMe {
+    userMe {
+        id
+        username
+        email
+        title
+        bio
+        avatar
+        points
+        courseCount
+        resourceCount
+        created
+    }
+}
+
+mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
+    changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DeleteAccount($password: String!) {
+    deleteUser(input: { password: $password }) {
+        errors {
+            field
+            messages
+        }
+    }
+}

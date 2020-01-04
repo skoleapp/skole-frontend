@@ -1,0 +1,11 @@
+mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
+    createCourse(input: { name: $courseName, code: $courseCode, subject: $subject, school: $school }) {
+        course {
+            id
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}

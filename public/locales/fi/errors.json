@@ -1,0 +1,9 @@
+{
+    "USERNAME_TAKEN_MESSAGE": "Tämä käyttäjätunnus on varattu.",
+    "EMAIL_TAKEN_MESSAGE": "Tämä sähköposti on varattu.",
+    "EMAIL_INVALID_MESSAGE": "Virheellinen sähköpostiosoite.",
+    "INCORRECT_OLD_PASSWORD_MESSAGE": "Virheellinen vanha salasana.",
+    "INCORRECT_PASSWORD_MESSAGE": "Virheellinen salasana.",
+    "MESSAGE_SENT_ERROR_MESSAGE": "Virhe lähetettäessä viestiä.",
+    "UNABLE_TO_AUTHENTICATE_MESSAGE": "Tunnistautuminen epäonnistui antamillasi arvoilla."
+}

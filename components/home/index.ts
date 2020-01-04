@@ -1,1 +1,0 @@
-export { Shortcut } from './Shortcut';
