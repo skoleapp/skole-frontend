@@ -7,6 +7,9 @@ query UploadResourceInitialData($course: Int) {
 
 mutation UploadResource($title: String!, $resourceType: ID!, $course: ID!, $files: String!) {
     uploadResource(input: { title: $title, resourceType: $resourceType, course: $course, files: $files }) {
+        resource {
+            id
+        }
         errors {
             field
             messages

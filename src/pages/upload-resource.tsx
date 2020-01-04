@@ -19,6 +19,7 @@ import {
 } from '../../generated/graphql';
 import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { Router, includeDefaultNamespaces } from '../i18n';
 import { UploadResourceMutation, useUploadResourceMutation } from '../../generated/graphql';
 import { useForm, usePrivatePage } from '../utils';
 import { withApollo, withRedux } from '../lib';
@@ -27,7 +28,6 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../i18n';
 import { openNotification } from '../actions';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -47,7 +47,9 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
-    const { ref, setSubmitting, setFieldValue, onError, handleMutationErrors } = useForm<UploadResourceFormValues>();
+    const { ref, setSubmitting, setFieldValue, onError, resetForm, handleMutationErrors } = useForm<
+        UploadResourceFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:resourceTitleRequired')),
@@ -62,9 +64,10 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         if (uploadResource) {
             if (uploadResource.errors) {
                 handleMutationErrors(uploadResource.errors);
-            } else {
-                // resetForm();
+            } else if (uploadResource.resource && uploadResource.resource.id) {
+                resetForm();
                 dispatch(openNotification(t('notifications:resourceUploaded')));
+                await Router.push(`/resources/${uploadResource.resource.id}`);
             }
         }
     };

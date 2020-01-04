@@ -3,7 +3,6 @@ query ResourceDetail($id: Int!) {
         id
         resourceType
         title
-        file
         date
         created
         creator {
