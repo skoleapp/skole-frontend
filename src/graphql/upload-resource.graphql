@@ -4,3 +4,12 @@ query UploadResourceInitialData($course: Int) {
         name
     }
 }
+
+mutation UploadResource($title: String!, $resourceType: ID!, $course: ID!, $files: String!) {
+    uploadResource(input: { title: $title, resourceType: $resourceType, course: $course, files: $files }) {
+        errors {
+            field
+            messages
+        }
+    }
+}

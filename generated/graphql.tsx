@@ -173,6 +173,7 @@ export type Mutation = {
   deleteUser?: Maybe<DeleteUserMutationPayload>,
   upvoteResource?: Maybe<UpvoteResourceMutation>,
   downvoteResource?: Maybe<DownvoteResourceMutation>,
+  uploadResource?: Maybe<UploadResourceMutationPayload>,
   createCourse?: Maybe<CreateCourseMutationPayload>,
   upvoteCourse?: Maybe<UpvoteCourseMutation>,
   downvoteCourse?: Maybe<DownvoteCourseMutation>,
@@ -216,6 +217,11 @@ export type MutationUpvoteResourceArgs = {
 
 export type MutationDownvoteResourceArgs = {
   resourceId?: Maybe<Scalars['Int']>
+};
+
+
+export type MutationUploadResourceArgs = {
+  input: UploadResourceMutationInput
 };
 
 
@@ -454,6 +460,22 @@ export type UpdateUserMutationInput = {
 export type UpdateUserMutationPayload = {
    __typename?: 'UpdateUserMutationPayload',
   user?: Maybe<UserType>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type UploadResourceMutationInput = {
+  title: Scalars['String'],
+  resourceType: Scalars['ID'],
+  files: Scalars['String'],
+  course: Scalars['ID'],
+  id?: Maybe<Scalars['ID']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type UploadResourceMutationPayload = {
+   __typename?: 'UploadResourceMutationPayload',
+  resource?: Maybe<ResourceType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -788,6 +810,25 @@ export type UploadResourceInitialDataQuery = (
   & { course: Maybe<(
     { __typename?: 'CourseType' }
     & Pick<CourseType, 'id' | 'name'>
+  )> }
+);
+
+export type UploadResourceMutationVariables = {
+  title: Scalars['String'],
+  resourceType: Scalars['ID'],
+  course: Scalars['ID'],
+  files: Scalars['String']
+};
+
+
+export type UploadResourceMutation = (
+  { __typename?: 'Mutation' }
+  & { uploadResource: Maybe<(
+    { __typename?: 'UploadResourceMutationPayload' }
+    & { errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
   )> }
 );
 
@@ -1268,6 +1309,24 @@ export const UploadResourceInitialDataDocument = gql`
       
 export type UploadResourceInitialDataQueryHookResult = ReturnType<typeof useUploadResourceInitialDataQuery>;
 export type UploadResourceInitialDataQueryResult = ApolloReactCommon.QueryResult<UploadResourceInitialDataQuery, UploadResourceInitialDataQueryVariables>;
+export const UploadResourceDocument = gql`
+    mutation UploadResource($title: String!, $resourceType: ID!, $course: ID!, $files: String!) {
+  uploadResource(input: {title: $title, resourceType: $resourceType, course: $course, files: $files}) {
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type UploadResourceMutationFn = ApolloReactCommon.MutationFunction<UploadResourceMutation, UploadResourceMutationVariables>;
+
+    export function useUploadResourceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UploadResourceMutation, UploadResourceMutationVariables>) {
+      return ApolloReactHooks.useMutation<UploadResourceMutation, UploadResourceMutationVariables>(UploadResourceDocument, baseOptions);
+    }
+export type UploadResourceMutationHookResult = ReturnType<typeof useUploadResourceMutation>;
+export type UploadResourceMutationResult = ApolloReactCommon.MutationResult<UploadResourceMutation>;
+export type UploadResourceMutationOptions = ApolloReactCommon.BaseMutationOptions<UploadResourceMutation, UploadResourceMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

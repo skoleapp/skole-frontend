@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import * as Yup from 'yup';
 
 import {
@@ -18,6 +19,7 @@ import {
 } from '../../generated/graphql';
 import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { UploadResourceMutation, useUploadResourceMutation } from '../../generated/graphql';
 import { useForm, usePrivatePage } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
@@ -28,7 +30,6 @@ import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../i18n';
 import { openNotification } from '../actions';
 import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 interface UploadResourceFormValues {
@@ -44,9 +45,9 @@ interface Props extends I18nProps {
 
 const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const dispatch = useDispatch();
-    const router = useRouter();
-    const { ref, setSubmitting, resetForm, setFieldValue } = useForm<UploadResourceFormValues>();
     const { t } = useTranslation();
+
+    const { ref, setSubmitting, setFieldValue, onError, handleMutationErrors } = useForm<UploadResourceFormValues>();
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:resourceTitleRequired')),
@@ -57,12 +58,31 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         files: Yup.array().required(t('validation:filesRequired')),
     });
 
+    const onCompleted = async ({ uploadResource }: UploadResourceMutation): Promise<void> => {
+        if (uploadResource) {
+            if (uploadResource.errors) {
+                handleMutationErrors(uploadResource.errors);
+            } else {
+                // resetForm();
+                dispatch(openNotification(t('notifications:resourceUploaded')));
+            }
+        }
+    };
+
+    const [uploadResourceMutation] = useUploadResourceMutation({ onCompleted, onError });
+
     const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
-        console.log(values);
+        const { resourceTitle, resourceType, course, files } = values;
+
+        const variables = {
+            title: resourceTitle,
+            resourceType: R.propOr('', 'id', resourceType) as string,
+            course: R.propOr('', 'id', course) as string,
+            files: (files as unknown) as string,
+        };
+
+        await uploadResourceMutation({ variables });
         setSubmitting(false);
-        resetForm();
-        dispatch(openNotification(t('notifications:resourceUploaded')));
-        await router.push('/');
     };
 
     const initialValues = {
