@@ -85,10 +85,10 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
             open={open}
             onOpen={(): void => setOpen(true)}
             onClose={(): void => setOpen(false)}
-            getOptionLabel={(option): string => R.prop(labelKey, option)}
+            getOptionLabel={(option): string => R.propOr('', labelKey, option)}
             options={options}
             loading={loading}
-            value={{ [labelKey]: R.propOr('', labelKey, value) }}
+            value={value}
             onChange={handleAutoCompleteChange}
             renderInput={renderInput}
             disabled={disabled !== undefined ? disabled : isSubmitting}
