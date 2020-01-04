@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import { Autocomplete, RenderInputParams } from '@material-ui/lab';
 import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
 import { FieldAttributes, FormikProps, getIn } from 'formik';
@@ -57,50 +59,36 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
     }, [open]);
 
     const handleAutoCompleteChange = (_e: ChangeEvent<{}>, val: T): void => {
-        !!val ? form.setFieldValue(name, val[labelKey as keyof T]) : form.setFieldValue(name, '');
+        !!val ? form.setFieldValue(name, val) : form.setFieldValue(name, null);
     };
 
-    const renderInput = (params: RenderInputParams): JSX.Element => {
-        interface ExtendedRenderInputParams extends RenderInputParams {
-            onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-        }
-
-        const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
-            form.setFieldValue(field.name, e.target.value);
-            (params.inputProps as ExtendedRenderInputParams).onChange(e);
-        };
-
-        const inputProps = {
-            ...params.InputProps,
-            onChange,
-            endAdornment: (
-                <>
-                    {loading && <CircularProgress color="primary" size={20} />}
-                    {params.InputProps.endAdornment}
-                </>
-            ),
-        };
-
-        return (
-            <TextField
-                {...params}
-                {...props}
-                error={showError}
-                helperText={showError ? fieldError : helperText}
-                InputProps={inputProps}
-            />
-        );
-    };
+    const renderInput = (params: RenderInputParams): JSX.Element => (
+        <TextField
+            {...params}
+            {...props}
+            error={showError}
+            helperText={showError ? fieldError : helperText}
+            InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                    <>
+                        {loading && <CircularProgress color="primary" size={20} />}
+                        {params.InputProps.endAdornment}
+                    </>
+                ),
+            }}
+        />
+    );
 
     return (
         <Autocomplete
             open={open}
             onOpen={(): void => setOpen(true)}
             onClose={(): void => setOpen(false)}
-            getOptionLabel={(option): string => option[labelKey]}
+            getOptionLabel={(option): string => R.prop(labelKey, option)}
             options={options}
             loading={loading}
-            value={{ [labelKey]: value }}
+            value={{ [labelKey]: R.propOr('', labelKey, value) }}
             onChange={handleAutoCompleteChange}
             renderInput={renderInput}
             disabled={disabled !== undefined ? disabled : isSubmitting}

@@ -90,6 +90,13 @@ query CourseDetail($courseId: Int!) {
     }
 }
 
+query SimpleCourseDetail($courseId: Int!) {
+    course(courseId: $courseId) {
+        id
+        name
+    }
+}
+
 query ResourceDetail($resourceId: Int!) {
     resource(resourceId: $resourceId) {
         id

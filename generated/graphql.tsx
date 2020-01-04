@@ -676,6 +676,19 @@ export type CourseDetailQuery = (
   )> }
 );
 
+export type SimpleCourseDetailQueryVariables = {
+  courseId: Scalars['Int']
+};
+
+
+export type SimpleCourseDetailQuery = (
+  { __typename?: 'Query' }
+  & { course: Maybe<(
+    { __typename?: 'CourseType' }
+    & Pick<CourseType, 'id' | 'name'>
+  )> }
+);
+
 export type ResourceDetailQueryVariables = {
   resourceId: Scalars['Int']
 };
@@ -1069,6 +1082,24 @@ export const CourseDetailDocument = gql`
       
 export type CourseDetailQueryHookResult = ReturnType<typeof useCourseDetailQuery>;
 export type CourseDetailQueryResult = ApolloReactCommon.QueryResult<CourseDetailQuery, CourseDetailQueryVariables>;
+export const SimpleCourseDetailDocument = gql`
+    query SimpleCourseDetail($courseId: Int!) {
+  course(courseId: $courseId) {
+    id
+    name
+  }
+}
+    `;
+
+    export function useSimpleCourseDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SimpleCourseDetailQuery, SimpleCourseDetailQueryVariables>) {
+      return ApolloReactHooks.useQuery<SimpleCourseDetailQuery, SimpleCourseDetailQueryVariables>(SimpleCourseDetailDocument, baseOptions);
+    }
+      export function useSimpleCourseDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SimpleCourseDetailQuery, SimpleCourseDetailQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<SimpleCourseDetailQuery, SimpleCourseDetailQueryVariables>(SimpleCourseDetailDocument, baseOptions);
+      }
+      
+export type SimpleCourseDetailQueryHookResult = ReturnType<typeof useSimpleCourseDetailQuery>;
+export type SimpleCourseDetailQueryResult = ApolloReactCommon.QueryResult<SimpleCourseDetailQuery, SimpleCourseDetailQueryVariables>;
 export const ResourceDetailDocument = gql`
     query ResourceDetail($resourceId: Int!) {
   resource(resourceId: $resourceId) {

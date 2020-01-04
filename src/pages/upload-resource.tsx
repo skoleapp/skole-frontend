@@ -1,4 +1,3 @@
-import * as R from 'ramda';
 import * as Yup from 'yup';
 
 import {
@@ -11,7 +10,13 @@ import {
     StyledForm,
 } from '../components';
 import { Box, CardHeader, FormControl } from '@material-ui/core';
-import { CoursesDocument, ResourceTypesDocument } from '../../generated/graphql';
+import {
+    CourseType,
+    CoursesDocument,
+    ResourceTypeObjectType,
+    ResourceTypesDocument,
+    SimpleCourseDetailDocument,
+} from '../../generated/graphql';
 import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePrivatePage } from '../utils';
@@ -29,12 +34,16 @@ import { useTranslation } from 'react-i18next';
 
 export interface UploadResourceFormValues {
     resourceTitle: string;
-    resourceType: string;
-    course: string;
+    resourceType: ResourceTypeObjectType | null;
+    course: CourseType | null;
     files: File[];
 }
 
-const UploadResourcePage: I18nPage<I18nProps> = () => {
+interface Props extends I18nProps {
+    course?: CourseType;
+}
+
+const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { ref, setSubmitting, resetForm, setFieldValue } = useForm<UploadResourceFormValues>();
@@ -42,8 +51,12 @@ const UploadResourcePage: I18nPage<I18nProps> = () => {
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:resourceTitleRequired')),
-        resourceType: Yup.string().required(t('validation:resourceTypeRequired')),
-        course: Yup.string().required(t('validation:courseRequired')),
+        resourceType: Yup.object()
+            .nullable()
+            .required(t('validation:resourceTypeRequired')),
+        course: Yup.object()
+            .nullable()
+            .required(t('validation:courseRequired')),
         files: Yup.string().required(t('validation:filesRequired')),
     });
 
@@ -57,8 +70,8 @@ const UploadResourcePage: I18nPage<I18nProps> = () => {
 
     const initialValues = {
         resourceTitle: '',
-        resourceType: '',
-        course: R.propOr('', 'courseId', router.query) as string,
+        resourceType: null,
+        course: course || null,
         files: [],
         general: '',
     };
@@ -137,12 +150,22 @@ const UploadResourcePage: I18nPage<I18nProps> = () => {
     );
 };
 
-UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await usePrivatePage(ctx);
+    const { query, apolloClient } = ctx;
+    const { courseId } = query;
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
-    return {
-        namespacesRequired: includeDefaultNamespaces(['upload-resource']),
-    };
+    if (courseId) {
+        try {
+            const { data } = await apolloClient.query({ query: SimpleCourseDetailDocument, variables: { courseId } });
+            return { ...data, ...nameSpaces };
+        } catch {
+            return nameSpaces;
+        }
+    }
+
+    return nameSpaces;
 };
 
 export default compose(withApollo, withRedux)(UploadResourcePage);
