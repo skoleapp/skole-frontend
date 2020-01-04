@@ -22,11 +22,16 @@ import {
 } from '@material-ui/core';
 import {
     CitiesDocument,
+    CityType,
     CountriesDocument,
+    CountryType,
     CourseType,
+    SchoolType,
+    SchoolTypeObjectType,
     SchoolTypesDocument,
     SchoolsDocument,
-    SearchDocument,
+    SearchCoursesDocument,
+    SubjectType,
     SubjectsDocument,
 } from '../../generated/graphql';
 import { Field, Formik, FormikProps } from 'formik';
@@ -42,37 +47,42 @@ import { compose } from 'redux';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-interface Props {
-    courses?: CourseType[];
-}
-
-export interface FilterSearchResultsFormValues {
+interface FilterSearchResultsFormValues {
     courseName: string;
     courseCode: string;
-    schoolName: string;
-    subjectName: string;
-    schoolType: string;
-    countryName: string;
-    cityName: string;
+    school: SchoolType | null;
+    subject: SubjectType | null;
+    schoolType: SchoolTypeObjectType | null;
+    country: CountryType | null;
+    city: CityType | null;
 }
 
-const SearchPage: I18nPage<Props> = ({ courses }) => {
+interface Props {
+    courses?: CourseType[];
+    school?: SchoolType;
+    subject?: SubjectType;
+    schoolType?: SchoolTypeObjectType;
+    country?: CountryType;
+    city?: CityType;
+}
+
+const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, country, city }) => {
     const { query, pathname } = useRouter();
     const { ref, setSubmitting, resetForm } = useForm<FilterSearchResultsFormValues>();
     const { t } = useTranslation();
 
     // Pick non-empty values and reload the page with new query params.
     const handleSubmit = async (values: FilterSearchResultsFormValues): Promise<void> => {
-        const { courseName, courseCode, schoolName, subjectName, schoolType, countryName, cityName } = values;
+        const { courseName, courseCode, school, subject, schoolType, country, city } = values;
 
         const filteredValues = {
             courseName,
             courseCode,
-            schoolName,
-            subjectName,
-            schoolType,
-            countryName,
-            cityName,
+            school: R.propOr('', 'id', school),
+            subject: R.propOr('', 'id', subject),
+            schoolType: R.propOr('', 'id', schoolType),
+            country: R.propOr('', 'id', country),
+            city: R.propOr('', 'id', city),
         };
 
         const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
@@ -86,23 +96,15 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
         resetForm();
     };
 
-    const courseName = R.propOr('', 'courseName', query) as string;
-    const courseCode = R.propOr('', 'courseCode', query) as string;
-    const schoolName = R.propOr('', 'schoolName', query) as string;
-    const subjectName = R.propOr('', 'subjectName', query) as string;
-    const schoolType = R.propOr('', 'schoolType', query) as string;
-    const countryName = R.propOr('', 'countryName', query) as string;
-    const cityName = R.propOr('', 'cityName', query) as string;
-
     // Pre-load query params to the form.
     const initialValues = {
-        courseName,
-        courseCode,
-        schoolName,
-        subjectName,
-        schoolType,
-        countryName,
-        cityName,
+        courseName: R.propOr('', 'courseName', query) as string,
+        courseCode: R.propOr('', 'courseName', query) as string,
+        school: school || null,
+        subject: subject || null,
+        schoolType: schoolType || null,
+        country: country || null,
+        city: city || null,
     };
 
     const renderForm = (props: FormikProps<FilterSearchResultsFormValues>): JSX.Element => (
@@ -129,7 +131,7 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
             </FormControl>
             <FormControl fullWidth>
                 <Field
-                    name="schoolName"
+                    name="school"
                     label={t('forms:school')}
                     placeholder={t('forms:school')}
                     dataKey="schools"
@@ -141,7 +143,7 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
             </FormControl>
             <FormControl fullWidth>
                 <Field
-                    name="subjectName"
+                    name="subject"
                     label={t('forms:subject')}
                     placeholder={t('forms:subject')}
                     dataKey="subjects"
@@ -165,7 +167,7 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
             </FormControl>
             <FormControl fullWidth>
                 <Field
-                    name="countryName"
+                    name="country"
                     label={t('forms:country')}
                     placeholder={t('forms:country')}
                     dataKey="countries"
@@ -177,7 +179,7 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
             </FormControl>
             <FormControl fullWidth>
                 <Field
-                    name="cityName"
+                    name="city"
                     label={t('forms:city')}
                     placeholder={t('forms:city')}
                     dataKey="cities"
@@ -236,16 +238,17 @@ const SearchPage: I18nPage<Props> = ({ courses }) => {
 SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await useAuthSync(ctx);
     const { apolloClient, query } = ctx;
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
     try {
         const { data } = await apolloClient.query({
-            query: SearchDocument,
-            variables: { ...query },
+            query: SearchCoursesDocument,
+            variables: query,
         });
 
-        return { ...data, namespacesRequired: includeDefaultNamespaces(['search']) };
+        return { ...data, ...nameSpaces };
     } catch {
-        return { namespacesRequired: includeDefaultNamespaces(['search']) };
+        return nameSpaces;
     }
 };
 

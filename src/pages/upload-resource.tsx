@@ -13,9 +13,8 @@ import { Box, CardHeader, FormControl } from '@material-ui/core';
 import {
     CourseType,
     CoursesDocument,
-    ResourceTypeObjectType,
     ResourceTypesDocument,
-    SimpleCourseDetailDocument,
+    UploadResourceInitialDataDocument,
 } from '../../generated/graphql';
 import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
@@ -32,9 +31,9 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-export interface UploadResourceFormValues {
+interface UploadResourceFormValues {
     resourceTitle: string;
-    resourceType: ResourceTypeObjectType | null;
+    resourceType: string;
     course: CourseType | null;
     files: File[];
 }
@@ -51,13 +50,11 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:resourceTitleRequired')),
-        resourceType: Yup.object()
-            .nullable()
-            .required(t('validation:resourceTypeRequired')),
+        resourceType: Yup.string().required(t('validation:resourceTypeRequired')),
         course: Yup.object()
             .nullable()
             .required(t('validation:courseRequired')),
-        files: Yup.string().required(t('validation:filesRequired')),
+        files: Yup.array().required(t('validation:filesRequired')),
     });
 
     const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
@@ -70,7 +67,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
     const initialValues = {
         resourceTitle: '',
-        resourceType: null,
+        resourceType: '',
         course: course || null,
         files: [],
         general: '',
@@ -153,19 +150,18 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await usePrivatePage(ctx);
     const { query, apolloClient } = ctx;
-    const { courseId } = query;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
-    if (courseId) {
+    if (!!query.course) {
         try {
-            const { data } = await apolloClient.query({ query: SimpleCourseDetailDocument, variables: { courseId } });
+            const { data } = await apolloClient.query({ query: UploadResourceInitialDataDocument, variables: query });
             return { ...data, ...nameSpaces };
         } catch {
             return nameSpaces;
         }
+    } else {
+        return nameSpaces;
     }
-
-    return nameSpaces;
 };
 
 export default compose(withApollo, withRedux)(UploadResourcePage);
