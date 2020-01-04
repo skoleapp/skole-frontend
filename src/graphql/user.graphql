@@ -1,0 +1,42 @@
+query Users {
+    users {
+        id
+        username
+        points
+        avatarThumbnail
+    }
+}
+
+query UserDetail($id: Int!) {
+    user(userId: $id) {
+        id
+        username
+        email
+        title
+        bio
+        avatar
+        points
+        courseCount
+        resourceCount
+        created
+    }
+}
+
+mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String) {
+    updateUser(input: { username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar }) {
+        user {
+            id
+            username
+            email
+            title
+            bio
+            avatar
+            points
+            created
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}

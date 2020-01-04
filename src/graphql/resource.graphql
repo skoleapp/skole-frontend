@@ -1,0 +1,22 @@
+query ResourceDetail($id: Int!) {
+    resource(resourceId: $id) {
+        id
+        resourceType
+        title
+        file
+        date
+        created
+        creator {
+            id
+        }
+        modified
+        created
+        points
+        resourceParts {
+            id
+            title
+            file
+            text
+        }
+    }
+}

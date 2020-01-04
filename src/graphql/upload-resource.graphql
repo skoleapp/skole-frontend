@@ -1,0 +1,6 @@
+query UploadResourceInitialData($course: Int) {
+    course(courseId: $course) {
+        id
+        name
+    }
+}

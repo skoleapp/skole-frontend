@@ -1,0 +1,28 @@
+query CourseDetail($courseId: Int!) {
+    course(courseId: $courseId) {
+        id
+        name
+        code
+        subject {
+            id
+            name
+        }
+        school {
+            id
+            name
+        }
+        creator {
+            id
+            username
+        }
+        resources {
+            id
+            title
+            points
+        }
+        modified
+        created
+        points
+        resourceCount
+    }
+}

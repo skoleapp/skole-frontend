@@ -1,0 +1,11 @@
+query SchoolDetail($id: Int!) {
+    school(schoolId: $id) {
+        id
+        name
+        city
+        country
+        schoolType
+        subjectCount
+        courseCount
+    }
+}
