@@ -13,3 +13,4 @@ export { TabPanel } from './TabPanel';
 export { TextLink } from './TextLink';
 export { AutoCompleteField } from './AutoCompleteField';
 export { Download } from './Download';
+export { StyledTabs } from './StyledTabs';
