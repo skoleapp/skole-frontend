@@ -160,7 +160,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         return (
             <Layout heading={username} title={username} backUrl>
                 <StyledCard>
-                    <StyledUserProfileCardContent>
+                    <Box>
                         {renderTopSection}
                         <Divider />
                         {renderAccountInfo}
@@ -169,7 +169,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                         <Divider />
                         {renderTabs}
                         {renderTabContent}
-                    </StyledUserProfileCardContent>
+                    </Box>
                 </StyledCard>
             </Layout>
         );
@@ -177,12 +177,6 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         return <NotFound title={t('profile:notFound')} />;
     }
 };
-
-const StyledUserProfileCardContent = styled(Box)`
-    .label {
-        font-size: 0.75rem;
-    }
-`;
 
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await useAuthSync(ctx);
