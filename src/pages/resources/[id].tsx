@@ -1,15 +1,39 @@
 import * as R from 'ramda';
 
-import { CardContent, CardHeader, Divider, Tab, Tabs } from '@material-ui/core';
+import {
+    Avatar,
+    Box,
+    CardContent,
+    CardHeader,
+    Divider,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Tab,
+    Tabs,
+    Typography,
+} from '@material-ui/core';
+import { CloudDownload, ScoreOutlined } from '@material-ui/icons';
+import {
+    Download,
+    Layout,
+    NotFound,
+    SlimCardContent,
+    StyledCard,
+    StyledList,
+    TabPanel,
+    TextLink,
+} from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { Layout, NotFound, StyledCard, TabPanel } from '../../components';
 import { ResourceDetailDocument, ResourcePartType, ResourceType } from '../../../generated/graphql';
-import { useAuthSync, useTabs } from '../../utils';
+import { getFilePath, useAuthSync, useTabs } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
+import Image from 'material-ui-image';
 import React from 'react';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../../i18n';
+import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends I18nProps {
@@ -18,19 +42,89 @@ interface Props extends I18nProps {
 
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { tabValue, handleTabChange } = useTabs();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     if (resource) {
         const resourceTitle = R.propOr('-', 'title', resource) as string;
+        const resourceType = R.propOr('-', 'resourceType', resource);
+        const resourceCourseId = R.propOr('', 'id', resource.course);
+        const resourceCourseName = R.propOr('-', 'name', resource.course) as string;
+        const resourceSchoolId = R.propOr('', 'id', resource.school);
+        const resourceSchoolName = R.propOr('-', 'name', resource.school) as string;
+        const creatorId = R.propOr('', 'id', resource.creator);
+        const creatorName = R.propOr('-', 'username', resource.creator) as string;
+        moment.locale(i18n.language); // Set moment language.
+        const created = moment(resource.created).format('LL');
+        const modified = moment(resource.modified).format('LL');
+        const points = R.propOr('-', 'points', resource);
         const resourceParts = R.propOr([], 'resourceParts', resource) as ResourcePartType[];
+
+        const renderGeneralResourceInfo = (
+            <Box textAlign="left">
+                <Typography variant="body1">
+                    {t('common:resourceType')}: {resourceType}
+                </Typography>
+                <Typography variant="body1">
+                    {t('common:course')}:{' '}
+                    <TextLink href={`/courses/${resourceCourseId}`} color="primary">
+                        {resourceCourseName}
+                    </TextLink>
+                </Typography>
+                <Typography variant="body1">
+                    {t('common:school')}:{' '}
+                    <TextLink href={`/schools/${resourceSchoolId}`} color="primary">
+                        {resourceSchoolName}
+                    </TextLink>
+                </Typography>
+                <Typography variant="body1">
+                    {t('common:creator')}:{' '}
+                    <TextLink href={`/users/${creatorId}`} color="primary">
+                        {creatorName}
+                    </TextLink>
+                </Typography>
+                <Typography variant="body1">
+                    {t('common:created')}: {created}
+                </Typography>
+                <Typography variant="body1">
+                    {t('common:modified')}: {modified}
+                </Typography>
+            </Box>
+        );
+
+        const renderResourceInfoList = (
+            <StyledList>
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <ScoreOutlined />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText>
+                        {t('common:points')}: {points}
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <CloudDownload />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText>{t('common:downloads')}: 0</ListItemText>
+                </ListItem>
+            </StyledList>
+        );
 
         return (
             <Layout title={resourceTitle} backUrl>
                 <StyledCard>
                     <CardHeader title={resourceTitle} />
-                    {/* <CardContent>
-                        <Image src={process.env.BACKEND_URL + resource.file} />
-                    </CardContent> */}
+                    <Divider />
+                    <CardContent>
+                        <Box className="flex-flow" display="flex" justifyContent="space-between" alignItems="center">
+                            {renderGeneralResourceInfo}
+                            {renderResourceInfoList}
+                        </Box>
+                    </CardContent>
                     <Divider />
                     <Tabs
                         value={tabValue}
@@ -50,6 +144,33 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     </TabPanel>
                     {resourceParts.map((r: ResourcePartType, i: number) => (
                         <TabPanel key={i} value={tabValue} index={i + 1}>
+                            <CardContent>
+                                <Box textAlign="left">
+                                    <Typography variant="body1">
+                                        {t('common:resourcePartType')}: {R.propOr('-', 'resourcePartType', r)}
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        {t('common:exerciseNumber')}: {R.propOr('-', 'exerciseNumber', r)}
+                                    </Typography>
+                                </Box>
+                            </CardContent>
+                            <Divider />
+                            <CardContent>
+                                <Box textAlign="left">
+                                    <Typography className="label" variant="body2" color="textSecondary">
+                                        {t('common:description')}
+                                    </Typography>
+                                    <Typography variant="body1">{R.propOr('-', 'text', r)}</Typography>
+                                </Box>
+                            </CardContent>
+                            <Divider />
+                            <CardContent>
+                                <Image src={getFilePath(r)} />
+                            </CardContent>
+                            <SlimCardContent>
+                                <Download url={getFilePath(r)} fileName={r.title} />
+                            </SlimCardContent>
+                            <Divider />
                             <CardContent>Here will be {r.title} discussion thread...</CardContent>
                         </TabPanel>
                     ))}
