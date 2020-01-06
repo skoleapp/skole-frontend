@@ -1,8 +1,9 @@
-import { Box, Container } from '@material-ui/core';
-import React from 'react';
-import styled from 'styled-components';
-import { breakpoints } from '../../styles';
 import { BottomNavbar, Footer, Head, Notifications, SkoleGDPR, TopNavbar } from '../layout';
+import { Box, Container } from '@material-ui/core';
+
+import React from 'react';
+import { breakpoints } from '../../styles';
+import styled from 'styled-components';
 
 interface Props {
     title: string;
@@ -28,9 +29,14 @@ const StyledLayout = styled(Box)`
     text-align: center;
     min-height: 100vh;
     position: relative;
+    display: flex;
+    flex-direction: column;
 
     .MuiContainer-root {
         padding: 0.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
 
         @media only screen and (min-width: ${breakpoints.SM}) {
             padding: 1rem;
