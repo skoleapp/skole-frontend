@@ -5,8 +5,8 @@ query UploadResourceInitialData($course: Int) {
     }
 }
 
-mutation UploadResource($title: String!, $resourceType: ID!, $course: ID!, $files: String!) {
-    uploadResource(input: { title: $title, resourceType: $resourceType, course: $course, files: $files }) {
+mutation UploadResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $files: String!) {
+    uploadResource(input: { title: $resourceTitle, resourceType: $resourceType, course: $course, files: $files }) {
         resource {
             id
         }
