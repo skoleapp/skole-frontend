@@ -1,13 +1,12 @@
 import { Box, Button, CardContent, Divider, MenuItem, MenuList, Typography } from '@material-ui/core';
 import { I18nPage, I18nProps, SkoleContext, State } from '../types';
-import { Layout, SlimCardContent, StyledCard } from '../components';
+import { LanguageSelector, Layout, SlimCardContent, StyledCard } from '../components';
 import { Router, includeDefaultNamespaces } from '../i18n';
 import { menuItems, useAuthSync } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { withApollo, withRedux } from '../lib';
 
 import React from 'react';
-import { TFunction } from 'next-i18next';
 import { compose } from 'redux';
 import { deAuthenticate } from '../actions';
 import { useApolloClient } from 'react-apollo';
@@ -17,8 +16,7 @@ const SettingsPage: I18nPage = () => {
     const { authenticated } = useSelector((state: State) => state.auth);
     const apolloClient = useApolloClient();
     const dispatch = useDispatch();
-    const { t, i18n } = useTranslation();
-    const handleLanguageSelect = (value: string) => (): Promise<TFunction> => i18n.changeLanguage(value);
+    const { t } = useTranslation();
     const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
     const renderMenuSubHeader = (text: string): JSX.Element => (
@@ -35,11 +33,11 @@ const SettingsPage: I18nPage = () => {
         </MenuItem>
     ));
 
-    const renderLanguageMenuItems = menuItems.language.map((m, i) => (
-        <MenuItem key={i} onClick={handleLanguageSelect(m.value)}>
-            {t(m.title)}
-        </MenuItem>
-    ));
+    const renderLanguage = (
+        <Box margin="0 0.5rem" textAlign="left">
+            <LanguageSelector />
+        </Box>
+    );
 
     const renderAboutMenuItems = menuItems.about.map((m, i) => (
         <MenuItem key={i} onClick={handleRedirect(m.href)}>
@@ -59,7 +57,7 @@ const SettingsPage: I18nPage = () => {
             {renderAccountMenuItems}
             <Divider />
             {renderMenuSubHeader('common:language')}
-            {renderLanguageMenuItems}
+            {renderLanguage}
             <Divider />
             {renderMenuSubHeader('common:about')}
             {renderAboutMenuItems}
@@ -72,7 +70,7 @@ const SettingsPage: I18nPage = () => {
     const renderUnAuthenticatedMenuList = (
         <MenuList>
             {renderMenuSubHeader('common:language')}
-            {renderLanguageMenuItems}
+            {renderLanguage}
             <Divider />
             {renderMenuSubHeader('common:about')}
             {renderAboutMenuItems}

@@ -14,3 +14,4 @@ export { TextLink } from './TextLink';
 export { AutoCompleteField } from './AutoCompleteField';
 export { Download } from './Download';
 export { StyledTabs } from './StyledTabs';
+export { LanguageSelector } from './LanguageSelector';
