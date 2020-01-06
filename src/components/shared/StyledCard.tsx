@@ -27,4 +27,8 @@ export const StyledCard = styled(Card)`
         width: 10rem;
         margin: 1rem;
     }
+
+    .label {
+        font-size: 0.75rem;
+    }
 `;
