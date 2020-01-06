@@ -1,21 +1,7 @@
 {
-    "usernameRequired": "Krävs",
+    "fieldRequired": "Krävs",
     "invalidEmail": "Invalid email",
-    "emailRequired": "Krävs",
-    "usernameOrEmailRequired": "Krävs",
-    "passwordRequired": "Krävs",
     "passwordTooShort": "Lösenordet måste vara minst 6 tecken lång",
     "passwordsNotMatch": "Lösenorden stämmer inte överens",
-    "confirmPasswordRequired": "Krävs",
-    "oldPasswordRequired": "Krävs",
-    "newPasswordRequired": "Krävs",
-    "resourceTitleRequired": "Krävs",
-    "resourceTypeRequired": "Krävs",
-    "courseRequired": "Krävs",
-    "courseNameRequired": "Krävs",
-    "filesRequired": "En eller flera filer krävs",
-    "contactTypeRequired": "Krävs",
-    "messageRequired": "Krävs",
-    "subjectRequired": "Krävs",
-    "schoolRequired": "Krävs"
+    "filesRequired": "En eller flera filer krävs"
 }

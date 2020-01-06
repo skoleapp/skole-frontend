@@ -35,13 +35,13 @@ const ChangePasswordPage: I18nPage = () => {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        oldPassword: Yup.string().required(t('validation:oldPasswordRequired')),
+        oldPassword: Yup.string().required(t('validation:fieldRequired')),
         newPassword: Yup.string()
             .min(6, t('validation:passwordTooShort'))
-            .required(t('validation:newPasswordRequired')),
+            .required(t('validation:fieldRequired')),
         confirmNewPassword: Yup.string()
             .oneOf([Yup.ref('newPassword'), null], t('validation:passwordsNotMatch'))
-            .required(t('validation:confirmPasswordRequired')),
+            .required(t('validation:fieldRequired')),
     });
 
     const onCompleted = async ({ changePassword }: ChangePasswordMutation): Promise<void> => {

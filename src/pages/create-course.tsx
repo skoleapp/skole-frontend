@@ -38,14 +38,14 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        courseName: Yup.string().required(t('validation:courseNameRequired')),
+        courseName: Yup.string().required(t('validation:fieldRequired')),
         courseCode: Yup.string(),
         subject: Yup.object()
             .nullable()
-            .required(t('validation:subjectRequired')),
+            .required(t('validation:fieldRequired')),
         school: Yup.object()
             .nullable()
-            .required(t('validation:schoolRequired')),
+            .required(t('validation:fieldRequired')),
     });
 
     const onCompleted = async ({ createCourse }: CreateCourseMutation): Promise<void> => {

@@ -31,10 +31,10 @@ const ResetPasswordPage: I18nPage = () => {
     const validationSchema = Yup.object().shape({
         password: Yup.string()
             .min(6, t('validation:passwordTooShort'))
-            .required(t('validation:passwordRequired')),
+            .required(t('validation:fieldRequired')),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
-            .required(t('validation:confirmPasswordRequired')),
+            .required(t('validation:fieldRequired')),
     });
 
     const handleSubmit = async (values: ResetPasswordFormValues): Promise<void> => {

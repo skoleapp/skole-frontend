@@ -67,7 +67,7 @@ export const DeleteAccountPage: I18nPage = () => {
     };
 
     const validationSchema = Yup.object().shape({
-        password: Yup.string().required(t('validation:passwordRequired')),
+        password: Yup.string().required(t('validation:fieldRequired')),
     });
 
     const renderForm = (props: FormikProps<DeleteAccountFormValues>): JSX.Element => (

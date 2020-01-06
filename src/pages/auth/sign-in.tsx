@@ -43,8 +43,8 @@ const SignInPage: I18nPage = () => {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        usernameOrEmail: Yup.string().required(t('validation:usernameOrEmailRequired')),
-        password: Yup.string().required(t('validation:passwordRequired')),
+        usernameOrEmail: Yup.string().required(t('validation:fieldRequired')),
+        password: Yup.string().required(t('validation:fieldRequired')),
     });
 
     const onCompleted = ({ signIn }: SignInMutation): void => {

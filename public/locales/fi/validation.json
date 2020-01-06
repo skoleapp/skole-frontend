@@ -1,21 +1,7 @@
 {
-    "usernameRequired": "Käyttäjätunnus vaadittu.",
+    "fieldRequired": "Vaaditaan.",
     "invalidEmail": "Virheellinen sähköposti.",
-    "emailRequired": "Sähköposti vaadittu.",
-    "usernameOrEmailRequired": "Käyttäjätunnus tai sähköposti vaadittu.",
-    "passwordRequired": "Salasana vaadittu.",
     "passwordTooShort": "Salasanan tulee olla vähintään 6 merkkiä pitkä.",
     "passwordsNotMatch": "Salasanat eivät täsmää.",
-    "confirmPasswordRequired": "Salasanan vahvistus vaadittu.",
-    "oldPasswordRequired": "Vanha salasana vaadittu.",
-    "newPasswordRequired": "Uusi salasana vaadittu.",
-    "resourceTitleRequired": "Resurssin otsikko vaadittu.",
-    "resourceTypeRequired": "Resurssityyppi vaadittu.",
-    "courseRequired": "Kurssi vaadittu.",
-    "courseNameRequired": "Kurssin nimi vaadittu.",
-    "filesRequired": "Vähintään yksi tiedosto vaadittu.",
-    "contactTypeRequired": "Yhteydenottotyyppi vaadittu.",
-    "messageRequired": "Viesti vaadittu.",
-    "subjectRequired": "Oppiaine vaadittu.",
-    "schoolRequired": "Koulu vaadittu."
+    "filesRequired": "Vähintään yksi tiedosto vaadittu."
 }

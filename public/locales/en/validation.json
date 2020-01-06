@@ -1,21 +1,7 @@
 {
-    "usernameRequired": "Username is required.",
+    "fieldRequired": "Field required.",
     "invalidEmail": "Invalid email.",
-    "emailRequired": "Email is required.",
-    "usernameOrEmailRequired": "Username or email is required.",
-    "passwordRequired": "Password is required.",
     "passwordTooShort": "Password must be at least 6 characters long.",
     "passwordsNotMatch": "Passwords do not match.",
-    "confirmPasswordRequired": "Password confirmation is required.",
-    "oldPasswordRequired": "Old password is required.",
-    "newPasswordRequired": "New password is required.",
-    "resourceTitleRequired": "Resource title is required.",
-    "resourceTypeRequired": "Resource type is required.",
-    "courseRequired": "Course is required.",
-    "courseNameRequired": "Course name is required.",
-    "filesRequired": "One or more files required.",
-    "contactTypeRequired": "Contact type is required.",
-    "messageRequired": "Message is required.",
-    "subjectRequired": "Subject is required.",
-    "schoolRequired": "School is required."
+    "filesRequired": "One or more files required."
 }

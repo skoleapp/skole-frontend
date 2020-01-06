@@ -49,11 +49,11 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        resourceTitle: Yup.string().required(t('validation:resourceTitleRequired')),
-        resourceType: Yup.string().required(t('validation:resourceTypeRequired')),
+        resourceTitle: Yup.string().required(t('validation:fieldRequired')),
+        resourceType: Yup.string().required(t('validation:fieldRequired')),
         course: Yup.object()
             .nullable()
-            .required(t('validation:courseRequired')),
+            .required(t('validation:fieldRequired')),
         files: Yup.array().required(t('validation:filesRequired')),
     });
 

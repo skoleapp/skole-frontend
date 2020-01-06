@@ -72,10 +72,10 @@ const EditProfilePage: I18nPage = () => {
 
     const validationSchema = Yup.object().shape({
         title: Yup.string(),
-        username: Yup.string().required(t('validation:usernameRequired')),
+        username: Yup.string().required(t('validation:fieldRequired')),
         email: Yup.string()
             .email(t('validation:invalidEmail'))
-            .required(t('validation:emailRequired')),
+            .required(t('validation:fieldRequired')),
         bio: Yup.string(),
     });
 
