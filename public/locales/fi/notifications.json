@@ -4,5 +4,6 @@
     "resourceUploaded": "Resurssi lisätty!",
     "messageSubmitted": "Viesti lähetetty!",
     "courseCreated": "Kurssi luotu!",
-    "signedOut": "Kirjauduttu ulos!"
+    "signedOut": "Kirjauduttu ulos!",
+    "errorDownloadingResource": "Virhe ladattaessa tiedostoa!"
 }

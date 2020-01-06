@@ -30,5 +30,12 @@
     "courseCode": "Kurssikoodi",
     "creator": "Luoja",
     "country": "Maa",
-    "city": "Kaupunki"
+    "city": "Kaupunki",
+    "totalDownloads": "Lataukset yht.",
+    "downloads": "Lataukset",
+    "download": "Lataa",
+    "resourceType": "Resurssin tyyppi",
+    "resourcePartType": "Resurssiosan tyyppi",
+    "exerciseNumber": "Exercise Number",
+    "description": "Description"
 }
