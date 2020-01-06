@@ -159,7 +159,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                                     resources.map((r: ResourceType, i: number) => (
                                         <TableRow
                                             key={i}
-                                            onClick={(): Promise<boolean> => Router.push(`/resources/${r.id}}`)}
+                                            onClick={(): Promise<boolean> => Router.push(`/resources/${r.id}`)}
                                         >
                                             <TableCell>
                                                 <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
