@@ -10,7 +10,6 @@ import {
     ListItemAvatar,
     ListItemText,
     Tab,
-    Tabs,
     Typography,
 } from '@material-ui/core';
 import { CloudDownload, ScoreOutlined } from '@material-ui/icons';
@@ -21,6 +20,7 @@ import {
     SlimCardContent,
     StyledCard,
     StyledList,
+    StyledTabs,
     TabPanel,
     TextLink,
 } from '../../components';
@@ -59,121 +59,131 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const points = R.propOr('-', 'points', resource);
         const resourceParts = R.propOr([], 'resourceParts', resource) as ResourcePartType[];
 
-        const renderGeneralResourceInfo = (
-            <Box textAlign="left">
-                <Typography variant="body1">
-                    {t('common:resourceType')}: {resourceType}
-                </Typography>
-                <Typography variant="body1">
-                    {t('common:course')}:{' '}
-                    <TextLink href={`/courses/${resourceCourseId}`} color="primary">
-                        {resourceCourseName}
-                    </TextLink>
-                </Typography>
-                <Typography variant="body1">
-                    {t('common:school')}:{' '}
-                    <TextLink href={`/schools/${resourceSchoolId}`} color="primary">
-                        {resourceSchoolName}
-                    </TextLink>
-                </Typography>
-                <Typography variant="body1">
-                    {t('common:creator')}:{' '}
-                    <TextLink href={`/users/${creatorId}`} color="primary">
-                        {creatorName}
-                    </TextLink>
-                </Typography>
-                <Typography variant="body1">
-                    {t('common:created')}: {created}
-                </Typography>
-                <Typography variant="body1">
-                    {t('common:modified')}: {modified}
-                </Typography>
+        const renderResourceInfo = (
+            <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
+                <SlimCardContent>
+                    <Box textAlign="left">
+                        <Typography variant="body1">
+                            {t('common:resourceType')}: {resourceType}
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:course')}:{' '}
+                            <TextLink href={`/courses/${resourceCourseId}`} color="primary">
+                                {resourceCourseName}
+                            </TextLink>
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:school')}:{' '}
+                            <TextLink href={`/schools/${resourceSchoolId}`} color="primary">
+                                {resourceSchoolName}
+                            </TextLink>
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:creator')}:{' '}
+                            <TextLink href={`/users/${creatorId}`} color="primary">
+                                {creatorName}
+                            </TextLink>
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:created')}: {created}
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:modified')}: {modified}
+                        </Typography>
+                    </Box>
+                </SlimCardContent>
+                <SlimCardContent>
+                    <StyledList>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <ScoreOutlined />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText>
+                                {t('common:points')}: {points}
+                            </ListItemText>
+                        </ListItem>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <CloudDownload />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText>{t('common:downloads')}: 0</ListItemText>
+                        </ListItem>
+                    </StyledList>
+                </SlimCardContent>
             </Box>
         );
 
-        const renderResourceInfoList = (
-            <StyledList>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ScoreOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        {t('common:points')}: {points}
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <CloudDownload />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>{t('common:downloads')}: 0</ListItemText>
-                </ListItem>
-            </StyledList>
+        const renderTabs = (
+            // <Box display="flex" justifyContent="center">
+            <StyledTabs
+                value={tabValue}
+                onChange={handleTabChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="scrollable"
+                scrollButtons="on"
+            >
+                <Tab label="General" />
+                {resourceParts.map((r: ResourcePartType, i: number) => (
+                    <Tab key={i} label={r.title} />
+                ))}
+            </StyledTabs>
+            // </Box>
         );
+
+        const renderGeneralDiscussionThread = (
+            <TabPanel value={tabValue} index={0}>
+                <CardContent>Here will be general discussion thread...</CardContent>
+            </TabPanel>
+        );
+
+        const renderResourceParts = resourceParts.map((r: ResourcePartType, i: number) => (
+            <TabPanel key={i} value={tabValue} index={i + 1}>
+                <CardContent>
+                    <Box textAlign="left">
+                        <Typography variant="body1">
+                            {t('common:resourcePartType')}: {R.propOr('-', 'resourcePartType', r)}
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:exerciseNumber')}: {R.propOr('-', 'exerciseNumber', r)}
+                        </Typography>
+                    </Box>
+                </CardContent>
+                <Divider />
+                <CardContent>
+                    <Box textAlign="left">
+                        <Typography className="label" variant="body2" color="textSecondary">
+                            {t('common:description')}
+                        </Typography>
+                        <Typography variant="body1">{R.propOr('-', 'text', r)}</Typography>
+                    </Box>
+                </CardContent>
+                <Divider />
+                <CardContent>
+                    <Image src={getFilePath(r)} />
+                </CardContent>
+                <SlimCardContent>
+                    <Download url={getFilePath(r)} fileName={r.title} />
+                </SlimCardContent>
+                <Divider />
+                <CardContent>Here will be {r.title} discussion thread...</CardContent>
+            </TabPanel>
+        ));
 
         return (
             <Layout title={resourceTitle} backUrl>
                 <StyledCard>
                     <CardHeader title={resourceTitle} />
                     <Divider />
-                    <CardContent>
-                        <Box className="flex-flow" display="flex" justifyContent="space-between" alignItems="center">
-                            {renderGeneralResourceInfo}
-                            {renderResourceInfoList}
-                        </Box>
-                    </CardContent>
+                    {renderResourceInfo}
                     <Divider />
-                    <Tabs
-                        value={tabValue}
-                        onChange={handleTabChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="scrollable"
-                        scrollButtons="on"
-                    >
-                        <Tab label="General" />
-                        {resourceParts.map((r: ResourcePartType, i: number) => (
-                            <Tab key={i} label={r.title} />
-                        ))}
-                    </Tabs>
-                    <TabPanel value={tabValue} index={0}>
-                        <CardContent>Here will be general discussion thread...</CardContent>
-                    </TabPanel>
-                    {resourceParts.map((r: ResourcePartType, i: number) => (
-                        <TabPanel key={i} value={tabValue} index={i + 1}>
-                            <CardContent>
-                                <Box textAlign="left">
-                                    <Typography variant="body1">
-                                        {t('common:resourcePartType')}: {R.propOr('-', 'resourcePartType', r)}
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        {t('common:exerciseNumber')}: {R.propOr('-', 'exerciseNumber', r)}
-                                    </Typography>
-                                </Box>
-                            </CardContent>
-                            <Divider />
-                            <CardContent>
-                                <Box textAlign="left">
-                                    <Typography className="label" variant="body2" color="textSecondary">
-                                        {t('common:description')}
-                                    </Typography>
-                                    <Typography variant="body1">{R.propOr('-', 'text', r)}</Typography>
-                                </Box>
-                            </CardContent>
-                            <Divider />
-                            <CardContent>
-                                <Image src={getFilePath(r)} />
-                            </CardContent>
-                            <SlimCardContent>
-                                <Download url={getFilePath(r)} fileName={r.title} />
-                            </SlimCardContent>
-                            <Divider />
-                            <CardContent>Here will be {r.title} discussion thread...</CardContent>
-                        </TabPanel>
-                    ))}
+                    {renderTabs}
+                    {renderGeneralDiscussionThread}
+                    {renderResourceParts}
                 </StyledCard>
             </Layout>
         );

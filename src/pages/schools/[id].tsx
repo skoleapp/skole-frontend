@@ -37,64 +37,79 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
         const courseCount = R.propOr('-', 'courseCount', school);
         const subjectCount = R.propOr('-', 'subjectCount', school);
 
-        const renderGeneralSchoolInfo = (
-            <SlimCardContent>
-                <Box textAlign="left">
-                    <Typography variant="body1">
-                        {t('common:schoolType')}:{' '}
-                        <TextLink
-                            href={{ pathname: '/search', query: { schoolType: R.propOr('', 'schoolType', school) } }}
-                            color="primary"
-                        >
-                            {schoolType}
-                        </TextLink>
-                    </Typography>
-                    <Typography variant="body1">
-                        {t('common:country')}:{' '}
-                        <TextLink
-                            href={{ pathname: '/search', query: { countryName: R.propOr('', 'country', school) } }}
-                            color="primary"
-                        >
-                            {country}
-                        </TextLink>
-                    </Typography>
-                    <Typography variant="body1">
-                        {t('common:city')}:{' '}
-                        <TextLink
-                            href={{ pathname: '/search', query: { cityName: R.propOr('', 'city', school) } }}
-                            color="primary"
-                        >
-                            {city}
-                        </TextLink>
-                    </Typography>
-                </Box>
-            </SlimCardContent>
+        const renderSchoolInfo = (
+            <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
+                <SlimCardContent>
+                    <Box textAlign="left">
+                        <Typography variant="body1">
+                            {t('common:schoolType')}:{' '}
+                            <TextLink
+                                href={{
+                                    pathname: '/search',
+                                    query: { schoolType: R.propOr('', 'schoolType', school) },
+                                }}
+                                color="primary"
+                            >
+                                {schoolType}
+                            </TextLink>
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:country')}:{' '}
+                            <TextLink
+                                href={{ pathname: '/search', query: { countryName: R.propOr('', 'country', school) } }}
+                                color="primary"
+                            >
+                                {country}
+                            </TextLink>
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:city')}:{' '}
+                            <TextLink
+                                href={{ pathname: '/search', query: { cityName: R.propOr('', 'city', school) } }}
+                                color="primary"
+                            >
+                                {city}
+                            </TextLink>
+                        </Typography>
+                    </Box>
+                </SlimCardContent>
+                <SlimCardContent>
+                    <StyledList>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <SchoolOutlined />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText>
+                                {t('common:courses')}: {courseCount}
+                            </ListItemText>
+                        </ListItem>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <SubjectOutlined />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText>
+                                {t('common:subjects')}: {subjectCount}
+                            </ListItemText>
+                        </ListItem>
+                    </StyledList>
+                </SlimCardContent>
+            </Box>
         );
 
-        const renderSchoolInfoList = (
+        const renderBottomSection = (
             <SlimCardContent>
-                <StyledList>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <SchoolOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            {t('common:courses')}: {courseCount}
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <SubjectOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            {t('common:subjects')}: {subjectCount}
-                        </ListItemText>
-                    </ListItem>
-                </StyledList>
+                <ButtonLink
+                    href={{ pathname: '/search', query: { schoolName: R.propOr('', 'name', school) } }}
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                >
+                    {t('common:courses')}
+                </ButtonLink>
             </SlimCardContent>
         );
 
@@ -103,21 +118,9 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                 <StyledCard>
                     <CardHeader title={schoolName} />
                     <Divider />
-                    <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                        {renderGeneralSchoolInfo}
-                        {renderSchoolInfoList}
-                    </Box>
+                    {renderSchoolInfo}
                     <Divider />
-                    <SlimCardContent>
-                        <ButtonLink
-                            href={{ pathname: '/search', query: { schoolName: R.propOr('', 'name', school) } }}
-                            variant="outlined"
-                            color="primary"
-                            fullWidth
-                        >
-                            {t('common:courses')}
-                        </ButtonLink>
-                    </SlimCardContent>
+                    {renderBottomSection}
                 </StyledCard>
             </Layout>
         );

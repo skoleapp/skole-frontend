@@ -9,10 +9,18 @@ import {
     ListItemAvatar,
     ListItemText,
     Tab,
-    Tabs,
     Typography,
 } from '@material-ui/core';
-import { ButtonLink, Layout, NotFound, StyledCard, StyledList, TabPanel } from '../../components';
+import {
+    ButtonLink,
+    Layout,
+    NotFound,
+    SlimCardContent,
+    StyledCard,
+    StyledList,
+    StyledTabs,
+    TabPanel,
+} from '../../components';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { UserDetailDocument, UserType } from '../../../generated/graphql';
@@ -23,7 +31,6 @@ import React from 'react';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../../i18n';
 import moment from 'moment';
-import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -49,8 +56,10 @@ const UserPage: I18nPage<Props> = ({ user }) => {
 
         const renderTopSection = (
             <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                <Avatar className="main-avatar" src={getAvatar(user)} />
-                <CardContent>
+                <SlimCardContent>
+                    <Avatar className="main-avatar" src={getAvatar(user)} />
+                </SlimCardContent>
+                <SlimCardContent>
                     <StyledList>
                         <ListItem>
                             <ListItemAvatar>
@@ -82,13 +91,15 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                 {t('common:resources')}: {resourceCount}
                             </ListItemText>
                         </ListItem>
+                        <ListItem>
+                            {isOwnProfile && (
+                                <ButtonLink href="/account/edit-profile" color="primary" variant="outlined" fullWidth>
+                                    {t('profile:editProfileButton')}
+                                </ButtonLink>
+                            )}
+                        </ListItem>
                     </StyledList>
-                    {isOwnProfile && (
-                        <ButtonLink href="/account/edit-profile" color="primary" variant="outlined" fullWidth>
-                            {t('profile:editProfileButton')}
-                        </ButtonLink>
-                    )}
-                </CardContent>
+                </SlimCardContent>
             </Box>
         );
 
@@ -134,16 +145,16 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         const renderTabs = (
-            <Tabs
+            <StyledTabs
                 value={tabValue}
                 onChange={handleTabChange}
+                variant="fullWidth"
                 indicatorColor="primary"
                 textColor="primary"
-                variant="fullWidth"
             >
                 <Tab label={t('common:courses')} />
                 <Tab label={t('common:resources')} />
-            </Tabs>
+            </StyledTabs>
         );
 
         const renderTabContent = (

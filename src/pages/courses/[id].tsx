@@ -15,7 +15,6 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Tabs,
     Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, ScoreOutlined } from '@material-ui/icons';
@@ -28,6 +27,7 @@ import {
     StyledCard,
     StyledList,
     StyledTable,
+    StyledTabs,
     TabPanel,
     TextLink,
 } from '../../components';
@@ -62,72 +62,71 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceType[];
 
-        const renderGeneralCourseInfo = (
-            <SlimCardContent>
-                <Box textAlign="left">
-                    <Typography variant="body1">
-                        {t('common:courseCode')}: {courseCode}
-                    </Typography>
-                    <Typography variant="body1">
-                        {t('common:subject')}:{' '}
-                        <TextLink
-                            href={{ pathname: '/search', query: { subjectId: R.propOr('', 'id', subject) } }}
-                            color="primary"
-                        >
-                            {subjectName}
-                        </TextLink>
-                    </Typography>
-                    <Typography variant="body1">
-                        {t('common:school')}:{' '}
-                        <TextLink href={`/schools/${R.propOr('-', 'id', school)}`} color="primary">
-                            {schoolName}
-                        </TextLink>
-                    </Typography>
-                    <Typography variant="body1">
-                        {t('common:creator')}:{' '}
-                        <TextLink href={`/users/${R.propOr('', 'id', creator)}`} color="primary">
-                            {creatorName}
-                        </TextLink>
-                    </Typography>
-                    <Typography variant="body1">
-                        {t('common:created')}: {created}
-                    </Typography>
-                    <Typography variant="body1">
-                        {t('common:modified')}: {modified}
-                    </Typography>
-                </Box>
-            </SlimCardContent>
-        );
-
-        const renderCourseInfoList = (
-            <SlimCardContent>
-                <StyledList>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <ScoreOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            {t('common:points')}: {points}
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <CloudUploadOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            {t('common:resources')}: {resourceCount}
-                        </ListItemText>
-                    </ListItem>
-                </StyledList>
-            </SlimCardContent>
+        const renderCourseInfo = (
+            <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
+                <SlimCardContent>
+                    <Box textAlign="left">
+                        <Typography variant="body1">
+                            {t('common:courseCode')}: {courseCode}
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:subject')}:{' '}
+                            <TextLink
+                                href={{ pathname: '/search', query: { subjectId: R.propOr('', 'id', subject) } }}
+                                color="primary"
+                            >
+                                {subjectName}
+                            </TextLink>
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:school')}:{' '}
+                            <TextLink href={`/schools/${R.propOr('-', 'id', school)}`} color="primary">
+                                {schoolName}
+                            </TextLink>
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:creator')}:{' '}
+                            <TextLink href={`/users/${R.propOr('', 'id', creator)}`} color="primary">
+                                {creatorName}
+                            </TextLink>
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:created')}: {created}
+                        </Typography>
+                        <Typography variant="body1">
+                            {t('common:modified')}: {modified}
+                        </Typography>
+                    </Box>
+                </SlimCardContent>
+                <SlimCardContent>
+                    <StyledList>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <ScoreOutlined />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText>
+                                {t('common:points')}: {points}
+                            </ListItemText>
+                        </ListItem>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <CloudUploadOutlined />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText>
+                                {t('common:resources')}: {resourceCount}
+                            </ListItemText>
+                        </ListItem>
+                    </StyledList>
+                </SlimCardContent>
+            </Box>
         );
 
         const renderTabs = (
-            <Tabs
+            <StyledTabs
                 value={tabValue}
                 onChange={handleTabChange}
                 indicatorColor="primary"
@@ -136,27 +135,27 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             >
                 <Tab label={t('common:resources')} />
                 <Tab label={t('common:discussion')} />
-            </Tabs>
+            </StyledTabs>
         );
 
         const renderTabContent = (
             <>
                 <TabPanel value={tabValue} index={0}>
-                    <StyledTable>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>
-                                        <Typography variant="h6">{t('common:title')}</Typography>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Typography variant="h6">{t('common:points')}</Typography>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {resources.length ? (
-                                    resources.map((r: ResourceType, i: number) => (
+                    {resources.length ? (
+                        <StyledTable disableBoxShadow>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant="h6">{t('common:title')}</Typography>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Typography variant="h6">{t('common:points')}</Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {resources.map((r: ResourceType, i: number) => (
                                         <TableRow
                                             key={i}
                                             onClick={(): Promise<boolean> => Router.push(`/resources/${r.id}`)}
@@ -170,17 +169,15 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                                                 </Typography>
                                             </TableCell>
                                         </TableRow>
-                                    ))
-                                ) : (
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1">{t('course:noResources')}</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </StyledTable>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </StyledTable>
+                    ) : (
+                        <CardContent>
+                            <Typography variant="subtitle1">{t('course:noResources')}</Typography>
+                        </CardContent>
+                    )}
                 </TabPanel>
                 <TabPanel value={tabValue} index={1}>
                     <CardContent>Course discussion will show here...</CardContent>
@@ -193,10 +190,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 <StyledCard>
                     <CardHeader title={fullName} />
                     <Divider />
-                    <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                        {renderGeneralCourseInfo}
-                        {renderCourseInfoList}
-                    </Box>
+                    {renderCourseInfo}
                     <Divider />
                     {renderTabs}
                     {renderTabContent}
