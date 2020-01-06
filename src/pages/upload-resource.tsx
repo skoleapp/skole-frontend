@@ -78,7 +78,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         const { resourceTitle, resourceType, course, files } = values;
 
         const variables = {
-            title: resourceTitle,
+            resourceTitle,
             resourceType: R.propOr('', 'id', resourceType) as string,
             course: R.propOr('', 'id', course) as string,
             files: (files as unknown) as string,
