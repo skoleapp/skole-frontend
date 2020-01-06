@@ -34,7 +34,7 @@ const SettingsPage: I18nPage = () => {
     ));
 
     const renderLanguage = (
-        <Box margin="0 0.5rem" textAlign="left">
+        <Box margin="0.5rem" textAlign="left">
             <LanguageSelector />
         </Box>
     );

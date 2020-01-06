@@ -57,10 +57,11 @@ interface StyledLanguageSelectorProps {
     secondary?: boolean;
 }
 
-const StyledLanguageSelector = styled(Select)<StyledLanguageSelectorProps>`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledLanguageSelector = styled(({ secondary, ...other }) => <Select {...other} />)<StyledLanguageSelectorProps>`
     height: 2.5rem;
     margin: 0.5rem;
-    color: ${({ secondary }): string => (secondary ? 'var(--white) !important' : 'inherit')};
+    color: ${({ secondary }): string => (!!secondary ? 'var(--white) !important' : 'inherit')};
 
     @media only screen and (min-width: ${breakpoints.SM}) {
         max-width: 10rem;
