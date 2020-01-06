@@ -1,18 +1,13 @@
 import { Paper } from '@material-ui/core';
-import { breakpoints } from '../../styles';
 import styled from 'styled-components';
 
-export const StyledTable = styled(Paper)`
-    margin: 0 auto;
-    width: 100%;
+interface Props {
+    disableBoxShadow?: boolean;
+}
 
-    @media only screen and (min-width: ${breakpoints.SM}) {
-        max-width: 35rem;
-    }
-
-    .MuiButton-root {
-        margin-top: 0.5rem;
-    }
+export const StyledTable = styled(Paper)<Props>`
+    flex-grow: 1;
+    box-shadow: ${({ disableBoxShadow }): string => (disableBoxShadow ? 'none !important' : 'inherit')};
 
     .MuiTableBody-root {
         tr {

@@ -1,18 +1,8 @@
 import { Card } from '@material-ui/core';
-import { breakpoints } from '../../styles';
 import styled from 'styled-components';
 
 export const StyledCard = styled(Card)`
-    margin: 0 auto;
-    width: 100%;
-
-    @media only screen and (max-width: ${breakpoints.SM}) {
-        flex-grow: 1;
-    }
-
-    @media only screen and (min-width: ${breakpoints.SM}) {
-        max-width: 35rem;
-    }
+    flex-grow: 1;
 
     .MuiCardHeader-title {
         text-align: center;
