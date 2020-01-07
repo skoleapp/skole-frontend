@@ -1,16 +1,16 @@
 import * as Yup from 'yup';
 
 import { Field, Formik, FormikProps } from 'formik';
-import { FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../../components';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useForm, usePublicPage } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
+import { FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../../../components';
+import { I18nPage, I18nProps, SkoleContext } from '../../../types';
+import { useForm, usePublicPage } from '../../../utils';
+import { withApollo, withRedux } from '../../../lib';
 
 import { CardHeader } from '@material-ui/core';
 import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../../i18n';
+import { includeDefaultNamespaces } from '../../../i18n';
 import { useTranslation } from 'react-i18next';
 
 const initialValues = {
@@ -19,13 +19,13 @@ const initialValues = {
     general: '',
 };
 
-export interface ResetPasswordFormValues {
+export interface ResetPasswordConfirmFormValues {
     password: string;
     confirmPassword: string;
 }
 
-const ResetPasswordPage: I18nPage = () => {
-    const { ref, setSubmitting } = useForm<ResetPasswordFormValues>();
+const ResetPasswordConfirmPage: I18nPage = () => {
+    const { ref, setSubmitting } = useForm<ResetPasswordConfirmFormValues>();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -37,19 +37,20 @@ const ResetPasswordPage: I18nPage = () => {
             .required(t('validation:confirmPasswordRequired')),
     });
 
-    const handleSubmit = async (values: ResetPasswordFormValues): Promise<void> => {
+    const handleSubmit = async (values: ResetPasswordConfirmFormValues): Promise<void> => {
         const { password } = values;
         console.log('Submitted!', password);
         setSubmitting(false);
     };
 
-    const renderForm = (props: FormikProps<ResetPasswordFormValues>): JSX.Element => (
+    const renderForm = (props: FormikProps<ResetPasswordConfirmFormValues>): JSX.Element => (
         <StyledForm>
             <Field
                 placeholder={t('forms:password')}
                 name="password"
                 component={TextField}
                 label={t('forms:password')}
+                variant="outlined"
                 type="password"
                 fullWidth
             />
@@ -59,16 +60,17 @@ const ResetPasswordPage: I18nPage = () => {
                 type="password"
                 component={TextField}
                 label={t('forms:confirmPassword')}
+                variant="outlined"
                 fullWidth
             />
-            <FormSubmitSection submitButtonText={t('common:save')} {...props} />
+            <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </StyledForm>
     );
 
     return (
-        <Layout title={t('reset-password:title')} backUrl>
+        <Layout title={t('reset-password:confirm')} backUrl>
             <StyledCard>
-                <CardHeader title={t('reset-password:title')} />
+                <CardHeader title={t('reset-password:confirm')} />
                 <SlimCardContent>
                     <Formik
                         initialValues={initialValues}
@@ -84,9 +86,9 @@ const ResetPasswordPage: I18nPage = () => {
     );
 };
 
-ResetPasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+ResetPasswordConfirmPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
     return { namespacesRequired: includeDefaultNamespaces(['reset-password']) };
 };
 
-export default compose(withApollo, withRedux)(ResetPasswordPage);
+export default compose(withApollo, withRedux)(ResetPasswordConfirmPage);

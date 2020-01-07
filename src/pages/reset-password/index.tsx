@@ -18,12 +18,12 @@ const initialValues = {
     general: '',
 };
 
-export interface ForgotPasswordFormValues {
+export interface ResetPasswordLinkFormValues {
     email: string;
 }
 
-const ForgotPasswordPage: I18nPage = () => {
-    const { ref, setSubmitting } = useForm<ForgotPasswordFormValues>();
+const ResetPasswordLinkPage: I18nPage = () => {
+    const { ref, setSubmitting } = useForm<ResetPasswordLinkFormValues>();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -32,29 +32,30 @@ const ForgotPasswordPage: I18nPage = () => {
             .required(t('validation:emailRequired')),
     });
 
-    const handleSubmit = async (values: ForgotPasswordFormValues): Promise<void> => {
+    const handleSubmit = async (values: ResetPasswordLinkFormValues): Promise<void> => {
         const { email } = values;
         console.log('Submitted!', email);
         setSubmitting(false);
     };
 
-    const renderForm = (props: FormikProps<ForgotPasswordFormValues>): JSX.Element => (
+    const renderForm = (props: FormikProps<ResetPasswordLinkFormValues>): JSX.Element => (
         <StyledForm>
             <Field
                 placeholder={t('forms:email')}
                 name="email"
                 component={TextField}
                 label={t('forms:email')}
+                variant="outlined"
                 fullWidth
             />
-            <FormSubmitSection submitButtonText={t('forgot-password:submitButton')} {...props} />
+            <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </StyledForm>
     );
 
     return (
-        <Layout title={t('forgot-password:title')} backUrl>
+        <Layout title={t('reset-password:link')} backUrl>
             <StyledCard>
-                <CardHeader title={t('forgot-password:title')} />
+                <CardHeader title={t('reset-password:link')} />
                 <SlimCardContent>
                     <Formik
                         initialValues={initialValues}
@@ -70,9 +71,9 @@ const ForgotPasswordPage: I18nPage = () => {
     );
 };
 
-ForgotPasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+ResetPasswordLinkPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['forgot-password']) };
+    return { namespacesRequired: includeDefaultNamespaces(['reset-password']) };
 };
 
-export default compose(withApollo, withRedux)(ForgotPasswordPage);
+export default compose(withApollo, withRedux)(ResetPasswordLinkPage);
