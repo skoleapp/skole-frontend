@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-import { Avatar, Box, Button, ButtonProps } from '@material-ui/core';
+import { Avatar, Box, Button, ButtonProps, FormControl } from '@material-ui/core';
 import { ErrorMessage, Field, FieldAttributes, FormikProps } from 'formik';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
@@ -30,28 +30,30 @@ export const ImagePreviewField: React.FC<Props & ButtonProps> = ({ form, field, 
     };
 
     return (
-        <StyledImagePreviewField display="flex" flexDirection="column" alignItems="center" marginY="0.5rem">
-            <Avatar className="main-avatar" src={image ? preview : process.env.BACKEND_URL + field.value} />
-            <Field
-                value=""
-                name={field.name}
-                id="file-input"
-                accept="image/*"
-                type="file"
-                component="input"
-                onChange={handleChange}
-            />
-            <label htmlFor="file-input">
-                <Button variant="outlined" color="primary" component="span">
-                    {label}
-                </Button>
-            </label>
-            <ErrorMessage name={field.name} component={FormErrorMessage} />
+        <StyledImagePreviewField fullWidth>
+            <Box display="flex" flexDirection="column" alignItems="center" marginY="0.5rem">
+                <Avatar className="main-avatar" src={image ? preview : process.env.BACKEND_URL + field.value} />
+                <Field
+                    value=""
+                    name={field.name}
+                    id="file-input"
+                    accept="image/*"
+                    type="file"
+                    component="input"
+                    onChange={handleChange}
+                />
+                <label htmlFor="file-input">
+                    <Button variant="outlined" color="primary" component="span">
+                        {label}
+                    </Button>
+                </label>
+                <ErrorMessage name={field.name} component={FormErrorMessage} />
+            </Box>
         </StyledImagePreviewField>
     );
 };
 
-const StyledImagePreviewField = styled(Box)`
+const StyledImagePreviewField = styled(FormControl)`
     label {
         width: 100%;
     }

@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 
-import { CardHeader, FormControl } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
 import {
     FormSubmitSection,
@@ -18,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm, usePrivatePage } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
+import { CardHeader } from '@material-ui/core';
 import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
@@ -88,50 +88,40 @@ const EditProfilePage: I18nPage = () => {
 
     const renderForm = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
         <StyledForm>
-            <FormControl fullWidth>
-                <Field name="avatar" label={t('edit-profile:changeAvatarButton')} component={ImagePreviewField} />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    placeholder={t('forms:title')}
-                    name="title"
-                    component={TextField}
-                    label={t('forms:title')}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    placeholder={t('forms:username')}
-                    name="username"
-                    component={TextField}
-                    label={t('forms:username')}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    placeholder={t('forms:email')}
-                    name="email"
-                    component={TextField}
-                    label={t('forms:email')}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    placeholder={t('forms:bio')}
-                    name="bio"
-                    component={TextField}
-                    label={t('forms:bio')}
-                    variant="outlined"
-                    multiline
-                    fullWidth
-                />
-            </FormControl>
+            <Field name="avatar" label={t('edit-profile:changeAvatarButton')} component={ImagePreviewField} />
+            <Field
+                placeholder={t('forms:title')}
+                name="title"
+                component={TextField}
+                label={t('forms:title')}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                placeholder={t('forms:username')}
+                name="username"
+                component={TextField}
+                label={t('forms:username')}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                placeholder={t('forms:email')}
+                name="email"
+                component={TextField}
+                label={t('forms:email')}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                placeholder={t('forms:bio')}
+                name="bio"
+                component={TextField}
+                label={t('forms:bio')}
+                variant="outlined"
+                multiline
+                fullWidth
+            />
             <FormSubmitSection submitButtonText={t('common:save')} {...props} />
         </StyledForm>
     );
