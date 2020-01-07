@@ -81,12 +81,7 @@ const SettingsPage: I18nPage = () => {
     );
 
     const renderSignInButton = (
-        <Button
-            fullWidth
-            variant="outlined"
-            color="primary"
-            onClick={(): Promise<boolean> => Router.push('/auth/sign-in')}
-        >
+        <Button fullWidth variant="outlined" color="primary" onClick={(): Promise<boolean> => Router.push('/sign-in')}>
             {t('common:signIn')}
         </Button>
     );
