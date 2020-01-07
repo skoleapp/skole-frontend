@@ -1,18 +1,18 @@
 import * as Yup from 'yup';
 
 import { Box, CardHeader, Divider, FormControl, Link, Typography } from '@material-ui/core';
-import { ButtonLink, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../../components';
+import { ButtonLink, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
 import { Field, Formik, FormikProps } from 'formik';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { SignUpMutation, useSignUpMutation } from '../../../generated/graphql';
-import { useForm, usePublicPage } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { SignUpMutation, useSignUpMutation } from '../../generated/graphql';
+import { useForm, usePublicPage } from '../utils';
+import { withApollo, withRedux } from '../lib';
 
 import React from 'react';
 import { TextField } from 'formik-material-ui';
-import { authenticate } from '../../actions';
+import { authenticate } from '../actions';
 import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../../i18n';
+import { includeDefaultNamespaces } from '../i18n';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -77,6 +77,7 @@ const SignUpPage: I18nPage = () => {
                 name="username"
                 component={TextField}
                 label={t('forms:username')}
+                variant="outlined"
                 fullWidth
             />
             <Field
@@ -84,6 +85,7 @@ const SignUpPage: I18nPage = () => {
                 name="email"
                 component={TextField}
                 label={t('forms:email')}
+                variant="outlined"
                 fullWidth
             />
             <Field
@@ -91,6 +93,7 @@ const SignUpPage: I18nPage = () => {
                 name="password"
                 component={TextField}
                 label={t('forms:password')}
+                variant="outlined"
                 type="password"
                 fullWidth
             />
@@ -100,6 +103,7 @@ const SignUpPage: I18nPage = () => {
                 type="password"
                 component={TextField}
                 label={t('forms:confirmPassword')}
+                variant="outlined"
                 fullWidth
             />
             <FormControl fullWidth>
@@ -133,8 +137,8 @@ const SignUpPage: I18nPage = () => {
                     <Box marginTop="1rem">
                         <Divider />
                     </Box>
-                    <Box marginY="0.5rem">
-                        <ButtonLink href="/auth/sign-in" variant="outlined" color="primary" fullWidth>
+                    <Box marginTop="0.5rem">
+                        <ButtonLink href="/sign-in" variant="outlined" color="primary" fullWidth>
                             {t('sign-up:alreadyHaveAccount')}
                         </ButtonLink>
                     </Box>

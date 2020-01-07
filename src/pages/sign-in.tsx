@@ -9,18 +9,18 @@ import {
     StyledCard,
     StyledForm,
     TextLink,
-} from '../../components';
+} from '../components';
 import { Field, Formik, FormikProps } from 'formik';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { SignInMutation, useSignInMutation } from '../../../generated/graphql';
-import { useForm, usePublicPage } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { SignInMutation, useSignInMutation } from '../../generated/graphql';
+import { useForm, usePublicPage } from '../utils';
+import { withApollo, withRedux } from '../lib';
 
 import React from 'react';
 import { TextField } from 'formik-material-ui';
-import { authenticate } from '../../actions';
+import { authenticate } from '../actions';
 import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../../i18n';
+import { includeDefaultNamespaces } from '../i18n';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -73,6 +73,7 @@ const SignInPage: I18nPage = () => {
                 name="usernameOrEmail"
                 component={TextField}
                 label={t('forms:usernameOrEmail')}
+                variant="outlined"
                 fullWidth
             />
             <Field
@@ -80,6 +81,7 @@ const SignInPage: I18nPage = () => {
                 name="password"
                 component={TextField}
                 label={t('forms:password')}
+                variant="outlined"
                 type="password"
                 fullWidth
             />
@@ -103,12 +105,14 @@ const SignInPage: I18nPage = () => {
                     <Box marginTop="1rem">
                         <Divider />
                     </Box>
-                    <Box marginY="0.5rem">
-                        <ButtonLink href="/auth/sign-up" variant="outlined" color="primary" fullWidth>
+                    <Box marginTop="0.5rem">
+                        <ButtonLink href="/sign-up" variant="outlined" color="primary" fullWidth>
                             {t('sign-in:createAccount')}
                         </ButtonLink>
                     </Box>
-                    <TextLink href="/auth/forgot-password">{t('sign-in:forgotPassword')}</TextLink>
+                    <Box marginTop="1rem">
+                        <TextLink href="/reset-password">{t('sign-in:forgotPassword')}</TextLink>
+                    </Box>
                 </SlimCardContent>
             </StyledCard>
         </Layout>
