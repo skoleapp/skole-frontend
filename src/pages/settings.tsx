@@ -1,6 +1,6 @@
-import { Box, Button, CardContent, Divider, MenuItem, MenuList, Typography } from '@material-ui/core';
+import { Box, Button, Divider, ListItem, MenuItem, Typography } from '@material-ui/core';
 import { I18nPage, I18nProps, SkoleContext, State } from '../types';
-import { LanguageSelector, Layout, SlimCardContent, StyledCard } from '../components';
+import { LanguageSelector, Layout, SlimCardContent, StyledCard, StyledMenuList } from '../components';
 import { Router, includeDefaultNamespaces } from '../i18n';
 import { menuItems, useAuthSync } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,8 +20,8 @@ const SettingsPage: I18nPage = () => {
     const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
     const renderMenuSubHeader = (text: string): JSX.Element => (
-        <Box marginLeft="1rem">
-            <Typography variant="subtitle1" align="left" color="textSecondary">
+        <Box margin="0.25rem 1rem">
+            <Typography className="sub-header" variant="subtitle1" align="left" color="textSecondary">
                 {t(text)}
             </Typography>
         </Box>
@@ -34,9 +34,9 @@ const SettingsPage: I18nPage = () => {
     ));
 
     const renderLanguage = (
-        <Box margin="0.5rem" textAlign="left">
-            <LanguageSelector />
-        </Box>
+        <ListItem>
+            <LanguageSelector fullWidth />;
+        </ListItem>
     );
 
     const renderAboutMenuItems = menuItems.about.map((m, i) => (
@@ -52,7 +52,7 @@ const SettingsPage: I18nPage = () => {
     ));
 
     const renderAuthenticatedMenuList = (
-        <MenuList>
+        <StyledMenuList>
             {renderMenuSubHeader('settings:account')}
             {renderAccountMenuItems}
             <Divider />
@@ -64,11 +64,11 @@ const SettingsPage: I18nPage = () => {
             <Divider />
             {renderMenuSubHeader('common:legal')}
             {renderLegalItems}
-        </MenuList>
+        </StyledMenuList>
     );
 
     const renderUnAuthenticatedMenuList = (
-        <MenuList>
+        <StyledMenuList>
             {renderMenuSubHeader('common:language')}
             {renderLanguage}
             <Divider />
@@ -77,32 +77,43 @@ const SettingsPage: I18nPage = () => {
             <Divider />
             {renderMenuSubHeader('common:legal')}
             {renderLegalItems}
-        </MenuList>
+        </StyledMenuList>
     );
 
     const renderSignInButton = (
-        <Button fullWidth variant="outlined" color="primary" onClick={(): Promise<boolean> => Router.push('/sign-in')}>
-            {t('common:signIn')}
-        </Button>
+        <ListItem>
+            <Button
+                fullWidth
+                variant="outlined"
+                color="primary"
+                onClick={(): Promise<boolean> => Router.push('/sign-in')}
+            >
+                {t('common:signIn')}
+            </Button>
+        </ListItem>
     );
 
     const renderSignOutButton = (
-        <Button
-            fullWidth
-            variant="outlined"
-            color="primary"
-            onClick={(): void => dispatch((deAuthenticate(apolloClient) as unknown) as void)}
-        >
-            {t('common:signOut')}
-        </Button>
+        <ListItem>
+            <Button
+                fullWidth
+                variant="outlined"
+                color="primary"
+                onClick={(): void => dispatch((deAuthenticate(apolloClient) as unknown) as void)}
+            >
+                {t('common:signOut')}
+            </Button>
+        </ListItem>
     );
 
     return (
         <Layout heading={t('settings:title')} title={t('settings:title')} backUrl>
             <StyledCard>
-                <CardContent>{authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}</CardContent>
-                <Divider />
-                <SlimCardContent>{authenticated ? renderSignOutButton : renderSignInButton}</SlimCardContent>
+                <SlimCardContent>
+                    {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
+                    <Divider />
+                    {authenticated ? renderSignOutButton : renderSignInButton}
+                </SlimCardContent>
             </StyledCard>
         </Layout>
     );

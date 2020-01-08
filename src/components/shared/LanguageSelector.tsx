@@ -1,7 +1,6 @@
-import { MenuItem, Select } from '@material-ui/core';
+import { MenuItem, Select, SelectProps } from '@material-ui/core';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import { breakpoints } from '../../styles';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
@@ -15,7 +14,7 @@ interface Props {
     secondary?: boolean;
 }
 
-export const LanguageSelector: React.FC<Props> = ({ secondary }) => {
+export const LanguageSelector: React.FC<Props & SelectProps> = ({ secondary, ...props }) => {
     const { t, i18n } = useTranslation();
     const [value, setValue] = useState(i18n.language);
 
@@ -42,7 +41,7 @@ export const LanguageSelector: React.FC<Props> = ({ secondary }) => {
             value={value}
             onChange={handleChange}
             variant="outlined"
-            fullWidth
+            {...props}
         >
             {countries.map((c, i) => (
                 <MenuItem key={i} value={c.value}>
@@ -59,11 +58,6 @@ interface StyledLanguageSelectorProps {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledLanguageSelector = styled(({ secondary, ...other }) => <Select {...other} />)<StyledLanguageSelectorProps>`
-    height: 2.5rem;
     margin: 0.5rem;
     color: ${({ secondary }): string => (!!secondary ? 'var(--white) !important' : 'inherit')};
-
-    @media only screen and (min-width: ${breakpoints.SM}) {
-        max-width: 10rem;
-    }
 `;
