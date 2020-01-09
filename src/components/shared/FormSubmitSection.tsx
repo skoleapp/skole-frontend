@@ -19,7 +19,9 @@ export const FormSubmitSection: React.FC<FormSubmitSectionProps & ButtonProps> =
     <FormControl fullWidth>
         <Box display="flex" flexDirection="column" alignItems="center">
             {isSubmitting ? (
-                <CircularProgress color="primary" />
+                <Box marginY="0.5rem">
+                    <CircularProgress color="primary" />
+                </Box>
             ) : (
                 <ErrorMessage name="general" component={FormErrorMessage} />
             )}
