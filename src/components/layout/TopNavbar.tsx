@@ -24,27 +24,27 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch }) 
     const renderLeftSection = (
         <>
             {backUrl ? (
-                <IconButton className="mobile-only" onClick={(): void => Router.back()} color="secondary">
+                <IconButton className="sm-down" onClick={(): void => Router.back()} color="secondary">
                     <ArrowBack />
                 </IconButton>
             ) : (
-                <IconButtonLink className="mobile-only" icon={CloudUpload} href="/upload-resource" color="secondary" />
+                <IconButtonLink className="sm-down" icon={CloudUpload} href="/upload-resource" color="secondary" />
             )}
         </>
     );
 
     const renderMidSection = (
         <Box className="text-section" display="flex" justifyContent="center">
-            <Box className="desktop-only">
+            <Box className="sm-up">
                 <Logo />
             </Box>
-            <Box className="mobile-only">{heading ? <Heading text={heading} /> : <Logo />}</Box>
+            <Box className="sm-down">{heading ? <Heading text={heading} /> : <Logo />}</Box>
         </Box>
     );
 
     const renderRightSection = (
         <>
-            <Box className="desktop-only" display="flex" alignItems="center">
+            <Box className="sm-up" display="flex" alignItems="center">
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
                     <IconButtonLink icon={AccountCircle} href={`/users/${user.id}`} color="secondary" />
