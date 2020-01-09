@@ -23,7 +23,6 @@ import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import {
     Layout,
     NotFound,
-    SlimCardContent,
     StyledCard,
     StyledList,
     StyledTable,
@@ -64,7 +63,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderCourseInfo = (
             <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                <SlimCardContent>
+                <CardContent>
                     <Box textAlign="left">
                         <Typography variant="body1">
                             {t('common:courseCode')}: {courseCode}
@@ -97,8 +96,8 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             {t('common:modified')}: {modified}
                         </Typography>
                     </Box>
-                </SlimCardContent>
-                <SlimCardContent>
+                </CardContent>
+                <CardContent>
                     <StyledList>
                         <ListItem>
                             <ListItemAvatar>
@@ -121,7 +120,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </ListItemText>
                         </ListItem>
                     </StyledList>
-                </SlimCardContent>
+                </CardContent>
             </Box>
         );
 

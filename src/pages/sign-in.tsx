@@ -1,15 +1,7 @@
 import * as Yup from 'yup';
 
-import { Box, CardHeader, Divider } from '@material-ui/core';
-import {
-    ButtonLink,
-    FormSubmitSection,
-    Layout,
-    SlimCardContent,
-    StyledCard,
-    StyledForm,
-    TextLink,
-} from '../components';
+import { Box, CardContent, CardHeader, Divider, Grid } from '@material-ui/core';
+import { ButtonLink, FormSubmitSection, Layout, StyledCard, StyledForm, TextLink } from '../components';
 import { Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { SignInMutation, useSignInMutation } from '../../generated/graphql';
@@ -86,34 +78,36 @@ const SignInPage: I18nPage = () => {
                 fullWidth
             />
             <FormSubmitSection submitButtonText={t('common:signIn')} {...props} />
+            <Box marginY="1rem">
+                <Divider />
+            </Box>
+            <ButtonLink href="/sign-up" variant="outlined" color="primary" fullWidth>
+                {t('sign-in:createAccount')}
+            </ButtonLink>
+            <Box marginTop="1rem">
+                <TextLink href="/reset-password">{t('sign-in:forgotPassword')}</TextLink>
+            </Box>
         </StyledForm>
     );
 
     return (
         <Layout title={t('common:signIn')} backUrl>
             <StyledCard>
-                <CardHeader title={t('common:signIn')} />
-                <SlimCardContent>
-                    <Formik
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        onSubmit={handleSubmit}
-                        ref={ref}
-                    >
-                        {renderForm}
-                    </Formik>
-                    <Box marginTop="1rem">
-                        <Divider />
-                    </Box>
-                    <Box marginTop="0.5rem">
-                        <ButtonLink href="/sign-up" variant="outlined" color="primary" fullWidth>
-                            {t('sign-in:createAccount')}
-                        </ButtonLink>
-                    </Box>
-                    <Box marginTop="1rem">
-                        <TextLink href="/reset-password">{t('sign-in:forgotPassword')}</TextLink>
-                    </Box>
-                </SlimCardContent>
+                <Grid container justify="center">
+                    <Grid item xs={12} sm={8} md={6} lg={4}>
+                        <CardHeader title={t('common:signIn')} />
+                        <CardContent>
+                            <Formik
+                                initialValues={initialValues}
+                                validationSchema={validationSchema}
+                                onSubmit={handleSubmit}
+                                ref={ref}
+                            >
+                                {renderForm}
+                            </Formik>
+                        </CardContent>
+                    </Grid>
+                </Grid>
             </StyledCard>
         </Layout>
     );

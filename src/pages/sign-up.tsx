@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
-import { Box, CardHeader, Divider, FormControl, Link, Typography } from '@material-ui/core';
-import { ButtonLink, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
+import { Box, CardContent, CardHeader, Divider, FormControl, Grid, Link, Typography } from '@material-ui/core';
+import { ButtonLink, FormSubmitSection, Layout, StyledCard, StyledForm } from '../components';
 import { Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { SignUpMutation, useSignUpMutation } from '../../generated/graphql';
@@ -116,31 +116,33 @@ const SignUpPage: I18nPage = () => {
                 </Typography>
             </FormControl>
             <FormSubmitSection submitButtonText={t('common:signUp')} {...props} />
+            <Box marginY="1rem">
+                <Divider />
+            </Box>
+            <ButtonLink href="/sign-in" variant="outlined" color="primary" fullWidth>
+                {t('sign-up:alreadyHaveAccount')}
+            </ButtonLink>
         </StyledForm>
     );
 
     return (
         <Layout title={t('common:signUp')} backUrl>
             <StyledCard>
-                <CardHeader title={t('common:signUp')} />
-                <SlimCardContent>
-                    <Formik
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        onSubmit={handleSubmit}
-                        ref={ref}
-                    >
-                        {renderForm}
-                    </Formik>
-                    <Box marginTop="1rem">
-                        <Divider />
-                    </Box>
-                    <Box marginTop="0.5rem">
-                        <ButtonLink href="/sign-in" variant="outlined" color="primary" fullWidth>
-                            {t('sign-up:alreadyHaveAccount')}
-                        </ButtonLink>
-                    </Box>
-                </SlimCardContent>
+                <Grid container justify="center">
+                    <Grid item xs={12} sm={8} md={6} lg={4}>
+                        <CardHeader title={t('common:signUp')} />
+                        <CardContent>
+                            <Formik
+                                initialValues={initialValues}
+                                validationSchema={validationSchema}
+                                onSubmit={handleSubmit}
+                                ref={ref}
+                            >
+                                {renderForm}
+                            </Formik>
+                        </CardContent>
+                    </Grid>
+                </Grid>
             </StyledCard>
         </Layout>
     );

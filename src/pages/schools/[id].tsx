@@ -3,14 +3,16 @@ import * as R from 'ramda';
 import {
     Avatar,
     Box,
+    CardContent,
     CardHeader,
     Divider,
+    Grid,
     ListItem,
     ListItemAvatar,
     ListItemText,
     Typography,
 } from '@material-ui/core';
-import { ButtonLink, Layout, NotFound, SlimCardContent, StyledCard, StyledList, TextLink } from '../../components';
+import { ButtonLink, Layout, NotFound, StyledCard, StyledList, TextLink } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { SchoolDetailDocument, SchoolType } from '../../../generated/graphql';
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
@@ -39,7 +41,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 
         const renderSchoolInfo = (
             <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                <SlimCardContent>
+                <CardContent>
                     <Box textAlign="left">
                         <Typography variant="body1">
                             {t('common:schoolType')}:{' '}
@@ -72,8 +74,8 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                             </TextLink>
                         </Typography>
                     </Box>
-                </SlimCardContent>
-                <SlimCardContent>
+                </CardContent>
+                <CardContent>
                     <StyledList>
                         <ListItem>
                             <ListItemAvatar>
@@ -96,21 +98,25 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                             </ListItemText>
                         </ListItem>
                     </StyledList>
-                </SlimCardContent>
+                </CardContent>
             </Box>
         );
 
         const renderBottomSection = (
-            <SlimCardContent>
-                <ButtonLink
-                    href={{ pathname: '/search', query: { schoolName: R.propOr('', 'name', school) } }}
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                >
-                    {t('common:courses')}
-                </ButtonLink>
-            </SlimCardContent>
+            <CardContent>
+                <Grid container justify="center">
+                    <Grid item xs={12} sm={8} md={6} lg={4}>
+                        <ButtonLink
+                            href={{ pathname: '/search', query: { schoolName: R.propOr('', 'name', school) } }}
+                            variant="outlined"
+                            color="primary"
+                            fullWidth
+                        >
+                            {t('common:courses')}
+                        </ButtonLink>
+                    </Grid>
+                </Grid>
+            </CardContent>
         );
 
         return (

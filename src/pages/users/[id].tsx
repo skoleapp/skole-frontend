@@ -11,16 +11,7 @@ import {
     Tab,
     Typography,
 } from '@material-ui/core';
-import {
-    ButtonLink,
-    Layout,
-    NotFound,
-    SlimCardContent,
-    StyledCard,
-    StyledList,
-    StyledTabs,
-    TabPanel,
-} from '../../components';
+import { ButtonLink, Layout, NotFound, StyledCard, StyledList, StyledTabs, TabPanel } from '../../components';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { UserDetailDocument, UserType } from '../../../generated/graphql';
@@ -56,10 +47,10 @@ const UserPage: I18nPage<Props> = ({ user }) => {
 
         const renderTopSection = (
             <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                <SlimCardContent>
+                <CardContent>
                     <Avatar className="main-avatar" src={getAvatar(user)} />
-                </SlimCardContent>
-                <SlimCardContent>
+                </CardContent>
+                <CardContent>
                     <StyledList>
                         <ListItem>
                             <ListItemAvatar>
@@ -99,7 +90,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                             )}
                         </ListItem>
                     </StyledList>
-                </SlimCardContent>
+                </CardContent>
             </Box>
         );
 
@@ -171,16 +162,14 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         return (
             <Layout heading={username} title={username} backUrl>
                 <StyledCard>
-                    <Box>
-                        {renderTopSection}
-                        <Divider />
-                        {renderAccountInfo}
-                        <Divider />
-                        {renderBioSection}
-                        <Divider />
-                        {renderTabs}
-                        {renderTabContent}
-                    </Box>
+                    {renderTopSection}
+                    <Divider />
+                    {renderAccountInfo}
+                    <Divider />
+                    {renderBioSection}
+                    <Divider />
+                    {renderTabs}
+                    {renderTabContent}
                 </StyledCard>
             </Layout>
         );

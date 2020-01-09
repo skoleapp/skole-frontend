@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
-import { CardHeader, FormControl, InputLabel, MenuItem } from '@material-ui/core';
+import { CardContent, CardHeader, FormControl, Grid, InputLabel, MenuItem } from '@material-ui/core';
 import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
-import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
+import { FormErrorMessage, FormSubmitSection, Layout, StyledCard, StyledForm } from '../components';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Select, TextField } from 'formik-material-ui';
 import { useAuthSync, useForm } from '../utils';
@@ -52,7 +52,7 @@ const ContactPage: I18nPage = () => {
         <StyledForm>
             <FormControl fullWidth>
                 <InputLabel>{t('forms:contactType')}</InputLabel>
-                <Field name="contactType" component={Select} fullWidth>
+                <Field name="contactType" component={Select} variant="outlined" fullWidth>
                     <MenuItem value="">---</MenuItem>
                     <MenuItem value="feedback">Feedback</MenuItem>
                     <MenuItem value="requestSchool">{t('forms:requestSchool')}</MenuItem>
@@ -66,6 +66,7 @@ const ContactPage: I18nPage = () => {
                 component={TextField}
                 label={t('forms:email')}
                 placeholder={t('forms:email')}
+                variant="outlined"
                 fullWidth
             />
             <Field
@@ -73,6 +74,7 @@ const ContactPage: I18nPage = () => {
                 component={TextField}
                 placeholder={t('forms:message')}
                 label={t('forms:message')}
+                variant="outlined"
                 fullWidth
                 multiline
             />
@@ -83,17 +85,21 @@ const ContactPage: I18nPage = () => {
     return (
         <Layout title={t('contact:title')} backUrl>
             <StyledCard>
-                <CardHeader title={t('contact:title')} />
-                <SlimCardContent>
-                    <Formik
-                        onSubmit={handleSubmit}
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        ref={ref}
-                    >
-                        {renderForm}
-                    </Formik>
-                </SlimCardContent>
+                <Grid container justify="center">
+                    <Grid item xs={12} sm={8} md={6} lg={4}>
+                        <CardHeader title={t('contact:title')} />
+                        <CardContent>
+                            <Formik
+                                onSubmit={handleSubmit}
+                                initialValues={initialValues}
+                                validationSchema={validationSchema}
+                                ref={ref}
+                            >
+                                {renderForm}
+                            </Formik>
+                        </CardContent>
+                    </Grid>
+                </Grid>
             </StyledCard>
         </Layout>
     );

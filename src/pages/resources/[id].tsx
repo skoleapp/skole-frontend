@@ -6,6 +6,7 @@ import {
     CardContent,
     CardHeader,
     Divider,
+    Grid,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -13,17 +14,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import { CloudDownload, ScoreOutlined } from '@material-ui/icons';
-import {
-    Download,
-    Layout,
-    NotFound,
-    SlimCardContent,
-    StyledCard,
-    StyledList,
-    StyledTabs,
-    TabPanel,
-    TextLink,
-} from '../../components';
+import { Download, Layout, NotFound, StyledCard, StyledList, StyledTabs, TabPanel, TextLink } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { ResourceDetailDocument, ResourcePartType, ResourceType } from '../../../generated/graphql';
 import { getFilePath, useAuthSync, useTabs } from '../../utils';
@@ -61,7 +52,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         const renderResourceInfo = (
             <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                <SlimCardContent>
+                <CardContent>
                     <Box textAlign="left">
                         <Typography variant="body1">
                             {t('common:resourceType')}: {resourceType}
@@ -91,8 +82,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             {t('common:modified')}: {modified}
                         </Typography>
                     </Box>
-                </SlimCardContent>
-                <SlimCardContent>
+                </CardContent>
+                <CardContent>
                     <StyledList>
                         <ListItem>
                             <ListItemAvatar>
@@ -113,12 +104,11 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             <ListItemText>{t('common:downloads')}: 0</ListItemText>
                         </ListItem>
                     </StyledList>
-                </SlimCardContent>
+                </CardContent>
             </Box>
         );
 
         const renderTabs = (
-            // <Box display="flex" justifyContent="center">
             <StyledTabs
                 value={tabValue}
                 onChange={handleTabChange}
@@ -132,7 +122,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     <Tab key={i} label={r.title} />
                 ))}
             </StyledTabs>
-            // </Box>
         );
 
         const renderGeneralDiscussionThread = (
@@ -166,9 +155,13 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 <CardContent>
                     <Image src={getFilePath(r)} />
                 </CardContent>
-                <SlimCardContent>
-                    <Download url={getFilePath(r)} fileName={r.title} />
-                </SlimCardContent>
+                <CardContent>
+                    <Grid container justify="center">
+                        <Grid item xs={12} sm={8} md={6} lg={4}>
+                            <Download url={getFilePath(r)} fileName={r.title} />
+                        </Grid>
+                    </Grid>
+                </CardContent>
                 <Divider />
                 <CardContent>Here will be {r.title} discussion thread...</CardContent>
             </TabPanel>

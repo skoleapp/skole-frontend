@@ -1,15 +1,9 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 
+import { CardContent, CardHeader, Grid } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
-import {
-    FormSubmitSection,
-    ImagePreviewField,
-    Layout,
-    SlimCardContent,
-    StyledCard,
-    StyledForm,
-} from '../../components';
+import { FormSubmitSection, ImagePreviewField, Layout, StyledCard, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { UpdateUserMutation, UserType, useUpdateUserMutation } from '../../../generated/graphql';
 import { openNotification, reAuthenticate } from '../../actions';
@@ -17,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm, usePrivatePage } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
-import { CardHeader } from '@material-ui/core';
 import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
@@ -129,17 +122,21 @@ const EditProfilePage: I18nPage = () => {
     return (
         <Layout title={t('edit-profile:title')} backUrl>
             <StyledCard>
-                <CardHeader title={t('edit-profile:title')} />
-                <SlimCardContent>
-                    <Formik
-                        initialValues={initialValues}
-                        onSubmit={handleSubmit}
-                        validationSchema={validationSchema}
-                        ref={ref}
-                    >
-                        {renderForm}
-                    </Formik>
-                </SlimCardContent>
+                <Grid container justify="center">
+                    <Grid item xs={12} sm={8} md={6} lg={4}>
+                        <CardHeader title={t('edit-profile:title')} />
+                        <CardContent>
+                            <Formik
+                                initialValues={initialValues}
+                                onSubmit={handleSubmit}
+                                validationSchema={validationSchema}
+                                ref={ref}
+                            >
+                                {renderForm}
+                            </Formik>
+                        </CardContent>
+                    </Grid>
+                </Grid>
             </StyledCard>
         </Layout>
     );

@@ -1,8 +1,8 @@
+import { CardContent, CardHeader } from '@material-ui/core';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Layout, SlimCardContent, StyledCard } from '../components';
+import { Layout, StyledCard } from '../components';
 import { withApollo, withRedux } from '../lib';
 
-import { CardHeader } from '@material-ui/core';
 import React from 'react';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../i18n';
@@ -16,7 +16,7 @@ const AboutPage: I18nPage = () => {
         <Layout title={t('about:title')} backUrl>
             <StyledCard>
                 <CardHeader title={t('about:title')} />
-                <SlimCardContent>Here will wil about content...</SlimCardContent>
+                <CardContent>Here will wil about content...</CardContent>
             </StyledCard>
         </Layout>
     );
