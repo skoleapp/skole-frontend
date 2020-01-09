@@ -252,11 +252,11 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     const renderDesktopContent = (
         <StyledCard className="md-up">
             <Grid container>
-                <Grid item md={3}>
+                <Grid item xs={5} md={4} lg={3}>
                     <CardHeader subheader={t('search:filtersSubHeader')} />
                     <CardContent>{renderForm}</CardContent>
                 </Grid>
-                <Grid item md={9}>
+                <Grid item xs={7} md={8} lg={9}>
                     <CardHeader subheader={t('search:coursesSubHeader')} />
                     <CardContent>
                         <StyledTable disableBoxShadow>
