@@ -2,7 +2,6 @@ import * as R from 'ramda';
 import * as Yup from 'yup';
 
 import { AutoCompleteField, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
-import { CardHeader, FormControl } from '@material-ui/core';
 import {
     CreateCourseMutation,
     SchoolType,
@@ -17,6 +16,7 @@ import { Router, includeDefaultNamespaces } from '../i18n';
 import { useForm, usePrivatePage } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
+import { CardHeader } from '@material-ui/core';
 import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
@@ -86,50 +86,42 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
 
     const renderForm = (props: FormikProps<CreateCourseFormValues>): JSX.Element => (
         <StyledForm>
-            <FormControl fullWidth>
-                <Field
-                    name="courseName"
-                    label={t('forms:courseName')}
-                    placeholder={t('forms:courseName')}
-                    component={TextField}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="courseCode"
-                    label={t('forms:courseCode')}
-                    placeholder={t('forms:courseCode')}
-                    component={TextField}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="school"
-                    label={t('forms:school')}
-                    placeholder={t('forms:school')}
-                    dataKey="schools"
-                    document={SchoolsDocument}
-                    component={AutoCompleteField}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="subject"
-                    label={t('forms:subject')}
-                    placeholder={t('forms:subject')}
-                    dataKey="subjects"
-                    document={SubjectsDocument}
-                    component={AutoCompleteField}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
+            <Field
+                name="courseName"
+                label={t('forms:courseName')}
+                placeholder={t('forms:courseName')}
+                component={TextField}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                name="courseCode"
+                label={t('forms:courseCode')}
+                placeholder={t('forms:courseCode')}
+                component={TextField}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                name="school"
+                label={t('forms:school')}
+                placeholder={t('forms:school')}
+                dataKey="schools"
+                document={SchoolsDocument}
+                component={AutoCompleteField}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                name="subject"
+                label={t('forms:subject')}
+                placeholder={t('forms:subject')}
+                dataKey="subjects"
+                document={SubjectsDocument}
+                component={AutoCompleteField}
+                variant="outlined"
+                fullWidth
+            />
             <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </StyledForm>
     );

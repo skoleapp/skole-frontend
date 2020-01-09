@@ -9,17 +9,7 @@ import {
     StyledForm,
     StyledTable,
 } from '../components';
-import {
-    Box,
-    Button,
-    CardHeader,
-    FormControl,
-    Table,
-    TableBody,
-    TableCell,
-    TableRow,
-    Typography,
-} from '@material-ui/core';
+import { Box, Button, CardHeader, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import {
     CitiesDocument,
     CityType,
@@ -109,86 +99,72 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
 
     const renderForm = (props: FormikProps<FilterSearchResultsFormValues>): JSX.Element => (
         <StyledForm>
-            <FormControl fullWidth>
-                <Field
-                    name="courseName"
-                    label={t('forms:courseName')}
-                    placeholder={t('forms:courseName')}
-                    variant="outlined"
-                    component={TextField}
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="courseCode"
-                    label={t('forms:courseCode')}
-                    placeholder={t('forms:courseCode')}
-                    variant="outlined"
-                    component={TextField}
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="school"
-                    label={t('forms:school')}
-                    placeholder={t('forms:school')}
-                    dataKey="schools"
-                    document={SchoolsDocument}
-                    component={AutoCompleteField}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="subject"
-                    label={t('forms:subject')}
-                    placeholder={t('forms:subject')}
-                    dataKey="subjects"
-                    document={SubjectsDocument}
-                    component={AutoCompleteField}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="schoolType"
-                    label={t('forms:schoolType')}
-                    placeholder={t('forms:schoolType')}
-                    dataKey="schoolTypes"
-                    document={SchoolTypesDocument}
-                    component={AutoCompleteField}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="country"
-                    label={t('forms:country')}
-                    placeholder={t('forms:country')}
-                    dataKey="countries"
-                    document={CountriesDocument}
-                    component={AutoCompleteField}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="city"
-                    label={t('forms:city')}
-                    placeholder={t('forms:city')}
-                    dataKey="cities"
-                    document={CitiesDocument}
-                    component={AutoCompleteField}
-                    variant="outlined"
-                    fullWidth
-                />
-            </FormControl>
+            <Field
+                name="courseName"
+                label={t('forms:courseName')}
+                placeholder={t('forms:courseName')}
+                variant="outlined"
+                component={TextField}
+                fullWidth
+            />
+            <Field
+                name="courseCode"
+                label={t('forms:courseCode')}
+                placeholder={t('forms:courseCode')}
+                variant="outlined"
+                component={TextField}
+                fullWidth
+            />
+            <Field
+                name="school"
+                label={t('forms:school')}
+                placeholder={t('forms:school')}
+                dataKey="schools"
+                document={SchoolsDocument}
+                component={AutoCompleteField}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                name="subject"
+                label={t('forms:subject')}
+                placeholder={t('forms:subject')}
+                dataKey="subjects"
+                document={SubjectsDocument}
+                component={AutoCompleteField}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                name="schoolType"
+                label={t('forms:schoolType')}
+                placeholder={t('forms:schoolType')}
+                dataKey="schoolTypes"
+                document={SchoolTypesDocument}
+                component={AutoCompleteField}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                name="country"
+                label={t('forms:country')}
+                placeholder={t('forms:country')}
+                dataKey="countries"
+                document={CountriesDocument}
+                component={AutoCompleteField}
+                variant="outlined"
+                fullWidth
+            />
+            <Field
+                name="city"
+                label={t('forms:city')}
+                placeholder={t('forms:city')}
+                dataKey="cities"
+                document={CitiesDocument}
+                component={AutoCompleteField}
+                variant="outlined"
+                fullWidth
+            />
             <SlimCardContent>
                 <FormSubmitSection submitButtonText={t('search:applyFiltersButton')} {...props} />
                 <Button onClick={handleClearFilters} variant="outlined" color="primary" fullWidth>

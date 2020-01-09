@@ -107,15 +107,13 @@ const SignUpPage: I18nPage = () => {
                 fullWidth
             />
             <FormControl fullWidth>
-                <Box marginTop="0.5rem">
-                    <Typography variant="body2" color="textSecondary">
-                        {t('sign-up:termsHelpText')}{' '}
-                        <Link href="/terms" target="_blank">
-                            {t('common:terms')}
-                        </Link>
-                        .
-                    </Typography>
-                </Box>
+                <Typography variant="body2" color="textSecondary">
+                    {t('sign-up:termsHelpText')}{' '}
+                    <Link href="/terms" target="_blank">
+                        {t('common:terms')}
+                    </Link>
+                    .
+                </Typography>
             </FormControl>
             <FormSubmitSection submitButtonText={t('common:signUp')} {...props} />
         </StyledForm>
