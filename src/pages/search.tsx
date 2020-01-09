@@ -1,15 +1,22 @@
 import * as R from 'ramda';
 
+import { AutoCompleteField, FormSubmitSection, Layout, StyledCard, StyledForm, StyledTable } from '../components';
 import {
-    AutoCompleteField,
-    FormSubmitSection,
-    Layout,
-    SlimCardContent,
-    StyledCard,
-    StyledForm,
-    StyledTable,
-} from '../components';
-import { Box, Button, CardHeader, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+    Box,
+    Button,
+    CardContent,
+    CardHeader,
+    FormControl,
+    Grid,
+    IconButton,
+    SwipeableDrawer,
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+    Typography,
+} from '@material-ui/core';
+import { Cancel, Clear, FilterList } from '@material-ui/icons';
 import {
     CitiesDocument,
     CityType,
@@ -24,10 +31,10 @@ import {
     SubjectType,
     SubjectsDocument,
 } from '../../generated/graphql';
-import { Field, Formik, FormikProps } from 'formik';
+import { Field, Formik } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
-import { getFullCourseName, useAuthSync, useForm } from '../utils';
+import { getFullCourseName, useAuthSync, useDrawer, useForm } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
 import { ParsedUrlQueryInput } from 'querystring';
@@ -60,6 +67,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     const { query, pathname } = useRouter();
     const { ref, setSubmitting, resetForm } = useForm<FilterSearchResultsFormValues>();
     const { t } = useTranslation();
+    const { open, toggleDrawer, closeDrawer } = useDrawer();
 
     // Pick non-empty values and reload the page with new query params.
     const handleSubmit = async (values: FilterSearchResultsFormValues): Promise<void> => {
@@ -78,12 +86,14 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
         await Router.push({ pathname, query });
         setSubmitting(false);
+        closeDrawer();
     };
 
     // Clear the query params and reset form.
     const handleClearFilters = async (): Promise<void> => {
         await Router.push(pathname);
         resetForm();
+        closeDrawer();
     };
 
     // Pre-load query params to the form.
@@ -97,116 +107,173 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         city: city || null,
     };
 
-    const renderForm = (props: FormikProps<FilterSearchResultsFormValues>): JSX.Element => (
-        <StyledForm>
-            <Field
-                name="courseName"
-                label={t('forms:courseName')}
-                placeholder={t('forms:courseName')}
-                variant="outlined"
-                component={TextField}
-                fullWidth
-            />
-            <Field
-                name="courseCode"
-                label={t('forms:courseCode')}
-                placeholder={t('forms:courseCode')}
-                variant="outlined"
-                component={TextField}
-                fullWidth
-            />
-            <Field
-                name="school"
-                label={t('forms:school')}
-                placeholder={t('forms:school')}
-                dataKey="schools"
-                document={SchoolsDocument}
-                component={AutoCompleteField}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                name="subject"
-                label={t('forms:subject')}
-                placeholder={t('forms:subject')}
-                dataKey="subjects"
-                document={SubjectsDocument}
-                component={AutoCompleteField}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                name="schoolType"
-                label={t('forms:schoolType')}
-                placeholder={t('forms:schoolType')}
-                dataKey="schoolTypes"
-                document={SchoolTypesDocument}
-                component={AutoCompleteField}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                name="country"
-                label={t('forms:country')}
-                placeholder={t('forms:country')}
-                dataKey="countries"
-                document={CountriesDocument}
-                component={AutoCompleteField}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                name="city"
-                label={t('forms:city')}
-                placeholder={t('forms:city')}
-                dataKey="cities"
-                document={CitiesDocument}
-                component={AutoCompleteField}
-                variant="outlined"
-                fullWidth
-            />
-            <SlimCardContent>
-                <FormSubmitSection submitButtonText={t('search:applyFiltersButton')} {...props} />
-                <Button onClick={handleClearFilters} variant="outlined" color="primary" fullWidth>
-                    {t('search:clearFiltersButton')}
-                </Button>
-            </SlimCardContent>
-        </StyledForm>
+    const renderForm = (
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field
+                        name="courseName"
+                        label={t('forms:courseName')}
+                        placeholder={t('forms:courseName')}
+                        variant="outlined"
+                        component={TextField}
+                        fullWidth
+                    />
+                    <Field
+                        name="courseCode"
+                        label={t('forms:courseCode')}
+                        placeholder={t('forms:courseCode')}
+                        variant="outlined"
+                        component={TextField}
+                        fullWidth
+                    />
+                    <Field
+                        name="school"
+                        label={t('forms:school')}
+                        placeholder={t('forms:school')}
+                        dataKey="schools"
+                        document={SchoolsDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="subject"
+                        label={t('forms:subject')}
+                        placeholder={t('forms:subject')}
+                        dataKey="subjects"
+                        document={SubjectsDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="schoolType"
+                        label={t('forms:schoolType')}
+                        placeholder={t('forms:schoolType')}
+                        dataKey="schoolTypes"
+                        document={SchoolTypesDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="country"
+                        label={t('forms:country')}
+                        placeholder={t('forms:country')}
+                        dataKey="countries"
+                        document={CountriesDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="city"
+                        label={t('forms:city')}
+                        placeholder={t('forms:city')}
+                        dataKey="cities"
+                        document={CitiesDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <FormSubmitSection submitButtonText={t('search:applyFiltersButton')} {...props} />
+                    <FormControl fullWidth>
+                        <Button
+                            onClick={handleClearFilters}
+                            variant="outlined"
+                            color="primary"
+                            endIcon={<Clear />}
+                            fullWidth
+                        >
+                            {t('search:clearFiltersButton')}
+                        </Button>
+                    </FormControl>
+                </StyledForm>
+            )}
+        </Formik>
+    );
+
+    const renderCourses =
+        courses && courses.length ? (
+            courses.map((c: CourseType, i: number) => (
+                <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
+                    <TableCell>
+                        <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
+                    </TableCell>
+                </TableRow>
+            ))
+        ) : (
+            <TableRow>
+                <TableCell>
+                    <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
+                </TableCell>
+            </TableRow>
+        );
+
+    const renderExitDrawerButton = (
+        <IconButton onClick={toggleDrawer(false)}>
+            <Cancel />
+        </IconButton>
+    );
+
+    const renderMobileContent = (
+        <Box className="md-down">
+            <Box marginBottom="0.5rem">
+                <StyledCard>
+                    <CardHeader title={t('search:title')} />
+                    <CardContent>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={toggleDrawer(true)}
+                            endIcon={<FilterList />}
+                            fullWidth
+                        >
+                            {t('search:filtersButton')}
+                        </Button>
+                    </CardContent>
+                </StyledCard>
+            </Box>
+            <SwipeableDrawer anchor="bottom" open={open} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+                <StyledCard scrollable>
+                    <CardHeader subheader={t('search:filtersSubHeader')} action={renderExitDrawerButton} />
+                    <CardContent>{renderForm}</CardContent>
+                </StyledCard>
+            </SwipeableDrawer>
+            <StyledTable>
+                <Table>
+                    <TableBody>{renderCourses}</TableBody>
+                </Table>
+            </StyledTable>
+        </Box>
+    );
+
+    const renderDesktopContent = (
+        <StyledCard className="md-up">
+            <Grid container>
+                <Grid item md={3}>
+                    <CardHeader subheader={t('search:filtersSubHeader')} />
+                    <CardContent>{renderForm}</CardContent>
+                </Grid>
+                <Grid item md={9}>
+                    <CardHeader subheader={t('search:coursesSubHeader')} />
+                    <CardContent>
+                        <StyledTable disableBoxShadow>
+                            <Table>
+                                <TableBody>{renderCourses}</TableBody>
+                            </Table>
+                        </StyledTable>
+                    </CardContent>
+                </Grid>
+            </Grid>
+        </StyledCard>
     );
 
     return (
         <Layout title={t('search:title')} backUrl disableSearch>
-            <Box marginBottom="0.5rem">
-                <StyledCard>
-                    <CardHeader title={t('search:title')} />
-                    <SlimCardContent>
-                        <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
-                            {renderForm}
-                        </Formik>
-                    </SlimCardContent>
-                </StyledCard>
-            </Box>
-            <StyledTable>
-                <Table>
-                    <TableBody>
-                        {courses && courses.length ? (
-                            courses.map((c: CourseType, i: number) => (
-                                <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
-                                    <TableCell>
-                                        <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell>
-                                    <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </StyledTable>
+            {renderMobileContent}
+            {renderDesktopContent}
         </Layout>
     );
 };
