@@ -3,28 +3,27 @@ import * as Yup from 'yup';
 
 import {
     AutoCompleteField,
-    FormErrorMessage,
+    DropzoneField,
     FormSubmitSection,
     Layout,
     SlimCardContent,
     StyledCard,
     StyledForm,
 } from '../components';
-import { Box, CardHeader, FormControl } from '@material-ui/core';
 import {
     CourseType,
     CoursesDocument,
     ResourceTypesDocument,
     UploadResourceInitialDataDocument,
 } from '../../generated/graphql';
-import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
+import { Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
 import { UploadResourceMutation, useUploadResourceMutation } from '../../generated/graphql';
 import { useForm, usePrivatePage } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
-import { DropzoneArea } from 'material-ui-dropzone';
+import { CardHeader } from '@material-ui/core';
 import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
@@ -46,14 +45,13 @@ interface Props extends I18nProps {
 const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-
-    const { ref, setSubmitting, setFieldValue, onError, resetForm, handleMutationErrors } = useForm<
-        UploadResourceFormValues
-    >();
+    const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<UploadResourceFormValues>();
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:resourceTitleRequired')),
-        resourceType: Yup.string().required(t('validation:resourceTypeRequired')),
+        resourceType: Yup.object()
+            .nullable()
+            .required(t('validation:resourceTypeRequired')),
         course: Yup.object()
             .nullable()
             .required(t('validation:courseRequired')),
@@ -96,57 +94,37 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         general: '',
     };
 
-    const handleFileChange = (files: File[]): void => setFieldValue('files', files);
-
     const renderForm = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
         <StyledForm>
-            <FormControl fullWidth>
-                <Field
-                    name="resourceTitle"
-                    label={t('forms:resourceTitle')}
-                    placeholder={t('forms:resourceTitle')}
-                    variant="outlined"
-                    component={TextField}
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="resourceType"
-                    label={t('forms:resourceType')}
-                    placeholder={t('forms:resourceType')}
-                    dataKey="resourceTypes"
-                    document={ResourceTypesDocument}
-                    variant="outlined"
-                    component={AutoCompleteField}
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Field
-                    name="course"
-                    label={t('forms:course')}
-                    placeholder={t('forms:course')}
-                    dataKey="courses"
-                    document={CoursesDocument}
-                    variant="outlined"
-                    component={AutoCompleteField}
-                    fullWidth
-                />
-            </FormControl>
-            <FormControl fullWidth>
-                <Box marginY="1rem">
-                    <DropzoneArea
-                        onChange={handleFileChange}
-                        acceptedFiles={['image/*']}
-                        filesLimit={20}
-                        dropzoneText={t('upload-resource:dropzoneText')}
-                        useChipsForPreview
-                        showAlerts={false}
-                    />
-                    <ErrorMessage name="files" component={FormErrorMessage} />
-                </Box>
-            </FormControl>
+            <Field
+                name="resourceTitle"
+                label={t('forms:resourceTitle')}
+                placeholder={t('forms:resourceTitle')}
+                variant="outlined"
+                component={TextField}
+                fullWidth
+            />
+            <Field
+                name="resourceType"
+                label={t('forms:resourceType')}
+                placeholder={t('forms:resourceType')}
+                dataKey="resourceTypes"
+                document={ResourceTypesDocument}
+                variant="outlined"
+                component={AutoCompleteField}
+                fullWidth
+            />
+            <Field
+                name="course"
+                label={t('forms:course')}
+                placeholder={t('forms:course')}
+                dataKey="courses"
+                document={CoursesDocument}
+                variant="outlined"
+                component={AutoCompleteField}
+                fullWidth
+            />
+            <Field name="files" label={t('upload-resource:dropzoneText')} component={DropzoneField} />
             <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </StyledForm>
     );
