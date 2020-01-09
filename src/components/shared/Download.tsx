@@ -48,7 +48,7 @@ export const Download: React.FC<Props> = ({ url, fileName }) => {
         <Button
             variant="outlined"
             color="primary"
-            startIcon={<CloudDownload />}
+            endIcon={<CloudDownload />}
             disabled={fetching}
             onClick={handleClick}
             fullWidth
