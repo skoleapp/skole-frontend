@@ -1,11 +1,9 @@
 import { Paper } from '@material-ui/core';
+import React from 'react';
 import styled from 'styled-components';
 
-interface Props {
-    disableBoxShadow?: boolean;
-}
-
-export const StyledTable = styled(Paper)<Props>`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const StyledTable = styled(({ disableBoxShadow, ...other }) => <Paper {...other} />)`
     flex-grow: 1;
     box-shadow: ${({ disableBoxShadow }): string => (disableBoxShadow ? 'none !important' : 'inherit')};
 

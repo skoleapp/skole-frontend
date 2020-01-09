@@ -58,6 +58,5 @@ interface StyledLanguageSelectorProps {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledLanguageSelector = styled(({ secondary, ...other }) => <Select {...other} />)<StyledLanguageSelectorProps>`
-    margin: 0.5rem;
     color: ${({ secondary }): string => (!!secondary ? 'var(--white) !important' : 'inherit')};
 `;

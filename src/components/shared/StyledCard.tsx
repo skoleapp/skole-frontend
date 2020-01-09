@@ -1,16 +1,11 @@
 import { Card } from '@material-ui/core';
+import React from 'react';
 import styled from 'styled-components';
 
-export const StyledCard = styled(Card)`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const StyledCard = styled(({ scrollable, ...other }) => <Card {...other} />)`
     flex-grow: 1;
-
-    .MuiCardHeader-title {
-        text-align: center;
-    }
-
-    .MuiButton-root {
-        margin-top: 0.5rem;
-    }
+    overflow-y: ${({ scrollable }): string => (scrollable ? 'scroll !important' : 'inherit')};
 
     .main-avatar {
         height: 10rem;
