@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { LanguageSelector, TextLink } from '../shared';
 
 import React from 'react';
@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
     const { t } = useTranslation();
 
     return (
-        <StyledFooter className="desktop-only" container>
+        <StyledFooter className="sm-up" container>
             <Grid item xs={12} container>
                 <Grid item xs={4} container>
                     <Grid item xs={12}>
@@ -35,7 +35,9 @@ export const Footer: React.FC = () => {
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <LanguageSelector secondary />
+                        <Box marginTop="0.5rem">
+                            <LanguageSelector secondary />
+                        </Box>
                     </Grid>
                 </Grid>
                 <Grid item xs={4} container>

@@ -1,6 +1,6 @@
-import { css } from 'styled-components';
 import { breakpoints } from './breakpoints';
 import { colors } from './colors';
+import { css } from 'styled-components';
 
 export const base = css`
     :root {
@@ -28,14 +28,26 @@ export const base = css`
         background: var(--secondary);
         font-family: 'Roboto', sans-serif;
 
-        .desktop-only {
+        .sm-down {
+            @media only screen and (min-width: ${breakpoints.SM}) {
+                display: none;
+            }
+        }
+
+        .sm-up {
             @media only screen and (max-width: ${breakpoints.SM}) {
                 display: none;
             }
         }
 
-        .mobile-only {
-            @media only screen and (min-width: ${breakpoints.SM}) {
+        .md-down {
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                display: none;
+            }
+        }
+
+        .md-up {
+            @media only screen and (max-width: ${breakpoints.MD}) {
                 display: none;
             }
         }
