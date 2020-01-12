@@ -38,5 +38,7 @@
     "resourceType": "Resurssin tyyppi",
     "resourcePartType": "Resurssiosan tyyppi",
     "exerciseNumber": "Exercise Number",
-    "description": "Description"
+    "description": "Description",
+    "advancedSearch": "Tarkennettu haku",
+    "searchResults": "Hakutulokset"
 }

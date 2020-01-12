@@ -39,5 +39,7 @@
     "resourceType": "Resource Type",
     "resourcePartType": "Resource Part Type",
     "exerciseNumber": "Exercise Number",
-    "description": "Description"
+    "description": "Description",
+    "advancedSearch": "Advanced Search",
+    "searchResults": "Search Results"
 }
