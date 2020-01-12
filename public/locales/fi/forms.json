@@ -25,5 +25,10 @@
     "message": "Viesti",
     "resourceTitle": "Resurssin Otsikko",
     "resourceType": "Resurssin Tyyppi",
-    "course": "Kurssi"
+    "course": "Kurssi",
+    "ordering": "Järjestys",
+    "usernameOrdering": "Käyttätunnus (A-Z)",
+    "usernameOrderingReverse": "Käyttäjätunnus (Z-A)",
+    "pointsOrdering": "Pisteet (nouseva)",
+    "pointsOrderingReverse": "Points (laskeva)"
 }

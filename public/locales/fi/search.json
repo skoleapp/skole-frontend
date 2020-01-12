@@ -1,9 +1,5 @@
 {
     "title": "Kurssit",
-    "filtersSubHeader": "Suodattimet",
     "coursesSubHeader": "Kurssit",
-    "filtersButton": "Suodattimet",
-    "applyFiltersButton": "Lisää suodattimet",
-    "clearFiltersButton": "Poista suodattimet",
     "noCourses": "Ei kursseja..."
 }
