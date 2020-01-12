@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
 
-import { CardContent, CardHeader, FormControl, Grid, InputLabel, MenuItem } from '@material-ui/core';
-import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
-import { FormErrorMessage, FormSubmitSection, Layout, StyledCard, StyledForm } from '../components';
+import { CardContent, CardHeader, Grid, MenuItem } from '@material-ui/core';
+import { Field, Formik, FormikProps } from 'formik';
+import { FormSubmitSection, Layout, SelectField, StyledCard, StyledForm } from '../components';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Select, TextField } from 'formik-material-ui';
 import { useAuthSync, useForm } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
 import React from 'react';
+import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../i18n';
 import { openNotification } from '../actions';
@@ -50,17 +50,12 @@ const ContactPage: I18nPage = () => {
 
     const renderForm = (props: FormikProps<ContactFormValues>): JSX.Element => (
         <StyledForm>
-            <FormControl fullWidth>
-                <InputLabel>{t('forms:contactType')}</InputLabel>
-                <Field name="contactType" component={Select} variant="outlined" fullWidth>
-                    <MenuItem value="">---</MenuItem>
-                    <MenuItem value="feedback">Feedback</MenuItem>
-                    <MenuItem value="requestSchool">{t('forms:requestSchool')}</MenuItem>
-                    <MenuItem value="requestSubject">{t('forms:requestSubject')}</MenuItem>
-                    <MenuItem value="businessInquiry">{t('forms:businessInquiry')}</MenuItem>
-                </Field>
-                <ErrorMessage name="contactType" component={FormErrorMessage} />
-            </FormControl>
+            <Field name="contactType" label={t('forms:contactType')} component={SelectField} fullWidth>
+                <MenuItem value="feedback">{t('forms:feedback')}</MenuItem>
+                <MenuItem value="requestSchool">{t('forms:requestSchool')}</MenuItem>
+                <MenuItem value="requestSubject">{t('forms:requestSubject')}</MenuItem>
+                <MenuItem value="businessInquiry">{t('forms:businessInquiry')}</MenuItem>
+            </Field>
             <Field
                 name="email"
                 component={TextField}
