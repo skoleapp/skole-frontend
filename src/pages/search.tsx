@@ -1,22 +1,6 @@
 import * as R from 'ramda';
 
-import { AutoCompleteField, FormSubmitSection, Layout, StyledCard, StyledForm, StyledTable } from '../components';
-import {
-    Box,
-    Button,
-    CardContent,
-    CardHeader,
-    FormControl,
-    Grid,
-    IconButton,
-    SwipeableDrawer,
-    Table,
-    TableBody,
-    TableCell,
-    TableRow,
-    Typography,
-} from '@material-ui/core';
-import { Cancel, Clear, FilterList } from '@material-ui/icons';
+import { AutoCompleteField, FormSubmitSection, Layout, StyledForm } from '../components';
 import {
     CitiesDocument,
     CityType,
@@ -34,10 +18,10 @@ import {
 import { Field, Formik } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
-import { getFullCourseName, useAuthSync, useDrawer, useForm } from '../utils';
+import { Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import { getFullCourseName, useAuthSync, useResponsiveAdvancedSearch } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
-import { ParsedUrlQueryInput } from 'querystring';
 import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
@@ -64,16 +48,22 @@ interface Props {
 }
 
 const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, country, city }) => {
-    const { query, pathname } = useRouter();
-    const { ref, setSubmitting, resetForm } = useForm<FilterSearchResultsFormValues>();
+    const { query } = useRouter();
     const { t } = useTranslation();
-    const { open, toggleDrawer, closeDrawer } = useDrawer();
 
-    // Pick non-empty values and reload the page with new query params.
-    const handleSubmit = async (values: FilterSearchResultsFormValues): Promise<void> => {
+    const {
+        ref,
+        handleSubmit,
+        renderClearFiltersButton,
+        renderMobileContent,
+        renderDesktopContent,
+        submitButtonText,
+    } = useResponsiveAdvancedSearch<FilterSearchResultsFormValues>();
+
+    const handlePreSubmit = (values: FilterSearchResultsFormValues): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city } = values;
 
-        const filteredValues = {
+        const filteredValues: FilterSearchResultsFormValues = {
             courseName,
             courseCode,
             school: R.propOr('', 'id', school),
@@ -83,17 +73,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
             city: R.propOr('', 'id', city),
         };
 
-        const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
-        await Router.push({ pathname, query });
-        setSubmitting(false);
-        closeDrawer();
-    };
-
-    // Clear the query params and reset form.
-    const handleClearFilters = async (): Promise<void> => {
-        await Router.push(pathname);
-        resetForm();
-        closeDrawer();
+        handleSubmit(filteredValues);
     };
 
     // Pre-load query params to the form.
@@ -108,7 +88,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     };
 
     const renderForm = (
-        <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
+        <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
                     <Field
@@ -177,103 +157,45 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
                         variant="outlined"
                         fullWidth
                     />
-                    <FormSubmitSection submitButtonText={t('search:applyFiltersButton')} {...props} />
-                    <FormControl fullWidth>
-                        <Button
-                            onClick={handleClearFilters}
-                            variant="outlined"
-                            color="primary"
-                            endIcon={<Clear />}
-                            fullWidth
-                        >
-                            {t('search:clearFiltersButton')}
-                        </Button>
-                    </FormControl>
+                    <FormSubmitSection submitButtonText={submitButtonText} {...props} />
+                    {renderClearFiltersButton}
                 </StyledForm>
             )}
         </Formik>
     );
 
-    const renderCourses =
-        courses && courses.length ? (
-            courses.map((c: CourseType, i: number) => (
-                <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
-                    <TableCell>
-                        <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
-                    </TableCell>
-                </TableRow>
-            ))
-        ) : (
-            <TableRow>
-                <TableCell>
-                    <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
-                </TableCell>
-            </TableRow>
-        );
-
-    const renderExitDrawerButton = (
-        <IconButton onClick={toggleDrawer(false)}>
-            <Cancel />
-        </IconButton>
+    const renderTableContent = (
+        <Table>
+            <TableBody>
+                {courses && courses.length ? (
+                    courses.map((c: CourseType, i: number) => (
+                        <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
+                            <TableCell>
+                                <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
+                            </TableCell>
+                        </TableRow>
+                    ))
+                ) : (
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
+                        </TableCell>
+                    </TableRow>
+                )}
+            </TableBody>
+        </Table>
     );
 
-    const renderMobileContent = (
-        <Box className="md-down">
-            <Box marginBottom="0.5rem">
-                <StyledCard>
-                    <CardHeader title={t('search:title')} />
-                    <CardContent>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            onClick={toggleDrawer(true)}
-                            endIcon={<FilterList />}
-                            fullWidth
-                        >
-                            {t('search:filtersButton')}
-                        </Button>
-                    </CardContent>
-                </StyledCard>
-            </Box>
-            <SwipeableDrawer anchor="bottom" open={open} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
-                <StyledCard scrollable>
-                    <CardHeader subheader={t('search:filtersSubHeader')} action={renderExitDrawerButton} />
-                    <CardContent>{renderForm}</CardContent>
-                </StyledCard>
-            </SwipeableDrawer>
-            <StyledTable>
-                <Table>
-                    <TableBody>{renderCourses}</TableBody>
-                </Table>
-            </StyledTable>
-        </Box>
-    );
-
-    const renderDesktopContent = (
-        <StyledCard className="md-up">
-            <Grid container>
-                <Grid item xs={5} md={4} lg={3}>
-                    <CardHeader subheader={t('search:filtersSubHeader')} />
-                    <CardContent>{renderForm}</CardContent>
-                </Grid>
-                <Grid item xs={7} md={8} lg={9}>
-                    <CardHeader subheader={t('search:coursesSubHeader')} />
-                    <CardContent>
-                        <StyledTable disableBoxShadow>
-                            <Table>
-                                <TableBody>{renderCourses}</TableBody>
-                            </Table>
-                        </StyledTable>
-                    </CardContent>
-                </Grid>
-            </Grid>
-        </StyledCard>
-    );
+    const responsiveContentProps = {
+        title: t('common:courses'),
+        renderForm,
+        renderTableContent,
+    };
 
     return (
         <Layout title={t('search:title')} backUrl disableSearch>
-            {renderMobileContent}
-            {renderDesktopContent}
+            {renderMobileContent(responsiveContentProps)}
+            {renderDesktopContent(responsiveContentProps)}
         </Layout>
     );
 };
