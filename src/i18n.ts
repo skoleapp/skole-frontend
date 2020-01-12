@@ -11,7 +11,18 @@ export const nextI18next = new NextI18Next({
 nextI18next.i18n.languages = ['en', 'fi', 'sv'];
 
 export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
-    return ['common', '_error', 'languages', 'forms', 'validation', 'notifications', 'errors'].concat(namespaces);
+    const defaultNamespaces = [
+        'common',
+        '_error',
+        'languages',
+        'forms',
+        'validation',
+        'notifications',
+        'sign-in-required',
+        'errors',
+    ];
+
+    return defaultNamespaces.concat(namespaces);
 };
 
 export const { appWithTranslation, Router, Link, i18n } = nextI18next;
