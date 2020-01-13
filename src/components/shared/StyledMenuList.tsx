@@ -5,6 +5,6 @@ export const StyledMenuList = styled(MenuList)`
     outline: none;
 
     .sub-header {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
     }
 `;
