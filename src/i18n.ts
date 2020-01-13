@@ -19,6 +19,7 @@ export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
         'validation',
         'notifications',
         'alerts',
+        'settings',
         'errors',
     ];
 
