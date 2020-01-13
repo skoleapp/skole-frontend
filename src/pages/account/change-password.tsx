@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
 
-import { CardContent, CardHeader, Grid } from '@material-ui/core';
+import { CardContent, CardHeader } from '@material-ui/core';
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
 import { Field, Formik, FormikProps } from 'formik';
-import { FormSubmitSection, Layout, StyledCard, StyledForm } from '../../components';
+import { FormSubmitSection, FormGridContainer, Layout, StyledCard, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useForm, usePrivatePage } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
@@ -99,21 +99,19 @@ const ChangePasswordPage: I18nPage = () => {
     return (
         <Layout title={t('change-password:title')} backUrl>
             <StyledCard>
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={8} md={6} lg={4}>
-                        <CardHeader title={t('change-password:title')} />
-                        <CardContent>
-                            <Formik
-                                onSubmit={handleSubmit}
-                                initialValues={initialValues}
-                                validationSchema={validationSchema}
-                                ref={ref}
-                            >
-                                {renderForm}
-                            </Formik>
-                        </CardContent>
-                    </Grid>
-                </Grid>
+                <FormGridContainer>
+                    <CardHeader title={t('change-password:title')} />
+                    <CardContent>
+                        <Formik
+                            onSubmit={handleSubmit}
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            ref={ref}
+                        >
+                            {renderForm}
+                        </Formik>
+                    </CardContent>
+                </FormGridContainer>
             </StyledCard>
         </Layout>
     );

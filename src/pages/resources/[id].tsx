@@ -6,7 +6,6 @@ import {
     CardContent,
     CardHeader,
     Divider,
-    Grid,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -14,7 +13,17 @@ import {
     Typography,
 } from '@material-ui/core';
 import { CloudDownload, ScoreOutlined } from '@material-ui/icons';
-import { Download, Layout, NotFound, StyledCard, StyledList, StyledTabs, TabPanel, TextLink } from '../../components';
+import {
+    Download,
+    FormGridContainer,
+    Layout,
+    NotFound,
+    StyledCard,
+    StyledList,
+    StyledTabs,
+    TabPanel,
+    TextLink,
+} from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { ResourceDetailDocument, ResourcePartType, ResourceType } from '../../../generated/graphql';
 import { getFilePath, useAuthSync, useTabs } from '../../utils';
@@ -156,11 +165,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     <Image src={getFilePath(r)} />
                 </CardContent>
                 <CardContent>
-                    <Grid container justify="center">
-                        <Grid item xs={12} sm={8} md={6} lg={4}>
-                            <Download url={getFilePath(r)} fileName={r.title} />
-                        </Grid>
-                    </Grid>
+                    <FormGridContainer>
+                        <Download url={getFilePath(r)} fileName={r.title} />
+                    </FormGridContainer>
                 </CardContent>
                 <Divider />
                 <CardContent>Here will be {r.title} discussion thread...</CardContent>

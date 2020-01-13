@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
-import { Box, CardContent, CardHeader, Divider, FormControl, Grid, Link, Typography } from '@material-ui/core';
-import { ButtonLink, FormSubmitSection, Layout, StyledCard, StyledForm } from '../components';
+import { Box, CardContent, CardHeader, Divider, FormControl, Link, Typography } from '@material-ui/core';
+import { ButtonLink, FormSubmitSection, FormGridContainer, Layout, StyledCard, StyledForm } from '../components';
 import { Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { SignUpMutation, useSignUpMutation } from '../../generated/graphql';
@@ -128,21 +128,19 @@ const SignUpPage: I18nPage = () => {
     return (
         <Layout title={t('common:signUp')} backUrl>
             <StyledCard>
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={8} md={6} lg={4}>
-                        <CardHeader title={t('common:signUp')} />
-                        <CardContent>
-                            <Formik
-                                initialValues={initialValues}
-                                validationSchema={validationSchema}
-                                onSubmit={handleSubmit}
-                                ref={ref}
-                            >
-                                {renderForm}
-                            </Formik>
-                        </CardContent>
-                    </Grid>
-                </Grid>
+                <FormGridContainer>
+                    <CardHeader title={t('common:signUp')} />
+                    <CardContent>
+                        <Formik
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            onSubmit={handleSubmit}
+                            ref={ref}
+                        >
+                            {renderForm}
+                        </Formik>
+                    </CardContent>
+                </FormGridContainer>
             </StyledCard>
         </Layout>
     );

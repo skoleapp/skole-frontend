@@ -1,7 +1,15 @@
 import * as Yup from 'yup';
 
-import { Box, CardContent, CardHeader, Divider, Grid } from '@material-ui/core';
-import { ButtonLink, FormSubmitSection, Layout, StyledCard, StyledForm, TextLink } from '../components';
+import { Box, CardContent, CardHeader, Divider } from '@material-ui/core';
+import {
+    ButtonLink,
+    FormGridContainer,
+    FormSubmitSection,
+    Layout,
+    StyledCard,
+    StyledForm,
+    TextLink,
+} from '../components';
 import { Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
@@ -105,22 +113,20 @@ const SignInPage: I18nPage = () => {
     return (
         <Layout title={t('common:signIn')} backUrl>
             <StyledCard>
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={6} md={5} lg={4}>
-                        <CardContent>{query.next && renderAlert('warning', t('alerts:signInRequired'))}</CardContent>
-                        <CardHeader title={t('common:signIn')} />
-                        <CardContent>
-                            <Formik
-                                initialValues={initialValues}
-                                validationSchema={validationSchema}
-                                onSubmit={handleSubmit}
-                                ref={ref}
-                            >
-                                {renderForm}
-                            </Formik>
-                        </CardContent>
-                    </Grid>
-                </Grid>
+                <FormGridContainer>
+                    <CardContent>{query.next && renderAlert('warning', t('alerts:signInRequired'))}</CardContent>
+                    <CardHeader title={t('common:signIn')} />
+                    <CardContent>
+                        <Formik
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            onSubmit={handleSubmit}
+                            ref={ref}
+                        >
+                            {renderForm}
+                        </Formik>
+                    </CardContent>
+                </FormGridContainer>
             </StyledCard>
         </Layout>
     );

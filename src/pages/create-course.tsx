@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 
-import { AutoCompleteField, FormSubmitSection, Layout, StyledCard, StyledForm } from '../components';
-import { CardContent, CardHeader, Grid } from '@material-ui/core';
+import { AutoCompleteField, FormSubmitSection, FormGridContainer, Layout, StyledCard, StyledForm } from '../components';
+import { CardContent, CardHeader } from '@material-ui/core';
 import {
     CreateCourseMutation,
     SchoolType,
@@ -129,21 +129,19 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
     return (
         <Layout title={t('create-course:title')} backUrl>
             <StyledCard>
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={8} md={6} lg={4}>
-                        <CardHeader title={t('create-course:title')} />
-                        <CardContent>
-                            <Formik
-                                initialValues={initialValues}
-                                onSubmit={handleSubmit}
-                                validationSchema={validationSchema}
-                                ref={ref}
-                            >
-                                {renderForm}
-                            </Formik>
-                        </CardContent>
-                    </Grid>
-                </Grid>
+                <FormGridContainer>
+                    <CardHeader title={t('create-course:title')} />
+                    <CardContent>
+                        <Formik
+                            initialValues={initialValues}
+                            onSubmit={handleSubmit}
+                            validationSchema={validationSchema}
+                            ref={ref}
+                        >
+                            {renderForm}
+                        </Formik>
+                    </CardContent>
+                </FormGridContainer>
             </StyledCard>
         </Layout>
     );

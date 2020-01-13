@@ -1,8 +1,16 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 
-import { AutoCompleteField, DropzoneField, FormSubmitSection, Layout, StyledCard, StyledForm } from '../components';
-import { CardContent, CardHeader, Grid } from '@material-ui/core';
+import {
+    AutoCompleteField,
+    DropzoneField,
+    FormSubmitSection,
+    FormGridContainer,
+    Layout,
+    StyledCard,
+    StyledForm,
+} from '../components';
+import { CardContent, CardHeader } from '@material-ui/core';
 import {
     CourseType,
     CoursesDocument,
@@ -124,21 +132,19 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     return (
         <Layout title={t('upload-resource:title')} backUrl>
             <StyledCard>
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={8} md={6} lg={4}>
-                        <CardHeader title={t('upload-resource:title')} />
-                        <CardContent>
-                            <Formik
-                                onSubmit={handleSubmit}
-                                initialValues={initialValues}
-                                validationSchema={validationSchema}
-                                ref={ref}
-                            >
-                                {renderForm}
-                            </Formik>
-                        </CardContent>
-                    </Grid>
-                </Grid>
+                <FormGridContainer>
+                    <CardHeader title={t('upload-resource:title')} />
+                    <CardContent>
+                        <Formik
+                            onSubmit={handleSubmit}
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            ref={ref}
+                        >
+                            {renderForm}
+                        </Formik>
+                    </CardContent>
+                </FormGridContainer>
             </StyledCard>
         </Layout>
     );

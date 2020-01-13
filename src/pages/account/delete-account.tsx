@@ -8,11 +8,10 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Grid,
 } from '@material-ui/core';
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { Field, Formik, FormikProps } from 'formik';
-import { FormSubmitSection, Layout, StyledCard, StyledDialog, StyledForm } from '../../components';
+import { FormSubmitSection, FormGridContainer, Layout, StyledCard, StyledDialog, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import React, { useState } from 'react';
 import { useForm, usePrivatePage } from '../../utils';
@@ -96,21 +95,19 @@ export const DeleteAccountPage: I18nPage = () => {
 
     const renderCard = (
         <StyledCard>
-            <Grid container justify="center">
-                <Grid item xs={12} sm={8} md={6} lg={4}>
-                    <CardHeader title={t('delete-account:title')} />
-                    <CardContent>
-                        <Formik
-                            onSubmit={handleSubmit}
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            ref={ref}
-                        >
-                            {renderForm}
-                        </Formik>
-                    </CardContent>
-                </Grid>
-            </Grid>
+            <FormGridContainer>
+                <CardHeader title={t('delete-account:title')} />
+                <CardContent>
+                    <Formik
+                        onSubmit={handleSubmit}
+                        initialValues={initialValues}
+                        validationSchema={validationSchema}
+                        ref={ref}
+                    >
+                        {renderForm}
+                    </Formik>
+                </CardContent>
+            </FormGridContainer>
         </StyledCard>
     );
 

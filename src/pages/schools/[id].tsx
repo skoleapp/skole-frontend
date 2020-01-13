@@ -6,13 +6,12 @@ import {
     CardContent,
     CardHeader,
     Divider,
-    Grid,
     ListItem,
     ListItemAvatar,
     ListItemText,
     Typography,
 } from '@material-ui/core';
-import { ButtonLink, Layout, NotFound, StyledCard, StyledList, TextLink } from '../../components';
+import { ButtonLink, FormGridContainer, Layout, NotFound, StyledCard, StyledList, TextLink } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { SchoolDetailDocument, SchoolType } from '../../../generated/graphql';
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
@@ -104,18 +103,16 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 
         const renderBottomSection = (
             <CardContent>
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={8} md={6} lg={4}>
-                        <ButtonLink
-                            href={{ pathname: '/search', query: { schoolName: R.propOr('', 'name', school) } }}
-                            variant="outlined"
-                            color="primary"
-                            fullWidth
-                        >
-                            {t('common:courses')}
-                        </ButtonLink>
-                    </Grid>
-                </Grid>
+                <FormGridContainer>
+                    <ButtonLink
+                        href={{ pathname: '/search', query: { schoolName: R.propOr('', 'name', school) } }}
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                    >
+                        {t('common:courses')}
+                    </ButtonLink>
+                </FormGridContainer>
             </CardContent>
         );
 

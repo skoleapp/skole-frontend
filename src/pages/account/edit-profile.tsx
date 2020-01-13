@@ -1,9 +1,16 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 
-import { CardContent, CardHeader, Grid } from '@material-ui/core';
+import { CardContent, CardHeader } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
-import { FormSubmitSection, ImagePreviewField, Layout, StyledCard, StyledForm } from '../../components';
+import {
+    FormGridContainer,
+    FormSubmitSection,
+    ImagePreviewField,
+    Layout,
+    StyledCard,
+    StyledForm,
+} from '../../components';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { UpdateUserMutation, UserType, useUpdateUserMutation } from '../../../generated/graphql';
 import { openNotification, reAuthenticate } from '../../actions';
@@ -122,21 +129,19 @@ const EditProfilePage: I18nPage = () => {
     return (
         <Layout title={t('edit-profile:title')} backUrl>
             <StyledCard>
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={8} md={6} lg={4}>
-                        <CardHeader title={t('edit-profile:title')} />
-                        <CardContent>
-                            <Formik
-                                initialValues={initialValues}
-                                onSubmit={handleSubmit}
-                                validationSchema={validationSchema}
-                                ref={ref}
-                            >
-                                {renderForm}
-                            </Formik>
-                        </CardContent>
-                    </Grid>
-                </Grid>
+                <FormGridContainer>
+                    <CardHeader title={t('edit-profile:title')} />
+                    <CardContent>
+                        <Formik
+                            initialValues={initialValues}
+                            onSubmit={handleSubmit}
+                            validationSchema={validationSchema}
+                            ref={ref}
+                        >
+                            {renderForm}
+                        </Formik>
+                    </CardContent>
+                </FormGridContainer>
             </StyledCard>
         </Layout>
     );

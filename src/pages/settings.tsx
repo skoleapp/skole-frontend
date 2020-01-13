@@ -1,6 +1,6 @@
-import { Box, Button, CardContent, Divider, Grid, ListItem, MenuItem, Typography } from '@material-ui/core';
+import { Box, Button, CardContent, Divider, ListItem, MenuItem, Typography } from '@material-ui/core';
+import { FormGridContainer, LanguageSelector, Layout, StyledCard, StyledMenuList } from '../components';
 import { I18nPage, I18nProps, SkoleContext, State } from '../types';
-import { LanguageSelector, Layout, StyledCard, StyledMenuList } from '../components';
 import { Router, includeDefaultNamespaces } from '../i18n';
 import { menuItems, useAuthSync } from '../utils';
 import { useDispatch, useSelector } from 'react-redux';
@@ -109,15 +109,13 @@ const SettingsPage: I18nPage = () => {
     return (
         <Layout heading={t('settings:title')} title={t('settings:title')} backUrl>
             <StyledCard>
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={8} md={6} lg={4}>
-                        <CardContent>
-                            {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
-                            <Divider />
-                            {authenticated ? renderSignOutButton : renderSignInButton}
-                        </CardContent>
-                    </Grid>
-                </Grid>
+                <FormGridContainer>
+                    <CardContent>
+                        {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
+                        <Divider />
+                        {authenticated ? renderSignOutButton : renderSignInButton}
+                    </CardContent>
+                </FormGridContainer>
             </StyledCard>
         </Layout>
     );

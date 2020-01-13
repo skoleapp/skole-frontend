@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
-import { CardContent, CardHeader, Grid, MenuItem } from '@material-ui/core';
+import { CardContent, CardHeader, MenuItem } from '@material-ui/core';
 import { Field, Formik, FormikProps } from 'formik';
-import { FormSubmitSection, Layout, SelectField, StyledCard, StyledForm } from '../components';
+import { FormSubmitSection, FormGridContainer, Layout, SelectField, StyledCard, StyledForm } from '../components';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useForm } from '../utils';
 import { withApollo, withRedux } from '../lib';
@@ -80,21 +80,19 @@ const ContactPage: I18nPage = () => {
     return (
         <Layout title={t('contact:title')} backUrl>
             <StyledCard>
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={8} md={6} lg={4}>
-                        <CardHeader title={t('contact:title')} />
-                        <CardContent>
-                            <Formik
-                                onSubmit={handleSubmit}
-                                initialValues={initialValues}
-                                validationSchema={validationSchema}
-                                ref={ref}
-                            >
-                                {renderForm}
-                            </Formik>
-                        </CardContent>
-                    </Grid>
-                </Grid>
+                <FormGridContainer>
+                    <CardHeader title={t('contact:title')} />
+                    <CardContent>
+                        <Formik
+                            onSubmit={handleSubmit}
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            ref={ref}
+                        >
+                            {renderForm}
+                        </Formik>
+                    </CardContent>
+                </FormGridContainer>
             </StyledCard>
         </Layout>
     );
