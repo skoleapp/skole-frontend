@@ -18,4 +18,3 @@ export { ImagePreviewField } from './ImagePreviewField';
 export { StyledMenuList } from './StyledMenuList';
 export { DropzoneField } from './DropzoneField';
 export { SelectField } from './SelectField';
-export { SignInRequired } from './SignInRequired';
