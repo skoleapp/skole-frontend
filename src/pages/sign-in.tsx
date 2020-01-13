@@ -4,6 +4,7 @@ import { Box, CardContent, CardHeader, Divider, Grid } from '@material-ui/core';
 import { ButtonLink, FormSubmitSection, Layout, StyledCard, StyledForm, TextLink } from '../components';
 import { Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { Router, includeDefaultNamespaces } from '../i18n';
 import { SignInMutation, useSignInMutation } from '../../generated/graphql';
 import { useForm, usePublicPage } from '../utils';
 import { withApollo, withRedux } from '../lib';
@@ -12,9 +13,9 @@ import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { authenticate } from '../actions';
 import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../i18n';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 const initialValues = {
@@ -33,19 +34,29 @@ const SignInPage: I18nPage = () => {
     const dispatch = useDispatch();
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<SignInFormValues>();
     const { t } = useTranslation();
+    const { query } = useRouter();
 
     const validationSchema = Yup.object().shape({
         usernameOrEmail: Yup.string().required(t('validation:usernameOrEmailRequired')),
         password: Yup.string().required(t('validation:passwordRequired')),
     });
 
-    const onCompleted = ({ signIn }: SignInMutation): void => {
+    const onCompleted = async ({ signIn }: SignInMutation): Promise<void> => {
         if (signIn) {
             if (signIn.errors) {
                 handleMutationErrors(signIn.errors);
             } else {
                 resetForm();
-                dispatch(authenticate(client, signIn));
+                await dispatch(authenticate(client, signIn));
+
+                const { next } = query;
+                const { user } = signIn;
+
+                if (!!next) {
+                    Router.push(next as string);
+                } else if (user) {
+                    Router.push(`/users/${user.id}`);
+                }
             }
         }
     };
