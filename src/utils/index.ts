@@ -11,4 +11,4 @@ export { useTabs } from './useTabs';
 export { getAvatar } from './getAvatar';
 export { getAvatarThumb } from './getAvatarThumb';
 export { getFilePath } from './getFilePath';
-export { useResponsiveAdvancedSearch } from './useResponsiveAdvancedSearch';
+export { useResponsiveSearch } from './useResponsiveSearch';

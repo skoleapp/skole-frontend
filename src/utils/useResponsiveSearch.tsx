@@ -26,7 +26,7 @@ interface ResponsiveContentProps {
     renderForm: JSX.Element;
 }
 
-interface UseResponsiveAdvancedSearch<T> extends UseForm<T> {
+interface UseResponsiveSearch<T> extends UseForm<T> {
     submitButtonText: string;
     handleSubmit: (filteredValues: T) => Promise<void>;
     renderClearFiltersButton: JSX.Element;
@@ -35,7 +35,7 @@ interface UseResponsiveAdvancedSearch<T> extends UseForm<T> {
     handleClearFilters: () => Promise<void>;
 }
 
-export const useResponsiveAdvancedSearch = <T extends {}>(): UseResponsiveAdvancedSearch<T> => {
+export const useResponsiveSearch = <T extends {}>(): UseResponsiveSearch<T> => {
     const { resetForm, setSubmitting, ...other } = useForm<T>();
     const [open, setOpen] = useState(false);
     const closeDrawer = (): void => setOpen(false);
