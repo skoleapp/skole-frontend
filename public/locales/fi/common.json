@@ -40,5 +40,9 @@
     "exerciseNumber": "Exercise Number",
     "description": "Description",
     "advancedSearch": "Tarkennettu haku",
-    "searchResults": "Hakutulokset"
+    "searchResults": "Hakutulokset",
+    "editProfile": "Muokkaa profiilia",
+    "changePassword": "Vaihda salasana",
+    "deleteAccount": "Poista tili",
+    "account": "Tili"
 }

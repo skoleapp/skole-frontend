@@ -1,25 +1,24 @@
-import { CardContent, CardHeader } from '@material-ui/core';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Layout, StyledCard } from '../components';
+import { useAuthSync, useSettingsLayout } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
 import React from 'react';
+import { Typography } from '@material-ui/core';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../i18n';
-import { useAuthSync } from '../utils';
 import { useTranslation } from 'react-i18next';
 
 const AboutPage: I18nPage = () => {
     const { t } = useTranslation();
 
-    return (
-        <Layout title={t('about:title')} backUrl>
-            <StyledCard>
-                <CardHeader title={t('about:title')} />
-                <CardContent>Here will wil about content...</CardContent>
-            </StyledCard>
-        </Layout>
-    );
+    const renderCardContent = <Typography>Here will be about content...</Typography>;
+
+    const responsiveSettingsProps = {
+        title: t('about:title'),
+        renderCardContent,
+    };
+
+    return useSettingsLayout(responsiveSettingsProps);
 };
 
 AboutPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

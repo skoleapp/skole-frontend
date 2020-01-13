@@ -41,5 +41,9 @@
     "exerciseNumber": "Exercise Number",
     "description": "Description",
     "advancedSearch": "Advanced Search",
-    "searchResults": "Search Results"
+    "searchResults": "Search Results",
+    "editProfile": "Edit Profile",
+    "changePassword": "Change Password",
+    "deleteAccount": "Delete Account",
+    "account": "Account"
 }
