@@ -9,6 +9,7 @@ import { SignInMutation, useSignInMutation } from '../../generated/graphql';
 import { useForm, usePublicPage } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
+import { Alert } from '@material-ui/lab';
 import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { authenticate } from '../actions';
@@ -101,11 +102,18 @@ const SignInPage: I18nPage = () => {
         </StyledForm>
     );
 
+    const renderSignInRequired = (
+        <Box margin="1rem">
+            <Alert severity="warning">{t('alerts:signInRequired')}</Alert>
+        </Box>
+    );
+
     return (
         <Layout title={t('common:signIn')} backUrl>
             <StyledCard>
                 <Grid container justify="center">
                     <Grid item xs={12} sm={8} md={6} lg={4}>
+                        {query.next && renderSignInRequired}
                         <CardHeader title={t('common:signIn')} />
                         <CardContent>
                             <Formik
@@ -126,7 +134,7 @@ const SignInPage: I18nPage = () => {
 
 SignInPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['sign-in', 'validation', 'forms']) };
+    return { namespacesRequired: includeDefaultNamespaces(['sign-in']) };
 };
 
 export default compose(withApollo, withRedux)(SignInPage);
