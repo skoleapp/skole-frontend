@@ -12,3 +12,4 @@ export { getAvatar } from './getAvatar';
 export { getAvatarThumb } from './getAvatarThumb';
 export { getFilePath } from './getFilePath';
 export { useResponsiveSearch } from './useResponsiveSearch';
+export { useAlerts } from './useAlerts';

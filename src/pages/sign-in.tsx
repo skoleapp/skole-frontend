@@ -6,10 +6,9 @@ import { Field, Formik, FormikProps } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
 import { SignInMutation, useSignInMutation } from '../../generated/graphql';
-import { useForm, usePublicPage } from '../utils';
+import { useAlerts, useForm, usePublicPage } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
-import { Alert } from '@material-ui/lab';
 import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { authenticate } from '../actions';
@@ -36,6 +35,7 @@ const SignInPage: I18nPage = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<SignInFormValues>();
     const { t } = useTranslation();
     const { query } = useRouter();
+    const { renderAlert } = useAlerts();
 
     const validationSchema = Yup.object().shape({
         usernameOrEmail: Yup.string().required(t('validation:usernameOrEmailRequired')),
@@ -102,18 +102,12 @@ const SignInPage: I18nPage = () => {
         </StyledForm>
     );
 
-    const renderSignInRequired = (
-        <Box margin="1rem">
-            <Alert severity="warning">{t('alerts:signInRequired')}</Alert>
-        </Box>
-    );
-
     return (
         <Layout title={t('common:signIn')} backUrl>
             <StyledCard>
                 <Grid container justify="center">
-                    <Grid item xs={12} sm={8} md={6} lg={4}>
-                        {query.next && renderSignInRequired}
+                    <Grid item xs={12} sm={6} md={5} lg={4}>
+                        <CardContent>{query.next && renderAlert('warning', t('alerts:signInRequired'))}</CardContent>
                         <CardHeader title={t('common:signIn')} />
                         <CardContent>
                             <Formik
