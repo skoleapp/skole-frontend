@@ -1,4 +1,4 @@
-import { BottomNavbar, Footer, Head, Notifications, SkoleGDPR, TopNavbar } from '../layout';
+import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 import { Box, Container } from '@material-ui/core';
 
 import React from 'react';
@@ -6,7 +6,7 @@ import { breakpoints } from '../../styles';
 import styled from 'styled-components';
 
 interface Props {
-    title: string;
+    title?: string;
     heading?: string;
     backUrl?: boolean;
     disableSearch?: boolean;
@@ -20,6 +20,7 @@ export const Layout: React.FC<Props> = ({ title, heading, backUrl, disableSearch
         <BottomNavbar />
         <Footer />
         <Notifications />
+        <Settings />
         <SkoleGDPR />
     </StyledLayout>
 );
