@@ -1,15 +1,15 @@
 export const menuItems = {
     account: [
         {
-            text: 'settings:editProfile',
+            text: 'common:editProfile',
             href: '/account/edit-profile',
         },
         {
-            text: 'settings:changePassword',
+            text: 'common:changePassword',
             href: '/account/change-password',
         },
         {
-            text: 'settings:deleteAccount',
+            text: 'common:deleteAccount',
             href: '/account/delete-account',
         },
     ],
