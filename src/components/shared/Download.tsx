@@ -17,7 +17,6 @@ interface Props {
  */
 export const Download: React.FC<Props> = ({ url, fileName }) => {
     const [fetching, setFetching] = useState(false);
-    const [error, setError] = useState(false);
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
@@ -36,15 +35,13 @@ export const Download: React.FC<Props> = ({ url, fileName }) => {
             document.body.appendChild(a);
             a.click();
         } catch {
-            setError(true);
+            dispatch(openNotification(t('notification:errorDownLoadingResource')));
         }
     };
 
     const handleClick = (): Promise<void> => download(url, fileName);
 
-    return error ? (
-        dispatch(openNotification(t('notification:errorDownLoadingResource')))
-    ) : (
+    return (
         <Button
             variant="outlined"
             color="primary"
