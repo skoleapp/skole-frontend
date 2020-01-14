@@ -19,7 +19,7 @@ import { Field, Formik } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
 import { Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { getFullCourseName, useAuthSync, useResponsiveSearch } from '../utils';
+import { getFullCourseName, useAuthSync, useSearchLayout } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
 import React from 'react';
@@ -58,7 +58,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         renderMobileContent,
         renderDesktopContent,
         submitButtonText,
-    } = useResponsiveSearch<FilterSearchResultsFormValues>();
+    } = useSearchLayout<FilterSearchResultsFormValues>();
 
     const handlePreSubmit = (values: FilterSearchResultsFormValues): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city } = values;

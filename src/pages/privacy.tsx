@@ -1,25 +1,24 @@
-import { CardContent, CardHeader } from '@material-ui/core';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Layout, StyledCard } from '../components';
+import { useAuthSync, useSettingsLayout } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
 import React from 'react';
+import { Typography } from '@material-ui/core';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../i18n';
-import { useAuthSync } from '../utils';
 import { useTranslation } from 'react-i18next';
 
 const PrivacyPage: I18nPage = () => {
     const { t } = useTranslation();
 
-    return (
-        <Layout title={t('privacy:title')} backUrl>
-            <StyledCard>
-                <CardHeader title={t('privacy:title')} />
-                <CardContent>Here will be privacy policy...</CardContent>
-            </StyledCard>
-        </Layout>
-    );
+    const renderCardContent = <Typography>Here will be privacy policy...</Typography>;
+
+    const responsiveSettingsProps = {
+        title: t('privacy:title'),
+        renderCardContent,
+    };
+
+    return useSettingsLayout(responsiveSettingsProps);
 };
 
 PrivacyPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

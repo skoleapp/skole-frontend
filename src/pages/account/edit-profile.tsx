@@ -1,21 +1,13 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 
-import { CardContent, CardHeader } from '@material-ui/core';
-import { Field, Formik, FormikProps } from 'formik';
-import {
-    FormGridContainer,
-    FormSubmitSection,
-    ImagePreviewField,
-    Layout,
-    StyledCard,
-    StyledForm,
-} from '../../components';
+import { Field, Formik } from 'formik';
+import { FormSubmitSection, ImagePreviewField, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { UpdateUserMutation, UserType, useUpdateUserMutation } from '../../../generated/graphql';
 import { openNotification, reAuthenticate } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm, usePrivatePage } from '../../utils';
+import { useForm, usePrivatePage, useSettingsLayout } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
 import React from 'react';
@@ -86,65 +78,56 @@ const EditProfilePage: I18nPage = () => {
         bio: Yup.string(),
     });
 
-    const renderForm = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
-        <StyledForm>
-            <Field name="avatar" label={t('edit-profile:changeAvatarButton')} component={ImagePreviewField} />
-            <Field
-                placeholder={t('forms:title')}
-                name="title"
-                component={TextField}
-                label={t('forms:title')}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:username')}
-                name="username"
-                component={TextField}
-                label={t('forms:username')}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:email')}
-                name="email"
-                component={TextField}
-                label={t('forms:email')}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:bio')}
-                name="bio"
-                component={TextField}
-                label={t('forms:bio')}
-                variant="outlined"
-                multiline
-                fullWidth
-            />
-            <FormSubmitSection submitButtonText={t('common:save')} {...props} />
-        </StyledForm>
+    const renderCardContent = (
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field name="avatar" label={t('edit-profile:changeAvatarButton')} component={ImagePreviewField} />
+                    <Field
+                        placeholder={t('forms:title')}
+                        name="title"
+                        component={TextField}
+                        label={t('forms:title')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:username')}
+                        name="username"
+                        component={TextField}
+                        label={t('forms:username')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:email')}
+                        name="email"
+                        component={TextField}
+                        label={t('forms:email')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:bio')}
+                        name="bio"
+                        component={TextField}
+                        label={t('forms:bio')}
+                        variant="outlined"
+                        multiline
+                        fullWidth
+                    />
+                    <FormSubmitSection submitButtonText={t('common:save')} {...props} />
+                </StyledForm>
+            )}
+        </Formik>
     );
 
-    return (
-        <Layout title={t('edit-profile:title')} backUrl>
-            <StyledCard>
-                <FormGridContainer>
-                    <CardHeader title={t('edit-profile:title')} />
-                    <CardContent>
-                        <Formik
-                            initialValues={initialValues}
-                            onSubmit={handleSubmit}
-                            validationSchema={validationSchema}
-                            ref={ref}
-                        >
-                            {renderForm}
-                        </Formik>
-                    </CardContent>
-                </FormGridContainer>
-            </StyledCard>
-        </Layout>
-    );
+    const responsiveSettingsProps = {
+        title: t('edit-profile:title'),
+        renderCardContent,
+    };
+
+    return useSettingsLayout(responsiveSettingsProps);
 };
 
 EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

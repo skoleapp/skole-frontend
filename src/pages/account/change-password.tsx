@@ -1,11 +1,10 @@
 import * as Yup from 'yup';
 
-import { CardContent, CardHeader } from '@material-ui/core';
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
-import { Field, Formik, FormikProps } from 'formik';
-import { FormSubmitSection, FormGridContainer, Layout, StyledCard, StyledForm } from '../../components';
+import { Field, Formik } from 'formik';
+import { FormSubmitSection, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useForm, usePrivatePage } from '../../utils';
+import { useForm, usePrivatePage, useSettingsLayout } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
 import React from 'react';
@@ -63,58 +62,49 @@ const ChangePasswordPage: I18nPage = () => {
         setSubmitting(false);
     };
 
-    const renderForm = (props: FormikProps<ChangePasswordFormValues>): JSX.Element => (
-        <StyledForm>
-            <Field
-                placeholder={t('forms:oldPassword')}
-                name="oldPassword"
-                component={TextField}
-                label={t('forms:oldPassword')}
-                variant="outlined"
-                type="password"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:newPassword')}
-                name="newPassword"
-                component={TextField}
-                label={t('forms:newPassword')}
-                variant="outlined"
-                type="password"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:confirmNewPassword')}
-                name="confirmNewPassword"
-                component={TextField}
-                label={t('forms:confirmNewPassword')}
-                variant="outlined"
-                type="password"
-                fullWidth
-            />
-            <FormSubmitSection submitButtonText={t('common:save')} {...props} />
-        </StyledForm>
+    const renderCardContent = (
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field
+                        placeholder={t('forms:oldPassword')}
+                        name="oldPassword"
+                        component={TextField}
+                        label={t('forms:oldPassword')}
+                        variant="outlined"
+                        type="password"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:newPassword')}
+                        name="newPassword"
+                        component={TextField}
+                        label={t('forms:newPassword')}
+                        variant="outlined"
+                        type="password"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:confirmNewPassword')}
+                        name="confirmNewPassword"
+                        component={TextField}
+                        label={t('forms:confirmNewPassword')}
+                        variant="outlined"
+                        type="password"
+                        fullWidth
+                    />
+                    <FormSubmitSection submitButtonText={t('common:save')} {...props} />
+                </StyledForm>
+            )}
+        </Formik>
     );
 
-    return (
-        <Layout title={t('change-password:title')} backUrl>
-            <StyledCard>
-                <FormGridContainer>
-                    <CardHeader title={t('change-password:title')} />
-                    <CardContent>
-                        <Formik
-                            onSubmit={handleSubmit}
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            ref={ref}
-                        >
-                            {renderForm}
-                        </Formik>
-                    </CardContent>
-                </FormGridContainer>
-            </StyledCard>
-        </Layout>
-    );
+    const responsiveSettingsProps = {
+        title: t('change-password:title'),
+        renderCardContent,
+    };
+
+    return useSettingsLayout(responsiveSettingsProps);
 };
 
 ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

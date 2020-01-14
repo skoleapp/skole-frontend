@@ -1,20 +1,12 @@
 import * as Yup from 'yup';
 
-import {
-    Button,
-    CardContent,
-    CardHeader,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-} from '@material-ui/core';
+import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
-import { Field, Formik, FormikProps } from 'formik';
-import { FormSubmitSection, FormGridContainer, Layout, StyledCard, StyledDialog, StyledForm } from '../../components';
+import { Field, Formik } from 'formik';
+import { FormSubmitSection, StyledDialog, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import React, { useState } from 'react';
-import { useForm, usePrivatePage } from '../../utils';
+import { useForm, usePrivatePage, useSettingsLayout } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
 import { TextField } from 'formik-material-ui';
@@ -78,37 +70,23 @@ export const DeleteAccountPage: I18nPage = () => {
         password: Yup.string().required(t('validation:passwordRequired')),
     });
 
-    const renderForm = (props: FormikProps<DeleteAccountFormValues>): JSX.Element => (
-        <StyledForm>
-            <Field
-                name="password"
-                label={t('forms:password')}
-                placeholder={t('forms:password')}
-                variant="outlined"
-                component={TextField}
-                fullWidth
-                type="password"
-            />
-            <FormSubmitSection submitButtonText={t('delete-account:submitButton')} {...props} />
-        </StyledForm>
-    );
-
-    const renderCard = (
-        <StyledCard>
-            <FormGridContainer>
-                <CardHeader title={t('delete-account:title')} />
-                <CardContent>
-                    <Formik
-                        onSubmit={handleSubmit}
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        ref={ref}
-                    >
-                        {renderForm}
-                    </Formik>
-                </CardContent>
-            </FormGridContainer>
-        </StyledCard>
+    const renderCardContent = (
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field
+                        name="password"
+                        label={t('forms:password')}
+                        placeholder={t('forms:password')}
+                        variant="outlined"
+                        component={TextField}
+                        fullWidth
+                        type="password"
+                    />
+                    <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
+                </StyledForm>
+            )}
+        </Formik>
     );
 
     const renderDialog = (
@@ -128,11 +106,18 @@ export const DeleteAccountPage: I18nPage = () => {
         </StyledDialog>
     );
 
+    const responsiveSettingsProps = {
+        title: t('delete-account:title'),
+        renderCardContent,
+    };
+
+    const renderSettingsLayout = useSettingsLayout(responsiveSettingsProps);
+
     return (
-        <Layout title={t('delete-account:title')} backUrl>
-            {renderCard}
+        <>
+            {renderSettingsLayout}
             {renderDialog}
-        </Layout>
+        </>
     );
 };
 
