@@ -16,29 +16,35 @@ export const Shortcut: React.FC<Props> = ({ text, icon: Icon, href }) => (
         <StyledShortcut>
             <CardContent>
                 <Icon color="primary" />
-                <Typography variant="h6">{text}</Typography>
+                <Typography variant="h2">{text}</Typography>
             </CardContent>
         </StyledShortcut>
     </Link>
 );
 
 const StyledShortcut = styled(Card)`
-    height: 14rem;
-    width: 14rem;
     margin: 0.5rem;
     cursor: pointer;
+    width: 14rem;
+    height: 14rem;
 
     .MuiCardContent-root {
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
 
         .MuiSvgIcon-root {
             height: 5rem;
             width: 5rem;
+            margin: 0.5rem;
         }
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin: 0.5rem;
     }
 
     &:hover {
