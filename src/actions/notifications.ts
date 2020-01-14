@@ -1,14 +1,13 @@
-import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
+import { Dispatch } from 'react';
 
 export const OPEN_NOTIFICATION = 'OPEN_NOTIFICATION';
 export const CLOSE_NOTIFICATION = 'CLOSE_NOTIFICATION';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const openNotification: any = (message: string) => (dispatch: Dispatch<AnyAction>) => {
+export const openNotification = (message: string) => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: OPEN_NOTIFICATION, payload: message });
 };
 
-export const closeNotification = () => (dispatch: Dispatch<AnyAction>) => {
+export const closeNotification = () => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: CLOSE_NOTIFICATION });
 };
