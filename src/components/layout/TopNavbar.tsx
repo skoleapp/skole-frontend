@@ -1,6 +1,6 @@
-import { AccountCircle, ArrowBack, CloudUpload, Settings } from '@material-ui/icons';
+import { AccountCircle, ArrowBack, CloudUpload } from '@material-ui/icons';
 import { AppBar, Box, IconButton, Toolbar } from '@material-ui/core';
-import { ButtonLink, IconButtonLink } from '../shared';
+import { ButtonLink, IconButtonLink, SettingsButton } from '../shared';
 import { Heading, Logo, TopNavbarSearchWidget } from '.';
 
 import React from 'react';
@@ -59,7 +59,9 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch }) 
                     </>
                 )}
             </Box>
-            <IconButtonLink icon={Settings} href="/settings" color="secondary" />
+            <Box className="sm-down">
+                <SettingsButton color="secondary" />
+            </Box>
         </>
     );
 
