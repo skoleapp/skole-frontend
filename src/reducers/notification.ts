@@ -22,7 +22,8 @@ export const notificationReducer = (state = initialState, action: AnyAction): No
             return { open: false, message: null };
         }
 
-        default:
+        default: {
             return state;
+        }
     }
 };
