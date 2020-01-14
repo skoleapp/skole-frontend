@@ -11,7 +11,16 @@ import {
     Tab,
     Typography,
 } from '@material-ui/core';
-import { ButtonLink, Layout, NotFound, StyledCard, StyledList, StyledTabs, TabPanel } from '../../components';
+import {
+    ButtonLink,
+    Layout,
+    NotFound,
+    SettingsButton,
+    StyledCard,
+    StyledList,
+    StyledTabs,
+    TabPanel,
+} from '../../components';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { UserDetailDocument, UserType } from '../../../generated/graphql';
@@ -44,6 +53,17 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         moment.locale(i18n.language); // Set moment language.
         const joined = moment(user.created).format('LL');
         const isOwnProfile = user.id === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
+
+        const renderPrivateContent = (
+            <>
+                <ButtonLink href="/account/edit-profile" color="primary" variant="outlined" fullWidth>
+                    {t('profile:editProfileButton')}
+                </ButtonLink>
+                <Box className="sm-up" marginLeft="0.5rem">
+                    <SettingsButton color="primary" />
+                </Box>
+            </>
+        );
 
         const renderTopSection = (
             <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
@@ -82,13 +102,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                 {t('common:resources')}: {resourceCount}
                             </ListItemText>
                         </ListItem>
-                        <ListItem>
-                            {isOwnProfile && (
-                                <ButtonLink href="/account/edit-profile" color="primary" variant="outlined" fullWidth>
-                                    {t('profile:editProfileButton')}
-                                </ButtonLink>
-                            )}
-                        </ListItem>
+                        <ListItem>{isOwnProfile && renderPrivateContent}</ListItem>
                     </StyledList>
                 </CardContent>
             </Box>
