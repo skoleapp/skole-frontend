@@ -5,7 +5,7 @@ import { Field, Formik } from 'formik';
 import { FormSubmitSection, Layout, SelectField, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { UserType, UsersDocument } from '../../../generated/graphql';
-import { getAvatarThumb, useAuthSync, useResponsiveSearch } from '../../utils';
+import { getAvatarThumb, useAuthSync, useSearchLayout } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
 import Link from 'next/link';
@@ -36,7 +36,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         renderMobileContent,
         renderDesktopContent,
         ref,
-    } = useResponsiveSearch<FilterUsersFormValues>();
+    } = useSearchLayout<FilterUsersFormValues>();
 
     const handlePreSubmit = (values: FilterUsersFormValues): void => {
         const { username, ordering } = values;

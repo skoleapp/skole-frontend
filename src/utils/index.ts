@@ -11,6 +11,7 @@ export { useTabs } from './useTabs';
 export { getAvatar } from './getAvatar';
 export { getAvatarThumb } from './getAvatarThumb';
 export { getFilePath } from './getFilePath';
-export { useResponsiveSearch } from './useResponsiveSearch';
+export { useSearchLayout } from './useSearchLayout';
 export { useAlerts } from './useAlerts';
 export { useSettingsLayout } from './useSettingsLayout';
+export { useSettings } from './useSettings';
