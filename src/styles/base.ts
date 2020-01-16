@@ -59,5 +59,17 @@ export const base = css`
         .MuiLink-root {
             cursor: pointer;
         }
+
+        .MuiTypography-h1 {
+            font-size: 2rem;
+        }
+
+        .MuiTypography-h2 {
+            font-size: 1.5rem;
+        }
+
+        .MuiTypography-h3 {
+            font-size: 1.25rem;
+        }
     }
 `;

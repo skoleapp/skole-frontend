@@ -12,6 +12,5 @@ export const Logo: React.FC = () => (
 const StyledLogo = styled(Typography)`
     font-family: 'Ubuntu Mono', monospace !important;
     color: var(--secondary);
-    font-size: 1.75rem !important;
     cursor: pointer;
 `;

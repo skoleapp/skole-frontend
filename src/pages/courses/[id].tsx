@@ -153,10 +153,14 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>
-                                            <Typography variant="h6">{t('common:title')}</Typography>
+                                            <Typography variant="subtitle1" color="textSecondary">
+                                                {t('common:title')}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell align="right">
-                                            <Typography variant="h6">{t('common:points')}</Typography>
+                                            <Typography variant="subtitle1" color="textSecondary">
+                                                {t('common:points')}
+                                            </Typography>
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>

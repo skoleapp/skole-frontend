@@ -42,11 +42,6 @@ const StyledShortcut = styled(Card)`
         }
     }
 
-    h2 {
-        font-size: 1.5rem;
-        margin: 0.5rem;
-    }
-
     &:hover {
         background-color: var(--primary-opacity);
     }
