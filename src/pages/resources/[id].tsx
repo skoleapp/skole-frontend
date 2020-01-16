@@ -6,6 +6,7 @@ import {
     CardContent,
     CardHeader,
     Divider,
+    Grid,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -59,61 +60,65 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const resourceParts = R.propOr([], 'resourceParts', resource) as ResourcePartType[];
 
         const renderResourceInfo = (
-            <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                <CardContent>
-                    <Box textAlign="left">
-                        <Typography variant="body1">
-                            {t('common:resourceType')}: {resourceType}
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:course')}:{' '}
-                            <TextLink href={`/courses/${resourceCourseId}`} color="primary">
-                                {resourceCourseName}
-                            </TextLink>
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:school')}:{' '}
-                            <TextLink href={`/schools/${resourceSchoolId}`} color="primary">
-                                {resourceSchoolName}
-                            </TextLink>
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:creator')}:{' '}
-                            <TextLink href={`/users/${creatorId}`} color="primary">
-                                {creatorName}
-                            </TextLink>
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:created')}: {created}
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:modified')}: {modified}
-                        </Typography>
-                    </Box>
-                </CardContent>
-                <CardContent>
-                    <StyledList>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <ScoreOutlined />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>
-                                {t('common:points')}: {points}
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <CloudDownload />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>{t('common:downloads')}: 0</ListItemText>
-                        </ListItem>
-                    </StyledList>
-                </CardContent>
-            </Box>
+            <Grid container alignItems="center">
+                <Grid item container sm={6} justify="center">
+                    <CardContent>
+                        <Box textAlign="left">
+                            <Typography variant="body1">
+                                {t('common:resourceType')}: {resourceType}
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:course')}:{' '}
+                                <TextLink href={`/courses/${resourceCourseId}`} color="primary">
+                                    {resourceCourseName}
+                                </TextLink>
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:school')}:{' '}
+                                <TextLink href={`/schools/${resourceSchoolId}`} color="primary">
+                                    {resourceSchoolName}
+                                </TextLink>
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:creator')}:{' '}
+                                <TextLink href={`/users/${creatorId}`} color="primary">
+                                    {creatorName}
+                                </TextLink>
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:created')}: {created}
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:modified')}: {modified}
+                            </Typography>
+                        </Box>
+                    </CardContent>
+                </Grid>
+                <Grid item container sm={6} justify="center">
+                    <CardContent>
+                        <StyledList>
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <ScoreOutlined />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText>
+                                    {t('common:points')}: {points}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <CloudDownload />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText>{t('common:downloads')}: 0</ListItemText>
+                            </ListItem>
+                        </StyledList>
+                    </CardContent>
+                </Grid>
+            </Grid>
         );
 
         const renderTabs = (
