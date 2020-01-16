@@ -15,8 +15,7 @@ import {
 import { CloudDownload, ScoreOutlined } from '@material-ui/icons';
 import {
     Download,
-    FormGridContainer,
-    Layout,
+    MainLayout,
     NotFound,
     StyledCard,
     StyledList,
@@ -165,9 +164,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     <Image src={getFilePath(r)} />
                 </CardContent>
                 <CardContent>
-                    <FormGridContainer>
-                        <Download url={getFilePath(r)} fileName={r.title} />
-                    </FormGridContainer>
+                    <Download url={getFilePath(r)} fileName={r.title} />
                 </CardContent>
                 <Divider />
                 <CardContent>Here will be {r.title} discussion thread...</CardContent>
@@ -175,7 +172,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         ));
 
         return (
-            <Layout title={resourceTitle} backUrl>
+            <MainLayout title={resourceTitle} backUrl>
                 <StyledCard>
                     <CardHeader title={resourceTitle} />
                     <Divider />
@@ -185,7 +182,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     {renderGeneralDiscussionThread}
                     {renderResourceParts}
                 </StyledCard>
-            </Layout>
+            </MainLayout>
         );
     } else {
         return <NotFound title={t('resource:notFound')} />;

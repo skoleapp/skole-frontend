@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
-import { Box, CardContent, CardHeader, Divider, FormControl, Link, Typography } from '@material-ui/core';
-import { ButtonLink, FormSubmitSection, FormGridContainer, Layout, StyledCard, StyledForm } from '../components';
-import { Field, Formik, FormikProps } from 'formik';
+import { Box, Divider, FormControl, Link, Typography } from '@material-ui/core';
+import { ButtonLink, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { Field, Formik } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { SignUpMutation, useSignUpMutation } from '../../generated/graphql';
 import { useForm, usePublicPage } from '../utils';
@@ -70,80 +70,66 @@ const SignUpPage: I18nPage = () => {
         setSubmitting(false);
     };
 
-    const renderForm = (props: FormikProps<SignUpFormValues>): JSX.Element => (
-        <StyledForm>
-            <Field
-                placeholder={t('forms:username')}
-                name="username"
-                component={TextField}
-                label={t('forms:username')}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:email')}
-                name="email"
-                component={TextField}
-                label={t('forms:email')}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:password')}
-                name="password"
-                component={TextField}
-                label={t('forms:password')}
-                variant="outlined"
-                type="password"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:confirmPassword')}
-                name="confirmPassword"
-                type="password"
-                component={TextField}
-                label={t('forms:confirmPassword')}
-                variant="outlined"
-                fullWidth
-            />
-            <FormControl fullWidth>
-                <Typography variant="body2" color="textSecondary">
-                    {t('sign-up:termsHelpText')}{' '}
-                    <Link href="/terms" target="_blank">
-                        {t('common:terms')}
-                    </Link>
-                    .
-                </Typography>
-            </FormControl>
-            <FormSubmitSection submitButtonText={t('common:signUp')} {...props} />
-            <Box marginY="1rem">
-                <Divider />
-            </Box>
-            <ButtonLink href="/sign-in" variant="outlined" color="primary" fullWidth>
-                {t('sign-up:alreadyHaveAccount')}
-            </ButtonLink>
-        </StyledForm>
+    const renderForm = (
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field
+                        placeholder={t('forms:username')}
+                        name="username"
+                        component={TextField}
+                        label={t('forms:username')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:email')}
+                        name="email"
+                        component={TextField}
+                        label={t('forms:email')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:password')}
+                        name="password"
+                        component={TextField}
+                        label={t('forms:password')}
+                        variant="outlined"
+                        type="password"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:confirmPassword')}
+                        name="confirmPassword"
+                        type="password"
+                        component={TextField}
+                        label={t('forms:confirmPassword')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <FormControl fullWidth>
+                        <Typography variant="body2" color="textSecondary">
+                            {t('sign-up:termsHelpText')}{' '}
+                            <Link href="/terms" target="_blank">
+                                {t('common:terms')}
+                            </Link>
+                            .
+                        </Typography>
+                    </FormControl>
+                    <FormSubmitSection submitButtonText={t('common:signUp')} {...props} />
+                    <Box marginY="1rem">
+                        <Divider />
+                    </Box>
+                    <ButtonLink href="/sign-in" variant="outlined" color="primary" fullWidth>
+                        {t('sign-up:alreadyHaveAccount')}
+                    </ButtonLink>
+                </StyledForm>
+            )}
+        </Formik>
     );
 
-    return (
-        <Layout title={t('common:signUp')} backUrl>
-            <StyledCard>
-                <FormGridContainer>
-                    <CardHeader title={t('common:signUp')} />
-                    <CardContent>
-                        <Formik
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            onSubmit={handleSubmit}
-                            ref={ref}
-                        >
-                            {renderForm}
-                        </Formik>
-                    </CardContent>
-                </FormGridContainer>
-            </StyledCard>
-        </Layout>
-    );
+    return <FormLayout title={t('common:signUp')} renderForm={renderForm} backUrl />;
 };
 
 SignUpPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

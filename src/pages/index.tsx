@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
-import { ButtonLink, LandingPageSearchWidget, Layout, Shortcut } from '../components';
+import { ButtonLink, LandingPageSearchWidget, MainLayout, Shortcut } from '../components';
 import {
     CloudUploadOutlined,
     LibraryAddOutlined,
@@ -20,7 +20,7 @@ const IndexPage: I18nPage = () => {
     const { t } = useTranslation();
 
     return (
-        <Layout title={t('index:title')} disableSearch>
+        <MainLayout title={t('index:title')} disableSearch>
             <StyledIndexPage>
                 <Box marginY="1rem">
                     <Typography variant="h1">{t('index:slogan')}</Typography>
@@ -41,7 +41,7 @@ const IndexPage: I18nPage = () => {
                     </ButtonLink>
                 </Box>
             </StyledIndexPage>
-        </Layout>
+        </MainLayout>
     );
 };
 

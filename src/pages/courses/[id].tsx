@@ -21,7 +21,7 @@ import { CloudUploadOutlined, ScoreOutlined } from '@material-ui/icons';
 import { CourseDetailDocument, CourseType, ResourceType } from '../../../generated/graphql';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import {
-    Layout,
+    MainLayout,
     NotFound,
     StyledCard,
     StyledList,
@@ -185,7 +185,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         return (
-            <Layout heading={fullName} title={fullName} backUrl>
+            <MainLayout heading={fullName} title={fullName} backUrl>
                 <StyledCard>
                     <CardHeader title={fullName} />
                     <Divider />
@@ -194,7 +194,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     {renderTabs}
                     {renderTabContent}
                 </StyledCard>
-            </Layout>
+            </MainLayout>
         );
     } else {
         return <NotFound title={t('course:notFound')} />;

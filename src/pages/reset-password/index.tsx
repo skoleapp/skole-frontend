@@ -1,8 +1,7 @@
 import * as Yup from 'yup';
 
-import { CardContent, CardHeader } from '@material-ui/core';
-import { Field, Formik, FormikProps } from 'formik';
-import { FormSubmitSection, FormGridContainer, Layout, StyledCard, StyledForm } from '../../components';
+import { Field, Formik } from 'formik';
+import { FormLayout, FormSubmitSection, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useForm, usePublicPage } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
@@ -38,39 +37,25 @@ const ResetPasswordLinkPage: I18nPage = () => {
         setSubmitting(false);
     };
 
-    const renderForm = (props: FormikProps<ResetPasswordLinkFormValues>): JSX.Element => (
-        <StyledForm>
-            <Field
-                placeholder={t('forms:email')}
-                name="email"
-                component={TextField}
-                label={t('forms:email')}
-                variant="outlined"
-                fullWidth
-            />
-            <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-        </StyledForm>
+    const renderForm = (
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field
+                        placeholder={t('forms:email')}
+                        name="email"
+                        component={TextField}
+                        label={t('forms:email')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+                </StyledForm>
+            )}
+        </Formik>
     );
 
-    return (
-        <Layout title={t('reset-password:link')} backUrl>
-            <StyledCard>
-                <FormGridContainer>
-                    <CardHeader title={t('reset-password:link')} />
-                    <CardContent>
-                        <Formik
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            onSubmit={handleSubmit}
-                            ref={ref}
-                        >
-                            {renderForm}
-                        </Formik>
-                    </CardContent>
-                </FormGridContainer>
-            </StyledCard>
-        </Layout>
-    );
+    return <FormLayout title={t('reset-password:link')} renderForm={renderForm} backUrl />;
 };
 
 ResetPasswordLinkPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

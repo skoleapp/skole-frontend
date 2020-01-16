@@ -1,23 +1,14 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 
-import {
-    AutoCompleteField,
-    DropzoneField,
-    FormSubmitSection,
-    FormGridContainer,
-    Layout,
-    StyledCard,
-    StyledForm,
-} from '../components';
-import { CardContent, CardHeader } from '@material-ui/core';
+import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection, StyledForm } from '../components';
 import {
     CourseType,
     CoursesDocument,
     ResourceTypesDocument,
     UploadResourceInitialDataDocument,
 } from '../../generated/graphql';
-import { Field, Formik, FormikProps } from 'formik';
+import { Field, Formik } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
 import { UploadResourceMutation, useUploadResourceMutation } from '../../generated/graphql';
@@ -94,60 +85,46 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         general: '',
     };
 
-    const renderForm = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
-        <StyledForm>
-            <Field
-                name="resourceTitle"
-                label={t('forms:resourceTitle')}
-                placeholder={t('forms:resourceTitle')}
-                variant="outlined"
-                component={TextField}
-                fullWidth
-            />
-            <Field
-                name="resourceType"
-                label={t('forms:resourceType')}
-                placeholder={t('forms:resourceType')}
-                dataKey="resourceTypes"
-                document={ResourceTypesDocument}
-                variant="outlined"
-                component={AutoCompleteField}
-                fullWidth
-            />
-            <Field
-                name="course"
-                label={t('forms:course')}
-                placeholder={t('forms:course')}
-                dataKey="courses"
-                document={CoursesDocument}
-                variant="outlined"
-                component={AutoCompleteField}
-                fullWidth
-            />
-            <Field name="files" label={t('upload-resource:dropzoneText')} component={DropzoneField} />
-            <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-        </StyledForm>
+    const renderForm = (
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field
+                        name="resourceTitle"
+                        label={t('forms:resourceTitle')}
+                        placeholder={t('forms:resourceTitle')}
+                        variant="outlined"
+                        component={TextField}
+                        fullWidth
+                    />
+                    <Field
+                        name="resourceType"
+                        label={t('forms:resourceType')}
+                        placeholder={t('forms:resourceType')}
+                        dataKey="resourceTypes"
+                        document={ResourceTypesDocument}
+                        variant="outlined"
+                        component={AutoCompleteField}
+                        fullWidth
+                    />
+                    <Field
+                        name="course"
+                        label={t('forms:course')}
+                        placeholder={t('forms:course')}
+                        dataKey="courses"
+                        document={CoursesDocument}
+                        variant="outlined"
+                        component={AutoCompleteField}
+                        fullWidth
+                    />
+                    <Field name="files" label={t('upload-resource:dropzoneText')} component={DropzoneField} />
+                    <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+                </StyledForm>
+            )}
+        </Formik>
     );
 
-    return (
-        <Layout title={t('upload-resource:title')} backUrl>
-            <StyledCard>
-                <FormGridContainer>
-                    <CardHeader title={t('upload-resource:title')} />
-                    <CardContent>
-                        <Formik
-                            onSubmit={handleSubmit}
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            ref={ref}
-                        >
-                            {renderForm}
-                        </Formik>
-                    </CardContent>
-                </FormGridContainer>
-            </StyledCard>
-        </Layout>
-    );
+    return <FormLayout title={t('upload-resource:title')} backUrl renderForm={renderForm} />;
 };
 
 UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {

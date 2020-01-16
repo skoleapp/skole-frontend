@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-import { AutoCompleteField, FormSubmitSection, Layout, StyledForm } from '../components';
+import { AutoCompleteField, FormSubmitSection, MainLayout, StyledForm } from '../components';
 import {
     CitiesDocument,
     CityType,
@@ -193,10 +193,10 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     };
 
     return (
-        <Layout title={t('search:title')} backUrl disableSearch>
+        <MainLayout title={t('search:title')} backUrl disableSearch>
             {renderMobileContent(responsiveContentProps)}
             {renderDesktopContent(responsiveContentProps)}
-        </Layout>
+        </MainLayout>
     );
 };
 

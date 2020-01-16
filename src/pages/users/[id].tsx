@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import {
     ButtonLink,
-    Layout,
+    MainLayout,
     NotFound,
     SettingsButton,
     StyledCard,
@@ -174,7 +174,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         return (
-            <Layout heading={username} title={username} backUrl>
+            <MainLayout heading={username} title={username} backUrl>
                 <StyledCard>
                     {renderTopSection}
                     <Divider />
@@ -185,7 +185,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     {renderTabs}
                     {renderTabContent}
                 </StyledCard>
-            </Layout>
+            </MainLayout>
         );
     } else {
         return <NotFound title={t('profile:notFound')} />;

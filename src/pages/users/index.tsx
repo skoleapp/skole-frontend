@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import { Avatar, MenuItem, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Field, Formik } from 'formik';
-import { FormSubmitSection, Layout, SelectField, StyledForm } from '../../components';
+import { FormSubmitSection, MainLayout, SelectField, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { UserType, UsersDocument } from '../../../generated/graphql';
 import { getAvatarThumb, useAuthSync, useSearchLayout } from '../../utils';
@@ -122,10 +122,10 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     };
 
     return (
-        <Layout heading={t('users:title')} title={t('users:title')} backUrl>
+        <MainLayout heading={t('users:title')} title={t('users:title')} backUrl>
             {renderMobileContent(responsiveContentProps)}
             {renderDesktopContent(responsiveContentProps)}
-        </Layout>
+        </MainLayout>
     );
 };
 

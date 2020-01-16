@@ -1,16 +1,8 @@
 import * as Yup from 'yup';
 
-import { Box, CardContent, CardHeader, Divider } from '@material-ui/core';
-import {
-    ButtonLink,
-    FormGridContainer,
-    FormSubmitSection,
-    Layout,
-    StyledCard,
-    StyledForm,
-    TextLink,
-} from '../components';
-import { Field, Formik, FormikProps } from 'formik';
+import { Box, Divider } from '@material-ui/core';
+import { ButtonLink, FormLayout, FormSubmitSection, StyledForm, TextLink } from '../components';
+import { Field, Formik } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
 import { SignInMutation, useSignInMutation } from '../../generated/graphql';
@@ -78,57 +70,49 @@ const SignInPage: I18nPage = () => {
         setSubmitting(false);
     };
 
-    const renderForm = (props: FormikProps<SignInFormValues>): JSX.Element => (
-        <StyledForm>
-            <Field
-                placeholder={t('forms:usernameOrEmail')}
-                name="usernameOrEmail"
-                component={TextField}
-                label={t('forms:usernameOrEmail')}
-                variant="outlined"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:password')}
-                name="password"
-                component={TextField}
-                label={t('forms:password')}
-                variant="outlined"
-                type="password"
-                fullWidth
-            />
-            <FormSubmitSection submitButtonText={t('common:signIn')} {...props} />
-            <Box marginY="1rem">
-                <Divider />
-            </Box>
-            <ButtonLink href="/sign-up" variant="outlined" color="primary" fullWidth>
-                {t('sign-in:createAccount')}
-            </ButtonLink>
-            <Box marginTop="1rem">
-                <TextLink href="/reset-password">{t('sign-in:forgotPassword')}</TextLink>
-            </Box>
-        </StyledForm>
+    const renderForm = (
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field
+                        placeholder={t('forms:usernameOrEmail')}
+                        name="usernameOrEmail"
+                        component={TextField}
+                        label={t('forms:usernameOrEmail')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:password')}
+                        name="password"
+                        component={TextField}
+                        label={t('forms:password')}
+                        variant="outlined"
+                        type="password"
+                        fullWidth
+                    />
+                    <FormSubmitSection submitButtonText={t('common:signIn')} {...props} />
+                    <Box marginY="1rem">
+                        <Divider />
+                    </Box>
+                    <ButtonLink href="/sign-up" variant="outlined" color="primary" fullWidth>
+                        {t('sign-in:createAccount')}
+                    </ButtonLink>
+                    <Box marginTop="1rem">
+                        <TextLink href="/reset-password">{t('sign-in:forgotPassword')}</TextLink>
+                    </Box>
+                </StyledForm>
+            )}
+        </Formik>
     );
 
     return (
-        <Layout title={t('common:signIn')} backUrl>
-            <StyledCard>
-                <FormGridContainer>
-                    <CardContent>{query.next && renderAlert('warning', t('alerts:signInRequired'))}</CardContent>
-                    <CardHeader title={t('common:signIn')} />
-                    <CardContent>
-                        <Formik
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            onSubmit={handleSubmit}
-                            ref={ref}
-                        >
-                            {renderForm}
-                        </Formik>
-                    </CardContent>
-                </FormGridContainer>
-            </StyledCard>
-        </Layout>
+        <FormLayout
+            title={t('common:signIn')}
+            renderForm={renderForm}
+            renderAlert={!!query.next ? renderAlert('warning', t('alerts:signInRequired')) : undefined}
+            backUrl
+        />
     );
 };
 

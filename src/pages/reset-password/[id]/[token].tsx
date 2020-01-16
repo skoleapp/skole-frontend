@@ -1,8 +1,7 @@
 import * as Yup from 'yup';
 
-import { CardContent, CardHeader } from '@material-ui/core';
-import { Field, Formik, FormikProps } from 'formik';
-import { FormSubmitSection, FormGridContainer, Layout, StyledCard, StyledForm } from '../../../components';
+import { Field, Formik } from 'formik';
+import { FormLayout, FormSubmitSection, StyledForm } from '../../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../../types';
 import { useForm, usePublicPage } from '../../../utils';
 import { withApollo, withRedux } from '../../../lib';
@@ -43,49 +42,35 @@ const ResetPasswordConfirmPage: I18nPage = () => {
         setSubmitting(false);
     };
 
-    const renderForm = (props: FormikProps<ResetPasswordConfirmFormValues>): JSX.Element => (
-        <StyledForm>
-            <Field
-                placeholder={t('forms:password')}
-                name="password"
-                component={TextField}
-                label={t('forms:password')}
-                variant="outlined"
-                type="password"
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:confirmPassword')}
-                name="confirmPassword"
-                type="password"
-                component={TextField}
-                label={t('forms:confirmPassword')}
-                variant="outlined"
-                fullWidth
-            />
-            <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-        </StyledForm>
+    const renderForm = (
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field
+                        placeholder={t('forms:password')}
+                        name="password"
+                        component={TextField}
+                        label={t('forms:password')}
+                        variant="outlined"
+                        type="password"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:confirmPassword')}
+                        name="confirmPassword"
+                        type="password"
+                        component={TextField}
+                        label={t('forms:confirmPassword')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+                </StyledForm>
+            )}
+        </Formik>
     );
 
-    return (
-        <Layout title={t('reset-password:confirm')} backUrl>
-            <StyledCard>
-                <FormGridContainer>
-                    <CardHeader title={t('reset-password:confirm')} />
-                    <CardContent>
-                        <Formik
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            onSubmit={handleSubmit}
-                            ref={ref}
-                        >
-                            {renderForm}
-                        </Formik>
-                    </CardContent>
-                </FormGridContainer>
-            </StyledCard>
-        </Layout>
-    );
+    return <FormLayout title={t('reset-password:confirm')} renderForm={renderForm} backUrl />;
 };
 
 ResetPasswordConfirmPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

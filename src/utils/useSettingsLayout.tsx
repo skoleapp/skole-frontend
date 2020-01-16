@@ -1,5 +1,5 @@
 import { CardContent, CardHeader, Grid } from '@material-ui/core';
-import { Layout, StyledCard } from '../components';
+import { MainLayout, StyledCard } from '../components';
 
 import React from 'react';
 import { useSettings } from '.';
@@ -36,9 +36,9 @@ export const useSettingsLayout = ({ title, renderCardContent }: Props): JSX.Elem
     );
 
     return (
-        <Layout title={title} backUrl>
+        <MainLayout title={title} backUrl>
             {renderMobileContent}
             {renderDesktopContent}
-        </Layout>
+        </MainLayout>
     );
 };
