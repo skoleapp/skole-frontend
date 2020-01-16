@@ -1,4 +1,4 @@
-import { Box, Button, Divider, ListItem, MenuItem, Typography } from '@material-ui/core';
+import { Button, Divider, ListItem, ListSubheader, MenuItem } from '@material-ui/core';
 import { LanguageSelector, StyledMenuList } from '../components';
 import { deAuthenticate, toggleSettings } from '../actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,25 +40,11 @@ export const useSettings = ({ modal }: Props): UseSettings => {
 
     const getSelected = (m: { [key: string]: string }): boolean => !modal && m.href === pathname;
 
-    const renderMenuSubHeader = (text: string): JSX.Element => (
-        <Box margin="0.25rem 1rem">
-            <Typography className="sub-header" variant="subtitle1" align="left" color="textSecondary">
-                {t(text)}
-            </Typography>
-        </Box>
-    );
-
     const renderAccountMenuItems = menuItems.account.map((m, i) => (
         <MenuItem key={i} onClick={handleMenuItemClick(m.href)} selected={getSelected(m)}>
             {t(m.text)}
         </MenuItem>
     ));
-
-    const renderLanguage = (
-        <ListItem>
-            <LanguageSelector fullWidth />;
-        </ListItem>
-    );
 
     const renderAboutMenuItems = menuItems.about.map((m, i) => (
         <MenuItem key={i} onClick={handleMenuItemClick(m.href)} selected={getSelected(m)}>
@@ -72,32 +58,27 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         </MenuItem>
     ));
 
-    const renderAuthenticatedMenuList = (
-        <StyledMenuList>
-            {renderMenuSubHeader('common:account')}
-            {renderAccountMenuItems}
+    const renderCommonMenuItems = (
+        <>
+            <ListSubheader>{t('common:language')}</ListSubheader>
+            <ListItem>
+                <LanguageSelector fullWidth />;
+            </ListItem>
             <Divider />
-            {renderMenuSubHeader('common:language')}
-            {renderLanguage}
-            <Divider />
-            {renderMenuSubHeader('common:about')}
+            <ListSubheader>{t('common:about')}</ListSubheader>
             {renderAboutMenuItems}
             <Divider />
-            {renderMenuSubHeader('common:legal')}
+            <ListSubheader>{t('common:legal')}</ListSubheader>
             {renderLegalItems}
-        </StyledMenuList>
+        </>
     );
 
-    const renderUnAuthenticatedMenuList = (
+    const renderAuthenticatedMenuList = (
         <StyledMenuList>
-            {renderMenuSubHeader('common:language')}
-            {renderLanguage}
+            <ListSubheader>{t('common:account')}</ListSubheader>
+            {renderAccountMenuItems}
             <Divider />
-            {renderMenuSubHeader('common:about')}
-            {renderAboutMenuItems}
-            <Divider />
-            {renderMenuSubHeader('common:legal')}
-            {renderLegalItems}
+            {renderCommonMenuItems}
         </StyledMenuList>
     );
 
@@ -119,7 +100,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
 
     const renderSettingsCardContent = (
         <>
-            {authenticated ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuList}
+            {authenticated ? renderAuthenticatedMenuList : <StyledMenuList>{renderCommonMenuItems}</StyledMenuList>}
             <Divider />
             {authenticated ? renderSignOutButton : renderSignInButton}
         </>
