@@ -111,6 +111,7 @@ export const DeleteAccountPage: I18nPage = () => {
             title={t('delete-account:title')}
             renderCardContent={renderCardContent}
             renderDialog={renderDialog}
+            backUrl
         />
     );
 };

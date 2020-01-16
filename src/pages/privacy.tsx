@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 const PrivacyPage: I18nPage = () => {
     const { t } = useTranslation();
     const renderCardContent = <Typography>Here will be privacy policy...</Typography>;
-    return <SettingsLayout title={t('privacy:title')} renderCardContent={renderCardContent} />;
+    return <SettingsLayout title={t('privacy:title')} renderCardContent={renderCardContent} backUrl />;
 };
 
 PrivacyPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

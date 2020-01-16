@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 const AboutPage: I18nPage = () => {
     const { t } = useTranslation();
     const renderCardContent = <Typography>Here will be about content...</Typography>;
-    return <SettingsLayout title={t('about:title')} renderCardContent={renderCardContent} />;
+    return <SettingsLayout title={t('about:title')} renderCardContent={renderCardContent} backUrl />;
 };
 
 AboutPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
