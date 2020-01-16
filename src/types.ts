@@ -30,8 +30,10 @@ export interface State {
 
 export interface LayoutProps {
     title?: string;
+    heading?: string;
     backUrl?: boolean;
     renderCardContent?: JSX.Element;
     renderAlert?: JSX.Element;
     renderDialog?: JSX.Element;
+    disableSearch?: boolean;
 }
