@@ -2,10 +2,10 @@ import * as R from 'ramda';
 
 import { Avatar, MenuItem, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Field, Formik } from 'formik';
-import { FormSubmitSection, MainLayout, SelectField, StyledForm } from '../../components';
+import { FilterLayout, FormSubmitSection, SelectField, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { UserType, UsersDocument } from '../../../generated/graphql';
-import { getAvatarThumb, useAuthSync, useSearchLayout } from '../../utils';
+import { getAvatarThumb, useAuthSync, useFilters } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
 import Link from 'next/link';
@@ -26,17 +26,9 @@ interface Props extends I18nProps {
 }
 
 const UsersPage: I18nPage<Props> = ({ users }) => {
+    const { handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<FilterUsersFormValues>();
     const { t } = useTranslation();
     const { query } = useRouter();
-
-    const {
-        handleSubmit,
-        submitButtonText,
-        renderClearFiltersButton,
-        renderMobileContent,
-        renderDesktopContent,
-        ref,
-    } = useSearchLayout<FilterUsersFormValues>();
 
     const handlePreSubmit = (values: FilterUsersFormValues): void => {
         const { username, ordering } = values;
@@ -116,16 +108,14 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         </Table>
     );
 
-    const responsiveContentProps = {
-        renderTableContent,
-        renderCardContent,
-    };
-
     return (
-        <MainLayout heading={t('users:title')} title={t('users:title')} backUrl>
-            {renderMobileContent(responsiveContentProps)}
-            {renderDesktopContent(responsiveContentProps)}
-        </MainLayout>
+        <FilterLayout
+            heading={t('users:title')}
+            title={t('users:title')}
+            renderCardContent={renderCardContent}
+            renderTableContent={renderTableContent}
+            backUrl
+        />
     );
 };
 

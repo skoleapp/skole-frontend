@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-import { AutoCompleteField, FormSubmitSection, MainLayout, StyledForm } from '../components';
+import { AutoCompleteField, FilterLayout, FormSubmitSection, StyledForm } from '../components';
 import {
     CitiesDocument,
     CityType,
@@ -19,7 +19,7 @@ import { Field, Formik } from 'formik';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { Router, includeDefaultNamespaces } from '../i18n';
 import { Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { getFullCourseName, useAuthSync, useSearchLayout } from '../utils';
+import { getFullCourseName, useAuthSync, useFilters } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
 import React from 'react';
@@ -51,14 +51,9 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     const { query } = useRouter();
     const { t } = useTranslation();
 
-    const {
-        ref,
-        handleSubmit,
-        renderClearFiltersButton,
-        renderMobileContent,
-        renderDesktopContent,
-        submitButtonText,
-    } = useSearchLayout<FilterSearchResultsFormValues>();
+    const { ref, handleSubmit, renderClearFiltersButton, submitButtonText } = useFilters<
+        FilterSearchResultsFormValues
+    >();
 
     const handlePreSubmit = (values: FilterSearchResultsFormValues): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city } = values;
@@ -186,17 +181,13 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         </Table>
     );
 
-    const responsiveContentProps = {
-        title: t('common:courses'),
-        renderCardContent,
-        renderTableContent,
-    };
-
     return (
-        <MainLayout title={t('search:title')} backUrl disableSearch>
-            {renderMobileContent(responsiveContentProps)}
-            {renderDesktopContent(responsiveContentProps)}
-        </MainLayout>
+        <FilterLayout
+            title={t('search:title')}
+            renderCardContent={renderCardContent}
+            renderTableContent={renderTableContent}
+            backUrl
+        />
     );
 };
 
