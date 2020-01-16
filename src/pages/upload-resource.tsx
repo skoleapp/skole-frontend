@@ -85,7 +85,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         general: '',
     };
 
-    const renderForm = (
+    const renderCardContent = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
@@ -124,7 +124,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         </Formik>
     );
 
-    return <FormLayout title={t('upload-resource:title')} backUrl renderForm={renderForm} />;
+    return <FormLayout title={t('upload-resource:title')} backUrl renderCardContent={renderCardContent} />;
 };
 
 UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {

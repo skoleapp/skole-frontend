@@ -1,16 +1,11 @@
 import { CardContent, CardHeader, Grid } from '@material-ui/core';
 import { MainLayout, StyledCard } from '..';
 
+import { LayoutProps } from '../../types';
 import React from 'react';
 import { useSettings } from '../../utils';
 
-interface Props {
-    title: string;
-    renderCardContent: JSX.Element;
-    renderDialog?: JSX.Element;
-}
-
-export const SettingsLayout: React.FC<Props> = ({ title, renderCardContent, renderDialog }) => {
+export const SettingsLayout: React.FC<Omit<LayoutProps, 'backUrl'>> = ({ title, renderCardContent, renderDialog }) => {
     const { renderSettingsCardContent } = useSettings({ modal: false });
 
     const renderMobileContent = (

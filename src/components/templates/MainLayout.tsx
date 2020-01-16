@@ -1,14 +1,13 @@
 import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 import { Box, Container } from '@material-ui/core';
 
+import { LayoutProps } from '../../types';
 import React from 'react';
 import { breakpoints } from '../../styles';
 import styled from 'styled-components';
 
-interface Props {
-    title?: string;
+interface Props extends Pick<LayoutProps, 'title' | 'backUrl'> {
     heading?: string;
-    backUrl?: boolean;
     disableSearch?: boolean;
 }
 

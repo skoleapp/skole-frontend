@@ -27,3 +27,11 @@ export interface State {
     notification: Notification;
     settings: Settings;
 }
+
+export interface LayoutProps {
+    title?: string;
+    backUrl?: boolean;
+    renderCardContent?: JSX.Element;
+    renderAlert?: JSX.Element;
+    renderDialog?: JSX.Element;
+}

@@ -49,7 +49,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         ordering: R.propOr('', 'ordering', query) as string,
     };
 
-    const renderForm = (
+    const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
@@ -118,7 +118,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
 
     const responsiveContentProps = {
         renderTableContent,
-        renderForm,
+        renderCardContent,
     };
 
     return (

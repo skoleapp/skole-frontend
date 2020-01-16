@@ -42,7 +42,7 @@ const ResetPasswordConfirmPage: I18nPage = () => {
         setSubmitting(false);
     };
 
-    const renderForm = (
+    const renderCardContent = (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
@@ -70,7 +70,7 @@ const ResetPasswordConfirmPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('reset-password:confirm')} renderForm={renderForm} backUrl />;
+    return <FormLayout title={t('reset-password:confirm')} renderCardContent={renderCardContent} backUrl />;
 };
 
 ResetPasswordConfirmPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

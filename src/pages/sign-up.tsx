@@ -70,7 +70,7 @@ const SignUpPage: I18nPage = () => {
         setSubmitting(false);
     };
 
-    const renderForm = (
+    const renderCardContent = (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
@@ -129,7 +129,7 @@ const SignUpPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('common:signUp')} renderForm={renderForm} backUrl />;
+    return <FormLayout title={t('common:signUp')} renderCardContent={renderCardContent} backUrl />;
 };
 
 SignUpPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

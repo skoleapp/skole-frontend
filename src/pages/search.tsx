@@ -87,7 +87,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         city: city || null,
     };
 
-    const renderForm = (
+    const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
@@ -188,7 +188,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
 
     const responsiveContentProps = {
         title: t('common:courses'),
-        renderForm,
+        renderCardContent,
         renderTableContent,
     };
 

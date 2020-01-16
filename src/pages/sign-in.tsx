@@ -70,7 +70,7 @@ const SignInPage: I18nPage = () => {
         setSubmitting(false);
     };
 
-    const renderForm = (
+    const renderCardContent = (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
@@ -109,7 +109,7 @@ const SignInPage: I18nPage = () => {
     return (
         <FormLayout
             title={t('common:signIn')}
-            renderForm={renderForm}
+            renderCardContent={renderCardContent}
             renderAlert={!!query.next ? renderAlert('warning', t('alerts:signInRequired')) : undefined}
             backUrl
         />

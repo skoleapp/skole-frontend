@@ -83,7 +83,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
         general: '',
     };
 
-    const renderForm = (
+    const renderCardContent = (
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
@@ -129,7 +129,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('create-course:title')} renderForm={renderForm} backUrl />;
+    return <FormLayout title={t('create-course:title')} renderCardContent={renderCardContent} backUrl />;
 };
 
 CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

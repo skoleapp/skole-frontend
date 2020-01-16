@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 
 interface ResponsiveContentProps {
     renderTableContent: JSX.Element;
-    renderForm: JSX.Element;
+    renderCardContent: JSX.Element;
 }
 
 interface UseSearchLayout<T> extends UseForm<T> {
@@ -73,7 +73,7 @@ export const useSearchLayout = <T extends {}>(): UseSearchLayout<T> => {
         </FormControl>
     );
 
-    const renderMobileContent = ({ renderTableContent, renderForm }: ResponsiveContentProps): JSX.Element => (
+    const renderMobileContent = ({ renderTableContent, renderCardContent }: ResponsiveContentProps): JSX.Element => (
         <Box className="md-down">
             <Box marginBottom="0.5rem">
                 <StyledCard>
@@ -94,18 +94,18 @@ export const useSearchLayout = <T extends {}>(): UseSearchLayout<T> => {
             <SwipeableDrawer anchor="bottom" open={open} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
                 <StyledCard scrollable>
                     <CardHeader subheader={t('common:advancedSearch')} action={renderExitDrawerButton} />
-                    <CardContent>{renderForm}</CardContent>
+                    <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
             </SwipeableDrawer>
         </Box>
     );
 
-    const renderDesktopContent = ({ renderForm, renderTableContent }: ResponsiveContentProps): JSX.Element => (
+    const renderDesktopContent = ({ renderCardContent, renderTableContent }: ResponsiveContentProps): JSX.Element => (
         <StyledCard className="md-up">
             <Grid container>
                 <Grid item xs={5} md={4} lg={3}>
                     <CardHeader subheader={t('common:advancedSearch')} />
-                    <CardContent>{renderForm}</CardContent>
+                    <CardContent>{renderCardContent}</CardContent>
                 </Grid>
                 <Grid item xs={7} md={8} lg={9}>
                     <CardHeader subheader={t('common:searchResults')} />
