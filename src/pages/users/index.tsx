@@ -27,9 +27,9 @@ interface Props extends I18nProps {
 
 const UsersPage: I18nPage<Props> = ({ users }) => {
     const filterProps = useFilters<FilterUsersFormValues>();
+    const { handleSubmit, submitButtonText, renderClearFiltersButton, ref } = filterProps;
     const { t } = useTranslation();
     const { query } = useRouter();
-    const { handleSubmit, submitButtonText, renderClearFiltersButton, ref } = filterProps;
 
     const handlePreSubmit = (values: FilterUsersFormValues): void => {
         const { username, ordering } = values;
