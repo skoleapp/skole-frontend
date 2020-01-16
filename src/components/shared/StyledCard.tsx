@@ -10,7 +10,6 @@ export const StyledCard = styled(({ scrollable, ...other }) => <Card {...other} 
     .main-avatar {
         height: 10rem;
         width: 10rem;
-        margin: 1rem;
     }
 
     .label {
