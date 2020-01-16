@@ -11,7 +11,7 @@ import {
     ListItemText,
     Typography,
 } from '@material-ui/core';
-import { ButtonLink, FormGridContainer, Layout, NotFound, StyledCard, StyledList, TextLink } from '../../components';
+import { ButtonLink, MainLayout, NotFound, StyledCard, StyledList, TextLink } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { SchoolDetailDocument, SchoolType } from '../../../generated/graphql';
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
@@ -101,31 +101,25 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
             </Box>
         );
 
-        const renderBottomSection = (
-            <CardContent>
-                <FormGridContainer>
-                    <ButtonLink
-                        href={{ pathname: '/search', query: { schoolName: R.propOr('', 'name', school) } }}
-                        variant="outlined"
-                        color="primary"
-                        fullWidth
-                    >
-                        {t('common:courses')}
-                    </ButtonLink>
-                </FormGridContainer>
-            </CardContent>
+        const renderSeeCoursesButton = (
+            <ButtonLink
+                href={{ pathname: '/search', query: { schoolName: R.propOr('', 'name', school) } }}
+                variant="outlined"
+                color="primary"
+            >
+                {t('school:seeCoursesButton')}
+            </ButtonLink>
         );
 
         return (
-            <Layout heading={schoolName} title={schoolName} backUrl>
+            <MainLayout heading={schoolName} title={schoolName} backUrl>
                 <StyledCard>
                     <CardHeader title={schoolName} />
                     <Divider />
                     {renderSchoolInfo}
-                    <Divider />
-                    {renderBottomSection}
+                    {renderSeeCoursesButton}
                 </StyledCard>
-            </Layout>
+            </MainLayout>
         );
     } else {
         return <NotFound title={t('school:notFound')} />;
