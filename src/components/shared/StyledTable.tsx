@@ -20,7 +20,7 @@ export const StyledTable = styled(({ disableBoxShadow, ...other }) => <Paper {..
                     display: flex;
                     align-items: center;
 
-                    h6 {
+                    .MuiTypography-subtitle1 {
                         margin-left: 1rem;
                     }
                 }
@@ -29,7 +29,7 @@ export const StyledTable = styled(({ disableBoxShadow, ...other }) => <Paper {..
             td {
                 padding: 0.75rem;
 
-                h6 {
+                .MuiTypography-subtitle1 {
                     font-size: 0.85rem;
                 }
             }
