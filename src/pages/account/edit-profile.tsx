@@ -2,12 +2,12 @@ import * as R from 'ramda';
 import * as Yup from 'yup';
 
 import { Field, Formik } from 'formik';
-import { FormSubmitSection, ImagePreviewField, StyledForm } from '../../components';
+import { FormSubmitSection, ImagePreviewField, SettingsLayout, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { UpdateUserMutation, UserType, useUpdateUserMutation } from '../../../generated/graphql';
 import { openNotification, reAuthenticate } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm, usePrivatePage, useSettingsLayout } from '../../utils';
+import { useForm, usePrivatePage } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
 import React from 'react';
@@ -122,12 +122,7 @@ const EditProfilePage: I18nPage = () => {
         </Formik>
     );
 
-    const responsiveSettingsProps = {
-        title: t('edit-profile:title'),
-        renderCardContent,
-    };
-
-    return useSettingsLayout(responsiveSettingsProps);
+    return <SettingsLayout title={t('edit-profile:title')} renderCardContent={renderCardContent} />;
 };
 
 EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

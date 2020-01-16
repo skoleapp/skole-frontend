@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
 
 import { Field, Formik } from 'formik';
-import { FormSubmitSection, SelectField, StyledForm } from '../components';
+import { FormSubmitSection, SelectField, SettingsLayout, StyledForm } from '../components';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useAuthSync, useForm, useSettingsLayout } from '../utils';
+import { useAuthSync, useForm } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
 import { MenuItem } from '@material-ui/core';
@@ -81,12 +81,7 @@ const ContactPage: I18nPage = () => {
         </Formik>
     );
 
-    const responsiveSettingsProps = {
-        title: t('contact:title'),
-        renderCardContent,
-    };
-
-    return useSettingsLayout(responsiveSettingsProps);
+    return <SettingsLayout title={t('contact:title')} renderCardContent={renderCardContent} />;
 };
 
 ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

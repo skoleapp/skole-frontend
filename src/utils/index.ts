@@ -13,5 +13,4 @@ export { getAvatarThumb } from './getAvatarThumb';
 export { getFilePath } from './getFilePath';
 export { useSearchLayout } from './useSearchLayout';
 export { useAlerts } from './useAlerts';
-export { useSettingsLayout } from './useSettingsLayout';
 export { useSettings } from './useSettings';

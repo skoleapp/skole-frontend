@@ -3,10 +3,10 @@ import * as Yup from 'yup';
 import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { Field, Formik } from 'formik';
-import { FormSubmitSection, StyledDialog, StyledForm } from '../../components';
+import { FormSubmitSection, SettingsLayout, StyledDialog, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import React, { useState } from 'react';
-import { useForm, usePrivatePage, useSettingsLayout } from '../../utils';
+import { useForm, usePrivatePage } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
 import { TextField } from 'formik-material-ui';
@@ -106,18 +106,12 @@ export const DeleteAccountPage: I18nPage = () => {
         </StyledDialog>
     );
 
-    const responsiveSettingsProps = {
-        title: t('delete-account:title'),
-        renderCardContent,
-    };
-
-    const renderSettingsLayout = useSettingsLayout(responsiveSettingsProps);
-
     return (
-        <>
-            {renderSettingsLayout}
-            {renderDialog}
-        </>
+        <SettingsLayout
+            title={t('delete-account:title')}
+            renderCardContent={renderCardContent}
+            renderDialog={renderDialog}
+        />
     );
 };
 

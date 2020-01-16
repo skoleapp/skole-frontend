@@ -2,9 +2,9 @@ import * as Yup from 'yup';
 
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
 import { Field, Formik } from 'formik';
-import { FormSubmitSection, StyledForm } from '../../components';
+import { FormSubmitSection, SettingsLayout, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useForm, usePrivatePage, useSettingsLayout } from '../../utils';
+import { useForm, usePrivatePage } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
 import React from 'react';
@@ -99,12 +99,7 @@ const ChangePasswordPage: I18nPage = () => {
         </Formik>
     );
 
-    const responsiveSettingsProps = {
-        title: t('change-password:title'),
-        renderCardContent,
-    };
-
-    return useSettingsLayout(responsiveSettingsProps);
+    return <SettingsLayout title={t('change-password:title')} renderCardContent={renderCardContent} />;
 };
 
 ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

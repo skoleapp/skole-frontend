@@ -1,15 +1,16 @@
 import { CardContent, CardHeader, Grid } from '@material-ui/core';
-import { MainLayout, StyledCard } from '../components';
+import { MainLayout, StyledCard } from '..';
 
 import React from 'react';
-import { useSettings } from '.';
+import { useSettings } from '../../utils';
 
 interface Props {
     title: string;
     renderCardContent: JSX.Element;
+    renderDialog?: JSX.Element;
 }
 
-export const useSettingsLayout = ({ title, renderCardContent }: Props): JSX.Element => {
+export const SettingsLayout: React.FC<Props> = ({ title, renderCardContent, renderDialog }) => {
     const { renderSettingsCardContent } = useSettings({ modal: false });
 
     const renderMobileContent = (
@@ -39,6 +40,7 @@ export const useSettingsLayout = ({ title, renderCardContent }: Props): JSX.Elem
         <MainLayout title={title} backUrl>
             {renderMobileContent}
             {renderDesktopContent}
+            {renderDialog}
         </MainLayout>
     );
 };
