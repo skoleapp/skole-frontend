@@ -55,64 +55,69 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const joined = moment(user.created).format('LL');
         const isOwnProfile = user.id === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
 
-        const renderPrivateContent = (
-            <CardContent>
-                <Grid container alignItems="center" justify="center">
-                    <Grid item xs={9} md={6} lg={4}>
-                        <ButtonLink href="/account/edit-profile" color="primary" variant="outlined" fullWidth>
-                            {t('profile:editProfileButton')}
-                        </ButtonLink>
-                    </Grid>
-                    <Grid className="sm-up" item xs={3} md={2}>
-                        <SettingsButton color="primary" />
-                    </Grid>
-                </Grid>
-            </CardContent>
-        );
-
         const renderTopSection = (
             <Grid container alignItems="center">
-                <Grid item container sm={6} justify="center">
+                <Grid item container xs={12} sm={6} justify="center">
                     <CardContent>
                         <Avatar className="main-avatar" src={getAvatar(user)} />
                     </CardContent>
                 </Grid>
-                <Grid item container direction="column" sm={6} justify="center">
-                    <CardContent>
-                        <StyledList>
-                            <ListItem divider>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <ScoreOutlined />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText>
-                                    {t('common:points')}: {points}
-                                </ListItemText>
-                            </ListItem>
-                            <ListItem divider>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <SchoolOutlined />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText>
-                                    {t('common:courses')}: {courseCount}
-                                </ListItemText>
-                            </ListItem>
-                            <ListItem divider>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <CloudUploadOutlined />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText>
-                                    {t('common:resources')}: {resourceCount}
-                                </ListItemText>
-                            </ListItem>
-                        </StyledList>
-                    </CardContent>
-                    {isOwnProfile && renderPrivateContent}
+                <Grid item container xs={12} sm={6} direction="column">
+                    <Grid container alignItems="center" justify="center">
+                        <CardContent>
+                            <StyledList>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <ScoreOutlined />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText>
+                                        {t('common:points')}: {points}
+                                    </ListItemText>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <SchoolOutlined />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText>
+                                        {t('common:courses')}: {courseCount}
+                                    </ListItemText>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <CloudUploadOutlined />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText>
+                                        {t('common:resources')}: {resourceCount}
+                                    </ListItemText>
+                                </ListItem>
+                            </StyledList>
+                        </CardContent>
+                    </Grid>
+                    {isOwnProfile && (
+                        <CardContent>
+                            <Grid container alignItems="center" justify="center">
+                                <Grid item xs={10} sm={6} md={4}>
+                                    <ButtonLink
+                                        href="/account/edit-profile"
+                                        color="primary"
+                                        variant="outlined"
+                                        fullWidth
+                                    >
+                                        {t('profile:editProfileButton')}
+                                    </ButtonLink>
+                                </Grid>
+                                <Grid item xs={2} className="sm-up">
+                                    <SettingsButton color="primary" />
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                    )}
                 </Grid>
             </Grid>
         );
