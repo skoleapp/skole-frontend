@@ -6,6 +6,7 @@ import {
     CardContent,
     CardHeader,
     Divider,
+    Grid,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -61,67 +62,73 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceType[];
 
+        const subjectLink = {
+            pathname: '/search',
+            query: { subjectId: R.propOr('', 'id', subject) as boolean[] },
+        };
+
         const renderCourseInfo = (
-            <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                <CardContent>
-                    <Box textAlign="left">
-                        <Typography variant="body1">
-                            {t('common:courseCode')}: {courseCode}
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:subject')}:{' '}
-                            <TextLink
-                                href={{ pathname: '/search', query: { subjectId: R.propOr('', 'id', subject) } }}
-                                color="primary"
-                            >
-                                {subjectName}
-                            </TextLink>
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:school')}:{' '}
-                            <TextLink href={`/schools/${R.propOr('-', 'id', school)}`} color="primary">
-                                {schoolName}
-                            </TextLink>
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:creator')}:{' '}
-                            <TextLink href={`/users/${R.propOr('', 'id', creator)}`} color="primary">
-                                {creatorName}
-                            </TextLink>
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:created')}: {created}
-                        </Typography>
-                        <Typography variant="body1">
-                            {t('common:modified')}: {modified}
-                        </Typography>
-                    </Box>
-                </CardContent>
-                <CardContent>
-                    <StyledList>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <ScoreOutlined />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>
-                                {t('common:points')}: {points}
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <CloudUploadOutlined />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>
-                                {t('common:resources')}: {resourceCount}
-                            </ListItemText>
-                        </ListItem>
-                    </StyledList>
-                </CardContent>
-            </Box>
+            <Grid container alignItems="center">
+                <Grid item container xs={12} sm={6} justify="center">
+                    <CardContent>
+                        <Box textAlign="left">
+                            <Typography variant="body1">
+                                {t('common:courseCode')}: {courseCode}
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:subject')}:{' '}
+                                <TextLink href={subjectLink} color="primary">
+                                    {subjectName}
+                                </TextLink>
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:school')}:{' '}
+                                <TextLink href={`/schools/${R.propOr('-', 'id', school)}`} color="primary">
+                                    {schoolName}
+                                </TextLink>
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:creator')}:{' '}
+                                <TextLink href={`/users/${R.propOr('', 'id', creator)}`} color="primary">
+                                    {creatorName}
+                                </TextLink>
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:created')}: {created}
+                            </Typography>
+                            <Typography variant="body1">
+                                {t('common:modified')}: {modified}
+                            </Typography>
+                        </Box>
+                    </CardContent>
+                </Grid>
+                <Grid item container xs={12} sm={6} justify="center">
+                    <CardContent>
+                        <StyledList>
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <ScoreOutlined />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText>
+                                    {t('common:points')}: {points}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <CloudUploadOutlined />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText>
+                                    {t('common:resources')}: {resourceCount}
+                                </ListItemText>
+                            </ListItem>
+                        </StyledList>
+                    </CardContent>
+                </Grid>
+            </Grid>
         );
 
         const renderTabs = (
@@ -185,7 +192,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         return (
-            <MainLayout heading={fullName} title={fullName} backUrl>
+            <MainLayout title={fullName} backUrl>
                 <StyledCard>
                     <CardHeader title={fullName} />
                     <Divider />
