@@ -5,6 +5,7 @@ import {
     Box,
     CardContent,
     Divider,
+    Grid,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -55,62 +56,70 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const isOwnProfile = user.id === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
 
         const renderPrivateContent = (
-            <>
-                <ButtonLink href="/account/edit-profile" color="primary" variant="outlined" fullWidth>
-                    {t('profile:editProfileButton')}
-                </ButtonLink>
-                <Box className="sm-up" marginLeft="0.5rem">
-                    <SettingsButton color="primary" />
-                </Box>
-            </>
+            <CardContent>
+                <Grid container alignItems="center" justify="center">
+                    <Grid item xs={9} md={6} lg={4}>
+                        <ButtonLink href="/account/edit-profile" color="primary" variant="outlined" fullWidth>
+                            {t('profile:editProfileButton')}
+                        </ButtonLink>
+                    </Grid>
+                    <Grid className="sm-up" item xs={3} md={2}>
+                        <SettingsButton color="primary" />
+                    </Grid>
+                </Grid>
+            </CardContent>
         );
 
         const renderTopSection = (
-            <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                <CardContent>
-                    <Avatar className="main-avatar" src={getAvatar(user)} />
-                </CardContent>
-                <CardContent>
-                    <StyledList>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <ScoreOutlined />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>
-                                {t('common:points')}: {points}
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <SchoolOutlined />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>
-                                {t('common:courses')}: {courseCount}
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <CloudUploadOutlined />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>
-                                {t('common:resources')}: {resourceCount}
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem>{isOwnProfile && renderPrivateContent}</ListItem>
-                    </StyledList>
-                </CardContent>
-            </Box>
+            <Grid container alignItems="center">
+                <Grid item container sm={6} justify="center">
+                    <CardContent>
+                        <Avatar className="main-avatar" src={getAvatar(user)} />
+                    </CardContent>
+                </Grid>
+                <Grid item container direction="column" sm={6} justify="center">
+                    <CardContent>
+                        <StyledList>
+                            <ListItem divider>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <ScoreOutlined />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText>
+                                    {t('common:points')}: {points}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem divider>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <SchoolOutlined />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText>
+                                    {t('common:courses')}: {courseCount}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem divider>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <CloudUploadOutlined />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText>
+                                    {t('common:resources')}: {resourceCount}
+                                </ListItemText>
+                            </ListItem>
+                        </StyledList>
+                    </CardContent>
+                    {isOwnProfile && renderPrivateContent}
+                </Grid>
+            </Grid>
         );
 
         const renderAccountInfo = (
             <CardContent>
-                <Box textAlign="left" marginTop="1rem">
+                <Box textAlign="left">
                     <Box display="flex" flexDirection="column" marginY="0.5rem">
                         <Typography className="label" variant="body2" color="textSecondary">
                             {t('common:username')}
