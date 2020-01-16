@@ -20,7 +20,7 @@ export const Download: React.FC<Props> = ({ url, fileName }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
-    const download = async (url: string, name: string): Promise<void> => {
+    const handleClick = async (): Promise<void> => {
         setFetching(true);
 
         try {
@@ -31,7 +31,7 @@ export const Download: React.FC<Props> = ({ url, fileName }) => {
             const a = document.createElement('a');
             a.href = blobURL;
             a.style.display = 'none';
-            if (name && name.length) a.download = name;
+            if (fileName && fileName.length) a.download = fileName;
             document.body.appendChild(a);
             a.click();
         } catch {
@@ -39,16 +39,13 @@ export const Download: React.FC<Props> = ({ url, fileName }) => {
         }
     };
 
-    const handleClick = (): Promise<void> => download(url, fileName);
-
     return (
         <Button
-            variant="outlined"
             color="primary"
+            variant="outlined"
             endIcon={<CloudDownload />}
             disabled={fetching}
             onClick={handleClick}
-            fullWidth
         >
             {t('common:download')}
         </Button>
