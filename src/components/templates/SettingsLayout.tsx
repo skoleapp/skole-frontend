@@ -5,7 +5,7 @@ import { LayoutProps } from '../../types';
 import React from 'react';
 import { useSettings } from '../../utils';
 
-export const SettingsLayout: React.FC<Omit<LayoutProps, 'backUrl'>> = ({ title, renderCardContent, renderDialog }) => {
+export const SettingsLayout: React.FC<LayoutProps> = ({ title, renderCardContent, renderDialog, ...props }) => {
     const { renderSettingsCardContent } = useSettings({ modal: false });
 
     const renderMobileContent = (
@@ -32,7 +32,7 @@ export const SettingsLayout: React.FC<Omit<LayoutProps, 'backUrl'>> = ({ title, 
     );
 
     return (
-        <MainLayout title={title} backUrl>
+        <MainLayout title={title} {...props}>
             {renderMobileContent}
             {renderDesktopContent}
             {renderDialog}

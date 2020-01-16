@@ -6,9 +6,8 @@ import React from 'react';
 import { breakpoints } from '../../styles';
 import styled from 'styled-components';
 
-interface Props extends Pick<LayoutProps, 'title' | 'backUrl'> {
+interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch'> {
     heading?: string;
-    disableSearch?: boolean;
 }
 
 export const MainLayout: React.FC<Props> = ({ title, heading, backUrl, disableSearch, children }) => (
