@@ -2,7 +2,6 @@ export { ButtonLink } from './ButtonLink';
 export { FormErrorMessage } from './FormErrorMessage';
 export { FormSubmitSection } from './FormSubmitSection';
 export { IconButtonLink } from './IconButtonLink';
-export { Layout } from './Layout';
 export { StyledCard } from './StyledCard';
 export { StyledDialog } from './StyledDialog';
 export { StyledForm } from './StyledForm';
