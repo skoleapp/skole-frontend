@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface UseFilters<T> extends UseForm<T> {
+export interface UseFilters<T> extends UseForm<T> {
     submitButtonText: string;
     renderClearFiltersButton: JSX.Element;
     handleSubmit: (filteredValues: T) => Promise<void>;

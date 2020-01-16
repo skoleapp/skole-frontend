@@ -26,9 +26,10 @@ interface Props extends I18nProps {
 }
 
 const UsersPage: I18nPage<Props> = ({ users }) => {
-    const { handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<FilterUsersFormValues>();
+    const filterProps = useFilters<FilterUsersFormValues>();
     const { t } = useTranslation();
     const { query } = useRouter();
+    const { handleSubmit, submitButtonText, renderClearFiltersButton, ref } = filterProps;
 
     const handlePreSubmit = (values: FilterUsersFormValues): void => {
         const { username, ordering } = values;
@@ -109,12 +110,13 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     );
 
     return (
-        <FilterLayout
+        <FilterLayout<FilterUsersFormValues>
             heading={t('users:title')}
             title={t('users:title')}
             renderCardContent={renderCardContent}
             renderTableContent={renderTableContent}
             backUrl
+            {...filterProps}
         />
     );
 };

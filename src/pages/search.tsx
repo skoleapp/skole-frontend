@@ -48,12 +48,10 @@ interface Props {
 }
 
 const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, country, city }) => {
+    const filterProps = useFilters<FilterSearchResultsFormValues>();
+    const { handleSubmit, submitButtonText, renderClearFiltersButton, ref } = filterProps;
     const { query } = useRouter();
     const { t } = useTranslation();
-
-    const { ref, handleSubmit, renderClearFiltersButton, submitButtonText } = useFilters<
-        FilterSearchResultsFormValues
-    >();
 
     const handlePreSubmit = (values: FilterSearchResultsFormValues): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city } = values;
@@ -182,11 +180,12 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     );
 
     return (
-        <FilterLayout
+        <FilterLayout<FilterSearchResultsFormValues>
             title={t('search:title')}
             renderCardContent={renderCardContent}
             renderTableContent={renderTableContent}
             backUrl
+            {...filterProps}
         />
     );
 };

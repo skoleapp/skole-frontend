@@ -5,15 +5,20 @@ import { StyledCard, StyledTable } from '..';
 import { LayoutProps } from '../../types';
 import { MainLayout } from './MainLayout';
 import React from 'react';
-import { useFilters } from '../../utils';
+import { UseFilters } from '../../utils/useFilters';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends LayoutProps {
     renderTableContent: JSX.Element;
 }
 
-export const FilterLayout: React.FC<Props> = ({ renderCardContent, renderTableContent, ...props }) => {
-    const { toggleDrawer, open } = useFilters();
+export const FilterLayout = <T extends {}>({
+    renderCardContent,
+    renderTableContent,
+    toggleDrawer,
+    open,
+    ...props
+}: Props & UseFilters<T>): JSX.Element => {
     const { t } = useTranslation();
 
     const renderExitDrawerButton = (
