@@ -1,4 +1,4 @@
-import { Auth, Notification } from './reducers';
+import { Auth, Notification, Settings } from './reducers';
 import { NextComponentType, NextPageContext } from 'next';
 
 import ApolloClient from 'apollo-client';
@@ -25,4 +25,15 @@ export interface I18nProps {
 export interface State {
     auth: Auth;
     notification: Notification;
+    settings: Settings;
+}
+
+export interface LayoutProps {
+    title?: string;
+    heading?: string;
+    backUrl?: boolean;
+    renderCardContent?: JSX.Element;
+    renderAlert?: JSX.Element;
+    renderDialog?: JSX.Element;
+    disableSearch?: boolean;
 }

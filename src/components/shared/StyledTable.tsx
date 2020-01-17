@@ -1,18 +1,11 @@
 import { Paper } from '@material-ui/core';
-import { breakpoints } from '../../styles';
+import React from 'react';
 import styled from 'styled-components';
 
-export const StyledTable = styled(Paper)`
-    margin: 0 auto;
-    width: 100%;
-
-    @media only screen and (min-width: ${breakpoints.SM}) {
-        max-width: 35rem;
-    }
-
-    .MuiButton-root {
-        margin-top: 0.5rem;
-    }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const StyledTable = styled(({ disableBoxShadow, ...other }) => <Paper {...other} />)`
+    flex-grow: 1;
+    box-shadow: ${({ disableBoxShadow }): string => (disableBoxShadow ? 'none !important' : 'inherit')};
 
     .MuiTableBody-root {
         tr {
@@ -27,7 +20,7 @@ export const StyledTable = styled(Paper)`
                     display: flex;
                     align-items: center;
 
-                    h6 {
+                    .MuiTypography-subtitle1 {
                         margin-left: 1rem;
                     }
                 }
@@ -36,7 +29,7 @@ export const StyledTable = styled(Paper)`
             td {
                 padding: 0.75rem;
 
-                h6 {
+                .MuiTypography-subtitle1 {
                     font-size: 0.85rem;
                 }
             }

@@ -1,6 +1,5 @@
 {
     "title": "Courses",
-    "applyFiltersButton": "Apply Filters",
-    "clearFiltersButton": "Clear Filters",
+    "coursesSubHeader": "Courses",
     "noCourses": "No courses..."
 }

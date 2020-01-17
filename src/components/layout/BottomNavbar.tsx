@@ -4,6 +4,7 @@ import { AccountCircle, Home, Search } from '@material-ui/icons';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import React, { ChangeEvent, useState } from 'react';
 
+import { Router } from '../../i18n';
 import { State } from '../../types';
 import { breakpoints } from '../../styles';
 import styled from 'styled-components';
@@ -11,11 +12,11 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 export const BottomNavbar: React.FC = () => {
-    const { user } = useSelector((state: State) => state.auth);
-    const router = useRouter();
+    const { user, authenticated } = useSelector((state: State) => state.auth);
+    const { pathname, query } = useRouter();
 
     const getNavbarValue = (): number | null => {
-        switch (router.pathname) {
+        switch (pathname) {
             case '/': {
                 return 0;
             }
@@ -23,7 +24,7 @@ export const BottomNavbar: React.FC = () => {
                 return 1;
             }
             case '/users/[id]': {
-                if (user && router.query.id === user.id) {
+                if (user && query.id === user.id) {
                     return 2;
                 }
             }
@@ -39,16 +40,17 @@ export const BottomNavbar: React.FC = () => {
         setValue(newValue);
     };
 
-    const handleRedirect = (href: string) => (): Promise<boolean> => router.push(href);
+    const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
+
+    const handleAccountClick = (): void => {
+        authenticated ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/sign-in';
+    };
 
     return (
         <StyledBottomNavbar value={value} onChange={handleChange}>
             <BottomNavigationAction onClick={handleRedirect('/')} icon={<Home />} />
             <BottomNavigationAction onClick={handleRedirect('/search')} icon={<Search />} />
-            <BottomNavigationAction
-                onClick={handleRedirect(`/users/${R.propOr('', 'id', user)}`)}
-                icon={<AccountCircle />}
-            />
+            <BottomNavigationAction onClick={handleAccountClick} icon={<AccountCircle />} />
         </StyledBottomNavbar>
     );
 };

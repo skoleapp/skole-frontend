@@ -1,17 +1,15 @@
-import { Grid, Link as MaterialLink, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
+import { LanguageSelector, TextLink } from '../shared';
 
 import React from 'react';
-import { TFunction } from 'next-i18next';
-import { TextLink } from '../shared';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 export const Footer: React.FC = () => {
-    const { t, i18n } = useTranslation();
-    const handleLanguageSelect = (value: string) => (): Promise<TFunction> => i18n.changeLanguage(value);
+    const { t } = useTranslation();
 
     return (
-        <StyledFooter className="desktop-only" container>
+        <StyledFooter className="sm-up" container>
             <Grid item xs={12} container>
                 <Grid item xs={4} container>
                     <Grid item xs={12}>
@@ -37,19 +35,9 @@ export const Footer: React.FC = () => {
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <MaterialLink onClick={handleLanguageSelect('en')} color="secondary">
-                            {t('languages:english')}
-                        </MaterialLink>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <MaterialLink onClick={handleLanguageSelect('fi')} color="secondary">
-                            {t('languages:finnish')}
-                        </MaterialLink>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <MaterialLink onClick={handleLanguageSelect('sv')} color="secondary">
-                            {t('languages:swedish')}
-                        </MaterialLink>
+                        <Box marginTop="0.5rem">
+                            <LanguageSelector secondary />
+                        </Box>
                     </Grid>
                 </Grid>
                 <Grid item xs={4} container>

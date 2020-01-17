@@ -1,4 +1,4 @@
-import { Layout, StyledCard } from '../shared';
+import { MainLayout, StyledCard } from '..';
 
 import { CardHeader } from '@material-ui/core';
 import React from 'react';
@@ -8,9 +8,9 @@ interface Props {
 }
 
 export const NotFound: React.FC<Props> = ({ title }) => (
-    <Layout title={title} backUrl>
+    <MainLayout title={title} backUrl>
         <StyledCard>
             <CardHeader title={title} />
         </StyledCard>
-    </Layout>
+    </MainLayout>
 );

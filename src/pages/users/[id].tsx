@@ -5,14 +5,23 @@ import {
     Box,
     CardContent,
     Divider,
+    Grid,
     ListItem,
     ListItemAvatar,
     ListItemText,
     Tab,
-    Tabs,
     Typography,
 } from '@material-ui/core';
-import { ButtonLink, Layout, NotFound, StyledCard, StyledList, TabPanel } from '../../components';
+import {
+    ButtonLink,
+    MainLayout,
+    NotFound,
+    SettingsButton,
+    StyledCard,
+    StyledList,
+    StyledTabs,
+    TabPanel,
+} from '../../components';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { UserDetailDocument, UserType } from '../../../generated/graphql';
@@ -23,7 +32,6 @@ import React from 'react';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../../i18n';
 import moment from 'moment';
-import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -48,53 +56,75 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const isOwnProfile = user.id === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
 
         const renderTopSection = (
-            <Box className="flex-flow" display="flex" justifyContent="space-around" alignItems="center">
-                <Avatar className="main-avatar" src={getAvatar(user)} />
-                <CardContent>
-                    <StyledList>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <ScoreOutlined />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>
-                                {t('common:points')}: {points}
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <SchoolOutlined />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>
-                                {t('common:courses')}: {courseCount}
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <CloudUploadOutlined />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText>
-                                {t('common:resources')}: {resourceCount}
-                            </ListItemText>
-                        </ListItem>
-                    </StyledList>
+            <Grid container alignItems="center">
+                <Grid item container xs={12} sm={6} justify="center">
+                    <CardContent>
+                        <Avatar className="main-avatar" src={getAvatar(user)} />
+                    </CardContent>
+                </Grid>
+                <Grid item container xs={12} sm={6} direction="column">
+                    <Grid container alignItems="center" justify="center">
+                        <CardContent>
+                            <StyledList>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <ScoreOutlined />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText>
+                                        {t('common:points')}: {points}
+                                    </ListItemText>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <SchoolOutlined />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText>
+                                        {t('common:courses')}: {courseCount}
+                                    </ListItemText>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <CloudUploadOutlined />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText>
+                                        {t('common:resources')}: {resourceCount}
+                                    </ListItemText>
+                                </ListItem>
+                            </StyledList>
+                        </CardContent>
+                    </Grid>
                     {isOwnProfile && (
-                        <ButtonLink href="/account/edit-profile" color="primary" variant="outlined" fullWidth>
-                            {t('profile:editProfileButton')}
-                        </ButtonLink>
+                        <CardContent>
+                            <Grid container alignItems="center" justify="center">
+                                <Grid item xs={10} sm={6} md={4}>
+                                    <ButtonLink
+                                        href="/account/edit-profile"
+                                        color="primary"
+                                        variant="outlined"
+                                        fullWidth
+                                    >
+                                        {t('profile:editProfileButton')}
+                                    </ButtonLink>
+                                </Grid>
+                                <Grid item xs={2} className="sm-up">
+                                    <SettingsButton color="primary" />
+                                </Grid>
+                            </Grid>
+                        </CardContent>
                     )}
-                </CardContent>
-            </Box>
+                </Grid>
+            </Grid>
         );
 
         const renderAccountInfo = (
             <CardContent>
-                <Box textAlign="left" marginTop="1rem">
+                <Box textAlign="left">
                     <Box display="flex" flexDirection="column" marginY="0.5rem">
                         <Typography className="label" variant="body2" color="textSecondary">
                             {t('common:username')}
@@ -134,16 +164,16 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         const renderTabs = (
-            <Tabs
+            <StyledTabs
                 value={tabValue}
                 onChange={handleTabChange}
+                variant="fullWidth"
                 indicatorColor="primary"
                 textColor="primary"
-                variant="fullWidth"
             >
                 <Tab label={t('common:courses')} />
                 <Tab label={t('common:resources')} />
-            </Tabs>
+            </StyledTabs>
         );
 
         const renderTabContent = (
@@ -158,31 +188,23 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         return (
-            <Layout heading={username} title={username} backUrl>
+            <MainLayout heading={username} title={username} backUrl>
                 <StyledCard>
-                    <StyledUserProfileCardContent>
-                        {renderTopSection}
-                        <Divider />
-                        {renderAccountInfo}
-                        <Divider />
-                        {renderBioSection}
-                        <Divider />
-                        {renderTabs}
-                        {renderTabContent}
-                    </StyledUserProfileCardContent>
+                    {renderTopSection}
+                    <Divider />
+                    {renderAccountInfo}
+                    <Divider />
+                    {renderBioSection}
+                    <Divider />
+                    {renderTabs}
+                    {renderTabContent}
                 </StyledCard>
-            </Layout>
+            </MainLayout>
         );
     } else {
         return <NotFound title={t('profile:notFound')} />;
     }
 };
-
-const StyledUserProfileCardContent = styled(Box)`
-    .label {
-        font-size: 0.75rem;
-    }
-`;
 
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await useAuthSync(ctx);

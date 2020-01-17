@@ -1,17 +1,24 @@
 query ResourceDetail($id: Int!) {
     resource(resourceId: $id) {
         id
-        resourceType
         title
-        file
+        resourceType
         date
-        created
-        creator {
-            id
-        }
         modified
         created
         points
+        school {
+            id
+            name
+        }
+        course {
+            id
+            name
+        }
+        creator {
+            id
+            username
+        }
         resourceParts {
             id
             title

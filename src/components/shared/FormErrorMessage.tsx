@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const FormErrorMessage = styled(Box)`
     color: var(--danger) !important;
-    margin: 0.5rem 0;
+    margin: 0.5rem 1rem;
     font-size: 0.75rem;
     text-align: left;
 `;

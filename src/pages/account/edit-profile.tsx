@@ -1,17 +1,16 @@
 import * as R from 'ramda';
 import * as Yup from 'yup';
 
-import { Avatar, Box, Button, CardHeader, FormControl } from '@material-ui/core';
-import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
-import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../../components';
+import { Field, Formik } from 'formik';
+import { FormSubmitSection, ImagePreviewField, SettingsLayout, StyledForm } from '../../components';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import React, { ChangeEvent, useEffect, useState } from 'react';
 import { UpdateUserMutation, UserType, useUpdateUserMutation } from '../../../generated/graphql';
 import { openNotification, reAuthenticate } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, usePrivatePage } from '../../utils';
 import { withApollo, withRedux } from '../../lib';
 
+import React from 'react';
 import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../../i18n';
@@ -27,7 +26,7 @@ export interface UpdateProfileFormValues {
 
 const EditProfilePage: I18nPage = () => {
     const { user } = useSelector((state: State) => state.auth);
-    const { ref, handleMutationErrors, onError, setSubmitting, setFieldValue } = useForm<UpdateProfileFormValues>();
+    const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
@@ -79,98 +78,51 @@ const EditProfilePage: I18nPage = () => {
         bio: Yup.string(),
     });
 
-    const [avatar, setAvatar] = useState();
-    const [preview, setPreview] = useState();
-
-    useEffect(() => {
-        const objectUrl = avatar && URL.createObjectURL(avatar);
-        setPreview(objectUrl);
-        return (): void => URL.revokeObjectURL(objectUrl);
-    }, [avatar]);
-
-    const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const newAvatar = R.path(['currentTarget', 'files', '0'], e) as File;
-        setFieldValue('avatar', newAvatar);
-        newAvatar && setAvatar(newAvatar);
-    };
-
-    const renderForm = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
-        <StyledForm>
-            <FormControl fullWidth>
-                <Box display="flex" flexDirection="column" alignItems="center" className="file-input">
-                    <Avatar
-                        className="main-avatar"
-                        src={avatar ? preview : process.env.BACKEND_URL + props.values.avatar}
+    const renderCardContent = (
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field name="avatar" label={t('edit-profile:changeAvatarButton')} component={ImagePreviewField} />
+                    <Field
+                        placeholder={t('forms:title')}
+                        name="title"
+                        component={TextField}
+                        label={t('forms:title')}
+                        variant="outlined"
+                        fullWidth
                     />
                     <Field
-                        value=""
-                        name="avatar"
-                        id="avatar-input"
-                        accept="image/*"
-                        type="file"
-                        component="input"
-                        onChange={handleAvatarChange}
+                        placeholder={t('forms:username')}
+                        name="username"
+                        component={TextField}
+                        label={t('forms:username')}
+                        variant="outlined"
+                        fullWidth
                     />
-                    <Box marginTop="0.5rem">
-                        <label htmlFor="avatar-input">
-                            <Button variant="outlined" color="primary" component="span">
-                                {t('edit-profile:changeAvatarButton')}
-                            </Button>
-                        </label>
-                    </Box>
-                    <ErrorMessage name="avatar" component={FormErrorMessage} />
-                </Box>
-            </FormControl>
-            <Field
-                placeholder={t('forms:title')}
-                name="title"
-                component={TextField}
-                label={t('forms:title')}
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:username')}
-                name="username"
-                component={TextField}
-                label={t('forms:username')}
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:email')}
-                name="email"
-                component={TextField}
-                label={t('forms:email')}
-                fullWidth
-            />
-            <Field
-                placeholder={t('forms:bio')}
-                name="bio"
-                component={TextField}
-                label={t('forms:bio')}
-                multiline
-                fullWidth
-            />
-            <FormSubmitSection submitButtonText={t('common:save')} {...props} />
-        </StyledForm>
+                    <Field
+                        placeholder={t('forms:email')}
+                        name="email"
+                        component={TextField}
+                        label={t('forms:email')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:bio')}
+                        name="bio"
+                        component={TextField}
+                        label={t('forms:bio')}
+                        variant="outlined"
+                        multiline
+                        fullWidth
+                    />
+                    <FormSubmitSection submitButtonText={t('common:save')} {...props} />
+                </StyledForm>
+            )}
+        </Formik>
     );
 
-    return (
-        <Layout title={t('edit-profile:title')} backUrl>
-            <StyledCard>
-                <CardHeader title={t('edit-profile:title')} />
-                <SlimCardContent>
-                    <Formik
-                        initialValues={initialValues}
-                        onSubmit={handleSubmit}
-                        validationSchema={validationSchema}
-                        ref={ref}
-                    >
-                        {renderForm}
-                    </Formik>
-                </SlimCardContent>
-            </StyledCard>
-        </Layout>
-    );
+    return <SettingsLayout title={t('edit-profile:title')} renderCardContent={renderCardContent} backUrl />;
 };
 
 EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

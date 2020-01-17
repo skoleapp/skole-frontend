@@ -173,6 +173,7 @@ export type Mutation = {
   deleteUser?: Maybe<DeleteUserMutationPayload>,
   upvoteResource?: Maybe<UpvoteResourceMutation>,
   downvoteResource?: Maybe<DownvoteResourceMutation>,
+  uploadResource?: Maybe<UploadResourceMutationPayload>,
   createCourse?: Maybe<CreateCourseMutationPayload>,
   upvoteCourse?: Maybe<UpvoteCourseMutation>,
   downvoteCourse?: Maybe<DownvoteCourseMutation>,
@@ -216,6 +217,11 @@ export type MutationUpvoteResourceArgs = {
 
 export type MutationDownvoteResourceArgs = {
   resourceId?: Maybe<Scalars['Int']>
+};
+
+
+export type MutationUploadResourceArgs = {
+  input: UploadResourceMutationInput
 };
 
 
@@ -269,12 +275,12 @@ export type Query = {
   userMe?: Maybe<UserType>,
   subjects?: Maybe<Array<Maybe<SubjectType>>>,
   subject?: Maybe<SubjectType>,
-  schoolTypes?: Maybe<Array<Maybe<SchoolTypeObjectType>>>,
-  schoolType?: Maybe<SchoolTypeObjectType>,
   schools?: Maybe<Array<Maybe<SchoolType>>>,
+  schoolTypes?: Maybe<Array<Maybe<SchoolTypeObjectType>>>,
   school?: Maybe<SchoolType>,
-  resourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>,
+  schoolType?: Maybe<SchoolTypeObjectType>,
   resource?: Maybe<ResourceType>,
+  resourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>,
   courses?: Maybe<Array<Maybe<CourseType>>>,
   course?: Maybe<CourseType>,
   comments?: Maybe<Array<Maybe<CommentType>>>,
@@ -302,13 +308,13 @@ export type QuerySubjectArgs = {
 };
 
 
-export type QuerySchoolTypeArgs = {
-  schoolTypeId?: Maybe<Scalars['Int']>
+export type QuerySchoolArgs = {
+  schoolId?: Maybe<Scalars['Int']>
 };
 
 
-export type QuerySchoolArgs = {
-  schoolId?: Maybe<Scalars['Int']>
+export type QuerySchoolTypeArgs = {
+  schoolTypeId?: Maybe<Scalars['Int']>
 };
 
 
@@ -347,7 +353,7 @@ export type QueryCommentArgs = {
 export type ResourcePartType = {
    __typename?: 'ResourcePartType',
   id: Scalars['ID'],
-  title?: Maybe<Scalars['String']>,
+  title: Scalars['String'],
   file?: Maybe<Scalars['String']>,
   text?: Maybe<Scalars['String']>,
 };
@@ -355,15 +361,17 @@ export type ResourcePartType = {
 export type ResourceType = {
    __typename?: 'ResourceType',
   id: Scalars['ID'],
-  resourceType?: Maybe<Scalars['String']>,
   title: Scalars['String'],
-  file: Scalars['String'],
-  date: Scalars['Date'],
+  date?: Maybe<Scalars['Date']>,
+  course: CourseType,
+  downloads?: Maybe<Scalars['Int']>,
   creator?: Maybe<UserType>,
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
   resourceParts: Array<ResourcePartType>,
+  resourceType?: Maybe<Scalars['String']>,
   points?: Maybe<Scalars['Int']>,
+  school?: Maybe<SchoolType>,
 };
 
 export type ResourceTypeObjectType = {
@@ -454,6 +462,22 @@ export type UpdateUserMutationInput = {
 export type UpdateUserMutationPayload = {
    __typename?: 'UpdateUserMutationPayload',
   user?: Maybe<UserType>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type UploadResourceMutationInput = {
+  title: Scalars['String'],
+  resourceType: Scalars['ID'],
+  course: Scalars['ID'],
+  files?: Maybe<Scalars['String']>,
+  id?: Maybe<Scalars['ID']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type UploadResourceMutationPayload = {
+   __typename?: 'UploadResourceMutationPayload',
+  resource?: Maybe<ResourceType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -664,7 +688,7 @@ export type ResourceTypesQuery = (
 );
 
 export type CourseDetailQueryVariables = {
-  courseId: Scalars['Int']
+  id: Scalars['Int']
 };
 
 
@@ -720,10 +744,16 @@ export type ResourceDetailQuery = (
   { __typename?: 'Query' }
   & { resource: Maybe<(
     { __typename?: 'ResourceType' }
-    & Pick<ResourceType, 'id' | 'resourceType' | 'title' | 'file' | 'date' | 'created' | 'modified' | 'points'>
-    & { creator: Maybe<(
+    & Pick<ResourceType, 'id' | 'title' | 'resourceType' | 'date' | 'modified' | 'created' | 'points'>
+    & { school: Maybe<(
+      { __typename?: 'SchoolType' }
+      & Pick<SchoolType, 'id' | 'name'>
+    )>, course: (
+      { __typename?: 'CourseType' }
+      & Pick<CourseType, 'id' | 'name'>
+    ), creator: Maybe<(
       { __typename?: 'UserType' }
-      & Pick<UserType, 'id'>
+      & Pick<UserType, 'id' | 'username'>
     )>, resourceParts: Array<(
       { __typename?: 'ResourcePartType' }
       & Pick<ResourcePartType, 'id' | 'title' | 'file' | 'text'>
@@ -788,6 +818,28 @@ export type UploadResourceInitialDataQuery = (
   & { course: Maybe<(
     { __typename?: 'CourseType' }
     & Pick<CourseType, 'id' | 'name'>
+  )> }
+);
+
+export type UploadResourceMutationVariables = {
+  resourceTitle: Scalars['String'],
+  resourceType: Scalars['ID'],
+  course: Scalars['ID'],
+  files: Scalars['String']
+};
+
+
+export type UploadResourceMutation = (
+  { __typename?: 'Mutation' }
+  & { uploadResource: Maybe<(
+    { __typename?: 'UploadResourceMutationPayload' }
+    & { resource: Maybe<(
+      { __typename?: 'ResourceType' }
+      & Pick<ResourceType, 'id'>
+    )>, errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
   )> }
 );
 
@@ -1094,8 +1146,8 @@ export const ResourceTypesDocument = gql`
 export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQuery>;
 export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
 export const CourseDetailDocument = gql`
-    query CourseDetail($courseId: Int!) {
-  course(courseId: $courseId) {
+    query CourseDetail($id: Int!) {
+  course(courseId: $id) {
     id
     name
     code
@@ -1158,17 +1210,24 @@ export const ResourceDetailDocument = gql`
     query ResourceDetail($id: Int!) {
   resource(resourceId: $id) {
     id
-    resourceType
     title
-    file
+    resourceType
     date
-    created
-    creator {
-      id
-    }
     modified
     created
     points
+    school {
+      id
+      name
+    }
+    course {
+      id
+      name
+    }
+    creator {
+      id
+      username
+    }
     resourceParts {
       id
       title
@@ -1268,6 +1327,27 @@ export const UploadResourceInitialDataDocument = gql`
       
 export type UploadResourceInitialDataQueryHookResult = ReturnType<typeof useUploadResourceInitialDataQuery>;
 export type UploadResourceInitialDataQueryResult = ApolloReactCommon.QueryResult<UploadResourceInitialDataQuery, UploadResourceInitialDataQueryVariables>;
+export const UploadResourceDocument = gql`
+    mutation UploadResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $files: String!) {
+  uploadResource(input: {title: $resourceTitle, resourceType: $resourceType, course: $course, files: $files}) {
+    resource {
+      id
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type UploadResourceMutationFn = ApolloReactCommon.MutationFunction<UploadResourceMutation, UploadResourceMutationVariables>;
+
+    export function useUploadResourceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UploadResourceMutation, UploadResourceMutationVariables>) {
+      return ApolloReactHooks.useMutation<UploadResourceMutation, UploadResourceMutationVariables>(UploadResourceDocument, baseOptions);
+    }
+export type UploadResourceMutationHookResult = ReturnType<typeof useUploadResourceMutation>;
+export type UploadResourceMutationResult = ApolloReactCommon.MutationResult<UploadResourceMutation>;
+export type UploadResourceMutationOptions = ApolloReactCommon.BaseMutationOptions<UploadResourceMutation, UploadResourceMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {

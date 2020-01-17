@@ -1,5 +1,5 @@
-query CourseDetail($courseId: Int!) {
-    course(courseId: $courseId) {
+query CourseDetail($id: Int!) {
+    course(courseId: $id) {
         id
         name
         code

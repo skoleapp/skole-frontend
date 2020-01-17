@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
 
-import { CardHeader, FormControl, InputLabel, MenuItem } from '@material-ui/core';
-import { ErrorMessage, Field, Formik, FormikProps } from 'formik';
-import { FormErrorMessage, FormSubmitSection, Layout, SlimCardContent, StyledCard, StyledForm } from '../components';
+import { Field, Formik } from 'formik';
+import { FormSubmitSection, SelectField, SettingsLayout, StyledForm } from '../components';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Select, TextField } from 'formik-material-ui';
 import { useAuthSync, useForm } from '../utils';
 import { withApollo, withRedux } from '../lib';
 
+import { MenuItem } from '@material-ui/core';
 import React from 'react';
+import { TextField } from 'formik-material-ui';
 import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../i18n';
 import { openNotification } from '../actions';
@@ -48,55 +48,40 @@ const ContactPage: I18nPage = () => {
         dispatch(openNotification(t('notifications:messageSubmitted')));
     };
 
-    const renderForm = (props: FormikProps<ContactFormValues>): JSX.Element => (
-        <StyledForm>
-            <FormControl fullWidth>
-                <InputLabel>{t('forms:contactType')}</InputLabel>
-                <Field name="contactType" component={Select} fullWidth>
-                    <MenuItem value="">---</MenuItem>
-                    <MenuItem value="feedback">Feedback</MenuItem>
-                    <MenuItem value="requestSchool">{t('forms:requestSchool')}</MenuItem>
-                    <MenuItem value="requestSubject">{t('forms:requestSubject')}</MenuItem>
-                    <MenuItem value="businessInquiry">{t('forms:businessInquiry')}</MenuItem>
-                </Field>
-                <ErrorMessage name="contactType" component={FormErrorMessage} />
-            </FormControl>
-            <Field
-                name="email"
-                component={TextField}
-                label={t('forms:email')}
-                placeholder={t('forms:email')}
-                fullWidth
-            />
-            <Field
-                name="message"
-                component={TextField}
-                placeholder={t('forms:message')}
-                label={t('forms:message')}
-                fullWidth
-                multiline
-            />
-            <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-        </StyledForm>
+    const renderCardContent = (
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+            {(props): JSX.Element => (
+                <StyledForm>
+                    <Field name="contactType" label={t('forms:contactType')} component={SelectField} fullWidth>
+                        <MenuItem value="feedback">{t('forms:feedback')}</MenuItem>
+                        <MenuItem value="requestSchool">{t('forms:requestSchool')}</MenuItem>
+                        <MenuItem value="requestSubject">{t('forms:requestSubject')}</MenuItem>
+                        <MenuItem value="businessInquiry">{t('forms:businessInquiry')}</MenuItem>
+                    </Field>
+                    <Field
+                        name="email"
+                        component={TextField}
+                        label={t('forms:email')}
+                        placeholder={t('forms:email')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="message"
+                        component={TextField}
+                        placeholder={t('forms:message')}
+                        label={t('forms:message')}
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                    />
+                    <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+                </StyledForm>
+            )}
+        </Formik>
     );
 
-    return (
-        <Layout title={t('contact:title')} backUrl>
-            <StyledCard>
-                <CardHeader title={t('contact:title')} />
-                <SlimCardContent>
-                    <Formik
-                        onSubmit={handleSubmit}
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        ref={ref}
-                    >
-                        {renderForm}
-                    </Formik>
-                </SlimCardContent>
-            </StyledCard>
-        </Layout>
-    );
+    return <SettingsLayout title={t('contact:title')} renderCardContent={renderCardContent} backUrl />;
 };
 
 ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

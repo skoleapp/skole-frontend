@@ -12,9 +12,9 @@ export const AUTHENTICATE = 'AUTHENTICATED';
 export const RE_AUTHENTICATE = 'RE_AUTHENTICATED';
 export const DE_AUTHENTICATE = 'DE_AUTHENTICATED';
 
-export const authenticate = (client: ApolloClient<{}>, { token, user }: SignInMutationPayload) => async (
+export const authenticate = (client: ApolloClient<{}>, { token, user }: SignInMutationPayload) => (
     dispatch: Dispatch<AnyAction>,
-): Promise<void> => {
+): void => {
     if (token && user) {
         document.cookie = cookie.serialize('token', token, {
             maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -22,8 +22,7 @@ export const authenticate = (client: ApolloClient<{}>, { token, user }: SignInMu
         });
 
         dispatch({ type: AUTHENTICATE, payload: user });
-        await client.cache.reset();
-        await Router.push(`/users/${user.id}`);
+        client.cache.reset();
     }
 };
 
@@ -40,7 +39,7 @@ export const deAuthenticate = (apolloClient: ApolloClient<{}>) => async (
     });
 
     dispatch({ type: DE_AUTHENTICATE });
-    dispatch(openNotification(i18n.t('notifications:signedOut')));
+    dispatch((openNotification(i18n.t('notifications:signedOut')) as unknown) as AnyAction);
     await apolloClient.cache.reset();
-    Router.push('/auth/sign-in');
+    Router.push('/sign-in');
 };
