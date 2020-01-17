@@ -12,17 +12,6 @@ export const theme = createMuiTheme({
     },
     typography: {
         fontSize: 14,
-        fontFamily: [
-            '-apple-system',
-            'BlinkMacSystemFont',
-            '"Segoe UI"',
-            'Roboto',
-            '"Helvetica Neue"',
-            'Arial',
-            'sans-serif',
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
-        ].join(','),
+        fontFamily: ['Roboto', 'sans-serif'].join(','),
     },
 });
