@@ -10,7 +10,7 @@ export const Logo: React.FC = () => (
 );
 
 const StyledLogo = styled(Typography)`
-    font-family: 'Ubuntu Mono', monospace !important;
+    font-family: 'Roboto Mono', monospace !important;
     color: var(--secondary);
     cursor: pointer;
 `;

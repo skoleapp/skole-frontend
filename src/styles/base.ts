@@ -26,7 +26,6 @@ export const base = css`
     html,
     body {
         background: var(--secondary);
-        font-family: 'Roboto', sans-serif;
 
         .sm-down {
             @media only screen and (min-width: ${breakpoints.SM}) {

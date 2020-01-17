@@ -1,8 +1,9 @@
-import { ServerStyleSheets } from '@material-ui/styles';
-import { RenderPageResult } from 'next/dist/next-server/lib/utils';
 import Document, { DocumentContext, Head, Main, NextScript } from 'next/document';
+
 import React from 'react';
+import { RenderPageResult } from 'next/dist/next-server/lib/utils';
 import { ServerStyleSheet } from 'styled-components';
+import { ServerStyleSheets } from '@material-ui/styles';
 
 export default class SkoleDocument extends Document {
     render(): JSX.Element {
