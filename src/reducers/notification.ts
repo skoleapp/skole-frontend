@@ -1,6 +1,6 @@
-import { CLOSE_NOTIFICATION, OPEN_NOTIFICATION } from '../actions';
-
 import { AnyAction } from 'redux';
+
+import { CLOSE_NOTIFICATION, OPEN_NOTIFICATION } from '../actions';
 
 export interface Notification {
     open: boolean;

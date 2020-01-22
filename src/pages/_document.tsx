@@ -1,9 +1,8 @@
-import Document, { DocumentContext, Head, Main, NextScript } from 'next/document';
-
-import React from 'react';
-import { RenderPageResult } from 'next/dist/next-server/lib/utils';
-import { ServerStyleSheet } from 'styled-components';
 import { ServerStyleSheets } from '@material-ui/styles';
+import { DocumentInitialProps, RenderPageResult } from 'next/dist/next-server/lib/utils';
+import Document, { DocumentContext, Head, Main, NextScript } from 'next/document';
+import React from 'react';
+import { ServerStyleSheet } from 'styled-components';
 
 export default class SkoleDocument extends Document {
     render(): JSX.Element {
@@ -25,14 +24,15 @@ export default class SkoleDocument extends Document {
     }
 }
 
-SkoleDocument.getInitialProps = async (ctx: DocumentContext) => {
+SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<DocumentInitialProps> => {
     const styledComponentsSheet = new ServerStyleSheet();
     const materialSheets = new ServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
 
     ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> => {
         return originalRenderPage({
-            enhanceApp: App => props => styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />)),
+            enhanceApp: App => (props): JSX.Element =>
+                styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />)),
         });
     };
 

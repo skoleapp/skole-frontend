@@ -1,32 +1,31 @@
+import { Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { compose } from 'redux';
 
-import { AutoCompleteField, FilterLayout, FormSubmitSection, StyledForm } from '../components';
 import {
     CitiesDocument,
     CityType,
     CountriesDocument,
     CountryType,
     CourseType,
+    SchoolsDocument,
     SchoolType,
     SchoolTypeObjectType,
     SchoolTypesDocument,
-    SchoolsDocument,
     SearchCoursesDocument,
-    SubjectType,
     SubjectsDocument,
+    SubjectType,
 } from '../../generated/graphql';
-import { Field, Formik } from 'formik';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Router, includeDefaultNamespaces } from '../i18n';
-import { Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { getFullCourseName, useAuthSync, useFilters } from '../utils';
+import { AutoCompleteField, FilterLayout, FormSubmitSection, StyledForm } from '../components';
+import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
-import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { getFullCourseName, useAuthSync, useFilters } from '../utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;

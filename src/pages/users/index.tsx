@@ -1,20 +1,19 @@
-import * as R from 'ramda';
-
 import { Avatar, MenuItem, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import { Field, Formik } from 'formik';
-import { FilterLayout, FormSubmitSection, SelectField, StyledForm } from '../../components';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { UserType, UsersDocument } from '../../../generated/graphql';
-import { getAvatarThumb, useAuthSync, useFilters } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
-
-import Link from 'next/link';
-import React from 'react';
 import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../../i18n';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import * as R from 'ramda';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { compose } from 'redux';
+
+import { UsersDocument, UserType } from '../../../generated/graphql';
+import { FilterLayout, FormSubmitSection, SelectField, StyledForm } from '../../components';
+import { includeDefaultNamespaces } from '../../i18n';
+import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { getAvatarThumb, useAuthSync, useFilters } from '../../utils';
 
 interface FilterUsersFormValues {
     username: string;

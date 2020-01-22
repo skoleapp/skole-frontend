@@ -7,14 +7,14 @@ import {
     DialogTitle,
     Typography,
 } from '@material-ui/core';
-import { StyledDialog, TextLink } from '../shared';
-import { useEffect, useState } from 'react';
-
 import { CheckOutlined } from '@material-ui/icons';
-import React from 'react';
-import { breakpoints } from '../../styles';
 import cookie from 'cookie';
+import { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+
+import { breakpoints } from '../../styles';
+import { StyledDialog, TextLink } from '../shared';
 
 export const SkoleGDPR: React.FC = () => {
     const [consent, setConsent] = useState(true);

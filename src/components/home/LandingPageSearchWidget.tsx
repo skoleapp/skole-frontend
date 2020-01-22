@@ -1,8 +1,8 @@
 import { Box, Button, InputBase } from '@material-ui/core';
-
-import React from 'react';
 import { Search } from '@material-ui/icons';
+import React from 'react';
 import styled from 'styled-components';
+
 import { useSearch } from '../../utils';
 
 export const LandingPageSearchWidget: React.FC = () => {

@@ -1,9 +1,9 @@
 import { Card, CardContent, Typography } from '@material-ui/core';
+import { SvgIconComponent } from '@material-ui/icons';
+import React from 'react';
+import styled from 'styled-components';
 
 import { Link } from '../../i18n';
-import React from 'react';
-import { SvgIconComponent } from '@material-ui/icons';
-import styled from 'styled-components';
 
 interface Props {
     text: string;

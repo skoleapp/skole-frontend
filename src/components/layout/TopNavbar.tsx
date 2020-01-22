@@ -1,16 +1,16 @@
-import { AccountCircle, ArrowBack, CloudUpload, SupervisedUserCircleOutlined } from '@material-ui/icons';
 import { AppBar, Box, IconButton, Toolbar } from '@material-ui/core';
+import { AccountCircle, ArrowBack, CloudUpload, SupervisedUserCircleOutlined } from '@material-ui/icons';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+
+import { Router } from '../../i18n';
+import { breakpoints } from '../../styles';
+import { State } from '../../types';
 import { ButtonLink, IconButtonLink, SettingsButton } from '../shared';
 import { Heading, Logo, TopNavbarSearchWidget } from '.';
-
-import React from 'react';
-import { Router } from '../../i18n';
-import { State } from '../../types';
-import { breakpoints } from '../../styles';
-import styled from 'styled-components';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 interface Props {
     heading?: string;

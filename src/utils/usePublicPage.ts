@@ -1,8 +1,9 @@
+import { AnyAction } from 'redux';
+
 import { reAuthenticate } from '../actions';
 import { SkoleContext } from '../types';
 import { redirect } from './redirect';
 import { useAuthSync } from './useAuthSync';
-import { AnyAction } from 'redux';
 
 // SSR hook to allow page only for unauthenticated users.
 export const usePublicPage = async (ctx: SkoleContext): Promise<void> => {

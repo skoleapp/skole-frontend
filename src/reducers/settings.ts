@@ -1,4 +1,5 @@
 import { AnyAction } from 'redux';
+
 import { TOGGLE_SETTINGS } from '../actions';
 
 export interface Settings {

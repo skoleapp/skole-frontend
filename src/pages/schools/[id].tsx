@@ -1,5 +1,3 @@
-import * as R from 'ramda';
-
 import {
     Avatar,
     Box,
@@ -12,17 +10,18 @@ import {
     ListItemText,
     Typography,
 } from '@material-ui/core';
-import { ButtonLink, MainLayout, NotFound, StyledCard, StyledList, TextLink } from '../../components';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { SchoolDetailDocument, SchoolType } from '../../../generated/graphql';
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
-import { withApollo, withRedux } from '../../lib';
-
+import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../../i18n';
-import { useAuthSync } from '../../utils';
 import { useTranslation } from 'react-i18next';
+import { compose } from 'redux';
+
+import { SchoolDetailDocument, SchoolType } from '../../../generated/graphql';
+import { ButtonLink, MainLayout, NotFound, StyledCard, StyledList, TextLink } from '../../components';
+import { includeDefaultNamespaces } from '../../i18n';
+import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { useAuthSync } from '../../utils';
 
 interface Props extends I18nProps {
     school?: SchoolType;

@@ -1,6 +1,7 @@
+import { css } from 'styled-components';
+
 import { breakpoints } from './breakpoints';
 import { colors } from './colors';
-import { css } from 'styled-components';
 
 export const base = css`
     :root {

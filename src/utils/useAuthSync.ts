@@ -1,9 +1,9 @@
-import { UserMeDocument, UserType } from '../../generated/graphql';
-
 import { AnyAction } from 'redux';
+
+import { UserMeDocument, UserType } from '../../generated/graphql';
+import { reAuthenticate } from '../actions';
 import { SkoleContext } from '../types';
 import { getToken } from './getToken';
-import { reAuthenticate } from '../actions';
 
 interface Params {
     userMe?: UserType;

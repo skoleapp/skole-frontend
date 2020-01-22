@@ -1,10 +1,10 @@
-import { Auth, Notification, Settings } from './reducers';
-import { NextComponentType, NextPageContext } from 'next';
-
-import ApolloClient from 'apollo-client';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-client';
+import { NextComponentType, NextPageContext } from 'next';
 import { Store } from 'redux';
+
 import { UserType } from '../generated/graphql';
+import { Auth, Notification, Settings } from './reducers';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;

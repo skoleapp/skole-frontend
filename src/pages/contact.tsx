@@ -1,19 +1,18 @@
+import { MenuItem } from '@material-ui/core';
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { Field, Formik } from 'formik';
+import { openNotification } from '../actions';
 import { FormSubmitSection, SelectField, SettingsLayout, StyledForm } from '../components';
+import { includeDefaultNamespaces } from '../i18n';
+import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useForm } from '../utils';
-import { withApollo, withRedux } from '../lib';
-
-import { MenuItem } from '@material-ui/core';
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../i18n';
-import { openNotification } from '../actions';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 const initialValues = {
     contactType: '',

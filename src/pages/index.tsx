@@ -1,19 +1,19 @@
 import { Box, Typography } from '@material-ui/core';
-import { ButtonLink, LandingPageSearchWidget, MainLayout, Shortcut } from '../components';
 import {
     CloudUploadOutlined,
     LibraryAddOutlined,
     SchoolOutlined,
     SupervisedUserCircleOutlined,
 } from '@material-ui/icons';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { withApollo, withRedux } from '../lib';
-
 import React from 'react';
-import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../i18n';
-import { useAuthSync } from '../utils';
 import { useTranslation } from 'react-i18next';
+import { compose } from 'redux';
+
+import { ButtonLink, LandingPageSearchWidget, MainLayout, Shortcut } from '../components';
+import { includeDefaultNamespaces } from '../i18n';
+import { withApollo, withRedux } from '../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { useAuthSync } from '../utils';
 
 const IndexPage: I18nPage = () => {
     const { t } = useTranslation();

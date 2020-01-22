@@ -1,7 +1,7 @@
-import { MainLayout, StyledCard } from '..';
-
 import { CardHeader } from '@material-ui/core';
 import React from 'react';
+
+import { MainLayout, StyledCard } from '..';
 
 interface Props {
     title: string;

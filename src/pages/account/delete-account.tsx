@@ -1,21 +1,20 @@
+import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import React, { useState } from 'react';
+import { useApolloClient } from 'react-apollo';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
-import { Field, Formik } from 'formik';
-import { FormSubmitSection, SettingsLayout, StyledDialog, StyledForm } from '../../components';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import React, { useState } from 'react';
-import { useForm, usePrivatePage } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
-
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
 import { deAuthenticate } from '../../actions';
+import { FormSubmitSection, SettingsLayout, StyledDialog, StyledForm } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
-import { useApolloClient } from 'react-apollo';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { useForm, usePrivatePage } from '../../utils';
 
 const initialValues = {
     password: '',

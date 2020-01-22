@@ -1,10 +1,10 @@
-import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 import { Box, Container } from '@material-ui/core';
-
-import { LayoutProps } from '../../types';
 import React from 'react';
-import { breakpoints } from '../../styles';
 import styled from 'styled-components';
+
+import { breakpoints } from '../../styles';
+import { LayoutProps } from '../../types';
+import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 
 interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch'> {
     heading?: string;

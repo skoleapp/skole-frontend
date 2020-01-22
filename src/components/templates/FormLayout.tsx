@@ -1,9 +1,9 @@
 import { CardContent, CardHeader, Grid } from '@material-ui/core';
+import React from 'react';
 
+import { StyledCard } from '..';
 import { LayoutProps } from '../../types';
 import { MainLayout } from '.';
-import React from 'react';
-import { StyledCard } from '..';
 
 export const FormLayout: React.FC<LayoutProps> = ({ renderCardContent, renderAlert, renderDialog, ...props }) => (
     <MainLayout {...props}>

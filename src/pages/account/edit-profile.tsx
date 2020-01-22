@@ -1,20 +1,19 @@
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { Field, Formik } from 'formik';
-import { FormSubmitSection, ImagePreviewField, SettingsLayout, StyledForm } from '../../components';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { UpdateUserMutation, UserType, useUpdateUserMutation } from '../../../generated/graphql';
 import { openNotification, reAuthenticate } from '../../actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm, usePrivatePage } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
+import { FormSubmitSection, ImagePreviewField, SettingsLayout, StyledForm } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
-import { useTranslation } from 'react-i18next';
+import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { useForm, usePrivatePage } from '../../utils';
 
 export interface UpdateProfileFormValues {
     username: string;

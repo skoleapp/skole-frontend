@@ -1,17 +1,17 @@
 import 'nprogress/nprogress.css';
 import 'typeface-roboto';
 
-import { GlobalStyle, theme } from '../styles';
-
-import App from 'next/app';
 import { CssBaseline } from '@material-ui/core';
-import { I18nPage } from '../types';
-import NProgress from 'nprogress';
-import { NextPageContext } from 'next';
-import React from 'react';
-import Router from 'next/router';
 import { ThemeProvider } from '@material-ui/styles';
+import { NextPageContext } from 'next';
+import App from 'next/app';
+import Router from 'next/router';
+import NProgress from 'nprogress';
+import React from 'react';
+
 import { appWithTranslation } from '../i18n';
+import { GlobalStyle, theme } from '../styles';
+import { I18nPage } from '../types';
 
 interface Props {
     Component: I18nPage;

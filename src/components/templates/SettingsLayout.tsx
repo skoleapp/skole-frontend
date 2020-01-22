@@ -1,8 +1,8 @@
 import { CardContent, CardHeader, Grid } from '@material-ui/core';
-import { MainLayout, StyledCard } from '..';
-
-import { LayoutProps } from '../../types';
 import React from 'react';
+
+import { MainLayout, StyledCard } from '..';
+import { LayoutProps } from '../../types';
 import { useSettings } from '../../utils';
 
 export const SettingsLayout: React.FC<LayoutProps> = ({ title, renderCardContent, renderDialog, ...props }) => {

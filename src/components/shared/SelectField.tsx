@@ -1,10 +1,10 @@
+import { FormControl, InputLabel, MenuItem, Select, SelectProps as MuiSelectProps } from '@material-ui/core';
 import { ErrorMessage, FieldAttributes, FieldProps, FormikProps } from 'formik';
-import { FormControl, InputLabel, MenuItem, SelectProps as MuiSelectProps, Select } from '@material-ui/core';
+import { fieldToSelect } from 'formik-material-ui';
+import React from 'react';
+import styled from 'styled-components';
 
 import { FormErrorMessage } from './FormErrorMessage';
-import React from 'react';
-import { fieldToSelect } from 'formik-material-ui';
-import styled from 'styled-components';
 
 interface SelectProps extends FieldProps, Omit<MuiSelectProps, 'value'> {}
 

@@ -1,13 +1,13 @@
 import { Backdrop, Box, Fade, IconButton, Modal, Paper } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { AnyAction } from 'redux';
 import { Close } from '@material-ui/icons';
 import React from 'react';
-import { State } from '../../types';
-import { breakpoints } from '../../styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { AnyAction } from 'redux';
 import styled from 'styled-components';
+
 import { toggleSettings } from '../../actions';
+import { breakpoints } from '../../styles';
+import { State } from '../../types';
 import { useSettings } from '../../utils';
 
 export const Settings: React.FC = () => {

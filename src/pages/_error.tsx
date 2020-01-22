@@ -1,5 +1,7 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
+
 import { NotFound } from '../components';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';

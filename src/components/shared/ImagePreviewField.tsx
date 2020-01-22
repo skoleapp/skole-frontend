@@ -1,11 +1,10 @@
-import * as R from 'ramda';
-
 import { Avatar, Box, Button, ButtonProps, FormControl } from '@material-ui/core';
 import { ErrorMessage, Field, FieldAttributes, FormikProps } from 'formik';
+import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import { FormErrorMessage } from '../shared';
-import styled from 'styled-components';
 
 interface Props {
     field: FieldAttributes<{}>;

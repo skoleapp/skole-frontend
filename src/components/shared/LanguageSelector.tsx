@@ -1,8 +1,7 @@
 import { MenuItem, Select, SelectProps } from '@material-ui/core';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-
-import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 const countries = [
     { code: 'US', label: 'languages:english', value: 'en' },

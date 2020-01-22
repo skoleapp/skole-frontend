@@ -1,6 +1,7 @@
-import { Link } from '../../i18n';
 import React from 'react';
 import styled from 'styled-components';
+
+import { Link } from '../../i18n';
 
 export const Logo: React.FC = () => (
     <Link href="/">

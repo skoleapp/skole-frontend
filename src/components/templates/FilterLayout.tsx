@@ -1,12 +1,12 @@
 import { Box, Button, CardContent, CardHeader, Grid, IconButton, SwipeableDrawer } from '@material-ui/core';
 import { Cancel, FilterList } from '@material-ui/icons';
-import { StyledCard, StyledTable } from '..';
-
-import { LayoutProps } from '../../types';
-import { MainLayout } from './MainLayout';
 import React from 'react';
-import { UseFilters } from '../../utils/useFilters';
 import { useTranslation } from 'react-i18next';
+
+import { StyledCard, StyledTable } from '..';
+import { LayoutProps } from '../../types';
+import { UseFilters } from '../../utils/useFilters';
+import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps {
     renderTableContent: JSX.Element;

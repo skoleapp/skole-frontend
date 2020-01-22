@@ -1,5 +1,3 @@
-import * as R from 'ramda';
-
 import {
     Avatar,
     Box,
@@ -19,8 +17,13 @@ import {
     Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, ScoreOutlined } from '@material-ui/icons';
+import moment from 'moment';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { compose } from 'redux';
+
 import { CourseDetailDocument, CourseType, ResourceType } from '../../../generated/graphql';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import {
     MainLayout,
     NotFound,
@@ -31,14 +34,10 @@ import {
     TabPanel,
     TextLink,
 } from '../../components';
-import { Router, includeDefaultNamespaces } from '../../i18n';
-import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
+import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-
-import React from 'react';
-import { compose } from 'redux';
-import moment from 'moment';
-import { useTranslation } from 'react-i18next';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseType;

@@ -1,5 +1,6 @@
-import { ParsedUrlQueryInput } from 'querystring';
 import Router from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
+
 import { SkoleContext } from '../types';
 
 // Redirect either on the server or in the browser.

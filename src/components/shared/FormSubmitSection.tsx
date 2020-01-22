@@ -1,9 +1,9 @@
 import { Box, Button, ButtonProps, CircularProgress, FormControl } from '@material-ui/core';
+import { Send } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
+import React from 'react';
 
 import { FormErrorMessage } from '.';
-import React from 'react';
-import { Send } from '@material-ui/icons';
 
 interface FormSubmitSectionProps extends FormikProps<{}> {
     submitButtonText: string;

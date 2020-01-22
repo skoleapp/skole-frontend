@@ -1,15 +1,14 @@
-import * as R from 'ramda';
-
-import { AccountCircle, Home, Search } from '@material-ui/icons';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import { AccountCircle, Home, Search } from '@material-ui/icons';
+import { useRouter } from 'next/router';
+import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
+import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import { Router } from '../../i18n';
-import { State } from '../../types';
 import { breakpoints } from '../../styles';
-import styled from 'styled-components';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { State } from '../../types';
 
 export const BottomNavbar: React.FC = () => {
     const { user, authenticated } = useSelector((state: State) => state.auth);

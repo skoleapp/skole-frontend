@@ -1,5 +1,3 @@
-import * as R from 'ramda';
-
 import {
     Avatar,
     Box,
@@ -14,6 +12,14 @@ import {
     Typography,
 } from '@material-ui/core';
 import { CloudDownload, ScoreOutlined } from '@material-ui/icons';
+import Image from 'material-ui-image';
+import moment from 'moment';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { compose } from 'redux';
+
+import { ResourceDetailDocument, ResourcePartType, ResourceType } from '../../../generated/graphql';
 import {
     Download,
     MainLayout,
@@ -24,17 +30,10 @@ import {
     TabPanel,
     TextLink,
 } from '../../components';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { ResourceDetailDocument, ResourcePartType, ResourceType } from '../../../generated/graphql';
-import { getFilePath, useAuthSync, useTabs } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
-
-import Image from 'material-ui-image';
-import React from 'react';
-import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../../i18n';
-import moment from 'moment';
-import { useTranslation } from 'react-i18next';
+import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { getFilePath, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceType;

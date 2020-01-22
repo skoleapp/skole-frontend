@@ -1,5 +1,3 @@
-import * as R from 'ramda';
-
 import {
     Avatar,
     Box,
@@ -12,6 +10,15 @@ import {
     Tab,
     Typography,
 } from '@material-ui/core';
+import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
+import moment from 'moment';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { compose } from 'redux';
+
+import { UserDetailDocument, UserType } from '../../../generated/graphql';
 import {
     ButtonLink,
     MainLayout,
@@ -22,18 +29,10 @@ import {
     StyledTabs,
     TabPanel,
 } from '../../components';
-import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { UserDetailDocument, UserType } from '../../../generated/graphql';
-import { getAvatar, useAuthSync, useTabs } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
-
-import React from 'react';
-import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../../i18n';
-import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { getAvatar, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     user?: UserType;

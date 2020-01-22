@@ -1,10 +1,10 @@
-import { SignInMutationPayload, UserType } from '../../generated/graphql';
-
-import { AnyAction } from 'redux';
 import ApolloClient from 'apollo-client';
-import { Dispatch } from 'react';
-import Router from 'next/router';
 import cookie from 'cookie';
+import Router from 'next/router';
+import { Dispatch } from 'react';
+import { AnyAction } from 'redux';
+
+import { SignInMutationPayload, UserType } from '../../generated/graphql';
 import { i18n } from '../i18n';
 import { openNotification } from './notifications';
 

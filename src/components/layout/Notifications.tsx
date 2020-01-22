@@ -1,12 +1,12 @@
 import { IconButton, Snackbar } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 import React, { SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { Close } from '@material-ui/icons';
-import { State } from '../../types';
-import { breakpoints } from '../../styles';
-import { closeNotification } from '../../actions';
 import styled from 'styled-components';
+
+import { closeNotification } from '../../actions';
+import { breakpoints } from '../../styles';
+import { State } from '../../types';
 
 export const Notifications: React.FC = () => {
     const { open, message } = useSelector((state: State) => state.notification);

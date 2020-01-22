@@ -1,5 +1,5 @@
-import { AnyAction } from 'redux';
 import { Dispatch } from 'react';
+import { AnyAction } from 'redux';
 
 export const TOGGLE_SETTINGS = 'TOGGLE_SETTINGS';
 

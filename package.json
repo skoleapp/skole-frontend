@@ -11,7 +11,7 @@
         "start": "NODE_ENV=production node build/src/server.js",
         "type-check": "tsc",
         "gen": "graphql-codegen --config codegen.yml",
-        "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+        "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
         "format": "prettier --write '**/*.{ts,tsx,js,json}'"
     },
     "dependencies": {

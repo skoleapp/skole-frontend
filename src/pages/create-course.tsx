@@ -1,27 +1,26 @@
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { AutoCompleteField, FormLayout, FormSubmitSection, StyledForm } from '../components';
 import {
     CreateCourseMutation,
-    SchoolType,
     SchoolsDocument,
-    SubjectType,
+    SchoolType,
     SubjectsDocument,
+    SubjectType,
     useCreateCourseMutation,
 } from '../../generated/graphql';
-import { Field, Formik } from 'formik';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Router, includeDefaultNamespaces } from '../i18n';
-import { useForm, usePrivatePage } from '../utils';
-import { withApollo, withRedux } from '../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
 import { openNotification } from '../actions';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { AutoCompleteField, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { includeDefaultNamespaces, Router } from '../i18n';
+import { withApollo, withRedux } from '../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { useForm, usePrivatePage } from '../utils';
 
 interface CreateCourseFormValues {
     courseName: string;
