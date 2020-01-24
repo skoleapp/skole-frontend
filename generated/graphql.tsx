@@ -855,6 +855,13 @@ export type UserDetailQuery = (
   & { user: Maybe<(
     { __typename?: 'UserObjectType' }
     & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+    & { createdCourses: Array<(
+      { __typename?: 'CourseObjectType' }
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+    )>, createdResources: Array<(
+      { __typename?: 'ResourceObjectType' }
+      & Pick<ResourceObjectType, 'id' | 'title'>
+    )> }
   )> }
 );
 
@@ -1372,6 +1379,16 @@ export const UserDetailDocument = gql`
     courseCount
     resourceCount
     created
+    createdCourses {
+      id
+      name
+      code
+      points
+    }
+    createdResources {
+      id
+      title
+    }
   }
 }
     `;
