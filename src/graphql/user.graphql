@@ -19,6 +19,16 @@ query UserDetail($id: Int!) {
         courseCount
         resourceCount
         created
+        createdCourses {
+            id
+            name
+            code
+            points
+        }
+        createdResources {
+            id
+            title
+        }
     }
 }
 
