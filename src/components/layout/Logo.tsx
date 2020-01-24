@@ -11,5 +11,5 @@ export const Logo: React.FC = () => (
 
 const StyledLogo = styled.img`
     cursor: pointer;
-    height: 1.5rem;
+    height: 1.25rem;
 `;
