@@ -8,7 +8,7 @@ module.exports = {
     },
     rules: {
         'react/prop-types': 'off',
-        'simple-import-sort/sort': 'error',
+        'simple-import-sort/sort': 'off',
         'sort-imports': 'off',
         'import/order': 'off',
         'import/prefer-default-export': 'off',
