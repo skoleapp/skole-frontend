@@ -1,10 +1,10 @@
 import { AnyAction } from 'redux';
 
-import { UserType } from '../../generated/graphql';
+import { UserObjectType } from '../../generated/graphql';
 import { AUTHENTICATE, DE_AUTHENTICATE, RE_AUTHENTICATE } from '../actions';
 
 export interface Auth {
-    user: UserType | null;
+    user: UserObjectType | null;
     authenticated: boolean | null;
 }
 

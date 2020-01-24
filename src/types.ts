@@ -3,13 +3,13 @@ import ApolloClient from 'apollo-client';
 import { NextComponentType, NextPageContext } from 'next';
 import { Store } from 'redux';
 
-import { UserType } from '../generated/graphql';
+import { UserObjectType } from '../generated/graphql';
 import { Auth, Notification, Settings } from './reducers';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
     reduxStore: Store;
-    userMe: UserType;
+    userMe: UserObjectType;
 }
 
 export type I18nPage<P = {}> = NextComponentType<

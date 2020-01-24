@@ -23,7 +23,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 
-import { CourseDetailDocument, CourseType, ResourceType } from '../../../generated/graphql';
+import { CourseDetailDocument, CourseObjectType, ResourceTypeObjectType } from '../../../generated/graphql';
 import {
     MainLayout,
     NotFound,
@@ -40,7 +40,7 @@ import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
-    course?: CourseType;
+    course?: CourseObjectType;
 }
 
 const CourseDetailPage: I18nPage<Props> = ({ course }) => {
@@ -59,7 +59,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const modified = moment(course.modified).format('LL');
         const points = R.propOr('-', 'points', course);
         const resourceCount = R.propOr('-', 'resourceCount', course);
-        const resources = R.propOr([], 'resources', course) as ResourceType[];
+        const resources = R.propOr([], 'resources', course) as ResourceTypeObjectType[];
 
         const subjectLink = {
             pathname: '/search',
@@ -164,7 +164,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {resources.map((r: ResourceType, i: number) => (
+                                    {resources.map((r: ResourceTypeObjectType, i: number) => (
                                         <TableRow
                                             key={i}
                                             onClick={(): Promise<boolean> => Router.push(`/resources/${r.id}`)}

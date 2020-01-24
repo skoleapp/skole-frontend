@@ -10,9 +10,9 @@ import * as Yup from 'yup';
 import {
     CreateCourseMutation,
     SchoolsDocument,
-    SchoolType,
+    SchoolTypeObjectType,
+    SubjectObjectType,
     SubjectsDocument,
-    SubjectType,
     useCreateCourseMutation,
 } from '../../generated/graphql';
 import { openNotification } from '../actions';
@@ -25,8 +25,8 @@ import { useForm, usePrivatePage } from '../utils';
 interface CreateCourseFormValues {
     courseName: string;
     courseCode: string;
-    subject: SubjectType | null;
-    school: SchoolType | null;
+    subject: SubjectObjectType | null;
+    school: SchoolTypeObjectType | null;
     general: string;
 }
 

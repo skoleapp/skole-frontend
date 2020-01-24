@@ -6,7 +6,7 @@ import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useApolloClient } from 'react-apollo';
 
-import { SchoolType } from '../../../generated/graphql';
+import { SchoolTypeObjectType } from '../../../generated/graphql';
 
 interface Props {
     field: FieldAttributes<{}>;
@@ -17,7 +17,7 @@ interface Props {
     disabled?: boolean;
 }
 
-export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends SchoolType>({
+export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends SchoolTypeObjectType>({
     field,
     form,
     labelKey = 'name',

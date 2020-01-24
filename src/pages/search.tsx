@@ -9,17 +9,17 @@ import { compose } from 'redux';
 
 import {
     CitiesDocument,
-    CityType,
+    CityObjectType,
     CountriesDocument,
-    CountryType,
-    CourseType,
+    CountryObjectType,
+    CourseObjectType,
+    SchoolObjectType,
     SchoolsDocument,
-    SchoolType,
     SchoolTypeObjectType,
     SchoolTypesDocument,
     SearchCoursesDocument,
+    SubjectObjectType,
     SubjectsDocument,
-    SubjectType,
 } from '../../generated/graphql';
 import { AutoCompleteField, FilterLayout, FormSubmitSection, StyledForm } from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
@@ -30,20 +30,20 @@ import { getFullCourseName, useAuthSync, useFilters } from '../utils';
 interface FilterSearchResultsFormValues {
     courseName: string;
     courseCode: string;
-    school: SchoolType | null;
-    subject: SubjectType | null;
+    school: SchoolObjectType | null;
+    subject: SubjectObjectType | null;
     schoolType: SchoolTypeObjectType | null;
-    country: CountryType | null;
-    city: CityType | null;
+    country: CountryObjectType | null;
+    city: CityObjectType | null;
 }
 
 interface Props {
-    courses?: CourseType[];
-    school?: SchoolType;
-    subject?: SubjectType;
+    courses?: CourseObjectType[];
+    school?: SchoolObjectType;
+    subject?: SubjectObjectType;
     schoolType?: SchoolTypeObjectType;
-    country?: CountryType;
-    city?: CityType;
+    country?: CountryObjectType;
+    city?: CityObjectType;
 }
 
 const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, country, city }) => {
@@ -160,7 +160,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         <Table>
             <TableBody>
                 {courses && courses.length ? (
-                    courses.map((c: CourseType, i: number) => (
+                    courses.map((c: CourseObjectType, i: number) => (
                         <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
                             <TableCell>
                                 <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>

@@ -8,8 +8,8 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import {
+    CourseObjectType,
     CoursesDocument,
-    CourseType,
     ResourceTypesDocument,
     UploadResourceInitialDataDocument,
 } from '../../generated/graphql';
@@ -24,12 +24,12 @@ import { useForm, usePrivatePage } from '../utils';
 interface UploadResourceFormValues {
     resourceTitle: string;
     resourceType: string;
-    course: CourseType | null;
+    course: CourseObjectType | null;
     files: File[];
 }
 
 interface Props extends I18nProps {
-    course?: CourseType;
+    course?: CourseObjectType;
 }
 
 const UploadResourcePage: I18nPage<Props> = ({ course }) => {

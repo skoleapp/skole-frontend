@@ -8,7 +8,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 
-import { UsersDocument, UserType } from '../../../generated/graphql';
+import { UserObjectType, UsersDocument } from '../../../generated/graphql';
 import { FilterLayout, FormSubmitSection, SelectField, StyledForm } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -21,7 +21,7 @@ interface FilterUsersFormValues {
 }
 
 interface Props extends I18nProps {
-    users?: UserType[];
+    users?: UserObjectType[];
 }
 
 const UsersPage: I18nPage<Props> = ({ users }) => {
@@ -84,7 +84,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
             </TableHead>
             <TableBody>
                 {users && users.length ? (
-                    users.map((u: UserType, i: number) => (
+                    users.map((u: UserObjectType, i: number) => (
                         <Link href={`/users/${u.id}`} key={i}>
                             <TableRow>
                                 <TableCell className="user-cell">

@@ -4,7 +4,7 @@ import Router from 'next/router';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 
-import { SignInMutationPayload, UserType } from '../../generated/graphql';
+import { SignInMutationPayload, UserObjectType } from '../../generated/graphql';
 import { i18n } from '../i18n';
 import { openNotification } from './notifications';
 
@@ -26,7 +26,7 @@ export const authenticate = (client: ApolloClient<{}>, { token, user }: SignInMu
     }
 };
 
-export const reAuthenticate = (user: UserType) => (dispatch: Dispatch<AnyAction>): void => {
+export const reAuthenticate = (user: UserObjectType) => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: RE_AUTHENTICATE, payload: user });
 };
 

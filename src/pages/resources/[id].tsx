@@ -19,7 +19,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 
-import { ResourceDetailDocument, ResourcePartType, ResourceType } from '../../../generated/graphql';
+import { ResourceDetailDocument, ResourceObjectType, ResourcePartObjectType } from '../../../generated/graphql';
 import {
     Download,
     MainLayout,
@@ -36,7 +36,7 @@ import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { getFilePath, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
-    resource?: ResourceType;
+    resource?: ResourceObjectType;
 }
 
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
@@ -56,7 +56,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const created = moment(resource.created).format('LL');
         const modified = moment(resource.modified).format('LL');
         const points = R.propOr('-', 'points', resource);
-        const resourceParts = R.propOr([], 'resourceParts', resource) as ResourcePartType[];
+        const resourceParts = R.propOr([], 'resourceParts', resource) as ResourcePartObjectType[];
 
         const renderResourceInfo = (
             <Grid container alignItems="center">
@@ -130,7 +130,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 scrollButtons="on"
             >
                 <Tab label="General" />
-                {resourceParts.map((r: ResourcePartType, i: number) => (
+                {resourceParts.map((r: ResourcePartObjectType, i: number) => (
                     <Tab key={i} label={r.title} />
                 ))}
             </StyledTabs>
@@ -142,7 +142,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </TabPanel>
         );
 
-        const renderResourceParts = resourceParts.map((r: ResourcePartType, i: number) => (
+        const renderResourceParts = resourceParts.map((r: ResourcePartObjectType, i: number) => (
             <TabPanel key={i} value={tabValue} index={i + 1}>
                 <CardContent>
                     <Box textAlign="left">

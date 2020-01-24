@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
 
-import { UserDetailDocument, UserType } from '../../../generated/graphql';
+import { UserDetailDocument, UserObjectType } from '../../../generated/graphql';
 import {
     ButtonLink,
     MainLayout,
@@ -35,7 +35,7 @@ import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { getAvatar, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
-    user?: UserType;
+    user?: UserObjectType;
 }
 
 const UserPage: I18nPage<Props> = ({ user }) => {

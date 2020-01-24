@@ -16,7 +16,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 
-import { SchoolDetailDocument, SchoolType } from '../../../generated/graphql';
+import { SchoolDetailDocument, SchoolObjectType } from '../../../generated/graphql';
 import { ButtonLink, MainLayout, NotFound, StyledCard, StyledList, TextLink } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -24,7 +24,7 @@ import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useAuthSync } from '../../utils';
 
 interface Props extends I18nProps {
-    school?: SchoolType;
+    school?: SchoolObjectType;
 }
 
 const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
