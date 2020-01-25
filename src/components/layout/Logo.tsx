@@ -5,7 +5,7 @@ import { Link } from '../../i18n';
 
 export const Logo: React.FC = () => (
     <Link href="/">
-        <StyledLogo src="/images/logo-text.svg" />
+        <StyledLogo src="/images/skole-icon-text.svg" />
     </Link>
 );
 
