@@ -2,6 +2,6 @@
     "watch": [".babelrc", "public/locales/**/*.json", "next.config.js", "src/*.ts"],
     "ignore": ["locales/**/*.missing.json"],
     "execMap": {
-        "ts": "ts-node --transpile-only --compiler-options '{\"module\":\"commonjs\", \"target\": \"es2017\"}'"
+        "ts": "TS_NODE_PROJECT='./tsconfig.commonjs.json' node -r ts-node/register --max-old-space-size=8192"
     }
 }
