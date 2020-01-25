@@ -77,7 +77,7 @@ export type CourseObjectType = {
   id: Scalars['ID'],
   name: Scalars['String'],
   code?: Maybe<Scalars['String']>,
-  subject: SubjectObjectType,
+  subject?: Maybe<SubjectObjectType>,
   school: SchoolObjectType,
   user?: Maybe<UserObjectType>,
   modified: Scalars['DateTime'],
@@ -109,7 +109,7 @@ export type CreateCommentMutationPayload = {
 export type CreateCourseMutationInput = {
   name: Scalars['String'],
   code?: Maybe<Scalars['String']>,
-  subject: Scalars['ID'],
+  subject?: Maybe<Scalars['ID']>,
   school: Scalars['ID'],
   id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
@@ -683,10 +683,10 @@ export type CourseDetailQuery = (
   & { course: Maybe<(
     { __typename?: 'CourseObjectType' }
     & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'points' | 'resourceCount'>
-    & { subject: (
+    & { subject: Maybe<(
       { __typename?: 'SubjectObjectType' }
       & Pick<SubjectObjectType, 'id' | 'name'>
-    ), school: (
+    )>, school: (
       { __typename?: 'SchoolObjectType' }
       & Pick<SchoolObjectType, 'id' | 'name'>
     ), user: Maybe<(
@@ -700,13 +700,13 @@ export type CourseDetailQuery = (
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
       & { user: Maybe<(
         { __typename?: 'UserObjectType' }
-        & Pick<UserObjectType, 'id' | 'username'>
+        & Pick<UserObjectType, 'id' | 'username' | 'title' | 'avatarThumbnail'>
       )>, replyComments: Array<(
         { __typename?: 'CommentObjectType' }
         & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points'>
         & { user: Maybe<(
           { __typename?: 'UserObjectType' }
-          & Pick<UserObjectType, 'id' | 'username'>
+          & Pick<UserObjectType, 'id' | 'username' | 'title' | 'avatarThumbnail'>
         )> }
       )> }
     )> }
@@ -1180,6 +1180,8 @@ export const CourseDetailDocument = gql`
       user {
         id
         username
+        title
+        avatarThumbnail
       }
       text
       attachment
@@ -1190,6 +1192,8 @@ export const CourseDetailDocument = gql`
         user {
           id
           username
+          title
+          avatarThumbnail
         }
         text
         attachment

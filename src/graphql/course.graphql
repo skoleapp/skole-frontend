@@ -25,6 +25,7 @@ query CourseDetail($id: Int!) {
             user {
                 id
                 username
+                avatarThumbnail
             }
             text
             attachment
@@ -35,6 +36,7 @@ query CourseDetail($id: Int!) {
                 user {
                     id
                     username
+                    avatarThumbnail
                 }
                 text
                 attachment
