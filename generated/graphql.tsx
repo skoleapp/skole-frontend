@@ -45,7 +45,9 @@ export type CommentObjectType = {
   comment?: Maybe<CommentObjectType>,
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
+  replyComments: Array<CommentObjectType>,
   points?: Maybe<Scalars['Int']>,
+  replyCount?: Maybe<Scalars['Int']>,
 };
 
 export type ContactMutationInput = {
@@ -693,6 +695,20 @@ export type CourseDetailQuery = (
     )>, resources: Array<(
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id' | 'title' | 'points'>
+    )>, comments: Array<(
+      { __typename?: 'CommentObjectType' }
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
+      & { user: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username'>
+      )>, replyComments: Array<(
+        { __typename?: 'CommentObjectType' }
+        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points'>
+        & { user: Maybe<(
+          { __typename?: 'UserObjectType' }
+          & Pick<UserObjectType, 'id' | 'username'>
+        )> }
+      )> }
     )> }
   )> }
 );
@@ -1157,6 +1173,31 @@ export const CourseDetailDocument = gql`
     resources {
       id
       title
+      points
+    }
+    comments {
+      id
+      user {
+        id
+        username
+      }
+      text
+      attachment
+      modified
+      created
+      replyComments {
+        id
+        user {
+          id
+          username
+        }
+        text
+        attachment
+        modified
+        created
+        points
+      }
+      replyCount
       points
     }
     modified
