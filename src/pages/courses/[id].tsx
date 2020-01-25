@@ -23,7 +23,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 
-import { CourseDetailDocument, CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
+import {
+    CourseDetailDocument,
+    CourseObjectType,
+    ResourceObjectType,
+    CommentObjectType,
+} from '../../../generated/graphql';
 import {
     MainLayout,
     NotFound,
@@ -33,6 +38,7 @@ import {
     StyledTabs,
     TabPanel,
     TextLink,
+    CommentCard,
 } from '../../components';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -60,6 +66,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const points = R.propOr('-', 'points', course);
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
+        const comments = R.propOr([], 'comments', course) as CommentObjectType[];
 
         const subjectLink = {
             pathname: '/search',
@@ -189,7 +196,13 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     )}
                 </TabPanel>
                 <TabPanel value={tabValue} index={1}>
-                    <CardContent>Course discussion will show here...</CardContent>
+                    {comments.length ? (
+                        comments.map((c: CommentObjectType, i: number) => <CommentCard key={i} comment={c} />)
+                    ) : (
+                        <CardContent>
+                            <Typography variant="subtitle1">{t('course:noComments')}</Typography>
+                        </CardContent>
+                    )}
                 </TabPanel>
             </>
         );

@@ -18,3 +18,4 @@ export { StyledMenuList } from './StyledMenuList';
 export { DropzoneField } from './DropzoneField';
 export { SelectField } from './SelectField';
 export { SettingsButton } from './SettingsButton';
+export { CommentCard } from './CommentCard';
