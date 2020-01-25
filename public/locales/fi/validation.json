@@ -16,6 +16,5 @@
     "filesRequired": "Vähintään yksi tiedosto vaadittu.",
     "contactTypeRequired": "Yhteydenottotyyppi vaadittu.",
     "messageRequired": "Viesti vaadittu.",
-    "subjectRequired": "Oppiaine vaadittu.",
     "schoolRequired": "Koulu vaadittu."
 }

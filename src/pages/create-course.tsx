@@ -38,9 +38,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
     const validationSchema = Yup.object().shape({
         courseName: Yup.string().required(t('validation:courseNameRequired')),
         courseCode: Yup.string(),
-        subject: Yup.object()
-            .nullable()
-            .required(t('validation:subjectRequired')),
+        subject: Yup.object().nullable(),
         school: Yup.object()
             .nullable()
             .required(t('validation:schoolRequired')),

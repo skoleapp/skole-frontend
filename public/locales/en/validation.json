@@ -16,6 +16,5 @@
     "filesRequired": "One or more files required.",
     "contactTypeRequired": "Contact type is required.",
     "messageRequired": "Message is required.",
-    "subjectRequired": "Subject is required.",
     "schoolRequired": "School is required."
 }
