@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
 import { openNotification, reAuthenticate } from '../../actions';
-import { FormSubmitSection, ImagePreviewField, SettingsLayout, StyledForm } from '../../components';
+import { FormSubmitSection, SettingsLayout, StyledForm, AvatarField } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
@@ -81,7 +81,7 @@ const EditProfilePage: I18nPage = () => {
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
-                    <Field name="avatar" label={t('edit-profile:changeAvatarButton')} component={ImagePreviewField} />
+                    <AvatarField {...props} />
                     <Field
                         placeholder={t('forms:title')}
                         name="title"
