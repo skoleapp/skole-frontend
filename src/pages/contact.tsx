@@ -73,6 +73,7 @@ const ContactPage: I18nPage = () => {
                         label={t('forms:message')}
                         variant="outlined"
                         fullWidth
+                        rows="5"
                         multiline
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
