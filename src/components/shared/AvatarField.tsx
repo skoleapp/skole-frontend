@@ -8,6 +8,7 @@ import { FormErrorMessage } from '.';
 import { useTranslation } from 'react-i18next';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
 
+// FIXME: I am borke.
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ setFieldValue, values }) => {
     const { t } = useTranslation();
     const [avatar, setAvatar] = useState();
