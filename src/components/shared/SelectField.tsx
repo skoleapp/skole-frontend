@@ -4,6 +4,7 @@ import { FormControl, InputLabel, MenuItem, SelectProps as MuiSelectProps, Selec
 import { FormErrorMessage } from './FormErrorMessage';
 import React from 'react';
 import { fieldToSelect } from 'formik-material-ui';
+import styled from 'styled-components';
 
 interface SelectProps extends FieldProps, Omit<MuiSelectProps, 'value'> {}
 
@@ -14,13 +15,23 @@ interface Props {
 }
 
 // FIXME: Label is not working correctly.
-export const SelectField: React.FC<Props & SelectProps> = ({ children, label, ...props }) => (
-    <FormControl variant="outlined" fullWidth>
-        <InputLabel>{label}</InputLabel>
-        <Select {...fieldToSelect(props)}>
-            <MenuItem value="">---</MenuItem>
-            {children}
-        </Select>
-        <ErrorMessage name={props.field.name} component={FormErrorMessage} />
-    </FormControl>
-);
+export const SelectField: React.FC<Props & SelectProps> = ({ children, label, ...props }) => {
+    return (
+        <StyledFormControl variant="outlined" fullWidth>
+            <InputLabel>{label}</InputLabel>
+            <Select {...fieldToSelect(props)}>
+                <MenuItem value="">---</MenuItem>
+                {children}
+            </Select>
+            <ErrorMessage name={props.field.name} component={FormErrorMessage} />
+        </StyledFormControl>
+    );
+};
+
+const StyledFormControl = styled(FormControl)`
+    .MuiFormLabel-root {
+        background-color: var(--white);
+        border-radius: 0.1rem;
+        padding: 0.05rem;
+    }
+`;
