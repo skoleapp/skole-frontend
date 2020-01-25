@@ -15,19 +15,16 @@ interface Props {
 }
 
 // FIXME: Label is not working correctly.
-export const SelectField: React.FC<Props & SelectProps> = ({ children, label, ...props }) => {
-    return (
-        <StyledFormControl variant="outlined" fullWidth>
-            <InputLabel>{label}</InputLabel>
-            <Select {...fieldToSelect(props)}>
-                <MenuItem value="">---</MenuItem>
-                {children}
-            </Select>
-            <ErrorMessage name={props.field.name} component={FormErrorMessage} />
-        </StyledFormControl>
-    );
-};
-
+export const SelectField: React.FC<Props & SelectProps> = ({ children, label, ...props }) => (
+    <StyledFormControl variant="outlined" fullWidth>
+        <InputLabel>{label}</InputLabel>
+        <Select {...fieldToSelect(props)}>
+            <MenuItem value="">---</MenuItem>
+            {children}
+        </Select>
+        <ErrorMessage name={props.field.name} component={FormErrorMessage} />
+    </StyledFormControl>
+);
 const StyledFormControl = styled(FormControl)`
     .MuiFormLabel-root {
         background-color: var(--white);
