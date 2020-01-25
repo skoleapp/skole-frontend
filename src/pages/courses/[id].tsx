@@ -48,12 +48,12 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { tabValue, handleTabChange } = useTabs();
 
     if (course) {
-        const { subject, school, creator } = course;
+        const { subject, school, user } = course;
         const fullName = getFullCourseName(course);
         const courseCode = R.propOr('-', 'code', course);
         const subjectName = R.propOr('-', 'name', subject) as string;
         const schoolName = R.propOr('-', 'name', school) as string;
-        const creatorName = R.propOr('-', 'username', creator) as string;
+        const creatorName = R.propOr('-', 'username', user) as string;
         moment.locale(i18n.language); // Set moment language.
         const created = moment(course.created).format('LL');
         const modified = moment(course.modified).format('LL');
@@ -88,7 +88,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Typography>
                             <Typography variant="body1">
                                 {t('common:creator')}:{' '}
-                                <TextLink href={`/users/${R.propOr('', 'id', creator)}`} color="primary">
+                                <TextLink href={`/users/${R.propOr('', 'id', user)}`} color="primary">
                                     {creatorName}
                                 </TextLink>
                             </Typography>

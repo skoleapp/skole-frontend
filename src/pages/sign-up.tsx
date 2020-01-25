@@ -55,10 +55,10 @@ const SignUpPage: I18nPage = () => {
             handleMutationErrors(signUp.errors);
         } else if (signIn && signIn.errors) {
             handleMutationErrors(signIn.errors);
-        } else if (signIn) {
+        } else if (signIn && signIn.user) {
             resetForm();
             dispatch(authenticate(client, signIn));
-            Router.push(`/users/${user.id}`);
+            Router.push(`/users/${signIn.user.id}`);
         }
     };
 

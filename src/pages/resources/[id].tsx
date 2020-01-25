@@ -50,8 +50,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const resourceCourseName = R.propOr('-', 'name', resource.course) as string;
         const resourceSchoolId = R.propOr('', 'id', resource.school);
         const resourceSchoolName = R.propOr('-', 'name', resource.school) as string;
-        const creatorId = R.propOr('', 'id', resource.creator);
-        const creatorName = R.propOr('-', 'username', resource.creator) as string;
+        const creatorId = R.propOr('', 'id', resource.user);
+        const creatorName = R.propOr('-', 'username', resource.user) as string;
         moment.locale(i18n.language); // Set moment language.
         const created = moment(resource.created).format('LL');
         const modified = moment(resource.modified).format('LL');

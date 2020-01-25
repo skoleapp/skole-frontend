@@ -36,7 +36,7 @@ export type CityObjectType = {
 export type CommentObjectType = {
    __typename?: 'CommentObjectType',
   id: Scalars['ID'],
-  creator?: Maybe<UserObjectType>,
+  user?: Maybe<UserObjectType>,
   text: Scalars['String'],
   attachment?: Maybe<Scalars['String']>,
   course?: Maybe<CourseObjectType>,
@@ -77,10 +77,11 @@ export type CourseObjectType = {
   code?: Maybe<Scalars['String']>,
   subject: SubjectObjectType,
   school: SchoolObjectType,
-  creator?: Maybe<UserObjectType>,
+  user?: Maybe<UserObjectType>,
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
   resources: Array<ResourceObjectType>,
+  comments: Array<CommentObjectType>,
   points?: Maybe<Scalars['Int']>,
   resourceCount?: Maybe<Scalars['Int']>,
 };
@@ -91,6 +92,7 @@ export type CreateCommentMutationInput = {
   course?: Maybe<Scalars['ID']>,
   resource?: Maybe<Scalars['ID']>,
   resourcePart?: Maybe<Scalars['ID']>,
+  comment?: Maybe<Scalars['ID']>,
   id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -266,15 +268,14 @@ export type Query = {
   userMe?: Maybe<UserObjectType>,
   subjects?: Maybe<Array<Maybe<SubjectObjectType>>>,
   subject?: Maybe<SubjectObjectType>,
-  schools?: Maybe<Array<Maybe<SchoolObjectType>>>,
   schoolTypes?: Maybe<Array<Maybe<SchoolTypeObjectType>>>,
-  school?: Maybe<SchoolObjectType>,
   schoolType?: Maybe<SchoolTypeObjectType>,
-  resource?: Maybe<ResourceObjectType>,
+  schools?: Maybe<Array<Maybe<SchoolObjectType>>>,
+  school?: Maybe<SchoolObjectType>,
   resourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>,
+  resource?: Maybe<ResourceObjectType>,
   courses?: Maybe<Array<Maybe<CourseObjectType>>>,
   course?: Maybe<CourseObjectType>,
-  comments?: Maybe<Array<Maybe<CommentObjectType>>>,
   comment?: Maybe<CommentObjectType>,
 };
 
@@ -299,13 +300,13 @@ export type QuerySubjectArgs = {
 };
 
 
-export type QuerySchoolArgs = {
-  schoolId?: Maybe<Scalars['Int']>
+export type QuerySchoolTypeArgs = {
+  schoolTypeId?: Maybe<Scalars['Int']>
 };
 
 
-export type QuerySchoolTypeArgs = {
-  schoolTypeId?: Maybe<Scalars['Int']>
+export type QuerySchoolArgs = {
+  schoolId?: Maybe<Scalars['Int']>
 };
 
 
@@ -330,13 +331,6 @@ export type QueryCourseArgs = {
 };
 
 
-export type QueryCommentsArgs = {
-  courseId?: Maybe<Scalars['String']>,
-  resourceId?: Maybe<Scalars['Int']>,
-  resourcePartId?: Maybe<Scalars['Int']>
-};
-
-
 export type QueryCommentArgs = {
   commentId?: Maybe<Scalars['Int']>
 };
@@ -348,10 +342,11 @@ export type ResourceObjectType = {
   date?: Maybe<Scalars['Date']>,
   course: CourseObjectType,
   downloads?: Maybe<Scalars['Int']>,
-  creator?: Maybe<UserObjectType>,
+  user?: Maybe<UserObjectType>,
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
   resourceParts: Array<ResourcePartObjectType>,
+  comments: Array<CommentObjectType>,
   resourceType?: Maybe<Scalars['String']>,
   points?: Maybe<Scalars['Int']>,
   school?: Maybe<SchoolObjectType>,
@@ -379,8 +374,6 @@ export type SchoolObjectType = {
   schoolType?: Maybe<Scalars['String']>,
   city?: Maybe<Scalars['String']>,
   country?: Maybe<Scalars['String']>,
-  subjectCount?: Maybe<Scalars['Int']>,
-  courseCount?: Maybe<Scalars['Int']>,
 };
 
 export type SchoolTypeObjectType = {
@@ -694,7 +687,7 @@ export type CourseDetailQuery = (
     ), school: (
       { __typename?: 'SchoolObjectType' }
       & Pick<SchoolObjectType, 'id' | 'name'>
-    ), creator: Maybe<(
+    ), user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resources: Array<(
@@ -742,7 +735,7 @@ export type ResourceDetailQuery = (
     )>, course: (
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id' | 'name'>
-    ), creator: Maybe<(
+    ), user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resourceParts: Array<(
@@ -761,7 +754,7 @@ export type SchoolDetailQuery = (
   { __typename?: 'Query' }
   & { school: Maybe<(
     { __typename?: 'SchoolObjectType' }
-    & Pick<SchoolObjectType, 'id' | 'name' | 'city' | 'country' | 'schoolType' | 'subjectCount' | 'courseCount'>
+    & Pick<SchoolObjectType, 'id' | 'name' | 'city' | 'country' | 'schoolType'>
   )> }
 );
 
@@ -1157,7 +1150,7 @@ export const CourseDetailDocument = gql`
       id
       name
     }
-    creator {
+    user {
       id
       username
     }
@@ -1222,7 +1215,7 @@ export const ResourceDetailDocument = gql`
       id
       name
     }
-    creator {
+    user {
       id
       username
     }
@@ -1253,8 +1246,6 @@ export const SchoolDetailDocument = gql`
     city
     country
     schoolType
-    subjectCount
-    courseCount
   }
 }
     `;

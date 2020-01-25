@@ -15,7 +15,7 @@ query ResourceDetail($id: Int!) {
             id
             name
         }
-        creator {
+        user {
             id
             username
         }
