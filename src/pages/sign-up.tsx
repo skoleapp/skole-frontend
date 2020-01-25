@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 import { SignUpMutation, useSignUpMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
 import { ButtonLink, FormLayout, FormSubmitSection, StyledForm } from '../components';
-import { includeDefaultNamespaces } from '../i18n';
+import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePublicPage } from '../utils';
@@ -58,6 +58,7 @@ const SignUpPage: I18nPage = () => {
         } else if (signIn) {
             resetForm();
             dispatch(authenticate(client, signIn));
+            Router.push(`/users/${user.id}`);
         }
     };
 
