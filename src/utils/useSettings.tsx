@@ -62,7 +62,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         <>
             <ListSubheader>{t('common:language')}</ListSubheader>
             <ListItem>
-                <LanguageSelector fullWidth />;
+                <LanguageSelector fullWidth />
             </ListItem>
             <Divider />
             <ListSubheader>{t('common:about')}</ListSubheader>
