@@ -5,13 +5,15 @@ import { Divider, Grid } from '@material-ui/core';
 import { StyledCard } from '../shared';
 
 interface Props extends LayoutProps {
-    renderLeftCardContent: JSX.Element;
-    renderRightCardContent: JSX.Element;
-    renderMidCardContent: JSX.Element;
-    renderTabs: JSX.Element;
+    renderCardHeader?: JSX.Element;
+    renderLeftCardContent?: JSX.Element;
+    renderRightCardContent?: JSX.Element;
+    renderMidCardContent?: JSX.Element;
+    renderTabs?: JSX.Element;
 }
 
 export const ResponsiveMainLayout: React.FC<Props> = ({
+    renderCardHeader,
     renderLeftCardContent,
     renderRightCardContent,
     renderMidCardContent,
@@ -34,10 +36,12 @@ export const ResponsiveMainLayout: React.FC<Props> = ({
     return (
         <MainLayout {...props}>
             <StyledCard>
+                {renderCardHeader}
+                {!!renderCardHeader && <Divider />}
                 {renderTopSection}
-                <Divider />
+                {!!renderTopSection && <Divider />}
                 {renderMidCardContent}
-                <Divider />
+                {!!renderMidCardContent && <Divider />}
                 {renderTabs}
             </StyledCard>
         </MainLayout>

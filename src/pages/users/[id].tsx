@@ -47,9 +47,9 @@ interface Props extends I18nProps {
 
 const UserPage: I18nPage<Props> = ({ user }) => {
     const { t, i18n } = useTranslation();
+    const { tabValue, handleTabChange } = useTabs();
 
     if (user) {
-        const { tabValue, handleTabChange } = useTabs();
         const username = R.propOr('-', 'username', user) as string;
         const email = R.propOr('-', 'email', user) as string;
         const title = R.prop('title', user) as string;

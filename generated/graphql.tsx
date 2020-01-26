@@ -292,6 +292,12 @@ export type QueryCountryArgs = {
 };
 
 
+export type QueryUsersArgs = {
+  username?: Maybe<Scalars['String']>,
+  ordering?: Maybe<Scalars['String']>
+};
+
+
 export type QueryUserArgs = {
   userId: Scalars['Int']
 };
@@ -373,9 +379,13 @@ export type SchoolObjectType = {
    __typename?: 'SchoolObjectType',
   id: Scalars['ID'],
   name: Scalars['String'],
+  courses: Array<CourseObjectType>,
   schoolType?: Maybe<Scalars['String']>,
   city?: Maybe<Scalars['String']>,
   country?: Maybe<Scalars['String']>,
+  subjects?: Maybe<Array<Maybe<SubjectObjectType>>>,
+  subjectCount?: Maybe<Scalars['Int']>,
+  courseCount?: Maybe<Scalars['Int']>,
 };
 
 export type SchoolTypeObjectType = {
@@ -770,7 +780,14 @@ export type SchoolDetailQuery = (
   { __typename?: 'Query' }
   & { school: Maybe<(
     { __typename?: 'SchoolObjectType' }
-    & Pick<SchoolObjectType, 'id' | 'name' | 'city' | 'country' | 'schoolType'>
+    & Pick<SchoolObjectType, 'id' | 'name' | 'city' | 'country' | 'schoolType' | 'subjectCount' | 'courseCount'>
+    & { subjects: Maybe<Array<Maybe<(
+      { __typename?: 'SubjectObjectType' }
+      & Pick<SubjectObjectType, 'id' | 'name'>
+    )>>>, courses: Array<(
+      { __typename?: 'CourseObjectType' }
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+    )> }
   )> }
 );
 
@@ -1289,6 +1306,18 @@ export const SchoolDetailDocument = gql`
     city
     country
     schoolType
+    subjects {
+      id
+      name
+    }
+    courses {
+      id
+      name
+      code
+      points
+    }
+    subjectCount
+    courseCount
   }
 }
     `;
