@@ -112,6 +112,7 @@ const EditProfilePage: I18nPage = () => {
                         component={TextField}
                         label={t('forms:bio')}
                         variant="outlined"
+                        rows="5"
                         multiline
                         rows="4"
                         fullWidth
