@@ -1,7 +1,5 @@
 {
     "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
         "jsx": "preserve",
         "lib": ["dom", "es2017"],
         "moduleResolution": "node",
@@ -18,7 +16,9 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
-        "isolatedModules": true
+        "isolatedModules": true,
+        "target": "es5",
+        "module": "esnext"
     },
     "exclude": ["node_modules"],
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]

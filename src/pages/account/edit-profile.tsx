@@ -114,6 +114,7 @@ const EditProfilePage: I18nPage = () => {
                         label={t('forms:bio')}
                         variant="outlined"
                         multiline
+                        rows="4"
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />

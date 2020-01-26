@@ -13,6 +13,12 @@ export const StyledCard = styled(({ scrollable, ...other }) => <Card {...other} 
         margin: 1rem;
     }
 
+    .MuiFormLabel-root {
+        background-color: var(--white);
+        border-radius: 0.1rem;
+        padding: 0.05rem;
+    }
+
     .label {
         font-size: 0.75rem;
     }

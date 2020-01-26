@@ -46,7 +46,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const { tabValue, handleTabChange } = useTabs();
         const username = R.propOr('-', 'username', user) as string;
         const email = R.propOr('-', 'email', user) as string;
-        const title = R.propOr('-', 'title', user) as string;
+        const title = R.prop('title', user) as string;
         const bio = R.propOr('-', 'bio', user) as string;
         const points = R.propOr('-', 'points', user);
         const courseCount = R.propOr('-', 'courseCount', user);
@@ -60,6 +60,14 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <Grid item container xs={12} sm={6} justify="center">
                     <CardContent>
                         <Avatar className="main-avatar" src={getAvatar(user)} />
+                        <Box display="flex" flexDirection="column" marginY="0.5rem">
+                            <Typography variant="h1">{username}</Typography>
+                        </Box>
+                        {!!title && (
+                            <Box display="flex" flexDirection="column" marginY="0.5rem">
+                                <Typography variant="caption">{title}</Typography>
+                            </Box>
+                        )}
                     </CardContent>
                 </Grid>
                 <Grid item container xs={12} sm={6} direction="column">
@@ -125,12 +133,6 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const renderAccountInfo = (
             <CardContent>
                 <Box textAlign="left">
-                    <Box display="flex" flexDirection="column" marginY="0.5rem">
-                        <Typography className="label" variant="body2" color="textSecondary">
-                            {t('common:username')}
-                        </Typography>
-                        <Typography variant="body1">{username}</Typography>
-                    </Box>
                     {isOwnProfile && (
                         <Box display="flex" flexDirection="column" marginY="0.5rem">
                             <Typography className="label" variant="body2" color="textSecondary">
@@ -139,12 +141,6 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                             <Typography variant="body1">{email}</Typography>
                         </Box>
                     )}
-                    <Box display="flex" flexDirection="column" marginY="0.5rem">
-                        <Typography className="label" variant="body2" color="textSecondary">
-                            {t('common:title')}
-                        </Typography>
-                        <Typography variant="body1">{title}</Typography>
-                    </Box>
                     <Typography className="label" variant="body2" color="textSecondary">
                         {t('common:joined')} {joined}
                     </Typography>
