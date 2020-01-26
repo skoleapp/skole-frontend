@@ -2,38 +2,55 @@ import React from 'react';
 import { CommentObjectType } from '../../../generated/graphql';
 import { Reply, ArrowDropDownOutlined, ArrowDropUpOutlined } from '@material-ui/icons';
 
-import { Card, Badge, Typography, CardHeader, Avatar, IconButton, CardContent, Grid, Box } from '@material-ui/core';
+import {
+    Card,
+    Badge,
+    Typography,
+    CardHeader,
+    Avatar,
+    IconButton,
+    CardContent,
+    Grid,
+    Box,
+    Divider,
+} from '@material-ui/core';
 import styled from 'styled-components';
 import { getAvatarThumb } from '../../utils';
 import * as R from 'ramda';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import { TextLink } from './TextLink';
 
 interface Props {
     comment: CommentObjectType;
 }
 
 export const CommentCard: React.FC<Props> = ({ comment }) => {
-    const { i18n, t } = useTranslation();
+    const { i18n } = useTranslation();
     moment.locale(i18n.language); // Set moment language.
     const created = moment(comment.created).format('LL');
 
     const renderAction = (
-        <Box margin="1rem">
-            <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
-                <Reply />
-            </Badge>
-        </Box>
+        <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
+            <Reply />
+        </Badge>
+    );
+
+    const renderTitle = (
+        <TextLink href={`/users/${R.propOr('', 'id', comment.user)}`}>
+            {R.propOr('-', 'username', comment.user)}
+        </TextLink>
     );
 
     return (
-        <StyledCommnentCard>
+        <StyledCommentCard>
             <CardHeader
                 avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
                 action={renderAction}
-                title={R.propOr('-', 'username', comment.user)}
-                subheader={`${t('common:created')}: ${created}`}
+                title={renderTitle}
+                subheader={created}
             />
+            <Divider />
             <CardContent>
                 <Grid container justify="space-between" alignItems="center">
                     <Grid item xs={11} justify="flex-start">
@@ -43,7 +60,7 @@ export const CommentCard: React.FC<Props> = ({ comment }) => {
                         <IconButton>
                             <ArrowDropUpOutlined />
                         </IconButton>
-                        <Box marginRight="0.75rem">
+                        <Box margin="0.25rem 0.75rem">
                             <Typography variant="body2">{comment.points}</Typography>
                         </Box>
                         <IconButton>
@@ -52,17 +69,37 @@ export const CommentCard: React.FC<Props> = ({ comment }) => {
                     </Grid>
                 </Grid>
             </CardContent>
-        </StyledCommnentCard>
+        </StyledCommentCard>
     );
 };
 
-const StyledCommnentCard = styled(Card)`
+const StyledCommentCard = styled(Card)`
+    cursor: pointer;
+
+    .MuiCardHeader-root {
+        padding: 0.5rem;
+    }
+
     .MuiCardHeader-title,
     .MuiCardHeader-subheader {
         text-align: left;
+        font-size: 0.75rem;
+    }
+
+    .MuiCardHeader-action {
+        margin: 0.75rem 0.75rem 0 0;
+    }
+
+    .MuiAvatar-root {
+        height: 1.75rem;
+        width: 1.75rem;
     }
 
     .MuiIconButton-root {
         padding: 0.25rem;
+    }
+
+    &:hover {
+        background-color: var(--primary-opacity);
     }
 `;
