@@ -46,5 +46,6 @@
     "deleteAccount": "Poista tili",
     "account": "Tili",
     "course": "Kurssi",
-    "name": "Nimi"
+    "name": "Nimi",
+    "discussion": "Keskustelu"
 }

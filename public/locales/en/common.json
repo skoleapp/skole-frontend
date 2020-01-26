@@ -47,5 +47,6 @@
     "deleteAccount": "Delete Account",
     "account": "Account",
     "course": "Course",
-    "name": "Name"
+    "name": "Name",
+    "discussion": "Discussion"
 }
