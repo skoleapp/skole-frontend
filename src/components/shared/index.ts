@@ -19,3 +19,7 @@ export { DropzoneField } from './DropzoneField';
 export { SelectField } from './SelectField';
 export { SettingsButton } from './SettingsButton';
 export { CommentCard } from './CommentCard';
+export { CreateCommentForm } from './CreateCommentForm';
+export { StyledModal } from './StyledModal';
+export { ModalCloseIcon } from './ModalCloseIcon';
+export { CommentThread } from './CommentThread';

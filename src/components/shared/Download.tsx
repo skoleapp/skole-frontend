@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
-import { openNotification } from '../../actions';
+import { toggleNotification } from '../../actions';
 
 interface Props {
     url: string;
@@ -35,7 +35,7 @@ export const Download: React.FC<Props> = ({ url, fileName }) => {
             document.body.appendChild(a);
             a.click();
         } catch {
-            dispatch(openNotification(t('notification:errorDownLoadingResource')));
+            dispatch(toggleNotification(t('notification:errorDownLoadingResource')));
         }
     };
 
