@@ -6,7 +6,7 @@ import {
     SupervisedUserCircleOutlined,
 } from '@material-ui/icons';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../i18n';
 import { compose } from 'redux';
 
 import { ButtonLink, LandingPageSearchWidget, MainLayout, Shortcut } from '../components';

@@ -19,7 +19,7 @@ import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../../i18n';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
 import { getFullCourseName } from '../../utils';
@@ -46,7 +46,7 @@ interface Props extends I18nProps {
 }
 
 const UserPage: I18nPage<Props> = ({ user }) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
 
     if (user) {
@@ -57,7 +57,6 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const points = R.propOr('-', 'points', user);
         const courseCount = R.propOr('-', 'courseCount', user);
         const resourceCount = R.propOr('-', 'resourceCount', user);
-        moment.locale(i18n.language); // Set moment language.
         const joined = moment(user.created).format('LL');
         const isOwnProfile = user.id === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
         const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];

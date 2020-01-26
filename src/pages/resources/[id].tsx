@@ -16,7 +16,7 @@ import Image from 'material-ui-image';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../../i18n';
 import { compose } from 'redux';
 
 import { ResourceDetailDocument, ResourceObjectType, ResourcePartObjectType } from '../../../generated/graphql';
@@ -41,7 +41,7 @@ interface Props extends I18nProps {
 
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { tabValue, handleTabChange } = useTabs();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     if (resource) {
         const resourceTitle = R.propOr('-', 'title', resource) as string;
@@ -52,7 +52,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const resourceSchoolName = R.propOr('-', 'name', resource.school) as string;
         const creatorId = R.propOr('', 'id', resource.user);
         const creatorName = R.propOr('-', 'username', resource.user) as string;
-        moment.locale(i18n.language); // Set moment language.
         const created = moment(resource.created).format('LL');
         const modified = moment(resource.modified).format('LL');
         const points = R.propOr('-', 'points', resource);

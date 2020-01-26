@@ -1,7 +1,7 @@
 import { Box, Button, CardContent, CardHeader, Grid, IconButton, SwipeableDrawer } from '@material-ui/core';
 import { Cancel, FilterList } from '@material-ui/icons';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../../i18n';
 
 import { StyledCard, StyledTable } from '..';
 import { LayoutProps } from '../../types';

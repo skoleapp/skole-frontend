@@ -19,7 +19,6 @@ import { CloudUploadOutlined, ScoreOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { compose } from 'redux';
 
 import {
@@ -38,7 +37,7 @@ import {
     CommentCard,
     ResponsiveMainLayout,
 } from '../../components';
-import { includeDefaultNamespaces, Router } from '../../i18n';
+import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
@@ -49,7 +48,7 @@ interface Props extends I18nProps {
 }
 
 const CourseDetailPage: I18nPage<Props> = ({ course }) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
 
     if (course) {
@@ -59,7 +58,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const subjectName = R.propOr('-', 'name', subject) as string;
         const schoolName = R.propOr('-', 'name', school) as string;
         const creatorName = R.propOr('-', 'username', user) as string;
-        moment.locale(i18n.language); // Set moment language.
         const created = moment(course.created).format('LL');
         const modified = moment(course.modified).format('LL');
         const points = R.propOr('-', 'points', course);
@@ -201,7 +199,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                                 ) : (
                                     <Typography variant="subtitle1">{t('course:noComments')}</Typography>
                                 )}
-                                <CreateCommentForm />
+                                <CreateCommentForm label={t('forms:message')} placeholder={t('forms:message')} />
                             </CardContent>
                         </Grid>
                     </Grid>

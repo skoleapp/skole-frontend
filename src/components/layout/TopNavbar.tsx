@@ -2,7 +2,7 @@ import { AppBar, Box, IconButton, Toolbar } from '@material-ui/core';
 import { AccountCircle, ArrowBack, CloudUpload, SupervisedUserCircleOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../../i18n';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 

@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../../i18n';
 import styled from 'styled-components';
 
 import { LanguageSelector, TextLink } from '../shared';

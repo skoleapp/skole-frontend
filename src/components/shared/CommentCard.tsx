@@ -1,6 +1,6 @@
 import React from 'react';
 import { CommentObjectType } from '../../../generated/graphql';
-import { Reply, ArrowDropDownOutlined, ArrowDropUpOutlined } from '@material-ui/icons';
+import { Reply, ArrowDropDownOutlined, ArrowDropUpOutlined, AttachmentOutlined } from '@material-ui/icons';
 
 import {
     Card,
@@ -18,27 +18,32 @@ import styled from 'styled-components';
 import { getAvatarThumb } from '../../utils';
 import * as R from 'ramda';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
 import { TextLink } from './TextLink';
 import { toggleCommentThread } from '../../actions';
 import { useDispatch } from 'react-redux';
-import { AnyAction } from 'redux';
 
 interface Props {
     comment: CommentObjectType;
+    disableClick?: boolean;
 }
 
-export const CommentCard: React.FC<Props> = ({ comment }) => {
-    const { i18n } = useTranslation();
+export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     const dispatch = useDispatch();
-    moment.locale(i18n.language); // Set moment language.
     const created = moment(comment.created).format('LL');
-    const handleClick = (): AnyAction => dispatch((toggleCommentThread(comment) as unknown) as AnyAction);
+
+    const handleClick = (): void => {
+        !disableClick && dispatch(toggleCommentThread(comment));
+    };
 
     const renderAction = (
-        <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
-            <Reply />
-        </Badge>
+        <Box display="flex">
+            <Box marginRight="0.5rem">
+                <AttachmentOutlined />
+            </Box>
+            <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
+                <Reply />
+            </Badge>
+        </Box>
     );
 
     const renderTitle = (

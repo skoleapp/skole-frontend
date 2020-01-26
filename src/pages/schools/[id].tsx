@@ -17,7 +17,7 @@ import {
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../../i18n';
 import { compose } from 'redux';
 
 import {

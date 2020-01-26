@@ -1,4 +1,4 @@
-import { Backdrop, Fade, Paper } from '@material-ui/core';
+import { Fade, Paper } from '@material-ui/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
@@ -16,13 +16,7 @@ export const Settings: React.FC = () => {
     const handleClose = (): AnyAction => dispatch((toggleSettings(false) as unknown) as AnyAction);
 
     return (
-        <StyledModal
-            open={!!settings}
-            onClose={handleClose}
-            closeAfterTransition
-            BackdropComponent={Backdrop}
-            BackdropProps={{ timeout: 500 }}
-        >
+        <StyledModal open={!!settings} onClose={handleClose}>
             <Fade in={!!settings}>
                 <Paper>
                     <ModalCloseIcon onClick={handleClose} />

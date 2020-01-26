@@ -22,4 +22,3 @@ export { CommentCard } from './CommentCard';
 export { CreateCommentForm } from './CreateCommentForm';
 export { StyledModal } from './StyledModal';
 export { ModalCloseIcon } from './ModalCloseIcon';
-export { CommentThread } from './CommentThread';

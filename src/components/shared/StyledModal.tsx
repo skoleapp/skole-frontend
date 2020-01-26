@@ -1,8 +1,11 @@
 import styled from 'styled-components';
-import { Modal } from '@material-ui/core';
+import { Modal, Backdrop } from '@material-ui/core';
 import { breakpoints } from '../../styles';
+import React from 'react';
 
-export const StyledModal = styled(Modal)`
+export const StyledModal = styled(props => (
+    <Modal closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} {...props} />
+))`
     display: flex;
     justify-content: center;
     align-items: center;

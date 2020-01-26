@@ -5,7 +5,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { FormErrorMessage } from '.';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
 
 // FIXME: I am borke.

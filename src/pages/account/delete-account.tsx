@@ -3,7 +3,7 @@ import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../../i18n';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
 import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
-import { CommentThread } from '../shared';
+import { CommentThread } from '../layout';
 
 interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch'> {
     heading?: string;

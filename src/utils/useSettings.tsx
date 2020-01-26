@@ -2,7 +2,7 @@ import { Button, Divider, ListItem, ListSubheader, MenuItem } from '@material-ui
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../i18n';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deAuthenticate, toggleSettings } from '../actions';
