@@ -68,43 +68,41 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
 
     const renderTableContent = (
         <Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>
-                        <Typography variant="subtitle1" color="textSecondary">
-                            {t('common:username')}
-                        </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                        <Typography variant="subtitle1" color="textSecondary">
-                            {t('common:points')}
-                        </Typography>
-                    </TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {users && users.length ? (
-                    users.map((u: UserObjectType, i: number) => (
-                        <Link href={`/users/${u.id}`} key={i}>
-                            <TableRow>
-                                <TableCell className="user-cell">
-                                    <Avatar src={getAvatarThumb(u)} />
-                                    <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
-                                </TableCell>
-                            </TableRow>
-                        </Link>
-                    ))
-                ) : (
-                    <TableRow>
-                        <TableCell className="user-cell">
-                            <Typography variant="subtitle1">{t('users:notFound')}</Typography>
-                        </TableCell>
-                    </TableRow>
-                )}
-            </TableBody>
+            {users && users.length ? (
+                <>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>
+                                <Typography variant="subtitle1" color="textSecondary">
+                                    {t('common:username')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                                <Typography variant="subtitle1" color="textSecondary">
+                                    {t('common:points')}
+                                </Typography>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {users.map((u: UserObjectType, i: number) => (
+                            <Link href={`/users/${u.id}`} key={i}>
+                                <TableRow>
+                                    <TableCell className="user-cell">
+                                        <Avatar src={getAvatarThumb(u)} />
+                                        <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
+                                    </TableCell>
+                                </TableRow>
+                            </Link>
+                        ))}
+                    </TableBody>
+                </>
+            ) : (
+                <Typography variant="subtitle1">{t('users:notFound')}</Typography>
+            )}
         </Table>
     );
 
@@ -122,10 +120,11 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
 
 UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await useAuthSync(ctx);
+    const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
 
     try {
-        const { data } = await ctx.apolloClient.query({ query: UsersDocument });
+        const { data } = await apolloClient.query({ query: UsersDocument, variables: query });
         return { ...data, ...nameSpaces };
     } catch {
         return nameSpaces;
