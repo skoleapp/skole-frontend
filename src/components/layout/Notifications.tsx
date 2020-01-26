@@ -1,41 +1,49 @@
-import { IconButton, Snackbar } from '@material-ui/core';
+import { IconButton, Snackbar, SnackbarOrigin } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import React, { SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { toggleNotification } from '../../actions';
 
-import { closeNotification } from '../../actions';
 import { breakpoints } from '../../styles';
 import { State } from '../../types';
 
 export const Notifications: React.FC = () => {
-    const { open, message } = useSelector((state: State) => state.notification);
+    const { notification } = useSelector((state: State) => state.ui);
     const dispatch = useDispatch();
 
     const handleClose = (_e: SyntheticEvent | MouseEvent, reason?: string): void => {
         if (reason !== 'clickaway') {
-            dispatch(closeNotification());
+            dispatch(toggleNotification(null));
         }
     };
 
+    const anchorOrigin: SnackbarOrigin = {
+        vertical: 'bottom',
+        horizontal: 'center',
+    };
+
+    const contentProps = {
+        'aria-describedby': 'message-id',
+    };
+
+    const renderMessage = <span id="message-id">{notification}</span>;
+
+    const renderAction = [
+        <IconButton key="close" color="inherit" onClick={handleClose}>
+            <Close />
+        </IconButton>,
+    ];
+
     return (
         <StyledNotifications
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-            }}
-            open={open}
+            anchorOrigin={anchorOrigin}
+            open={!!notification}
             autoHideDuration={2000}
             onClose={handleClose}
-            ContentProps={{
-                'aria-describedby': 'message-id',
-            }}
-            message={<span id="message-id">{message}</span>}
-            action={[
-                <IconButton key="close" color="inherit" onClick={handleClose}>
-                    <Close />
-                </IconButton>,
-            ]}
+            ContentProps={contentProps}
+            message={renderMessage}
+            action={renderAction}
         />
     );
 };

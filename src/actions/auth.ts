@@ -6,7 +6,7 @@ import { AnyAction } from 'redux';
 
 import { SignInMutationPayload, UserObjectType } from '../../generated/graphql';
 import { i18n } from '../i18n';
-import { openNotification } from './notifications';
+import { toggleNotification } from './ui';
 
 export const AUTHENTICATE = 'AUTHENTICATED';
 export const RE_AUTHENTICATE = 'RE_AUTHENTICATED';
@@ -39,7 +39,7 @@ export const deAuthenticate = (apolloClient: ApolloClient<{}>) => async (
     });
 
     dispatch({ type: DE_AUTHENTICATE });
-    dispatch((openNotification(i18n.t('notifications:signedOut')) as unknown) as AnyAction);
+    dispatch((toggleNotification(i18n.t('notifications:signedOut')) as unknown) as AnyAction);
     await apolloClient.cache.reset();
     Router.push('/sign-in');
 };

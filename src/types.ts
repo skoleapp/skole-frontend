@@ -4,7 +4,7 @@ import { NextComponentType, NextPageContext } from 'next';
 import { Store } from 'redux';
 
 import { UserObjectType } from '../generated/graphql';
-import { Auth, Notification, Settings } from './reducers';
+import { Auth, UI } from './reducers';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
@@ -24,8 +24,7 @@ export interface I18nProps {
 
 export interface State {
     auth: Auth;
-    notification: Notification;
-    settings: Settings;
+    ui: UI;
 }
 
 export interface LayoutProps {
