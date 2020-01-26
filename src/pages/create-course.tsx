@@ -15,7 +15,7 @@ import {
     SubjectsDocument,
     useCreateCourseMutation,
 } from '../../generated/graphql';
-import { openNotification } from '../actions';
+import { toggleNotification } from '../actions';
 import { AutoCompleteField, FormLayout, FormSubmitSection, StyledForm } from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -50,7 +50,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
                 handleMutationErrors(createCourse.errors);
             } else if (createCourse.course) {
                 resetForm();
-                dispatch(openNotification(t('notifications:courseCreated')));
+                dispatch(toggleNotification(t('notifications:courseCreated')));
                 await Router.push(`/courses/${createCourse.course.id}`);
             }
         }

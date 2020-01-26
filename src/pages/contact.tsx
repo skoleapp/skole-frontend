@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { openNotification } from '../actions';
+import { toggleNotification } from '../actions';
 import { FormSubmitSection, SelectField, SettingsLayout, StyledForm } from '../components';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -44,7 +44,7 @@ const ContactPage: I18nPage = () => {
     const handleSubmit = (values: ContactFormValues): void => {
         console.log(values);
         resetForm();
-        dispatch(openNotification(t('notifications:messageSubmitted')));
+        dispatch(toggleNotification(t('notifications:messageSubmitted')));
     };
 
     const renderCardContent = (

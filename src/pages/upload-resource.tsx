@@ -14,7 +14,7 @@ import {
     UploadResourceInitialDataDocument,
 } from '../../generated/graphql';
 import { UploadResourceMutation, useUploadResourceMutation } from '../../generated/graphql';
-import { openNotification } from '../actions';
+import { toggleNotification } from '../actions';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection, StyledForm } from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -54,7 +54,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                 handleMutationErrors(uploadResource.errors);
             } else if (uploadResource.resource && uploadResource.resource.id) {
                 resetForm();
-                dispatch(openNotification(t('notifications:resourceUploaded')));
+                dispatch(toggleNotification(t('notifications:resourceUploaded')));
                 await Router.push(`/resources/${uploadResource.resource.id}`);
             }
         }

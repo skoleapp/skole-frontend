@@ -8,7 +8,7 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
-import { openNotification, reAuthenticate } from '../../actions';
+import { toggleNotification, reAuthenticate } from '../../actions';
 import { FormSubmitSection, SettingsLayout, StyledForm, AvatarField } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -34,7 +34,7 @@ const EditProfilePage: I18nPage = () => {
             if (updateUser.errors) {
                 handleMutationErrors(updateUser.errors);
             } else {
-                dispatch(openNotification(t('notifications:profileUpdated')));
+                dispatch(toggleNotification(t('notifications:profileUpdated')));
                 dispatch(reAuthenticate(updateUser.user as UserObjectType));
             }
         }

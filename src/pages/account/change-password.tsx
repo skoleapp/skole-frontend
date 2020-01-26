@@ -7,7 +7,7 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
-import { openNotification } from '../../actions';
+import { toggleNotification } from '../../actions';
 import { FormSubmitSection, SettingsLayout, StyledForm } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -48,7 +48,7 @@ const ChangePasswordPage: I18nPage = () => {
                 handleMutationErrors(changePassword.errors);
             } else {
                 resetForm();
-                dispatch(openNotification(t('notifications:passwordChanged')));
+                dispatch(toggleNotification(t('notifications:passwordChanged')));
             }
         }
     };

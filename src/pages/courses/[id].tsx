@@ -13,6 +13,7 @@ import {
     TableHead,
     TableRow,
     Typography,
+    Grid,
 } from '@material-ui/core';
 import { CloudUploadOutlined, ScoreOutlined } from '@material-ui/icons';
 import moment from 'moment';
@@ -41,6 +42,7 @@ import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
+import { CreateCommentForm } from '../../components';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -189,13 +191,20 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     )}
                 </TabPanel>
                 <TabPanel value={tabValue} index={1}>
-                    <CardContent>
-                        {comments.length ? (
-                            comments.map((c: CommentObjectType, i: number) => <CommentCard key={i} comment={c} />)
-                        ) : (
-                            <Typography variant="subtitle1">{t('course:noComments')}</Typography>
-                        )}
-                    </CardContent>
+                    <Grid container justify="center">
+                        <Grid item xs={12} sm={9} md={6} lg={5}>
+                            <CardContent>
+                                {comments.length ? (
+                                    comments.map((c: CommentObjectType, i: number) => (
+                                        <CommentCard key={i} comment={c} />
+                                    ))
+                                ) : (
+                                    <Typography variant="subtitle1">{t('course:noComments')}</Typography>
+                                )}
+                                <CreateCommentForm />
+                            </CardContent>
+                        </Grid>
+                    </Grid>
                 </TabPanel>
             </>
         );
