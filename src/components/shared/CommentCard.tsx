@@ -20,6 +20,9 @@ import * as R from 'ramda';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { TextLink } from './TextLink';
+import { toggleCommentThread } from '../../actions';
+import { useDispatch } from 'react-redux';
+import { AnyAction } from 'redux';
 
 interface Props {
     comment: CommentObjectType;
@@ -27,8 +30,10 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment }) => {
     const { i18n } = useTranslation();
+    const dispatch = useDispatch();
     moment.locale(i18n.language); // Set moment language.
     const created = moment(comment.created).format('LL');
+    const handleClick = (): AnyAction => dispatch((toggleCommentThread(comment) as unknown) as AnyAction);
 
     const renderAction = (
         <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
@@ -43,7 +48,7 @@ export const CommentCard: React.FC<Props> = ({ comment }) => {
     );
 
     return (
-        <StyledCommentCard>
+        <StyledCommentCard onClick={handleClick}>
             <CardHeader
                 avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
                 action={renderAction}
@@ -76,13 +81,17 @@ export const CommentCard: React.FC<Props> = ({ comment }) => {
 const StyledCommentCard = styled(Card)`
     cursor: pointer;
 
-    .MuiCardHeader-root {
+    .MuiCardHeader-root,
+    .MuiCardContent-root {
         padding: 0.5rem;
     }
 
     .MuiCardHeader-title,
     .MuiCardHeader-subheader {
         text-align: left;
+    }
+
+    .MuiCardHeader-subheader {
         font-size: 0.75rem;
     }
 
@@ -97,9 +106,5 @@ const StyledCommentCard = styled(Card)`
 
     .MuiIconButton-root {
         padding: 0.25rem;
-    }
-
-    &:hover {
-        background-color: var(--primary-opacity);
     }
 `;
