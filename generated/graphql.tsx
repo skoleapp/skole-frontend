@@ -700,13 +700,13 @@ export type CourseDetailQuery = (
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
       & { user: Maybe<(
         { __typename?: 'UserObjectType' }
-        & Pick<UserObjectType, 'id' | 'username' | 'title' | 'avatarThumbnail'>
+        & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
       )>, replyComments: Array<(
         { __typename?: 'CommentObjectType' }
         & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points'>
         & { user: Maybe<(
           { __typename?: 'UserObjectType' }
-          & Pick<UserObjectType, 'id' | 'username' | 'title' | 'avatarThumbnail'>
+          & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
         )> }
       )> }
     )> }
@@ -869,7 +869,7 @@ export type UserDetailQuery = (
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
     )>, createdResources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'points'>
     )> }
   )> }
 );
@@ -1180,7 +1180,6 @@ export const CourseDetailDocument = gql`
       user {
         id
         username
-        title
         avatarThumbnail
       }
       text
@@ -1192,7 +1191,6 @@ export const CourseDetailDocument = gql`
         user {
           id
           username
-          title
           avatarThumbnail
         }
         text
@@ -1424,6 +1422,7 @@ export const UserDetailDocument = gql`
     createdResources {
       id
       title
+      points
     }
   }
 }

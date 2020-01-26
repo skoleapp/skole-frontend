@@ -28,6 +28,7 @@ query UserDetail($id: Int!) {
         createdResources {
             id
             title
+            points
         }
     }
 }
