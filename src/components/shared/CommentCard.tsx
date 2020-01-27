@@ -2,18 +2,7 @@ import React from 'react';
 import { CommentObjectType } from '../../../generated/graphql';
 import { Reply, ArrowDropDownOutlined, ArrowDropUpOutlined, AttachmentOutlined } from '@material-ui/icons';
 
-import {
-    Card,
-    Badge,
-    Typography,
-    CardHeader,
-    Avatar,
-    IconButton,
-    CardContent,
-    Grid,
-    Box,
-    Divider,
-} from '@material-ui/core';
+import { Card, Badge, Typography, CardHeader, Avatar, IconButton, CardContent, Grid, Box } from '@material-ui/core';
 import styled from 'styled-components';
 import { getAvatarThumb } from '../../utils';
 import * as R from 'ramda';
@@ -60,7 +49,6 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
                 title={renderTitle}
                 subheader={created}
             />
-            <Divider />
             <CardContent>
                 <Grid container justify="space-between" alignItems="center">
                     <Grid item xs={11} justify="flex-start">
@@ -70,7 +58,7 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
                         <IconButton>
                             <ArrowDropUpOutlined />
                         </IconButton>
-                        <Box margin="0.25rem 0.75rem">
+                        <Box margin="0.25rem 0.6rem">
                             <Typography variant="body2">{comment.points}</Typography>
                         </Box>
                         <IconButton>
@@ -111,5 +99,10 @@ const StyledCommentCard = styled(Card)`
 
     .MuiIconButton-root {
         padding: 0.25rem;
+    }
+
+    .MuiSvgIcon-root {
+        height: 1.25rem;
+        width: 1.25rem;
     }
 `;
