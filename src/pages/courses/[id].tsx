@@ -39,17 +39,16 @@ import {
     StyledList,
     StyledTable,
     TextLink,
-    CommentCard,
     StyledCard,
     MainLayout,
     StyledTabs,
     TabPanel,
+    DiscussionBox,
 } from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
-import { CreateCommentForm } from '../../components';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -194,17 +193,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </CardContent>
         );
 
-        const renderComments = (
-            <CardContent>
-                {comments.length ? (
-                    comments.map((c: CommentObjectType, i: number) => <CommentCard key={i} comment={c} />)
-                ) : (
-                    <Typography variant="subtitle1">{t('course:noComments')}</Typography>
-                )}
-                <CreateCommentForm label={t('forms:message')} placeholder={t('forms:message')} />
-            </CardContent>
-        );
-
         const renderMobileContent = (
             <Grid className="md-down" container>
                 <Grid item xs={12}>
@@ -224,7 +212,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         {renderResources}
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
-                        {renderComments}
+                        <DiscussionBox comments={comments} />
                     </TabPanel>
                 </Grid>
             </Grid>
@@ -232,24 +220,19 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderDesktopContent = (
             <Grid className="md-up" container>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} md={7} lg={8}>
                     {renderCourseInfo}
                     <Divider />
                     {renderResources}
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <CardContent>
-                        <Typography variant="subtitle1" color="textSecondary">
-                            {t('common:discussion')}
-                        </Typography>
-                    </CardContent>
-                    {renderComments}
+                <Grid item xs={12} md={5} lg={4}>
+                    <DiscussionBox comments={comments} />
                 </Grid>
             </Grid>
         );
 
         return (
-            <MainLayout title={fullName} backUrl>
+            <MainLayout title={fullName} backUrl maxWidth="xl">
                 <StyledCard>
                     <CardHeader title={fullName} />
                     <Divider />

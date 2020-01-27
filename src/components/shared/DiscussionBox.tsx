@@ -1,10 +1,11 @@
 import React from 'react';
 import { CommentObjectType } from '../../../generated/graphql';
 import { CommentCard } from './CommentCard';
-import { Typography, Box, Divider } from '@material-ui/core';
+import { Typography, Box, Fab, CardContent } from '@material-ui/core';
 import { useTranslation } from '../../i18n';
-import { CreateCommentForm } from './CreateCommentForm';
 import styled from 'styled-components';
+import { AddOutlined } from '@material-ui/icons';
+import { CreateCommentForm } from './CreateCommentForm';
 
 interface Props {
     comments: CommentObjectType[];
@@ -14,7 +15,7 @@ export const DiscussionBox: React.FC<Props> = ({ comments }) => {
     const { t } = useTranslation();
 
     const renderHeader = (
-        <Typography variant="subtitle1" color="textSecondary">
+        <Typography className="md-up" variant="subtitle1" color="textSecondary">
             {t('common:discussion')}
         </Typography>
     );
@@ -34,23 +35,30 @@ export const DiscussionBox: React.FC<Props> = ({ comments }) => {
     );
 
     const renderInputArea = (
-        <Box className="input-area" padding="0.5rem">
+        <Box className="md-up" padding="0.5rem">
             <CreateCommentForm label={t('forms:message')} placeholder={t('forms:message')} />
+        </Box>
+    );
+
+    const renderNewMessageIcon = (
+        <Box className="md-down" display="flex" justifyContent="flex-end" padding="0.5rem">
+            <Fab color="primary" size="medium">
+                <AddOutlined />
+            </Fab>
         </Box>
     );
 
     return (
         <StyledDiscussionBox>
             {renderHeader}
-            <Divider />
             {renderMessageArea}
-            <Divider />
             {renderInputArea}
+            {renderNewMessageIcon}
         </StyledDiscussionBox>
     );
 };
 
-const StyledDiscussionBox = styled(Box)`
+const StyledDiscussionBox = styled(CardContent)`
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -61,10 +69,6 @@ const StyledDiscussionBox = styled(Box)`
 
     .message-area {
         flex-grow: 1;
-        overflow-y: scroll;
-        background-color: var(--primary-opacity);
-    }
-
-    .input-area {
+        // overflow-y: scroll;
     }
 `;
