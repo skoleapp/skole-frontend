@@ -5,6 +5,7 @@ import { Store } from 'redux';
 
 import { UserObjectType } from '../generated/graphql';
 import { Auth, UI } from './reducers';
+import { ContainerProps } from '@material-ui/core';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
@@ -27,7 +28,7 @@ export interface State {
     ui: UI;
 }
 
-export interface LayoutProps {
+export interface LayoutProps extends ContainerProps {
     title?: string;
     heading?: string;
     backUrl?: boolean;

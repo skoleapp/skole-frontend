@@ -47,8 +47,10 @@ interface Props {
 }
 
 const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, country, city }) => {
-    const filterProps = useFilters<FilterSearchResultsFormValues>();
-    const { handleSubmit, submitButtonText, renderClearFiltersButton, ref } = filterProps;
+    const { toggleDrawer, open, handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<
+        FilterSearchResultsFormValues
+    >();
+
     const { query } = useRouter();
     const { t } = useTranslation();
 
@@ -183,8 +185,9 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
             title={t('search:title')}
             renderCardContent={renderCardContent}
             renderTableContent={renderTableContent}
+            toggleDrawer={toggleDrawer}
+            open={open}
             backUrl
-            {...filterProps}
         />
     );
 };

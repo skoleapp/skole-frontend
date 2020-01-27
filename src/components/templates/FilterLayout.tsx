@@ -18,7 +18,7 @@ export const FilterLayout = <T extends {}>({
     toggleDrawer,
     open,
     ...props
-}: Props & UseFilters<T>): JSX.Element => {
+}: Props & Pick<UseFilters<T>, 'toggleDrawer' | 'open'>): JSX.Element => {
     const { t } = useTranslation();
 
     const renderExitDrawerButton = (

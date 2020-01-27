@@ -1,4 +1,4 @@
-import { Box, Container } from '@material-ui/core';
+import { Box, Container, ContainerProps } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -7,15 +7,22 @@ import { LayoutProps } from '../../types';
 import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 import { CommentThread } from '../layout';
 
-interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch'> {
+interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch'>, ContainerProps {
     heading?: string;
 }
 
-export const MainLayout: React.FC<Props> = ({ title, heading, backUrl, disableSearch, children }) => (
+export const MainLayout: React.FC<Props> = ({
+    title,
+    heading,
+    backUrl,
+    disableSearch,
+    children,
+    ...containerProps
+}) => (
     <StyledMainLayout>
         <Head title={title} />
         <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} />
-        <Container>{children}</Container>
+        <Container {...containerProps}>{children}</Container>
         <BottomNavbar />
         <Footer />
         <Notifications />
