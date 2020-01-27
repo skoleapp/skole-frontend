@@ -1,5 +1,5 @@
-query Users {
-    users {
+query Users($username: String, $ordering: String) {
+    users(username: $username, ordering: $ordering) {
         id
         username
         points
