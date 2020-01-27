@@ -16,7 +16,7 @@ export const base = css`
         --success: ${colors.success};
         --danger: ${colors.danger};
 
-        --primary-opacity: rgba(0, 0, 0, 0.15);
+        --primary-opacity: rgba(0, 0, 0, 0.1);
         --dark-opacity: rgba(0, 0, 0, 0.75);
 
         // Misc
