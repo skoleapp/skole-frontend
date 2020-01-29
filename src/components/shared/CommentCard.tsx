@@ -2,7 +2,7 @@ import React from 'react';
 import { CommentObjectType } from '../../../generated/graphql';
 import { Reply, ArrowDropDownOutlined, ArrowDropUpOutlined, AttachmentOutlined } from '@material-ui/icons';
 
-import { Card, Badge, Typography, CardHeader, Avatar, IconButton, CardContent, Grid, Box } from '@material-ui/core';
+import { Badge, Typography, CardHeader, Avatar, IconButton, CardContent, Grid, Box } from '@material-ui/core';
 import styled from 'styled-components';
 import { getAvatarThumb } from '../../utils';
 import * as R from 'ramda';
@@ -29,9 +29,11 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
             <Box marginRight="0.5rem">
                 <AttachmentOutlined />
             </Box>
-            <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
-                <Reply />
-            </Badge>
+            {!disableClick && (
+                <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
+                    <Reply />
+                </Badge>
+            )}
         </Box>
     );
 
@@ -71,8 +73,13 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 };
 
-const StyledCommentCard = styled(Card)`
+const StyledCommentCard = styled(Box)`
     cursor: pointer;
+    border-bottom: var(--border);
+
+    &:hover {
+        background-color: var(--hover-opacity);
+    }
 
     .MuiCardHeader-root,
     .MuiCardContent-root {

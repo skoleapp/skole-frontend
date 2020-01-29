@@ -1,9 +1,11 @@
 import React from 'react';
-import { Formik, Field } from 'formik';
+import { Formik, Field, FormikActions } from 'formik';
 import { useTranslation } from '../../i18n';
 import { FormSubmitSection } from './FormSubmitSection';
 import { StyledForm } from './StyledForm';
 import { TextField } from 'formik-material-ui';
+import { useDispatch } from 'react-redux';
+import { toggleNotification, toggleCommentThread } from '../../actions';
 
 interface CreateCommentFormValues {
     message: string;
@@ -16,8 +18,14 @@ interface Props {
 
 export const CreateCommentForm: React.FC<Props> = ({ label, placeholder }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
-    const handleSubmit = (values: CreateCommentFormValues): void => console.log(values);
+    const handleSubmit = (values: CreateCommentFormValues, actions: FormikActions<CreateCommentFormValues>): void => {
+        actions.setSubmitting(false);
+        dispatch(toggleNotification(t('notifications:messageSubmitted')));
+        dispatch(toggleCommentThread(null));
+        console.log(values);
+    };
 
     const initialValues = {
         message: '',
