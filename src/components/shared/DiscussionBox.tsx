@@ -1,10 +1,9 @@
 import React from 'react';
 import { CommentObjectType } from '../../../generated/graphql';
 import { CommentCard } from './CommentCard';
-import { Typography, Box, Fab, CardContent } from '@material-ui/core';
+import { Typography, Box, Divider } from '@material-ui/core';
 import { useTranslation } from '../../i18n';
 import styled from 'styled-components';
-import { AddOutlined } from '@material-ui/icons';
 import { CreateCommentForm } from './CreateCommentForm';
 
 interface Props {
@@ -18,7 +17,7 @@ export const DiscussionBox: React.FC<Props> = ({ comments }) => {
         <Box className="message-area">
             {comments.length ? (
                 comments.map((c: CommentObjectType, i: number) => (
-                    <Box key={i} margin="0.5rem">
+                    <Box key={i} margin="0.25rem 0.25rem 0 0.25rem">
                         <CommentCard comment={c} />
                     </Box>
                 ))
@@ -29,40 +28,37 @@ export const DiscussionBox: React.FC<Props> = ({ comments }) => {
     );
 
     const renderInputArea = (
-        <Box className="md-up" padding="0.5rem">
+        <Box padding="0.5rem">
             <CreateCommentForm label={t('forms:message')} placeholder={t('forms:message')} />
-        </Box>
-    );
-
-    const renderNewMessageIcon = (
-        <Box className="md-down" display="flex" justifyContent="flex-end" padding="0.5rem">
-            <Fab color="primary" size="medium">
-                <AddOutlined />
-            </Fab>
         </Box>
     );
 
     return (
         <StyledDiscussionBox>
             {renderMessageArea}
+            <Divider />
             {renderInputArea}
-            {renderNewMessageIcon}
         </StyledDiscussionBox>
     );
 };
 
-const StyledDiscussionBox = styled(CardContent)`
+const StyledDiscussionBox = styled(Box)`
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    position: relative;
 
     .MuiInputBase-root {
         background-color: var(--white);
     }
 
+    // TODO: Make the messages container responsive and the messages scrollable.
     .message-area {
-        flex-grow: 1;
-        overflow-y: scroll;
-        max-height: 55rem;
+        // overflow-y: scroll;
+        background-color: var(--primary-opacity);
+        padding-bottom: 0.25rem;
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
     }
 `;
