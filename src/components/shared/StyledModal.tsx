@@ -15,14 +15,20 @@ export const StyledModal = styled(props => (
         padding: 0.5rem;
         height: 100%;
         width: 100%;
+        overflow-y: scroll;
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
 
         @media only screen and (max-width: ${breakpoints.MD}) {
-            overflow-y: scroll;
+            padding-bottom: 3rem; // Negate the bottom nav bar.
         }
 
         @media only screen and (min-width: ${breakpoints.MD}) {
             height: auto;
             max-width: 25rem;
+            max-height: 50rem;
         }
     }
 `;
