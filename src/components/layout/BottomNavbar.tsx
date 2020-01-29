@@ -60,6 +60,7 @@ const StyledBottomNavbar = styled(BottomNavigation)`
     width: 100%;
     height: 3rem !important;
     border-top: 0.05rem solid var(--grey);
+    z-index: 9999;
 
     .MuiButtonBase-root,
     .Mui-selected {
