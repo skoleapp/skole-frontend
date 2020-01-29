@@ -219,26 +219,30 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const renderDesktopContent = (
-            <Grid className="md-up" container>
-                <Grid item xs={12} md={7} lg={8}>
-                    {renderCourseInfo}
-                    <Divider />
-                    {renderResources}
+            <Box className="md-up" display="flex" flexGrow="1">
+                <Grid container xs={12} md={7} lg={8}>
+                    <StyledCard>
+                        <CardHeader title={fullName} />
+                        <Divider />
+                        {renderCourseInfo}
+                        <Divider />
+                        {renderResources}
+                    </StyledCard>
                 </Grid>
-                <Grid item xs={12} md={5} lg={4}>
-                    <DiscussionBox comments={comments} />
+                <Grid container xs={12} md={5} lg={4}>
+                    <StyledCard style={{ marginLeft: '0.5rem', height: '100%' }}>
+                        <CardHeader title={t('common:discussion')} />
+                        <Divider />
+                        <DiscussionBox comments={comments} />
+                    </StyledCard>
                 </Grid>
-            </Grid>
+            </Box>
         );
 
         return (
             <MainLayout title={fullName} backUrl maxWidth="xl">
-                <StyledCard>
-                    <CardHeader title={fullName} />
-                    <Divider />
-                    {renderMobileContent}
-                    {renderDesktopContent}
-                </StyledCard>
+                {renderMobileContent}
+                {renderDesktopContent}
             </MainLayout>
         );
     } else {

@@ -14,12 +14,6 @@ interface Props {
 export const DiscussionBox: React.FC<Props> = ({ comments }) => {
     const { t } = useTranslation();
 
-    const renderHeader = (
-        <Typography className="md-up" variant="subtitle1" color="textSecondary">
-            {t('common:discussion')}
-        </Typography>
-    );
-
     const renderMessageArea = (
         <Box className="message-area">
             {comments.length ? (
@@ -50,7 +44,6 @@ export const DiscussionBox: React.FC<Props> = ({ comments }) => {
 
     return (
         <StyledDiscussionBox>
-            {renderHeader}
             {renderMessageArea}
             {renderInputArea}
             {renderNewMessageIcon}
@@ -59,9 +52,9 @@ export const DiscussionBox: React.FC<Props> = ({ comments }) => {
 };
 
 const StyledDiscussionBox = styled(CardContent)`
-    height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     .MuiInputBase-root {
         background-color: var(--white);
@@ -69,6 +62,7 @@ const StyledDiscussionBox = styled(CardContent)`
 
     .message-area {
         flex-grow: 1;
-        // overflow-y: scroll;
+        overflow-y: scroll;
+        max-height: 55rem;
     }
 `;
