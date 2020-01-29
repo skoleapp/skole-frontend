@@ -7,7 +7,7 @@ import { LayoutProps } from '../../types';
 import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 import { CommentThread } from '../layout';
 
-interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch'>, ContainerProps {
+interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
     heading?: string;
 }
 
@@ -16,12 +16,13 @@ export const MainLayout: React.FC<Props> = ({
     heading,
     backUrl,
     disableSearch,
+    headerRight,
     children,
     ...containerProps
 }) => (
     <StyledMainLayout>
         <Head title={title} />
-        <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} />
+        <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
         <Container {...containerProps}>{children}</Container>
         <BottomNavbar />
         <Footer />
