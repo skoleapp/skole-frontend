@@ -51,7 +51,7 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
             />
             <CardContent>
                 <Grid container justify="space-between" alignItems="center">
-                    <Grid item xs={11} justify="flex-start">
+                    <Grid item container xs={11} justify="flex-start">
                         <Typography variant="body2">{comment.text}</Typography>
                     </Grid>
                     <Grid item container xs={1} direction="column" justify="center" alignItems="flex-end">
