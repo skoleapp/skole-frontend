@@ -36,4 +36,5 @@ export interface LayoutProps extends ContainerProps {
     renderAlert?: JSX.Element;
     renderDialog?: JSX.Element;
     disableSearch?: boolean;
+    headerRight?: JSX.Element;
 }

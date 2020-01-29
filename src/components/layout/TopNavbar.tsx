@@ -1,6 +1,5 @@
 import { AppBar, Box, IconButton, Toolbar } from '@material-ui/core';
 import { AccountCircle, ArrowBack, CloudUpload, SupervisedUserCircleOutlined } from '@material-ui/icons';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from '../../i18n';
 import { useSelector } from 'react-redux';
@@ -8,20 +7,15 @@ import styled from 'styled-components';
 
 import { Router } from '../../i18n';
 import { breakpoints } from '../../styles';
-import { State } from '../../types';
-import { ButtonLink, IconButtonLink, SettingsButton } from '../shared';
+import { State, LayoutProps } from '../../types';
+import { ButtonLink, IconButtonLink } from '../shared';
 import { Heading, Logo, TopNavbarSearchWidget } from '.';
 
-interface Props {
-    heading?: string;
-    backUrl?: boolean;
-    disableSearch?: boolean;
-}
+type Props = Pick<LayoutProps, 'heading' | 'backUrl' | 'disableSearch' | 'headerRight'>;
 
-export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch }) => {
+export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, headerRight }) => {
     const { user } = useSelector((state: State) => state.auth);
     const { t } = useTranslation();
-    const { pathname, query } = useRouter();
 
     const contentProps = {
         display: 'flex',
@@ -40,8 +34,9 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch }) 
                 <IconButtonLink icon={CloudUpload} href="/upload-resource" color="secondary" />
             )}
             {heading ? <Heading text={heading} /> : <Logo />}
-            {!!user && pathname === '/users/[id]' && query.id === user.id ? (
-                <SettingsButton color="secondary" />
+
+            {!!headerRight ? (
+                headerRight
             ) : (
                 <IconButtonLink href="/users" icon={SupervisedUserCircleOutlined} color="secondary" />
             )}
