@@ -43,6 +43,6 @@ const StyledShortcut = styled(Card)`
     }
 
     &:hover {
-        background-color: var(--primary-opacity);
+        background-color: var(--hover-opacity);
     }
 `;

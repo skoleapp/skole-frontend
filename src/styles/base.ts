@@ -16,12 +16,14 @@ export const base = css`
         --success: ${colors.success};
         --danger: ${colors.danger};
 
-        --primary-opacity: rgba(0, 0, 0, 0.1);
+        --hover-opacity: rgba(0, 0, 0, 0.05);
+        --border-color: rgba(0, 0, 0, 0.12);
         --dark-opacity: rgba(0, 0, 0, 0.75);
 
         // Misc
         --transition: all 0.15s ease-in;
         --border-radius: 0.25rem;
+        --border: 1px solid var(--border-color); // Default MUI border.
     }
 
     html,
