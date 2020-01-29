@@ -15,6 +15,9 @@ import {
     Box,
     Divider,
     Tab,
+    IconButton,
+    Fade,
+    Paper,
 } from '@material-ui/core';
 import {
     CloudUploadOutlined,
@@ -22,10 +25,11 @@ import {
     AccountCircleOutlined,
     SubjectOutlined,
     SchoolOutlined,
+    InfoOutlined,
 } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useState } from 'react';
 import { compose } from 'redux';
 
 import {
@@ -44,6 +48,8 @@ import {
     StyledTabs,
     TabPanel,
     DiscussionBox,
+    StyledModal,
+    ModalCloseIcon,
 } from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -57,6 +63,10 @@ interface Props extends I18nProps {
 const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
+    const [courseInfoVisible, setCourseInfoVisible] = useState(false);
+
+    const handleOpenCourseInfo = (): void => setCourseInfoVisible(true);
+    const handleCloseCourseInfo = (): void => setCourseInfoVisible(false);
 
     if (course) {
         const { subject, school, user } = course;
@@ -145,7 +155,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         </ListItemText>
                     </ListItem>
                 </StyledList>
-                <Box textAlign="left">
+                <Box textAlign="left" marginLeft="1rem">
                     <Typography className="label" variant="body2" color="textSecondary">
                         {t('common:created')} {created}
                     </Typography>
@@ -195,9 +205,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderMobileContent = (
             <Grid className="md-down" container>
-                <Grid item xs={12}>
-                    {renderCourseInfo}
-                    <Divider />
+                <StyledCard>
                     <StyledTabs
                         value={tabValue}
                         onChange={handleTabChange}
@@ -206,7 +214,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         variant="fullWidth"
                     >
                         <Tab label={t('common:resources')} />
-                        <Tab label={t('common:discussion')} />
+                        <Tab label={t('course:courseDiscussion')} />
                     </StyledTabs>
                     <TabPanel value={tabValue} index={0}>
                         {renderResources}
@@ -214,13 +222,13 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     <TabPanel value={tabValue} index={1}>
                         <DiscussionBox comments={comments} />
                     </TabPanel>
-                </Grid>
+                </StyledCard>
             </Grid>
         );
 
         const renderDesktopContent = (
-            <Box className="md-up" display="flex" flexGrow="1">
-                <Grid container xs={12} md={7} lg={8}>
+            <Grid container className="md-up">
+                <Grid item container xs={12} md={7} lg={8}>
                     <StyledCard>
                         <CardHeader title={fullName} />
                         <Divider />
@@ -229,20 +237,41 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         {renderResources}
                     </StyledCard>
                 </Grid>
-                <Grid container xs={12} md={5} lg={4}>
-                    <StyledCard style={{ marginLeft: '0.5rem', height: '100%' }}>
-                        <CardHeader title={t('common:discussion')} />
+                <Grid item container xs={12} md={5} lg={4}>
+                    <StyledCard marginLeft>
+                        <CardHeader title={t('course:courseDiscussion')} />
                         <Divider />
                         <DiscussionBox comments={comments} />
                     </StyledCard>
                 </Grid>
-            </Box>
+            </Grid>
+        );
+
+        const renderCourseInfoButton = (
+            <IconButton color="secondary" onClick={handleOpenCourseInfo}>
+                <InfoOutlined />
+            </IconButton>
+        );
+
+        const renderCourseInfoModal = (
+            <StyledModal open={!!courseInfoVisible} onClose={handleCloseCourseInfo}>
+                <Fade in={!!courseInfoVisible}>
+                    <Paper>
+                        <ModalCloseIcon onClick={handleCloseCourseInfo} />
+                        <Box textAlign="center">
+                            <CardHeader title={fullName} />
+                            {renderCourseInfo}
+                        </Box>
+                    </Paper>
+                </Fade>
+            </StyledModal>
         );
 
         return (
-            <MainLayout title={fullName} backUrl maxWidth="xl">
+            <MainLayout title={fullName} backUrl maxWidth="xl" headerRight={renderCourseInfoButton}>
                 {renderMobileContent}
                 {renderDesktopContent}
+                {renderCourseInfoModal}
             </MainLayout>
         );
     } else {
