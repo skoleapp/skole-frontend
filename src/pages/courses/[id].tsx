@@ -64,7 +64,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const [courseInfoVisible, setCourseInfoVisible] = useState(false);
-
     const handleOpenCourseInfo = (): void => setCourseInfoVisible(true);
     const handleCloseCourseInfo = (): void => setCourseInfoVisible(false);
 
