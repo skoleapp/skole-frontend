@@ -736,7 +736,7 @@ export type CourseDetailQuery = (
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
       )>, replyComments: Array<(
         { __typename?: 'CommentObjectType' }
-        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points'>
+        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
         & { user: Maybe<(
           { __typename?: 'UserObjectType' }
           & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -1240,6 +1240,7 @@ export const CourseDetailDocument = gql`
         attachment
         modified
         created
+        replyCount
         points
       }
       replyCount

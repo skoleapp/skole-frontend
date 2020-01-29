@@ -42,6 +42,7 @@ query CourseDetail($id: Int!) {
                 attachment
                 modified
                 created
+                replyCount
                 points
             }
             replyCount
