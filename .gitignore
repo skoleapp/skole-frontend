@@ -24,3 +24,10 @@ yarn-error.log*
 
 .next
 .next/
+
+# webstorm
+.idea/**/*.iml
+.idea/shelf
+.idea/tasks.xml
+.idea/usage.statistics.xml
+.idea/workspace.xml
