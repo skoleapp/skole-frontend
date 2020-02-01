@@ -66,7 +66,7 @@ const IndexPage: I18nPage = () => {
 
     const renderShortcut = ({ href, text, icon: Icon }: Shortcut): JSX.Element => (
         <Link href={href}>
-            <Card className="shortcut">
+            <Card>
                 <CardContent>
                     <Icon color="primary" />
                     <Typography variant="h2">{t(text)}</Typography>
@@ -77,11 +77,11 @@ const IndexPage: I18nPage = () => {
 
     return (
         <StyledIndexPage title={t('index:title')} disableSearch>
-            <Box marginTop="1rem">
+            <Box marginTop="4rem">
                 <Typography variant="h1">{t('index:slogan')}</Typography>
             </Box>
             <Box marginTop="1rem">{renderSearchWidget}</Box>
-            <Box className="flex-flow" display="flex" justifyContent="center" marginTop="2rem">
+            <Box className="shortcuts" display="flex" justifyContent="center" marginTop="2rem">
                 {shortcuts.map((s: Shortcut) => renderShortcut(s))}
             </Box>
             <Box marginTop="2rem">
@@ -118,28 +118,32 @@ const StyledIndexPage = styled(MainLayout)`
         }
     }
 
-    .shortcut {
-        margin: 0.5rem;
-        cursor: pointer;
-        width: 14rem;
-        height: 14rem;
+    .shortcuts {
+        flex-flow: row wrap;
 
-        .MuiCardContent-root {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .MuiCard-root {
+            margin: 0.5rem;
+            cursor: pointer;
+            width: 14rem;
+            height: 14rem;
 
-            .MuiSvgIcon-root {
-                height: 5rem;
-                width: 5rem;
-                margin: 0.5rem;
+            .MuiCardContent-root {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                .MuiSvgIcon-root {
+                    height: 5rem;
+                    width: 5rem;
+                    margin: 0.5rem;
+                }
             }
-        }
 
-        &:hover {
-            background-color: var(--hover-opacity);
+            &:hover {
+                background-color: var(--hover-opacity);
+            }
         }
     }
 `;

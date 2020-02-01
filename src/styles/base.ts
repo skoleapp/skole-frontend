@@ -54,10 +54,6 @@ export const base = css`
             }
         }
 
-        .flex-flow {
-            flex-flow: row wrap;
-        }
-
         .MuiLink-root {
             cursor: pointer;
         }
@@ -72,6 +68,10 @@ export const base = css`
 
         .MuiTypography-h3 {
             font-size: 1.25rem;
+        }
+
+        .MuiGrid-root {
+            flex-grow: 1;
         }
     }
 `;
