@@ -17,6 +17,7 @@ import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useSearch } from '../utils';
 import styled from 'styled-components';
+import { breakpoints } from '../styles';
 
 interface Shortcut {
     text: string;
@@ -77,7 +78,7 @@ const IndexPage: I18nPage = () => {
 
     return (
         <StyledIndexPage title={t('index:title')} disableSearch>
-            <Box marginTop="4rem">
+            <Box className="slogan">
                 <Typography variant="h1">{t('index:slogan')}</Typography>
             </Box>
             <Box marginTop="1rem">{renderSearchWidget}</Box>
@@ -99,6 +100,14 @@ const IndexPage: I18nPage = () => {
 };
 
 const StyledIndexPage = styled(MainLayout)`
+    .slogan {
+        margin-top: 1rem;
+
+        @media only screen and (min-width: ${breakpoints.MD}) {
+            margin-top: 4rem;
+        }
+    }
+
     .search-widget {
         .search-input {
             border-radius: var(--border-radius) 0 0 var(--border-radius);
