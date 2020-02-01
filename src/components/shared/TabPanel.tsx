@@ -1,13 +1,17 @@
-import { Box } from '@material-ui/core';
+import { Box, BoxProps } from '@material-ui/core';
 import React from 'react';
 
-interface TabPanelProps {
+interface TabPanelProps extends BoxProps {
     index: number;
     value: number;
 }
 
 export const TabPanel: React.FC<TabPanelProps> = ({ children, value, index, ...props }) => (
     <Box role="tabpanel" hidden={value !== index} {...props}>
-        {value === index && <Box>{children}</Box>}
+        {value === index && (
+            <Box flexGrow="1" display="flex">
+                {children}
+            </Box>
+        )}
     </Box>
 );

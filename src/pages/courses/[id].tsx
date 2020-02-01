@@ -176,7 +176,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography variant="subtitle1" color="textPrimary">
+                                <Typography variant="subtitle1" color="textSecondary" gutterBottom>
                                     {t('common:resources')}
                                 </Typography>
                             </TableCell>
@@ -209,7 +209,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const renderMobileContent = (
-            <Grid className="md-down" container>
+            <Grid container className="md-down">
                 <StyledCard>
                     <StyledTabs
                         value={tabValue}
@@ -224,7 +224,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     <TabPanel value={tabValue} index={0}>
                         {renderResources}
                     </TabPanel>
-                    <TabPanel value={tabValue} index={1}>
+                    <TabPanel value={tabValue} index={1} flexGrow="1" display="flex">
                         <DiscussionBox comments={comments} />
                     </TabPanel>
                 </StyledCard>

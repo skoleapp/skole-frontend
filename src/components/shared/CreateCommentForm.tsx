@@ -1,15 +1,10 @@
 import React from 'react';
 import { Formik, Field, FormikActions } from 'formik';
 import { useTranslation } from '../../i18n';
-import { FormSubmitSection } from './FormSubmitSection';
 import { StyledForm } from './StyledForm';
 import { TextField } from 'formik-material-ui';
 import { useDispatch } from 'react-redux';
 import { toggleNotification, toggleCommentThread } from '../../actions';
-
-interface CreateCommentFormValues {
-    message: string;
-}
 
 interface Props {
     label: string;
@@ -20,7 +15,7 @@ export const CreateCommentForm: React.FC<Props> = ({ label, placeholder }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const handleSubmit = (values: CreateCommentFormValues, actions: FormikActions<CreateCommentFormValues>): void => {
+    const handleSubmit = (values: unknown, actions: FormikActions<unknown>): void => {
         actions.setSubmitting(false);
         dispatch(toggleNotification(t('notifications:messageSubmitted')));
         dispatch(toggleCommentThread(null));
@@ -33,7 +28,7 @@ export const CreateCommentForm: React.FC<Props> = ({ label, placeholder }) => {
 
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues}>
-            {(props): JSX.Element => (
+            {(): JSX.Element => (
                 <StyledForm>
                     <Field
                         name="message"
@@ -41,11 +36,9 @@ export const CreateCommentForm: React.FC<Props> = ({ label, placeholder }) => {
                         placeholder={placeholder}
                         variant="outlined"
                         component={TextField}
-                        rows="5"
                         fullWidth
-                        multiline
                     />
-                    <FormSubmitSection submitButtonText={t('common:send')} {...props} />
+                    <input type="submit" value="Submit" />
                 </StyledForm>
             )}
         </Formik>

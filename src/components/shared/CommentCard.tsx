@@ -75,7 +75,6 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
 
 const StyledCommentCard = styled(Box)`
     cursor: pointer;
-    border-bottom: var(--border);
 
     &:hover {
         background-color: var(--hover-opacity);

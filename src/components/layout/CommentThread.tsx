@@ -1,5 +1,5 @@
 import { StyledModal } from '../shared/StyledModal';
-import { Fade, Paper } from '@material-ui/core';
+import { Fade, Paper, Box, Typography, Divider } from '@material-ui/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleCommentThread } from '../../actions';
@@ -9,6 +9,7 @@ import { AnyAction } from 'redux';
 import { DiscussionBox, CommentCard } from '../shared';
 import * as R from 'ramda';
 import { CommentObjectType } from '../../../generated/graphql';
+import styled from 'styled-components';
 
 export const CommentThread: React.FC = () => {
     const { commentThread } = useSelector((state: State) => state.ui);
@@ -17,14 +18,27 @@ export const CommentThread: React.FC = () => {
     const comments = R.propOr([], 'replyComments', commentThread) as CommentObjectType[];
 
     return (
-        <StyledModal open={!!commentThread} onClose={handleClose}>
+        <StyledCommentThread open={!!commentThread} onClose={handleClose}>
             <Fade in={!!commentThread}>
                 <Paper>
                     <ModalCloseIcon onClick={handleClose} />
                     {!!commentThread && <CommentCard comment={commentThread} />}
+                    <Box padding="0.25rem" display="flex" alignItems="center">
+                        <Typography variant="subtitle2" color="textSecondary">
+                            {R.propOr('-', 'replyCount', commentThread)} replies
+                        </Typography>
+                        <Divider />
+                    </Box>
                     <DiscussionBox comments={comments} thread />
                 </Paper>
             </Fade>
-        </StyledModal>
+        </StyledCommentThread>
     );
 };
+
+const StyledCommentThread = styled(StyledModal)`
+    .MuiDivider-root {
+        flex-grow: 1;
+        margin-left: 0.5rem;
+    }
+`;

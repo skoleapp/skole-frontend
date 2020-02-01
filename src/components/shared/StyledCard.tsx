@@ -7,6 +7,8 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
     flex-grow: 1;
     overflow-y: ${({ scrollable }): string => (scrollable ? 'scroll !important' : 'inherit')};
     margin-left: ${({ marginLeft }): string => (!!marginLeft ? '0.5rem' : '0')};
+    display: flex;
+    flex-direction: column;
 
     .main-avatar {
         height: 10rem;

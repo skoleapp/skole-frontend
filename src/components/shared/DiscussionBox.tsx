@@ -1,7 +1,7 @@
 import React from 'react';
 import { CommentObjectType } from '../../../generated/graphql';
 import { CommentCard } from './CommentCard';
-import { Box, Divider } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { useTranslation } from '../../i18n';
 import styled from 'styled-components';
 import { CreateCommentForm } from './CreateCommentForm';
@@ -25,7 +25,7 @@ export const DiscussionBox: React.FC<Props> = ({ comments, thread }) => {
     );
 
     const renderInputArea = (
-        <Box padding="0.5rem">
+        <Box className="input-area">
             <CreateCommentForm
                 label={!!thread ? t('forms:reply') : t('forms:message')}
                 placeholder={!!thread ? t('forms:reply') : t('forms:message')}
@@ -36,7 +36,6 @@ export const DiscussionBox: React.FC<Props> = ({ comments, thread }) => {
     return (
         <StyledDiscussionBox>
             {renderMessageArea}
-            <Divider />
             {renderInputArea}
         </StyledDiscussionBox>
     );
@@ -45,14 +44,30 @@ export const DiscussionBox: React.FC<Props> = ({ comments, thread }) => {
 const StyledDiscussionBox = styled(Box)`
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    position: relative;
 
     // TODO: Make the messages container responsive and the messages scrollable.
     .message-area {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 5.25rem;
         overflow-y: scroll;
-        margin-bottom: -1px; // Negate the bottom border for the last comment.
 
         ::-webkit-scrollbar {
             display: none;
         }
+    }
+
+    .input-area {
+        position: absolute;
+        top: auto;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 0.5rem;
+        border-top: var(--border);
     }
 `;
