@@ -6,6 +6,7 @@ import {
     DialogContentText,
     DialogTitle,
     Typography,
+    Grid,
 } from '@material-ui/core';
 import { CheckOutlined } from '@material-ui/icons';
 import cookie from 'cookie';
@@ -45,22 +46,22 @@ export const SkoleGDPR: React.FC = () => {
     };
 
     const renderWarning = (
-        <>
-            <Box margin="0.5rem" flex="0.7" flexGrow="1">
+        <Grid container justify="center" alignItems="center">
+            <Grid item xs={12} md={8}>
                 This website stores cookies on your computer. These cookies are used to collect information about how
                 you interact with our website and allow us to remember you. We use this information in order to improve
                 and customize your browsing experience and for analytics and metrics about our visitors both on this
                 website and other media. To find out more about the cookies we use, see our Privacy Policy.
-            </Box>
-            <Box className="flex-flow" margin="0.5rem">
+            </Grid>
+            <Grid item container xs={12} md={4} justify="space-evenly" alignItems="center">
                 <Button onClick={openPrivacyPreferences} color="secondary" fullWidth>
                     privacy preferences
                 </Button>
-                <Button onClick={handleConsent} startIcon={<CheckOutlined />} variant="contained" fullWidth>
+                <Button onClick={handleConsent} endIcon={<CheckOutlined />} variant="contained" fullWidth>
                     i agree
                 </Button>
-            </Box>
-        </>
+            </Grid>
+        </Grid>
     );
 
     const renderPrivacyPreferences = (
@@ -116,7 +117,7 @@ export const SkoleGDPR: React.FC = () => {
     );
 
     return !consent ? (
-        <StyledSkoleGDPR className="flex-flow" display="flex">
+        <StyledSkoleGDPR>
             {renderWarning}
             {renderPrivacyPreferences}
         </StyledSkoleGDPR>
@@ -128,11 +129,13 @@ const StyledSkoleGDPR = styled(Box)`
     bottom: 0;
     width: 100%;
     color: var(--white);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 0.5rem;
     background-color: var(--dark-opacity);
     text-align: left;
+
+    @media only screen and (max-width: ${breakpoints.SM}) {
+        bottom: 3rem;
+    }
 
     .MuiButton-root {
         white-space: nowrap;
