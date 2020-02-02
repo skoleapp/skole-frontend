@@ -25,14 +25,18 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     };
 
     const renderAction = (
-        <Box display="flex">
-            <Box marginRight="0.5rem">
-                <AttachmentOutlined />
-            </Box>
+        <Box display="flex" justifyContent="center" alignItems="center">
+            {!!comment.attachment && (
+                <Box margin="0.75rem 0.25rem 0 0">
+                    <AttachmentOutlined />
+                </Box>
+            )}
             {!disableClick && (
-                <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
-                    <Reply />
-                </Badge>
+                <Box margin="0.75rem 0.75rem 0 0.5rem">
+                    <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
+                        <Reply />
+                    </Badge>
+                </Box>
             )}
         </Box>
     );
@@ -95,7 +99,7 @@ const StyledCommentCard = styled(Box)`
     }
 
     .MuiCardHeader-action {
-        margin: 0.75rem 0.75rem 0 0;
+        padding: 0.5rem;
     }
 
     .MuiAvatar-root {
