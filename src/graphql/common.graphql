@@ -65,7 +65,7 @@ mutation CreateComment(
             comment: $comment
         }
     ) {
-        comment {
+        comments {
             id
             user {
                 id

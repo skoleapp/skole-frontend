@@ -101,7 +101,7 @@ export type CreateCommentMutationInput = {
 
 export type CreateCommentMutationPayload = {
    __typename?: 'CreateCommentMutationPayload',
-  comment?: Maybe<CommentObjectType>,
+  comments?: Maybe<Array<Maybe<CommentObjectType>>>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -720,7 +720,7 @@ export type CreateCommentMutation = (
   { __typename?: 'Mutation' }
   & { createComment: Maybe<(
     { __typename?: 'CreateCommentMutationPayload' }
-    & { comment: Maybe<(
+    & { comments: Maybe<Array<Maybe<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
       & { user: Maybe<(
@@ -734,7 +734,7 @@ export type CreateCommentMutation = (
           & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
         )> }
       )> }
-    )>, errors: Maybe<Array<Maybe<(
+    )>>>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
@@ -1233,7 +1233,7 @@ export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTyp
 export const CreateCommentDocument = gql`
     mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $resourcePart: ID, $comment: ID) {
   createComment(input: {text: $text, attachment: $attachment, course: $course, resource: $resource, resourcePart: $resourcePart, comment: $comment}) {
-    comment {
+    comments {
       id
       user {
         id
