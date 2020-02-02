@@ -180,11 +180,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                                     {t('common:title')}
                                 </Typography>
                             </TableCell>
-                            <TableCell>
-                                <Typography variant="subtitle1" color="textSecondary" gutterBottom>
-                                    {t('common:resources')}
-                                </Typography>
-                            </TableCell>
                             <TableCell align="right">
                                 <Typography variant="subtitle2" color="textSecondary">
                                     {t('common:points')}
@@ -198,7 +193,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                                 <TableCell>
                                     <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
                                 </TableCell>
-                                <TableCell />
                                 <TableCell align="right">
                                     <Typography variant="subtitle1">{R.propOr('-', 'points', r)}</Typography>
                                 </TableCell>
