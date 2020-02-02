@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CommentObjectType } from '../../../generated/graphql';
 import { CommentCard } from './CommentCard';
 import { Box } from '@material-ui/core';
@@ -13,9 +13,11 @@ interface Props {
     target: CommentTarget;
 }
 
-export const DiscussionBox: React.FC<Props> = ({ comments, thread, target }) => {
+export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, thread, target }) => {
     const { t } = useTranslation();
     const labelPlaceholder = !!thread ? t('forms:reply') : t('forms:message');
+    const [comments, setComments] = useState(initialComments);
+    const appendComments = (comments: CommentObjectType[]): void => setComments(comments);
 
     const renderMessageArea = (
         <Box className="message-area">
@@ -29,7 +31,12 @@ export const DiscussionBox: React.FC<Props> = ({ comments, thread, target }) => 
 
     const renderInputArea = (
         <Box className="input-area">
-            <CreateCommentForm label={labelPlaceholder} placeholder={labelPlaceholder} target={target} />
+            <CreateCommentForm
+                label={labelPlaceholder}
+                placeholder={labelPlaceholder}
+                target={target}
+                appendComments={appendComments}
+            />
         </Box>
     );
 

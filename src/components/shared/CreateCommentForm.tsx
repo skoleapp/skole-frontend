@@ -5,7 +5,7 @@ import { StyledForm } from './StyledForm';
 import { TextField } from 'formik-material-ui';
 import { useDispatch } from 'react-redux';
 import { toggleNotification } from '../../actions';
-import { useCreateCommentMutation, CreateCommentMutation } from '../../../generated/graphql';
+import { useCreateCommentMutation, CreateCommentMutation, CommentObjectType } from '../../../generated/graphql';
 import { useForm } from '../../utils';
 import { CommentTarget } from '../../types';
 
@@ -13,6 +13,7 @@ interface Props {
     label: string;
     placeholder: string;
     target: CommentTarget;
+    appendComments: (comments: CommentObjectType[]) => void;
 }
 
 interface CreateCommentFormValues {
@@ -24,20 +25,23 @@ interface CreateCommentFormValues {
     comment?: string;
 }
 
-export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target }) => {
+export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target, appendComments }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { ref, setSubmitting } = useForm<CreateCommentFormValues>();
+    const { ref, setSubmitting, resetForm } = useForm<CreateCommentFormValues>();
 
     const onError = (): void => {
         dispatch(toggleNotification(t('notifications:messageError')));
     };
 
     const onCompleted = ({ createComment }: CreateCommentMutation): void => {
-        if (createComment && createComment.errors) {
-            onError();
-        } else {
-            dispatch(toggleNotification(t('notifications:messageSubmitted')));
+        if (createComment) {
+            if (createComment.errors) {
+                onError();
+            } else if (createComment.comments) {
+                dispatch(toggleNotification(t('notifications:messageSubmitted')));
+                appendComments(createComment.comments as CommentObjectType[]);
+            }
         }
     };
 
@@ -46,6 +50,7 @@ export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
         await createCommentMutation({ variables: { ...values } });
         setSubmitting(false);
+        resetForm();
     };
 
     const initialValues = {

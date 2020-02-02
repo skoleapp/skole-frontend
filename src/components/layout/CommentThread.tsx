@@ -1,6 +1,6 @@
 import { StyledModal } from '../shared/StyledModal';
 import { Fade, Paper, Box, Typography, Divider } from '@material-ui/core';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleCommentThread } from '../../actions';
 import { State } from '../../types';
@@ -15,12 +15,23 @@ export const CommentThread: React.FC = () => {
     const { commentThread } = useSelector((state: State) => state.ui);
     const dispatch = useDispatch();
     const handleClose = (): AnyAction => dispatch((toggleCommentThread(null) as unknown) as AnyAction);
-    const comments = R.propOr([], 'replyComments', commentThread) as CommentObjectType[];
+    const [comments, setComments] = useState();
+    const appendComments = (comments: CommentObjectType[]): void => setComments(comments);
+
+    useEffect(() => {
+        const initialComments = R.propOr([], 'replyComments', commentThread) as CommentObjectType[];
+        setComments(initialComments);
+
+        return (): void => {
+            setComments([]);
+        };
+    }, [commentThread]);
 
     const discussionBoxProps = {
         comments,
         target: { comment: R.propOr(null, 'id', commentThread) as string | null },
         thread: true,
+        appendComments,
     };
 
     return (

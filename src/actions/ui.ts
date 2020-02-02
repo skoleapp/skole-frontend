@@ -15,5 +15,5 @@ export const toggleSettings = (payload: boolean) => (dispatch: Dispatch<AnyActio
 };
 
 export const toggleCommentThread = (payload: CommentObjectType | null) => (dispatch: Dispatch<AnyAction>): void => {
-    return dispatch({ type: TOGGLE_COMMENT_THREAD, payload });
+    dispatch({ type: TOGGLE_COMMENT_THREAD, payload });
 };
