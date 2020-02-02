@@ -65,17 +65,6 @@ const IndexPage: I18nPage = () => {
         </form>
     );
 
-    const renderShortcut = ({ href, text, icon: Icon }: Shortcut): JSX.Element => (
-        <Link href={href}>
-            <Card>
-                <CardContent>
-                    <Icon color="primary" />
-                    <Typography variant="h2">{t(text)}</Typography>
-                </CardContent>
-            </Card>
-        </Link>
-    );
-
     return (
         <StyledIndexPage title={t('index:title')} disableSearch>
             <Box className="slogan">
@@ -83,7 +72,16 @@ const IndexPage: I18nPage = () => {
             </Box>
             <Box marginTop="1rem">{renderSearchWidget}</Box>
             <Box className="shortcuts" display="flex" justifyContent="center" marginTop="2rem">
-                {shortcuts.map((s: Shortcut) => renderShortcut(s))}
+                {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+                    <Link href={href} key={i}>
+                        <Card>
+                            <CardContent>
+                                <Icon color="primary" />
+                                <Typography variant="h2">{t(text)}</Typography>
+                            </CardContent>
+                        </Card>
+                    </Link>
+                ))}
             </Box>
             <Box marginTop="2rem">
                 <Typography variant="h3" gutterBottom>
