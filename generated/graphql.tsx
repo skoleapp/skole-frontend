@@ -706,6 +706,41 @@ export type ResourceTypesQuery = (
   )>>> }
 );
 
+export type CreateCommentMutationVariables = {
+  text: Scalars['String'],
+  attachment?: Maybe<Scalars['String']>,
+  course?: Maybe<Scalars['ID']>,
+  resource?: Maybe<Scalars['ID']>,
+  resourcePart?: Maybe<Scalars['ID']>,
+  comment?: Maybe<Scalars['ID']>
+};
+
+
+export type CreateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment: Maybe<(
+    { __typename?: 'CreateCommentMutationPayload' }
+    & { comment: Maybe<(
+      { __typename?: 'CommentObjectType' }
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
+      & { user: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+      )>, replyComments: Array<(
+        { __typename?: 'CommentObjectType' }
+        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points'>
+        & { user: Maybe<(
+          { __typename?: 'UserObjectType' }
+          & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+        )> }
+      )> }
+    )>, errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
+  )> }
+);
+
 export type CourseDetailQueryVariables = {
   id: Scalars['Int']
 };
@@ -736,7 +771,7 @@ export type CourseDetailQuery = (
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
       )>, replyComments: Array<(
         { __typename?: 'CommentObjectType' }
-        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
+        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points'>
         & { user: Maybe<(
           { __typename?: 'UserObjectType' }
           & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -1195,6 +1230,51 @@ export const ResourceTypesDocument = gql`
       
 export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQuery>;
 export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
+export const CreateCommentDocument = gql`
+    mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $resourcePart: ID, $comment: ID) {
+  createComment(input: {text: $text, attachment: $attachment, course: $course, resource: $resource, resourcePart: $resourcePart, comment: $comment}) {
+    comment {
+      id
+      user {
+        id
+        username
+        avatarThumbnail
+      }
+      text
+      attachment
+      modified
+      created
+      replyComments {
+        id
+        user {
+          id
+          username
+          avatarThumbnail
+        }
+        text
+        attachment
+        modified
+        created
+        points
+      }
+      replyCount
+      points
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type CreateCommentMutationFn = ApolloReactCommon.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+
+    export function useCreateCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+      return ApolloReactHooks.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, baseOptions);
+    }
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = ApolloReactCommon.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const CourseDetailDocument = gql`
     query CourseDetail($id: Int!) {
   course(courseId: $id) {
@@ -1240,7 +1320,6 @@ export const CourseDetailDocument = gql`
         attachment
         modified
         created
-        replyCount
         points
       }
       replyCount

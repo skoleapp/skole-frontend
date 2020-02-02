@@ -46,3 +46,55 @@ query ResourceTypes {
         name
     }
 }
+
+mutation CreateComment(
+    $text: String!,
+    $attachment: String,
+    $course: ID,
+    $resource: ID,
+    $resourcePart: ID,
+    $comment: ID,
+) {
+    createComment(
+        input: {
+            text: $text,
+            attachment: $attachment,
+            course: $course,
+            resource: $resource,
+            resourcePart: $resourcePart,
+            comment: $comment
+        }
+    ) {
+        comment {
+            id
+            user {
+                id
+                username
+                avatarThumbnail
+            }
+            text
+            attachment
+            modified
+            created
+            replyComments {
+                id
+                user {
+                    id
+                    username
+                    avatarThumbnail
+                }
+                text
+                attachment
+                modified
+                created
+                points
+            }
+            replyCount
+            points
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
