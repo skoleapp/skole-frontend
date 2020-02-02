@@ -38,3 +38,7 @@ export interface LayoutProps extends ContainerProps {
     disableSearch?: boolean;
     headerRight?: JSX.Element;
 }
+
+export interface CommentTarget {
+    [key: string]: string | null;
+}

@@ -17,6 +17,12 @@ export const CommentThread: React.FC = () => {
     const handleClose = (): AnyAction => dispatch((toggleCommentThread(null) as unknown) as AnyAction);
     const comments = R.propOr([], 'replyComments', commentThread) as CommentObjectType[];
 
+    const discussionBoxProps = {
+        comments,
+        target: { comment: R.propOr(null, 'id', commentThread) as string | null },
+        thread: true,
+    };
+
     return (
         <StyledCommentThread open={!!commentThread} onClose={handleClose}>
             <Fade in={!!commentThread}>
@@ -29,7 +35,7 @@ export const CommentThread: React.FC = () => {
                         </Typography>
                         <Divider />
                     </Box>
-                    <DiscussionBox comments={comments} thread />
+                    <DiscussionBox {...discussionBoxProps} />
                 </Paper>
             </Fade>
         </StyledCommentThread>

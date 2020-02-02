@@ -9,7 +9,7 @@ interface TabPanelProps extends BoxProps {
 export const TabPanel: React.FC<TabPanelProps> = ({ children, value, index, ...props }) => (
     <Box role="tabpanel" hidden={value !== index} {...props}>
         {value === index && (
-            <Box flexGrow="1" display="flex">
+            <Box flexGrow="1" display="flex" flexDirection="column">
                 {children}
             </Box>
         )}

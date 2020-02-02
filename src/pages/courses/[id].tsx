@@ -85,6 +85,11 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             query: { subjectId: R.propOr('', 'id', subject) as boolean[] },
         };
 
+        const discussionBoxProps = {
+            comments,
+            target: { course: course.id },
+        };
+
         const renderCourseInfo = (
             <CardContent>
                 <StyledList>
@@ -225,7 +230,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         {renderResources}
                     </TabPanel>
                     <TabPanel value={tabValue} index={1} flexGrow="1" display="flex">
-                        <DiscussionBox comments={comments} />
+                        <DiscussionBox {...discussionBoxProps} />
                     </TabPanel>
                 </StyledCard>
             </Grid>
@@ -246,7 +251,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     <StyledCard marginLeft>
                         <CardHeader title={t('course:courseDiscussion')} />
                         <Divider />
-                        <DiscussionBox comments={comments} />
+                        <DiscussionBox {...discussionBoxProps} />
                     </StyledCard>
                 </Grid>
             </Grid>

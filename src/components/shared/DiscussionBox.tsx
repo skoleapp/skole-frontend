@@ -5,14 +5,17 @@ import { Box } from '@material-ui/core';
 import { useTranslation } from '../../i18n';
 import styled from 'styled-components';
 import { CreateCommentForm } from './CreateCommentForm';
+import { CommentTarget } from '../../types';
 
 interface Props {
     comments: CommentObjectType[];
     thread?: boolean;
+    target: CommentTarget;
 }
 
-export const DiscussionBox: React.FC<Props> = ({ comments, thread }) => {
+export const DiscussionBox: React.FC<Props> = ({ comments, thread, target }) => {
     const { t } = useTranslation();
+    const labelPlaceholder = !!thread ? t('forms:reply') : t('forms:message');
 
     const renderMessageArea = (
         <Box className="message-area">
@@ -26,10 +29,7 @@ export const DiscussionBox: React.FC<Props> = ({ comments, thread }) => {
 
     const renderInputArea = (
         <Box className="input-area">
-            <CreateCommentForm
-                label={!!thread ? t('forms:reply') : t('forms:message')}
-                placeholder={!!thread ? t('forms:reply') : t('forms:message')}
-            />
+            <CreateCommentForm label={labelPlaceholder} placeholder={labelPlaceholder} target={target} />
         </Box>
     );
 
