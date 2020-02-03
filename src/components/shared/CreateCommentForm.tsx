@@ -10,6 +10,7 @@ import { useForm } from '../../utils';
 import { CommentTarget } from '../../types';
 
 interface Props {
+    label: string;
     placeholder: string;
     target: CommentTarget;
     appendComments: (comments: CommentObjectType[]) => void;
@@ -62,14 +63,7 @@ export const CreateCommentForm: React.FC<Props> = ({ placeholder, target, append
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
             {(): JSX.Element => (
                 <StyledForm>
-                    <Field
-                        name="text"
-                        placeholder={placeholder}
-                        variant="outlined"
-                        component={TextField}
-                        fullWidth
-                        autoComplete="off"
-                    />
+                    <Field name="text" placeholder={placeholder} variant="outlined" component={TextField} fullWidth />
                     <input type="submit" value="Submit" />
                 </StyledForm>
             )}
