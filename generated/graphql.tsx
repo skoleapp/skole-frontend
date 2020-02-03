@@ -124,6 +124,16 @@ export type CreateCourseMutationPayload = {
 
 
 
+export type DeleteCommentMutation = {
+   __typename?: 'DeleteCommentMutation',
+  comment?: Maybe<CommentObjectType>,
+};
+
+export type DeleteResourceMutation = {
+   __typename?: 'DeleteResourceMutation',
+  resource?: Maybe<ResourceObjectType>,
+};
+
 export type DeleteUserMutationInput = {
   password: Scalars['String'],
   id?: Maybe<Scalars['ID']>,
@@ -170,6 +180,7 @@ export type Mutation = {
   downvoteResource?: Maybe<DownvoteResourceMutation>,
   uploadResource?: Maybe<UploadResourceMutationPayload>,
   updateResource?: Maybe<UpdateResourceMutationPayload>,
+  deleteResource?: Maybe<DeleteResourceMutation>,
   createCourse?: Maybe<CreateCourseMutationPayload>,
   upvoteCourse?: Maybe<UpvoteCourseMutation>,
   downvoteCourse?: Maybe<DownvoteCourseMutation>,
@@ -178,6 +189,7 @@ export type Mutation = {
   downvoteComment?: Maybe<DownvoteCommentMutation>,
   createComment?: Maybe<CreateCommentMutationPayload>,
   updateComment?: Maybe<UpdateCommentMutationPayload>,
+  deleteComment?: Maybe<DeleteCommentMutation>,
 };
 
 
@@ -226,6 +238,11 @@ export type MutationUpdateResourceArgs = {
 };
 
 
+export type MutationDeleteResourceArgs = {
+  resourceId?: Maybe<Scalars['Int']>
+};
+
+
 export type MutationCreateCourseArgs = {
   input: CreateCourseMutationInput
 };
@@ -263,6 +280,11 @@ export type MutationCreateCommentArgs = {
 
 export type MutationUpdateCommentArgs = {
   input: UpdateCommentMutationInput
+};
+
+
+export type MutationDeleteCommentArgs = {
+  commentId?: Maybe<Scalars['Int']>
 };
 
 export type Query = {
@@ -865,22 +887,7 @@ export type SearchCoursesQuery = (
   & { courses: Maybe<Array<Maybe<(
     { __typename?: 'CourseObjectType' }
     & Pick<CourseObjectType, 'id' | 'name' | 'code'>
-  )>>>, school: Maybe<(
-    { __typename?: 'SchoolObjectType' }
-    & Pick<SchoolObjectType, 'id' | 'name'>
-  )>, subject: Maybe<(
-    { __typename?: 'SubjectObjectType' }
-    & Pick<SubjectObjectType, 'id' | 'name'>
-  )>, schoolType: Maybe<(
-    { __typename?: 'SchoolTypeObjectType' }
-    & Pick<SchoolTypeObjectType, 'id' | 'name'>
-  )>, country: Maybe<(
-    { __typename?: 'CountryObjectType' }
-    & Pick<CountryObjectType, 'id' | 'name'>
-  )>, city: Maybe<(
-    { __typename?: 'CityObjectType' }
-    & Pick<CityObjectType, 'id' | 'name'>
-  )> }
+  )>>> }
 );
 
 export type UploadResourceInitialDataQueryVariables = {
@@ -1443,26 +1450,6 @@ export const SearchCoursesDocument = gql`
     id
     name
     code
-  }
-  school(schoolId: $school) {
-    id
-    name
-  }
-  subject(subjectId: $subject) {
-    id
-    name
-  }
-  schoolType(schoolTypeId: $schoolType) {
-    id
-    name
-  }
-  country(countryId: $country) {
-    id
-    name
-  }
-  city(cityId: $city) {
-    id
-    name
   }
 }
     `;

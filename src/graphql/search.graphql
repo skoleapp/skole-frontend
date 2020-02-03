@@ -20,24 +20,4 @@ query SearchCourses(
         name
         code
     }
-    school(schoolId: $school) {
-        id
-        name
-    }
-    subject(subjectId: $subject) {
-        id
-        name
-    }
-    schoolType(schoolTypeId: $schoolType) {
-        id
-        name
-    }
-    country(countryId: $country) {
-        id
-        name
-    }
-    city(cityId: $city) {
-        id
-        name
-    }
 }
