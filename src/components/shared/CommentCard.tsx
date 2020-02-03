@@ -9,8 +9,7 @@ import * as R from 'ramda';
 import moment from 'moment';
 import { TextLink } from './TextLink';
 import { toggleCommentThread } from '../../actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../../types';
+import { useDispatch } from 'react-redux';
 
 interface Props {
     comment: CommentObjectType;
@@ -19,8 +18,6 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     const dispatch = useDispatch();
-    const { commentThread } = useSelector((state: State) => state.ui);
-
     const created = moment(comment.created).format('LL');
 
     const handleClick = (): void => {
@@ -51,7 +48,7 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 
     return (
-        <StyledCommentCard modalopen={!!commentThread ? 1 : 0} onClick={handleClick}>
+        <StyledCommentCard isThread={!!disableClick} onClick={handleClick}>
             <CardHeader
                 avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
                 action={renderAction}
@@ -80,10 +77,12 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 };
 
-const StyledCommentCard = styled(({ modalopen, ...other }) => <Box {...other} />)`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledCommentCard = styled(({ isThread, ...other }) => <Box {...other} />)`
+    // Disable hover background color and cursor mode when on message thread.
     &:hover {
-        cursor: ${({ modalopen }): string | false => !modalopen && 'pointer'};
-        background-color: ${({ modalopen }): string | false => !modalopen && 'var(--hover-opacity)'};
+        cursor: ${({ isThread }): string => (!isThread ? 'pointer' : 'inherit')};
+        background-color: ${({ isThread }): string => (!isThread ? 'var(--hover-opacity)' : 'inherit')};
     }
 
     .MuiCardHeader-root,
