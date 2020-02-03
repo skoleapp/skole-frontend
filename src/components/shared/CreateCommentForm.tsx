@@ -25,7 +25,7 @@ interface CreateCommentFormValues {
     comment?: string;
 }
 
-export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target, appendComments }) => {
+export const CreateCommentForm: React.FC<Props> = ({ placeholder, target, appendComments }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const { ref, setSubmitting, resetForm } = useForm<CreateCommentFormValues>();
@@ -63,14 +63,7 @@ export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target,
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
             {(): JSX.Element => (
                 <StyledForm>
-                    <Field
-                        name="text"
-                        label={label}
-                        placeholder={placeholder}
-                        variant="outlined"
-                        component={TextField}
-                        fullWidth
-                    />
+                    <Field name="text" placeholder={placeholder} variant="outlined" component={TextField} fullWidth />
                     <input type="submit" value="Submit" />
                 </StyledForm>
             )}
