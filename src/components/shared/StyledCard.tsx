@@ -9,6 +9,7 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
     margin-left: ${({ marginLeft }): string => (!!marginLeft ? '0.5rem' : '0')};
     display: flex;
     flex-direction: column;
+    height: 100%;
 
     .main-avatar {
         height: 10rem;

@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableRow, Typography, CardContent } from '@material-ui/core';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
@@ -158,27 +158,24 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         </Formik>
     );
 
-    const renderTableContent = (
-        <Table>
-            <TableBody>
-                {courses && courses.length ? (
-                    courses.map((c: CourseObjectType, i: number) => (
-                        <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
+    const renderTableContent =
+        courses && courses.length ? (
+            courses.map((c: CourseObjectType, i: number) => (
+                <Table key={i}>
+                    <TableBody>
+                        <TableRow onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
                             <TableCell>
                                 <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
                             </TableCell>
                         </TableRow>
-                    ))
-                ) : (
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
-                        </TableCell>
-                    </TableRow>
-                )}
-            </TableBody>
-        </Table>
-    );
+                    </TableBody>
+                </Table>
+            ))
+        ) : (
+            <CardContent>
+                <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
+            </CardContent>
+        );
 
     return (
         <FilterLayout<FilterSearchResultsFormValues>
@@ -202,6 +199,8 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
             query: SearchCoursesDocument,
             variables: query,
         });
+
+        console.log(data);
 
         return { ...data, ...nameSpaces };
     } catch {

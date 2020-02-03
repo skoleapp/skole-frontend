@@ -1,4 +1,14 @@
-import { Avatar, MenuItem, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import {
+    Avatar,
+    MenuItem,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Typography,
+    CardContent,
+} from '@material-ui/core';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Link from 'next/link';
@@ -68,45 +78,44 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         </Formik>
     );
 
-    const renderTableContent = (
-        <Table>
-            {users && users.length ? (
-                <>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {t('common:username')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {t('common:points')}
-                                </Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {users.map((u: UserObjectType, i: number) => (
-                            <Link href={`/users/${u.id}`} key={i}>
-                                <TableRow>
-                                    <TableCell className="user-cell">
-                                        <Avatar src={getAvatarThumb(u)} />
-                                        <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
-                                    </TableCell>
-                                </TableRow>
-                            </Link>
-                        ))}
-                    </TableBody>
-                </>
-            ) : (
+    const renderTableContent =
+        users && users.length ? (
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="subtitle1" color="textSecondary">
+                                {t('common:username')}
+                            </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Typography variant="subtitle1" color="textSecondary">
+                                {t('common:points')}
+                            </Typography>
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {users.map((u: UserObjectType, i: number) => (
+                        <Link href={`/users/${u.id}`} key={i}>
+                            <TableRow>
+                                <TableCell className="user-cell">
+                                    <Avatar src={getAvatarThumb(u)} />
+                                    <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
+                                </TableCell>
+                            </TableRow>
+                        </Link>
+                    ))}
+                </TableBody>
+            </Table>
+        ) : (
+            <CardContent>
                 <Typography variant="subtitle1">{t('users:notFound')}</Typography>
-            )}
-        </Table>
-    );
+            </CardContent>
+        );
 
     return (
         <FilterLayout<FilterUsersFormValues>
