@@ -85,8 +85,8 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
 
 const StyledCommentCard = styled(Box)`
     &:hover {
-        cursor: ${props => (!!props.theme.modalOpen ? 'initial' : 'pointer')};
-        background-color: ${props => (!!props.theme.modalOpen ? 'initial' : 'rgba(0, 0, 0, 0.05)')};
+        cursor: ${props => !props.theme.modalOpen && 'pointer'};
+        background-color: ${props => !props.theme.modalOpen && 'rgba(0, 0, 0, 0.05)'};
     }
 
     .MuiCardHeader-root,
