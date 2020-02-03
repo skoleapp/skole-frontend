@@ -63,7 +63,14 @@ export const CreateCommentForm: React.FC<Props> = ({ placeholder, target, append
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
             {(): JSX.Element => (
                 <StyledForm>
-                    <Field name="text" placeholder={placeholder} variant="outlined" component={TextField} fullWidth />
+                    <Field
+                        name="text"
+                        placeholder={placeholder}
+                        variant="outlined"
+                        component={TextField}
+                        fullWidth
+                        autoComplete="off"
+                    />
                     <input type="submit" value="Submit" />
                 </StyledForm>
             )}
