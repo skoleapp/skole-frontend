@@ -3,13 +3,14 @@ import { CommentObjectType } from '../../../generated/graphql';
 import { Reply, ArrowDropDownOutlined, ArrowDropUpOutlined, AttachmentOutlined } from '@material-ui/icons';
 
 import { Badge, Typography, CardHeader, Avatar, IconButton, CardContent, Grid, Box } from '@material-ui/core';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { getAvatarThumb } from '../../utils';
 import * as R from 'ramda';
 import moment from 'moment';
 import { TextLink } from './TextLink';
 import { toggleCommentThread } from '../../actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from '../../types';
 
 interface Props {
     comment: CommentObjectType;
@@ -18,6 +19,9 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     const dispatch = useDispatch();
+    const { commentThread } = useSelector((state: State) => state.ui);
+    const theme = { modalOpen: !!commentThread };
+
     const created = moment(comment.created).format('LL');
 
     const handleClick = (): void => {
@@ -48,40 +52,41 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 
     return (
-        <StyledCommentCard onClick={handleClick}>
-            <CardHeader
-                avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
-                action={renderAction}
-                title={renderTitle}
-                subheader={created}
-            />
-            <CardContent>
-                <Grid container justify="space-between" alignItems="center">
-                    <Grid item container xs={11} justify="flex-start">
-                        <Typography variant="body2">{comment.text}</Typography>
+        <ThemeProvider theme={theme}>
+            <StyledCommentCard onClick={handleClick}>
+                <CardHeader
+                    avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
+                    action={renderAction}
+                    title={renderTitle}
+                    subheader={created}
+                />
+                <CardContent>
+                    <Grid container justify="space-between" alignItems="center">
+                        <Grid item container xs={11} justify="flex-start">
+                            <Typography variant="body2">{comment.text}</Typography>
+                        </Grid>
+                        <Grid item container xs={1} direction="column" justify="center" alignItems="flex-end">
+                            <IconButton>
+                                <ArrowDropUpOutlined />
+                            </IconButton>
+                            <Box margin="0.25rem 0.6rem">
+                                <Typography variant="body2">{comment.points}</Typography>
+                            </Box>
+                            <IconButton>
+                                <ArrowDropDownOutlined />
+                            </IconButton>
+                        </Grid>
                     </Grid>
-                    <Grid item container xs={1} direction="column" justify="center" alignItems="flex-end">
-                        <IconButton>
-                            <ArrowDropUpOutlined />
-                        </IconButton>
-                        <Box margin="0.25rem 0.6rem">
-                            <Typography variant="body2">{comment.points}</Typography>
-                        </Box>
-                        <IconButton>
-                            <ArrowDropDownOutlined />
-                        </IconButton>
-                    </Grid>
-                </Grid>
-            </CardContent>
-        </StyledCommentCard>
+                </CardContent>
+            </StyledCommentCard>
+        </ThemeProvider>
     );
 };
 
 const StyledCommentCard = styled(Box)`
-    cursor: pointer;
-
     &:hover {
-        background-color: var(--hover-opacity);
+        cursor: ${props => (!!props.theme.modalOpen ? 'initial' : 'pointer')};
+        background-color: ${props => (!!props.theme.modalOpen ? 'initial' : 'rgba(0, 0, 0, 0.05)')};
     }
 
     .MuiCardHeader-root,
