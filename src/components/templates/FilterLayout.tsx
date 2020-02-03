@@ -58,14 +58,14 @@ export const FilterLayout = <T extends {}>({
 
     const renderDesktopContent = (
         <Grid container className="md-up">
-            <Grid item xs={5} md={4} lg={3}>
+            <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
                     <CardHeader subheader={t('common:advancedSearch')} />
                     <Divider />
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
             </Grid>
-            <Grid item xs={7} md={8} lg={9}>
+            <Grid item container xs={7} md={8} lg={9}>
                 <StyledCard marginLeft>
                     <CardHeader subheader={t('common:searchResults')} />
                     <Divider />
