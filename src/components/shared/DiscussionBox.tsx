@@ -23,7 +23,7 @@ export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, thre
         <Box className="message-area">
             {comments.map((c: CommentObjectType, i: number) => (
                 <Box key={i}>
-                    <CommentCard comment={c} modalOpen={!!thread} />
+                    <CommentCard comment={c} modalOpen={!thread} />
                 </Box>
             ))}
         </Box>
