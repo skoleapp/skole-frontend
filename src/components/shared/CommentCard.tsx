@@ -51,7 +51,7 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 
     return (
-        <StyledCommentCard modalopen={!!commentThread} onClick={handleClick}>
+        <StyledCommentCard modalopen={!!commentThread ? 1 : 0} onClick={handleClick}>
             <CardHeader
                 avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
                 action={renderAction}
