@@ -9,20 +9,22 @@ import * as R from 'ramda';
 import moment from 'moment';
 import { TextLink } from './TextLink';
 import { toggleCommentThread } from '../../actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from '../../types';
 
 interface Props {
     comment: CommentObjectType;
-    modalOpen?: boolean;
+    disableClick?: boolean;
 }
 
-export const CommentCard: React.FC<Props> = ({ comment, modalOpen }) => {
+export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     const dispatch = useDispatch();
+    const { commentThread } = useSelector((state: State) => state.ui);
 
     const created = moment(comment.created).format('LL');
 
     const handleClick = (): void => {
-        !modalOpen && dispatch(toggleCommentThread(comment));
+        !disableClick && dispatch(toggleCommentThread(comment));
     };
 
     const renderAction = (
@@ -32,7 +34,7 @@ export const CommentCard: React.FC<Props> = ({ comment, modalOpen }) => {
                     <AttachmentOutlined />
                 </Box>
             )}
-            {!modalOpen && (
+            {!disableClick && (
                 <Box margin="0.75rem 0.75rem 0 0.5rem">
                     <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
                         <Reply />
@@ -49,7 +51,7 @@ export const CommentCard: React.FC<Props> = ({ comment, modalOpen }) => {
     );
 
     return (
-        <StyledCommentCard modalOpen onClick={handleClick}>
+        <StyledCommentCard modalopen={!!commentThread} onClick={handleClick}>
             <CardHeader
                 avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
                 action={renderAction}
@@ -80,8 +82,8 @@ export const CommentCard: React.FC<Props> = ({ comment, modalOpen }) => {
 
 const StyledCommentCard: any = styled(Box)`
     &:hover {
-        cursor: ${(props: any) => !props.modalOpen && 'pointer'};
-        background-color: ${(props: any) => !props.modalOpen && 'var(--hover-opacity)'};
+        cursor: ${(props: any) => !props.modalopen && 'pointer'};
+        background-color: ${(props: any) => !props.modalopen && 'var(--hover-opacity)'};
     }
 
     .MuiCardHeader-root,
