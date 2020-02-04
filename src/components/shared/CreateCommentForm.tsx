@@ -10,7 +10,6 @@ import { useForm } from '../../utils';
 import { CommentTarget } from '../../types';
 
 interface Props {
-    label: string;
     placeholder: string;
     target: CommentTarget;
     appendComments: (comments: CommentObjectType[]) => void;
