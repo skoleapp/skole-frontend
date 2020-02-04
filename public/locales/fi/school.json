@@ -1,4 +1,6 @@
 {
     "seeCoursesButton": "Katso kurssit!",
+    "noSubjects": "Tällä koululla ei ole oppiaineita...",
+    "noCourses": "Tällä koululla ei ole kursseja...",
     "notFound": "Koulua ei löytynyt..."
 }

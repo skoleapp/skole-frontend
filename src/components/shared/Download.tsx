@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-
 import { Button } from '@material-ui/core';
 import { CloudDownload } from '@material-ui/icons';
-import { openNotification } from '../../actions';
+import React, { useState } from 'react';
+import { useTranslation } from '../../i18n';
 import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+
+import { toggleNotification } from '../../actions';
 
 interface Props {
     url: string;
@@ -35,7 +35,7 @@ export const Download: React.FC<Props> = ({ url, fileName }) => {
             document.body.appendChild(a);
             a.click();
         } catch {
-            dispatch(openNotification(t('notification:errorDownLoadingResource')));
+            dispatch(toggleNotification(t('notification:errorDownLoadingResource')));
         }
     };
 

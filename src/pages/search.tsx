@@ -1,55 +1,56 @@
+import { Table, TableBody, TableCell, TableRow, Typography, CardContent } from '@material-ui/core';
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from '../i18n';
+import { compose } from 'redux';
 
-import { AutoCompleteField, FilterLayout, FormSubmitSection, StyledForm } from '../components';
 import {
     CitiesDocument,
-    CityType,
+    CityObjectType,
     CountriesDocument,
-    CountryType,
-    CourseType,
-    SchoolType,
+    CountryObjectType,
+    CourseObjectType,
+    SchoolObjectType,
+    SchoolsDocument,
     SchoolTypeObjectType,
     SchoolTypesDocument,
-    SchoolsDocument,
     SearchCoursesDocument,
-    SubjectType,
+    SubjectObjectType,
     SubjectsDocument,
 } from '../../generated/graphql';
-import { Field, Formik } from 'formik';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Router, includeDefaultNamespaces } from '../i18n';
-import { Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { getFullCourseName, useAuthSync, useFilters } from '../utils';
+import { AutoCompleteField, FilterLayout, FormSubmitSection, StyledForm } from '../components';
+import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
-import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { getFullCourseName, useAuthSync, useFilters } from '../utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
     courseCode: string;
-    school: SchoolType | null;
-    subject: SubjectType | null;
+    school: SchoolObjectType | null;
+    subject: SubjectObjectType | null;
     schoolType: SchoolTypeObjectType | null;
-    country: CountryType | null;
-    city: CityType | null;
+    country: CountryObjectType | null;
+    city: CityObjectType | null;
 }
 
 interface Props {
-    courses?: CourseType[];
-    school?: SchoolType;
-    subject?: SubjectType;
+    courses?: CourseObjectType[];
+    school?: SchoolObjectType;
+    subject?: SubjectObjectType;
     schoolType?: SchoolTypeObjectType;
-    country?: CountryType;
-    city?: CityType;
+    country?: CountryObjectType;
+    city?: CityObjectType;
 }
 
 const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, country, city }) => {
-    const filterProps = useFilters<FilterSearchResultsFormValues>();
-    const { handleSubmit, submitButtonText, renderClearFiltersButton, ref } = filterProps;
+    const { toggleDrawer, open, handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<
+        FilterSearchResultsFormValues
+    >();
+
     const { query } = useRouter();
     const { t } = useTranslation();
 
@@ -157,35 +158,33 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         </Formik>
     );
 
-    const renderTableContent = (
-        <Table>
-            <TableBody>
-                {courses && courses.length ? (
-                    courses.map((c: CourseType, i: number) => (
-                        <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
+    const renderTableContent =
+        courses && courses.length ? (
+            courses.map((c: CourseObjectType, i: number) => (
+                <Table key={i}>
+                    <TableBody>
+                        <TableRow onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
                             <TableCell>
                                 <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
                             </TableCell>
                         </TableRow>
-                    ))
-                ) : (
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
-                        </TableCell>
-                    </TableRow>
-                )}
-            </TableBody>
-        </Table>
-    );
+                    </TableBody>
+                </Table>
+            ))
+        ) : (
+            <CardContent>
+                <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
+            </CardContent>
+        );
 
     return (
         <FilterLayout<FilterSearchResultsFormValues>
             title={t('search:title')}
             renderCardContent={renderCardContent}
             renderTableContent={renderTableContent}
+            toggleDrawer={toggleDrawer}
+            open={open}
             backUrl
-            {...filterProps}
         />
     );
 };
@@ -200,6 +199,8 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
             query: SearchCoursesDocument,
             variables: query,
         });
+
+        console.log(data);
 
         return { ...data, ...nameSpaces };
     } catch {

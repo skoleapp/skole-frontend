@@ -1,9 +1,9 @@
-import { MutableRefObject, useRef } from 'react';
-
 import { ApolloError } from 'apollo-client';
-import { ErrorType } from '../../generated/graphql';
 import { Formik } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
+import { MutableRefObject, useRef } from 'react';
+
+import { ErrorType } from '../../generated/graphql';
 import { i18n } from '../i18n';
 
 const snakeToCamel = (str: string): string => {

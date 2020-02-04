@@ -45,5 +45,7 @@
     "changePassword": "Vaihda salasana",
     "deleteAccount": "Poista tili",
     "account": "Tili",
-    "course": "Kurssi"
+    "course": "Kurssi",
+    "name": "Nimi",
+    "discussion": "Keskustelu"
 }

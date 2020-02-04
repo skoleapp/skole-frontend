@@ -1,7 +1,6 @@
-import { Alert, Color } from '@material-ui/lab';
 import { Collapse, IconButton } from '@material-ui/core';
-
 import { Close } from '@material-ui/icons';
+import { Alert, Color } from '@material-ui/lab';
 import React from 'react';
 import { useState } from 'react';
 

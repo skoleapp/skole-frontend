@@ -9,3 +9,4 @@ export { SkoleGDPR } from './SkoleGDPR';
 export { TopNavbar } from './TopNavbar';
 export { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 export { Settings } from './Settings';
+export { CommentThread } from './CommentThread';

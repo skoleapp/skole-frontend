@@ -1,22 +1,21 @@
+import { Box, Divider } from '@material-ui/core';
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useApolloClient } from 'react-apollo';
+import { useTranslation } from '../i18n';
+import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { Box, Divider } from '@material-ui/core';
-import { ButtonLink, FormLayout, FormSubmitSection, StyledForm, TextLink } from '../components';
-import { Field, Formik } from 'formik';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Router, includeDefaultNamespaces } from '../i18n';
 import { SignInMutation, useSignInMutation } from '../../generated/graphql';
-import { useAlerts, useForm, usePublicPage } from '../utils';
-import { withApollo, withRedux } from '../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
 import { authenticate } from '../actions';
-import { compose } from 'redux';
-import { useApolloClient } from 'react-apollo';
-import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import { ButtonLink, FormLayout, FormSubmitSection, StyledForm, TextLink } from '../components';
+import { includeDefaultNamespaces, Router } from '../i18n';
+import { withApollo, withRedux } from '../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { useAlerts, useForm, usePublicPage } from '../utils';
 
 const initialValues = {
     usernameOrEmail: '',

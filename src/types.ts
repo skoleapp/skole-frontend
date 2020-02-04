@@ -1,15 +1,16 @@
-import { Auth, Notification, Settings } from './reducers';
-import { NextComponentType, NextPageContext } from 'next';
-
-import ApolloClient from 'apollo-client';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-client';
+import { NextComponentType, NextPageContext } from 'next';
 import { Store } from 'redux';
-import { UserType } from '../generated/graphql';
+
+import { UserObjectType } from '../generated/graphql';
+import { Auth, UI } from './reducers';
+import { ContainerProps } from '@material-ui/core';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
     reduxStore: Store;
-    userMe: UserType;
+    userMe: UserObjectType;
 }
 
 export type I18nPage<P = {}> = NextComponentType<
@@ -24,11 +25,10 @@ export interface I18nProps {
 
 export interface State {
     auth: Auth;
-    notification: Notification;
-    settings: Settings;
+    ui: UI;
 }
 
-export interface LayoutProps {
+export interface LayoutProps extends ContainerProps {
     title?: string;
     heading?: string;
     backUrl?: boolean;
@@ -36,4 +36,9 @@ export interface LayoutProps {
     renderAlert?: JSX.Element;
     renderDialog?: JSX.Element;
     disableSearch?: boolean;
+    headerRight?: JSX.Element;
+}
+
+export interface CommentTarget {
+    [key: string]: string | null;
 }

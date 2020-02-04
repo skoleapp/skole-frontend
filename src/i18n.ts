@@ -1,4 +1,6 @@
 import NextI18Next from 'next-i18next';
+import moment from 'moment';
+import { useTranslation as useReactI18nextTranslation, UseTranslationResponse } from 'react-i18next';
 
 export const nextI18next = new NextI18Next({
     defaultLanguage: 'en',
@@ -19,10 +21,18 @@ export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
         'validation',
         'notifications',
         'alerts',
+        'comments',
         'errors',
     ];
 
     return defaultNamespaces.concat(namespaces);
+};
+
+// Wrapper around translation hook to set moment language.
+export const useTranslation = (): UseTranslationResponse => {
+    const reactI18next = useReactI18nextTranslation();
+    moment.locale(reactI18next.i18n.language);
+    return reactI18next;
 };
 
 export const { appWithTranslation, Router, Link, i18n } = nextI18next;

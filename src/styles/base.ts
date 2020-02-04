@@ -1,6 +1,7 @@
+import { css } from 'styled-components';
+
 import { breakpoints } from './breakpoints';
 import { colors } from './colors';
-import { css } from 'styled-components';
 
 export const base = css`
     :root {
@@ -15,12 +16,14 @@ export const base = css`
         --success: ${colors.success};
         --danger: ${colors.danger};
 
-        --primary-opacity: rgba(0, 0, 0, 0.15);
+        --hover-opacity: rgba(0, 0, 0, 0.05);
+        --border-color: rgba(0, 0, 0, 0.12);
         --dark-opacity: rgba(0, 0, 0, 0.75);
 
         // Misc
         --transition: all 0.15s ease-in;
         --border-radius: 0.25rem;
+        --border: 1px solid var(--border-color); // Default MUI border.
     }
 
     html,
@@ -51,10 +54,6 @@ export const base = css`
             }
         }
 
-        .flex-flow {
-            flex-flow: row wrap;
-        }
-
         .MuiLink-root {
             cursor: pointer;
         }
@@ -69,6 +68,10 @@ export const base = css`
 
         .MuiTypography-h3 {
             font-size: 1.25rem;
+        }
+
+        .MuiGrid-root {
+            flex-grow: 1;
         }
     }
 `;

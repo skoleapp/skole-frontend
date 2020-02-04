@@ -5,6 +5,16 @@ query SchoolDetail($id: Int!) {
         city
         country
         schoolType
+        subjects {
+            id
+            name
+        }
+        courses {
+            id
+            name
+            code
+            points
+        }
         subjectCount
         courseCount
     }

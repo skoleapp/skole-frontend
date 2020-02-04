@@ -1,21 +1,20 @@
+import { Box, Divider, FormControl, Link, Typography } from '@material-ui/core';
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import React from 'react';
+import { useApolloClient } from 'react-apollo';
+import { useTranslation } from '../i18n';
+import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { Box, Divider, FormControl, Link, Typography } from '@material-ui/core';
-import { ButtonLink, FormLayout, FormSubmitSection, StyledForm } from '../components';
-import { Field, Formik } from 'formik';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { SignUpMutation, useSignUpMutation } from '../../generated/graphql';
-import { useForm, usePublicPage } from '../utils';
-import { withApollo, withRedux } from '../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
 import { authenticate } from '../actions';
-import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../i18n';
-import { useApolloClient } from 'react-apollo';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { ButtonLink, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { includeDefaultNamespaces, Router } from '../i18n';
+import { withApollo, withRedux } from '../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { useForm, usePublicPage } from '../utils';
 
 const initialValues = {
     username: '',
@@ -56,9 +55,10 @@ const SignUpPage: I18nPage = () => {
             handleMutationErrors(signUp.errors);
         } else if (signIn && signIn.errors) {
             handleMutationErrors(signIn.errors);
-        } else if (signIn) {
+        } else if (signIn && signIn.user) {
             resetForm();
             dispatch(authenticate(client, signIn));
+            Router.push(`/users/${signIn.user.id}`);
         }
     };
 

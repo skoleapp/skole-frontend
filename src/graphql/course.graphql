@@ -11,13 +11,40 @@ query CourseDetail($id: Int!) {
             id
             name
         }
-        creator {
+        user {
             id
             username
         }
         resources {
             id
             title
+            points
+        }
+        comments {
+            id
+            user {
+                id
+                username
+                avatarThumbnail
+            }
+            text
+            attachment
+            modified
+            created
+            replyComments {
+                id
+                user {
+                    id
+                    username
+                    avatarThumbnail
+                }
+                text
+                attachment
+                modified
+                created
+                points
+            }
+            replyCount
             points
         }
         modified

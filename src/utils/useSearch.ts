@@ -1,5 +1,6 @@
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../i18n';
+
 import { Router } from '../i18n';
 
 interface UseSearch {

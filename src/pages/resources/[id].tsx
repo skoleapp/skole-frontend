@@ -1,5 +1,3 @@
-import * as R from 'ramda';
-
 import {
     Avatar,
     Box,
@@ -14,6 +12,14 @@ import {
     Typography,
 } from '@material-ui/core';
 import { CloudDownload, ScoreOutlined } from '@material-ui/icons';
+import Image from 'material-ui-image';
+import moment from 'moment';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from '../../i18n';
+import { compose } from 'redux';
+
+import { ResourceDetailDocument, ResourceObjectType, ResourcePartObjectType } from '../../../generated/graphql';
 import {
     Download,
     MainLayout,
@@ -24,25 +30,18 @@ import {
     TabPanel,
     TextLink,
 } from '../../components';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { ResourceDetailDocument, ResourcePartType, ResourceType } from '../../../generated/graphql';
-import { getFilePath, useAuthSync, useTabs } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
-
-import Image from 'material-ui-image';
-import React from 'react';
-import { compose } from 'redux';
 import { includeDefaultNamespaces } from '../../i18n';
-import moment from 'moment';
-import { useTranslation } from 'react-i18next';
+import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { getFilePath, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
-    resource?: ResourceType;
+    resource?: ResourceObjectType;
 }
 
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { tabValue, handleTabChange } = useTabs();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     if (resource) {
         const resourceTitle = R.propOr('-', 'title', resource) as string;
@@ -51,13 +50,12 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const resourceCourseName = R.propOr('-', 'name', resource.course) as string;
         const resourceSchoolId = R.propOr('', 'id', resource.school);
         const resourceSchoolName = R.propOr('-', 'name', resource.school) as string;
-        const creatorId = R.propOr('', 'id', resource.creator);
-        const creatorName = R.propOr('-', 'username', resource.creator) as string;
-        moment.locale(i18n.language); // Set moment language.
+        const creatorId = R.propOr('', 'id', resource.user);
+        const creatorName = R.propOr('-', 'username', resource.user) as string;
         const created = moment(resource.created).format('LL');
         const modified = moment(resource.modified).format('LL');
         const points = R.propOr('-', 'points', resource);
-        const resourceParts = R.propOr([], 'resourceParts', resource) as ResourcePartType[];
+        const resourceParts = R.propOr([], 'resourceParts', resource) as ResourcePartObjectType[];
 
         const renderResourceInfo = (
             <Grid container alignItems="center">
@@ -131,7 +129,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 scrollButtons="on"
             >
                 <Tab label="General" />
-                {resourceParts.map((r: ResourcePartType, i: number) => (
+                {resourceParts.map((r: ResourcePartObjectType, i: number) => (
                     <Tab key={i} label={r.title} />
                 ))}
             </StyledTabs>
@@ -143,7 +141,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </TabPanel>
         );
 
-        const renderResourceParts = resourceParts.map((r: ResourcePartType, i: number) => (
+        const renderResourceParts = resourceParts.map((r: ResourcePartObjectType, i: number) => (
             <TabPanel key={i} value={tabValue} index={i + 1}>
                 <CardContent>
                     <Box textAlign="left">

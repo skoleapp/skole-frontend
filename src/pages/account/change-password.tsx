@@ -1,19 +1,18 @@
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import React from 'react';
+import { useTranslation } from '../../i18n';
+import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
-import { Field, Formik } from 'formik';
+import { toggleNotification } from '../../actions';
 import { FormSubmitSection, SettingsLayout, StyledForm } from '../../components';
+import { includeDefaultNamespaces } from '../../i18n';
+import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useForm, usePrivatePage } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../../i18n';
-import { openNotification } from '../../actions';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 const initialValues = {
     oldPassword: '',
@@ -49,7 +48,7 @@ const ChangePasswordPage: I18nPage = () => {
                 handleMutationErrors(changePassword.errors);
             } else {
                 resetForm();
-                dispatch(openNotification(t('notifications:passwordChanged')));
+                dispatch(toggleNotification(t('notifications:passwordChanged')));
             }
         }
     };

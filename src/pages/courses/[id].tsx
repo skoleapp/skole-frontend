@@ -1,210 +1,281 @@
-import * as R from 'ramda';
-
 import {
     Avatar,
-    Box,
     CardContent,
     CardHeader,
-    Divider,
-    Grid,
     ListItem,
     ListItemAvatar,
     ListItemText,
-    Tab,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
     Typography,
+    Grid,
+    Box,
+    Divider,
+    Tab,
+    IconButton,
+    Fade,
+    Paper,
 } from '@material-ui/core';
-import { CloudUploadOutlined, ScoreOutlined } from '@material-ui/icons';
-import { CourseDetailDocument, CourseType, ResourceType } from '../../../generated/graphql';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import {
-    MainLayout,
+    CloudUploadOutlined,
+    ScoreOutlined,
+    AccountCircleOutlined,
+    SubjectOutlined,
+    SchoolOutlined,
+    InfoOutlined,
+} from '@material-ui/icons';
+import moment from 'moment';
+import * as R from 'ramda';
+import React, { useState } from 'react';
+import { compose } from 'redux';
+
+import {
+    CourseDetailDocument,
+    CourseObjectType,
+    ResourceObjectType,
+    CommentObjectType,
+} from '../../../generated/graphql';
+import {
     NotFound,
-    StyledCard,
     StyledList,
     StyledTable,
+    TextLink,
+    StyledCard,
+    MainLayout,
     StyledTabs,
     TabPanel,
-    TextLink,
+    DiscussionBox,
+    StyledModal,
+    ModalCloseIcon,
 } from '../../components';
-import { Router, includeDefaultNamespaces } from '../../i18n';
-import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
+import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-
-import React from 'react';
-import { compose } from 'redux';
-import moment from 'moment';
-import { useTranslation } from 'react-i18next';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
-    course?: CourseType;
+    course?: CourseObjectType;
 }
 
 const CourseDetailPage: I18nPage<Props> = ({ course }) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
+    const [courseInfoVisible, setCourseInfoVisible] = useState(false);
+    const handleOpenCourseInfo = (): void => setCourseInfoVisible(true);
+    const handleCloseCourseInfo = (): void => setCourseInfoVisible(false);
 
     if (course) {
-        const { subject, school, creator } = course;
+        const { subject, school, user } = course;
         const fullName = getFullCourseName(course);
-        const courseCode = R.propOr('-', 'code', course);
         const subjectName = R.propOr('-', 'name', subject) as string;
         const schoolName = R.propOr('-', 'name', school) as string;
-        const creatorName = R.propOr('-', 'username', creator) as string;
-        moment.locale(i18n.language); // Set moment language.
+        const creatorName = R.propOr('-', 'username', user) as string;
         const created = moment(course.created).format('LL');
         const modified = moment(course.modified).format('LL');
         const points = R.propOr('-', 'points', course);
         const resourceCount = R.propOr('-', 'resourceCount', course);
-        const resources = R.propOr([], 'resources', course) as ResourceType[];
+        const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
+        const comments = R.propOr([], 'comments', course) as CommentObjectType[];
 
         const subjectLink = {
             pathname: '/search',
             query: { subjectId: R.propOr('', 'id', subject) as boolean[] },
         };
 
+        const discussionBoxProps = {
+            comments,
+            target: { course: course.id },
+        };
+
         const renderCourseInfo = (
-            <Grid container alignItems="center">
-                <Grid item container xs={12} sm={6} justify="center">
-                    <CardContent>
-                        <Box textAlign="left">
+            <CardContent>
+                <StyledList>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <AccountCircleOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body1">
-                                {t('common:courseCode')}: {courseCode}
+                                {t('common:creator')}:{' '}
+                                <TextLink href={`/users/${R.propOr('', 'id', user)}`} color="primary">
+                                    {creatorName}
+                                </TextLink>
                             </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <SubjectOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body1">
                                 {t('common:subject')}:{' '}
                                 <TextLink href={subjectLink} color="primary">
                                     {subjectName}
                                 </TextLink>
                             </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <SchoolOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body1">
                                 {t('common:school')}:{' '}
                                 <TextLink href={`/schools/${R.propOr('-', 'id', school)}`} color="primary">
                                     {schoolName}
                                 </TextLink>
                             </Typography>
-                            <Typography variant="body1">
-                                {t('common:creator')}:{' '}
-                                <TextLink href={`/users/${R.propOr('', 'id', creator)}`} color="primary">
-                                    {creatorName}
-                                </TextLink>
-                            </Typography>
-                            <Typography variant="body1">
-                                {t('common:created')}: {created}
-                            </Typography>
-                            <Typography variant="body1">
-                                {t('common:modified')}: {modified}
-                            </Typography>
-                        </Box>
-                    </CardContent>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <ScoreOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            {t('common:points')}: {points}
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <CloudUploadOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            {t('common:resources')}: {resourceCount}
+                        </ListItemText>
+                    </ListItem>
+                </StyledList>
+                <Box textAlign="left" marginLeft="1rem">
+                    <Typography className="label" variant="body2" color="textSecondary">
+                        {t('common:created')} {created}
+                    </Typography>
+                    <Typography className="label" variant="body2" color="textSecondary">
+                        {t('common:modified')} {modified}
+                    </Typography>
+                </Box>
+            </CardContent>
+        );
+
+        const renderResources = resources.length ? (
+            <StyledTable disableBoxShadow>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>
+                                <Typography variant="subtitle2" color="textSecondary">
+                                    {t('common:title')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                                <Typography variant="subtitle2" color="textSecondary">
+                                    {t('common:points')}
+                                </Typography>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {resources.map((r: ResourceObjectType, i: number) => (
+                            <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/resources/${r.id}`)}>
+                                <TableCell>
+                                    <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Typography variant="subtitle1">{R.propOr('-', 'points', r)}</Typography>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </StyledTable>
+        ) : (
+            <CardContent>
+                <Typography variant="subtitle1">{t('course:noResources')}</Typography>
+            </CardContent>
+        );
+
+        const renderMobileContent = (
+            <Grid container className="md-down">
+                <StyledCard>
+                    <StyledTabs
+                        value={tabValue}
+                        onChange={handleTabChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                    >
+                        <Tab label={t('common:resources')} />
+                        <Tab label={t('course:courseDiscussion')} />
+                    </StyledTabs>
+                    <TabPanel value={tabValue} index={0}>
+                        {renderResources}
+                    </TabPanel>
+                    <TabPanel value={tabValue} index={1} flexGrow="1" display="flex">
+                        <DiscussionBox {...discussionBoxProps} />
+                    </TabPanel>
+                </StyledCard>
+            </Grid>
+        );
+
+        const renderDesktopContent = (
+            <Grid container className="md-up">
+                <Grid item container xs={12} md={7} lg={8}>
+                    <StyledCard>
+                        <CardHeader title={fullName} />
+                        <Divider />
+                        {renderCourseInfo}
+                        <Divider />
+                        {renderResources}
+                    </StyledCard>
                 </Grid>
-                <Grid item container xs={12} sm={6} justify="center">
-                    <CardContent>
-                        <StyledList>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <ScoreOutlined />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText>
-                                    {t('common:points')}: {points}
-                                </ListItemText>
-                            </ListItem>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <CloudUploadOutlined />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText>
-                                    {t('common:resources')}: {resourceCount}
-                                </ListItemText>
-                            </ListItem>
-                        </StyledList>
-                    </CardContent>
+                <Grid item container xs={12} md={5} lg={4}>
+                    <StyledCard marginLeft>
+                        <CardHeader title={t('course:courseDiscussion')} />
+                        <Divider />
+                        <DiscussionBox {...discussionBoxProps} />
+                    </StyledCard>
                 </Grid>
             </Grid>
         );
 
-        const renderTabs = (
-            <StyledTabs
-                value={tabValue}
-                onChange={handleTabChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="fullWidth"
-            >
-                <Tab label={t('common:resources')} />
-                <Tab label={t('common:discussion')} />
-            </StyledTabs>
+        const renderCourseInfoButton = (
+            <IconButton color="secondary" onClick={handleOpenCourseInfo}>
+                <InfoOutlined />
+            </IconButton>
         );
 
-        const renderTabContent = (
-            <>
-                <TabPanel value={tabValue} index={0}>
-                    {resources.length ? (
-                        <StyledTable disableBoxShadow>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {t('common:title')}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {t('common:points')}
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {resources.map((r: ResourceType, i: number) => (
-                                        <TableRow
-                                            key={i}
-                                            onClick={(): Promise<boolean> => Router.push(`/resources/${r.id}`)}
-                                        >
-                                            <TableCell>
-                                                <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <Typography variant="subtitle1">
-                                                    {R.propOr('-', 'points', r)}
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </StyledTable>
-                    ) : (
-                        <CardContent>
-                            <Typography variant="subtitle1">{t('course:noResources')}</Typography>
-                        </CardContent>
-                    )}
-                </TabPanel>
-                <TabPanel value={tabValue} index={1}>
-                    <CardContent>Course discussion will show here...</CardContent>
-                </TabPanel>
-            </>
+        const renderCourseInfoModal = (
+            <StyledModal open={!!courseInfoVisible} onClose={handleCloseCourseInfo}>
+                <Fade in={!!courseInfoVisible}>
+                    <Paper>
+                        <ModalCloseIcon onClick={handleCloseCourseInfo} />
+                        <Box textAlign="center">
+                            <CardHeader title={fullName} />
+                            {renderCourseInfo}
+                        </Box>
+                    </Paper>
+                </Fade>
+            </StyledModal>
         );
 
         return (
-            <MainLayout title={fullName} backUrl>
-                <StyledCard>
-                    <CardHeader title={fullName} />
-                    <Divider />
-                    {renderCourseInfo}
-                    <Divider />
-                    {renderTabs}
-                    {renderTabContent}
-                </StyledCard>
+            <MainLayout title={fullName} backUrl maxWidth="xl" headerRight={renderCourseInfoButton}>
+                {renderMobileContent}
+                {renderDesktopContent}
+                {renderCourseInfoModal}
             </MainLayout>
         );
     } else {

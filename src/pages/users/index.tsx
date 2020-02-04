@@ -1,20 +1,29 @@
-import * as R from 'ramda';
-
-import { Avatar, MenuItem, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import {
+    Avatar,
+    MenuItem,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Typography,
+    CardContent,
+} from '@material-ui/core';
 import { Field, Formik } from 'formik';
-import { FilterLayout, FormSubmitSection, SelectField, StyledForm } from '../../components';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { UserType, UsersDocument } from '../../../generated/graphql';
-import { getAvatarThumb, useAuthSync, useFilters } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
-
-import Link from 'next/link';
-import React from 'react';
 import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../../i18n';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from '../../i18n';
+import { compose } from 'redux';
+
+import { UserObjectType, UsersDocument } from '../../../generated/graphql';
+import { FilterLayout, FormSubmitSection, SelectField, StyledForm } from '../../components';
+import { includeDefaultNamespaces } from '../../i18n';
+import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { getAvatarThumb, useAuthSync, useFilters } from '../../utils';
 
 interface FilterUsersFormValues {
     username: string;
@@ -22,12 +31,14 @@ interface FilterUsersFormValues {
 }
 
 interface Props extends I18nProps {
-    users?: UserType[];
+    users?: UserObjectType[];
 }
 
 const UsersPage: I18nPage<Props> = ({ users }) => {
-    const filterProps = useFilters<FilterUsersFormValues>();
-    const { handleSubmit, submitButtonText, renderClearFiltersButton, ref } = filterProps;
+    const { toggleDrawer, open, handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<
+        FilterUsersFormValues
+    >();
+
     const { t } = useTranslation();
     const { query } = useRouter();
 
@@ -67,25 +78,25 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         </Formik>
     );
 
-    const renderTableContent = (
-        <Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>
-                        <Typography variant="subtitle1" color="textSecondary">
-                            {t('common:username')}
-                        </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                        <Typography variant="subtitle1" color="textSecondary">
-                            {t('common:points')}
-                        </Typography>
-                    </TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {users && users.length ? (
-                    users.map((u: UserType, i: number) => (
+    const renderTableContent =
+        users && users.length ? (
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="subtitle1" color="textSecondary">
+                                {t('common:username')}
+                            </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Typography variant="subtitle1" color="textSecondary">
+                                {t('common:points')}
+                            </Typography>
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {users.map((u: UserObjectType, i: number) => (
                         <Link href={`/users/${u.id}`} key={i}>
                             <TableRow>
                                 <TableCell className="user-cell">
@@ -97,17 +108,14 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                                 </TableCell>
                             </TableRow>
                         </Link>
-                    ))
-                ) : (
-                    <TableRow>
-                        <TableCell className="user-cell">
-                            <Typography variant="subtitle1">{t('users:notFound')}</Typography>
-                        </TableCell>
-                    </TableRow>
-                )}
-            </TableBody>
-        </Table>
-    );
+                    ))}
+                </TableBody>
+            </Table>
+        ) : (
+            <CardContent>
+                <Typography variant="subtitle1">{t('users:notFound')}</Typography>
+            </CardContent>
+        );
 
     return (
         <FilterLayout<FilterUsersFormValues>
@@ -115,18 +123,20 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
             title={t('users:title')}
             renderCardContent={renderCardContent}
             renderTableContent={renderTableContent}
+            toggleDrawer={toggleDrawer}
+            open={open}
             backUrl
-            {...filterProps}
         />
     );
 };
 
 UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await useAuthSync(ctx);
+    const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
 
     try {
-        const { data } = await ctx.apolloClient.query({ query: UsersDocument });
+        const { data } = await apolloClient.query({ query: UsersDocument, variables: query });
         return { ...data, ...nameSpaces };
     } catch {
         return nameSpaces;

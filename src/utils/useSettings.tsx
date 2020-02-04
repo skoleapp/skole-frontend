@@ -1,15 +1,15 @@
 import { Button, Divider, ListItem, ListSubheader, MenuItem } from '@material-ui/core';
-import { LanguageSelector, StyledMenuList } from '../components';
-import { deAuthenticate, toggleSettings } from '../actions';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useApolloClient } from 'react-apollo';
+import { useTranslation } from '../i18n';
 import { useDispatch, useSelector } from 'react-redux';
 
-import React from 'react';
+import { deAuthenticate, toggleSettings } from '../actions';
+import { LanguageSelector, StyledMenuList } from '../components';
 import { Router } from '../i18n';
 import { State } from '../types';
 import { menuItems } from '.';
-import { useApolloClient } from 'react-apollo';
-import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
 
 interface UseSettings {
     renderSettingsCardContent: JSX.Element;

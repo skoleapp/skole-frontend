@@ -1,36 +1,35 @@
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from '../i18n';
+import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection, StyledForm } from '../components';
 import {
-    CourseType,
+    CourseObjectType,
     CoursesDocument,
     ResourceTypesDocument,
     UploadResourceInitialDataDocument,
 } from '../../generated/graphql';
-import { Field, Formik } from 'formik';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Router, includeDefaultNamespaces } from '../i18n';
 import { UploadResourceMutation, useUploadResourceMutation } from '../../generated/graphql';
-import { useForm, usePrivatePage } from '../utils';
+import { toggleNotification } from '../actions';
+import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
-import { openNotification } from '../actions';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { useForm, usePrivatePage } from '../utils';
 
 interface UploadResourceFormValues {
     resourceTitle: string;
     resourceType: string;
-    course: CourseType | null;
+    course: CourseObjectType | null;
     files: File[];
 }
 
 interface Props extends I18nProps {
-    course?: CourseType;
+    course?: CourseObjectType;
 }
 
 const UploadResourcePage: I18nPage<Props> = ({ course }) => {
@@ -55,7 +54,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                 handleMutationErrors(uploadResource.errors);
             } else if (uploadResource.resource && uploadResource.resource.id) {
                 resetForm();
-                dispatch(openNotification(t('notifications:resourceUploaded')));
+                dispatch(toggleNotification(t('notifications:resourceUploaded')));
                 await Router.push(`/resources/${uploadResource.resource.id}`);
             }
         }

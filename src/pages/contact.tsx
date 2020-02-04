@@ -1,19 +1,18 @@
+import { MenuItem } from '@material-ui/core';
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import React from 'react';
+import { useTranslation } from '../i18n';
+import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { Field, Formik } from 'formik';
+import { toggleNotification } from '../actions';
 import { FormSubmitSection, SelectField, SettingsLayout, StyledForm } from '../components';
+import { includeDefaultNamespaces } from '../i18n';
+import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useForm } from '../utils';
-import { withApollo, withRedux } from '../lib';
-
-import { MenuItem } from '@material-ui/core';
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../i18n';
-import { openNotification } from '../actions';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 const initialValues = {
     contactType: '',
@@ -45,7 +44,7 @@ const ContactPage: I18nPage = () => {
     const handleSubmit = (values: ContactFormValues): void => {
         console.log(values);
         resetForm();
-        dispatch(openNotification(t('notifications:messageSubmitted')));
+        dispatch(toggleNotification(t('notifications:messageSubmitted')));
     };
 
     const renderCardContent = (
@@ -72,6 +71,7 @@ const ContactPage: I18nPage = () => {
                         placeholder={t('forms:message')}
                         label={t('forms:message')}
                         variant="outlined"
+                        rows="5"
                         fullWidth
                         rows="5"
                         multiline

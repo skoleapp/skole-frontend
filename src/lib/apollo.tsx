@@ -1,18 +1,18 @@
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-
-import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { ApolloClient } from 'apollo-client';
 import { GraphQLRequest } from 'apollo-link';
-import Head from 'next/head';
+import { setContext } from 'apollo-link-context';
 import { HttpConfig } from 'apollo-link-http-common';
+import { createUploadLink } from 'apollo-upload-client';
 import { IncomingMessage } from 'http';
+import fetch from 'isomorphic-unfetch';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import React from 'react';
 import { WithApolloClient } from 'react-apollo';
-import { createUploadLink } from 'apollo-upload-client';
-import fetch from 'isomorphic-unfetch';
+
 import { getToken } from '../utils';
-import { setContext } from 'apollo-link-context';
 
 interface GetToken {
     getToken: (req?: IncomingMessage) => string;

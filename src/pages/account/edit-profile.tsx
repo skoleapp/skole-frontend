@@ -1,20 +1,19 @@
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from '../../i18n';
+import { useDispatch, useSelector } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { Field, Formik } from 'formik';
-import { FormSubmitSection, ImagePreviewField, SettingsLayout, StyledForm } from '../../components';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { UpdateUserMutation, UserType, useUpdateUserMutation } from '../../../generated/graphql';
-import { openNotification, reAuthenticate } from '../../actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm, usePrivatePage } from '../../utils';
-import { withApollo, withRedux } from '../../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
+import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
+import { toggleNotification, reAuthenticate } from '../../actions';
+import { FormSubmitSection, SettingsLayout, StyledForm, AvatarField } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
-import { useTranslation } from 'react-i18next';
+import { withApollo, withRedux } from '../../lib';
+import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { useForm, usePrivatePage } from '../../utils';
 
 export interface UpdateProfileFormValues {
     username: string;
@@ -35,8 +34,8 @@ const EditProfilePage: I18nPage = () => {
             if (updateUser.errors) {
                 handleMutationErrors(updateUser.errors);
             } else {
-                dispatch(openNotification(t('notifications:profileUpdated')));
-                dispatch(reAuthenticate(updateUser.user as UserType));
+                dispatch(toggleNotification(t('notifications:profileUpdated')));
+                dispatch(reAuthenticate(updateUser.user as UserObjectType));
             }
         }
     };
@@ -82,7 +81,7 @@ const EditProfilePage: I18nPage = () => {
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
-                    <Field name="avatar" label={t('edit-profile:changeAvatarButton')} component={ImagePreviewField} />
+                    <AvatarField {...props} />
                     <Field
                         placeholder={t('forms:title')}
                         name="title"
@@ -113,6 +112,7 @@ const EditProfilePage: I18nPage = () => {
                         component={TextField}
                         label={t('forms:bio')}
                         variant="outlined"
+                        rows="5"
                         multiline
                         rows="4"
                         fullWidth

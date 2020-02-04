@@ -1,6 +1,7 @@
 import { AnyAction } from 'redux';
-import { SkoleContext } from '../types';
+
 import { reAuthenticate } from '../actions';
+import { SkoleContext } from '../types';
 import { redirect } from './redirect';
 import { useAuthSync } from './useAuthSync';
 

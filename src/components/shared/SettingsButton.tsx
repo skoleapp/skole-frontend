@@ -1,10 +1,10 @@
 import { IconButton, IconButtonProps } from '@material-ui/core';
-
-import { AnyAction } from 'redux';
-import React from 'react';
 import { Settings } from '@material-ui/icons';
-import { toggleSettings } from '../../actions';
+import React from 'react';
 import { useDispatch } from 'react-redux';
+import { AnyAction } from 'redux';
+
+import { toggleSettings } from '../../actions';
 
 export const SettingsButton: React.FC<IconButtonProps> = props => {
     const dispatch = useDispatch();

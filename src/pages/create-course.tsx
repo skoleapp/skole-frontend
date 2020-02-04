@@ -1,33 +1,32 @@
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from '../i18n';
+import { useDispatch } from 'react-redux';
+import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { AutoCompleteField, FormLayout, FormSubmitSection, StyledForm } from '../components';
 import {
     CreateCourseMutation,
-    SchoolType,
     SchoolsDocument,
-    SubjectType,
+    SchoolTypeObjectType,
+    SubjectObjectType,
     SubjectsDocument,
     useCreateCourseMutation,
 } from '../../generated/graphql';
-import { Field, Formik } from 'formik';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { Router, includeDefaultNamespaces } from '../i18n';
-import { useForm, usePrivatePage } from '../utils';
+import { toggleNotification } from '../actions';
+import { AutoCompleteField, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-
-import React from 'react';
-import { TextField } from 'formik-material-ui';
-import { compose } from 'redux';
-import { openNotification } from '../actions';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { useForm, usePrivatePage } from '../utils';
 
 interface CreateCourseFormValues {
     courseName: string;
     courseCode: string;
-    subject: SubjectType | null;
-    school: SchoolType | null;
+    subject: SubjectObjectType | null;
+    school: SchoolTypeObjectType | null;
     general: string;
 }
 
@@ -39,9 +38,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
     const validationSchema = Yup.object().shape({
         courseName: Yup.string().required(t('validation:courseNameRequired')),
         courseCode: Yup.string(),
-        subject: Yup.object()
-            .nullable()
-            .required(t('validation:subjectRequired')),
+        subject: Yup.object().nullable(),
         school: Yup.object()
             .nullable()
             .required(t('validation:schoolRequired')),
@@ -53,7 +50,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
                 handleMutationErrors(createCourse.errors);
             } else if (createCourse.course) {
                 resetForm();
-                dispatch(openNotification(t('notifications:courseCreated')));
+                dispatch(toggleNotification(t('notifications:courseCreated')));
                 await Router.push(`/courses/${createCourse.course.id}`);
             }
         }

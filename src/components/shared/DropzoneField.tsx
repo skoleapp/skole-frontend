@@ -1,10 +1,10 @@
-import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
-
-import { DropzoneArea } from 'material-ui-dropzone';
 import { FormControl } from '@material-ui/core';
-import { FormErrorMessage } from './FormErrorMessage';
+import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
+import { DropzoneArea } from 'material-ui-dropzone';
 import React from 'react';
 import styled from 'styled-components';
+
+import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props {
     form: FormikProps<{}>;

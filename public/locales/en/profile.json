@@ -1,5 +1,7 @@
 {
     "title": "Profile",
     "editProfileButton": "Edit Profile",
+    "noResources": "This user has no resources...",
+    "noCourses": "This user has no courses...",
     "notFound": "Profile not found..."
 }

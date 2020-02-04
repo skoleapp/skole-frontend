@@ -1,5 +1,3 @@
-import * as R from 'ramda';
-
 import {
     Avatar,
     Box,
@@ -11,7 +9,22 @@ import {
     ListItemText,
     Tab,
     Typography,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
 } from '@material-ui/core';
+import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
+import moment from 'moment';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from '../../i18n';
+import { useSelector } from 'react-redux';
+import { compose } from 'redux';
+import { getFullCourseName } from '../../utils';
+
+import { UserDetailDocument, UserObjectType, CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
 import {
     ButtonLink,
     MainLayout,
@@ -21,29 +34,22 @@ import {
     StyledList,
     StyledTabs,
     TabPanel,
+    StyledTable,
 } from '../../components';
-import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { UserDetailDocument, UserType } from '../../../generated/graphql';
-import { getAvatar, useAuthSync, useTabs } from '../../utils';
+import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-
-import React from 'react';
-import { compose } from 'redux';
-import { includeDefaultNamespaces } from '../../i18n';
-import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { getAvatar, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
-    user?: UserType;
+    user?: UserObjectType;
 }
 
 const UserPage: I18nPage<Props> = ({ user }) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
+    const { tabValue, handleTabChange } = useTabs();
 
     if (user) {
-        const { tabValue, handleTabChange } = useTabs();
         const username = R.propOr('-', 'username', user) as string;
         const email = R.propOr('-', 'email', user) as string;
         const title = R.prop('title', user) as string;
@@ -51,9 +57,10 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const points = R.propOr('-', 'points', user);
         const courseCount = R.propOr('-', 'courseCount', user);
         const resourceCount = R.propOr('-', 'resourceCount', user);
-        moment.locale(i18n.language); // Set moment language.
         const joined = moment(user.created).format('LL');
         const isOwnProfile = user.id === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
+        const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
+        const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
 
         const renderTopSection = (
             <Grid container alignItems="center">
@@ -173,14 +180,94 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         const renderTabContent = (
-            <CardContent>
+            <>
                 <TabPanel value={tabValue} index={0}>
-                    Courses will be here...
+                    {createdCourses.length ? (
+                        <StyledTable disableBoxShadow>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant="subtitle1" color="textSecondary">
+                                                {t('common:title')}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Typography variant="subtitle1" color="textSecondary">
+                                                {t('common:points')}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {createdCourses.map((c: CourseObjectType, i: number) => (
+                                        <TableRow
+                                            key={i}
+                                            onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}
+                                        >
+                                            <TableCell>
+                                                <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Typography variant="subtitle1">
+                                                    {R.propOr('-', 'points', c)}
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </StyledTable>
+                    ) : (
+                        <CardContent>
+                            <Typography variant="subtitle1">{t('profile:noCourses')}</Typography>
+                        </CardContent>
+                    )}
                 </TabPanel>
                 <TabPanel value={tabValue} index={1}>
-                    Resources will be here...
+                    {createdResources.length ? (
+                        <StyledTable disableBoxShadow>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant="subtitle1" color="textSecondary">
+                                                {t('common:title')}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Typography variant="subtitle1" color="textSecondary">
+                                                {t('common:points')}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {createdResources.map((r: ResourceObjectType, i: number) => (
+                                        <TableRow
+                                            key={i}
+                                            onClick={(): Promise<boolean> => Router.push(`/resources/${r.id}`)}
+                                        >
+                                            <TableCell>
+                                                <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Typography variant="subtitle1">
+                                                    {R.propOr('-', 'points', r)}
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </StyledTable>
+                    ) : (
+                        <CardContent>
+                            <Typography variant="subtitle1">{t('profile:noResources')}</Typography>
+                        </CardContent>
+                    )}
                 </TabPanel>
-            </CardContent>
+            </>
         );
 
         return (

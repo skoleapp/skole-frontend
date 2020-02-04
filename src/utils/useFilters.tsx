@@ -1,15 +1,14 @@
-import * as R from 'ramda';
-
 import { Button, FormControl } from '@material-ui/core';
-import { UseForm, useForm } from './useForm';
-
 import { Clear } from '@material-ui/icons';
-import { ParsedUrlQueryInput } from 'querystring';
-import React from 'react';
-import { Router } from '../i18n';
 import { useRouter } from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
+import * as R from 'ramda';
+import React from 'react';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '../i18n';
+
+import { Router } from '../i18n';
+import { UseForm, useForm } from './useForm';
 
 export interface UseFilters<T> extends UseForm<T> {
     submitButtonText: string;

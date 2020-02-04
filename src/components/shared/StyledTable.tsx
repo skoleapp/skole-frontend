@@ -10,7 +10,7 @@ export const StyledTable = styled(({ disableBoxShadow, ...other }) => <Paper {..
     .MuiTableBody-root {
         tr {
             &:hover {
-                background-color: var(--primary-opacity);
+                background-color: var(--hover-opacity);
             }
 
             .MuiTableCell-root {

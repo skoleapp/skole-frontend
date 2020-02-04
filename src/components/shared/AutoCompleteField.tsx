@@ -1,13 +1,12 @@
-import * as R from 'ramda';
-
-import { Autocomplete, RenderInputParams } from '@material-ui/lab';
 import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
+import { Autocomplete, RenderInputParams } from '@material-ui/lab';
 import { FieldAttributes, FormikProps, getIn } from 'formik';
-import React, { ChangeEvent, useEffect, useState } from 'react';
-
 import { DocumentNode } from 'graphql';
-import { SchoolType } from '../../../generated/graphql';
+import * as R from 'ramda';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useApolloClient } from 'react-apollo';
+
+import { SchoolTypeObjectType } from '../../../generated/graphql';
 
 interface Props {
     field: FieldAttributes<{}>;
@@ -18,7 +17,7 @@ interface Props {
     disabled?: boolean;
 }
 
-export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends SchoolType>({
+export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends SchoolTypeObjectType>({
     field,
     form,
     labelKey = 'name',

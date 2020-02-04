@@ -1,5 +1,5 @@
-query Users {
-    users {
+query Users($username: String, $ordering: String) {
+    users(username: $username, ordering: $ordering) {
         id
         username
         points
@@ -19,6 +19,17 @@ query UserDetail($id: Int!) {
         courseCount
         resourceCount
         created
+        createdCourses {
+            id
+            name
+            code
+            points
+        }
+        createdResources {
+            id
+            title
+            points
+        }
     }
 }
 
