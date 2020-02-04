@@ -13,16 +13,16 @@ import { useDispatch } from 'react-redux';
 
 interface Props {
     comment: CommentObjectType;
-    disableClick?: boolean;
+    modalOpen?: boolean;
 }
 
-export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
+export const CommentCard: React.FC<Props> = ({ comment, modalOpen }) => {
     const dispatch = useDispatch();
 
     const created = moment(comment.created).format('LL');
 
     const handleClick = (): void => {
-        !disableClick && dispatch(toggleCommentThread(comment));
+        !modalOpen && dispatch(toggleCommentThread(comment));
     };
 
     const renderAction = (
@@ -32,7 +32,7 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
                     <AttachmentOutlined />
                 </Box>
             )}
-            {!disableClick && (
+            {!modalOpen && (
                 <Box margin="0.75rem 0.75rem 0 0.5rem">
                     <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
                         <Reply />
@@ -49,7 +49,7 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 
     return (
-        <StyledCommentCard disableClick onClick={handleClick}>
+        <StyledCommentCard modalOpen onClick={handleClick}>
             <CardHeader
                 avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
                 action={renderAction}
@@ -80,8 +80,8 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
 
 const StyledCommentCard: any = styled(Box)`
     &:hover {
-        cursor: ${(props: any) => !props.disableClick && 'pointer'};
-        background-color: ${(props: any) => !props.disableClick && 'var(--hover-opacity)'};
+        cursor: ${(props: any) => !props.modalOpen && 'pointer'};
+        background-color: ${(props: any) => !props.modalOpen && 'var(--hover-opacity)'};
     }
 
     .MuiCardHeader-root,
