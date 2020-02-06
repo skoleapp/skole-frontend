@@ -80,10 +80,10 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 };
 
-const StyledCommentCard: any = styled(Box)`
+const StyledCommentCard = styled(({ modalopen, ...other }) => <Box {...other} />)`
     &:hover {
-        cursor: ${(props: any) => !props.modalopen && 'pointer'};
-        background-color: ${(props: any) => !props.modalopen && 'var(--hover-opacity)'};
+        cursor: ${({ modalopen }): any => !modalopen && 'pointer'};
+        background-color: ${({ modalopen }): any => !modalopen && 'var(--hover-opacity)'};
     }
 
     .MuiCardHeader-root,
