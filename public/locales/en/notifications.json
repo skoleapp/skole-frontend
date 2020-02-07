@@ -4,6 +4,6 @@
     "resourceUploaded": "Resource uploaded!",
     "messageSubmitted": "Message submitted!",
     "courseCreated": "Course created!",
-    "signedOut": "Signed out!",
+    "dOut": "Signed out!",
     "errorDownloadingResource": "Error while downloading resource!"
 }

@@ -1,5 +1,5 @@
-mutation SignUp($username: String!, $email: String!, $password: String!) {
-    signUp(input: { username: $username, email: $email, password: $password }) {
+mutation Register($username: String!, $email: String!, $password: String!) {
+    register(input: { username: $username, email: $email, password: $password }) {
         user {
             id
             created
@@ -9,7 +9,7 @@ mutation SignUp($username: String!, $email: String!, $password: String!) {
             messages
         }
     }
-    signIn(input: { usernameOrEmail: $email, password: $password }) {
+    login(input: { usernameOrEmail: $email, password: $password }) {
         token
         user {
             id
@@ -27,8 +27,8 @@ mutation SignUp($username: String!, $email: String!, $password: String!) {
     }
 }
 
-mutation SignIn($usernameOrEmail: String!, $password: String!) {
-    signIn(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+mutation Login($usernameOrEmail: String!, $password: String!) {
+    login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
         token
         user {
             id

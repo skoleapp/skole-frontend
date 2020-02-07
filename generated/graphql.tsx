@@ -171,8 +171,8 @@ export type ErrorType = {
 
 export type Mutation = {
    __typename?: 'Mutation',
-  signUp?: Maybe<SignUpMutationPayload>,
-  signIn?: Maybe<SignInMutationPayload>,
+  register?: Maybe<RegisterMutationPayload>,
+  login?: Maybe<LoginMutationPayload>,
   updateUser?: Maybe<UpdateUserMutationPayload>,
   changePassword?: Maybe<ChangePasswordMutationPayload>,
   deleteUser?: Maybe<DeleteUserMutationPayload>,
@@ -193,13 +193,13 @@ export type Mutation = {
 };
 
 
-export type MutationSignUpArgs = {
-  input: SignUpMutationInput
+export type MutationRegisterArgs = {
+  input: RegisterMutationInput
 };
 
 
-export type MutationSignInArgs = {
-  input: SignInMutationInput
+export type MutationLoginArgs = {
+  input: LoginMutationInput
 };
 
 
@@ -422,22 +422,22 @@ export type SchoolTypeObjectType = {
   name: Scalars['String'],
 };
 
-export type SignInMutationInput = {
+export type LoginMutationInput = {
   usernameOrEmail: Scalars['String'],
   password: Scalars['String'],
   id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
-export type SignInMutationPayload = {
-   __typename?: 'SignInMutationPayload',
+export type LoginMutationPayload = {
+   __typename?: 'LoginMutationPayload',
   user?: Maybe<UserObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
   token?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
-export type SignUpMutationInput = {
+export type RegisterMutationInput = {
   username: Scalars['String'],
   email: Scalars['String'],
   password: Scalars['String'],
@@ -445,8 +445,8 @@ export type SignUpMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
-export type SignUpMutationPayload = {
-   __typename?: 'SignUpMutationPayload',
+export type RegisterMutationPayload = {
+   __typename?: 'RegisterMutationPayload',
   user?: Maybe<UserObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
@@ -555,17 +555,17 @@ export type UserObjectType = {
   resourceCount?: Maybe<Scalars['Int']>,
 };
 
-export type SignUpMutationVariables = {
+export type RegisterMutationVariables = {
   username: Scalars['String'],
   email: Scalars['String'],
   password: Scalars['String']
 };
 
 
-export type SignUpMutation = (
+export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & { signUp: Maybe<(
-    { __typename?: 'SignUpMutationPayload' }
+  & { register: Maybe<(
+    { __typename?: 'RegisterMutationPayload' }
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'created'>
@@ -573,9 +573,9 @@ export type SignUpMutation = (
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
-  )>, signIn: Maybe<(
-    { __typename?: 'SignInMutationPayload' }
-    & Pick<SignInMutationPayload, 'token'>
+  )>, login: Maybe<(
+    { __typename?: 'LoginMutationPayload' }
+    & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email'>
@@ -586,17 +586,17 @@ export type SignUpMutation = (
   )> }
 );
 
-export type SignInMutationVariables = {
+export type LoginMutationVariables = {
   usernameOrEmail: Scalars['String'],
   password: Scalars['String']
 };
 
 
-export type SignInMutation = (
+export type LoginMutation = (
   { __typename?: 'Mutation' }
-  & { signIn: Maybe<(
-    { __typename?: 'SignInMutationPayload' }
-    & Pick<SignInMutationPayload, 'token'>
+  & { login: Maybe<(
+    { __typename?: 'LoginMutationPayload' }
+    & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email'>
@@ -983,9 +983,9 @@ export type UpdateUserMutation = (
 );
 
 
-export const SignUpDocument = gql`
-    mutation SignUp($username: String!, $email: String!, $password: String!) {
-  signUp(input: {username: $username, email: $email, password: $password}) {
+export const RegisterDocument = gql`
+    mutation Register($username: String!, $email: String!, $password: String!) {
+  register(input: {username: $username, email: $email, password: $password}) {
     user {
       id
       created
@@ -995,7 +995,7 @@ export const SignUpDocument = gql`
       messages
     }
   }
-  signIn(input: {usernameOrEmail: $email, password: $password}) {
+  login(input: {usernameOrEmail: $email, password: $password}) {
     token
     user {
       id
@@ -1013,17 +1013,17 @@ export const SignUpDocument = gql`
   }
 }
     `;
-export type SignUpMutationFn = ApolloReactCommon.MutationFunction<SignUpMutation, SignUpMutationVariables>;
+export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
-    export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignUpMutation, SignUpMutationVariables>) {
-      return ApolloReactHooks.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, baseOptions);
+    export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+      return ApolloReactHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
     }
-export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
-export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
-export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
-export const SignInDocument = gql`
-    mutation SignIn($usernameOrEmail: String!, $password: String!) {
-  signIn(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($usernameOrEmail: String!, $password: String!) {
+  login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
     token
     user {
       id
@@ -1041,14 +1041,14 @@ export const SignInDocument = gql`
   }
 }
     `;
-export type SignInMutationFn = ApolloReactCommon.MutationFunction<SignInMutation, SignInMutationVariables>;
+export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
-    export function useSignInMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignInMutation, SignInMutationVariables>) {
-      return ApolloReactHooks.useMutation<SignInMutation, SignInMutationVariables>(SignInDocument, baseOptions);
+    export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+      return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
     }
-export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
-export type SignInMutationResult = ApolloReactCommon.MutationResult<SignInMutation>;
-export type SignInMutationOptions = ApolloReactCommon.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
+export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const UserMeDocument = gql`
     query UserMe {
   userMe {
