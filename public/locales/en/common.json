@@ -1,6 +1,6 @@
 {
-    "signIn": "Sign In",
-    "signUp": "Sign Up",
+    "login": "Log In",
+    "register": "Register",
     "signOut": "Sign Out",
     "username": "Username",
     "email": "Email",

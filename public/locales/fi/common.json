@@ -1,6 +1,6 @@
 {
-    "signIn": "Kirjaudu sisään",
-    "signUp": "Rekisteröidy",
+    "login": "Kirjaudu sisään",
+    "register": "Rekisteröidy",
     "signOut": "Kirjaudu ulos",
     "username": "Käyttäjätunnus",
     "title": "Otsikko",
