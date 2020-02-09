@@ -101,7 +101,7 @@ mutation CreateComment(
     }
 }
 
-mutation CreateVoteMutation($status: String!, $commentId: Int, $courseId: Int, $resourceId: Int) {
+mutation CreateVoteMutation($status: Int!, $commentId: Int, $courseId: Int, $resourceId: Int) {
     createVote(input: { status: $status, commentId: $commentId, courseId: $courseId, resourceId: $resourceId }) {
         message
         errors {

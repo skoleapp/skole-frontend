@@ -1,15 +1,15 @@
-import React from 'react';
-import { CommentObjectType } from '../../../generated/graphql';
-import { Reply, ArrowDropDownOutlined, ArrowDropUpOutlined, AttachmentOutlined } from '@material-ui/icons';
-
-import { Badge, Typography, CardHeader, Avatar, IconButton, CardContent, Grid, Box } from '@material-ui/core';
-import styled from 'styled-components';
-import { getAvatarThumb } from '../../utils';
-import * as R from 'ramda';
+import { Avatar, Badge, Box, CardContent, CardHeader, Grid, IconButton, Typography } from '@material-ui/core';
+import { ArrowDropDownOutlined, ArrowDropUpOutlined, AttachmentOutlined, Reply } from '@material-ui/icons';
 import moment from 'moment';
-import { TextLink } from './TextLink';
-import { toggleCommentThread } from '../../actions';
+import * as R from 'ramda';
+import React from 'react';
 import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
+
+import { CommentObjectType } from '../../../generated/graphql';
+import { toggleCommentThread } from '../../actions';
+import { getAvatarThumb } from '../../utils';
+import { TextLink } from './TextLink';
 
 interface Props {
     comment: CommentObjectType;
