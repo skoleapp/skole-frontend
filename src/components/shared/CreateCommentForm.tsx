@@ -29,7 +29,7 @@ interface CreateCommentFormValues {
 export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target, appendComments }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { ref, setSubmitting, resetForm } = useForm<CreateCommentFormValues>();
+    const { ref, setSubmitting, resetForm, submitForm } = useForm<CreateCommentFormValues>();
 
     const onError = (): void => {
         dispatch(toggleNotification(t('notifications:messageError')));
@@ -54,6 +54,12 @@ export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target,
         resetForm();
     };
 
+    const handleKeyPress = (e: KeyboardEvent): void => {
+        if (e.key === 'Enter') {
+            submitForm();
+        }
+    };
+
     const initialValues = {
         text: '',
         attachment: '',
@@ -71,6 +77,8 @@ export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target,
                         variant="outlined"
                         component={TextField}
                         autoComplete="off"
+                        rowsMax="10"
+                        onKeyPress={handleKeyPress}
                         multiline
                         fullWidth
                     />
