@@ -42,7 +42,7 @@ const StyledMainLayout = styled(Box)`
     flex-direction: column;
 
     .MuiContainer-root {
-        padding: 0.5rem;
+        padding: 0;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
