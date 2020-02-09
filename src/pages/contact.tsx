@@ -71,6 +71,7 @@ const ContactPage: I18nPage = () => {
                         placeholder={t('forms:message')}
                         label={t('forms:message')}
                         variant="outlined"
+                        rows="5"
                         fullWidth
                         rows="5"
                         multiline

@@ -15,7 +15,7 @@ interface Props {
 
 export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, thread, target }) => {
     const { t } = useTranslation();
-    const placeholder = !!thread ? t('forms:reply') : t('forms:message');
+    const labelPlaceholder = !!thread ? t('forms:reply') : t('forms:message');
     const [comments, setComments] = useState(initialComments);
     const appendComments = (comments: CommentObjectType[]): void => setComments(comments);
 
@@ -31,7 +31,12 @@ export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, thre
 
     const renderInputArea = (
         <Box className="input-area">
-            <CreateCommentForm placeholder={placeholder} target={target} appendComments={appendComments} />
+            <CreateCommentForm
+                label={labelPlaceholder}
+                placeholder={labelPlaceholder}
+                target={target}
+                appendComments={appendComments}
+            />
         </Box>
     );
 
