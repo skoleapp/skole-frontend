@@ -10,11 +10,11 @@ query SearchCourses(
     courses(
         courseName: $courseName
         courseCode: $courseCode
-        schoolId: $school
-        subjectId: $subject
-        schoolTypeId: $schoolType
-        countryId: $country
-        cityId: $city
+        schoolId: $schoolId
+        subjectId: $subjectId
+        schoolTypeId: $schoolTypeId
+        countryId: $countryId
+        cityId: $cityId
     ) {
         id
         name
