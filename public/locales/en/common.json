@@ -1,6 +1,10 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "login": "Log In",
+=======
+    "login": "Log In]",
+>>>>>>> parent of d128124... Fix typos
     "register": "Register",
 =======
     "signIn": "Sign In",
