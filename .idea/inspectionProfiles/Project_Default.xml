@@ -2,31 +2,5 @@
   <profile version="1.0">
     <option name="myName" value="Project Default" />
     <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
-<<<<<<< HEAD
-    <inspection_tool class="PyCompatibilityInspection" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ourVersions">
-        <value>
-          <list size="1">
-            <item index="0" class="java.lang.String" itemvalue="3.8" />
-          </list>
-        </value>
-      </option>
-    </inspection_tool>
-    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
-      <scope name="Project Files" level="WARNING" enabled="true">
-        <option name="ignoredIdentifiers">
-          <list>
-            <option value="api.schemas.comment.CommentType.*" />
-          </list>
-        </option>
-      </scope>
-      <option name="ignoredIdentifiers">
-        <list>
-          <option value="api.schemas.comment.CommentType.*" />
-        </list>
-      </option>
-    </inspection_tool>
-=======
->>>>>>> parent of 1320a0e... Change sign-in/sign-up to login/register
   </profile>
 </component>
