@@ -277,8 +277,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     <Divider />
                     {renderAccountInfo}
                     <Divider />
-                    {renderBioSection}
-                    <Divider />
+                    {!!bio && renderBioSection}
+                    {!!bio && <Divider />}
                     {renderTabs}
                     {renderTabContent}
                 </StyledCard>

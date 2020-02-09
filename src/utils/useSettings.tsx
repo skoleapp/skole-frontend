@@ -59,7 +59,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     ));
 
     const renderCommonMenuItems = (
-        <>
+        <StyledMenuList>
             <ListSubheader>{t('common:language')}</ListSubheader>
             <ListItem>
                 <LanguageSelector fullWidth />
@@ -70,7 +70,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
             <Divider />
             <ListSubheader>{t('common:legal')}</ListSubheader>
             {renderLegalItems}
-        </>
+        </StyledMenuList>
     );
 
     const renderAuthenticatedMenuList = (
@@ -100,7 +100,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
 
     const renderSettingsCardContent = (
         <>
-            {authenticated ? renderAuthenticatedMenuList : <StyledMenuList>{renderCommonMenuItems}</StyledMenuList>}
+            {authenticated ? renderAuthenticatedMenuList : renderCommonMenuItems}
             <Divider />
             {authenticated ? renderSignOutButton : renderLoginButton}
         </>
