@@ -98,6 +98,10 @@ const IndexPage: I18nPage = () => {
 };
 
 const StyledIndexPage = styled(MainLayout)`
+    @media only screen and (max-width: ${breakpoints.MD}) {
+        padding: 0.5rem !important;
+    }
+
     .slogan {
         margin-top: 1rem;
 
