@@ -43,39 +43,39 @@ export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, isTh
 
     return (
         <StyledDiscussionBox>
-            {renderMessageArea}
-            {renderInputArea}
+            <Box className="discussion-container">
+                {renderMessageArea}
+                {renderInputArea}
+            </Box>
         </StyledDiscussionBox>
     );
 };
 
 const StyledDiscussionBox = styled(Box)`
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
     position: relative;
+    flex-grow: 1;
 
-    // TODO: Make the messages container responsive and the messages scrollable.
-    .message-area {
+    .discussion-container {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        bottom: 5.25rem;
-        overflow-y: scroll;
-
-        ::-webkit-scrollbar {
-            display: none;
-        }
-    }
-
-    .input-area {
-        position: absolute;
-        top: auto;
-        left: 0;
         bottom: 0;
-        right: 0;
-        padding: 0.5rem;
-        border-top: var(--border);
+        display: flex;
+        flex-direction: column;
+
+        .message-area {
+            flex-grow: 1;
+            overflow-y: scroll;
+
+            ::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        .input-area {
+            padding: 0.5rem;
+            border-top: var(--border);
+        }
     }
 `;
