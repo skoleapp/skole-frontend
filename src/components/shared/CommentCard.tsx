@@ -9,7 +9,8 @@ import * as R from 'ramda';
 import moment from 'moment';
 import { TextLink } from './TextLink';
 import { toggleCommentThread } from '../../actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from '../../types';
 
 interface Props {
     comment: CommentObjectType;
@@ -18,6 +19,8 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     const dispatch = useDispatch();
+    const { commentThread } = useSelector((state: State) => state.ui);
+
     const created = moment(comment.created).format('LL');
 
     const handleClick = (): void => {
@@ -48,7 +51,7 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 
     return (
-        <StyledCommentCard onClick={handleClick}>
+        <StyledCommentCard modalopen={!!commentThread ? 1 : 0} onClick={handleClick}>
             <CardHeader
                 avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
                 action={renderAction}
@@ -77,11 +80,10 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 };
 
-const StyledCommentCard = styled(Box)`
-    cursor: pointer;
-
+const StyledCommentCard = styled(({ modalopen, ...other }) => <Box {...other} />)`
     &:hover {
-        background-color: var(--hover-opacity);
+        cursor: ${({ modalopen }): string | false => !modalopen && 'pointer'};
+        background-color: ${({ modalopen }): string | false => !modalopen && 'var(--hover-opacity)'};
     }
 
     .MuiCardHeader-root,
