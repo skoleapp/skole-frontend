@@ -47,7 +47,7 @@ const StyledMainLayout = styled(Box)`
         display: flex;
         flex-direction: column;
 
-        @media only screen and (min-width: ${breakpoints.SM}) {
+        @media only screen and (min-width: ${breakpoints.MD}) {
             padding: 1rem;
         }
 
