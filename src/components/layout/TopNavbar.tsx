@@ -1,13 +1,13 @@
 import { AppBar, Box, IconButton, Toolbar } from '@material-ui/core';
 import { AccountCircle, ArrowBack, CloudUpload, SupervisedUserCircleOutlined } from '@material-ui/icons';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
 import { breakpoints } from '../../styles';
-import { State, LayoutProps } from '../../types';
+import { LayoutProps, State } from '../../types';
 import { ButtonLink, IconButtonLink } from '../shared';
 import { Heading, Logo, TopNavbarSearchWidget } from '.';
 

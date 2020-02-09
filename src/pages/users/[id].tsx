@@ -8,23 +8,21 @@ import {
     ListItemAvatar,
     ListItemText,
     Tab,
-    Typography,
     Table,
+    TableBody,
+    TableCell,
     TableHead,
     TableRow,
-    TableCell,
-    TableBody,
+    Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
-import { getFullCourseName } from '../../utils';
 
-import { UserDetailDocument, UserObjectType, CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
+import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
 import {
     ButtonLink,
     MainLayout,
@@ -32,13 +30,15 @@ import {
     SettingsButton,
     StyledCard,
     StyledList,
+    StyledTable,
     StyledTabs,
     TabPanel,
-    StyledTable,
 } from '../../components';
+import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { getFullCourseName } from '../../utils';
 import { getAvatar, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {

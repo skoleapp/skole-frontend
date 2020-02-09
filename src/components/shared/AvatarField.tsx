@@ -4,9 +4,9 @@ import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { FormErrorMessage } from '.';
 import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
+import { FormErrorMessage } from '.';
 
 // FIXME: I am borke.
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ setFieldValue, values }) => {

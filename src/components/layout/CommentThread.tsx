@@ -30,8 +30,8 @@ export const CommentThread: React.FC = () => {
 
     const discussionBoxProps = {
         comments,
-        target: { comment: R.propOr(null, 'id', commentThread) as string | null },
-        thread: true,
+        target: { commentId: Number(R.propOr(undefined, 'id', commentThread)) },
+        isThread: true,
         appendComments,
     };
 

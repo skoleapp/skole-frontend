@@ -1,6 +1,6 @@
-import React from 'react';
 import { Box, IconButton } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import React from 'react';
 
 interface Props {
     onClick: () => void;

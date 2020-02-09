@@ -1,31 +1,31 @@
 import {
     Avatar,
+    Box,
     CardContent,
     CardHeader,
+    Divider,
+    Fade,
+    Grid,
+    IconButton,
     ListItem,
     ListItemAvatar,
     ListItemText,
+    Paper,
+    Tab,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
     Typography,
-    Grid,
-    Box,
-    Divider,
-    Tab,
-    IconButton,
-    Fade,
-    Paper,
 } from '@material-ui/core';
 import {
-    CloudUploadOutlined,
-    ScoreOutlined,
     AccountCircleOutlined,
-    SubjectOutlined,
-    SchoolOutlined,
+    CloudUploadOutlined,
     InfoOutlined,
+    SchoolOutlined,
+    ScoreOutlined,
+    SubjectOutlined,
 } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
@@ -33,23 +33,23 @@ import React, { useState } from 'react';
 import { compose } from 'redux';
 
 import {
+    CommentObjectType,
     CourseDetailDocument,
     CourseObjectType,
     ResourceObjectType,
-    CommentObjectType,
 } from '../../../generated/graphql';
 import {
-    NotFound,
-    StyledList,
-    StyledTable,
-    TextLink,
-    StyledCard,
+    DiscussionBox,
     MainLayout,
+    ModalCloseIcon,
+    NotFound,
+    StyledCard,
+    StyledList,
+    StyledModal,
+    StyledTable,
     StyledTabs,
     TabPanel,
-    DiscussionBox,
-    StyledModal,
-    ModalCloseIcon,
+    TextLink,
 } from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -87,7 +87,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const discussionBoxProps = {
             comments,
-            target: { course: course.id },
+            target: { course: Number(course.id) },
         };
 
         const renderCourseInfo = (

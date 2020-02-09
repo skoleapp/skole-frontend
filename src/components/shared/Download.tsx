@@ -1,10 +1,10 @@
 import { Button } from '@material-ui/core';
 import { CloudDownload } from '@material-ui/icons';
 import React, { useState } from 'react';
-import { useTranslation } from '../../i18n';
 import { useDispatch } from 'react-redux';
 
 import { toggleNotification } from '../../actions';
+import { useTranslation } from '../../i18n';
 
 interface Props {
     url: string;

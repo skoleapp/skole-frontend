@@ -2,14 +2,14 @@ import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
-import { toggleNotification, reAuthenticate } from '../../actions';
-import { FormSubmitSection, SettingsLayout, StyledForm, AvatarField } from '../../components';
+import { reAuthenticate, toggleNotification } from '../../actions';
+import { AvatarField, FormSubmitSection, SettingsLayout, StyledForm } from '../../components';
+import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';

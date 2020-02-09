@@ -1,11 +1,11 @@
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { FormLayout, FormSubmitSection, StyledForm } from '../../components';
+import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';

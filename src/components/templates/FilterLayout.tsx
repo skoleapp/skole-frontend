@@ -1,9 +1,9 @@
-import { Box, Button, CardContent, CardHeader, Grid, IconButton, SwipeableDrawer, Divider } from '@material-ui/core';
+import { Box, Button, CardContent, CardHeader, Divider, Grid, IconButton, SwipeableDrawer } from '@material-ui/core';
 import { Cancel, FilterList } from '@material-ui/icons';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 
 import { StyledCard, StyledTable } from '..';
+import { useTranslation } from '../../i18n';
 import { LayoutProps } from '../../types';
 import { UseFilters } from '../../utils/useFilters';
 import { MainLayout } from './MainLayout';

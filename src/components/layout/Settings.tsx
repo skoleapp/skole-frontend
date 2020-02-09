@@ -6,8 +6,8 @@ import { AnyAction } from 'redux';
 import { toggleSettings } from '../../actions';
 import { State } from '../../types';
 import { useSettings } from '../../utils';
-import { StyledModal } from '../shared/StyledModal';
 import { ModalCloseIcon } from '../shared';
+import { StyledModal } from '../shared/StyledModal';
 
 export const Settings: React.FC = () => {
     const { settings } = useSelector((state: State) => state.ui);

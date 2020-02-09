@@ -2,7 +2,6 @@ import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from '../i18n';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
@@ -17,6 +16,7 @@ import {
 } from '../../generated/graphql';
 import { toggleNotification } from '../actions';
 import { AutoCompleteField, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
