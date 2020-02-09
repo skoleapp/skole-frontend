@@ -11,8 +11,8 @@
         "start": "NODE_ENV=production node build/src/server.js",
         "type-check": "tsc",
         "gen": "graphql-codegen --config codegen.yml",
-        "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-        "format": "prettier --write '**/*.{ts,tsx,js,json}'"
+        "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+        "format": "prettier --write '**/*.{ts,tsx,js,json}' && yarn lint:fix"
     },
     "dependencies": {
         "@apollo/react-hooks": "^3.1.2",
