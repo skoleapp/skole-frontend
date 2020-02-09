@@ -1,29 +1,30 @@
-import React, { useState } from 'react';
-import { CommentObjectType } from '../../../generated/graphql';
-import { CommentCard } from './CommentCard';
 import { Box } from '@material-ui/core';
-import { useTranslation } from '../../i18n';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { CreateCommentForm } from './CreateCommentForm';
+
+import { CommentObjectType } from '../../../generated/graphql';
+import { useTranslation } from '../../i18n';
 import { CommentTarget } from '../../types';
+import { CommentCard } from './CommentCard';
+import { CreateCommentForm } from './CreateCommentForm';
 
 interface Props {
     comments: CommentObjectType[];
-    thread?: boolean;
+    isThread?: boolean;
     target: CommentTarget;
 }
 
-export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, thread, target }) => {
+export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, isThread, target }) => {
     const { t } = useTranslation();
-    const labelPlaceholder = !!thread ? t('forms:reply') : t('forms:message');
+    const labelPlaceholder = !!isThread ? t('forms:reply') : t('forms:message');
     const [comments, setComments] = useState(initialComments);
-    const appendComments = (comments: CommentObjectType[]): void => setComments(comments);
+    const appendComments = (comment: CommentObjectType): void => setComments([...comments, comment]);
 
     const renderMessageArea = (
         <Box className="message-area">
             {comments.map((c: CommentObjectType, i: number) => (
                 <Box key={i}>
-                    <CommentCard comment={c} disableClick={!!thread} />
+                    <CommentCard comment={c} isThread={!!isThread} />
                 </Box>
             ))}
         </Box>

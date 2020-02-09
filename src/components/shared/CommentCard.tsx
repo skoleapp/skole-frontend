@@ -13,15 +13,15 @@ import { TextLink } from './TextLink';
 
 interface Props {
     comment: CommentObjectType;
-    disableClick?: boolean;
+    isThread?: boolean;
 }
 
-export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
+export const CommentCard: React.FC<Props> = ({ comment, isThread }) => {
     const dispatch = useDispatch();
     const created = moment(comment.created).format('LL');
 
     const handleClick = (): void => {
-        !disableClick && dispatch(toggleCommentThread(comment));
+        !isThread && dispatch(toggleCommentThread(comment));
     };
 
     const renderAction = (
@@ -31,7 +31,7 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
                     <AttachmentOutlined />
                 </Box>
             )}
-            {!disableClick && (
+            {!isThread && (
                 <Box margin="0.75rem 0.75rem 0 0.5rem">
                     <Badge badgeContent={R.propOr('-', 'replyCount', comment)} showZero color="primary">
                         <Reply />
@@ -48,7 +48,7 @@ export const CommentCard: React.FC<Props> = ({ comment, disableClick }) => {
     );
 
     return (
-        <StyledCommentCard isThread={!!disableClick} onClick={handleClick}>
+        <StyledCommentCard isThread={!!isThread} onClick={handleClick}>
             <CardHeader
                 avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
                 action={renderAction}
