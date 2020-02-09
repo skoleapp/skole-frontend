@@ -9,7 +9,7 @@ interface Params {
     userMe?: UserObjectType;
 }
 
-// SSR hook to update and return currently  user.
+// SSR hook to update and return the currently logged in user.
 export const useAuthSync = async (ctx: SkoleContext): Promise<Params> => {
     const { apolloClient, reduxStore, req } = ctx;
     const token = getToken(req);
