@@ -2,6 +2,7 @@
   <profile version="1.0">
     <option name="myName" value="Project Default" />
     <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+<<<<<<< HEAD
     <inspection_tool class="PyCompatibilityInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ourVersions">
         <value>
@@ -25,5 +26,7 @@
         </list>
       </option>
     </inspection_tool>
+=======
+>>>>>>> parent of 1320a0e... Change sign-in/sign-up to login/register
   </profile>
 </component>

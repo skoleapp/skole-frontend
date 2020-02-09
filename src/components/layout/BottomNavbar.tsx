@@ -42,7 +42,7 @@ export const BottomNavbar: React.FC = () => {
     const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
     const handleAccountClick = (): void => {
-        authenticated ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/login';
+        authenticated ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/sign-in';
     };
 
     return (

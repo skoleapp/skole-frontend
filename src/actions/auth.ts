@@ -4,7 +4,7 @@ import Router from 'next/router';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 
-import { LoginMutationPayload, UserObjectType } from '../../generated/graphql';
+import { SignInMutationPayload, UserObjectType } from '../../generated/graphql';
 import { i18n } from '../i18n';
 import { toggleNotification } from './ui';
 
@@ -12,7 +12,7 @@ export const AUTHENTICATE = 'AUTHENTICATED';
 export const RE_AUTHENTICATE = 'RE_AUTHENTICATED';
 export const DE_AUTHENTICATE = 'DE_AUTHENTICATED';
 
-export const authenticate = (client: ApolloClient<{}>, { token, user }: LoginMutationPayload) => (
+export const authenticate = (client: ApolloClient<{}>, { token, user }: SignInMutationPayload) => (
     dispatch: Dispatch<AnyAction>,
 ): void => {
     if (token && user) {
@@ -41,5 +41,5 @@ export const deAuthenticate = (apolloClient: ApolloClient<{}>) => async (
     dispatch({ type: DE_AUTHENTICATE });
     dispatch((toggleNotification(i18n.t('notifications:signedOut')) as unknown) as AnyAction);
     await apolloClient.cache.reset();
-    Router.push('/login');
+    Router.push('/sign-in');
 };

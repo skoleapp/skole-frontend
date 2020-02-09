@@ -52,11 +52,11 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
                     <IconButtonLink icon={AccountCircle} href={`/users/${user.id}`} color="secondary" />
                 ) : (
                     <>
-                        <ButtonLink href="/login" color="secondary">
-                            {t('common:login')}
+                        <ButtonLink href="/sign-in" color="secondary">
+                            {t('common:signIn')}
                         </ButtonLink>
-                        <ButtonLink href="/register" color="secondary">
-                            {t('common:register')}
+                        <ButtonLink href="/sign-up" color="secondary">
+                            {t('common:signUp')}
                         </ButtonLink>
                     </>
                 )}

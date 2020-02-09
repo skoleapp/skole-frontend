@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { LoginMutation, useLoginMutation } from '../../generated/graphql';
+import { SignInMutation, useSignInMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
 import { ButtonLink, FormLayout, FormSubmitSection, StyledForm, TextLink } from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
@@ -23,15 +23,15 @@ const initialValues = {
     general: '',
 };
 
-export interface LoginFormValues {
+export interface SignInFormValues {
     usernameOrEmail: string;
     password: string;
 }
 
-const LoginPage: I18nPage = () => {
+const SignInPage: I18nPage = () => {
     const client = useApolloClient();
     const dispatch = useDispatch();
-    const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<LoginFormValues>();
+    const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<SignInFormValues>();
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
@@ -41,16 +41,16 @@ const LoginPage: I18nPage = () => {
         password: Yup.string().required(t('validation:passwordRequired')),
     });
 
-    const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
-        if (login) {
-            if (login.errors) {
-                handleMutationErrors(login.errors);
+    const onCompleted = async ({ signIn }: SignInMutation): Promise<void> => {
+        if (signIn) {
+            if (signIn.errors) {
+                handleMutationErrors(signIn.errors);
             } else {
                 resetForm();
-                await dispatch(authenticate(client, login));
+                await dispatch(authenticate(client, signIn));
 
                 const { next } = query;
-                const { user } = login;
+                const { user } = signIn;
 
                 if (!!next) {
                     Router.push(next as string);
@@ -61,11 +61,11 @@ const LoginPage: I18nPage = () => {
         }
     };
 
-    const [loginMutation] = useLoginMutation({ onCompleted, onError });
+    const [signInMutation] = useSignInMutation({ onCompleted, onError });
 
-    const handleSubmit = async (values: LoginFormValues): Promise<void> => {
+    const handleSubmit = async (values: SignInFormValues): Promise<void> => {
         const { usernameOrEmail, password } = values;
-        await loginMutation({ variables: { usernameOrEmail, password } });
+        await signInMutation({ variables: { usernameOrEmail, password } });
         setSubmitting(false);
     };
 
@@ -90,15 +90,15 @@ const LoginPage: I18nPage = () => {
                         type="password"
                         fullWidth
                     />
-                    <FormSubmitSection submitButtonText={t('common:login')} {...props} />
+                    <FormSubmitSection submitButtonText={t('common:signIn')} {...props} />
                     <Box marginY="1rem">
                         <Divider />
                     </Box>
-                    <ButtonLink href="/register" variant="outlined" color="primary" fullWidth>
-                        {t('login:createAccount')}
+                    <ButtonLink href="/sign-up" variant="outlined" color="primary" fullWidth>
+                        {t('sign-in:createAccount')}
                     </ButtonLink>
                     <Box marginTop="1rem">
-                        <TextLink href="/reset-password">{t('login:forgotPassword')}</TextLink>
+                        <TextLink href="/reset-password">{t('sign-in:forgotPassword')}</TextLink>
                     </Box>
                 </StyledForm>
             )}
@@ -107,17 +107,17 @@ const LoginPage: I18nPage = () => {
 
     return (
         <FormLayout
-            title={t('common:login')}
+            title={t('common:signIn')}
             renderCardContent={renderCardContent}
-            renderAlert={!!query.next ? renderAlert('warning', t('alerts:loginRequired')) : undefined}
+            renderAlert={!!query.next ? renderAlert('warning', t('alerts:signInRequired')) : undefined}
             backUrl
         />
     );
 };
 
-LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+SignInPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['login']) };
+    return { namespacesRequired: includeDefaultNamespaces(['sign-in']) };
 };
 
-export default compose(withApollo, withRedux)(LoginPage);
+export default compose(withApollo, withRedux)(SignInPage);

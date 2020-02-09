@@ -12,6 +12,6 @@ export const usePrivatePage = async (ctx: SkoleContext): Promise<void> => {
     if (!!userMe) {
         await ctx.reduxStore.dispatch((reAuthenticate(userMe) as unknown) as AnyAction);
     } else {
-        redirect(ctx, '/login', { next: ctx.pathname });
+        redirect(ctx, '/sign-in', { next: ctx.pathname });
     }
 };

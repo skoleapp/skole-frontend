@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
     "login": "Log In",
     "register": "Register",
+=======
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+>>>>>>> parent of 1320a0e... Change sign-in/sign-up to login/register
     "signOut": "Sign Out",
     "username": "Username",
     "email": "Email",

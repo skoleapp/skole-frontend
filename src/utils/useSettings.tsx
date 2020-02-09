@@ -82,10 +82,10 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         </StyledMenuList>
     );
 
-    const renderLoginButton = (
+    const renderSignInButton = (
         <ListItem>
-            <Button fullWidth variant="outlined" color="primary" onClick={handleMenuItemClick('/login')}>
-                {t('common:login')}
+            <Button fullWidth variant="outlined" color="primary" onClick={handleMenuItemClick('/sign-in')}>
+                {t('common:signIn')}
             </Button>
         </ListItem>
     );
@@ -102,7 +102,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         <>
             {authenticated ? renderAuthenticatedMenuList : <StyledMenuList>{renderCommonMenuItems}</StyledMenuList>}
             <Divider />
-            {authenticated ? renderSignOutButton : renderLoginButton}
+            {authenticated ? renderSignOutButton : renderSignInButton}
         </>
     );
 

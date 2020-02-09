@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { RegisterMutation, useRegisterMutation } from '../../generated/graphql';
+import { SignUpMutation, useSignUpMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
 import { ButtonLink, FormLayout, FormSubmitSection, StyledForm } from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
@@ -24,16 +24,16 @@ const initialValues = {
     general: '',
 };
 
-export interface RegisterFormValues {
+export interface SignUpFormValues {
     username: string;
     email: string;
     password: string;
     confirmPassword: string;
 }
 
-const RegisterPage: I18nPage = () => {
+const SignUpPage: I18nPage = () => {
     const client = useApolloClient();
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<RegisterFormValues>();
+    const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<SignUpFormValues>();
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
@@ -50,23 +50,23 @@ const RegisterPage: I18nPage = () => {
             .required(t('validation:confirmPasswordRequired')),
     });
 
-    const onCompleted = ({ register, login }: RegisterMutation): void => {
-        if (register && register.errors) {
-            handleMutationErrors(register.errors);
-        } else if (login && login.errors) {
-            handleMutationErrors(login.errors);
-        } else if (login && login.user) {
+    const onCompleted = ({ signUp, signIn }: SignUpMutation): void => {
+        if (signUp && signUp.errors) {
+            handleMutationErrors(signUp.errors);
+        } else if (signIn && signIn.errors) {
+            handleMutationErrors(signIn.errors);
+        } else if (signIn && signIn.user) {
             resetForm();
-            dispatch(authenticate(client, login));
-            Router.push(`/users/${login.user.id}`);
+            dispatch(authenticate(client, signIn));
+            Router.push(`/users/${signIn.user.id}`);
         }
     };
 
-    const [registerMutation] = useRegisterMutation({ onCompleted, onError });
+    const [signUpMutation] = useSignUpMutation({ onCompleted, onError });
 
-    const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
+    const handleSubmit = async (values: SignUpFormValues): Promise<void> => {
         const { username, email, password } = values;
-        await registerMutation({ variables: { username, email, password } });
+        await signUpMutation({ variables: { username, email, password } });
         setSubmitting(false);
     };
 
@@ -110,31 +110,31 @@ const RegisterPage: I18nPage = () => {
                     />
                     <FormControl fullWidth>
                         <Typography variant="body2" color="textSecondary">
-                            {t('register:termsHelpText')}{' '}
+                            {t('sign-up:termsHelpText')}{' '}
                             <Link href="/terms" target="_blank">
                                 {t('common:terms')}
                             </Link>
                             .
                         </Typography>
                     </FormControl>
-                    <FormSubmitSection submitButtonText={t('common:register')} {...props} />
+                    <FormSubmitSection submitButtonText={t('common:signUp')} {...props} />
                     <Box marginY="1rem">
                         <Divider />
                     </Box>
-                    <ButtonLink href="/login" variant="outlined" color="primary" fullWidth>
-                        {t('register:alreadyHaveAccount')}
+                    <ButtonLink href="/sign-in" variant="outlined" color="primary" fullWidth>
+                        {t('sign-up:alreadyHaveAccount')}
                     </ButtonLink>
                 </StyledForm>
             )}
         </Formik>
     );
 
-    return <FormLayout title={t('common:register')} renderCardContent={renderCardContent} backUrl />;
+    return <FormLayout title={t('common:signUp')} renderCardContent={renderCardContent} backUrl />;
 };
 
-RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+SignUpPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['register']) };
+    return { namespacesRequired: includeDefaultNamespaces(['sign-up']) };
 };
 
-export default compose(withApollo, withRedux)(RegisterPage);
+export default compose(withApollo, withRedux)(SignUpPage);
