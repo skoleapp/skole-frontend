@@ -10,6 +10,7 @@ import { useForm } from '../../utils';
 import { CommentTarget } from '../../types';
 
 interface Props {
+    label: string;
     placeholder: string;
     target: CommentTarget;
     appendComments: (comments: CommentObjectType[]) => void;
@@ -24,7 +25,7 @@ interface CreateCommentFormValues {
     comment?: string;
 }
 
-export const CreateCommentForm: React.FC<Props> = ({ placeholder, target, appendComments }) => {
+export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target, appendComments }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const { ref, setSubmitting, resetForm } = useForm<CreateCommentFormValues>();
@@ -64,11 +65,11 @@ export const CreateCommentForm: React.FC<Props> = ({ placeholder, target, append
                 <StyledForm>
                     <Field
                         name="text"
+                        label={label}
                         placeholder={placeholder}
                         variant="outlined"
                         component={TextField}
                         fullWidth
-                        autoComplete="off"
                     />
                     <input type="submit" value="Submit" />
                 </StyledForm>

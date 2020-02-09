@@ -114,6 +114,7 @@ const EditProfilePage: I18nPage = () => {
                         variant="outlined"
                         rows="5"
                         multiline
+                        rows="4"
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
