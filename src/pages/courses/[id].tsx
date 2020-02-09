@@ -87,7 +87,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const discussionBoxProps = {
             comments,
-            target: { course: Number(course.id) },
+            target: { courseId: Number(course.id) },
         };
 
         const renderCourseInfo = (
