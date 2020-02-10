@@ -22,6 +22,7 @@ const initialValues = {
     password: '',
     confirmPassword: '',
     general: '',
+    code: '',
 };
 
 export interface SignUpFormValues {
@@ -29,6 +30,7 @@ export interface SignUpFormValues {
     email: string;
     password: string;
     confirmPassword: string;
+    code: string;
 }
 
 const SignUpPage: I18nPage = () => {
@@ -48,6 +50,7 @@ const SignUpPage: I18nPage = () => {
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
             .required(t('validation:confirmPasswordRequired')),
+        code: Yup.string().required(t('validation:betaCodeRequired')),
     });
 
     const onCompleted = ({ signUp, signIn }: SignUpMutation): void => {
@@ -65,7 +68,9 @@ const SignUpPage: I18nPage = () => {
     const [signUpMutation] = useSignUpMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: SignUpFormValues): Promise<void> => {
-        const { username, email, password } = values;
+        const { username, email, password, code } = values;
+        // lisää code alempaan mutaatioon
+        console.log(code);
         await signUpMutation({ variables: { username, email, password } });
         setSubmitting(false);
     };
@@ -78,24 +83,25 @@ const SignUpPage: I18nPage = () => {
                         placeholder={t('forms:username')}
                         name="username"
                         component={TextField}
-                        label={t('forms:username')}
                         variant="outlined"
+                        autoComplete="off"
                         fullWidth
+                        type="text"
                     />
                     <Field
                         placeholder={t('forms:email')}
                         name="email"
                         component={TextField}
-                        label={t('forms:email')}
                         variant="outlined"
+                        autoComplete="off"
                         fullWidth
                     />
                     <Field
                         placeholder={t('forms:password')}
                         name="password"
                         component={TextField}
-                        label={t('forms:password')}
                         variant="outlined"
+                        autoComplete="new-password"
                         type="password"
                         fullWidth
                     />
@@ -103,8 +109,16 @@ const SignUpPage: I18nPage = () => {
                         placeholder={t('forms:confirmPassword')}
                         name="confirmPassword"
                         type="password"
+                        autoComplete="off"
                         component={TextField}
-                        label={t('forms:confirmPassword')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:betaCode')}
+                        name="code"
+                        autoComplete="off"
+                        component={TextField}
                         variant="outlined"
                         fullWidth
                     />
