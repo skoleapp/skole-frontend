@@ -16,6 +16,7 @@ import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePublicPage } from '../utils';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 
 export interface SignUpFormValues {
     username: string;
@@ -40,13 +41,15 @@ const BetaPage: I18nPage = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
+    const betaPassCode = getBetaPassCodeFromQuery();
+
     const initialValues = {
         username: '',
         email: '',
         password: '',
         confirmPassword: '',
         general: '',
-        code: getBetaPassCodeFromQuery(),
+        code: betaPassCode,
     };
 
     const validationSchema = Yup.object().shape({
@@ -126,13 +129,15 @@ const BetaPage: I18nPage = () => {
                         variant="outlined"
                         fullWidth
                     />
-                    <Field
+                    <StyledField
                         placeholder={t('forms:betaCode')}
                         name="code"
                         autoComplete="off"
                         component={TextField}
                         variant="outlined"
                         fullWidth
+                        label={t('forms:betaCode')}
+                        disabled={!!betaPassCode}
                     />
                     <FormControl fullWidth>
                         <Typography variant="body2" color="textSecondary">
@@ -157,6 +162,12 @@ const BetaPage: I18nPage = () => {
 
     return <FormLayout renderCardContent={renderCardContent} backUrl />;
 };
+
+const StyledField = styled(Field)`
+    .MuiInputBase-root.Mui-disabled {
+        color: green;
+    }
+`;
 
 BetaPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
