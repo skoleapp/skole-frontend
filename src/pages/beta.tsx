@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 
 import { SignUpMutation, useSignUpMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection, StyledForm, FilledLogo } from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
@@ -89,6 +89,8 @@ const BetaPage: I18nPage = () => {
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {(props): JSX.Element => (
                 <StyledForm>
+                    <FilledLogo />
+                    <Typography variant="h2">{t('beta:welcomeToBeta')}</Typography>
                     <Field
                         placeholder={t('forms:username')}
                         name="username"
@@ -153,7 +155,7 @@ const BetaPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('beta:welcomeToBeta')} renderCardContent={renderCardContent} backUrl />;
+    return <FormLayout renderCardContent={renderCardContent} backUrl />;
 };
 
 BetaPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
