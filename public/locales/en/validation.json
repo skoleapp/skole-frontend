@@ -17,5 +17,5 @@
     "contactTypeRequired": "Contact type is required.",
     "messageRequired": "Message is required.",
     "schoolRequired": "School is required.",
-    "betaCodeRequired": "Beta code is required."
+    "betaCodeRequired": "Beta passcode is required."
 }
