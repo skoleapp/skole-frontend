@@ -64,8 +64,8 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
         const variables = {
             courseName,
             courseCode,
-            school: R.propOr('', 'id', school) as string,
-            subject: R.propOr('', 'id', subject) as string,
+            schoolId: R.propOr('', 'id', school) as number,
+            subjectId: R.propOr('', 'id', subject) as number,
         };
 
         createCourseMutation({ variables });
