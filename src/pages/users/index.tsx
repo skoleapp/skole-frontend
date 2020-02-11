@@ -1,5 +1,6 @@
 import {
     Avatar,
+    CardContent,
     MenuItem,
     Table,
     TableBody,
@@ -7,7 +8,6 @@ import {
     TableHead,
     TableRow,
     Typography,
-    CardContent,
 } from '@material-ui/core';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -15,11 +15,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 import { compose } from 'redux';
 
 import { UserObjectType, UsersDocument } from '../../../generated/graphql';
 import { FilterLayout, FormSubmitSection, SelectField, StyledForm } from '../../components';
+import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';

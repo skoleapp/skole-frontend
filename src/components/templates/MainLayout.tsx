@@ -42,12 +42,12 @@ const StyledMainLayout = styled(Box)`
     flex-direction: column;
 
     .MuiContainer-root {
-        padding: 0.5rem;
+        padding: 0;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
 
-        @media only screen and (min-width: ${breakpoints.SM}) {
+        @media only screen and (min-width: ${breakpoints.MD}) {
             padding: 1rem;
         }
 

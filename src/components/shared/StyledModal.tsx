@@ -1,7 +1,8 @@
-import styled from 'styled-components';
-import { Modal, Backdrop } from '@material-ui/core';
-import { breakpoints } from '../../styles';
+import { Backdrop, Modal } from '@material-ui/core';
 import React from 'react';
+import styled from 'styled-components';
+
+import { breakpoints } from '../../styles';
 
 export const StyledModal = styled(props => (
     <Modal closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} {...props} />

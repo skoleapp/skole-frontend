@@ -3,8 +3,8 @@ import { Close } from '@material-ui/icons';
 import React, { SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { toggleNotification } from '../../actions';
 
+import { toggleNotification } from '../../actions';
 import { breakpoints } from '../../styles';
 import { State } from '../../types';
 

@@ -1,9 +1,9 @@
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { useTranslation } from '../i18n';
 import { compose } from 'redux';
 
 import { SettingsLayout } from '../components';
+import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';

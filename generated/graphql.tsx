@@ -16,7 +16,6 @@ export type Scalars = {
 export type ChangePasswordMutationInput = {
   oldPassword: Scalars['String'],
   newPassword: Scalars['String'],
-  id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -35,7 +34,7 @@ export type CityObjectType = {
 
 export type CommentObjectType = {
    __typename?: 'CommentObjectType',
-  id: Scalars['ID'],
+  id?: Maybe<Scalars['Int']>,
   user?: Maybe<UserObjectType>,
   text: Scalars['String'],
   attachment: Scalars['String'],
@@ -48,6 +47,7 @@ export type CommentObjectType = {
   replyComments: Array<CommentObjectType>,
   points?: Maybe<Scalars['Int']>,
   replyCount?: Maybe<Scalars['Int']>,
+  vote?: Maybe<VoteObjectType>,
 };
 
 export type ContactMutationInput = {
@@ -74,7 +74,7 @@ export type CountryObjectType = {
 
 export type CourseObjectType = {
    __typename?: 'CourseObjectType',
-  id: Scalars['ID'],
+  id?: Maybe<Scalars['Int']>,
   name: Scalars['String'],
   code: Scalars['String'],
   subject?: Maybe<SubjectObjectType>,
@@ -91,17 +91,16 @@ export type CourseObjectType = {
 export type CreateCommentMutationInput = {
   text: Scalars['String'],
   attachment?: Maybe<Scalars['String']>,
-  course?: Maybe<Scalars['ID']>,
-  resource?: Maybe<Scalars['ID']>,
-  resourcePart?: Maybe<Scalars['ID']>,
-  comment?: Maybe<Scalars['ID']>,
-  id?: Maybe<Scalars['ID']>,
+  courseId?: Maybe<Scalars['Int']>,
+  resourceId?: Maybe<Scalars['Int']>,
+  resourcePartId?: Maybe<Scalars['Int']>,
+  commentId?: Maybe<Scalars['Int']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
 export type CreateCommentMutationPayload = {
    __typename?: 'CreateCommentMutationPayload',
-  comments?: Maybe<Array<Maybe<CommentObjectType>>>,
+  comment?: Maybe<CommentObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -109,9 +108,8 @@ export type CreateCommentMutationPayload = {
 export type CreateCourseMutationInput = {
   name: Scalars['String'],
   code?: Maybe<Scalars['String']>,
-  subject?: Maybe<Scalars['ID']>,
-  school: Scalars['ID'],
-  id?: Maybe<Scalars['ID']>,
+  subjectId?: Maybe<Scalars['Int']>,
+  schoolId: Scalars['Int'],
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -122,45 +120,65 @@ export type CreateCourseMutationPayload = {
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
-
-
-export type DeleteCommentMutation = {
-   __typename?: 'DeleteCommentMutation',
-  comment?: Maybe<CommentObjectType>,
+export type CreateResourceMutationInput = {
+  title: Scalars['String'],
+  resourceTypeId: Scalars['Int'],
+  courseId: Scalars['Int'],
+  date?: Maybe<Scalars['Date']>,
+  files?: Maybe<Scalars['String']>,
+  clientMutationId?: Maybe<Scalars['String']>,
 };
 
-export type DeleteResourceMutation = {
-   __typename?: 'DeleteResourceMutation',
+export type CreateResourceMutationPayload = {
+   __typename?: 'CreateResourceMutationPayload',
   resource?: Maybe<ResourceObjectType>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type CreateVoteMutationInput = {
+  status: Scalars['Int'],
+  commentId?: Maybe<Scalars['Int']>,
+  courseId?: Maybe<Scalars['Int']>,
+  resourceId?: Maybe<Scalars['Int']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type CreateVoteMutationPayload = {
+   __typename?: 'CreateVoteMutationPayload',
+  vote?: Maybe<VoteObjectType>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+
+
+export type DeleteObjectMutationInput = {
+  commentId?: Maybe<Scalars['Int']>,
+  resourceId?: Maybe<Scalars['Int']>,
+  resourcePartId?: Maybe<Scalars['Int']>,
+  voteId?: Maybe<Scalars['Int']>,
+  courseId?: Maybe<Scalars['Int']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type DeleteObjectMutationPayload = {
+   __typename?: 'DeleteObjectMutationPayload',
+  message?: Maybe<Scalars['String']>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  clientMutationId?: Maybe<Scalars['String']>,
 };
 
 export type DeleteUserMutationInput = {
   password: Scalars['String'],
-  id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
 export type DeleteUserMutationPayload = {
    __typename?: 'DeleteUserMutationPayload',
-  user?: Maybe<UserObjectType>,
-  errors?: Maybe<Array<Maybe<ErrorType>>>,
   message?: Maybe<Scalars['String']>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
-};
-
-export type DownvoteCommentMutation = {
-   __typename?: 'DownvoteCommentMutation',
-  comment?: Maybe<CommentObjectType>,
-};
-
-export type DownvoteCourseMutation = {
-   __typename?: 'DownvoteCourseMutation',
-  course?: Maybe<CourseObjectType>,
-};
-
-export type DownvoteResourceMutation = {
-   __typename?: 'DownvoteResourceMutation',
-  resource?: Maybe<ResourceObjectType>,
 };
 
 export type ErrorType = {
@@ -169,37 +187,50 @@ export type ErrorType = {
   messages: Array<Scalars['String']>,
 };
 
+export type LoginMutationInput = {
+  usernameOrEmail: Scalars['String'],
+  password: Scalars['String'],
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type LoginMutationPayload = {
+   __typename?: 'LoginMutationPayload',
+  user?: Maybe<UserObjectType>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  token?: Maybe<Scalars['String']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
-  signUp?: Maybe<SignUpMutationPayload>,
-  signIn?: Maybe<SignInMutationPayload>,
+  createVote?: Maybe<CreateVoteMutationPayload>,
+  login?: Maybe<LoginMutationPayload>,
+  register?: Maybe<RegisterMutationPayload>,
   updateUser?: Maybe<UpdateUserMutationPayload>,
   changePassword?: Maybe<ChangePasswordMutationPayload>,
   deleteUser?: Maybe<DeleteUserMutationPayload>,
-  upvoteResource?: Maybe<UpvoteResourceMutation>,
-  downvoteResource?: Maybe<DownvoteResourceMutation>,
-  uploadResource?: Maybe<UploadResourceMutationPayload>,
+  uploadResource?: Maybe<CreateResourceMutationPayload>,
   updateResource?: Maybe<UpdateResourceMutationPayload>,
-  deleteResource?: Maybe<DeleteResourceMutation>,
+  deleteObject?: Maybe<DeleteObjectMutationPayload>,
   createCourse?: Maybe<CreateCourseMutationPayload>,
-  upvoteCourse?: Maybe<UpvoteCourseMutation>,
-  downvoteCourse?: Maybe<DownvoteCourseMutation>,
   contact?: Maybe<ContactMutationPayload>,
-  upvoteComment?: Maybe<UpvoteCommentMutation>,
-  downvoteComment?: Maybe<DownvoteCommentMutation>,
   createComment?: Maybe<CreateCommentMutationPayload>,
   updateComment?: Maybe<UpdateCommentMutationPayload>,
-  deleteComment?: Maybe<DeleteCommentMutation>,
 };
 
 
-export type MutationSignUpArgs = {
-  input: SignUpMutationInput
+export type MutationCreateVoteArgs = {
+  input: CreateVoteMutationInput
 };
 
 
-export type MutationSignInArgs = {
-  input: SignInMutationInput
+export type MutationLoginArgs = {
+  input: LoginMutationInput
+};
+
+
+export type MutationRegisterArgs = {
+  input: RegisterMutationInput
 };
 
 
@@ -218,18 +249,8 @@ export type MutationDeleteUserArgs = {
 };
 
 
-export type MutationUpvoteResourceArgs = {
-  resourceId?: Maybe<Scalars['Int']>
-};
-
-
-export type MutationDownvoteResourceArgs = {
-  resourceId?: Maybe<Scalars['Int']>
-};
-
-
 export type MutationUploadResourceArgs = {
-  input: UploadResourceMutationInput
+  input: CreateResourceMutationInput
 };
 
 
@@ -238,8 +259,8 @@ export type MutationUpdateResourceArgs = {
 };
 
 
-export type MutationDeleteResourceArgs = {
-  resourceId?: Maybe<Scalars['Int']>
+export type MutationDeleteObjectArgs = {
+  input: DeleteObjectMutationInput
 };
 
 
@@ -248,28 +269,8 @@ export type MutationCreateCourseArgs = {
 };
 
 
-export type MutationUpvoteCourseArgs = {
-  courseId?: Maybe<Scalars['Int']>
-};
-
-
-export type MutationDownvoteCourseArgs = {
-  courseId?: Maybe<Scalars['Int']>
-};
-
-
 export type MutationContactArgs = {
   input: ContactMutationInput
-};
-
-
-export type MutationUpvoteCommentArgs = {
-  commentId?: Maybe<Scalars['Int']>
-};
-
-
-export type MutationDownvoteCommentArgs = {
-  commentId?: Maybe<Scalars['Int']>
 };
 
 
@@ -282,17 +283,8 @@ export type MutationUpdateCommentArgs = {
   input: UpdateCommentMutationInput
 };
 
-
-export type MutationDeleteCommentArgs = {
-  commentId?: Maybe<Scalars['Int']>
-};
-
 export type Query = {
    __typename?: 'Query',
-  cities?: Maybe<Array<Maybe<CityObjectType>>>,
-  city?: Maybe<CityObjectType>,
-  countries?: Maybe<Array<Maybe<CountryObjectType>>>,
-  country?: Maybe<CountryObjectType>,
   users?: Maybe<Array<Maybe<UserObjectType>>>,
   user?: Maybe<UserObjectType>,
   userMe?: Maybe<UserObjectType>,
@@ -306,17 +298,11 @@ export type Query = {
   resource?: Maybe<ResourceObjectType>,
   courses?: Maybe<Array<Maybe<CourseObjectType>>>,
   course?: Maybe<CourseObjectType>,
+  countries?: Maybe<Array<Maybe<CountryObjectType>>>,
+  country?: Maybe<CountryObjectType>,
   comment?: Maybe<CommentObjectType>,
-};
-
-
-export type QueryCityArgs = {
-  cityId?: Maybe<Scalars['Int']>
-};
-
-
-export type QueryCountryArgs = {
-  countryId?: Maybe<Scalars['Int']>
+  cities?: Maybe<Array<Maybe<CityObjectType>>>,
+  city?: Maybe<CityObjectType>,
 };
 
 
@@ -367,13 +353,37 @@ export type QueryCourseArgs = {
 };
 
 
+export type QueryCountryArgs = {
+  countryId?: Maybe<Scalars['Int']>
+};
+
+
 export type QueryCommentArgs = {
   commentId?: Maybe<Scalars['Int']>
 };
 
+
+export type QueryCityArgs = {
+  cityId?: Maybe<Scalars['Int']>
+};
+
+export type RegisterMutationInput = {
+  username: Scalars['String'],
+  email: Scalars['String'],
+  password: Scalars['String'],
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type RegisterMutationPayload = {
+   __typename?: 'RegisterMutationPayload',
+  user?: Maybe<UserObjectType>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
 export type ResourceObjectType = {
    __typename?: 'ResourceObjectType',
-  id: Scalars['ID'],
+  id?: Maybe<Scalars['Int']>,
   title: Scalars['String'],
   date: Scalars['Date'],
   course: CourseObjectType,
@@ -393,7 +403,6 @@ export type ResourcePartObjectType = {
   id: Scalars['ID'],
   title: Scalars['String'],
   file: Scalars['String'],
-  text: Scalars['String'],
 };
 
 export type ResourceTypeObjectType = {
@@ -422,36 +431,6 @@ export type SchoolTypeObjectType = {
   name: Scalars['String'],
 };
 
-export type SignInMutationInput = {
-  usernameOrEmail: Scalars['String'],
-  password: Scalars['String'],
-  id?: Maybe<Scalars['ID']>,
-  clientMutationId?: Maybe<Scalars['String']>,
-};
-
-export type SignInMutationPayload = {
-   __typename?: 'SignInMutationPayload',
-  user?: Maybe<UserObjectType>,
-  errors?: Maybe<Array<Maybe<ErrorType>>>,
-  token?: Maybe<Scalars['String']>,
-  clientMutationId?: Maybe<Scalars['String']>,
-};
-
-export type SignUpMutationInput = {
-  username: Scalars['String'],
-  email: Scalars['String'],
-  password: Scalars['String'],
-  id?: Maybe<Scalars['ID']>,
-  clientMutationId?: Maybe<Scalars['String']>,
-};
-
-export type SignUpMutationPayload = {
-   __typename?: 'SignUpMutationPayload',
-  user?: Maybe<UserObjectType>,
-  errors?: Maybe<Array<Maybe<ErrorType>>>,
-  clientMutationId?: Maybe<Scalars['String']>,
-};
-
 export type SubjectObjectType = {
    __typename?: 'SubjectObjectType',
   id: Scalars['ID'],
@@ -459,10 +438,12 @@ export type SubjectObjectType = {
 };
 
 export type UpdateCommentMutationInput = {
-  commentId: Scalars['Int'],
   text: Scalars['String'],
   attachment?: Maybe<Scalars['String']>,
-  id?: Maybe<Scalars['ID']>,
+  courseId?: Maybe<Scalars['Int']>,
+  resourceId?: Maybe<Scalars['Int']>,
+  resourcePartId?: Maybe<Scalars['Int']>,
+  commentId?: Maybe<Scalars['Int']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -476,9 +457,8 @@ export type UpdateCommentMutationPayload = {
 export type UpdateResourceMutationInput = {
   resourceId: Scalars['Int'],
   title: Scalars['String'],
-  resourceType: Scalars['ID'],
+  resourceTypeId: Scalars['Int'],
   date?: Maybe<Scalars['Date']>,
-  id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -495,7 +475,6 @@ export type UpdateUserMutationInput = {
   title?: Maybe<Scalars['String']>,
   bio?: Maybe<Scalars['String']>,
   avatar?: Maybe<Scalars['String']>,
-  id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -506,41 +485,9 @@ export type UpdateUserMutationPayload = {
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
-export type UploadResourceMutationInput = {
-  title: Scalars['String'],
-  resourceType: Scalars['ID'],
-  course: Scalars['ID'],
-  date?: Maybe<Scalars['Date']>,
-  files?: Maybe<Scalars['String']>,
-  id?: Maybe<Scalars['ID']>,
-  clientMutationId?: Maybe<Scalars['String']>,
-};
-
-export type UploadResourceMutationPayload = {
-   __typename?: 'UploadResourceMutationPayload',
-  resource?: Maybe<ResourceObjectType>,
-  errors?: Maybe<Array<Maybe<ErrorType>>>,
-  clientMutationId?: Maybe<Scalars['String']>,
-};
-
-export type UpvoteCommentMutation = {
-   __typename?: 'UpvoteCommentMutation',
-  comment?: Maybe<CommentObjectType>,
-};
-
-export type UpvoteCourseMutation = {
-   __typename?: 'UpvoteCourseMutation',
-  course?: Maybe<CourseObjectType>,
-};
-
-export type UpvoteResourceMutation = {
-   __typename?: 'UpvoteResourceMutation',
-  resource?: Maybe<ResourceObjectType>,
-};
-
 export type UserObjectType = {
    __typename?: 'UserObjectType',
-  id: Scalars['ID'],
+  id?: Maybe<Scalars['Int']>,
   username: Scalars['String'],
   title: Scalars['String'],
   bio: Scalars['String'],
@@ -548,6 +495,7 @@ export type UserObjectType = {
   created: Scalars['DateTime'],
   createdCourses: Array<CourseObjectType>,
   createdResources: Array<ResourceObjectType>,
+  votes: Array<VoteObjectType>,
   email?: Maybe<Scalars['String']>,
   avatarThumbnail?: Maybe<Scalars['String']>,
   points?: Maybe<Scalars['Int']>,
@@ -555,17 +503,27 @@ export type UserObjectType = {
   resourceCount?: Maybe<Scalars['Int']>,
 };
 
-export type SignUpMutationVariables = {
+export type VoteObjectType = {
+   __typename?: 'VoteObjectType',
+  id?: Maybe<Scalars['Int']>,
+  user: UserObjectType,
+  status?: Maybe<Scalars['Int']>,
+  comment?: Maybe<CommentObjectType>,
+  course?: Maybe<CourseObjectType>,
+  resource?: Maybe<ResourceObjectType>,
+};
+
+export type RegisterMutationVariables = {
   username: Scalars['String'],
   email: Scalars['String'],
   password: Scalars['String']
 };
 
 
-export type SignUpMutation = (
+export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & { signUp: Maybe<(
-    { __typename?: 'SignUpMutationPayload' }
+  & { register: Maybe<(
+    { __typename?: 'RegisterMutationPayload' }
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'created'>
@@ -573,9 +531,9 @@ export type SignUpMutation = (
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
-  )>, signIn: Maybe<(
-    { __typename?: 'SignInMutationPayload' }
-    & Pick<SignInMutationPayload, 'token'>
+  )>, login: Maybe<(
+    { __typename?: 'LoginMutationPayload' }
+    & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email'>
@@ -586,17 +544,17 @@ export type SignUpMutation = (
   )> }
 );
 
-export type SignInMutationVariables = {
+export type LoginMutationVariables = {
   usernameOrEmail: Scalars['String'],
   password: Scalars['String']
 };
 
 
-export type SignInMutation = (
+export type LoginMutation = (
   { __typename?: 'Mutation' }
-  & { signIn: Maybe<(
-    { __typename?: 'SignInMutationPayload' }
-    & Pick<SignInMutationPayload, 'token'>
+  & { login: Maybe<(
+    { __typename?: 'LoginMutationPayload' }
+    & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email'>
@@ -731,10 +689,10 @@ export type ResourceTypesQuery = (
 export type CreateCommentMutationVariables = {
   text: Scalars['String'],
   attachment?: Maybe<Scalars['String']>,
-  course?: Maybe<Scalars['ID']>,
-  resource?: Maybe<Scalars['ID']>,
-  resourcePart?: Maybe<Scalars['ID']>,
-  comment?: Maybe<Scalars['ID']>
+  courseId?: Maybe<Scalars['Int']>,
+  resourceId?: Maybe<Scalars['Int']>,
+  resourcePartId?: Maybe<Scalars['Int']>,
+  commentId?: Maybe<Scalars['Int']>
 };
 
 
@@ -742,7 +700,7 @@ export type CreateCommentMutation = (
   { __typename?: 'Mutation' }
   & { createComment: Maybe<(
     { __typename?: 'CreateCommentMutationPayload' }
-    & { comments: Maybe<Array<Maybe<(
+    & { comment: Maybe<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
       & { user: Maybe<(
@@ -754,9 +712,15 @@ export type CreateCommentMutation = (
         & { user: Maybe<(
           { __typename?: 'UserObjectType' }
           & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+        )>, vote: Maybe<(
+          { __typename?: 'VoteObjectType' }
+          & Pick<VoteObjectType, 'id' | 'status'>
         )> }
+      )>, vote: Maybe<(
+        { __typename?: 'VoteObjectType' }
+        & Pick<VoteObjectType, 'id' | 'status'>
       )> }
-    )>>>, errors: Maybe<Array<Maybe<(
+    )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
@@ -797,7 +761,13 @@ export type CourseDetailQuery = (
         & { user: Maybe<(
           { __typename?: 'UserObjectType' }
           & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+        )>, vote: Maybe<(
+          { __typename?: 'VoteObjectType' }
+          & Pick<VoteObjectType, 'id' | 'status'>
         )> }
+      )>, vote: Maybe<(
+        { __typename?: 'VoteObjectType' }
+        & Pick<VoteObjectType, 'id' | 'status'>
       )> }
     )> }
   )> }
@@ -806,8 +776,8 @@ export type CourseDetailQuery = (
 export type CreateCourseMutationVariables = {
   courseName: Scalars['String'],
   courseCode?: Maybe<Scalars['String']>,
-  subject: Scalars['ID'],
-  school: Scalars['ID']
+  subjectId: Scalars['Int'],
+  schoolId: Scalars['Int']
 };
 
 
@@ -819,6 +789,27 @@ export type CreateCourseMutation = (
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id'>
     )>, errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
+  )> }
+);
+
+export type DeleteObjectMutationVariables = {
+  commentId?: Maybe<Scalars['Int']>,
+  resourceId?: Maybe<Scalars['Int']>,
+  resourcePartId?: Maybe<Scalars['Int']>,
+  voteId?: Maybe<Scalars['Int']>,
+  courseId?: Maybe<Scalars['Int']>
+};
+
+
+export type DeleteObjectMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteObject: Maybe<(
+    { __typename?: 'DeleteObjectMutationPayload' }
+    & Pick<DeleteObjectMutationPayload, 'message'>
+    & { errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
@@ -846,7 +837,7 @@ export type ResourceDetailQuery = (
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resourceParts: Array<(
       { __typename?: 'ResourcePartObjectType' }
-      & Pick<ResourcePartObjectType, 'id' | 'title' | 'file' | 'text'>
+      & Pick<ResourcePartObjectType, 'id' | 'title' | 'file'>
     )> }
   )> }
 );
@@ -874,11 +865,11 @@ export type SchoolDetailQuery = (
 export type SearchCoursesQueryVariables = {
   courseName?: Maybe<Scalars['String']>,
   courseCode?: Maybe<Scalars['String']>,
-  school?: Maybe<Scalars['Int']>,
-  subject?: Maybe<Scalars['Int']>,
-  schoolType?: Maybe<Scalars['Int']>,
-  country?: Maybe<Scalars['Int']>,
-  city?: Maybe<Scalars['Int']>
+  schoolId?: Maybe<Scalars['Int']>,
+  subjectId?: Maybe<Scalars['Int']>,
+  schoolTypeId?: Maybe<Scalars['Int']>,
+  countryId?: Maybe<Scalars['Int']>,
+  cityId?: Maybe<Scalars['Int']>
 };
 
 
@@ -905,8 +896,8 @@ export type UploadResourceInitialDataQuery = (
 
 export type UploadResourceMutationVariables = {
   resourceTitle: Scalars['String'],
-  resourceType: Scalars['ID'],
-  course: Scalars['ID'],
+  resourceTypeId: Scalars['Int'],
+  courseId: Scalars['Int'],
   files: Scalars['String']
 };
 
@@ -914,7 +905,7 @@ export type UploadResourceMutationVariables = {
 export type UploadResourceMutation = (
   { __typename?: 'Mutation' }
   & { uploadResource: Maybe<(
-    { __typename?: 'UploadResourceMutationPayload' }
+    { __typename?: 'CreateResourceMutationPayload' }
     & { resource: Maybe<(
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id'>
@@ -982,10 +973,32 @@ export type UpdateUserMutation = (
   )> }
 );
 
+export type CreateVoteMutationVariables = {
+  status: Scalars['Int'],
+  commentId?: Maybe<Scalars['Int']>,
+  courseId?: Maybe<Scalars['Int']>,
+  resourceId?: Maybe<Scalars['Int']>
+};
 
-export const SignUpDocument = gql`
-    mutation SignUp($username: String!, $email: String!, $password: String!) {
-  signUp(input: {username: $username, email: $email, password: $password}) {
+
+export type CreateVoteMutation = (
+  { __typename?: 'Mutation' }
+  & { createVote: Maybe<(
+    { __typename?: 'CreateVoteMutationPayload' }
+    & { vote: Maybe<(
+      { __typename?: 'VoteObjectType' }
+      & Pick<VoteObjectType, 'id' | 'status'>
+    )>, errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
+  )> }
+);
+
+
+export const RegisterDocument = gql`
+    mutation Register($username: String!, $email: String!, $password: String!) {
+  register(input: {username: $username, email: $email, password: $password}) {
     user {
       id
       created
@@ -995,7 +1008,7 @@ export const SignUpDocument = gql`
       messages
     }
   }
-  signIn(input: {usernameOrEmail: $email, password: $password}) {
+  login(input: {usernameOrEmail: $email, password: $password}) {
     token
     user {
       id
@@ -1013,17 +1026,17 @@ export const SignUpDocument = gql`
   }
 }
     `;
-export type SignUpMutationFn = ApolloReactCommon.MutationFunction<SignUpMutation, SignUpMutationVariables>;
+export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
-    export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignUpMutation, SignUpMutationVariables>) {
-      return ApolloReactHooks.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, baseOptions);
+    export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+      return ApolloReactHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
     }
-export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
-export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
-export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
-export const SignInDocument = gql`
-    mutation SignIn($usernameOrEmail: String!, $password: String!) {
-  signIn(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($usernameOrEmail: String!, $password: String!) {
+  login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
     token
     user {
       id
@@ -1041,14 +1054,14 @@ export const SignInDocument = gql`
   }
 }
     `;
-export type SignInMutationFn = ApolloReactCommon.MutationFunction<SignInMutation, SignInMutationVariables>;
+export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
-    export function useSignInMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignInMutation, SignInMutationVariables>) {
-      return ApolloReactHooks.useMutation<SignInMutation, SignInMutationVariables>(SignInDocument, baseOptions);
+    export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+      return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
     }
-export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
-export type SignInMutationResult = ApolloReactCommon.MutationResult<SignInMutation>;
-export type SignInMutationOptions = ApolloReactCommon.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
+export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const UserMeDocument = gql`
     query UserMe {
   userMe {
@@ -1238,9 +1251,9 @@ export const ResourceTypesDocument = gql`
 export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQuery>;
 export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
 export const CreateCommentDocument = gql`
-    mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $resourcePart: ID, $comment: ID) {
-  createComment(input: {text: $text, attachment: $attachment, course: $course, resource: $resource, resourcePart: $resourcePart, comment: $comment}) {
-    comments {
+    mutation CreateComment($text: String!, $attachment: String, $courseId: Int, $resourceId: Int, $resourcePartId: Int, $commentId: Int) {
+  createComment(input: {text: $text, attachment: $attachment, courseId: $courseId, resourceId: $resourceId, resourcePartId: $resourcePartId, commentId: $commentId}) {
+    comment {
       id
       user {
         id
@@ -1263,9 +1276,17 @@ export const CreateCommentDocument = gql`
         modified
         created
         points
+        vote {
+          id
+          status
+        }
       }
       replyCount
       points
+      vote {
+        id
+        status
+      }
     }
     errors {
       field
@@ -1328,9 +1349,17 @@ export const CourseDetailDocument = gql`
         modified
         created
         points
+        vote {
+          id
+          status
+        }
       }
       replyCount
       points
+      vote {
+        id
+        status
+      }
     }
     modified
     created
@@ -1350,8 +1379,8 @@ export const CourseDetailDocument = gql`
 export type CourseDetailQueryHookResult = ReturnType<typeof useCourseDetailQuery>;
 export type CourseDetailQueryResult = ApolloReactCommon.QueryResult<CourseDetailQuery, CourseDetailQueryVariables>;
 export const CreateCourseDocument = gql`
-    mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
-  createCourse(input: {name: $courseName, code: $courseCode, subject: $subject, school: $school}) {
+    mutation CreateCourse($courseName: String!, $courseCode: String, $subjectId: Int!, $schoolId: Int!) {
+  createCourse(input: {name: $courseName, code: $courseCode, subjectId: $subjectId, schoolId: $schoolId}) {
     course {
       id
     }
@@ -1370,6 +1399,25 @@ export type CreateCourseMutationFn = ApolloReactCommon.MutationFunction<CreateCo
 export type CreateCourseMutationHookResult = ReturnType<typeof useCreateCourseMutation>;
 export type CreateCourseMutationResult = ApolloReactCommon.MutationResult<CreateCourseMutation>;
 export type CreateCourseMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCourseMutation, CreateCourseMutationVariables>;
+export const DeleteObjectDocument = gql`
+    mutation DeleteObject($commentId: Int, $resourceId: Int, $resourcePartId: Int, $voteId: Int, $courseId: Int) {
+  deleteObject(input: {commentId: $commentId, resourceId: $resourceId, resourcePartId: $resourcePartId, voteId: $voteId, courseId: $courseId}) {
+    message
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type DeleteObjectMutationFn = ApolloReactCommon.MutationFunction<DeleteObjectMutation, DeleteObjectMutationVariables>;
+
+    export function useDeleteObjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteObjectMutation, DeleteObjectMutationVariables>) {
+      return ApolloReactHooks.useMutation<DeleteObjectMutation, DeleteObjectMutationVariables>(DeleteObjectDocument, baseOptions);
+    }
+export type DeleteObjectMutationHookResult = ReturnType<typeof useDeleteObjectMutation>;
+export type DeleteObjectMutationResult = ApolloReactCommon.MutationResult<DeleteObjectMutation>;
+export type DeleteObjectMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteObjectMutation, DeleteObjectMutationVariables>;
 export const ResourceDetailDocument = gql`
     query ResourceDetail($id: Int!) {
   resource(resourceId: $id) {
@@ -1396,7 +1444,6 @@ export const ResourceDetailDocument = gql`
       id
       title
       file
-      text
     }
   }
 }
@@ -1445,8 +1492,8 @@ export const SchoolDetailDocument = gql`
 export type SchoolDetailQueryHookResult = ReturnType<typeof useSchoolDetailQuery>;
 export type SchoolDetailQueryResult = ApolloReactCommon.QueryResult<SchoolDetailQuery, SchoolDetailQueryVariables>;
 export const SearchCoursesDocument = gql`
-    query SearchCourses($courseName: String, $courseCode: String, $school: Int, $subject: Int, $schoolType: Int, $country: Int, $city: Int) {
-  courses(courseName: $courseName, courseCode: $courseCode, schoolId: $school, subjectId: $subject, schoolTypeId: $schoolType, countryId: $country, cityId: $city) {
+    query SearchCourses($courseName: String, $courseCode: String, $schoolId: Int, $subjectId: Int, $schoolTypeId: Int, $countryId: Int, $cityId: Int) {
+  courses(courseName: $courseName, courseCode: $courseCode, schoolId: $schoolId, subjectId: $subjectId, schoolTypeId: $schoolTypeId, countryId: $countryId, cityId: $cityId) {
     id
     name
     code
@@ -1482,8 +1529,8 @@ export const UploadResourceInitialDataDocument = gql`
 export type UploadResourceInitialDataQueryHookResult = ReturnType<typeof useUploadResourceInitialDataQuery>;
 export type UploadResourceInitialDataQueryResult = ApolloReactCommon.QueryResult<UploadResourceInitialDataQuery, UploadResourceInitialDataQueryVariables>;
 export const UploadResourceDocument = gql`
-    mutation UploadResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $files: String!) {
-  uploadResource(input: {title: $resourceTitle, resourceType: $resourceType, course: $course, files: $files}) {
+    mutation UploadResource($resourceTitle: String!, $resourceTypeId: Int!, $courseId: Int!, $files: String!) {
+  uploadResource(input: {title: $resourceTitle, resourceTypeId: $resourceTypeId, courseId: $courseId, files: $files}) {
     resource {
       id
     }
@@ -1587,3 +1634,25 @@ export type UpdateUserMutationFn = ApolloReactCommon.MutationFunction<UpdateUser
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = ApolloReactCommon.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const CreateVoteDocument = gql`
+    mutation CreateVote($status: Int!, $commentId: Int, $courseId: Int, $resourceId: Int) {
+  createVote(input: {status: $status, commentId: $commentId, courseId: $courseId, resourceId: $resourceId}) {
+    vote {
+      id
+      status
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type CreateVoteMutationFn = ApolloReactCommon.MutationFunction<CreateVoteMutation, CreateVoteMutationVariables>;
+
+    export function useCreateVoteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateVoteMutation, CreateVoteMutationVariables>) {
+      return ApolloReactHooks.useMutation<CreateVoteMutation, CreateVoteMutationVariables>(CreateVoteDocument, baseOptions);
+    }
+export type CreateVoteMutationHookResult = ReturnType<typeof useCreateVoteMutation>;
+export type CreateVoteMutationResult = ApolloReactCommon.MutationResult<CreateVoteMutation>;
+export type CreateVoteMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateVoteMutation, CreateVoteMutationVariables>;

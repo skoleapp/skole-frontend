@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 
-import { TOGGLE_SETTINGS, TOGGLE_NOTIFICATION, TOGGLE_COMMENT_THREAD } from '../actions';
 import { CommentObjectType } from '../../generated/graphql';
+import { TOGGLE_COMMENT_THREAD, TOGGLE_NOTIFICATION, TOGGLE_SETTINGS } from '../actions';
 
 export interface UI {
     notification: string | null;

@@ -2,11 +2,11 @@ import { Button, Divider, ListItem, ListSubheader, MenuItem } from '@material-ui
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
-import { useTranslation } from '../i18n';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deAuthenticate, toggleSettings } from '../actions';
 import { LanguageSelector, StyledMenuList } from '../components';
+import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { State } from '../types';
 import { menuItems } from '.';
@@ -59,7 +59,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     ));
 
     const renderCommonMenuItems = (
-        <>
+        <StyledMenuList>
             <ListSubheader>{t('common:language')}</ListSubheader>
             <ListItem>
                 <LanguageSelector fullWidth />
@@ -70,7 +70,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
             <Divider />
             <ListSubheader>{t('common:legal')}</ListSubheader>
             {renderLegalItems}
-        </>
+        </StyledMenuList>
     );
 
     const renderAuthenticatedMenuList = (
@@ -82,10 +82,10 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         </StyledMenuList>
     );
 
-    const renderSignInButton = (
+    const renderLoginButton = (
         <ListItem>
-            <Button fullWidth variant="outlined" color="primary" onClick={handleMenuItemClick('/sign-in')}>
-                {t('common:signIn')}
+            <Button fullWidth variant="outlined" color="primary" onClick={handleMenuItemClick('/login')}>
+                {t('common:login')}
             </Button>
         </ListItem>
     );
@@ -100,9 +100,9 @@ export const useSettings = ({ modal }: Props): UseSettings => {
 
     const renderSettingsCardContent = (
         <>
-            {authenticated ? renderAuthenticatedMenuList : <StyledMenuList>{renderCommonMenuItems}</StyledMenuList>}
+            {authenticated ? renderAuthenticatedMenuList : renderCommonMenuItems}
             <Divider />
-            {authenticated ? renderSignOutButton : renderSignInButton}
+            {authenticated ? renderSignOutButton : renderLoginButton}
         </>
     );
 

@@ -1,10 +1,9 @@
-import { Table, TableBody, TableCell, TableRow, Typography, CardContent } from '@material-ui/core';
+import { CardContent, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from '../i18n';
 import { compose } from 'redux';
 
 import {
@@ -22,6 +21,7 @@ import {
     SubjectsDocument,
 } from '../../generated/graphql';
 import { AutoCompleteField, FilterLayout, FormSubmitSection, StyledForm } from '../components';
+import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
@@ -199,8 +199,6 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
             query: SearchCoursesDocument,
             variables: query,
         });
-
-        console.log(data);
 
         return { ...data, ...nameSpaces };
     } catch {

@@ -3,14 +3,14 @@ import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
-import { useTranslation } from '../i18n';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { SignUpMutation, useSignUpMutation } from '../../generated/graphql';
+import { RegisterMutation, useRegisterMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
 import { ButtonLink, FormLayout, FormSubmitSection, StyledForm, FilledLogo } from '../components';
+import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
@@ -18,7 +18,7 @@ import { useForm, usePublicPage } from '../utils';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-export interface SignUpFormValues {
+export interface RegisterFormValues {
     username: string;
     email: string;
     password: string;
@@ -35,9 +35,9 @@ const getBetaPassCodeFromQuery = (): string => {
     }
 };
 
-const BetaPage: I18nPage = () => {
+const RegisterPage: I18nPage = () => {
     const client = useApolloClient();
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<SignUpFormValues>();
+    const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<RegisterFormValues>();
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
@@ -66,25 +66,24 @@ const BetaPage: I18nPage = () => {
         code: Yup.string().required(t('validation:betaCodeRequired')),
     });
 
-    const onCompleted = ({ signUp, signIn }: SignUpMutation): void => {
-        if (signUp && signUp.errors) {
-            handleMutationErrors(signUp.errors);
-        } else if (signIn && signIn.errors) {
-            handleMutationErrors(signIn.errors);
-        } else if (signIn && signIn.user) {
+    const onCompleted = ({ register, login }: RegisterMutation): void => {
+        if (register && register.errors) {
+            handleMutationErrors(register.errors);
+        } else if (login && login.errors) {
+            handleMutationErrors(login.errors);
+        } else if (login && login.user) {
             resetForm();
-            dispatch(authenticate(client, signIn));
-            Router.push(`/users/${signIn.user.id}`);
+            dispatch(authenticate(client, login));
+            Router.push(`/users/${login.user.id}`);
         }
     };
 
-    const [signUpMutation] = useSignUpMutation({ onCompleted, onError });
+    const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
-    const handleSubmit = async (values: SignUpFormValues): Promise<void> => {
+    const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
         const { username, email, password, code } = values;
-        // lisää code alempaan mutaatioon
         console.log(code);
-        await signUpMutation({ variables: { username, email, password } });
+        await registerMutation({ variables: { username, email, password } });
         setSubmitting(false);
     };
 
@@ -93,7 +92,7 @@ const BetaPage: I18nPage = () => {
             {(props): JSX.Element => (
                 <StyledForm>
                     <FilledLogo />
-                    <Typography variant="h2">{t('beta:welcomeToBeta')}</Typography>
+                    <Typography variant="h2">{t('register:welcomeToBeta')}</Typography>
                     <Field
                         placeholder={t('forms:username')}
                         name="username"
@@ -141,19 +140,19 @@ const BetaPage: I18nPage = () => {
                     />
                     <FormControl fullWidth>
                         <Typography variant="body2" color="textSecondary">
-                            {t('beta:termsHelpText')}{' '}
+                            {t('register:termsHelpText')}{' '}
                             <Link href="/terms" target="_blank">
                                 {t('common:terms')}
                             </Link>
                             .
                         </Typography>
                     </FormControl>
-                    <FormSubmitSection submitButtonText={t('common:signUp')} {...props} />
+                    <FormSubmitSection submitButtonText={t('common:register')} {...props} />
                     <Box marginY="1rem">
                         <Divider />
                     </Box>
-                    <ButtonLink href="/sign-in" variant="outlined" color="primary" fullWidth>
-                        {t('beta:alreadyHaveAccount')}
+                    <ButtonLink href="/login" variant="outlined" color="primary" fullWidth>
+                        {t('register:alreadyHaveABetaAccount')}
                     </ButtonLink>
                 </StyledForm>
             )}
@@ -169,9 +168,9 @@ const StyledField = styled(Field)`
     }
 `;
 
-BetaPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['beta']) };
+    return { namespacesRequired: includeDefaultNamespaces(['register']) };
 };
 
-export default compose(withApollo, withRedux)(BetaPage);
+export default compose(withApollo, withRedux)(RegisterPage);

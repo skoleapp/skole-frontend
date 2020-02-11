@@ -5,8 +5,8 @@ import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React from 'react';
 import { useState } from 'react';
-import { useTranslation } from '../i18n';
 
+import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { UseForm, useForm } from './useForm';
 

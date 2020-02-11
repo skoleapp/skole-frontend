@@ -1,0 +1,17 @@
+mutation DeleteObject($commentId: Int, $resourceId: Int, $resourcePartId: Int, $voteId: Int, $courseId: Int) {
+    deleteObject(
+        input: {
+            commentId: $commentId
+            resourceId: $resourceId
+            resourcePartId: $resourcePartId
+            voteId: $voteId
+            courseId: $courseId
+        }
+    ) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}

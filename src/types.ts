@@ -1,3 +1,4 @@
+import { ContainerProps } from '@material-ui/core';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { NextComponentType, NextPageContext } from 'next';
@@ -5,7 +6,6 @@ import { Store } from 'redux';
 
 import { UserObjectType } from '../generated/graphql';
 import { Auth, UI } from './reducers';
-import { ContainerProps } from '@material-ui/core';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
@@ -40,5 +40,5 @@ export interface LayoutProps extends ContainerProps {
 }
 
 export interface CommentTarget {
-    [key: string]: string | null;
+    [key: string]: number | undefined;
 }

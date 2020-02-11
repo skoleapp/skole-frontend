@@ -5,8 +5,8 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Typography,
     Grid,
+    Typography,
 } from '@material-ui/core';
 import { CheckOutlined } from '@material-ui/icons';
 import cookie from 'cookie';

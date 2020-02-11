@@ -2,13 +2,13 @@ import { MenuItem } from '@material-ui/core';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { useTranslation } from '../i18n';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { toggleNotification } from '../actions';
 import { FormSubmitSection, SelectField, SettingsLayout, StyledForm } from '../components';
+import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
@@ -71,6 +71,7 @@ const ContactPage: I18nPage = () => {
                         placeholder={t('forms:message')}
                         label={t('forms:message')}
                         variant="outlined"
+                        rows="5"
                         fullWidth
                         rows="5"
                         multiline

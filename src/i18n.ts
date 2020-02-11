@@ -1,5 +1,5 @@
-import NextI18Next from 'next-i18next';
 import moment from 'moment';
+import NextI18Next from 'next-i18next';
 import { useTranslation as useReactI18nextTranslation, UseTranslationResponse } from 'react-i18next';
 
 export const nextI18next = new NextI18Next({

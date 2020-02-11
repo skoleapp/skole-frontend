@@ -43,9 +43,17 @@ query CourseDetail($id: Int!) {
                 modified
                 created
                 points
+                vote {
+                    id
+                    status
+                }
             }
             replyCount
             points
+            vote {
+                id
+                status
+            }
         }
         modified
         created
