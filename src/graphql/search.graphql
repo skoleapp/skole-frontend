@@ -1,20 +1,20 @@
 query SearchCourses(
     $courseName: String
     $courseCode: String
-    $school: Int
-    $subject: Int
-    $schoolType: Int
-    $country: Int
-    $city: Int
+    $schoolId: Int
+    $subjectId: Int
+    $schoolTypeId: Int
+    $countryId: Int
+    $cityId: Int
 ) {
     courses(
         courseName: $courseName
         courseCode: $courseCode
-        schoolId: $school
-        subjectId: $subject
-        schoolTypeId: $schoolType
-        countryId: $country
-        cityId: $city
+        schoolId: $schoolId
+        subjectId: $subjectId
+        schoolTypeId: $schoolTypeId
+        countryId: $countryId
+        cityId: $cityId
     ) {
         id
         name

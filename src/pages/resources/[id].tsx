@@ -16,7 +16,6 @@ import Image from 'material-ui-image';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 import { compose } from 'redux';
 
 import { ResourceDetailDocument, ResourceObjectType, ResourcePartObjectType } from '../../../generated/graphql';
@@ -30,6 +29,7 @@ import {
     TabPanel,
     TextLink,
 } from '../../components';
+import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';

@@ -1,33 +1,35 @@
-import React from 'react';
-import { Formik, Field } from 'formik';
-import { useTranslation } from '../../i18n';
-import { StyledForm } from './StyledForm';
+import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import React from 'react';
 import { useDispatch } from 'react-redux';
+
+import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { useCreateCommentMutation, CreateCommentMutation, CommentObjectType } from '../../../generated/graphql';
-import { useForm } from '../../utils';
+import { useTranslation } from '../../i18n';
 import { CommentTarget } from '../../types';
+import { useForm } from '../../utils';
+import { StyledForm } from './StyledForm';
 
 interface Props {
+    label: string;
     placeholder: string;
     target: CommentTarget;
-    appendComments: (comments: CommentObjectType[]) => void;
+    appendComments: (comments: CommentObjectType) => void;
 }
 
 interface CreateCommentFormValues {
     text: string;
     attachment: string;
-    course?: string;
-    resource?: string;
-    resourcePart?: string;
-    comment?: string;
+    course?: number;
+    resource?: number;
+    resourcePart?: number;
+    comment?: number;
 }
 
-export const CreateCommentForm: React.FC<Props> = ({ placeholder, target, appendComments }) => {
+export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target, appendComments }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { ref, setSubmitting, resetForm } = useForm<CreateCommentFormValues>();
+    const { ref, setSubmitting, resetForm, submitForm } = useForm<CreateCommentFormValues>();
 
     const onError = (): void => {
         dispatch(toggleNotification(t('notifications:messageError')));
@@ -37,9 +39,9 @@ export const CreateCommentForm: React.FC<Props> = ({ placeholder, target, append
         if (createComment) {
             if (createComment.errors) {
                 onError();
-            } else if (createComment.comments) {
+            } else if (createComment.comment) {
                 dispatch(toggleNotification(t('notifications:messageSubmitted')));
-                appendComments(createComment.comments as CommentObjectType[]);
+                appendComments(createComment.comment as CommentObjectType);
             }
         }
     };
@@ -50,6 +52,12 @@ export const CreateCommentForm: React.FC<Props> = ({ placeholder, target, append
         await createCommentMutation({ variables: { ...values } });
         setSubmitting(false);
         resetForm();
+    };
+
+    const handleKeyPress = (e: KeyboardEvent): void => {
+        if (e.key === 'Enter') {
+            submitForm();
+        }
     };
 
     const initialValues = {
@@ -64,11 +72,15 @@ export const CreateCommentForm: React.FC<Props> = ({ placeholder, target, append
                 <StyledForm>
                     <Field
                         name="text"
+                        label={label}
                         placeholder={placeholder}
                         variant="outlined"
                         component={TextField}
-                        fullWidth
                         autoComplete="off"
+                        rowsMax="10"
+                        onKeyPress={handleKeyPress}
+                        multiline
+                        fullWidth
                     />
                     <input type="submit" value="Submit" />
                 </StyledForm>

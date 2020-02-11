@@ -1,23 +1,23 @@
-import { Box, Typography, InputBase, Button, CardContent, Card } from '@material-ui/core';
+import { Box, Button, Card, CardContent, InputBase, Typography } from '@material-ui/core';
 import {
     CloudUploadOutlined,
     LibraryAddOutlined,
     SchoolOutlined,
-    SupervisedUserCircleOutlined,
     Search,
+    SupervisedUserCircleOutlined,
     SvgIconComponent,
 } from '@material-ui/icons';
 import React from 'react';
-import { useTranslation, Link } from '../i18n';
 import { compose } from 'redux';
+import styled from 'styled-components';
 
 import { ButtonLink, MainLayout } from '../components';
+import { Link, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
+import { breakpoints } from '../styles';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useSearch } from '../utils';
-import styled from 'styled-components';
-import { breakpoints } from '../styles';
 
 interface Shortcut {
     text: string;
@@ -98,6 +98,10 @@ const IndexPage: I18nPage = () => {
 };
 
 const StyledIndexPage = styled(MainLayout)`
+    @media only screen and (max-width: ${breakpoints.MD}) {
+        padding: 0.5rem !important;
+    }
+
     .slogan {
         margin-top: 1rem;
 

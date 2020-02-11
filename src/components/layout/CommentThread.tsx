@@ -1,15 +1,16 @@
-import { StyledModal } from '../shared/StyledModal';
-import { Fade, Paper, Box, Typography, Divider } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import { Box, Divider, Fade, Paper, Typography } from '@material-ui/core';
+import * as R from 'ramda';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AnyAction } from 'redux';
+import styled from 'styled-components';
+
+import { ModalCloseIcon } from '..';
+import { CommentObjectType } from '../../../generated/graphql';
 import { toggleCommentThread } from '../../actions';
 import { State } from '../../types';
-import { ModalCloseIcon } from '..';
-import { AnyAction } from 'redux';
-import { DiscussionBox, CommentCard } from '../shared';
-import * as R from 'ramda';
-import { CommentObjectType } from '../../../generated/graphql';
-import styled from 'styled-components';
+import { CommentCard, DiscussionBox } from '../shared';
+import { StyledModal } from '../shared/StyledModal';
 
 export const CommentThread: React.FC = () => {
     const { commentThread } = useSelector((state: State) => state.ui);
@@ -29,8 +30,8 @@ export const CommentThread: React.FC = () => {
 
     const discussionBoxProps = {
         comments,
-        target: { comment: R.propOr(null, 'id', commentThread) as string | null },
-        thread: true,
+        target: { commentId: Number(R.propOr(undefined, 'id', commentThread)) },
+        isThread: true,
         appendComments,
     };
 
@@ -39,7 +40,7 @@ export const CommentThread: React.FC = () => {
             <Fade in={!!commentThread}>
                 <Paper>
                     <ModalCloseIcon onClick={handleClose} />
-                    {!!commentThread && <CommentCard comment={commentThread} />}
+                    {!!commentThread && <CommentCard comment={commentThread} isThread />}
                     <Box padding="0.25rem" display="flex" alignItems="center">
                         <Typography variant="subtitle2" color="textSecondary">
                             {R.propOr('-', 'replyCount', commentThread)} replies

@@ -1,5 +1,5 @@
-mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
-    createCourse(input: { name: $courseName, code: $courseCode, subject: $subject, school: $school }) {
+mutation CreateCourse($courseName: String!, $courseCode: String, $subjectId: Int!, $schoolId: Int!) {
+    createCourse(input: { name: $courseName, code: $courseCode, subjectId: $subjectId, schoolId: $schoolId }) {
         course {
             id
         }

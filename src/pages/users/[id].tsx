@@ -8,23 +8,21 @@ import {
     ListItemAvatar,
     ListItemText,
     Tab,
-    Typography,
     Table,
+    TableBody,
+    TableCell,
     TableHead,
     TableRow,
-    TableCell,
-    TableBody,
+    Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
-import { getFullCourseName } from '../../utils';
 
-import { UserDetailDocument, UserObjectType, CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
+import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
 import {
     ButtonLink,
     MainLayout,
@@ -32,13 +30,15 @@ import {
     SettingsButton,
     StyledCard,
     StyledList,
+    StyledTable,
     StyledTabs,
     TabPanel,
-    StyledTable,
 } from '../../components';
+import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { getFullCourseName } from '../../utils';
 import { getAvatar, useAuthSync, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
@@ -66,17 +66,15 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             <Grid container alignItems="center">
                 <Grid item container xs={12} sm={6} justify="center">
                     <CardContent>
-                        <Box display="flex" flexDirection="column" alignItems="center">
-                            <Avatar className="main-avatar" src={getAvatar(user)} />
-                            <Box display="flex" flexDirection="column" marginY="0.5rem">
-                                <Typography variant="h1">{username}</Typography>
-                            </Box>
-                            {!!title && (
-                                <Box display="flex" flexDirection="column" marginY="0.5rem">
-                                    <Typography variant="caption">{title}</Typography>
-                                </Box>
-                            )}
+                        <Avatar className="main-avatar" src={getAvatar(user)} />
+                        <Box marginY="0.5rem">
+                            <Typography variant="h1">{username}</Typography>
                         </Box>
+                        {!!title && (
+                            <Box marginY="0.5rem">
+                                <Typography variant="caption">{title}</Typography>
+                            </Box>
+                        )}
                     </CardContent>
                 </Grid>
                 <Grid item container xs={12} sm={6} direction="column">
@@ -279,8 +277,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     <Divider />
                     {renderAccountInfo}
                     <Divider />
-                    {renderBioSection}
-                    <Divider />
+                    {!!bio && renderBioSection}
+                    {!!bio && <Divider />}
                     {renderTabs}
                     {renderTabContent}
                 </StyledCard>

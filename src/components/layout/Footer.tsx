@@ -1,8 +1,8 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 import styled from 'styled-components';
 
+import { useTranslation } from '../../i18n';
 import { LanguageSelector, TextLink } from '../shared';
 
 export const Footer: React.FC = () => {

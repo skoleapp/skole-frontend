@@ -28,6 +28,7 @@ export interface UseForm<T> {
     onError: (err: ApolloError) => void;
     setSubmitting: (val: boolean) => void;
     resetForm: () => void;
+    submitForm: () => Promise<void> | null;
     setFieldValue: (fieldName: string, val: string | File | File[]) => void;
 }
 
@@ -76,6 +77,7 @@ export const useForm = <T>(): UseForm<T> => {
 
     const setSubmitting = (val: boolean): void | null => ref && ref.current && ref.current.setSubmitting(val);
     const resetForm = (): void | null => ref && ref.current && ref.current.resetForm();
+    const submitForm = (): Promise<void> | null => ref && ref.current && ref.current.submitForm();
 
     const setFieldValue = (fieldName: string, val: string | File | File[]): void => {
         ref && ref.current && ref.current.setFieldValue(fieldName, val);
@@ -87,6 +89,7 @@ export const useForm = <T>(): UseForm<T> => {
         onError,
         setSubmitting,
         resetForm,
+        submitForm,
         setFieldValue,
     };
 };

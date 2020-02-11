@@ -1,40 +1,40 @@
 import {
     Avatar,
+    Box,
     CardContent,
     CardHeader,
     ListItem,
     ListItemAvatar,
     ListItemText,
-    Typography,
     Tab,
     Table,
+    TableBody,
+    TableCell,
     TableHead,
     TableRow,
-    TableCell,
-    TableBody,
-    Box,
+    Typography,
 } from '@material-ui/core';
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from '../../i18n';
 import { compose } from 'redux';
 
 import {
+    CourseObjectType,
     SchoolDetailDocument,
     SchoolObjectType,
     SubjectObjectType,
-    CourseObjectType,
 } from '../../../generated/graphql';
 import {
     NotFound,
-    StyledList,
-    TextLink,
     ResponsiveMainLayout,
+    StyledList,
+    StyledTable,
     StyledTabs,
     TabPanel,
-    StyledTable,
+    TextLink,
 } from '../../components';
+import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';

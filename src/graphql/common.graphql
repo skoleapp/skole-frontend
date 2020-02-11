@@ -48,24 +48,24 @@ query ResourceTypes {
 }
 
 mutation CreateComment(
-    $text: String!,
-    $attachment: String,
-    $course: ID,
-    $resource: ID,
-    $resourcePart: ID,
-    $comment: ID,
+    $text: String!
+    $attachment: String
+    $courseId: Int
+    $resourceId: Int
+    $resourcePartId: Int
+    $commentId: Int
 ) {
     createComment(
         input: {
-            text: $text,
-            attachment: $attachment,
-            course: $course,
-            resource: $resource,
-            resourcePart: $resourcePart,
-            comment: $comment
+            text: $text
+            attachment: $attachment
+            courseId: $courseId
+            resourceId: $resourceId
+            resourcePartId: $resourcePartId
+            commentId: $commentId
         }
     ) {
-        comments {
+        comment {
             id
             user {
                 id
@@ -88,9 +88,17 @@ mutation CreateComment(
                 modified
                 created
                 points
+                vote {
+                    id
+                    status
+                }
             }
             replyCount
             points
+            vote {
+                id
+                status
+            }
         }
         errors {
             field

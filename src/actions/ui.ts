@@ -1,6 +1,7 @@
-import { CommentObjectType } from '../../generated/graphql';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
+
+import { CommentObjectType } from '../../generated/graphql';
 
 export const TOGGLE_NOTIFICATION = 'TOGGLE_NOTIFICATION';
 export const TOGGLE_SETTINGS = 'TOGGLE_SETTINGS';

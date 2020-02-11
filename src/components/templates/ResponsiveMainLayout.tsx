@@ -1,8 +1,9 @@
-import React from 'react';
-import { LayoutProps } from '../../types';
-import { MainLayout } from './MainLayout';
 import { Divider, Grid } from '@material-ui/core';
+import React from 'react';
+
+import { LayoutProps } from '../../types';
 import { StyledCard } from '../shared';
+import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps {
     renderCardHeader?: JSX.Element;

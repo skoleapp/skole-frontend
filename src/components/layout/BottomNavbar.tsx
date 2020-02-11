@@ -23,7 +23,7 @@ export const BottomNavbar: React.FC = () => {
                 return 1;
             }
             case '/users/[id]': {
-                if (user && query.id === user.id) {
+                if (user && ((query.id as unknown) as number) === (user.id as number)) {
                     return 2;
                 }
             }
@@ -42,7 +42,7 @@ export const BottomNavbar: React.FC = () => {
     const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
     const handleAccountClick = (): void => {
-        authenticated ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/sign-in';
+        authenticated ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/login';
     };
 
     return (
