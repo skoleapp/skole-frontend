@@ -159,7 +159,7 @@ const RegisterPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout renderCardContent={renderCardContent} backUrl />;
+    return <FormLayout title={t('common:register')} renderCardContent={renderCardContent} backUrl />;
 };
 
 const StyledField = styled(Field)`
