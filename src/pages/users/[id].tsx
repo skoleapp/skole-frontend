@@ -67,11 +67,11 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <Grid item container xs={12} sm={6} justify="center">
                     <CardContent>
                         <Avatar className="main-avatar" src={getAvatar(user)} />
-                        <Box display="flex" flexDirection="column" marginY="0.5rem">
+                        <Box marginY="0.5rem">
                             <Typography variant="h1">{username}</Typography>
                         </Box>
                         {!!title && (
-                            <Box display="flex" flexDirection="column" marginY="0.5rem">
+                            <Box marginY="0.5rem">
                                 <Typography variant="caption">{title}</Typography>
                             </Box>
                         )}

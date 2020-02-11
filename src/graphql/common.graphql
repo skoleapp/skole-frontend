@@ -88,22 +88,18 @@ mutation CreateComment(
                 modified
                 created
                 points
-                voteStatus
+                vote {
+                    id
+                    status
+                }
             }
             replyCount
             points
-            voteStatus
+            vote {
+                id
+                status
+            }
         }
-        errors {
-            field
-            messages
-        }
-    }
-}
-
-mutation CreateVoteMutation($status: Int!, $commentId: Int, $courseId: Int, $resourceId: Int) {
-    createVote(input: { status: $status, commentId: $commentId, courseId: $courseId, resourceId: $resourceId }) {
-        message
         errors {
             field
             messages

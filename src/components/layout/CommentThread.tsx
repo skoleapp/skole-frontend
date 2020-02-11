@@ -40,7 +40,7 @@ export const CommentThread: React.FC = () => {
             <Fade in={!!commentThread}>
                 <Paper>
                     <ModalCloseIcon onClick={handleClose} />
-                    {!!commentThread && <CommentCard comment={commentThread} />}
+                    {!!commentThread && <CommentCard comment={commentThread} isThread />}
                     <Box padding="0.25rem" display="flex" alignItems="center">
                         <Typography variant="subtitle2" color="textSecondary">
                             {R.propOr('-', 'replyCount', commentThread)} replies
