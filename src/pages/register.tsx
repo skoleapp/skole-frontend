@@ -28,8 +28,8 @@ export interface RegisterFormValues {
 
 const getBetaPassCodeFromQuery = (): string => {
     const router = useRouter();
-    if (!!router.query && !!router.query.pass) {
-        return router.query.pass.toString();
+    if (!!router.query && !!router.query.code) {
+        return router.query.code.toString();
     } else {
         return '';
     }
