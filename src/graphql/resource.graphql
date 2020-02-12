@@ -1,5 +1,5 @@
-query ResourceDetail($id: Int!) {
-    resource(resourceId: $id) {
+query ResourceDetail($id: ID!) {
+    resource(id: $id) {
         id
         title
         resourceType

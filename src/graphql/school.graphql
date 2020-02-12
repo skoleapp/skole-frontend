@@ -1,5 +1,5 @@
-query SchoolDetail($id: Int!) {
-    school(schoolId: $id) {
+query SchoolDetail($id: ID!) {
+    school(id: $id) {
         id
         name
         city

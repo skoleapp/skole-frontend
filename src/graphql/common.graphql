@@ -50,19 +50,19 @@ query ResourceTypes {
 mutation CreateComment(
     $text: String!
     $attachment: String
-    $courseId: Int
-    $resourceId: Int
-    $resourcePartId: Int
-    $commentId: Int
+    $course: ID
+    $resource: ID
+    $resourcePart: ID
+    $comment: ID
 ) {
     createComment(
         input: {
             text: $text
             attachment: $attachment
-            courseId: $courseId
-            resourceId: $resourceId
-            resourcePartId: $resourcePartId
-            commentId: $commentId
+            course: $course
+            resource: $resource
+            resourcePart: $resourcePart
+            comment: $comment
         }
     ) {
         comment {

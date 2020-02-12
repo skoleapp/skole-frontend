@@ -1,11 +1,10 @@
-mutation DeleteObject($commentId: Int, $resourceId: Int, $resourcePartId: Int, $voteId: Int, $courseId: Int) {
+mutation DeleteObject($comment: ID, $resource: ID, $resourcePart: ID, $vote: ID) {
     deleteObject(
         input: {
-            commentId: $commentId
-            resourceId: $resourceId
-            resourcePartId: $resourcePartId
-            voteId: $voteId
-            courseId: $courseId
+            comment: $comment
+            resource: $resource
+            resourcePart: $resourcePart
+            vote: $vote
         }
     ) {
         message
