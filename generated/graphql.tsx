@@ -927,6 +927,19 @@ export type SearchCoursesQuery = (
   )>>> }
 );
 
+export type UploadResourceInitialDataQueryVariables = {
+  course: Scalars['ID']
+};
+
+
+export type UploadResourceInitialDataQuery = (
+  { __typename?: 'Query' }
+  & { course: Maybe<(
+    { __typename?: 'CourseObjectType' }
+    & Pick<CourseObjectType, 'id' | 'name'>
+  )> }
+);
+
 export type UploadResourceMutationVariables = {
   resourceTitle: Scalars['String'],
   resourceType: Scalars['ID'],
@@ -1543,6 +1556,24 @@ export const SearchCoursesDocument = gql`
       
 export type SearchCoursesQueryHookResult = ReturnType<typeof useSearchCoursesQuery>;
 export type SearchCoursesQueryResult = ApolloReactCommon.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
+export const UploadResourceInitialDataDocument = gql`
+    query UploadResourceInitialData($course: ID!) {
+  course(id: $course) {
+    id
+    name
+  }
+}
+    `;
+
+    export function useUploadResourceInitialDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UploadResourceInitialDataQuery, UploadResourceInitialDataQueryVariables>) {
+      return ApolloReactHooks.useQuery<UploadResourceInitialDataQuery, UploadResourceInitialDataQueryVariables>(UploadResourceInitialDataDocument, baseOptions);
+    }
+      export function useUploadResourceInitialDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UploadResourceInitialDataQuery, UploadResourceInitialDataQueryVariables>) {
+        return ApolloReactHooks.useLazyQuery<UploadResourceInitialDataQuery, UploadResourceInitialDataQueryVariables>(UploadResourceInitialDataDocument, baseOptions);
+      }
+      
+export type UploadResourceInitialDataQueryHookResult = ReturnType<typeof useUploadResourceInitialDataQuery>;
+export type UploadResourceInitialDataQueryResult = ApolloReactCommon.QueryResult<UploadResourceInitialDataQuery, UploadResourceInitialDataQueryVariables>;
 export const UploadResourceDocument = gql`
     mutation UploadResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $files: String!) {
   uploadResource(input: {title: $resourceTitle, resourceType: $resourceType, course: $course, files: $files}) {
