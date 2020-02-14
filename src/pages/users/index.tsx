@@ -23,7 +23,8 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { getAvatarThumb, useAuthSync, useFilters } from '../../utils';
+import { useAuthSync, useFilters } from '../../utils';
+import { mediaURL } from '../../utils/mediaURL';
 
 interface FilterUsersFormValues {
     username: string;
@@ -100,7 +101,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                         <Link href={`/users/${u.id}`} key={i}>
                             <TableRow>
                                 <TableCell className="user-cell">
-                                    <Avatar src={getAvatarThumb(u)} />
+                                    <Avatar src={mediaURL(R.propOr('', 'avatarThumbnail', u))} />
                                     <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
                                 </TableCell>
                                 <TableCell align="right">

@@ -16,7 +16,7 @@ import {
 } from '../../../generated/graphql';
 import { toggleCommentThread, toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
-import { getAvatarThumb } from '../../utils';
+import { mediaURL } from '../../utils/mediaURL';
 import { TextLink } from './TextLink';
 
 interface Props {
@@ -30,6 +30,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     const created = moment(initialComment.created).format('LL');
     const [comment, setComment] = useState(initialComment);
     const [vote, setVote] = useState(comment.vote);
+    const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
 
     const handleClick = (): void => {
         !isThread && dispatch(toggleCommentThread(comment));
@@ -135,7 +136,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     return (
         <StyledCommentCard isThread={!!isThread} onClick={handleClick}>
             <CardHeader
-                avatar={<Avatar src={getAvatarThumb(R.propOr('', 'avatarThumbnail', comment.user))} />}
+                avatar={<Avatar src={mediaURL(avatarThumb)} />}
                 action={renderAction}
                 title={renderTitle}
                 subheader={created}

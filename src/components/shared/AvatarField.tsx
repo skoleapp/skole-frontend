@@ -7,11 +7,12 @@ import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
+import { mediaURL } from '../../utils/mediaURL';
 import { FormErrorMessage } from '.';
 
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ setFieldValue, values }) => {
     const { t } = useTranslation();
-    const [preview, setPreview] = useState(process.env.BACKEND_URL + values.avatar);
+    const [preview, setPreview] = useState(mediaURL(values.avatar));
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();

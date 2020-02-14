@@ -39,7 +39,8 @@ import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { getFullCourseName } from '../../utils';
-import { getAvatar, useAuthSync, useTabs } from '../../utils';
+import { useAuthSync, useTabs } from '../../utils';
+import { mediaURL } from '../../utils/mediaURL';
 
 interface Props extends I18nProps {
     user?: UserObjectType;
@@ -53,6 +54,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const username = R.propOr('-', 'username', user) as string;
         const email = R.propOr('-', 'email', user) as string;
         const title = R.prop('title', user) as string;
+        const avatar = R.prop('avatar', user) as string;
         const bio = R.propOr('-', 'bio', user) as string;
         const points = R.propOr('-', 'points', user);
         const courseCount = R.propOr('-', 'courseCount', user);
@@ -66,7 +68,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             <Grid container alignItems="center">
                 <Grid item container xs={12} sm={6} justify="center">
                     <CardContent>
-                        <Avatar className="main-avatar" src={getAvatar(user)} />
+                        <Avatar className="main-avatar" src={mediaURL(avatar)} />
                         <Box marginY="0.5rem">
                             <Typography variant="h1">{username}</Typography>
                         </Box>
