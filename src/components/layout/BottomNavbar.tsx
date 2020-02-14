@@ -23,7 +23,7 @@ export const BottomNavbar: React.FC = () => {
                 return 1;
             }
             case '/users/[id]': {
-                if (user && ((query.id as unknown) as number) === (user.id as number)) {
+                if (user && query.id === user.id) {
                     return 2;
                 }
             }

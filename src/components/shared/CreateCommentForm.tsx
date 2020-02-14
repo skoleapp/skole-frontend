@@ -20,10 +20,10 @@ interface Props {
 interface CreateCommentFormValues {
     text: string;
     attachment: string;
-    course?: number;
-    resource?: number;
-    resourcePart?: number;
-    comment?: number;
+    course?: string;
+    resource?: string;
+    resourcePart?: string;
+    comment?: string;
 }
 
 export const CreateCommentForm: React.FC<Props> = ({ label, placeholder, target, appendComments }) => {

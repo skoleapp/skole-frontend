@@ -103,9 +103,9 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         e.stopPropagation();
 
         if ((!!vote && vote.status === 1 && status === 1) || (!!vote && vote.status === -1 && status === -1)) {
-            deleteVoteMutation({ variables: { voteId: vote.id } }); // Delete existing vote.
+            deleteVoteMutation({ variables: { vote: vote.id } }); // Delete existing vote.
         } else {
-            voteMutation({ variables: { commentId: comment.id as number, status } }); // Create new vote.
+            voteMutation({ variables: { comment: comment.id, status: String(status) } }); // Create new vote.
         }
     };
 
