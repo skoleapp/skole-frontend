@@ -1,6 +1,8 @@
 import { Box, Divider, FormControl, Link, Typography } from '@material-ui/core';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { useRouter } from 'next/router';
+import * as R from 'ramda';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
@@ -16,25 +18,19 @@ import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePublicPage } from '../utils';
 
-const initialValues = {
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    general: '',
-};
-
 export interface RegisterFormValues {
     username: string;
     email: string;
     password: string;
     confirmPassword: string;
+    code: string;
 }
 
 const RegisterPage: I18nPage = () => {
     const client = useApolloClient();
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<RegisterFormValues>();
     const dispatch = useDispatch();
+    const { query } = useRouter();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -49,6 +45,15 @@ const RegisterPage: I18nPage = () => {
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
             .required(t('validation:confirmPasswordRequired')),
     });
+
+    const initialValues = {
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        code: R.propOr('', 'code', query) as string,
+        general: '',
+    };
 
     const onCompleted = ({ register, login }: RegisterMutation): void => {
         if (register && register.errors) {
@@ -65,8 +70,8 @@ const RegisterPage: I18nPage = () => {
     const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
-        const { username, email, password } = values;
-        await registerMutation({ variables: { username, email, password } });
+        const { username, email, password, code } = values;
+        await registerMutation({ variables: { username, email, password, code } });
         setSubmitting(false);
     };
 

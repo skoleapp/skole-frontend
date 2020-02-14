@@ -34,6 +34,7 @@ import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useAuthSync, useTabs } from '../../utils';
+import { mediaURL } from '../../utils/mediaURL';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -164,10 +165,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 </CardContent>
                 <Divider />
                 <CardContent>
-                    <Image src={r.file} />
+                    <Image src={mediaURL(r.file)} />
                 </CardContent>
                 <CardContent>
-                    <Download url={r.file} fileName={r.title} />
+                    <Download url={mediaURL(r.file)} fileName={r.title} />
                 </CardContent>
                 <Divider />
                 <CardContent>Here will be {r.title} discussion thread...</CardContent>

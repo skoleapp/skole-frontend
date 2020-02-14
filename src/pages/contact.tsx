@@ -73,7 +73,6 @@ const ContactPage: I18nPage = () => {
                         variant="outlined"
                         rows="5"
                         fullWidth
-                        rows="5"
                         multiline
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
