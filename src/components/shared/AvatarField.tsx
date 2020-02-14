@@ -1,49 +1,52 @@
-import { Avatar, Box, Button, FormControl } from '@material-ui/core';
-import { ErrorMessage, Field, FormikProps } from 'formik';
+import { Avatar, Box, Button, FormControl, IconButton } from '@material-ui/core';
+import { DeleteOutline } from '@material-ui/icons';
+import { ErrorMessage, FormikProps } from 'formik';
 import * as R from 'ramda';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
 import { FormErrorMessage } from '.';
 
-// FIXME: I am borke.
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ setFieldValue, values }) => {
     const { t } = useTranslation();
-    const [avatar, setAvatar] = useState();
-    const [preview, setPreview] = useState();
-
-    useEffect(() => {
-        const objectUrl = avatar && URL.createObjectURL(avatar);
-        setPreview(objectUrl);
-        return (): void => URL.revokeObjectURL(objectUrl);
-    }, [avatar]);
+    const [preview, setPreview] = useState(process.env.BACKEND_URL + values.avatar);
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const newAvatar = R.path(['currentTarget', 'files', '0'], e) as File;
-        setFieldValue('avatar', newAvatar);
-        setAvatar(newAvatar);
+        const reader = new FileReader();
+        const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
+        setFieldValue('avatar', avatar);
+        reader.readAsDataURL(avatar);
+
+        reader.onloadend = (): void => {
+            setFieldValue('avatar', avatar);
+            setPreview(reader.result as string);
+        };
+    };
+
+    const handleRemoveImage = (): void => {
+        setFieldValue('avatar', null);
+        setPreview('');
     };
 
     return (
         <StyledImagePreviewField fullWidth>
-            <Box display="flex" flexDirection="column" alignItems="center" marginY="0.5rem">
-                <Avatar className="main-avatar" src={avatar ? preview : process.env.BACKEND_URL + values.avatar} />
-                <Field
-                    value=""
-                    name="avatar"
-                    id="avatar-input"
-                    accept="image/*"
-                    type="file"
-                    component="input"
-                    onChange={handleAvatarChange}
-                />
-                <label htmlFor="avatar-input">
-                    <Button variant="outlined" color="primary" component="span">
-                        {t('edit-profile:changeAvatarButton')}
-                    </Button>
-                </label>
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Avatar className="main-avatar" src={preview} />
+                <input value="" id="avatar-input" accept="image/*" type="file" onChange={handleAvatarChange} />
+                <Box marginY="0.5rem" display="flex" alignItems="center">
+                    <label htmlFor="avatar-input">
+                        <Button variant="outlined" color="primary" component="span">
+                            {t('edit-profile:changeAvatarButton')}
+                        </Button>
+                    </label>
+                    {!!preview && (
+                        <IconButton onClick={handleRemoveImage} color="primary">
+                            <DeleteOutline />
+                        </IconButton>
+                    )}
+                </Box>
                 <ErrorMessage name="avatar" component={FormErrorMessage} />
             </Box>
         </StyledImagePreviewField>
@@ -61,5 +64,9 @@ const StyledImagePreviewField = styled(FormControl)`
 
     .MuiButton-root {
         margin-top: 0;
+    }
+
+    .MuiIconButton-root {
+        margin-left: 0.5rem;
     }
 `;
