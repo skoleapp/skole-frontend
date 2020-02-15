@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
-import { useTranslation } from '../../i18n';
 import { CommentTarget } from '../../types';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
@@ -15,8 +14,6 @@ interface Props {
 }
 
 export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, isThread, target }) => {
-    const { t } = useTranslation();
-    const labelPlaceholder = !!isThread ? t('forms:reply') : t('forms:message');
     const [comments, setComments] = useState(initialComments);
     const appendComments = (comment: CommentObjectType): void => setComments([...comments, comment]);
 
@@ -32,12 +29,7 @@ export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, isTh
 
     const renderInputArea = (
         <Box className="input-area">
-            <CreateCommentForm
-                label={labelPlaceholder}
-                placeholder={labelPlaceholder}
-                target={target}
-                appendComments={appendComments}
-            />
+            <CreateCommentForm target={target} appendComments={appendComments} />
         </Box>
     );
 

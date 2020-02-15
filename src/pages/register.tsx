@@ -113,6 +113,14 @@ const RegisterPage: I18nPage = () => {
                         variant="outlined"
                         fullWidth
                     />
+                    <Field
+                        placeholder={t('forms:code')}
+                        name="code"
+                        component={TextField}
+                        label={t('forms:code')}
+                        variant="outlined"
+                        fullWidth
+                    />
                     <FormControl fullWidth>
                         <Typography variant="body2" color="textSecondary">
                             {t('register:termsHelpText')}{' '}
