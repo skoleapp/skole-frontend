@@ -1,5 +1,6 @@
 import 'nprogress/nprogress.css';
 import 'typeface-roboto';
+import 'react-quill/dist/quill.snow.css';
 
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
