@@ -12,7 +12,8 @@
         "type-check": "tsc",
         "gen": "graphql-codegen --config codegen.yml",
         "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-        "format": "prettier --write '**/*.{ts,tsx,js,json}' && yarn lint:fix"
+        "format": "prettier --write '**/*.{ts,tsx,js,json}' && yarn lint:fix",
+        "analyze": "cross-env ANALYZE=1 next build && cat .next/stats.txt"
     },
     "dependencies": {
         "@apollo/react-hooks": "^3.1.2",
@@ -90,6 +91,8 @@
         "ts-node": "^8.5.4",
         "typescript": "^3.6.2",
         "webpack": "^4.41.2",
-        "webpackbar": "^4.0.0"
+        "webpackbar": "^4.0.0",
+        "cross-env": "^7.0.0",
+        "webpack-bundle-size-analyzer": "^3.1.0"
     }
 }
