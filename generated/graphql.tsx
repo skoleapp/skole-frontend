@@ -343,27 +343,27 @@ export type QueryUsersArgs = {
 
 
 export type QueryUserArgs = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
 export type QuerySubjectArgs = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
 export type QuerySchoolTypeArgs = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
 export type QuerySchoolArgs = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
 export type QueryResourceArgs = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
@@ -379,22 +379,22 @@ export type QueryCoursesArgs = {
 
 
 export type QueryCourseArgs = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
 export type QueryCountryArgs = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
 export type QueryCommentArgs = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
 export type QueryCityArgs = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 export type RegisterMutationInput = {
@@ -775,7 +775,7 @@ export type CreateCommentMutation = (
 );
 
 export type CourseDetailQueryVariables = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
@@ -863,7 +863,7 @@ export type DeleteObjectMutation = (
 );
 
 export type ResourceDetailQueryVariables = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
@@ -889,7 +889,7 @@ export type ResourceDetailQuery = (
 );
 
 export type SchoolDetailQueryVariables = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
@@ -924,11 +924,26 @@ export type SearchCoursesQuery = (
   & { courses: Maybe<Array<Maybe<(
     { __typename?: 'CourseObjectType' }
     & Pick<CourseObjectType, 'id' | 'name' | 'code'>
-  )>>> }
+  )>>>, school: Maybe<(
+    { __typename?: 'SchoolObjectType' }
+    & Pick<SchoolObjectType, 'id' | 'name'>
+  )>, subject: Maybe<(
+    { __typename?: 'SubjectObjectType' }
+    & Pick<SubjectObjectType, 'id' | 'name'>
+  )>, schoolType: Maybe<(
+    { __typename?: 'SchoolTypeObjectType' }
+    & Pick<SchoolTypeObjectType, 'id' | 'name'>
+  )>, country: Maybe<(
+    { __typename?: 'CountryObjectType' }
+    & Pick<CountryObjectType, 'id' | 'name'>
+  )>, city: Maybe<(
+    { __typename?: 'CityObjectType' }
+    & Pick<CityObjectType, 'id' | 'name'>
+  )> }
 );
 
 export type UploadResourceInitialDataQueryVariables = {
-  course: Scalars['ID']
+  course?: Maybe<Scalars['ID']>
 };
 
 
@@ -977,7 +992,7 @@ export type UsersQuery = (
 );
 
 export type UserDetailQueryVariables = {
-  id: Scalars['ID']
+  id?: Maybe<Scalars['ID']>
 };
 
 
@@ -1350,7 +1365,7 @@ export type CreateCommentMutationHookResult = ReturnType<typeof useCreateComment
 export type CreateCommentMutationResult = ApolloReactCommon.MutationResult<CreateCommentMutation>;
 export type CreateCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const CourseDetailDocument = gql`
-    query CourseDetail($id: ID!) {
+    query CourseDetail($id: ID) {
   course(id: $id) {
     id
     name
@@ -1465,7 +1480,7 @@ export type DeleteObjectMutationHookResult = ReturnType<typeof useDeleteObjectMu
 export type DeleteObjectMutationResult = ApolloReactCommon.MutationResult<DeleteObjectMutation>;
 export type DeleteObjectMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteObjectMutation, DeleteObjectMutationVariables>;
 export const ResourceDetailDocument = gql`
-    query ResourceDetail($id: ID!) {
+    query ResourceDetail($id: ID) {
   resource(id: $id) {
     id
     title
@@ -1505,7 +1520,7 @@ export const ResourceDetailDocument = gql`
 export type ResourceDetailQueryHookResult = ReturnType<typeof useResourceDetailQuery>;
 export type ResourceDetailQueryResult = ApolloReactCommon.QueryResult<ResourceDetailQuery, ResourceDetailQueryVariables>;
 export const SchoolDetailDocument = gql`
-    query SchoolDetail($id: ID!) {
+    query SchoolDetail($id: ID) {
   school(id: $id) {
     id
     name
@@ -1544,6 +1559,26 @@ export const SearchCoursesDocument = gql`
     name
     code
   }
+  school(id: $school) {
+    id
+    name
+  }
+  subject(id: $subject) {
+    id
+    name
+  }
+  schoolType(id: $schoolType) {
+    id
+    name
+  }
+  country(id: $country) {
+    id
+    name
+  }
+  city(id: $city) {
+    id
+    name
+  }
 }
     `;
 
@@ -1557,7 +1592,7 @@ export const SearchCoursesDocument = gql`
 export type SearchCoursesQueryHookResult = ReturnType<typeof useSearchCoursesQuery>;
 export type SearchCoursesQueryResult = ApolloReactCommon.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
 export const UploadResourceInitialDataDocument = gql`
-    query UploadResourceInitialData($course: ID!) {
+    query UploadResourceInitialData($course: ID) {
   course(id: $course) {
     id
     name
@@ -1616,7 +1651,7 @@ export const UsersDocument = gql`
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersQueryResult = ApolloReactCommon.QueryResult<UsersQuery, UsersQueryVariables>;
 export const UserDetailDocument = gql`
-    query UserDetail($id: ID!) {
+    query UserDetail($id: ID) {
   user(id: $id) {
     id
     username

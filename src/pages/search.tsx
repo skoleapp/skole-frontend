@@ -1,5 +1,5 @@
 import { CardContent, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { Field, Formik } from 'formik';
+import { Field, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -54,7 +54,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     const { query } = useRouter();
     const { t } = useTranslation();
 
-    const handlePreSubmit = (values: FilterSearchResultsFormValues): void => {
+    const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T, actions: FormikActions<T>): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city } = values;
 
         const filteredValues: FilterSearchResultsFormValues = {
@@ -67,13 +67,13 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
             city: R.propOr('', 'id', city),
         };
 
-        handleSubmit(filteredValues);
+        handleSubmit(filteredValues, actions);
     };
 
     // Pre-load query params to the form.
     const initialValues = {
         courseName: R.propOr('', 'courseName', query) as string,
-        courseCode: R.propOr('', 'courseName', query) as string,
+        courseCode: R.propOr('', 'courseCode', query) as string,
         school: school || null,
         subject: subject || null,
         schoolType: schoolType || null,

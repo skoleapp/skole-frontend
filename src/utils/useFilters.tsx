@@ -1,5 +1,6 @@
 import { Button, FormControl } from '@material-ui/core';
 import { Clear } from '@material-ui/icons';
+import { FormikActions } from 'formik';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
@@ -13,7 +14,7 @@ import { UseForm, useForm } from './useForm';
 export interface UseFilters<T> extends UseForm<T> {
     submitButtonText: string;
     renderClearFiltersButton: JSX.Element;
-    handleSubmit: (filteredValues: T) => Promise<void>;
+    handleSubmit: (filteredValues: T, actions: FormikActions<T>) => Promise<void>;
     handleClearFilters: () => Promise<void>;
     open: boolean;
     toggleDrawer: (open: boolean) => () => void;
@@ -29,10 +30,10 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
     const submitButtonText = t('common:apply');
 
     // Pick non-empty values and reload the page with new query params.
-    const handleSubmit = async (filteredValues: {}): Promise<void> => {
+    const handleSubmit = async (filteredValues: {}, actions: FormikActions<T>): Promise<void> => {
         const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
         await Router.push({ pathname, query });
-        setSubmitting(false);
+        actions.setSubmitting(false);
         closeDrawer();
     };
 

@@ -1,4 +1,4 @@
-query SchoolDetail($id: ID!) {
+query SchoolDetail($id: ID) {
     school(id: $id) {
         id
         name

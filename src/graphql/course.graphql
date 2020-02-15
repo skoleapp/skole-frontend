@@ -1,4 +1,4 @@
-query CourseDetail($id: ID!) {
+query CourseDetail($id: ID) {
     course(id: $id) {
         id
         name

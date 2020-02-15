@@ -1,4 +1,4 @@
-query ResourceDetail($id: ID!) {
+query ResourceDetail($id: ID) {
     resource(id: $id) {
         id
         title
