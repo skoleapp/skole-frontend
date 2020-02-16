@@ -1,7 +1,6 @@
-import { Box, IconButton } from '@material-ui/core';
+import { Box, IconButton, TextField } from '@material-ui/core';
 import { AttachmentOutlined } from '@material-ui/icons';
-import { Formik } from 'formik';
-import dynamic, { LoaderComponent } from 'next/dynamic';
+import { Field, Formik } from 'formik';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -11,15 +10,7 @@ import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } fr
 import { toggleNotification } from '../../actions';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
-import { FormSubmitSection } from './FormSubmitSection';
 import { StyledForm } from './StyledForm';
-
-const DynamicTextEditor: any = dynamic(
-    (): LoaderComponent<{}> => (import('./TextEditor') as unknown) as LoaderComponent<{}>,
-    {
-        ssr: false,
-    },
-);
 
 interface Props {
     target: CommentTarget;
@@ -38,7 +29,7 @@ interface CreateCommentFormValues {
 export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { ref, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
+    const { ref, setSubmitting, resetForm, submitForm } = useForm<CreateCommentFormValues>();
 
     const onError = (): void => {
         dispatch(toggleNotification(t('notifications:messageError')));
@@ -64,13 +55,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
         resetForm();
     };
 
-    const handleChange = (val: string): void => setFieldValue('text', val);
-
-    // const handleKeyPress = (e: KeyboardEvent): void => {
-    //     if (e.key === 'Enter') {
-    //         submitForm();
-    //     }
-    // };
+    const handleKeyPress = (e: KeyboardEvent): void => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            submitForm();
+        }
+    };
 
     const initialValues = {
         text: '',
@@ -80,15 +69,24 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
 
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
-            {(props): JSX.Element => (
+            {(): JSX.Element => (
                 <StyledCreateCommentForm>
-                    <DynamicTextEditor value={props.values.text} onChange={handleChange} />
-                    <Box display="flex" alignItems="center">
-                        <FormSubmitSection submitButtonText={t('forms:submit')} {...props} />
+                    <Box display="flex" justifyContent="flex-end">
                         <IconButton>
                             <AttachmentOutlined />
                         </IconButton>
                     </Box>
+                    <Field
+                        name="text"
+                        placeholder={t('forms:message')}
+                        variant="outlined"
+                        component={TextField}
+                        autoComplete="off"
+                        rowsMax="10"
+                        onKeyPress={handleKeyPress}
+                        multiline
+                        fullWidth
+                    />
                 </StyledCreateCommentForm>
             )}
         </Formik>
@@ -101,7 +99,9 @@ const StyledCreateCommentForm = styled(StyledForm)`
 
     .MuiIconButton-root {
         padding: 0.5rem;
-        margin-top: 0.75rem;
-        margin-left: 0.5rem;
+    }
+
+    .MuiFormControl-root {
+        margin-top: 0.25rem;
     }
 `;
