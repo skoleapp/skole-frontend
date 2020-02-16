@@ -1,6 +1,4 @@
-import { Box, IconButton, TextField } from '@material-ui/core';
-import { AttachmentOutlined } from '@material-ui/icons';
-import { Field, Formik } from 'formik';
+import { Formik } from 'formik';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -11,6 +9,7 @@ import { toggleNotification } from '../../actions';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
 import { StyledForm } from './StyledForm';
+import { TextEditor } from './TextEditor';
 
 interface Props {
     target: CommentTarget;
@@ -69,24 +68,9 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
 
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
-            {(): JSX.Element => (
+            {(props): JSX.Element => (
                 <StyledCreateCommentForm>
-                    <Box display="flex" justifyContent="flex-end">
-                        <IconButton>
-                            <AttachmentOutlined />
-                        </IconButton>
-                    </Box>
-                    <Field
-                        name="text"
-                        placeholder={t('forms:message')}
-                        variant="outlined"
-                        component={TextField}
-                        autoComplete="off"
-                        rowsMax="10"
-                        onKeyPress={handleKeyPress}
-                        multiline
-                        fullWidth
-                    />
+                    <TextEditor onKeyPress={handleKeyPress} {...props} />
                 </StyledCreateCommentForm>
             )}
         </Formik>
