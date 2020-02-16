@@ -6,9 +6,10 @@ import {
     FormatItalicOutlined,
     FormatListBulletedOutlined,
     FormatListNumberedOutlined,
-    FormatQuote,
+    FormatQuoteOutlined,
     FormatStrikethroughOutlined,
     LinkOutlined,
+    WebAssetOutlined,
 } from '@material-ui/icons';
 import { DraftHandleValue, Editor, EditorState, RichUtils } from 'draft-js';
 import { FormikProps } from 'formik';
@@ -16,6 +17,48 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
+
+const inlineStyles = [
+    {
+        style: 'BOLD',
+        icon: FormatBoldOutlined,
+    },
+    {
+        style: 'ITALIC',
+        icon: FormatItalicOutlined,
+    },
+    {
+        style: 'STRIKETHROUGH',
+        icon: FormatStrikethroughOutlined,
+    },
+    {
+        style: 'CODE',
+        icon: CodeOutlined,
+    },
+];
+
+const blockTypes = [
+    {
+        blockType: 'link',
+        icon: LinkOutlined,
+    },
+    {
+        blockType: 'unordered-list-item',
+        icon: FormatListNumberedOutlined,
+    },
+    {
+        blockType: 'ordered-list-item',
+        icon: FormatListBulletedOutlined,
+    },
+    {
+        blockType: 'blockquote',
+        icon: FormatQuoteOutlined,
+    },
+    {
+        blockType: 'code-block',
+        icon: WebAssetOutlined,
+    },
+];
 
 interface Props extends FormikProps<{}> {
     onKeyPress: (e: KeyboardEvent) => void;
@@ -40,6 +83,10 @@ export const TextEditor: React.FC<Props> = () => {
         setEditorState(RichUtils.toggleInlineStyle(editorState, style));
     };
 
+    const toggleBlockType = (blockType: string) => (): void => {
+        setEditorState(RichUtils.toggleBlockType(editorState, blockType));
+    };
+
     return (
         <StyledTextEditor>
             <Editor
@@ -52,30 +99,16 @@ export const TextEditor: React.FC<Props> = () => {
                 <IconButton>
                     <AttachmentOutlined />
                 </IconButton>
-                <IconButton onClick={toggleInlineStyle('BOLD')}>
-                    <FormatBoldOutlined />
-                </IconButton>
-                <IconButton onClick={toggleInlineStyle('ITALIC')}>
-                    <FormatItalicOutlined />
-                </IconButton>
-                <IconButton onClick={toggleInlineStyle('STRIKE-THROUGH')}>
-                    <FormatStrikethroughOutlined />
-                </IconButton>
-                <IconButton onClick={toggleInlineStyle('CODE')}>
-                    <CodeOutlined />
-                </IconButton>
-                <IconButton onClick={toggleInlineStyle('LINK')}>
-                    <LinkOutlined />
-                </IconButton>
-                <IconButton onClick={toggleInlineStyle('LIST-NUMBERED')}>
-                    <FormatListNumberedOutlined />
-                </IconButton>
-                <IconButton onClick={toggleInlineStyle('LIST-BULLETED')}>
-                    <FormatListBulletedOutlined />
-                </IconButton>
-                <IconButton onClick={toggleInlineStyle('QUOTE')}>
-                    <FormatQuote />
-                </IconButton>
+                {inlineStyles.map(({ style, icon: Icon }, i) => (
+                    <IconButton key={i} onClick={toggleInlineStyle(style)}>
+                        <Icon />
+                    </IconButton>
+                ))}
+                {blockTypes.map(({ blockType, icon: Icon }, i) => (
+                    <IconButton key={i} onClick={toggleBlockType(blockType)}>
+                        <Icon />
+                    </IconButton>
+                ))}
             </Box>
         </StyledTextEditor>
     );

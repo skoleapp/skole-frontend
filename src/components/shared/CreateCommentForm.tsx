@@ -48,7 +48,6 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
     const [createCommentMutation] = useCreateCommentMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
-        console.log(values);
         await createCommentMutation({ variables: { ...values } });
         setSubmitting(false);
         resetForm();
@@ -82,7 +81,7 @@ const StyledCreateCommentForm = styled(StyledForm)`
     flex-direction: column;
 
     .MuiIconButton-root {
-        padding: 0.5rem;
+        padding: 0.25rem;
     }
 
     .MuiFormControl-root {
