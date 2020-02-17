@@ -9,10 +9,11 @@ import * as Yup from 'yup';
 import {
     CourseObjectType,
     CoursesDocument,
+    CreateResourceInitialDataDocument,
+    CreateResourceMutation,
     ResourceTypesDocument,
-    UploadResourceInitialDataDocument,
+    useCreateResourceMutation,
 } from '../../generated/graphql';
-import { UploadResourceMutation, useUploadResourceMutation } from '../../generated/graphql';
 import { toggleNotification } from '../actions';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection, StyledForm } from '../components';
 import { useTranslation } from '../i18n';
@@ -48,19 +49,19 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         files: Yup.array().required(t('validation:filesRequired')),
     });
 
-    const onCompleted = async ({ uploadResource }: UploadResourceMutation): Promise<void> => {
-        if (uploadResource) {
-            if (uploadResource.errors) {
-                handleMutationErrors(uploadResource.errors);
-            } else if (uploadResource.resource && uploadResource.resource.id) {
+    const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {
+        if (createResource) {
+            if (createResource.errors) {
+                handleMutationErrors(createResource.errors);
+            } else if (createResource.resource && createResource.resource.id) {
                 resetForm();
                 dispatch(toggleNotification(t('notifications:resourceUploaded')));
-                await Router.push(`/resources/${uploadResource.resource.id}`);
+                await Router.push(`/resources/${createResource.resource.id}`);
             }
         }
     };
 
-    const [uploadResourceMutation] = useUploadResourceMutation({ onCompleted, onError });
+    const [createResourceMutation] = useCreateResourceMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
         const { resourceTitle, resourceType, course, files } = values;
@@ -72,7 +73,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
             files: (files as unknown) as string,
         };
 
-        await uploadResourceMutation({ variables });
+        await createResourceMutation({ variables });
         setSubmitting(false);
     };
 
@@ -133,7 +134,7 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
 
     if (!!query.course) {
         try {
-            const { data } = await apolloClient.query({ query: UploadResourceInitialDataDocument, variables: query });
+            const { data } = await apolloClient.query({ query: CreateResourceInitialDataDocument, variables: query });
             return { ...data, ...nameSpaces };
         } catch {
             return nameSpaces;

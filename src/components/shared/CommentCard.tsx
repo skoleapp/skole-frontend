@@ -8,10 +8,8 @@ import styled from 'styled-components';
 
 import {
     CommentObjectType,
-    CreateVoteMutation,
-    DeleteObjectMutation,
-    useCreateVoteMutation,
-    useDeleteObjectMutation,
+    PerformVoteMutation,
+    usePerformVoteMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleCommentThread, toggleNotification } from '../../actions';
@@ -40,74 +38,26 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         dispatch(toggleNotification(t('notifications:createVoteError')));
     };
 
-    const onCreateVoteCompleted = ({ createVote }: CreateVoteMutation): void => {
-        if (!!createVote) {
-            if (!!createVote.errors) {
+    const onCreateVoteCompleted = ({ performVote }: PerformVoteMutation): void => {
+        if (!!performVote) {
+            if (!!performVote.errors) {
                 onCreateVoteError();
-            } else if (
-                !!createVote.vote &&
-                !!createVote.vote.status &&
-                comment.points !== undefined &&
-                comment.points !== null
-            ) {
-                setVote(createVote.vote as VoteObjectType);
-                const voteStatus = createVote.vote.status;
-
-                if (!!vote && vote.status === 1 && voteStatus === -1) {
-                    setComment({ ...comment, points: comment.points - 2 }); // Decrement score by 2.
-                } else if (!!vote && vote.status === -1 && voteStatus === 1) {
-                    setComment({ ...comment, points: comment.points + 2 }); // Increment score by 2.
-                } else {
-                    setComment({ ...comment, points: comment.points + voteStatus }); // Increment/decrement score by whatever the mutation returns.
-                }
+            } else if (!!performVote.vote && !!comment.points) {
+                setVote(performVote.vote as VoteObjectType);
+                const voteStatus = performVote.vote.status;
+                voteStatus && setComment({ ...comment, points: comment.points + voteStatus });
             }
         }
     };
 
-    const onDeleteVoteError = (): void => {
-        dispatch(toggleNotification(t('notifications:deleteVoteError')));
-    };
-
-    const onDeleteVoteCompleted = ({ deleteObject }: DeleteObjectMutation): void => {
-        if (!!deleteObject) {
-            if (!!deleteObject.errors) {
-                onDeleteVoteError();
-            } else {
-                const currentVoteStatus = !!vote && vote.status;
-
-                if (comment.points !== undefined && comment.points !== null) {
-                    if (currentVoteStatus === 1) {
-                        setComment({ ...comment, points: comment.points - 1 });
-                    } else if (currentVoteStatus === -1) {
-                        setComment({ ...comment, points: comment.points + 1 });
-                    }
-                }
-
-                setVote(null);
-            }
-        }
-    };
-
-    const [voteMutation, { loading: createVoteLoading }] = useCreateVoteMutation({
+    const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({
         onCompleted: onCreateVoteCompleted,
         onError: onCreateVoteError,
     });
 
-    const [deleteVoteMutation, { loading: deleteVoteLoading }] = useDeleteObjectMutation({
-        onCompleted: onDeleteVoteCompleted,
-        onError: onDeleteVoteError,
-    });
-
-    const voteSubmitting = !!createVoteLoading || !!deleteVoteLoading;
-
     const handleVote = (status: number) => (e: SyntheticEvent): void => {
         e.stopPropagation();
-
-        if ((!!vote && vote.status === 1 && status === 1) || (!!vote && vote.status === -1 && status === -1)) {
-            deleteVoteMutation({ variables: { vote: vote.id } }); // Delete existing vote.
-        } else {
-            voteMutation({ variables: { comment: comment.id, status: String(status) } }); // Create new vote.
-        }
+        performVote({ variables: { comment: comment.id, status } });
     };
 
     const renderAction = (
