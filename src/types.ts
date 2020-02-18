@@ -40,5 +40,5 @@ export interface LayoutProps extends ContainerProps {
 }
 
 export interface CommentTarget {
-    [key: string]: number | undefined;
+    [key: string]: number;
 }

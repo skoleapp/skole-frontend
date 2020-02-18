@@ -17,7 +17,6 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ se
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();
         const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
-        setFieldValue('avatar', avatar);
         reader.readAsDataURL(avatar);
 
         reader.onloadend = (): void => {

@@ -1,8 +1,9 @@
-import { Box, IconButton } from '@material-ui/core';
+import { Box, IconButton, Typography } from '@material-ui/core';
 import { AttachmentOutlined, SendOutlined } from '@material-ui/icons';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import React from 'react';
+import * as R from 'ramda';
+import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -20,7 +21,7 @@ interface Props {
 
 interface CreateCommentFormValues {
     text: string;
-    attachment: string;
+    attachment: File | null;
     course?: string;
     resource?: string;
     resourcePart?: string;
@@ -30,7 +31,7 @@ interface CreateCommentFormValues {
 export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { ref, setSubmitting, resetForm, submitForm } = useForm<CreateCommentFormValues>();
+    const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
 
     const onError = (): void => {
         dispatch(toggleNotification(t('notifications:messageError')));
@@ -50,7 +51,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
     const [createCommentMutation] = useCreateCommentMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
-        await createCommentMutation({ variables: { ...values } });
+        await createCommentMutation({ variables: { ...values, attachment: (values.attachment as unknown) as string } });
         setSubmitting(false);
         resetForm();
     };
@@ -61,15 +62,26 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
         }
     };
 
+    const handleAttachmentChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        const reader = new FileReader();
+        const attachment = R.path(['currentTarget', 'files', '0'], e) as File;
+        setFieldValue('attachment', attachment);
+        reader.readAsDataURL(attachment);
+
+        reader.onloadend = (): void => {
+            setFieldValue('attachment', attachment);
+        };
+    };
+
     const initialValues = {
         text: '',
-        attachment: '',
+        attachment: null,
         ...target,
     };
 
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
-            {(): JSX.Element => (
+            {({ values }): JSX.Element => (
                 <StyledCreateCommentForm>
                     <Field
                         name="text"
@@ -82,9 +94,29 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
                         autoComplete="off"
                     />
                     <Box display="flex" justifyContent="space-between" marginTop="0.5rem">
-                        <IconButton size="small">
-                            <AttachmentOutlined />
-                        </IconButton>
+                        <input
+                            value=""
+                            id="attachment"
+                            accept="image/*"
+                            type="file"
+                            onChange={handleAttachmentChange}
+                        />
+                        <label htmlFor="attachment">
+                            <IconButton
+                                size="small"
+                                component="span"
+                                color={!!values.attachment ? 'primary' : 'default'}
+                            >
+                                <AttachmentOutlined />
+                            </IconButton>
+                        </label>
+                        {!!values.attachment && (
+                            <Box display="flex" alignItems="center">
+                                <Typography variant="body2" color="textSecondary">
+                                    File Uploaded: {values.attachment.name}
+                                </Typography>
+                            </Box>
+                        )}
                         <IconButton size="small" color="primary" type="submit">
                             <SendOutlined />
                         </IconButton>
@@ -101,5 +133,9 @@ const StyledCreateCommentForm = styled(StyledForm)`
 
     .MuiFormControl-root {
         margin-top: 0;
+    }
+
+    input#attachment {
+        display: none;
     }
 `;
