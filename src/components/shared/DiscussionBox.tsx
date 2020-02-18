@@ -28,7 +28,7 @@ export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, isTh
     );
 
     const renderInputArea = (
-        <Box className="input-area">
+        <Box className="input-area md-up">
             <CreateCommentForm target={target} appendComments={appendComments} />
         </Box>
     );

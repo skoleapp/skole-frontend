@@ -512,6 +512,7 @@ export type VoteMutationPayload = {
    __typename?: 'VoteMutationPayload',
   vote?: Maybe<VoteObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
+  targetPoints?: Maybe<Scalars['Int']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -1025,6 +1026,7 @@ export type PerformVoteMutation = (
   { __typename?: 'Mutation' }
   & { performVote: Maybe<(
     { __typename?: 'VoteMutationPayload' }
+    & Pick<VoteMutationPayload, 'targetPoints'>
     & { vote: Maybe<(
       { __typename?: 'VoteObjectType' }
       & Pick<VoteObjectType, 'id' | 'status'>
@@ -1719,6 +1721,7 @@ export const PerformVoteDocument = gql`
       id
       status
     }
+    targetPoints
     errors {
       field
       messages

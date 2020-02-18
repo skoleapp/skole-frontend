@@ -1,4 +1,7 @@
-import { Formik } from 'formik';
+import { Box, IconButton } from '@material-ui/core';
+import { AttachmentOutlined, SendOutlined } from '@material-ui/icons';
+import { Field, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -9,7 +12,6 @@ import { toggleNotification } from '../../actions';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
 import { StyledForm } from './StyledForm';
-import { TextEditor } from './TextEditor';
 
 interface Props {
     target: CommentTarget;
@@ -67,9 +69,26 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
 
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
-            {(props): JSX.Element => (
+            {(): JSX.Element => (
                 <StyledCreateCommentForm>
-                    <TextEditor onKeyPress={handleKeyPress} {...props} />
+                    <Field
+                        name="text"
+                        placeholder={t('forms:message')}
+                        component={TextField}
+                        variant="outlined"
+                        onKeyPress={handleKeyPress}
+                        rowsMax="10"
+                        multiline
+                        autoComplete="off"
+                    />
+                    <Box display="flex" justifyContent="space-between" marginTop="0.5rem">
+                        <IconButton size="small">
+                            <AttachmentOutlined />
+                        </IconButton>
+                        <IconButton size="small" color="primary" type="submit">
+                            <SendOutlined />
+                        </IconButton>
+                    </Box>
                 </StyledCreateCommentForm>
             )}
         </Formik>
@@ -80,11 +99,7 @@ const StyledCreateCommentForm = styled(StyledForm)`
     display: flex;
     flex-direction: column;
 
-    .MuiIconButton-root {
-        padding: 0.25rem;
-    }
-
     .MuiFormControl-root {
-        margin-top: 0.25rem;
+        margin-top: 0;
     }
 `;

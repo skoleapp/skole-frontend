@@ -34,26 +34,22 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         !isThread && dispatch(toggleCommentThread(comment));
     };
 
-    const onCreateVoteError = (): void => {
+    const onError = (): void => {
         dispatch(toggleNotification(t('notifications:createVoteError')));
     };
 
-    const onCreateVoteCompleted = ({ performVote }: PerformVoteMutation): void => {
+    const onCompleted = ({ performVote }: PerformVoteMutation): void => {
         if (!!performVote) {
             if (!!performVote.errors) {
-                onCreateVoteError();
-            } else if (!!performVote.vote && !!comment.points) {
+                onError();
+            } else {
                 setVote(performVote.vote as VoteObjectType);
-                const voteStatus = performVote.vote.status;
-                voteStatus && setComment({ ...comment, points: comment.points + voteStatus });
+                setComment({ ...comment, points: performVote.targetPoints });
             }
         }
     };
 
-    const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({
-        onCompleted: onCreateVoteCompleted,
-        onError: onCreateVoteError,
-    });
+    const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
 
     const handleVote = (status: number) => (e: SyntheticEvent): void => {
         e.stopPropagation();
