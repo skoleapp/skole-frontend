@@ -33,11 +33,11 @@ const ContactPage: I18nPage = () => {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        contactType: Yup.string().required(t('validation:contactTypeRequired')),
+        contactType: Yup.string().required(t('validation:required')),
         email: Yup.string()
             .email(t('validation:invalidEmail'))
-            .required(t('validation:emailRequired')),
-        message: Yup.string().required(t('validation:messageRequired')),
+            .required(t('validation:required')),
+        message: Yup.string().required(t('validation:required')),
     });
 
     // TODO: Finish this.

@@ -37,8 +37,8 @@ const LoginPage: I18nPage = () => {
     const { renderAlert } = useAlerts();
 
     const validationSchema = Yup.object().shape({
-        usernameOrEmail: Yup.string().required(t('validation:usernameOrEmailRequired')),
-        password: Yup.string().required(t('validation:passwordRequired')),
+        usernameOrEmail: Yup.string().required(t('validation:required')),
+        password: Yup.string().required(t('validation:required')),
     });
 
     const onCompleted = async ({ login }: LoginMutation): Promise<void> => {

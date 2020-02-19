@@ -56,7 +56,7 @@ export const useForm = <T>(): UseForm<T> => {
                 }
             });
         } else {
-            formErrors.general = 'Encountered unexpected error.';
+            formErrors.general = i18n.t('validation:unexpectedError');
         }
 
         setFormErrors(formErrors);
@@ -67,9 +67,9 @@ export const useForm = <T>(): UseForm<T> => {
         const formErrors = { general: '' };
 
         if (err.networkError) {
-            formErrors.general = 'Network error.';
+            formErrors.general = i18n.t('validation:networkError');
         } else {
-            formErrors.general = 'Encountered unexpected error.';
+            formErrors.general = i18n.t('validation:unexpectedError');
         }
 
         setFormErrors(formErrors);

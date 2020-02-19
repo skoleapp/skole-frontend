@@ -34,16 +34,16 @@ const RegisterPage: I18nPage = () => {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required(t('validation:usernameRequired')),
+        username: Yup.string().required(t('validation:required')),
         email: Yup.string()
             .email(t('validation:invalidEmail'))
-            .required(t('validation:emailRequired')),
+            .required(t('validation:required')),
         password: Yup.string()
             .min(6, t('validation:passwordTooShort'))
-            .required(t('validation:passwordRequired')),
+            .required(t('validation:required')),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
-            .required(t('validation:confirmPasswordRequired')),
+            .required(t('validation:required')),
     });
 
     const initialValues = {

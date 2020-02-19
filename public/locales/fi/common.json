@@ -50,5 +50,6 @@
     "discussion": "Keskustelu",
     "commentActions": "Kommenttitoiminnot",
     "deleteComment": "Poista kommentti",
+    "deleteCommentHeader": "Haluatko varmasti poistaa tämän kommentin?",
     "reportAbuse": "Ilmoita väärinkäytöstä"
 }

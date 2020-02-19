@@ -39,14 +39,14 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<UploadResourceFormValues>();
 
     const validationSchema = Yup.object().shape({
-        resourceTitle: Yup.string().required(t('validation:resourceTitleRequired')),
+        resourceTitle: Yup.string().required(t('validation:required')),
         resourceType: Yup.object()
             .nullable()
-            .required(t('validation:resourceTypeRequired')),
+            .required(t('validation:required')),
         course: Yup.object()
             .nullable()
-            .required(t('validation:courseRequired')),
-        files: Yup.array().required(t('validation:filesRequired')),
+            .required(t('validation:required')),
+        files: Yup.array().required(t('validation:required')),
     });
 
     const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {

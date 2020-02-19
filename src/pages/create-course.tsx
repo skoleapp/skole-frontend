@@ -41,7 +41,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
         subject: Yup.object().nullable(),
         school: Yup.object()
             .nullable()
-            .required(t('validation:schoolRequired')),
+            .required(t('validation:required')),
     });
 
     const onCompleted = async ({ createCourse }: CreateCourseMutation): Promise<void> => {

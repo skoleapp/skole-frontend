@@ -29,10 +29,10 @@ const ResetPasswordConfirmPage: I18nPage = () => {
     const validationSchema = Yup.object().shape({
         password: Yup.string()
             .min(6, t('validation:passwordTooShort'))
-            .required(t('validation:passwordRequired')),
+            .required(t('validation:required')),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
-            .required(t('validation:confirmPasswordRequired')),
+            .required(t('validation:required')),
     });
 
     const handleSubmit = async (values: ResetPasswordConfirmFormValues): Promise<void> => {

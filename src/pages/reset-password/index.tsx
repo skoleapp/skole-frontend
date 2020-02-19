@@ -27,7 +27,7 @@ const ResetPasswordLinkPage: I18nPage = () => {
     const validationSchema = Yup.object().shape({
         email: Yup.string()
             .email(t('validation:invalidEmail'))
-            .required(t('validation:emailRequired')),
+            .required(t('validation:required')),
     });
 
     const handleSubmit = async (values: ResetPasswordLinkFormValues): Promise<void> => {
