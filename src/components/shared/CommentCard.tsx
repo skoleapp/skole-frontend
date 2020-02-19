@@ -109,7 +109,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         onError: performVoteError,
     });
 
-    const [deleteComment] = useDeleteCommentMutation({
+    const [deleteComment, { loading: deleteCommentSubmitting }] = useDeleteCommentMutation({
         onCompleted: deleteCommentCompleted,
         onError: deleteCommentError,
     });
@@ -141,6 +141,8 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         setDeleteCommentOpen(false);
     };
 
+    const handleStopPropagation = (e: SyntheticEvent): void => e.stopPropagation();
+
     const renderTitle = (
         <TextLink href={`/users/${R.propOr('', 'id', comment.user)}`}>
             {R.propOr('-', 'username', comment.user)}
@@ -149,9 +151,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
 
     const renderCommentOptionsDialog = (
         <StyledDialog open={commentOptionsOpen} onClose={handleCloseCommentOptions}>
-            <DialogTitle onClick={(e: SyntheticEvent): void => e.stopPropagation()}>
-                {t('common:commentActions')}
-            </DialogTitle>
+            <DialogTitle onClick={handleStopPropagation}>{t('common:commentActions')}</DialogTitle>
             {R.prop('id', comment.user as UserObjectType) === R.prop('id', user as UserObjectType) && (
                 <ListItem>
                     <ListItemText onClick={handleDeleteComment}>
@@ -160,7 +160,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                 </ListItem>
             )}
             <ListItem disabled>
-                <ListItemText>
+                <ListItemText onClick={handleStopPropagation}>
                     <FlagOutlined /> {t('common:reportAbuse')}
                 </ListItemText>
             </ListItem>
@@ -169,14 +169,17 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
 
     const renderDeleteCommentDialog = (
         <StyledDialog open={deleteCommentOpen} onClose={handleCloseDeleteComment}>
-            <DialogTitle onClick={(e: SyntheticEvent): void => e.stopPropagation()}>
-                {t('common:deleteComment')}
-            </DialogTitle>
+            <DialogTitle onClick={handleStopPropagation}>{t('common:deleteCommentHeader')}</DialogTitle>
             <DialogActions>
                 <Button onClick={handleCloseDeleteComment} color="primary" variant="outlined">
                     {t('common:cancel')}
                 </Button>
-                <Button onClick={handleConfirmDeleteComment} color="primary" variant="contained">
+                <Button
+                    onClick={handleConfirmDeleteComment}
+                    color="primary"
+                    variant="contained"
+                    disabled={!!deleteCommentSubmitting}
+                >
                     {t('common:confirm')}
                 </Button>
             </DialogActions>
