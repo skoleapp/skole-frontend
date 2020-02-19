@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const ModalCloseIcon: React.FC<Props> = ({ onClick }) => (
-    <Box display="flex" justifyContent="flex-end">
+    <Box display="flex" justifyContent="flex-end" borderBottom="var(--border)">
         <IconButton onClick={onClick}>
             <Close />
         </IconButton>
