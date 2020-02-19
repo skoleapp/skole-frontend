@@ -11,7 +11,7 @@ import { useAuthSync } from '../utils';
 
 const AboutPage: I18nPage = () => {
     const { t } = useTranslation();
-    const renderCardContent = <Typography>Here will be about content...</Typography>;
+    const renderCardContent = <Typography variant="body1">{t('about:content')}</Typography>;
     return <SettingsLayout title={t('about:title')} renderCardContent={renderCardContent} backUrl />;
 };
 

@@ -25,7 +25,7 @@ import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { getFullCourseName, useAuthSync, useFilters } from '../utils';
+import { getFullCourseName, useFilters, usePrivatePage } from '../utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
@@ -190,7 +190,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
 };
 
 SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await useAuthSync(ctx);
+    await usePrivatePage(ctx);
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 

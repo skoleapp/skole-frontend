@@ -9,7 +9,7 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core';
-import { Field, Formik } from 'formik';
+import { Field, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -23,7 +23,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useAuthSync, useFilters } from '../../utils';
+import { useFilters, usePrivatePage } from '../../utils';
 import { mediaURL } from '../../utils/mediaURL';
 
 interface FilterUsersFormValues {
@@ -43,9 +43,9 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     const { t } = useTranslation();
     const { query } = useRouter();
 
-    const handlePreSubmit = (values: FilterUsersFormValues): void => {
+    const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
         const { username, ordering } = values;
-        handleSubmit({ username, ordering });
+        handleSubmit({ username, ordering }, actions);
     };
 
     // Pre-load query params to the form.
@@ -132,7 +132,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
 };
 
 UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await useAuthSync(ctx);
+    await usePrivatePage(ctx);
     const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
 

@@ -33,7 +33,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useAuthSync, useTabs } from '../../utils';
+import { usePrivatePage, useTabs } from '../../utils';
 import { mediaURL } from '../../utils/mediaURL';
 
 interface Props extends I18nProps {
@@ -194,7 +194,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 };
 
 ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await useAuthSync(ctx);
+    await usePrivatePage(ctx);
     const { query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 

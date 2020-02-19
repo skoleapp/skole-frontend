@@ -44,6 +44,7 @@ const RegisterPage: I18nPage = () => {
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
             .required(t('validation:required')),
+        code: Yup.string().required(t('validation:required')),
     });
 
     const initialValues = {
@@ -114,10 +115,10 @@ const RegisterPage: I18nPage = () => {
                         fullWidth
                     />
                     <Field
-                        placeholder={t('forms:code')}
+                        placeholder={t('forms:betaCode')}
                         name="code"
                         component={TextField}
-                        label={t('forms:code')}
+                        label={t('forms:betaCode')}
                         variant="outlined"
                         fullWidth
                     />

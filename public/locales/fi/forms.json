@@ -31,5 +31,6 @@
     "usernameOrdering": "Käyttätunnus (A-Z)",
     "usernameOrderingReverse": "Käyttäjätunnus (Z-A)",
     "pointsOrdering": "Pisteet (nouseva)",
-    "pointsOrderingReverse": "Pisteet (laskeva)"
+    "pointsOrderingReverse": "Pisteet (laskeva)",
+    "betaCode": "Betakoodi"
 }

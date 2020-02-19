@@ -54,7 +54,7 @@ import {
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
+import { getFullCourseName, usePrivatePage, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -284,7 +284,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 };
 
 CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await useAuthSync(ctx);
+    await usePrivatePage(ctx);
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 
