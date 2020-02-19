@@ -48,7 +48,10 @@ export const DeleteAccountPage: I18nPage = () => {
         }
     };
 
-    const [deleteAccountMutation] = useDeleteAccountMutation({ onCompleted, onError });
+    const [deleteAccountMutation, { loading: deleteAccountSubmitting }] = useDeleteAccountMutation({
+        onCompleted,
+        onError,
+    });
 
     const handleSubmit = (values: DeleteAccountFormValues): void => {
         setSubmitting(false);
@@ -98,7 +101,12 @@ export const DeleteAccountPage: I18nPage = () => {
                 <Button onClick={handleClose} variant="outlined" color="primary">
                     {t('common:cancel')}
                 </Button>
-                <Button onClick={handleSubmitConfirm} variant="contained" color="primary">
+                <Button
+                    onClick={handleSubmitConfirm}
+                    variant="contained"
+                    color="primary"
+                    disabled={!!deleteAccountSubmitting}
+                >
                     {t('common:confirm')}
                 </Button>
             </DialogActions>
