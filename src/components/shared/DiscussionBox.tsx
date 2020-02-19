@@ -19,9 +19,15 @@ export const DiscussionBox: React.FC<Props> = ({ commentThread, comments: initia
     const [comments, setComments] = useState(initialComments);
     const appendComments = (comment: CommentObjectType): void => setComments([...comments, comment]);
 
+    const removeComment = (id: string): void => {
+        setComments(comments.filter((c: CommentObjectType): boolean => c.id !== id));
+    };
+
+    const commentCardProps = { isThread, removeComment };
+
     const renderTopComment = !!commentThread && (
         <>
-            <CommentCard comment={commentThread} isThread={!!isThread} />
+            <CommentCard comment={commentThread} {...commentCardProps} />
             <Box padding="0.25rem" display="flex" alignItems="center">
                 <Typography variant="subtitle2" color="textSecondary">
                     {R.propOr('-', 'replyCount', commentThread)} replies
@@ -36,7 +42,7 @@ export const DiscussionBox: React.FC<Props> = ({ commentThread, comments: initia
             {renderTopComment}
             {comments.map((c: CommentObjectType, i: number) => (
                 <Box key={i}>
-                    <CommentCard comment={c} isThread={!!isThread} />
+                    <CommentCard comment={c} {...commentCardProps} />
                 </Box>
             ))}
         </Box>

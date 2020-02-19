@@ -46,9 +46,10 @@ import { TextLink } from './TextLink';
 interface Props {
     comment: CommentObjectType;
     isThread?: boolean;
+    removeComment: (id: string) => void;
 }
 
-export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread }) => {
+export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread, removeComment }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { user } = useSelector((state: State) => state.auth);
@@ -97,6 +98,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
             if (!!deleteComment.errors) {
                 deleteCommentError();
             } else {
+                removeComment(comment.id);
                 dispatch(toggleNotification(t('notifications:commentDeleted')));
             }
         }
