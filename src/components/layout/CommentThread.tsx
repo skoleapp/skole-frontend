@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
 
-import { ModalCloseIcon } from '..';
+import { ModalHeader } from '..';
 import { CommentObjectType } from '../../../generated/graphql';
 import { toggleCommentThread } from '../../actions';
 import { State } from '../../types';
@@ -39,7 +39,7 @@ export const CommentThread: React.FC = () => {
         <StyledModal open={!!commentThread} onClose={handleClose}>
             <Fade in={!!commentThread}>
                 <Paper>
-                    <ModalCloseIcon onClick={handleClose} />
+                    <ModalHeader onClick={handleClose} />
                     <DiscussionBox {...discussionBoxProps} />
                 </Paper>
             </Fade>

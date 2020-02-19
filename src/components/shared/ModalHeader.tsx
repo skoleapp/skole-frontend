@@ -6,7 +6,7 @@ interface Props {
     onClick: () => void;
 }
 
-export const ModalCloseIcon: React.FC<Props> = ({ onClick }) => (
+export const ModalHeader: React.FC<Props> = ({ onClick }) => (
     <Box display="flex" justifyContent="flex-end" borderBottom="var(--border)">
         <IconButton onClick={onClick}>
             <Close />

@@ -41,7 +41,7 @@ import {
 import {
     DiscussionBox,
     MainLayout,
-    ModalCloseIcon,
+    ModalHeader,
     NotFound,
     StyledCard,
     StyledList,
@@ -261,7 +261,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             <StyledModal open={!!courseInfoVisible} onClose={handleCloseCourseInfo}>
                 <Fade in={!!courseInfoVisible}>
                     <Paper>
-                        <ModalCloseIcon onClick={handleCloseCourseInfo} />
+                        <ModalHeader onClick={handleCloseCourseInfo} />
                         <Box textAlign="center">
                             <CardHeader title={fullName} />
                             {renderCourseInfo}

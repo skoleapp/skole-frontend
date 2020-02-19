@@ -21,5 +21,5 @@ export { SettingsButton } from './SettingsButton';
 export { CommentCard } from './CommentCard';
 export { CreateCommentForm } from './CreateCommentForm';
 export { StyledModal } from './StyledModal';
-export { ModalCloseIcon } from './ModalCloseIcon';
+export { ModalHeader } from './ModalHeader';
 export { DiscussionBox } from './DiscussionBox';
