@@ -1,5 +1,5 @@
-import { Box, IconButton, Typography } from '@material-ui/core';
-import { AttachmentOutlined, SendOutlined } from '@material-ui/icons';
+import { Box, IconButton } from '@material-ui/core';
+import { AttachFileOutlined } from '@material-ui/icons';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
@@ -83,17 +83,17 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
             {({ values }): JSX.Element => (
                 <StyledCreateCommentForm>
-                    <Field
-                        name="text"
-                        placeholder={t('forms:message')}
-                        component={TextField}
-                        variant="outlined"
-                        onKeyPress={handleKeyPress}
-                        rowsMax="10"
-                        multiline
-                        autoComplete="off"
-                    />
-                    <Box display="flex" justifyContent="space-between" marginTop="0.5rem">
+                    <Box display="flex" alignItems="center">
+                        <Field
+                            name="text"
+                            placeholder={t('forms:message')}
+                            component={TextField}
+                            variant="outlined"
+                            onKeyPress={handleKeyPress}
+                            rowsMax="10"
+                            multiline
+                            autoComplete="off"
+                        />
                         <input
                             value=""
                             id="attachment"
@@ -102,24 +102,12 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
                             onChange={handleAttachmentChange}
                         />
                         <label htmlFor="attachment">
-                            <IconButton
-                                size="small"
-                                component="span"
-                                color={!!values.attachment ? 'primary' : 'default'}
-                            >
-                                <AttachmentOutlined />
-                            </IconButton>
-                        </label>
-                        {!!values.attachment && (
-                            <Box display="flex" alignItems="center">
-                                <Typography variant="body2" color="textSecondary">
-                                    File Uploaded: {values.attachment.name}
-                                </Typography>
+                            <Box marginLeft="0.5rem">
+                                <IconButton component="span" color={!!values.attachment ? 'primary' : 'default'}>
+                                    <AttachFileOutlined />
+                                </IconButton>
                             </Box>
-                        )}
-                        <IconButton size="small" color="primary" type="submit">
-                            <SendOutlined />
-                        </IconButton>
+                        </label>
                     </Box>
                 </StyledCreateCommentForm>
             )}
@@ -133,6 +121,7 @@ const StyledCreateCommentForm = styled(StyledForm)`
 
     .MuiFormControl-root {
         margin-top: 0;
+        flex-grow: 1;
     }
 
     input#attachment {

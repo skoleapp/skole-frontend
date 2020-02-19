@@ -48,5 +48,8 @@
     "account": "Account",
     "course": "Course",
     "name": "Name",
-    "discussion": "Discussion"
+    "discussion": "Discussion",
+    "commentActions": "Comment Actions",
+    "deleteComment": "Delete Comment",
+    "reportAbuse": "Report Abuse"
 }

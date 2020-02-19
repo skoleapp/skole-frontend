@@ -47,5 +47,8 @@
     "account": "Tili",
     "course": "Kurssi",
     "name": "Nimi",
-    "discussion": "Keskustelu"
+    "discussion": "Keskustelu",
+    "commentActions": "Kommenttitoiminnot",
+    "deleteComment": "Poista kommentti",
+    "reportAbuse": "Ilmoita väärinkäytöstä"
 }
