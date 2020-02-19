@@ -78,19 +78,19 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
         const renderLeftCardContent = (
             <CardContent>
                 <Box textAlign="left">
-                    <Typography variant="body1">
+                    <Typography variant="body2">
                         {t('common:schoolType')}:{' '}
                         <TextLink href={schoolTypeLink} color="primary">
                             {schoolType}
                         </TextLink>
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body2">
                         {t('common:country')}:{' '}
                         <TextLink href={countryLink} color="primary">
                             {country}
                         </TextLink>
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body2">
                         {t('common:city')}:{' '}
                         <TextLink href={cityLink} color="primary">
                             {city}

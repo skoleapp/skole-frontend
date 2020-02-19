@@ -100,7 +100,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:creator')}:{' '}
                                 <TextLink href={`/users/${R.propOr('', 'id', user)}`} color="primary">
                                     {creatorName}
@@ -115,7 +115,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:subject')}:{' '}
                                 <TextLink href={subjectLink} color="primary">
                                     {subjectName}
@@ -130,7 +130,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:school')}:{' '}
                                 <TextLink href={`/schools/${R.propOr('-', 'id', school)}`} color="primary">
                                     {schoolName}

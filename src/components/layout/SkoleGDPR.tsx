@@ -69,7 +69,7 @@ export const SkoleGDPR: React.FC = () => {
             <DialogTitle>Privacy Preferences</DialogTitle>
             <DialogContent>
                 <Box textAlign="left">
-                    <Typography variant="body1" gutterBottom>
+                    <Typography variant="body2" gutterBottom>
                         Consent Management
                     </Typography>
                     <DialogContentText>
@@ -82,7 +82,7 @@ export const SkoleGDPR: React.FC = () => {
                     </DialogContentText>
                 </Box>
                 <Box textAlign="left">
-                    <Typography variant="body1" gutterBottom>
+                    <Typography variant="body2" gutterBottom>
                         Privacy Policy
                     </Typography>
                     <DialogContentText>
@@ -90,7 +90,7 @@ export const SkoleGDPR: React.FC = () => {
                     </DialogContentText>
                 </Box>
                 <Box textAlign="left">
-                    <Typography variant="body1" gutterBottom>
+                    <Typography variant="body2" gutterBottom>
                         Terms and Conditions
                     </Typography>
                     <DialogContentText>
@@ -98,7 +98,7 @@ export const SkoleGDPR: React.FC = () => {
                     </DialogContentText>
                 </Box>
                 <Box textAlign="left">
-                    <Typography variant="body1" gutterBottom>
+                    <Typography variant="body2" gutterBottom>
                         Cookie Settings
                     </Typography>
                     <DialogContentText>

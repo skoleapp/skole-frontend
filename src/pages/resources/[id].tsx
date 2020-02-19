@@ -63,31 +63,31 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 <Grid item container sm={6} justify="center">
                     <CardContent>
                         <Box textAlign="left">
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:resourceType')}: {resourceType}
                             </Typography>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:course')}:{' '}
                                 <TextLink href={`/courses/${resourceCourseId}`} color="primary">
                                     {resourceCourseName}
                                 </TextLink>
                             </Typography>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:school')}:{' '}
                                 <TextLink href={`/schools/${resourceSchoolId}`} color="primary">
                                     {resourceSchoolName}
                                 </TextLink>
                             </Typography>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:creator')}:{' '}
                                 <TextLink href={`/users/${creatorId}`} color="primary">
                                     {creatorName}
                                 </TextLink>
                             </Typography>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:created')}: {created}
                             </Typography>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:modified')}: {modified}
                             </Typography>
                         </Box>
@@ -146,10 +146,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             <TabPanel key={i} value={tabValue} index={i + 1}>
                 <CardContent>
                     <Box textAlign="left">
-                        <Typography variant="body1">
+                        <Typography variant="body2">
                             {t('common:resourcePartType')}: {R.propOr('-', 'resourcePartType', r)}
                         </Typography>
-                        <Typography variant="body1">
+                        <Typography variant="body2">
                             {t('common:exerciseNumber')}: {R.propOr('-', 'exerciseNumber', r)}
                         </Typography>
                     </Box>
@@ -160,7 +160,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         <Typography className="label" variant="body2" color="textSecondary">
                             {t('common:description')}
                         </Typography>
-                        <Typography variant="body1">{R.propOr('-', 'text', r)}</Typography>
+                        <Typography variant="body2">{R.propOr('-', 'text', r)}</Typography>
                     </Box>
                 </CardContent>
                 <Divider />

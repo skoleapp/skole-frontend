@@ -146,7 +146,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                             <Typography className="label" variant="body2" color="textSecondary">
                                 {t('common:email')}
                             </Typography>
-                            <Typography variant="body1">{email}</Typography>
+                            <Typography variant="body2">{email}</Typography>
                         </Box>
                     )}
                     <Typography className="label" variant="body2" color="textSecondary">
@@ -162,7 +162,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     <Typography className="label" variant="body2" color="textSecondary">
                         {t('common:bio')}
                     </Typography>
-                    <Typography variant="body1">{bio}</Typography>
+                    <Typography variant="body2">{bio}</Typography>
                 </Box>
             </CardContent>
         );
