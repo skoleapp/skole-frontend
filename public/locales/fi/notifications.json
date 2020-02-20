@@ -8,5 +8,6 @@
     "errorDownloadingResource": "Virhe ladattaessa tiedostoa!",
     "voteError": "Virhe äänestyksessä!",
     "deleteCommentError": "Virhe poistettaessa kommenttia!",
-    "commentDeleted": "Kommentti poistettu!"
+    "commentDeleted": "Kommentti poistettu!",
+    "messageEmpty": "Viesti ei voi olla tyhjä!"
 }

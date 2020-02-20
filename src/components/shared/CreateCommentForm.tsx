@@ -61,9 +61,17 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
         setAttachmentModal(null);
-        await createCommentMutation({ variables: { ...values, attachment: (values.attachment as unknown) as string } });
-        setSubmitting(false);
+
+        if (!!values.text) {
+            await createCommentMutation({
+                variables: { ...values, attachment: (values.attachment as unknown) as string },
+            });
+        } else {
+            dispatch(toggleNotification('notifications:messageEmpty'));
+        }
+
         resetForm();
+        setSubmitting(false);
     };
 
     const handleKeyPress = (e: KeyboardEvent): void => {
@@ -105,7 +113,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
 
     const renderSubmitButton = (
         <Box marginLeft="0.5rem">
-            <IconButton type="submit" color="primary">
+            <IconButton onClick={submitForm} color="primary">
                 <SendOutlined />
             </IconButton>
         </Box>
@@ -156,7 +164,6 @@ const StyledCreateCommentForm = styled(StyledForm)`
 
     .MuiFormControl-root {
         margin-top: 0;
-        // flex-grow: 1;
     }
 
     input#attachment {
