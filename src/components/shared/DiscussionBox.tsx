@@ -85,10 +85,6 @@ const StyledDiscussionBox = styled(Box)`
                 flex-grow: 1;
                 margin-left: 0.5rem;
             }
-
-            ::-webkit-scrollbar {
-                display: none;
-            }
         }
 
         .input-area {
