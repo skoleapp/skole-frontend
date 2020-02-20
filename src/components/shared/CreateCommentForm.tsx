@@ -1,9 +1,10 @@
-import { Box, IconButton } from '@material-ui/core';
-import { AttachFileOutlined } from '@material-ui/icons';
+import { Box, Fade, IconButton, Paper } from '@material-ui/core';
+import { AttachFileOutlined, SendOutlined } from '@material-ui/icons';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import Image from 'material-ui-image';
 import * as R from 'ramda';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -12,7 +13,9 @@ import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } fr
 import { toggleNotification } from '../../actions';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
+import { ModalHeader } from './ModalHeader';
 import { StyledForm } from './StyledForm';
+import { StyledModal } from './StyledModal';
 
 interface Props {
     target: CommentTarget;
@@ -32,6 +35,12 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
+    const [attachmentModal, setAttachmentModal] = useState<string | ArrayBuffer | null>(null);
+
+    const handleCloseAttachmentModal = (): void => {
+        setFieldValue('attachment', null);
+        setAttachmentModal(null);
+    };
 
     const onError = (): void => {
         dispatch(toggleNotification(t('notifications:messageError')));
@@ -51,6 +60,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
     const [createCommentMutation] = useCreateCommentMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
+        setAttachmentModal(null);
         await createCommentMutation({ variables: { ...values, attachment: (values.attachment as unknown) as string } });
         setSubmitting(false);
         resetForm();
@@ -65,11 +75,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
     const handleAttachmentChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();
         const attachment = R.path(['currentTarget', 'files', '0'], e) as File;
-        setFieldValue('attachment', attachment);
         reader.readAsDataURL(attachment);
 
         reader.onloadend = (): void => {
             setFieldValue('attachment', attachment);
+            setAttachmentModal(reader.result);
         };
     };
 
@@ -79,21 +89,34 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
         ...target,
     };
 
+    const renderTextField = (
+        <Field
+            name="text"
+            placeholder={t('forms:message')}
+            component={TextField}
+            variant="outlined"
+            onKeyPress={handleKeyPress}
+            rowsMax="10"
+            multiline={true}
+            autoComplete="off"
+            fullWidth
+        />
+    );
+
+    const renderSubmitButton = (
+        <Box marginLeft="0.5rem">
+            <IconButton type="submit" color="primary">
+                <SendOutlined />
+            </IconButton>
+        </Box>
+    );
+
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
-            {({ values }): JSX.Element => (
+            {(): JSX.Element => (
                 <StyledCreateCommentForm>
                     <Box display="flex" alignItems="center">
-                        <Field
-                            name="text"
-                            placeholder={t('forms:message')}
-                            component={TextField}
-                            variant="outlined"
-                            onKeyPress={handleKeyPress}
-                            rowsMax="10"
-                            multiline
-                            autoComplete="off"
-                        />
+                        {renderTextField}
                         <input
                             value=""
                             id="attachment"
@@ -103,12 +126,24 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
                         />
                         <label htmlFor="attachment">
                             <Box marginLeft="0.5rem">
-                                <IconButton component="span" color={!!values.attachment ? 'primary' : 'default'}>
+                                <IconButton component="span">
                                     <AttachFileOutlined />
                                 </IconButton>
                             </Box>
                         </label>
                     </Box>
+                    <StyledModal open={!!attachmentModal} onClose={handleCloseAttachmentModal}>
+                        <Fade in={!!attachmentModal}>
+                            <Paper>
+                                <ModalHeader onClick={handleCloseAttachmentModal} title={t('common:attachFile')} />
+                                <Box flexGrow="1">{!!attachmentModal && <Image src={attachmentModal as string} />}</Box>
+                                <Box display="flex" alignItems="center">
+                                    {renderTextField}
+                                    {renderSubmitButton}
+                                </Box>
+                            </Paper>
+                        </Fade>
+                    </StyledModal>
                 </StyledCreateCommentForm>
             )}
         </Formik>
@@ -121,7 +156,7 @@ const StyledCreateCommentForm = styled(StyledForm)`
 
     .MuiFormControl-root {
         margin-top: 0;
-        flex-grow: 1;
+        // flex-grow: 1;
     }
 
     input#attachment {

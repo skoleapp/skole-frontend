@@ -29,7 +29,7 @@ export interface UseForm<T> {
     setSubmitting: (val: boolean) => void;
     resetForm: () => void;
     submitForm: () => Promise<void> | null;
-    setFieldValue: (fieldName: string, val: string | File | File[]) => void;
+    setFieldValue: (fieldName: string, val: string | File | File[] | null) => void;
 }
 
 export const useForm = <T>(): UseForm<T> => {
@@ -79,7 +79,7 @@ export const useForm = <T>(): UseForm<T> => {
     const resetForm = (): void | null => ref && ref.current && ref.current.resetForm();
     const submitForm = (): Promise<void> | null => ref && ref.current && ref.current.submitForm();
 
-    const setFieldValue = (fieldName: string, val: string | File | File[]): void => {
+    const setFieldValue = (fieldName: string, val: string | File | File[] | null): void => {
         ref && ref.current && ref.current.setFieldValue(fieldName, val);
     };
 
