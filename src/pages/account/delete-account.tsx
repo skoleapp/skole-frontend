@@ -1,4 +1,4 @@
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
 import React from 'react';
@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { deAuthenticate } from '../../actions';
-import { FormSubmitSection, SettingsLayout, StyledForm } from '../../components';
+import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -64,7 +64,7 @@ export const DeleteAccountPage: I18nPage = () => {
     const renderCardContent = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         name="password"
                         label={t('forms:password')}
@@ -75,7 +75,7 @@ export const DeleteAccountPage: I18nPage = () => {
                         type="password"
                     />
                     <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

@@ -1,4 +1,4 @@
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
 import { reAuthenticate, toggleNotification } from '../../actions';
-import { AvatarField, FormSubmitSection, SettingsLayout, StyledForm } from '../../components';
+import { AvatarField, FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -80,7 +80,7 @@ const EditProfilePage: I18nPage = () => {
     const renderCardContent = (
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <AvatarField {...props} />
                     <Field
                         placeholder={t('forms:title')}
@@ -117,7 +117,7 @@ const EditProfilePage: I18nPage = () => {
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

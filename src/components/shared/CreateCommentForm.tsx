@@ -1,6 +1,6 @@
 import { Box, Fade, IconButton, Paper } from '@material-ui/core';
 import { AttachFileOutlined, SendOutlined } from '@material-ui/icons';
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Image from 'material-ui-image';
 import * as R from 'ramda';
@@ -14,7 +14,6 @@ import { toggleNotification } from '../../actions';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
 import { ModalHeader } from './ModalHeader';
-import { StyledForm } from './StyledForm';
 import { StyledModal } from './StyledModal';
 
 interface Props {
@@ -158,7 +157,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
     );
 };
 
-const StyledCreateCommentForm = styled(StyledForm)`
+const StyledCreateCommentForm = styled(Form)`
     display: flex;
     flex-direction: column;
 

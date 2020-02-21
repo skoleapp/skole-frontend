@@ -18,7 +18,7 @@ import React from 'react';
 import { compose } from 'redux';
 
 import { UserObjectType, UsersDocument } from '../../../generated/graphql';
-import { FilterLayout, FormSubmitSection, SelectField, StyledForm } from '../../components';
+import { FilterLayout, FormSubmitSection, SelectField } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -57,7 +57,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         name="username"
                         label={t('forms:username')}
@@ -74,7 +74,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                     </Field>
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
                     {renderClearFiltersButton}
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

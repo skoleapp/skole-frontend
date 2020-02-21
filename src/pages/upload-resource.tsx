@@ -1,4 +1,4 @@
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
@@ -15,7 +15,7 @@ import {
     useCreateResourceMutation,
 } from '../../generated/graphql';
 import { toggleNotification } from '../actions';
-import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -88,7 +88,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const renderCardContent = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         name="resourceTitle"
                         label={t('forms:resourceTitle')}
@@ -119,7 +119,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                     />
                     <Field name="files" label={t('upload-resource:dropzoneText')} component={DropzoneField} />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

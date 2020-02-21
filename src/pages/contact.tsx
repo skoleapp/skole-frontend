@@ -1,5 +1,5 @@
 import { MenuItem } from '@material-ui/core';
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -7,7 +7,7 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { toggleNotification } from '../actions';
-import { FormSubmitSection, SelectField, SettingsLayout, StyledForm } from '../components';
+import { FormSubmitSection, SelectField, SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -50,7 +50,7 @@ const ContactPage: I18nPage = () => {
     const renderCardContent = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field name="contactType" label={t('forms:contactType')} component={SelectField} fullWidth>
                         <MenuItem value="feedback">{t('forms:feedback')}</MenuItem>
                         <MenuItem value="requestSchool">{t('forms:requestSchool')}</MenuItem>
@@ -76,7 +76,7 @@ const ContactPage: I18nPage = () => {
                         multiline
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

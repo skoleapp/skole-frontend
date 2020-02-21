@@ -14,7 +14,6 @@ interface Props {
     label: string;
 }
 
-// FIXME: Label is not working correctly.
 export const SelectField: React.FC<Props & SelectProps> = ({ children, label, ...props }) => (
     <StyledFormControl variant="outlined" fullWidth>
         <InputLabel>{label}</InputLabel>
@@ -25,6 +24,7 @@ export const SelectField: React.FC<Props & SelectProps> = ({ children, label, ..
         <ErrorMessage name={props.field.name} component={FormErrorMessage} />
     </StyledFormControl>
 );
+
 const StyledFormControl = styled(FormControl)`
     .MuiFormLabel-root {
         background-color: var(--white);

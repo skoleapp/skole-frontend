@@ -1,5 +1,5 @@
 import { CardContent, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { Field, Formik, FormikActions } from 'formik';
+import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -20,7 +20,7 @@ import {
     SubjectObjectType,
     SubjectsDocument,
 } from '../../generated/graphql';
-import { AutoCompleteField, FilterLayout, FormSubmitSection, StyledForm } from '../components';
+import { AutoCompleteField, FilterLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -84,7 +84,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         name="courseName"
                         label={t('forms:courseName')}
@@ -153,7 +153,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
                     />
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
                     {renderClearFiltersButton}
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

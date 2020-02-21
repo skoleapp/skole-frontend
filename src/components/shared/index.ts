@@ -3,7 +3,6 @@ export { FormErrorMessage } from './FormErrorMessage';
 export { FormSubmitSection } from './FormSubmitSection';
 export { IconButtonLink } from './IconButtonLink';
 export { StyledCard } from './StyledCard';
-export { StyledForm } from './StyledForm';
 export { StyledList } from './StyledList';
 export { StyledTable } from './StyledTable';
 export { TabPanel } from './TabPanel';

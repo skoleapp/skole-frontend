@@ -1,4 +1,4 @@
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
@@ -15,7 +15,7 @@ import {
     useCreateCourseMutation,
 } from '../../generated/graphql';
 import { toggleNotification } from '../actions';
-import { AutoCompleteField, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { AutoCompleteField, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -83,7 +83,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
     const renderCardContent = (
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         name="courseName"
                         label={t('forms:courseName')}
@@ -121,7 +121,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );
