@@ -13,6 +13,7 @@ import { CheckOutlined } from '@material-ui/icons';
 import cookie from 'cookie';
 import { useEffect, useState } from 'react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
@@ -21,6 +22,7 @@ import { TextLink } from '../shared';
 export const SkoleGDPR: React.FC = () => {
     const [consent, setConsent] = useState(true);
     const [privacyPreferencesOpen, setPrivacyPreferencesOpen] = useState(false);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const skoleGDPRConsent = cookie.parse(document.cookie).skole_gdpr_consent;
@@ -49,17 +51,14 @@ export const SkoleGDPR: React.FC = () => {
     const renderWarning = (
         <Grid container justify="center" alignItems="center">
             <Grid item xs={12} md={8}>
-                This website stores cookies on your computer. These cookies are used to collect information about how
-                you interact with our website and allow us to remember you. We use this information in order to improve
-                and customize your browsing experience and for analytics and metrics about our visitors both on this
-                website and other media. To find out more about the cookies we use, see our Privacy Policy.
+                {t('gdpr:warningDesc')}
             </Grid>
             <Grid item container xs={12} md={4} justify="space-evenly" alignItems="center">
                 <Button onClick={openPrivacyPreferences} color="secondary" fullWidth>
-                    privacy preferences
+                    {t('gdpr:privacyPreferences')}
                 </Button>
                 <Button onClick={handleConsent} endIcon={<CheckOutlined />} variant="contained" fullWidth>
-                    i agree
+                    {t('common:confirm')}
                 </Button>
             </Grid>
         </Grid>
@@ -70,48 +69,39 @@ export const SkoleGDPR: React.FC = () => {
             <DialogTitle>Privacy Preferences</DialogTitle>
             <DialogContent>
                 <Box textAlign="left">
-                    <Typography variant="body2" gutterBottom>
-                        Consent Management
+                    <Typography variant="subtitle1" gutterBottom>
+                        {t('gdpr:consentManagement')}
+                    </Typography>
+                    <DialogContentText>{t('gdpr:consentManagementDesc')}</DialogContentText>
+                </Box>
+                <Box textAlign="left">
+                    <Typography variant="subtitle1" gutterBottom>
+                        {t('gdpr:privacyPolicy')}
                     </Typography>
                     <DialogContentText>
-                        When you visit any website, it may store or retrieve information on your browser, mostly in the
-                        form of cookies. This information might be about you, your preferences or your device and is
-                        mostly used to make the site work as you expect it to. The information does not usually directly
-                        identify you, but it can give you a more personalized web experience. Because we respect your
-                        right to privacy, you can choose not to allow some types of cookies. However, blocking some
-                        types of cookies may impact your experience of the site and the services we are able to offer.
+                        {t('gdpr:privacyPolicyDesc')} <TextLink href="/privacy">{t('gdpr:privacyPolicy')}</TextLink>.
                     </DialogContentText>
                 </Box>
                 <Box textAlign="left">
-                    <Typography variant="body2" gutterBottom>
-                        Privacy Policy
+                    <Typography variant="subtitle1" gutterBottom>
+                        {t('gdpr:termsAndConditions')}
                     </Typography>
                     <DialogContentText>
-                        You read and agreed to our <TextLink href="/privacy">Privacy Policy</TextLink>.
+                        {t('gdpr:termsAndConditionsDesc')}{' '}
+                        <TextLink href="/terms">{t('gdpr:termsAndConditions')}</TextLink>.
                     </DialogContentText>
                 </Box>
                 <Box textAlign="left">
-                    <Typography variant="body2" gutterBottom>
-                        Terms and Conditions
+                    <Typography variant="subtitle1" gutterBottom>
+                        {t('gdpr:cookieSettings')}
                     </Typography>
-                    <DialogContentText>
-                        You read and agreed to our <TextLink href="/terms">Terms and Conditions</TextLink>.
-                    </DialogContentText>
-                </Box>
-                <Box textAlign="left">
-                    <Typography variant="body2" gutterBottom>
-                        Cookie Settings
-                    </Typography>
-                    <DialogContentText>
-                        We use these cookies to ensure the correct language is being chosen for you based on your region
-                        as well as the overall site functionality.
-                    </DialogContentText>
-                    <DialogContentText>Cookies: token, csrftoken, skole_gdpr_consent</DialogContentText>
+                    <DialogContentText>{t('gdpr:cookieSettingsDesc')}</DialogContentText>
+                    <DialogContentText>{t('gdpr:cookies')}: token, csrftoken, skole_gdpr_consent</DialogContentText>
                 </Box>
             </DialogContent>
             <DialogActions>
                 <Button onClick={savePrivacyPreferences} variant="contained" color="primary" autoFocus>
-                    save preferences
+                    {t('common:save')}
                 </Button>
             </DialogActions>
         </Dialog>
