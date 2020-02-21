@@ -1,9 +1,6 @@
 const withCSS = require('@zeit/next-css');
 const WebpackBar = require('webpackbar');
 const withAssetsImport = require('next-assets-import');
-const { WebpackBundleSizeAnalyzerPlugin } = require('webpack-bundle-size-analyzer');
-
-const { ANALYZE } = process.env;
 
 module.exports = withAssetsImport(
     withCSS({
@@ -20,7 +17,7 @@ module.exports = withAssetsImport(
 
             return config;
         },
-        webpack: (config, { dev }) => {
+        webpack: config => {
             config.plugins.push(
                 new WebpackBar({
                     fancy: true,
@@ -28,10 +25,6 @@ module.exports = withAssetsImport(
                     basic: false,
                 }),
             );
-
-            if (ANALYZE) {
-                config.plugins.push(new WebpackBundleSizeAnalyzerPlugin('stats.txt'));
-            }
 
             return config;
         },
