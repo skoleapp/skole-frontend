@@ -1,10 +1,9 @@
 import {
     Avatar,
     Box,
-    Button,
     CardContent,
     CardHeader,
-    DialogActions,
+    Dialog,
     DialogTitle,
     Grid,
     IconButton,
@@ -21,6 +20,7 @@ import {
     KeyboardArrowUpOutlined,
     MoreHorizOutlined,
 } from '@material-ui/icons';
+import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useState } from 'react';
@@ -40,7 +40,6 @@ import { toggleCommentThread, toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
 import { State } from '../../types';
 import { mediaURL } from '../../utils/mediaURL';
-import { StyledDialog } from '../shared';
 import { TextLink } from './TextLink';
 
 interface Props {
@@ -58,16 +57,11 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     const [vote, setVote] = useState(comment.vote);
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const [commentOptionsOpen, setCommentOptionsOpen] = useState(false);
-    const [deleteCommentOpen, setDeleteCommentOpen] = useState(false);
+    const confirm = useConfirm();
 
     const handleCloseCommentOptions = (e: SyntheticEvent): void => {
         e.stopPropagation();
         setCommentOptionsOpen(false);
-    };
-
-    const handleCloseDeleteComment = (e: SyntheticEvent): void => {
-        e.stopPropagation();
-        setDeleteCommentOpen(false);
     };
 
     const handleClick = (): void => {
@@ -109,7 +103,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         onError: performVoteError,
     });
 
-    const [deleteComment, { loading: deleteCommentSubmitting }] = useDeleteCommentMutation({
+    const [deleteComment] = useDeleteCommentMutation({
         onCompleted: deleteCommentCompleted,
         onError: deleteCommentError,
     });
@@ -132,13 +126,8 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     const handleDeleteComment = (e: SyntheticEvent): void => {
         e.stopPropagation();
         setCommentOptionsOpen(false);
-        setDeleteCommentOpen(true);
-    };
 
-    const handleConfirmDeleteComment = async (e: SyntheticEvent): Promise<void> => {
-        e.stopPropagation();
-        await deleteComment({ variables: { id: comment.id } });
-        setDeleteCommentOpen(false);
+        confirm({ title: t('common:deleteCommentTitle') }).then(() => deleteComment({ variables: { id: comment.id } }));
     };
 
     const handleStopPropagation = (e: SyntheticEvent): void => e.stopPropagation();
@@ -150,7 +139,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     );
 
     const renderCommentOptionsDialog = (
-        <StyledDialog open={commentOptionsOpen} onClose={handleCloseCommentOptions}>
+        <Dialog open={commentOptionsOpen} onClose={handleCloseCommentOptions}>
             <DialogTitle onClick={handleStopPropagation}>{t('common:commentActions')}</DialogTitle>
             {R.prop('id', comment.user as UserObjectType) === R.prop('id', user as UserObjectType) && (
                 <ListItem>
@@ -164,26 +153,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                     <FlagOutlined /> {t('common:reportAbuse')}
                 </ListItemText>
             </ListItem>
-        </StyledDialog>
-    );
-
-    const renderDeleteCommentDialog = (
-        <StyledDialog open={deleteCommentOpen} onClose={handleCloseDeleteComment}>
-            <DialogTitle onClick={handleStopPropagation}>{t('common:deleteCommentHeader')}</DialogTitle>
-            <DialogActions>
-                <Button onClick={handleCloseDeleteComment} color="primary" variant="outlined">
-                    {t('common:cancel')}
-                </Button>
-                <Button
-                    onClick={handleConfirmDeleteComment}
-                    color="primary"
-                    variant="contained"
-                    disabled={!!deleteCommentSubmitting}
-                >
-                    {t('common:confirm')}
-                </Button>
-            </DialogActions>
-        </StyledDialog>
+        </Dialog>
     );
 
     return (
@@ -241,7 +211,6 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                 </Grid>
             </CardContent>
             {renderCommentOptionsDialog}
-            {renderDeleteCommentDialog}
         </StyledCommentCard>
     );
 };

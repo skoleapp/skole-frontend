@@ -73,5 +73,32 @@ export const base = css`
         .MuiGrid-root {
             flex-grow: 1;
         }
+
+        .MuiDialog-paper {
+            .MuiDialogTitle-root {
+                text-align: center;
+            }
+
+            .MuiListItem-root {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--hover-opacity);
+                }
+
+                .MuiListItemText-primary {
+                    display: flex;
+                    align-items: center;
+
+                    .MuiSvgIcon-root {
+                        margin-right: 0.5rem;
+                    }
+                }
+            }
+
+            .MuiDialogActions-root {
+                margin: auto;
+            }
+        }
     }
 `;

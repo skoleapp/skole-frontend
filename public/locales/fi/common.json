@@ -49,8 +49,8 @@
     "name": "Nimi",
     "discussion": "Keskustelu",
     "commentActions": "Kommenttitoiminnot",
-    "deleteComment": "Poista kommentti",
-    "deleteCommentHeader": "Haluatko varmasti poistaa tämän kommentin?",
+    "deleteComment": "Delete Comment",
+    "deleteCommentTitle": "Haluatko varmasti poistaa tämän kommentin?",
     "reportAbuse": "Ilmoita väärinkäytöstä",
     "attachFile": "Liitä tiedosto"
 }

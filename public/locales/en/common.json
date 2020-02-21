@@ -51,7 +51,7 @@
     "discussion": "Discussion",
     "commentActions": "Comment Actions",
     "deleteComment": "Delete Comment",
-    "deleteCommentHeader": "Are you sure that you want to delete this comment?",
+    "deleteCommentTitle": "Are you sure that you want to delete this comment?",
     "reportAbuse": "Report Abuse",
     "attachFile": "Attach a file"
 }

@@ -1,7 +1,7 @@
-import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { Field, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import React, { useState } from 'react';
+import { useConfirm } from 'material-ui-confirm';
+import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { deAuthenticate } from '../../actions';
-import { FormSubmitSection, SettingsLayout, StyledDialog, StyledForm } from '../../components';
+import { FormSubmitSection, SettingsLayout, StyledForm } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -25,17 +25,12 @@ export interface DeleteAccountFormValues {
     password: string;
 }
 
-const initialDialogState = {
-    password: '',
-    open: false,
-};
-
 export const DeleteAccountPage: I18nPage = () => {
-    const [dialog, setDialog] = useState(initialDialogState);
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<DeleteAccountFormValues>();
     const dispatch = useDispatch();
     const apolloClient = useApolloClient();
     const { t } = useTranslation();
+    const confirm = useConfirm();
 
     const onCompleted = ({ deleteUser }: DeleteAccountMutation): void => {
         if (deleteUser) {
@@ -48,24 +43,18 @@ export const DeleteAccountPage: I18nPage = () => {
         }
     };
 
-    const [deleteAccountMutation, { loading: deleteAccountSubmitting }] = useDeleteAccountMutation({
-        onCompleted,
-        onError,
-    });
+    const [deleteAccountMutation] = useDeleteAccountMutation({ onCompleted, onError });
 
     const handleSubmit = (values: DeleteAccountFormValues): void => {
         setSubmitting(false);
-        setDialog({ password: values.password, open: true });
-    };
 
-    const handleClose = (): void => setDialog({ ...dialog, open: false });
-
-    const handleSubmitConfirm = async (): Promise<void> => {
-        handleClose();
-        setSubmitting(true);
-        const { password } = dialog;
-        await deleteAccountMutation({ variables: { password } });
-        setSubmitting(false);
+        confirm({ title: t('delete-account:confirmTitle'), description: t('delete-account:confirmDesc') }).then(
+            async () => {
+                setSubmitting(true);
+                await deleteAccountMutation({ variables: { password: values.password } });
+                setSubmitting(false);
+            },
+        );
     };
 
     const validationSchema = Yup.object().shape({
@@ -91,36 +80,7 @@ export const DeleteAccountPage: I18nPage = () => {
         </Formik>
     );
 
-    const renderDialog = (
-        <StyledDialog open={dialog.open} onClose={handleClose}>
-            <DialogTitle>{t('delete-account:dialogTitle')}</DialogTitle>
-            <DialogContent>
-                <DialogContentText>{t('delete-account:dialogContentText')}</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} variant="outlined" color="primary">
-                    {t('common:cancel')}
-                </Button>
-                <Button
-                    onClick={handleSubmitConfirm}
-                    variant="contained"
-                    color="primary"
-                    disabled={!!deleteAccountSubmitting}
-                >
-                    {t('common:confirm')}
-                </Button>
-            </DialogActions>
-        </StyledDialog>
-    );
-
-    return (
-        <SettingsLayout
-            title={t('delete-account:title')}
-            renderCardContent={renderCardContent}
-            renderDialog={renderDialog}
-            backUrl
-        />
-    );
+    return <SettingsLayout title={t('delete-account:title')} renderCardContent={renderCardContent} backUrl />;
 };
 
 DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

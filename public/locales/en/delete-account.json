@@ -1,5 +1,5 @@
 {
     "title": "Delete Account",
-    "dialogTitle": "Are you sure you want to delete your account?",
-    "dialogContentText": "This action cannot be reverted and your account will be lost forever!"
+    "confirmTitle": "Are you sure you want to delete your account?",
+    "confirmDesc": "This action cannot be reverted and your account will be lost forever!"
 }

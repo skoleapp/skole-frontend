@@ -1,6 +1,7 @@
 import {
     Box,
     Button,
+    Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
@@ -15,7 +16,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
-import { StyledDialog, TextLink } from '../shared';
+import { TextLink } from '../shared';
 
 export const SkoleGDPR: React.FC = () => {
     const [consent, setConsent] = useState(true);
@@ -65,7 +66,7 @@ export const SkoleGDPR: React.FC = () => {
     );
 
     const renderPrivacyPreferences = (
-        <StyledDialog open={privacyPreferencesOpen} onClose={closePrivacyPreferences}>
+        <Dialog open={privacyPreferencesOpen} onClose={closePrivacyPreferences}>
             <DialogTitle>Privacy Preferences</DialogTitle>
             <DialogContent>
                 <Box textAlign="left">
@@ -113,7 +114,7 @@ export const SkoleGDPR: React.FC = () => {
                     save preferences
                 </Button>
             </DialogActions>
-        </StyledDialog>
+        </Dialog>
     );
 
     return !consent ? (
