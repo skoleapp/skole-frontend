@@ -17,6 +17,7 @@ import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePublicPage } from '../utils';
+import styled from 'styled-components';
 
 export interface RegisterFormValues {
     username: string;
@@ -82,45 +83,52 @@ const RegisterPage: I18nPage = () => {
                 <Form>
                     <Field
                         placeholder={t('forms:username')}
+                        label={t('forms:username')}
                         name="username"
                         component={TextField}
-                        label={t('forms:username')}
                         variant="outlined"
+                        autoComplete="off"
                         fullWidth
+                        type="text"
                     />
                     <Field
                         placeholder={t('forms:email')}
+                        label={t('forms:email')}
                         name="email"
                         component={TextField}
-                        label={t('forms:email')}
                         variant="outlined"
+                        autoComplete="off"
                         fullWidth
                     />
                     <Field
                         placeholder={t('forms:password')}
+                        label={t('forms:password')}
                         name="password"
                         component={TextField}
-                        label={t('forms:password')}
                         variant="outlined"
+                        autoComplete="new-password"
                         type="password"
                         fullWidth
                     />
                     <Field
                         placeholder={t('forms:confirmPassword')}
+                        label={t('forms:confirmPassword')}
                         name="confirmPassword"
                         type="password"
+                        autoComplete="off"
                         component={TextField}
-                        label={t('forms:confirmPassword')}
                         variant="outlined"
                         fullWidth
                     />
-                    <Field
+                    <StyledField
                         placeholder={t('forms:betaCode')}
-                        name="code"
-                        component={TextField}
                         label={t('forms:betaCode')}
+                        name="code"
+                        autoComplete="off"
+                        component={TextField}
                         variant="outlined"
                         fullWidth
+                        disabled={!!query.code}
                     />
                     <FormControl fullWidth>
                         <Typography variant="body2" color="textSecondary">
@@ -143,8 +151,14 @@ const RegisterPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('common:register')} renderCardContent={renderCardContent} backUrl />;
+    return <FormLayout title={t('register:welcomeToBeta')} renderCardContent={renderCardContent} backUrl />;
 };
+
+const StyledField = styled(Field)`
+    .MuiInputBase-root.Mui-disabled {
+        color: green;
+    }
+`;
 
 RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
