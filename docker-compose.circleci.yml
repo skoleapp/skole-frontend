@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
