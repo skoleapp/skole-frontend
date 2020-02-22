@@ -1,5 +1,5 @@
 import { CardContent, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -20,12 +20,12 @@ import {
     SubjectObjectType,
     SubjectsDocument,
 } from '../../generated/graphql';
-import { AutoCompleteField, FilterLayout, FormSubmitSection, StyledForm } from '../components';
+import { AutoCompleteField, FilterLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { getFullCourseName, useAuthSync, useFilters } from '../utils';
+import { getFullCourseName, useFilters, usePrivatePage } from '../utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
@@ -54,7 +54,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     const { query } = useRouter();
     const { t } = useTranslation();
 
-    const handlePreSubmit = (values: FilterSearchResultsFormValues): void => {
+    const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T, actions: FormikActions<T>): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city } = values;
 
         const filteredValues: FilterSearchResultsFormValues = {
@@ -67,13 +67,13 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
             city: R.propOr('', 'id', city),
         };
 
-        handleSubmit(filteredValues);
+        handleSubmit(filteredValues, actions);
     };
 
     // Pre-load query params to the form.
     const initialValues = {
         courseName: R.propOr('', 'courseName', query) as string,
-        courseCode: R.propOr('', 'courseName', query) as string,
+        courseCode: R.propOr('', 'courseCode', query) as string,
         school: school || null,
         subject: subject || null,
         schoolType: schoolType || null,
@@ -84,7 +84,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         name="courseName"
                         label={t('forms:courseName')}
@@ -153,7 +153,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
                     />
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
                     {renderClearFiltersButton}
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );
@@ -190,7 +190,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
 };
 
 SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await useAuthSync(ctx);
+    await usePrivatePage(ctx);
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 

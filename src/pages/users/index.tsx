@@ -9,7 +9,7 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core';
-import { Field, Formik } from 'formik';
+import { Field, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,12 +18,13 @@ import React from 'react';
 import { compose } from 'redux';
 
 import { UserObjectType, UsersDocument } from '../../../generated/graphql';
-import { FilterLayout, FormSubmitSection, SelectField, StyledForm } from '../../components';
+import { FilterLayout, FormSubmitSection, SelectField } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { getAvatarThumb, useAuthSync, useFilters } from '../../utils';
+import { useFilters, usePrivatePage } from '../../utils';
+import { mediaURL } from '../../utils/mediaURL';
 
 interface FilterUsersFormValues {
     username: string;
@@ -42,9 +43,9 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     const { t } = useTranslation();
     const { query } = useRouter();
 
-    const handlePreSubmit = (values: FilterUsersFormValues): void => {
+    const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
         const { username, ordering } = values;
-        handleSubmit({ username, ordering });
+        handleSubmit({ username, ordering }, actions);
     };
 
     // Pre-load query params to the form.
@@ -56,7 +57,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         name="username"
                         label={t('forms:username')}
@@ -73,7 +74,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                     </Field>
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
                     {renderClearFiltersButton}
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );
@@ -100,7 +101,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                         <Link href={`/users/${u.id}`} key={i}>
                             <TableRow>
                                 <TableCell className="user-cell">
-                                    <Avatar src={getAvatarThumb(u)} />
+                                    <Avatar src={mediaURL(R.propOr('', 'avatarThumbnail', u))} />
                                     <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
                                 </TableCell>
                                 <TableCell align="right">
@@ -131,7 +132,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
 };
 
 UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await useAuthSync(ctx);
+    await usePrivatePage(ctx);
     const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
 

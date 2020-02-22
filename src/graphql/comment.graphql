@@ -1,26 +1,8 @@
-query CourseDetail($id: ID) {
-    course(id: $id) {
-        id
-        name
-        code
-        subject {
-            id
-            name
-        }
-        school {
-            id
-            name
-        }
-        user {
-            id
-            username
-        }
-        resources {
-            id
-            title
-            points
-        }
-        comments {
+mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $comment: ID) {
+    createComment(
+        input: { text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment }
+    ) {
+        comment {
             id
             user {
                 id
@@ -55,9 +37,19 @@ query CourseDetail($id: ID) {
                 status
             }
         }
-        modified
-        created
-        points
-        resourceCount
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DeleteComment($id: ID) {
+    deleteComment(input: { id: $id }) {
+        message
+        errors {
+            field
+            messages
+        }
     }
 }

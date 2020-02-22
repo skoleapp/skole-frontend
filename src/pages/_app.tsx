@@ -3,6 +3,7 @@ import 'typeface-roboto';
 
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
+import { ConfirmProvider } from 'material-ui-confirm';
 import { NextPageContext } from 'next';
 import App from 'next/app';
 import Router from 'next/router';
@@ -39,9 +40,11 @@ class SkoleApp extends App<Props> {
 
         return (
             <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <GlobalStyle />
-                <Component {...pageProps} />
+                <ConfirmProvider>
+                    <CssBaseline />
+                    <GlobalStyle />
+                    <Component {...pageProps} />
+                </ConfirmProvider>
             </ThemeProvider>
         );
     }

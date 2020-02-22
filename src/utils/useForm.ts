@@ -29,7 +29,7 @@ export interface UseForm<T> {
     setSubmitting: (val: boolean) => void;
     resetForm: () => void;
     submitForm: () => Promise<void> | null;
-    setFieldValue: (fieldName: string, val: string | File | File[]) => void;
+    setFieldValue: (fieldName: string, val: string | File | File[] | null) => void;
 }
 
 export const useForm = <T>(): UseForm<T> => {
@@ -56,7 +56,7 @@ export const useForm = <T>(): UseForm<T> => {
                 }
             });
         } else {
-            formErrors.general = 'Encountered unexpected error.';
+            formErrors.general = i18n.t('validation:unexpectedError');
         }
 
         setFormErrors(formErrors);
@@ -67,9 +67,9 @@ export const useForm = <T>(): UseForm<T> => {
         const formErrors = { general: '' };
 
         if (err.networkError) {
-            formErrors.general = 'Network error.';
+            formErrors.general = i18n.t('validation:networkError');
         } else {
-            formErrors.general = 'Encountered unexpected error.';
+            formErrors.general = i18n.t('validation:unexpectedError');
         }
 
         setFormErrors(formErrors);
@@ -79,7 +79,7 @@ export const useForm = <T>(): UseForm<T> => {
     const resetForm = (): void | null => ref && ref.current && ref.current.resetForm();
     const submitForm = (): Promise<void> | null => ref && ref.current && ref.current.submitForm();
 
-    const setFieldValue = (fieldName: string, val: string | File | File[]): void => {
+    const setFieldValue = (fieldName: string, val: string | File | File[] | null): void => {
         ref && ref.current && ref.current.setFieldValue(fieldName, val);
     };
 

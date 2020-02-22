@@ -1,6 +1,8 @@
 import { Box, Divider, FormControl, Link, Typography } from '@material-ui/core';
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { useRouter } from 'next/router';
+import * as R from 'ramda';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
@@ -9,46 +11,50 @@ import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePublicPage } from '../utils';
 
-const initialValues = {
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    general: '',
-};
-
 export interface RegisterFormValues {
     username: string;
     email: string;
     password: string;
     confirmPassword: string;
+    code: string;
 }
 
 const RegisterPage: I18nPage = () => {
     const client = useApolloClient();
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<RegisterFormValues>();
     const dispatch = useDispatch();
+    const { query } = useRouter();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required(t('validation:usernameRequired')),
+        username: Yup.string().required(t('validation:required')),
         email: Yup.string()
             .email(t('validation:invalidEmail'))
-            .required(t('validation:emailRequired')),
+            .required(t('validation:required')),
         password: Yup.string()
             .min(6, t('validation:passwordTooShort'))
-            .required(t('validation:passwordRequired')),
+            .required(t('validation:required')),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
-            .required(t('validation:confirmPasswordRequired')),
+            .required(t('validation:required')),
+        code: Yup.string().required(t('validation:required')),
     });
+
+    const initialValues = {
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        code: R.propOr('', 'code', query) as string,
+        general: '',
+    };
 
     const onCompleted = ({ register, login }: RegisterMutation): void => {
         if (register && register.errors) {
@@ -65,15 +71,15 @@ const RegisterPage: I18nPage = () => {
     const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
-        const { username, email, password } = values;
-        await registerMutation({ variables: { username, email, password } });
+        const { username, email, password, code } = values;
+        await registerMutation({ variables: { username, email, password, code } });
         setSubmitting(false);
     };
 
     const renderCardContent = (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         placeholder={t('forms:username')}
                         name="username"
@@ -108,6 +114,14 @@ const RegisterPage: I18nPage = () => {
                         variant="outlined"
                         fullWidth
                     />
+                    <Field
+                        placeholder={t('forms:betaCode')}
+                        name="code"
+                        component={TextField}
+                        label={t('forms:betaCode')}
+                        variant="outlined"
+                        fullWidth
+                    />
                     <FormControl fullWidth>
                         <Typography variant="body2" color="textSecondary">
                             {t('register:termsHelpText')}{' '}
@@ -124,7 +138,7 @@ const RegisterPage: I18nPage = () => {
                     <ButtonLink href="/login" variant="outlined" color="primary" fullWidth>
                         {t('register:alreadyHaveAccount')}
                     </ButtonLink>
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

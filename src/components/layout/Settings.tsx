@@ -6,7 +6,7 @@ import { AnyAction } from 'redux';
 import { toggleSettings } from '../../actions';
 import { State } from '../../types';
 import { useSettings } from '../../utils';
-import { ModalCloseIcon } from '../shared';
+import { ModalHeader } from '../shared';
 import { StyledModal } from '../shared/StyledModal';
 
 export const Settings: React.FC = () => {
@@ -19,7 +19,7 @@ export const Settings: React.FC = () => {
         <StyledModal open={!!settings} onClose={handleClose}>
             <Fade in={!!settings}>
                 <Paper>
-                    <ModalCloseIcon onClick={handleClose} />
+                    <ModalHeader onClick={handleClose} />
                     {renderSettingsCardContent}
                 </Paper>
             </Fade>

@@ -41,7 +41,7 @@ import {
 import {
     DiscussionBox,
     MainLayout,
-    ModalCloseIcon,
+    ModalHeader,
     NotFound,
     StyledCard,
     StyledList,
@@ -54,7 +54,7 @@ import {
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { getFullCourseName, useAuthSync, useTabs } from '../../utils';
+import { getFullCourseName, usePrivatePage, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -87,7 +87,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const discussionBoxProps = {
             comments,
-            target: { courseId: Number(course.id) },
+            target: { course: Number(course.id) },
         };
 
         const renderCourseInfo = (
@@ -100,7 +100,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:creator')}:{' '}
                                 <TextLink href={`/users/${R.propOr('', 'id', user)}`} color="primary">
                                     {creatorName}
@@ -115,7 +115,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:subject')}:{' '}
                                 <TextLink href={subjectLink} color="primary">
                                     {subjectName}
@@ -130,7 +130,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            <Typography variant="body1">
+                            <Typography variant="body2">
                                 {t('common:school')}:{' '}
                                 <TextLink href={`/schools/${R.propOr('-', 'id', school)}`} color="primary">
                                     {schoolName}
@@ -261,7 +261,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             <StyledModal open={!!courseInfoVisible} onClose={handleCloseCourseInfo}>
                 <Fade in={!!courseInfoVisible}>
                     <Paper>
-                        <ModalCloseIcon onClick={handleCloseCourseInfo} />
+                        <ModalHeader onClick={handleCloseCourseInfo} />
                         <Box textAlign="center">
                             <CardHeader title={fullName} />
                             {renderCourseInfo}
@@ -284,7 +284,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 };
 
 CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await useAuthSync(ctx);
+    await usePrivatePage(ctx);
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 

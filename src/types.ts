@@ -34,11 +34,10 @@ export interface LayoutProps extends ContainerProps {
     backUrl?: boolean;
     renderCardContent?: JSX.Element;
     renderAlert?: JSX.Element;
-    renderDialog?: JSX.Element;
     disableSearch?: boolean;
     headerRight?: JSX.Element;
 }
 
 export interface CommentTarget {
-    [key: string]: number | undefined;
+    [key: string]: number;
 }

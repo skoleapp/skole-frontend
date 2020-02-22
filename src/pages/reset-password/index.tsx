@@ -1,10 +1,10 @@
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { FormLayout, FormSubmitSection, StyledForm } from '../../components';
+import { FormLayout, FormSubmitSection } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -27,7 +27,7 @@ const ResetPasswordLinkPage: I18nPage = () => {
     const validationSchema = Yup.object().shape({
         email: Yup.string()
             .email(t('validation:invalidEmail'))
-            .required(t('validation:emailRequired')),
+            .required(t('validation:required')),
     });
 
     const handleSubmit = async (values: ResetPasswordLinkFormValues): Promise<void> => {
@@ -39,7 +39,7 @@ const ResetPasswordLinkPage: I18nPage = () => {
     const renderCardContent = (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         placeholder={t('forms:email')}
                         name="email"
@@ -49,7 +49,7 @@ const ResetPasswordLinkPage: I18nPage = () => {
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

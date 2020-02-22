@@ -23,7 +23,7 @@
     "requestSubject": "Request New Subject",
     "businessInquiry": "Business Inquiry",
     "message": "Message",
-    "reply": "Reply",
+    "sendMessage": "Send Message",
     "resourceTitle": "Resource Title",
     "resourceType": "Resource Type",
     "course": "Course",
@@ -31,5 +31,6 @@
     "usernameOrdering": "Username (A-Z)",
     "usernameOrderingReverse": "Username (Z-A)",
     "pointsOrdering": "Points (Ascending)",
-    "pointsOrderingReverse": "Points (Descending)"
+    "pointsOrderingReverse": "Points (Descending)",
+    "betaCode": "Beta Code"
 }

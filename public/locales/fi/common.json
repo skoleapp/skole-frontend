@@ -47,5 +47,10 @@
     "account": "Tili",
     "course": "Kurssi",
     "name": "Nimi",
-    "discussion": "Keskustelu"
+    "discussion": "Keskustelu",
+    "commentActions": "Kommenttitoiminnot",
+    "deleteComment": "Delete Comment",
+    "deleteCommentTitle": "Haluatko varmasti poistaa tämän kommentin?",
+    "reportAbuse": "Ilmoita väärinkäytöstä",
+    "attachFile": "Liitä tiedosto"
 }

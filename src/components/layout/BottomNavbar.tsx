@@ -23,7 +23,7 @@ export const BottomNavbar: React.FC = () => {
                 return 1;
             }
             case '/users/[id]': {
-                if (user && ((query.id as unknown) as number) === (user.id as number)) {
+                if (user && query.id === user.id) {
                     return 2;
                 }
             }
@@ -60,7 +60,7 @@ const StyledBottomNavbar = styled(BottomNavigation)`
     width: 100%;
     height: 3rem !important;
     border-top: var(--border);
-    z-index: 9999;
+    z-index: 1000;
 
     .MuiButtonBase-root,
     .Mui-selected {

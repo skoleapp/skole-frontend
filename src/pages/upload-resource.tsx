@@ -1,4 +1,4 @@
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
@@ -9,12 +9,13 @@ import * as Yup from 'yup';
 import {
     CourseObjectType,
     CoursesDocument,
+    CreateResourceInitialDataDocument,
+    CreateResourceMutation,
     ResourceTypesDocument,
-    UploadResourceInitialDataDocument,
+    useCreateResourceMutation,
 } from '../../generated/graphql';
-import { UploadResourceMutation, useUploadResourceMutation } from '../../generated/graphql';
 import { toggleNotification } from '../actions';
-import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection, StyledForm } from '../components';
+import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -38,29 +39,29 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<UploadResourceFormValues>();
 
     const validationSchema = Yup.object().shape({
-        resourceTitle: Yup.string().required(t('validation:resourceTitleRequired')),
+        resourceTitle: Yup.string().required(t('validation:required')),
         resourceType: Yup.object()
             .nullable()
-            .required(t('validation:resourceTypeRequired')),
+            .required(t('validation:required')),
         course: Yup.object()
             .nullable()
-            .required(t('validation:courseRequired')),
-        files: Yup.array().required(t('validation:filesRequired')),
+            .required(t('validation:required')),
+        files: Yup.array().required(t('validation:required')),
     });
 
-    const onCompleted = async ({ uploadResource }: UploadResourceMutation): Promise<void> => {
-        if (uploadResource) {
-            if (uploadResource.errors) {
-                handleMutationErrors(uploadResource.errors);
-            } else if (uploadResource.resource && uploadResource.resource.id) {
+    const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {
+        if (createResource) {
+            if (createResource.errors) {
+                handleMutationErrors(createResource.errors);
+            } else if (createResource.resource && createResource.resource.id) {
                 resetForm();
                 dispatch(toggleNotification(t('notifications:resourceUploaded')));
-                await Router.push(`/resources/${uploadResource.resource.id}`);
+                await Router.push(`/resources/${createResource.resource.id}`);
             }
         }
     };
 
-    const [uploadResourceMutation] = useUploadResourceMutation({ onCompleted, onError });
+    const [createResourceMutation] = useCreateResourceMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
         const { resourceTitle, resourceType, course, files } = values;
@@ -72,7 +73,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
             files: (files as unknown) as string,
         };
 
-        await uploadResourceMutation({ variables });
+        await createResourceMutation({ variables });
         setSubmitting(false);
     };
 
@@ -87,7 +88,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const renderCardContent = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         name="resourceTitle"
                         label={t('forms:resourceTitle')}
@@ -118,7 +119,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                     />
                     <Field name="files" label={t('upload-resource:dropzoneText')} component={DropzoneField} />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );
@@ -133,7 +134,7 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
 
     if (!!query.course) {
         try {
-            const { data } = await apolloClient.query({ query: UploadResourceInitialDataDocument, variables: query });
+            const { data } = await apolloClient.query({ query: CreateResourceInitialDataDocument, variables: query });
             return { ...data, ...nameSpaces };
         } catch {
             return nameSpaces;

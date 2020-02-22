@@ -54,24 +54,20 @@ export const base = css`
             }
         }
 
-        .MuiLink-root {
-            cursor: pointer;
+        .main-avatar {
+            height: 10rem;
+            width: 10rem;
+            margin: 1rem;
         }
 
-        .MuiTypography-h1 {
-            font-size: 2rem;
-        }
+        form {
+            .MuiFormControl-root {
+                margin-top: 0.75rem;
+            }
 
-        .MuiTypography-h2 {
-            font-size: 1.5rem;
-        }
-
-        .MuiTypography-h3 {
-            font-size: 1.25rem;
-        }
-
-        .MuiGrid-root {
-            flex-grow: 1;
+            input[type='submit'] {
+                display: none;
+            }
         }
     }
 `;
