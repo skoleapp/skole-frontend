@@ -4,8 +4,6 @@ services:
   frontend:
     container_name: frontend
     build: .
-    env_file:
-      - ./.env.circleci
     volumes:
       - .:/app
       - /app/node_modules
