@@ -26,34 +26,6 @@ mutation Register($username: String!, $email: String!, $password: String!) {
         }
     }
 }
-mutation BetaRegister($username: String!, $email: String!, $password: String!, $code: String!) {
-    signUp(input: { username: $username, email: $email, password: $password, code: $code }) {
-        user {
-            id
-            created
-        }
-        errors {
-            field
-            messages
-        }
-    }
-    signIn(input: { usernameOrEmail: $email, password: $password }) {
-        token
-        user {
-            id
-            title
-            bio
-            avatar
-            points
-            created
-            email
-        }
-        errors {
-            field
-            messages
-        }
-    }
-}
 
 mutation Login($usernameOrEmail: String!, $password: String!) {
     login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
