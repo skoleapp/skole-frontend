@@ -1,4 +1,4 @@
-import { Box, Fade, IconButton, Paper } from '@material-ui/core';
+import { Box, Divider, Fade, IconButton, Paper } from '@material-ui/core';
 import { AttachFileOutlined, SendOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -143,7 +143,10 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
                         <Fade in={!!attachmentModal}>
                             <Paper>
                                 <ModalHeader onClick={handleCloseAttachmentModal} title={t('common:attachFile')} />
-                                <Box flexGrow="1">{!!attachmentModal && <Image src={attachmentModal as string} />}</Box>
+                                <Box flexGrow="1" padding="0.5rem">
+                                    {!!attachmentModal && <Image src={attachmentModal as string} />}
+                                </Box>
+                                <Divider />
                                 <Box display="flex" alignItems="center">
                                     {renderTextField}
                                     {renderSubmitButton}
