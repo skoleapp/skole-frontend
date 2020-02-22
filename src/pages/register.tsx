@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, FilledLogo } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -81,10 +81,9 @@ const RegisterPage: I18nPage = () => {
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <FilledLogo />
-                    <Typography variant="h2">{t('register:welcomeToBeta')}</Typography>
                     <Field
                         placeholder={t('forms:username')}
+                        label={t('forms:username')}
                         name="username"
                         component={TextField}
                         variant="outlined"
@@ -94,6 +93,7 @@ const RegisterPage: I18nPage = () => {
                     />
                     <Field
                         placeholder={t('forms:email')}
+                        label={t('forms:email')}
                         name="email"
                         component={TextField}
                         variant="outlined"
@@ -102,6 +102,7 @@ const RegisterPage: I18nPage = () => {
                     />
                     <Field
                         placeholder={t('forms:password')}
+                        label={t('forms:password')}
                         name="password"
                         component={TextField}
                         variant="outlined"
@@ -111,6 +112,7 @@ const RegisterPage: I18nPage = () => {
                     />
                     <Field
                         placeholder={t('forms:confirmPassword')}
+                        label={t('forms:confirmPassword')}
                         name="confirmPassword"
                         type="password"
                         autoComplete="off"
@@ -120,12 +122,12 @@ const RegisterPage: I18nPage = () => {
                     />
                     <StyledField
                         placeholder={t('forms:betaCode')}
+                        label={t('forms:betaCode')}
                         name="code"
                         autoComplete="off"
                         component={TextField}
                         variant="outlined"
                         fullWidth
-                        label={t('forms:betaCode')}
                         disabled={!!query.code}
                     />
                     <FormControl fullWidth>
@@ -149,7 +151,7 @@ const RegisterPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('common:register')} renderCardContent={renderCardContent} backUrl />;
+    return <FormLayout title={t('register:welcomeToBeta')} renderCardContent={renderCardContent} backUrl />;
 };
 
 const StyledField = styled(Field)`
