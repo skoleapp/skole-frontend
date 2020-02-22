@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, StyledForm, FilledLogo } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection, FilledLogo } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -80,7 +80,7 @@ const RegisterPage: I18nPage = () => {
     const renderCardContent = (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <FilledLogo />
                     <Typography variant="h2">{t('register:welcomeToBeta')}</Typography>
                     <Field
@@ -142,7 +142,7 @@ const RegisterPage: I18nPage = () => {
                         <Divider />
                     </Box>
                     <ButtonLink href="/login" variant="outlined" color="primary" fullWidth>
-                        {t('register:alreadyHaveAnAccount')}
+                        {t('register:alreadyHaveAccount')}
                     </ButtonLink>
                 </Form>
             )}
