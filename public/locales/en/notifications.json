@@ -5,5 +5,9 @@
     "messageSubmitted": "Message submitted!",
     "courseCreated": "Course created!",
     "signedOut": "Signed out!",
-    "errorDownloadingResource": "Error while downloading resource!"
+    "errorDownloadingResource": "Error while downloading resource!",
+    "voteError": "Error while performing vote!",
+    "deleteCommentError": "Error while deleting comment!",
+    "commentDeleted": "Comment deleted!",
+    "messageEmpty": "Message cannot be empty!"
 }

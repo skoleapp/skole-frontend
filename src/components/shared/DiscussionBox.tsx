@@ -1,43 +1,56 @@
-import { Box } from '@material-ui/core';
+import { Box, Divider, Typography } from '@material-ui/core';
+import * as R from 'ramda';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
-import { useTranslation } from '../../i18n';
 import { CommentTarget } from '../../types';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 
 interface Props {
+    commentThread?: CommentObjectType | null;
     comments: CommentObjectType[];
     isThread?: boolean;
     target: CommentTarget;
 }
 
-export const DiscussionBox: React.FC<Props> = ({ comments: initialComments, isThread, target }) => {
-    const { t } = useTranslation();
-    const labelPlaceholder = !!isThread ? t('forms:reply') : t('forms:message');
+export const DiscussionBox: React.FC<Props> = ({ commentThread, comments: initialComments, isThread, target }) => {
     const [comments, setComments] = useState(initialComments);
     const appendComments = (comment: CommentObjectType): void => setComments([...comments, comment]);
 
+    const removeComment = (id: string): void => {
+        setComments(comments.filter((c: CommentObjectType): boolean => c.id !== id));
+    };
+
+    const commentCardProps = { isThread, removeComment };
+
+    const renderTopComment = !!commentThread && (
+        <>
+            <CommentCard comment={commentThread} {...commentCardProps} />
+            <Box padding="0.25rem" display="flex" alignItems="center">
+                <Typography variant="subtitle2" color="textSecondary">
+                    {R.propOr('-', 'replyCount', commentThread)} replies
+                </Typography>
+                <Divider />
+            </Box>
+        </>
+    );
+
     const renderMessageArea = (
         <Box className="message-area">
+            {renderTopComment}
             {comments.map((c: CommentObjectType, i: number) => (
                 <Box key={i}>
-                    <CommentCard comment={c} isThread={!!isThread} />
+                    <CommentCard comment={c} {...commentCardProps} />
                 </Box>
             ))}
         </Box>
     );
 
     const renderInputArea = (
-        <Box className="input-area">
-            <CreateCommentForm
-                label={labelPlaceholder}
-                placeholder={labelPlaceholder}
-                target={target}
-                appendComments={appendComments}
-            />
+        <Box className="input-area md-up">
+            <CreateCommentForm target={target} appendComments={appendComments} />
         </Box>
     );
 
@@ -68,8 +81,9 @@ const StyledDiscussionBox = styled(Box)`
             flex-grow: 1;
             overflow-y: scroll;
 
-            ::-webkit-scrollbar {
-                display: none;
+            .MuiDivider-root {
+                flex-grow: 1;
+                margin-left: 0.5rem;
             }
         }
 

@@ -24,12 +24,8 @@ export const StyledModal = styled(props => (
             display: none;
         }
 
-        @media only screen and (max-width: ${breakpoints.MD}) {
-            padding-bottom: 3rem; // Negate the bottom nav bar.
-        }
-
         @media only screen and (min-width: ${breakpoints.MD}) {
-            height: auto;
+            height: auto !important;
             max-width: 25rem;
             max-height: 50rem;
         }

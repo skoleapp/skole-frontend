@@ -17,7 +17,7 @@ import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { breakpoints } from '../styles';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useAuthSync, useSearch } from '../utils';
+import { usePrivatePage, useSearch } from '../utils';
 
 interface Shortcut {
     text: string;
@@ -160,7 +160,7 @@ const StyledIndexPage = styled(MainLayout)`
 `;
 
 IndexPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await useAuthSync(ctx);
+    await usePrivatePage(ctx);
     return { namespacesRequired: includeDefaultNamespaces(['index']) };
 };
 

@@ -1,5 +1,5 @@
 import { Box, Divider } from '@material-ui/core';
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, StyledForm, TextLink } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -37,8 +37,8 @@ const LoginPage: I18nPage = () => {
     const { renderAlert } = useAlerts();
 
     const validationSchema = Yup.object().shape({
-        usernameOrEmail: Yup.string().required(t('validation:usernameOrEmailRequired')),
-        password: Yup.string().required(t('validation:passwordRequired')),
+        usernameOrEmail: Yup.string().required(t('validation:required')),
+        password: Yup.string().required(t('validation:required')),
     });
 
     const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
@@ -72,7 +72,7 @@ const LoginPage: I18nPage = () => {
     const renderCardContent = (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         placeholder={t('forms:usernameOrEmail')}
                         name="usernameOrEmail"
@@ -100,7 +100,7 @@ const LoginPage: I18nPage = () => {
                     <Box marginTop="1rem">
                         <TextLink href="/reset-password">{t('login:forgotPassword')}</TextLink>
                     </Box>
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

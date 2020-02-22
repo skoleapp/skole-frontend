@@ -1,4 +1,4 @@
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { FormSubmitSection, SettingsLayout, StyledForm } from '../../components';
+import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -33,13 +33,13 @@ const ChangePasswordPage: I18nPage = () => {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        oldPassword: Yup.string().required(t('validation:oldPasswordRequired')),
+        oldPassword: Yup.string().required(t('validation:required')),
         newPassword: Yup.string()
             .min(6, t('validation:passwordTooShort'))
-            .required(t('validation:newPasswordRequired')),
+            .required(t('validation:required')),
         confirmNewPassword: Yup.string()
             .oneOf([Yup.ref('newPassword'), null], t('validation:passwordsNotMatch'))
-            .required(t('validation:confirmPasswordRequired')),
+            .required(t('validation:required')),
     });
 
     const onCompleted = async ({ changePassword }: ChangePasswordMutation): Promise<void> => {
@@ -64,7 +64,7 @@ const ChangePasswordPage: I18nPage = () => {
     const renderCardContent = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
-                <StyledForm>
+                <Form>
                     <Field
                         placeholder={t('forms:oldPassword')}
                         name="oldPassword"
@@ -93,7 +93,7 @@ const ChangePasswordPage: I18nPage = () => {
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
-                </StyledForm>
+                </Form>
             )}
         </Formik>
     );

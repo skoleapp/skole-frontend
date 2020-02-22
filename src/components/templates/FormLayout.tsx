@@ -5,7 +5,7 @@ import { StyledCard } from '..';
 import { LayoutProps } from '../../types';
 import { MainLayout } from '.';
 
-export const FormLayout: React.FC<LayoutProps> = ({ renderCardContent, renderAlert, renderDialog, ...props }) => (
+export const FormLayout: React.FC<LayoutProps> = ({ renderCardContent, renderAlert, ...props }) => (
     <MainLayout {...props}>
         <StyledCard>
             <Grid container justify="center">
@@ -13,7 +13,6 @@ export const FormLayout: React.FC<LayoutProps> = ({ renderCardContent, renderAle
                     <CardContent>{renderAlert}</CardContent>
                     <CardHeader title={props.title} />
                     <CardContent>{renderCardContent}</CardContent>
-                    <CardContent>{renderDialog}</CardContent>
                 </Grid>
             </Grid>
         </StyledCard>

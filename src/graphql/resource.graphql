@@ -1,5 +1,24 @@
-query ResourceDetail($id: Int!) {
-    resource(resourceId: $id) {
+query CreateResourceInitialData($course: ID) {
+    course(id: $course) {
+        id
+        name
+    }
+}
+
+mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $files: String!) {
+    createResource(input: { title: $resourceTitle, resourceType: $resourceType, course: $course, files: $files }) {
+        resource {
+            id
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+query ResourceDetail($id: ID) {
+    resource(id: $id) {
         id
         title
         resourceType
@@ -19,10 +38,19 @@ query ResourceDetail($id: Int!) {
             id
             username
         }
-        resourceParts {
+        resourceFiles {
             id
-            title
             file
+        }
+    }
+}
+
+mutation DeleteResource($id: ID) {
+    deleteResource(input: { id: $id }) {
+        message
+        errors {
+            field
+            messages
         }
     }
 }

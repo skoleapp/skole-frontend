@@ -10,12 +10,6 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
     display: flex;
     flex-direction: column;
 
-    .main-avatar {
-        height: 10rem;
-        width: 10rem;
-        margin: 1rem;
-    }
-
     .MuiFormLabel-root {
         background-color: var(--white);
         border-radius: 0.1rem;

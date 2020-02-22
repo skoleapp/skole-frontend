@@ -38,7 +38,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useAuthSync, useTabs } from '../../utils';
+import { usePrivatePage, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     school?: SchoolObjectType;
@@ -78,19 +78,19 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
         const renderLeftCardContent = (
             <CardContent>
                 <Box textAlign="left">
-                    <Typography variant="body1">
+                    <Typography variant="body2">
                         {t('common:schoolType')}:{' '}
                         <TextLink href={schoolTypeLink} color="primary">
                             {schoolType}
                         </TextLink>
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body2">
                         {t('common:country')}:{' '}
                         <TextLink href={countryLink} color="primary">
                             {country}
                         </TextLink>
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body2">
                         {t('common:city')}:{' '}
                         <TextLink href={cityLink} color="primary">
                             {city}
@@ -236,7 +236,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 };
 
 SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await useAuthSync(ctx);
+    await usePrivatePage(ctx);
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 

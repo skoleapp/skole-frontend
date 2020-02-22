@@ -5,5 +5,9 @@
     "messageSubmitted": "Viesti lähetetty!",
     "courseCreated": "Kurssi luotu!",
     "signedOut": "Kirjauduttu ulos!",
-    "errorDownloadingResource": "Virhe ladattaessa tiedostoa!"
+    "errorDownloadingResource": "Virhe ladattaessa tiedostoa!",
+    "voteError": "Virhe äänestyksessä!",
+    "deleteCommentError": "Virhe poistettaessa kommenttia!",
+    "commentDeleted": "Kommentti poistettu!",
+    "messageEmpty": "Viesti ei voi olla tyhjä!"
 }

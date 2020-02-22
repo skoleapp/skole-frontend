@@ -1,9 +1,10 @@
-mutation CreateVote($status: Int!, $commentId: Int, $courseId: Int, $resourceId: Int) {
-    createVote(input: { status: $status, commentId: $commentId, courseId: $courseId, resourceId: $resourceId }) {
+mutation PerformVote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
+    performVote(input: { status: $status, comment: $comment, course: $course, resource: $resource }) {
         vote {
             id
             status
         }
+        targetPoints
         errors {
             field
             messages

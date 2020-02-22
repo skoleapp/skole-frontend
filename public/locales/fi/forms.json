@@ -23,7 +23,7 @@
     "requestSubject": "Ehdota uutta oppiainetta",
     "businessInquiry": "Liiketoiminta",
     "message": "Viesti",
-    "reply": "Vastaus",
+    "sendMessage": "Lähetä Viesti",
     "resourceTitle": "Resurssin Otsikko",
     "resourceType": "Resurssin Tyyppi",
     "course": "Kurssi",
@@ -31,5 +31,6 @@
     "usernameOrdering": "Käyttätunnus (A-Z)",
     "usernameOrderingReverse": "Käyttäjätunnus (Z-A)",
     "pointsOrdering": "Pisteet (nouseva)",
-    "pointsOrderingReverse": "Pisteet (laskeva)"
+    "pointsOrderingReverse": "Pisteet (laskeva)",
+    "betaCode": "Betakoodi"
 }
