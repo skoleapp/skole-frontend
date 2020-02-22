@@ -142,7 +142,7 @@ const RegisterPage: I18nPage = () => {
                         <Divider />
                     </Box>
                     <ButtonLink href="/login" variant="outlined" color="primary" fullWidth>
-                        {t('register:alreadyHaveAnAccount')}
+                        {t('register:alreadyHaveAccount')}
                     </ButtonLink>
                 </Form>
             )}
