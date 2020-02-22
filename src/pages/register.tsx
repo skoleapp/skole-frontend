@@ -44,7 +44,7 @@ const RegisterPage: I18nPage = () => {
             .required(t('validation:required')),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
-            .required(t('validation:confirmPasswordRequired')),
+            .required(t('validation:required')),
         code: Yup.string().required(t('validation:required')),
     });
 
