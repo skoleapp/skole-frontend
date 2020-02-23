@@ -15,7 +15,6 @@ export const StyledModal = styled(props => (
         display: flex;
         flex-direction: column;
         outline: none;
-        padding: 0.5rem;
         height: 100% !important;
         width: 100% !important;
         overflow-y: scroll;
@@ -28,6 +27,7 @@ export const StyledModal = styled(props => (
             height: auto !important;
             max-width: 25rem;
             max-height: 50rem;
+            padding: 0.5rem;
         }
     }
 `;

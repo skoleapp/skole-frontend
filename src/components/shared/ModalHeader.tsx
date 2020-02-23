@@ -9,7 +9,7 @@ interface Props {
 
 export const ModalHeader: React.FC<Props> = ({ onClick, title }) => (
     <Box display="flex" justifyContent="space-between" alignItems="center" borderBottom="var(--border)">
-        {!!title && <Typography variant="subtitle1">{title}</Typography>}
+        {!!title && <Typography variant="h2">{title}</Typography>}
         <IconButton onClick={onClick}>
             <Close />
         </IconButton>
