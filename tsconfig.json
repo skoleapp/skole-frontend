@@ -3,7 +3,7 @@
         "jsx": "preserve",
         "lib": ["dom", "es2015"],
         "moduleResolution": "node",
-        "allowJs": true,
+        "allowJs": false,
         "noEmit": true,
         "strict": true,
         "allowSyntheticDefaultImports": true,
