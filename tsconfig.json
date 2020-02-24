@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
         "jsx": "preserve",
-        "lib": ["dom", "es2017"],
+        "lib": ["dom", "es2015"],
         "moduleResolution": "node",
-        "allowJs": false,
+        "allowJs": true,
         "noEmit": true,
         "strict": true,
         "allowSyntheticDefaultImports": true,
@@ -17,7 +17,7 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "target": "es5",
+        "target": "es2015",
         "module": "esnext"
     },
     "exclude": ["node_modules"],
