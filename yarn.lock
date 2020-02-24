@@ -1538,6 +1538,11 @@
     apollo-link-http-common "^0.2.4"
     graphql "^14.5.3"
 
+"@types/arcgis-rest-api@*":
+  version "10.4.4"
+  resolved "https://registry.yarnpkg.com/@types/arcgis-rest-api/-/arcgis-rest-api-10.4.4.tgz#c84b26ac7f01deb2829bff10ebbe544c2310fbcd"
+  integrity sha512-5NwSfj4po+03fauyr4F5AxYzu8pbbqmxay+pNr5ef2V3Mj+7OylvV48VKuVoO9m799jhZdH3EQgQBHm3Y6q1Sw==
+
 "@types/body-parser@*":
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.1.tgz#18fcf61768fb5c30ccc508c21d6fd2e8b3bf7897"
@@ -1599,6 +1604,11 @@
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@types/extract-files/-/extract-files-3.1.0.tgz#a93ce5b82b81a9b420f3a6d14b9bfc043779fd2b"
   integrity sha512-tLNI7qpktX1NYqE4yXSp9sHgBJOH4kO03WAgeZYDC+xhi005ZDEHkHVdy+/zoNEHasu5kJIU0yqECgT7xxANdg==
+
+"@types/geojson@*":
+  version "7946.0.7"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.7.tgz#c8fa532b60a0042219cdf173ca21a975ef0666ad"
+  integrity sha512-wE2v81i4C4Ol09RtsWFAqg3BUitWbHSpSlIo+bNdsCJijO9sjme+zm+73ZMCa/qMC8UEERxzGbvmr1cffo2SiQ==
 
 "@types/glob@^7.1.1":
   version "7.1.1"
@@ -1685,6 +1695,20 @@
   resolved "https://registry.yarnpkg.com/@types/nprogress/-/nprogress-0.2.0.tgz#86c593682d4199212a0509cc3c4d562bbbd6e45f"
   integrity sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==
 
+"@types/ol@^6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@types/ol/-/ol-6.1.0.tgz#446915e0c6f6a21736d9e026b5beb1588ad0b8b3"
+  integrity sha512-NyaUqEq4k7/utn2NZt8JViHjLoKIRIrK4QhtB7tBwJTuMGlK16pALqX2uZuB3PuVYyYveL4loI0TRvD0Eqdk9g==
+  dependencies:
+    "@types/arcgis-rest-api" "*"
+    "@types/geojson" "*"
+    "@types/topojson-specification" "*"
+
+"@types/openlayers@^4.6.17":
+  version "4.6.17"
+  resolved "https://registry.yarnpkg.com/@types/openlayers/-/openlayers-4.6.17.tgz#39a8dce631e284a26cf0958664509932e6cd7c7d"
+  integrity sha512-vCCV5MY3XRmHyED1ndHxXJ/5IpeA3pX9J6IKZnMY+uTerhYNfG7pM451dgS90tSkBBxszd8ETPrF5ggQ9mqwlA==
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -1764,6 +1788,13 @@
   integrity sha512-Yjye9VwMdYeXfS71ihueWRSxrruuXTwKCbzue4+5b2rjnQ//AtyM7myZ1BEhNhBQ/nL/RE7bdToUoLln2miKvg==
   dependencies:
     "@types/react" "*"
+
+"@types/topojson-specification@*":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/topojson-specification/-/topojson-specification-1.0.1.tgz#a80cb294290b79f2d674d3f5938c544ed2bd9d80"
+  integrity sha512-ZZYZUgkmUls9Uhxx2WZNt9f/h2+H3abUUjOVmq+AaaDFckC5oAwd+MDp95kBirk+XCXrYj0hfpI6DSUiJMrpYQ==
+  dependencies:
+    "@types/geojson" "*"
 
 "@types/valid-url@1.0.2":
   version "1.0.2"
@@ -6786,6 +6817,11 @@ next-assets-import@^0.0.2:
     file-loader "^1.1.11"
     url-loader "^0.6.2"
 
+next-compose-plugins@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/next-compose-plugins/-/next-compose-plugins-2.2.0.tgz#95cd8eb40ab0652070d76572fb648354191628b0"
+  integrity sha512-ChUlpT9tWfJ7YxqGw/WQ2T1gf8EeX93n1XqeQw0lkvGa7seszahvF4eOZUJoq7Hetsbzg4UHVnPoCXfXTyQR3g==
+
 next-i18next@^2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/next-i18next/-/next-i18next-2.1.3.tgz#2b67e5df59438f32ac9f5a4ed04def66720e9bf0"
@@ -6823,6 +6859,14 @@ next-server@*:
     send "0.17.1"
     styled-jsx "3.2.1"
     url "0.11.0"
+
+next-transpile-modules@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/next-transpile-modules/-/next-transpile-modules-3.0.2.tgz#b289698d453bb7346fd768da171b53a740bfe436"
+  integrity sha512-w3WsyxvkJ3ws16InHwXhlDaOyG6Peo4co9U2sVBMePwEDo9r3SsbzX7p43sLUTYbpuA2t9iwJoCXkj/4BuD3Qw==
+  dependencies:
+    micromatch "^4.0.2"
+    slash "^3.0.0"
 
 next@^9.0.5:
   version "9.1.7"
