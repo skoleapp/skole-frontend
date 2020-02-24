@@ -2,29 +2,42 @@ const withCSS = require('@zeit/next-css');
 const WebpackBar = require('webpackbar');
 const withAssetsImport = require('next-assets-import');
 
-module.exports = withAssetsImport(
-    withCSS({
-        target: 'serverless',
-        env: {
-            API_URL: process.env.API_URL,
-            BACKEND_URL: process.env.BACKEND_URL,
-        },
-        webpack: (config, { dev }) => {
-            if (dev) {
-                config.devtool = '';
-            }
+const withTM = require('next-transpile-modules');
+const withPlugins = require('next-compose-plugins');
 
-            config.plugins.push(new WebpackBar());
+module.exports = withPlugins(
+    [
+        [
+            withTM,
+            {
+                transpileModules: ['ol'],
+            },
+        ],
+    ],
+    withAssetsImport(
+        withCSS({
+            target: 'serverless',
+            env: {
+                API_URL: process.env.API_URL,
+                BACKEND_URL: process.env.BACKEND_URL,
+            },
+            webpack: (config, { dev }) => {
+                if (dev) {
+                    config.devtool = '';
+                }
 
-            return config;
-        },
-        webpackDevMiddleware: config => {
-            config.watchOptions = {
-                poll: 1000,
-                aggregateTimeout: 300,
-            };
+                config.plugins.push(new WebpackBar());
 
-            return config;
-        },
-    }),
+                return config;
+            },
+            webpackDevMiddleware: config => {
+                config.watchOptions = {
+                    poll: 1000,
+                    aggregateTimeout: 300,
+                };
+
+                return config;
+            },
+        }),
+    ),
 );
