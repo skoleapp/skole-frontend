@@ -1,16 +1,21 @@
 import React from 'react';
 import { compose } from 'redux';
 
-import { SettingsLayout, ImagePreview } from '../components';
+import { ResourcePreview, FullWidthLayout } from '../components';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync } from '../utils';
+import { Box } from '@material-ui/core';
 
 const Testpage: I18nPage = () => {
-    const renderCardContent = <ImagePreview />;
+    const renderCardContent = (
+        <Box display="flex" justifyContent="center">
+            <ResourcePreview />
+        </Box>
+    );
 
-    return <SettingsLayout title="testpage" renderCardContent={renderCardContent} backUrl />;
+    return <FullWidthLayout title="testpage" renderCardContent={renderCardContent} backUrl />;
 };
 
 Testpage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
