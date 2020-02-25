@@ -1,10 +1,9 @@
-import { Box, Divider, Fade, IconButton, Paper } from '@material-ui/core';
+import { Box, Divider, Fade, IconButton, OutlinedTextFieldProps, Paper, TextField } from '@material-ui/core';
 import { AttachFileOutlined, SendOutlined } from '@material-ui/icons';
-import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { Form, Formik } from 'formik';
 import Image from 'material-ui-image';
 import * as R from 'ramda';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -73,10 +72,14 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
         setSubmitting(false);
     };
 
-    const handleKeyPress = (e: KeyboardEvent): void => {
+    const handleKeyPress = (e: KeyboardEvent<HTMLDivElement>): void => {
         if (e.key === 'Enter' && !e.shiftKey) {
             submitForm();
         }
+    };
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        setFieldValue('text', e.target.value);
     };
 
     const handleAttachmentChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -96,19 +99,16 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
         ...target,
     };
 
-    const renderTextField = (
-        <Field
-            name="text"
-            placeholder={t('forms:message')}
-            component={TextField}
-            variant="outlined"
-            onKeyPress={handleKeyPress}
-            rowsMax="10"
-            multiline={true}
-            autoComplete="off"
-            fullWidth
-        />
-    );
+    const textFieldProps: OutlinedTextFieldProps = {
+        placeholder: t('forms:message'),
+        variant: 'outlined',
+        onChange: handleChange,
+        onKeyPress: handleKeyPress,
+        rowsMax: '10',
+        multiline: true,
+        autoComplete: 'off',
+        fullWidth: true,
+    };
 
     const renderSubmitButton = (
         <Box marginLeft="0.5rem">
@@ -120,10 +120,10 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
 
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
-            {(): JSX.Element => (
+            {({ values }): JSX.Element => (
                 <StyledCreateCommentForm>
                     <Box display="flex" alignItems="center">
-                        {renderTextField}
+                        <TextField value={!attachmentModal ? values.text : ''} {...textFieldProps} />
                         <input
                             value=""
                             id="attachment"
@@ -147,8 +147,8 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
                                     {!!attachmentModal && <Image src={attachmentModal as string} />}
                                 </Box>
                                 <Divider />
-                                <Box display="flex" alignItems="center">
-                                    {renderTextField}
+                                <Box display="flex" alignItems="center" marginTop="0.5rem">
+                                    <TextField value={!!attachmentModal ? values.text : ''} {...textFieldProps} />
                                     {renderSubmitButton}
                                 </Box>
                             </Paper>
