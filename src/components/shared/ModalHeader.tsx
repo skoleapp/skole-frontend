@@ -23,7 +23,10 @@ const StyledModalHeader = styled(Box)`
     display: flex;
     align-items: center;
     border-bottom: var(--border);
-    text-align: center;
+
+    .MuiTypography-root {
+        margin-left: 0.5rem;
+    }
 
     .MuiIconButton-root {
         margin-left: auto;
