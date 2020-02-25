@@ -18,6 +18,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Tabs,
     Typography,
 } from '@material-ui/core';
 import {
@@ -47,7 +48,6 @@ import {
     StyledCard,
     StyledModal,
     StyledTable,
-    StyledTabs,
     TabPanel,
     TextLink,
 } from '../../components';
@@ -210,7 +210,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const renderMobileContent = (
             <Grid container className="md-down">
                 <StyledCard>
-                    <StyledTabs
+                    <Tabs
                         value={tabValue}
                         onChange={handleTabChange}
                         indicatorColor="primary"
@@ -219,7 +219,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     >
                         <Tab label={t('common:resources')} />
                         <Tab label={t('course:courseDiscussion')} />
-                    </StyledTabs>
+                    </Tabs>
                     <TabPanel value={tabValue} index={0}>
                         {renderResources}
                     </TabPanel>
