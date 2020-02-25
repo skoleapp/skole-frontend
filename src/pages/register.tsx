@@ -65,7 +65,7 @@ const RegisterPage: I18nPage = () => {
         } else if (login && login.user) {
             resetForm();
             dispatch(authenticate(client, login));
-            Router.push(`/users/${login.user.id}`);
+            Router.push('/');
         }
     };
 
