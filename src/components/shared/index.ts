@@ -11,7 +11,6 @@ export { Download } from './Download';
 export { StyledTabs } from './StyledTabs';
 export { LanguageSelector } from './LanguageSelector';
 export { AvatarField } from './AvatarField';
-export { StyledMenuList } from './StyledMenuList';
 export { DropzoneField } from './DropzoneField';
 export { SelectField } from './SelectField';
 export { SettingsButton } from './SettingsButton';

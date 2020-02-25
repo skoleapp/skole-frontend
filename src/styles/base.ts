@@ -122,5 +122,21 @@ export const base = css`
                 background-color: var(--primary);
             }
         }
+
+        .MuiListSubheader-root {
+            outline: none;
+        }
+
+        .MuiTabs-root {
+            width: 100%;
+
+            .MuiTab-root {
+                flex-grow: 1;
+            }
+
+            .MuiTabs-scrollButtons {
+                color: var(--primary);
+            }
+        }
     }
 `;
