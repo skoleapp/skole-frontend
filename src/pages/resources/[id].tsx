@@ -5,6 +5,7 @@ import {
     CardHeader,
     Divider,
     Grid,
+    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -19,16 +20,7 @@ import React from 'react';
 import { compose } from 'redux';
 
 import { ResourceDetailDocument, ResourceObjectType, ResourcePartObjectType } from '../../../generated/graphql';
-import {
-    Download,
-    MainLayout,
-    NotFound,
-    StyledCard,
-    StyledList,
-    StyledTabs,
-    TabPanel,
-    TextLink,
-} from '../../components';
+import { Download, MainLayout, NotFound, StyledCard, StyledTabs, TabPanel, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -95,7 +87,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 </Grid>
                 <Grid item container sm={6} justify="center">
                     <CardContent>
-                        <StyledList>
+                        <List>
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar>
@@ -114,7 +106,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                                 </ListItemAvatar>
                                 <ListItemText>{t('common:downloads')}: 0</ListItemText>
                             </ListItem>
-                        </StyledList>
+                        </List>
                     </CardContent>
                 </Grid>
             </Grid>

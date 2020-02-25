@@ -116,5 +116,11 @@ export const base = css`
                 margin: auto;
             }
         }
+
+        .MuiList-root {
+            .MuiAvatar-root {
+                background-color: var(--primary);
+            }
+        }
     }
 `;

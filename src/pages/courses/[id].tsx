@@ -7,6 +7,7 @@ import {
     Fade,
     Grid,
     IconButton,
+    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -44,7 +45,6 @@ import {
     ModalHeader,
     NotFound,
     StyledCard,
-    StyledList,
     StyledModal,
     StyledTable,
     StyledTabs,
@@ -92,7 +92,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderCourseInfo = (
             <CardContent>
-                <StyledList>
+                <List>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -158,7 +158,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             {t('common:resources')}: {resourceCount}
                         </ListItemText>
                     </ListItem>
-                </StyledList>
+                </List>
                 <Box textAlign="left" marginLeft="1rem">
                     <Typography className="label" variant="body2" color="textSecondary">
                         {t('common:created')} {created}

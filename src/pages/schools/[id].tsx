@@ -3,6 +3,7 @@ import {
     Box,
     CardContent,
     CardHeader,
+    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -25,15 +26,7 @@ import {
     SchoolObjectType,
     SubjectObjectType,
 } from '../../../generated/graphql';
-import {
-    NotFound,
-    ResponsiveMainLayout,
-    StyledList,
-    StyledTable,
-    StyledTabs,
-    TabPanel,
-    TextLink,
-} from '../../components';
+import { NotFound, ResponsiveMainLayout, StyledTable, StyledTabs, TabPanel, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -102,7 +95,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 
         const renderRightCardContent = (
             <CardContent>
-                <StyledList>
+                <List>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -123,7 +116,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                             {t('common:subjects')}: {subjectCount}
                         </ListItemText>
                     </ListItem>
-                </StyledList>
+                </List>
             </CardContent>
         );
 

@@ -4,6 +4,7 @@ import {
     CardContent,
     Divider,
     Grid,
+    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -29,7 +30,6 @@ import {
     NotFound,
     SettingsButton,
     StyledCard,
-    StyledList,
     StyledTable,
     StyledTabs,
     TabPanel,
@@ -83,7 +83,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <Grid item container xs={12} sm={6} direction="column">
                     <Grid container alignItems="center" justify="center">
                         <CardContent>
-                            <StyledList>
+                            <List>
                                 <ListItem>
                                     <ListItemAvatar>
                                         <Avatar>
@@ -114,7 +114,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         {t('common:resources')}: {resourceCount}
                                     </ListItemText>
                                 </ListItem>
-                            </StyledList>
+                            </List>
                         </CardContent>
                     </Grid>
                     {isOwnProfile && (
