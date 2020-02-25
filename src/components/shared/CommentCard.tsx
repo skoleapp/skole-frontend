@@ -195,11 +195,13 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                                     </Box>
                                 </>
                             )}
-                            <Box marginLeft="0.25rem">
-                                <IconButton onClick={handleAttachmentClick}>
-                                    <AttachFileOutlined />
-                                </IconButton>
-                            </Box>
+                            {!!comment.attachment && (
+                                <Box marginLeft="0.25rem">
+                                    <IconButton onClick={handleAttachmentClick}>
+                                        <AttachFileOutlined />
+                                    </IconButton>
+                                </Box>
+                            )}
                         </Box>
                     </Grid>
                     <Grid container item xs={4} justify="center">
