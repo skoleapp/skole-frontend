@@ -15,8 +15,8 @@ export const StyledModal = styled(props => (
         display: flex;
         flex-direction: column;
         outline: none;
-        height: 100% !important;
-        width: 100% !important;
+        height: 100%;
+        width: 100%;
         overflow-y: scroll;
 
         ::-webkit-scrollbar {
@@ -24,7 +24,7 @@ export const StyledModal = styled(props => (
         }
 
         @media only screen and (min-width: ${breakpoints.MD}) {
-            height: auto !important;
+            height: auto;
             max-width: 25rem;
             max-height: 50rem;
             padding: 0.5rem;
