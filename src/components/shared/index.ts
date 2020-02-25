@@ -21,4 +21,4 @@ export { CreateCommentForm } from './CreateCommentForm';
 export { StyledModal } from './StyledModal';
 export { ModalHeader } from './ModalHeader';
 export { DiscussionBox } from './DiscussionBox';
-export { ImagePreview } from './ImagePreview';
+export { ResourcePreview } from './ResourcePreview';
