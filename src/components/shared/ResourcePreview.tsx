@@ -1,10 +1,11 @@
 import 'ol/ol.css';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-// url, size, pages, scale
+// url, size, scale
 export const ResourcePreview = () => {
     const [, setMap] = useState(null);
-    const size = [0, 0, 595, 842];
+    const [size, setSize] = useState([0, 0, 595, 842]);
 
     // TODO: implement proper canvas
     // 595 x 842 72dpi
@@ -15,6 +16,10 @@ export const ResourcePreview = () => {
     useEffect(() => {
         const urlPDF = '/images/tenttisample2.pdf';
         const urlJPG = '/images/skole-icon.svg';
+
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            setSize([0, 0, window.innerWidth - 30, window.innerHeight - 130]);
+        }
 
         if (urlPDF.endsWith('.pdf')) {
             createMapFromPDF(urlPDF);
@@ -27,6 +32,9 @@ export const ResourcePreview = () => {
                 createMapFromImage(urlJPG, imageSize);
             });
         }
+        return () => {
+            setMap(null);
+        };
     }, []);
 
     const getImageSize = (url: string) => {
@@ -89,8 +97,6 @@ export const ResourcePreview = () => {
         const Image = require('ol/layer/Image').default;
         const Projection = require('ol/proj/Projection').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
-        const PinchZoom = require('ol/interaction').PinchZoom;
-        const defaults = require('ol/interaction').defaults;
         const PDFJS: any = require('pdfjs-dist');
 
         PDFJS.getDocument(url).promise.then((pdf: any) => {
@@ -144,11 +150,9 @@ export const ResourcePreview = () => {
                             resolution: 2,
                             maxResolution: 2,
                             zoom: 0,
-                            maxZoom: 8,
-                            extent: imageExtent,
+                            maxZoom: 4,
                             constrainResolution: false,
                         }),
-                        interactions: defaults().extend([new PinchZoom()]),
                     });
 
                     setMap(map);
@@ -161,10 +165,53 @@ export const ResourcePreview = () => {
         return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     };
 
+    let controls: any = [];
+
+    const StyledButton = styled.button`
+        background-color: #438eb9;
+        z-index: 9999;
+        margin: 3px;
+        color: #fff;
+        font-weight: 700;
+        text-align: center;
+        height: 40px;
+        width: 30px;
+        border: none;
+        border-radius: 2;
+        outline: none;
+    `;
+    const PreviousButton = (
+        <StyledButton key={2} onClick={() => {}}>
+            {'<'}
+        </StyledButton>
+    );
+    const NextButton = (
+        <StyledButton key={1} onClick={() => {}}>
+            {'>'}
+        </StyledButton>
+    );
+
+    controls.push(PreviousButton);
+    controls.push(NextButton);
+
+    const StyledControls = styled(({ size, ...other }) => <div {...other} />)`
+        width: ${({ size }): any => size[2] + 'px'};
+        position: absolute;
+        display: none;
+        justify-content: space-between;
+    `;
+
     return (
         <div>
+            <StyledControls size={size}>{controls}</StyledControls>
             <div
-                style={{ backgroundColor: '#484C4F', border: '1px solid black', width: size[2], height: size[3] }}
+                style={{
+                    backgroundColor: '#484C4F',
+                    border: '1px solid black',
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                }}
                 id="map"
                 className="map"
             ></div>
