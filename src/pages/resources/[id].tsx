@@ -5,10 +5,12 @@ import {
     CardHeader,
     Divider,
     Grid,
+    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
     Tab,
+    Tabs,
     Typography,
 } from '@material-ui/core';
 import { CloudDownload, ScoreOutlined } from '@material-ui/icons';
@@ -19,22 +21,13 @@ import React from 'react';
 import { compose } from 'redux';
 
 import { ResourceDetailDocument, ResourceObjectType, ResourcePartObjectType } from '../../../generated/graphql';
-import {
-    Download,
-    MainLayout,
-    NotFound,
-    StyledCard,
-    StyledList,
-    StyledTabs,
-    TabPanel,
-    TextLink,
-} from '../../components';
+import { Download, MainLayout, NotFound, StyledCard, TabPanel, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { usePrivatePage, useTabs } from '../../utils';
-import { mediaURL } from '../../utils/mediaURL';
+import { mediaURL } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -95,7 +88,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 </Grid>
                 <Grid item container sm={6} justify="center">
                     <CardContent>
-                        <StyledList>
+                        <List>
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar>
@@ -114,14 +107,14 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                                 </ListItemAvatar>
                                 <ListItemText>{t('common:downloads')}: 0</ListItemText>
                             </ListItem>
-                        </StyledList>
+                        </List>
                     </CardContent>
                 </Grid>
             </Grid>
         );
 
         const renderTabs = (
-            <StyledTabs
+            <Tabs
                 value={tabValue}
                 onChange={handleTabChange}
                 indicatorColor="primary"
@@ -133,7 +126,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 {resourceParts.map((r: ResourcePartObjectType, i: number) => (
                     <Tab key={i} label={r.title} />
                 ))}
-            </StyledTabs>
+            </Tabs>
         );
 
         const renderGeneralDiscussionThread = (

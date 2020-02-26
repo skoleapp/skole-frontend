@@ -55,7 +55,7 @@ const LoginPage: I18nPage = () => {
                 if (!!next) {
                     Router.push(next as string);
                 } else if (user) {
-                    Router.push(`/users/${user.id}`);
+                    Router.push('/');
                 }
             }
         }

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
-import { mediaURL } from '../../utils/mediaURL';
+import { mediaURL } from '../../utils';
 import { FormErrorMessage } from '.';
 
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ setFieldValue, values }) => {

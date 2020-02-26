@@ -3,6 +3,7 @@ import {
     Box,
     CardContent,
     CardHeader,
+    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -12,6 +13,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Tabs,
     Typography,
 } from '@material-ui/core';
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
@@ -25,15 +27,7 @@ import {
     SchoolObjectType,
     SubjectObjectType,
 } from '../../../generated/graphql';
-import {
-    NotFound,
-    ResponsiveMainLayout,
-    StyledList,
-    StyledTable,
-    StyledTabs,
-    TabPanel,
-    TextLink,
-} from '../../components';
+import { NotFound, ResponsiveMainLayout, StyledTable, TabPanel, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -102,7 +96,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 
         const renderRightCardContent = (
             <CardContent>
-                <StyledList>
+                <List>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -123,13 +117,13 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                             {t('common:subjects')}: {subjectCount}
                         </ListItemText>
                     </ListItem>
-                </StyledList>
+                </List>
             </CardContent>
         );
 
         const renderTabs = (
             <>
-                <StyledTabs
+                <Tabs
                     value={tabValue}
                     onChange={handleTabChange}
                     variant="fullWidth"
@@ -138,7 +132,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                 >
                     <Tab label={t('common:subjects')} />
                     <Tab label={t('common:courses')} />
-                </StyledTabs>
+                </Tabs>
                 <TabPanel value={tabValue} index={0}>
                     {subjects.length ? (
                         <StyledTable disableBoxShadow>

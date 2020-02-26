@@ -10,12 +10,6 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
     display: flex;
     flex-direction: column;
 
-    .MuiFormLabel-root {
-        background-color: var(--white);
-        border-radius: 0.1rem;
-        padding: 0.05rem;
-    }
-
     .label {
         font-size: 0.75rem;
     }

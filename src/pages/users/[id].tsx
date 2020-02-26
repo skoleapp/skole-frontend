@@ -4,6 +4,7 @@ import {
     CardContent,
     Divider,
     Grid,
+    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -13,6 +14,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Tabs,
     Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
@@ -23,23 +25,13 @@ import { useSelector } from 'react-redux';
 import { compose } from 'redux';
 
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
-import {
-    ButtonLink,
-    MainLayout,
-    NotFound,
-    SettingsButton,
-    StyledCard,
-    StyledList,
-    StyledTable,
-    StyledTabs,
-    TabPanel,
-} from '../../components';
+import { ButtonLink, MainLayout, NotFound, SettingsButton, StyledCard, StyledTable, TabPanel } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { getFullCourseName, usePrivatePage, useTabs } from '../../utils';
-import { mediaURL } from '../../utils/mediaURL';
+import { mediaURL } from '../../utils';
 
 interface Props extends I18nProps {
     user?: UserObjectType;
@@ -83,7 +75,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <Grid item container xs={12} sm={6} direction="column">
                     <Grid container alignItems="center" justify="center">
                         <CardContent>
-                            <StyledList>
+                            <List>
                                 <ListItem>
                                     <ListItemAvatar>
                                         <Avatar>
@@ -114,7 +106,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         {t('common:resources')}: {resourceCount}
                                     </ListItemText>
                                 </ListItem>
-                            </StyledList>
+                            </List>
                         </CardContent>
                     </Grid>
                     {isOwnProfile && (
@@ -170,7 +162,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         const renderTabs = (
-            <StyledTabs
+            <Tabs
                 value={tabValue}
                 onChange={handleTabChange}
                 variant="fullWidth"
@@ -179,7 +171,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             >
                 <Tab label={t('common:courses')} />
                 <Tab label={t('common:resources')} />
-            </StyledTabs>
+            </Tabs>
         );
 
         const renderTabContent = (

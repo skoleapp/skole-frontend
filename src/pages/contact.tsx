@@ -1,4 +1,3 @@
-import { MenuItem } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
@@ -7,7 +6,7 @@ import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { toggleNotification } from '../actions';
-import { FormSubmitSection, SelectField, SettingsLayout } from '../components';
+import { FormSubmitSection, SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -15,14 +14,16 @@ import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useForm } from '../utils';
 
 const initialValues = {
-    contactType: '',
+    subject: '',
+    name: '',
     email: '',
     message: '',
     general: '',
 };
 
 export interface ContactFormValues {
-    contactType: string;
+    subject: string;
+    name: string;
     email: string;
     message: string;
 }
@@ -33,7 +34,8 @@ const ContactPage: I18nPage = () => {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        contactType: Yup.string().required(t('validation:required')),
+        subject: Yup.string().required(t('validation:required')),
+        name: Yup.string(),
         email: Yup.string()
             .email(t('validation:invalidEmail'))
             .required(t('validation:required')),
@@ -51,12 +53,22 @@ const ContactPage: I18nPage = () => {
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field name="contactType" label={t('forms:contactType')} component={SelectField} fullWidth>
-                        <MenuItem value="feedback">{t('forms:feedback')}</MenuItem>
-                        <MenuItem value="requestSchool">{t('forms:requestSchool')}</MenuItem>
-                        <MenuItem value="requestSubject">{t('forms:requestSubject')}</MenuItem>
-                        <MenuItem value="businessInquiry">{t('forms:businessInquiry')}</MenuItem>
-                    </Field>
+                    <Field
+                        name="subject"
+                        component={TextField}
+                        label={t('forms:subject')}
+                        placeholder={t('forms:subject')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="name"
+                        component={TextField}
+                        label={t('forms:name')}
+                        placeholder={t('forms:name')}
+                        variant="outlined"
+                        fullWidth
+                    />
                     <Field
                         name="email"
                         component={TextField}

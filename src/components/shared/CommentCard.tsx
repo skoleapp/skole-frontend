@@ -36,10 +36,10 @@ import {
     UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { toggleCommentThread, toggleNotification } from '../../actions';
+import { toggleCommentThread, toggleFileViewer, toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
 import { State } from '../../types';
-import { mediaURL } from '../../utils/mediaURL';
+import { mediaURL } from '../../utils';
 import { TextLink } from './TextLink';
 
 interface Props {
@@ -115,7 +115,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
 
     const handleAttachmentClick = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        console.log('Attachment clicked!');
+        dispatch(toggleFileViewer(comment.attachment));
     };
 
     const handleMoreClick = (e: SyntheticEvent): void => {
@@ -195,11 +195,13 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                                     </Box>
                                 </>
                             )}
-                            <Box marginLeft="0.25rem">
-                                <IconButton onClick={handleAttachmentClick}>
-                                    <AttachFileOutlined />
-                                </IconButton>
-                            </Box>
+                            {!!comment.attachment && (
+                                <Box marginLeft="0.25rem">
+                                    <IconButton onClick={handleAttachmentClick}>
+                                        <AttachFileOutlined />
+                                    </IconButton>
+                                </Box>
+                            )}
                         </Box>
                     </Grid>
                     <Grid container item xs={4} justify="center">
