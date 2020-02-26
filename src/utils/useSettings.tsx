@@ -1,11 +1,11 @@
-import { Button, Divider, ListItem, ListSubheader, MenuItem } from '@material-ui/core';
+import { Button, Divider, ListItem, ListSubheader, MenuItem, MenuList } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deAuthenticate, toggleSettings } from '../actions';
-import { LanguageSelector, StyledMenuList } from '../components';
+import { LanguageSelector } from '../components';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { State } from '../types';
@@ -59,7 +59,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     ));
 
     const renderCommonMenuItems = (
-        <StyledMenuList>
+        <MenuList>
             <ListSubheader>{t('common:language')}</ListSubheader>
             <ListItem>
                 <LanguageSelector fullWidth />
@@ -70,16 +70,16 @@ export const useSettings = ({ modal }: Props): UseSettings => {
             <Divider />
             <ListSubheader>{t('common:legal')}</ListSubheader>
             {renderLegalItems}
-        </StyledMenuList>
+        </MenuList>
     );
 
     const renderAuthenticatedMenuList = (
-        <StyledMenuList>
+        <MenuList>
             <ListSubheader>{t('common:account')}</ListSubheader>
             {renderAccountMenuItems}
             <Divider />
             {renderCommonMenuItems}
-        </StyledMenuList>
+        </MenuList>
     );
 
     const renderLoginButton = (

@@ -7,6 +7,7 @@ import {
     Fade,
     Grid,
     IconButton,
+    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -17,6 +18,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Tabs,
     Typography,
 } from '@material-ui/core';
 import {
@@ -44,10 +46,8 @@ import {
     ModalHeader,
     NotFound,
     StyledCard,
-    StyledList,
     StyledModal,
     StyledTable,
-    StyledTabs,
     TabPanel,
     TextLink,
 } from '../../components';
@@ -92,7 +92,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderCourseInfo = (
             <CardContent>
-                <StyledList>
+                <List>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -158,7 +158,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             {t('common:resources')}: {resourceCount}
                         </ListItemText>
                     </ListItem>
-                </StyledList>
+                </List>
                 <Box textAlign="left" marginLeft="1rem">
                     <Typography className="label" variant="body2" color="textSecondary">
                         {t('common:created')} {created}
@@ -210,7 +210,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const renderMobileContent = (
             <Grid container className="md-down">
                 <StyledCard>
-                    <StyledTabs
+                    <Tabs
                         value={tabValue}
                         onChange={handleTabChange}
                         indicatorColor="primary"
@@ -219,7 +219,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     >
                         <Tab label={t('common:resources')} />
                         <Tab label={t('course:courseDiscussion')} />
-                    </StyledTabs>
+                    </Tabs>
                     <TabPanel value={tabValue} index={0}>
                         {renderResources}
                     </TabPanel>

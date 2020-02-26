@@ -52,5 +52,6 @@
     "deleteComment": "Delete Comment",
     "deleteCommentTitle": "Haluatko varmasti poistaa tämän kommentin?",
     "reportAbuse": "Ilmoita väärinkäytöstä",
-    "attachFile": "Liitä tiedosto"
+    "attachFile": "Liitä tiedosto",
+    "createComment": "Luo kommentti"
 }

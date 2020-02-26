@@ -9,7 +9,7 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core';
-import { Field, Formik, FormikActions, Form } from 'formik';
+import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -24,7 +24,7 @@ import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useFilters, usePrivatePage } from '../../utils';
-import { mediaURL } from '../../utils/mediaURL';
+import { mediaURL } from '../../utils';
 
 interface FilterUsersFormValues {
     username: string;
