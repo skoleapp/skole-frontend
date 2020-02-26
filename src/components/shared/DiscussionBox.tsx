@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
+import { breakpoints } from '../../styles';
 import { CommentTarget } from '../../types';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
@@ -103,7 +104,7 @@ export const DiscussionBox: React.FC<Props> = ({
     );
 
     return (
-        <StyledDiscussionBox>
+        <StyledDiscussionBox topComment={topComment}>
             <Box className="discussion-container">
                 {renderMessageArea}
                 {renderInputArea}
@@ -114,7 +115,8 @@ export const DiscussionBox: React.FC<Props> = ({
     );
 };
 
-const StyledDiscussionBox = styled(Box)`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other} />)`
     position: relative;
     flex-grow: 1;
 
@@ -140,6 +142,10 @@ const StyledDiscussionBox = styled(Box)`
         .input-area {
             padding: 0.5rem;
             border-top: var(--border);
+
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                padding: ${({ topComment }): string | false => !!topComment && '0.5rem 0 0 0 !important'};
+            }
         }
 
         #create-comment-button {

@@ -124,6 +124,7 @@ export const base = css`
         }
 
         .MuiListSubheader-root {
+            text-align: left;
             outline: none;
         }
 
