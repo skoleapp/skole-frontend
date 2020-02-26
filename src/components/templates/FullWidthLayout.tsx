@@ -1,20 +1,58 @@
-import { CardContent, CardHeader, Grid } from '@material-ui/core';
+import { Box, ContainerProps } from '@material-ui/core';
 import React from 'react';
+import styled from 'styled-components';
 
-import { StyledCard } from '..';
+import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { MainLayout } from '.';
+import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
+import { CommentThread } from '../layout';
 
-export const FullWidthLayout: React.FC<LayoutProps> = ({ renderCardContent, renderAlert, ...props }) => (
-    <MainLayout {...props}>
-        <StyledCard>
-            <Grid container justify="center">
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <CardContent>{renderAlert}</CardContent>
-                    <CardHeader title={props.title} />
-                    <CardContent>{renderCardContent}</CardContent>
-                </Grid>
-            </Grid>
-        </StyledCard>
-    </MainLayout>
+interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
+    heading?: string;
+    renderCardContent: any;
+}
+
+export const FullWidthLayout: React.FC<Props> = ({
+    title,
+    heading,
+    backUrl,
+    disableSearch,
+    headerRight,
+    renderCardContent,
+}) => (
+    <StyledMainLayout>
+        <Head title={title} />
+        <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
+        {renderCardContent}
+        <BottomNavbar />
+        <Footer />
+        <Notifications />
+        <Settings />
+        <CommentThread />
+        <SkoleGDPR />
+    </StyledMainLayout>
 );
+
+const StyledMainLayout = styled(Box)`
+    background-color: var(--secondary);
+    text-align: center;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .MuiContainer-root {
+        padding: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+
+        @media only screen and (min-width: ${breakpoints.MD}) {
+            padding: 1rem;
+        }
+
+        @media only screen and (max-width: ${breakpoints.SM}) {
+            margin-bottom: 3rem;
+        }
+    }
+`;
