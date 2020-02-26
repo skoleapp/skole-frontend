@@ -118,8 +118,19 @@ export const base = css`
         }
 
         .MuiList-root {
+            .MuiListItem-root {
+                padding: 0.5rem;
+            }
+
             .MuiAvatar-root {
                 background-color: var(--primary);
+                width: 2rem;
+                height: 2rem;
+
+                .MuiSvgIcon-root {
+                    width: 1rem;
+                    height: 1rem;
+                }
             }
         }
 
@@ -138,6 +149,14 @@ export const base = css`
             .MuiTabs-scrollButtons {
                 color: var(--primary);
             }
+        }
+
+        .MuiCardHeader-root {
+            padding: 0.5rem !important;
+        }
+
+        .MuiCardContent-root {
+            padding: 0.5rem;
         }
     }
 `;

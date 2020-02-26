@@ -150,7 +150,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 <Divider />
                 <CardContent>
                     <Box textAlign="left">
-                        <Typography className="label" variant="body2" color="textSecondary">
+                        <Typography variant="body2" color="textSecondary">
                             {t('common:description')}
                         </Typography>
                         <Typography variant="body2">{R.propOr('-', 'text', r)}</Typography>

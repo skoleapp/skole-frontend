@@ -137,13 +137,13 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <Box textAlign="left">
                     {isOwnProfile && (
                         <Box display="flex" flexDirection="column" marginY="0.5rem">
-                            <Typography className="label" variant="body2" color="textSecondary">
+                            <Typography variant="body2" color="textSecondary">
                                 {t('common:email')}
                             </Typography>
                             <Typography variant="body2">{email}</Typography>
                         </Box>
                     )}
-                    <Typography className="label" variant="body2" color="textSecondary">
+                    <Typography variant="body2" color="textSecondary">
                         {t('common:joined')} {joined}
                     </Typography>
                 </Box>
@@ -153,7 +153,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const renderBioSection = (
             <CardContent>
                 <Box textAlign="left">
-                    <Typography className="label" variant="body2" color="textSecondary">
+                    <Typography variant="body2" color="textSecondary">
                         {t('common:bio')}
                     </Typography>
                     <Typography variant="body2">{bio}</Typography>
