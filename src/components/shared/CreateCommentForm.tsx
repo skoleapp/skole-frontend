@@ -3,7 +3,7 @@ import { AttachFileOutlined, SendOutlined } from '@material-ui/icons';
 import { Form, Formik } from 'formik';
 import Image from 'material-ui-image';
 import * as R from 'ramda';
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -65,17 +65,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
                 variables: { ...values, attachment: (values.attachment as unknown) as string },
             });
         } else {
-            dispatch(toggleNotification('notifications:messageEmpty'));
+            dispatch(toggleNotification(t('notifications:messageEmpty')));
         }
 
         resetForm();
         setSubmitting(false);
-    };
-
-    const handleKeyPress = (e: KeyboardEvent<HTMLDivElement>): void => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            submitForm();
-        }
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -103,7 +97,6 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
         placeholder: t('forms:message'),
         variant: 'outlined',
         onChange: handleChange,
-        onKeyPress: handleKeyPress,
         rowsMax: '10',
         multiline: true,
         autoComplete: 'off',
@@ -139,15 +132,15 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
                             </Box>
                         </label>
                     </Box>
-                    <StyledModal open={!!attachmentModal} onClose={handleCloseAttachmentModal}>
+                    <StyledModal open={!!attachmentModal} onClose={handleCloseAttachmentModal} autoHeight>
                         <Fade in={!!attachmentModal}>
                             <Paper>
                                 <ModalHeader onClick={handleCloseAttachmentModal} title={t('common:attachFile')} />
-                                <Box flexGrow="1" padding="0.5rem">
+                                <Box flexGrow="1" padding="0.5rem 0">
                                     {!!attachmentModal && <Image src={attachmentModal as string} />}
                                 </Box>
                                 <Divider />
-                                <Box display="flex" alignItems="center" marginTop="0.5rem">
+                                <Box className="modal-input-area">
                                     <TextField value={!!attachmentModal ? values.text : ''} {...textFieldProps} />
                                     {renderSubmitButton}
                                 </Box>
@@ -163,6 +156,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
 const StyledCreateCommentForm = styled(Form)`
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 
     .MuiFormControl-root {
         margin-top: 0;

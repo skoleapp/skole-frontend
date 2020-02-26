@@ -4,8 +4,9 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 
-export const StyledModal = styled(props => (
-    <Modal closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} {...props} />
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const StyledModal = styled(({ autoHeight, ...other }) => (
+    <Modal closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} {...other} />
 ))`
     display: flex;
     justify-content: center;
@@ -24,10 +25,21 @@ export const StyledModal = styled(props => (
         }
 
         @media only screen and (min-width: ${breakpoints.MD}) {
-            height: auto;
+            height: ${({ autoHeight }): string => (!!autoHeight ? 'auto' : '100%')};
             max-width: 25rem;
             max-height: 50rem;
             padding: 0.5rem;
+        }
+
+        .modal-input-area {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            margin: 0.5rem;
+
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                margin: 0.5rem 0 0 0 !important;
+            }
         }
     }
 `;

@@ -1,6 +1,6 @@
 import { Fade, Paper } from '@material-ui/core';
 import * as R from 'ramda';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
 
@@ -15,24 +15,12 @@ export const CommentThread: React.FC = () => {
     const { commentThread } = useSelector((state: State) => state.ui);
     const dispatch = useDispatch();
     const handleClose = (): AnyAction => dispatch((toggleCommentThread(null) as unknown) as AnyAction);
-    const [comments, setComments] = useState();
-    const appendComments = (comments: CommentObjectType[]): void => setComments(comments);
-
-    useEffect(() => {
-        const initialComments = R.propOr([], 'replyComments', commentThread) as CommentObjectType[];
-        setComments(initialComments);
-
-        return (): void => {
-            setComments([]);
-        };
-    }, [commentThread]);
 
     const discussionBoxProps = {
         commentThread,
-        comments,
+        comments: R.propOr([], 'replyComments', commentThread) as CommentObjectType[],
         target: { comment: Number(R.propOr(undefined, 'id', commentThread)) },
         isThread: true,
-        appendComments,
     };
 
     return (
