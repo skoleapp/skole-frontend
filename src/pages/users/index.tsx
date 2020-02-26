@@ -24,7 +24,7 @@ import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useFilters, usePrivatePage } from '../../utils';
-import { mediaURL } from '../../utils/mediaURL';
+import { mediaURL } from '../../utils';
 
 interface FilterUsersFormValues {
     username: string;

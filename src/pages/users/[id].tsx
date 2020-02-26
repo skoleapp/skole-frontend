@@ -31,7 +31,7 @@ import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { getFullCourseName, usePrivatePage, useTabs } from '../../utils';
-import { mediaURL } from '../../utils/mediaURL';
+import { mediaURL } from '../../utils';
 
 interface Props extends I18nProps {
     user?: UserObjectType;
