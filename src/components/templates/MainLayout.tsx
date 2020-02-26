@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
 import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
-import { CommentThread } from '../layout';
+import { CommentThread, FileViewer } from '../layout';
 
 interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
     heading?: string;
@@ -29,6 +29,7 @@ export const MainLayout: React.FC<Props> = ({
         <Notifications />
         <Settings />
         <CommentThread />
+        <FileViewer />
         <SkoleGDPR />
     </StyledMainLayout>
 );
