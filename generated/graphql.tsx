@@ -794,6 +794,33 @@ export type ResourceDetailQuery = { __typename?: 'Query' } & {
             ResourceObjectType,
             'id' | 'title' | 'resourceType' | 'date' | 'modified' | 'created' | 'points'
         > & {
+                comments: Array<
+                    { __typename?: 'CommentObjectType' } & Pick<
+                        CommentObjectType,
+                        'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points' | 'replyCount'
+                    > & {
+                            user: Maybe<
+                                { __typename?: 'UserObjectType' } & Pick<
+                                    UserObjectType,
+                                    'id' | 'username' | 'avatarThumbnail'
+                                >
+                            >;
+                            replyComments: Array<
+                                { __typename?: 'CommentObjectType' } & Pick<
+                                    CommentObjectType,
+                                    'id' | 'text' | 'attachment'
+                                > & {
+                                        user: Maybe<
+                                            { __typename?: 'UserObjectType' } & Pick<
+                                                UserObjectType,
+                                                'id' | 'username' | 'avatarThumbnail'
+                                            >
+                                        >;
+                                    }
+                            >;
+                            vote: Maybe<{ __typename?: 'VoteObjectType' } & Pick<VoteObjectType, 'id' | 'status'>>;
+                        }
+                >;
                 school: Maybe<{ __typename?: 'SchoolObjectType' } & Pick<SchoolObjectType, 'id' | 'name'>>;
                 course: { __typename?: 'CourseObjectType' } & Pick<CourseObjectType, 'id' | 'name'>;
                 user: Maybe<{ __typename?: 'UserObjectType' } & Pick<UserObjectType, 'id' | 'username'>>;
@@ -1542,6 +1569,41 @@ export const ResourceDetailDocument = gql`
             modified
             created
             points
+            comments {
+                id
+                user {
+                    id
+                    username
+                    avatarThumbnail
+                }
+                text
+                attachment
+                modified
+                created
+                replyComments {
+                    id
+                    user {
+                        id
+                        username
+                        avatarThumbnail
+                    }
+                    text
+                    attachment
+                }
+                modified
+                created
+                points
+                vote {
+                    id
+                    status
+                }
+                replyCount
+                points
+                vote {
+                    id
+                    status
+                }
+            }
             school {
                 id
                 name

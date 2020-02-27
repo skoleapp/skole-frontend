@@ -67,7 +67,7 @@ const StyledBottomNavbar = styled(BottomNavigation)`
         padding: 0 !important;
     }
 
-    @media only screen and (min-width: ${breakpoints.SM}) {
+    @media only screen and (min-width: ${breakpoints.MD}) {
         display: none !important;
     }
 `;
