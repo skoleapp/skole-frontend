@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
     const { t } = useTranslation();
 
     return (
-        <StyledFooter className="sm-up" container>
+        <StyledFooter className="md-up" container>
             <Grid item xs={12} container>
                 <Grid item xs={4} container>
                     <Grid item xs={12}>

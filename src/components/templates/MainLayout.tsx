@@ -4,11 +4,12 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
+import { BottomNavbar, ResourceNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 import { CommentThread, FileViewer } from '../layout';
 
 interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
     heading?: string;
+    resource?: any;
 }
 
 export const MainLayout: React.FC<Props> = ({
@@ -18,21 +19,26 @@ export const MainLayout: React.FC<Props> = ({
     disableSearch,
     headerRight,
     children,
+    resource,
     ...containerProps
-}) => (
-    <StyledMainLayout>
-        <Head title={title} />
-        <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
-        <Container {...containerProps}>{children}</Container>
-        <BottomNavbar />
-        <Footer />
-        <Notifications />
-        <Settings />
-        <CommentThread />
-        <FileViewer />
-        <SkoleGDPR />
-    </StyledMainLayout>
-);
+}) => {
+    const renderBottomNavbar = !!resource ? <ResourceNavbar resource={resource} /> : <BottomNavbar />;
+
+    return (
+        <StyledMainLayout>
+            <Head title={title} />
+            <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
+            <Container {...containerProps}>{children}</Container>
+            {renderBottomNavbar}
+            <Footer />
+            <Notifications />
+            <Settings />
+            <CommentThread />
+            <FileViewer />
+            <SkoleGDPR />
+        </StyledMainLayout>
+    );
+};
 
 const StyledMainLayout = styled(Box)`
     background-color: var(--secondary);

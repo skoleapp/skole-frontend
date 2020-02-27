@@ -1,11 +1,16 @@
 import 'ol/ol.css';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { FullscreenOutlined } from '@material-ui/icons';
+import { IconButton } from '@material-ui/core';
 
+interface Props {
+    url: string;
+}
 // url, size, scale
-export const ResourcePreview = () => {
+export const ResourcePreview: React.FC<Props> = ({ url }) => {
     const [, setMap] = useState(null);
-    const [size, setSize] = useState([0, 0, 595, 842]);
+    const [size] = useState([0, 0, 595, 842]);
 
     // TODO: implement proper canvas
     // 595 x 842 72dpi
@@ -14,22 +19,18 @@ export const ResourcePreview = () => {
     console.time('renderTime');
 
     useEffect(() => {
-        const urlPDF = '/images/tenttisample2.pdf';
-        const urlJPG = '/images/skole-icon.svg';
+        /*         const urlPDF = '/images/tenttisample2.pdf';
+        const urlJPG = '/images/skole-icon.svg'; */
 
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            setSize([0, 0, window.innerWidth - 30, window.innerHeight - 130]);
-        }
-
-        if (urlPDF.endsWith('.pdf')) {
-            createMapFromPDF(urlPDF);
+        if (url.endsWith('.pdf')) {
+            createMapFromPDF(url);
 
             console.timeEnd('renderTime');
             // 0.3s - 0.5s render with x6 CPU throttle!
         } else {
-            getImageSize(urlJPG).then((imageSize: any) => {
+            getImageSize(url).then((imageSize: any) => {
                 console.log('imageSize: ', imageSize);
-                createMapFromImage(urlJPG, imageSize);
+                createMapFromImage(url, imageSize);
             });
         }
         return () => {
@@ -191,23 +192,29 @@ export const ResourcePreview = () => {
         </StyledButton>
     );
 
+    const FullscreenButton = (
+        <IconButton onClick={() => {}}>
+            <FullscreenOutlined color="secondary" />
+        </IconButton>
+    );
+
     controls.push(PreviousButton);
     controls.push(NextButton);
 
-    const StyledControls = styled(({ size, ...other }) => <div {...other} />)`
-        width: ${({ size }): any => size[2] + 'px'};
+    const StyledControls = styled.div`
+        z-index: 999;
+        right: 0;
+        margin: 0.4rem;
         position: absolute;
-        display: none;
         justify-content: space-between;
     `;
 
     return (
-        <div>
-            <StyledControls size={size}>{controls}</StyledControls>
+        <div style={{ height: '100%', position: 'relative' }}>
+            <StyledControls>{FullscreenButton}</StyledControls>
             <div
                 style={{
-                    backgroundColor: '#484C4F',
-                    border: '1px solid black',
+                    backgroundColor: 'rgb(72, 76, 79,0.7)',
                     width: '100%',
                     height: '100%',
                     position: 'absolute',
