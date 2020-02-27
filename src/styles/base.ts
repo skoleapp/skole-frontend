@@ -18,6 +18,7 @@ export const base = css`
 
         --hover-opacity: rgba(0, 0, 0, 0.05);
         --border-color: rgba(0, 0, 0, 0.12);
+        --light-opacity: rgba(0, 0, 0, 0.25);
         --dark-opacity: rgba(0, 0, 0, 0.75);
 
         // Misc

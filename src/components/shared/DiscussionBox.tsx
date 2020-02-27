@@ -1,5 +1,5 @@
-import { Box, Divider, Fab, Fade, Paper, Typography } from '@material-ui/core';
-import { AddOutlined } from '@material-ui/icons';
+import { Box, Divider, Fab, Fade, IconButton, Paper, Typography } from '@material-ui/core';
+import { AddOutlined, SendOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -88,13 +88,23 @@ export const DiscussionBox: React.FC<Props> = ({
         </Fab>
     );
 
+    const renderSubmitButton = (
+        <IconButton color="primary">
+            <SendOutlined />
+        </IconButton>
+    );
+
     const renderMobileCreateComment = (
         <StyledModal className="md-down" open={!!mobileCreateComment} onClose={handleCloseMobileCreateComment}>
             <Fade in={!!mobileCreateComment}>
                 <Paper>
-                    <ModalHeader title={t('common:createComment')} onClick={handleCloseMobileCreateComment} />
+                    <ModalHeader
+                        title={t('common:createComment')}
+                        onCancel={handleCloseMobileCreateComment}
+                        headerRight={renderSubmitButton}
+                    />
                     <Box flexGrow="1" display="flex" alignItems="flex-end">
-                        <Box className="modal-input-area">
+                        <Box className="modal-input-area" flexGrow="1">
                             <CreateCommentForm {...createCommentFormProps} />
                         </Box>
                     </Box>

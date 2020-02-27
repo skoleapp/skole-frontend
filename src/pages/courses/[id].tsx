@@ -269,7 +269,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 onClose={handleCloseCourseInfo}
             >
                 <Paper>
-                    <ModalHeader onClick={handleCloseCourseInfo} />
+                    <ModalHeader onCancel={handleCloseCourseInfo} />
                     <CardHeader title={fullName} />
                     {renderCreatedInfo}
                     <Divider />

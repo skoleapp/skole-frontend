@@ -1,7 +1,6 @@
-import { Box, Divider, Fade, IconButton, OutlinedTextFieldProps, Paper, TextField } from '@material-ui/core';
-import { AttachFileOutlined, SendOutlined } from '@material-ui/icons';
+import { Box, Fab, Fade, IconButton, OutlinedTextFieldProps, Paper, TextField } from '@material-ui/core';
+import { AttachFileOutlined, CameraAltOutlined, SendOutlined } from '@material-ui/icons';
 import { Form, Formik } from 'formik';
-import Image from 'material-ui-image';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -103,46 +102,80 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target }) =
         fullWidth: true,
     };
 
+    const renderAttachmentButton = (
+        <>
+            <input value="" id="attachment" accept="image/*" type="file" onChange={handleAttachmentChange} />
+            <label htmlFor="attachment">
+                <Fab component="span">
+                    <AttachFileOutlined />
+                </Fab>
+            </label>
+        </>
+    );
+
     const renderSubmitButton = (
-        <Box marginLeft="0.5rem">
-            <IconButton onClick={submitForm} color="primary">
-                <SendOutlined />
-            </IconButton>
-        </Box>
+        <IconButton onClick={submitForm} color="primary">
+            <SendOutlined />
+        </IconButton>
     );
 
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
             {({ values }): JSX.Element => (
                 <StyledCreateCommentForm>
+                    <Box className="md-down" display="flex" marginBottom="0.5rem">
+                        <Box>{renderAttachmentButton}</Box>
+                        <Box marginLeft="0.5rem">
+                            <input
+                                value=""
+                                id="camera-attachment"
+                                accept="image/*"
+                                type="file"
+                                capture="camera"
+                                onChange={handleAttachmentChange}
+                            />
+                            <label htmlFor="camera-attachment">
+                                <Fab component="span">
+                                    <CameraAltOutlined />
+                                </Fab>
+                            </label>
+                        </Box>
+                    </Box>
                     <Box display="flex" alignItems="center">
-                        <TextField value={!attachmentModal ? values.text : ''} {...textFieldProps} />
-                        <input
-                            value=""
-                            id="attachment"
-                            accept="image/*"
-                            type="file"
-                            onChange={handleAttachmentChange}
-                        />
-                        <label htmlFor="attachment">
-                            <Box marginLeft="0.5rem">
+                        <Box className="md-up" marginRight="0.5rem">
+                            <input
+                                value=""
+                                id="attachment"
+                                accept="image/*"
+                                type="file"
+                                onChange={handleAttachmentChange}
+                            />
+                            <label htmlFor="attachment">
                                 <IconButton component="span">
                                     <AttachFileOutlined />
                                 </IconButton>
-                            </Box>
-                        </label>
+                            </label>
+                        </Box>
+                        <TextField value={!attachmentModal ? values.text : ''} {...textFieldProps} />
+                        <Box className="md-up" marginLeft="0.5rem">
+                            {renderSubmitButton}
+                        </Box>
                     </Box>
                     <StyledModal open={!!attachmentModal} onClose={handleCloseAttachmentModal} autoHeight>
                         <Fade in={!!attachmentModal}>
                             <Paper>
-                                <ModalHeader onClick={handleCloseAttachmentModal} title={t('common:attachFile')} />
-                                <Box flexGrow="1" padding="0.5rem 0">
-                                    {!!attachmentModal && <Image src={attachmentModal as string} />}
+                                <ModalHeader
+                                    onCancel={handleCloseAttachmentModal}
+                                    headerRight={renderSubmitButton}
+                                    title={t('common:attachFile')}
+                                />
+                                <Box className="attachment-container">
+                                    {!!attachmentModal && (
+                                        <img className="attachment" src={attachmentModal as string} />
+                                    )}
                                 </Box>
-                                <Divider />
                                 <Box className="modal-input-area">
                                     <TextField value={!!attachmentModal ? values.text : ''} {...textFieldProps} />
-                                    {renderSubmitButton}
                                 </Box>
                             </Paper>
                         </Fade>
@@ -162,7 +195,8 @@ const StyledCreateCommentForm = styled(Form)`
         margin-top: 0;
     }
 
-    input#attachment {
+    input#attachment,
+    input#camera-attachment {
         display: none;
     }
 `;

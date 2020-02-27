@@ -1,21 +1,33 @@
-import { Box, IconButton, Typography } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
+import { Box, Grid, IconButton, Typography } from '@material-ui/core';
+import { CloseOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 
 interface Props {
-    onClick: () => void;
     title?: string;
+    onCancel: () => void;
+    headerRight?: JSX.Element;
 }
 
-export const ModalHeader: React.FC<Props> = ({ onClick, title }) => (
+export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) => (
     <StyledModalHeader>
-        {!!title && <Typography variant="subtitle2">{title}</Typography>}
-        <IconButton onClick={onClick}>
-            <Close />
-        </IconButton>
+        <Grid container alignItems="center">
+            <Grid item xs={2}>
+                {!!onCancel && (
+                    <IconButton onClick={onCancel}>
+                        <CloseOutlined />
+                    </IconButton>
+                )}
+            </Grid>
+            <Grid item container xs={8} justify="center">
+                <Typography variant="subtitle2">{title}</Typography>
+            </Grid>
+            <Grid item xs={2}>
+                {headerRight}
+            </Grid>
+        </Grid>
     </StyledModalHeader>
 );
 
@@ -28,11 +40,7 @@ const StyledModalHeader = styled(Box)`
         margin-left: 0.5rem;
     }
 
-    .MuiIconButton-root {
-        margin-left: auto;
-    }
-
     @media only screen and (min-width: ${breakpoints.MD}) {
-        padding-bottom: 0.5rem;
+        padding: 0.5rem;
     }
 `;
