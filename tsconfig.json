@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "jsx": "preserve",
-        "lib": ["dom", "es2015"],
+        "lib": ["dom", "es2017"],
         "moduleResolution": "node",
         "allowJs": false,
         "noEmit": true,
@@ -17,7 +17,7 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "target": "es2015",
+        "target": "es2017",
         "module": "esnext"
     },
     "exclude": ["node_modules"],
