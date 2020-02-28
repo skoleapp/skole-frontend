@@ -63,7 +63,7 @@ export const ResourceNavbar: React.FC<Props> = ({ resource }) => {
     return (
         <StyledBottomNavbar>
             <IconButton onClick={() => {}}>
-                <FullscreenOutlined className="vote-button" />
+                <FullscreenOutlined />
             </IconButton>
             {renderVoteButtons}
         </StyledBottomNavbar>
