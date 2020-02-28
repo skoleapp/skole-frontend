@@ -4,28 +4,32 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
+import { Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar, BottomNavbar } from '../layout';
 import { CommentThread, FileViewer } from '../layout';
 
 interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
     heading?: string;
+    resource: any;
+    showBottomNavigation: boolean;
 }
 
-export const MainLayout: React.FC<Props> = ({
+export const ResourceLayout: React.FC<Props> = ({
     title,
     heading,
     backUrl,
     disableSearch,
     headerRight,
     children,
+    resource,
+    showBottomNavigation,
     ...containerProps
 }) => {
     return (
-        <StyledMainLayout>
+        <StyledMainLayout isDiscussion={showBottomNavigation}>
             <Head title={title} />
             <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
             <Container {...containerProps}>{children}</Container>
-            <BottomNavbar />
+            {!!showBottomNavigation && <BottomNavbar />}
             <Footer />
             <Notifications />
             <Settings />
@@ -36,7 +40,7 @@ export const MainLayout: React.FC<Props> = ({
     );
 };
 
-const StyledMainLayout = styled(Box)`
+const StyledMainLayout = styled(({ isDiscussion, ...other }) => <Box {...other} />)`
     background-color: var(--secondary);
     text-align: center;
     min-height: 100vh;
@@ -55,7 +59,7 @@ const StyledMainLayout = styled(Box)`
         }
 
         @media only screen and (max-width: ${breakpoints.MD}) {
-            margin-bottom: 3rem;
+            margin-bottom: ${({ isDiscussion }): string => (isDiscussion ? '3rem' : 'initial')};
         }
     }
 `;

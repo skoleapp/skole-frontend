@@ -24,7 +24,7 @@ import { compose } from 'redux';
 
 import { ResourceDetailDocument, ResourceObjectType, CommentObjectType } from '../../../generated/graphql';
 import {
-    MainLayout,
+    ResourceLayout,
     NotFound,
     StyledCard,
     TextLink,
@@ -37,7 +37,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { usePrivatePage, useTabs, mediaURL } from '../../utils';
+import { usePrivatePage, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -63,7 +63,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const created = moment(resource.created).format('LL');
         const modified = moment(resource.modified).format('LL');
         const points = R.propOr('-', 'points', resource);
-        const resourceFile = R.propOr('-', 'file', resource.resourceFiles[0]) as string;
 
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
 
@@ -158,7 +157,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         const renderContent = (
             <Grid container>
-                <Grid item container xs={12} md={7} lg={8}>
+                <Grid item container xs={12} sm={12} md={7} lg={8}>
                     <StyledCard>
                         <Tabs
                             className="md-down"
@@ -173,11 +172,11 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </Tabs>
                         <CardHeader className="md-up" title={resourceTitle} />
 
-                        {tabValue === 0 && <ResourcePreview url={mediaURL(resourceFile)} />}
+                        {tabValue === 0 && <ResourcePreview resource={resource} />}
                         {tabValue === 1 && <DiscussionBox {...discussionBoxProps} />}
                     </StyledCard>
                 </Grid>
-                <Grid item container xs={12} md={5} lg={4} className="md-up">
+                <Grid item container xs={12} sm={12} md={5} lg={4} className="md-up">
                     <StyledCard marginLeft>
                         <CardHeader title={t('resource:resourceDiscussion')} />
                         <Divider />
@@ -188,8 +187,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         );
 
         return (
-            <MainLayout
+            <ResourceLayout
                 resource={resource}
+                showBottomNavigation={tabValue === 1}
                 title={resourceTitle}
                 backUrl
                 maxWidth="xl"
@@ -197,7 +197,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             >
                 {renderContent}
                 {renderCourseInfoModal}
-            </MainLayout>
+            </ResourceLayout>
         );
     } else {
         return <NotFound title={t('resource:notFound')} />;

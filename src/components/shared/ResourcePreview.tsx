@@ -1,32 +1,28 @@
 import 'ol/ol.css';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { FullscreenOutlined } from '@material-ui/icons';
+import { NavigateNextOutlined, NavigateBeforeOutlined, FullscreenOutlined } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
-
+import { mediaURL } from '../../utils';
 interface Props {
-    url: string;
+    resource: any;
 }
 // url, size, scale
-export const ResourcePreview: React.FC<Props> = ({ url }) => {
-    const [, setMap] = useState(null);
-    const [size] = useState([0, 0, 595, 842]);
+export const ResourcePreview: React.FC<Props> = ({ resource }) => {
+    const [currentMap, setCurrentMap]: any = useState({ map: null, imageExtent: [] });
+    const [pages, setPages]: any = useState([]);
+    const [currentPage, setCurrentPage]: any = useState(0);
 
-    // TODO: implement proper canvas
-    // 595 x 842 72dpi
-    // 794 x 1123 96dpi
+    console.log(resource.resourceFiles);
+    const url = mediaURL(resource.resourceFiles[1].file);
 
     console.time('renderTime');
 
     useEffect(() => {
-        /*         const urlPDF = '/images/tenttisample2.pdf';
-        const urlJPG = '/images/skole-icon.svg'; */
-
         if (url.endsWith('.pdf')) {
             createMapFromPDF(url);
 
             console.timeEnd('renderTime');
-            // 0.3s - 0.5s render with x6 CPU throttle!
         } else {
             getImageSize(url).then((imageSize: any) => {
                 console.log('imageSize: ', imageSize);
@@ -34,7 +30,7 @@ export const ResourcePreview: React.FC<Props> = ({ url }) => {
             });
         }
         return () => {
-            setMap(null);
+            setCurrentMap(null);
         };
     }, []);
 
@@ -54,15 +50,13 @@ export const ResourcePreview: React.FC<Props> = ({ url }) => {
         const Image = require('ol/layer/Image').default;
         const Projection = require('ol/proj/Projection').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
-        const PinchZoom = require('ol/interaction').PinchZoom;
-        const defaults = require('ol/interaction').defaults;
 
-        const elementExtent = [0, 0, size[2], size[3]];
+        //const elementExtent = [0, 0, size[2], size[3]];
         const imageExtent = [0, 0, imageSize[0], imageSize[1]];
 
         const projection = new Projection({
             units: 'pixels',
-            extent: elementExtent,
+            extent: imageExtent,
         });
 
         const source = new ImageStatic({
@@ -82,14 +76,12 @@ export const ResourcePreview: React.FC<Props> = ({ url }) => {
             view: new View({
                 projection: projection,
                 center: getCenter(imageExtent),
-                resolution: 1,
-                maxResolution: 1,
-                constrainResolution: true,
+                zoom: 1,
             }),
-            interactions: defaults().extend([new PinchZoom()]),
+            controls: [],
         });
 
-        setMap(map);
+        setCurrentMap(map);
     };
 
     const createMapFromPDF = (url: string) => {
@@ -100,128 +92,174 @@ export const ResourcePreview: React.FC<Props> = ({ url }) => {
         const ImageStatic = require('ol/source/ImageStatic').default;
         const PDFJS: any = require('pdfjs-dist');
 
-        PDFJS.getDocument(url).promise.then((pdf: any) => {
-            const numberOfPages = pdf.numPages;
-            console.log('Number of PDF pages: ' + numberOfPages);
-            pdf.getPage(1).then((page: any) => {
-                const scale = 1.5;
-                const viewport = page.getViewport({ scale: scale });
-                const canvas: any = document.createElement('canvas');
+        const renderPage = (page: any) => {
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport,
+            };
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
 
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
+            console.log('moro', page.pageIndex);
 
+            page.render(renderContext).promise.then(() => {
                 const imageWidth = canvas.width;
                 const imageHeight = canvas.height;
 
-                let theURL = '';
-                page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
-                    theURL = canvas.toDataURL();
+                const imageExtent = [0, 0, imageWidth, imageHeight];
 
-                    const imageExtent = [0, 0, imageWidth, imageHeight];
+                console.log('PDF imageSize: ' + imageExtent);
+                //const elementExtent = [0, 0, size[2], size[3];
 
-                    console.log('PDF imageSize: ' + imageExtent);
-                    //const elementExtent = [0, 0, size[2], size[3];
-
-                    const projection = new Projection({
-                        units: 'pixels',
-                        extent: imageExtent,
-                    });
-
-                    const source = new ImageStatic({
-                        imageLoadFunction: (image: any) => {
-                            image.getImage().src = theURL;
-                        },
-                        projection: projection,
-                        imageExtent: imageExtent,
-                        crossOrigin: 'anonymous',
-                    });
-
-                    const map = new Map({
-                        layers: [
-                            new Image({
-                                source: source,
-                            }),
-                        ],
-                        target: 'map',
-                        view: new View({
-                            projection: projection,
-                            center: getCenter(imageExtent),
-                            resolution: 2,
-                            maxResolution: 2,
-                            zoom: 0,
-                            maxZoom: 4,
-                            constrainResolution: false,
-                        }),
-                    });
-
-                    setMap(map);
+                const projection = new Projection({
+                    units: 'pixels',
+                    extent: imageExtent,
                 });
+
+                const source = new ImageStatic({
+                    imageLoadFunction: (image: any) => {
+                        image.getImage().src = canvas.toDataURL();
+                    },
+                    projection: projection,
+                    imageExtent: imageExtent,
+                    crossOrigin: 'anonymous',
+                });
+
+                const map = new Map({
+                    layers: [
+                        new Image({
+                            source: source,
+                        }),
+                    ],
+
+                    view: new View({
+                        projection: projection,
+                        center: getCenter(imageExtent),
+                        resolution: 2,
+                        maxResolution: 2,
+                        zoom: 0,
+                        maxZoom: 4,
+                        constrainResolution: false,
+                    }),
+                    controls: [],
+                });
+
+                const mapData = { map: map, imageExtent: imageExtent };
+
+                if (page.pageIndex === 0) {
+                    map.setTarget('map');
+                    setCurrentMap(mapData);
+                }
+                setPages((oldArray: any) => [...oldArray, mapData]);
             });
-        });
+        };
+        const renderPages = (pdfDoc: any) => {
+            for (var num = 1; num <= pdfDoc.numPages; num++) pdfDoc.getPage(num).then(renderPage);
+        };
+        PDFJS.getDocument(url).then(renderPages);
     };
 
     const getCenter = (extent: any) => {
         return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     };
 
-    let controls: any = [];
+    const setCenter = () => {
+        console.log(currentMap);
+        currentMap.map.getView().setCenter(getCenter(currentMap.imageExtent));
+        currentMap.map.getView().setZoom(0);
+    };
 
-    const StyledButton = styled.button`
-        background-color: #438eb9;
-        z-index: 9999;
-        margin: 3px;
-        color: #fff;
-        font-weight: 700;
-        text-align: center;
-        height: 40px;
-        width: 30px;
-        border: none;
-        border-radius: 2;
-        outline: none;
-    `;
-    const PreviousButton = (
-        <StyledButton key={2} onClick={() => {}}>
-            {'<'}
-        </StyledButton>
-    );
-    const NextButton = (
-        <StyledButton key={1} onClick={() => {}}>
-            {'>'}
-        </StyledButton>
-    );
+    const nextPage = () => {
+        console.log('pages:', pages);
+        console.log(currentMap);
+        const numPages = pages.length;
 
-    const FullscreenButton = (
-        <IconButton onClick={() => {}}>
-            <FullscreenOutlined color="secondary" />
-        </IconButton>
-    );
+        if (currentPage < numPages - 1) {
+            console.log('ööö', currentPage, numPages);
+            let nextPage = currentPage + 1;
+            currentMap.map.setTarget(null);
+            pages[nextPage].map.setTarget('map');
+            setCurrentMap(pages[nextPage]);
+            setCurrentPage(nextPage);
+        }
+    };
+    const previousPage = () => {
+        console.log('pages:', pages);
+        console.log(currentMap);
 
-    controls.push(PreviousButton);
-    controls.push(NextButton);
+        if (currentPage !== 0) {
+            let previousPage = currentPage - 1;
+            currentMap.map.setTarget(null);
+            pages[previousPage].map.setTarget('map');
+            setCurrentMap(pages[previousPage]);
+            setCurrentPage(previousPage);
+        }
+    };
 
     const StyledControls = styled.div`
         z-index: 999;
-        right: 0;
-        margin: 0.4rem;
-        position: absolute;
-        justify-content: space-between;
+        width: 100%;
+        bottom: 0;
+        display: flex;
+        position: relative;
+        justify-content: space-around;
+        .MuiIconButton-root {
+        }
+        background-color: white;
     `;
 
+    const NextPageButton = (
+        <IconButton
+            onClick={() => {
+                nextPage();
+            }}
+        >
+            <NavigateNextOutlined color="primary" />
+        </IconButton>
+    );
+    const PreviousPageButton = (
+        <IconButton
+            onClick={() => {
+                previousPage();
+            }}
+        >
+            <NavigateBeforeOutlined color="primary" />
+        </IconButton>
+    );
+    const CenterImageButton = (
+        <IconButton
+            onClick={() => {
+                setCenter();
+            }}
+        >
+            <FullscreenOutlined color="primary" />
+        </IconButton>
+    );
+
     return (
-        <div style={{ height: '100%', position: 'relative' }}>
-            <StyledControls>{FullscreenButton}</StyledControls>
-            <div
-                style={{
-                    backgroundColor: 'rgb(72, 76, 79,0.7)',
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                }}
-                id="map"
-                className="map"
-            ></div>
-        </div>
+        <>
+            <div style={{ height: '100%', position: 'relative' }}>
+                <div
+                    style={{
+                        backgroundColor: 'rgb(72, 76, 79,0.7)',
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        overflowY: 'auto',
+                        overflowX: 'auto',
+                    }}
+                    id="map"
+                    className="map"
+                />
+            </div>
+            <StyledControls>
+                {PreviousPageButton}
+                {CenterImageButton}
+                {NextPageButton}
+            </StyledControls>
+        </>
     );
 };
