@@ -9,28 +9,39 @@ interface Props {
 }
 // url, size, scale
 export const ResourcePreview: React.FC<Props> = ({ resource }) => {
-    const [currentMap, setCurrentMap]: any = useState({ map: null, imageExtent: [] });
-    const [pages, setPages]: any = useState([]);
+    const [pages, setPages]: any[] = useState([]);
     const [currentPage, setCurrentPage]: any = useState(0);
 
-    console.log(resource.resourceFiles);
-    const url = mediaURL(resource.resourceFiles[1].file);
-
-    console.time('renderTime');
+    console.log('currentPage: ', currentPage);
 
     useEffect(() => {
-        if (url.endsWith('.pdf')) {
-            createMapFromPDF(url);
+        let maps: any[] = [];
+        if (!!resource && !!resource.resourceFiles) {
+            resource.resourceFiles.forEach((resource: any, i: number) => {
+                console.log('!!', resource);
+                const url = mediaURL(resource.file);
 
-            console.timeEnd('renderTime');
-        } else {
-            getImageSize(url).then((imageSize: any) => {
-                console.log('imageSize: ', imageSize);
-                createMapFromImage(url, imageSize);
+                if (url.endsWith('.pdf')) {
+                    const doo = createMapFromPDF(url, i);
+                    maps[i] = doo;
+                    console.log('!!!pdfs', maps);
+                } else {
+                    getImageSize(url).then((imageSize: any) => {
+                        const foo = createMapFromImage(url, imageSize, i);
+                        maps[i] = foo;
+                        console.log('!!!', maps);
+                    });
+                }
+            });
+            Promise.all(maps).then((madd: any) => {
+                setPages(madd.flat());
+                console.log('JOOOOOOOOOO');
+                console.log(madd);
+                console.log(madd.flat());
             });
         }
         return () => {
-            setCurrentMap(null);
+            setPages([]);
         };
     }, []);
 
@@ -44,7 +55,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
         });
     };
 
-    const createMapFromImage = (url: string, imageSize: any) => {
+    const createMapFromImage = (url: string, imageSize: any, i: number) => {
         const Map = require('ol/Map').default;
         const View = require('ol/View').default;
         const Image = require('ol/layer/Image').default;
@@ -66,13 +77,18 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
             crossOrigin: 'anonymous',
         });
 
+        let target = 'null';
+        if (i === 0) {
+            target = 'map';
+        }
+
         const map = new Map({
             layers: [
                 new Image({
                     source: source,
                 }),
             ],
-            target: 'map',
+            target: target,
             view: new View({
                 projection: projection,
                 center: getCenter(imageExtent),
@@ -80,17 +96,22 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
             }),
             controls: [],
         });
+        const mapData = { map: map, imageExtent: imageExtent };
 
-        setCurrentMap(map);
+        return mapData;
+
+        //setPages((oldArray: any) => [...oldArray, map]);
     };
 
-    const createMapFromPDF = (url: string) => {
+    const createMapFromPDF = (url: string, i: number) => {
         const Map = require('ol/Map').default;
         const View = require('ol/View').default;
         const Image = require('ol/layer/Image').default;
         const Projection = require('ol/proj/Projection').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
         const PDFJS: any = require('pdfjs-dist');
+
+        PDFJS.disableWorker = true;
 
         const renderPage = (page: any) => {
             const viewport = page.getViewport({ scale: 1.5 });
@@ -103,63 +124,80 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
             canvas.height = viewport.height;
             canvas.width = viewport.width;
 
-            console.log('moro', page.pageIndex);
+            return page
+                .render(renderContext)
+                .promise.then(() => {
+                    const imageWidth = canvas.width;
+                    const imageHeight = canvas.height;
 
-            page.render(renderContext).promise.then(() => {
-                const imageWidth = canvas.width;
-                const imageHeight = canvas.height;
+                    const imageExtent = [0, 0, imageWidth, imageHeight];
 
-                const imageExtent = [0, 0, imageWidth, imageHeight];
+                    //console.log('PDF imageSize: ' + imageExtent);
+                    //const elementExtent = [0, 0, size[2], size[3];
 
-                console.log('PDF imageSize: ' + imageExtent);
-                //const elementExtent = [0, 0, size[2], size[3];
+                    const projection = new Projection({
+                        units: 'pixels',
+                        extent: imageExtent,
+                    });
 
-                const projection = new Projection({
-                    units: 'pixels',
-                    extent: imageExtent,
-                });
-
-                const source = new ImageStatic({
-                    imageLoadFunction: (image: any) => {
-                        image.getImage().src = canvas.toDataURL();
-                    },
-                    projection: projection,
-                    imageExtent: imageExtent,
-                    crossOrigin: 'anonymous',
-                });
-
-                const map = new Map({
-                    layers: [
-                        new Image({
-                            source: source,
-                        }),
-                    ],
-
-                    view: new View({
+                    const source = new ImageStatic({
+                        imageLoadFunction: (image: any) => {
+                            image.getImage().src = canvas.toDataURL();
+                        },
                         projection: projection,
-                        center: getCenter(imageExtent),
-                        resolution: 2,
-                        maxResolution: 2,
-                        zoom: 0,
-                        maxZoom: 4,
-                        constrainResolution: false,
-                    }),
-                    controls: [],
+                        imageExtent: imageExtent,
+                        crossOrigin: 'anonymous',
+                    });
+
+                    const map = new Map({
+                        layers: [
+                            new Image({
+                                source: source,
+                            }),
+                        ],
+
+                        view: new View({
+                            projection: projection,
+                            center: getCenter(imageExtent),
+                            resolution: 2,
+                            maxResolution: 2,
+                            zoom: 0,
+                            maxZoom: 4,
+                            constrainResolution: false,
+                        }),
+                        controls: [],
+                    });
+
+                    console.log('hey', i, page.pageIndex);
+                    if (page.pageIndex === 0 && i === 0) {
+                        console.log('täällä!');
+                        map.setTarget('map');
+                    }
+
+                    const mapData = { map: map, imageExtent: imageExtent };
+                    return mapData;
+                    //setPages((oldArray: any) => [...oldArray, mapData]);
+                })
+                .then((mapData: any) => {
+                    console.log('juu', mapData);
+                    return mapData;
                 });
-
-                const mapData = { map: map, imageExtent: imageExtent };
-
-                if (page.pageIndex === 0) {
-                    map.setTarget('map');
-                    setCurrentMap(mapData);
-                }
-                setPages((oldArray: any) => [...oldArray, mapData]);
-            });
         };
         const renderPages = (pdfDoc: any) => {
-            for (var num = 1; num <= pdfDoc.numPages; num++) pdfDoc.getPage(num).then(renderPage);
+            let promises: any[] = [];
+
+            for (var num = 1; num <= pdfDoc.numPages; num++) {
+                promises.push(pdfDoc.getPage(num).then(renderPage));
+            }
+
+            return Promise.all(promises);
         };
-        PDFJS.getDocument(url).then(renderPages);
+
+        return PDFJS.getDocument(url).promise.then((l: any) => {
+            const hmm = renderPages(l);
+            console.log('lel', hmm);
+            return hmm;
+        });
     };
 
     const getCenter = (extent: any) => {
@@ -167,34 +205,40 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
     };
 
     const setCenter = () => {
-        console.log(currentMap);
-        currentMap.map.getView().setCenter(getCenter(currentMap.imageExtent));
-        currentMap.map.getView().setZoom(0);
+        pages[currentPage].map.getView().setCenter(getCenter(pages[currentPage].imageExtent));
+        pages[currentPage].map.getView().setZoom(0);
     };
 
     const nextPage = () => {
         console.log('pages:', pages);
-        console.log(currentMap);
+
+        console.log(pages[currentPage]);
+
         const numPages = pages.length;
 
         if (currentPage < numPages - 1) {
             console.log('ööö', currentPage, numPages);
+
             let nextPage = currentPage + 1;
-            currentMap.map.setTarget(null);
-            pages[nextPage].map.setTarget('map');
-            setCurrentMap(pages[nextPage]);
+            const foo = pages;
+            setPages(null);
+            foo[currentPage].map.setTarget(null);
+            foo[nextPage].map.setTarget('map');
+            setPages(foo);
             setCurrentPage(nextPage);
         }
     };
     const previousPage = () => {
         console.log('pages:', pages);
-        console.log(currentMap);
+        console.log(pages[currentPage]);
 
         if (currentPage !== 0) {
             let previousPage = currentPage - 1;
-            currentMap.map.setTarget(null);
-            pages[previousPage].map.setTarget('map');
-            setCurrentMap(pages[previousPage]);
+            const foo = pages;
+            setPages(null);
+            foo[currentPage].map.setTarget(null);
+            foo[previousPage].map.setTarget('map');
+            setPages(foo);
             setCurrentPage(previousPage);
         }
     };
