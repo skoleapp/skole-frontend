@@ -1,50 +1,62 @@
 import 'ol/ol.css';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { NavigateNextOutlined, NavigateBeforeOutlined, FullscreenOutlined } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
 import { mediaURL } from '../../utils';
 interface Props {
     resource: any;
+    pages: any[];
+    setPages: (foo: any[]) => void;
+    currentPage: number;
+    setCurrentPage: (index: number) => void;
 }
 // url, size, scale
-export const ResourcePreview: React.FC<Props> = ({ resource }) => {
-    const [pages, setPages]: any[] = useState([]);
-    const [currentPage, setCurrentPage]: any = useState(0);
-
+export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, currentPage, setCurrentPage }) => {
     console.log('currentPage: ', currentPage);
 
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        let maps: any[] = [];
-        if (!!resource && !!resource.resourceFiles) {
-            resource.resourceFiles.forEach((resource: any, i: number) => {
-                console.log('!!', resource);
-                const url = mediaURL(resource.file);
+        if (pages.length === 0) {
+            let maps: any[] = [];
+            if (!!resource && !!resource.resourceFiles) {
+                resource.resourceFiles.forEach((resource: any, i: number) => {
+                    console.log('!!', resource);
+                    const url = mediaURL(resource.file);
 
-                if (url.endsWith('.pdf')) {
-                    const doo = createMapFromPDF(url, i);
-                    maps[i] = doo;
-                } else {
-                    const foo = createMapFromImage(url, i);
-                    maps[i] = foo;
-                }
-            });
-            Promise.all(maps).then((madd: any) => {
-                const foo = madd.flat();
+                    if (url.endsWith('.pdf')) {
+                        const doo = createMapFromPDF(url, i);
+                        maps[i] = doo;
+                    } else {
+                        const foo = createMapFromImage(url, i);
+                        maps[i] = foo;
+                    }
+                });
+                Promise.all(maps).then((madd: any) => {
+                    const foo = madd.flat();
 
-                foo[0].map.getView().setCenter(getCenter(foo[0].imageExtent));
-                foo[0].map.getView().setZoom(0);
+                    foo[0].map.getView().setCenter(getCenter(foo[0].imageExtent));
+                    foo[0].map.getView().setZoom(0);
 
-                setPages(foo);
-                console.log('Valmiit sivut: ', foo);
-            });
-        }
-        return () => {
+                    setPages(foo);
+                    console.log('Valmiit sivut: ', foo);
+                });
+            }
+        } else {
+            console.log('welcome back!');
+            const tempPages = pages;
+
             setPages([]);
-            setCurrentPage(0);
-        };
+
+            tempPages[currentPage].map.setTarget(null);
+            tempPages[currentPage].map.setTarget('map');
+
+            tempPages[currentPage].map.getView().setCenter(getCenter(tempPages[currentPage].imageExtent));
+            tempPages[currentPage].map.getView().setZoom(0);
+
+            setPages(tempPages);
+        }
     }, []);
 
     const getImageSize = (url: string) => {
@@ -214,7 +226,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
         if (currentPage < numPages - 1) {
             const nextPage = currentPage + 1;
             const tempPages = pages;
-            setPages(null);
+            setPages([]);
             tempPages[currentPage].map.setTarget(null);
 
             tempPages[nextPage].map.setTarget('map');
@@ -232,7 +244,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
         if (currentPage !== 0) {
             const previousPage = currentPage - 1;
             const tempPages = pages;
-            setPages(null);
+            setPages([]);
             tempPages[currentPage].map.setTarget(null);
 
             tempPages[previousPage].map.setTarget('map');
