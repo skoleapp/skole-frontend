@@ -2,7 +2,7 @@ import 'ol/ol.css';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { NavigateNextOutlined, NavigateBeforeOutlined, FullscreenOutlined } from '@material-ui/icons';
-import { IconButton } from '@material-ui/core';
+import { IconButton, CircularProgress, Box } from '@material-ui/core';
 import { mediaURL } from '../../utils';
 interface Props {
     resource: any;
@@ -306,7 +306,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
     return (
         <>
             <div style={{ height: '100%', position: 'relative' }}>
-                <StyledLayer>{currentPage + 1 + ' / ' + pages.length}</StyledLayer>
+                {pages.length > 0 && <StyledLayer>{currentPage + 1 + ' / ' + pages.length}</StyledLayer>}
                 <div
                     style={{
                         backgroundColor: 'rgb(72, 76, 79,0.7)',
@@ -320,6 +320,11 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                     ref={ref}
                     className="map"
                 />
+                {pages.length === 0 && (
+                    <Box display="flex" justifyContent="center" alignItems="center" width="100%" height="100%">
+                        <CircularProgress color="primary" size={100} />
+                    </Box>
+                )}
             </div>
             <StyledControls>
                 {PreviousPageButton}
