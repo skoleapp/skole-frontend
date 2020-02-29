@@ -269,14 +269,15 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
         z-index: 999;
         display: flex;
         position: absolute;
-        margin: 1rem;
-        padding: 1rem;
+        margin: 0.5rem;
+        padding: 0.5rem 0.7rem;
         color: white;
         background-color: rgb(72, 76, 79, 0.7);
     `;
 
     const NextPageButton = (
         <IconButton
+            disabled={currentPage === pages.length - 1}
             onClick={() => {
                 nextPage();
             }}
@@ -286,6 +287,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
     );
     const PreviousPageButton = (
         <IconButton
+            disabled={currentPage === 0}
             onClick={() => {
                 previousPage();
             }}
