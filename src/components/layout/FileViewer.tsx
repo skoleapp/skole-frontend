@@ -31,11 +31,27 @@ export const FileViewer: React.FC = () => {
 const StyledFileViewer = styled(Backdrop)`
     background-color: var(--dark-opacity) !important;
     z-index: 9999 !important;
-    display: flex;
     position: relative;
 
     #file-container {
-        flex-grow: 1;
+        height: 100vh;
+        width: 100vh;
+        display: flex;
+
+        > div {
+            padding: 0 !important;
+            flex-grow: 1;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            background-color: transparent !important;
+
+            img {
+                width: auto !important;
+                height: auto !important;
+                position: relative !important;
+            }
+        }
 
         @media only screen and (min-width: ${breakpoints.MD}) {
             padding: 10rem;
