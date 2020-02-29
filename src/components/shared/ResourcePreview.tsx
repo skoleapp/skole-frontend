@@ -1,5 +1,5 @@
 import 'ol/ol.css';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { NavigateNextOutlined, NavigateBeforeOutlined, FullscreenOutlined } from '@material-ui/icons';
 import { IconButton, CircularProgress, Box } from '@material-ui/core';
@@ -15,7 +15,45 @@ interface Props {
 export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, currentPage, setCurrentPage }) => {
     console.log('currentPage: ', currentPage);
 
+    const [touchStart, setTouchStart]: any = useState(0);
+    const [touchEnd, setTouchEnd]: any = useState(0);
+
+    console.log(touchEnd);
+
     const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        //TODO jos ZOOMIA niin ÄLÄ vaihda sivua
+
+        if (!!pages[currentPage] && !!pages[currentPage].map) {
+            const zoomLevel = pages[currentPage].map.getView().getZoom();
+            console.log('ZOOMLEVEL: ' + zoomLevel);
+
+            if (zoomLevel < 1.3) {
+                if (touchEnd < touchStart - 300) {
+                    console.log('Swiped left');
+                    nextPage();
+                } else if (touchEnd > touchStart + 300) {
+                    console.log('Swiped right');
+                    previousPage();
+                }
+            }
+        }
+    }, [touchEnd]);
+
+    useEffect(() => {
+        if (!!ref.current) {
+            ref.current.addEventListener('touchstart', handleTouchStart, false);
+            ref.current.addEventListener('touchend', handleTouchEnd, false);
+        }
+
+        return () => {
+            if (!!ref.current) {
+                ref.current.removeEventListener('touchstart', handleTouchStart, false);
+                ref.current.removeEventListener('touchend', handleTouchEnd, false);
+            }
+        };
+    }, [ref.current]);
 
     useEffect(() => {
         if (pages.length === 0) {
@@ -206,6 +244,22 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
             const promises = renderPages(pages);
             return promises;
         });
+    };
+
+    const handleTouchStart = (e: any) => {
+        console.log('start', e);
+        console.log('start', e.changedTouches[0].screenX);
+        const startX = e.changedTouches[0].screenX;
+
+        setTouchStart(startX);
+    };
+    const handleTouchEnd = (e: any) => {
+        console.log('end', e);
+        console.log('end', e.changedTouches[0].screenX);
+
+        console.log('wtf', touchStart);
+        const endX = e.changedTouches[0].screenX;
+        setTouchEnd(endX);
     };
 
     const getCenter = (extent: any) => {
