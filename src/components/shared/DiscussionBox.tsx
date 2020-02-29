@@ -48,7 +48,7 @@ export const DiscussionBox: React.FC<Props> = ({
 
     const renderTopComment = !!topComment && (
         <>
-            <CommentCard comment={topComment} {...commentCardProps} />
+            <CommentCard comment={topComment} {...commentCardProps} disableBorder />
             <Box padding="0.25rem 0.5rem" display="flex" alignItems="center">
                 <Typography variant="subtitle2" color="textSecondary">
                     {replyCount} replies

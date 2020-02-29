@@ -221,7 +221,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         variant="fullWidth"
                     >
                         <Tab label={t('common:resources')} />
-                        <Tab label={t('course:courseDiscussion')} />
+                        <Tab label={t('common:discussion')} />
                     </Tabs>
                     <TabPanel value={tabValue} index={0}>
                         {renderResources}
@@ -247,7 +247,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 </Grid>
                 <Grid item container xs={12} md={5} lg={4}>
                     <StyledCard marginLeft>
-                        <CardHeader title={t('course:courseDiscussion')} />
+                        <CardHeader title={t('common:discussion')} />
                         <Divider />
                         <DiscussionBox {...discussionBoxProps} />
                     </StyledCard>

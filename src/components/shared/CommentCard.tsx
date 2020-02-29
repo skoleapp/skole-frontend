@@ -46,9 +46,10 @@ interface Props {
     comment: CommentObjectType;
     isThread?: boolean;
     removeComment: (id: string) => void;
+    disableBorder?: boolean;
 }
 
-export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread, removeComment }) => {
+export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread, removeComment, disableBorder }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { user } = useSelector((state: State) => state.auth);
@@ -157,7 +158,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     );
 
     return (
-        <StyledCommentCard isThread={!!isThread} onClick={handleClick}>
+        <StyledCommentCard isThread={!!isThread} onClick={handleClick} disableBorder={disableBorder}>
             <CardHeader avatar={<Avatar src={mediaURL(avatarThumb)} />} title={renderTitle} subheader={created} />
             <CardContent>
                 <Grid container justify="space-between" alignItems="center">
@@ -218,7 +219,9 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledCommentCard = styled(({ isThread, ...other }) => <Box {...other} />)`
+const StyledCommentCard = styled(({ isThread, disableBorder, ...other }) => <Box {...other} />)`
+    border-bottom: ${({ disableBorder }): string => (!disableBorder ? 'var(--border)' : 'none')};
+
     // Disable hover background color and cursor mode when on message thread.
     &:hover {
         cursor: ${({ isThread }): string => (!isThread ? 'pointer' : 'inherit')};
