@@ -47,6 +47,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
 
+    const [pages, setPages]: any[] = useState([]);
+    const [currentPage, setCurrentPage]: any = useState(0);
+
     const [courseInfoVisible, setCourseInfoVisible] = useState(false);
     const handleOpenCourseInfo = (): void => setCourseInfoVisible(true);
     const handleCloseCourseInfo = (): void => setCourseInfoVisible(false);
@@ -171,7 +174,15 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             <Tab label={t('resource:resourceDiscussion')} />
                         </Tabs>
                         <CardHeader className="md-up" title={resourceTitle} />
-                        {tabValue === 0 && <ResourcePreview resource={resource} />}
+                        {tabValue === 0 && (
+                            <ResourcePreview
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                                pages={pages}
+                                setPages={setPages}
+                                resource={resource}
+                            />
+                        )}
                         {tabValue === 1 && <DiscussionBox {...discussionBoxProps} />}
                     </StyledCard>
                 </Grid>
