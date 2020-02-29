@@ -30,23 +30,5 @@ export const StyledModal = styled(({ autoHeight, ...other }) => (
             max-height: 50rem;
             padding: 0.5rem;
         }
-
-        .modal-input-area {
-            display: flex;
-            align-items: center;
-            margin: 0.5rem;
-            margin-top: auto;
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                margin: 0.5rem 0 0 0 !important;
-            }
-        }
-
-        .attachment-container {
-            padding: 0.5rem 0;
-            display: flex;
-            justify-content: center;
-            background-color: var(--light-opacity);
-        }
     }
 `;

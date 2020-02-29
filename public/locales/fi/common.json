@@ -52,7 +52,7 @@
     "deleteComment": "Delete Comment",
     "deleteCommentTitle": "Haluatko varmasti poistaa tämän kommentin?",
     "reportAbuse": "Ilmoita väärinkäytöstä",
-    "attachFile": "Liitä tiedosto",
     "createComment": "Luo kommentti",
-    "comments": "Kommentit"
+    "comments": "Kommentit",
+    "dropzoneText": "Raahaa tiedostoja tai klikkaa tästä!"
 }

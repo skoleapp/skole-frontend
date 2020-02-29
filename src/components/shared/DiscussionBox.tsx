@@ -1,17 +1,15 @@
-import { Box, Divider, Fab, Fade, IconButton, Paper, Typography } from '@material-ui/core';
-import { AddOutlined, SendOutlined } from '@material-ui/icons';
+import { Box, Button, Divider, Fab, Typography } from '@material-ui/core';
+import { AddOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
+import { useTranslation } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { CommentTarget } from '../../types';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
-import { ModalHeader } from './ModalHeader';
-import { StyledModal } from './StyledModal';
 
 interface Props {
     commentThread?: CommentObjectType | null;
@@ -29,15 +27,15 @@ export const DiscussionBox: React.FC<Props> = ({
     const [comments, setComments] = useState(initialComments);
     const initialReplyCount = R.propOr('-', 'replyCount', topComment);
     const [replyCount, setReplyCount] = useState(initialReplyCount);
-    const [mobileCreateComment, setMobileCreateComment] = useState(false);
-    const handleCloseMobileCreateComment = (): void => setMobileCreateComment(false);
     const updateReplyCount = (): void => setReplyCount(comments.length);
+    const [createCommentModalOpen, setCreateCommentModalOpen] = useState(false);
+    const toggleCreateCommentModal = (val: boolean): void => setCreateCommentModalOpen(val);
+    const openCommentModal = (): void => setCreateCommentModalOpen(true);
     const { t } = useTranslation();
 
     const appendComments = (comment: CommentObjectType): void => {
         setComments([...comments, comment]);
         updateReplyCount();
-        setMobileCreateComment(false);
     };
 
     const removeComment = (id: string): void => {
@@ -46,7 +44,7 @@ export const DiscussionBox: React.FC<Props> = ({
     };
 
     const commentCardProps = { isThread, removeComment };
-    const createCommentFormProps = { target, appendComments };
+    const createCommentFormProps = { target, appendComments, createCommentModalOpen, toggleCreateCommentModal };
 
     const renderTopComment = !!topComment && (
         <>
@@ -55,7 +53,7 @@ export const DiscussionBox: React.FC<Props> = ({
                 <Typography variant="subtitle2" color="textSecondary">
                     {replyCount} replies
                 </Typography>
-                <Divider />
+                <Divider id="reply" />
             </Box>
         </>
     );
@@ -68,49 +66,29 @@ export const DiscussionBox: React.FC<Props> = ({
                     <CommentCard comment={c} {...commentCardProps} />
                 </Box>
             ))}
+            {!!topComment && (
+                <Box marginTop="auto" className="md-down">
+                    <Divider />
+                    <Box padding="0.5rem">
+                        <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
+                            {t('common:reply')}
+                        </Button>
+                    </Box>
+                </Box>
+            )}
         </Box>
     );
 
     const renderInputArea = (
-        <Box className={`${!topComment && 'md-up'} input-area`}>
+        <Box className="md-up input-area">
             <CreateCommentForm {...createCommentFormProps} />
         </Box>
     );
 
     const renderMobileCreateCommentButton = !topComment && (
-        <Fab
-            id="create-comment-button"
-            className="md-down"
-            color="primary"
-            onClick={(): void => setMobileCreateComment(true)}
-        >
+        <Fab id="create-comment-button" className="md-down" color="primary" onClick={openCommentModal}>
             <AddOutlined />
         </Fab>
-    );
-
-    const renderSubmitButton = (
-        <IconButton color="primary">
-            <SendOutlined />
-        </IconButton>
-    );
-
-    const renderMobileCreateComment = (
-        <StyledModal className="md-down" open={!!mobileCreateComment} onClose={handleCloseMobileCreateComment}>
-            <Fade in={!!mobileCreateComment}>
-                <Paper>
-                    <ModalHeader
-                        title={t('common:createComment')}
-                        onCancel={handleCloseMobileCreateComment}
-                        headerRight={renderSubmitButton}
-                    />
-                    <Box flexGrow="1" display="flex" alignItems="flex-end">
-                        <Box className="modal-input-area" flexGrow="1">
-                            <CreateCommentForm {...createCommentFormProps} />
-                        </Box>
-                    </Box>
-                </Paper>
-            </Fade>
-        </StyledModal>
     );
 
     return (
@@ -119,7 +97,6 @@ export const DiscussionBox: React.FC<Props> = ({
                 {renderMessageArea}
                 {renderInputArea}
                 {renderMobileCreateCommentButton}
-                {renderMobileCreateComment}
             </Box>
         </StyledDiscussionBox>
     );
@@ -141,9 +118,11 @@ const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other}
 
         .message-area {
             flex-grow: 1;
+            display: flex;
+            flex-direction: column;
             overflow-y: scroll;
 
-            .MuiDivider-root {
+            .MuiDivider-root#reply {
                 flex-grow: 1;
                 margin-left: 0.5rem;
             }

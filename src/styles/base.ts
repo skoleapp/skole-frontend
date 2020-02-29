@@ -159,5 +159,28 @@ export const base = css`
         .MuiCardContent-root {
             padding: 0.5rem;
         }
+
+        input#attachment {
+            display: none;
+        }
+
+        .modal-input-area {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem;
+            margin-top: auto;
+
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                margin: 0.5rem 0 0 0 !important;
+            }
+        }
+
+        #comment-attachment-container {
+            margin: 0.5rem;
+
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                margin: 0;
+            }
+        }
     }
 `;
