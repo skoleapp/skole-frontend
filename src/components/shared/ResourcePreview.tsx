@@ -1,5 +1,5 @@
 import 'ol/ol.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { NavigateNextOutlined, NavigateBeforeOutlined, FullscreenOutlined } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
@@ -14,6 +14,8 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
 
     console.log('currentPage: ', currentPage);
 
+    const ref = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         let maps: any[] = [];
         if (!!resource && !!resource.resourceFiles) {
@@ -24,24 +26,24 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
                 if (url.endsWith('.pdf')) {
                     const doo = createMapFromPDF(url, i);
                     maps[i] = doo;
-                    console.log('!!!pdfs', maps);
                 } else {
                     const foo = createMapFromImage(url, i);
                     maps[i] = foo;
-                    console.log('!!!', maps);
-                    console.log('!!!', foo);
                 }
             });
-            console.log('nyt jo täällä');
             Promise.all(maps).then((madd: any) => {
-                setPages(madd.flat());
-                console.log('JOOOOOOOOOO');
-                console.log(madd);
-                console.log(madd.flat());
+                const foo = madd.flat();
+
+                foo[0].map.getView().setCenter(getCenter(foo[0].imageExtent));
+                foo[0].map.getView().setZoom(0);
+
+                setPages(foo);
+                console.log('Valmiit sivut: ', foo);
             });
         }
         return () => {
             setPages([]);
+            setCurrentPage(0);
         };
     }, []);
 
@@ -63,8 +65,6 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
         const ImageStatic = require('ol/source/ImageStatic').default;
 
         return getImageSize(url).then((imageSize: any) => {
-            //const elementExtent = [0, 0, size[2], size[3]];
-
             const imageExtent = [0, 0, imageSize[0], imageSize[1]];
 
             const projection = new Projection({
@@ -94,15 +94,18 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
                 view: new View({
                     projection: projection,
                     center: getCenter(imageExtent),
-                    zoom: 1,
+                    extent: imageExtent,
+                    showFullExtent: true,
+                    zoom: 0,
+                    maxZoom: 4,
+                    constrainResolution: false,
                 }),
                 controls: [],
             });
+
             const mapData = { map: map, imageExtent: imageExtent };
 
             return mapData;
-
-            //setPages((oldArray: any) => [...oldArray, map]);
         });
     };
 
@@ -113,8 +116,6 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
         const Projection = require('ol/proj/Projection').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
         const PDFJS: any = require('pdfjs-dist');
-
-        PDFJS.disableWorker = true;
 
         const renderPage = (page: any) => {
             const viewport = page.getViewport({ scale: 1.5 });
@@ -127,64 +128,56 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
             canvas.height = viewport.height;
             canvas.width = viewport.width;
 
-            return page
-                .render(renderContext)
-                .promise.then(() => {
-                    const imageWidth = canvas.width;
-                    const imageHeight = canvas.height;
+            return page.render(renderContext).promise.then(() => {
+                const imageWidth = canvas.width;
+                const imageHeight = canvas.height;
 
-                    const imageExtent = [0, 0, imageWidth, imageHeight];
+                const imageExtent = [0, 0, imageWidth, imageHeight];
 
-                    //console.log('PDF imageSize: ' + imageExtent);
-                    //const elementExtent = [0, 0, size[2], size[3];
+                //console.log('PDF imageSize: ' + imageExtent);
+                //const elementExtent = [0, 0, size[2], size[3];
 
-                    const projection = new Projection({
-                        units: 'pixels',
-                        extent: imageExtent,
-                    });
-
-                    const source = new ImageStatic({
-                        imageLoadFunction: (image: any) => {
-                            image.getImage().src = canvas.toDataURL();
-                        },
-                        projection: projection,
-                        imageExtent: imageExtent,
-                        crossOrigin: 'anonymous',
-                    });
-
-                    const map = new Map({
-                        layers: [
-                            new Image({
-                                source: source,
-                            }),
-                        ],
-
-                        view: new View({
-                            projection: projection,
-                            center: getCenter(imageExtent),
-                            resolution: 2,
-                            maxResolution: 2,
-                            zoom: 0,
-                            maxZoom: 4,
-                            constrainResolution: false,
-                        }),
-                        controls: [],
-                    });
-
-                    console.log('hey', i, page.pageIndex);
-                    if (page.pageIndex === 0 && i === 0) {
-                        console.log('täällä!');
-                        map.setTarget('map');
-                    }
-
-                    const mapData = { map: map, imageExtent: imageExtent };
-                    return mapData;
-                    //setPages((oldArray: any) => [...oldArray, mapData]);
-                })
-                .then((mapData: any) => {
-                    console.log('juu', mapData);
-                    return mapData;
+                const projection = new Projection({
+                    units: 'pixels',
+                    extent: imageExtent,
                 });
+
+                const source = new ImageStatic({
+                    imageLoadFunction: (image: any) => {
+                        image.getImage().src = canvas.toDataURL();
+                    },
+                    projection: projection,
+                    imageExtent: imageExtent,
+                    crossOrigin: 'anonymous',
+                });
+
+                const map = new Map({
+                    layers: [
+                        new Image({
+                            source: source,
+                        }),
+                    ],
+
+                    view: new View({
+                        projection: projection,
+                        center: getCenter(imageExtent),
+                        zoom: 0,
+                        maxZoom: 4,
+                        constrainResolution: false,
+                        showFullExtent: true,
+                        extent: imageExtent,
+                    }),
+                    controls: [],
+                });
+
+                // First page
+                if (page.pageIndex === 0 && i === 0) {
+                    map.setTarget('map');
+                }
+                const mapData = { map: map, imageExtent: imageExtent };
+
+                return mapData;
+            });
         };
         const renderPages = (pdfDoc: any) => {
             let promises: any[] = [];
@@ -196,10 +189,10 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
             return Promise.all(promises);
         };
 
-        return PDFJS.getDocument(url).promise.then((l: any) => {
-            const hmm = renderPages(l);
-            console.log('lel', hmm);
-            return hmm;
+        PDFJS.disableWorker = true;
+        return PDFJS.getDocument(url).promise.then((pages: any) => {
+            const promises = renderPages(pages);
+            return promises;
         });
     };
 
@@ -214,34 +207,39 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
 
     const nextPage = () => {
         console.log('pages:', pages);
-
-        console.log(pages[currentPage]);
+        console.log('current page map: ', pages[currentPage]);
 
         const numPages = pages.length;
 
         if (currentPage < numPages - 1) {
-            console.log('ööö', currentPage, numPages);
-
-            let nextPage = currentPage + 1;
-            const foo = pages;
+            const nextPage = currentPage + 1;
+            const tempPages = pages;
             setPages(null);
-            foo[currentPage].map.setTarget(null);
-            foo[nextPage].map.setTarget('map');
-            setPages(foo);
+            tempPages[currentPage].map.setTarget(null);
+
+            tempPages[nextPage].map.setTarget('map');
+            tempPages[nextPage].map.getView().setCenter(getCenter(tempPages[nextPage].imageExtent));
+            tempPages[nextPage].map.getView().setZoom(0);
+
+            setPages(tempPages);
             setCurrentPage(nextPage);
         }
     };
     const previousPage = () => {
         console.log('pages:', pages);
-        console.log(pages[currentPage]);
+        console.log('current page map: ', pages[currentPage]);
 
         if (currentPage !== 0) {
-            let previousPage = currentPage - 1;
-            const foo = pages;
+            const previousPage = currentPage - 1;
+            const tempPages = pages;
             setPages(null);
-            foo[currentPage].map.setTarget(null);
-            foo[previousPage].map.setTarget('map');
-            setPages(foo);
+            tempPages[currentPage].map.setTarget(null);
+
+            tempPages[previousPage].map.setTarget('map');
+            tempPages[previousPage].map.getView().setCenter(getCenter(tempPages[previousPage].imageExtent));
+            tempPages[previousPage].map.getView().setZoom(0);
+
+            setPages(tempPages);
             setCurrentPage(previousPage);
         }
     };
@@ -253,9 +251,16 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
         display: flex;
         position: relative;
         justify-content: space-around;
-        .MuiIconButton-root {
-        }
         background-color: white;
+    `;
+    const StyledLayer = styled.div`
+        z-index: 999;
+        display: flex;
+        position: absolute;
+        margin: 1rem;
+        padding: 1rem;
+        color: white;
+        background-color: rgb(72, 76, 79, 0.7);
     `;
 
     const NextPageButton = (
@@ -289,6 +294,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
     return (
         <>
             <div style={{ height: '100%', position: 'relative' }}>
+                <StyledLayer>{currentPage + 1 + ' / ' + pages.length}</StyledLayer>
                 <div
                     style={{
                         backgroundColor: 'rgb(72, 76, 79,0.7)',
@@ -299,6 +305,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
                         overflowX: 'auto',
                     }}
                     id="map"
+                    ref={ref}
                     className="map"
                 />
             </div>
