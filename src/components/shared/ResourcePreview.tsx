@@ -26,13 +26,13 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
                     maps[i] = doo;
                     console.log('!!!pdfs', maps);
                 } else {
-                    getImageSize(url).then((imageSize: any) => {
-                        const foo = createMapFromImage(url, imageSize, i);
-                        maps[i] = foo;
-                        console.log('!!!', maps);
-                    });
+                    const foo = createMapFromImage(url, i);
+                    maps[i] = foo;
+                    console.log('!!!', maps);
+                    console.log('!!!', foo);
                 }
             });
+            console.log('nyt jo täällä');
             Promise.all(maps).then((madd: any) => {
                 setPages(madd.flat());
                 console.log('JOOOOOOOOOO');
@@ -55,52 +55,55 @@ export const ResourcePreview: React.FC<Props> = ({ resource }) => {
         });
     };
 
-    const createMapFromImage = (url: string, imageSize: any, i: number) => {
+    const createMapFromImage = (url: string, i: number) => {
         const Map = require('ol/Map').default;
         const View = require('ol/View').default;
         const Image = require('ol/layer/Image').default;
         const Projection = require('ol/proj/Projection').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
 
-        //const elementExtent = [0, 0, size[2], size[3]];
-        const imageExtent = [0, 0, imageSize[0], imageSize[1]];
+        return getImageSize(url).then((imageSize: any) => {
+            //const elementExtent = [0, 0, size[2], size[3]];
 
-        const projection = new Projection({
-            units: 'pixels',
-            extent: imageExtent,
-        });
+            const imageExtent = [0, 0, imageSize[0], imageSize[1]];
 
-        const source = new ImageStatic({
-            url: url,
-            projection: projection,
-            imageExtent: imageExtent,
-            crossOrigin: 'anonymous',
-        });
+            const projection = new Projection({
+                units: 'pixels',
+                extent: imageExtent,
+            });
 
-        let target = 'null';
-        if (i === 0) {
-            target = 'map';
-        }
-
-        const map = new Map({
-            layers: [
-                new Image({
-                    source: source,
-                }),
-            ],
-            target: target,
-            view: new View({
+            const source = new ImageStatic({
+                url: url,
                 projection: projection,
-                center: getCenter(imageExtent),
-                zoom: 1,
-            }),
-            controls: [],
+                imageExtent: imageExtent,
+                crossOrigin: 'anonymous',
+            });
+
+            let target = 'null';
+            if (i === 0) {
+                target = 'map';
+            }
+
+            const map = new Map({
+                layers: [
+                    new Image({
+                        source: source,
+                    }),
+                ],
+                target: target,
+                view: new View({
+                    projection: projection,
+                    center: getCenter(imageExtent),
+                    zoom: 1,
+                }),
+                controls: [],
+            });
+            const mapData = { map: map, imageExtent: imageExtent };
+
+            return mapData;
+
+            //setPages((oldArray: any) => [...oldArray, map]);
         });
-        const mapData = { map: map, imageExtent: imageExtent };
-
-        return mapData;
-
-        //setPages((oldArray: any) => [...oldArray, map]);
     };
 
     const createMapFromPDF = (url: string, i: number) => {
