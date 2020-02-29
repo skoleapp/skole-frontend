@@ -4,9 +4,9 @@ import {
     CardContent,
     CardHeader,
     Dialog,
-    DialogTitle,
     Grid,
     IconButton,
+    List,
     ListItem,
     ListItemText,
     Typography,
@@ -19,6 +19,7 @@ import {
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
     MoreHorizOutlined,
+    ShareOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
@@ -133,27 +134,40 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
 
     const handleStopPropagation = (e: SyntheticEvent): void => e.stopPropagation();
 
+    const handleShare = (e: SyntheticEvent): void => {
+        e.stopPropagation();
+        setCommentOptionsOpen(false);
+        navigator.clipboard.writeText(window.location.href);
+        dispatch(toggleNotification(t('notifications:linkCopied')));
+    };
+
     const renderTitle = (
         <TextLink href={`/users/${R.propOr('', 'id', comment.user)}`}>
             {R.propOr('-', 'username', comment.user)}
         </TextLink>
     );
 
-    const renderCommentOptionsDialog = (
+    const renderCommentOptions = (
         <Dialog open={commentOptionsOpen} onClose={handleCloseCommentOptions}>
-            <DialogTitle onClick={handleStopPropagation}>{t('common:commentActions')}</DialogTitle>
-            {R.prop('id', comment.user as UserObjectType) === R.prop('id', user as UserObjectType) && (
+            <List>
+                {R.prop('id', comment.user as UserObjectType) === R.prop('id', user as UserObjectType) && (
+                    <ListItem>
+                        <ListItemText onClick={handleDeleteComment}>
+                            <DeleteOutline /> {t('common:deleteComment')}
+                        </ListItemText>
+                    </ListItem>
+                )}
                 <ListItem>
-                    <ListItemText onClick={handleDeleteComment}>
-                        <DeleteOutline /> {t('common:deleteComment')}
+                    <ListItemText onClick={handleShare}>
+                        <ShareOutlined /> {t('common:share')}
                     </ListItemText>
                 </ListItem>
-            )}
-            <ListItem disabled>
-                <ListItemText onClick={handleStopPropagation}>
-                    <FlagOutlined /> {t('common:reportAbuse')}
-                </ListItemText>
-            </ListItem>
+                <ListItem disabled>
+                    <ListItemText onClick={handleStopPropagation}>
+                        <FlagOutlined /> {t('common:reportAbuse')}
+                    </ListItemText>
+                </ListItem>
+            </List>
         </Dialog>
     );
 
@@ -213,7 +227,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                     <Grid item xs={4} />
                 </Grid>
             </CardContent>
-            {renderCommentOptionsDialog}
+            {renderCommentOptions}
         </StyledCommentCard>
     );
 };

@@ -9,5 +9,6 @@
     "voteError": "Virhe äänestyksessä!",
     "deleteCommentError": "Virhe poistettaessa kommenttia!",
     "commentDeleted": "Kommentti poistettu!",
-    "messageEmpty": "Viesti ei voi olla tyhjä!"
+    "messageEmpty": "Viesti ei voi olla tyhjä!",
+    "linkCopied": "Linkki kopioitu leikepöydälle!"
 }

@@ -48,11 +48,11 @@
     "course": "Kurssi",
     "name": "Nimi",
     "discussion": "Keskustelu",
-    "commentActions": "Kommenttitoiminnot",
     "deleteComment": "Delete Comment",
     "deleteCommentTitle": "Haluatko varmasti poistaa tämän kommentin?",
     "reportAbuse": "Ilmoita väärinkäytöstä",
     "createComment": "Luo kommentti",
     "comments": "Kommentit",
-    "dropzoneText": "Raahaa tiedostoja tai klikkaa tästä!"
+    "dropzoneText": "Raahaa tiedostoja tai klikkaa tästä!",
+    "share": "Jaa"
 }
