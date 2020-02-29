@@ -7,6 +7,7 @@ import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
+import styled from 'styled-components';
 import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation } from '../../generated/graphql';
@@ -17,7 +18,6 @@ import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePublicPage } from '../utils';
-import styled from 'styled-components';
 
 export interface RegisterFormValues {
     username: string;
@@ -151,7 +151,7 @@ const RegisterPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('register:welcomeToBeta')} renderCardContent={renderCardContent} backUrl />;
+    return <FormLayout title={t('register:title')} renderCardContent={renderCardContent} backUrl />;
 };
 
 const StyledField = styled(Field)`
