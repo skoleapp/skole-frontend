@@ -169,7 +169,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             variant="fullWidth"
                         >
                             <Tab label={resourceTitle} />
-                            <Tab label={t('resource:resourceDiscussion')} />
+                            <Tab label={t('common:discussion')} />
                         </Tabs>
                         <CardHeader className="md-up" title={resourceTitle} />
                         {tabValue === 0 && (
@@ -186,7 +186,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 </Grid>
                 <Grid item container xs={12} sm={12} md={5} lg={4} className="md-up">
                     <StyledCard marginLeft>
-                        <CardHeader title={t('resource:resourceDiscussion')} />
+                        <CardHeader title={t('common:discussion')} />
                         <Divider />
                         <DiscussionBox {...discussionBoxProps} />
                     </StyledCard>
