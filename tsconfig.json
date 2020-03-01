@@ -17,7 +17,7 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "target": "es2017",
+        "target": "es5",
         "module": "esnext"
     },
     "exclude": ["node_modules"],
