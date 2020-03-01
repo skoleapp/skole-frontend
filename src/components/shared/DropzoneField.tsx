@@ -16,6 +16,7 @@ const acceptedFiles = ['image/*', 'text/*', 'application/*'];
 
 export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) => {
     const { t } = useTranslation();
+
     const [errorMessage, setErrorMessage]: any = useState(null);
 
     const handleOnChange = (field: any, files: File[]) => {
@@ -46,42 +47,30 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
         const onlyDocx = files.every(file => isDocx(file));
 
         if (files.length === 0) {
-            setErrorMessage('Empty...');
+            setErrorMessage('Empty!');
             form.setFieldValue(field.name, []);
         } else if (!!firstPDF && allPDFs.length === 1 && !!onlyPDFs) {
-            console.log('1');
-
-            setErrorMessage(null);
             const acceptedFile = [];
             acceptedFile.push(firstPDF);
+            setErrorMessage(null);
             form.setFieldValue(field.name, acceptedFile);
         } else if (allPDFs.length > 1 && !!onlyPDFs) {
-            console.log('2');
-
-            form.setFieldValue(field.name, []);
             setErrorMessage('Only one PDF is allowed!');
+            form.setFieldValue(field.name, []);
         } else if (!!firstDocx && allDocx.length === 1) {
-            console.log('3');
-
-            setErrorMessage(null);
             const acceptedFile = [];
             acceptedFile.push(firstDocx);
+            setErrorMessage(null);
             form.setFieldValue(field.name, acceptedFile);
         } else if (allDocx.length > 1 && !!onlyDocx) {
-            console.log('4');
-
+            setErrorMessage('Only one .docx is allowed!');
             form.setFieldValue(field.name, []);
-            setErrorMessage('Only one Docx is allowed!');
         } else if (!!onlyImages) {
-            console.log('5');
-
             setErrorMessage(null);
             form.setFieldValue(field.name, files);
         } else {
-            console.log('6');
-
+            setErrorMessage('Too many filetypes!');
             form.setFieldValue(field.name, []);
-            setErrorMessage('Not allowed...');
         }
     };
 
@@ -97,7 +86,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
                 initialFiles={initialFiles}
             />
             <ErrorMessage name={field.name} component={FormErrorMessage} />
-            {errorMessage}
+            <FormErrorMessage>{errorMessage}</FormErrorMessage>
         </StyledDropzoneField>
     );
 };
