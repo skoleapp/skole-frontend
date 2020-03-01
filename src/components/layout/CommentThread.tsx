@@ -27,7 +27,7 @@ export const CommentThread: React.FC = () => {
         <StyledModal open={!!commentThread} onClose={handleClose}>
             <Fade in={!!commentThread}>
                 <Paper>
-                    <ModalHeader onClick={handleClose} />
+                    <ModalHeader onCancel={handleClose} />
                     <DiscussionBox {...discussionBoxProps} />
                 </Paper>
             </Fade>

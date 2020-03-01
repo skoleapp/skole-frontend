@@ -4,7 +4,6 @@ import {
     CardContent,
     CardHeader,
     Divider,
-    Fade,
     Grid,
     IconButton,
     List,
@@ -12,6 +11,7 @@ import {
     ListItemAvatar,
     ListItemText,
     Paper,
+    SwipeableDrawer,
     Tab,
     Table,
     TableBody,
@@ -22,8 +22,8 @@ import {
     Typography,
 } from '@material-ui/core';
 import {
-    AccountCircleOutlined,
     CloudUploadOutlined,
+    CommentOutlined,
     InfoOutlined,
     SchoolOutlined,
     ScoreOutlined,
@@ -46,7 +46,6 @@ import {
     ModalHeader,
     NotFound,
     StyledCard,
-    StyledModal,
     StyledTable,
     TabPanel,
     TextLink,
@@ -73,12 +72,15 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const subjectName = R.propOr('-', 'name', subject) as string;
         const schoolName = R.propOr('-', 'name', school) as string;
         const creatorName = R.propOr('-', 'username', user) as string;
-        const created = moment(course.created).format('LL');
-        const modified = moment(course.modified).format('LL');
         const points = R.propOr('-', 'points', course);
         const resourceCount = R.propOr('-', 'resourceCount', course);
+        const commentCount = course.comments.length;
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
+
+        const created = moment(course.created)
+            .startOf('day')
+            .fromNow();
 
         const subjectLink = {
             pathname: '/search',
@@ -90,24 +92,17 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             target: { course: Number(course.id) },
         };
 
+        const renderCreatedInfo = (
+            <Box padding="0.5rem" textAlign="left">
+                <Typography variant="body2" color="textSecondary">
+                    {t('common:createdBy')} {creatorName} {created}
+                </Typography>
+            </Box>
+        );
+
         const renderCourseInfo = (
             <CardContent>
                 <List>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <AccountCircleOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            <Typography variant="body2">
-                                {t('common:creator')}:{' '}
-                                <TextLink href={`/users/${R.propOr('', 'id', user)}`} color="primary">
-                                    {creatorName}
-                                </TextLink>
-                            </Typography>
-                        </ListItemText>
-                    </ListItem>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -145,7 +140,9 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            {t('common:points')}: {points}
+                            <Typography variant="body2">
+                                {t('common:points')}: {points}
+                            </Typography>
                         </ListItemText>
                     </ListItem>
                     <ListItem>
@@ -155,18 +152,24 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            {t('common:resources')}: {resourceCount}
+                            <Typography variant="body2">
+                                {t('common:resources')}: {resourceCount}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <CommentOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:comments')}: {commentCount}
+                            </Typography>
                         </ListItemText>
                     </ListItem>
                 </List>
-                <Box textAlign="left" marginLeft="1rem">
-                    <Typography className="label" variant="body2" color="textSecondary">
-                        {t('common:created')} {created}
-                    </Typography>
-                    <Typography className="label" variant="body2" color="textSecondary">
-                        {t('common:modified')} {modified}
-                    </Typography>
-                </Box>
             </CardContent>
         );
 
@@ -218,7 +221,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         variant="fullWidth"
                     >
                         <Tab label={t('common:resources')} />
-                        <Tab label={t('course:courseDiscussion')} />
+                        <Tab label={t('common:discussion')} />
                     </Tabs>
                     <TabPanel value={tabValue} index={0}>
                         {renderResources}
@@ -237,13 +240,14 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         <CardHeader title={fullName} />
                         <Divider />
                         {renderCourseInfo}
+                        {renderCreatedInfo}
                         <Divider />
                         {renderResources}
                     </StyledCard>
                 </Grid>
                 <Grid item container xs={12} md={5} lg={4}>
                     <StyledCard marginLeft>
-                        <CardHeader title={t('course:courseDiscussion')} />
+                        <CardHeader title={t('common:discussion')} />
                         <Divider />
                         <DiscussionBox {...discussionBoxProps} />
                     </StyledCard>
@@ -258,17 +262,20 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const renderCourseInfoModal = (
-            <StyledModal open={!!courseInfoVisible} onClose={handleCloseCourseInfo}>
-                <Fade in={!!courseInfoVisible}>
-                    <Paper>
-                        <ModalHeader onClick={handleCloseCourseInfo} />
-                        <Box textAlign="center">
-                            <CardHeader title={fullName} />
-                            {renderCourseInfo}
-                        </Box>
-                    </Paper>
-                </Fade>
-            </StyledModal>
+            <SwipeableDrawer
+                anchor="bottom"
+                open={!!courseInfoVisible}
+                onOpen={(): void => setCourseInfoVisible(true)}
+                onClose={handleCloseCourseInfo}
+            >
+                <Paper>
+                    <ModalHeader onCancel={handleCloseCourseInfo} />
+                    <CardHeader title={fullName} />
+                    {renderCreatedInfo}
+                    <Divider />
+                    {renderCourseInfo}
+                </Paper>
+            </SwipeableDrawer>
         );
 
         return (

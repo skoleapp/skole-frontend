@@ -5,7 +5,7 @@
     "username": "Käyttäjätunnus",
     "title": "Otsikko",
     "joined": "Liittynyt",
-    "created": "Luotu",
+    "createdBy": "Luonut",
     "modified": "Muokattu",
     "points": "Pisteet",
     "users": "Käyttäjät",
@@ -48,10 +48,11 @@
     "course": "Kurssi",
     "name": "Nimi",
     "discussion": "Keskustelu",
-    "commentActions": "Kommenttitoiminnot",
     "deleteComment": "Delete Comment",
     "deleteCommentTitle": "Haluatko varmasti poistaa tämän kommentin?",
     "reportAbuse": "Ilmoita väärinkäytöstä",
-    "attachFile": "Liitä tiedosto",
-    "createComment": "Luo kommentti"
+    "createComment": "Luo kommentti",
+    "comments": "Kommentit",
+    "dropzoneText": "Raahaa tiedosto tai klikkaa tästä!",
+    "share": "Jaa"
 }

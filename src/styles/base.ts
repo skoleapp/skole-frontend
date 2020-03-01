@@ -18,6 +18,7 @@ export const base = css`
 
         --hover-opacity: rgba(0, 0, 0, 0.05);
         --border-color: rgba(0, 0, 0, 0.12);
+        --light-opacity: rgba(0, 0, 0, 0.25);
         --dark-opacity: rgba(0, 0, 0, 0.75);
 
         // Misc
@@ -118,8 +119,19 @@ export const base = css`
         }
 
         .MuiList-root {
+            .MuiListItem-root {
+                padding: 0.5rem;
+            }
+
             .MuiAvatar-root {
                 background-color: var(--primary);
+                width: 2rem;
+                height: 2rem;
+
+                .MuiSvgIcon-root {
+                    width: 1rem;
+                    height: 1rem;
+                }
             }
         }
 
@@ -137,6 +149,37 @@ export const base = css`
 
             .MuiTabs-scrollButtons {
                 color: var(--primary);
+            }
+        }
+
+        .MuiCardHeader-root {
+            padding: 0.5rem !important;
+        }
+
+        .MuiCardContent-root {
+            padding: 0.5rem;
+        }
+
+        input#attachment {
+            display: none;
+        }
+
+        .modal-input-area {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem;
+            margin-top: auto;
+
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                margin: 0.5rem 0 0 0 !important;
+            }
+        }
+
+        #comment-attachment-container {
+            margin: 0.5rem;
+
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                margin: 0;
             }
         }
     }

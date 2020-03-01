@@ -117,7 +117,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                         component={AutoCompleteField}
                         fullWidth
                     />
-                    <Field name="files" label={t('upload-resource:dropzoneText')} component={DropzoneField} />
+                    <Field name="files" component={DropzoneField} />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}

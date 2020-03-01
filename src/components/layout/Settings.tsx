@@ -19,7 +19,7 @@ export const Settings: React.FC = () => {
         <StyledModal open={!!settings} onClose={handleClose}>
             <Fade in={!!settings}>
                 <Paper>
-                    <ModalHeader onClick={handleClose} />
+                    <ModalHeader onCancel={handleClose} />
                     {renderSettingsCardContent}
                 </Paper>
             </Fade>
