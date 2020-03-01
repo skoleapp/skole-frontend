@@ -122,7 +122,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         {t('profile:editProfileButton')}
                                     </ButtonLink>
                                 </Grid>
-                                <Grid item xs={2} className="sm-up">
+                                <Grid item xs={2} className="md-up">
                                     <SettingsButton color="primary" />
                                 </Grid>
                             </Grid>
@@ -266,7 +266,12 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         return (
-            <MainLayout heading={username} title={username} backUrl>
+            <MainLayout
+                heading={username}
+                title={username}
+                headerRight={isOwnProfile ? <SettingsButton color="secondary" /> : undefined}
+                backUrl
+            >
                 <StyledCard>
                     {renderTopSection}
                     <Divider />
