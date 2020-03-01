@@ -57,21 +57,21 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                     const url = mediaURL(resource.file);
 
                     if (url.endsWith('.pdf')) {
-                        const doo = createMapFromPDF(url, i);
-                        maps[i] = doo;
+                        const pdfMaps = createMapFromPDF(url, i);
+                        maps[i] = pdfMaps;
                     } else {
-                        const foo = createMapFromImage(url, i);
-                        maps[i] = foo;
+                        const imageMaps = createMapFromImage(url, i);
+                        maps[i] = imageMaps;
                     }
                 });
-                Promise.all(maps).then((madd: any) => {
-                    const foo = madd.flat();
+                Promise.all(maps).then((maps: any) => {
+                    const flatMaps = maps.flat();
 
-                    foo[0].map.getView().setCenter(getCenter(foo[0].imageExtent));
-                    foo[0].map.getView().setZoom(0);
+                    flatMaps[0].map.getView().setCenter(getCenter(flatMaps[0].imageExtent));
+                    flatMaps[0].map.getView().setZoom(0);
 
-                    setPages(foo);
-                    console.log('Valmiit sivut: ', foo);
+                    setPages(flatMaps);
+                    console.log('Valmiit sivut: ', flatMaps);
                 });
             }
         } else {
@@ -122,6 +122,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
             });
 
             let target = 'null';
+            // render first page to target
             if (i === 0) {
                 target = 'map';
             }
@@ -209,7 +210,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                     controls: [],
                 });
 
-                // First page
+                // render first page to target
                 if (page.pageIndex === 0 && i === 0) {
                     map.setTarget('map');
                 }
@@ -221,7 +222,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
         const renderPages = (pdfDoc: any) => {
             let promises: any[] = [];
 
-            for (var num = 1; num <= pdfDoc.numPages; num++) {
+            for (let num = 1; num <= pdfDoc.numPages; num++) {
                 promises.push(pdfDoc.getPage(num).then(renderPage));
             }
 
@@ -236,13 +237,12 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
     };
 
     const handleTouchStart = (e: any) => {
-        const startX = e.changedTouches[0].screenX;
-
-        setTouchStart(startX);
+        const startCoordX = e.changedTouches[0].screenX;
+        setTouchStart(startCoordX);
     };
     const handleTouchEnd = (e: any) => {
-        const endX = e.changedTouches[0].screenX;
-        setTouchEnd(endX);
+        const endCoordX = e.changedTouches[0].screenX;
+        setTouchEnd(endCoordX);
     };
 
     const getCenter = (extent: any) => {
@@ -336,10 +336,12 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
         </IconButton>
     );
 
+    const resourcesRendered = pages.length > 0;
+
     return (
         <>
             <div style={{ height: '100%', position: 'relative' }}>
-                {pages.length > 0 && <StyledLayer>{currentPage + 1 + ' / ' + pages.length}</StyledLayer>}
+                {resourcesRendered && <StyledLayer>{currentPage + 1 + ' / ' + pages.length}</StyledLayer>}
                 <div
                     style={{
                         backgroundColor: 'rgb(72, 76, 79,0.7)',
@@ -353,7 +355,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                     ref={ref}
                     className="map"
                 />
-                {pages.length === 0 && (
+                {!resourcesRendered && (
                     <Box display="flex" justifyContent="center" alignItems="center" width="100%" height="100%">
                         <CircularProgress color="primary" size={100} />
                     </Box>
