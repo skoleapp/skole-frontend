@@ -32,6 +32,7 @@ import {
     ModalHeader,
     ResourcePreview,
     DiscussionBox,
+    TabPanel,
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
@@ -172,6 +173,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             <Tab label={t('common:discussion')} />
                         </Tabs>
                         <CardHeader className="md-up" title={resourceTitle} />
+
                         {tabValue === 0 && (
                             <ResourcePreview
                                 currentPage={currentPage}
@@ -181,7 +183,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                                 resource={resource}
                             />
                         )}
-                        {tabValue === 1 && <DiscussionBox {...discussionBoxProps} />}
+
+                        <TabPanel value={tabValue} index={1} flexGrow="1" display={tabValue === 1 ? 'flex' : 'none'}>
+                            <DiscussionBox {...discussionBoxProps} />
+                        </TabPanel>
                     </StyledCard>
                 </Grid>
                 <Grid item container xs={12} sm={12} md={5} lg={4} className="md-up">
