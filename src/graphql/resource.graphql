@@ -5,8 +5,8 @@ query CreateResourceInitialData($course: ID) {
     }
 }
 
-mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $files: String!) {
-    createResource(input: { title: $resourceTitle, resourceType: $resourceType, course: $course, files: $files }) {
+mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
+    createResource(input: { title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file }) {
         resource {
             id
         }
@@ -22,6 +22,7 @@ query ResourceDetail($id: ID) {
         id
         title
         resourceType
+        file
         date
         modified
         created
@@ -74,9 +75,40 @@ query ResourceDetail($id: ID) {
             id
             username
         }
-        resourceFiles {
+        comments {
             id
-            file
+            user {
+                id
+                username
+                avatarThumbnail
+            }
+            text
+            attachment
+            modified
+            created
+            replyComments {
+                id
+                user {
+                    id
+                    username
+                    avatarThumbnail
+                }
+                text
+                attachment
+                modified
+                created
+                points
+                vote {
+                    id
+                    status
+                }
+            }
+            replyCount
+            points
+            vote {
+                id
+                status
+            }
         }
     }
 }
