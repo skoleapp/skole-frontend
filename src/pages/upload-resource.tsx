@@ -26,7 +26,7 @@ interface UploadResourceFormValues {
     resourceTitle: string;
     resourceType: string;
     course: CourseObjectType | null;
-    files: File[];
+    file: File | null;
 }
 
 interface Props extends I18nProps {
@@ -46,7 +46,9 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         course: Yup.object()
             .nullable()
             .required(t('validation:required')),
-        files: Yup.array().required(t('validation:required')),
+        file: Yup.object()
+            .nullable()
+            .required(t('validation:required')),
     });
 
     const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {
@@ -64,13 +66,13 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const [createResourceMutation] = useCreateResourceMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
-        const { resourceTitle, resourceType, course, files } = values;
+        const { resourceTitle, resourceType, course, file } = values;
 
         const variables = {
             resourceTitle,
             resourceType: R.propOr('', 'id', resourceType) as string,
             course: R.propOr('', 'id', course) as string,
-            files: (files as unknown) as string,
+            file: (file as unknown) as string,
         };
 
         await createResourceMutation({ variables });
@@ -81,7 +83,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         resourceTitle: '',
         resourceType: '',
         course: course || null,
-        files: [],
+        file: null,
         general: '',
     };
 
@@ -117,7 +119,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                         component={AutoCompleteField}
                         fullWidth
                     />
-                    <Field name="files" component={DropzoneField} />
+                    <Field name="file" component={DropzoneField} />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}
