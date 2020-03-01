@@ -1,5 +1,7 @@
 import {
     Avatar,
+    BottomNavigation,
+    BottomNavigationAction,
     Box,
     CardContent,
     CardHeader,
@@ -19,6 +21,8 @@ import {
 import {
     CloudUploadOutlined,
     InfoOutlined,
+    KeyboardArrowDownOutlined,
+    KeyboardArrowUpOutlined,
     LibraryAddOutlined,
     SchoolOutlined,
     ScoreOutlined,
@@ -46,9 +50,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const [resourceInfoVisible, setResourceInfoVisible] = useState(false);
     const handleOpenResourceInfo = (): void => setResourceInfoVisible(true);
     const handleCloseResourceInfo = (): void => setResourceInfoVisible(false);
-
-    // const [pages, setPages]: any[] = useState([]);
-    // const [currentPage, setCurrentPage]: any = useState(0);
 
     if (resource) {
         const title = R.propOr('-', 'title', resource) as string;
@@ -141,7 +142,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             target: { resource: Number(resource.id) },
         };
 
-        const renderFile = <img src={mediaURL(resource.file)} />;
+        const renderFile = <iframe id="file-viewer" height="100%" frameBorder="0" src={mediaURL(resource.file)} />;
 
         const renderMobileContent = (
             <Grid container className="md-down">
@@ -156,17 +157,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         <Tab label={t('common:resource')} />
                         <Tab label={t('common:discussion')} />
                     </Tabs>
-                    <TabPanel value={tabValue} index={0}>
-                        {/* <ResourcePreview
-                                currentPage={currentPage}
-                                setCurrentPage={setCurrentPage}
-                                pages={pages}
-                                setPages={setPages}
-                                resource={resource}
-                            /> */}
+                    <TabPanel value={tabValue} index={0} flexGrow={tabValue === 0 ? '1' : '0'} display="flex">
                         {renderFile}
                     </TabPanel>
-                    <TabPanel value={tabValue} index={1} flexGrow="1" display="flex">
+                    <TabPanel value={tabValue} index={1} flexGrow={tabValue === 1 ? '1' : '0'} display="flex">
                         <DiscussionBox {...discussionBoxProps} />
                     </TabPanel>
                 </StyledCard>
@@ -176,14 +170,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const renderDesktopContent = (
             <Grid container className="md-up">
                 <Grid item container xs={12} md={7} lg={8}>
-                    <StyledCard>
-                        <CardHeader title={title} />
-                        <Divider />
-                        {renderResourceInfo}
-                        {renderCreatedInfo}
-                        <Divider />
-                        <CardContent>{renderFile}</CardContent>
-                    </StyledCard>
+                    <StyledCard>{renderFile}</StyledCard>
                 </Grid>
                 <Grid item container xs={12} md={5} lg={4}>
                     <StyledCard marginLeft>
@@ -218,8 +205,20 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </SwipeableDrawer>
         );
 
+        const renderCustomBottomNavbar = (
+            <BottomNavigation>
+                <BottomNavigationAction icon={<KeyboardArrowUpOutlined />} />
+                <BottomNavigationAction icon={<KeyboardArrowDownOutlined />} />
+            </BottomNavigation>
+        );
+
         return (
-            <MainLayout title={title} backUrl headerRight={renderResourceInfoButton}>
+            <MainLayout
+                title={title}
+                backUrl
+                headerRight={renderResourceInfoButton}
+                customBottomNavbar={renderCustomBottomNavbar}
+            >
                 {renderMobileContent}
                 {renderDesktopContent}
                 {renderResourceInfoModal}
