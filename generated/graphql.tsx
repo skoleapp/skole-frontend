@@ -753,6 +753,26 @@ export type ResourceTypesQuery = (
   )>>> }
 );
 
+export type ContactMutationVariables = {
+  subject: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
+  email: Scalars['String'],
+  message: Scalars['String']
+};
+
+
+export type ContactMutation = (
+  { __typename?: 'Mutation' }
+  & { contact: Maybe<(
+    { __typename?: 'ContactMutationPayload' }
+    & Pick<ContactMutationPayload, 'message'>
+    & { errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
+  )> }
+);
+
 export type CourseDetailQueryVariables = {
   id?: Maybe<Scalars['ID']>
 };
@@ -866,9 +886,18 @@ export type ResourceDetailQuery = (
   & { resource: Maybe<(
     { __typename?: 'ResourceObjectType' }
     & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'file' | 'date' | 'modified' | 'created' | 'points'>
-    & { comments: Array<(
+    & { school: Maybe<(
+      { __typename?: 'SchoolObjectType' }
+      & Pick<SchoolObjectType, 'id' | 'name'>
+    )>, course: (
+      { __typename?: 'CourseObjectType' }
+      & Pick<CourseObjectType, 'id' | 'name'>
+    ), user: Maybe<(
+      { __typename?: 'UserObjectType' }
+      & Pick<UserObjectType, 'id' | 'username'>
+    )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
-      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points' | 'replyCount'>
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
       & { user: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -886,15 +915,6 @@ export type ResourceDetailQuery = (
         { __typename?: 'VoteObjectType' }
         & Pick<VoteObjectType, 'id' | 'status'>
       )> }
-    )>, school: Maybe<(
-      { __typename?: 'SchoolObjectType' }
-      & Pick<SchoolObjectType, 'id' | 'name'>
-    )>, course: (
-      { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name'>
-    ), user: Maybe<(
-      { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'username'>
     )> }
   )> }
 );
@@ -1377,6 +1397,25 @@ export const ResourceTypesDocument = gql`
       
 export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQuery>;
 export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
+export const ContactDocument = gql`
+    mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
+  contact(input: {subject: $subject, name: $name, email: $email, message: $message}) {
+    message
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type ContactMutationFn = ApolloReactCommon.MutationFunction<ContactMutation, ContactMutationVariables>;
+
+    export function useContactMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ContactMutation, ContactMutationVariables>) {
+      return ApolloReactHooks.useMutation<ContactMutation, ContactMutationVariables>(ContactDocument, baseOptions);
+    }
+export type ContactMutationHookResult = ReturnType<typeof useContactMutation>;
+export type ContactMutationResult = ApolloReactCommon.MutationResult<ContactMutation>;
+export type ContactMutationOptions = ApolloReactCommon.BaseMutationOptions<ContactMutation, ContactMutationVariables>;
 export const CourseDetailDocument = gql`
     query CourseDetail($id: ID) {
   course(id: $id) {
@@ -1523,48 +1562,6 @@ export const ResourceDetailDocument = gql`
     modified
     created
     points
-    comments {
-      id
-      user {
-        id
-        username
-        avatarThumbnail
-      }
-      text
-      attachment
-      modified
-      created
-      replyComments {
-        id
-        user {
-          id
-          username
-          avatarThumbnail
-        }
-        text
-        attachment
-        modified
-        created
-        points
-        vote {
-          id
-          status
-        }
-      }
-      modified
-      created
-      points
-      vote {
-        id
-        status
-      }
-      replyCount
-      points
-      vote {
-        id
-        status
-      }
-    }
     school {
       id
       name
