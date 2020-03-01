@@ -22,7 +22,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
             <DropzoneArea
                 onChange={(files: File[]): void => form.setFieldValue(field.name, files)}
                 acceptedFiles={acceptedFiles}
-                filesLimit={20}
+                filesLimit={1}
                 useChipsForPreview
                 showAlerts={false}
                 dropzoneText={t('common:dropzoneText')}
