@@ -18,11 +18,7 @@ export const ResourceNavbar: React.FC<Props> = ({ resource }) => {
     const dispatch = useDispatch();
     const [vote, setVote] = useState(resource.points);
 
-    console.log('vote: ', vote);
-    console.log('resurssi: ', resource);
-
     const performVoteCompleted = ({ performVote }: PerformVoteMutation): void => {
-        console.log('performVote: ', performVote);
         if (!!performVote) {
             if (!!performVote.errors) {
                 performVoteError();
@@ -40,14 +36,14 @@ export const ResourceNavbar: React.FC<Props> = ({ resource }) => {
         onError: performVoteError,
     });
 
+    console.log(voteSubmitting);
+
     const handleVote = (status: number) => (e: SyntheticEvent): void => {
         e.stopPropagation();
         const payload = { variables: { resource: resource.id, status } };
-        console.log(payload);
         performVote(payload);
     };
 
-    console.log(voteSubmitting);
     const renderVoteButtons = (
         <Box display="flex" alignItems="center">
             <IconButton onClick={handleVote(1)} color={!!vote && vote.status === 1 ? 'primary' : 'inherit'}>

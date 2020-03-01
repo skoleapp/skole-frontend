@@ -69,15 +69,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
 
-        console.log(resource);
         const discussionBoxProps = {
             comments,
             target: { resource: Number(resource.id) },
         };
-
-        console.log('resource: ', resource);
-
-        console.log('nosiis: ', comments, resource.id);
 
         const renderResourceInfo = (
             <Grid container alignItems="center">

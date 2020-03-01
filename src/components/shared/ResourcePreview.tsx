@@ -13,18 +13,12 @@ interface Props {
 }
 // url, size, scale
 export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, currentPage, setCurrentPage }) => {
-    console.log('currentPage: ', currentPage);
-
     const [touchStart, setTouchStart]: any = useState(0);
     const [touchEnd, setTouchEnd]: any = useState(0);
-
-    console.log(touchEnd);
 
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        //TODO jos ZOOMIA niin ÄLÄ vaihda sivua
-
         if (!!pages[currentPage] && !!pages[currentPage].map) {
             const zoomLevel = pages[currentPage].map.getView().getZoom();
             console.log('ZOOMLEVEL: ' + zoomLevel);
@@ -60,7 +54,6 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
             let maps: any[] = [];
             if (!!resource && !!resource.resourceFiles) {
                 resource.resourceFiles.forEach((resource: any, i: number) => {
-                    console.log('!!', resource);
                     const url = mediaURL(resource.file);
 
                     if (url.endsWith('.pdf')) {
@@ -82,7 +75,6 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                 });
             }
         } else {
-            console.log('welcome back!');
             const tempPages = pages;
 
             setPages([]);
@@ -184,9 +176,6 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
 
                 const imageExtent = [0, 0, imageWidth, imageHeight];
 
-                //console.log('PDF imageSize: ' + imageExtent);
-                //const elementExtent = [0, 0, size[2], size[3];
-
                 const projection = new Projection({
                     units: 'pixels',
                     extent: imageExtent,
@@ -247,17 +236,11 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
     };
 
     const handleTouchStart = (e: any) => {
-        console.log('start', e);
-        console.log('start', e.changedTouches[0].screenX);
         const startX = e.changedTouches[0].screenX;
 
         setTouchStart(startX);
     };
     const handleTouchEnd = (e: any) => {
-        console.log('end', e);
-        console.log('end', e.changedTouches[0].screenX);
-
-        console.log('wtf', touchStart);
         const endX = e.changedTouches[0].screenX;
         setTouchEnd(endX);
     };
@@ -272,9 +255,6 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
     };
 
     const nextPage = () => {
-        console.log('pages:', pages);
-        console.log('current page map: ', pages[currentPage]);
-
         const numPages = pages.length;
 
         if (currentPage < numPages - 1) {
@@ -292,9 +272,6 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
         }
     };
     const previousPage = () => {
-        console.log('pages:', pages);
-        console.log('current page map: ', pages[currentPage]);
-
         if (currentPage !== 0) {
             const previousPage = currentPage - 1;
             const tempPages = pages;
