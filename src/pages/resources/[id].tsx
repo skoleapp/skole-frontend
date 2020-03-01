@@ -24,7 +24,7 @@ import { compose } from 'redux';
 
 import { ResourceDetailDocument, ResourceObjectType, CommentObjectType } from '../../../generated/graphql';
 import {
-    ResourceLayout,
+    MainLayout,
     NotFound,
     StyledCard,
     TextLink,
@@ -195,8 +195,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         );
 
         return (
-            <ResourceLayout
-                resource={resource}
+            <MainLayout
                 showBottomNavigation={tabValue === 1}
                 title={resourceTitle}
                 backUrl
@@ -205,7 +204,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             >
                 {renderContent}
                 {renderCourseInfoModal}
-            </ResourceLayout>
+            </MainLayout>
         );
     } else {
         return <NotFound title={t('resource:notFound')} />;
