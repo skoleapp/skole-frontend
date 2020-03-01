@@ -336,7 +336,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                 nextPage();
             }}
         >
-            <NavigateNextOutlined color="primary" />
+            <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'primary'} />
         </IconButton>
     );
     const PreviousPageButton = (
@@ -346,7 +346,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                 previousPage();
             }}
         >
-            <NavigateBeforeOutlined color="primary" />
+            <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'primary'} />
         </IconButton>
     );
     const CenterImageButton = (
