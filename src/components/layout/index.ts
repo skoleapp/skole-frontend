@@ -1,3 +1,4 @@
+export { ResourceNavbar } from './ResourceNavbar';
 export { BottomNavbar } from './BottomNavbar';
 export { Footer } from './Footer';
 export { HeadComponent as Head } from './Head';

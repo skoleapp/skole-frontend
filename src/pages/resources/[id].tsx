@@ -12,22 +12,33 @@ import {
     Tab,
     Tabs,
     Typography,
+    Fade,
+    Paper,
+    IconButton,
 } from '@material-ui/core';
-import { CloudDownload, ScoreOutlined } from '@material-ui/icons';
-import Image from 'material-ui-image';
+import { CloudDownload, ScoreOutlined, InfoOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useState } from 'react';
 import { compose } from 'redux';
 
-import { ResourceDetailDocument, ResourceObjectType, ResourcePartObjectType } from '../../../generated/graphql';
-import { Download, MainLayout, NotFound, StyledCard, TabPanel, TextLink } from '../../components';
+import { ResourceDetailDocument, ResourceObjectType, CommentObjectType } from '../../../generated/graphql';
+import {
+    MainLayout,
+    NotFound,
+    StyledCard,
+    TextLink,
+    StyledModal,
+    ModalHeader,
+    ResourcePreview,
+    DiscussionBox,
+    TabPanel,
+} from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { usePrivatePage, useTabs } from '../../utils';
-import { mediaURL } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -36,6 +47,13 @@ interface Props extends I18nProps {
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
+
+    const [pages, setPages]: any[] = useState([]);
+    const [currentPage, setCurrentPage]: any = useState(0);
+
+    const [resourceInfoVisible, setResourceInfoVisible] = useState(false);
+    const handleOpenResourceInfo = (): void => setResourceInfoVisible(true);
+    const handleCloseResourceInfo = (): void => setResourceInfoVisible(false);
 
     if (resource) {
         const resourceTitle = R.propOr('-', 'title', resource) as string;
@@ -49,7 +67,13 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const created = moment(resource.created).format('LL');
         const modified = moment(resource.modified).format('LL');
         const points = R.propOr('-', 'points', resource);
-        const resourceParts = R.propOr([], 'resourceParts', resource) as ResourcePartObjectType[];
+
+        const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
+
+        const discussionBoxProps = {
+            comments,
+            target: { resource: Number(resource.id) },
+        };
 
         const renderResourceInfo = (
             <Grid container alignItems="center">
@@ -113,72 +137,78 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </Grid>
         );
 
-        const renderTabs = (
-            <Tabs
-                value={tabValue}
-                onChange={handleTabChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="scrollable"
-                scrollButtons="on"
-            >
-                <Tab label="General" />
-                {resourceParts.map((r: ResourcePartObjectType, i: number) => (
-                    <Tab key={i} label={r.title} />
-                ))}
-            </Tabs>
+        const renderResourceInfoModal = (
+            <StyledModal open={!!resourceInfoVisible} onClose={handleCloseResourceInfo}>
+                <Fade in={!!resourceInfoVisible}>
+                    <Paper>
+                        <ModalHeader onCancel={handleCloseResourceInfo} />
+                        <Box textAlign="center">
+                            <CardHeader title={resourceTitle} />
+                            {renderResourceInfo}
+                        </Box>
+                    </Paper>
+                </Fade>
+            </StyledModal>
         );
 
-        const renderGeneralDiscussionThread = (
-            <TabPanel value={tabValue} index={0}>
-                <CardContent>Here will be general discussion thread...</CardContent>
-            </TabPanel>
+        const renderResourceInfoButton = (
+            <IconButton color="secondary" onClick={handleOpenResourceInfo}>
+                <InfoOutlined />
+            </IconButton>
         );
 
-        const renderResourceParts = resourceParts.map((r: ResourcePartObjectType, i: number) => (
-            <TabPanel key={i} value={tabValue} index={i + 1}>
-                <CardContent>
-                    <Box textAlign="left">
-                        <Typography variant="body2">
-                            {t('common:resourcePartType')}: {R.propOr('-', 'resourcePartType', r)}
-                        </Typography>
-                        <Typography variant="body2">
-                            {t('common:exerciseNumber')}: {R.propOr('-', 'exerciseNumber', r)}
-                        </Typography>
-                    </Box>
-                </CardContent>
-                <Divider />
-                <CardContent>
-                    <Box textAlign="left">
-                        <Typography variant="body2" color="textSecondary">
-                            {t('common:description')}
-                        </Typography>
-                        <Typography variant="body2">{R.propOr('-', 'text', r)}</Typography>
-                    </Box>
-                </CardContent>
-                <Divider />
-                <CardContent>
-                    <Image src={mediaURL(r.file)} />
-                </CardContent>
-                <CardContent>
-                    <Download url={mediaURL(r.file)} fileName={r.title} />
-                </CardContent>
-                <Divider />
-                <CardContent>Here will be {r.title} discussion thread...</CardContent>
-            </TabPanel>
-        ));
+        const renderContent = (
+            <Grid container>
+                <Grid item container xs={12} sm={12} md={7} lg={8}>
+                    <StyledCard>
+                        <Tabs
+                            className="md-down"
+                            value={tabValue}
+                            onChange={handleTabChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            variant="fullWidth"
+                        >
+                            <Tab label={resourceTitle} />
+                            <Tab label={t('common:discussion')} />
+                        </Tabs>
+                        <CardHeader className="md-up" title={resourceTitle} />
+
+                        {tabValue === 0 && (
+                            <ResourcePreview
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                                pages={pages}
+                                setPages={setPages}
+                                resource={resource}
+                            />
+                        )}
+
+                        <TabPanel value={tabValue} index={1} flexGrow="1" display={tabValue === 1 ? 'flex' : 'none'}>
+                            <DiscussionBox {...discussionBoxProps} />
+                        </TabPanel>
+                    </StyledCard>
+                </Grid>
+                <Grid item container xs={12} sm={12} md={5} lg={4} className="md-up">
+                    <StyledCard marginLeft>
+                        <CardHeader title={t('common:discussion')} />
+                        <Divider />
+                        <DiscussionBox {...discussionBoxProps} />
+                    </StyledCard>
+                </Grid>
+            </Grid>
+        );
 
         return (
-            <MainLayout title={resourceTitle} backUrl>
-                <StyledCard>
-                    <CardHeader title={resourceTitle} />
-                    <Divider />
-                    {renderResourceInfo}
-                    <Divider />
-                    {renderTabs}
-                    {renderGeneralDiscussionThread}
-                    {renderResourceParts}
-                </StyledCard>
+            <MainLayout
+                showBottomNavigation={tabValue === 1}
+                title={resourceTitle}
+                backUrl
+                maxWidth="xl"
+                headerRight={renderResourceInfoButton}
+            >
+                {renderContent}
+                {renderResourceInfoModal}
             </MainLayout>
         );
     } else {

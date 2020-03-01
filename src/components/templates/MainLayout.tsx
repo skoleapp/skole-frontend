@@ -4,11 +4,12 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
+import { Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar, BottomNavbar } from '../layout';
 import { CommentThread, FileViewer } from '../layout';
 
 interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
     heading?: string;
+    showBottomNavigation?: boolean;
 }
 
 export const MainLayout: React.FC<Props> = ({
@@ -18,23 +19,26 @@ export const MainLayout: React.FC<Props> = ({
     disableSearch,
     headerRight,
     children,
+    showBottomNavigation = true,
     ...containerProps
-}) => (
-    <StyledMainLayout>
-        <Head title={title} />
-        <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
-        <Container {...containerProps}>{children}</Container>
-        <BottomNavbar />
-        <Footer />
-        <Notifications />
-        <Settings />
-        <CommentThread />
-        <FileViewer />
-        <SkoleGDPR />
-    </StyledMainLayout>
-);
+}) => {
+    return (
+        <StyledMainLayout isDiscussion={showBottomNavigation}>
+            <Head title={title} />
+            <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
+            <Container {...containerProps}>{children}</Container>
+            {!!showBottomNavigation && <BottomNavbar />}
+            <Footer />
+            <Notifications />
+            <Settings />
+            <CommentThread />
+            <FileViewer />
+            <SkoleGDPR />
+        </StyledMainLayout>
+    );
+};
 
-const StyledMainLayout = styled(Box)`
+const StyledMainLayout = styled(({ isDiscussion, ...other }) => <Box {...other} />)`
     background-color: var(--secondary);
     text-align: center;
     min-height: 100vh;
@@ -52,8 +56,8 @@ const StyledMainLayout = styled(Box)`
             padding: 1rem;
         }
 
-        @media only screen and (max-width: ${breakpoints.SM}) {
-            margin-bottom: 3rem;
+        @media only screen and (max-width: ${breakpoints.MD}) {
+            margin-bottom: ${({ isDiscussion }): string => (isDiscussion ? '3rem' : 'initial')};
         }
     }
 `;
