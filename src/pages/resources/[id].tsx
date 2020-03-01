@@ -50,9 +50,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const [pages, setPages]: any[] = useState([]);
     const [currentPage, setCurrentPage]: any = useState(0);
 
-    const [courseInfoVisible, setCourseInfoVisible] = useState(false);
-    const handleOpenCourseInfo = (): void => setCourseInfoVisible(true);
-    const handleCloseCourseInfo = (): void => setCourseInfoVisible(false);
+    const [resourceInfoVisible, setResourceInfoVisible] = useState(false);
+    const handleOpenResourceInfo = (): void => setResourceInfoVisible(true);
+    const handleCloseResourceInfo = (): void => setResourceInfoVisible(false);
 
     if (resource) {
         const resourceTitle = R.propOr('-', 'title', resource) as string;
@@ -136,11 +136,11 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </Grid>
         );
 
-        const renderCourseInfoModal = (
-            <StyledModal open={!!courseInfoVisible} onClose={handleCloseCourseInfo}>
-                <Fade in={!!courseInfoVisible}>
+        const renderResourceInfoModal = (
+            <StyledModal open={!!resourceInfoVisible} onClose={handleCloseResourceInfo}>
+                <Fade in={!!resourceInfoVisible}>
                     <Paper>
-                        <ModalHeader onCancel={handleCloseCourseInfo} />
+                        <ModalHeader onCancel={handleCloseResourceInfo} />
                         <Box textAlign="center">
                             <CardHeader title={resourceTitle} />
                             {renderResourceInfo}
@@ -150,8 +150,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </StyledModal>
         );
 
-        const renderCourseInfoButton = (
-            <IconButton color="secondary" onClick={handleOpenCourseInfo}>
+        const renderResourceInfoButton = (
+            <IconButton color="secondary" onClick={handleOpenResourceInfo}>
                 <InfoOutlined />
             </IconButton>
         );
@@ -200,10 +200,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 title={resourceTitle}
                 backUrl
                 maxWidth="xl"
-                headerRight={renderCourseInfoButton}
+                headerRight={renderResourceInfoButton}
             >
                 {renderContent}
-                {renderCourseInfoModal}
+                {renderResourceInfoModal}
             </MainLayout>
         );
     } else {
