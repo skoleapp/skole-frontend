@@ -14,7 +14,13 @@ module.exports = withAssetsImport(
                 config.devtool = '';
             }
 
-            config.plugins.push(new WebpackBar());
+            config.plugins.push(
+                new WebpackBar({
+                    fancy: true,
+                    profile: true,
+                    basic: false,
+                }),
+            );
 
             return config;
         },
