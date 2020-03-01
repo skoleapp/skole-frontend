@@ -53,6 +53,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     if (resource) {
         const title = R.propOr('-', 'title', resource) as string;
         const resourceType = R.propOr('-', 'resourceType', resource);
+        const courseId = R.propOr('-', 'id', resource.course) as string;
         const courseName = R.propOr('-', 'name', resource.course) as string;
         const schoolId = R.propOr('', 'id', resource.school);
         const schoolName = R.propOr('-', 'name', resource.school) as string;
@@ -97,7 +98,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </ListItemAvatar>
                         <ListItemText>
                             <Typography variant="body2">
-                                {t('common:course')}: {courseName}
+                                {t('common:course')}:{' '}
+                                <TextLink href={`/courses/${courseId}`} color="primary">
+                                    {courseName}
+                                </TextLink>
                             </Typography>
                         </ListItemText>
                     </ListItem>

@@ -21,14 +21,7 @@ import {
     Tabs,
     Typography,
 } from '@material-ui/core';
-import {
-    CloudUploadOutlined,
-    CommentOutlined,
-    InfoOutlined,
-    SchoolOutlined,
-    ScoreOutlined,
-    SubjectOutlined,
-} from '@material-ui/icons';
+import { CloudUploadOutlined, InfoOutlined, SchoolOutlined, ScoreOutlined, SubjectOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React, { useState } from 'react';
@@ -71,10 +64,10 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const fullName = getFullCourseName(course);
         const subjectName = R.propOr('-', 'name', subject) as string;
         const schoolName = R.propOr('-', 'name', school) as string;
+        const creatorId = R.propOr('', 'id', course.user);
         const creatorName = R.propOr('-', 'username', user) as string;
         const points = R.propOr('-', 'points', course);
         const resourceCount = R.propOr('-', 'resourceCount', course);
-        const commentCount = course.comments.length;
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
 
@@ -95,7 +88,11 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const renderCreatedInfo = (
             <Box padding="0.5rem" textAlign="left">
                 <Typography variant="body2" color="textSecondary">
-                    {t('common:createdBy')} {creatorName} {created}
+                    {t('common:createdBy')}{' '}
+                    <TextLink href={`/users/${creatorId}`} color="primary">
+                        {creatorName}
+                    </TextLink>{' '}
+                    {created}
                 </Typography>
             </Box>
         );
@@ -154,18 +151,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         <ListItemText>
                             <Typography variant="body2">
                                 {t('common:resources')}: {resourceCount}
-                            </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <CommentOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            <Typography variant="body2">
-                                {t('common:comments')}: {commentCount}
                             </Typography>
                         </ListItemText>
                     </ListItem>
@@ -279,7 +264,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         return (
-            <MainLayout title={fullName} backUrl maxWidth="xl" headerRight={renderCourseInfoButton}>
+            <MainLayout title={fullName} backUrl headerRight={renderCourseInfoButton}>
                 {renderMobileContent}
                 {renderDesktopContent}
                 {renderCourseInfoModal}
