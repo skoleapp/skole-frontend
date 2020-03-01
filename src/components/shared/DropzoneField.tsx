@@ -17,10 +17,14 @@ const acceptedFiles = ['image/*', 'text/*', 'application/*'];
 export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) => {
     const { t } = useTranslation();
 
+    const handleFileChange = (files: File[]): void => {
+        form.setFieldValue(field.name, files[0]);
+    };
+
     return (
         <StyledDropzoneField fullWidth>
             <DropzoneArea
-                onChange={(files: File[]): void => form.setFieldValue(field.name, files)}
+                onChange={handleFileChange}
                 acceptedFiles={acceptedFiles}
                 filesLimit={1}
                 useChipsForPreview
