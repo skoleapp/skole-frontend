@@ -1,5 +1,5 @@
-import { AppBar, Box, IconButton, Toolbar } from '@material-ui/core';
-import { AccountCircle, ArrowBack, CloudUpload, SupervisedUserCircleOutlined } from '@material-ui/icons';
+import { AppBar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
+import { AccountCircle, ArrowBack, CloudUpload } from '@material-ui/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -25,22 +25,23 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
     };
 
     const renderMobileContent = (
-        <Box className="md-down" {...contentProps}>
-            {backUrl ? (
-                <IconButton onClick={(): void => Router.back()} color="secondary">
-                    <ArrowBack />
-                </IconButton>
-            ) : (
-                <IconButtonLink icon={CloudUpload} href="/upload-resource" color="secondary" />
-            )}
-            {heading ? <Heading text={heading} /> : <Logo />}
-
-            {!!headerRight ? (
-                headerRight
-            ) : (
-                <IconButtonLink href="/users" icon={SupervisedUserCircleOutlined} color="secondary" />
-            )}
-        </Box>
+        <Grid container alignItems="center" className="md-down">
+            <Grid item xs={2} container justify="flex-start">
+                {backUrl ? (
+                    <IconButton onClick={(): void => Router.back()} color="secondary">
+                        <ArrowBack />
+                    </IconButton>
+                ) : (
+                    <IconButtonLink icon={CloudUpload} href="/upload-resource" color="secondary" />
+                )}
+            </Grid>
+            <Grid item xs={8}>
+                {heading ? <Heading text={heading} /> : <Logo />}
+            </Grid>
+            <Grid item xs={2} container justify="flex-end">
+                {headerRight}
+            </Grid>
+        </Grid>
     );
 
     const renderDesktopContent = (
