@@ -23,7 +23,7 @@ import React from 'react';
 import { compose } from 'redux';
 
 import { CommentObjectType, ResourceDetailDocument, ResourceObjectType } from '../../../generated/graphql';
-import { DiscussionLayout, FilePreview, NotFound, TextLink } from '../../components';
+import { DiscussionBox, FilePreview, NotFound, TabLayout, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -127,14 +127,15 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         );
 
         return (
-            <DiscussionLayout
+            <TabLayout
                 title={title}
+                titleSecondary={t('common:discussion')}
                 backUrl
                 renderMobileInfo={renderInfo}
                 customBottomNavbar={renderCustomBottomNavbar}
-                tabLabel={t('common:resource')}
-                renderMainContent={<FilePreview file={file} />}
-                discussionBoxProps={discussionBoxProps}
+                tabLabelLeft={t('common:resource')}
+                renderLeftContent={<FilePreview file={file} />}
+                renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 createdInfoProps={createdInfoProps}
             />
         );

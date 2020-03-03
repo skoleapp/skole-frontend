@@ -15,17 +15,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LayoutProps } from '../../types';
-import { DiscussionBoxProps } from '../../types';
 import { useOpen, useTabs } from '../../utils';
-import { DiscussionBox, ModalHeader, StyledCard, TabPanel, TextLink } from '../shared';
+import { ModalHeader, StyledCard, TabPanel, TextLink } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps {
-    tabLabel: string;
+    titleSecondary: string;
+    tabLabelLeft: string;
     renderMobileInfo?: JSX.Element;
     renderDesktopInfo?: JSX.Element;
-    renderMainContent: JSX.Element;
-    discussionBoxProps: DiscussionBoxProps;
+    renderLeftContent: JSX.Element;
+    renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
     createdInfoProps?: {
         creatorId: string;
@@ -34,13 +34,14 @@ interface Props extends LayoutProps {
     };
 }
 
-export const DiscussionLayout: React.FC<Props> = ({
+export const TabLayout: React.FC<Props> = ({
     title,
-    tabLabel,
+    titleSecondary,
+    tabLabelLeft,
     renderMobileInfo,
     renderDesktopInfo,
-    renderMainContent,
-    discussionBoxProps,
+    renderLeftContent,
+    renderRightContent,
     customBottomNavbar,
     createdInfoProps,
     ...props
@@ -83,14 +84,14 @@ export const DiscussionLayout: React.FC<Props> = ({
                     textColor="primary"
                     variant="fullWidth"
                 >
-                    <Tab label={tabLabel} />
-                    <Tab label={t('common:discussion')} />
+                    <Tab label={tabLabelLeft} />
+                    <Tab label={titleSecondary} />
                 </Tabs>
                 <TabPanel value={tabValue} index={0} flexGrow={tabValue === 0 ? '1' : '0'} display="flex">
-                    {renderMainContent}
+                    {renderLeftContent}
                 </TabPanel>
                 <TabPanel value={tabValue} index={1} flexGrow={tabValue === 1 ? '1' : '0'} display="flex">
-                    <DiscussionBox {...discussionBoxProps} />
+                    {renderRightContent}
                 </TabPanel>
             </StyledCard>
         </Grid>
@@ -103,14 +104,14 @@ export const DiscussionLayout: React.FC<Props> = ({
                     <CardHeader title={title} action={!renderDesktopInfo && renderDesktopHeaderRight} />
                     {renderDesktopInfo}
                     <Divider />
-                    {renderMainContent}
+                    {renderLeftContent}
                 </StyledCard>
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
                 <StyledCard marginLeft>
-                    <CardHeader title={t('common:discussion')} />
+                    <CardHeader title={titleSecondary} />
                     <Divider />
-                    <DiscussionBox {...discussionBoxProps} />
+                    {renderRightContent}
                 </StyledCard>
             </Grid>
         </Grid>
