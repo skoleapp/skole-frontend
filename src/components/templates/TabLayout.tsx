@@ -104,6 +104,7 @@ export const TabLayout: React.FC<Props> = ({
                     <CardHeader title={title} action={!renderDesktopInfo && renderDesktopHeaderRight} />
                     <Divider />
                     {renderDesktopInfo}
+                    {!!renderDesktopInfo && renderCreatedInfo}
                     <Divider />
                     {renderLeftContent}
                 </StyledCard>
