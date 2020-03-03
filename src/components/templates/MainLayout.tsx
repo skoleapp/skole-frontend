@@ -4,12 +4,12 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar, BottomNavbar } from '../layout';
+import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 import { CommentThread, FileViewer } from '../layout';
 
 interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
     heading?: string;
-    showBottomNavigation?: boolean;
+    customBottomNavbar?: JSX.Element;
 }
 
 export const MainLayout: React.FC<Props> = ({
@@ -19,15 +19,15 @@ export const MainLayout: React.FC<Props> = ({
     disableSearch,
     headerRight,
     children,
-    showBottomNavigation = true,
+    customBottomNavbar,
     ...containerProps
 }) => {
     return (
-        <StyledMainLayout isDiscussion={showBottomNavigation}>
+        <StyledMainLayout>
             <Head title={title} />
             <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
             <Container {...containerProps}>{children}</Container>
-            {!!showBottomNavigation && <BottomNavbar />}
+            {customBottomNavbar || <BottomNavbar />}
             <Footer />
             <Notifications />
             <Settings />
@@ -38,7 +38,7 @@ export const MainLayout: React.FC<Props> = ({
     );
 };
 
-const StyledMainLayout = styled(({ isDiscussion, ...other }) => <Box {...other} />)`
+const StyledMainLayout = styled(Box)`
     background-color: var(--secondary);
     text-align: center;
     min-height: 100vh;
@@ -57,7 +57,7 @@ const StyledMainLayout = styled(({ isDiscussion, ...other }) => <Box {...other} 
         }
 
         @media only screen and (max-width: ${breakpoints.MD}) {
-            margin-bottom: ${({ isDiscussion }): string => (isDiscussion ? '3rem' : 'initial')};
+            margin-bottom: 3rem;
         }
     }
 `;

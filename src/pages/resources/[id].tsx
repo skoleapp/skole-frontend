@@ -33,7 +33,16 @@ import React, { useState } from 'react';
 import { compose } from 'redux';
 
 import { CommentObjectType, ResourceDetailDocument, ResourceObjectType } from '../../../generated/graphql';
-import { DiscussionBox, MainLayout, ModalHeader, NotFound, StyledCard, TabPanel, TextLink } from '../../components';
+import {
+    DiscussionBox,
+    FilePreview,
+    MainLayout,
+    ModalHeader,
+    NotFound,
+    StyledCard,
+    TabPanel,
+    TextLink,
+} from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -53,6 +62,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
     if (resource) {
         const title = R.propOr('-', 'title', resource) as string;
+        const file = mediaURL(resource.file);
         const resourceType = R.propOr('-', 'resourceType', resource);
         const courseId = R.propOr('-', 'id', resource.course) as string;
         const courseName = R.propOr('-', 'name', resource.course) as string;
@@ -142,8 +152,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             target: { resource: Number(resource.id) },
         };
 
-        const renderFile = <iframe id="file-viewer" height="100%" frameBorder="0" src={mediaURL(resource.file)} />;
-
         const renderMobileContent = (
             <Grid container className="md-down">
                 <StyledCard>
@@ -158,7 +166,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         <Tab label={t('common:discussion')} />
                     </Tabs>
                     <TabPanel value={tabValue} index={0} flexGrow={tabValue === 0 ? '1' : '0'} display="flex">
-                        {renderFile}
+                        <FilePreview file={file} />
                     </TabPanel>
                     <TabPanel value={tabValue} index={1} flexGrow={tabValue === 1 ? '1' : '0'} display="flex">
                         <DiscussionBox {...discussionBoxProps} />
@@ -170,7 +178,11 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const renderDesktopContent = (
             <Grid container className="md-up">
                 <Grid item container xs={12} md={7} lg={8}>
-                    <StyledCard>{renderFile}</StyledCard>
+                    <StyledCard>
+                        <CardHeader title={title} />
+                        <Divider />
+                        <FilePreview file={file} />
+                    </StyledCard>
                 </Grid>
                 <Grid item container xs={12} md={5} lg={4}>
                     <StyledCard marginLeft>
