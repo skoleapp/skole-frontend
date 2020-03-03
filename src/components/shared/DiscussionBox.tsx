@@ -7,18 +7,11 @@ import styled from 'styled-components';
 import { CommentObjectType } from '../../../generated/graphql';
 import { useTranslation } from '../../i18n';
 import { breakpoints } from '../../styles';
-import { CommentTarget } from '../../types';
+import { DiscussionBoxProps } from '../../types';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 
-interface Props {
-    commentThread?: CommentObjectType | null;
-    comments: CommentObjectType[];
-    isThread?: boolean;
-    target: CommentTarget;
-}
-
-export const DiscussionBox: React.FC<Props> = ({
+export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     commentThread: topComment,
     comments: initialComments,
     isThread,

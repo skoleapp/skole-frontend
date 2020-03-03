@@ -22,7 +22,7 @@ export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) =
                 )}
             </Grid>
             <Grid item container xs={8} justify="center">
-                <Typography variant="subtitle2">{title}</Typography>
+                <Typography variant="h2">{title}</Typography>
             </Grid>
             <Grid item xs={2}>
                 {headerRight}

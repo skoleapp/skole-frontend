@@ -9,4 +9,14 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
     margin-left: ${({ marginLeft }): string => (!!marginLeft ? '0.5rem' : '0')};
     display: flex;
     flex-direction: column;
+
+    .MuiCardHeader-root {
+        .MuiCardHeader-action {
+            margin: 0;
+
+            .MuiButtonBase-root {
+                padding: 0.25rem;
+            }
+        }
+    }
 `;
