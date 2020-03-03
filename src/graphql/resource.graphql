@@ -27,42 +27,6 @@ query ResourceDetail($id: ID) {
         modified
         created
         points
-        comments {
-            id
-            user {
-                id
-                username
-                avatarThumbnail
-            }
-            text
-            attachment
-            modified
-            created
-            replyComments {
-                id
-                user {
-                    id
-                    username
-                    avatarThumbnail
-                }
-                text
-                attachment
-            }
-            modified
-            created
-            points
-            vote {
-                id
-                status
-            }
-
-            replyCount
-            points
-            vote {
-                id
-                status
-            }
-        }
         school {
             id
             name

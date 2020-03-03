@@ -36,11 +36,20 @@ export const FilePreview: React.FC<Props> = ({ file }) => {
 };
 
 const StyledFilePreview = styled(Box)`
-    overflow-y: scroll;
-    max-height: 65rem;
+    position: relative;
+    flex-grow: 1;
 
-    canvas {
-        width: 100% !important;
-        height: 100% !important;
+    .react-pdf__Document {
+        overflow-y: scroll;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
     }
 `;

@@ -1,10 +1,8 @@
-export { ResourceNavbar } from './ResourceNavbar';
 export { BottomNavbar } from './BottomNavbar';
 export { Footer } from './Footer';
 export { HeadComponent as Head } from './Head';
 export { Heading } from './Heading';
 export { Logo } from './Logo';
-export { FilledLogo } from './FilledLogo';
 export { NotFound } from './NotFound';
 export { Notifications } from './Notifications';
 export { SkoleGDPR } from './SkoleGDPR';

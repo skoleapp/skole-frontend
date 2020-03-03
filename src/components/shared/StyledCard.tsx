@@ -9,8 +9,4 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
     margin-left: ${({ marginLeft }): string => (!!marginLeft ? '0.5rem' : '0')};
     display: flex;
     flex-direction: column;
-
-    .label {
-        font-size: 0.75rem;
-    }
 `;

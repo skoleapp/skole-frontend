@@ -61,11 +61,19 @@ export const DiscussionBox: React.FC<Props> = ({
     const renderMessageArea = (
         <Box className="message-area">
             {renderTopComment}
-            {comments.map((c: CommentObjectType, i: number) => (
-                <Box key={i}>
-                    <CommentCard comment={c} {...commentCardProps} />
-                </Box>
-            ))}
+            {!!comments.length
+                ? comments.map((c: CommentObjectType, i: number) => (
+                      <Box key={i}>
+                          <CommentCard comment={c} {...commentCardProps} />
+                      </Box>
+                  ))
+                : !topComment && (
+                      <Box marginTop="0.5rem">
+                          <Typography variant="subtitle2" color="textSecondary">
+                              {t('common:noComments')}
+                          </Typography>
+                      </Box>
+                  )}
             {!!topComment && (
                 <Box marginTop="auto" className="md-down">
                     <Divider />
