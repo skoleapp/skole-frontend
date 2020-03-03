@@ -8,8 +8,8 @@ import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { LayoutProps, State } from '../../types';
-import { ButtonLink, IconButtonLink } from '../shared';
-import { Heading, Logo, TopNavbarSearchWidget } from '.';
+import { ButtonLink, Heading, IconButtonLink } from '../shared';
+import { Logo, TopNavbarSearchWidget } from '.';
 
 type Props = Pick<LayoutProps, 'heading' | 'backUrl' | 'disableSearch' | 'headerRight'>;
 

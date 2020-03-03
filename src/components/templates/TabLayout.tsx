@@ -102,6 +102,7 @@ export const TabLayout: React.FC<Props> = ({
             <Grid item container xs={12} md={7} lg={8}>
                 <StyledCard>
                     <CardHeader title={title} action={!renderDesktopInfo && renderDesktopHeaderRight} />
+                    <Divider />
                     {renderDesktopInfo}
                     <Divider />
                     {renderLeftContent}

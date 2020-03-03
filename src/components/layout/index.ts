@@ -1,7 +1,6 @@
 export { BottomNavbar } from './BottomNavbar';
 export { Footer } from './Footer';
 export { HeadComponent as Head } from './Head';
-export { Heading } from './Heading';
 export { Logo } from './Logo';
 export { NotFound } from './NotFound';
 export { Notifications } from './Notifications';
