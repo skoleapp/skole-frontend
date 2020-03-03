@@ -56,5 +56,6 @@
     "createComment": "Create Comment",
     "comments": "Comments",
     "dropzoneText": "Drag a file or click here!",
-    "share": "Share"
+    "share": "Share",
+    "noComments": "No comments to be shown..."
 }

@@ -55,5 +55,6 @@
     "createComment": "Luo kommentti",
     "comments": "Kommentit",
     "dropzoneText": "Raahaa tiedosto tai klikkaa tästä!",
-    "share": "Jaa"
+    "share": "Jaa",
+    "noComments": "Ei kommentteja näytettäväksi..."
 }
