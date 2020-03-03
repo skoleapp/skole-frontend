@@ -87,6 +87,7 @@ export type CourseObjectType = {
   comments: Array<CommentObjectType>,
   points?: Maybe<Scalars['Int']>,
   resourceCount?: Maybe<Scalars['Int']>,
+  vote?: Maybe<VoteObjectType>,
 };
 
 export type CreateCommentMutationInput = {
@@ -396,6 +397,7 @@ export type ResourceObjectType = {
   resourceType?: Maybe<Scalars['String']>,
   points?: Maybe<Scalars['Int']>,
   school?: Maybe<SchoolObjectType>,
+  vote?: Maybe<VoteObjectType>,
 };
 
 export type ResourceTypeObjectType = {
@@ -815,6 +817,9 @@ export type CourseDetailQuery = (
         { __typename?: 'VoteObjectType' }
         & Pick<VoteObjectType, 'id' | 'status'>
       )> }
+    )>, vote: Maybe<(
+      { __typename?: 'VoteObjectType' }
+      & Pick<VoteObjectType, 'id' | 'status'>
     )> }
   )> }
 );
@@ -915,6 +920,9 @@ export type ResourceDetailQuery = (
         { __typename?: 'VoteObjectType' }
         & Pick<VoteObjectType, 'id' | 'status'>
       )> }
+    )>, vote: Maybe<(
+      { __typename?: 'VoteObjectType' }
+      & Pick<VoteObjectType, 'id' | 'status'>
     )> }
   )> }
 );
@@ -1478,6 +1486,10 @@ export const CourseDetailDocument = gql`
     created
     points
     resourceCount
+    vote {
+      id
+      status
+    }
   }
 }
     `;
@@ -1608,6 +1620,10 @@ export const ResourceDetailDocument = gql`
         id
         status
       }
+    }
+    vote {
+      id
+      status
     }
   }
 }

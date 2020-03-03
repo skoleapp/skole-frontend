@@ -59,5 +59,9 @@ query CourseDetail($id: ID) {
         created
         points
         resourceCount
+        vote {
+            id
+            status
+        }
     }
 }

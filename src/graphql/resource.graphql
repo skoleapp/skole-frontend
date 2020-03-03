@@ -74,6 +74,10 @@ query ResourceDetail($id: ID) {
                 status
             }
         }
+        vote {
+            id
+            status
+        }
     }
 }
 

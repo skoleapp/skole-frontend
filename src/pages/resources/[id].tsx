@@ -2,7 +2,9 @@ import {
     Avatar,
     BottomNavigation,
     BottomNavigationAction,
+    Box,
     CardContent,
+    IconButton,
     List,
     ListItem,
     ListItemAvatar,
@@ -19,10 +21,19 @@ import {
 } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 
-import { CommentObjectType, ResourceDetailDocument, ResourceObjectType } from '../../../generated/graphql';
+import {
+    CommentObjectType,
+    PerformVoteMutation,
+    ResourceDetailDocument,
+    ResourceObjectType,
+    usePerformVoteMutation,
+    VoteObjectType,
+} from '../../../generated/graphql';
+import { toggleNotification } from '../../actions';
 import { DiscussionBox, FilePreview, NotFound, TabLayout, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
@@ -36,6 +47,7 @@ interface Props extends I18nProps {
 
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     if (resource) {
         const title = R.propOr('-', 'title', resource) as string;
@@ -48,15 +60,37 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const creatorId = R.propOr('', 'id', resource.user) as string;
         const creatorName = R.propOr('-', 'username', resource.user) as string;
         const created = moment(resource.created).format('LL');
-        const points = R.propOr('-', 'points', resource);
+        const initialPoints = R.propOr('-', 'points', resource);
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
 
         const discussionBoxProps = {
             comments,
             target: { resource: Number(resource.id) },
         };
-
         const createdInfoProps = { creatorId, creatorName, created };
+        const [vote, setVote] = useState(resource.vote);
+        const [points, setPoints] = useState(initialPoints);
+
+        const onError = (): void => {
+            dispatch(toggleNotification(t('notifications:voteError')));
+        };
+
+        const onCompleted = ({ performVote }: PerformVoteMutation): void => {
+            if (!!performVote) {
+                if (!!performVote.errors) {
+                    onError();
+                } else {
+                    setVote(performVote.vote as VoteObjectType);
+                    setPoints(performVote.targetPoints);
+                }
+            }
+        };
+
+        const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
+
+        const handleVote = (status: number) => (): void => {
+            performVote({ variables: { resource: resource.id, status } });
+        };
 
         const renderInfo = (
             <CardContent>
@@ -121,8 +155,23 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         const renderCustomBottomNavbar = (
             <BottomNavigation>
-                <BottomNavigationAction icon={<KeyboardArrowUpOutlined />} />
-                <BottomNavigationAction icon={<KeyboardArrowDownOutlined />} />
+                <Box display="flex" justifyContent="space-around" alignItems="center" width="100%">
+                    <IconButton
+                        color={!!vote && vote.status === 1 ? 'primary' : 'inherit'}
+                        onClick={handleVote(1)}
+                        disabled={voteSubmitting}
+                    >
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                    <Typography variant="body2">{points}</Typography>
+                    <IconButton
+                        color={!!vote && vote.status === -1 ? 'primary' : 'inherit'}
+                        onClick={handleVote(-1)}
+                        disabled={voteSubmitting}
+                    >
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
+                </Box>
             </BottomNavigation>
         );
 

@@ -1,18 +1,15 @@
 import {
     Avatar,
     CardContent,
-    CardHeader,
     List,
     ListItem,
     ListItemAvatar,
     ListItemText,
-    Tab,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
-    Tabs,
     Typography,
 } from '@material-ui/core';
 import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
@@ -26,12 +23,12 @@ import {
     SchoolObjectType,
     SubjectObjectType,
 } from '../../../generated/graphql';
-import { MainLayout, NotFound, StyledCard, StyledTable, TabLayout, TabPanel, TextLink } from '../../components';
+import { NotFound, StyledTable, TabLayout, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { usePrivatePage, useTabs } from '../../utils';
+import { usePrivatePage } from '../../utils';
 
 interface Props extends I18nProps {
     school?: SchoolObjectType;
