@@ -46,6 +46,7 @@ const StyledFilePreview = styled(Box)`
         left: 0;
         right: 0;
         bottom: 0;
+        overflow-x: hidden;
 
         canvas {
             width: 100% !important;
