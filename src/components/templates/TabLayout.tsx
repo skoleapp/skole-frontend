@@ -27,6 +27,7 @@ interface Props extends LayoutProps {
     renderLeftContent: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
+    singleColumn?: boolean;
     createdInfoProps?: {
         creatorId: string;
         creatorName: string;
@@ -44,6 +45,7 @@ export const TabLayout: React.FC<Props> = ({
     renderRightContent,
     customBottomNavbar,
     createdInfoProps,
+    singleColumn,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
@@ -74,30 +76,50 @@ export const TabLayout: React.FC<Props> = ({
         </Box>
     );
 
-    const renderMobileContent = (
-        <Grid container className="md-down">
-            <StyledCard>
-                <Tabs
-                    value={tabValue}
-                    onChange={handleTabChange}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="fullWidth"
-                >
-                    <Tab label={tabLabelLeft} />
-                    <Tab label={titleSecondary} />
-                </Tabs>
-                <TabPanel value={tabValue} index={0} flexGrow={tabValue === 0 ? '1' : '0'} display="flex">
-                    {renderLeftContent}
-                </TabPanel>
-                <TabPanel value={tabValue} index={1} flexGrow={tabValue === 1 ? '1' : '0'} display="flex">
-                    {renderRightContent}
-                </TabPanel>
-            </StyledCard>
-        </Grid>
+    const renderTabs = (
+        <Tabs
+            value={tabValue}
+            onChange={handleTabChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+        >
+            <Tab label={tabLabelLeft} />
+            <Tab label={titleSecondary} />
+        </Tabs>
     );
 
-    const renderDesktopContent = (
+    const renderLeftTabPanel = (
+        <TabPanel value={tabValue} index={0} flexGrow={tabValue === 0 ? '1' : '0'} display="flex">
+            {renderLeftContent}
+        </TabPanel>
+    );
+
+    const renderRightTabPanel = (
+        <TabPanel value={tabValue} index={1} flexGrow={tabValue === 1 ? '1' : '0'} display="flex">
+            {renderRightContent}
+        </TabPanel>
+    );
+
+    const renderMobileContent = (
+        <StyledCard className="md-down">
+            {renderTabs}
+            {renderLeftTabPanel}
+            {renderRightTabPanel}
+        </StyledCard>
+    );
+
+    const renderDesktopContent = !!singleColumn ? (
+        <StyledCard className="md-up">
+            <CardHeader title={title} />
+            <Divider />
+            {renderDesktopInfo}
+            <Divider />
+            {renderTabs}
+            {renderLeftTabPanel}
+            {renderRightTabPanel}
+        </StyledCard>
+    ) : (
         <Grid container className="md-up">
             <Grid item container xs={12} md={7} lg={8}>
                 <StyledCard>

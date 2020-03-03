@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Box,
     CardContent,
     CardHeader,
     List,
@@ -27,7 +26,7 @@ import {
     SchoolObjectType,
     SubjectObjectType,
 } from '../../../generated/graphql';
-import { NotFound, ResponsiveMainLayout, StyledTable, TabPanel, TextLink } from '../../components';
+import { MainLayout, NotFound, StyledCard, StyledTable, TabLayout, TabPanel, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -40,7 +39,6 @@ interface Props extends I18nProps {
 
 const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
     const { t } = useTranslation();
-    const { tabValue, handleTabChange } = useTabs();
 
     if (school) {
         const schoolName = R.propOr('-', 'name', school) as string;
@@ -67,34 +65,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
             query: { cityName: R.propOr('', 'city', school) as boolean[] },
         };
 
-        const renderCardHeader = <CardHeader title={schoolName} />;
-
-        const renderLeftCardContent = (
-            <CardContent>
-                <Box textAlign="left">
-                    <Typography variant="body2">
-                        {t('common:schoolType')}:{' '}
-                        <TextLink href={schoolTypeLink} color="primary">
-                            {schoolType}
-                        </TextLink>
-                    </Typography>
-                    <Typography variant="body2">
-                        {t('common:country')}:{' '}
-                        <TextLink href={countryLink} color="primary">
-                            {country}
-                        </TextLink>
-                    </Typography>
-                    <Typography variant="body2">
-                        {t('common:city')}:{' '}
-                        <TextLink href={cityLink} color="primary">
-                            {city}
-                        </TextLink>
-                    </Typography>
-                </Box>
-            </CardContent>
-        );
-
-        const renderRightCardContent = (
+        const renderInfo = (
             <CardContent>
                 <List>
                     <ListItem>
@@ -104,7 +75,9 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            {t('common:courses')}: {courseCount}
+                            <Typography variant="body2">
+                                {t('common:courses')}: {courseCount}
+                            </Typography>
                         </ListItemText>
                     </ListItem>
                     <ListItem>
@@ -114,114 +87,133 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
-                            {t('common:subjects')}: {subjectCount}
+                            <Typography variant="body2">
+                                {t('common:subjects')}: {subjectCount}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <SubjectOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:schoolType')}:{' '}
+                                <TextLink href={schoolTypeLink} color="primary">
+                                    {schoolType}
+                                </TextLink>
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <SubjectOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:country')}:{' '}
+                                <TextLink href={countryLink} color="primary">
+                                    {country}
+                                </TextLink>
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <SubjectOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:city')}:{' '}
+                                <TextLink href={cityLink} color="primary">
+                                    {city}
+                                </TextLink>
+                            </Typography>
                         </ListItemText>
                     </ListItem>
                 </List>
             </CardContent>
         );
 
-        const renderTabs = (
-            <>
-                <Tabs
-                    value={tabValue}
-                    onChange={handleTabChange}
-                    variant="fullWidth"
-                    indicatorColor="primary"
-                    textColor="primary"
-                >
-                    <Tab label={t('common:subjects')} />
-                    <Tab label={t('common:courses')} />
-                </Tabs>
-                <TabPanel value={tabValue} index={0}>
-                    {subjects.length ? (
-                        <StyledTable disableBoxShadow>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {t('common:name')}
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {subjects.map((s: SubjectObjectType, i: number) => (
-                                        <TableRow
-                                            key={i}
-                                            onClick={(): Promise<boolean> =>
-                                                Router.push({ pathname: '/search', query: { subject: s.id } })
-                                            }
-                                        >
-                                            <TableCell>
-                                                <Typography variant="subtitle1">{R.propOr('-', 'name', s)}</Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </StyledTable>
-                    ) : (
-                        <CardContent>
-                            <Typography variant="subtitle1">{t('school:noSubjects')}</Typography>
-                        </CardContent>
-                    )}
-                </TabPanel>
-                <TabPanel value={tabValue} index={1}>
-                    {courses.length ? (
-                        <StyledTable disableBoxShadow>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {t('common:name')}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {t('common:points')}
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {courses.map((c: CourseObjectType, i: number) => (
-                                        <TableRow
-                                            key={i}
-                                            onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}
-                                        >
-                                            <TableCell>
-                                                <Typography variant="subtitle1">{R.propOr('-', 'name', c)}</Typography>
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <Typography variant="subtitle1">
-                                                    {R.propOr('-', 'points', c)}
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </StyledTable>
-                    ) : (
-                        <CardContent>
-                            <Typography variant="subtitle1">{t('school:noCourses')}</Typography>
-                        </CardContent>
-                    )}
-                </TabPanel>
-            </>
+        const renderSubjects = subjects.length ? (
+            <StyledTable disableBoxShadow>
+                <Table>
+                    <TableBody>
+                        {subjects.map((s: SubjectObjectType, i: number) => (
+                            <TableRow
+                                key={i}
+                                onClick={(): Promise<boolean> =>
+                                    Router.push({ pathname: '/search', query: { subject: s.id } })
+                                }
+                            >
+                                <TableCell>
+                                    <Typography variant="subtitle1">{R.propOr('-', 'name', s)}</Typography>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </StyledTable>
+        ) : (
+            <CardContent>
+                <Typography variant="subtitle1">{t('school:noSubjects')}</Typography>
+            </CardContent>
+        );
+
+        const renderCourses = courses.length ? (
+            <StyledTable disableBoxShadow>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>
+                                <Typography variant="subtitle1" color="textSecondary">
+                                    {t('common:name')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                                <Typography variant="subtitle1" color="textSecondary">
+                                    {t('common:points')}
+                                </Typography>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {courses.map((c: CourseObjectType, i: number) => (
+                            <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
+                                <TableCell>
+                                    <Typography variant="subtitle1">{R.propOr('-', 'name', c)}</Typography>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Typography variant="subtitle1">{R.propOr('-', 'points', c)}</Typography>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </StyledTable>
+        ) : (
+            <CardContent>
+                <Typography variant="subtitle1">{t('school:noCourses')}</Typography>
+            </CardContent>
         );
 
         return (
-            <ResponsiveMainLayout
+            <TabLayout
                 title={schoolName}
+                titleSecondary={t('common:courses')}
+                tabLabelLeft={t('common:subjects')}
+                renderMobileInfo={renderInfo}
+                renderDesktopInfo={renderInfo}
+                renderLeftContent={renderSubjects}
+                renderRightContent={renderCourses}
+                singleColumn
                 backUrl
-                renderCardHeader={renderCardHeader}
-                renderLeftCardContent={renderLeftCardContent}
-                renderRightCardContent={renderRightCardContent}
-                renderTabs={renderTabs}
             />
         );
     } else {
