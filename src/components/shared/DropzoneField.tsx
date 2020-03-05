@@ -20,10 +20,6 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
     const [errorMessage, setErrorMessage]: any = useState(null);
 
     const handleOnChange = (field: any, files: File[]) => {
-        console.log('hmm: ', form);
-        console.log('Field: ', field);
-        console.log('files: ', files);
-
         const isPDF = (file: any) => !!file && file.type === 'application/pdf';
 
         const isImage = (file: any) =>
@@ -39,15 +35,12 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
 
         const onlyImages = files.every(file => isImage(file));
 
-        console.log('allImages: ', onlyImages);
-        console.log('onlyPDFs: ', onlyPDFs);
-
         const firstDocx = files.find((file: any) => isDocx(file));
         const allDocx = files.filter((file: any) => isDocx(file));
         const onlyDocx = files.every(file => isDocx(file));
 
         if (files.length === 0) {
-            setErrorMessage('Empty!');
+            setErrorMessage(t('common:empty'));
             form.setFieldValue(field.name, []);
         } else if (!!firstPDF && allPDFs.length === 1 && !!onlyPDFs) {
             const acceptedFile = [];
@@ -55,7 +48,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
             setErrorMessage(null);
             form.setFieldValue(field.name, acceptedFile);
         } else if (allPDFs.length > 1 && !!onlyPDFs) {
-            setErrorMessage('Only one PDF is allowed!');
+            setErrorMessage(t('common:onePdfAllowed'));
             form.setFieldValue(field.name, []);
         } else if (!!firstDocx && allDocx.length === 1) {
             const acceptedFile = [];
@@ -63,13 +56,13 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
             setErrorMessage(null);
             form.setFieldValue(field.name, acceptedFile);
         } else if (allDocx.length > 1 && !!onlyDocx) {
-            setErrorMessage('Only one .docx is allowed!');
+            setErrorMessage(t('common:oneDocxAllowed'));
             form.setFieldValue(field.name, []);
         } else if (!!onlyImages) {
             setErrorMessage(null);
             form.setFieldValue(field.name, files);
         } else {
-            setErrorMessage('Too many filetypes!');
+            setErrorMessage(t('common:tooManyFiletypes'));
             form.setFieldValue(field.name, []);
         }
     };

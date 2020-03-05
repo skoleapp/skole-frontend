@@ -55,5 +55,9 @@
     "createComment": "Create Comment",
     "comments": "Comments",
     "dropzoneText": "Drag a file or click here!",
-    "share": "Share"
+    "share": "Share",
+    "empty": "Empty",
+    "onePdfAllowed": "Only one PDF is allowed!",
+    "oneDocxAllowed": "Only one .docx is allowed!",
+    "tooManyFiletypes": "Too many filetypes!"
 }
