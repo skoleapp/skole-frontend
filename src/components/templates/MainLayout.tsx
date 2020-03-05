@@ -10,6 +10,7 @@ import { CommentThread, FileViewer } from '../layout';
 interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
     heading?: string;
     customBottomNavbar?: JSX.Element;
+    disableBottomNavbar?: boolean;
 }
 
 export const MainLayout: React.FC<Props> = ({
@@ -20,14 +21,15 @@ export const MainLayout: React.FC<Props> = ({
     headerRight,
     children,
     customBottomNavbar,
+    disableBottomNavbar = false,
     ...containerProps
 }) => {
     return (
-        <StyledMainLayout>
+        <StyledMainLayout disableBottomNavbar={disableBottomNavbar}>
             <Head title={title} />
             <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
             <Container {...containerProps}>{children}</Container>
-            {customBottomNavbar || <BottomNavbar />}
+            {!disableBottomNavbar && (customBottomNavbar || <BottomNavbar />)}
             <Footer />
             <Notifications />
             <Settings />
@@ -38,26 +40,23 @@ export const MainLayout: React.FC<Props> = ({
     );
 };
 
-const StyledMainLayout = styled(Box)`
+const StyledMainLayout = styled(({ disableBottomNavbar, ...other }) => <Box {...other} />)`
     background-color: var(--secondary);
     text-align: center;
     min-height: 100vh;
     position: relative;
     display: flex;
     flex-direction: column;
-
     .MuiContainer-root {
         padding: 0;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-
         @media only screen and (min-width: ${breakpoints.MD}) {
             padding: 1rem;
         }
-
         @media only screen and (max-width: ${breakpoints.MD}) {
-            margin-bottom: 3rem;
+            margin-bottom: ${({ disableBottomNavbar }): string => (!disableBottomNavbar ? '3rem' : 'initial')};
         }
     }
 `;

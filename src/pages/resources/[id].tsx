@@ -1,192 +1,216 @@
 import {
     Avatar,
-    BottomNavigation,
-    BottomNavigationAction,
     Box,
     CardContent,
-    IconButton,
+    CardHeader,
+    Divider,
+    Grid,
     List,
     ListItem,
     ListItemAvatar,
     ListItemText,
+    Tab,
+    Tabs,
     Typography,
+    Fade,
+    Paper,
+    IconButton,
 } from '@material-ui/core';
-import {
-    CloudUploadOutlined,
-    KeyboardArrowDownOutlined,
-    KeyboardArrowUpOutlined,
-    LibraryAddOutlined,
-    SchoolOutlined,
-    ScoreOutlined,
-} from '@material-ui/icons';
+import { CloudDownload, ScoreOutlined, InfoOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 
+import { ResourceDetailDocument, ResourceObjectType, CommentObjectType } from '../../../generated/graphql';
 import {
-    CommentObjectType,
-    PerformVoteMutation,
-    ResourceDetailDocument,
-    ResourceObjectType,
-    usePerformVoteMutation,
-    VoteObjectType,
-} from '../../../generated/graphql';
-import { toggleNotification } from '../../actions';
-import { DiscussionBox, FilePreview, NotFound, TabLayout, TextLink } from '../../components';
+    MainLayout,
+    NotFound,
+    StyledCard,
+    TextLink,
+    StyledModal,
+    ModalHeader,
+    DiscussionBox,
+    TabPanel,
+} from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { mediaURL, usePrivatePage } from '../../utils';
+import { usePrivatePage, useTabs, mediaURL } from '../../utils';
+import { ResourcePreview } from '../../components/shared/ResourcePreview';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
 }
 
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
+    const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
-    const dispatch = useDispatch();
+
+    const [pages, setPages]: any[] = useState([]);
+    const [currentPage, setCurrentPage]: any = useState(0);
+
+    const [resourceInfoVisible, setResourceInfoVisible] = useState(false);
+    const handleOpenResourceInfo = (): void => setResourceInfoVisible(true);
+    const handleCloseResourceInfo = (): void => setResourceInfoVisible(false);
 
     if (resource) {
-        const title = R.propOr('-', 'title', resource) as string;
         const file = mediaURL(resource.file);
+        const resourceTitle = R.propOr('-', 'title', resource) as string;
         const resourceType = R.propOr('-', 'resourceType', resource);
-        const courseId = R.propOr('-', 'id', resource.course) as string;
-        const courseName = R.propOr('-', 'name', resource.course) as string;
-        const schoolId = R.propOr('', 'id', resource.school);
-        const schoolName = R.propOr('-', 'name', resource.school) as string;
-        const creatorId = R.propOr('', 'id', resource.user) as string;
+        const resourceCourseId = R.propOr('', 'id', resource.course);
+        const resourceCourseName = R.propOr('-', 'name', resource.course) as string;
+        const resourceSchoolId = R.propOr('', 'id', resource.school);
+        const resourceSchoolName = R.propOr('-', 'name', resource.school) as string;
+        const creatorId = R.propOr('', 'id', resource.user);
         const creatorName = R.propOr('-', 'username', resource.user) as string;
         const created = moment(resource.created).format('LL');
-        const initialPoints = R.propOr('-', 'points', resource);
+        const modified = moment(resource.modified).format('LL');
+        const points = R.propOr('-', 'points', resource);
+
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
 
         const discussionBoxProps = {
             comments,
             target: { resource: Number(resource.id) },
         };
-        const createdInfoProps = { creatorId, creatorName, created };
-        const [vote, setVote] = useState(resource.vote);
-        const [points, setPoints] = useState(initialPoints);
 
-        const onError = (): void => {
-            dispatch(toggleNotification(t('notifications:voteError')));
-        };
-
-        const onCompleted = ({ performVote }: PerformVoteMutation): void => {
-            if (!!performVote) {
-                if (!!performVote.errors) {
-                    onError();
-                } else {
-                    setVote(performVote.vote as VoteObjectType);
-                    setPoints(performVote.targetPoints);
-                }
-            }
-        };
-
-        const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
-
-        const handleVote = (status: number) => (): void => {
-            performVote({ variables: { resource: resource.id, status } });
-        };
-
-        const renderInfo = (
-            <CardContent>
-                <List>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <CloudUploadOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
+        const renderResourceInfo = (
+            <Grid container alignItems="center">
+                <Grid item container sm={6} justify="center">
+                    <CardContent>
+                        <Box textAlign="left">
                             <Typography variant="body2">
                                 {t('common:resourceType')}: {resourceType}
                             </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <SchoolOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
                             <Typography variant="body2">
                                 {t('common:course')}:{' '}
-                                <TextLink href={`/courses/${courseId}`} color="primary">
-                                    {courseName}
+                                <TextLink href={`/courses/${resourceCourseId}`} color="primary">
+                                    {resourceCourseName}
                                 </TextLink>
                             </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <LibraryAddOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
                             <Typography variant="body2">
                                 {t('common:school')}:{' '}
-                                <TextLink href={`/schools/${schoolId}`} color="primary">
-                                    {schoolName}
+                                <TextLink href={`/schools/${resourceSchoolId}`} color="primary">
+                                    {resourceSchoolName}
                                 </TextLink>
                             </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <ScoreOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
                             <Typography variant="body2">
-                                {t('common:points')}: {points}
+                                {t('common:creator')}:{' '}
+                                <TextLink href={`/users/${creatorId}`} color="primary">
+                                    {creatorName}
+                                </TextLink>
                             </Typography>
-                        </ListItemText>
-                    </ListItem>
-                </List>
-            </CardContent>
+                            <Typography variant="body2">
+                                {t('common:created')}: {created}
+                            </Typography>
+                            <Typography variant="body2">
+                                {t('common:modified')}: {modified}
+                            </Typography>
+                        </Box>
+                    </CardContent>
+                </Grid>
+                <Grid item container sm={6} justify="center">
+                    <CardContent>
+                        <List>
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <ScoreOutlined />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText>
+                                    {t('common:points')}: {points}
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <CloudDownload />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText>{t('common:downloads')}: 0</ListItemText>
+                            </ListItem>
+                        </List>
+                    </CardContent>
+                </Grid>
+            </Grid>
         );
 
-        const renderCustomBottomNavbar = (
-            <BottomNavigation>
-                <Box display="flex" justifyContent="space-around" alignItems="center" width="100%">
-                    <IconButton
-                        color={!!vote && vote.status === 1 ? 'primary' : 'inherit'}
-                        onClick={handleVote(1)}
-                        disabled={voteSubmitting}
-                    >
-                        <KeyboardArrowUpOutlined />
-                    </IconButton>
-                    <Typography variant="body2">{points}</Typography>
-                    <IconButton
-                        color={!!vote && vote.status === -1 ? 'primary' : 'inherit'}
-                        onClick={handleVote(-1)}
-                        disabled={voteSubmitting}
-                    >
-                        <KeyboardArrowDownOutlined />
-                    </IconButton>
-                </Box>
-            </BottomNavigation>
+        const renderResourceInfoModal = (
+            <StyledModal open={!!resourceInfoVisible} onClose={handleCloseResourceInfo}>
+                <Fade in={!!resourceInfoVisible}>
+                    <Paper>
+                        <ModalHeader onCancel={handleCloseResourceInfo} />
+                        <Box textAlign="center">
+                            <CardHeader title={resourceTitle} />
+                            {renderResourceInfo}
+                        </Box>
+                    </Paper>
+                </Fade>
+            </StyledModal>
+        );
+
+        const renderResourceInfoButton = (
+            <IconButton color="secondary" onClick={handleOpenResourceInfo}>
+                <InfoOutlined />
+            </IconButton>
+        );
+
+        const renderContent = (
+            <Grid container>
+                <Grid item container xs={12} sm={12} md={7} lg={8}>
+                    <StyledCard>
+                        <Tabs
+                            className="md-down"
+                            value={tabValue}
+                            onChange={handleTabChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            variant="fullWidth"
+                        >
+                            <Tab label={resourceTitle} />
+                            <Tab label={t('common:discussion')} />
+                        </Tabs>
+                        <CardHeader className="md-up" title={resourceTitle} />
+
+                        {tabValue === 0 && (
+                            <ResourcePreview
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                                pages={pages}
+                                setPages={setPages}
+                                file={file}
+                            />
+                        )}
+
+                        <TabPanel value={tabValue} index={1} flexGrow="1" display={tabValue === 1 ? 'flex' : 'none'}>
+                            <DiscussionBox {...discussionBoxProps} />
+                        </TabPanel>
+                    </StyledCard>
+                </Grid>
+                <Grid item container xs={12} sm={12} md={5} lg={4} className="md-up">
+                    <StyledCard marginLeft>
+                        <CardHeader title={t('common:discussion')} />
+                        <Divider />
+                        <DiscussionBox {...discussionBoxProps} />
+                    </StyledCard>
+                </Grid>
+            </Grid>
         );
 
         return (
-            <TabLayout
-                title={title}
-                titleSecondary={t('common:discussion')}
+            <MainLayout
+                disableBottomNavbar={tabValue === 0}
+                title={resourceTitle}
                 backUrl
-                renderMobileInfo={renderInfo}
-                customBottomNavbar={renderCustomBottomNavbar}
-                tabLabelLeft={t('common:resource')}
-                renderLeftContent={<FilePreview file={file} />}
-                renderRightContent={<DiscussionBox {...discussionBoxProps} />}
-                createdInfoProps={createdInfoProps}
-            />
+                maxWidth="xl"
+                headerRight={renderResourceInfoButton}
+            >
+                {renderContent}
+                {renderResourceInfoModal}
+            </MainLayout>
         );
     } else {
         return <NotFound title={t('resource:notFound')} />;
