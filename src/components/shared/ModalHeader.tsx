@@ -22,9 +22,11 @@ export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) =
                     </IconButton>
                 )}
             </Grid>
-            <Grid item container xs={8} justify="center">
-                <Heading text={title} />
-            </Grid>
+            {!!title && (
+                <Grid item container xs={8} justify="center">
+                    <Heading text={title} />
+                </Grid>
+            )}
             <Grid item xs={2}>
                 {headerRight}
             </Grid>
