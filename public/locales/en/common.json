@@ -55,7 +55,7 @@
     "reportAbuse": "Report Abuse",
     "createComment": "Create Comment",
     "comments": "Comments",
-    "dropzoneText": "Upload file",
+    "dropzoneText": "Drop files here or click to upload.",
     "share": "Share",
     "noComments": "No comments to be shown..."
 }
