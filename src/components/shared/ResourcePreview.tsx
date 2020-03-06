@@ -1,8 +1,14 @@
 import 'ol/ol.css';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { NavigateNextOutlined, NavigateBeforeOutlined, FullscreenOutlined } from '@material-ui/icons';
-import { IconButton, CircularProgress, Box } from '@material-ui/core';
+import {
+    NavigateNextOutlined,
+    NavigateBeforeOutlined,
+    FullscreenOutlined,
+    KeyboardArrowUpOutlined,
+    KeyboardArrowDownOutlined,
+} from '@material-ui/icons';
+import { IconButton, CircularProgress, Box, Typography } from '@material-ui/core';
 
 interface Props {
     file: any;
@@ -10,10 +16,13 @@ interface Props {
     setPages: (foo: any[]) => void;
     currentPage: number;
     setCurrentPage: (index: number) => void;
+    voteProps: any;
 }
-export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, currentPage, setCurrentPage }) => {
+export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, currentPage, setCurrentPage, voteProps }) => {
     const [touchStart, setTouchStart]: any = useState(0);
     const [touchEnd, setTouchEnd]: any = useState(0);
+
+    const { vote, voteSubmitting, handleVote, points } = voteProps;
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -155,7 +164,7 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
         const PDFJS: any = require('pdfjs-dist');
 
         const renderPage = (page: any) => {
-            const viewport = page.getViewport({ scale: 1.5 });
+            const viewport = page.getViewport({ scale: 2 });
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const renderContext = {
@@ -294,37 +303,8 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
         justify-content: space-around;
         background-color: white;
     `;
-    const StyledLayer = styled.div`
-        z-index: 999;
-        display: flex;
-        position: absolute;
-        margin: 0.5rem;
-        padding: 0.5rem 0.7rem;
-        color: white;
-        background-color: rgb(72, 76, 79, 0.7);
-    `;
 
-    const NextPageButton = (
-        <IconButton
-            disabled={currentPage === pages.length - 1}
-            onClick={() => {
-                nextPage();
-            }}
-        >
-            <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'primary'} />
-        </IconButton>
-    );
-    const PreviousPageButton = (
-        <IconButton
-            disabled={currentPage === 0}
-            onClick={() => {
-                previousPage();
-            }}
-        >
-            <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'primary'} />
-        </IconButton>
-    );
-    const CenterImageButton = (
+    const renderImageButton = (
         <IconButton
             onClick={() => {
                 setCenter();
@@ -334,12 +314,49 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
         </IconButton>
     );
 
+    const renderNavigationButtons = (
+        <Box width="7rem" justifyContent="center" alignItems="center" display="flex">
+            <IconButton disabled={currentPage === 0} onClick={previousPage} size="small">
+                <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'primary'} />
+            </IconButton>
+            <Typography style={{ margin: 10 }} variant="body2">
+                {currentPage + 1 + ' / ' + pages.length}
+            </Typography>
+            <IconButton disabled={currentPage === pages.length - 1} onClick={nextPage} size="small">
+                <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'primary'} />
+            </IconButton>
+        </Box>
+    );
+
+    const renderVoteButtons = (
+        <Box width="7rem" justifyContent="center" alignItems="center" display="flex">
+            <IconButton
+                color={!!vote && vote.status === 1 ? 'primary' : 'inherit'}
+                onClick={handleVote(1)}
+                disabled={voteSubmitting}
+                size="small"
+            >
+                <KeyboardArrowUpOutlined />
+            </IconButton>
+            <Typography style={{ margin: 10 }} variant="body2">
+                {points}
+            </Typography>
+            <IconButton
+                color={!!vote && vote.status === -1 ? 'primary' : 'inherit'}
+                onClick={handleVote(-1)}
+                disabled={voteSubmitting}
+                size="small"
+            >
+                <KeyboardArrowDownOutlined />
+            </IconButton>
+        </Box>
+    );
+
     const resourcesRendered = pages.length > 0;
 
     return (
         <>
             <div style={{ height: '100%', position: 'relative' }}>
-                {resourcesRendered && <StyledLayer>{currentPage + 1 + ' / ' + pages.length}</StyledLayer>}
                 <div
                     style={{
                         backgroundColor: 'rgb(72, 76, 79,0.7)',
@@ -360,9 +377,9 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
                 )}
             </div>
             <StyledControls>
-                {PreviousPageButton}
-                {CenterImageButton}
-                {NextPageButton}
+                {renderNavigationButtons}
+                {renderImageButton}
+                {renderVoteButtons}
             </StyledControls>
         </>
     );

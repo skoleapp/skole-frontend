@@ -16,13 +16,26 @@ import {
     Paper,
     IconButton,
 } from '@material-ui/core';
-import { CloudDownload, ScoreOutlined, InfoOutlined } from '@material-ui/icons';
-import moment from 'moment';
+import {
+    ScoreOutlined,
+    InfoOutlined,
+    CloudUploadOutlined,
+    LibraryAddOutlined,
+    SchoolOutlined,
+} from '@material-ui/icons';
+
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { compose } from 'redux';
 
-import { ResourceDetailDocument, ResourceObjectType, CommentObjectType } from '../../../generated/graphql';
+import {
+    ResourceDetailDocument,
+    ResourceObjectType,
+    CommentObjectType,
+    usePerformVoteMutation,
+    PerformVoteMutation,
+    VoteObjectType,
+} from '../../../generated/graphql';
 import {
     MainLayout,
     NotFound,
@@ -39,6 +52,8 @@ import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { usePrivatePage, useTabs, mediaURL } from '../../utils';
 import { ResourcePreview } from '../../components/shared/ResourcePreview';
+import { toggleNotification } from '../../actions';
+import { useDispatch } from 'react-redux';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -47,6 +62,7 @@ interface Props extends I18nProps {
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     const [pages, setPages]: any[] = useState([]);
     const [currentPage, setCurrentPage]: any = useState(0);
@@ -59,83 +75,103 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const file = mediaURL(resource.file);
         const resourceTitle = R.propOr('-', 'title', resource) as string;
         const resourceType = R.propOr('-', 'resourceType', resource);
-        const resourceCourseId = R.propOr('', 'id', resource.course);
-        const resourceCourseName = R.propOr('-', 'name', resource.course) as string;
-        const resourceSchoolId = R.propOr('', 'id', resource.school);
-        const resourceSchoolName = R.propOr('-', 'name', resource.school) as string;
-        const creatorId = R.propOr('', 'id', resource.user);
-        const creatorName = R.propOr('-', 'username', resource.user) as string;
-        const created = moment(resource.created).format('LL');
-        const modified = moment(resource.modified).format('LL');
-        const points = R.propOr('-', 'points', resource);
+        const courseId = R.propOr('', 'id', resource.course);
+        const courseName = R.propOr('-', 'name', resource.course) as string;
+        const schoolId = R.propOr('', 'id', resource.school);
+        const schoolName = R.propOr('-', 'name', resource.school) as string;
 
+        const initialPoints = R.propOr('-', 'points', resource);
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
+
+        const [vote, setVote] = useState(resource.vote);
+        const [points, setPoints] = useState(initialPoints);
 
         const discussionBoxProps = {
             comments,
             target: { resource: Number(resource.id) },
         };
 
+        const onError = (): void => {
+            dispatch(toggleNotification(t('notifications:voteError')));
+        };
+
+        const onCompleted = ({ performVote }: PerformVoteMutation): void => {
+            if (!!performVote) {
+                if (!!performVote.errors) {
+                    onError();
+                } else {
+                    setVote(performVote.vote as VoteObjectType);
+                    setPoints(performVote.targetPoints);
+                }
+            }
+        };
+
+        const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
+
+        const handleVote = (status: number) => (): void => {
+            performVote({ variables: { resource: resource.id, status } });
+        };
+        const voteProps = { vote, voteSubmitting, handleVote, points };
+
         const renderResourceInfo = (
-            <Grid container alignItems="center">
-                <Grid item container sm={6} justify="center">
-                    <CardContent>
-                        <Box textAlign="left">
+            <CardContent>
+                <List>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <CloudUploadOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body2">
                                 {t('common:resourceType')}: {resourceType}
                             </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <SchoolOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body2">
                                 {t('common:course')}:{' '}
-                                <TextLink href={`/courses/${resourceCourseId}`} color="primary">
-                                    {resourceCourseName}
+                                <TextLink href={`/courses/${courseId}`} color="primary">
+                                    {courseName}
                                 </TextLink>
                             </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <LibraryAddOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body2">
                                 {t('common:school')}:{' '}
-                                <TextLink href={`/schools/${resourceSchoolId}`} color="primary">
-                                    {resourceSchoolName}
+                                <TextLink href={`/schools/${schoolId}`} color="primary">
+                                    {schoolName}
                                 </TextLink>
                             </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <ScoreOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body2">
-                                {t('common:creator')}:{' '}
-                                <TextLink href={`/users/${creatorId}`} color="primary">
-                                    {creatorName}
-                                </TextLink>
+                                {t('common:points')}: {points}
                             </Typography>
-                            <Typography variant="body2">
-                                {t('common:created')}: {created}
-                            </Typography>
-                            <Typography variant="body2">
-                                {t('common:modified')}: {modified}
-                            </Typography>
-                        </Box>
-                    </CardContent>
-                </Grid>
-                <Grid item container sm={6} justify="center">
-                    <CardContent>
-                        <List>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <ScoreOutlined />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText>
-                                    {t('common:points')}: {points}
-                                </ListItemText>
-                            </ListItem>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <CloudDownload />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText>{t('common:downloads')}: 0</ListItemText>
-                            </ListItem>
-                        </List>
-                    </CardContent>
-                </Grid>
-            </Grid>
+                        </ListItemText>
+                    </ListItem>
+                </List>
+            </CardContent>
         );
 
         const renderResourceInfoModal = (
@@ -182,6 +218,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                                 pages={pages}
                                 setPages={setPages}
                                 file={file}
+                                voteProps={voteProps}
                             />
                         )}
 
