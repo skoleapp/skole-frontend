@@ -70,7 +70,6 @@ const IndexPage: I18nPage = () => {
             <Box className="slogan">
                 <Typography variant="h1">{t('index:slogan')}</Typography>
             </Box>
-
             <Box marginTop="1rem">{renderSearchWidget}</Box>
             <Box className="shortcuts" display="flex" justifyContent="center" marginTop="2rem">
                 {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
