@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Box,
     CardContent,
     CardHeader,
     Divider,
@@ -12,9 +11,11 @@ import {
     Tab,
     Tabs,
     Typography,
+    IconButton,
+    SwipeableDrawer,
+    Box,
     Fade,
     Paper,
-    IconButton,
 } from '@material-ui/core';
 import {
     ScoreOutlined,
@@ -41,19 +42,20 @@ import {
     NotFound,
     StyledCard,
     TextLink,
-    StyledModal,
     ModalHeader,
     DiscussionBox,
     TabPanel,
+    StyledModal,
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { usePrivatePage, useTabs, mediaURL } from '../../utils';
+import { usePrivatePage, useTabs, mediaURL, useOpen } from '../../utils';
 import { ResourcePreview } from '../../components/shared/ResourcePreview';
 import { toggleNotification } from '../../actions';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -63,13 +65,14 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
     const dispatch = useDispatch();
-
-    const [pages, setPages]: any[] = useState([]);
-    const [currentPage, setCurrentPage]: any = useState(0);
+    const { open, handleOpen, handleClose } = useOpen();
 
     const [resourceInfoVisible, setResourceInfoVisible] = useState(false);
     const handleOpenResourceInfo = (): void => setResourceInfoVisible(true);
     const handleCloseResourceInfo = (): void => setResourceInfoVisible(false);
+
+    const [pages, setPages]: any[] = useState([]);
+    const [currentPage, setCurrentPage]: any = useState(0);
 
     if (resource) {
         const file = mediaURL(resource.file);
@@ -79,7 +82,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const courseName = R.propOr('-', 'name', resource.course) as string;
         const schoolId = R.propOr('', 'id', resource.school);
         const schoolName = R.propOr('-', 'name', resource.school) as string;
-
+        const creatorId = R.propOr('', 'id', resource.user) as string;
+        const creatorName = R.propOr('-', 'username', resource.user) as string;
+        const created = moment(resource.created).format('LL');
         const initialPoints = R.propOr('-', 'points', resource);
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
 
@@ -174,6 +179,25 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </CardContent>
         );
 
+        const renderCreatedInfo = (
+            <Box padding="0.5rem" textAlign="left">
+                <Typography variant="body2" color="textSecondary">
+                    {t('common:createdBy')}{' '}
+                    <TextLink href={`/users/${creatorId}`} color="primary">
+                        {creatorName}
+                    </TextLink>{' '}
+                    {created}
+                </Typography>
+            </Box>
+        );
+        const renderDesktopDrawer = (
+            <SwipeableDrawer className="md-up" anchor="left" open={!!open} onOpen={handleOpen} onClose={handleClose}>
+                <ModalHeader title={resourceTitle} onCancel={handleClose} />
+                {renderResourceInfo}
+                <Divider />
+                {renderCreatedInfo}
+            </SwipeableDrawer>
+        );
         const renderResourceInfoModal = (
             <StyledModal open={!!resourceInfoVisible} onClose={handleCloseResourceInfo}>
                 <Fade in={!!resourceInfoVisible}>
@@ -182,13 +206,20 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         <Box textAlign="center">
                             <CardHeader title={resourceTitle} />
                             {renderResourceInfo}
+                            <Divider />
+                            {renderCreatedInfo}
                         </Box>
                     </Paper>
                 </Fade>
             </StyledModal>
         );
 
-        const renderResourceInfoButton = (
+        const renderDesktopResourceInfoButton = (
+            <IconButton color="primary" onClick={handleOpen}>
+                <InfoOutlined />
+            </IconButton>
+        );
+        const renderMobileResourceInfoButton = (
             <IconButton color="secondary" onClick={handleOpenResourceInfo}>
                 <InfoOutlined />
             </IconButton>
@@ -209,7 +240,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             <Tab label={resourceTitle} />
                             <Tab label={t('common:discussion')} />
                         </Tabs>
-                        <CardHeader className="md-up" title={resourceTitle} />
+                        <CardHeader action={renderDesktopResourceInfoButton} className="md-up" title={resourceTitle} />
 
                         {tabValue === 0 && (
                             <ResourcePreview
@@ -243,9 +274,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 title={resourceTitle}
                 backUrl
                 maxWidth="xl"
-                headerRight={renderResourceInfoButton}
+                headerRight={renderMobileResourceInfoButton}
             >
                 {renderContent}
+                {renderDesktopDrawer}
                 {renderResourceInfoModal}
             </MainLayout>
         );
