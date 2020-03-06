@@ -16,6 +16,7 @@ import {
     Box,
     Fade,
     Paper,
+    Button,
 } from '@material-ui/core';
 import {
     ScoreOutlined,
@@ -23,12 +24,14 @@ import {
     CloudUploadOutlined,
     LibraryAddOutlined,
     SchoolOutlined,
+    DeleteOutlined,
 } from '@material-ui/icons';
 
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { compose } from 'redux';
 
+import Router from 'next/router';
 import {
     ResourceDetailDocument,
     ResourceObjectType,
@@ -36,6 +39,8 @@ import {
     usePerformVoteMutation,
     PerformVoteMutation,
     VoteObjectType,
+    useDeleteResourceMutation,
+    DeleteResourceMutation,
 } from '../../../generated/graphql';
 import {
     MainLayout,
@@ -50,12 +55,13 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { usePrivatePage, useTabs, mediaURL, useOpen } from '../../utils';
 import { ResourcePreview } from '../../components/shared/ResourcePreview';
 import { toggleNotification } from '../../actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import { useConfirm } from 'material-ui-confirm';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -65,6 +71,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const confirm = useConfirm();
     const { open, handleOpen, handleClose } = useOpen();
 
     const [resourceInfoVisible, setResourceInfoVisible] = useState(false);
@@ -84,9 +91,12 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const schoolName = R.propOr('-', 'name', resource.school) as string;
         const creatorId = R.propOr('', 'id', resource.user) as string;
         const creatorName = R.propOr('-', 'username', resource.user) as string;
+
         const created = moment(resource.created).format('LL');
         const initialPoints = R.propOr('-', 'points', resource);
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
+
+        const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
 
         const [vote, setVote] = useState(resource.vote);
         const [points, setPoints] = useState(initialPoints);
@@ -117,6 +127,32 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             performVote({ variables: { resource: resource.id, status } });
         };
         const voteProps = { vote, voteSubmitting, handleVote, points };
+
+        const deleteResourceError = (): void => {
+            dispatch(toggleNotification(t('resource:deleteResourceError')));
+        };
+        const deleteResourceCompleted = ({ deleteResource }: DeleteResourceMutation): void => {
+            if (!!deleteResource) {
+                if (!!deleteResource.errors) {
+                    deleteResourceError();
+                } else {
+                    Router.push('/courses/' + courseId);
+                    dispatch(toggleNotification(t('resource:resourceDeleted')));
+                }
+            }
+        };
+
+        const [deleteResource] = useDeleteResourceMutation({
+            onCompleted: deleteResourceCompleted,
+            onError: deleteResourceError,
+        });
+
+        const handleDelete = () => {
+            confirm({ title: t('resource:confirmTitle'), description: t('resource:confirmDesc') }).then(() => {
+                creatorName;
+                deleteResource({ variables: { id: resource.id } });
+            });
+        };
 
         const renderResourceInfo = (
             <CardContent>
@@ -176,6 +212,11 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </ListItemText>
                     </ListItem>
                 </List>
+                <Box justifyContent="center" display="flex">
+                    <Button variant="contained" color="primary" onClick={handleDelete} startIcon={<DeleteOutlined />}>
+                        {isOwnProfile && t('Delete resource')}
+                    </Button>
+                </Box>
             </CardContent>
         );
 
