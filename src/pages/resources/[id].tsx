@@ -148,7 +148,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         });
 
         const handleDelete = () => {
-            confirm({ title: t('resource:confirmTitle'), description: t('resource:confirmDesc') }).then(() => {
+            confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') }).then(() => {
                 creatorName;
                 deleteResource({ variables: { id: resource.id } });
             });
@@ -214,7 +214,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 </List>
                 <Box justifyContent="center" display="flex">
                     <Button variant="contained" color="primary" onClick={handleDelete} startIcon={<DeleteOutlined />}>
-                        {isOwnProfile && t('Delete resource')}
+                        {isOwnProfile && t('resource:deleteResource')}
                     </Button>
                 </Box>
             </CardContent>

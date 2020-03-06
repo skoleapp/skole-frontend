@@ -2,6 +2,6 @@
     "notFound": "Resurssia ei löytynyt...",
     "resourceDeleted": "Resurssi poistettu",
     "deleteResourceError": "Resurssin poistamisessa tapahtui odottamaton virhe",
-    "confirmTitle": "Poista resurssi",
+    "deleteResource": "Poista resurssi",
     "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?"
 }
