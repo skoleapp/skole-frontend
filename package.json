@@ -7,7 +7,7 @@
     "author": "Skole Team",
     "scripts": {
         "dev": "nodemon src/server.ts",
-        "build": "NODE_OPTIONS=--max_old_space_size=8192 next build && rimraf build && tsc --project tsconfig.server.json",
+        "build": "NODE_OPTIONS=--max_old_space_size=4096 next build && rimraf build && tsc --project tsconfig.server.json",
         "start": "NODE_ENV=production node build/src/server.js",
         "type-check": "tsc",
         "gen": "graphql-codegen --config codegen.yml",
