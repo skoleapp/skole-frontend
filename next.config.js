@@ -2,12 +2,14 @@ const withCSS = require('@zeit/next-css');
 const WebpackBar = require('webpackbar');
 const withAssetsImport = require('next-assets-import');
 
+const prod = process.env.NODE_ENV === 'production';
+
 module.exports = withAssetsImport(
     withCSS({
         target: 'serverless',
         env: {
-            API_URL: process.env.API_URL,
-            BACKEND_URL: process.env.BACKEND_URL,
+            API_URL: prod ? 'https://api.skoleapp.com/' : 'http://localhost:8000/',
+            BACKEND_URL: prod ? 'https://api.skoleapp.com/' : 'http://backend:8000/',
         },
         webpack: (config, { dev }) => {
             if (dev) {
