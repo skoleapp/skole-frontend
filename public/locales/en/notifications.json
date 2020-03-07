@@ -12,5 +12,7 @@
     "messageEmpty": "Message cannot be empty!",
     "linkCopied": "Link copied to clip board!",
     "deleteResourceError": "An unexpected error has occurred while deleting the resource",
-    "resourceDeleted": "Resource deleted"
+    "resourceDeleted": "Resource deleted",
+    "courseDeleted": "Course deleted",
+    "deleteCourseError": "An unexpected error has occurred while deleting the course"
 }
