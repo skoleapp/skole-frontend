@@ -1,7 +1,5 @@
 {
     "notFound": "Resource not found...",
     "resourceDeleted": "Resource deleted",
-    "deleteResourceError": "An unexpected error has occurred while deleting the resource",
-    "deleteResource": "Delete resource",
     "confirmDesc": "Are you sure you want to delete this resource?"
 }

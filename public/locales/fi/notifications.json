@@ -10,5 +10,7 @@
     "deleteCommentError": "Virhe poistettaessa kommenttia!",
     "commentDeleted": "Kommentti poistettu!",
     "messageEmpty": "Viesti ei voi olla tyhjä!",
-    "linkCopied": "Linkki kopioitu leikepöydälle!"
+    "linkCopied": "Linkki kopioitu leikepöydälle!",
+    "deleteResourceError": "Resurssin poistamisessa tapahtui odottamaton virhe",
+    "deleteResource": "Poista resurssi"
 }

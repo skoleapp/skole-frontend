@@ -129,7 +129,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const voteProps = { vote, voteSubmitting, handleVote, points };
 
         const deleteResourceError = (): void => {
-            dispatch(toggleNotification(t('resource:deleteResourceError')));
+            dispatch(toggleNotification(t('notifications:deleteResourceError')));
         };
         const deleteResourceCompleted = ({ deleteResource }: DeleteResourceMutation): void => {
             if (!!deleteResource) {
@@ -137,7 +137,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     deleteResourceError();
                 } else {
                     Router.push('/courses/' + courseId);
-                    dispatch(toggleNotification(t('resource:resourceDeleted')));
+                    dispatch(toggleNotification(t('notifications:resourceDeleted')));
                 }
             }
         };
