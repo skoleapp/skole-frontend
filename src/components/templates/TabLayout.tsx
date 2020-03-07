@@ -29,6 +29,7 @@ interface Props extends LayoutProps {
     customBottomNavbar?: JSX.Element;
     renderOptions?: JSX.Element;
     headerLeft?: JSX.Element;
+    renderSecondaryAction?: JSX.Element;
     singleColumn?: boolean;
     createdInfoProps?: {
         creatorId: string;
@@ -50,6 +51,7 @@ export const TabLayout: React.FC<Props> = ({
     singleColumn,
     renderOptions,
     headerLeft,
+    renderSecondaryAction,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
@@ -73,6 +75,7 @@ export const TabLayout: React.FC<Props> = ({
 
     const renderDesktopHeaderRight = (
         <>
+            {renderSecondaryAction}
             {!renderDesktopInfo && (
                 <IconButton color="primary" onClick={handleOpen}>
                     <InfoOutlined />

@@ -231,9 +231,16 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </List>
         );
 
-        const uploadResourceButton = (
+        const uploadResourceButtonMobile = (
             <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
                 <IconButton color="secondary">
+                    <CloudUploadOutlined />
+                </IconButton>
+            </Link>
+        );
+        const uploadResourceButtonDesktop = (
+            <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
+                <IconButton color="primary">
                     <CloudUploadOutlined />
                 </IconButton>
             </Link>
@@ -251,7 +258,8 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 createdInfoProps={createdInfoProps}
                 renderOptions={renderOptions}
-                headerLeft={uploadResourceButton}
+                headerLeft={uploadResourceButtonMobile}
+                renderSecondaryAction={uploadResourceButtonDesktop}
             />
         );
     } else {
