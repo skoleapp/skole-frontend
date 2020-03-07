@@ -11,9 +11,9 @@ import {
 import { IconButton, CircularProgress, Box, Typography } from '@material-ui/core';
 
 interface Props {
-    file: any;
+    file: string;
     pages: any[];
-    setPages: (foo: any[]) => void;
+    setPages: (pages: any[]) => void;
     currentPage: number;
     setCurrentPage: (index: number) => void;
     voteProps: any;
@@ -294,17 +294,7 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
         }
     };
 
-    const StyledControls = styled.div`
-        z-index: 999;
-        width: 100%;
-        bottom: 0;
-        display: flex;
-        position: relative;
-        justify-content: space-around;
-        background-color: white;
-    `;
-
-    const renderImageButton = (
+    const renderCenterImageButton = (
         <IconButton
             onClick={() => {
                 setCenter();
@@ -378,9 +368,19 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
             </div>
             <StyledControls>
                 {renderNavigationButtons}
-                {renderImageButton}
+                {renderCenterImageButton}
                 {renderVoteButtons}
             </StyledControls>
         </>
     );
 };
+
+const StyledControls = styled.div`
+    z-index: 999;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    position: relative;
+    justify-content: space-around;
+    background-color: white;
+`;
