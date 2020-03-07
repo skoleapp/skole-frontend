@@ -65,3 +65,13 @@ query CourseDetail($id: ID) {
         }
     }
 }
+
+mutation DeleteCourse($id: ID) {
+    deleteCourse(input: { id: $id }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}

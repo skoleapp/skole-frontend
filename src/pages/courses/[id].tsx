@@ -31,13 +31,17 @@ import {
     CourseDetailDocument,
     CourseObjectType,
     ResourceObjectType,
+    useDeleteCourseMutation,
+    DeleteCourseMutation,
 } from '../../../generated/graphql';
 import { DiscussionBox, NotFound, StyledTable, TabLayout, TextLink } from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { getFullCourseName, usePrivatePage } from '../../utils';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleNotification } from '../../actions';
+import { useConfirm } from 'material-ui-confirm';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -45,6 +49,8 @@ interface Props extends I18nProps {
 
 const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const confirm = useConfirm();
 
     if (course) {
         const { subject, school, user } = course;
@@ -52,7 +58,10 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const subjectName = R.propOr('-', 'name', subject) as string;
         const schoolName = R.propOr('-', 'name', school) as string;
         const creatorId = R.propOr('', 'id', course.user) as string;
+        const courseId = R.propOr('', 'id', course) as string;
+
         const creatorName = R.propOr('-', 'username', user) as string;
+
         const points = R.propOr('-', 'points', course);
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
@@ -75,6 +84,31 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const createdInfoProps = { creatorId, creatorName, created };
+
+        const deleteCourseError = (): void => {
+            dispatch(toggleNotification(t('notifications:deleteCourseError')));
+        };
+        const deleteCourseCompleted = ({ deleteCourse }: DeleteCourseMutation): void => {
+            if (!!deleteCourse) {
+                if (!!deleteCourse.errors) {
+                    deleteCourseError();
+                } else {
+                    Router.push('/');
+                    dispatch(toggleNotification(t('notifications:courseDeleted')));
+                }
+            }
+        };
+
+        const [deleteCourse] = useDeleteCourseMutation({
+            onCompleted: deleteCourseCompleted,
+            onError: deleteCourseError,
+        });
+
+        const handleDelete = () => {
+            confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') }).then(() => {
+                deleteCourse({ variables: { id: courseId } });
+            });
+        };
 
         const renderInfo = (
             <CardContent>
@@ -178,7 +212,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             <List>
                 {isOwnProfile && (
                     <ListItem>
-                        <ListItemText onClick={() => {}}>
+                        <ListItemText onClick={handleDelete}>
                             <DeleteOutline /> {t('course:deleteCourse')}
                         </ListItemText>
                     </ListItem>
