@@ -162,6 +162,9 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
         const ImageStatic = require('ol/source/ImageStatic').default;
         const Projection = require('ol/proj/Projection').default;
         const PDFJS: any = require('pdfjs-dist');
+        const pdfjsWorker: any = require('pdfjs-dist/build/pdf.worker.entry');
+
+        PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
         const renderPage = (page: any) => {
             const viewport = page.getViewport({ scale: 2 });

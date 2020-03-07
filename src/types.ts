@@ -36,6 +36,7 @@ export interface LayoutProps extends ContainerProps {
     renderAlert?: JSX.Element;
     disableSearch?: boolean;
     headerRight?: JSX.Element;
+    headerLeft?: JSX.Element;
 }
 
 export interface CommentTarget {

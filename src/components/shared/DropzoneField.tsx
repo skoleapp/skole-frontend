@@ -47,5 +47,6 @@ const StyledDropzoneField = styled(FormControl)`
 
     .MuiChip-root {
         margin: 0.25rem;
+        max-width: 16rem;
     }
 `;

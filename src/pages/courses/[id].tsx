@@ -11,6 +11,7 @@ import {
     TableHead,
     TableRow,
     Typography,
+    IconButton,
 } from '@material-ui/core';
 import {
     CloudUploadOutlined,
@@ -35,7 +36,7 @@ import {
     DeleteCourseMutation,
 } from '../../../generated/graphql';
 import { DiscussionBox, NotFound, StyledTable, TabLayout, TextLink } from '../../components';
-import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
+import { includeDefaultNamespaces, Router, useTranslation, Link } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { getFullCourseName, usePrivatePage } from '../../utils';
@@ -230,6 +231,14 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </List>
         );
 
+        const uploadResourceButton = (
+            <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
+                <IconButton color="secondary">
+                    <CloudUploadOutlined />
+                </IconButton>
+            </Link>
+        );
+
         return (
             <TabLayout
                 title={fullName}
@@ -242,6 +251,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 createdInfoProps={createdInfoProps}
                 renderOptions={renderOptions}
+                headerLeft={uploadResourceButton}
             />
         );
     } else {

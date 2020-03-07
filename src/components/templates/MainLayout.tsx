@@ -7,7 +7,9 @@ import { LayoutProps } from '../../types';
 import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 import { CommentThread, FileViewer } from '../layout';
 
-interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
+interface Props
+    extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight' | 'headerLeft'>,
+        ContainerProps {
     heading?: string;
     customBottomNavbar?: JSX.Element;
     disableBottomNavbar?: boolean;
@@ -19,6 +21,7 @@ export const MainLayout: React.FC<Props> = ({
     backUrl,
     disableSearch,
     headerRight,
+    headerLeft,
     children,
     customBottomNavbar,
     disableBottomNavbar = false,
@@ -27,7 +30,13 @@ export const MainLayout: React.FC<Props> = ({
     return (
         <StyledMainLayout disableBottomNavbar={disableBottomNavbar}>
             <Head title={title} />
-            <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
+            <TopNavbar
+                heading={heading}
+                backUrl={backUrl}
+                disableSearch={disableSearch}
+                headerRight={headerRight}
+                headerLeft={headerLeft}
+            />
             <Container {...containerProps}>{children}</Container>
             {!disableBottomNavbar && (customBottomNavbar || <BottomNavbar />)}
             <Footer />

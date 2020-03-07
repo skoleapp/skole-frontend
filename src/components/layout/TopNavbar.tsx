@@ -1,5 +1,5 @@
 import { AppBar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
-import { AccountCircle, ArrowBack, CloudUpload } from '@material-ui/icons';
+import { AccountCircle, ArrowBack } from '@material-ui/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -11,9 +11,9 @@ import { LayoutProps, State } from '../../types';
 import { ButtonLink, Heading, IconButtonLink } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
 
-type Props = Pick<LayoutProps, 'heading' | 'backUrl' | 'disableSearch' | 'headerRight'>;
+type Props = Pick<LayoutProps, 'heading' | 'backUrl' | 'disableSearch' | 'headerRight' | 'headerLeft'>;
 
-export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, headerRight }) => {
+export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, headerRight, headerLeft }) => {
     const { user } = useSelector((state: State) => state.auth);
     const { t } = useTranslation();
 
@@ -26,14 +26,13 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
 
     const renderMobileContent = (
         <Grid container alignItems="center" className="md-down">
-            <Grid item xs={2} container justify="flex-start">
-                {backUrl ? (
+            <Grid item xs={2} container justify="flex-start" wrap="nowrap">
+                {backUrl && (
                     <IconButton onClick={(): void => Router.back()} color="secondary">
                         <ArrowBack />
                     </IconButton>
-                ) : (
-                    <IconButtonLink icon={CloudUpload} href="/upload-resource" color="secondary" />
                 )}
+                {headerLeft}
             </Grid>
             <Grid item xs={8}>
                 {heading ? <Heading text={heading} /> : <Logo />}
