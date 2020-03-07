@@ -1,5 +1,6 @@
 {
     "notFound": "Resurssia ei löytynyt...",
-    "resourceDeleted": "Resurssi poistettu",
+    "deleteResource": "Poista resurssi",
+
     "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?"
 }
