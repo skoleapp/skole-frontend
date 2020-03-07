@@ -12,7 +12,15 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core';
-import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined, SubjectOutlined } from '@material-ui/icons';
+import {
+    CloudUploadOutlined,
+    SchoolOutlined,
+    ScoreOutlined,
+    SubjectOutlined,
+    DeleteOutline,
+    ShareOutlined,
+    FlagOutlined,
+} from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
@@ -27,8 +35,9 @@ import {
 import { DiscussionBox, NotFound, StyledTable, TabLayout, TextLink } from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { getFullCourseName, usePrivatePage } from '../../utils';
+import { useSelector } from 'react-redux';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -48,6 +57,8 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
+
+        const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
 
         const created = moment(course.created)
             .startOf('day')
@@ -163,6 +174,28 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </CardContent>
         );
 
+        const renderOptions = (
+            <List>
+                {isOwnProfile && (
+                    <ListItem>
+                        <ListItemText onClick={() => {}}>
+                            <DeleteOutline /> {t('course:deleteCourse')}
+                        </ListItemText>
+                    </ListItem>
+                )}
+                <ListItem>
+                    <ListItemText onClick={() => {}}>
+                        <ShareOutlined /> {t('common:share')}
+                    </ListItemText>
+                </ListItem>
+                <ListItem disabled>
+                    <ListItemText onClick={() => {}}>
+                        <FlagOutlined /> {t('common:reportAbuse')}
+                    </ListItemText>
+                </ListItem>
+            </List>
+        );
+
         return (
             <TabLayout
                 title={fullName}
@@ -174,6 +207,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 renderLeftContent={renderResources}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 createdInfoProps={createdInfoProps}
+                renderOptions={renderOptions}
             />
         );
     } else {

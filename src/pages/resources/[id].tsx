@@ -14,9 +14,7 @@ import {
     IconButton,
     SwipeableDrawer,
     Box,
-    Fade,
     Paper,
-    Button,
 } from '@material-ui/core';
 import {
     ScoreOutlined,
@@ -24,11 +22,14 @@ import {
     CloudUploadOutlined,
     LibraryAddOutlined,
     SchoolOutlined,
-    DeleteOutlined,
+    MoreHorizOutlined,
+    DeleteOutline,
+    ShareOutlined,
+    FlagOutlined,
 } from '@material-ui/icons';
 
 import * as R from 'ramda';
-import React, { useState } from 'react';
+import React, { useState, SyntheticEvent } from 'react';
 import { compose } from 'redux';
 
 import Router from 'next/router';
@@ -42,16 +43,7 @@ import {
     useDeleteResourceMutation,
     DeleteResourceMutation,
 } from '../../../generated/graphql';
-import {
-    MainLayout,
-    NotFound,
-    StyledCard,
-    TextLink,
-    ModalHeader,
-    DiscussionBox,
-    TabPanel,
-    StyledModal,
-} from '../../components';
+import { MainLayout, NotFound, StyledCard, TextLink, ModalHeader, DiscussionBox, TabPanel } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -74,12 +66,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const confirm = useConfirm();
     const { open, handleOpen, handleClose } = useOpen();
 
-    const [resourceInfoVisible, setResourceInfoVisible] = useState(false);
-    const handleOpenResourceInfo = (): void => setResourceInfoVisible(true);
-    const handleCloseResourceInfo = (): void => setResourceInfoVisible(false);
-
     const [pages, setPages]: any[] = useState([]);
     const [currentPage, setCurrentPage]: any = useState(0);
+
+    const { open: optionsOpen, handleOpen: openOptions, handleClose: closeOptions } = useOpen();
 
     if (resource) {
         const file = mediaURL(resource.file);
@@ -91,11 +81,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const schoolName = R.propOr('-', 'name', resource.school) as string;
         const creatorId = R.propOr('', 'id', resource.user) as string;
         const creatorName = R.propOr('-', 'username', resource.user) as string;
-
         const created = moment(resource.created).format('LL');
         const initialPoints = R.propOr('-', 'points', resource);
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
-
         const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
 
         const [vote, setVote] = useState(resource.vote);
@@ -149,9 +137,15 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         const handleDelete = () => {
             confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') }).then(() => {
-                creatorName;
                 deleteResource({ variables: { id: resource.id } });
             });
+        };
+
+        const handleShare = (e: SyntheticEvent): void => {
+            e.stopPropagation();
+            closeOptions();
+            navigator.clipboard.writeText(window.location.href);
+            dispatch(toggleNotification(t('notifications:linkCopied')));
         };
 
         const renderResourceInfo = (
@@ -212,11 +206,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </ListItemText>
                     </ListItem>
                 </List>
-                <Box justifyContent="center" display="flex">
-                    <Button variant="contained" color="primary" onClick={handleDelete} startIcon={<DeleteOutlined />}>
-                        {isOwnProfile && t('resource:deleteResource')}
-                    </Button>
-                </Box>
             </CardContent>
         );
 
@@ -239,31 +228,107 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 {renderCreatedInfo}
             </SwipeableDrawer>
         );
-        const renderResourceInfoModal = (
-            <StyledModal open={!!resourceInfoVisible} onClose={handleCloseResourceInfo}>
-                <Fade in={!!resourceInfoVisible}>
-                    <Paper>
-                        <ModalHeader onCancel={handleCloseResourceInfo} />
-                        <Box textAlign="center">
-                            <CardHeader title={resourceTitle} />
-                            {renderResourceInfo}
-                            <Divider />
-                            {renderCreatedInfo}
-                        </Box>
-                    </Paper>
-                </Fade>
-            </StyledModal>
+
+        const renderDesktopOptionsDrawer = (
+            <SwipeableDrawer
+                className="md-up"
+                anchor="left"
+                open={!!optionsOpen}
+                onOpen={openOptions}
+                onClose={closeOptions}
+            >
+                <ModalHeader onCancel={closeOptions} />
+                <List>
+                    {isOwnProfile && (
+                        <ListItem>
+                            <ListItemText onClick={handleDelete}>
+                                <DeleteOutline /> {t('resource:deleteResource')}
+                            </ListItemText>
+                        </ListItem>
+                    )}
+                    <ListItem>
+                        <ListItemText onClick={handleShare}>
+                            <ShareOutlined /> {t('common:share')}
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem disabled>
+                        <ListItemText onClick={() => {}}>
+                            <FlagOutlined /> {t('common:reportAbuse')}
+                        </ListItemText>
+                    </ListItem>
+                </List>
+            </SwipeableDrawer>
         );
 
-        const renderDesktopResourceInfoButton = (
-            <IconButton color="primary" onClick={handleOpen}>
-                <InfoOutlined />
-            </IconButton>
+        const renderMobileDrawer = (
+            <SwipeableDrawer
+                className="md-down"
+                anchor="bottom"
+                open={!!open}
+                onOpen={handleOpen}
+                onClose={handleClose}
+            >
+                <Paper>
+                    <ModalHeader title={resourceTitle} onCancel={handleClose} />
+                    {renderCreatedInfo}
+                    <Divider />
+                    {renderResourceInfo}
+                </Paper>
+            </SwipeableDrawer>
         );
+
+        const renderMobileOptionsDrawer = (
+            <SwipeableDrawer
+                className="md-down"
+                anchor="bottom"
+                open={!!optionsOpen}
+                onOpen={openOptions}
+                onClose={closeOptions}
+            >
+                <Paper>
+                    <List>
+                        {isOwnProfile && (
+                            <ListItem>
+                                <ListItemText onClick={handleDelete}>
+                                    <DeleteOutline /> {t('resource:deleteResource')}
+                                </ListItemText>
+                            </ListItem>
+                        )}
+                        <ListItem>
+                            <ListItemText onClick={handleShare}>
+                                <ShareOutlined /> {t('common:share')}
+                            </ListItemText>
+                        </ListItem>
+                        <ListItem disabled>
+                            <ListItemText onClick={() => {}}>
+                                <FlagOutlined /> {t('common:reportAbuse')}
+                            </ListItemText>
+                        </ListItem>
+                    </List>
+                </Paper>
+            </SwipeableDrawer>
+        );
+
+        const renderDesktopActionButtons = (
+            <>
+                <IconButton color="primary" onClick={handleOpen}>
+                    <InfoOutlined />
+                </IconButton>
+                <IconButton onClick={openOptions}>
+                    <MoreHorizOutlined />
+                </IconButton>
+            </>
+        );
+
         const renderMobileResourceInfoButton = (
-            <IconButton color="secondary" onClick={handleOpenResourceInfo}>
-                <InfoOutlined />
-            </IconButton>
+            <Box display="flex" flex-direction="row">
+                <IconButton color="secondary" onClick={handleOpen}>
+                    <InfoOutlined />
+                </IconButton>
+                <IconButton color="secondary" onClick={openOptions}>
+                    <MoreHorizOutlined />
+                </IconButton>
+            </Box>
         );
 
         const renderContent = (
@@ -281,7 +346,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             <Tab label={resourceTitle} />
                             <Tab label={t('common:discussion')} />
                         </Tabs>
-                        <CardHeader action={renderDesktopResourceInfoButton} className="md-up" title={resourceTitle} />
+                        <CardHeader action={renderDesktopActionButtons} className="md-up" title={resourceTitle} />
 
                         {tabValue === 0 && (
                             <ResourcePreview
@@ -319,7 +384,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             >
                 {renderContent}
                 {renderDesktopDrawer}
-                {renderResourceInfoModal}
+                {renderDesktopOptionsDrawer}
+                {renderMobileDrawer}
+                {renderMobileOptionsDrawer}
             </MainLayout>
         );
     } else {

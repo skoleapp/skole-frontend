@@ -10,7 +10,7 @@ import {
     Tabs,
     Typography,
 } from '@material-ui/core';
-import { InfoOutlined } from '@material-ui/icons';
+import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -27,6 +27,7 @@ interface Props extends LayoutProps {
     renderLeftContent: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
+    renderOptions?: JSX.Element;
     singleColumn?: boolean;
     createdInfoProps?: {
         creatorId: string;
@@ -46,22 +47,41 @@ export const TabLayout: React.FC<Props> = ({
     customBottomNavbar,
     createdInfoProps,
     singleColumn,
+    renderOptions,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
     const { open, handleOpen, handleClose } = useOpen();
+    const { open: optionsOpen, handleOpen: openOptions, handleClose: closeOptions } = useOpen();
 
     const renderMobileHeaderRight = (
-        <IconButton color="secondary" onClick={handleOpen}>
-            <InfoOutlined />
-        </IconButton>
+        <Box display="flex" flex-direction="row">
+            <IconButton color="secondary" onClick={handleOpen}>
+                <InfoOutlined />
+            </IconButton>
+
+            {!!renderOptions && (
+                <IconButton color="secondary" onClick={openOptions}>
+                    <MoreHorizOutlined />
+                </IconButton>
+            )}
+        </Box>
     );
 
     const renderDesktopHeaderRight = (
-        <IconButton color="primary" onClick={handleOpen}>
-            <InfoOutlined />
-        </IconButton>
+        <>
+            {!renderDesktopInfo && (
+                <IconButton color="primary" onClick={handleOpen}>
+                    <InfoOutlined />
+                </IconButton>
+            )}
+            {!!renderOptions && (
+                <IconButton color="primary" onClick={openOptions}>
+                    <MoreHorizOutlined />
+                </IconButton>
+            )}
+        </>
     );
 
     const renderCreatedInfo = !!createdInfoProps && (
@@ -123,7 +143,7 @@ export const TabLayout: React.FC<Props> = ({
         <Grid container className="md-up">
             <Grid item container xs={12} md={7} lg={8}>
                 <StyledCard>
-                    <CardHeader title={title} action={!renderDesktopInfo && renderDesktopHeaderRight} />
+                    <CardHeader title={title} action={renderDesktopHeaderRight} />
                     <Divider />
                     {renderDesktopInfo}
                     {!!renderDesktopInfo && renderCreatedInfo}
@@ -161,6 +181,30 @@ export const TabLayout: React.FC<Props> = ({
         </SwipeableDrawer>
     );
 
+    const renderMobileOptionsDrawer = (
+        <SwipeableDrawer
+            className="md-down"
+            anchor="bottom"
+            open={!!optionsOpen}
+            onOpen={openOptions}
+            onClose={closeOptions}
+        >
+            {renderOptions}
+        </SwipeableDrawer>
+    );
+
+    const renderDesktopOptionsDrawer = (
+        <SwipeableDrawer
+            className="md-up"
+            anchor="left"
+            open={!!optionsOpen}
+            onOpen={openOptions}
+            onClose={closeOptions}
+        >
+            {renderOptions}
+        </SwipeableDrawer>
+    );
+
     return (
         <MainLayout
             title={title}
@@ -173,6 +217,8 @@ export const TabLayout: React.FC<Props> = ({
             {renderDesktopContent}
             {renderMobileDrawer}
             {renderDesktopDrawer}
+            {renderMobileOptionsDrawer}
+            {renderDesktopOptionsDrawer}
         </MainLayout>
     );
 };
