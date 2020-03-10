@@ -1,6 +1,7 @@
 import {
     Avatar,
     CardContent,
+    IconButton,
     List,
     ListItem,
     ListItemAvatar,
@@ -15,6 +16,7 @@ import {
 import { CloudUploadOutlined, DeleteOutline, SchoolOutlined, ScoreOutlined, SubjectOutlined } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
+import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +34,7 @@ import { toggleNotification } from '../../actions';
 import { DiscussionBox, NotFound, StyledTable, TabLayout, TextLink } from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
 import { getFullCourseName, useOptions, usePrivatePage } from '../../utils';
 
 interface Props extends I18nProps {
@@ -212,21 +214,16 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </List>
         );
 
-        // const uploadResourceButtonMobile = (
-        //     <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
-        //         <IconButton color="secondary">
-        //             <CloudUploadOutlined />
-        //         </IconButton>
-        //     </Link>
-        // );
+        const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
+            <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
+                <IconButton color={color}>
+                    <CloudUploadOutlined />
+                </IconButton>
+            </Link>
+        );
 
-        // const uploadResourceButtonDesktop = (
-        //     <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
-        //         <IconButton color="primary">
-        //             <CloudUploadOutlined />
-        //         </IconButton>
-        //     </Link>
-        // );
+        const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
+        const uploadResourceButtonDesktop = renderUploadResourceButton('primary');
 
         return (
             <TabLayout
@@ -239,8 +236,8 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 renderLeftContent={renderResources}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 createdInfoProps={createdInfoProps}
-                // headerLeft={uploadResourceButtonMobile}
-                // renderSecondaryAction={uploadResourceButtonDesktop}
+                extraActionMobile={uploadResourceButtonMobile}
+                extraActionDesktop={uploadResourceButtonDesktop}
             />
         );
     } else {

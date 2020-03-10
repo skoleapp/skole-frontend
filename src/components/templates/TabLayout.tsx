@@ -14,8 +14,7 @@ import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutProps } from '../../types';
-import { MuiColor } from '../../types';
+import { LayoutProps, MuiColor } from '../../types';
 import { useOpen, useTabs } from '../../utils';
 import { ModalHeader, StyledCard, TabPanel, TextLink } from '../shared';
 import { MainLayout } from './MainLayout';
@@ -29,6 +28,8 @@ interface Props extends LayoutProps {
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
     renderSecondaryAction?: JSX.Element;
+    extraActionMobile?: JSX.Element;
+    extraActionDesktop?: JSX.Element;
     singleColumn?: boolean;
     createdInfoProps?: {
         creatorId: string;
@@ -48,6 +49,8 @@ export const TabLayout: React.FC<Props> = ({
     createdInfoProps,
     singleColumn,
     renderOptions,
+    extraActionMobile,
+    extraActionDesktop,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
@@ -57,6 +60,7 @@ export const TabLayout: React.FC<Props> = ({
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
+            <Box className="md-up">{extraActionDesktop}</Box>
             <IconButton onClick={handleOpenInfo} color={color}>
                 <InfoOutlined />
             </IconButton>
@@ -209,6 +213,7 @@ export const TabLayout: React.FC<Props> = ({
             backUrl
             headerRight={renderMobileHeaderActions}
             customBottomNavbar={customBottomNavbar}
+            headerLeft={extraActionMobile}
             {...props}
         >
             {renderMobileContent}
