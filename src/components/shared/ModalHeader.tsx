@@ -1,10 +1,9 @@
-import { Box, Grid, IconButton } from '@material-ui/core';
+import { Box, Grid, IconButton, Typography } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
-import { Heading } from './Heading';
 
 interface Props {
     title?: string;
@@ -23,7 +22,7 @@ export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) =
                 )}
             </Grid>
             <Grid item container xs={8} justify="center">
-                {!!title && <Heading text={title} />}
+                {!!title && <Typography variant="subtitle2">{title}</Typography>}
             </Grid>
             <Grid item xs={2}>
                 {headerRight}

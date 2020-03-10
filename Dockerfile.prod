@@ -3,7 +3,7 @@ FROM node:12.13.0-alpine
 RUN mkdir /app
 WORKDIR /app
 
-COPY . .
+COPY ./frontend .
 
 RUN yarn install
 RUN yarn build
