@@ -28,7 +28,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { usePrivatePage } from '../../utils';
+import { useOptions, usePrivatePage } from '../../utils';
 
 interface Props extends I18nProps {
     school?: SchoolObjectType;
@@ -36,6 +36,7 @@ interface Props extends I18nProps {
 
 const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
     const { t } = useTranslation();
+    const { renderShareOption, renderReportOption } = useOptions();
 
     if (school) {
         const schoolName = R.propOr('-', 'name', school) as string;
@@ -138,6 +139,13 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
             </CardContent>
         );
 
+        const renderOptions = (
+            <List>
+                {renderShareOption}
+                {renderReportOption}
+            </List>
+        );
+
         const renderSubjects = subjects.length ? (
             <StyledTable disableBoxShadow>
                 <Table>
@@ -205,8 +213,8 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                 title={schoolName}
                 titleSecondary={t('common:courses')}
                 tabLabelLeft={t('common:subjects')}
-                renderMobileInfo={renderInfo}
-                renderDesktopInfo={renderInfo}
+                renderInfo={renderInfo}
+                renderOptions={renderOptions}
                 renderLeftContent={renderSubjects}
                 renderRightContent={renderCourses}
                 singleColumn

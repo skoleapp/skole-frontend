@@ -96,25 +96,25 @@ export const base = css`
                 text-align: center;
             }
 
-            .MuiListItem-root {
-                cursor: pointer;
-
-                &:hover {
-                    background-color: var(--hover-opacity);
-                }
-
-                .MuiListItemText-primary {
-                    display: flex;
-                    align-items: center;
-
-                    .MuiSvgIcon-root {
-                        margin-right: 0.5rem;
-                    }
-                }
-            }
-
             .MuiDialogActions-root {
                 margin: auto;
+            }
+        }
+
+        .MuiListItem-root {
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--hover-opacity);
+            }
+
+            .MuiListItemText-primary {
+                display: flex;
+                align-items: center;
+
+                .MuiSvgIcon-root {
+                    margin-right: 0.5rem;
+                }
             }
         }
 

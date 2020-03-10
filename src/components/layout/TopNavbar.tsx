@@ -86,4 +86,10 @@ const StyledTopNavBar = styled(AppBar)`
     .MuiButton-root {
         margin: 0 0.5rem;
     }
+
+    .MuiToolbar-root {
+        @media only screen and (max-width: ${breakpoints.MD}) {
+            padding: 0;
+        }
+    }
 `;

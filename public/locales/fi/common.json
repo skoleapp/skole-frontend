@@ -23,7 +23,7 @@
     "subjects": "Oppiaineet",
     "resources": "Resurssit",
     "resource": "Resurssi",
-    "skoleLtd": "Skole Team",
+    "skoleLtd": "Skole Oy",
     "save": "Tallenna",
     "confirm": "Vahvista",
     "submit": "Lähetä",
@@ -54,8 +54,8 @@
     "reportAbuse": "Ilmoita väärinkäytöstä",
     "createComment": "Luo kommentti",
     "comments": "Kommentit",
+    "dropzoneText": "Raahaa tiedosto tai klikkaa tästä",
     "share": "Jaa",
     "noComments": "Ei kommentteja näytettäväksi...",
-    "dropzoneText": "Raahaa tiedosto tai klikkaa tästä!",
-    "filesize": "Maksimi tiedostokoko 5MB"
+    "actions": "Toiminnot"
 }

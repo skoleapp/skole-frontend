@@ -1,7 +1,6 @@
 import {
     Avatar,
     CardContent,
-    IconButton,
     List,
     ListItem,
     ListItemAvatar,
@@ -13,15 +12,7 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core';
-import {
-    CloudUploadOutlined,
-    DeleteOutline,
-    FlagOutlined,
-    SchoolOutlined,
-    ScoreOutlined,
-    ShareOutlined,
-    SubjectOutlined,
-} from '@material-ui/icons';
+import { CloudUploadOutlined, DeleteOutline, SchoolOutlined, ScoreOutlined, SubjectOutlined } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import * as R from 'ramda';
@@ -39,10 +30,10 @@ import {
 } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
 import { DiscussionBox, NotFound, StyledTable, TabLayout, TextLink } from '../../components';
-import { includeDefaultNamespaces, Link, Router, useTranslation } from '../../i18n';
+import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { getFullCourseName, usePrivatePage } from '../../utils';
+import { getFullCourseName, useOptions, usePrivatePage } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -52,6 +43,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const confirm = useConfirm();
+    const { renderShareOption, renderReportOption } = useOptions();
 
     if (course) {
         const { subject, school, user } = course;
@@ -60,14 +52,11 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const schoolName = R.propOr('-', 'name', school) as string;
         const creatorId = R.propOr('', 'id', course.user) as string;
         const courseId = R.propOr('', 'id', course) as string;
-
         const creatorName = R.propOr('-', 'username', user) as string;
-
         const points = R.propOr('-', 'points', course);
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
-
         const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
 
         const created = moment(course.created)
@@ -105,7 +94,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             onError: deleteCourseError,
         });
 
-        const handleDelete = (): void => {
+        const handleDeleteCourse = (): void => {
             confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') }).then(() => {
                 deleteCourse({ variables: { id: courseId } });
             });
@@ -211,55 +200,47 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderOptions = (
             <List>
+                {renderShareOption}
+                {renderReportOption}
                 {isOwnProfile && (
                     <ListItem>
-                        <ListItemText onClick={handleDelete}>
+                        <ListItemText onClick={handleDeleteCourse}>
                             <DeleteOutline /> {t('course:deleteCourse')}
                         </ListItemText>
                     </ListItem>
                 )}
-                <ListItem>
-                    <ListItemText>
-                        <ShareOutlined /> {t('common:share')}
-                    </ListItemText>
-                </ListItem>
-                <ListItem disabled>
-                    <ListItemText>
-                        <FlagOutlined /> {t('common:reportAbuse')}
-                    </ListItemText>
-                </ListItem>
             </List>
         );
 
-        const uploadResourceButtonMobile = (
-            <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
-                <IconButton color="secondary">
-                    <CloudUploadOutlined />
-                </IconButton>
-            </Link>
-        );
-        const uploadResourceButtonDesktop = (
-            <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
-                <IconButton color="primary">
-                    <CloudUploadOutlined />
-                </IconButton>
-            </Link>
-        );
+        // const uploadResourceButtonMobile = (
+        //     <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
+        //         <IconButton color="secondary">
+        //             <CloudUploadOutlined />
+        //         </IconButton>
+        //     </Link>
+        // );
+
+        // const uploadResourceButtonDesktop = (
+        //     <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
+        //         <IconButton color="primary">
+        //             <CloudUploadOutlined />
+        //         </IconButton>
+        //     </Link>
+        // );
 
         return (
             <TabLayout
                 title={fullName}
                 titleSecondary={t('common:discussion')}
                 backUrl
-                renderMobileInfo={renderInfo}
-                renderDesktopInfo={renderInfo}
+                renderInfo={renderInfo}
+                renderOptions={renderOptions}
                 tabLabelLeft={t('common:resources')}
                 renderLeftContent={renderResources}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 createdInfoProps={createdInfoProps}
-                renderOptions={renderOptions}
-                headerLeft={uploadResourceButtonMobile}
-                renderSecondaryAction={uploadResourceButtonDesktop}
+                // headerLeft={uploadResourceButtonMobile}
+                // renderSecondaryAction={uploadResourceButtonDesktop}
             />
         );
     } else {

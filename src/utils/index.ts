@@ -13,3 +13,4 @@ export { useSettings } from './useSettings';
 export { useFilters } from './useFilters';
 export { mediaURL } from './mediaURL';
 export { useOpen } from './useOpen';
+export { useOptions } from './useOptions';
