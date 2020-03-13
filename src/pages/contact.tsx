@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Field, Form, Formik } from 'formik';
+=======
+import { Field, Formik } from 'formik';
+>>>>>>> contact from updates
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -22,8 +26,11 @@ const initialValues = {
 };
 
 export interface ContactFormValues {
+<<<<<<< HEAD
     subject: string;
     name: string;
+=======
+>>>>>>> contact from updates
     email: string;
     message: string;
 }
@@ -44,6 +51,11 @@ const ContactPage: I18nPage = () => {
 
     // TODO: Finish this.
     const handleSubmit = (values: ContactFormValues): void => {
+        const {email, message} = values
+        const variables = {
+            email,
+            message
+        }
         console.log(values);
         resetForm();
         dispatch(toggleNotification(t('notifications:messageSubmitted')));
@@ -52,6 +64,7 @@ const ContactPage: I18nPage = () => {
     const renderCardContent = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
+<<<<<<< HEAD
                 <Form>
                     <Field
                         name="subject"
@@ -69,6 +82,9 @@ const ContactPage: I18nPage = () => {
                         variant="outlined"
                         fullWidth
                     />
+=======
+                <StyledForm>
+>>>>>>> contact from updates
                     <Field
                         name="email"
                         component={TextField}
