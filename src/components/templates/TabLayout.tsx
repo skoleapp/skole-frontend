@@ -31,6 +31,7 @@ interface Props extends LayoutProps {
     extraActionMobile?: JSX.Element;
     extraActionDesktop?: JSX.Element;
     singleColumn?: boolean;
+    filePreview?: boolean;
     createdInfoProps?: {
         creatorId: string;
         creatorName: string;
@@ -51,6 +52,7 @@ export const TabLayout: React.FC<Props> = ({
     renderOptions,
     extraActionMobile,
     extraActionDesktop,
+    filePreview,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
@@ -134,7 +136,7 @@ export const TabLayout: React.FC<Props> = ({
                 <StyledCard>
                     <CardHeader title={title} action={renderDesktopHeaderActions} />
                     <Divider />
-                    {renderInfo}
+                    {!filePreview && renderInfo}
                     <Divider />
                     {renderLeftContent}
                 </StyledCard>
