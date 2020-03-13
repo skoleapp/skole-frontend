@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/react-hooks';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
-import { GraphQLRequest } from 'apollo-link';
+import { GraphQLRequest, ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpConfig } from 'apollo-link-http-common';
 import { createUploadLink } from 'apollo-upload-client';
@@ -95,11 +95,11 @@ const initApolloClient = (initState = {}, { getToken }: GetToken): ApolloClient<
 
 const createApolloClient = (initialState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
     const isBrowser = typeof window !== 'undefined';
-    const isDocker = process.env.API_URL === 'http://backend:8000/graphql/';
+    const uri = isBrowser ? process.env.API_URL : process.env.BACKEND_URL;
 
     const httpLink = createUploadLink({
-        uri: isDocker && isBrowser ? 'http://localhost:8000/graphql/' : process.env.API_URL,
-        credentials: 'same-origin',
+        uri: uri + 'graphql/',
+        credentials: 'include',
         fetch,
     });
 
@@ -117,7 +117,7 @@ const createApolloClient = (initialState = {}, { getToken }: GetToken): ApolloCl
     return new ApolloClient({
         connectToDevTools: isBrowser,
         ssrMode: !isBrowser,
-        link: authLink.concat(httpLink),
+        link: ApolloLink.from([authLink, httpLink]),
         cache: new InMemoryCache().restore(initialState),
     });
 };

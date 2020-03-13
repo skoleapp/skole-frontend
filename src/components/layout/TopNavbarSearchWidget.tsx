@@ -8,11 +8,15 @@ import { useSearch } from '../../utils';
 export const TopNavbarSearchWidget: React.FC = () => {
     const { searchValue, handleSubmit, handleChange, placeholder } = useSearch();
 
+    const onButtonClick = () => {
+        document.getElementById('myInput')?.focus();
+    };
+
     return (
         <StyledSearchWidget onSubmit={handleSubmit}>
             <Box className="search-input">
-                <Search />
-                <InputBase placeholder={placeholder} onChange={handleChange} value={searchValue} />
+                <Search onClick={onButtonClick} />
+                <InputBase placeholder={placeholder} onChange={handleChange} value={searchValue} id="myInput" />
                 <input type="submit" value="Submit" />
             </Box>
         </StyledSearchWidget>
