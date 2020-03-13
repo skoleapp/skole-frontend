@@ -92,7 +92,8 @@ export const base = css`
         }
 
         .MuiDialog-paper {
-            .MuiDialogTitle-root {
+            .MuiDialogTitle-root,
+            .MuiDialogContent-root {
                 text-align: center;
             }
 
