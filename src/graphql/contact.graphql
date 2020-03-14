@@ -1,9 +1,9 @@
-# mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
-#     createMessage(input: { subject: $subject, name: $name, email: $email: message: $message }) {
-#         message
-#         errors {
-#             field
-#             messages
-#         }
-#     }
-# }
+#mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
+#    createMessage(input: { subject: $subject, name: $name, email: $email, message: $message }) {
+#       message
+#        errors {
+#            field
+#            messages
+#        }
+#    }
+#}

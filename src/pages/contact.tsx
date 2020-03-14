@@ -37,7 +37,7 @@ export interface ContactFormValues {
 
 const ContactPage: I18nPage = () => {
     const dispatch = useDispatch();
-    const { ref, resetForm } = useForm<ContactFormValues>();
+    const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<ContactFormValues>();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -49,6 +49,8 @@ const ContactPage: I18nPage = () => {
         message: Yup.string().required(t('validation:required')),
     });
 
+    const [contactMutation] = usecontac({ onCompleted, onError });
+    
     // TODO: Finish this.
     const handleSubmit = (values: ContactFormValues): void => {
         const {email, message} = values
