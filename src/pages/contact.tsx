@@ -43,18 +43,15 @@ const ContactPage: I18nPage = () => {
         message: Yup.string().required(t('validation:required')),
     });
 
-    
     const onCompleted = ({ createMessage }: ContactMutation): void => {
         if (createMessage && createMessage.errors) {
-            handleMutationErrors(createMessage.errors);
-        } else if (createMessage && createMessage.errors) {
             handleMutationErrors(createMessage.errors);
         } else if (createMessage) {
             resetForm();
             dispatch(toggleNotification(t('notifications:messageSubmitted')));
         }
     };
-    
+
     const [contactMutation] = useContactMutation({ onCompleted, onError });
     // TODO: Finish this.
     const handleSubmit = async (values: ContactFormValues): Promise<void> => {
@@ -65,8 +62,8 @@ const ContactPage: I18nPage = () => {
             email,
             message,
         };
-        await contactMutation({variables})
-        setSubmitting(false)
+        await contactMutation({ variables });
+        setSubmitting(false);
     };
 
     const renderCardContent = (
