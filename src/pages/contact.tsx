@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Field, Form, Formik } from 'formik';
-=======
-import { Field, Formik } from 'formik';
->>>>>>> contact from updates
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -16,6 +12,7 @@ import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useForm } from '../utils';
+import { useContactMutation, ContactMutation } from '../../generated/graphql';
 
 const initialValues = {
     subject: '',
@@ -26,11 +23,8 @@ const initialValues = {
 };
 
 export interface ContactFormValues {
-<<<<<<< HEAD
-    subject: string;
     name: string;
-=======
->>>>>>> contact from updates
+    subject: string;
     email: string;
     message: string;
 }
@@ -49,33 +43,36 @@ const ContactPage: I18nPage = () => {
         message: Yup.string().required(t('validation:required')),
     });
 
-    const [contactMutation] = usecontac({ onCompleted, onError });
     
-    // TODO: Finish this.
-    const handleSubmit = (values: ContactFormValues): void => {
-        const {email, message} = values
-        const variables = {
-            email,
-            message
+    const onCompleted = ({ createMessage }: ContactMutation): void => {
+        if (createMessage && createMessage.errors) {
+            handleMutationErrors(createMessage.errors);
+        } else if (createMessage && createMessage.errors) {
+            handleMutationErrors(createMessage.errors);
+        } else if (createMessage) {
+            resetForm();
+            dispatch(toggleNotification(t('notifications:messageSubmitted')));
         }
-        console.log(values);
-        resetForm();
-        dispatch(toggleNotification(t('notifications:messageSubmitted')));
+    };
+    
+    const [contactMutation] = useContactMutation({ onCompleted, onError });
+    // TODO: Finish this.
+    const handleSubmit = async (values: ContactFormValues): Promise<void> => {
+        const { name, subject, email, message } = values;
+        const variables = {
+            name,
+            subject,
+            email,
+            message,
+        };
+        await contactMutation({variables})
+        setSubmitting(false)
     };
 
     const renderCardContent = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
-<<<<<<< HEAD
                 <Form>
-                    <Field
-                        name="subject"
-                        component={TextField}
-                        label={t('forms:subject')}
-                        placeholder={t('forms:subject')}
-                        variant="outlined"
-                        fullWidth
-                    />
                     <Field
                         name="name"
                         component={TextField}
@@ -84,9 +81,14 @@ const ContactPage: I18nPage = () => {
                         variant="outlined"
                         fullWidth
                     />
-=======
-                <StyledForm>
->>>>>>> contact from updates
+                    <Field
+                        name="subject"
+                        component={TextField}
+                        label={t('forms:subject')}
+                        placeholder={t('forms:subject')}
+                        variant="outlined"
+                        fullWidth
+                    />
                     <Field
                         name="email"
                         component={TextField}
