@@ -5,6 +5,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
+import styled from 'styled-components';
 
 import {
     CourseObjectType,
@@ -21,12 +22,13 @@ import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePrivatePage } from '../utils';
+import { Typography } from '@material-ui/core';
 
 interface UploadResourceFormValues {
     resourceTitle: string;
     resourceType: string;
     course: CourseObjectType | null;
-    files: File[];
+    file: File | null;
 }
 
 interface Props extends I18nProps {
@@ -46,7 +48,9 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         course: Yup.object()
             .nullable()
             .required(t('validation:required')),
-        files: Yup.array().required(t('validation:required')),
+        file: Yup.object()
+            .nullable()
+            .required(t('validation:required')),
     });
 
     const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {
@@ -64,13 +68,13 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const [createResourceMutation] = useCreateResourceMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
-        const { resourceTitle, resourceType, course, files } = values;
+        const { resourceTitle, resourceType, course, file } = values;
 
         const variables = {
             resourceTitle,
             resourceType: R.propOr('', 'id', resourceType) as string,
             course: R.propOr('', 'id', course) as string,
-            files: (files as unknown) as string,
+            file: (file as unknown) as string,
         };
 
         await createResourceMutation({ variables });
@@ -81,7 +85,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         resourceTitle: '',
         resourceType: '',
         course: course || null,
-        files: [],
+        file: null,
         general: '',
     };
 
@@ -117,7 +121,8 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                         component={AutoCompleteField}
                         fullWidth
                     />
-                    <Field name="files" component={DropzoneField} />
+                    <Field name="file" component={DropzoneField} />
+                    <StyledTypography variant="body2">{t('common:filesize')}</StyledTypography>
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}
@@ -143,5 +148,10 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
         return nameSpaces;
     }
 };
-
+const StyledTypography = styled(Typography)`
+    color: grey;
+    && {
+        margin-top: 0.5rem;
+    }
+`;
 export default compose(withApollo, withRedux)(UploadResourcePage);

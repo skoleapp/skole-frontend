@@ -54,5 +54,6 @@
     "createComment": "Luo kommentti",
     "comments": "Kommentit",
     "dropzoneText": "Raahaa tiedosto tai klikkaa tästä!",
-    "share": "Jaa"
+    "share": "Jaa",
+    "filesize": "Maksimi tiedostokoko 5MB"
 }
