@@ -12,6 +12,7 @@ import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useForm } from '../utils';
+import { useContactMutation, ContactMutation } from '../../generated/graphql';
 
 const initialValues = {
     subject: '',
@@ -22,15 +23,15 @@ const initialValues = {
 };
 
 export interface ContactFormValues {
-    subject: string;
     name: string;
+    subject: string;
     email: string;
     message: string;
 }
 
 const ContactPage: I18nPage = () => {
     const dispatch = useDispatch();
-    const { ref, resetForm } = useForm<ContactFormValues>();
+    const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<ContactFormValues>();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -42,11 +43,27 @@ const ContactPage: I18nPage = () => {
         message: Yup.string().required(t('validation:required')),
     });
 
+    const onCompleted = ({ createMessage }: ContactMutation): void => {
+        if (createMessage && createMessage.errors) {
+            handleMutationErrors(createMessage.errors);
+        } else if (createMessage) {
+            resetForm();
+            dispatch(toggleNotification(t('notifications:messageSubmitted')));
+        }
+    };
+
+    const [contactMutation] = useContactMutation({ onCompleted, onError });
     // TODO: Finish this.
-    const handleSubmit = (values: ContactFormValues): void => {
-        console.log(values);
-        resetForm();
-        dispatch(toggleNotification(t('notifications:messageSubmitted')));
+    const handleSubmit = async (values: ContactFormValues): Promise<void> => {
+        const { name, subject, email, message } = values;
+        const variables = {
+            name,
+            subject,
+            email,
+            message,
+        };
+        await contactMutation({ variables });
+        setSubmitting(false);
     };
 
     const renderCardContent = (
@@ -54,18 +71,18 @@ const ContactPage: I18nPage = () => {
             {(props): JSX.Element => (
                 <Form>
                     <Field
-                        name="subject"
-                        component={TextField}
-                        label={t('forms:subject')}
-                        placeholder={t('forms:subject')}
-                        variant="outlined"
-                        fullWidth
-                    />
-                    <Field
                         name="name"
                         component={TextField}
                         label={t('forms:name')}
                         placeholder={t('forms:name')}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="subject"
+                        component={TextField}
+                        label={t('forms:subject')}
+                        placeholder={t('forms:subject')}
                         variant="outlined"
                         fullWidth
                     />

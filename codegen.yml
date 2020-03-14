@@ -1,4 +1,3 @@
-  
 overwrite: true
 schema: "http://backend:8000/graphql/"
 documents: "src/graphql/*.graphql"
