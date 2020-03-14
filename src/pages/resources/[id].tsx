@@ -1,27 +1,49 @@
-import { Avatar, Box, CardContent, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
-import { CloudUploadOutlined, DeleteOutline, LibraryAddOutlined, SchoolOutlined } from '@material-ui/icons';
+import {
+    Avatar,
+    BottomNavigation,
+    Box,
+    CardContent,
+    IconButton,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Typography,
+} from '@material-ui/core';
+import {
+    CloudUploadOutlined,
+    DeleteOutline,
+    KeyboardArrowDownOutlined,
+    KeyboardArrowUpOutlined,
+    LibraryAddOutlined,
+    SchoolOutlined,
+    ScoreOutlined,
+} from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 
 import {
     CommentObjectType,
     DeleteResourceMutation,
+    PerformVoteMutation,
     ResourceDetailDocument,
     ResourceObjectType,
     useDeleteResourceMutation,
+    usePerformVoteMutation,
+    VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { DiscussionBox, NotFound, TabLayout, TextLink } from '../../components';
+import { DiscussionBox, FilePreview, NotFound, TabLayout, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { useOptions, usePrivatePage } from '../../utils';
+import { mediaURL, useOptions, usePrivatePage } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -34,7 +56,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { renderShareOption, renderReportOption } = useOptions();
 
     if (resource) {
-        // const file = mediaURL(resource.file);
+        const file = mediaURL(resource.file);
         const resourceTitle = R.propOr('-', 'title', resource) as string;
         const resourceType = R.propOr('-', 'resourceType', resource);
         const courseId = R.propOr('', 'id', resource.course);
@@ -44,12 +66,12 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const creatorId = R.propOr('', 'id', resource.user) as string;
         const creatorName = R.propOr('-', 'username', resource.user) as string;
         const created = moment(resource.created).format('LL');
-        // const initialPoints = R.propOr('-', 'points', resource);
+        const initialPoints = R.propOr('-', 'points', resource);
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
         const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
 
-        // const [vote, setVote] = useState(resource.vote);
-        // const [points, setPoints] = useState(initialPoints);
+        const [vote, setVote] = useState(resource.vote);
+        const [points, setPoints] = useState(initialPoints);
 
         const discussionBoxProps = {
             comments,
@@ -58,28 +80,26 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         const createdInfoProps = { creatorId, creatorName, created };
 
-        // const onError = (): void => {
-        //     dispatch(toggleNotification(t('notifications:voteError')));
-        // };
+        const onError = (): void => {
+            dispatch(toggleNotification(t('notifications:voteError')));
+        };
 
-        // const onCompleted = ({ performVote }: PerformVoteMutation): void => {
-        //     if (!!performVote) {
-        //         if (!!performVote.errors) {
-        //             onError();
-        //         } else {
-        //             setVote(performVote.vote as VoteObjectType);
-        //             setPoints(performVote.targetPoints);
-        //         }
-        //     }
-        // };
+        const onCompleted = ({ performVote }: PerformVoteMutation): void => {
+            if (!!performVote) {
+                if (!!performVote.errors) {
+                    onError();
+                } else {
+                    setVote(performVote.vote as VoteObjectType);
+                    setPoints(performVote.targetPoints);
+                }
+            }
+        };
 
-        // const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
+        const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
 
-        // const handleVote = (status: number) => (): void => {
-        //     performVote({ variables: { resource: resource.id, status } });
-        // };
-
-        // const voteProps = { vote, voteSubmitting, handleVote, points };
+        const handleVote = (status: number) => (): void => {
+            performVote({ variables: { resource: resource.id, status } });
+        };
 
         const deleteResourceError = (): void => {
             dispatch(toggleNotification(t('notifications:deleteResourceError')));
@@ -152,7 +172,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
-                    {/* <ListItem>
+                    <ListItem>
                         <ListItemAvatar>
                             <Avatar>
                                 <ScoreOutlined />
@@ -163,7 +183,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                                 {t('common:points')}: {points}
                             </Typography>
                         </ListItemText>
-                    </ListItem> */}
+                    </ListItem>
                 </List>
             </CardContent>
         );
@@ -182,7 +202,26 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </List>
         );
 
-        const renderFilePreview = <Box>Resource Preview</Box>;
+        const renderCustomBottomNavbar = (
+            <BottomNavigation>
+                <Box display="flex" justifyContent="space-around" alignItems="center" width="100%">
+                    <IconButton
+                        color={!!vote && vote.status === 1 ? 'primary' : 'inherit'}
+                        onClick={handleVote(1)}
+                        disabled={voteSubmitting}
+                    >
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                    <IconButton
+                        color={!!vote && vote.status === -1 ? 'primary' : 'inherit'}
+                        onClick={handleVote(-1)}
+                        disabled={voteSubmitting}
+                    >
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
+                </Box>
+            </BottomNavigation>
+        );
 
         return (
             <TabLayout
@@ -191,10 +230,12 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 backUrl
                 renderInfo={renderInfo}
                 tabLabelLeft={t('common:resources')}
-                renderLeftContent={renderFilePreview}
+                renderLeftContent={<FilePreview file={file} />}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
+                customBottomNavbar={renderCustomBottomNavbar}
                 createdInfoProps={createdInfoProps}
                 renderOptions={renderOptions}
+                filePreview
             />
         );
     } else {
