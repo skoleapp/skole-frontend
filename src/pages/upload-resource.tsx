@@ -1,11 +1,11 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { FormHelperText } from '@material-ui/core';
 import * as R from 'ramda';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
-import styled from 'styled-components';
 
 import {
     CourseObjectType,
@@ -22,7 +22,6 @@ import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePrivatePage } from '../utils';
-import { Typography } from '@material-ui/core';
 
 interface UploadResourceFormValues {
     resourceTitle: string;
@@ -122,7 +121,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                         fullWidth
                     />
                     <Field name="file" component={DropzoneField} />
-                    <StyledTypography variant="body2">{t('common:filesize')}</StyledTypography>
+                    <FormHelperText>{t('common:filesize')}</FormHelperText>
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}
@@ -148,10 +147,4 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
         return nameSpaces;
     }
 };
-const StyledTypography = styled(Typography)`
-    color: grey;
-    && {
-        margin-top: 0.5rem;
-    }
-`;
 export default compose(withApollo, withRedux)(UploadResourcePage);
