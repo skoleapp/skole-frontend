@@ -200,13 +200,5 @@ export const base = css`
                 margin: 0;
             }
         }
-
-        iframe#file-viewer {
-            margin-right: -1rem; // Disable scroll bar on mobile.
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                margin-right: inherit;
-            }
-        }
     }
 `;
