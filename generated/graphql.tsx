@@ -45,8 +45,8 @@ export type CommentObjectType = {
   created: Scalars['DateTime'],
   replyComments: Array<CommentObjectType>,
   points?: Maybe<Scalars['Int']>,
-  replyCount?: Maybe<Scalars['Int']>,
   vote?: Maybe<VoteObjectType>,
+  replyCount?: Maybe<Scalars['Int']>,
 };
 
 export type ContactMutationInput = {
@@ -86,8 +86,8 @@ export type CourseObjectType = {
   resources: Array<ResourceObjectType>,
   comments: Array<CommentObjectType>,
   points?: Maybe<Scalars['Int']>,
-  resourceCount?: Maybe<Scalars['Int']>,
   vote?: Maybe<VoteObjectType>,
+  resourceCount?: Maybe<Scalars['Int']>,
 };
 
 export type CreateCommentMutationInput = {
@@ -220,7 +220,7 @@ export type Mutation = {
   deleteResource?: Maybe<DeleteResourceMutationPayload>,
   createCourse?: Maybe<CreateCourseMutationPayload>,
   deleteCourse?: Maybe<DeleteCourseMutationPayload>,
-  contact?: Maybe<ContactMutationPayload>,
+  createMessage?: Maybe<ContactMutationPayload>,
   createComment?: Maybe<CreateCommentMutationPayload>,
   updateComment?: Maybe<UpdateCommentMutationPayload>,
   deleteComment?: Maybe<DeleteCommentMutationPayload>,
@@ -282,7 +282,7 @@ export type MutationDeleteCourseArgs = {
 };
 
 
-export type MutationContactArgs = {
+export type MutationCreateMessageArgs = {
   input: ContactMutationInput
 };
 
@@ -407,15 +407,15 @@ export type ResourceObjectType = {
   file: Scalars['String'],
   date: Scalars['Date'],
   course: CourseObjectType,
-  downloads?: Maybe<Scalars['Int']>,
+  downloads: Scalars['Int'],
   user?: Maybe<UserObjectType>,
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
   comments: Array<CommentObjectType>,
-  resourceType?: Maybe<Scalars['String']>,
   points?: Maybe<Scalars['Int']>,
-  school?: Maybe<SchoolObjectType>,
   vote?: Maybe<VoteObjectType>,
+  resourceType?: Maybe<Scalars['String']>,
+  school?: Maybe<SchoolObjectType>,
 };
 
 export type ResourceTypeObjectType = {
@@ -510,8 +510,8 @@ export type UserObjectType = {
   createdResources: Array<ResourceObjectType>,
   votes: Array<VoteObjectType>,
   email?: Maybe<Scalars['String']>,
-  avatarThumbnail?: Maybe<Scalars['String']>,
   points?: Maybe<Scalars['Int']>,
+  avatarThumbnail?: Maybe<Scalars['String']>,
   courseCount?: Maybe<Scalars['Int']>,
   resourceCount?: Maybe<Scalars['Int']>,
 };
@@ -783,7 +783,7 @@ export type ContactMutationVariables = {
 
 export type ContactMutation = (
   { __typename?: 'Mutation' }
-  & { contact: Maybe<(
+  & { createMessage: Maybe<(
     { __typename?: 'ContactMutationPayload' }
     & Pick<ContactMutationPayload, 'message'>
     & { errors: Maybe<Array<Maybe<(
@@ -925,8 +925,25 @@ export type ResourceDetailQuery = (
   { __typename?: 'Query' }
   & { resource: Maybe<(
     { __typename?: 'ResourceObjectType' }
-    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'file' | 'date' | 'modified' | 'created' | 'points'>
-    & { school: Maybe<(
+    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'date' | 'modified' | 'created' | 'points'>
+    & { comments: Array<(
+      { __typename?: 'CommentObjectType' }
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points' | 'replyCount'>
+      & { user: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+      )>, replyComments: Array<(
+        { __typename?: 'CommentObjectType' }
+        & Pick<CommentObjectType, 'id' | 'text' | 'attachment'>
+        & { user: Maybe<(
+          { __typename?: 'UserObjectType' }
+          & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+        )> }
+      )>, vote: Maybe<(
+        { __typename?: 'VoteObjectType' }
+        & Pick<VoteObjectType, 'id' | 'status'>
+      )> }
+    )>, school: Maybe<(
       { __typename?: 'SchoolObjectType' }
       & Pick<SchoolObjectType, 'id' | 'name'>
     )>, course: (
@@ -935,26 +952,6 @@ export type ResourceDetailQuery = (
     ), user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'username'>
-    )>, comments: Array<(
-      { __typename?: 'CommentObjectType' }
-      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
-      & { user: Maybe<(
-        { __typename?: 'UserObjectType' }
-        & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
-      )>, replyComments: Array<(
-        { __typename?: 'CommentObjectType' }
-        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points'>
-        & { user: Maybe<(
-          { __typename?: 'UserObjectType' }
-          & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
-        )>, vote: Maybe<(
-          { __typename?: 'VoteObjectType' }
-          & Pick<VoteObjectType, 'id' | 'status'>
-        )> }
-      )>, vote: Maybe<(
-        { __typename?: 'VoteObjectType' }
-        & Pick<VoteObjectType, 'id' | 'status'>
-      )> }
     )>, vote: Maybe<(
       { __typename?: 'VoteObjectType' }
       & Pick<VoteObjectType, 'id' | 'status'>
@@ -1442,7 +1439,7 @@ export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQue
 export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
 export const ContactDocument = gql`
     mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
-  contact(input: {subject: $subject, name: $name, email: $email, message: $message}) {
+  createMessage(input: {subject: $subject, name: $name, email: $email, message: $message}) {
     message
     errors {
       field
@@ -1623,23 +1620,10 @@ export const ResourceDetailDocument = gql`
     id
     title
     resourceType
-    file
     date
     modified
     created
     points
-    school {
-      id
-      name
-    }
-    course {
-      id
-      name
-    }
-    user {
-      id
-      username
-    }
     comments {
       id
       user {
@@ -1660,13 +1644,13 @@ export const ResourceDetailDocument = gql`
         }
         text
         attachment
-        modified
-        created
-        points
-        vote {
-          id
-          status
-        }
+      }
+      modified
+      created
+      points
+      vote {
+        id
+        status
       }
       replyCount
       points
@@ -1674,6 +1658,18 @@ export const ResourceDetailDocument = gql`
         id
         status
       }
+    }
+    school {
+      id
+      name
+    }
+    course {
+      id
+      name
+    }
+    user {
+      id
+      username
     }
     vote {
       id

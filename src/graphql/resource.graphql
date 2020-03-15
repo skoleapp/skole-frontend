@@ -22,23 +22,10 @@ query ResourceDetail($id: ID) {
         id
         title
         resourceType
-        file
         date
         modified
         created
         points
-        school {
-            id
-            name
-        }
-        course {
-            id
-            name
-        }
-        user {
-            id
-            username
-        }
         comments {
             id
             user {
@@ -59,20 +46,33 @@ query ResourceDetail($id: ID) {
                 }
                 text
                 attachment
-                modified
-                created
-                points
-                vote {
-                    id
-                    status
-                }
             }
+            modified
+            created
+            points
+            vote {
+                id
+                status
+            }
+
             replyCount
             points
             vote {
                 id
                 status
             }
+        }
+        school {
+            id
+            name
+        }
+        course {
+            id
+            name
+        }
+        user {
+            id
+            username
         }
         vote {
             id

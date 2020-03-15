@@ -11,7 +11,7 @@ import { useAuthSync } from '../utils';
 
 const PrivacyPage: I18nPage = () => {
     const { t } = useTranslation();
-    const renderCardContent = <Typography>Here will be privacy policy...</Typography>;
+    const renderCardContent = <Typography variant="body2">{t('privacy:content')}</Typography>;
     return <SettingsLayout title={t('privacy:title')} renderCardContent={renderCardContent} backUrl />;
 };
 
