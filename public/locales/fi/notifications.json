@@ -10,5 +10,6 @@
     "deleteCommentError": "Virhe poistettaessa kommenttia!",
     "commentDeleted": "Kommentti poistettu!",
     "messageEmpty": "Viesti ei voi olla tyhjä!",
-    "linkCopied": "Linkki kopioitu leikepöydälle!"
+    "linkCopied": "Linkki kopioitu leikepöydälle!",
+    "avatarFileSize": "Suurin avatarin koko tiedostokoko 2MB. Valitse toinen!"
 }

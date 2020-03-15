@@ -23,7 +23,7 @@
     "courses": "Courses",
     "subjects": "Subjects",
     "resources": "Resources",
-    "skoleLtd": "Skole Team.",
+    "skoleLtd": "Skole Team",
     "save": "Save",
     "confirm": "Confirm",
     "submit": "Submit",
@@ -55,5 +55,6 @@
     "createComment": "Create Comment",
     "comments": "Comments",
     "dropzoneText": "Drag a file or click here!",
-    "share": "Share"
+    "share": "Share",
+    "filesize": "Max file size 5MB"
 }
