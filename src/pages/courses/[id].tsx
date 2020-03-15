@@ -1,6 +1,7 @@
 import {
     Avatar,
     CardContent,
+    IconButton,
     List,
     ListItem,
     ListItemAvatar,
@@ -11,38 +12,37 @@ import {
     TableHead,
     TableRow,
     Typography,
-    IconButton,
 } from '@material-ui/core';
 import {
     CloudUploadOutlined,
+    DeleteOutline,
+    FlagOutlined,
     SchoolOutlined,
     ScoreOutlined,
-    SubjectOutlined,
-    DeleteOutline,
     ShareOutlined,
-    FlagOutlined,
+    SubjectOutlined,
 } from '@material-ui/icons';
+import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 
 import {
     CommentObjectType,
     CourseDetailDocument,
     CourseObjectType,
+    DeleteCourseMutation,
     ResourceObjectType,
     useDeleteCourseMutation,
-    DeleteCourseMutation,
 } from '../../../generated/graphql';
+import { toggleNotification } from '../../actions';
 import { DiscussionBox, NotFound, StyledTable, TabLayout, TextLink } from '../../components';
-import { includeDefaultNamespaces, Router, useTranslation, Link } from '../../i18n';
+import { includeDefaultNamespaces, Link, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { getFullCourseName, usePrivatePage } from '../../utils';
-import { useSelector, useDispatch } from 'react-redux';
-import { toggleNotification } from '../../actions';
-import { useConfirm } from 'material-ui-confirm';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -105,7 +105,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             onError: deleteCourseError,
         });
 
-        const handleDelete = () => {
+        const handleDelete = (): void => {
             confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') }).then(() => {
                 deleteCourse({ variables: { id: courseId } });
             });
@@ -219,12 +219,12 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     </ListItem>
                 )}
                 <ListItem>
-                    <ListItemText onClick={() => {}}>
+                    <ListItemText>
                         <ShareOutlined /> {t('common:share')}
                     </ListItemText>
                 </ListItem>
                 <ListItem disabled>
-                    <ListItemText onClick={() => {}}>
+                    <ListItemText>
                         <FlagOutlined /> {t('common:reportAbuse')}
                     </ListItemText>
                 </ListItem>

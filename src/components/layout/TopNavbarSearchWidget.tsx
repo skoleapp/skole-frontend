@@ -8,7 +8,7 @@ import { useSearch } from '../../utils';
 export const TopNavbarSearchWidget: React.FC = () => {
     const { searchValue, handleSubmit, handleChange, placeholder } = useSearch();
 
-    const onButtonClick = () => {
+    const onButtonClick = (): void => {
         document.getElementById('myInput')?.focus();
     };
 

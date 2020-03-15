@@ -12,6 +12,8 @@ module.exports = {
         'sort-imports': 'off',
         'import/order': 'off',
         'import/prefer-default-export': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
     },
     settings: {
         react: {

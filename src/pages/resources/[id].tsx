@@ -1,59 +1,58 @@
 import {
     Avatar,
+    Box,
     CardContent,
     CardHeader,
     Divider,
     Grid,
+    IconButton,
     List,
     ListItem,
     ListItemAvatar,
     ListItemText,
+    Paper,
+    SwipeableDrawer,
     Tab,
     Tabs,
     Typography,
-    IconButton,
-    SwipeableDrawer,
-    Box,
-    Paper,
 } from '@material-ui/core';
 import {
-    ScoreOutlined,
-    InfoOutlined,
     CloudUploadOutlined,
-    LibraryAddOutlined,
-    SchoolOutlined,
-    MoreHorizOutlined,
     DeleteOutline,
-    ShareOutlined,
     FlagOutlined,
+    InfoOutlined,
+    LibraryAddOutlined,
+    MoreHorizOutlined,
+    SchoolOutlined,
+    ScoreOutlined,
+    ShareOutlined,
 } from '@material-ui/icons';
-
+import { useConfirm } from 'material-ui-confirm';
+import moment from 'moment';
+import Router from 'next/router';
 import * as R from 'ramda';
-import React, { useState, SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 
-import Router from 'next/router';
 import {
+    CommentObjectType,
+    DeleteResourceMutation,
+    PerformVoteMutation,
     ResourceDetailDocument,
     ResourceObjectType,
-    CommentObjectType,
-    usePerformVoteMutation,
-    PerformVoteMutation,
-    VoteObjectType,
     useDeleteResourceMutation,
-    DeleteResourceMutation,
+    usePerformVoteMutation,
+    VoteObjectType,
 } from '../../../generated/graphql';
-import { MainLayout, NotFound, StyledCard, TextLink, ModalHeader, DiscussionBox, TabPanel } from '../../components';
+import { toggleNotification } from '../../actions';
+import { DiscussionBox, MainLayout, ModalHeader, NotFound, StyledCard, TabPanel, TextLink } from '../../components';
+import { ResourcePreview } from '../../components/shared/ResourcePreview';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { usePrivatePage, useTabs, mediaURL, useOpen } from '../../utils';
-import { ResourcePreview } from '../../components/shared/ResourcePreview';
-import { toggleNotification } from '../../actions';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { useConfirm } from 'material-ui-confirm';
+import { mediaURL, useOpen, usePrivatePage, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -135,7 +134,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             onError: deleteResourceError,
         });
 
-        const handleDelete = () => {
+        const handleDelete = (): void => {
             confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') }).then(() => {
                 deleteResource({ variables: { id: resource.id } });
             });
@@ -252,7 +251,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </ListItemText>
                     </ListItem>
                     <ListItem disabled>
-                        <ListItemText onClick={() => {}}>
+                        <ListItemText>
                             <FlagOutlined /> {t('common:reportAbuse')}
                         </ListItemText>
                     </ListItem>
@@ -300,7 +299,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             </ListItemText>
                         </ListItem>
                         <ListItem disabled>
-                            <ListItemText onClick={() => {}}>
+                            <ListItemText>
                                 <FlagOutlined /> {t('common:reportAbuse')}
                             </ListItemText>
                         </ListItem>
