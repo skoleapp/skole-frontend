@@ -57,5 +57,6 @@
     "dropzoneText": "Raahaa tiedosto tai klikkaa tästä",
     "share": "Jaa",
     "noComments": "Ei kommentteja näytettäväksi...",
-    "actions": "Toiminnot"
+    "actions": "Toiminnot",
+    "dropzoneMaxFileSize": "Maksimi tiedostokoko"
 }
