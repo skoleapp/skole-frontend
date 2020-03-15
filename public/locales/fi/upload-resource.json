@@ -1,3 +1,4 @@
 {
-    "title": "Lisää resurssi"
+    "title": "Lisää resurssi",
+    "fileGenerationError": "Virhe luotaessa PDF-tiedostoa."
 }

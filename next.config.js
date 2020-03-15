@@ -38,6 +38,7 @@ module.exports = withOffline(
             env: {
                 API_URL: prod ? API_URL : 'http://localhost:8000/',
                 BACKEND_URL: prod ? API_URL : 'http://backend:8000/',
+                CLOUDMERSIVE_API_KEY: process.env.CLOUDMERSIVE_API_KEY,
             },
             webpack: (config, { dev }) => {
                 if (dev) {
