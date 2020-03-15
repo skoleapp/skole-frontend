@@ -14,5 +14,6 @@
     "deleteResourceError": "An unexpected error has occurred while deleting the resource!",
     "resourceDeleted": "Resource deleted!",
     "courseDeleted": "Course deleted!",
-    "deleteCourseError": "An unexpected error has occurred while deleting the course!"
+    "deleteCourseError": "An unexpected error has occurred while deleting the course!",
+    "avatarFileSize": "Max avatar file size is 2MB. Choose another one!"
 }

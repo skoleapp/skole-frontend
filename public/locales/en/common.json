@@ -55,7 +55,8 @@
     "reportAbuse": "Report Abuse",
     "createComment": "Create Comment",
     "comments": "Comments",
-    "dropzoneText": "Drop files here or click to upload.",
+    "noComments": "No comments to be shown...",
+    "dropzoneText": "Drag a file or click here!",
     "share": "Share",
-    "noComments": "No comments to be shown..."
+    "filesize": "Max file size 5MB"
 }

@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { FormHelperText } from '@material-ui/core';
 import * as R from 'ramda';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -118,6 +119,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                         fullWidth
                     />
                     <Field name="file" component={DropzoneField} />
+                    <FormHelperText>{t('common:filesize')}</FormHelperText>
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}
@@ -143,5 +145,4 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
         return nameSpaces;
     }
 };
-
 export default compose(withApollo, withRedux)(UploadResourcePage);

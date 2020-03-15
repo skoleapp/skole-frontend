@@ -31,6 +31,8 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
                 showAlerts={false}
                 dropzoneText={t('common:dropzoneText')}
                 initialFiles={initialFiles}
+                maxFileSize={5000000}
+
             />
             <ErrorMessage name={field.name} component={FormErrorMessage} />
         </StyledDropzoneField>
