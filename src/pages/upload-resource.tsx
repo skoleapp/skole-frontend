@@ -46,9 +46,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         course: Yup.object()
             .nullable()
             .required(t('validation:required')),
-        file: Yup.object()
-            .nullable()
-            .required(t('validation:required')),
+        file: Yup.mixed().required(t('validation:required')),
     });
 
     const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {
