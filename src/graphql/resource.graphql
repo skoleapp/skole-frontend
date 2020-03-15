@@ -22,6 +22,7 @@ query ResourceDetail($id: ID) {
         id
         title
         resourceType
+        file
         date
         modified
         created
@@ -73,6 +74,10 @@ query ResourceDetail($id: ID) {
         user {
             id
             username
+        }
+        vote {
+            id
+            status
         }
     }
 }

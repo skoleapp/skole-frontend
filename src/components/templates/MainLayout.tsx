@@ -4,12 +4,15 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar, BottomNavbar } from '../layout';
+import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
 import { CommentThread, FileViewer } from '../layout';
 
-interface Props extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight'>, ContainerProps {
+interface Props
+    extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight' | 'headerLeft'>,
+        ContainerProps {
     heading?: string;
-    showBottomNavigation?: boolean;
+    customBottomNavbar?: JSX.Element;
+    disableBottomNavbar?: boolean;
 }
 
 export const MainLayout: React.FC<Props> = ({
@@ -18,16 +21,24 @@ export const MainLayout: React.FC<Props> = ({
     backUrl,
     disableSearch,
     headerRight,
+    headerLeft,
     children,
-    showBottomNavigation = true,
+    customBottomNavbar,
+    disableBottomNavbar = false,
     ...containerProps
 }) => {
     return (
-        <StyledMainLayout isDiscussion={showBottomNavigation}>
+        <StyledMainLayout disableBottomNavbar={disableBottomNavbar}>
             <Head title={title} />
-            <TopNavbar heading={heading} backUrl={backUrl} disableSearch={disableSearch} headerRight={headerRight} />
+            <TopNavbar
+                heading={heading}
+                backUrl={backUrl}
+                disableSearch={disableSearch}
+                headerRight={headerRight}
+                headerLeft={headerLeft}
+            />
             <Container {...containerProps}>{children}</Container>
-            {!!showBottomNavigation && <BottomNavbar />}
+            {!disableBottomNavbar && (customBottomNavbar || <BottomNavbar />)}
             <Footer />
             <Notifications />
             <Settings />
@@ -38,26 +49,24 @@ export const MainLayout: React.FC<Props> = ({
     );
 };
 
-const StyledMainLayout = styled(({ isDiscussion, ...other }) => <Box {...other} />)`
+/* eslint-disable */
+const StyledMainLayout = styled(({ disableBottomNavbar, ...other }) => <Box {...other} />)`
     background-color: var(--secondary);
     text-align: center;
     min-height: 100vh;
     position: relative;
     display: flex;
     flex-direction: column;
-
     .MuiContainer-root {
         padding: 0;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-
         @media only screen and (min-width: ${breakpoints.MD}) {
             padding: 1rem;
         }
-
         @media only screen and (max-width: ${breakpoints.MD}) {
-            margin-bottom: ${({ isDiscussion }): string => (isDiscussion ? '3rem' : 'initial')};
+            margin-bottom: ${({ disableBottomNavbar }): string => (!disableBottomNavbar ? '3rem' : 'initial')};
         }
     }
 `;

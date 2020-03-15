@@ -835,7 +835,27 @@ export type CourseDetailQuery = (
         { __typename?: 'VoteObjectType' }
         & Pick<VoteObjectType, 'id' | 'status'>
       )> }
+    )>, vote: Maybe<(
+      { __typename?: 'VoteObjectType' }
+      & Pick<VoteObjectType, 'id' | 'status'>
     )> }
+  )> }
+);
+
+export type DeleteCourseMutationVariables = {
+  id?: Maybe<Scalars['ID']>
+};
+
+
+export type DeleteCourseMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteCourse: Maybe<(
+    { __typename?: 'DeleteCourseMutationPayload' }
+    & Pick<DeleteCourseMutationPayload, 'message'>
+    & { errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
   )> }
 );
 
@@ -905,7 +925,7 @@ export type ResourceDetailQuery = (
   { __typename?: 'Query' }
   & { resource: Maybe<(
     { __typename?: 'ResourceObjectType' }
-    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'date' | 'modified' | 'created' | 'points'>
+    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'file' | 'date' | 'modified' | 'created' | 'points'>
     & { comments: Array<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points' | 'replyCount'>
@@ -932,6 +952,9 @@ export type ResourceDetailQuery = (
     ), user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'username'>
+    )>, vote: Maybe<(
+      { __typename?: 'VoteObjectType' }
+      & Pick<VoteObjectType, 'id' | 'status'>
     )> }
   )> }
 );
@@ -1495,6 +1518,10 @@ export const CourseDetailDocument = gql`
     created
     points
     resourceCount
+    vote {
+      id
+      status
+    }
   }
 }
     `;
@@ -1508,6 +1535,25 @@ export const CourseDetailDocument = gql`
       
 export type CourseDetailQueryHookResult = ReturnType<typeof useCourseDetailQuery>;
 export type CourseDetailQueryResult = ApolloReactCommon.QueryResult<CourseDetailQuery, CourseDetailQueryVariables>;
+export const DeleteCourseDocument = gql`
+    mutation DeleteCourse($id: ID) {
+  deleteCourse(input: {id: $id}) {
+    message
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type DeleteCourseMutationFn = ApolloReactCommon.MutationFunction<DeleteCourseMutation, DeleteCourseMutationVariables>;
+
+    export function useDeleteCourseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCourseMutation, DeleteCourseMutationVariables>) {
+      return ApolloReactHooks.useMutation<DeleteCourseMutation, DeleteCourseMutationVariables>(DeleteCourseDocument, baseOptions);
+    }
+export type DeleteCourseMutationHookResult = ReturnType<typeof useDeleteCourseMutation>;
+export type DeleteCourseMutationResult = ApolloReactCommon.MutationResult<DeleteCourseMutation>;
+export type DeleteCourseMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCourseMutation, DeleteCourseMutationVariables>;
 export const CreateCourseDocument = gql`
     mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
   createCourse(input: {name: $courseName, code: $courseCode, subject: $subject, school: $school}) {
@@ -1574,6 +1620,7 @@ export const ResourceDetailDocument = gql`
     id
     title
     resourceType
+    file
     date
     modified
     created
@@ -1624,6 +1671,10 @@ export const ResourceDetailDocument = gql`
     user {
       id
       username
+    }
+    vote {
+      id
+      status
     }
   }
 }

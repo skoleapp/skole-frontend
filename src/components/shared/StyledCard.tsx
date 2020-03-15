@@ -10,7 +10,13 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
     display: flex;
     flex-direction: column;
 
-    .label {
-        font-size: 0.75rem;
+    .MuiCardHeader-root {
+        .MuiCardHeader-action {
+            margin: 0;
+
+            .MuiButtonBase-root {
+                padding: 0.25rem;
+            }
+        }
     }
 `;

@@ -1,6 +1,6 @@
+import { FormHelperText } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { FormHelperText } from '@material-ui/core';
 import * as R from 'ramda';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -47,9 +47,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         course: Yup.object()
             .nullable()
             .required(t('validation:required')),
-        file: Yup.object()
-            .nullable()
-            .required(t('validation:required')),
+        file: Yup.mixed().required(t('validation:required')),
     });
 
     const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {

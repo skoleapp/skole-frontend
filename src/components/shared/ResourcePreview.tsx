@@ -1,105 +1,101 @@
 import 'ol/ol.css';
+
+import { Box, CircularProgress, IconButton, Typography } from '@material-ui/core';
+import {
+    FullscreenOutlined,
+    KeyboardArrowDownOutlined,
+    KeyboardArrowUpOutlined,
+    NavigateBeforeOutlined,
+    NavigateNextOutlined,
+} from '@material-ui/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { NavigateNextOutlined, NavigateBeforeOutlined, FullscreenOutlined } from '@material-ui/icons';
-import { IconButton, CircularProgress, Box } from '@material-ui/core';
-import { mediaURL } from '../../utils';
+
 interface Props {
-    resource: any;
+    file: string;
     pages: any[];
-    setPages: (foo: any[]) => void;
+    setPages: (pages: any[]) => void;
     currentPage: number;
     setCurrentPage: (index: number) => void;
+    voteProps: any;
 }
-// url, size, scale
-export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, currentPage, setCurrentPage }) => {
+export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, currentPage, setCurrentPage, voteProps }) => {
     const [touchStart, setTouchStart]: any = useState(0);
     const [touchEnd, setTouchEnd]: any = useState(0);
 
+    const { vote, voteSubmitting, handleVote, points } = voteProps;
+
     const ref = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (!!pages[currentPage] && !!pages[currentPage].map) {
-            const zoomLevel = pages[currentPage].map.getView().getZoom();
-            console.log('ZOOMLEVEL: ' + zoomLevel);
+    const handleTouchStart = (e: any): void => {
+        const startCoordX = e.changedTouches[0].screenX;
+        setTouchStart(startCoordX);
+    };
+    const handleTouchEnd = (e: any): void => {
+        const endCoordX = e.changedTouches[0].screenX;
+        setTouchEnd(endCoordX);
+    };
 
-            if (zoomLevel < 1.3) {
-                if (touchEnd < touchStart - 300) {
-                    console.log('Swiped left');
-                    nextPage();
-                } else if (touchEnd > touchStart + 300) {
-                    console.log('Swiped right');
-                    previousPage();
-                }
-            }
-        }
-    }, [touchEnd]);
+    const getCenter = (extent: any): any[] => {
+        return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
+    };
 
-    useEffect(() => {
-        if (!!ref.current) {
-            ref.current.addEventListener('touchstart', handleTouchStart, false);
-            ref.current.addEventListener('touchend', handleTouchEnd, false);
-        }
+    const setCenter = (): void => {
+        pages[currentPage].map.getView().setCenter(getCenter(pages[currentPage].imageExtent));
+        pages[currentPage].map.getView().setZoom(0);
+    };
 
-        return () => {
-            if (!!ref.current) {
-                ref.current.removeEventListener('touchstart', handleTouchStart, false);
-                ref.current.removeEventListener('touchend', handleTouchEnd, false);
-            }
-        };
-    }, [ref.current]);
+    const nextPage = (): void => {
+        const numPages = pages.length;
 
-    useEffect(() => {
-        if (pages.length === 0) {
-            let maps: any[] = [];
-            if (!!resource && !!resource.resourceFiles) {
-                resource.resourceFiles.forEach((resource: any, i: number) => {
-                    const url = mediaURL(resource.file);
-
-                    if (url.endsWith('.pdf')) {
-                        const pdfMaps = createMapFromPDF(url, i);
-                        maps[i] = pdfMaps;
-                    } else {
-                        const imageMaps = createMapFromImage(url, i);
-                        maps[i] = imageMaps;
-                    }
-                });
-                Promise.all(maps).then((maps: any) => {
-                    const flatMaps = maps.flat();
-
-                    flatMaps[0].map.getView().setCenter(getCenter(flatMaps[0].imageExtent));
-                    flatMaps[0].map.getView().setZoom(0);
-
-                    setPages(flatMaps);
-                    console.log('Valmiit sivut: ', flatMaps);
-                });
-            }
-        } else {
+        if (currentPage < numPages - 1) {
+            const nextPage = currentPage + 1;
             const tempPages = pages;
-
             setPages([]);
-
             tempPages[currentPage].map.setTarget(null);
-            tempPages[currentPage].map.setTarget('map');
+            pages[currentPage].map.setTarget(null);
 
-            tempPages[currentPage].map.getView().setCenter(getCenter(tempPages[currentPage].imageExtent));
-            tempPages[currentPage].map.getView().setZoom(0);
+            tempPages[nextPage].map.setTarget('map');
+            tempPages[nextPage].map.getView().setCenter(getCenter(tempPages[nextPage].imageExtent));
+            tempPages[nextPage].map.getView().setZoom(0);
 
             setPages(tempPages);
+            setCurrentPage(nextPage);
         }
-    }, []);
+    };
+    const previousPage = (): void => {
+        if (currentPage !== 0) {
+            const previousPage = currentPage - 1;
+            const tempPages = pages;
+            setPages([]);
+            tempPages[currentPage].map.setTarget(null);
+            pages[currentPage].map.setTarget(null);
 
-    const getImageSize = (url: string) => {
+            tempPages[previousPage].map.setTarget('map');
+            tempPages[previousPage].map.getView().setCenter(getCenter(tempPages[previousPage].imageExtent));
+            tempPages[previousPage].map.getView().setZoom(0);
+
+            setPages(tempPages);
+            setCurrentPage(previousPage);
+        }
+    };
+
+    const getImageSize = (url: string): Promise<[number, number]> => {
         return new Promise(resolve => {
-            let img = new Image();
+            const img = new Image();
             img.src = url;
-            img.onload = () => {
+            img.onload = (): void => {
                 resolve([img.width, img.height]);
             };
         });
     };
 
-    const createMapFromImage = (url: string, i: number) => {
+    interface MapData {
+        map: any;
+        imageExtent: number[];
+    }
+
+    const createMapFromImage = (url: string): Promise<MapData> => {
         const Map = require('ol/Map').default;
         const View = require('ol/View').default;
         const Image = require('ol/layer/Image').default;
@@ -121,11 +117,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                 crossOrigin: 'anonymous',
             });
 
-            let target = 'null';
-            // render first page to target
-            if (i === 0) {
-                target = 'map';
-            }
+            const target = 'map';
 
             const map = new Map({
                 layers: [
@@ -152,16 +144,19 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
         });
     };
 
-    const createMapFromPDF = (url: string, i: number) => {
+    const createMapFromPDF = (url: string): Promise<MapData> => {
         const Map = require('ol/Map').default;
         const View = require('ol/View').default;
         const Image = require('ol/layer/Image').default;
-        const Projection = require('ol/proj/Projection').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
+        const Projection = require('ol/proj/Projection').default;
         const PDFJS: any = require('pdfjs-dist');
+        const pdfjsWorker: any = require('pdfjs-dist/build/pdf.worker.entry');
 
-        const renderPage = (page: any) => {
-            const viewport = page.getViewport({ scale: 1.5 });
+        PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
+        const renderPage = (page: any): any => {
+            const viewport = page.getViewport({ scale: 2 });
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const renderContext = {
@@ -183,7 +178,7 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                 });
 
                 const source = new ImageStatic({
-                    imageLoadFunction: (image: any) => {
+                    imageLoadFunction: (image: any): void => {
                         image.getImage().src = canvas.toDataURL();
                     },
                     projection: projection,
@@ -210,17 +205,19 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                     controls: [],
                 });
 
-                // render first page to target
-                if (page.pageIndex === 0 && i === 0) {
-                    map.setTarget('map');
+                let target = null;
+                if (page.pageIndex === 0) {
+                    target = 'map';
                 }
+                map.setTarget(target);
+
                 const mapData = { map: map, imageExtent: imageExtent };
 
                 return mapData;
             });
         };
-        const renderPages = (pdfDoc: any) => {
-            let promises: any[] = [];
+        const renderPages = (pdfDoc: any): Promise<any> => {
+            const promises: any[] = [];
 
             for (let num = 1; num <= pdfDoc.numPages; num++) {
                 promises.push(pdfDoc.getPage(num).then(renderPage));
@@ -236,99 +233,79 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
         });
     };
 
-    const handleTouchStart = (e: any) => {
-        const startCoordX = e.changedTouches[0].screenX;
-        setTouchStart(startCoordX);
-    };
-    const handleTouchEnd = (e: any) => {
-        const endCoordX = e.changedTouches[0].screenX;
-        setTouchEnd(endCoordX);
-    };
+    useEffect(() => {
+        if (!!pages[currentPage] && !!pages[currentPage].map) {
+            const zoomLevel = pages[currentPage].map.getView().getZoom();
+            console.log('ZOOMLEVEL: ' + zoomLevel);
 
-    const getCenter = (extent: any) => {
-        return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
-    };
+            if (zoomLevel < 1.3) {
+                if (touchEnd < touchStart - 300) {
+                    console.log('Swiped left');
+                    nextPage();
+                } else if (touchEnd > touchStart + 300) {
+                    console.log('Swiped right');
+                    previousPage();
+                }
+            }
+        }
+    }, [touchEnd]);
 
-    const setCenter = () => {
-        pages[currentPage].map.getView().setCenter(getCenter(pages[currentPage].imageExtent));
-        pages[currentPage].map.getView().setZoom(0);
-    };
+    useEffect(() => {
+        if (!!ref.current) {
+            ref.current.addEventListener('touchstart', handleTouchStart, false);
+            ref.current.addEventListener('touchend', handleTouchEnd, false);
+        }
 
-    const nextPage = () => {
-        const numPages = pages.length;
+        return (): void => {
+            if (!!ref.current) {
+                ref.current.removeEventListener('touchstart', handleTouchStart, false);
+                ref.current.removeEventListener('touchend', handleTouchEnd, false);
+            }
+        };
+    }, [ref.current]);
 
-        if (currentPage < numPages - 1) {
-            const nextPage = currentPage + 1;
+    useEffect(() => {
+        if (pages.length === 0) {
+            const maps: any[] = [];
+            if (!!file) {
+                const url = file;
+
+                if (url.endsWith('.pdf')) {
+                    const pdfMaps = createMapFromPDF(url);
+                    maps.push(pdfMaps);
+                } else {
+                    const imageMaps = createMapFromImage(url);
+                    maps.push(imageMaps);
+                }
+
+                Promise.all(maps).then((maps: any) => {
+                    const flatMaps = maps.flat();
+
+                    flatMaps[0].map.getView().setCenter(getCenter(flatMaps[0].imageExtent));
+                    flatMaps[0].map.getView().setZoom(0);
+
+                    setPages(flatMaps);
+                    console.log('Valmiit sivut: ', flatMaps);
+                });
+            }
+        } else {
             const tempPages = pages;
-            setPages([]);
-            tempPages[currentPage].map.setTarget(null);
 
-            tempPages[nextPage].map.setTarget('map');
-            tempPages[nextPage].map.getView().setCenter(getCenter(tempPages[nextPage].imageExtent));
-            tempPages[nextPage].map.getView().setZoom(0);
+            setPages([]);
+
+            tempPages[currentPage].map.setTarget(null);
+            tempPages[currentPage].map.setTarget('map');
+
+            tempPages[currentPage].map.getView().setCenter(getCenter(tempPages[currentPage].imageExtent));
+            tempPages[currentPage].map.getView().setZoom(0);
 
             setPages(tempPages);
-            setCurrentPage(nextPage);
         }
-    };
-    const previousPage = () => {
-        if (currentPage !== 0) {
-            const previousPage = currentPage - 1;
-            const tempPages = pages;
-            setPages([]);
-            tempPages[currentPage].map.setTarget(null);
+    }, []);
 
-            tempPages[previousPage].map.setTarget('map');
-            tempPages[previousPage].map.getView().setCenter(getCenter(tempPages[previousPage].imageExtent));
-            tempPages[previousPage].map.getView().setZoom(0);
-
-            setPages(tempPages);
-            setCurrentPage(previousPage);
-        }
-    };
-
-    const StyledControls = styled.div`
-        z-index: 999;
-        width: 100%;
-        bottom: 0;
-        display: flex;
-        position: relative;
-        justify-content: space-around;
-        background-color: white;
-    `;
-    const StyledLayer = styled.div`
-        z-index: 999;
-        display: flex;
-        position: absolute;
-        margin: 0.5rem;
-        padding: 0.5rem 0.7rem;
-        color: white;
-        background-color: rgb(72, 76, 79, 0.7);
-    `;
-
-    const NextPageButton = (
+    const renderCenterImageButton = (
         <IconButton
-            disabled={currentPage === pages.length - 1}
-            onClick={() => {
-                nextPage();
-            }}
-        >
-            <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'primary'} />
-        </IconButton>
-    );
-    const PreviousPageButton = (
-        <IconButton
-            disabled={currentPage === 0}
-            onClick={() => {
-                previousPage();
-            }}
-        >
-            <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'primary'} />
-        </IconButton>
-    );
-    const CenterImageButton = (
-        <IconButton
-            onClick={() => {
+            onClick={(): void => {
                 setCenter();
             }}
         >
@@ -336,12 +313,49 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
         </IconButton>
     );
 
+    const renderNavigationButtons = (
+        <Box width="7rem" justifyContent="center" alignItems="center" display="flex">
+            <IconButton disabled={currentPage === 0} onClick={previousPage} size="small">
+                <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'primary'} />
+            </IconButton>
+            <Typography style={{ margin: 10 }} variant="body2">
+                {currentPage + 1 + ' / ' + pages.length}
+            </Typography>
+            <IconButton disabled={currentPage === pages.length - 1} onClick={nextPage} size="small">
+                <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'primary'} />
+            </IconButton>
+        </Box>
+    );
+
+    const renderVoteButtons = (
+        <Box width="7rem" justifyContent="center" alignItems="center" display="flex">
+            <IconButton
+                color={!!vote && vote.status === 1 ? 'primary' : 'inherit'}
+                onClick={handleVote(1)}
+                disabled={voteSubmitting}
+                size="small"
+            >
+                <KeyboardArrowUpOutlined />
+            </IconButton>
+            <Typography style={{ margin: 10 }} variant="body2">
+                {points}
+            </Typography>
+            <IconButton
+                color={!!vote && vote.status === -1 ? 'primary' : 'inherit'}
+                onClick={handleVote(-1)}
+                disabled={voteSubmitting}
+                size="small"
+            >
+                <KeyboardArrowDownOutlined />
+            </IconButton>
+        </Box>
+    );
+
     const resourcesRendered = pages.length > 0;
 
     return (
         <>
             <div style={{ height: '100%', position: 'relative' }}>
-                {resourcesRendered && <StyledLayer>{currentPage + 1 + ' / ' + pages.length}</StyledLayer>}
                 <div
                     style={{
                         backgroundColor: 'rgb(72, 76, 79,0.7)',
@@ -362,10 +376,20 @@ export const ResourcePreview: React.FC<Props> = ({ resource, pages, setPages, cu
                 )}
             </div>
             <StyledControls>
-                {PreviousPageButton}
-                {CenterImageButton}
-                {NextPageButton}
+                {renderNavigationButtons}
+                {renderCenterImageButton}
+                {renderVoteButtons}
             </StyledControls>
         </>
     );
 };
+
+const StyledControls = styled.div`
+    z-index: 999;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    position: relative;
+    justify-content: space-around;
+    background-color: white;
+`;

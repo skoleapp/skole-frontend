@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-client';
 import { NextComponentType, NextPageContext } from 'next';
 import { Store } from 'redux';
 
-import { UserObjectType } from '../generated/graphql';
+import { CommentObjectType, UserObjectType } from '../generated/graphql';
 import { Auth, UI } from './reducers';
 
 export interface SkoleContext extends NextPageContext {
@@ -36,8 +36,16 @@ export interface LayoutProps extends ContainerProps {
     renderAlert?: JSX.Element;
     disableSearch?: boolean;
     headerRight?: JSX.Element;
+    headerLeft?: JSX.Element;
 }
 
 export interface CommentTarget {
     [key: string]: number;
+}
+
+export interface DiscussionBoxProps {
+    commentThread?: CommentObjectType | null;
+    comments: CommentObjectType[];
+    isThread?: boolean;
+    target: CommentTarget;
 }

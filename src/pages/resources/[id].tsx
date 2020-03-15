@@ -5,40 +5,54 @@ import {
     CardHeader,
     Divider,
     Grid,
+    IconButton,
     List,
     ListItem,
     ListItemAvatar,
     ListItemText,
+    Paper,
+    SwipeableDrawer,
     Tab,
     Tabs,
     Typography,
-    Fade,
-    Paper,
-    IconButton,
 } from '@material-ui/core';
-import { CloudDownload, ScoreOutlined, InfoOutlined } from '@material-ui/icons';
+import {
+    CloudUploadOutlined,
+    DeleteOutline,
+    FlagOutlined,
+    InfoOutlined,
+    LibraryAddOutlined,
+    MoreHorizOutlined,
+    SchoolOutlined,
+    ScoreOutlined,
+    ShareOutlined,
+} from '@material-ui/icons';
+import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
+import Router from 'next/router';
 import * as R from 'ramda';
-import React, { useState } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 
-import { ResourceDetailDocument, ResourceObjectType, CommentObjectType } from '../../../generated/graphql';
 import {
-    MainLayout,
-    NotFound,
-    StyledCard,
-    TextLink,
-    StyledModal,
-    ModalHeader,
-    ResourcePreview,
-    DiscussionBox,
-    TabPanel,
-} from '../../components';
+    CommentObjectType,
+    DeleteResourceMutation,
+    PerformVoteMutation,
+    ResourceDetailDocument,
+    ResourceObjectType,
+    useDeleteResourceMutation,
+    usePerformVoteMutation,
+    VoteObjectType,
+} from '../../../generated/graphql';
+import { toggleNotification } from '../../actions';
+import { DiscussionBox, MainLayout, ModalHeader, NotFound, StyledCard, TabPanel, TextLink } from '../../components';
+import { ResourcePreview } from '../../components/shared/ResourcePreview';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { usePrivatePage, useTabs } from '../../utils';
+import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { mediaURL, useOpen, usePrivatePage, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -47,114 +61,273 @@ interface Props extends I18nProps {
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const confirm = useConfirm();
+    const { open, handleOpen, handleClose } = useOpen();
 
     const [pages, setPages]: any[] = useState([]);
     const [currentPage, setCurrentPage]: any = useState(0);
 
-    const [resourceInfoVisible, setResourceInfoVisible] = useState(false);
-    const handleOpenResourceInfo = (): void => setResourceInfoVisible(true);
-    const handleCloseResourceInfo = (): void => setResourceInfoVisible(false);
+    const { open: optionsOpen, handleOpen: openOptions, handleClose: closeOptions } = useOpen();
 
     if (resource) {
+        const file = mediaURL(resource.file);
         const resourceTitle = R.propOr('-', 'title', resource) as string;
         const resourceType = R.propOr('-', 'resourceType', resource);
-        const resourceCourseId = R.propOr('', 'id', resource.course);
-        const resourceCourseName = R.propOr('-', 'name', resource.course) as string;
-        const resourceSchoolId = R.propOr('', 'id', resource.school);
-        const resourceSchoolName = R.propOr('-', 'name', resource.school) as string;
-        const creatorId = R.propOr('', 'id', resource.user);
+        const courseId = R.propOr('', 'id', resource.course);
+        const courseName = R.propOr('-', 'name', resource.course) as string;
+        const schoolId = R.propOr('', 'id', resource.school);
+        const schoolName = R.propOr('-', 'name', resource.school) as string;
+        const creatorId = R.propOr('', 'id', resource.user) as string;
         const creatorName = R.propOr('-', 'username', resource.user) as string;
         const created = moment(resource.created).format('LL');
-        const modified = moment(resource.modified).format('LL');
-        const points = R.propOr('-', 'points', resource);
-
+        const initialPoints = R.propOr('-', 'points', resource);
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
+        const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
+
+        const [vote, setVote] = useState(resource.vote);
+        const [points, setPoints] = useState(initialPoints);
 
         const discussionBoxProps = {
             comments,
             target: { resource: Number(resource.id) },
         };
 
+        const onError = (): void => {
+            dispatch(toggleNotification(t('notifications:voteError')));
+        };
+
+        const onCompleted = ({ performVote }: PerformVoteMutation): void => {
+            if (!!performVote) {
+                if (!!performVote.errors) {
+                    onError();
+                } else {
+                    setVote(performVote.vote as VoteObjectType);
+                    setPoints(performVote.targetPoints);
+                }
+            }
+        };
+
+        const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
+
+        const handleVote = (status: number) => (): void => {
+            performVote({ variables: { resource: resource.id, status } });
+        };
+        const voteProps = { vote, voteSubmitting, handleVote, points };
+
+        const deleteResourceError = (): void => {
+            dispatch(toggleNotification(t('notifications:deleteResourceError')));
+        };
+        const deleteResourceCompleted = ({ deleteResource }: DeleteResourceMutation): void => {
+            if (!!deleteResource) {
+                if (!!deleteResource.errors) {
+                    deleteResourceError();
+                } else {
+                    Router.push('/courses/' + courseId);
+                    dispatch(toggleNotification(t('notifications:resourceDeleted')));
+                }
+            }
+        };
+
+        const [deleteResource] = useDeleteResourceMutation({
+            onCompleted: deleteResourceCompleted,
+            onError: deleteResourceError,
+        });
+
+        const handleDelete = (): void => {
+            confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') }).then(() => {
+                deleteResource({ variables: { id: resource.id } });
+            });
+        };
+
+        const handleShare = (e: SyntheticEvent): void => {
+            e.stopPropagation();
+            closeOptions();
+            navigator.clipboard.writeText(window.location.href);
+            dispatch(toggleNotification(t('notifications:linkCopied')));
+        };
+
         const renderResourceInfo = (
-            <Grid container alignItems="center">
-                <Grid item container sm={6} justify="center">
-                    <CardContent>
-                        <Box textAlign="left">
+            <CardContent>
+                <List>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <CloudUploadOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body2">
                                 {t('common:resourceType')}: {resourceType}
                             </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <SchoolOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body2">
                                 {t('common:course')}:{' '}
-                                <TextLink href={`/courses/${resourceCourseId}`} color="primary">
-                                    {resourceCourseName}
+                                <TextLink href={`/courses/${courseId}`} color="primary">
+                                    {courseName}
                                 </TextLink>
                             </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <LibraryAddOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body2">
                                 {t('common:school')}:{' '}
-                                <TextLink href={`/schools/${resourceSchoolId}`} color="primary">
-                                    {resourceSchoolName}
+                                <TextLink href={`/schools/${schoolId}`} color="primary">
+                                    {schoolName}
                                 </TextLink>
                             </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <ScoreOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
                             <Typography variant="body2">
-                                {t('common:creator')}:{' '}
-                                <TextLink href={`/users/${creatorId}`} color="primary">
-                                    {creatorName}
-                                </TextLink>
+                                {t('common:points')}: {points}
                             </Typography>
-                            <Typography variant="body2">
-                                {t('common:created')}: {created}
-                            </Typography>
-                            <Typography variant="body2">
-                                {t('common:modified')}: {modified}
-                            </Typography>
-                        </Box>
-                    </CardContent>
-                </Grid>
-                <Grid item container sm={6} justify="center">
-                    <CardContent>
-                        <List>
+                        </ListItemText>
+                    </ListItem>
+                </List>
+            </CardContent>
+        );
+
+        const renderCreatedInfo = (
+            <Box padding="0.5rem" textAlign="left">
+                <Typography variant="body2" color="textSecondary">
+                    {t('common:createdBy')}{' '}
+                    <TextLink href={`/users/${creatorId}`} color="primary">
+                        {creatorName}
+                    </TextLink>{' '}
+                    {created}
+                </Typography>
+            </Box>
+        );
+        const renderDesktopDrawer = (
+            <SwipeableDrawer className="md-up" anchor="left" open={!!open} onOpen={handleOpen} onClose={handleClose}>
+                <ModalHeader title={resourceTitle} onCancel={handleClose} />
+                {renderResourceInfo}
+                <Divider />
+                {renderCreatedInfo}
+            </SwipeableDrawer>
+        );
+
+        const renderDesktopOptionsDrawer = (
+            <SwipeableDrawer
+                className="md-up"
+                anchor="left"
+                open={!!optionsOpen}
+                onOpen={openOptions}
+                onClose={closeOptions}
+            >
+                <ModalHeader onCancel={closeOptions} />
+                <List>
+                    {isOwnProfile && (
+                        <ListItem>
+                            <ListItemText onClick={handleDelete}>
+                                <DeleteOutline /> {t('resource:deleteResource')}
+                            </ListItemText>
+                        </ListItem>
+                    )}
+                    <ListItem>
+                        <ListItemText onClick={handleShare}>
+                            <ShareOutlined /> {t('common:share')}
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem disabled>
+                        <ListItemText>
+                            <FlagOutlined /> {t('common:reportAbuse')}
+                        </ListItemText>
+                    </ListItem>
+                </List>
+            </SwipeableDrawer>
+        );
+
+        const renderMobileDrawer = (
+            <SwipeableDrawer
+                className="md-down"
+                anchor="bottom"
+                open={!!open}
+                onOpen={handleOpen}
+                onClose={handleClose}
+            >
+                <Paper>
+                    <ModalHeader title={resourceTitle} onCancel={handleClose} />
+                    {renderCreatedInfo}
+                    <Divider />
+                    {renderResourceInfo}
+                </Paper>
+            </SwipeableDrawer>
+        );
+
+        const renderMobileOptionsDrawer = (
+            <SwipeableDrawer
+                className="md-down"
+                anchor="bottom"
+                open={!!optionsOpen}
+                onOpen={openOptions}
+                onClose={closeOptions}
+            >
+                <Paper>
+                    <List>
+                        {isOwnProfile && (
                             <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <ScoreOutlined />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText>
-                                    {t('common:points')}: {points}
+                                <ListItemText onClick={handleDelete}>
+                                    <DeleteOutline /> {t('resource:deleteResource')}
                                 </ListItemText>
                             </ListItem>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <CloudDownload />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText>{t('common:downloads')}: 0</ListItemText>
-                            </ListItem>
-                        </List>
-                    </CardContent>
-                </Grid>
-            </Grid>
+                        )}
+                        <ListItem>
+                            <ListItemText onClick={handleShare}>
+                                <ShareOutlined /> {t('common:share')}
+                            </ListItemText>
+                        </ListItem>
+                        <ListItem disabled>
+                            <ListItemText>
+                                <FlagOutlined /> {t('common:reportAbuse')}
+                            </ListItemText>
+                        </ListItem>
+                    </List>
+                </Paper>
+            </SwipeableDrawer>
         );
 
-        const renderResourceInfoModal = (
-            <StyledModal open={!!resourceInfoVisible} onClose={handleCloseResourceInfo}>
-                <Fade in={!!resourceInfoVisible}>
-                    <Paper>
-                        <ModalHeader onCancel={handleCloseResourceInfo} />
-                        <Box textAlign="center">
-                            <CardHeader title={resourceTitle} />
-                            {renderResourceInfo}
-                        </Box>
-                    </Paper>
-                </Fade>
-            </StyledModal>
+        const renderDesktopActionButtons = (
+            <>
+                <IconButton color="primary" onClick={handleOpen}>
+                    <InfoOutlined />
+                </IconButton>
+                <IconButton onClick={openOptions}>
+                    <MoreHorizOutlined />
+                </IconButton>
+            </>
         );
 
-        const renderResourceInfoButton = (
-            <IconButton color="secondary" onClick={handleOpenResourceInfo}>
-                <InfoOutlined />
-            </IconButton>
+        const renderMobileResourceInfoButton = (
+            <Box display="flex" flex-direction="row">
+                <IconButton color="secondary" onClick={handleOpen}>
+                    <InfoOutlined />
+                </IconButton>
+                <IconButton color="secondary" onClick={openOptions}>
+                    <MoreHorizOutlined />
+                </IconButton>
+            </Box>
         );
 
         const renderContent = (
@@ -172,7 +345,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             <Tab label={resourceTitle} />
                             <Tab label={t('common:discussion')} />
                         </Tabs>
-                        <CardHeader className="md-up" title={resourceTitle} />
+                        <CardHeader action={renderDesktopActionButtons} className="md-up" title={resourceTitle} />
 
                         {tabValue === 0 && (
                             <ResourcePreview
@@ -180,7 +353,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                                 setCurrentPage={setCurrentPage}
                                 pages={pages}
                                 setPages={setPages}
-                                resource={resource}
+                                file={file}
+                                voteProps={voteProps}
                             />
                         )}
 
@@ -201,14 +375,17 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         return (
             <MainLayout
-                showBottomNavigation={tabValue === 1}
+                disableBottomNavbar={tabValue === 0}
                 title={resourceTitle}
                 backUrl
                 maxWidth="xl"
-                headerRight={renderResourceInfoButton}
+                headerRight={renderMobileResourceInfoButton}
             >
                 {renderContent}
-                {renderResourceInfoModal}
+                {renderDesktopDrawer}
+                {renderDesktopOptionsDrawer}
+                {renderMobileDrawer}
+                {renderMobileOptionsDrawer}
             </MainLayout>
         );
     } else {

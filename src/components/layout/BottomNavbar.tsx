@@ -4,10 +4,8 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
 
 import { Router } from '../../i18n';
-import { breakpoints } from '../../styles';
 import { State } from '../../types';
 
 export const BottomNavbar: React.FC = () => {
@@ -46,28 +44,10 @@ export const BottomNavbar: React.FC = () => {
     };
 
     return (
-        <StyledBottomNavbar value={value} onChange={handleChange}>
+        <BottomNavigation value={value} onChange={handleChange}>
             <BottomNavigationAction onClick={handleRedirect('/')} icon={<Home />} />
             <BottomNavigationAction onClick={handleRedirect('/search')} icon={<Search />} />
             <BottomNavigationAction onClick={handleAccountClick} icon={<AccountCircle />} />
-        </StyledBottomNavbar>
+        </BottomNavigation>
     );
 };
-
-const StyledBottomNavbar = styled(BottomNavigation)`
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 3rem !important;
-    border-top: var(--border);
-    z-index: 1000;
-
-    .MuiButtonBase-root,
-    .Mui-selected {
-        padding: 0 !important;
-    }
-
-    @media only screen and (min-width: ${breakpoints.MD}) {
-        display: none !important;
-    }
-`;

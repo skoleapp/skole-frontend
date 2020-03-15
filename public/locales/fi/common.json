@@ -22,6 +22,7 @@
     "courses": "Kurssit",
     "subjects": "Oppiaineet",
     "resources": "Resurssit",
+    "resource": "Resurssi",
     "skoleLtd": "Skole Team",
     "save": "Tallenna",
     "confirm": "Vahvista",
@@ -48,12 +49,13 @@
     "course": "Kurssi",
     "name": "Nimi",
     "discussion": "Keskustelu",
-    "deleteComment": "Delete Comment",
+    "deleteComment": "Poista kommentti",
     "deleteCommentTitle": "Haluatko varmasti poistaa tämän kommentin?",
     "reportAbuse": "Ilmoita väärinkäytöstä",
     "createComment": "Luo kommentti",
     "comments": "Kommentit",
-    "dropzoneText": "Raahaa tiedosto tai klikkaa tästä!",
     "share": "Jaa",
+    "noComments": "Ei kommentteja näytettäväksi...",
+    "dropzoneText": "Raahaa tiedosto tai klikkaa tästä!",
     "filesize": "Maksimi tiedostokoko 5MB"
 }

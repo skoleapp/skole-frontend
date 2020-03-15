@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
+import { ContactMutation, useContactMutation } from '../../generated/graphql';
 import { toggleNotification } from '../actions';
 import { FormSubmitSection, SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
@@ -12,7 +13,6 @@ import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAuthSync, useForm } from '../utils';
-import { useContactMutation, ContactMutation } from '../../generated/graphql';
 
 const initialValues = {
     subject: '',

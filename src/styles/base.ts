@@ -160,6 +160,24 @@ export const base = css`
             padding: 0.5rem;
         }
 
+        .MuiBottomNavigation-root {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 3rem !important;
+            border-top: var(--border);
+            z-index: 1000;
+
+            .MuiButtonBase-root,
+            .Mui-selected {
+                padding: 0 !important;
+            }
+
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                display: none !important;
+            }
+        }
+
         input#attachment {
             display: none;
         }

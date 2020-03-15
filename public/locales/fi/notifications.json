@@ -11,5 +11,9 @@
     "commentDeleted": "Kommentti poistettu!",
     "messageEmpty": "Viesti ei voi olla tyhjä!",
     "linkCopied": "Linkki kopioitu leikepöydälle!",
+    "deleteResourceError": "Resurssin poistamisessa tapahtui odottamaton virhe!",
+    "resourceDeleted": "Resurssi poistettu!",
+    "courseDeleted": "Kurssi poistettu!",
+    "deleteCourseError": "Kurssin poistamisessa tapahtui odottamaton virhe!",
     "avatarFileSize": "Suurin avatarin koko tiedostokoko 2MB. Valitse toinen!"
 }

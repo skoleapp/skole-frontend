@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/react-hooks';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
-import { GraphQLRequest, ApolloLink } from 'apollo-link';
+import { ApolloLink, GraphQLRequest } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpConfig } from 'apollo-link-http-common';
 import { createUploadLink } from 'apollo-upload-client';
@@ -20,6 +20,49 @@ interface GetToken {
 
 /* eslint-disable*/
 export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): NextPage => {
+    let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
+
+    const initApolloClient = (initState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> | null => {
+        if (typeof window === 'undefined') {
+            return createApolloClient(initState, { getToken });
+        }
+
+        if (!apolloClient) {
+            apolloClient = createApolloClient(initState, { getToken });
+        }
+
+        return apolloClient;
+    };
+
+    const createApolloClient = (initialState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
+        const isBrowser = typeof window !== 'undefined';
+        const uri = isBrowser ? process.env.API_URL : process.env.BACKEND_URL;
+
+        const httpLink = createUploadLink({
+            uri: uri + 'graphql/',
+            credentials: 'include',
+            fetch,
+        });
+
+        const authLink = setContext((_req: GraphQLRequest, { headers }: HttpConfig) => {
+            const token = getToken();
+
+            return {
+                headers: {
+                    ...headers,
+                    authorization: token ? `JWT ${token}` : '',
+                },
+            };
+        });
+
+        return new ApolloClient({
+            connectToDevTools: isBrowser,
+            ssrMode: !isBrowser,
+            link: ApolloLink.from([authLink, httpLink]),
+            cache: new InMemoryCache().restore(initialState),
+        });
+    };
+
     const WithApollo = ({ apolloClient, apolloState, ...pageProps }: WithApolloClient<any>): WithApolloClient<any> => {
         const client = apolloClient || initApolloClient(apolloState, { getToken });
         return (
@@ -77,47 +120,4 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): NextPa
     }
 
     return WithApollo;
-};
-
-let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
-
-const initApolloClient = (initState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> | null => {
-    if (typeof window === 'undefined') {
-        return createApolloClient(initState, { getToken });
-    }
-
-    if (!apolloClient) {
-        apolloClient = createApolloClient(initState, { getToken });
-    }
-
-    return apolloClient;
-};
-
-const createApolloClient = (initialState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
-    const isBrowser = typeof window !== 'undefined';
-    const uri = isBrowser ? process.env.API_URL : process.env.BACKEND_URL;
-
-    const httpLink = createUploadLink({
-        uri: uri + 'graphql/',
-        credentials: 'include',
-        fetch,
-    });
-
-    const authLink = setContext((_req: GraphQLRequest, { headers }: HttpConfig) => {
-        const token = getToken();
-
-        return {
-            headers: {
-                ...headers,
-                authorization: token ? `JWT ${token}` : '',
-            },
-        };
-    });
-
-    return new ApolloClient({
-        connectToDevTools: isBrowser,
-        ssrMode: !isBrowser,
-        link: ApolloLink.from([authLink, httpLink]),
-        cache: new InMemoryCache().restore(initialState),
-    });
 };
