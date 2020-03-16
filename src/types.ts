@@ -1,6 +1,6 @@
 import { ContainerProps } from '@material-ui/core';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
-import ApolloClient from 'apollo-client';
+import ApolloClient, { ApolloQueryResult } from 'apollo-client';
 import { NextComponentType, NextPageContext } from 'next';
 import { Store } from 'redux';
 
@@ -8,7 +8,8 @@ import { CommentObjectType, UserObjectType } from '../generated/graphql';
 import { Auth, UI } from './reducers';
 
 export interface SkoleContext extends NextPageContext {
-    apolloClient: ApolloClient<NormalizedCacheObject>;
+    apolloClient: ApolloClient<NormalizedCacheObject> | null;
+    apolloState: ApolloQueryResult<{}>;
     reduxStore: Store;
     userMe: UserObjectType;
 }

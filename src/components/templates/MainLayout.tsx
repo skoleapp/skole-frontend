@@ -49,7 +49,7 @@ export const MainLayout: React.FC<Props> = ({
     );
 };
 
-/* eslint-disable */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledMainLayout = styled(({ disableBottomNavbar, ...other }) => <Box {...other} />)`
     background-color: var(--secondary);
     text-align: center;
