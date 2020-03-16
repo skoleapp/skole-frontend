@@ -4,22 +4,22 @@ import Document, { DocumentContext, Head, Main, NextScript } from 'next/document
 import React from 'react';
 import { ServerStyleSheet } from 'styled-components';
 
+const GAScript = {
+    __html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){window.dataLayer.push(arguments)}
+        gtag("js", new Date());
+        gtag("config", "UA-159917631-1");
+    `,
+};
+
 export default class SkoleDocument extends Document {
     render(): JSX.Element {
         return (
             <html lang="en">
                 <Head>
                     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159917631-1"></script>
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){window.dataLayer.push(arguments)}
-        gtag("js", new Date());
-        gtag("config", "UA-159917631-1");
-    `,
-                        }}
-                    ></script>
+                    <script dangerouslySetInnerHTML={GAScript} />
                     <meta charSet="UTF-8" />
                     <meta
                         name="viewport"
