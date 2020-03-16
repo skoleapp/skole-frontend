@@ -33,5 +33,6 @@
     "pointsOrdering": "Pisteet (nouseva)",
     "pointsOrderingReverse": "Pisteet (laskeva)",
     "betaCode": "Betakoodi",
-    "name": "Nimi"
+    "name": "Nimi",
+    "fileSizeError": "Tiedosto on liian suuri!"
 }

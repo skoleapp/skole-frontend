@@ -33,5 +33,6 @@
     "pointsOrdering": "Points (Ascending)",
     "pointsOrderingReverse": "Points (Descending)",
     "betaCode": "Beta Code",
-    "name": "Name"
+    "name": "Name",
+    "fileSizeError": "File is too large!"
 }
