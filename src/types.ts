@@ -37,6 +37,7 @@ export interface LayoutProps extends ContainerProps {
     disableSearch?: boolean;
     headerRight?: JSX.Element;
     headerLeft?: JSX.Element;
+    disableBottomNavbar?: boolean;
 }
 
 export interface CommentTarget {

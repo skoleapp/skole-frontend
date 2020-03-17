@@ -11,7 +11,7 @@ import React from 'react';
 import { compose } from 'redux';
 import styled from 'styled-components';
 
-import { ButtonLink, MainLayout } from '../components';
+import { ButtonLink, MainLayout, SettingsButton } from '../components';
 import { Link, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -66,7 +66,7 @@ const IndexPage: I18nPage = () => {
     );
 
     return (
-        <StyledIndexPage title={t('index:title')} disableSearch>
+        <StyledIndexPage title={t('index:title')} disableSearch headerRight={<SettingsButton color="secondary" />}>
             <Box className="slogan">
                 <Typography variant="h1">{t('index:slogan')}</Typography>
             </Box>
@@ -103,7 +103,7 @@ const StyledIndexPage = styled(MainLayout)`
     }
 
     .slogan {
-        margin-top: 1rem;
+        margin-top: 3rem;
 
         @media only screen and (min-width: ${breakpoints.MD}) {
             margin-top: 4rem;
@@ -115,7 +115,7 @@ const StyledIndexPage = styled(MainLayout)`
             border-radius: var(--border-radius) 0 0 var(--border-radius);
             background-color: var(--white);
             display: flex;
-            width: 100%;
+            width: 50%;
             max-width: 20rem;
             border: 0.05rem solid var(--primary);
 
@@ -133,10 +133,9 @@ const StyledIndexPage = styled(MainLayout)`
         flex-flow: row wrap;
 
         .MuiCard-root {
-            margin: 0.5rem;
+            margin: 1rem;
             cursor: pointer;
             width: 14rem;
-            height: 14rem;
 
             .MuiCardContent-root {
                 height: 100%;
