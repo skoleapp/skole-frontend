@@ -8,7 +8,7 @@ import { CommentObjectType, UserObjectType } from '../generated/graphql';
 import { Auth, UI } from './reducers';
 
 export interface SkoleContext extends NextPageContext {
-    apolloClient: ApolloClient<NormalizedCacheObject> | null;
+    apolloClient: ApolloClient<NormalizedCacheObject>;
     apolloState: ApolloQueryResult<{}>;
     reduxStore: Store;
     userMe: UserObjectType;

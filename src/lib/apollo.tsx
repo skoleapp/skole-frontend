@@ -86,7 +86,10 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.El
     if (ssr || PageComponent.getInitialProps) {
         WithApollo.getInitialProps = async (ctx: WithApolloClient<SkoleContext>): Promise<SkoleContext | {}> => {
             const { AppTree } = ctx;
-            const apolloClient = (ctx.apolloClient = initApolloClient({}, { getToken: () => getToken(ctx.req) }));
+            const apolloClient = ((ctx.apolloClient as ApolloClient<NormalizedCacheObject> | null) = initApolloClient(
+                {},
+                { getToken: () => getToken(ctx.req) },
+            ));
             const pageProps = PageComponent.getInitialProps ? await PageComponent.getInitialProps(ctx) : {};
 
             if (typeof window === 'undefined') {
