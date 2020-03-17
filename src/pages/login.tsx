@@ -10,12 +10,13 @@ import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection, TextLink, LanguageSelector } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAlerts, useForm, usePublicPage } from '../utils';
+import styled from 'styled-components';
 
 const initialValues = {
     usernameOrEmail: '',
@@ -108,12 +109,22 @@ const LoginPage: I18nPage = () => {
     return (
         <FormLayout
             title={t('common:login')}
+            headerRight={<StyledLanguageSelector secondary />}
             renderCardContent={renderCardContent}
             renderAlert={!!query.next ? renderAlert('warning', t('alerts:loginRequired')) : undefined}
             backUrl
         />
     );
 };
+const StyledLanguageSelector = styled(LanguageSelector)`
+    border-radius: 0px !important;
+    position: initial !important;
+    background-color: transparent !important;
+    font-size: inherit !important;
+    .MuiSelect-select:focus {
+        background-color: transparent !important;
+    }
+`;
 
 LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);
