@@ -103,7 +103,7 @@ const StyledIndexPage = styled(MainLayout)`
     }
 
     .slogan {
-        margin-top: 1rem;
+        margin-top: 3rem;
 
         @media only screen and (min-width: ${breakpoints.MD}) {
             margin-top: 4rem;
@@ -115,7 +115,7 @@ const StyledIndexPage = styled(MainLayout)`
             border-radius: var(--border-radius) 0 0 var(--border-radius);
             background-color: var(--white);
             display: flex;
-            width: 100%;
+            width: 50%;
             max-width: 20rem;
             border: 0.05rem solid var(--primary);
 
@@ -133,10 +133,9 @@ const StyledIndexPage = styled(MainLayout)`
         flex-flow: row wrap;
 
         .MuiCard-root {
-            margin: 0.5rem;
+            margin: 1rem;
             cursor: pointer;
             width: 14rem;
-            height: 14rem;
 
             .MuiCardContent-root {
                 height: 100%;
