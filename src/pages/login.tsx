@@ -109,6 +109,7 @@ const LoginPage: I18nPage = () => {
     return (
         <FormLayout
             title={t('common:login')}
+            disableBottomNavbar
             headerRight={<StyledLanguageSelector secondary />}
             renderCardContent={renderCardContent}
             renderAlert={!!query.next ? renderAlert('warning', t('alerts:loginRequired')) : undefined}

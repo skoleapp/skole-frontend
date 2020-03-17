@@ -156,6 +156,7 @@ const RegisterPage: I18nPage = () => {
             title={t('register:title')}
             headerRight={<StyledLanguageSelector secondary />}
             renderCardContent={renderCardContent}
+            disableBottomNavbar
             backUrl
         />
     );
