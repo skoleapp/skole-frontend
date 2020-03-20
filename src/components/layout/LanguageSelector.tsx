@@ -24,7 +24,6 @@ export const LanguageSelector: React.FC = () => {
         <List>
             {languages.map((l, i) => (
                 <MenuItem key={i} onClick={handleLanguageChange(l.value)}>
-                    {console.log(l)}
                     {t(l.label)} {languageToFlag(l.code)}
                 </MenuItem>
             ))}

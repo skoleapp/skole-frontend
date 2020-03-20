@@ -158,7 +158,6 @@ const RegisterPage: I18nPage = () => {
             headerRight={renderLanguageButton}
             renderCardContent={renderCardContent}
             disableBottomNavbar
-            backUrl
         />
     );
 };

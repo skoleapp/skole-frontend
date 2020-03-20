@@ -109,11 +109,10 @@ const LoginPage: I18nPage = () => {
     return (
         <FormLayout
             title={t('common:login')}
-            disableBottomNavbar
             headerRight={renderLanguageButton}
             renderCardContent={renderCardContent}
             renderAlert={!!query.next ? renderAlert('warning', t('alerts:loginRequired')) : undefined}
-            backUrl
+            disableBottomNavbar
         />
     );
 };

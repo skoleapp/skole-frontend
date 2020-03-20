@@ -8,7 +8,10 @@ import { BottomNavbar, Footer, Head, LanguageSelector, Notifications, Settings, 
 import { CommentThread, FileViewer } from '../layout';
 
 interface Props
-    extends Pick<LayoutProps, 'title' | 'backUrl' | 'disableSearch' | 'headerRight' | 'headerLeft'>,
+    extends Pick<
+            LayoutProps,
+            'title' | 'backUrl' | 'disableSearch' | 'headerRight' | 'headerLeft' | 'disableBottomNavbar'
+        >,
         ContainerProps {
     heading?: string;
     customBottomNavbar?: JSX.Element;
@@ -23,33 +26,33 @@ export const MainLayout: React.FC<Props> = ({
     headerLeft,
     children,
     customBottomNavbar,
+    disableBottomNavbar,
     ...containerProps
-}) => {
-    return (
-        <StyledMainLayout>
-            <Head title={title} />
-            <TopNavbar
-                heading={heading}
-                backUrl={backUrl}
-                disableSearch={disableSearch}
-                headerRight={headerRight}
-                headerLeft={headerLeft}
-            />
-            <Container {...containerProps} maxWidth="xl">
-                {children}
-            </Container>
-            {customBottomNavbar || <BottomNavbar />}
-            <Footer />
-            <Notifications />
-            <Settings />
-            <CommentThread />
-            <FileViewer />
-            <LanguageSelector />
-        </StyledMainLayout>
-    );
-};
+}) => (
+    <StyledMainLayout disableBottomNavbar={disableBottomNavbar}>
+        <Head title={title} />
+        <TopNavbar
+            heading={heading}
+            backUrl={backUrl}
+            disableSearch={disableSearch}
+            headerRight={headerRight}
+            headerLeft={headerLeft}
+        />
+        <Container {...containerProps} maxWidth="xl">
+            {children}
+        </Container>
+        {(!disableBottomNavbar && customBottomNavbar) || (!disableBottomNavbar && <BottomNavbar />)}
+        <Footer />
+        <Notifications />
+        <Settings />
+        <CommentThread />
+        <FileViewer />
+        <LanguageSelector />
+    </StyledMainLayout>
+);
 
-const StyledMainLayout = styled(Box)`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledMainLayout = styled(({ disableBottomNavbar, ...other }) => <Box {...other} />)`
     background-color: var(--secondary);
     text-align: center;
     min-height: 100vh;
@@ -68,7 +71,7 @@ const StyledMainLayout = styled(Box)`
         }
 
         @media only screen and (max-width: ${breakpoints.MD}) {
-            margin-bottom: 3rem;
+            margin-bottom: ${({ disableBottomNavbar }): string => (!disableBottomNavbar ? '3rem' : 'initial')};
         }
     }
 `;
