@@ -1,4 +1,3 @@
-import { FormHelperText } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
@@ -148,7 +147,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                         fullWidth
                     />
                     <Field name="file" component={DropzoneField} />
-                    <FormHelperText>{t('common:filesize')}</FormHelperText>
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}
