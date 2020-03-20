@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { BottomNavbar, Footer, Head, Notifications, Settings, SkoleGDPR, TopNavbar } from '../layout';
+import { BottomNavbar, Footer, Head, Notifications, Settings, TopNavbar } from '../layout';
 import { CommentThread, FileViewer } from '../layout';
 
 interface Props
@@ -12,7 +12,6 @@ interface Props
         ContainerProps {
     heading?: string;
     customBottomNavbar?: JSX.Element;
-    disableBottomNavbar?: boolean;
 }
 
 export const MainLayout: React.FC<Props> = ({
@@ -24,11 +23,10 @@ export const MainLayout: React.FC<Props> = ({
     headerLeft,
     children,
     customBottomNavbar,
-    disableBottomNavbar = false,
     ...containerProps
 }) => {
     return (
-        <StyledMainLayout disableBottomNavbar={disableBottomNavbar}>
+        <StyledMainLayout>
             <Head title={title} />
             <TopNavbar
                 heading={heading}
@@ -40,35 +38,36 @@ export const MainLayout: React.FC<Props> = ({
             <Container {...containerProps} maxWidth="xl">
                 {children}
             </Container>
-            {!disableBottomNavbar && (customBottomNavbar || <BottomNavbar />)}
+            {customBottomNavbar || <BottomNavbar />}
             <Footer />
             <Notifications />
             <Settings />
             <CommentThread />
             <FileViewer />
-            <SkoleGDPR />
         </StyledMainLayout>
     );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledMainLayout = styled(({ disableBottomNavbar, ...other }) => <Box {...other} />)`
+const StyledMainLayout = styled(Box)`
     background-color: var(--secondary);
     text-align: center;
     min-height: 100vh;
     position: relative;
     display: flex;
     flex-direction: column;
+
     .MuiContainer-root {
         padding: 0;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
+
         @media only screen and (min-width: ${breakpoints.MD}) {
             padding: 1rem;
         }
+
         @media only screen and (max-width: ${breakpoints.MD}) {
-            margin-bottom: ${({ disableBottomNavbar }): string => (!disableBottomNavbar ? '3rem' : 'initial')};
+            margin-bottom: 3rem;
         }
     }
 `;
