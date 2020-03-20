@@ -1,6 +1,4 @@
 import { FormHelperText } from '@material-ui/core';
-import styled from 'styled-components';
+import React from 'react';
 
-export const FormErrorMessage = styled(FormHelperText)`
-    color: var(--danger) !important;
-`;
+export const FormErrorMessage: React.FC = props => <FormHelperText error {...props} />;
