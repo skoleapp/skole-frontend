@@ -180,6 +180,7 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
     return (
         <FilterLayout<FilterSearchResultsFormValues>
             title={t('search:title')}
+            heading={t('search:heading')}
             renderCardContent={renderCardContent}
             renderTableContent={renderTableContent}
             toggleDrawer={toggleDrawer}

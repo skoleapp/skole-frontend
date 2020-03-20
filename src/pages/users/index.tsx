@@ -120,8 +120,8 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
 
     return (
         <FilterLayout<FilterUsersFormValues>
-            heading={t('users:title')}
             title={t('users:title')}
+            heading={t('users:heading')}
             renderCardContent={renderCardContent}
             renderTableContent={renderTableContent}
             toggleDrawer={toggleDrawer}
