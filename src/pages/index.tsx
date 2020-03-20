@@ -71,7 +71,7 @@ const IndexPage: I18nPage = () => {
                 <Typography variant="h1">{t('index:slogan')}</Typography>
             </Box>
             <Box marginTop="1rem">{renderSearchWidget}</Box>
-            <Box className="shortcuts" display="flex" justifyContent="center" marginTop="2rem">
+            <Box className="shortcuts" display="flex" justifyContent="center" marginTop="1rem">
                 {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
                     <Link href={href} key={i}>
                         <Card>
@@ -88,7 +88,7 @@ const IndexPage: I18nPage = () => {
                     {t('index:contactUsText')}
                 </Typography>
             </Box>
-            <Box marginTop="1rem">
+            <Box marginY="1rem">
                 <ButtonLink href="/contact" variant="outlined" color="primary">
                     {t('index:contactUsButton')}
                 </ButtonLink>
@@ -103,7 +103,7 @@ const StyledIndexPage = styled(MainLayout)`
     }
 
     .slogan {
-        margin-top: 3rem;
+        margin-top: 1rem;
 
         @media only screen and (min-width: ${breakpoints.MD}) {
             margin-top: 4rem;
@@ -115,7 +115,7 @@ const StyledIndexPage = styled(MainLayout)`
             border-radius: var(--border-radius) 0 0 var(--border-radius);
             background-color: var(--white);
             display: flex;
-            width: 50%;
+            width: 100%;
             max-width: 20rem;
             border: 0.05rem solid var(--primary);
 
@@ -133,12 +133,22 @@ const StyledIndexPage = styled(MainLayout)`
         flex-flow: row wrap;
 
         .MuiCard-root {
-            margin: 1rem;
+            margin: 0.5rem;
             cursor: pointer;
-            width: 14rem;
+            width: 100%;
+            padding-bottom: 50%;
+            position: relative;
+
+            @media only screen and (min-width: ${breakpoints.SM}) {
+                width: 14rem;
+                height: 14rem;
+                padding-bottom: 0;
+            }
 
             .MuiCardContent-root {
+                position: absolute;
                 height: 100%;
+                width: 100%;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
