@@ -84,7 +84,7 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.El
     }
 
     if (ssr || PageComponent.getInitialProps) {
-        WithApollo.getInitialProps = async (ctx: WithApolloClient<SkoleContext>): Promise<SkoleContext | {}> => {
+        WithApollo.getInitialProps = async (ctx: WithApolloClient<SkoleContext>): Promise<{}> => {
             const { AppTree } = ctx;
             const apolloClient = ((ctx.apolloClient as ApolloClient<NormalizedCacheObject> | null) = initApolloClient(
                 {},
@@ -114,7 +114,7 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.El
                 Head.rewind();
             }
 
-            const apolloState = apolloClient && apolloClient.cache.extract();
+            const apolloState = apolloClient && (apolloClient.cache.extract() as unknown);
 
             return {
                 ...pageProps,

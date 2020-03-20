@@ -1,12 +1,14 @@
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
-import { LanguageSelector, TextLink } from '../shared';
+import { useLanguageSelector } from '../../utils';
+import { TextLink } from '../shared';
 
 export const Footer: React.FC = () => {
     const { t } = useTranslation();
+    const { renderLanguageButton } = useLanguageSelector();
 
     return (
         <StyledFooter className="md-up" container>
@@ -35,9 +37,7 @@ export const Footer: React.FC = () => {
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Box marginTop="0.5rem">
-                            <LanguageSelector secondary />
-                        </Box>
+                        {renderLanguageButton}
                     </Grid>
                 </Grid>
                 <Grid item xs={4} container>

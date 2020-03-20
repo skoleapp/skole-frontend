@@ -23,7 +23,9 @@ export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) =
             </Grid>
             {!!title && (
                 <Grid item container xs={8} justify="center">
-                    <Heading text={title} />
+                    <Box margin="0 1rem">
+                        <Heading text={title} />
+                    </Box>
                 </Grid>
             )}
             <Grid item xs={2}>
@@ -38,8 +40,4 @@ const StyledModalHeader = styled(Box)`
     align-items: center;
     border-bottom: var(--border);
     padding: 0.5rem;
-
-    .MuiTypography-root {
-        margin-left: 0.5rem;
-    }
 `;

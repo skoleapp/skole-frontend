@@ -120,6 +120,13 @@ export const base = css`
         }
 
         .MuiList-root {
+            outline: none;
+
+            .MuiListSubheader-root {
+                text-align: left;
+                outline: none;
+            }
+
             .MuiListItem-root {
                 padding: 0.5rem;
             }
@@ -134,11 +141,6 @@ export const base = css`
                     height: 1rem;
                 }
             }
-        }
-
-        .MuiListSubheader-root {
-            text-align: left;
-            outline: none;
         }
 
         .MuiTabs-root {

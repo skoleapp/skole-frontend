@@ -6,17 +6,16 @@ import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
-import styled from 'styled-components';
 import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, LanguageSelector, TextLink } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useAlerts, useForm, usePublicPage } from '../utils';
+import { useAlerts, useForm, useLanguageSelector, usePublicPage } from '../utils';
 
 const initialValues = {
     usernameOrEmail: '',
@@ -36,6 +35,7 @@ const LoginPage: I18nPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
+    const { renderLanguageButton } = useLanguageSelector();
 
     const validationSchema = Yup.object().shape({
         usernameOrEmail: Yup.string().required(t('validation:required')),
@@ -110,22 +110,13 @@ const LoginPage: I18nPage = () => {
         <FormLayout
             title={t('common:login')}
             disableBottomNavbar
-            headerRight={<StyledLanguageSelector secondary />}
+            headerRight={renderLanguageButton}
             renderCardContent={renderCardContent}
             renderAlert={!!query.next ? renderAlert('warning', t('alerts:loginRequired')) : undefined}
             backUrl
         />
     );
 };
-const StyledLanguageSelector = styled(LanguageSelector)`
-    border-radius: 0px !important;
-    position: initial !important;
-    background-color: transparent !important;
-    font-size: inherit !important;
-    .MuiSelect-select:focus {
-        background-color: transparent !important;
-    }
-`;
 
 LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);

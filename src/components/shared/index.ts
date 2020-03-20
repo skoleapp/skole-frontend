@@ -8,7 +8,6 @@ export { TabPanel } from './TabPanel';
 export { TextLink } from './TextLink';
 export { AutoCompleteField } from './AutoCompleteField';
 export { Download } from './Download';
-export { LanguageSelector } from './LanguageSelector';
 export { AvatarField } from './AvatarField';
 export { DropzoneField } from './DropzoneField';
 export { SelectField } from './SelectField';

@@ -12,12 +12,12 @@ import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, LanguageSelector } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useForm, usePublicPage } from '../utils';
+import { useForm, useLanguageSelector, usePublicPage } from '../utils';
 
 export interface RegisterFormValues {
     username: string;
@@ -33,6 +33,7 @@ const RegisterPage: I18nPage = () => {
     const dispatch = useDispatch();
     const { query } = useRouter();
     const { t } = useTranslation();
+    const { renderLanguageButton } = useLanguageSelector();
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
@@ -154,23 +155,13 @@ const RegisterPage: I18nPage = () => {
     return (
         <FormLayout
             title={t('register:title')}
-            headerRight={<StyledLanguageSelector secondary />}
+            headerRight={renderLanguageButton}
             renderCardContent={renderCardContent}
             disableBottomNavbar
             backUrl
         />
     );
 };
-
-const StyledLanguageSelector = styled(LanguageSelector)`
-    border-radius: 0px !important;
-    position: initial !important;
-    background-color: transparent !important;
-    font-size: inherit !important;
-    .MuiSelect-select:focus {
-        background-color: transparent !important;
-    }
-`;
 
 const StyledField = styled(Field)`
     .MuiInputBase-root.Mui-disabled {

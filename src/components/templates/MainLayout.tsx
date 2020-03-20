@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { BottomNavbar, Footer, Head, Notifications, Settings, TopNavbar } from '../layout';
+import { BottomNavbar, Footer, Head, LanguageSelector, Notifications, Settings, TopNavbar } from '../layout';
 import { CommentThread, FileViewer } from '../layout';
 
 interface Props
@@ -44,6 +44,7 @@ export const MainLayout: React.FC<Props> = ({
             <Settings />
             <CommentThread />
             <FileViewer />
+            <LanguageSelector />
         </StyledMainLayout>
     );
 };

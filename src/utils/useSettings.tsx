@@ -5,11 +5,11 @@ import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deAuthenticate, toggleSettings } from '../actions';
-import { LanguageSelector } from '../components';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { State } from '../types';
 import { menuItems } from '.';
+import { useLanguageSelector } from './useLanguageSelector';
 
 interface UseSettings {
     renderSettingsCardContent: JSX.Element;
@@ -27,6 +27,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { pathname } = useRouter();
+    const { renderCurrentFlag, openLanguageMenu } = useLanguageSelector();
 
     const handleMenuItemClick = (href: string) => (): void => {
         !!modal && dispatch(toggleSettings(false));
@@ -58,13 +59,15 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         </MenuItem>
     ));
 
+    const renderLanguageMenuItem = (
+        <MenuItem onClick={openLanguageMenu}>
+            {t('common:language')} {renderCurrentFlag}
+        </MenuItem>
+    );
+
     const renderCommonMenuItems = (
         <MenuList>
-            <ListSubheader>{t('common:language')}</ListSubheader>
-            <ListItem>
-                <LanguageSelector fullWidth />
-            </ListItem>
-            <Divider />
+            {renderLanguageMenuItem}
             <ListSubheader>{t('common:about')}</ListSubheader>
             {renderAboutMenuItems}
             <Divider />
@@ -77,8 +80,13 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         <MenuList>
             <ListSubheader>{t('common:account')}</ListSubheader>
             {renderAccountMenuItems}
+            {renderLanguageMenuItem}
             <Divider />
-            {renderCommonMenuItems}
+            <ListSubheader>{t('common:about')}</ListSubheader>
+            {renderAboutMenuItems}
+            <Divider />
+            <ListSubheader>{t('common:legal')}</ListSubheader>
+            {renderLegalItems}
         </MenuList>
     );
 
