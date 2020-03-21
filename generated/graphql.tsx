@@ -301,9 +301,19 @@ export type MutationDeleteCommentArgs = {
   input: DeleteCommentMutationInput
 };
 
+export type PaginatedUserObjectType = {
+   __typename?: 'PaginatedUserObjectType',
+  page?: Maybe<Scalars['Int']>,
+  pages?: Maybe<Scalars['Int']>,
+  hasNext?: Maybe<Scalars['Boolean']>,
+  hasPrev?: Maybe<Scalars['Boolean']>,
+  count?: Maybe<Scalars['Int']>,
+  objects?: Maybe<Array<Maybe<UserObjectType>>>,
+};
+
 export type Query = {
    __typename?: 'Query',
-  users?: Maybe<Array<Maybe<UserObjectType>>>,
+  users?: Maybe<PaginatedUserObjectType>,
   user?: Maybe<UserObjectType>,
   userMe?: Maybe<UserObjectType>,
   subjects?: Maybe<Array<Maybe<SubjectObjectType>>>,
@@ -325,6 +335,8 @@ export type Query = {
 
 
 export type QueryUsersArgs = {
+  page?: Maybe<Scalars['Int']>,
+  pageSize?: Maybe<Scalars['Int']>,
   username?: Maybe<Scalars['String']>,
   ordering?: Maybe<Scalars['String']>
 };
@@ -1032,16 +1044,22 @@ export type SearchCoursesQuery = (
 
 export type UsersQueryVariables = {
   username?: Maybe<Scalars['String']>,
-  ordering?: Maybe<Scalars['String']>
+  ordering?: Maybe<Scalars['String']>,
+  page?: Maybe<Scalars['Int']>,
+  pageSize?: Maybe<Scalars['Int']>
 };
 
 
 export type UsersQuery = (
   { __typename?: 'Query' }
-  & { users: Maybe<Array<Maybe<(
-    { __typename?: 'UserObjectType' }
-    & Pick<UserObjectType, 'id' | 'username' | 'points' | 'avatarThumbnail'>
-  )>>> }
+  & { users: Maybe<(
+    { __typename?: 'PaginatedUserObjectType' }
+    & Pick<PaginatedUserObjectType, 'page' | 'pages' | 'hasPrev' | 'hasNext' | 'count'>
+    & { objects: Maybe<Array<Maybe<(
+      { __typename?: 'UserObjectType' }
+      & Pick<UserObjectType, 'id' | 'username' | 'points' | 'avatarThumbnail'>
+    )>>> }
+  )> }
 );
 
 export type UserDetailQueryVariables = {
@@ -1781,12 +1799,19 @@ export const SearchCoursesDocument = gql`
 export type SearchCoursesQueryHookResult = ReturnType<typeof useSearchCoursesQuery>;
 export type SearchCoursesQueryResult = ApolloReactCommon.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
 export const UsersDocument = gql`
-    query Users($username: String, $ordering: String) {
-  users(username: $username, ordering: $ordering) {
-    id
-    username
-    points
-    avatarThumbnail
+    query Users($username: String, $ordering: String, $page: Int, $pageSize: Int) {
+  users(username: $username, ordering: $ordering, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasPrev
+    hasNext
+    count
+    objects {
+      id
+      username
+      points
+      avatarThumbnail
+    }
   }
 }
     `;

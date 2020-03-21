@@ -59,5 +59,6 @@
     "share": "Share",
     "noComments": "No comments to be shown...",
     "options": "Actions",
-    "dropzoneMaxFileSize": "Maximum file size"
+    "dropzoneMaxFileSize": "Maximum file size",
+    "resultsPerPage": "Results Per Page"
 }
