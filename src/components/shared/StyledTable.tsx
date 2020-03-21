@@ -11,15 +11,10 @@ export const StyledTable = styled(({ disableBoxShadow, ...other }) => <Paper {..
     position: relative;
 
     .MuiTableContainer-root {
-        position: absolute;
-        top: 0;
-
-        @media only screen and (max-width: ${breakpoints.MD}) {
-            height: 100%;
-        }
-
         @media only screen and (min-width: ${breakpoints.MD}) {
             bottom: 3.5rem;
+            position: absolute;
+            top: 0;
         }
 
         .MuiTable-root {
@@ -46,10 +41,23 @@ export const StyledTable = styled(({ disableBoxShadow, ...other }) => <Paper {..
     }
 
     .MuiTablePagination-root {
-        position: absolute;
-        bottom: 0;
-        height: 3.5rem;
         width: 100%;
         border-top: var(--border);
+
+        @media only screen and (min-width: ${breakpoints.MD}) {
+            height: 3.5rem;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .MuiTablePagination-toolbar {
+            display: flex;
+
+            @media only screen and (max-width: ${breakpoints.MD}) {
+                flex-direction: column;
+                padding: 0.5rem;
+                margin-top: auto;
+            }
+        }
     }
 `;

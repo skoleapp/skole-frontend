@@ -2,6 +2,7 @@ import {
     Avatar,
     Box,
     CardContent,
+    IconButton,
     MenuItem,
     Table,
     TableBody,
@@ -12,6 +13,12 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core';
+import {
+    FirstPageOutlined,
+    KeyboardArrowLeftOutlined,
+    KeyboardArrowRightOutlined,
+    LastPageOutlined,
+} from '@material-ui/icons';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Link from 'next/link';
@@ -28,6 +35,45 @@ import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { mediaURL, useFilters, usePrivatePage } from '../../utils';
+
+interface TablePaginationActionsProps {
+    count: number;
+    page: number;
+    rowsPerPage: number;
+    onChangePage: (e: MouseEvent<HTMLButtonElement>, newPage: number) => void;
+}
+
+const TablePaginationActions = ({
+    count,
+    page,
+    rowsPerPage,
+    onChangePage,
+}: TablePaginationActionsProps): JSX.Element => {
+    const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, 0);
+    const handleBackButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page - 1);
+    const handleNextButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page + 1);
+
+    const handleLastPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
+        onChangePage(e, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    };
+
+    return (
+        <Box display="flex">
+            <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0}>
+                <FirstPageOutlined />
+            </IconButton>
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+                <KeyboardArrowLeftOutlined />
+            </IconButton>
+            <IconButton onClick={handleNextButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1}>
+                <KeyboardArrowRightOutlined />
+            </IconButton>
+            <IconButton onClick={handleLastPageButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1}>
+                <LastPageOutlined />
+            </IconButton>
+        </Box>
+    );
+};
 
 interface FilterUsersFormValues {
     username: string;
@@ -80,6 +126,22 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     };
 
     const rowsPerPageOptions = [5, 10, 25, 50, 100];
+
+    const renderTablePagination = (classes: string): JSX.Element => (
+        <TablePagination
+            className={classes}
+            rowsPerPageOptions={rowsPerPageOptions}
+            colSpan={3}
+            count={count}
+            rowsPerPage={rowsPerPage}
+            page={page - 1}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            labelRowsPerPage={t('common:resultsPerPage')}
+            ActionsComponent={TablePaginationActions}
+            SelectProps={{ native: true }}
+        />
+    );
 
     const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
@@ -145,19 +207,10 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                             </Link>
                         ))}
                     </TableBody>
+                    {renderTablePagination('md-down')}
                 </Table>
             </TableContainer>
-            <TablePagination
-                className="md-up"
-                rowsPerPageOptions={rowsPerPageOptions}
-                colSpan={3}
-                count={count}
-                rowsPerPage={rowsPerPage}
-                page={page - 1}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                labelRowsPerPage={t('common:resultsPerPage')}
-            />
+            {renderTablePagination('md-up')}
         </>
     ) : (
         <CardContent>
