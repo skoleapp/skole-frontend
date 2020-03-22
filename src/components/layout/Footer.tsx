@@ -60,7 +60,7 @@ export const Footer: React.FC = () => {
             </Grid>
             <Grid item xs={12}>
                 <Typography variant="subtitle1" color="secondary">
-                    © {new Date().getFullYear()} {t('common:skoleLtd')}
+                    © {new Date().getFullYear()} {t('common:skoleTeam')}
                 </Typography>
             </Grid>
         </StyledFooter>
