@@ -2,78 +2,31 @@ import {
     Avatar,
     Box,
     CardContent,
-    IconButton,
     MenuItem,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TablePagination,
     TableRow,
     Typography,
 } from '@material-ui/core';
-import {
-    FirstPageOutlined,
-    KeyboardArrowLeftOutlined,
-    KeyboardArrowRightOutlined,
-    LastPageOutlined,
-} from '@material-ui/icons';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import React, { ChangeEvent, MouseEvent } from 'react';
+import React from 'react';
 import { compose } from 'redux';
 
 import { PaginatedUserObjectType, UserObjectType, UsersDocument } from '../../../generated/graphql';
 import { FilterLayout, FormSubmitSection, SelectField } from '../../components';
-import { Router, useTranslation } from '../../i18n';
+import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { mediaURL, useFilters, usePrivatePage } from '../../utils';
-
-interface TablePaginationActionsProps {
-    count: number;
-    page: number;
-    rowsPerPage: number;
-    onChangePage: (e: MouseEvent<HTMLButtonElement>, newPage: number) => void;
-}
-
-const TablePaginationActions = ({
-    count,
-    page,
-    rowsPerPage,
-    onChangePage,
-}: TablePaginationActionsProps): JSX.Element => {
-    const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, 0);
-    const handleBackButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page - 1);
-    const handleNextButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page + 1);
-
-    const handleLastPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
-        onChangePage(e, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-    };
-
-    return (
-        <Box display="flex">
-            <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0}>
-                <FirstPageOutlined />
-            </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-                <KeyboardArrowLeftOutlined />
-            </IconButton>
-            <IconButton onClick={handleNextButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1}>
-                <KeyboardArrowRightOutlined />
-            </IconButton>
-            <IconButton onClick={handleLastPageButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1}>
-                <LastPageOutlined />
-            </IconButton>
-        </Box>
-    );
-};
+import { usePagination } from '../../utils/usePagination';
 
 interface FilterUsersFormValues {
     username: string;
@@ -90,29 +43,10 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     >();
 
     const { t } = useTranslation();
-    const { query, pathname } = useRouter();
+    const { query } = useRouter();
     const userObjects = R.propOr([], 'objects', users) as UserObjectType[];
     const count = R.propOr(0, 'count', users) as number;
-    const page = R.propOr(1, 'page', users) as number;
-    const rowsPerPage = Number(R.propOr(10, 'pageSize', query));
-
-    const handleReloadPage = (values: {}): void => {
-        const query: ParsedUrlQueryInput = R.pickBy(
-            (val: string, key: string): boolean => (!!val && key === 'pageSize') || key === 'page',
-            values,
-        );
-
-        Router.push({ pathname, query });
-    };
-
-    const handleChangePage = (_e: MouseEvent<HTMLButtonElement> | null, page: number): void => {
-        handleReloadPage({ ...query, page: page + 1 }); // Back end indexing start from 1.
-    };
-
-    const handleChangeRowsPerPage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-        const pageSize = parseInt(e.target.value, 10);
-        handleReloadPage({ ...query, pageSize });
-    };
+    const { renderMobileTablePagination, renderDesktopTablePagination } = usePagination(count);
 
     const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
         const { username, ordering } = values;
@@ -124,24 +58,6 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         username: R.propOr('', 'username', query) as string,
         ordering: R.propOr('', 'ordering', query) as string,
     };
-
-    const rowsPerPageOptions = [5, 10, 25, 50, 100];
-
-    const renderTablePagination = (classes: string): JSX.Element => (
-        <TablePagination
-            className={classes}
-            rowsPerPageOptions={rowsPerPageOptions}
-            colSpan={3}
-            count={count}
-            rowsPerPage={rowsPerPage}
-            page={page - 1}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            labelRowsPerPage={t('common:resultsPerPage')}
-            ActionsComponent={TablePaginationActions}
-            SelectProps={{ native: true }}
-        />
-    );
 
     const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
@@ -207,10 +123,10 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                             </Link>
                         ))}
                     </TableBody>
-                    {renderTablePagination('md-down')}
+                    {renderMobileTablePagination}
                 </Table>
             </TableContainer>
-            {renderTablePagination('md-up')}
+            {renderDesktopTablePagination}
         </>
     ) : (
         <CardContent>
