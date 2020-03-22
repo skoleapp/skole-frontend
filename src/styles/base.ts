@@ -55,12 +55,6 @@ export const base = css`
             }
         }
 
-        .main-avatar {
-            height: 10rem;
-            width: 10rem;
-            margin: 1rem;
-        }
-
         form {
             .MuiFormControl-root {
                 margin-top: 0.75rem;
@@ -99,47 +93,6 @@ export const base = css`
 
             .MuiDialogActions-root {
                 margin: auto;
-            }
-        }
-
-        .MuiListItem-root {
-            cursor: pointer;
-
-            &:hover {
-                background-color: var(--hover-opacity);
-            }
-
-            .MuiListItemText-primary {
-                display: flex;
-                align-items: center;
-
-                .MuiSvgIcon-root {
-                    margin-right: 0.5rem;
-                }
-            }
-        }
-
-        .MuiList-root {
-            outline: none;
-
-            .MuiListSubheader-root {
-                text-align: left;
-                outline: none;
-            }
-
-            .MuiListItem-root {
-                padding: 0.5rem;
-            }
-
-            .MuiAvatar-root {
-                background-color: var(--primary);
-                width: 2rem;
-                height: 2rem;
-
-                .MuiSvgIcon-root {
-                    width: 1rem;
-                    height: 1rem;
-                }
             }
         }
 

@@ -1,4 +1,4 @@
-import { ListItem, ListItemText } from '@material-ui/core';
+import { ListItemText, MenuItem } from '@material-ui/core';
 import { FlagOutlined, ShareOutlined } from '@material-ui/icons';
 import React, { SyntheticEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -49,19 +49,19 @@ export const useOptions = (): UseOptions => {
     );
 
     const renderShareOption = (
-        <ListItem>
+        <MenuItem>
             <ListItemText onClick={handleShare}>
                 <ShareOutlined /> {t('common:share')}
             </ListItemText>
-        </ListItem>
+        </MenuItem>
     );
 
     const renderReportOption = (
-        <ListItem disabled>
+        <MenuItem disabled>
             <ListItemText>
                 <FlagOutlined /> {t('common:reportAbuse')}
             </ListItemText>
-        </ListItem>
+        </MenuItem>
     );
 
     const commonOptionsProps = {

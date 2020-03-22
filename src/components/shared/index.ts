@@ -19,3 +19,4 @@ export { ModalHeader } from './ModalHeader';
 export { DiscussionBox } from './DiscussionBox';
 export { Heading } from './Heading';
 export { FilePreview } from './FilePreview';
+export { StyledList } from './StyledList';

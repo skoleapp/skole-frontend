@@ -2,10 +2,10 @@ import {
     Avatar,
     CardContent,
     IconButton,
-    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
+    MenuItem,
     Table,
     TableBody,
     TableCell,
@@ -31,7 +31,7 @@ import {
     useDeleteCourseMutation,
 } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { DiscussionBox, NotFound, StyledTable, TabLayout, TextLink } from '../../components';
+import { DiscussionBox, NotFound, StyledList, StyledTable, TabLayout, TextLink } from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
@@ -104,7 +104,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderInfo = (
             <CardContent>
-                <List>
+                <StyledList>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -159,7 +159,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
-                </List>
+                </StyledList>
             </CardContent>
         );
 
@@ -201,17 +201,17 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const renderOptions = (
-            <List>
+            <StyledList>
                 {renderShareOption}
                 {renderReportOption}
                 {isOwnProfile && (
-                    <ListItem>
+                    <MenuItem>
                         <ListItemText onClick={handleDeleteCourse}>
                             <DeleteOutline /> {t('course:deleteCourse')}
                         </ListItemText>
-                    </ListItem>
+                    </MenuItem>
                 )}
-            </List>
+            </StyledList>
         );
 
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (

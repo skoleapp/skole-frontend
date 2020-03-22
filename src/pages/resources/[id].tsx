@@ -4,10 +4,10 @@ import {
     Box,
     CardContent,
     IconButton,
-    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
+    MenuItem,
     Typography,
 } from '@material-ui/core';
 import {
@@ -38,7 +38,7 @@ import {
     VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { DiscussionBox, FilePreview, NotFound, TabLayout, TextLink } from '../../components';
+import { DiscussionBox, FilePreview, NotFound, StyledList, TabLayout, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -129,7 +129,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         const renderInfo = (
             <CardContent>
-                <List>
+                <StyledList>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -184,22 +184,22 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
-                </List>
+                </StyledList>
             </CardContent>
         );
 
         const renderOptions = (
-            <List>
+            <StyledList>
                 {renderShareOption}
                 {renderReportOption}
                 {isOwnProfile && (
-                    <ListItem>
+                    <MenuItem>
                         <ListItemText onClick={handleDeleteResource}>
                             <DeleteOutline /> {t('resource:deleteResource')}
                         </ListItemText>
-                    </ListItem>
+                    </MenuItem>
                 )}
-            </List>
+            </StyledList>
         );
 
         const renderCustomBottomNavbar = (

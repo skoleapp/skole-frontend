@@ -4,7 +4,6 @@ import {
     CardContent,
     Divider,
     Grid,
-    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -23,9 +22,19 @@ import * as R from 'ramda';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
+import styled from 'styled-components';
 
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
-import { ButtonLink, MainLayout, NotFound, SettingsButton, StyledCard, StyledTable, TabPanel } from '../../components';
+import {
+    ButtonLink,
+    MainLayout,
+    NotFound,
+    SettingsButton,
+    StyledCard,
+    StyledList,
+    StyledTable,
+    TabPanel,
+} from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -60,7 +69,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <Grid item container xs={12} sm={6} justify="center">
                     <CardContent>
                         <Box display="flex" flexDirection="column" alignItems="center">
-                            <Avatar className="main-avatar" src={mediaURL(avatar)} />
+                            <Avatar id="main-avatar" src={mediaURL(avatar)} />
                             <Box marginY="0.5rem">
                                 <Typography variant="h1">{username}</Typography>
                             </Box>
@@ -75,7 +84,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <Grid item container xs={12} sm={6} direction="column">
                     <Grid container alignItems="center" justify="center">
                         <CardContent>
-                            <List>
+                            <StyledList>
                                 <ListItem>
                                     <ListItemAvatar>
                                         <Avatar>
@@ -106,7 +115,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         {t('common:resources')}: {resourceCount}
                                     </ListItemText>
                                 </ListItem>
-                            </List>
+                            </StyledList>
                         </CardContent>
                     </Grid>
                     {isOwnProfile && (
@@ -266,7 +275,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         return (
-            <MainLayout
+            <StyledUserPage
                 heading={username}
                 title={username}
                 headerRight={isOwnProfile ? <SettingsButton color="secondary" /> : undefined}
@@ -282,12 +291,20 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     {renderTabs}
                     {renderTabContent}
                 </StyledCard>
-            </MainLayout>
+            </StyledUserPage>
         );
     } else {
         return <NotFound title={t('profile:notFound')} />;
     }
 };
+
+const StyledUserPage = styled(MainLayout)`
+    #main-avatar {
+        height: 8rem;
+        width: 8rem;
+        margin: 1rem;
+    }
+`;
 
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await usePrivatePage(ctx);

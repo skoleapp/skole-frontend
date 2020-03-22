@@ -1,4 +1,4 @@
-import { List, MenuItem, SwipeableDrawer } from '@material-ui/core';
+import { MenuItem, SwipeableDrawer } from '@material-ui/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -6,7 +6,7 @@ import { toggleLanguageSelector } from '../../actions';
 import { useTranslation } from '../../i18n';
 import { State } from '../../types';
 import { useLanguageSelector } from '../../utils';
-import { ModalHeader } from '../shared';
+import { ModalHeader, StyledList } from '../shared';
 
 export const LanguageSelector: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -21,13 +21,13 @@ export const LanguageSelector: React.FC = () => {
     };
 
     const renderLanguageList = (
-        <List>
+        <StyledList>
             {languages.map((l, i) => (
                 <MenuItem key={i} onClick={handleLanguageChange(l.value)}>
                     {t(l.label)} {languageToFlag(l.code)}
                 </MenuItem>
             ))}
-        </List>
+        </StyledList>
     );
 
     const handleOpen = (): void => {

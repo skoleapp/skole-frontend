@@ -1,7 +1,6 @@
 import {
     Avatar,
     CardContent,
-    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -12,7 +11,7 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core';
-import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
+import { FlagOutlined, HouseOutlined, LocationCityOutlined, SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
@@ -23,7 +22,7 @@ import {
     SchoolObjectType,
     SubjectObjectType,
 } from '../../../generated/graphql';
-import { NotFound, StyledTable, TabLayout, TextLink } from '../../components';
+import { NotFound, StyledList, StyledTable, TabLayout, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -65,7 +64,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 
         const renderInfo = (
             <CardContent>
-                <List>
+                <StyledList>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -93,7 +92,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <SubjectOutlined />
+                                <HouseOutlined />
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
@@ -108,7 +107,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <SubjectOutlined />
+                                <FlagOutlined />
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
@@ -123,7 +122,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <SubjectOutlined />
+                                <LocationCityOutlined />
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
@@ -135,15 +134,15 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
-                </List>
+                </StyledList>
             </CardContent>
         );
 
         const renderOptions = (
-            <List>
+            <StyledList>
                 {renderShareOption}
                 {renderReportOption}
-            </List>
+            </StyledList>
         );
 
         const renderSubjects = subjects.length ? (
