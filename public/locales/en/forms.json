@@ -30,6 +30,8 @@
     "ordering": "Ordering",
     "usernameOrdering": "Username (A-Z)",
     "usernameOrderingReverse": "Username (Z-A)",
+    "nameOrdering": "Name (A-Z)",
+    "nameOrderingReverse": "Name (Z-A)",
     "pointsOrdering": "Points (Ascending)",
     "pointsOrderingReverse": "Points (Descending)",
     "betaCode": "Beta Code",

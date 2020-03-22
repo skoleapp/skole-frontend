@@ -301,6 +301,16 @@ export type MutationDeleteCommentArgs = {
   input: DeleteCommentMutationInput
 };
 
+export type PaginatedCourseObjectType = {
+   __typename?: 'PaginatedCourseObjectType',
+  page?: Maybe<Scalars['Int']>,
+  pages?: Maybe<Scalars['Int']>,
+  hasNext?: Maybe<Scalars['Boolean']>,
+  hasPrev?: Maybe<Scalars['Boolean']>,
+  count?: Maybe<Scalars['Int']>,
+  objects?: Maybe<Array<Maybe<CourseObjectType>>>,
+};
+
 export type PaginatedUserObjectType = {
    __typename?: 'PaginatedUserObjectType',
   page?: Maybe<Scalars['Int']>,
@@ -324,6 +334,7 @@ export type Query = {
   school?: Maybe<SchoolObjectType>,
   resourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>,
   resource?: Maybe<ResourceObjectType>,
+  searchCourses?: Maybe<PaginatedCourseObjectType>,
   courses?: Maybe<Array<Maybe<CourseObjectType>>>,
   course?: Maybe<CourseObjectType>,
   countries?: Maybe<Array<Maybe<CountryObjectType>>>,
@@ -367,14 +378,17 @@ export type QueryResourceArgs = {
 };
 
 
-export type QueryCoursesArgs = {
+export type QuerySearchCoursesArgs = {
   courseName?: Maybe<Scalars['String']>,
   courseCode?: Maybe<Scalars['String']>,
   subject?: Maybe<Scalars['ID']>,
   school?: Maybe<Scalars['ID']>,
   schoolType?: Maybe<Scalars['ID']>,
   country?: Maybe<Scalars['ID']>,
-  city?: Maybe<Scalars['ID']>
+  city?: Maybe<Scalars['ID']>,
+  page?: Maybe<Scalars['Int']>,
+  pageSize?: Maybe<Scalars['Int']>,
+  ordering?: Maybe<Scalars['String']>
 };
 
 
@@ -1015,16 +1029,23 @@ export type SearchCoursesQueryVariables = {
   subject?: Maybe<Scalars['ID']>,
   schoolType?: Maybe<Scalars['ID']>,
   country?: Maybe<Scalars['ID']>,
-  city?: Maybe<Scalars['ID']>
+  city?: Maybe<Scalars['ID']>,
+  ordering?: Maybe<Scalars['String']>,
+  page?: Maybe<Scalars['Int']>,
+  pageSize?: Maybe<Scalars['Int']>
 };
 
 
 export type SearchCoursesQuery = (
   { __typename?: 'Query' }
-  & { courses: Maybe<Array<Maybe<(
-    { __typename?: 'CourseObjectType' }
-    & Pick<CourseObjectType, 'id' | 'name' | 'code'>
-  )>>>, school: Maybe<(
+  & { searchCourses: Maybe<(
+    { __typename?: 'PaginatedCourseObjectType' }
+    & Pick<PaginatedCourseObjectType, 'page' | 'pages' | 'hasPrev' | 'hasNext' | 'count'>
+    & { objects: Maybe<Array<Maybe<(
+      { __typename?: 'CourseObjectType' }
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+    )>>> }
+  )>, school: Maybe<(
     { __typename?: 'SchoolObjectType' }
     & Pick<SchoolObjectType, 'id' | 'name'>
   )>, subject: Maybe<(
@@ -1760,11 +1781,19 @@ export const SchoolDetailDocument = gql`
 export type SchoolDetailQueryHookResult = ReturnType<typeof useSchoolDetailQuery>;
 export type SchoolDetailQueryResult = ApolloReactCommon.QueryResult<SchoolDetailQuery, SchoolDetailQueryVariables>;
 export const SearchCoursesDocument = gql`
-    query SearchCourses($courseName: String, $courseCode: String, $school: ID, $subject: ID, $schoolType: ID, $country: ID, $city: ID) {
-  courses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city) {
-    id
-    name
-    code
+    query SearchCourses($courseName: String, $courseCode: String, $school: ID, $subject: ID, $schoolType: ID, $country: ID, $city: ID, $ordering: String, $page: Int, $pageSize: Int) {
+  searchCourses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasPrev
+    hasNext
+    count
+    objects {
+      id
+      name
+      code
+      points
+    }
   }
   school(id: $school) {
     id

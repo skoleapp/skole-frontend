@@ -34,17 +34,25 @@ const TablePaginationActions = ({
     };
 
     return (
-        <Box display="flex">
-            <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0}>
+        <Box display="flex" margin="0.5rem">
+            <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
                 <FirstPageOutlined />
             </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
                 <KeyboardArrowLeftOutlined />
             </IconButton>
-            <IconButton onClick={handleNextButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1}>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                size="small"
+            >
                 <KeyboardArrowRightOutlined />
             </IconButton>
-            <IconButton onClick={handleLastPageButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1}>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                size="small"
+            >
                 <LastPageOutlined />
             </IconButton>
         </Box>
@@ -54,26 +62,31 @@ const TablePaginationActions = ({
 interface UsePagination {
     renderMobileTablePagination: JSX.Element;
     renderDesktopTablePagination: JSX.Element;
+    getPaginationQuery: (values: {}) => ParsedUrlQueryInput;
 }
 
-export const usePagination = (count: number): UsePagination => {
+export const usePagination = (count: number, filterValues: {}): UsePagination => {
     const { query, pathname } = useRouter();
     const { t } = useTranslation();
     const page = Number(R.propOr(1, 'page', query));
     const rowsPerPage = Number(R.propOr(10, 'pageSize', query));
     const rowsPerPageOptions = [5, 10, 25, 50, 100];
 
-    const handleReloadPage = (values: {}): void => {
-        const query: ParsedUrlQueryInput = R.pickBy(
-            (val: string, key: string): boolean => (!!val && key === 'pageSize') || key === 'page',
+    const getPaginationQuery = (values: {}): ParsedUrlQueryInput => {
+        return R.pickBy(
+            (val: string, key: string): boolean =>
+                (!!val && key === 'page') || key === 'pageSize' || key in filterValues,
             values,
         );
+    };
 
+    const handleReloadPage = (values: {}): void => {
+        const query = getPaginationQuery(values);
         Router.push({ pathname, query });
     };
 
     const handleChangePage = (_e: MouseEvent<HTMLButtonElement> | null, page: number): void => {
-        handleReloadPage({ ...query, page: page + 1 }); // Back end indexing start from 1.
+        handleReloadPage({ ...query, page: page + 1 }); // Back end indexing starts from 1.
     };
 
     const handleChangeRowsPerPage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -99,5 +112,5 @@ export const usePagination = (count: number): UsePagination => {
 
     const renderMobileTablePagination = renderTablePagination('md-down');
     const renderDesktopTablePagination = renderTablePagination('md-up');
-    return { renderMobileTablePagination, renderDesktopTablePagination };
+    return { renderMobileTablePagination, renderDesktopTablePagination, getPaginationQuery };
 };

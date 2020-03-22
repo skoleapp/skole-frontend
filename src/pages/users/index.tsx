@@ -38,25 +38,37 @@ interface Props extends I18nProps {
 }
 
 const UsersPage: I18nPage<Props> = ({ users }) => {
-    const { toggleDrawer, open, handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<
-        FilterUsersFormValues
-    >();
-
     const { t } = useTranslation();
     const { query } = useRouter();
     const userObjects = R.propOr([], 'objects', users) as UserObjectType[];
     const count = R.propOr(0, 'count', users) as number;
-    const { renderMobileTablePagination, renderDesktopTablePagination } = usePagination(count);
 
-    const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
-        const { username, ordering } = values;
-        handleSubmit({ username, ordering }, actions);
-    };
+    const { toggleDrawer, open, handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<
+        FilterUsersFormValues
+    >();
 
     // Pre-load query params to the form.
     const initialValues = {
         username: R.propOr('', 'username', query) as string,
         ordering: R.propOr('', 'ordering', query) as string,
+    };
+
+    const { renderMobileTablePagination, renderDesktopTablePagination, getPaginationQuery } = usePagination(
+        count,
+        initialValues,
+    );
+
+    const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
+        const { username, ordering } = values;
+        const paginationQuery = getPaginationQuery(query);
+
+        const filteredValues = {
+            ...paginationQuery, // Define this first to override the values.
+            username,
+            ordering,
+        };
+
+        handleSubmit(filteredValues, actions);
     };
 
     const renderCardContent = (
