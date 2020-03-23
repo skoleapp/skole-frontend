@@ -53,10 +53,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         ordering: R.propOr('', 'ordering', query) as string,
     };
 
-    const { renderMobileTablePagination, renderDesktopTablePagination, getPaginationQuery } = usePagination(
-        count,
-        initialValues,
-    );
+    const { renderTablePagination, getPaginationQuery } = usePagination(count, initialValues);
 
     const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
         const { username, ordering } = values;
@@ -135,10 +132,9 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                             </Link>
                         ))}
                     </TableBody>
-                    {renderMobileTablePagination}
                 </Table>
             </TableContainer>
-            {renderDesktopTablePagination}
+            {renderTablePagination}
         </>
     ) : (
         <CardContent>

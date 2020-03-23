@@ -8,7 +8,7 @@ import {
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import React, { ChangeEvent, MouseEvent } from 'react';
+import React, { ChangeEvent, MouseEvent, useState } from 'react';
 
 import { Router, useTranslation } from '../i18n';
 
@@ -59,9 +59,15 @@ const TablePaginationActions = ({
     );
 };
 
+const commonTablePaginationProps = {
+    rowsPerPageOptions: [5, 10, 25, 50, 100],
+    colSpan: 3,
+    SelectProps: { native: true },
+    ActionsComponent: TablePaginationActions,
+};
+
 interface UsePagination {
-    renderMobileTablePagination: JSX.Element;
-    renderDesktopTablePagination: JSX.Element;
+    renderTablePagination: JSX.Element;
     getPaginationQuery: (values: {}) => ParsedUrlQueryInput;
 }
 
@@ -70,7 +76,6 @@ export const usePagination = (count: number, filterValues: {}): UsePagination =>
     const { t } = useTranslation();
     const page = Number(R.propOr(1, 'page', query));
     const rowsPerPage = Number(R.propOr(10, 'pageSize', query));
-    const rowsPerPageOptions = [5, 10, 25, 50, 100];
 
     const getPaginationQuery = (values: {}): ParsedUrlQueryInput => {
         return R.pickBy(
@@ -94,23 +99,48 @@ export const usePagination = (count: number, filterValues: {}): UsePagination =>
         handleReloadPage({ ...query, pageSize });
     };
 
-    const renderTablePagination = (classes: string): JSX.Element => (
+    const renderTablePagination = (
         <TablePagination
-            className={classes}
-            rowsPerPageOptions={rowsPerPageOptions}
-            colSpan={3}
+            {...commonTablePaginationProps}
             count={count}
             rowsPerPage={rowsPerPage}
             page={page - 1}
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
             labelRowsPerPage={t('common:resultsPerPage')}
-            ActionsComponent={TablePaginationActions}
-            SelectProps={{ native: true }}
         />
     );
 
-    const renderMobileTablePagination = renderTablePagination('md-down');
-    const renderDesktopTablePagination = renderTablePagination('md-up');
-    return { renderMobileTablePagination, renderDesktopTablePagination, getPaginationQuery };
+    return { renderTablePagination, getPaginationQuery };
+};
+
+interface UseFrontendPagination<T> {
+    renderTablePagination: JSX.Element;
+    paginatedItems: T[];
+}
+
+export const useFrontendPagination = <T extends {}>(items: T[]): UseFrontendPagination<T> => {
+    const { t } = useTranslation();
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [page, setPage] = useState(0);
+    const paginatedItems = items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    const handleChangePage = (_e: MouseEvent<HTMLButtonElement> | null, page: number): void => setPage(page);
+
+    const handleChangeRowsPerPage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        setRowsPerPage(parseInt(e.target.value, 10));
+    };
+
+    const renderTablePagination = (
+        <TablePagination
+            {...commonTablePaginationProps}
+            count={items.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            labelRowsPerPage={t('common:resultsPerPage')}
+        />
+    );
+
+    return { renderTablePagination, paginatedItems };
 };

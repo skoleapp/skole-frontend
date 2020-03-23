@@ -82,10 +82,7 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
         ordering: R.propOr('', 'ordering', query) as string,
     };
 
-    const { renderMobileTablePagination, renderDesktopTablePagination, getPaginationQuery } = usePagination(
-        count,
-        initialValues,
-    );
+    const { renderTablePagination, getPaginationQuery } = usePagination(count, initialValues);
 
     const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T, actions: FormikActions<T>): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city, ordering } = values;
@@ -221,10 +218,9 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
                             </Link>
                         ))}
                     </TableBody>
-                    {renderMobileTablePagination}
                 </Table>
             </TableContainer>
-            {renderDesktopTablePagination}
+            {renderTablePagination}
         </>
     ) : (
         <CardContent>
