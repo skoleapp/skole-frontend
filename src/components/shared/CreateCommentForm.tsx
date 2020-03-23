@@ -9,6 +9,7 @@ import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
+import { breakpoints } from '../../styles';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
 import { DropzoneField } from './DropzoneField';
@@ -148,7 +149,7 @@ export const CreateCommentForm: React.FC<Props> = ({
                     <Box id="comment-attachment-container">
                         <Field name="attachment" component={DropzoneField} initialFiles={[initialAttachment]} />
                     </Box>
-                    <Box className="modal-input-area">
+                    <Box id="modal-input-area">
                         <TextField value={values.text} {...textFieldProps} />
                     </Box>
                 </Paper>
@@ -175,5 +176,28 @@ const StyledCreateCommentForm = styled(Form)`
 
     .MuiFormControl-root {
         margin-top: 0;
+    }
+
+    input#attachment {
+        display: none;
+    }
+
+    #comment-attachment-container {
+        margin: 0.5rem;
+
+        @media only screen and (min-width: ${breakpoints.MD}) {
+            margin: 0;
+        }
+    }
+
+    #modal-input-area {
+        display: flex;
+        align-items: center;
+        margin: 0.5rem;
+        margin-top: auto;
+
+        @media only screen and (min-width: ${breakpoints.MD}) {
+            margin: 0.5rem 0 0 0 !important;
+        }
     }
 `;

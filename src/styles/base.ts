@@ -81,9 +81,9 @@ export const base = css`
             font-size: 1.25rem;
         }
 
-        .MuiGrid-root {
-            flex-grow: 1;
-        }
+        // .MuiGrid-root {
+        //     flex-grow: 1;
+        // }
 
         .MuiDialog-paper {
             .MuiDialogTitle-root,
@@ -116,45 +116,14 @@ export const base = css`
             padding: 0.5rem;
         }
 
-        .MuiBottomNavigation-root {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 3rem !important;
-            border-top: var(--border);
-            z-index: 1000;
-
-            .MuiButtonBase-root,
-            .Mui-selected {
-                padding: 0 !important;
-            }
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                display: none !important;
-            }
+        .border-bottom {
+            border-bottom: var(--border);
         }
 
-        input#attachment {
-            display: none;
-        }
-
-        .modal-input-area {
-            display: flex;
-            align-items: center;
-            margin: 0.5rem;
-            margin-top: auto;
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                margin: 0.5rem 0 0 0 !important;
-            }
-        }
-
-        #comment-attachment-container {
-            margin: 0.5rem;
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                margin: 0;
-            }
+        .main-avatar {
+            height: 8rem;
+            width: 8rem;
+            margin: 1rem;
         }
     }
 `;
