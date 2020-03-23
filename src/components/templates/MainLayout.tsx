@@ -38,9 +38,7 @@ export const MainLayout: React.FC<Props> = ({
             headerRight={headerRight}
             headerLeft={headerLeft}
         />
-        <Container {...containerProps} maxWidth="xl">
-            {children}
-        </Container>
+        <Container {...containerProps}>{children}</Container>
         {(!disableBottomNavbar && customBottomNavbar) || (!disableBottomNavbar && <BottomNavbar />)}
         <Footer />
         <Notifications />

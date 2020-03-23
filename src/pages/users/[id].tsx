@@ -2,7 +2,6 @@ import {
     Avatar,
     Box,
     CardContent,
-    Divider,
     Grid,
     ListItem,
     ListItemAvatar,
@@ -11,6 +10,7 @@ import {
     Table,
     TableBody,
     TableCell,
+    TableContainer,
     TableHead,
     TableRow,
     Tabs,
@@ -18,11 +18,11 @@ import {
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import moment from 'moment';
+import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
-import styled from 'styled-components';
 
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
 import {
@@ -33,13 +33,12 @@ import {
     StyledCard,
     StyledList,
     StyledTable,
-    TabPanel,
 } from '../../components';
 import { useTranslation } from '../../i18n';
-import { includeDefaultNamespaces, Router } from '../../i18n';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { getFullCourseName, usePrivatePage, useTabs } from '../../utils';
+import { getFullCourseName, useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
 import { mediaURL } from '../../utils';
 
 interface Props extends I18nProps {
@@ -56,6 +55,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const title = R.prop('title', user) as string;
         const avatar = R.prop('avatar', user) as string;
         const bio = R.propOr('-', 'bio', user) as string;
+        console.log(user);
         const points = R.propOr('-', 'points', user);
         const courseCount = R.propOr('-', 'courseCount', user);
         const resourceCount = R.propOr('-', 'resourceCount', user);
@@ -64,12 +64,22 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
         const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
 
+        const {
+            renderTablePagination: renderCreatedCoursesTablePagination,
+            paginatedItems: paginatedCourses,
+        } = useFrontendPagination(createdCourses);
+
+        const {
+            renderTablePagination: renderCreatedResourcesTablePagination,
+            paginatedItems: paginatedResources,
+        } = useFrontendPagination(createdResources);
+
         const renderTopSection = (
-            <Grid container alignItems="center">
+            <Grid className="border-bottom" container alignItems="center">
                 <Grid item container xs={12} sm={6} justify="center">
                     <CardContent>
                         <Box display="flex" flexDirection="column" alignItems="center">
-                            <Avatar id="main-avatar" src={mediaURL(avatar)} />
+                            <Avatar className="main-avatar" src={mediaURL(avatar)} />
                             <Box marginY="0.5rem">
                                 <Typography variant="h1">{username}</Typography>
                             </Box>
@@ -121,19 +131,12 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     {isOwnProfile && (
                         <CardContent>
                             <Grid container alignItems="center" justify="center">
-                                <Grid item xs={10} sm={6} md={4}>
-                                    <ButtonLink
-                                        href="/account/edit-profile"
-                                        color="primary"
-                                        variant="outlined"
-                                        fullWidth
-                                    >
-                                        {t('profile:editProfileButton')}
-                                    </ButtonLink>
-                                </Grid>
-                                <Grid item xs={2} className="md-up">
-                                    <SettingsButton color="primary" />
-                                </Grid>
+                                <ButtonLink href="/account/edit-profile" color="primary" variant="outlined">
+                                    {t('profile:editProfileButton')}
+                                </ButtonLink>
+                                <Box marginLeft="0.5rem">
+                                    <SettingsButton className="md-up" color="primary" />
+                                </Box>
                             </Grid>
                         </CardContent>
                     )}
@@ -142,7 +145,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         const renderAccountInfo = (
-            <CardContent>
+            <CardContent className="border-bottom">
                 <Box textAlign="left">
                     {isOwnProfile && (
                         <Box display="flex" flexDirection="column" marginY="0.5rem">
@@ -159,8 +162,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </CardContent>
         );
 
-        const renderBioSection = (
-            <CardContent>
+        const renderBioSection = !!user.bio && (
+            <CardContent className="border-bottom">
                 <Box textAlign="left">
                     <Typography variant="body2" color="textSecondary">
                         {t('common:bio')}
@@ -170,112 +173,117 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </CardContent>
         );
 
-        const renderTabs = (
-            <Tabs
-                value={tabValue}
-                onChange={handleTabChange}
-                variant="fullWidth"
-                indicatorColor="primary"
-                textColor="primary"
-            >
-                <Tab label={t('common:courses')} />
-                <Tab label={t('common:resources')} />
-            </Tabs>
+        const renderCreatedCourses = !!createdCourses.length ? (
+            <StyledTable disableBoxShadow>
+                <TableContainer>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {t('common:title')}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {t('common:points')}
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {paginatedCourses.map((c: CourseObjectType, i: number) => (
+                                <Link href={`/courses/${c.id}`} key={i}>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Typography variant="subtitle1">{R.propOr('-', 'points', c)}</Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                </Link>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                {renderCreatedCoursesTablePagination}
+            </StyledTable>
+        ) : (
+            <CardContent>
+                <Typography variant="subtitle1">{t('profile:noCourses')}</Typography>
+            </CardContent>
         );
 
-        const renderTabContent = (
-            <>
-                <TabPanel value={tabValue} index={0}>
-                    {createdCourses.length ? (
-                        <StyledTable disableBoxShadow>
-                            <Table>
-                                <TableHead>
+        const renderCreatedResources = !!createdResources.length ? (
+            <StyledTable disableBoxShadow>
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {t('common:title')}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {t('common:points')}
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {paginatedResources.map((r: ResourceObjectType, i: number) => (
+                                <Link href={`/resources/${r.id}`} key={i}>
                                     <TableRow>
                                         <TableCell>
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {t('common:title')}
-                                            </Typography>
+                                            <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
                                         </TableCell>
                                         <TableCell align="right">
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {t('common:points')}
-                                            </Typography>
+                                            <Typography variant="subtitle1">{R.propOr('-', 'points', r)}</Typography>
                                         </TableCell>
                                     </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {createdCourses.map((c: CourseObjectType, i: number) => (
-                                        <TableRow
-                                            key={i}
-                                            onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}
-                                        >
-                                            <TableCell>
-                                                <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <Typography variant="subtitle1">
-                                                    {R.propOr('-', 'points', c)}
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </StyledTable>
-                    ) : (
-                        <CardContent>
-                            <Typography variant="subtitle1">{t('profile:noCourses')}</Typography>
-                        </CardContent>
-                    )}
-                </TabPanel>
-                <TabPanel value={tabValue} index={1}>
-                    {createdResources.length ? (
-                        <StyledTable disableBoxShadow>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {t('common:title')}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Typography variant="subtitle1" color="textSecondary">
-                                                {t('common:points')}
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {createdResources.map((r: ResourceObjectType, i: number) => (
-                                        <TableRow
-                                            key={i}
-                                            onClick={(): Promise<boolean> => Router.push(`/resources/${r.id}`)}
-                                        >
-                                            <TableCell>
-                                                <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <Typography variant="subtitle1">
-                                                    {R.propOr('-', 'points', r)}
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </StyledTable>
-                    ) : (
-                        <CardContent>
-                            <Typography variant="subtitle1">{t('profile:noResources')}</Typography>
-                        </CardContent>
-                    )}
-                </TabPanel>
-            </>
+                                </Link>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                {renderCreatedResourcesTablePagination}
+            </StyledTable>
+        ) : (
+            <CardContent>
+                <Typography variant="subtitle1">{t('profile:noResources')}</Typography>
+            </CardContent>
+        );
+
+        const renderTabs = (
+            <Box flexGrow="1" display="flex" flexDirection="column">
+                <Tabs
+                    value={tabValue}
+                    onChange={handleTabChange}
+                    variant="fullWidth"
+                    indicatorColor="primary"
+                    textColor="primary"
+                >
+                    <Tab label={t('common:courses')} />
+                    <Tab label={t('common:resources')} />
+                </Tabs>
+                {tabValue === 0 && (
+                    <Box display="flex" flexGrow="1">
+                        {renderCreatedCourses}
+                    </Box>
+                )}
+                {tabValue === 1 && (
+                    <Box display="flex" flexGrow="1">
+                        {renderCreatedResources}
+                    </Box>
+                )}
+            </Box>
         );
 
         return (
-            <StyledUserPage
+            <MainLayout
                 heading={username}
                 title={username}
                 headerRight={isOwnProfile ? <SettingsButton color="secondary" /> : undefined}
@@ -283,28 +291,16 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             >
                 <StyledCard>
                     {renderTopSection}
-                    <Divider />
                     {renderAccountInfo}
-                    <Divider />
-                    {!!bio && renderBioSection}
-                    {!!bio && <Divider />}
+                    {renderBioSection}
                     {renderTabs}
-                    {renderTabContent}
                 </StyledCard>
-            </StyledUserPage>
+            </MainLayout>
         );
     } else {
         return <NotFound title={t('profile:notFound')} />;
     }
 };
-
-const StyledUserPage = styled(MainLayout)`
-    #main-avatar {
-        height: 8rem;
-        width: 8rem;
-        margin: 1rem;
-    }
-`;
 
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await usePrivatePage(ctx);

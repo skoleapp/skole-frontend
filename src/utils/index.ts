@@ -15,3 +15,4 @@ export { mediaURL } from './mediaURL';
 export { useOpen } from './useOpen';
 export { useOptions } from './useOptions';
 export { useLanguageSelector } from './useLanguageSelector';
+export { usePagination, useFrontendPagination } from './usePagination';
