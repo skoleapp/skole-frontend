@@ -1,6 +1,7 @@
 import { Box, CardContent, CardHeader, Divider, Grid, IconButton, SwipeableDrawer } from '@material-ui/core';
 import { FilterListOutlined } from '@material-ui/icons';
 import React from 'react';
+import styled from 'styled-components';
 
 import { StyledCard, StyledTable } from '..';
 import { useTranslation } from '../../i18n';
@@ -60,9 +61,15 @@ export const FilterLayout = <T extends {}>({
     );
 
     return (
-        <MainLayout headerRight={renderFiltersButton} {...props}>
+        <StyledFilterLayout headerRight={renderFiltersButton} {...props}>
             {renderMobileContent}
             {renderDesktopContent}
-        </MainLayout>
+        </StyledFilterLayout>
     );
 };
+
+const StyledFilterLayout = styled(MainLayout)`
+    .MuiGrid-root {
+        flex-grow: 1;
+    }
+`;

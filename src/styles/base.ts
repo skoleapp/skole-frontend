@@ -81,10 +81,6 @@ export const base = css`
             font-size: 1.25rem;
         }
 
-        // .MuiGrid-root {
-        //     flex-grow: 1;
-        // }
-
         .MuiDialog-paper {
             .MuiDialogTitle-root,
             .MuiDialogContent-root {
@@ -96,22 +92,7 @@ export const base = css`
             }
         }
 
-        .MuiTabs-root {
-            width: 100%;
-
-            .MuiTab-root {
-                flex-grow: 1;
-            }
-
-            .MuiTabs-scrollButtons {
-                color: var(--primary);
-            }
-        }
-
-        .MuiCardHeader-root {
-            padding: 0.5rem !important;
-        }
-
+        .MuiCardHeader-root,
         .MuiCardContent-root {
             padding: 0.5rem;
         }

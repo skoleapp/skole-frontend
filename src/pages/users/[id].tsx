@@ -150,27 +150,26 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             <CardContent className="border-bottom">
                 <Box textAlign="left">
                     {isOwnProfile && (
-                        <Box display="flex" flexDirection="column" marginY="0.5rem">
+                        <>
                             <Typography className="section-help-text" variant="body2" color="textSecondary">
                                 {t('common:email')}
                             </Typography>
                             <Typography variant="body2">{email}</Typography>
+                        </>
+                    )}
+                    {!!user.bio && (
+                        <Box marginTop="0.5rem">
+                            <Typography className="section-help-text" variant="body2" color="textSecondary">
+                                {t('common:bio')}
+                            </Typography>
+                            <Typography variant="body2">{bio}</Typography>
                         </Box>
                     )}
-                    <Typography className="section-help-text" variant="body2" color="textSecondary">
-                        {t('common:joined')} {joined}
-                    </Typography>
-                </Box>
-            </CardContent>
-        );
-
-        const renderBioSection = !!user.bio && (
-            <CardContent className="border-bottom">
-                <Box textAlign="left">
-                    <Typography className="section-help-text" variant="body2" color="textSecondary">
-                        {t('common:bio')}
-                    </Typography>
-                    <Typography variant="body2">{bio}</Typography>
+                    <Box marginTop="0.5rem">
+                        <Typography className="section-help-text" variant="body2" color="textSecondary">
+                            {t('common:joined')} {joined}
+                        </Typography>
+                    </Box>
                 </Box>
             </CardContent>
         );
@@ -294,7 +293,6 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <StyledCard>
                     {renderTopSection}
                     {renderAccountInfo}
-                    {renderBioSection}
                     {renderTabs}
                 </StyledCard>
             </StyledUserPage>
