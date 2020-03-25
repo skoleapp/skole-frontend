@@ -58,6 +58,6 @@
     "share": "Jaa",
     "noComments": "Ei kommentteja näytettäväksi...",
     "actions": "Toiminnot",
-    "dropzoneMaxFileSize": "Maksimi tiedostokoko",
+    "maxFileSize": "Maksimi tiedostokoko",
     "resultsPerPage": "Tuloksia per sivu"
 }
