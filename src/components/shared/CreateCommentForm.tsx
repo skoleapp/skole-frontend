@@ -158,7 +158,7 @@ export const CreateCommentForm: React.FC<Props> = ({
                             <input
                                 value=""
                                 id="camera-attachment"
-                                accept="image/*"
+                                accept=".png, .jpg, .jpeg"
                                 type="file"
                                 capture="camera"
                                 onChange={handleAttachmentChange}
@@ -173,7 +173,7 @@ export const CreateCommentForm: React.FC<Props> = ({
                             <input
                                 value=""
                                 id="attachment"
-                                accept="image/*"
+                                accept=".png, .jpg, .jpeg"
                                 type="file"
                                 capture="camera"
                                 onChange={handleAttachmentChange}
@@ -227,8 +227,8 @@ const StyledAttachmentImage = styled(Box)`
 
         img {
             height: auto !important;
-            max-height: 100% !important;
             position: relative !important;
+            max-height: 25rem;
         }
     }
 `;
