@@ -4,7 +4,6 @@ export { FormSubmitSection } from './FormSubmitSection';
 export { IconButtonLink } from './IconButtonLink';
 export { StyledCard } from './StyledCard';
 export { StyledTable } from './StyledTable';
-export { TabPanel } from './TabPanel';
 export { TextLink } from './TextLink';
 export { AutoCompleteField } from './AutoCompleteField';
 export { Download } from './Download';

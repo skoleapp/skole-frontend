@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 import { LayoutProps, MuiColor } from '../../types';
 import { useOpen, useTabs } from '../../utils';
-import { ModalHeader, StyledCard, TabPanel, TextLink } from '../shared';
+import { ModalHeader, StyledCard, TextLink } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps {
@@ -100,23 +100,19 @@ export const TabLayout: React.FC<Props> = ({
         </Tabs>
     );
 
-    const renderLeftTabPanel = (
-        <TabPanel value={tabValue} index={0} flexGrow={tabValue === 0 ? '1' : '0'} display="flex">
-            {renderLeftContent}
-        </TabPanel>
-    );
-
-    const renderRightTabPanel = (
-        <TabPanel value={tabValue} index={1} flexGrow={tabValue === 1 ? '1' : '0'} display="flex">
-            {renderRightContent}
-        </TabPanel>
-    );
-
     const renderMobileContent = (
         <StyledCard className="md-down">
             {renderTabs}
-            {renderLeftTabPanel}
-            {renderRightTabPanel}
+            {tabValue === 0 && (
+                <Box display="flex" flexGrow="1">
+                    {renderLeftContent}
+                </Box>
+            )}
+            {tabValue === 1 && (
+                <Box display="flex" flexGrow="1">
+                    {renderRightContent}
+                </Box>
+            )}
         </StyledCard>
     );
 

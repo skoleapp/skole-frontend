@@ -23,6 +23,7 @@ import * as R from 'ramda';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
+import styled from 'styled-components';
 
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
 import {
@@ -55,7 +56,6 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const title = R.prop('title', user) as string;
         const avatar = R.prop('avatar', user) as string;
         const bio = R.propOr('-', 'bio', user) as string;
-        console.log(user);
         const points = R.propOr('-', 'points', user);
         const courseCount = R.propOr('-', 'courseCount', user);
         const resourceCount = R.propOr('-', 'resourceCount', user);
@@ -81,11 +81,13 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Avatar className="main-avatar" src={mediaURL(avatar)} />
                             <Box marginY="0.5rem">
-                                <Typography variant="h1">{username}</Typography>
+                                <Typography variant="h2">{username}</Typography>
                             </Box>
                             {!!title && (
                                 <Box marginY="0.5rem">
-                                    <Typography variant="caption">{title}</Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {title}
+                                    </Typography>
                                 </Box>
                             )}
                         </Box>
@@ -149,13 +151,13 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <Box textAlign="left">
                     {isOwnProfile && (
                         <Box display="flex" flexDirection="column" marginY="0.5rem">
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography className="section-help-text" variant="body2" color="textSecondary">
                                 {t('common:email')}
                             </Typography>
                             <Typography variant="body2">{email}</Typography>
                         </Box>
                     )}
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography className="section-help-text" variant="body2" color="textSecondary">
                         {t('common:joined')} {joined}
                     </Typography>
                 </Box>
@@ -165,7 +167,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const renderBioSection = !!user.bio && (
             <CardContent className="border-bottom">
                 <Box textAlign="left">
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography className="section-help-text" variant="body2" color="textSecondary">
                         {t('common:bio')}
                     </Typography>
                     <Typography variant="body2">{bio}</Typography>
@@ -283,7 +285,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         return (
-            <MainLayout
+            <StyledUserPage
                 heading={username}
                 title={username}
                 headerRight={isOwnProfile ? <SettingsButton color="secondary" /> : undefined}
@@ -295,12 +297,18 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     {renderBioSection}
                     {renderTabs}
                 </StyledCard>
-            </MainLayout>
+            </StyledUserPage>
         );
     } else {
         return <NotFound title={t('profile:notFound')} />;
     }
 };
+
+const StyledUserPage = styled(MainLayout)`
+    .section-help-text {
+        font-size: 0.75rem;
+    }
+`;
 
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     await usePrivatePage(ctx);
