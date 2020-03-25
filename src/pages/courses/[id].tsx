@@ -99,8 +99,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({ initialVote, initialPoints });
         const starButtonProps = useStarButton();
 
-        console.log(course);
-
         const created = moment(course.created)
             .startOf('day')
             .fromNow();

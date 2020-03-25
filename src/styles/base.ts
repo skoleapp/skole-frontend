@@ -55,14 +55,13 @@ export const base = css`
             }
         }
 
-        form {
-            .MuiFormControl-root {
-                margin-top: 0.75rem;
-            }
+        .MuiFormControl-root {
+            margin-top: 0.75rem;
+        }
 
-            input[type='submit'] {
-                display: none;
-            }
+        input[type='submit'],
+        input[type='file'] {
+            display: none;
         }
 
         .MuiLink-root {
