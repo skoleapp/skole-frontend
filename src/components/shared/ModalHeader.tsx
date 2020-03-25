@@ -14,7 +14,7 @@ interface Props {
 export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) => (
     <StyledModalHeader>
         <Grid container alignItems="center">
-            <Grid item xs={2}>
+            <Grid item xs={1}>
                 {!!onCancel && (
                     <IconButton onClick={onCancel} size="small">
                         <CloseOutlined />
@@ -22,12 +22,12 @@ export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) =
                 )}
             </Grid>
             {!!title && (
-                <Grid item container xs={!!headerRight ? 8 : 10} justify="center">
+                <Grid item container xs={!!headerRight ? 9 : 11} justify="center">
                     <Heading text={title} />
                 </Grid>
             )}
             {!!headerRight && (
-                <Grid item xs={2}>
+                <Grid item xs={1}>
                     {headerRight}
                 </Grid>
             )}

@@ -92,11 +92,6 @@ export const base = css`
             }
         }
 
-        .MuiCardHeader-root,
-        .MuiCardContent-root {
-            padding: 0.5rem;
-        }
-
         .border-bottom {
             border-bottom: var(--border);
         }

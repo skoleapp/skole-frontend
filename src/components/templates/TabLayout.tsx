@@ -13,17 +13,21 @@ import {
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
-import { LayoutProps, MuiColor } from '../../types';
+import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useOpen, useTabs } from '../../utils';
 import { ModalHeader, StyledCard, TextLink } from '../shared';
 import { MainLayout } from './MainLayout';
+
+interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
+    renderOptions: JSX.Element;
+}
 
 interface Props extends LayoutProps {
     titleSecondary: string;
     tabLabelLeft: string;
     renderInfo: JSX.Element;
-    renderOptions: JSX.Element;
     renderLeftContent: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
@@ -31,7 +35,7 @@ interface Props extends LayoutProps {
     extraActionMobile?: JSX.Element;
     extraActionDesktop?: JSX.Element;
     singleColumn?: boolean;
-    filePreview?: boolean;
+    optionProps: OptionProps;
     createdInfoProps?: {
         creatorId: string;
         creatorName: string;
@@ -49,16 +53,15 @@ export const TabLayout: React.FC<Props> = ({
     customBottomNavbar,
     createdInfoProps,
     singleColumn,
-    renderOptions,
+    optionProps,
     extraActionMobile,
     extraActionDesktop,
-    filePreview,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
     const { open: infoOpen, handleOpen: handleOpenInfo, handleClose: handleCloseInfo } = useOpen();
-    const { open: optionsOpen, handleOpen: openOptions, handleClose: closeOptions } = useOpen();
+    const { renderOptions, renderOptionsHeader, mobileDrawerProps, desktopDrawerProps, openOptions } = optionProps;
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
@@ -100,19 +103,23 @@ export const TabLayout: React.FC<Props> = ({
         </Tabs>
     );
 
+    const renderLeftTab = tabValue === 0 && (
+        <Box display="flex" flexGrow="1">
+            {renderLeftContent}
+        </Box>
+    );
+
+    const renderRightTab = tabValue === 1 && (
+        <Box display="flex" flexGrow="1">
+            {renderRightContent}
+        </Box>
+    );
+
     const renderMobileContent = (
         <StyledCard className="md-down">
             {renderTabs}
-            {tabValue === 0 && (
-                <Box display="flex" flexGrow="1">
-                    {renderLeftContent}
-                </Box>
-            )}
-            {tabValue === 1 && (
-                <Box display="flex" flexGrow="1">
-                    {renderRightContent}
-                </Box>
-            )}
+            {renderLeftTab}
+            {renderRightTab}
         </StyledCard>
     );
 
@@ -123,16 +130,14 @@ export const TabLayout: React.FC<Props> = ({
             {renderInfo}
             <Divider />
             {renderTabs}
-            {renderLeftTabPanel}
-            {renderRightTabPanel}
+            {renderLeftTab}
+            {renderRightTab}
         </StyledCard>
     ) : (
         <Grid container className="md-up">
             <Grid item container xs={12} md={7} lg={8}>
                 <StyledCard>
                     <CardHeader title={title} action={renderDesktopHeaderActions} />
-                    <Divider />
-                    {!filePreview && renderInfo}
                     <Divider />
                     {renderLeftContent}
                 </StyledCard>
@@ -180,33 +185,21 @@ export const TabLayout: React.FC<Props> = ({
     );
 
     const renderMobileOptionsDrawer = (
-        <SwipeableDrawer
-            className="md-down"
-            anchor="bottom"
-            open={!!optionsOpen}
-            onOpen={openOptions}
-            onClose={closeOptions}
-        >
-            <ModalHeader title={t('common:actions')} onCancel={closeOptions} />
+        <SwipeableDrawer {...mobileDrawerProps}>
+            {renderOptionsHeader}
             {renderOptions}
         </SwipeableDrawer>
     );
 
     const renderDesktopOptionsDrawer = (
-        <SwipeableDrawer
-            className="md-up"
-            anchor="left"
-            open={!!optionsOpen}
-            onOpen={openOptions}
-            onClose={closeOptions}
-        >
-            <ModalHeader title={t('common:actions')} onCancel={closeOptions} />
+        <SwipeableDrawer {...desktopDrawerProps}>
+            {renderOptionsHeader}
             {renderOptions}
         </SwipeableDrawer>
     );
 
     return (
-        <MainLayout
+        <StyledTabLayout
             title={title}
             backUrl
             headerRight={renderMobileHeaderActions}
@@ -220,6 +213,12 @@ export const TabLayout: React.FC<Props> = ({
             {renderDesktopInfoDrawer}
             {renderMobileOptionsDrawer}
             {renderDesktopOptionsDrawer}
-        </MainLayout>
+        </StyledTabLayout>
     );
 };
+
+const StyledTabLayout = styled(MainLayout)`
+    .MuiGrid-root {
+        flex-grow: 1;
+    }
+`;

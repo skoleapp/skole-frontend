@@ -5,8 +5,8 @@ import {
     CardHeader,
     Grid,
     IconButton,
-    ListItem,
     ListItemText,
+    MenuItem,
     SwipeableDrawer,
     Typography,
 } from '@material-ui/core';
@@ -38,6 +38,7 @@ import { toggleCommentThread, toggleFileViewer, toggleNotification } from '../..
 import { useTranslation } from '../../i18n';
 import { State } from '../../types';
 import { mediaURL, useOptions } from '../../utils';
+import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
 
 interface Props {
@@ -56,13 +57,14 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     const [vote, setVote] = useState(comment.vote);
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const confirm = useConfirm();
+
     const {
-        handleOpenOptions,
-        handleCloseOptions,
+        openOptions,
+        closeOptions,
         renderShareOption,
         renderReportOption,
-        mobileOptionsProps,
-        desktopOptionsProps,
+        mobileDrawerProps,
+        desktopDrawerProps,
         renderOptionsHeader,
     } = useOptions();
 
@@ -122,8 +124,13 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
 
     const handleDeleteComment = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        handleCloseOptions(e);
+        closeOptions();
         confirm({ title: t('common:deleteCommentTitle') }).then(() => deleteComment({ variables: { id: comment.id } }));
+    };
+
+    const handleMoreClick = (e: SyntheticEvent): void => {
+        e.stopPropagation();
+        openOptions();
     };
 
     const renderTitle = (
@@ -134,29 +141,28 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
 
     const renderDeleteCommentOption = R.prop('id', comment.user as UserObjectType) ===
         R.prop('id', user as UserObjectType) && (
-        <ListItem>
+        <MenuItem>
             <ListItemText onClick={handleDeleteComment}>
                 <DeleteOutline /> {t('common:deleteComment')}
             </ListItemText>
-        </ListItem>
+        </MenuItem>
+    );
+
+    const renderOptionDrawerContent = (
+        <StyledList>
+            {renderOptionsHeader}
+            {renderShareOption}
+            {renderReportOption}
+            {renderDeleteCommentOption}
+        </StyledList>
     );
 
     const renderMobileCommentOptions = (
-        <SwipeableDrawer {...mobileOptionsProps}>
-            {renderOptionsHeader}
-            {renderShareOption}
-            {renderReportOption}
-            {renderDeleteCommentOption}
-        </SwipeableDrawer>
+        <SwipeableDrawer {...mobileDrawerProps}>{renderOptionDrawerContent}</SwipeableDrawer>
     );
 
     const renderDesktopCommentOptions = (
-        <SwipeableDrawer {...desktopOptionsProps}>
-            {renderOptionsHeader}
-            {renderShareOption}
-            {renderReportOption}
-            {renderDeleteCommentOption}
-        </SwipeableDrawer>
+        <SwipeableDrawer {...desktopDrawerProps}>{renderOptionDrawerContent}</SwipeableDrawer>
     );
 
     return (
@@ -208,7 +214,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                         </Box>
                     </Grid>
                     <Grid container item xs={4} justify="center">
-                        <IconButton onClick={handleOpenOptions}>
+                        <IconButton onClick={handleMoreClick}>
                             <MoreHorizOutlined />
                         </IconButton>
                     </Grid>

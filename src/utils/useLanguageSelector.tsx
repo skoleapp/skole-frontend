@@ -2,6 +2,7 @@ import { Button } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 import { toggleLanguageSelector } from '../actions';
 import { useTranslation } from '../i18n';
@@ -47,6 +48,18 @@ export const useLanguageSelector = (): UseLanguageSelector => {
 
     const language = languages.find(c => c.value === value) as Language;
     const renderCurrentFlag = languageToFlag(language.code);
-    const renderLanguageButton = <Button onClick={openLanguageMenu}>{renderCurrentFlag}</Button>;
+
+    const renderLanguageButton = (
+        <StyledLanguageSelector onClick={openLanguageMenu}>{renderCurrentFlag}</StyledLanguageSelector>
+    );
+
     return { renderCurrentFlag, languageToFlag, languages, openLanguageMenu, renderLanguageButton };
 };
+
+const StyledLanguageSelector = styled(Button)`
+    padding: 0 !important;
+
+    .MuiButton-label {
+        font-size: 1.5rem;
+    }
+`;

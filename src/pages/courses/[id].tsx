@@ -9,6 +9,7 @@ import {
     Table,
     TableBody,
     TableCell,
+    TableContainer,
     TableHead,
     TableRow,
     Typography,
@@ -35,7 +36,7 @@ import { DiscussionBox, NotFound, StyledList, StyledTable, TabLayout, TextLink }
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
-import { getFullCourseName, useOptions, usePrivatePage } from '../../utils';
+import { getFullCourseName, useFrontendPagination, useOptions, usePrivatePage } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -45,7 +46,15 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const confirm = useConfirm();
-    const { renderShareOption, renderReportOption } = useOptions();
+
+    const {
+        renderShareOption,
+        renderReportOption,
+        renderOptionsHeader,
+        mobileDrawerProps,
+        desktopDrawerProps,
+        openOptions,
+    } = useOptions();
 
     if (course) {
         const { subject, school, user } = course;
@@ -59,7 +68,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
-        const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
+        const isOwnCourse = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
 
         const created = moment(course.created)
             .startOf('day')
@@ -76,6 +85,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const createdInfoProps = { creatorId, creatorName, created };
+        const { renderTablePagination, paginatedItems } = useFrontendPagination(resources);
 
         const deleteCourseError = (): void => {
             dispatch(toggleNotification(t('notifications:deleteCourseError')));
@@ -163,36 +173,41 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </CardContent>
         );
 
-        const renderResources = resources.length ? (
+        const renderResources = !!resources.length ? (
             <StyledTable disableBoxShadow>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <Typography variant="subtitle2" color="textSecondary">
-                                    {t('common:title')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                                <Typography variant="subtitle2" color="textSecondary">
-                                    {t('common:points')}
-                                </Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {resources.map((r: ResourceObjectType, i: number) => (
-                            <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/resources/${r.id}`)}>
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
                                 <TableCell>
-                                    <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
+                                    <Typography variant="subtitle2" color="textSecondary">
+                                        {t('common:resources')}
+                                    </Typography>
                                 </TableCell>
                                 <TableCell align="right">
-                                    <Typography variant="subtitle1">{R.propOr('-', 'points', r)}</Typography>
+                                    <Typography variant="subtitle2" color="textSecondary">
+                                        {t('common:points')}
+                                    </Typography>
                                 </TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHead>
+                        <TableBody>
+                            {paginatedItems.map((r: ResourceObjectType, i: number) => (
+                                <Link href={`/resources/${r.id}`} key={i}>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Typography variant="subtitle1">{R.propOr('-', 'points', r)}</Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                </Link>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                {renderTablePagination}
             </StyledTable>
         ) : (
             <CardContent>
@@ -204,7 +219,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             <StyledList>
                 {renderShareOption}
                 {renderReportOption}
-                {isOwnProfile && (
+                {isOwnCourse && (
                     <MenuItem>
                         <ListItemText onClick={handleDeleteCourse}>
                             <DeleteOutline /> {t('course:deleteCourse')}
@@ -213,6 +228,14 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 )}
             </StyledList>
         );
+
+        const optionProps = {
+            renderOptions,
+            renderOptionsHeader,
+            openOptions,
+            mobileDrawerProps,
+            desktopDrawerProps,
+        };
 
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
             <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
@@ -231,7 +254,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 titleSecondary={t('common:discussion')}
                 backUrl
                 renderInfo={renderInfo}
-                renderOptions={renderOptions}
+                optionProps={optionProps}
                 tabLabelLeft={t('common:resources')}
                 renderLeftContent={renderResources}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}

@@ -53,3 +53,22 @@ export interface DiscussionBoxProps {
 }
 
 export type MuiColor = 'inherit' | 'default' | 'primary' | 'secondary' | undefined;
+export type Anchor = 'bottom' | 'left' | 'top' | 'right' | undefined;
+
+interface OptionProps {
+    className: string;
+    anchor: Anchor;
+    open: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+}
+
+export interface UseOptions {
+    renderShareOption: JSX.Element;
+    renderReportOption: JSX.Element;
+    renderOptionsHeader: JSX.Element;
+    openOptions: () => void;
+    closeOptions: () => void;
+    mobileDrawerProps: OptionProps;
+    desktopDrawerProps: OptionProps;
+}
