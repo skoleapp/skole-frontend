@@ -39,6 +39,7 @@ export interface LayoutProps extends ContainerProps {
     headerRight?: JSX.Element;
     headerLeft?: JSX.Element;
     disableBottomNavbar?: boolean;
+    customBottomNavbar?: JSX.Element;
 }
 
 export interface CommentTarget {

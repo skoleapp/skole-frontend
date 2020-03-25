@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Box,
     CardContent,
     IconButton,
     ListItem,
@@ -14,7 +15,16 @@ import {
     TableRow,
     Typography,
 } from '@material-ui/core';
-import { CloudUploadOutlined, DeleteOutline, SchoolOutlined, ScoreOutlined, SubjectOutlined } from '@material-ui/icons';
+import {
+    CloudUploadOutlined,
+    DeleteOutline,
+    KeyboardArrowDownOutlined,
+    KeyboardArrowUpOutlined,
+    SchoolOutlined,
+    ScoreOutlined,
+    StarOutlined,
+    SubjectOutlined,
+} from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import Link from 'next/link';
@@ -30,13 +40,29 @@ import {
     DeleteCourseMutation,
     ResourceObjectType,
     useDeleteCourseMutation,
+    VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { DiscussionBox, NotFound, StyledList, StyledTable, TabLayout, TextLink } from '../../components';
+import {
+    DiscussionBox,
+    NotFound,
+    StyledBottomNavigation,
+    StyledList,
+    StyledTable,
+    TabLayout,
+    TextLink,
+} from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
-import { getFullCourseName, useFrontendPagination, useOptions, usePrivatePage } from '../../utils';
+import {
+    getFullCourseName,
+    useFrontendPagination,
+    useOptions,
+    usePrivatePage,
+    useStarButton,
+    useVotes,
+} from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -64,11 +90,16 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const creatorId = R.propOr('', 'id', course.user) as string;
         const courseId = R.propOr('', 'id', course) as string;
         const creatorName = R.propOr('-', 'username', user) as string;
-        const points = R.propOr('-', 'points', course);
+        const initialPoints = R.propOr(0, 'points', course) as number;
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
         const isOwnCourse = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
+        const initialVote = R.propOr(null, 'vote', course) as VoteObjectType | null;
+        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({ initialVote, initialPoints });
+        const starButtonProps = useStarButton();
+
+        console.log(course);
 
         const created = moment(course.created)
             .startOf('day')
@@ -111,6 +142,28 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 deleteCourse({ variables: { id: courseId } });
             });
         };
+
+        const handleVoteClick = (status: number) => (): void => {
+            handleVote({ status: status, course: courseId });
+        };
+
+        const renderStarButton = (
+            <IconButton {...starButtonProps}>
+                <StarOutlined />
+            </IconButton>
+        );
+
+        const renderUpVoteButton = (
+            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                <KeyboardArrowUpOutlined />
+            </IconButton>
+        );
+
+        const renderDownVoteButton = (
+            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                <KeyboardArrowDownOutlined />
+            </IconButton>
+        );
 
         const renderInfo = (
             <CardContent>
@@ -180,7 +233,10 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>
-                                    <Typography variant="subtitle2" color="textSecondary">
+                                    <Typography className="md-down" variant="subtitle2" color="textSecondary">
+                                        {t('common:title')}
+                                    </Typography>
+                                    <Typography className="md-up" variant="subtitle2" color="textSecondary">
                                         {t('common:resources')}
                                     </Typography>
                                 </TableCell>
@@ -246,7 +302,27 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
-        const uploadResourceButtonDesktop = renderUploadResourceButton('primary');
+        const uploadResourceButtonDesktop = renderUploadResourceButton('default');
+
+        const renderExtraDesktopActions = (
+            <Box display="flex" paddingLeft="0.5rem" paddingBottom="0.5rem">
+                {renderStarButton}
+                {renderDownVoteButton}
+                {renderUpVoteButton}
+            </Box>
+        );
+
+        const renderCustomBottomNavbar = (
+            <StyledBottomNavigation>
+                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" margin="0 1rem">
+                    {renderStarButton}
+                    <Box display="flex">
+                        <Box marginRight="1rem">{renderUpVoteButton}</Box>
+                        {renderDownVoteButton}
+                    </Box>
+                </Box>
+            </StyledBottomNavigation>
+        );
 
         return (
             <TabLayout
@@ -259,8 +335,10 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 renderLeftContent={renderResources}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 createdInfoProps={createdInfoProps}
-                extraActionMobile={uploadResourceButtonMobile}
-                extraActionDesktop={uploadResourceButtonDesktop}
+                headerActionMobile={uploadResourceButtonMobile}
+                headerActionDesktop={uploadResourceButtonDesktop}
+                customBottomNavbar={renderCustomBottomNavbar}
+                extraDesktopActions={renderExtraDesktopActions}
             />
         );
     } else {

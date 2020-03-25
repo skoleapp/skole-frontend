@@ -1,15 +1,4 @@
-import {
-    Box,
-    CardHeader,
-    Divider,
-    Grid,
-    IconButton,
-    Paper,
-    SwipeableDrawer,
-    Tab,
-    Tabs,
-    Typography,
-} from '@material-ui/core';
+import { Box, CardHeader, Divider, Grid, IconButton, Paper, SwipeableDrawer, Tab, Typography } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +7,7 @@ import styled from 'styled-components';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useOpen, useTabs } from '../../utils';
 import { ModalHeader, StyledCard, TextLink } from '../shared';
+import { StyledTabs } from '../shared/StyledTabs';
 import { MainLayout } from './MainLayout';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
@@ -32,8 +22,9 @@ interface Props extends LayoutProps {
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
     renderSecondaryAction?: JSX.Element;
-    extraActionMobile?: JSX.Element;
-    extraActionDesktop?: JSX.Element;
+    headerActionMobile?: JSX.Element;
+    headerActionDesktop?: JSX.Element;
+    extraDesktopActions?: JSX.Element;
     singleColumn?: boolean;
     optionProps: OptionProps;
     createdInfoProps?: {
@@ -50,12 +41,12 @@ export const TabLayout: React.FC<Props> = ({
     renderInfo,
     renderLeftContent,
     renderRightContent,
-    customBottomNavbar,
     createdInfoProps,
     singleColumn,
     optionProps,
-    extraActionMobile,
-    extraActionDesktop,
+    headerActionMobile,
+    headerActionDesktop,
+    extraDesktopActions,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
@@ -65,7 +56,7 @@ export const TabLayout: React.FC<Props> = ({
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
-            <Box className="md-up">{extraActionDesktop}</Box>
+            <Box className="md-up">{headerActionDesktop}</Box>
             <IconButton onClick={handleOpenInfo} color={color}>
                 <InfoOutlined />
             </IconButton>
@@ -76,7 +67,7 @@ export const TabLayout: React.FC<Props> = ({
     );
 
     const renderMobileHeaderActions = renderHeaderActions('secondary');
-    const renderDesktopHeaderActions = renderHeaderActions('primary');
+    const renderDesktopHeaderActions = renderHeaderActions('default');
 
     const renderCreatedInfo = !!createdInfoProps && (
         <Box padding="0.5rem" textAlign="left">
@@ -91,16 +82,10 @@ export const TabLayout: React.FC<Props> = ({
     );
 
     const renderTabs = (
-        <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-        >
+        <StyledTabs value={tabValue} onChange={handleTabChange}>
             <Tab label={tabLabelLeft} />
             <Tab label={titleSecondary} />
-        </Tabs>
+        </StyledTabs>
     );
 
     const renderLeftTab = tabValue === 0 && (
@@ -137,7 +122,8 @@ export const TabLayout: React.FC<Props> = ({
         <Grid container className="md-up">
             <Grid item container xs={12} md={7} lg={8}>
                 <StyledCard>
-                    <CardHeader title={title} action={renderDesktopHeaderActions} />
+                    <CardHeader id="main-header" title={title} action={renderDesktopHeaderActions} />
+                    {extraDesktopActions}
                     <Divider />
                     {renderLeftContent}
                 </StyledCard>
@@ -203,8 +189,7 @@ export const TabLayout: React.FC<Props> = ({
             title={title}
             backUrl
             headerRight={renderMobileHeaderActions}
-            customBottomNavbar={customBottomNavbar}
-            headerLeft={extraActionMobile}
+            headerLeft={headerActionMobile}
             {...props}
         >
             {renderMobileContent}
@@ -220,5 +205,9 @@ export const TabLayout: React.FC<Props> = ({
 const StyledTabLayout = styled(MainLayout)`
     .MuiGrid-root {
         flex-grow: 1;
+    }
+
+    #main-header {
+        text-align: left;
     }
 `;

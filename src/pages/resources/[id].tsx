@@ -53,7 +53,15 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const confirm = useConfirm();
-    const { renderShareOption, renderReportOption } = useOptions();
+
+    const {
+        renderShareOption,
+        renderReportOption,
+        renderOptionsHeader,
+        mobileDrawerProps,
+        desktopDrawerProps,
+        openOptions,
+    } = useOptions();
 
     if (resource) {
         const file = mediaURL(resource.file);
@@ -202,6 +210,14 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </StyledList>
         );
 
+        const optionProps = {
+            renderOptions,
+            renderOptionsHeader,
+            openOptions,
+            mobileDrawerProps,
+            desktopDrawerProps,
+        };
+
         const renderCustomBottomNavbar = (
             <BottomNavigation>
                 <Box display="flex" justifyContent="space-around" alignItems="center" width="100%">
@@ -234,8 +250,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 customBottomNavbar={renderCustomBottomNavbar}
                 createdInfoProps={createdInfoProps}
-                renderOptions={renderOptions}
-                filePreview
+                optionProps={optionProps}
+                // filePreview
             />
         );
     } else {

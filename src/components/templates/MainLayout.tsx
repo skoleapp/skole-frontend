@@ -29,7 +29,7 @@ export const MainLayout: React.FC<Props> = ({
     disableBottomNavbar,
     ...containerProps
 }) => (
-    <StyledMainLayout disableBottomNavbar={disableBottomNavbar}>
+    <StyledMainLayout disableBottomMargin={disableBottomNavbar && !customBottomNavbar} custom>
         <Head title={title} />
         <TopNavbar
             heading={heading}
@@ -39,7 +39,7 @@ export const MainLayout: React.FC<Props> = ({
             headerLeft={headerLeft}
         />
         <Container {...containerProps}>{children}</Container>
-        {(!disableBottomNavbar && customBottomNavbar) || (!disableBottomNavbar && <BottomNavbar />)}
+        {customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />)}
         <Footer />
         <Notifications />
         <Settings />
@@ -50,7 +50,7 @@ export const MainLayout: React.FC<Props> = ({
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledMainLayout = styled(({ disableBottomNavbar, ...other }) => <Box {...other} />)`
+const StyledMainLayout = styled(({ disableBottomMargin, customBottomNavbar, ...other }) => <Box {...other} />)`
     background-color: var(--secondary);
     text-align: center;
     min-height: 100vh;
@@ -69,7 +69,7 @@ const StyledMainLayout = styled(({ disableBottomNavbar, ...other }) => <Box {...
         }
 
         @media only screen and (max-width: ${breakpoints.MD}) {
-            margin-bottom: ${({ disableBottomNavbar }): string => (!disableBottomNavbar ? '3rem' : 'initial')};
+            margin-bottom: ${({ disableBottomMargin }): string => (!disableBottomMargin ? '3rem' : 'initial')};
         }
     }
 `;

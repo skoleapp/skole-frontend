@@ -19,3 +19,5 @@ export { DiscussionBox } from './DiscussionBox';
 export { Heading } from './Heading';
 export { FilePreview } from './FilePreview';
 export { StyledList } from './StyledList';
+export { StyledTabs } from './StyledTabs';
+export { StyledBottomNavigation } from './StyledBottomNavigation';

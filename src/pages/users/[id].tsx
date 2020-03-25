@@ -13,7 +13,6 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Tabs,
     Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
@@ -34,6 +33,7 @@ import {
     StyledCard,
     StyledList,
     StyledTable,
+    StyledTabs,
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
@@ -260,16 +260,10 @@ const UserPage: I18nPage<Props> = ({ user }) => {
 
         const renderTabs = (
             <Box flexGrow="1" display="flex" flexDirection="column">
-                <Tabs
-                    value={tabValue}
-                    onChange={handleTabChange}
-                    variant="fullWidth"
-                    indicatorColor="primary"
-                    textColor="primary"
-                >
+                <StyledTabs value={tabValue} onChange={handleTabChange}>
                     <Tab label={t('common:courses')} />
                     <Tab label={t('common:resources')} />
-                </Tabs>
+                </StyledTabs>
                 {tabValue === 0 && (
                     <Box display="flex" flexGrow="1">
                         {renderCreatedCourses}
