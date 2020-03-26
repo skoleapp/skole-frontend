@@ -14,5 +14,6 @@
     "deleteResourceError": "Unexpected error while deleting resource!",
     "resourceDeleted": "Resource deleted!",
     "courseDeleted": "Course deleted!",
-    "deleteCourseError": "Unexpected error while deleting course!"
+    "deleteCourseError": "Unexpected error while deleting course!",
+    "downloadResourceError": "Error while downloading resource!"
 }

@@ -10,6 +10,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import {
+    CloudDownloadOutlined,
     CloudUploadOutlined,
     DeleteOutline,
     KeyboardArrowDownOutlined,
@@ -124,6 +125,28 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             handleVote({ status: status, resource: resourceId });
         };
 
+        const handleDownloadResource = async (): Promise<void> => {
+            try {
+                const res = await fetch(file, {
+                    headers: new Headers({
+                        Origin: location.origin,
+                    }),
+                    mode: 'cors',
+                });
+
+                const blob = await res.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.download = resource.title;
+                a.href = blobUrl;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } catch {
+                dispatch(toggleNotification(t('notifications:downloadResourceError')));
+            }
+        };
+
         const renderUpVoteButton = (
             <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                 <KeyboardArrowUpOutlined />
@@ -208,6 +231,11 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </ListItemText>
                     </MenuItem>
                 )}
+                <MenuItem onClick={handleDownloadResource}>
+                    <ListItemText>
+                        <CloudDownloadOutlined /> {t('common:download')}
+                    </ListItemText>
+                </MenuItem>
             </StyledList>
         );
 
