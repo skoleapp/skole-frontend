@@ -6,6 +6,7 @@ import {
     Divider,
     Grid,
     IconButton,
+    Link,
     List,
     ListItem,
     ListItemAvatar,
@@ -17,12 +18,14 @@ import {
     Typography,
 } from '@material-ui/core';
 import {
+    CloudDownloadOutlined,
     CloudUploadOutlined,
     DeleteOutline,
     FlagOutlined,
     InfoOutlined,
     LibraryAddOutlined,
     MoreHorizOutlined,
+    OpenInNewOutlined,
     SchoolOutlined,
     ScoreOutlined,
     ShareOutlined,
@@ -34,6 +37,7 @@ import * as R from 'ramda';
 import React, { SyntheticEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
+import styled from 'styled-components';
 
 import {
     CommentObjectType,
@@ -147,6 +151,33 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             dispatch(toggleNotification(t('notifications:linkCopied')));
         };
 
+        const downloadResource = (url: string): void => {
+            if (!!url) {
+                fetch(url, {
+                    headers: new Headers({
+                        Origin: location.origin,
+                    }),
+                    mode: 'cors',
+                })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const blobUrl = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.download = resource.title;
+                        a.href = blobUrl;
+
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    })
+                    .catch(e => console.error(e));
+            }
+        };
+
+        const handleDownload = (): void => {
+            downloadResource(mediaURL(resource.file));
+        };
+
         const renderResourceInfo = (
             <CardContent>
                 <List>
@@ -228,6 +259,40 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </SwipeableDrawer>
         );
 
+        const renderOptions = (
+            <StyledList>
+                {isOwnProfile && (
+                    <ListItem onClick={handleDelete}>
+                        <ListItemText>
+                            <DeleteOutline /> {t('resource:deleteResource')}
+                        </ListItemText>
+                    </ListItem>
+                )}
+                <ListItem onClick={handleShare}>
+                    <ListItemText>
+                        <ShareOutlined /> {t('common:share')}
+                    </ListItemText>
+                </ListItem>
+                <ListItem disabled>
+                    <ListItemText>
+                        <FlagOutlined /> {t('common:reportAbuse')}
+                    </ListItemText>
+                </ListItem>
+                <ListItem onClick={handleDownload}>
+                    <ListItemText>
+                        <CloudDownloadOutlined /> {t('common:downloadResource')}
+                    </ListItemText>
+                </ListItem>
+                <Link target="_blank" rel="noopener noreferrer" href={mediaURL(resource.file)}>
+                    <ListItem>
+                        <ListItemText>
+                            <OpenInNewOutlined /> {t('common:externalLink')}
+                        </ListItemText>
+                    </ListItem>
+                </Link>
+            </StyledList>
+        );
+
         const renderDesktopOptionsDrawer = (
             <SwipeableDrawer
                 className="md-up"
@@ -237,25 +302,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 onClose={closeOptions}
             >
                 <ModalHeader onCancel={closeOptions} />
-                <List>
-                    {isOwnProfile && (
-                        <ListItem>
-                            <ListItemText onClick={handleDelete}>
-                                <DeleteOutline /> {t('resource:deleteResource')}
-                            </ListItemText>
-                        </ListItem>
-                    )}
-                    <ListItem>
-                        <ListItemText onClick={handleShare}>
-                            <ShareOutlined /> {t('common:share')}
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem disabled>
-                        <ListItemText>
-                            <FlagOutlined /> {t('common:reportAbuse')}
-                        </ListItemText>
-                    </ListItem>
-                </List>
+                {renderOptions}
             </SwipeableDrawer>
         );
 
@@ -284,27 +331,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 onOpen={openOptions}
                 onClose={closeOptions}
             >
-                <Paper>
-                    <List>
-                        {isOwnProfile && (
-                            <ListItem>
-                                <ListItemText onClick={handleDelete}>
-                                    <DeleteOutline /> {t('resource:deleteResource')}
-                                </ListItemText>
-                            </ListItem>
-                        )}
-                        <ListItem>
-                            <ListItemText onClick={handleShare}>
-                                <ShareOutlined /> {t('common:share')}
-                            </ListItemText>
-                        </ListItem>
-                        <ListItem disabled>
-                            <ListItemText>
-                                <FlagOutlined /> {t('common:reportAbuse')}
-                            </ListItemText>
-                        </ListItem>
-                    </List>
-                </Paper>
+                <Paper>{renderOptions}</Paper>
             </SwipeableDrawer>
         );
 
@@ -392,6 +419,22 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         return <NotFound title={t('resource:notFound')} />;
     }
 };
+
+const StyledList = styled(List)`
+    .MuiListItem-root {
+        padding: 1rem 1.5rem !important;
+        :hover {
+            background-color: rgb(245, 245, 245) !important;
+            cursor: pointer;
+        }
+    }
+    .MuiTypography-root {
+        display: flex;
+    }
+    .MuiSvgIcon-root {
+        margin-right: 1rem;
+    }
+`;
 
 ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePrivatePage(ctx);
