@@ -209,5 +209,6 @@ const StyledTabLayout = styled(MainLayout)`
 
     #main-header {
         text-align: left;
+        padding: 0.5rem 0.5rem 0.5rem 1rem;
     }
 `;

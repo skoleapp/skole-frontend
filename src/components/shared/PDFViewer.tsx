@@ -11,12 +11,12 @@ interface PDFDocument {
     numPages: number;
 }
 
-export const FilePreview: React.FC<Props> = ({ file }) => {
+export const PDFViewer: React.FC<Props> = ({ file }) => {
     const [numPages, setNumPages] = useState<number | null>(null);
     const onDocumentLoadSuccess = ({ numPages }: PDFDocument): void => setNumPages(numPages);
 
     const renderLoading = (
-        <Box padding="1rem" display="flex" justifyContent="center" alignItems="center">
+        <Box position="absolute" display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
             <CircularProgress color="primary" />
             <Box marginLeft="1rem">
                 <Typography variant="subtitle1">Loading Document...</Typography>

@@ -22,15 +22,13 @@ export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) =
                 )}
             </Grid>
             {!!title && (
-                <Grid item container xs={!!headerRight ? 10 : 11} justify="center">
+                <Grid item container xs={10} justify="center">
                     <Heading text={title} />
                 </Grid>
             )}
-            {!!headerRight && (
-                <Grid item container xs={1} justify="flex-end">
-                    {headerRight}
-                </Grid>
-            )}
+            <Grid item container xs={1} justify="flex-end">
+                {headerRight}
+            </Grid>
         </Grid>
     </StyledModalHeader>
 );

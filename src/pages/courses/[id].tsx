@@ -22,7 +22,6 @@ import {
     KeyboardArrowUpOutlined,
     SchoolOutlined,
     ScoreOutlined,
-    StarOutlined,
     SubjectOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
@@ -46,6 +45,7 @@ import { toggleNotification } from '../../actions';
 import {
     DiscussionBox,
     NotFound,
+    StarButton,
     StyledBottomNavigation,
     StyledList,
     StyledTable,
@@ -55,14 +55,7 @@ import {
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
-import {
-    getFullCourseName,
-    useFrontendPagination,
-    useOptions,
-    usePrivatePage,
-    useStarButton,
-    useVotes,
-} from '../../utils';
+import { getFullCourseName, useFrontendPagination, useOptions, usePrivatePage, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -97,7 +90,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const isOwnCourse = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
         const initialVote = R.propOr(null, 'vote', course) as VoteObjectType | null;
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({ initialVote, initialPoints });
-        const starButtonProps = useStarButton();
 
         const created = moment(course.created)
             .startOf('day')
@@ -119,6 +111,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const deleteCourseError = (): void => {
             dispatch(toggleNotification(t('notifications:deleteCourseError')));
         };
+
         const deleteCourseCompleted = ({ deleteCourse }: DeleteCourseMutation): void => {
             if (!!deleteCourse) {
                 if (!!deleteCourse.errors) {
@@ -144,12 +137,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const handleVoteClick = (status: number) => (): void => {
             handleVote({ status: status, course: courseId });
         };
-
-        const renderStarButton = (
-            <IconButton {...starButtonProps}>
-                <StarOutlined />
-            </IconButton>
-        );
 
         const renderUpVoteButton = (
             <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
@@ -304,7 +291,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderExtraDesktopActions = (
             <Box display="flex" paddingLeft="0.5rem" paddingBottom="0.5rem">
-                {renderStarButton}
+                <StarButton />
                 {renderDownVoteButton}
                 {renderUpVoteButton}
             </Box>
@@ -313,7 +300,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const renderCustomBottomNavbar = (
             <StyledBottomNavigation>
                 <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" margin="0 1rem">
-                    {renderStarButton}
+                    <StarButton />
                     <Box display="flex">
                         <Box marginRight="1rem">{renderUpVoteButton}</Box>
                         {renderDownVoteButton}

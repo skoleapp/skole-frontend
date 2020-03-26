@@ -16,5 +16,4 @@ export { useOpen } from './useOpen';
 export { useOptions } from './useOptions';
 export { useLanguageSelector } from './useLanguageSelector';
 export { usePagination, useFrontendPagination } from './usePagination';
-export { useStarButton } from './useStarButton';
 export { useVotes } from './useVotes';
