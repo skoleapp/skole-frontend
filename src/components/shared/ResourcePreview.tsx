@@ -80,69 +80,10 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
         }
     };
 
-    const getImageSize = (url: string): Promise<[number, number]> => {
-        return new Promise(resolve => {
-            const img = new Image();
-            img.src = url;
-            img.onload = (): void => {
-                resolve([img.width, img.height]);
-            };
-        });
-    };
-
     interface MapData {
         map: any;
         imageExtent: number[];
     }
-
-    const createMapFromImage = (url: string): Promise<MapData> => {
-        const Map = require('ol/Map').default;
-        const View = require('ol/View').default;
-        const Image = require('ol/layer/Image').default;
-        const Projection = require('ol/proj/Projection').default;
-        const ImageStatic = require('ol/source/ImageStatic').default;
-
-        return getImageSize(url).then((imageSize: any) => {
-            const imageExtent = [0, 0, imageSize[0], imageSize[1]];
-
-            const projection = new Projection({
-                units: 'pixels',
-                extent: imageExtent,
-            });
-
-            const source = new ImageStatic({
-                url: url,
-                projection: projection,
-                imageExtent: imageExtent,
-                crossOrigin: 'anonymous',
-            });
-
-            const target = 'map';
-
-            const map = new Map({
-                layers: [
-                    new Image({
-                        source: source,
-                    }),
-                ],
-                target: target,
-                view: new View({
-                    projection: projection,
-                    center: getCenter(imageExtent),
-                    extent: imageExtent,
-                    showFullExtent: true,
-                    zoom: 0,
-                    maxZoom: 4,
-                    constrainResolution: false,
-                }),
-                controls: [],
-            });
-
-            const mapData = { map: map, imageExtent: imageExtent };
-
-            return mapData;
-        });
-    };
 
     const createMapFromPDF = (url: string): Promise<MapData> => {
         const Map = require('ol/Map').default;
@@ -270,13 +211,8 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
             if (!!file) {
                 const url = file;
 
-                if (url.endsWith('.pdf')) {
-                    const pdfMaps = createMapFromPDF(url);
-                    maps.push(pdfMaps);
-                } else {
-                    const imageMaps = createMapFromImage(url);
-                    maps.push(imageMaps);
-                }
+                const pdfMaps = createMapFromPDF(url);
+                maps.push(pdfMaps);
 
                 Promise.all(maps).then((maps: any) => {
                     const flatMaps = maps.flat();
