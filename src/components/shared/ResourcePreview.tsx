@@ -88,8 +88,6 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
     const createMapFromPDF = (url: string): Promise<MapData> => {
         const Map = require('ol/Map').default;
         const View = require('ol/View').default;
-        const Control = require('ol/control/Control').default;
-        const Interaction = require('ol/interaction/Interaction').default;
         const Image = require('ol/layer/Image').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
         const Projection = require('ol/proj/Projection').default;
@@ -129,9 +127,6 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
                     crossOrigin: 'anonymous',
                 });
 
-                const controls = Control.defaults({ rotate: false });
-                const interactions = Interaction.defaults({ altShiftDragRotate: false, pinchRotate: false });
-
                 const map = new Map({
                     layers: [
                         new Image({
@@ -147,9 +142,9 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
                         constrainResolution: false,
                         showFullExtent: true,
                         extent: imageExtent,
+                        enableRotation: false,
                     }),
-                    controls: controls,
-                    interactions: interactions,
+                    controls: [],
                 });
 
                 let target = null;
