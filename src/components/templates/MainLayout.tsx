@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
 import { BottomNavbar, Footer, Head, LanguageSelector, Notifications, Settings, TopNavbar } from '../layout';
-import { CommentThread, FileViewer } from '../layout';
+import { CommentThread, AttachmentViewer } from '../layout';
 
 interface Props
     extends Pick<
@@ -44,7 +44,7 @@ export const MainLayout: React.FC<Props> = ({
         <Notifications />
         <Settings />
         <CommentThread />
-        <FileViewer />
+        <AttachmentViewer />
         <LanguageSelector />
     </StyledMainLayout>
 );

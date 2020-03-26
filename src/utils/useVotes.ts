@@ -38,8 +38,6 @@ export const useVotes = ({ initialVote, initialPoints }: UseVotesProps): UseVote
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
-    console.log(initialVote);
-
     const onError = (): void => {
         dispatch(toggleNotification(t('notifications:voteError')));
     };

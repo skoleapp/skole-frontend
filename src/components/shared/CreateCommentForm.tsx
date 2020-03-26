@@ -142,8 +142,8 @@ export const CreateCommentForm: React.FC<Props> = ({
     );
 
     const renderCreateCommentModal = ({ values }: T): JSX.Element => (
-        <StyledModal open={!!createCommentModalOpen} onClose={handleCloseCreateCommentModal} autoHeight>
-            <Fade in={!!createCommentModalOpen}>
+        <StyledModal open={createCommentModalOpen} onClose={handleCloseCreateCommentModal} autoHeight>
+            <Fade in={createCommentModalOpen}>
                 <Paper>
                     <ModalHeader
                         onCancel={handleCloseCreateCommentModal}

@@ -9,5 +9,5 @@ export { TopNavbar } from './TopNavbar';
 export { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 export { Settings } from './Settings';
 export { CommentThread } from './CommentThread';
-export { FileViewer } from './FileViewer';
+export { AttachmentViewer } from './AttachmentViewer';
 export { LanguageSelector } from './LanguageSelector';
