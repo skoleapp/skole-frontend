@@ -47,6 +47,7 @@
         "next": "^9.2.2",
         "next-assets-import": "^0.0.2",
         "next-i18next": "^4.2.0",
+        "next-offline": "^5.0.0",
         "nprogress": "^0.2.0",
         "ol": "^6.2.1",
         "pdfjs-dist": "^2.2.228",
