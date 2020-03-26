@@ -180,10 +180,10 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
             console.log('ZOOMLEVEL: ' + zoomLevel);
 
             if (zoomLevel < 1.3) {
-                if (touchEnd < touchStart - 100) {
+                if (touchEnd < touchStart - 50) {
                     console.log('Swiped left');
                     nextPage();
-                } else if (touchEnd > touchStart + 100) {
+                } else if (touchEnd > touchStart + 50) {
                     console.log('Swiped right');
                     previousPage();
                 }
