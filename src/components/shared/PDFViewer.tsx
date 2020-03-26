@@ -24,9 +24,27 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         </Box>
     );
 
+    const renderError = (
+        <Box position="absolute" display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
+            <Typography variant="subtitle1">Error rendering document.</Typography>
+        </Box>
+    );
+
+    const renderNoData = (
+        <Box position="absolute" display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
+            <Typography variant="subtitle1">No document found.</Typography>
+        </Box>
+    );
+
     return (
         <StyledFilePreview>
-            <Document file={file} onLoadSuccess={onDocumentLoadSuccess} loading={renderLoading}>
+            <Document
+                file={file}
+                onLoadSuccess={onDocumentLoadSuccess}
+                loading={renderLoading}
+                error={renderError}
+                noData={renderNoData}
+            >
                 {Array.from(new Array(numPages), (_el, index) => (
                     <Page key={`page_${index + 1}`} pageNumber={index + 1} />
                 ))}
