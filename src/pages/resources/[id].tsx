@@ -6,7 +6,6 @@ import {
     Divider,
     Grid,
     IconButton,
-    Link,
     List,
     ListItem,
     ListItemAvatar,
@@ -25,7 +24,6 @@ import {
     InfoOutlined,
     LibraryAddOutlined,
     MoreHorizOutlined,
-    OpenInNewOutlined,
     SchoolOutlined,
     ScoreOutlined,
     ShareOutlined,
@@ -280,16 +278,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 </ListItem>
                 <ListItem onClick={handleDownload}>
                     <ListItemText>
-                        <CloudDownloadOutlined /> {t('common:downloadResource')}
+                        <CloudDownloadOutlined /> {t('common:download')}
                     </ListItemText>
                 </ListItem>
-                <Link target="_blank" rel="noopener noreferrer" href={mediaURL(resource.file)}>
-                    <ListItem>
-                        <ListItemText>
-                            <OpenInNewOutlined /> {t('common:externalLink')}
-                        </ListItemText>
-                    </ListItem>
-                </Link>
             </StyledList>
         );
 
