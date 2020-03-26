@@ -6,17 +6,17 @@ import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
+import styled from 'styled-components';
 import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, TextLink, LanguageSelector } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection, LanguageSelector, TextLink } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAlerts, useForm, usePublicPage } from '../utils';
-import styled from 'styled-components';
 
 const initialValues = {
     usernameOrEmail: '',
