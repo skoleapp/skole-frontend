@@ -180,10 +180,10 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
             console.log('ZOOMLEVEL: ' + zoomLevel);
 
             if (zoomLevel < 1.3) {
-                if (touchEnd < touchStart - 300) {
+                if (touchEnd < touchStart - 100) {
                     console.log('Swiped left');
                     nextPage();
-                } else if (touchEnd > touchStart + 300) {
+                } else if (touchEnd > touchStart + 100) {
                     console.log('Swiped right');
                     previousPage();
                 }
@@ -254,9 +254,7 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
             <IconButton disabled={currentPage === 0} onClick={previousPage} size="small">
                 <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'primary'} />
             </IconButton>
-            <Typography style={{ margin: 10 }} variant="body2">
-                {currentPage + 1 + ' / ' + pages.length}
-            </Typography>
+            <Typography variant="body2">{currentPage + 1 + ' / ' + pages.length}</Typography>
             <IconButton disabled={currentPage === pages.length - 1} onClick={nextPage} size="small">
                 <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'primary'} />
             </IconButton>
@@ -273,9 +271,7 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
             >
                 <KeyboardArrowUpOutlined />
             </IconButton>
-            <Typography style={{ margin: 10 }} variant="body2">
-                {points}
-            </Typography>
+            <Typography variant="body2">{points}</Typography>
             <IconButton
                 color={!!vote && vote.status === -1 ? 'primary' : 'inherit'}
                 onClick={handleVote(-1)}
