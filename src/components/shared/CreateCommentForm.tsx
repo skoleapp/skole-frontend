@@ -20,6 +20,7 @@ interface Props {
     appendComments: (comments: CommentObjectType) => void;
     createCommentModalOpen: boolean;
     toggleCreateCommentModal: (val: boolean) => void;
+    formKey: string;
 }
 
 interface CreateCommentFormValues {
@@ -38,6 +39,7 @@ export const CreateCommentForm: React.FC<Props> = ({
     target,
     createCommentModalOpen,
     toggleCreateCommentModal,
+    formKey,
 }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -67,15 +69,15 @@ export const CreateCommentForm: React.FC<Props> = ({
     const [createCommentMutation] = useCreateCommentMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
-        if (!!values.text) {
+        if (!attachment && !values.text) {
+            dispatch(toggleNotification(t('notifications:messageEmpty')));
+        } else {
             await createCommentMutation({
                 variables: { ...values, attachment: (values.attachment as unknown) as string },
             });
 
             resetForm();
             toggleCreateCommentModal(false);
-        } else {
-            dispatch(toggleNotification(t('notifications:messageEmpty')));
         }
 
         setSubmitting(false);
@@ -127,8 +129,14 @@ export const CreateCommentForm: React.FC<Props> = ({
     const renderDesktopInputArea = ({ values }: T): JSX.Element => (
         <Box id="desktop-input-area" display="flex" alignItems="center">
             <Box marginRight="0.5rem">
-                <input value="" id="attachment" accept="image/*" type="file" onChange={handleAttachmentChange} />
-                <label htmlFor="attachment">
+                <input
+                    value=""
+                    id={`attachment-desktop-${formKey}`}
+                    accept=".png, .jpg, .jpeg"
+                    type="file"
+                    onChange={handleAttachmentChange}
+                />
+                <label htmlFor={`attachment-desktop-${formKey}`}>
                     <IconButton component="span" size="small">
                         <AttachFileOutlined />
                     </IconButton>
@@ -157,13 +165,13 @@ export const CreateCommentForm: React.FC<Props> = ({
                         <Box className="md-down" marginRight="0.5rem">
                             <input
                                 value=""
-                                id="camera-attachment"
+                                id={`camera-attachment-${formKey}`}
                                 accept=".png, .jpg, .jpeg"
                                 type="file"
                                 capture="camera"
                                 onChange={handleAttachmentChange}
                             />
-                            <label htmlFor="camera-attachment">
+                            <label htmlFor={`camera-attachment-${formKey}`}>
                                 <Fab component="span" size="small">
                                     <CameraAltOutlined />
                                 </Fab>
@@ -172,13 +180,13 @@ export const CreateCommentForm: React.FC<Props> = ({
                         <Box>
                             <input
                                 value=""
-                                id="attachment"
+                                id={`attachment-${formKey}`}
                                 accept=".png, .jpg, .jpeg"
                                 type="file"
                                 capture="camera"
                                 onChange={handleAttachmentChange}
                             />
-                            <label htmlFor="attachment">
+                            <label htmlFor={`attachment-${formKey}`}>
                                 <Fab component="span" size="small">
                                     <AttachFileOutlined />
                                 </Fab>

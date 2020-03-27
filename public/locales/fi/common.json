@@ -59,5 +59,6 @@
     "noComments": "Ei kommentteja näytettäväksi...",
     "actions": "Toiminnot",
     "maxFileSize": "Maksimi tiedostokoko",
-    "resultsPerPage": "Tuloksia per sivu"
+    "resultsPerPage": "Tuloksia per sivu",
+    "clickToView": "Klikkaa avataksesi!"
 }

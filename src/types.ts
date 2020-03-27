@@ -51,6 +51,7 @@ export interface DiscussionBoxProps {
     comments: CommentObjectType[];
     isThread?: boolean;
     target: CommentTarget;
+    formKey: string;
 }
 
 export type MuiColor = 'inherit' | 'default' | 'primary' | 'secondary' | undefined;

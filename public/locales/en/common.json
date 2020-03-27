@@ -60,5 +60,6 @@
     "noComments": "No comments to be shown...",
     "options": "Actions",
     "maxFileSize": "Maximum file size",
-    "resultsPerPage": "Results Per Page"
+    "resultsPerPage": "Results Per Page",
+    "clickToView": "Click to view!"
 }

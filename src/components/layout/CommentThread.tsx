@@ -21,6 +21,7 @@ export const CommentThread: React.FC = () => {
         comments: R.propOr([], 'replyComments', commentThread) as CommentObjectType[],
         target: { comment: Number(R.propOr(undefined, 'id', commentThread)) },
         isThread: true,
+        formKey: 'comment-thread',
     };
 
     return (

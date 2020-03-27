@@ -92,6 +92,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const discussionBoxProps = {
             comments,
             target: { resource: Number(resource.id) },
+            formKey: 'resource',
         };
 
         const createdInfoProps = { creatorId, creatorName, created };

@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import {
     AttachFileOutlined,
+    CameraAltOutlined,
     CommentOutlined,
     DeleteOutline,
     KeyboardArrowDownOutlined,
@@ -57,6 +58,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     const [vote, setVote] = useState(comment.vote);
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const confirm = useConfirm();
+    const attachmentOnly = comment.text == '' && comment.attachment !== '';
 
     const {
         openOptions,
@@ -69,7 +71,11 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     } = useOptions();
 
     const handleClick = (): void => {
-        !isThread && dispatch(toggleCommentThread(comment));
+        if (isThread) {
+            attachmentOnly && dispatch(toggleFileViewer(comment.attachment));
+        } else {
+            dispatch(toggleCommentThread(comment));
+        }
     };
 
     const performVoteError = (): void => {
@@ -166,12 +172,26 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     );
 
     return (
-        <StyledCommentCard isThread={!!isThread} onClick={handleClick} disableBorder={disableBorder}>
+        <StyledCommentCard
+            isThread={isThread}
+            onClick={handleClick}
+            disableBorder={disableBorder}
+            attachmentOnly={attachmentOnly}
+        >
             <CardHeader avatar={<Avatar src={mediaURL(avatarThumb)} />} title={renderTitle} subheader={created} />
             <CardContent>
                 <Grid container justify="space-between" alignItems="center">
-                    <Grid item container xs={11} justify="flex-start">
-                        <Typography variant="body2">{comment.text}</Typography>
+                    <Grid id="content" item container xs={11} justify="flex-start">
+                        {attachmentOnly ? (
+                            <Box display="flex">
+                                <CameraAltOutlined />
+                                <Box marginLeft="0.5rem">
+                                    <Typography variant="body2">{t('common:clickToView')}</Typography>
+                                </Box>
+                            </Box>
+                        ) : (
+                            <Typography variant="body2">{comment.text}</Typography>
+                        )}
                     </Grid>
                     <Grid item container xs={1} direction="column" justify="center" alignItems="center">
                         <IconButton
@@ -204,7 +224,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                                     </Box>
                                 </>
                             )}
-                            {!!comment.attachment && (
+                            {!!comment.attachment && !attachmentOnly && (
                                 <Box marginLeft="0.25rem">
                                     <IconButton onClick={handleAttachmentClick}>
                                         <AttachFileOutlined />
@@ -228,17 +248,29 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledCommentCard = styled(({ isThread, disableBorder, ...other }) => <Box {...other} />)`
+const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...other }) => <Box {...other} />)`
     border-bottom: ${({ disableBorder }): string => (!disableBorder ? 'var(--border)' : 'none')};
 
     // Disable hover background color and cursor mode when on message thread.
     &:hover {
-        cursor: ${({ isThread }): string => (!isThread ? 'pointer' : 'inherit')};
-        background-color: ${({ isThread }): string => (!isThread ? 'var(--hover-opacity)' : 'inherit')};
+        cursor: ${({ isThread, attachmentOnly }): string => {
+            return attachmentOnly ? 'pointer' : !isThread ? 'pointer' : 'inherit';
+        }};
+
+        background-color: ${({ isThread }): string => (isThread ? 'var(--hover-opacity)' : 'inherit')};
     }
 
     .MuiCardContent-root {
         padding: 0.5rem !important;
+
+        #content {
+            padding: 0.5rem;
+
+            .MuiTypography-root {
+                overflow: hidden;
+                word-break: break-word;
+            }
+        }
     }
 
     .MuiAvatar-root {

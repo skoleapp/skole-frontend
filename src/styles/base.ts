@@ -11,7 +11,7 @@ export const base = css`
 
         --white: ${colors.white};
         --black: ${colors.black};
-        --grey: ${colors.grey};
+        --gray: ${colors.gray};
 
         --success: ${colors.success};
         --danger: ${colors.danger};
