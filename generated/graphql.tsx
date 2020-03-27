@@ -85,6 +85,7 @@ export type CourseObjectType = {
   created: Scalars['DateTime'],
   resources: Array<ResourceObjectType>,
   comments: Array<CommentObjectType>,
+  starred?: Maybe<Scalars['Boolean']>,
   points?: Maybe<Scalars['Int']>,
   vote?: Maybe<VoteObjectType>,
   resourceCount?: Maybe<Scalars['Int']>,
@@ -209,6 +210,7 @@ export type LoginMutationPayload = {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  performStar?: Maybe<StarredMutationPayload>,
   performVote?: Maybe<VoteMutationPayload>,
   login?: Maybe<LoginMutationPayload>,
   register?: Maybe<RegisterMutationPayload>,
@@ -224,6 +226,11 @@ export type Mutation = {
   createComment?: Maybe<CreateCommentMutationPayload>,
   updateComment?: Maybe<UpdateCommentMutationPayload>,
   deleteComment?: Maybe<DeleteCommentMutationPayload>,
+};
+
+
+export type MutationPerformStarArgs = {
+  input: StarredMutationInput
 };
 
 
@@ -438,6 +445,7 @@ export type ResourceObjectType = {
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
   comments: Array<CommentObjectType>,
+  starred?: Maybe<Scalars['Boolean']>,
   points?: Maybe<Scalars['Int']>,
   vote?: Maybe<VoteObjectType>,
   resourceType?: Maybe<Scalars['String']>,
@@ -467,6 +475,19 @@ export type SchoolTypeObjectType = {
    __typename?: 'SchoolTypeObjectType',
   id: Scalars['ID'],
   name: Scalars['String'],
+};
+
+export type StarredMutationInput = {
+  course?: Maybe<Scalars['ID']>,
+  resource?: Maybe<Scalars['ID']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type StarredMutationPayload = {
+   __typename?: 'StarredMutationPayload',
+  starred?: Maybe<Scalars['Boolean']>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  clientMutationId?: Maybe<Scalars['String']>,
 };
 
 export type SubjectObjectType = {
@@ -828,8 +849,11 @@ export type CourseDetailQuery = (
   { __typename?: 'Query' }
   & { course: Maybe<(
     { __typename?: 'CourseObjectType' }
-    & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'points' | 'resourceCount'>
-    & { subject: Maybe<(
+    & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'points' | 'resourceCount' | 'starred'>
+    & { vote: Maybe<(
+      { __typename?: 'VoteObjectType' }
+      & Pick<VoteObjectType, 'id' | 'status'>
+    )>, subject: Maybe<(
       { __typename?: 'SubjectObjectType' }
       & Pick<SubjectObjectType, 'id' | 'name'>
     )>, school: (
@@ -861,9 +885,6 @@ export type CourseDetailQuery = (
         { __typename?: 'VoteObjectType' }
         & Pick<VoteObjectType, 'id' | 'status'>
       )> }
-    )>, vote: Maybe<(
-      { __typename?: 'VoteObjectType' }
-      & Pick<VoteObjectType, 'id' | 'status'>
     )> }
   )> }
 );
@@ -951,8 +972,20 @@ export type ResourceDetailQuery = (
   { __typename?: 'Query' }
   & { resource: Maybe<(
     { __typename?: 'ResourceObjectType' }
-    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'file' | 'date' | 'modified' | 'created' | 'points'>
-    & { comments: Array<(
+    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'file' | 'date' | 'modified' | 'created' | 'points' | 'starred'>
+    & { school: Maybe<(
+      { __typename?: 'SchoolObjectType' }
+      & Pick<SchoolObjectType, 'id' | 'name'>
+    )>, course: (
+      { __typename?: 'CourseObjectType' }
+      & Pick<CourseObjectType, 'id' | 'name'>
+    ), user: Maybe<(
+      { __typename?: 'UserObjectType' }
+      & Pick<UserObjectType, 'id' | 'username'>
+    )>, vote: Maybe<(
+      { __typename?: 'VoteObjectType' }
+      & Pick<VoteObjectType, 'id' | 'status'>
+    )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points' | 'replyCount'>
       & { user: Maybe<(
@@ -969,18 +1002,6 @@ export type ResourceDetailQuery = (
         { __typename?: 'VoteObjectType' }
         & Pick<VoteObjectType, 'id' | 'status'>
       )> }
-    )>, school: Maybe<(
-      { __typename?: 'SchoolObjectType' }
-      & Pick<SchoolObjectType, 'id' | 'name'>
-    )>, course: (
-      { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name'>
-    ), user: Maybe<(
-      { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'username'>
-    )>, vote: Maybe<(
-      { __typename?: 'VoteObjectType' }
-      & Pick<VoteObjectType, 'id' | 'status'>
     )> }
   )> }
 );
@@ -1060,6 +1081,24 @@ export type SearchCoursesQuery = (
   )>, city: Maybe<(
     { __typename?: 'CityObjectType' }
     & Pick<CityObjectType, 'id' | 'name'>
+  )> }
+);
+
+export type PerformStarMutationVariables = {
+  course?: Maybe<Scalars['ID']>,
+  resource?: Maybe<Scalars['ID']>
+};
+
+
+export type PerformStarMutation = (
+  { __typename?: 'Mutation' }
+  & { performStar: Maybe<(
+    { __typename?: 'StarredMutationPayload' }
+    & Pick<StarredMutationPayload, 'starred'>
+    & { errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
   )> }
 );
 
@@ -1501,6 +1540,15 @@ export const CourseDetailDocument = gql`
     id
     name
     code
+    modified
+    created
+    points
+    resourceCount
+    starred
+    vote {
+      id
+      status
+    }
     subject {
       id
       name
@@ -1552,14 +1600,6 @@ export const CourseDetailDocument = gql`
         id
         status
       }
-    }
-    modified
-    created
-    points
-    resourceCount
-    vote {
-      id
-      status
     }
   }
 }
@@ -1664,6 +1704,23 @@ export const ResourceDetailDocument = gql`
     modified
     created
     points
+    starred
+    school {
+      id
+      name
+    }
+    course {
+      id
+      name
+    }
+    user {
+      id
+      username
+    }
+    vote {
+      id
+      status
+    }
     comments {
       id
       user {
@@ -1698,22 +1755,6 @@ export const ResourceDetailDocument = gql`
         id
         status
       }
-    }
-    school {
-      id
-      name
-    }
-    course {
-      id
-      name
-    }
-    user {
-      id
-      username
-    }
-    vote {
-      id
-      status
     }
   }
 }
@@ -1827,6 +1868,25 @@ export const SearchCoursesDocument = gql`
       
 export type SearchCoursesQueryHookResult = ReturnType<typeof useSearchCoursesQuery>;
 export type SearchCoursesQueryResult = ApolloReactCommon.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
+export const PerformStarDocument = gql`
+    mutation PerformStar($course: ID, $resource: ID) {
+  performStar(input: {course: $course, resource: $resource}) {
+    starred
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type PerformStarMutationFn = ApolloReactCommon.MutationFunction<PerformStarMutation, PerformStarMutationVariables>;
+
+    export function usePerformStarMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PerformStarMutation, PerformStarMutationVariables>) {
+      return ApolloReactHooks.useMutation<PerformStarMutation, PerformStarMutationVariables>(PerformStarDocument, baseOptions);
+    }
+export type PerformStarMutationHookResult = ReturnType<typeof usePerformStarMutation>;
+export type PerformStarMutationResult = ApolloReactCommon.MutationResult<PerformStarMutation>;
+export type PerformStarMutationOptions = ApolloReactCommon.BaseMutationOptions<PerformStarMutation, PerformStarMutationVariables>;
 export const UsersDocument = gql`
     query Users($username: String, $ordering: String, $page: Int, $pageSize: Int) {
   users(username: $username, ordering: $ordering, page: $page, pageSize: $pageSize) {

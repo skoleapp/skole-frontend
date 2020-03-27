@@ -89,6 +89,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
         const isOwnCourse = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
         const initialVote = R.propOr(null, 'vote', course) as VoteObjectType | null;
+        const starred = !!course.starred;
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({ initialVote, initialPoints });
 
         const created = moment(course.created)
@@ -289,9 +290,14 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
         const uploadResourceButtonDesktop = renderUploadResourceButton('default');
 
+        const starButtonProps = {
+            starred,
+            course: courseId,
+        };
+
         const renderExtraDesktopActions = (
             <Box display="flex" paddingLeft="0.5rem" paddingBottom="0.5rem">
-                <StarButton />
+                <StarButton {...starButtonProps} />
                 {renderDownVoteButton}
                 {renderUpVoteButton}
             </Box>
@@ -300,7 +306,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const renderCustomBottomNavbar = (
             <StyledBottomNavigation>
                 <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" margin="0 1rem">
-                    <StarButton />
+                    <StarButton {...starButtonProps} />
                     <Box display="flex">
                         <Box marginRight="1rem">{renderUpVoteButton}</Box>
                         {renderDownVoteButton}

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
 import { BottomNavbar, Footer, Head, LanguageSelector, Notifications, Settings, TopNavbar } from '../layout';
-import { CommentThread, AttachmentViewer } from '../layout';
+import { AttachmentViewer, CommentThread } from '../layout';
 
 interface Props
     extends Pick<
@@ -29,7 +29,7 @@ export const MainLayout: React.FC<Props> = ({
     disableBottomNavbar,
     ...containerProps
 }) => (
-    <StyledMainLayout disableBottomMargin={disableBottomNavbar && !customBottomNavbar} custom>
+    <StyledMainLayout disableBottomMargin={disableBottomNavbar && !customBottomNavbar}>
         <Head title={title} />
         <TopNavbar
             heading={heading}

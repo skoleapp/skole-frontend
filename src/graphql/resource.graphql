@@ -27,6 +27,23 @@ query ResourceDetail($id: ID) {
         modified
         created
         points
+        starred
+        school {
+            id
+            name
+        }
+        course {
+            id
+            name
+        }
+        user {
+            id
+            username
+        }
+        vote {
+            id
+            status
+        }
         comments {
             id
             user {
@@ -62,22 +79,6 @@ query ResourceDetail($id: ID) {
                 id
                 status
             }
-        }
-        school {
-            id
-            name
-        }
-        course {
-            id
-            name
-        }
-        user {
-            id
-            username
-        }
-        vote {
-            id
-            status
         }
     }
 }
