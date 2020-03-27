@@ -86,6 +86,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
         const initialVote = R.propOr(null, 'vote', resource) as VoteObjectType | null;
         const initialPoints = R.propOr(0, 'points', resource) as number;
+        const starred = !!resource.starred;
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({ initialVote, initialPoints });
 
         const discussionBoxProps = {
@@ -128,9 +129,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const handleDownloadResource = async (): Promise<void> => {
             try {
                 const res = await fetch(file, {
-                    headers: new Headers({
-                        Origin: location.origin,
-                    }),
+                    headers: new Headers({ Origin: location.origin }),
                     mode: 'cors',
                 });
 
@@ -247,9 +246,14 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             desktopDrawerProps,
         };
 
+        const starButtonProps = {
+            starred,
+            resource: resourceId,
+        };
+
         const renderExtraDesktopActions = (
             <Box display="flex" paddingLeft="0.5rem" paddingBottom="0.5rem">
-                <StarButton />
+                <StarButton {...starButtonProps} />
                 {renderDownVoteButton}
                 {renderUpVoteButton}
             </Box>
@@ -258,7 +262,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const renderCustomBottomNavbar = (
             <StyledBottomNavigation>
                 <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" margin="0 1rem">
-                    <StarButton />
+                    <StarButton {...starButtonProps} />
                     <Box display="flex">
                         <Box marginRight="1rem">{renderUpVoteButton}</Box>
                         {renderDownVoteButton}

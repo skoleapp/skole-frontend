@@ -81,6 +81,8 @@ export const base = css`
         }
 
         .MuiDialog-paper {
+            width: auto;
+
             .MuiDialogTitle-root,
             .MuiDialogContent-root {
                 text-align: center;
