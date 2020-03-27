@@ -11,7 +11,6 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableHead,
     TableRow,
     Typography,
 } from '@material-ui/core';
@@ -108,7 +107,18 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const createdInfoProps = { creatorId, creatorName, created };
-        const { renderTablePagination, paginatedItems } = useFrontendPagination(resources);
+
+        const frontendPaginationProps = {
+            items: resources,
+            notFoundText: 'course:noResources',
+            titleLeft: 'common:title',
+            titleLeftDesktop: 'common:resources',
+            titleRight: 'common:points',
+        };
+
+        const { renderTablePagination, paginatedItems, renderNotFound, renderTableHead } = useFrontendPagination(
+            frontendPaginationProps,
+        );
 
         const deleteCourseError = (): void => {
             dispatch(toggleNotification(t('notifications:deleteCourseError')));
@@ -217,23 +227,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             <StyledTable disableBoxShadow>
                 <TableContainer>
                     <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>
-                                    <Typography className="md-down" variant="subtitle2" color="textSecondary">
-                                        {t('common:title')}
-                                    </Typography>
-                                    <Typography className="md-up" variant="subtitle2" color="textSecondary">
-                                        {t('common:resources')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Typography variant="subtitle2" color="textSecondary">
-                                        {t('common:points')}
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
+                        {renderTableHead}
                         <TableBody>
                             {paginatedItems.map((r: ResourceObjectType, i: number) => (
                                 <Link href={`/resources/${r.id}`} key={i}>
@@ -253,9 +247,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 {renderTablePagination}
             </StyledTable>
         ) : (
-            <CardContent>
-                <Typography variant="subtitle1">{t('course:noResources')}</Typography>
-            </CardContent>
+            renderNotFound
         );
 
         const renderOptions = (

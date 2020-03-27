@@ -1,14 +1,4 @@
-import {
-    CardContent,
-    MenuItem,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography,
-} from '@material-ui/core';
+import { MenuItem, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Link from 'next/link';
@@ -82,7 +72,17 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
         ordering: R.propOr('', 'ordering', query) as string,
     };
 
-    const { renderTablePagination, getPaginationQuery } = usePagination(count, initialValues);
+    const paginationProps = {
+        count,
+        filterValues: initialValues,
+        notFoundText: 'search:noCourses',
+        titleLeft: 'common:name',
+        titleRight: 'common:points',
+    };
+
+    const { renderTablePagination, getPaginationQuery, renderNotFound, renderTableHead } = usePagination(
+        paginationProps,
+    );
 
     const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T, actions: FormikActions<T>): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city, ordering } = values;
@@ -190,20 +190,7 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
         <>
             <TableContainer>
                 <Table stickyHeader>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {t('common:name')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {t('common:points')}
-                                </Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
+                    {renderTableHead}
                     <TableBody>
                         {courseObjects.map((c: CourseObjectType, i: number) => (
                             <Link href={`/courses/${c.id}`} key={i}>
@@ -223,9 +210,7 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
             {renderTablePagination}
         </>
     ) : (
-        <CardContent>
-            <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
-        </CardContent>
+        renderNotFound
     );
 
     return (

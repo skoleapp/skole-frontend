@@ -1,4 +1,13 @@
-import { Box, IconButton, TablePagination } from '@material-ui/core';
+import {
+    Box,
+    CardContent,
+    IconButton,
+    TableCell,
+    TableHead,
+    TablePagination,
+    TableRow,
+    Typography,
+} from '@material-ui/core';
 import {
     FirstPageOutlined,
     KeyboardArrowLeftOutlined,
@@ -9,8 +18,39 @@ import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
+import styled from 'styled-components';
 
 import { Router, useTranslation } from '../i18n';
+import { TextColor, Variant } from '../types';
+
+interface CustomTableHeadProps {
+    titleLeft: string;
+    titleLeftDesktop: string;
+    titleRight: string;
+}
+
+const titleProps = {
+    variant: 'subtitle1' as Variant,
+    color: 'textSecondary' as TextColor,
+};
+
+const CustomTableHead = ({ titleLeft, titleLeftDesktop, titleRight }: CustomTableHeadProps): JSX.Element => (
+    <TableHead>
+        <TableRow>
+            <TableCell>
+                <Typography className="md-down" {...titleProps}>
+                    {titleLeft}
+                </Typography>
+                <Typography className="md-up" {...titleProps}>
+                    {titleLeftDesktop}
+                </Typography>
+            </TableCell>
+            <TableCell align="right">
+                <Typography {...titleProps}>{titleRight}</Typography>
+            </TableCell>
+        </TableRow>
+    </TableHead>
+);
 
 interface TablePaginationActionsProps {
     count: number;
@@ -59,6 +99,22 @@ const TablePaginationActions = ({
     );
 };
 
+interface NotFoundProps {
+    text: string;
+}
+
+const NotFound = ({ text }: NotFoundProps): JSX.Element => (
+    <StyledNotFound>
+        <Typography variant="subtitle2" color="textSecondary">
+            {text}
+        </Typography>
+    </StyledNotFound>
+);
+
+const StyledNotFound = styled(CardContent)`
+    flex-grow: 1;
+`;
+
 const commonTablePaginationProps = {
     rowsPerPageOptions: [5, 10, 25, 50, 100],
     colSpan: 3,
@@ -66,12 +122,36 @@ const commonTablePaginationProps = {
     ActionsComponent: TablePaginationActions,
 };
 
-interface UsePagination {
+interface CommonPaginationProps {
+    titleLeft: string;
+    titleLeftDesktop?: string;
+    titleRight: string;
+    notFoundText: string;
+}
+
+interface CommonPaginationReturnValues {
     renderTablePagination: JSX.Element;
+    renderTableHead: JSX.Element;
+    renderNotFound: JSX.Element;
+}
+
+interface UsePagination extends CommonPaginationReturnValues {
     getPaginationQuery: (values: {}) => ParsedUrlQueryInput;
 }
 
-export const usePagination = (count: number, filterValues: {}): UsePagination => {
+interface UsePaginationProps extends CommonPaginationProps {
+    count: number;
+    filterValues: {};
+}
+
+export const usePagination = ({
+    count,
+    filterValues,
+    notFoundText,
+    titleLeft,
+    titleLeftDesktop = titleLeft,
+    titleRight,
+}: UsePaginationProps): UsePagination => {
     const { query, pathname } = useRouter();
     const { t } = useTranslation();
     const page = Number(R.propOr(1, 'page', query));
@@ -99,6 +179,12 @@ export const usePagination = (count: number, filterValues: {}): UsePagination =>
         handleReloadPage({ ...query, pageSize });
     };
 
+    const renderTableHead = (
+        <CustomTableHead titleLeft={t(titleLeft)} titleLeftDesktop={t(titleLeftDesktop)} titleRight={t(titleRight)} />
+    );
+
+    const renderNotFound = <NotFound text={t(notFoundText)} />;
+
     const renderTablePagination = (
         <TablePagination
             {...commonTablePaginationProps}
@@ -111,15 +197,24 @@ export const usePagination = (count: number, filterValues: {}): UsePagination =>
         />
     );
 
-    return { renderTablePagination, getPaginationQuery };
+    return { renderTablePagination, renderTableHead, getPaginationQuery, renderNotFound };
 };
 
-interface UseFrontendPagination<T> {
-    renderTablePagination: JSX.Element;
+interface UseFrontendPagination<T> extends CommonPaginationReturnValues {
     paginatedItems: T[];
 }
 
-export const useFrontendPagination = <T extends {}>(items: T[]): UseFrontendPagination<T> => {
+interface UseFrontendPaginationProps<T> extends CommonPaginationProps {
+    items: T[];
+}
+
+export const useFrontendPagination = <T extends {}>({
+    items,
+    notFoundText,
+    titleLeft,
+    titleLeftDesktop = titleLeft,
+    titleRight,
+}: UseFrontendPaginationProps<T>): UseFrontendPagination<T> => {
     const { t } = useTranslation();
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(0);
@@ -129,6 +224,12 @@ export const useFrontendPagination = <T extends {}>(items: T[]): UseFrontendPagi
     const handleChangeRowsPerPage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         setRowsPerPage(parseInt(e.target.value, 10));
     };
+
+    const renderTableHead = (
+        <CustomTableHead titleLeft={t(titleLeft)} titleLeftDesktop={t(titleLeftDesktop)} titleRight={t(titleRight)} />
+    );
+
+    const renderNotFound = <NotFound text={t(notFoundText)} />;
 
     const renderTablePagination = (
         <TablePagination
@@ -142,5 +243,5 @@ export const useFrontendPagination = <T extends {}>(items: T[]): UseFrontendPagi
         />
     );
 
-    return { renderTablePagination, paginatedItems };
+    return { renderTablePagination, renderTableHead, paginatedItems, renderNotFound };
 };

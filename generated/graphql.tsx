@@ -92,7 +92,7 @@ export type CourseObjectType = {
 };
 
 export type CreateCommentMutationInput = {
-  text: Scalars['String'],
+  text?: Maybe<Scalars['String']>,
   attachment?: Maybe<Scalars['String']>,
   course?: Maybe<Scalars['ID']>,
   resource?: Maybe<Scalars['ID']>,
@@ -497,7 +497,7 @@ export type SubjectObjectType = {
 };
 
 export type UpdateCommentMutationInput = {
-  text: Scalars['String'],
+  text?: Maybe<Scalars['String']>,
   attachment?: Maybe<Scalars['String']>,
   course?: Maybe<Scalars['ID']>,
   resource?: Maybe<Scalars['ID']>,
@@ -561,6 +561,8 @@ export type UserObjectType = {
   avatarThumbnail?: Maybe<Scalars['String']>,
   courseCount?: Maybe<Scalars['Int']>,
   resourceCount?: Maybe<Scalars['Int']>,
+  starredCourses?: Maybe<Array<Maybe<CourseObjectType>>>,
+  starredResources?: Maybe<Array<Maybe<ResourceObjectType>>>,
 };
 
 export type VoteMutationInput = {
@@ -650,6 +652,13 @@ export type UserMeQuery = (
   & { userMe: Maybe<(
     { __typename?: 'UserObjectType' }
     & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+    & { starredCourses: Maybe<Array<Maybe<(
+      { __typename?: 'CourseObjectType' }
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+    )>>>, starredResources: Maybe<Array<Maybe<(
+      { __typename?: 'ResourceObjectType' }
+      & Pick<ResourceObjectType, 'id' | 'title' | 'points'>
+    )>>> }
   )> }
 );
 
@@ -1268,6 +1277,17 @@ export const UserMeDocument = gql`
     courseCount
     resourceCount
     created
+    starredCourses {
+      id
+      name
+      code
+      points
+    }
+    starredResources {
+      id
+      title
+      points
+    }
   }
 }
     `;

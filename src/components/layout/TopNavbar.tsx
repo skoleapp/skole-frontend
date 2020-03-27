@@ -1,5 +1,5 @@
 import { AppBar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
-import { AccountCircle, ArrowBack } from '@material-ui/icons';
+import { AccountCircleOutlined, ArrowBack } from '@material-ui/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -49,7 +49,7 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
             <Box display="flex" alignItems="center">
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
-                    <IconButtonLink icon={AccountCircle} href={`/users/${user.id}`} color="secondary" />
+                    <IconButtonLink icon={AccountCircleOutlined} href={`/users/${user.id}`} color="secondary" />
                 ) : (
                     <>
                         <ButtonLink href="/login" color="secondary">

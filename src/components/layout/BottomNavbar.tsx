@@ -1,5 +1,5 @@
 import { BottomNavigationAction } from '@material-ui/core';
-import { AccountCircle, Home, Search } from '@material-ui/icons';
+import { AccountCircleOutlined, HomeOutlined, SearchOutlined, StarOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
@@ -12,19 +12,26 @@ import { StyledBottomNavigation } from '../shared';
 export const BottomNavbar: React.FC = () => {
     const { user, authenticated } = useSelector((state: State) => state.auth);
     const { pathname, query } = useRouter();
+    const home = '/';
+    const search = '/search';
+    const userDetail = '/users/[id]';
+    const starred = '/account/starred';
 
     const getNavbarValue = (): number | null => {
         switch (pathname) {
-            case '/': {
+            case home: {
                 return 0;
             }
-            case '/search': {
+            case search: {
                 return 1;
             }
-            case '/users/[id]': {
+            case userDetail: {
                 if (user && query.id === user.id) {
                     return 2;
                 }
+            }
+            case starred: {
+                return 3;
             }
             default: {
                 return null;
@@ -46,9 +53,10 @@ export const BottomNavbar: React.FC = () => {
 
     return (
         <StyledBottomNavigation value={value} onChange={handleChange}>
-            <BottomNavigationAction onClick={handleRedirect('/')} icon={<Home />} />
-            <BottomNavigationAction onClick={handleRedirect('/search')} icon={<Search />} />
-            <BottomNavigationAction onClick={handleAccountClick} icon={<AccountCircle />} />
+            <BottomNavigationAction value={1} onClick={handleRedirect(home)} icon={<HomeOutlined />} />
+            <BottomNavigationAction value={2} onClick={handleRedirect(search)} icon={<SearchOutlined />} />
+            <BottomNavigationAction value={3} onClick={handleRedirect(starred)} icon={<StarOutlined />} />
+            <BottomNavigationAction value={4} onClick={handleAccountClick} icon={<AccountCircleOutlined />} />
         </StyledBottomNavigation>
     );
 };

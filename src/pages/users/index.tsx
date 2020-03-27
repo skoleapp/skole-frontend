@@ -1,13 +1,11 @@
 import {
     Avatar,
     Box,
-    CardContent,
     MenuItem,
     Table,
     TableBody,
     TableCell,
     TableContainer,
-    TableHead,
     TableRow,
     Typography,
 } from '@material-ui/core';
@@ -53,7 +51,17 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         ordering: R.propOr('', 'ordering', query) as string,
     };
 
-    const { renderTablePagination, getPaginationQuery } = usePagination(count, initialValues);
+    const paginationProps = {
+        count,
+        filterValues: initialValues,
+        titleLeft: 'common:username',
+        titleRight: 'common:points',
+        notFoundText: 'users:notFound',
+    };
+
+    const { renderTablePagination, getPaginationQuery, renderNotFound, renderTableHead } = usePagination(
+        paginationProps,
+    );
 
     const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
         const { username, ordering } = values;
@@ -97,20 +105,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         <>
             <TableContainer>
                 <Table stickyHeader>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {t('common:username')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {t('common:points')}
-                                </Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
+                    {renderTableHead}
                     <TableBody>
                         {userObjects.map((u: UserObjectType, i: number) => (
                             <Link href={`/users/${u.id}`} key={i}>
@@ -137,9 +132,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
             {renderTablePagination}
         </>
     ) : (
-        <CardContent>
-            <Typography variant="subtitle1">{t('users:notFound')}</Typography>
-        </CardContent>
+        renderNotFound
     );
 
     return (

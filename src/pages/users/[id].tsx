@@ -11,7 +11,6 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableHead,
     TableRow,
     Typography,
 } from '@material-ui/core';
@@ -64,15 +63,32 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
         const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
 
+        const commonPaginationProps = {
+            titleLeft: 'common:title',
+            titleRight: 'common:points',
+        };
+
         const {
             renderTablePagination: renderCreatedCoursesTablePagination,
             paginatedItems: paginatedCourses,
-        } = useFrontendPagination(createdCourses);
+            renderNotFound: renderCoursesNotFound,
+            renderTableHead: renderCoursesTableHead,
+        } = useFrontendPagination({
+            ...commonPaginationProps,
+            items: createdCourses,
+            notFoundText: 'profile:noCourses',
+        });
 
         const {
             renderTablePagination: renderCreatedResourcesTablePagination,
             paginatedItems: paginatedResources,
-        } = useFrontendPagination(createdResources);
+            renderNotFound: renderResourcesNotFound,
+            renderTableHead: renderResourcesTableHead,
+        } = useFrontendPagination({
+            ...commonPaginationProps,
+            items: createdResources,
+            notFoundText: 'profile:noResources',
+        });
 
         const renderTopSection = (
             <Grid className="border-bottom" container alignItems="center">
@@ -178,20 +194,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             <StyledTable disableBoxShadow>
                 <TableContainer>
                     <Table stickyHeader>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>
-                                    <Typography variant="subtitle1" color="textSecondary">
-                                        {t('common:title')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Typography variant="subtitle1" color="textSecondary">
-                                        {t('common:points')}
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
+                        {renderCoursesTableHead}
                         <TableBody>
                             {paginatedCourses.map((c: CourseObjectType, i: number) => (
                                 <Link href={`/courses/${c.id}`} key={i}>
@@ -211,29 +214,14 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 {renderCreatedCoursesTablePagination}
             </StyledTable>
         ) : (
-            <CardContent>
-                <Typography variant="subtitle1">{t('profile:noCourses')}</Typography>
-            </CardContent>
+            renderCoursesNotFound
         );
 
         const renderCreatedResources = !!createdResources.length ? (
             <StyledTable disableBoxShadow>
                 <TableContainer>
                     <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>
-                                    <Typography variant="subtitle1" color="textSecondary">
-                                        {t('common:title')}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Typography variant="subtitle1" color="textSecondary">
-                                        {t('common:points')}
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
+                        {renderResourcesTableHead}
                         <TableBody>
                             {paginatedResources.map((r: ResourceObjectType, i: number) => (
                                 <Link href={`/resources/${r.id}`} key={i}>
@@ -253,9 +241,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 {renderCreatedResourcesTablePagination}
             </StyledTable>
         ) : (
-            <CardContent>
-                <Typography variant="subtitle1">{t('profile:noResources')}</Typography>
-            </CardContent>
+            renderResourcesNotFound
         );
 
         const renderTabs = (
