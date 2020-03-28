@@ -33,25 +33,25 @@ export const base = css`
 
         .sm-down {
             @media only screen and (min-width: ${breakpoints.SM}) {
-                display: none;
+                display: none !important;
             }
         }
 
         .sm-up {
             @media only screen and (max-width: ${breakpoints.SM}) {
-                display: none;
+                display: none !important;
             }
         }
 
         .md-down {
             @media only screen and (min-width: ${breakpoints.MD}) {
-                display: none;
+                display: none !important;
             }
         }
 
         .md-up {
             @media only screen and (max-width: ${breakpoints.MD}) {
-                display: none;
+                display: none !important;
             }
         }
 

@@ -1,28 +1,96 @@
-import { CardContent, CardHeader, Grid } from '@material-ui/core';
+import { CardContent, CardHeader, Divider, Grid, Typography } from '@material-ui/core';
 import React from 'react';
+import styled from 'styled-components';
 
-import { MainLayout, StyledCard } from '..';
 import { LayoutProps } from '../../types';
 import { useSettings } from '../../utils';
+import { SettingsButton, StyledCard } from '../shared';
+import { MainLayout } from './MainLayout';
 
-export const SettingsLayout: React.FC<LayoutProps> = ({ title, renderCardContent, ...props }) => {
+interface Props extends LayoutProps {
+    formLayout?: boolean;
+    infoLayout?: boolean;
+    infoContent?: string;
+}
+
+export const SettingsLayout: React.FC<Props> = ({
+    title,
+    heading,
+    renderCardContent,
+    formLayout,
+    infoLayout,
+    infoContent,
+    ...props
+}) => {
     const { renderSettingsCardContent } = useSettings({ modal: false });
 
-    return (
-        <MainLayout title={title} {...props}>
-            <StyledCard>
-                <Grid container>
-                    <Grid className="md-up" item xs={12} md={4} lg={3}>
-                        <CardContent>{renderSettingsCardContent}</CardContent>
-                    </Grid>
-                    <Grid item xs={12} md={8} lg={9} container justify="center">
-                        <Grid item xs={12} sm={8} md={6} lg={5}>
-                            <CardHeader title={title} />
-                            <CardContent>{renderCardContent}</CardContent>
+    const customColSpan = {
+        sm: 8,
+        md: 6,
+        lg: 5,
+    };
+
+    const layoutProps = formLayout || infoLayout ? customColSpan : {};
+
+    const renderFormLayoutMobileContent = formLayout && (
+        <StyledCard className="md-down">
+            <CardContent>{renderCardContent}</CardContent>
+        </StyledCard>
+    );
+
+    const renderFullWidthLayoutMobileContent = !formLayout && !infoLayout && (
+        <StyledCard className="md-down">{renderCardContent}</StyledCard>
+    );
+
+    const renderInfoContent = <Typography variant="body2">{infoContent}</Typography>;
+
+    const renderInfoLayoutMobileContent = infoLayout && (
+        <StyledCard className="md-down">
+            <CardContent>{renderInfoContent}</CardContent>
+        </StyledCard>
+    );
+
+    const renderDesktopContent = (
+        <Grid container className="md-up">
+            <Grid item xs={12} md={4} lg={3}>
+                <StyledCard>
+                    <CardContent>{renderSettingsCardContent}</CardContent>
+                </StyledCard>
+            </Grid>
+            <Grid item xs={12} md={8} lg={9} container>
+                <StyledCard marginLeft>
+                    <CardHeader title={heading} />
+                    <Divider />
+                    <Grid container justify="center">
+                        <Grid item container direction="column" xs={12} {...layoutProps}>
+                            {infoLayout ? (
+                                <CardContent className="container">{renderInfoContent}</CardContent>
+                            ) : (
+                                renderCardContent
+                            )}
                         </Grid>
                     </Grid>
-                </Grid>
-            </StyledCard>
-        </MainLayout>
+                </StyledCard>
+            </Grid>
+        </Grid>
+    );
+
+    const renderHeaderRight = <SettingsButton color="secondary" />;
+
+    return (
+        <StyledSettingsLayout title={title} heading={heading} headerRight={renderHeaderRight} {...props}>
+            {renderFormLayoutMobileContent}
+            {renderFullWidthLayoutMobileContent}
+            {renderInfoLayoutMobileContent}
+            {renderDesktopContent}
+        </StyledSettingsLayout>
     );
 };
+
+const StyledSettingsLayout = styled(MainLayout)`
+    .MuiGrid-root,
+    .container {
+        flex-grow: 1;
+        display: flex;
+    }
+`;

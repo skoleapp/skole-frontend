@@ -110,7 +110,15 @@ const ContactPage: I18nPage = () => {
         </Formik>
     );
 
-    return <SettingsLayout title={t('contact:title')} renderCardContent={renderCardContent} backUrl />;
+    return (
+        <SettingsLayout
+            title={t('contact:title')}
+            heading={t('contact:heading')}
+            renderCardContent={renderCardContent}
+            backUrl
+            formLayout
+        />
+    );
 };
 
 ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

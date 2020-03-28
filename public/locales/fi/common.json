@@ -60,5 +60,6 @@
     "actions": "Toiminnot",
     "maxFileSize": "Maksimi tiedostokoko",
     "resultsPerPage": "Tuloksia per sivu",
-    "clickToView": "Klikkaa avataksesi!"
+    "clickToView": "Klikkaa avataksesi!",
+    "starred": "Tähdellä merkityt"
 }

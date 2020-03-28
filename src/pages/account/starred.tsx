@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { compose } from 'redux';
 
 import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
-import { MainLayout, NotFound, StyledCard, StyledTable, StyledTabs } from '../../components';
+import { NotFound, SettingsLayout, StyledTable, StyledTabs } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -101,27 +101,32 @@ const StarredPage: I18nPage = () => {
             renderResourcesNotFound
         );
 
-        return (
-            <MainLayout heading={t('starred:heading')} title={t('starred:title')} backUrl>
-                <StyledCard>
-                    <Box flexGrow="1" display="flex" flexDirection="column">
-                        <StyledTabs value={tabValue} onChange={handleTabChange}>
-                            <Tab label={t('common:courses')} />
-                            <Tab label={t('common:resources')} />
-                        </StyledTabs>
-                        {tabValue === 0 && (
-                            <Box display="flex" flexGrow="1">
-                                {renderStarredCourses}
-                            </Box>
-                        )}
-                        {tabValue === 1 && (
-                            <Box display="flex" flexGrow="1">
-                                {renderStarredResources}
-                            </Box>
-                        )}
+        const renderCardContent = (
+            <Box flexGrow="1" display="flex" flexDirection="column">
+                <StyledTabs value={tabValue} onChange={handleTabChange}>
+                    <Tab label={t('common:courses')} />
+                    <Tab label={t('common:resources')} />
+                </StyledTabs>
+                {tabValue === 0 && (
+                    <Box display="flex" flexGrow="1">
+                        {renderStarredCourses}
                     </Box>
-                </StyledCard>
-            </MainLayout>
+                )}
+                {tabValue === 1 && (
+                    <Box display="flex" flexGrow="1">
+                        {renderStarredResources}
+                    </Box>
+                )}
+            </Box>
+        );
+
+        return (
+            <SettingsLayout
+                heading={t('starred:heading')}
+                title={t('starred:title')}
+                renderCardContent={renderCardContent}
+                backUrl
+            />
         );
     } else {
         return <NotFound title={t('error:notFound')} />;

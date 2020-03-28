@@ -1,4 +1,3 @@
-import { Typography } from '@material-ui/core';
 import React from 'react';
 import { compose } from 'redux';
 
@@ -11,8 +10,16 @@ import { useAuthSync } from '../utils';
 
 const PrivacyPage: I18nPage = () => {
     const { t } = useTranslation();
-    const renderCardContent = <Typography variant="body2">{t('privacy:content')}</Typography>;
-    return <SettingsLayout title={t('privacy:title')} renderCardContent={renderCardContent} backUrl />;
+
+    return (
+        <SettingsLayout
+            title={t('privacy:title')}
+            heading={t('privacy:heading')}
+            infoContent={t('privacy:content')}
+            backUrl
+            infoLayout
+        />
+    );
 };
 
 PrivacyPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

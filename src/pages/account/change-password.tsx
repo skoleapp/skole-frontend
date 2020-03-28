@@ -98,7 +98,15 @@ const ChangePasswordPage: I18nPage = () => {
         </Formik>
     );
 
-    return <SettingsLayout title={t('change-password:title')} renderCardContent={renderCardContent} backUrl />;
+    return (
+        <SettingsLayout
+            title={t('change-password:title')}
+            heading={t('change-password:heading')}
+            renderCardContent={renderCardContent}
+            backUrl
+            formLayout
+        />
+    );
 };
 
 ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
