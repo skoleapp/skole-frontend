@@ -62,5 +62,6 @@
     "maxFileSize": "Maksimi tiedostokoko",
     "resultsPerPage": "Tuloksia per sivu",
     "clickToView": "Klikkaa avataksesi!",
-    "starred": "Tähdellä merkityt"
+    "starred": "Tähdellä merkityt",
+    "settings": "Asetukset"
 }

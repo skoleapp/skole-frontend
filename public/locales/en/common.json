@@ -62,5 +62,6 @@
     "maxFileSize": "Maximum file size",
     "resultsPerPage": "Results Per Page",
     "clickToView": "Click to view!",
-    "starred": "Starred"
+    "starred": "Starred",
+    "settings": "Settings"
 }
