@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+/* eslint-disable */
 interface Props {
     file: string;
     pages: any[];
