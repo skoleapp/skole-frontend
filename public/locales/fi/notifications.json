@@ -16,5 +16,6 @@
     "resourceDeleted": "Resurssi poistettu!",
     "courseDeleted": "Kurssi poistettu!",
     "deleteCourseError": "Kurssin poistamisessa tapahtui odottamaton virhe!",
-    "downloadResourceError": "Virhe ladattaessa tiedostoa!"
+    "downloadResourceError": "Virhe ladattaessa tiedostoa!",
+    "messageError": "Virhe lähetettäessä viestiä!"
 }
