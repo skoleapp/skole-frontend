@@ -28,6 +28,7 @@ query CourseDetail($id: ID) {
             id
             title
             points
+            date
         }
         comments {
             id

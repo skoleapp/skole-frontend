@@ -1,4 +1,3 @@
-export { getFullCourseName } from './getFullCourseName';
 export { getToken } from './getToken';
 export { menuItems } from './menuItems';
 export { redirect } from './redirect';

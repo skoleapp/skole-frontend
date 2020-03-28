@@ -36,6 +36,7 @@ query UserDetail($id: ID) {
             id
             title
             points
+            date
         }
     }
 }

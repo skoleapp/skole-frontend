@@ -68,6 +68,7 @@ query UserMe {
             id
             title
             points
+            date
         }
     }
 }

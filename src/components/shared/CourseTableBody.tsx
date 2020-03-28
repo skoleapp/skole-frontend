@@ -2,21 +2,26 @@ import { TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
+import styled from 'styled-components';
 
 import { CourseObjectType } from '../../../generated/graphql';
-import { getFullCourseName } from '../../utils';
 
 interface Props {
     courses: CourseObjectType[];
 }
 
 export const CourseTableBody: React.FC<Props> = ({ courses }) => (
-    <TableBody>
+    <StyledCourseTableBody>
         {courses.map((c: CourseObjectType, i: number) => (
             <Link href={`/courses/${c.id}`} key={i}>
                 <TableRow>
                     <TableCell>
-                        <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
+                        <Typography variant="subtitle1">{R.propOr('-', 'name', c)}</Typography>
+                        {!!c.code && (
+                            <Typography id="code" variant="subtitle1" color="textSecondary">
+                                {R.propOr('-', 'code', c)}
+                            </Typography>
+                        )}
                     </TableCell>
                     <TableCell align="right">
                         <Typography variant="subtitle1">{R.propOr('-', 'points', c)}</Typography>
@@ -24,5 +29,11 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => (
                 </TableRow>
             </Link>
         ))}
-    </TableBody>
+    </StyledCourseTableBody>
 );
+
+const StyledCourseTableBody = styled(TableBody)`
+    #code {
+        font-size: 0.75rem;
+    }
+`;

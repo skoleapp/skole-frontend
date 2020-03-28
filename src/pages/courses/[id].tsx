@@ -52,7 +52,7 @@ import {
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
-import { getFullCourseName, useFrontendPagination, useOptions, usePrivatePage, useVotes } from '../../utils';
+import { useFrontendPagination, useOptions, usePrivatePage, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -71,6 +71,16 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         desktopDrawerProps,
         openOptions,
     } = useOptions();
+
+    const getFullCourseName = (course: CourseObjectType): string => {
+        const { code, name } = course;
+
+        if (code && name) {
+            return `${course.name} ${course.code}`;
+        } else {
+            return course.name || 'N/A';
+        }
+    };
 
     if (course) {
         const { subject, school, user } = course;

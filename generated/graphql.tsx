@@ -657,7 +657,7 @@ export type UserMeQuery = (
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
     )>>>, starredResources: Maybe<Array<Maybe<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'points'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
     )>>> }
   )> }
 );
@@ -873,7 +873,7 @@ export type CourseDetailQuery = (
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'points'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
     )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
@@ -1146,7 +1146,7 @@ export type UserDetailQuery = (
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
     )>, createdResources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'points'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
     )> }
   )> }
 );
@@ -1287,6 +1287,7 @@ export const UserMeDocument = gql`
       id
       title
       points
+      date
     }
   }
 }
@@ -1585,6 +1586,7 @@ export const CourseDetailDocument = gql`
       id
       title
       points
+      date
     }
     comments {
       id
@@ -1957,6 +1959,7 @@ export const UserDetailDocument = gql`
       id
       title
       points
+      date
     }
   }
 }
