@@ -45,16 +45,24 @@ query ResourceDetail($id: ID) {
             status
         }
         comments {
-            id
             user {
                 id
                 username
                 avatarThumbnail
             }
+            id
             text
             attachment
             modified
             created
+            modified
+            created
+            points
+            replyCount
+            vote {
+                id
+                status
+            }
             replyComments {
                 id
                 user {
@@ -64,20 +72,11 @@ query ResourceDetail($id: ID) {
                 }
                 text
                 attachment
-            }
-            modified
-            created
-            points
-            vote {
-                id
-                status
-            }
-
-            replyCount
-            points
-            vote {
-                id
-                status
+                points
+                vote {
+                    id
+                    status
+                }
             }
         }
     }

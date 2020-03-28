@@ -1000,16 +1000,19 @@ export type ResourceDetailQuery = (
       & { user: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
-      )>, replyComments: Array<(
-        { __typename?: 'CommentObjectType' }
-        & Pick<CommentObjectType, 'id' | 'text' | 'attachment'>
-        & { user: Maybe<(
-          { __typename?: 'UserObjectType' }
-          & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
-        )> }
       )>, vote: Maybe<(
         { __typename?: 'VoteObjectType' }
         & Pick<VoteObjectType, 'id' | 'status'>
+      )>, replyComments: Array<(
+        { __typename?: 'CommentObjectType' }
+        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'points'>
+        & { user: Maybe<(
+          { __typename?: 'UserObjectType' }
+          & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+        )>, vote: Maybe<(
+          { __typename?: 'VoteObjectType' }
+          & Pick<VoteObjectType, 'id' | 'status'>
+        )> }
       )> }
     )> }
   )> }
@@ -1744,16 +1747,24 @@ export const ResourceDetailDocument = gql`
       status
     }
     comments {
-      id
       user {
         id
         username
         avatarThumbnail
       }
+      id
       text
       attachment
       modified
       created
+      modified
+      created
+      points
+      replyCount
+      vote {
+        id
+        status
+      }
       replyComments {
         id
         user {
@@ -1763,19 +1774,11 @@ export const ResourceDetailDocument = gql`
         }
         text
         attachment
-      }
-      modified
-      created
-      points
-      vote {
-        id
-        status
-      }
-      replyCount
-      points
-      vote {
-        id
-        status
+        points
+        vote {
+          id
+          status
+        }
       }
     }
   }

@@ -140,7 +140,10 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     };
 
     const renderTitle = (
-        <TextLink href={`/users/${R.propOr('', 'id', comment.user)}`}>
+        <TextLink
+            href={`/users/${R.propOr('', 'id', comment.user)}`}
+            onClick={(e: SyntheticEvent): void => e.stopPropagation()}
+        >
             {R.propOr('-', 'username', comment.user)}
         </TextLink>
     );
@@ -257,7 +260,9 @@ const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...
             return attachmentOnly ? 'pointer' : !isThread ? 'pointer' : 'inherit';
         }};
 
-        background-color: ${({ isThread }): string => (isThread ? 'var(--hover-opacity)' : 'inherit')};
+        background-color: ${({ isThread, attachmentOnly }): string => {
+            return !isThread ? 'var(--hover-opacity)' : attachmentOnly ? 'var(--hover-opacity)' : 'inherit';
+        }};
     }
 
     .MuiCardContent-root {

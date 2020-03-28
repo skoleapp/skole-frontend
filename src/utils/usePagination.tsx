@@ -123,9 +123,9 @@ const commonTablePaginationProps = {
 };
 
 interface CommonPaginationProps {
-    titleLeft: string;
+    titleLeft?: string;
     titleLeftDesktop?: string;
-    titleRight: string;
+    titleRight?: string;
     notFoundText: string;
 }
 
@@ -180,7 +180,11 @@ export const usePagination = ({
     };
 
     const renderTableHead = (
-        <CustomTableHead titleLeft={t(titleLeft)} titleLeftDesktop={t(titleLeftDesktop)} titleRight={t(titleRight)} />
+        <CustomTableHead
+            titleLeft={t(titleLeft || '')}
+            titleLeftDesktop={t(titleLeftDesktop || '')}
+            titleRight={t(titleRight || '')}
+        />
     );
 
     const renderNotFound = <NotFound text={t(notFoundText)} />;
@@ -226,7 +230,11 @@ export const useFrontendPagination = <T extends {}>({
     };
 
     const renderTableHead = (
-        <CustomTableHead titleLeft={t(titleLeft)} titleLeftDesktop={t(titleLeftDesktop)} titleRight={t(titleRight)} />
+        <CustomTableHead
+            titleLeft={t(titleLeft || '')}
+            titleLeftDesktop={t(titleLeftDesktop || '')}
+            titleRight={t(titleRight || '')}
+        />
     );
 
     const renderNotFound = <NotFound text={t(notFoundText)} />;

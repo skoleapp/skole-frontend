@@ -55,6 +55,16 @@ export const base = css`
             }
         }
 
+        .border-bottom {
+            border-bottom: var(--border);
+        }
+
+        .main-avatar {
+            height: 8rem;
+            width: 8rem;
+            margin: 1rem;
+        }
+
         .MuiFormControl-root {
             margin-top: 0.75rem;
         }
@@ -93,14 +103,8 @@ export const base = css`
             }
         }
 
-        .border-bottom {
-            border-bottom: var(--border);
-        }
-
-        .main-avatar {
-            height: 8rem;
-            width: 8rem;
-            margin: 1rem;
+        .MuiDrawer-paperAnchorLeft {
+            width: 20rem;
         }
     }
 `;
