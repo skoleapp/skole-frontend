@@ -14,13 +14,11 @@ export const Settings: React.FC = () => {
     const { renderSettingsCardContent } = useSettings({ modal: true });
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const handleOpen = (): AnyAction => dispatch((toggleSettings(true) as unknown) as AnyAction);
     const handleClose = (): AnyAction => dispatch((toggleSettings(false) as unknown) as AnyAction);
     const renderModalHeader = <ModalHeader onCancel={handleClose} title={t('common:settings')} />;
 
     const commonDrawerProps = {
         open: !!settings,
-        onOpen: handleOpen,
         onClose: handleClose,
     };
 

@@ -3,11 +3,11 @@ import {
     Box,
     CardContent,
     CardHeader,
+    Drawer,
     Grid,
     IconButton,
     ListItemText,
     MenuItem,
-    SwipeableDrawer,
     Typography,
 } from '@material-ui/core';
 import {
@@ -166,13 +166,8 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         </StyledList>
     );
 
-    const renderMobileCommentOptions = (
-        <SwipeableDrawer {...mobileDrawerProps}>{renderOptionDrawerContent}</SwipeableDrawer>
-    );
-
-    const renderDesktopCommentOptions = (
-        <SwipeableDrawer {...desktopDrawerProps}>{renderOptionDrawerContent}</SwipeableDrawer>
-    );
+    const renderMobileCommentOptions = <Drawer {...mobileDrawerProps}>{renderOptionDrawerContent}</Drawer>;
+    const renderDesktopCommentOptions = <Drawer {...desktopDrawerProps}>{renderOptionDrawerContent}</Drawer>;
 
     return (
         <StyledCommentCard
