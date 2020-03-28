@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Document, Page } from 'react-pdf';
 import styled from 'styled-components';
 
+import { useTranslation } from '../../i18n';
+
 interface Props {
     file: string;
 }
@@ -14,25 +16,26 @@ interface PDFDocument {
 export const PDFViewer: React.FC<Props> = ({ file }) => {
     const [numPages, setNumPages] = useState<number | null>(null);
     const onDocumentLoadSuccess = ({ numPages }: PDFDocument): void => setNumPages(numPages);
+    const { t } = useTranslation();
 
     const renderLoading = (
         <Box position="absolute" display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
             <CircularProgress color="primary" />
             <Box marginLeft="1rem">
-                <Typography variant="subtitle1">Loading Document...</Typography>
+                <Typography variant="subtitle1">{t('resource:loadingResource')}</Typography>
             </Box>
         </Box>
     );
 
     const renderError = (
         <Box position="absolute" display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
-            <Typography variant="subtitle1">Error rendering document.</Typography>
+            <Typography variant="subtitle1">{t('resource:resourceError')}</Typography>
         </Box>
     );
 
     const renderNoData = (
         <Box position="absolute" display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
-            <Typography variant="subtitle1">No document found.</Typography>
+            <Typography variant="subtitle1">{t('resource:resourceNotFound')}</Typography>
         </Box>
     );
 
