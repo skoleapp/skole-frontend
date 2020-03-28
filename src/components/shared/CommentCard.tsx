@@ -22,23 +22,21 @@ import {
 import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useState } from 'react';
+import React, { SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import {
     CommentObjectType,
     DeleteCommentMutation,
-    PerformVoteMutation,
     useDeleteCommentMutation,
-    usePerformVoteMutation,
     UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleCommentThread, toggleFileViewer, toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
 import { State } from '../../types';
-import { mediaURL, useOptions } from '../../utils';
+import { mediaURL, useOptions, useVotes } from '../../utils';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
 
@@ -49,16 +47,25 @@ interface Props {
     disableBorder?: boolean;
 }
 
-export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread, removeComment, disableBorder }) => {
+export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { user } = useSelector((state: State) => state.auth);
-    const created = moment(initialComment.created).format('LL');
-    const [comment, setComment] = useState(initialComment);
-    const [vote, setVote] = useState(comment.vote);
+    const created = moment(comment.created).format('LL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const confirm = useConfirm();
     const attachmentOnly = comment.text == '' && comment.attachment !== '';
+    const initialVote = R.propOr(null, 'vote', comment) as VoteObjectType | null;
+    const initialPoints = R.propOr(0, 'points', comment) as number;
+    const creatorId = R.propOr('', 'id', comment.user) as string;
+    const isOwner = !!user && user.id === creatorId;
+    const commentId = R.propOr('', 'id', comment) as string;
+
+    const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+        initialVote,
+        initialPoints,
+        isOwner,
+    });
 
     const {
         openOptions,
@@ -78,23 +85,8 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         }
     };
 
-    const performVoteError = (): void => {
-        dispatch(toggleNotification(t('notifications:voteError')));
-    };
-
     const deleteCommentError = (): void => {
         dispatch(toggleNotification(t('notifications:deleteCommentError')));
-    };
-
-    const performVoteCompleted = ({ performVote }: PerformVoteMutation): void => {
-        if (!!performVote) {
-            if (!!performVote.errors) {
-                performVoteError();
-            } else {
-                setVote(performVote.vote as VoteObjectType);
-                setComment({ ...comment, points: performVote.targetPoints });
-            }
-        }
     };
 
     const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
@@ -108,19 +100,14 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         }
     };
 
-    const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({
-        onCompleted: performVoteCompleted,
-        onError: performVoteError,
-    });
-
     const [deleteComment] = useDeleteCommentMutation({
         onCompleted: deleteCommentCompleted,
         onError: deleteCommentError,
     });
 
-    const handleVote = (status: number) => (e: SyntheticEvent): void => {
+    const handleVoteClick = (status: number) => (e: SyntheticEvent): void => {
         e.stopPropagation();
-        performVote({ variables: { comment: comment.id, status } });
+        handleVote({ status: status, course: commentId });
     };
 
     const handleAttachmentClick = (e: SyntheticEvent): void => {
@@ -192,21 +179,13 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                         )}
                     </Grid>
                     <Grid item container xs={1} direction="column" justify="center" alignItems="center">
-                        <IconButton
-                            onClick={handleVote(1)}
-                            color={!!vote && vote.status === 1 ? 'primary' : 'inherit'}
-                            disabled={voteSubmitting}
-                        >
+                        <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                             <KeyboardArrowUpOutlined className="vote-button" />
                         </IconButton>
                         <Box>
-                            <Typography variant="body2">{comment.points}</Typography>
+                            <Typography variant="body2">{points}</Typography>
                         </Box>
-                        <IconButton
-                            onClick={handleVote(-1)}
-                            color={!!vote && vote.status === -1 ? 'primary' : 'inherit'}
-                            disabled={voteSubmitting}
-                        >
+                        <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                             <KeyboardArrowDownOutlined className="vote-button" />
                         </IconButton>
                     </Grid>

@@ -60,6 +60,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const confirm = useConfirm();
+    const { user } = useSelector((state: State) => state.auth);
 
     const {
         renderShareOption,
@@ -87,7 +88,13 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const initialVote = R.propOr(null, 'vote', resource) as VoteObjectType | null;
         const initialPoints = R.propOr(0, 'points', resource) as number;
         const starred = !!resource.starred;
-        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({ initialVote, initialPoints });
+        const isOwner = !!user && user.id === creatorId;
+
+        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+            initialVote,
+            initialPoints,
+            isOwner,
+        });
 
         const discussionBoxProps = {
             comments,
