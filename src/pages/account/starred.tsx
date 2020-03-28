@@ -106,6 +106,7 @@ const StarredPage: I18nPage = () => {
                 title={t('starred:title')}
                 renderCardContent={renderCardContent}
                 backUrl
+                fullSize
             />
         );
     } else {
