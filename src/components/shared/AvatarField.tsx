@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, FormControl } from '@material-ui/core';
-import { ClearOutlined, CreateOutlined } from '@material-ui/icons';
+import { ClearOutlined, EditOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
@@ -48,7 +48,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
                             variant="outlined"
                             color="primary"
                             component="span"
-                            endIcon={<CreateOutlined />}
+                            endIcon={<EditOutlined />}
                             fullWidth
                         >
                             {t('edit-profile:changeAvatar')}

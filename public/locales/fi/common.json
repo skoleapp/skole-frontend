@@ -1,7 +1,7 @@
 {
     "login": "Kirjaudu sisään",
     "register": "Rekisteröidy",
-    "signOut": "Kirjaudu ulos",
+    "logout": "Kirjaudu ulos",
     "username": "Käyttäjätunnus",
     "email": "Sähköposti",
     "title": "Otsikko",

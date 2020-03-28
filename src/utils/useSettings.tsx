@@ -1,4 +1,5 @@
 import { Button, Divider, ListItem, ListSubheader, MenuItem } from '@material-ui/core';
+import { ExitToAppOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
@@ -39,7 +40,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         Router.push(href);
     };
 
-    const handleSignOutClick = (): void => {
+    const handleLogoutClick = (): void => {
         !!modal && handleClose();
         dispatch((deAuthenticate(apolloClient) as unknown) as void);
     };
@@ -105,10 +106,16 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         </ListItem>
     );
 
-    const renderSignOutButton = (
+    const renderLogoutButton = (
         <ListItem>
-            <Button fullWidth variant="outlined" color="primary" onClick={handleSignOutClick}>
-                {t('common:signOut')}
+            <Button
+                fullWidth
+                variant="outlined"
+                color="primary"
+                onClick={handleLogoutClick}
+                endIcon={<ExitToAppOutlined />}
+            >
+                {t('common:logout')}
             </Button>
         </ListItem>
     );
@@ -117,7 +124,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         <>
             {authenticated ? renderAuthenticatedMenuList : renderCommonMenuItems}
             <Divider />
-            {authenticated ? renderSignOutButton : renderLoginButton}
+            {authenticated ? renderLogoutButton : renderLoginButton}
         </>
     );
 

@@ -1,4 +1,5 @@
 import { Box, Divider } from '@material-ui/core';
+import { AddCircleOutlineOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
@@ -95,7 +96,13 @@ const LoginPage: I18nPage = () => {
                     <Box marginY="1rem">
                         <Divider />
                     </Box>
-                    <ButtonLink href="/register" variant="outlined" color="primary" fullWidth>
+                    <ButtonLink
+                        href="/register"
+                        variant="outlined"
+                        color="primary"
+                        endIcon={<AddCircleOutlineOutlined />}
+                        fullWidth
+                    >
                         {t('login:createAccount')}
                     </ButtonLink>
                     <Box marginTop="1rem">
