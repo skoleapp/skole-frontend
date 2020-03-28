@@ -1,5 +1,6 @@
 {
     "title": "Muokkaa profiilia",
     "heading": "Muokkaa profiilia",
-    "changeAvatarButton": "Muokkaa avataria"
+    "changeAvatar": "Muokkaa avataria",
+    "clearAvatar": "Poista avatar"
 }
