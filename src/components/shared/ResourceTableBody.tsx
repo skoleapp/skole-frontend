@@ -15,9 +15,9 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => (
             <Link href={`/resources/${r.id}`} key={i}>
                 <TableRow>
                     <TableCell>
-                        {console.log(r)}
-                        <Typography variant="subtitle1">
-                            {R.propOr('-', 'title', r)} - {R.propOr('-', 'date', r)}
+                        <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
+                        <Typography className="cell-help-text" variant="subtitle1" color="textSecondary">
+                            {R.propOr('-', 'date', r)}
                         </Typography>
                     </TableCell>
                     <TableCell align="right">

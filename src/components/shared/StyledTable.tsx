@@ -30,6 +30,10 @@ export const StyledTable = styled(({ disableBoxShadow, ...other }) => <Paper {..
 
                     .MuiTableCell-root {
                         cursor: pointer;
+
+                        .cell-help-text {
+                            font-size: 0.75rem;
+                        }
                     }
 
                     td {
