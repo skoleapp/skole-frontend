@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   frontend:
@@ -6,5 +6,3 @@ services:
     build: .
     volumes:
       - .:/app
-      - /app/node_modules
-      - /app/.next
