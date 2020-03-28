@@ -8,10 +8,7 @@ import {
     ListItemText,
     MenuItem,
     Table,
-    TableBody,
-    TableCell,
     TableContainer,
-    TableRow,
     Typography,
 } from '@material-ui/core';
 import {
@@ -44,6 +41,7 @@ import { toggleNotification } from '../../actions';
 import {
     DiscussionBox,
     NotFound,
+    ResourceTableBody,
     StarButton,
     StyledBottomNavigation,
     StyledList,
@@ -228,20 +226,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 <TableContainer>
                     <Table>
                         {renderTableHead}
-                        <TableBody>
-                            {paginatedItems.map((r: ResourceObjectType, i: number) => (
-                                <Link href={`/resources/${r.id}`} key={i}>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Typography variant="subtitle1">{R.propOr('-', 'points', r)}</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </Link>
-                            ))}
-                        </TableBody>
+                        <ResourceTableBody resources={paginatedItems} />
                     </Table>
                 </TableContainer>
                 {renderTablePagination}

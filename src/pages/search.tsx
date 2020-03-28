@@ -1,7 +1,6 @@
-import { MenuItem, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@material-ui/core';
+import { MenuItem, Table, TableContainer } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -22,12 +21,12 @@ import {
     SubjectObjectType,
     SubjectsDocument,
 } from '../../generated/graphql';
-import { AutoCompleteField, FilterLayout, FormSubmitSection, SelectField } from '../components';
+import { AutoCompleteField, CourseTableBody, FilterLayout, FormSubmitSection, SelectField } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { getFullCourseName, useFilters, usePrivatePage } from '../utils';
+import { useFilters, usePrivatePage } from '../utils';
 import { usePagination } from '../utils/usePagination';
 
 interface FilterSearchResultsFormValues {
@@ -191,20 +190,7 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
             <TableContainer>
                 <Table stickyHeader>
                     {renderTableHead}
-                    <TableBody>
-                        {courseObjects.map((c: CourseObjectType, i: number) => (
-                            <Link href={`/courses/${c.id}`} key={i}>
-                                <TableRow>
-                                    <TableCell>
-                                        <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Typography variant="subtitle1">{R.propOr('-', 'points', c)}</Typography>
-                                    </TableCell>
-                                </TableRow>
-                            </Link>
-                        ))}
-                    </TableBody>
+                    <CourseTableBody courses={courseObjects} />
                 </Table>
             </TableContainer>
             {renderTablePagination}

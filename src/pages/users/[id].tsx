@@ -8,15 +8,11 @@ import {
     ListItemText,
     Tab,
     Table,
-    TableBody,
-    TableCell,
     TableContainer,
-    TableRow,
     Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import moment from 'moment';
-import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -26,8 +22,10 @@ import styled from 'styled-components';
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
 import {
     ButtonLink,
+    CourseTableBody,
     MainLayout,
     NotFound,
+    ResourceTableBody,
     SettingsButton,
     StyledCard,
     StyledList,
@@ -38,7 +36,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { getFullCourseName, useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
+import { useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
 import { mediaURL } from '../../utils';
 
 interface Props extends I18nProps {
@@ -54,7 +52,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const email = R.propOr('-', 'email', user) as string;
         const title = R.prop('title', user) as string;
         const avatar = R.prop('avatar', user) as string;
-        const bio = R.propOr('-', 'bio', user) as string;
+        const bio = user.bio || '-';
         const points = R.propOr('-', 'points', user);
         const courseCount = R.propOr('-', 'courseCount', user);
         const resourceCount = R.propOr('-', 'resourceCount', user);
@@ -173,14 +171,14 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                             <Typography variant="body2">{email}</Typography>
                         </>
                     )}
-                    {!!user.bio && (
-                        <Box marginTop="0.5rem">
-                            <Typography className="section-help-text" variant="body2" color="textSecondary">
-                                {t('common:bio')}
-                            </Typography>
-                            <Typography variant="body2">{bio}</Typography>
-                        </Box>
-                    )}
+                    <Box marginTop="0.5rem">
+                        <Typography className="section-help-text" variant="body2" color="textSecondary">
+                            {t('common:bio')}
+                        </Typography>
+                        <Typography id="bio" variant="body2">
+                            {bio}
+                        </Typography>
+                    </Box>
                     <Box marginTop="0.5rem">
                         <Typography className="section-help-text" variant="body2" color="textSecondary">
                             {t('common:joined')} {joined}
@@ -195,20 +193,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <TableContainer>
                     <Table stickyHeader>
                         {renderCoursesTableHead}
-                        <TableBody>
-                            {paginatedCourses.map((c: CourseObjectType, i: number) => (
-                                <Link href={`/courses/${c.id}`} key={i}>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Typography variant="subtitle1">{R.propOr('-', 'points', c)}</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </Link>
-                            ))}
-                        </TableBody>
+                        <CourseTableBody courses={paginatedCourses} />
                     </Table>
                 </TableContainer>
                 {renderCreatedCoursesTablePagination}
@@ -222,20 +207,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 <TableContainer>
                     <Table>
                         {renderResourcesTableHead}
-                        <TableBody>
-                            {paginatedResources.map((r: ResourceObjectType, i: number) => (
-                                <Link href={`/resources/${r.id}`} key={i}>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Typography variant="subtitle1">{R.propOr('-', 'points', r)}</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </Link>
-                            ))}
-                        </TableBody>
+                        <ResourceTableBody resources={paginatedResources} />
                     </Table>
                 </TableContainer>
                 {renderCreatedResourcesTablePagination}
@@ -285,6 +257,11 @@ const UserPage: I18nPage<Props> = ({ user }) => {
 const StyledUserPage = styled(MainLayout)`
     .section-help-text {
         font-size: 0.75rem;
+    }
+
+    #bio {
+        overflow: hidden;
+        word-break: break-word;
     }
 `;
 

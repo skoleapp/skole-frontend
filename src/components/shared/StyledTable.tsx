@@ -30,13 +30,28 @@ export const StyledTable = styled(({ disableBoxShadow, ...other }) => <Paper {..
 
                     .MuiTableCell-root {
                         cursor: pointer;
+
+                        .MuiTypography-root {
+                            overflow: hidden;
+                            max-width: 10rem;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+
+                            @media only screen and (min-width: ${breakpoints.SM}) {
+                                max-width: 20rem;
+                            }
+
+                            @media only screen and (min-width: ${breakpoints.MD}) {
+                                max-width: 30rem;
+                            }
+                        }
                     }
 
                     td {
-                        padding: 0.75rem;
+                        padding: 0.5rem;
 
                         .MuiTypography-subtitle1 {
-                            font-size: 0.85rem;
+                            font-size: 0.75rem;
                         }
                     }
                 }

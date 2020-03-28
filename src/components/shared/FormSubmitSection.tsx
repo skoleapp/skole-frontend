@@ -18,7 +18,7 @@ export const FormSubmitSection: React.FC<FormSubmitSectionProps & ButtonProps> =
 }) => (
     <Box display="flex" flexDirection="column" alignItems="center">
         {isSubmitting ? (
-            <Box>
+            <Box marginTop="0.5rem" display="flex" justifyContent="center">
                 <CircularProgress color="primary" />
             </Box>
         ) : (

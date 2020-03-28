@@ -1,17 +1,23 @@
-import { Box, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@material-ui/core';
-import Link from 'next/link';
+import { Box, Tab, Table, TableContainer } from '@material-ui/core';
 import * as R from 'ramda';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { compose } from 'redux';
 
 import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
-import { NotFound, SettingsLayout, StyledTable, StyledTabs } from '../../components';
+import {
+    CourseTableBody,
+    NotFound,
+    ResourceTableBody,
+    SettingsLayout,
+    StyledTable,
+    StyledTabs,
+} from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { getFullCourseName, useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
+import { useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
 
 const StarredPage: I18nPage = () => {
     const { t } = useTranslation();
@@ -52,20 +58,7 @@ const StarredPage: I18nPage = () => {
                 <TableContainer>
                     <Table stickyHeader>
                         {renderCoursesTableHead}
-                        <TableBody>
-                            {paginatedCourses.map((c: CourseObjectType, i: number) => (
-                                <Link href={`/courses/${c.id}`} key={i}>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Typography variant="subtitle1">{R.propOr('-', 'points', c)}</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </Link>
-                            ))}
-                        </TableBody>
+                        <CourseTableBody courses={paginatedCourses} />
                     </Table>
                 </TableContainer>
                 {renderStarredCoursesTablePagination}
@@ -79,20 +72,7 @@ const StarredPage: I18nPage = () => {
                 <TableContainer>
                     <Table>
                         {renderResourcesTableHead}
-                        <TableBody>
-                            {paginatedResources.map((r: ResourceObjectType, i: number) => (
-                                <Link href={`/resources/${r.id}`} key={i}>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Typography variant="subtitle1">{R.propOr('-', 'points', r)}</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </Link>
-                            ))}
-                        </TableBody>
+                        <ResourceTableBody resources={paginatedResources} />
                     </Table>
                 </TableContainer>
                 {renderStarredResourcesTablePagination}

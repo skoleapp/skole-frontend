@@ -108,7 +108,8 @@ const LoginPage: I18nPage = () => {
 
     return (
         <FormLayout
-            title={t('common:login')}
+            title={t('login:title')}
+            heading={t('login:heading')}
             headerRight={renderLanguageButton}
             renderCardContent={renderCardContent}
             renderAlert={!!query.next ? renderAlert('warning', t('alerts:loginRequired')) : undefined}

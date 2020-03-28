@@ -7,7 +7,6 @@ import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
-import styled from 'styled-components';
 import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation } from '../../generated/graphql';
@@ -121,7 +120,7 @@ const RegisterPage: I18nPage = () => {
                         variant="outlined"
                         fullWidth
                     />
-                    <StyledField
+                    <Field
                         placeholder={t('forms:betaCode')}
                         label={t('forms:betaCode')}
                         name="code"
@@ -155,18 +154,13 @@ const RegisterPage: I18nPage = () => {
     return (
         <FormLayout
             title={t('register:title')}
+            heading={t('register:heading')}
             headerRight={renderLanguageButton}
             renderCardContent={renderCardContent}
             disableBottomNavbar
         />
     );
 };
-
-const StyledField = styled(Field)`
-    .MuiInputBase-root.Mui-disabled {
-        color: green;
-    }
-`;
 
 RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePublicPage(ctx);

@@ -22,3 +22,5 @@ export { StyledList } from './StyledList';
 export { StyledTabs } from './StyledTabs';
 export { StyledBottomNavigation } from './StyledBottomNavigation';
 export { StarButton } from './StarButton';
+export { CourseTableBody } from './CourseTableBody';
+export { ResourceTableBody } from './ResourceTableBody';

@@ -153,7 +153,14 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         </Formik>
     );
 
-    return <FormLayout title={t('upload-resource:title')} backUrl renderCardContent={renderCardContent} />;
+    return (
+        <FormLayout
+            title={t('upload-resource:title')}
+            heading={t('upload-resource:heading')}
+            backUrl
+            renderCardContent={renderCardContent}
+        />
+    );
 };
 
 UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
