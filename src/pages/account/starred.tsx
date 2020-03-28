@@ -37,7 +37,7 @@ const StarredPage: I18nPage = () => {
         } = useFrontendPagination({
             ...commonPaginationProps,
             items: starredCourses,
-            notFoundText: 'my-stars:noCourses',
+            notFoundText: 'starred:noCourses',
             titleLeft: 'common:name',
         });
 
@@ -49,7 +49,7 @@ const StarredPage: I18nPage = () => {
         } = useFrontendPagination({
             ...commonPaginationProps,
             items: starredResources,
-            notFoundText: 'my-stars:noResources',
+            notFoundText: 'starred:noResources',
             titleLeft: 'common:title',
         });
 
