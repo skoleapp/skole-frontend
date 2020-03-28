@@ -81,8 +81,8 @@ const ContactPage: I18nPage = () => {
                     <Field
                         name="subject"
                         component={TextField}
-                        label={t('forms:subject')}
-                        placeholder={t('forms:subject')}
+                        label={t('forms:messageSubject')}
+                        placeholder={t('forms:messageSubject')}
                         variant="outlined"
                         fullWidth
                     />

@@ -13,6 +13,7 @@
     "courseCode": "Kurssikoodi",
     "school": "Koulu",
     "subject": "Oppiaine",
+    "messageSubject": "Aihe",
     "schoolType": "Koulutyyppi",
     "country": "Maa",
     "city": "Kaupunki",

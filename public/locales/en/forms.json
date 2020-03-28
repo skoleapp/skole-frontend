@@ -13,6 +13,7 @@
     "courseCode": "Course Code",
     "school": "School",
     "subject": "Subject",
+    "messageSubject": "Subject",
     "schoolType": "School Type",
     "country": "Country",
     "city": "City",
