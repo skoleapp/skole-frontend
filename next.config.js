@@ -10,7 +10,7 @@ module.exports = withOffline(
     withAssetsImport(
         withCSS({
             workboxOpts: {
-                swDest: process.env.NEXT_EXPORT ? 'service-worker.js' : 'static/service-worker.js',
+                swDest: 'static/service-worker.js',
                 runtimeCaching: [
                     {
                         urlPattern: /^https?.*/,
