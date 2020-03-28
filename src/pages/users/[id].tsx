@@ -94,7 +94,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     <CardContent>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Avatar className="main-avatar" src={mediaURL(avatar)} />
-                            <Box marginY="0.5rem">
+                            <Box marginY="0.5rem" className="md-up">
                                 <Typography variant="h2">{username}</Typography>
                             </Box>
                             {!!title && (
