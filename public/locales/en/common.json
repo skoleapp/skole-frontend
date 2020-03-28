@@ -58,9 +58,10 @@
     "dropzoneText": "Drop files here or click to upload.",
     "share": "Share",
     "noComments": "No comments to be shown...",
-    "options": "Actions",
+    "actions": "Actions",
     "maxFileSize": "Maximum file size",
     "resultsPerPage": "Results Per Page",
     "clickToView": "Click to view!",
-    "starred": "Starred"
+    "starred": "Starred",
+    "settings": "Settings"
 }

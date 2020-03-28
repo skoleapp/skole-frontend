@@ -1,4 +1,4 @@
-import { Box, CardContent, CardHeader, Divider, Grid, IconButton, SwipeableDrawer } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton } from '@material-ui/core';
 import { FilterListOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
@@ -32,12 +32,12 @@ export const FilterLayout = <T extends {}>({
     const renderMobileContent = (
         <Box className="md-down" flexGrow="1" display="flex">
             <StyledTable>{renderTableContent}</StyledTable>
-            <SwipeableDrawer anchor="bottom" open={open} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+            <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>
                 <StyledCard scrollable>
                     <ModalHeader onCancel={toggleDrawer(false)} title={t('common:advancedSearch')} />
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
-            </SwipeableDrawer>
+            </Drawer>
         </Box>
     );
 

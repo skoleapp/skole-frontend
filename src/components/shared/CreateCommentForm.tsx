@@ -81,6 +81,7 @@ export const CreateCommentForm: React.FC<Props> = ({
         }
 
         setSubmitting(false);
+        setAttachment(null);
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -161,8 +162,8 @@ export const CreateCommentForm: React.FC<Props> = ({
                     <StyledAttachmentImage>
                         {!!attachment && <Image src={attachment as string} />}
                     </StyledAttachmentImage>
-                    <Box display="flex">
-                        <Box className="md-down" marginRight="0.5rem">
+                    <Box display="flex" className="md-down">
+                        <Box>
                             <input
                                 value=""
                                 id={`camera-attachment-${formKey}`}
@@ -177,23 +178,8 @@ export const CreateCommentForm: React.FC<Props> = ({
                                 </Fab>
                             </label>
                         </Box>
-                        <Box>
-                            <input
-                                value=""
-                                id={`attachment-${formKey}`}
-                                accept=".png, .jpg, .jpeg"
-                                type="file"
-                                capture="camera"
-                                onChange={handleAttachmentChange}
-                            />
-                            <label htmlFor={`attachment-${formKey}`}>
-                                <Fab component="span" size="small">
-                                    <AttachFileOutlined />
-                                </Fab>
-                            </label>
-                        </Box>
                         {!!attachment && (
-                            <Box className="md-down" marginLeft="0.5rem">
+                            <Box marginLeft="0.5rem">
                                 <Fab onClick={handleClearAttachment} size="small">
                                     <ClearOutlined />
                                 </Fab>

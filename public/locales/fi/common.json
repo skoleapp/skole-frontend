@@ -3,6 +3,7 @@
     "register": "Rekisteröidy",
     "signOut": "Kirjaudu ulos",
     "username": "Käyttäjätunnus",
+    "email": "Sähköposti",
     "title": "Otsikko",
     "joined": "Liittynyt",
     "createdBy": "Luonut",
@@ -61,5 +62,6 @@
     "maxFileSize": "Maksimi tiedostokoko",
     "resultsPerPage": "Tuloksia per sivu",
     "clickToView": "Klikkaa avataksesi!",
-    "starred": "Tähdellä merkityt"
+    "starred": "Tähdellä merkityt",
+    "settings": "Asetukset"
 }

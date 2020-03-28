@@ -1,4 +1,4 @@
-import { MenuItem, SwipeableDrawer } from '@material-ui/core';
+import { Drawer, MenuItem } from '@material-ui/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -30,26 +30,27 @@ export const LanguageSelector: React.FC = () => {
         </StyledList>
     );
 
-    const handleOpen = (): void => {
-        dispatch(toggleLanguageSelector(true));
-    };
-
     const handleClose = (): void => {
         dispatch(toggleLanguageSelector(false));
     };
 
+    const commonDrawerProps = {
+        open: !!open,
+        onClose: handleClose,
+    };
+
     const renderMobileLanguageDrawer = (
-        <SwipeableDrawer className="md-down" anchor="bottom" open={!!open} onOpen={handleOpen} onClose={handleClose}>
+        <Drawer className="md-down" anchor="bottom" {...commonDrawerProps}>
             <ModalHeader title={title} onCancel={handleClose} />
             {renderLanguageList}
-        </SwipeableDrawer>
+        </Drawer>
     );
 
     const renderDesktopLanguageDrawer = (
-        <SwipeableDrawer className="md-up" anchor="left" open={!!open} onOpen={handleOpen} onClose={handleClose}>
+        <Drawer className="md-up" anchor="left" {...commonDrawerProps}>
             <ModalHeader title={title} onCancel={handleClose} />
             {renderLanguageList}
-        </SwipeableDrawer>
+        </Drawer>
     );
 
     return (

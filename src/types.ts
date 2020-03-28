@@ -61,7 +61,6 @@ interface OptionProps {
     className: string;
     anchor: Anchor;
     open: boolean;
-    onOpen: () => void;
     onClose: () => void;
 }
 

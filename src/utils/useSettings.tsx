@@ -30,17 +30,26 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     const { pathname } = useRouter();
     const { renderCurrentFlag, openLanguageMenu } = useLanguageSelector();
 
+    const handleClose = (): void => {
+        dispatch(toggleSettings(false));
+    };
+
     const handleMenuItemClick = (href: string) => (): void => {
-        !!modal && dispatch(toggleSettings(false));
+        !!modal && handleClose();
         Router.push(href);
     };
 
     const handleSignOutClick = (): void => {
-        !!modal && dispatch(toggleSettings(false));
+        !!modal && handleClose();
         dispatch((deAuthenticate(apolloClient) as unknown) as void);
     };
 
     const getSelected = (m: { [key: string]: string }): boolean => !modal && m.href === pathname;
+
+    const handleLanguageClick = (): void => {
+        handleClose();
+        openLanguageMenu();
+    };
 
     const renderAccountMenuItems = menuItems.account.map((m, i) => (
         <MenuItem key={i} onClick={handleMenuItemClick(m.href)} selected={getSelected(m)}>
@@ -61,7 +70,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     ));
 
     const renderLanguageMenuItem = (
-        <MenuItem onClick={openLanguageMenu}>
+        <MenuItem onClick={handleLanguageClick}>
             {t('common:language')} {renderCurrentFlag}
         </MenuItem>
     );

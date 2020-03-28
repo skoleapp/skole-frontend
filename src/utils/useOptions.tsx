@@ -42,7 +42,6 @@ export const useOptions = (): UseOptions => {
 
     const commonDrawerProps = {
         open: optionsOpen,
-        onOpen: openOptions,
         onClose: closeOptions,
     };
 

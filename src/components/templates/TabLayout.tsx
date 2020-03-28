@@ -1,4 +1,4 @@
-import { Box, CardHeader, Divider, Grid, IconButton, Paper, SwipeableDrawer, Tab, Typography } from '@material-ui/core';
+import { Box, CardHeader, Divider, Drawer, Grid, IconButton, Paper, Tab, Typography } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -138,50 +138,43 @@ export const TabLayout: React.FC<Props> = ({
         </Grid>
     );
 
+    const commonInfoDrawerProps = {
+        open: !!infoOpen,
+        onClose: handleCloseInfo,
+    };
+
     const renderMobileInfoDrawer = (
-        <SwipeableDrawer
-            className="md-down"
-            anchor="bottom"
-            open={!!infoOpen}
-            onOpen={handleOpenInfo}
-            onClose={handleCloseInfo}
-        >
+        <Drawer className="md-down" anchor="bottom" {...commonInfoDrawerProps}>
             <Paper>
                 <ModalHeader title={title} onCancel={handleCloseInfo} />
                 {renderCreatedInfo}
                 <Divider />
                 {renderInfo}
             </Paper>
-        </SwipeableDrawer>
+        </Drawer>
     );
 
     const renderDesktopInfoDrawer = (
-        <SwipeableDrawer
-            className="md-up"
-            anchor="left"
-            open={!!infoOpen}
-            onOpen={handleOpenInfo}
-            onClose={handleCloseInfo}
-        >
+        <Drawer className="md-up" anchor="left" {...commonInfoDrawerProps}>
             <ModalHeader title={title} onCancel={handleCloseInfo} />
             {renderCreatedInfo}
             <Divider />
             {renderInfo}
-        </SwipeableDrawer>
+        </Drawer>
     );
 
     const renderMobileOptionsDrawer = (
-        <SwipeableDrawer {...mobileDrawerProps}>
+        <Drawer {...mobileDrawerProps}>
             {renderOptionsHeader}
             {renderOptions}
-        </SwipeableDrawer>
+        </Drawer>
     );
 
     const renderDesktopOptionsDrawer = (
-        <SwipeableDrawer {...desktopDrawerProps}>
+        <Drawer {...desktopDrawerProps}>
             {renderOptionsHeader}
             {renderOptions}
-        </SwipeableDrawer>
+        </Drawer>
     );
 
     return (
