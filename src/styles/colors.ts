@@ -5,5 +5,5 @@ export const colors = {
     danger: '#f44336',
     white: '#ffffff',
     black: '#000000',
-    grey: '#adadad',
+    gray: '#dbdbdb',
 };

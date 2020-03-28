@@ -3,23 +3,21 @@ import {
     Box,
     CardContent,
     CardHeader,
-    Dialog,
     Grid,
     IconButton,
-    List,
-    ListItem,
     ListItemText,
+    MenuItem,
+    SwipeableDrawer,
     Typography,
 } from '@material-ui/core';
 import {
     AttachFileOutlined,
+    CameraAltOutlined,
     CommentOutlined,
     DeleteOutline,
-    FlagOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
     MoreHorizOutlined,
-    ShareOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
@@ -40,7 +38,8 @@ import {
 import { toggleCommentThread, toggleFileViewer, toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
 import { State } from '../../types';
-import { mediaURL } from '../../utils';
+import { mediaURL, useOptions } from '../../utils';
+import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
 
 interface Props {
@@ -58,16 +57,25 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
     const [comment, setComment] = useState(initialComment);
     const [vote, setVote] = useState(comment.vote);
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
-    const [commentOptionsOpen, setCommentOptionsOpen] = useState(false);
     const confirm = useConfirm();
+    const attachmentOnly = comment.text == '' && comment.attachment !== '';
 
-    const handleCloseCommentOptions = (e: SyntheticEvent): void => {
-        e.stopPropagation();
-        setCommentOptionsOpen(false);
-    };
+    const {
+        openOptions,
+        closeOptions,
+        renderShareOption,
+        renderReportOption,
+        mobileDrawerProps,
+        desktopDrawerProps,
+        renderOptionsHeader,
+    } = useOptions();
 
     const handleClick = (): void => {
-        !isThread && dispatch(toggleCommentThread(comment));
+        if (isThread) {
+            attachmentOnly && dispatch(toggleFileViewer(comment.attachment));
+        } else {
+            dispatch(toggleCommentThread(comment));
+        }
     };
 
     const performVoteError = (): void => {
@@ -120,64 +128,73 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
         dispatch(toggleFileViewer(comment.attachment));
     };
 
-    const handleMoreClick = (e: SyntheticEvent): void => {
-        e.stopPropagation();
-        setCommentOptionsOpen(true);
-    };
-
     const handleDeleteComment = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        setCommentOptionsOpen(false);
-
+        closeOptions();
         confirm({ title: t('common:deleteCommentTitle') }).then(() => deleteComment({ variables: { id: comment.id } }));
     };
 
-    const handleStopPropagation = (e: SyntheticEvent): void => e.stopPropagation();
-
-    const handleShare = (e: SyntheticEvent): void => {
+    const handleMoreClick = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        setCommentOptionsOpen(false);
-        navigator.clipboard.writeText(window.location.href);
-        dispatch(toggleNotification(t('notifications:linkCopied')));
+        openOptions();
     };
 
     const renderTitle = (
-        <TextLink href={`/users/${R.propOr('', 'id', comment.user)}`}>
+        <TextLink
+            href={`/users/${R.propOr('', 'id', comment.user)}`}
+            onClick={(e: SyntheticEvent): void => e.stopPropagation()}
+        >
             {R.propOr('-', 'username', comment.user)}
         </TextLink>
     );
 
-    const renderCommentOptions = (
-        <Dialog open={commentOptionsOpen} onClose={handleCloseCommentOptions}>
-            <List>
-                {R.prop('id', comment.user as UserObjectType) === R.prop('id', user as UserObjectType) && (
-                    <ListItem>
-                        <ListItemText onClick={handleDeleteComment}>
-                            <DeleteOutline /> {t('common:deleteComment')}
-                        </ListItemText>
-                    </ListItem>
-                )}
-                <ListItem>
-                    <ListItemText onClick={handleShare}>
-                        <ShareOutlined /> {t('common:share')}
-                    </ListItemText>
-                </ListItem>
-                <ListItem disabled>
-                    <ListItemText onClick={handleStopPropagation}>
-                        <FlagOutlined /> {t('common:reportAbuse')}
-                    </ListItemText>
-                </ListItem>
-            </List>
-        </Dialog>
+    const renderDeleteCommentOption = R.prop('id', comment.user as UserObjectType) ===
+        R.prop('id', user as UserObjectType) && (
+        <MenuItem>
+            <ListItemText onClick={handleDeleteComment}>
+                <DeleteOutline /> {t('common:deleteComment')}
+            </ListItemText>
+        </MenuItem>
+    );
+
+    const renderOptionDrawerContent = (
+        <StyledList>
+            {renderOptionsHeader}
+            {renderShareOption}
+            {renderReportOption}
+            {renderDeleteCommentOption}
+        </StyledList>
+    );
+
+    const renderMobileCommentOptions = (
+        <SwipeableDrawer {...mobileDrawerProps}>{renderOptionDrawerContent}</SwipeableDrawer>
+    );
+
+    const renderDesktopCommentOptions = (
+        <SwipeableDrawer {...desktopDrawerProps}>{renderOptionDrawerContent}</SwipeableDrawer>
     );
 
     return (
-        <StyledCommentCard isThread={!!isThread} onClick={handleClick} disableBorder={disableBorder}>
+        <StyledCommentCard
+            isThread={isThread}
+            onClick={handleClick}
+            disableBorder={disableBorder}
+            attachmentOnly={attachmentOnly}
+        >
             <CardHeader avatar={<Avatar src={mediaURL(avatarThumb)} />} title={renderTitle} subheader={created} />
             <CardContent>
                 <Grid container justify="space-between" alignItems="center">
-                    <Grid item container xs={11} justify="flex-start">
-                        <Typography variant="body2">{comment.text}</Typography>
+                    <Grid id="content" item container xs={11} justify="flex-start">
+                        {attachmentOnly ? (
+                            <Box display="flex">
+                                <CameraAltOutlined />
+                                <Box marginLeft="0.5rem">
+                                    <Typography variant="body2">{t('common:clickToView')}</Typography>
+                                </Box>
+                            </Box>
+                        ) : (
+                            <Typography variant="body2">{comment.text}</Typography>
+                        )}
                     </Grid>
                     <Grid item container xs={1} direction="column" justify="center" alignItems="center">
                         <IconButton
@@ -210,7 +227,7 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                                     </Box>
                                 </>
                             )}
-                            {!!comment.attachment && (
+                            {!!comment.attachment && !attachmentOnly && (
                                 <Box marginLeft="0.25rem">
                                     <IconButton onClick={handleAttachmentClick}>
                                         <AttachFileOutlined />
@@ -227,23 +244,38 @@ export const CommentCard: React.FC<Props> = ({ comment: initialComment, isThread
                     <Grid item xs={4} />
                 </Grid>
             </CardContent>
-            {renderCommentOptions}
+            {renderMobileCommentOptions}
+            {renderDesktopCommentOptions}
         </StyledCommentCard>
     );
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledCommentCard = styled(({ isThread, disableBorder, ...other }) => <Box {...other} />)`
+const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...other }) => <Box {...other} />)`
     border-bottom: ${({ disableBorder }): string => (!disableBorder ? 'var(--border)' : 'none')};
 
     // Disable hover background color and cursor mode when on message thread.
     &:hover {
-        cursor: ${({ isThread }): string => (!isThread ? 'pointer' : 'inherit')};
-        background-color: ${({ isThread }): string => (!isThread ? 'var(--hover-opacity)' : 'inherit')};
+        cursor: ${({ isThread, attachmentOnly }): string => {
+            return attachmentOnly ? 'pointer' : !isThread ? 'pointer' : 'inherit';
+        }};
+
+        background-color: ${({ isThread, attachmentOnly }): string => {
+            return !isThread ? 'var(--hover-opacity)' : attachmentOnly ? 'var(--hover-opacity)' : 'inherit';
+        }};
     }
 
     .MuiCardContent-root {
         padding: 0.5rem !important;
+
+        #content {
+            padding: 0.5rem;
+
+            .MuiTypography-root {
+                overflow: hidden;
+                word-break: break-word;
+            }
+        }
     }
 
     .MuiAvatar-root {

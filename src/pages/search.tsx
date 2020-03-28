@@ -1,4 +1,4 @@
-import { CardContent, Table, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import { MenuItem, Table, TableContainer } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
@@ -12,6 +12,7 @@ import {
     CountriesDocument,
     CountryObjectType,
     CourseObjectType,
+    PaginatedCourseObjectType,
     SchoolObjectType,
     SchoolsDocument,
     SchoolTypeObjectType,
@@ -20,12 +21,13 @@ import {
     SubjectObjectType,
     SubjectsDocument,
 } from '../../generated/graphql';
-import { AutoCompleteField, FilterLayout, FormSubmitSection } from '../components';
+import { AutoCompleteField, CourseTableBody, FilterLayout, FormSubmitSection, SelectField } from '../components';
 import { useTranslation } from '../i18n';
-import { includeDefaultNamespaces, Router } from '../i18n';
+import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { getFullCourseName, useFilters, usePrivatePage } from '../utils';
+import { useFilters, usePrivatePage } from '../utils';
+import { usePagination } from '../utils/usePagination';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
@@ -35,10 +37,11 @@ interface FilterSearchResultsFormValues {
     schoolType: SchoolTypeObjectType | null;
     country: CountryObjectType | null;
     city: CityObjectType | null;
+    ordering: string;
 }
 
 interface Props {
-    courses?: CourseObjectType[];
+    searchCourses?: PaginatedCourseObjectType;
     school?: SchoolObjectType;
     subject?: SubjectObjectType;
     schoolType?: SchoolTypeObjectType;
@@ -46,29 +49,15 @@ interface Props {
     city?: CityObjectType;
 }
 
-const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, country, city }) => {
+const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
     const { toggleDrawer, open, handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<
         FilterSearchResultsFormValues
     >();
 
     const { query } = useRouter();
     const { t } = useTranslation();
-
-    const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T, actions: FormikActions<T>): void => {
-        const { courseName, courseCode, school, subject, schoolType, country, city } = values;
-
-        const filteredValues: FilterSearchResultsFormValues = {
-            courseName,
-            courseCode,
-            school: R.propOr('', 'id', school),
-            subject: R.propOr('', 'id', subject),
-            schoolType: R.propOr('', 'id', schoolType),
-            country: R.propOr('', 'id', country),
-            city: R.propOr('', 'id', city),
-        };
-
-        handleSubmit(filteredValues, actions);
-    };
+    const courseObjects = R.propOr([], 'objects', searchCourses) as CourseObjectType[];
+    const count = R.propOr(0, 'count', searchCourses) as number;
 
     // Pre-load query params to the form.
     const initialValues = {
@@ -79,6 +68,38 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         schoolType: schoolType || null,
         country: country || null,
         city: city || null,
+        ordering: R.propOr('', 'ordering', query) as string,
+    };
+
+    const paginationProps = {
+        count,
+        filterValues: initialValues,
+        notFoundText: 'search:noCourses',
+        titleLeft: 'common:name',
+        titleRight: 'common:points',
+    };
+
+    const { renderTablePagination, getPaginationQuery, renderNotFound, renderTableHead } = usePagination(
+        paginationProps,
+    );
+
+    const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T, actions: FormikActions<T>): void => {
+        const { courseName, courseCode, school, subject, schoolType, country, city, ordering } = values;
+        const paginationQuery = getPaginationQuery(query);
+
+        const filteredValues: FilterSearchResultsFormValues = {
+            ...paginationQuery, // Define this first to override the values.
+            courseName,
+            courseCode,
+            school: R.propOr('', 'id', school),
+            subject: R.propOr('', 'id', subject),
+            schoolType: R.propOr('', 'id', schoolType),
+            country: R.propOr('', 'id', country),
+            city: R.propOr('', 'id', city),
+            ordering,
+        };
+
+        handleSubmit(filteredValues, actions);
     };
 
     const renderCardContent = (
@@ -151,6 +172,12 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
                         variant="outlined"
                         fullWidth
                     />
+                    <Field name="ordering" label={t('forms:ordering')} component={SelectField} fullWidth>
+                        <MenuItem value="name">{t('forms:nameOrdering')}</MenuItem>
+                        <MenuItem value="-name">{t('forms:nameOrderingReverse')}</MenuItem>
+                        <MenuItem value="points">{t('forms:pointsOrdering')}</MenuItem>
+                        <MenuItem value="-points">{t('forms:pointsOrderingReverse')}</MenuItem>
+                    </Field>
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
                     {renderClearFiltersButton}
                 </Form>
@@ -158,33 +185,30 @@ const SearchPage: I18nPage<Props> = ({ courses, school, subject, schoolType, cou
         </Formik>
     );
 
-    const renderTableContent =
-        courses && courses.length ? (
-            courses.map((c: CourseObjectType, i: number) => (
-                <Table key={i}>
-                    <TableBody>
-                        <TableRow onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
-                            <TableCell>
-                                <Typography variant="subtitle1">{getFullCourseName(c)}</Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
+    const renderTableContent = !!courseObjects.length ? (
+        <>
+            <TableContainer>
+                <Table stickyHeader>
+                    {renderTableHead}
+                    <CourseTableBody courses={courseObjects} />
                 </Table>
-            ))
-        ) : (
-            <CardContent>
-                <Typography variant="subtitle1">{t('search:noCourses')}</Typography>
-            </CardContent>
-        );
+            </TableContainer>
+            {renderTablePagination}
+        </>
+    ) : (
+        renderNotFound
+    );
 
     return (
         <FilterLayout<FilterSearchResultsFormValues>
             title={t('search:title')}
+            heading={t('search:heading')}
             renderCardContent={renderCardContent}
             renderTableContent={renderTableContent}
             toggleDrawer={toggleDrawer}
             open={open}
             backUrl
+            disableSearch
         />
     );
 };

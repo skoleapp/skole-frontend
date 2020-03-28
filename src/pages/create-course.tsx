@@ -126,7 +126,14 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('create-course:title')} renderCardContent={renderCardContent} backUrl />;
+    return (
+        <FormLayout
+            title={t('create-course:title')}
+            heading={t('create-course:heading')}
+            renderCardContent={renderCardContent}
+            backUrl
+        />
+    );
 };
 
 CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

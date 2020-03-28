@@ -30,6 +30,7 @@ export interface UseForm<T> {
     resetForm: () => void;
     submitForm: () => Promise<void> | null;
     setFieldValue: (fieldName: string, val: string | File | File[] | null) => void;
+    setFieldError: (fieldName: string, val: string) => void;
 }
 
 export const useForm = <T>(): UseForm<T> => {
@@ -83,6 +84,10 @@ export const useForm = <T>(): UseForm<T> => {
         ref && ref.current && ref.current.setFieldValue(fieldName, val);
     };
 
+    const setFieldError = (fieldName: string, val: string): void => {
+        ref && ref.current && ref.current.setFieldError(fieldName, val);
+    };
+
     return {
         ref,
         handleMutationErrors,
@@ -91,5 +96,6 @@ export const useForm = <T>(): UseForm<T> => {
         resetForm,
         submitForm,
         setFieldValue,
+        setFieldError,
     };
 };

@@ -122,7 +122,15 @@ const EditProfilePage: I18nPage = () => {
         </Formik>
     );
 
-    return <SettingsLayout title={t('edit-profile:title')} renderCardContent={renderCardContent} backUrl />;
+    return (
+        <SettingsLayout
+            title={t('edit-profile:title')}
+            heading={t('edit-profile:title')}
+            renderCardContent={renderCardContent}
+            backUrl
+            formLayout
+        />
+    );
 };
 
 EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

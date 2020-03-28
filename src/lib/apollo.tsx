@@ -12,27 +12,15 @@ import Head from 'next/head';
 import React from 'react';
 import { WithApolloClient } from 'react-apollo';
 
+import { SkoleContext } from '../types';
 import { getToken } from '../utils';
 
 interface GetToken {
     getToken: (req?: IncomingMessage) => string;
 }
 
-/* eslint-disable*/
-export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): NextPage => {
+export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.Element => {
     let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
-
-    const initApolloClient = (initState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> | null => {
-        if (typeof window === 'undefined') {
-            return createApolloClient(initState, { getToken });
-        }
-
-        if (!apolloClient) {
-            apolloClient = createApolloClient(initState, { getToken });
-        }
-
-        return apolloClient;
-    };
 
     const createApolloClient = (initialState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
         const isBrowser = typeof window !== 'undefined';
@@ -63,15 +51,27 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): NextPa
         });
     };
 
-    const WithApollo = ({ apolloClient, apolloState, ...pageProps }: WithApolloClient<any>): WithApolloClient<any> => {
+    const initApolloClient = (initState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> | null => {
+        if (typeof window === 'undefined') {
+            return createApolloClient(initState, { getToken });
+        }
+
+        if (!apolloClient) {
+            apolloClient = createApolloClient(initState, { getToken });
+        }
+
+        return apolloClient;
+    };
+
+    const WithApollo = ({ apolloClient, apolloState, ...pageProps }: WithApolloClient<SkoleContext>): JSX.Element => {
         const client = apolloClient || initApolloClient(apolloState, { getToken });
+
         return (
-            <ApolloProvider client={client}>
-                <PageComponent {...pageProps} />
+            <ApolloProvider client={client as ApolloClient<NormalizedCacheObject>}>
+                <PageComponent {...(pageProps as {})} />
             </ApolloProvider>
         );
     };
-    /* eslint-enable */
 
     if (process.env.NODE_ENV !== 'production') {
         const displayName = PageComponent.displayName || PageComponent.name || 'Component';
@@ -84,10 +84,14 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): NextPa
     }
 
     if (ssr || PageComponent.getInitialProps) {
-        WithApollo.getInitialProps = async (ctx: WithApolloClient<any>): Promise<any> => {
+        WithApollo.getInitialProps = async (ctx: WithApolloClient<SkoleContext>): Promise<{}> => {
             const { AppTree } = ctx;
-            const apolloClient = (ctx.apolloClient = initApolloClient({}, { getToken: () => getToken(ctx.req) }));
+            const apolloClient = ((ctx.apolloClient as ApolloClient<NormalizedCacheObject> | null) = initApolloClient(
+                {},
+                { getToken: () => getToken(ctx.req) },
+            ));
             const pageProps = PageComponent.getInitialProps ? await PageComponent.getInitialProps(ctx) : {};
+
             if (typeof window === 'undefined') {
                 if (ctx.res && ctx.res.finished) {
                     return {};
@@ -110,7 +114,7 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): NextPa
                 Head.rewind();
             }
 
-            const apolloState = apolloClient && apolloClient.cache.extract();
+            const apolloState = apolloClient && (apolloClient.cache.extract() as unknown);
 
             return {
                 ...pageProps,
@@ -119,5 +123,5 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): NextPa
         };
     }
 
-    return WithApollo;
+    return (WithApollo as unknown) as JSX.Element;
 };

@@ -3,6 +3,15 @@ query CourseDetail($id: ID) {
         id
         name
         code
+        modified
+        created
+        points
+        resourceCount
+        starred
+        vote {
+            id
+            status
+        }
         subject {
             id
             name
@@ -19,6 +28,7 @@ query CourseDetail($id: ID) {
             id
             title
             points
+            date
         }
         comments {
             id
@@ -54,14 +64,6 @@ query CourseDetail($id: ID) {
                 id
                 status
             }
-        }
-        modified
-        created
-        points
-        resourceCount
-        vote {
-            id
-            status
         }
     }
 }

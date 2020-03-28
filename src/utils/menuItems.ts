@@ -1,6 +1,10 @@
 export const menuItems = {
     account: [
         {
+            text: 'common:starred',
+            href: '/account/starred',
+        },
+        {
             text: 'common:editProfile',
             href: '/account/edit-profile',
         },

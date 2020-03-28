@@ -3,25 +3,26 @@ import { DeleteOutline } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import { toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
 import { mediaURL } from '../../utils';
 import { FormErrorMessage } from '.';
 
-export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ setFieldValue, values }) => {
+export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
+    setFieldValue,
+    setFieldError,
+    values,
+}) => {
     const { t } = useTranslation();
     const [preview, setPreview] = useState(mediaURL(values.avatar));
-    const dispatch = useDispatch();
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();
         const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
         if (avatar.size > 2000000) {
-            dispatch(toggleNotification(t('notifications:avatarFileSize')));
+            setFieldError('avatar', t('forms:fileSizeErr'));
         } else {
             reader.readAsDataURL(avatar);
             reader.onloadend = (): void => {

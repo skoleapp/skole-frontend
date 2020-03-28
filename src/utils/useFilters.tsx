@@ -25,21 +25,26 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
     const [open, setOpen] = useState(false);
     const closeDrawer = (): void => setOpen(false);
     const toggleDrawer = (open: boolean) => (): void => setOpen(open);
-    const { pathname } = useRouter();
+    const { pathname, query } = useRouter();
     const { t } = useTranslation();
     const submitButtonText = t('common:apply');
 
     // Pick non-empty values and reload the page with new query params.
     const handleSubmit = async (filteredValues: {}, actions: FormikActions<T>): Promise<void> => {
-        const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
-        await Router.push({ pathname, query });
+        const validQuery: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
+        await Router.push({ pathname, query: validQuery });
         actions.setSubmitting(false);
         closeDrawer();
     };
 
     // Clear the query params and reset form.
     const handleClearFilters = async (): Promise<void> => {
-        await Router.push(pathname);
+        const queryWithPagination: ParsedUrlQueryInput = R.pickBy(
+            (val: string, key: string): boolean => (!!val && key === 'page') || key === 'pageSize',
+            query,
+        );
+
+        await Router.push({ pathname, query: queryWithPagination });
         resetForm();
         closeDrawer();
     };

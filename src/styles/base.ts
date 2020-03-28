@@ -11,7 +11,7 @@ export const base = css`
 
         --white: ${colors.white};
         --black: ${colors.black};
-        --grey: ${colors.grey};
+        --gray: ${colors.gray};
 
         --success: ${colors.success};
         --danger: ${colors.danger};
@@ -33,42 +33,45 @@ export const base = css`
 
         .sm-down {
             @media only screen and (min-width: ${breakpoints.SM}) {
-                display: none;
+                display: none !important;
             }
         }
 
         .sm-up {
             @media only screen and (max-width: ${breakpoints.SM}) {
-                display: none;
+                display: none !important;
             }
         }
 
         .md-down {
             @media only screen and (min-width: ${breakpoints.MD}) {
-                display: none;
+                display: none !important;
             }
         }
 
         .md-up {
             @media only screen and (max-width: ${breakpoints.MD}) {
-                display: none;
+                display: none !important;
             }
+        }
+
+        .border-bottom {
+            border-bottom: var(--border);
         }
 
         .main-avatar {
-            height: 10rem;
-            width: 10rem;
+            height: 8rem;
+            width: 8rem;
             margin: 1rem;
         }
 
-        form {
-            .MuiFormControl-root {
-                margin-top: 0.75rem;
-            }
+        .MuiFormControl-root {
+            margin-top: 0.75rem;
+        }
 
-            input[type='submit'] {
-                display: none;
-            }
+        input[type='submit'],
+        input[type='file'] {
+            display: none;
         }
 
         .MuiLink-root {
@@ -87,30 +90,12 @@ export const base = css`
             font-size: 1.25rem;
         }
 
-        .MuiGrid-root {
-            flex-grow: 1;
-        }
-
         .MuiDialog-paper {
-            .MuiDialogTitle-root {
+            width: auto;
+
+            .MuiDialogTitle-root,
+            .MuiDialogContent-root {
                 text-align: center;
-            }
-
-            .MuiListItem-root {
-                cursor: pointer;
-
-                &:hover {
-                    background-color: var(--hover-opacity);
-                }
-
-                .MuiListItemText-primary {
-                    display: flex;
-                    align-items: center;
-
-                    .MuiSvgIcon-root {
-                        margin-right: 0.5rem;
-                    }
-                }
             }
 
             .MuiDialogActions-root {
@@ -118,87 +103,8 @@ export const base = css`
             }
         }
 
-        .MuiList-root {
-            .MuiListItem-root {
-                padding: 0.5rem;
-            }
-
-            .MuiAvatar-root {
-                background-color: var(--primary);
-                width: 2rem;
-                height: 2rem;
-
-                .MuiSvgIcon-root {
-                    width: 1rem;
-                    height: 1rem;
-                }
-            }
-        }
-
-        .MuiListSubheader-root {
-            text-align: left;
-            outline: none;
-        }
-
-        .MuiTabs-root {
-            width: 100%;
-
-            .MuiTab-root {
-                flex-grow: 1;
-            }
-
-            .MuiTabs-scrollButtons {
-                color: var(--primary);
-            }
-        }
-
-        .MuiCardHeader-root {
-            padding: 0.5rem !important;
-        }
-
-        .MuiCardContent-root {
-            padding: 0.5rem;
-        }
-
-        .MuiBottomNavigation-root {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 3rem !important;
-            border-top: var(--border);
-            z-index: 1000;
-
-            .MuiButtonBase-root,
-            .Mui-selected {
-                padding: 0 !important;
-            }
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                display: none !important;
-            }
-        }
-
-        input#attachment {
-            display: none;
-        }
-
-        .modal-input-area {
-            display: flex;
-            align-items: center;
-            margin: 0.5rem;
-            margin-top: auto;
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                margin: 0.5rem 0 0 0 !important;
-            }
-        }
-
-        #comment-attachment-container {
-            margin: 0.5rem;
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                margin: 0;
-            }
+        .MuiDrawer-paperAnchorLeft {
+            width: 20rem;
         }
     }
 `;

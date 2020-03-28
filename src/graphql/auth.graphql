@@ -58,6 +58,18 @@ query UserMe {
         courseCount
         resourceCount
         created
+        starredCourses {
+            id
+            name
+            code
+            points
+        }
+        starredResources {
+            id
+            title
+            points
+            date
+        }
     }
 }
 

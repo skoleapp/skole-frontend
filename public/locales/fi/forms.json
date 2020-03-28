@@ -30,8 +30,11 @@
     "ordering": "Järjestys",
     "usernameOrdering": "Käyttätunnus (A-Z)",
     "usernameOrderingReverse": "Käyttäjätunnus (Z-A)",
+    "nameOrdering": "Nimi (A-Z)",
+    "nameOrderingReverse": "Nimi (Z-A)",
     "pointsOrdering": "Pisteet (nouseva)",
     "pointsOrderingReverse": "Pisteet (laskeva)",
     "betaCode": "Betakoodi",
-    "name": "Nimi"
+    "name": "Nimi",
+    "fileSizeError": "Tiedosto on liian suuri!"
 }

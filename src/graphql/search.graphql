@@ -6,8 +6,11 @@ query SearchCourses(
     $schoolType: ID
     $country: ID
     $city: ID
+    $ordering: String
+    $page: Int
+    $pageSize: Int
 ) {
-    courses(
+    searchCourses(
         courseName: $courseName
         courseCode: $courseCode
         school: $school
@@ -15,10 +18,21 @@ query SearchCourses(
         schoolType: $schoolType
         country: $country
         city: $city
+        ordering: $ordering
+        page: $page
+        pageSize: $pageSize
     ) {
-        id
-        name
-        code
+        page
+        pages
+        hasPrev
+        hasNext
+        count
+        objects {
+            id
+            name
+            code
+            points
+        }
     }
     school(id: $school) {
         id

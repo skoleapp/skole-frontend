@@ -19,6 +19,7 @@ export const StyledModal = styled(({ autoHeight, ...other }) => (
         height: 100%;
         width: 100%;
         overflow-y: scroll;
+        padding: 0.5rem;
 
         ::-webkit-scrollbar {
             display: none;
@@ -28,7 +29,6 @@ export const StyledModal = styled(({ autoHeight, ...other }) => (
             height: ${({ autoHeight }): string => (!!autoHeight ? 'auto' : '100%')};
             max-width: 25rem;
             max-height: 50rem;
-            padding: 0.5rem;
         }
     }
 `;

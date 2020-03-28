@@ -1,4 +1,3 @@
-export { getFullCourseName } from './getFullCourseName';
 export { getToken } from './getToken';
 export { menuItems } from './menuItems';
 export { redirect } from './redirect';
@@ -13,3 +12,7 @@ export { useSettings } from './useSettings';
 export { useFilters } from './useFilters';
 export { mediaURL } from './mediaURL';
 export { useOpen } from './useOpen';
+export { useOptions } from './useOptions';
+export { useLanguageSelector } from './useLanguageSelector';
+export { usePagination, useFrontendPagination } from './usePagination';
+export { useVotes } from './useVotes';

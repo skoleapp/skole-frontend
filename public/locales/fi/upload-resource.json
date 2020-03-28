@@ -1,3 +1,5 @@
 {
-    "title": "Lisää resurssi"
+    "title": "Lisää resurssi",
+    "heading": "Lisää resurssi",
+    "fileGenerationError": "Virhe luotaessa PDF-tiedostoa."
 }

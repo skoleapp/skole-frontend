@@ -1,13 +1,20 @@
 import { AnyAction } from 'redux';
 
 import { CommentObjectType } from '../../generated/graphql';
-import { TOGGLE_COMMENT_THREAD, TOGGLE_FILE_VIEWER, TOGGLE_NOTIFICATION, TOGGLE_SETTINGS } from '../actions';
+import {
+    TOGGLE_COMMENT_THREAD,
+    TOGGLE_FILE_VIEWER,
+    TOGGLE_LANGUAGE_SELECTOR,
+    TOGGLE_NOTIFICATION,
+    TOGGLE_SETTINGS,
+} from '../actions';
 
 export interface UI {
     notification: string | null;
     settings: boolean | null;
     commentThread: CommentObjectType | null;
     file: string | null;
+    languageSelector: boolean | null;
 }
 
 const initialState: UI = {
@@ -15,6 +22,7 @@ const initialState: UI = {
     settings: null,
     commentThread: null,
     file: null,
+    languageSelector: null,
 };
 
 export const uiReducer = (state = initialState, action: AnyAction): UI => {
@@ -33,6 +41,10 @@ export const uiReducer = (state = initialState, action: AnyAction): UI => {
 
         case TOGGLE_FILE_VIEWER: {
             return { ...state, file: action.payload };
+        }
+
+        case TOGGLE_LANGUAGE_SELECTOR: {
+            return { ...state, languageSelector: action.payload };
         }
 
         default: {

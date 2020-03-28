@@ -1,4 +1,3 @@
-import { FormHelperText } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
@@ -17,8 +16,8 @@ import {
 } from '../../generated/graphql';
 import { toggleNotification } from '../actions';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
-import { useTranslation } from '../i18n';
-import { includeDefaultNamespaces, Router } from '../i18n';
+import { Router, useTranslation } from '../i18n';
+import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePrivatePage } from '../utils';
@@ -37,7 +36,9 @@ interface Props extends I18nProps {
 const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<UploadResourceFormValues>();
+    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, setFieldError } = useForm<
+        UploadResourceFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:required')),
@@ -64,18 +65,45 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
     const [createResourceMutation] = useCreateResourceMutation({ onCompleted, onError });
 
+    // Use Cloudmersive API to generate PDF from any commonly used file format.
     const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
         const { resourceTitle, resourceType, course, file } = values;
+        const handleFileGenerationError = (): void => setFieldError('file', t('upload-resource:fileGenerationError'));
 
-        const variables = {
-            resourceTitle,
-            resourceType: R.propOr('', 'id', resourceType) as string,
-            course: R.propOr('', 'id', course) as string,
-            file: (file as unknown) as string,
-        };
+        try {
+            if (!!file) {
+                const body = new FormData();
+                body.append('file', file);
 
-        await createResourceMutation({ variables });
-        setSubmitting(false);
+                const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
+                    method: 'POST',
+                    body,
+                    headers: {
+                        Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
+                    },
+                });
+
+                if (res.status === 200) {
+                    const blob = await res.blob();
+                    const pdf = new File([blob], 'file');
+
+                    const variables = {
+                        resourceTitle,
+                        resourceType: R.propOr('', 'id', resourceType) as string,
+                        course: R.propOr('', 'id', course) as string,
+                        file: (pdf as unknown) as string,
+                    };
+
+                    await createResourceMutation({ variables });
+                } else {
+                    handleFileGenerationError();
+                }
+            }
+        } catch {
+            handleFileGenerationError();
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const initialValues = {
@@ -119,14 +147,20 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                         fullWidth
                     />
                     <Field name="file" component={DropzoneField} />
-                    <FormHelperText>{t('common:filesize')}</FormHelperText>
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}
         </Formik>
     );
 
-    return <FormLayout title={t('upload-resource:title')} backUrl renderCardContent={renderCardContent} />;
+    return (
+        <FormLayout
+            title={t('upload-resource:title')}
+            heading={t('upload-resource:heading')}
+            backUrl
+            renderCardContent={renderCardContent}
+        />
+    );
 };
 
 UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {

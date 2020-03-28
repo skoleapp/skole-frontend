@@ -11,7 +11,7 @@ import { breakpoints } from '../../styles';
 import { State } from '../../types';
 import { mediaURL } from '../../utils';
 
-export const FileViewer: React.FC = () => {
+export const AttachmentViewer: React.FC = () => {
     const { file } = useSelector((state: State) => state.ui);
     const dispatch = useDispatch();
     const handleClose = (): AnyAction => dispatch((toggleFileViewer(null) as unknown) as AnyAction);
@@ -21,7 +21,7 @@ export const FileViewer: React.FC = () => {
             <IconButton onClick={handleClose}>
                 <CloseOutlined />
             </IconButton>
-            <Box id="file-container">
+            <Box id="image-container">
                 <Image src={mediaURL(file as string)} />
             </Box>
         </StyledFileViewer>
@@ -33,7 +33,7 @@ const StyledFileViewer = styled(Backdrop)`
     z-index: 9999 !important;
     position: relative;
 
-    #file-container {
+    #image-container {
         height: 100vh;
         width: 100vh;
         display: flex;
@@ -47,8 +47,9 @@ const StyledFileViewer = styled(Backdrop)`
             background-color: transparent !important;
 
             img {
-                width: auto !important;
+                width: 100% !important;
                 height: auto !important;
+                max-height: 75%;
                 position: relative !important;
             }
         }

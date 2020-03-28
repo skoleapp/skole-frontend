@@ -80,7 +80,15 @@ export const DeleteAccountPage: I18nPage = () => {
         </Formik>
     );
 
-    return <SettingsLayout title={t('delete-account:title')} renderCardContent={renderCardContent} backUrl />;
+    return (
+        <SettingsLayout
+            title={t('delete-account:title')}
+            heading={t('delete-account:heading')}
+            renderCardContent={renderCardContent}
+            backUrl
+            formLayout
+        />
+    );
 };
 
 DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

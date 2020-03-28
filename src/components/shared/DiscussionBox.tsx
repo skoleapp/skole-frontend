@@ -16,6 +16,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     comments: initialComments,
     isThread,
     target,
+    formKey,
 }) => {
     const [comments, setComments] = useState(initialComments);
     const initialReplyCount = R.propOr('-', 'replyCount', topComment);
@@ -37,7 +38,14 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     };
 
     const commentCardProps = { isThread, removeComment };
-    const createCommentFormProps = { target, appendComments, createCommentModalOpen, toggleCreateCommentModal };
+
+    const createCommentFormProps = {
+        target,
+        appendComments,
+        createCommentModalOpen,
+        toggleCreateCommentModal,
+        formKey,
+    };
 
     const renderTopComment = !!topComment && (
         <>

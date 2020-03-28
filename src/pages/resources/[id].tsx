@@ -2,75 +2,73 @@ import {
     Avatar,
     Box,
     CardContent,
-    CardHeader,
-    Divider,
-    Grid,
     IconButton,
-    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
-    Paper,
-    SwipeableDrawer,
-    Tab,
-    Tabs,
+    MenuItem,
     Typography,
 } from '@material-ui/core';
 import {
     CloudDownloadOutlined,
     CloudUploadOutlined,
     DeleteOutline,
-    FlagOutlined,
-    InfoOutlined,
+    KeyboardArrowDownOutlined,
+    KeyboardArrowUpOutlined,
     LibraryAddOutlined,
-    MoreHorizOutlined,
     SchoolOutlined,
     ScoreOutlined,
-    ShareOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
-import styled from 'styled-components';
 
 import {
     CommentObjectType,
     DeleteResourceMutation,
-    PerformVoteMutation,
     ResourceDetailDocument,
     ResourceObjectType,
     useDeleteResourceMutation,
-    usePerformVoteMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { DiscussionBox, MainLayout, ModalHeader, NotFound, StyledCard, TabPanel, TextLink } from '../../components';
-import { ResourcePreview } from '../../components/shared/ResourcePreview';
+import {
+    DiscussionBox,
+    NotFound,
+    PDFViewer,
+    StarButton,
+    StyledBottomNavigation,
+    StyledList,
+    TabLayout,
+    TextLink,
+} from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { mediaURL, useOpen, usePrivatePage, useTabs } from '../../utils';
+import { mediaURL, useOptions, usePrivatePage, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
 }
 
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
-    const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const confirm = useConfirm();
-    const { open, handleOpen, handleClose } = useOpen();
 
-    const [pages, setPages]: any[] = useState([]);
-    const [currentPage, setCurrentPage]: any = useState(0);
-
-    const { open: optionsOpen, handleOpen: openOptions, handleClose: closeOptions } = useOpen();
+    const {
+        renderShareOption,
+        renderReportOption,
+        renderOptionsHeader,
+        mobileDrawerProps,
+        desktopDrawerProps,
+        openOptions,
+    } = useOptions();
 
     if (resource) {
         const file = mediaURL(resource.file);
@@ -81,45 +79,28 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const schoolId = R.propOr('', 'id', resource.school);
         const schoolName = R.propOr('-', 'name', resource.school) as string;
         const creatorId = R.propOr('', 'id', resource.user) as string;
+        const resourceId = R.propOr('', 'id', resource) as string;
         const creatorName = R.propOr('-', 'username', resource.user) as string;
         const created = moment(resource.created).format('LL');
-        const initialPoints = R.propOr('-', 'points', resource);
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
         const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
-
-        const [vote, setVote] = useState(resource.vote);
-        const [points, setPoints] = useState(initialPoints);
+        const initialVote = R.propOr(null, 'vote', resource) as VoteObjectType | null;
+        const initialPoints = R.propOr(0, 'points', resource) as number;
+        const starred = !!resource.starred;
+        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({ initialVote, initialPoints });
 
         const discussionBoxProps = {
             comments,
             target: { resource: Number(resource.id) },
+            formKey: 'resource',
         };
 
-        const onError = (): void => {
-            dispatch(toggleNotification(t('notifications:voteError')));
-        };
-
-        const onCompleted = ({ performVote }: PerformVoteMutation): void => {
-            if (!!performVote) {
-                if (!!performVote.errors) {
-                    onError();
-                } else {
-                    setVote(performVote.vote as VoteObjectType);
-                    setPoints(performVote.targetPoints);
-                }
-            }
-        };
-
-        const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
-
-        const handleVote = (status: number) => (): void => {
-            performVote({ variables: { resource: resource.id, status } });
-        };
-        const voteProps = { vote, voteSubmitting, handleVote, points };
+        const createdInfoProps = { creatorId, creatorName, created };
 
         const deleteResourceError = (): void => {
             dispatch(toggleNotification(t('notifications:deleteResourceError')));
         };
+
         const deleteResourceCompleted = ({ deleteResource }: DeleteResourceMutation): void => {
             if (!!deleteResource) {
                 if (!!deleteResource.errors) {
@@ -136,49 +117,51 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             onError: deleteResourceError,
         });
 
-        const handleDelete = (): void => {
+        const handleDeleteResource = (): void => {
             confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') }).then(() => {
                 deleteResource({ variables: { id: resource.id } });
             });
         };
 
-        const handleShare = (e: SyntheticEvent): void => {
-            e.stopPropagation();
-            closeOptions();
-            navigator.clipboard.writeText(window.location.href);
-            dispatch(toggleNotification(t('notifications:linkCopied')));
+        const handleVoteClick = (status: number) => (): void => {
+            handleVote({ status: status, resource: resourceId });
         };
 
-        const downloadResource = (url: string): void => {
-            if (!!url) {
-                fetch(url, {
-                    headers: new Headers({
-                        Origin: location.origin,
-                    }),
+        const handleDownloadResource = async (): Promise<void> => {
+            try {
+                const res = await fetch(file, {
+                    headers: new Headers({ Origin: location.origin }),
                     mode: 'cors',
-                })
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const blobUrl = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.download = resource.title;
-                        a.href = blobUrl;
+                });
 
-                        document.body.appendChild(a);
-                        a.click();
-                        a.remove();
-                    })
-                    .catch(e => console.error(e));
+                const blob = await res.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.download = resource.title;
+                a.href = blobUrl;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } catch {
+                dispatch(toggleNotification(t('notifications:downloadResourceError')));
             }
         };
 
-        const handleDownload = (): void => {
-            downloadResource(mediaURL(resource.file));
-        };
+        const renderUpVoteButton = (
+            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                <KeyboardArrowUpOutlined />
+            </IconButton>
+        );
 
-        const renderResourceInfo = (
+        const renderDownVoteButton = (
+            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                <KeyboardArrowDownOutlined />
+            </IconButton>
+        );
+
+        const renderInfo = (
             <CardContent>
-                <List>
+                <StyledList>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -233,199 +216,81 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
-                </List>
+                </StyledList>
             </CardContent>
-        );
-
-        const renderCreatedInfo = (
-            <Box padding="0.5rem" textAlign="left">
-                <Typography variant="body2" color="textSecondary">
-                    {t('common:createdBy')}{' '}
-                    <TextLink href={`/users/${creatorId}`} color="primary">
-                        {creatorName}
-                    </TextLink>{' '}
-                    {created}
-                </Typography>
-            </Box>
-        );
-        const renderDesktopDrawer = (
-            <SwipeableDrawer className="md-up" anchor="left" open={!!open} onOpen={handleOpen} onClose={handleClose}>
-                <ModalHeader title={resourceTitle} onCancel={handleClose} />
-                {renderResourceInfo}
-                <Divider />
-                {renderCreatedInfo}
-            </SwipeableDrawer>
         );
 
         const renderOptions = (
             <StyledList>
+                {renderShareOption}
+                {renderReportOption}
                 {isOwnProfile && (
-                    <ListItem onClick={handleDelete}>
-                        <ListItemText>
+                    <MenuItem>
+                        <ListItemText onClick={handleDeleteResource}>
                             <DeleteOutline /> {t('resource:deleteResource')}
                         </ListItemText>
-                    </ListItem>
+                    </MenuItem>
                 )}
-                <ListItem onClick={handleShare}>
-                    <ListItemText>
-                        <ShareOutlined /> {t('common:share')}
-                    </ListItemText>
-                </ListItem>
-                <ListItem disabled>
-                    <ListItemText>
-                        <FlagOutlined /> {t('common:reportAbuse')}
-                    </ListItemText>
-                </ListItem>
-                <ListItem onClick={handleDownload}>
+                <MenuItem onClick={handleDownloadResource}>
                     <ListItemText>
                         <CloudDownloadOutlined /> {t('common:download')}
                     </ListItemText>
-                </ListItem>
+                </MenuItem>
             </StyledList>
         );
 
-        const renderDesktopOptionsDrawer = (
-            <SwipeableDrawer
-                className="md-up"
-                anchor="left"
-                open={!!optionsOpen}
-                onOpen={openOptions}
-                onClose={closeOptions}
-            >
-                <ModalHeader onCancel={closeOptions} />
-                {renderOptions}
-            </SwipeableDrawer>
-        );
+        const optionProps = {
+            renderOptions,
+            renderOptionsHeader,
+            openOptions,
+            mobileDrawerProps,
+            desktopDrawerProps,
+        };
 
-        const renderMobileDrawer = (
-            <SwipeableDrawer
-                className="md-down"
-                anchor="bottom"
-                open={!!open}
-                onOpen={handleOpen}
-                onClose={handleClose}
-            >
-                <Paper>
-                    <ModalHeader title={resourceTitle} onCancel={handleClose} />
-                    {renderCreatedInfo}
-                    <Divider />
-                    {renderResourceInfo}
-                </Paper>
-            </SwipeableDrawer>
-        );
+        const starButtonProps = {
+            starred,
+            resource: resourceId,
+        };
 
-        const renderMobileOptionsDrawer = (
-            <SwipeableDrawer
-                className="md-down"
-                anchor="bottom"
-                open={!!optionsOpen}
-                onOpen={openOptions}
-                onClose={closeOptions}
-            >
-                <Paper>{renderOptions}</Paper>
-            </SwipeableDrawer>
-        );
-
-        const renderDesktopActionButtons = (
-            <>
-                <IconButton color="primary" onClick={handleOpen}>
-                    <InfoOutlined />
-                </IconButton>
-                <IconButton onClick={openOptions}>
-                    <MoreHorizOutlined />
-                </IconButton>
-            </>
-        );
-
-        const renderMobileResourceInfoButton = (
-            <Box display="flex" flex-direction="row">
-                <IconButton color="secondary" onClick={handleOpen}>
-                    <InfoOutlined />
-                </IconButton>
-                <IconButton color="secondary" onClick={openOptions}>
-                    <MoreHorizOutlined />
-                </IconButton>
+        const renderExtraDesktopActions = (
+            <Box display="flex" paddingLeft="0.5rem" paddingBottom="0.5rem">
+                <StarButton {...starButtonProps} />
+                {renderDownVoteButton}
+                {renderUpVoteButton}
             </Box>
         );
 
-        const renderContent = (
-            <Grid container>
-                <Grid item container xs={12} sm={12} md={7} lg={8}>
-                    <StyledCard>
-                        <Tabs
-                            className="md-down"
-                            value={tabValue}
-                            onChange={handleTabChange}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            variant="fullWidth"
-                        >
-                            <Tab label={resourceTitle} />
-                            <Tab label={t('common:discussion')} />
-                        </Tabs>
-                        <CardHeader action={renderDesktopActionButtons} className="md-up" title={resourceTitle} />
-
-                        {tabValue === 0 && (
-                            <ResourcePreview
-                                currentPage={currentPage}
-                                setCurrentPage={setCurrentPage}
-                                pages={pages}
-                                setPages={setPages}
-                                file={file}
-                                voteProps={voteProps}
-                            />
-                        )}
-
-                        <TabPanel value={tabValue} index={1} flexGrow="1" display={tabValue === 1 ? 'flex' : 'none'}>
-                            <DiscussionBox {...discussionBoxProps} />
-                        </TabPanel>
-                    </StyledCard>
-                </Grid>
-                <Grid item container xs={12} sm={12} md={5} lg={4} className="md-up">
-                    <StyledCard marginLeft>
-                        <CardHeader title={t('common:discussion')} />
-                        <Divider />
-                        <DiscussionBox {...discussionBoxProps} />
-                    </StyledCard>
-                </Grid>
-            </Grid>
+        const renderCustomBottomNavbar = (
+            <StyledBottomNavigation>
+                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" margin="0 1rem">
+                    <StarButton {...starButtonProps} />
+                    <Box display="flex">
+                        <Box marginRight="1rem">{renderUpVoteButton}</Box>
+                        {renderDownVoteButton}
+                    </Box>
+                </Box>
+            </StyledBottomNavigation>
         );
 
         return (
-            <MainLayout
-                disableBottomNavbar={tabValue === 0}
+            <TabLayout
                 title={resourceTitle}
+                titleSecondary={t('common:discussion')}
                 backUrl
-                maxWidth="xl"
-                headerRight={renderMobileResourceInfoButton}
-            >
-                {renderContent}
-                {renderDesktopDrawer}
-                {renderDesktopOptionsDrawer}
-                {renderMobileDrawer}
-                {renderMobileOptionsDrawer}
-            </MainLayout>
+                renderInfo={renderInfo}
+                tabLabelLeft={t('common:resource')}
+                renderLeftContent={<PDFViewer file={file} />}
+                renderRightContent={<DiscussionBox {...discussionBoxProps} />}
+                createdInfoProps={createdInfoProps}
+                optionProps={optionProps}
+                customBottomNavbar={renderCustomBottomNavbar}
+                extraDesktopActions={renderExtraDesktopActions}
+            />
         );
     } else {
         return <NotFound title={t('resource:notFound')} />;
     }
 };
-
-const StyledList = styled(List)`
-    .MuiListItem-root {
-        padding: 1rem 1.5rem !important;
-        :hover {
-            background-color: rgb(245, 245, 245) !important;
-            cursor: pointer;
-        }
-    }
-    .MuiTypography-root {
-        display: flex;
-    }
-    .MuiSvgIcon-root {
-        margin-right: 1rem;
-    }
-`;
 
 ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePrivatePage(ctx);

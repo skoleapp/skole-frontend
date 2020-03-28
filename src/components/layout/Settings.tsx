@@ -16,7 +16,7 @@ export const Settings: React.FC = () => {
     const handleClose = (): AnyAction => dispatch((toggleSettings(false) as unknown) as AnyAction);
 
     return (
-        <StyledModal open={!!settings} onClose={handleClose}>
+        <StyledModal open={!!settings} onClose={handleClose} autoHeight>
             <Fade in={!!settings}>
                 <Paper>
                     <ModalHeader onCancel={handleClose} />

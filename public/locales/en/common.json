@@ -24,7 +24,7 @@
     "subjects": "Subjects",
     "resources": "Resources",
     "resource": "Resource",
-    "skoleLtd": "Skole Team",
+    "skoleTeam": "Skole Team",
     "save": "Save",
     "confirm": "Confirm",
     "submit": "Submit",
@@ -55,8 +55,12 @@
     "reportAbuse": "Report Abuse",
     "createComment": "Create Comment",
     "comments": "Comments",
-    "noComments": "No comments to be shown...",
-    "dropzoneText": "Drag a file or click here!",
+    "dropzoneText": "Drop files here or click to upload.",
     "share": "Share",
-    "filesize": "Max file size 5MB"
+    "noComments": "No comments to be shown...",
+    "options": "Actions",
+    "maxFileSize": "Maximum file size",
+    "resultsPerPage": "Results Per Page",
+    "clickToView": "Click to view!",
+    "starred": "Starred"
 }

@@ -1,9 +1,16 @@
-query Users($username: String, $ordering: String) {
-    users(username: $username, ordering: $ordering) {
-        id
-        username
-        points
-        avatarThumbnail
+query Users($username: String, $ordering: String, $page: Int, $pageSize: Int) {
+    users(username: $username, ordering: $ordering, page: $page, pageSize: $pageSize) {
+        page
+        pages
+        hasPrev
+        hasNext
+        count
+        objects {
+            id
+            username
+            points
+            avatarThumbnail
+        }
     }
 }
 
@@ -29,6 +36,7 @@ query UserDetail($id: ID) {
             id
             title
             points
+            date
         }
     }
 }

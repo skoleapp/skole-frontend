@@ -1,11 +1,11 @@
 import {
     Avatar,
-    CardContent,
+    Box,
     MenuItem,
     Table,
     TableBody,
     TableCell,
-    TableHead,
+    TableContainer,
     TableRow,
     Typography,
 } from '@material-ui/core';
@@ -17,14 +17,14 @@ import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
 
-import { UserObjectType, UsersDocument } from '../../../generated/graphql';
+import { PaginatedUserObjectType, UserObjectType, UsersDocument } from '../../../generated/graphql';
 import { FilterLayout, FormSubmitSection, SelectField } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useFilters, usePrivatePage } from '../../utils';
-import { mediaURL } from '../../utils';
+import { mediaURL, useFilters, usePrivatePage } from '../../utils';
+import { usePagination } from '../../utils/usePagination';
 
 interface FilterUsersFormValues {
     username: string;
@@ -32,26 +32,48 @@ interface FilterUsersFormValues {
 }
 
 interface Props extends I18nProps {
-    users?: UserObjectType[];
+    users?: PaginatedUserObjectType;
 }
 
 const UsersPage: I18nPage<Props> = ({ users }) => {
+    const { t } = useTranslation();
+    const { query } = useRouter();
+    const userObjects = R.propOr([], 'objects', users) as UserObjectType[];
+    const count = R.propOr(0, 'count', users) as number;
+
     const { toggleDrawer, open, handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<
         FilterUsersFormValues
     >();
-
-    const { t } = useTranslation();
-    const { query } = useRouter();
-
-    const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
-        const { username, ordering } = values;
-        handleSubmit({ username, ordering }, actions);
-    };
 
     // Pre-load query params to the form.
     const initialValues = {
         username: R.propOr('', 'username', query) as string,
         ordering: R.propOr('', 'ordering', query) as string,
+    };
+
+    const paginationProps = {
+        count,
+        filterValues: initialValues,
+        titleLeft: 'common:username',
+        titleRight: 'common:points',
+        notFoundText: 'users:notFound',
+    };
+
+    const { renderTablePagination, getPaginationQuery, renderNotFound, renderTableHead } = usePagination(
+        paginationProps,
+    );
+
+    const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
+        const { username, ordering } = values;
+        const paginationQuery = getPaginationQuery(query);
+
+        const filteredValues = {
+            ...paginationQuery, // Define this first to override the values.
+            username,
+            ordering,
+        };
+
+        handleSubmit(filteredValues, actions);
     };
 
     const renderCardContent = (
@@ -79,49 +101,44 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         </Formik>
     );
 
-    const renderTableContent =
-        users && users.length ? (
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="subtitle1" color="textSecondary">
-                                {t('common:username')}
-                            </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                            <Typography variant="subtitle1" color="textSecondary">
-                                {t('common:points')}
-                            </Typography>
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {users.map((u: UserObjectType, i: number) => (
-                        <Link href={`/users/${u.id}`} key={i}>
-                            <TableRow>
-                                <TableCell className="user-cell">
-                                    <Avatar src={mediaURL(R.propOr('', 'avatarThumbnail', u))} />
-                                    <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
-                                </TableCell>
-                            </TableRow>
-                        </Link>
-                    ))}
-                </TableBody>
-            </Table>
-        ) : (
-            <CardContent>
-                <Typography variant="subtitle1">{t('users:notFound')}</Typography>
-            </CardContent>
-        );
+    const renderTableContent = !!userObjects.length ? (
+        <>
+            <TableContainer>
+                <Table stickyHeader>
+                    {renderTableHead}
+                    <TableBody>
+                        {userObjects.map((u: UserObjectType, i: number) => (
+                            <Link href={`/users/${u.id}`} key={i}>
+                                <TableRow>
+                                    <TableCell>
+                                        <Box display="flex" alignItems="center">
+                                            <Avatar src={mediaURL(R.propOr('', 'avatarThumbnail', u))} />
+                                            <Box marginLeft="1rem">
+                                                <Typography variant="subtitle1">
+                                                    {R.propOr('-', 'username', u)}
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
+                                    </TableCell>
+                                </TableRow>
+                            </Link>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            {renderTablePagination}
+        </>
+    ) : (
+        renderNotFound
+    );
 
     return (
         <FilterLayout<FilterUsersFormValues>
-            heading={t('users:title')}
             title={t('users:title')}
+            heading={t('users:heading')}
             renderCardContent={renderCardContent}
             renderTableContent={renderTableContent}
             toggleDrawer={toggleDrawer}

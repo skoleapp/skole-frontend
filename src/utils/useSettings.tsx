@@ -1,15 +1,16 @@
-import { Button, Divider, ListItem, ListSubheader, MenuItem, MenuList } from '@material-ui/core';
+import { Button, Divider, ListItem, ListSubheader, MenuItem } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useApolloClient } from 'react-apollo';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deAuthenticate, toggleSettings } from '../actions';
-import { LanguageSelector } from '../components';
+import { StyledList } from '../components/shared/StyledList';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { State } from '../types';
 import { menuItems } from '.';
+import { useLanguageSelector } from './useLanguageSelector';
 
 interface UseSettings {
     renderSettingsCardContent: JSX.Element;
@@ -27,6 +28,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { pathname } = useRouter();
+    const { renderCurrentFlag, openLanguageMenu } = useLanguageSelector();
 
     const handleMenuItemClick = (href: string) => (): void => {
         !!modal && dispatch(toggleSettings(false));
@@ -58,28 +60,32 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         </MenuItem>
     ));
 
+    const renderLanguageMenuItem = (
+        <MenuItem onClick={openLanguageMenu}>
+            {t('common:language')} {renderCurrentFlag}
+        </MenuItem>
+    );
+
     const renderCommonMenuItems = (
-        <MenuList>
-            <ListSubheader>{t('common:language')}</ListSubheader>
-            <ListItem>
-                <LanguageSelector fullWidth />
-            </ListItem>
-            <Divider />
+        <StyledList>
+            {renderLanguageMenuItem}
             <ListSubheader>{t('common:about')}</ListSubheader>
             {renderAboutMenuItems}
             <Divider />
             <ListSubheader>{t('common:legal')}</ListSubheader>
             {renderLegalItems}
-        </MenuList>
+        </StyledList>
     );
 
     const renderAuthenticatedMenuList = (
-        <MenuList>
+        <StyledList>
             <ListSubheader>{t('common:account')}</ListSubheader>
             {renderAccountMenuItems}
             <Divider />
-            {renderCommonMenuItems}
-        </MenuList>
+            {renderLanguageMenuItem}
+            {renderAboutMenuItems}
+            {renderLegalItems}
+        </StyledList>
     );
 
     const renderLoginButton = (

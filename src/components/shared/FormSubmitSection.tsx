@@ -3,7 +3,7 @@ import { Send } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
 
-import { FormErrorMessage } from '.';
+import { FormErrorMessage } from './FormErrorMessage';
 
 interface FormSubmitSectionProps extends FormikProps<{}> {
     submitButtonText: string;
@@ -16,15 +16,19 @@ export const FormSubmitSection: React.FC<FormSubmitSectionProps & ButtonProps> =
     variant,
     color,
 }) => (
-    <FormControl fullWidth>
-        <Box display="flex" flexDirection="column" alignItems="center">
-            {isSubmitting ? (
-                <Box marginY="0.5rem">
-                    <CircularProgress color="primary" />
+    <Box display="flex" flexDirection="column" alignItems="center">
+        {isSubmitting ? (
+            <Box marginTop="0.5rem" display="flex" justifyContent="center">
+                <CircularProgress color="primary" />
+            </Box>
+        ) : (
+            <FormControl fullWidth>
+                <Box display="flex" justifyContent="center">
+                    <ErrorMessage name="general" component={FormErrorMessage} />
                 </Box>
-            ) : (
-                <ErrorMessage name="general" component={FormErrorMessage} />
-            )}
+            </FormControl>
+        )}
+        <FormControl fullWidth>
             <Button
                 type="submit"
                 disabled={isSubmitting}
@@ -35,6 +39,6 @@ export const FormSubmitSection: React.FC<FormSubmitSectionProps & ButtonProps> =
             >
                 {submitButtonText}
             </Button>
-        </Box>
-    </FormControl>
+        </FormControl>
+    </Box>
 );

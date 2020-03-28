@@ -7,6 +7,7 @@
     "signedOut": "Kirjauduttu ulos!",
     "errorDownloadingResource": "Virhe ladattaessa tiedostoa!",
     "voteError": "Virhe äänestyksessä!",
+    "starError": "Virhe merkittäessä tähdellä!",
     "deleteCommentError": "Virhe poistettaessa kommenttia!",
     "commentDeleted": "Kommentti poistettu!",
     "messageEmpty": "Viesti ei voi olla tyhjä!",
@@ -15,5 +16,5 @@
     "resourceDeleted": "Resurssi poistettu!",
     "courseDeleted": "Kurssi poistettu!",
     "deleteCourseError": "Kurssin poistamisessa tapahtui odottamaton virhe!",
-    "avatarFileSize": "Suurin avatarin koko tiedostokoko 2MB. Valitse toinen!"
+    "downloadResourceError": "Virhe ladattaessa tiedostoa!"
 }

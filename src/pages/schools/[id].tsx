@@ -1,18 +1,18 @@
 import {
     Avatar,
     CardContent,
-    List,
     ListItem,
     ListItemAvatar,
     ListItemText,
     Table,
     TableBody,
     TableCell,
-    TableHead,
+    TableContainer,
     TableRow,
     Typography,
 } from '@material-ui/core';
-import { SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
+import { FlagOutlined, HouseOutlined, LocationCityOutlined, SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
+import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
@@ -23,12 +23,12 @@ import {
     SchoolObjectType,
     SubjectObjectType,
 } from '../../../generated/graphql';
-import { NotFound, StyledTable, TabLayout, TextLink } from '../../components';
+import { CourseTableBody, NotFound, StyledList, StyledTable, TabLayout, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
-import { includeDefaultNamespaces, Router } from '../../i18n';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { usePrivatePage } from '../../utils';
+import { useFrontendPagination, useOptions, usePrivatePage } from '../../utils';
 
 interface Props extends I18nProps {
     school?: SchoolObjectType;
@@ -36,6 +36,7 @@ interface Props extends I18nProps {
 
 const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
     const { t } = useTranslation();
+    const { renderShareOption, renderOptionsHeader, mobileDrawerProps, desktopDrawerProps, openOptions } = useOptions();
 
     if (school) {
         const schoolName = R.propOr('-', 'name', school) as string;
@@ -62,9 +63,30 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
             query: { cityName: R.propOr('', 'city', school) as boolean[] },
         };
 
+        const {
+            renderTablePagination: renderSubjectsTablePagination,
+            paginatedItems: paginatedSubjects,
+            renderNotFound: subjectsNotFound,
+        } = useFrontendPagination({
+            items: subjects,
+            notFoundText: 'school:noSubjects',
+        });
+
+        const {
+            renderTablePagination: renderCoursesTablePagination,
+            paginatedItems: paginatedCourses,
+            renderNotFound: coursesNotFound,
+            renderTableHead: renderCoursesTableHead,
+        } = useFrontendPagination({
+            items: courses,
+            titleLeft: 'common:name',
+            titleRight: 'common:points',
+            notFoundText: 'school:noCourses',
+        });
+
         const renderInfo = (
             <CardContent>
-                <List>
+                <StyledList>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -92,7 +114,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <SubjectOutlined />
+                                <HouseOutlined />
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
@@ -107,7 +129,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <SubjectOutlined />
+                                <FlagOutlined />
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
@@ -122,7 +144,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <SubjectOutlined />
+                                <LocationCityOutlined />
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
@@ -134,70 +156,55 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
-                </List>
+                </StyledList>
             </CardContent>
         );
 
-        const renderSubjects = subjects.length ? (
+        const renderOptions = <StyledList>{renderShareOption}</StyledList>;
+
+        const optionProps = {
+            renderOptions,
+            renderOptionsHeader,
+            openOptions,
+            mobileDrawerProps,
+            desktopDrawerProps,
+        };
+
+        const renderSubjects = !!subjects.length ? (
             <StyledTable disableBoxShadow>
-                <Table>
-                    <TableBody>
-                        {subjects.map((s: SubjectObjectType, i: number) => (
-                            <TableRow
-                                key={i}
-                                onClick={(): Promise<boolean> =>
-                                    Router.push({ pathname: '/search', query: { subject: s.id } })
-                                }
-                            >
-                                <TableCell>
-                                    <Typography variant="subtitle1">{R.propOr('-', 'name', s)}</Typography>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                <TableContainer>
+                    <Table>
+                        <TableBody>
+                            {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
+                                <Link href={{ pathname: '/search', query: { subject: s.id } }} key={i}>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant="subtitle1">{R.propOr('-', 'name', s)}</Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                </Link>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                {renderSubjectsTablePagination}
             </StyledTable>
         ) : (
-            <CardContent>
-                <Typography variant="subtitle1">{t('school:noSubjects')}</Typography>
-            </CardContent>
+            subjectsNotFound
         );
 
-        const renderCourses = courses.length ? (
+        const renderCourses = !!courses.length ? (
             <StyledTable disableBoxShadow>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {t('common:name')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {t('common:points')}
-                                </Typography>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {courses.map((c: CourseObjectType, i: number) => (
-                            <TableRow key={i} onClick={(): Promise<boolean> => Router.push(`/courses/${c.id}`)}>
-                                <TableCell>
-                                    <Typography variant="subtitle1">{R.propOr('-', 'name', c)}</Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Typography variant="subtitle1">{R.propOr('-', 'points', c)}</Typography>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                <TableContainer>
+                    <Table>
+                        {renderCoursesTableHead}
+                        <CourseTableBody courses={paginatedCourses} />
+                    </Table>
+                </TableContainer>
+                {renderCoursesTablePagination}
             </StyledTable>
         ) : (
-            <CardContent>
-                <Typography variant="subtitle1">{t('school:noCourses')}</Typography>
-            </CardContent>
+            coursesNotFound
         );
 
         return (
@@ -205,8 +212,8 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                 title={schoolName}
                 titleSecondary={t('common:courses')}
                 tabLabelLeft={t('common:subjects')}
-                renderMobileInfo={renderInfo}
-                renderDesktopInfo={renderInfo}
+                renderInfo={renderInfo}
+                optionProps={optionProps}
                 renderLeftContent={renderSubjects}
                 renderRightContent={renderCourses}
                 singleColumn

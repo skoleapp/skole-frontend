@@ -1,4 +1,4 @@
-import { FormControl } from '@material-ui/core';
+import { FormControl, FormHelperText } from '@material-ui/core';
 import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
 import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
 import React from 'react';
@@ -33,13 +33,14 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
                 initialFiles={initialFiles}
                 maxFileSize={5000000}
             />
+            <FormHelperText>{t('common:maxFileSize')}: 5MB</FormHelperText>
             <ErrorMessage name={field.name} component={FormErrorMessage} />
         </StyledDropzoneField>
     );
 };
 
 const StyledDropzoneField = styled(FormControl)`
-    > div {
+    > div:first-child {
         padding: 0.5rem;
         display: flex;
         flex-direction: column;

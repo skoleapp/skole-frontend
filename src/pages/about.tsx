@@ -1,4 +1,3 @@
-import { Typography } from '@material-ui/core';
 import React from 'react';
 import { compose } from 'redux';
 
@@ -11,8 +10,16 @@ import { useAuthSync } from '../utils';
 
 const AboutPage: I18nPage = () => {
     const { t } = useTranslation();
-    const renderCardContent = <Typography variant="body2">{t('about:content')}</Typography>;
-    return <SettingsLayout title={t('about:title')} renderCardContent={renderCardContent} backUrl />;
+
+    return (
+        <SettingsLayout
+            title={t('about:title')}
+            heading={t('about:heading')}
+            infoContent={t('about:content')}
+            backUrl
+            infoLayout
+        />
+    );
 };
 
 AboutPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

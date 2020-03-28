@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+/* eslint-disable */
 interface Props {
     file: string;
     pages: any[];
@@ -19,6 +20,9 @@ interface Props {
     setCurrentPage: (index: number) => void;
     voteProps: any;
 }
+
+// This is a secondary PDF viewer, an alternative to PDFViewer.
+// TODO: Fix types and refactor this so it can be used on resource detail.
 export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, currentPage, setCurrentPage, voteProps }) => {
     const [touchStart, setTouchStart]: any = useState(0);
     const [touchEnd, setTouchEnd]: any = useState(0);

@@ -1,6 +1,6 @@
 import { ContainerProps } from '@material-ui/core';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
-import ApolloClient from 'apollo-client';
+import ApolloClient, { ApolloQueryResult } from 'apollo-client';
 import { NextComponentType, NextPageContext } from 'next';
 import { Store } from 'redux';
 
@@ -9,6 +9,7 @@ import { Auth, UI } from './reducers';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
+    apolloState: ApolloQueryResult<{}>;
     reduxStore: Store;
     userMe: UserObjectType;
 }
@@ -38,6 +39,7 @@ export interface LayoutProps extends ContainerProps {
     headerRight?: JSX.Element;
     headerLeft?: JSX.Element;
     disableBottomNavbar?: boolean;
+    customBottomNavbar?: JSX.Element;
 }
 
 export interface CommentTarget {
@@ -49,4 +51,54 @@ export interface DiscussionBoxProps {
     comments: CommentObjectType[];
     isThread?: boolean;
     target: CommentTarget;
+    formKey: string;
 }
+
+export type MuiColor = 'inherit' | 'default' | 'primary' | 'secondary' | undefined;
+export type Anchor = 'bottom' | 'left' | 'top' | 'right' | undefined;
+
+interface OptionProps {
+    className: string;
+    anchor: Anchor;
+    open: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+}
+
+export interface UseOptions {
+    renderShareOption: JSX.Element;
+    renderReportOption: JSX.Element;
+    renderOptionsHeader: JSX.Element;
+    openOptions: () => void;
+    closeOptions: () => void;
+    mobileDrawerProps: OptionProps;
+    desktopDrawerProps: OptionProps;
+}
+
+export type Variant =
+    | 'subtitle1'
+    | 'inherit'
+    | 'button'
+    | 'caption'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'subtitle2'
+    | 'body1'
+    | 'body2'
+    | 'overline'
+    | 'srOnly'
+    | undefined;
+
+export type TextColor =
+    | 'initial'
+    | 'primary'
+    | 'secondary'
+    | 'error'
+    | 'textPrimary'
+    | 'textSecondary'
+    | 'inherit'
+    | undefined;

@@ -1,0 +1,9 @@
+mutation PerformStar($course: ID, $resource: ID) {
+    performStar(input: { course: $course, resource: $resource }) {
+        starred
+        errors {
+            field
+            messages
+        }
+    }
+}
