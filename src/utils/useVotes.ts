@@ -17,6 +17,7 @@ interface Variables {
 interface UseVotesProps {
     initialVote: VoteObjectType | null;
     initialPoints: number;
+    isOwner: boolean;
 }
 
 interface VoteButtonProps {
@@ -32,7 +33,7 @@ interface UseVotes {
     handleVote: (variables: Variables) => void;
 }
 
-export const useVotes = ({ initialVote, initialPoints }: UseVotesProps): UseVotes => {
+export const useVotes = ({ initialVote, initialPoints, isOwner }: UseVotesProps): UseVotes => {
     const [vote, setVote] = useState(initialVote);
     const [points, setPoints] = useState(initialPoints);
     const dispatch = useDispatch();
@@ -61,7 +62,7 @@ export const useVotes = ({ initialVote, initialPoints }: UseVotesProps): UseVote
 
     const commonVoteButtonProps = {
         size: 'small' as Size,
-        disabled: voteSubmitting,
+        disabled: voteSubmitting || isOwner,
     };
 
     const upVoteButtonProps = {

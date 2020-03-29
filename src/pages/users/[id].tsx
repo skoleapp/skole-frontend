@@ -11,7 +11,7 @@ import {
     TableContainer,
     Typography,
 } from '@material-ui/core';
-import { CloudUploadOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
+import { CloudUploadOutlined, EditOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
@@ -147,8 +147,13 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     {isOwnProfile && (
                         <CardContent>
                             <Grid container alignItems="center" justify="center">
-                                <ButtonLink href="/account/edit-profile" color="primary" variant="outlined">
-                                    {t('profile:editProfileButton')}
+                                <ButtonLink
+                                    href="/account/edit-profile"
+                                    color="primary"
+                                    variant="outlined"
+                                    endIcon={<EditOutlined />}
+                                >
+                                    {t('profile:editProfile')}
                                 </ButtonLink>
                                 <Box marginLeft="0.5rem">
                                     <SettingsButton className="md-up" color="primary" />

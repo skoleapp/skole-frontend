@@ -62,6 +62,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const confirm = useConfirm();
+    const { user } = useSelector((state: State) => state.auth);
 
     const {
         renderShareOption,
@@ -83,10 +84,9 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     };
 
     if (course) {
-        const { subject, school, user } = course;
         const fullName = getFullCourseName(course);
-        const subjectName = R.propOr('-', 'name', subject) as string;
-        const schoolName = R.propOr('-', 'name', school) as string;
+        const subjectName = R.propOr('-', 'name', course.subject) as string;
+        const schoolName = R.propOr('-', 'name', course.school) as string;
         const creatorId = R.propOr('', 'id', course.user) as string;
         const courseId = R.propOr('', 'id', course) as string;
         const creatorName = R.propOr('-', 'username', user) as string;
@@ -97,7 +97,13 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const isOwnCourse = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
         const initialVote = R.propOr(null, 'vote', course) as VoteObjectType | null;
         const starred = !!course.starred;
-        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({ initialVote, initialPoints });
+        const isOwner = !!user && user.id === creatorId;
+
+        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+            initialVote,
+            initialPoints,
+            isOwner,
+        });
 
         const created = moment(course.created)
             .startOf('day')
@@ -105,7 +111,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const subjectLink = {
             pathname: '/search',
-            query: { subjectId: R.propOr('', 'id', subject) as boolean[] },
+            query: { subjectId: R.propOr('', 'id', course.subject) as boolean[] },
         };
 
         const discussionBoxProps = {
@@ -197,7 +203,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         <ListItemText>
                             <Typography variant="body2">
                                 {t('common:school')}:{' '}
-                                <TextLink href={`/schools/${R.propOr('-', 'id', school)}`} color="primary">
+                                <TextLink href={`/schools/${R.propOr('-', 'id', course.school)}`} color="primary">
                                     {schoolName}
                                 </TextLink>
                             </Typography>

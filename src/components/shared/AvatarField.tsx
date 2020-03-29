@@ -1,5 +1,5 @@
-import { Avatar, Box, Button, FormControl, IconButton } from '@material-ui/core';
-import { DeleteOutline } from '@material-ui/icons';
+import { Avatar, Box, Button, FormControl } from '@material-ui/core';
+import { ClearOutlined, EditOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
 import { mediaURL } from '../../utils';
-import { FormErrorMessage } from '.';
+import { FormErrorMessage } from './FormErrorMessage';
 
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
     setFieldValue,
@@ -41,17 +41,31 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
         <StyledImagePreviewField fullWidth>
             <Box display="flex" flexDirection="column" alignItems="center">
                 <Avatar className="main-avatar" src={preview} />
-                <input value="" id="avatar-input" accept="image/*" type="file" onChange={handleAvatarChange} />
-                <Box marginY="0.5rem" display="flex" alignItems="center">
+                <Box width="12rem">
+                    <input value="" id="avatar-input" accept="image/*" type="file" onChange={handleAvatarChange} />
                     <label htmlFor="avatar-input">
-                        <Button variant="outlined" color="primary" component="span">
-                            {t('edit-profile:changeAvatarButton')}
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            component="span"
+                            endIcon={<EditOutlined />}
+                            fullWidth
+                        >
+                            {t('edit-profile:changeAvatar')}
                         </Button>
                     </label>
                     {!!preview && (
-                        <IconButton onClick={handleRemoveImage} color="primary">
-                            <DeleteOutline />
-                        </IconButton>
+                        <Box marginTop="0.5rem">
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={handleRemoveImage}
+                                endIcon={<ClearOutlined />}
+                                fullWidth
+                            >
+                                {t('edit-profile:clearAvatar')}
+                            </Button>
+                        </Box>
                     )}
                 </Box>
                 <ErrorMessage name="avatar" component={FormErrorMessage} />

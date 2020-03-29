@@ -1,6 +1,7 @@
 import { Box, Button, Card, CardContent, InputBase, Typography } from '@material-ui/core';
 import {
     CloudUploadOutlined,
+    ContactSupportOutlined,
     LibraryAddOutlined,
     SchoolOutlined,
     Search,
@@ -97,7 +98,7 @@ const IndexPage: I18nPage = () => {
                 </Typography>
             </Box>
             <Box marginY="1rem">
-                <ButtonLink href="/contact" variant="outlined" color="primary">
+                <ButtonLink href="/contact" variant="outlined" color="primary" endIcon={<ContactSupportOutlined />}>
                     {t('index:contactUsButton')}
                 </ButtonLink>
             </Box>

@@ -1,4 +1,5 @@
 import { Box, Divider, FormControl, Link, Typography } from '@material-ui/core';
+import { HowToRegOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
@@ -143,7 +144,13 @@ const RegisterPage: I18nPage = () => {
                     <Box marginY="1rem">
                         <Divider />
                     </Box>
-                    <ButtonLink href="/login" variant="outlined" color="primary" fullWidth>
+                    <ButtonLink
+                        href="/login"
+                        variant="outlined"
+                        color="primary"
+                        endIcon={<HowToRegOutlined />}
+                        fullWidth
+                    >
                         {t('register:alreadyHaveAccount')}
                     </ButtonLink>
                 </Form>

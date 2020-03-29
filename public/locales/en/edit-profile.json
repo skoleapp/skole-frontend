@@ -1,5 +1,6 @@
 {
     "title": "Edit Profile",
     "heading": "Edit Profile",
-    "changeAvatarButton": "Change Avatar"
+    "changeAvatar": "Change Avatar",
+    "clearAvatar": "Clear Avatar"
 }

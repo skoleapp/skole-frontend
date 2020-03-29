@@ -1,7 +1,7 @@
 {
     "login": "Log In",
     "register": "Register",
-    "signOut": "Sign Out",
+    "logout": "Log Out",
     "username": "Username",
     "email": "Email",
     "title": "Title",
