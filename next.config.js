@@ -2,10 +2,12 @@ const withCSS = require('@zeit/next-css');
 const WebpackBar = require('webpackbar');
 const withAssetsImport = require('next-assets-import');
 const withOffline = require('next-offline');
+require('dotenv').config();
 
 const prod = process.env.NODE_ENV === 'production';
 const API_URL = 'https://api.skoleapp.com/';
 const CLOUDMERSIVE_API_KEY = 'f0d72604-8df2-45e8-9d0b-09029ee16525'; // TODO: Remove this when environment variables work in production.
+console.log(process.env.CLOUDMERSIVE_API_KEY); // This is a test log to test the environment variables in production.
 
 module.exports = withOffline(
     withAssetsImport(
