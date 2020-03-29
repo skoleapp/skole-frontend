@@ -11,6 +11,7 @@ export const StyledBottomNavigation = styled(BottomNavigation)`
     border-top: var(--border);
     z-index: 1000;
 
+    // iOS
     padding-bottom: 0;
     padding-bottom: env(safe-area-inset-bottom, 0);
 
