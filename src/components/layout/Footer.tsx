@@ -76,6 +76,4 @@ const StyledFooter = styled(Grid)`
     align-items: center;
     background-color: var(--primary);
     padding: 0.5rem;
-    margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
-    margin-bottom: env(safe-area-inset-bottom); /* iOS 11.2 */
 `;
