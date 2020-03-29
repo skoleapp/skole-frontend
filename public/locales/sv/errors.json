@@ -1,9 +1,0 @@
-{
-    "USERNAME_TAKEN_MESSAGE": "Det här användarnamnet är taget.",
-    "EMAIL_TAKEN_MESSAGE": "Den här e-postaddressen är taget.",
-    "EMAIL_INVALID_MESSAGE": "Ogiltig e-postadress.",
-    "INCORRECT_OLD_PASSWORD_MESSAGE": "Gamla lösenordet är felaktigt.",
-    "INCORRECT_PASSWORD_MESSAGE": "Fel lösenord.",
-    "MESSAGE_SENT_ERROR_MESSAGE": "Fel vid skickande av meddelande.",
-    "UNABLE_TO_AUTHENTICATE_MESSAGE": "Det går inte att autentisera med de angivna referenser."
-}
