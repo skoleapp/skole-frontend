@@ -26,7 +26,7 @@ export default class SkoleDocument extends Document {
                         content="viewport-fit=cover, initial-scale=1, height=device-height, width=device-width"
                     />
                     <meta name="apple-mobile-web-app-capable" content="yes" />
-                    <meta name="apple-mobile-web-app-status-bar-style" content="default"></meta>
+                    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></meta>
                     <link rel="manifest" href="/manifest.json" />
                     <link rel="shortcut icon" href="/images/favicon.ico" />
                     <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/icon-180x180.png" />
