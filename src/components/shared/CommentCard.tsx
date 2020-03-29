@@ -30,7 +30,6 @@ import {
     CommentObjectType,
     DeleteCommentMutation,
     useDeleteCommentMutation,
-    UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleCommentThread, toggleFileViewer, toggleNotification } from '../../actions';
@@ -135,8 +134,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         </TextLink>
     );
 
-    const renderDeleteCommentOption = R.prop('id', comment.user as UserObjectType) ===
-        R.prop('id', user as UserObjectType) && (
+    const renderDeleteCommentOption = isOwner && (
         <MenuItem>
             <ListItemText onClick={handleDeleteComment}>
                 <DeleteOutline /> {t('common:deleteComment')}

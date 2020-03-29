@@ -29,10 +29,7 @@ export const base = css`
 
     html,
     body {
-        background: var(--primary);
-
-        padding-top: constant(safe-area-inset-top); /* iOS 11.0 */
-        padding-top: env(safe-area-inset-top); /* iOS 11.2 */
+        background: var(--secondary);
 
         .sm-down {
             @media only screen and (min-width: ${breakpoints.SM}) {

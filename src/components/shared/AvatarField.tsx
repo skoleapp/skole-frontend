@@ -22,7 +22,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
         const reader = new FileReader();
         const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
         if (avatar.size > 2000000) {
-            setFieldError('avatar', t('forms:fileSizeErr'));
+            setFieldError('avatar', t('forms:fileSizeError'));
         } else {
             reader.readAsDataURL(avatar);
             reader.onloadend = (): void => {
@@ -42,7 +42,14 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
             <Box display="flex" flexDirection="column" alignItems="center">
                 <Avatar className="main-avatar" src={preview} />
                 <Box width="12rem">
-                    <input value="" id="avatar-input" accept="image/*" type="file" onChange={handleAvatarChange} />
+                    <input
+                        value=""
+                        id="avatar-input"
+                        accept=".png, .jpg, .jpeg"
+                        type="file"
+                        capture="camera"
+                        onChange={handleAvatarChange}
+                    />
                     <label htmlFor="avatar-input">
                         <Button
                             variant="outlined"
