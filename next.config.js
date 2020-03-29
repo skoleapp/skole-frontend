@@ -5,6 +5,7 @@ const withOffline = require('next-offline');
 
 const prod = process.env.NODE_ENV === 'production';
 const API_URL = 'https://api.skoleapp.com/';
+const CLOUDMERSIVE_API_KEY = 'f0d72604-8df2-45e8-9d0b-09029ee16525'; // TODO: Remove this when environment variables work in production.
 
 module.exports = withOffline(
     withAssetsImport(
@@ -38,7 +39,7 @@ module.exports = withOffline(
             env: {
                 API_URL: prod ? API_URL : 'http://localhost:8000/',
                 BACKEND_URL: prod ? API_URL : 'http://backend:8000/',
-                CLOUDMERSIVE_API_KEY: process.env.CLOUDMERSIVE_API_KEY,
+                CLOUDMERSIVE_API_KEY: prod ? CLOUDMERSIVE_API_KEY : process.env.CLOUDMERSIVE_API_KEY,
             },
             webpack: (config, { dev }) => {
                 if (dev) {
