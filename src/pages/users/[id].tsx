@@ -125,7 +125,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText>
-                                        {points} {t('profile:points')}
+                                        {t('common:points')}: {points}
                                     </ListItemText>
                                 </ListItem>
                                 <ListItem>
@@ -135,7 +135,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText>
-                                        {courseCount} {t('profile:courses')}
+                                        {t('common:courses')}: {courseCount}
                                     </ListItemText>
                                 </ListItem>
                                 <ListItem>
@@ -145,7 +145,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText>
-                                        {resourceCount} {t('profile:resources')}
+                                        {t('common:resources')}: {resourceCount}
                                     </ListItemText>
                                 </ListItem>
                             </StyledList>

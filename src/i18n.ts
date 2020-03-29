@@ -22,7 +22,6 @@ export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
         'alerts',
         'comments',
         'gdpr',
-        'info',
     ];
 
     return defaultNamespaces.concat(namespaces);

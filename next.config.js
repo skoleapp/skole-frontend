@@ -2,8 +2,6 @@ const withCSS = require('@zeit/next-css');
 const WebpackBar = require('webpackbar');
 const withAssetsImport = require('next-assets-import');
 const withOffline = require('next-offline');
-const { parsed: localEnv } = require('dotenv').config();
-const webpack = require('webpack');
 
 module.exports = withOffline(
     withAssetsImport(
@@ -52,7 +50,6 @@ module.exports = withOffline(
                     }),
                 );
 
-                config.plugins.push(new webpack.EnvironmentPlugin(localEnv));
                 return config;
             },
             webpackDevMiddleware: config => {
