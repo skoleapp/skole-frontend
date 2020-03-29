@@ -35,7 +35,7 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { ButtonColor, ButtonVariant, I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
 import { mediaURL } from '../../utils';
 
@@ -88,6 +88,13 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             notFoundText: 'profile:noResources',
         });
 
+        const editProfileButtonProps = {
+            href: '/account/edit-profile',
+            color: 'primary' as ButtonColor,
+            variant: 'outlined' as ButtonVariant,
+            endIcon: <EditOutlined />,
+        };
+
         const renderTopSection = (
             <Grid className="border-bottom" container alignItems="center">
                 <Grid item container xs={12} sm={6} justify="center">
@@ -118,7 +125,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText>
-                                        {t('common:points')}: {points}
+                                        {points} {t('profile:points')}
                                     </ListItemText>
                                 </ListItem>
                                 <ListItem>
@@ -128,7 +135,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText>
-                                        {t('common:courses')}: {courseCount}
+                                        {courseCount} {t('profile:courses')}
                                     </ListItemText>
                                 </ListItem>
                                 <ListItem>
@@ -138,29 +145,29 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText>
-                                        {t('common:resources')}: {resourceCount}
+                                        {resourceCount} {t('profile:resources')}
                                     </ListItemText>
                                 </ListItem>
                             </StyledList>
                         </CardContent>
                     </Grid>
                     {isOwnProfile && (
-                        <CardContent>
+                        <CardContent className="sm-up">
                             <Grid container alignItems="center" justify="center">
-                                <ButtonLink
-                                    href="/account/edit-profile"
-                                    color="primary"
-                                    variant="outlined"
-                                    endIcon={<EditOutlined />}
-                                >
-                                    {t('profile:editProfile')}
-                                </ButtonLink>
+                                <ButtonLink {...editProfileButtonProps}>{t('profile:editProfile')}</ButtonLink>
                                 <Box marginLeft="0.5rem">
                                     <SettingsButton className="md-up" color="primary" />
                                 </Box>
                             </Grid>
                         </CardContent>
                     )}
+                </Grid>
+                <Grid className="sm-down" item xs={12}>
+                    <CardContent>
+                        <ButtonLink {...editProfileButtonProps} fullWidth>
+                            {t('profile:editProfile')}
+                        </ButtonLink>
+                    </CardContent>
                 </Grid>
             </Grid>
         );

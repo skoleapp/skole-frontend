@@ -74,7 +74,7 @@ export interface UseOptions {
     desktopDrawerProps: OptionProps;
 }
 
-export type Variant =
+export type TextVariant =
     | 'subtitle1'
     | 'inherit'
     | 'button'
@@ -101,3 +101,6 @@ export type TextColor =
     | 'textSecondary'
     | 'inherit'
     | undefined;
+
+export type ButtonColor = 'inherit' | 'primary' | 'secondary' | 'default';
+export type ButtonVariant = 'text' | 'outlined' | 'contained' | undefined;
