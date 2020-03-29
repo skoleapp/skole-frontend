@@ -26,6 +26,11 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.El
         const isBrowser = typeof window !== 'undefined';
         const uri = isBrowser ? process.env.API_URL : process.env.BACKEND_URL;
 
+        console.log('API_URL', process.env.API_URL);
+        console.log('BACKEND_URL', process.env.BACKEND_URL);
+        console.log('CLOUDMERSIVE_API_KEY', process.env.CLOUDMERSIVE_API_KEY);
+        console.log('NODE_ENV', process.env.NODE_ENV);
+
         const httpLink = createUploadLink({
             uri: uri + 'graphql/',
             credentials: 'include',
