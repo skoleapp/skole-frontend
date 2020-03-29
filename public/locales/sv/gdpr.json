@@ -1,13 +1,13 @@
 {
-    "privacyPreferences": "Privacy Preferences",
-    "warningDesc": "This website stores cookies on your computer. These cookies are used to collect information about how you interact with our website and allow us to remember you. We use this information in order to improve and customize your browsing experience and for analytics and metrics about our visitors both on this website and other media. To find out more about the cookies we use, see our Privacy Policy.",
-    "consentManagement": "Consent Management",
-    "consentManagementDesc": "When you visit any website, it may store or retrieve information on your browser, mostly in the form of cookies. This information might be about you, your preferences or your device and is mostly used to make the site work as you expect it to. The information does not usually directly identify you, but it can give you a more personalized web experience. Because we respect your right to privacy, you can choose not to allow some types of cookies. However, blocking some types of cookies may impact your experience of the site and the services we are able to offer.",
-    "privacyPolicy": "Privacy Policy",
-    "privacyPolicyDesc": "You read and agreed to our",
-    "termsAndConditions": "Terms and Conditions",
-    "termsAndConditionsDesc": "You read and agreed to our",
-    "cookieSettings": "Cookie Settings",
-    "cookieSettingsDesc": "We use these cookies to ensure the correct language is being chosen for you based on your region as well as the overall site functionality.",
+    "privacyPreferences": "Sekretessinställningar",
+    "warningDesc": " Denna webbplats lagrar cookies på din dator. Dessa cookies används för att samla information om hur du interagerar med vår webbplats och gör att vi kan komma ihåg dig. Vi använder denna information för att förbättra och anpassa din surfupplevelse och för analys och statistik om våra besökare både på denna webbplats och andra medier. För att ta reda på mer om cookies vi använder, se vår sekretesspolicy.",
+    "consentManagement": "Samtyckeshantering",
+    "consentManagementDesc": "När du besöker någon webbplats kan den lagra eller hämta information i din webbläsare, oftast i form av cookies. Denna information kan handla om dig, dina preferenser eller din enhet och används mest för att få webbplatsen att fungera som du förväntar dig att göra. Informationen identifierar dig vanligtvis inte direkt, men den kan ge dig en mer personlig webbupplevelse. Eftersom vi respekterar din rätt till integritet kan du välja att inte tillåta vissa typer av cookies. Att blockera vissa typer av cookies kan dock påverka din upplevelse av sajten och de tjänster vi kan erbjuda.",
+    "privacyPolicy": "Integritetspolicy",
+    "privacyPolicyDesc": "Du läste och gick med på vår",
+    "termsAndConditions": "Allmänna Villkor",
+    "termsAndConditionsDesc": "Du läste och gick med på vår",
+    "cookieSettings": "Cookie-inställningar",
+    "cookieSettingsDesc": "Vi använder dessa cookies för att säkerställa att rätt språk väljs för dig baserat på din region såväl som den övergripande webbplatsfunktionaliteten.",
     "cookies": "Cookies"
 }

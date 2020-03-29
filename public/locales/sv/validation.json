@@ -1,8 +1,10 @@
 {
-    "invalidEmail": "Invalid email.",
-    "passwordTooShort": "Password must be at least 6 characters long.",
-    "passwordsNotMatch": "Passwords do not match.",
-    "required": "This field is required.",
-    "unexpectedError": "Unexpected error.",
-    "networkError": "Network error."
+    "fieldRequired": "Krävs",
+    "invalidEmail": "Invalid email",
+    "passwordTooShort": "Lösenordet måste vara minst 6 tecken lång",
+    "passwordsNotMatch": "Lösenorden stämmer inte överens",
+    "filesRequired": "En eller flera filer krävs",
+    "required": "This fält krävs.",
+    "unexpectedError": "Oväntat fel.",
+    "networkError": "Nätverksfel."
 }
