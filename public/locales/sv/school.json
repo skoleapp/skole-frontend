@@ -1,6 +1,6 @@
 {
-    "seeCoursesButton": "See Courses!",
-    "noSubjects": "This schools has no subjects...",
-    "noCourses": "This schools has no courses...",
-    "notFound": "School not found..."
+    "notFound": "Skolan hittades inte...",
+    "seeCoursesButton": "Se Kurser!",
+    "noSubjects": "Den här skolan har inga ämnen...",
+    "noCourses": "Den här skolan har inga kurser..."
 }

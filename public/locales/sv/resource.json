@@ -1,8 +1,8 @@
 {
-    "notFound": "Resource not found...",
-    "deleteResource": "Delete resource",
-    "confirmDesc": "Are you sure you want to delete this resource?",
-    "loadingResource": "Loading Resource...",
-    "resourceError": "Error rendering resource.",
-    "resourceNotFound": "No resource found."
+    "notFound": "Resursen hittades inte...",
+    "deleteResource": "Radera resurs",
+    "confirmDesc": "Är du säker på att du vill ta bort den här resursen?",
+    "loadingResource": "Laddar resurs...",
+    "resourceError": "Fel vid återgivning av resurs.",
+    "resourceNotFound": "Ingen resurs hittades."
 }

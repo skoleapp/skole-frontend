@@ -1,6 +1,6 @@
 {
-    "title": "Delete Account",
-    "heading": "Delete Account",
-    "confirmTitle": "Are you sure you want to delete your account?",
-    "confirmDesc": "This action cannot be reverted and your account will be lost forever!"
+    "title": "Radera Konto",
+    "heading": "Radera Konto",
+    "confirmTitle": "Är du säker på att du vill ta bort ditt konto?",
+    "confirmDesc": "Den här åtgärden kan inte återställas och ditt konto kommer att försvinna för alltid!"
 }

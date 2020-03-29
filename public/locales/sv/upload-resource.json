@@ -1,5 +1,5 @@
 {
-    "title": "Upload Resource",
-    "heading": "Upload Resource",
-    "fileGenerationError": "Error while generating PDF."
+    "title": "Ladda Upp Resurs",
+    "heading": "Ladda Upp Resurs",
+    "dropzoneText": "Fel vid generering av PDF!"
 }
