@@ -23,7 +23,7 @@ export default class SkoleDocument extends Document {
                     <meta charSet="UTF-8" />
                     <meta
                         name="viewport"
-                        content="viewport-fit=cover, minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+                        content="viewport-fit=cover initial-scale=1, height=device-height, width=device-width"
                     />
                     <meta name="apple-mobile-web-app-capable" content="yes" />
                     <meta name="apple-mobile-web-app-status-bar-style" content="default"></meta>
