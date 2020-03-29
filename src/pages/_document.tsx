@@ -23,10 +23,10 @@ export default class SkoleDocument extends Document {
                     <meta charSet="UTF-8" />
                     <meta
                         name="viewport"
-                        content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+                        content="viewport-fit=cover, minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
                     />
                     <meta name="apple-mobile-web-app-capable" content="yes" />
-                    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></meta>
+                    <meta name="apple-mobile-web-app-status-bar-style" content="default"></meta>
                     <link rel="manifest" href="/manifest.json" />
                     <link rel="shortcut icon" href="/images/favicon.ico" />
                     <link rel="apple-touch-icon" sizes="180x180" href="images/icons/icon-180x180.png" />
