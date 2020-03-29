@@ -41,9 +41,15 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     const userObjects = R.propOr([], 'objects', users) as UserObjectType[];
     const count = R.propOr(0, 'count', users) as number;
 
-    const { toggleDrawer, open, handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<
-        FilterUsersFormValues
-    >();
+    const {
+        toggleDrawer,
+        open,
+        handleSubmit,
+        submitButtonText,
+        renderMobileClearFiltersButton,
+        renderDesktopClearFiltersButton,
+        ref,
+    } = useFilters<FilterUsersFormValues>();
 
     // Pre-load query params to the form.
     const initialValues = {
@@ -95,7 +101,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                         <MenuItem value="-points">{t('forms:pointsOrderingReverse')}</MenuItem>
                     </Field>
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
-                    {renderClearFiltersButton}
+                    {renderDesktopClearFiltersButton}
                 </Form>
             )}
         </Formik>
@@ -140,6 +146,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
             title={t('users:title')}
             heading={t('users:heading')}
             renderCardContent={renderCardContent}
+            renderMobileClearFiltersButton={renderMobileClearFiltersButton}
             renderTableContent={renderTableContent}
             toggleDrawer={toggleDrawer}
             open={open}
