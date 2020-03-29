@@ -13,14 +13,13 @@ import {
     CloudDownloadOutlined,
     CloudUploadOutlined,
     DeleteOutline,
+    HouseOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
-    LibraryAddOutlined,
     SchoolOutlined,
     ScoreOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
-import moment from 'moment';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -33,10 +32,12 @@ import {
     ResourceDetailDocument,
     ResourceObjectType,
     useDeleteResourceMutation,
+    UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
 import {
+    CreatorListItem,
     DiscussionBox,
     NotFound,
     PDFViewer,
@@ -81,8 +82,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const schoolName = R.propOr('-', 'name', resource.school) as string;
         const creatorId = R.propOr('', 'id', resource.user) as string;
         const resourceId = R.propOr('', 'id', resource) as string;
-        const creatorName = R.propOr('-', 'username', resource.user) as string;
-        const created = moment(resource.created).format('LL');
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
         const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
         const initialVote = R.propOr(null, 'vote', resource) as VoteObjectType | null;
@@ -101,8 +100,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             target: { resource: Number(resource.id) },
             formKey: 'resource',
         };
-
-        const createdInfoProps = { creatorId, creatorName, created };
 
         const deleteResourceError = (): void => {
             dispatch(toggleNotification(t('notifications:deleteResourceError')));
@@ -199,7 +196,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <LibraryAddOutlined />
+                                <HouseOutlined />
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
@@ -223,6 +220,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
+                    <CreatorListItem user={resource.user as UserObjectType} created={resource.created} />
                 </StyledList>
             </CardContent>
         );
@@ -288,7 +286,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 tabLabelLeft={t('common:resource')}
                 renderLeftContent={<PDFViewer file={file} />}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
-                createdInfoProps={createdInfoProps}
                 optionProps={optionProps}
                 customBottomNavbar={renderCustomBottomNavbar}
                 extraDesktopActions={renderExtraDesktopActions}

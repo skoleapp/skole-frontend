@@ -1,12 +1,12 @@
-import { Box, CardHeader, Divider, Drawer, Grid, IconButton, Paper, Tab, Typography } from '@material-ui/core';
+import { Box, CardHeader, Divider, Drawer, Grid, IconButton, Paper, Tab } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { useTranslation } from '../../i18n';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useOpen, useTabs } from '../../utils';
-import { ModalHeader, StyledCard, TextLink } from '../shared';
+import { ModalHeader, StyledCard } from '../shared';
 import { StyledTabs } from '../shared/StyledTabs';
 import { MainLayout } from './MainLayout';
 
@@ -27,11 +27,6 @@ interface Props extends LayoutProps {
     extraDesktopActions?: JSX.Element;
     singleColumn?: boolean;
     optionProps: OptionProps;
-    createdInfoProps?: {
-        creatorId: string;
-        creatorName: string;
-        created: string;
-    };
 }
 
 export const TabLayout: React.FC<Props> = ({
@@ -41,7 +36,6 @@ export const TabLayout: React.FC<Props> = ({
     renderInfo,
     renderLeftContent,
     renderRightContent,
-    createdInfoProps,
     singleColumn,
     optionProps,
     headerActionMobile,
@@ -50,9 +44,10 @@ export const TabLayout: React.FC<Props> = ({
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
-    const { t } = useTranslation();
     const { open: infoOpen, handleOpen: handleOpenInfo, handleClose: handleCloseInfo } = useOpen();
     const { renderOptions, renderOptionsHeader, mobileDrawerProps, desktopDrawerProps, openOptions } = optionProps;
+    const { t } = useTranslation();
+    const infoTitle = t('common:info');
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
@@ -68,18 +63,6 @@ export const TabLayout: React.FC<Props> = ({
 
     const renderMobileHeaderActions = renderHeaderActions('secondary');
     const renderDesktopHeaderActions = renderHeaderActions('default');
-
-    const renderCreatedInfo = !!createdInfoProps && (
-        <Box padding="0.5rem" textAlign="left">
-            <Typography variant="body2" color="textSecondary">
-                {t('common:createdBy')}{' '}
-                <TextLink href={`/users/${createdInfoProps.creatorId}`} color="primary">
-                    {createdInfoProps.creatorName}
-                </TextLink>{' '}
-                {createdInfoProps.created}
-            </Typography>
-        </Box>
-    );
 
     const renderTabs = (
         <StyledTabs value={tabValue} onChange={handleTabChange}>
@@ -146,9 +129,7 @@ export const TabLayout: React.FC<Props> = ({
     const renderMobileInfoDrawer = (
         <Drawer className="md-down" anchor="bottom" {...commonInfoDrawerProps}>
             <Paper>
-                <ModalHeader title={title} onCancel={handleCloseInfo} />
-                {renderCreatedInfo}
-                <Divider />
+                <ModalHeader title={infoTitle} onCancel={handleCloseInfo} />
                 {renderInfo}
             </Paper>
         </Drawer>
@@ -156,9 +137,7 @@ export const TabLayout: React.FC<Props> = ({
 
     const renderDesktopInfoDrawer = (
         <Drawer className="md-up" anchor="left" {...commonInfoDrawerProps}>
-            <ModalHeader title={title} onCancel={handleCloseInfo} />
-            {renderCreatedInfo}
-            <Divider />
+            <ModalHeader title={infoTitle} onCancel={handleCloseInfo} />
             {renderInfo}
         </Drawer>
     );

@@ -24,3 +24,4 @@ export { StyledBottomNavigation } from './StyledBottomNavigation';
 export { StarButton } from './StarButton';
 export { CourseTableBody } from './CourseTableBody';
 export { ResourceTableBody } from './ResourceTableBody';
+export { CreatorListItem } from './CreatorListItem';

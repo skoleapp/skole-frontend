@@ -1,5 +1,5 @@
-import { Button, FormControl } from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
+import { Button, FormControl, IconButton } from '@material-ui/core';
+import { Clear, ClearAllOutlined } from '@material-ui/icons';
 import { FormikActions } from 'formik';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
@@ -13,7 +13,8 @@ import { UseForm, useForm } from './useForm';
 
 export interface UseFilters<T> extends UseForm<T> {
     submitButtonText: string;
-    renderClearFiltersButton: JSX.Element;
+    renderMobileClearFiltersButton: JSX.Element;
+    renderDesktopClearFiltersButton: JSX.Element;
     handleSubmit: (filteredValues: T, actions: FormikActions<T>) => Promise<void>;
     handleClearFilters: () => Promise<void>;
     open: boolean;
@@ -49,8 +50,14 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
         closeDrawer();
     };
 
-    const renderClearFiltersButton = (
-        <FormControl fullWidth>
+    const renderMobileClearFiltersButton = (
+        <IconButton onClick={handleClearFilters}>
+            <ClearAllOutlined />
+        </IconButton>
+    );
+
+    const renderDesktopClearFiltersButton = (
+        <FormControl className="md-up" fullWidth>
             <Button onClick={handleClearFilters} variant="outlined" color="primary" endIcon={<Clear />} fullWidth>
                 {t('common:clear')}
             </Button>
@@ -60,7 +67,8 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
     return {
         submitButtonText,
         handleSubmit,
-        renderClearFiltersButton,
+        renderMobileClearFiltersButton,
+        renderDesktopClearFiltersButton,
         open,
         toggleDrawer,
         handleClearFilters,

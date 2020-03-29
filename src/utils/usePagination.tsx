@@ -21,7 +21,7 @@ import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { Router, useTranslation } from '../i18n';
-import { TextColor, Variant } from '../types';
+import { TextColor, TextVariant } from '../types';
 
 interface CustomTableHeadProps {
     titleLeft: string;
@@ -30,7 +30,7 @@ interface CustomTableHeadProps {
 }
 
 const titleProps = {
-    variant: 'subtitle1' as Variant,
+    variant: 'subtitle1' as TextVariant,
     color: 'textSecondary' as TextColor,
 };
 
