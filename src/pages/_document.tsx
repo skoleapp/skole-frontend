@@ -29,7 +29,8 @@ export default class SkoleDocument extends Document {
                     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></meta>
                     <link rel="manifest" href="/manifest.json" />
                     <link rel="shortcut icon" href="/images/favicon.ico" />
-                    <link rel="apple-touch-icon" href="/images/icons/skole-icon-rounded-512.png"></link>
+                    <link rel="apple-touch-icon" sizes="180x180" href="images/icons/icon-180x180.png" />
+                    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ad3636"></link>
                 </Head>
                 <body>
                     <Main />
