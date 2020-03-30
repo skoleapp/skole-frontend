@@ -1,5 +1,4 @@
 {
-    "fieldRequired": "Krävs",
     "invalidEmail": "Invalid email",
     "passwordTooShort": "Lösenordet måste vara minst 6 tecken lång",
     "passwordsNotMatch": "Lösenorden stämmer inte överens",
