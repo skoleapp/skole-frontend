@@ -2,8 +2,10 @@ import { FormControl, FormHelperText } from '@material-ui/core';
 import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
 import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import { toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
 import { FormErrorMessage } from './FormErrorMessage';
 
@@ -14,11 +16,20 @@ interface Props extends DropzoneAreaProps {
 
 const acceptedFiles = ['image/*', 'text/*', 'application/*'];
 
-export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) => {
+export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const maxFileSize = 5000000;
 
     const handleFileChange = (files: File[]): void => {
         form.setFieldValue(field.name, files[0]);
+    };
+
+    // TODO: Use form error here, now using notification temporarily as the form error does not work for some reason.
+    const handleDropRejected = (files: File[]): void => {
+        if (files[0].size > maxFileSize) {
+            dispatch(toggleNotification(t('forms:fileSizeError')));
+        }
     };
 
     // Allow uploading files using camera.
@@ -36,10 +47,12 @@ export const DropzoneField: React.FC<Props> = ({ form, field, initialFiles }) =>
                 useChipsForPreview
                 showAlerts={false}
                 dropzoneText={t('common:dropzoneText')}
-                initialFiles={initialFiles}
-                maxFileSize={5000000}
+                maxFileSize={maxFileSize}
+                onDropRejected={handleDropRejected}
             />
-            <FormHelperText>{t('common:maxFileSize')}: 5MB</FormHelperText>
+            <FormHelperText>
+                {t('common:maxFileSize')}: {maxFileSize / 1000000} MB
+            </FormHelperText>
             <ErrorMessage name={field.name} component={FormErrorMessage} />
         </StyledDropzoneField>
     );

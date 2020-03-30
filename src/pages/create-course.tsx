@@ -36,7 +36,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
-        courseName: Yup.string().required(t('validation:courseNameRequired')),
+        courseName: Yup.string().required(t('validation:required')),
         courseCode: Yup.string(),
         subject: Yup.object().nullable(),
         school: Yup.object()

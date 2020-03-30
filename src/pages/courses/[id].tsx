@@ -14,14 +14,13 @@ import {
 import {
     CloudUploadOutlined,
     DeleteOutline,
+    HouseOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
-    SchoolOutlined,
     ScoreOutlined,
     SubjectOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
-import moment from 'moment';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
@@ -35,10 +34,12 @@ import {
     DeleteCourseMutation,
     ResourceObjectType,
     useDeleteCourseMutation,
+    UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
 import {
+    CreatorListItem,
     DiscussionBox,
     NotFound,
     ResourceTableBody,
@@ -89,7 +90,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const schoolName = R.propOr('-', 'name', course.school) as string;
         const creatorId = R.propOr('', 'id', course.user) as string;
         const courseId = R.propOr('', 'id', course) as string;
-        const creatorName = R.propOr('-', 'username', user) as string;
         const initialPoints = R.propOr(0, 'points', course) as number;
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
@@ -105,10 +105,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             isOwner,
         });
 
-        const created = moment(course.created)
-            .startOf('day')
-            .fromNow();
-
         const subjectLink = {
             pathname: '/search',
             query: { subjectId: R.propOr('', 'id', course.subject) as boolean[] },
@@ -119,8 +115,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             target: { course: Number(course.id) },
             formKey: 'course',
         };
-
-        const createdInfoProps = { creatorId, creatorName, created };
 
         const frontendPaginationProps = {
             items: resources,
@@ -197,7 +191,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <SchoolOutlined />
+                                <HouseOutlined />
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText>
@@ -233,6 +227,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
+                    <CreatorListItem user={course.user as UserObjectType} created={course.created} />
                 </StyledList>
             </CardContent>
         );
@@ -319,7 +314,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 tabLabelLeft={t('common:resources')}
                 renderLeftContent={renderResources}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
-                createdInfoProps={createdInfoProps}
                 headerActionMobile={uploadResourceButtonMobile}
                 headerActionDesktop={uploadResourceButtonDesktop}
                 customBottomNavbar={renderCustomBottomNavbar}

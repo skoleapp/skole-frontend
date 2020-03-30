@@ -20,18 +20,18 @@ export const BottomNavbar: React.FC = () => {
     const getNavbarValue = (): number | null => {
         switch (pathname) {
             case home: {
-                return 0;
-            }
-            case search: {
                 return 1;
             }
-            case userDetail: {
-                if (user && query.id === user.id) {
-                    return 2;
-                }
+            case search: {
+                return 2;
             }
             case starred: {
                 return 3;
+            }
+            case userDetail: {
+                if (user && query.id === user.id) {
+                    return 4;
+                }
             }
             default: {
                 return null;

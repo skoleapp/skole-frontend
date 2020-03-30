@@ -50,9 +50,15 @@ interface Props {
 }
 
 const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
-    const { toggleDrawer, open, handleSubmit, submitButtonText, renderClearFiltersButton, ref } = useFilters<
-        FilterSearchResultsFormValues
-    >();
+    const {
+        toggleDrawer,
+        open,
+        handleSubmit,
+        submitButtonText,
+        renderMobileClearFiltersButton,
+        renderDesktopClearFiltersButton,
+        ref,
+    } = useFilters<FilterSearchResultsFormValues>();
 
     const { query } = useRouter();
     const { t } = useTranslation();
@@ -179,7 +185,7 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
                         <MenuItem value="-points">{t('forms:pointsOrderingReverse')}</MenuItem>
                     </Field>
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
-                    {renderClearFiltersButton}
+                    {renderDesktopClearFiltersButton}
                 </Form>
             )}
         </Formik>
@@ -204,6 +210,7 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
             title={t('search:title')}
             heading={t('search:heading')}
             renderCardContent={renderCardContent}
+            renderMobileClearFiltersButton={renderMobileClearFiltersButton}
             renderTableContent={renderTableContent}
             toggleDrawer={toggleDrawer}
             open={open}

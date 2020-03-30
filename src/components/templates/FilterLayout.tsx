@@ -10,13 +10,14 @@ import { UseFilters } from '../../utils/useFilters';
 import { ModalHeader } from '../shared';
 import { MainLayout } from './MainLayout';
 
-interface Props extends LayoutProps {
+interface Props extends LayoutProps, Pick<UseFilters<{}>, 'renderMobileClearFiltersButton'> {
     renderTableContent: JSX.Element | JSX.Element[];
 }
 
 export const FilterLayout = <T extends {}>({
     renderCardContent,
     renderTableContent,
+    renderMobileClearFiltersButton,
     toggleDrawer,
     open,
     ...props
@@ -34,7 +35,11 @@ export const FilterLayout = <T extends {}>({
             <StyledTable>{renderTableContent}</StyledTable>
             <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>
                 <StyledCard scrollable>
-                    <ModalHeader onCancel={toggleDrawer(false)} title={t('common:advancedSearch')} />
+                    <ModalHeader
+                        onCancel={toggleDrawer(false)}
+                        title={t('common:advancedSearch')}
+                        headerRight={renderMobileClearFiltersButton}
+                    />
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
             </Drawer>

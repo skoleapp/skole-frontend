@@ -3,9 +3,6 @@ const WebpackBar = require('webpackbar');
 const withAssetsImport = require('next-assets-import');
 const withOffline = require('next-offline');
 
-const prod = process.env.NODE_ENV === 'production';
-const API_URL = 'https://api.skoleapp.com/';
-
 module.exports = withOffline(
     withAssetsImport(
         withCSS({
@@ -36,8 +33,8 @@ module.exports = withOffline(
             },
             target: 'serverless',
             env: {
-                API_URL: prod ? API_URL : 'http://localhost:8000/',
-                BACKEND_URL: prod ? API_URL : 'http://backend:8000/',
+                API_URL: process.env.API_URL,
+                BACKEND_URL: process.env.BACKEND_URL,
                 CLOUDMERSIVE_API_KEY: process.env.CLOUDMERSIVE_API_KEY,
             },
             webpack: (config, { dev }) => {
