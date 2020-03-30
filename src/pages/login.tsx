@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation } from '../../generated/graphql';
 import { authenticate } from '../actions';
-import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -105,9 +105,9 @@ const LoginPage: I18nPage = () => {
                     >
                         {t('login:createAccount')}
                     </ButtonLink>
-                    <Box marginTop="1rem">
+                    {/* <Box marginTop="1rem"> // Hide until reset password feature works.
                         <TextLink href="/reset-password">{t('login:forgotPassword')}</TextLink>
-                    </Box>
+                    </Box> */}
                 </Form>
             )}
         </Formik>
