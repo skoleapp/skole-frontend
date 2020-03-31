@@ -47,7 +47,8 @@ export const useLanguageSelector = (): UseLanguageSelector => {
     };
 
     const language = languages.find(c => c.value === value) as Language;
-    const renderCurrentFlag = languageToFlag(language.code);
+
+    const renderCurrentFlag = !!language && !!language.code ? languageToFlag(language.code) : languageToFlag('US');
 
     const renderLanguageButton = (
         <StyledLanguageSelector onClick={openLanguageMenu}>{renderCurrentFlag}</StyledLanguageSelector>
