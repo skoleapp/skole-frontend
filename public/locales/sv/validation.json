@@ -2,7 +2,6 @@
     "invalidEmail": "Invalid email",
     "passwordTooShort": "Lösenordet måste vara minst 6 tecken lång",
     "passwordsNotMatch": "Lösenorden stämmer inte överens",
-    "filesRequired": "En eller flera filer krävs",
     "required": "This fält krävs.",
     "unexpectedError": "Oväntat fel.",
     "networkError": "Nätverksfel."
