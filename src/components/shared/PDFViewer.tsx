@@ -62,15 +62,21 @@ const StyledFilePreview = styled(Box)`
 
     .react-pdf__Document {
         overflow-y: scroll;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        overflow-x: hidden;
+        width: 100%;
+        height: 100%;
 
-        canvas {
-            width: 100% !important;
-            height: 100% !important;
+        .react-pdf__Page {
+            height: 100%;
+            width: 100%;
+
+            .react-pdf__Page__canvas,
+            .react-pdf__Page__textContent {
+                height: auto !important;
+                width: auto !important;
+                max-width: 100%;
+                max-height: 100%;
+            }
         }
     }
 `;
