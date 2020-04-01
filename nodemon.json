@@ -1,7 +1,6 @@
 {
     "watch": [".babelrc", "public/locales/**/*.json", "next.config.js", "src/*.ts"],
     "ignore": ["locales/**/*.missing.json"],
-    "verbose": true,
     "execMap": {
         "ts": "TS_NODE_PROJECT='./tsconfig.server.json' node -r ts-node/register --max-old-space-size=4096"
     }

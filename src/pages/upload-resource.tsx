@@ -36,7 +36,7 @@ interface Props extends I18nProps {
 const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, setFieldError } = useForm<
+    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, setFieldError, setFieldValue } = useForm<
         UploadResourceFormValues
     >();
 
@@ -74,6 +74,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
             if (!!file) {
                 const body = new FormData();
                 body.append('file', file);
+                setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
 
                 const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
                     method: 'POST',
@@ -103,6 +104,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
             handleFileGenerationError();
         } finally {
             setSubmitting(false);
+            setFieldValue('general', '');
         }
     };
 
