@@ -85,7 +85,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
                 if (res.status === 200) {
                     const blob = await res.blob();
-                    const pdf = new File([blob], 'file');
+                    const pdf = new File([blob], 'resource.pdf');
 
                     const variables = {
                         resourceTitle,

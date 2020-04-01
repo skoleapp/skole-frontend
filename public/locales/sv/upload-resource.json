@@ -1,5 +1,5 @@
 {
     "title": "Ladda Upp Resurs",
     "heading": "Ladda Upp Resurs",
-    "dropzoneText": "Fel vid generering av PDF!"
+    "fileGenerationError": "Fel vid generering av PDF!"
 }
