@@ -1,25 +1,29 @@
-import { Box, Button, ButtonProps, CircularProgress, FormControl } from '@material-ui/core';
+import { Box, Button, ButtonProps, CircularProgress, FormControl, FormHelperText } from '@material-ui/core';
 import { Send } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
 
 import { FormErrorMessage } from './FormErrorMessage';
 
-interface FormSubmitSectionProps extends FormikProps<{}> {
+interface Props extends FormikProps<{}> {
     submitButtonText: string;
 }
 
-export const FormSubmitSection: React.FC<FormSubmitSectionProps & ButtonProps> = ({
+export const FormSubmitSection: React.FC<Props & ButtonProps> = ({
     isSubmitting,
     submitButtonText,
     endIcon,
     variant,
     color,
+    values,
 }) => (
     <Box display="flex" flexDirection="column" alignItems="center">
         {isSubmitting ? (
-            <Box marginTop="0.5rem" display="flex" justifyContent="center">
+            <Box marginTop="0.5rem" display="flex" justifyContent="center" alignItems="center">
                 <CircularProgress color="primary" />
+                <Box marginLeft="0.5rem">
+                    <FormHelperText>{(values as { general: string }).general}</FormHelperText>
+                </Box>
             </Box>
         ) : (
             <FormControl fullWidth>

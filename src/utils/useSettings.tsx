@@ -1,4 +1,4 @@
-import { Button, Divider, ListItem, ListSubheader, MenuItem } from '@material-ui/core';
+import { Button, Divider, ListItem, MenuItem } from '@material-ui/core';
 import { ExitToAppOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -79,19 +79,14 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     const renderCommonMenuItems = (
         <StyledList>
             {renderLanguageMenuItem}
-            <ListSubheader>{t('common:about')}</ListSubheader>
             {renderAboutMenuItems}
-            <Divider />
-            <ListSubheader>{t('common:legal')}</ListSubheader>
             {renderLegalItems}
         </StyledList>
     );
 
     const renderAuthenticatedMenuList = (
         <StyledList>
-            <ListSubheader>{t('common:account')}</ListSubheader>
             {renderAccountMenuItems}
-            <Divider />
             {renderLanguageMenuItem}
             {renderAboutMenuItems}
             {renderLegalItems}

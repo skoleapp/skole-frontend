@@ -1,5 +1,6 @@
 {
     "title": "Upload Resource",
     "heading": "Upload Resource",
-    "fileGenerationError": "Error while generating PDF."
+    "fileGenerationError": "Error while generating PDF.",
+    "fileGenerationLoadingText": "Generating PDF..."
 }

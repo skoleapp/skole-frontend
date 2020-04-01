@@ -46,7 +46,6 @@
     "editProfile": "Redigera Profil",
     "changePassword": "Byt Lösenord",
     "deleteAccount": "Radera Konto",
-    "account": "Konto",
     "course": "Kurs",
     "name": "Namn",
     "discussion": "Diskussion",
@@ -63,7 +62,6 @@
     "resultsPerPage": "Resultat Per Sida",
     "clickToView": "Klicka för att se!",
     "starred": "Stjärnmärkta",
-    "settings": "Inställningar"
-}
-
+    "settings": "Inställningar",
+    "info": "Info"
 }

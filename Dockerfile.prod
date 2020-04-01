@@ -7,7 +7,7 @@ ARG CLOUDMERSIVE_API_KEY
 RUN mkdir /app
 WORKDIR /app
 
-COPY ./frontend .
+COPY . .
 
 RUN yarn install
 RUN yarn build
