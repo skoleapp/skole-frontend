@@ -2,11 +2,6 @@ import { List } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const StyledList = styled(List)`
-    .MuiListSubheader-root {
-        text-align: left;
-        outline: none;
-    }
-
     .MuiListItem-root {
         .MuiListItemAvatar-root {
             min-width: 2.75rem;
