@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 
-import { SET_CENTER, PREV_PAGE, NEXT_PAGE, SET_PAGES, SET_CURRENT_PAGE } from '../actions';
+import { NEXT_PAGE, PREV_PAGE, SET_CENTER, SET_CURRENT_PAGE, SET_PAGES } from '../actions';
 
 export interface ResourceState {
     pages: any[];

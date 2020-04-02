@@ -1,11 +1,11 @@
 import 'ol/ol.css';
 
 import { Box, CircularProgress } from '@material-ui/core';
-
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch, batch } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
+
+import { NEXT_PAGE, PREV_PAGE, SET_CENTER, setCurrentPage, setPages } from '../../actions';
 import { State } from '../../types';
-import { setPages, setCurrentPage, SET_CENTER, PREV_PAGE, NEXT_PAGE } from '../../actions';
 
 /* eslint-disable */
 interface Props {

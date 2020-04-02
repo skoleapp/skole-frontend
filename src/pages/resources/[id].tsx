@@ -13,20 +13,20 @@ import {
     CloudDownloadOutlined,
     CloudUploadOutlined,
     DeleteOutline,
+    FullscreenOutlined,
     HouseOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
-    SchoolOutlined,
-    ScoreOutlined,
     NavigateBeforeOutlined,
     NavigateNextOutlined,
-    FullscreenOutlined,
+    SchoolOutlined,
+    ScoreOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector, batch } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 
 import {
@@ -38,7 +38,7 @@ import {
     UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { toggleNotification, setCenter, setPages, setCurrentPage, nextPage, prevPage } from '../../actions';
+import { nextPage, prevPage, setCenter, setCurrentPage, setPages, toggleNotification } from '../../actions';
 import {
     CreatorListItem,
     DiscussionBox,

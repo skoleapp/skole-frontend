@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
+import { breakpoints } from '../../styles';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useOpen, useTabs } from '../../utils';
 import { ModalHeader, StyledCard } from '../shared';
 import { StyledTabs } from '../shared/StyledTabs';
 import { MainLayout } from './MainLayout';
-import { breakpoints } from '../../styles';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
     renderOptions: JSX.Element;
@@ -51,7 +51,7 @@ export const TabLayout: React.FC<Props> = ({
     const { renderOptions, renderOptionsHeader, mobileDrawerProps, desktopDrawerProps, openOptions } = optionProps;
     const { t } = useTranslation();
     const infoTitle = t('common:info');
-    const [onDevice, setDevice]: any = useState('');
+    const [onDevice, setDevice]: string = useState('');
 
     useEffect(() => {
         // TODO: listen to breakpoint changes, add to redux, implement SSR to guess the device

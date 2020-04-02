@@ -2,6 +2,8 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
+// eslint-disable-next-line no-console
+import Resizer from 'react-image-file-resizer';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
@@ -21,9 +23,6 @@ import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePrivatePage } from '../utils';
-// @ts-ignore
-
-import Resizer from 'react-image-file-resizer';
 
 interface UploadResourceFormValues {
     resourceTitle: string;
