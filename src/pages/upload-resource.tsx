@@ -68,7 +68,10 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     // Use Cloudmersive API to generate PDF from any commonly used file format.
     const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
         const { resourceTitle, resourceType, course, file } = values;
-        const handleFileGenerationError = (): void => setFieldError('file', t('upload-resource:fileGenerationError'));
+        const handleFileGenerationError = (): void => {
+            setFieldError('file', t('upload-resource:fileGenerationError'));
+            setFieldValue('general', null);
+        };
 
         try {
             if (!!file) {
@@ -89,6 +92,8 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                     if (res.status === 200) {
                         const blob = await res.blob();
                         pdf = new File([blob], 'resource.pdf');
+                    } else {
+                        handleFileGenerationError();
                     }
                 } else {
                     setFieldValue('general', t('upload-resource:fileUploadingText'));
