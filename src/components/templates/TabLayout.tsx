@@ -1,6 +1,6 @@
 import { Box, CardHeader, Divider, Drawer, Grid, IconButton, Paper, Tab } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
@@ -9,6 +9,7 @@ import { useOpen, useTabs } from '../../utils';
 import { ModalHeader, StyledCard } from '../shared';
 import { StyledTabs } from '../shared/StyledTabs';
 import { MainLayout } from './MainLayout';
+import { breakpoints } from '../../styles';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
     renderOptions: JSX.Element;
@@ -19,6 +20,7 @@ interface Props extends LayoutProps {
     tabLabelLeft: string;
     renderInfo: JSX.Element;
     renderLeftContent: JSX.Element;
+    renderLeftFooter?: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
     renderSecondaryAction?: JSX.Element;
@@ -35,6 +37,7 @@ export const TabLayout: React.FC<Props> = ({
     tabLabelLeft,
     renderInfo,
     renderLeftContent,
+    renderLeftFooter,
     renderRightContent,
     singleColumn,
     optionProps,
@@ -48,6 +51,24 @@ export const TabLayout: React.FC<Props> = ({
     const { renderOptions, renderOptionsHeader, mobileDrawerProps, desktopDrawerProps, openOptions } = optionProps;
     const { t } = useTranslation();
     const infoTitle = t('common:info');
+    const [onDevice, setDevice]: any = useState('');
+
+    useEffect(() => {
+        // TODO: listen to breakpoint changes, add to redux, implement SSR to guess the device
+        if (typeof window !== 'undefined') {
+            const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+            const breakpoint = parseInt(breakpoints.MD, 10);
+
+            if (width >= breakpoint) {
+                console.log('ON_DESKTOP');
+                setDevice('DESKTOP');
+            } else {
+                console.log('ON_MOBILE');
+                setDevice('MOBILE');
+            }
+        }
+    }, []);
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
@@ -71,7 +92,7 @@ export const TabLayout: React.FC<Props> = ({
         </StyledTabs>
     );
 
-    const renderLeftTab = tabValue === 0 && (
+    const renderLeftTab = tabValue === 0 && onDevice === 'MOBILE' && (
         <Box display="flex" flexGrow="1">
             {renderLeftContent}
         </Box>
@@ -108,7 +129,9 @@ export const TabLayout: React.FC<Props> = ({
                     <CardHeader id="main-header" title={title} action={renderDesktopHeaderActions} />
                     {extraDesktopActions}
                     <Divider />
-                    {renderLeftContent}
+                    {onDevice === 'DESKTOP' && renderLeftContent}
+                    <Divider />
+                    {renderLeftFooter}
                 </StyledCard>
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
@@ -165,10 +188,10 @@ export const TabLayout: React.FC<Props> = ({
             {...props}
         >
             {renderMobileContent}
-            {renderDesktopContent}
             {renderMobileInfoDrawer}
-            {renderDesktopInfoDrawer}
             {renderMobileOptionsDrawer}
+            {renderDesktopContent}
+            {renderDesktopInfoDrawer}
             {renderDesktopOptionsDrawer}
         </StyledTabLayout>
     );
