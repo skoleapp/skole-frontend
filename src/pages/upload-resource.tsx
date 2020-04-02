@@ -2,7 +2,6 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
-// eslint-disable-next-line no-console
 import Resizer from 'react-image-file-resizer';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
