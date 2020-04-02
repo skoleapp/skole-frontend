@@ -66,22 +66,37 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
     const [createResourceMutation] = useCreateResourceMutation({ onCompleted, onError });
 
-    // Use Cloudmersive API to generate PDF from any commonly used file format.
-    const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
-        const { resourceTitle, resourceType, course, file } = values;
-        const handleFileGenerationError = (): void => {
-            setFieldError('file', t('upload-resource:fileGenerationError'));
-            setFieldValue('general', '');
+    const handleUpload = async ({
+        resourceTitle,
+        resourceType,
+        course,
+        file,
+    }: UploadResourceFormValues): Promise<void> => {
+        const variables = {
+            resourceTitle,
+            resourceType: R.propOr('', 'id', resourceType) as string,
+            course: R.propOr('', 'id', course) as string,
+            file: (file as unknown) as string,
         };
 
-        const generatePDF = async (file: any) => {
-            console.log('FILE_2: ', file);
+        setFieldValue('general', t('upload-resource:fileUploadingText'));
+        await createResourceMutation({ variables });
+        setSubmitting(false);
+    };
 
-            const body = new FormData();
-            body.append('file', file);
+    const handleFileGenerationError = (): void => {
+        setFieldError('file', t('upload-resource:fileGenerationError'));
+        setFieldValue('general', '');
+        setSubmitting(false);
+    };
 
-            setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
+    // Use Cloudmersive API to generate PDF from any commonly used file format.
+    const generatePDFAndUpload = async ({ file, ...variables }: UploadResourceFormValues): Promise<void> => {
+        const body = new FormData();
+        body.append('file', file);
+        setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
 
+        try {
             const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
                 method: 'POST',
                 body,
@@ -89,56 +104,54 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                     Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
                 },
             });
+
             if (res.status === 200) {
                 const blob = await res.blob();
                 const pdf = new File([blob], 'resource.pdf');
-                const variables = {
-                    resourceTitle,
-                    resourceType: R.propOr('', 'id', resourceType) as string,
-                    course: R.propOr('', 'id', course) as string,
-                    file: (pdf as unknown) as string,
-                };
-                console.log('FILE_3: ', pdf);
-
-                await createResourceMutation({ variables });
+                handleUpload({ file: pdf, ...variables });
             } else {
                 handleFileGenerationError();
             }
-        };
-
-        try {
-            if (!!file) {
-                console.log('FILE_1: ', file);
-                if (file.type !== 'application/pdf') {
-                    Resizer.imageFileResizer(
-                        file,
-                        1000,
-                        1000,
-                        'JPEG',
-                        50,
-                        0,
-                        (uri: any) => {
-                            generatePDF(uri);
-                        },
-                        'blob',
-                    );
-                } else {
-                    setFieldValue('general', t('upload-resource:fileUploadingText'));
-
-                    const variables = {
-                        resourceTitle,
-                        resourceType: R.propOr('', 'id', resourceType) as string,
-                        course: R.propOr('', 'id', course) as string,
-                        file: (file as unknown) as string,
-                    };
-                    await createResourceMutation({ variables });
-                }
-            }
         } catch {
             handleFileGenerationError();
-        } finally {
-            setSubmitting(false);
-            setFieldValue('general', '');
+        }
+    };
+
+    const handleSubmit = async (variables: UploadResourceFormValues): Promise<void> => {
+        const { file } = variables;
+
+        const imageTypes = [
+            'image/apng',
+            'image/bmp',
+            'image/gif',
+            'image/x-icon',
+            'image/jpeg',
+            'image/png',
+            'image/svg+xml',
+            'image/tiff',
+            'image/webp	',
+        ];
+
+        if (imageTypes.includes(file.type)) {
+            console.log('test 1');
+
+            // File is image.
+            Resizer.imageFileResizer(
+                file,
+                1000,
+                1000,
+                'JPEG',
+                50,
+                0,
+                (img: File) => generatePDFAndUpload({ file: img, ...variables }),
+                'blob',
+            );
+        } else if (file.type !== 'application/pdf') {
+            // File is neither image not PDF.
+            generatePDFAndUpload(variables);
+        } else {
+            // File is PDF.
+            handleUpload(variables);
         }
     };
 
