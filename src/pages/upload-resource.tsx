@@ -21,6 +21,9 @@ import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useForm, usePrivatePage } from '../utils';
+// @ts-ignore
+
+import Resizer from 'react-image-file-resizer';
 
 interface UploadResourceFormValues {
     resourceTitle: string;
@@ -70,44 +73,68 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         const { resourceTitle, resourceType, course, file } = values;
         const handleFileGenerationError = (): void => {
             setFieldError('file', t('upload-resource:fileGenerationError'));
-            setFieldValue('general', null);
+            setFieldValue('general', '');
         };
 
-        try {
-            if (!!file) {
-                let pdf = file;
+        const generatePDF = async (file: any) => {
+            console.log('FILE_2: ', file);
 
-                if (file.type !== 'application/pdf') {
-                    const body = new FormData();
-                    body.append('file', file);
-                    setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
+            const body = new FormData();
+            body.append('file', file);
 
-                    const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
-                        method: 'POST',
-                        body,
-                        headers: {
-                            Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
-                        },
-                    });
-                    if (res.status === 200) {
-                        const blob = await res.blob();
-                        pdf = new File([blob], 'resource.pdf');
-                    } else {
-                        handleFileGenerationError();
-                    }
-                } else {
-                    setFieldValue('general', t('upload-resource:fileUploadingText'));
-                }
+            setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
 
+            const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
+                method: 'POST',
+                body,
+                headers: {
+                    Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
+                },
+            });
+            if (res.status === 200) {
+                const blob = await res.blob();
+                const pdf = new File([blob], 'resource.pdf');
                 const variables = {
                     resourceTitle,
                     resourceType: R.propOr('', 'id', resourceType) as string,
                     course: R.propOr('', 'id', course) as string,
                     file: (pdf as unknown) as string,
                 };
+                console.log('FILE_3: ', pdf);
+
                 await createResourceMutation({ variables });
             } else {
                 handleFileGenerationError();
+            }
+        };
+
+        try {
+            if (!!file) {
+                console.log('FILE_1: ', file);
+                if (file.type !== 'application/pdf') {
+                    Resizer.imageFileResizer(
+                        file,
+                        1000,
+                        1000,
+                        'JPEG',
+                        50,
+                        0,
+                        (uri: any) => {
+                            generatePDF(uri);
+                        },
+                        'blob',
+                    );
+                } else {
+                    setFieldValue('general', t('upload-resource:fileUploadingText'));
+
+                    const variables = {
+                        resourceTitle,
+                        resourceType: R.propOr('', 'id', resourceType) as string,
+                        course: R.propOr('', 'id', course) as string,
+                        file: (file as unknown) as string,
+                    };
+                    await createResourceMutation({ variables });
+                }
             }
         } catch {
             handleFileGenerationError();
