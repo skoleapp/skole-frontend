@@ -51,7 +51,7 @@ export const TabLayout: React.FC<Props> = ({
     const { renderOptions, renderOptionsHeader, mobileDrawerProps, desktopDrawerProps, openOptions } = optionProps;
     const { t } = useTranslation();
     const infoTitle = t('common:info');
-    const [onDevice, setDevice]: string = useState('');
+    const [onDevice, setDevice] = useState('');
 
     useEffect(() => {
         // TODO: listen to breakpoint changes, add to redux, implement SSR to guess the device
