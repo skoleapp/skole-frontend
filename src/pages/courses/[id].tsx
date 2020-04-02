@@ -294,7 +294,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderCustomBottomNavbar = (
             <StyledBottomNavigation>
-                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" margin="0 1rem">
+                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                     <StarButton {...starButtonProps} />
                     <Box display="flex">
                         <Box marginRight="1rem">{renderUpVoteButton}</Box>

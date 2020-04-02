@@ -2,6 +2,7 @@ import {
     Avatar,
     Box,
     CardContent,
+    Grid,
     IconButton,
     ListItem,
     ListItemAvatar,
@@ -28,6 +29,7 @@ import * as R from 'ramda';
 import React, { useEffect } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
+import styled from 'styled-components';
 
 import {
     CommentObjectType,
@@ -43,7 +45,7 @@ import {
     CreatorListItem,
     DiscussionBox,
     NotFound,
-    ResourcePreview,
+    PDFViewer,
     StarButton,
     StyledBottomNavigation,
     StyledList,
@@ -53,6 +55,7 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
+import { breakpoints } from '../../styles';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { mediaURL, useOptions, usePrivatePage, useVotes } from '../../utils';
 
@@ -68,7 +71,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { pages, currentPage } = useSelector((state: State) => state.resource);
 
     useEffect(() => {
-        return () =>
+        return (): void =>
             batch(() => {
                 dispatch(setPages([]));
                 dispatch(setCurrentPage(0));
@@ -96,7 +99,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const resourceId = R.propOr('', 'id', resource) as string;
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
         const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
-        const initialVote = R.propOr(null, 'vote', resource) as VoteObjectType | null;
+        const initialVote = (R.propOr(null, 'vote', resource) as unknown) as VoteObjectType | null;
         const initialPoints = R.propOr(0, 'points', resource) as number;
         const starred = !!resource.starred;
         const isOwner = !!user && user.id === creatorId;
@@ -163,16 +166,17 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             }
         };
 
-        const renderVoteButtons = (
-            <Box>
-                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                    <KeyboardArrowUpOutlined />
-                </IconButton>
-                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                    <KeyboardArrowDownOutlined />
-                </IconButton>
-            </Box>
-        );
+        const handlePreviousPage = (): void => {
+            dispatch(prevPage());
+        };
+
+        const handleNextPage = (): void => {
+            dispatch(nextPage());
+        };
+
+        const handleCenterImage = (): void => {
+            dispatch(setCenter());
+        };
 
         const renderInfo = (
             <CardContent>
@@ -263,62 +267,35 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             desktopDrawerProps,
         };
 
-        const starButtonProps = {
-            starred,
-            resource: resourceId,
-        };
-
-        // previousPage, nextPage, setCenter
-
-        const renderNavigationButtons = (
-            <Box width="7rem" justifyContent="center" alignItems="center" display="flex">
-                <IconButton
-                    disableFocusRipple
-                    disableRipple
-                    disabled={currentPage === 0}
-                    onClick={() => dispatch(prevPage())}
-                    size="medium"
-                >
-                    <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'primary'} />
-                </IconButton>
-                <Typography style={{ minWidth: '3rem' }} variant="body2">
-                    {currentPage + 1 + ' / ' + pages.length}
-                </Typography>
-                <IconButton
-                    disableFocusRipple
-                    disableRipple
-                    disabled={currentPage === pages.length - 1}
-                    onClick={() => dispatch(nextPage())}
-                    size="medium"
-                >
-                    <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'primary'} />
-                </IconButton>
-            </Box>
+        const renderExtraResourceActions = (
+            <StyledExtraResourceActions container id="extra-resource-actions" alignItems="center">
+                <Grid item xs={4} container id="vote-section">
+                    <StarButton starred={starred} resource={resourceId} />
+                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
+                </Grid>
+                <Grid item xs={4} container alignItems="center" id="page-controls">
+                    <IconButton disabled={currentPage === 0} onClick={handlePreviousPage} size="small">
+                        <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
+                    </IconButton>
+                    <Typography variant="body2">{currentPage + 1 + ' / ' + pages.length}</Typography>
+                    <IconButton disabled={currentPage === pages.length - 1} onClick={handleNextPage} size="small">
+                        <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
+                    </IconButton>
+                </Grid>
+                <Grid item xs={4} container justify="flex-end">
+                    <IconButton onClick={handleCenterImage} size="small">
+                        <FullscreenOutlined />
+                    </IconButton>
+                </Grid>
+            </StyledExtraResourceActions>
         );
 
-        const renderCenterImageButton = (
-            <IconButton
-                disableFocusRipple
-                disableRipple
-                onClick={(): void => {
-                    dispatch(setCenter());
-                }}
-            >
-                <FullscreenOutlined color="primary" />
-            </IconButton>
-        );
-
-        const renderResourceActions = (
-            <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" padding="0 1rem">
-                <Box display="flex">
-                    <StarButton {...starButtonProps} />
-                    {renderVoteButtons}
-                </Box>
-                {renderNavigationButtons}
-                {renderCenterImageButton}
-            </Box>
-        );
-        const renderCustomBottomNavbar = <StyledBottomNavigation>{renderResourceActions}</StyledBottomNavigation>;
+        const renderCustomBottomNavbar = <StyledBottomNavigation>{renderExtraResourceActions}</StyledBottomNavigation>;
 
         return (
             <TabLayout
@@ -327,17 +304,30 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 backUrl
                 renderInfo={renderInfo}
                 tabLabelLeft={t('common:resource')}
-                renderLeftContent={<ResourcePreview file={file} />}
+                renderLeftContent={<PDFViewer file={file} />}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 optionProps={optionProps}
                 customBottomNavbar={renderCustomBottomNavbar}
-                renderLeftFooter={renderResourceActions}
+                extraDesktopActions={renderExtraResourceActions}
             />
         );
     } else {
         return <NotFound title={t('resource:notFound')} />;
     }
 };
+
+const StyledExtraResourceActions = styled(Grid)`
+    #vote-section,
+    #page-controls {
+        justify-content: space-around;
+
+        @media only screen and (min-width: ${breakpoints.MD}) {
+            &#vote-section {
+                justify-content: flex-start;
+            }
+        }
+    }
+`;
 
 ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     await usePrivatePage(ctx);
