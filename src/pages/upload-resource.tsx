@@ -72,7 +72,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
         try {
             if (!!file) {
-                console.log('file: ', file);
                 let pdf = file;
 
                 if (file.type !== 'application/pdf') {
