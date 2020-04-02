@@ -72,33 +72,38 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
         try {
             if (!!file) {
-                const body = new FormData();
-                body.append('file', file);
-                setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
+                console.log('file: ', file);
+                let pdf = file;
 
-                const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
-                    method: 'POST',
-                    body,
-                    headers: {
-                        Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
-                    },
-                });
+                if (file.type !== 'application/pdf') {
+                    const body = new FormData();
+                    body.append('file', file);
+                    setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
 
-                if (res.status === 200) {
-                    const blob = await res.blob();
-                    const pdf = new File([blob], 'resource.pdf');
-
-                    const variables = {
-                        resourceTitle,
-                        resourceType: R.propOr('', 'id', resourceType) as string,
-                        course: R.propOr('', 'id', course) as string,
-                        file: (pdf as unknown) as string,
-                    };
-
-                    await createResourceMutation({ variables });
+                    const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
+                        method: 'POST',
+                        body,
+                        headers: {
+                            Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
+                        },
+                    });
+                    if (res.status === 200) {
+                        const blob = await res.blob();
+                        pdf = new File([blob], 'resource.pdf');
+                    }
                 } else {
-                    handleFileGenerationError();
+                    setFieldValue('general', t('upload-resource:fileUploadingText'));
                 }
+
+                const variables = {
+                    resourceTitle,
+                    resourceType: R.propOr('', 'id', resourceType) as string,
+                    course: R.propOr('', 'id', course) as string,
+                    file: (pdf as unknown) as string,
+                };
+                await createResourceMutation({ variables });
+            } else {
+                handleFileGenerationError();
             }
         } catch {
             handleFileGenerationError();

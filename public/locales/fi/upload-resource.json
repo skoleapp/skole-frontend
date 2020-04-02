@@ -2,5 +2,6 @@
     "title": "Lisää resurssi",
     "heading": "Lisää resurssi",
     "fileGenerationError": "Virhe luotaessa PDF-tiedostoa.",
-    "fileGenerationLoadingText": "Luodaan PDF-tiedostoa..."
+    "fileGenerationLoadingText": "Luodaan PDF-tiedostoa...",
+    "fileUploadingText": "Lähetetään PDF-tiedostoa..."
 }
