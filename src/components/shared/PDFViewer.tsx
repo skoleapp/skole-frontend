@@ -197,14 +197,11 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     useEffect(() => {
         if (!!pages[currentPage] && !!pages[currentPage].map) {
             const zoomLevel = pages[currentPage].map.getView().getZoom();
-            console.log('ZOOMLEVEL: ' + zoomLevel + ' INITIAL: ' + initialZoom);
 
             if (initialZoom >= zoomLevel && !!touchStart) {
                 if (touchEnd < touchStart - 50) {
-                    console.log('Swiped left');
                     nextPage();
                 } else if (touchEnd > touchStart + 50) {
-                    console.log('Swiped right');
                     previousPage();
                 }
             }
@@ -236,16 +233,11 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
 
                 Promise.all(maps).then((maps: any) => {
                     const flatMaps = maps.flat();
-
                     flatMaps[0].map.getView().setCenter(getCenter(flatMaps[0].imageExtent));
                     flatMaps[0].map.getView().setZoom(0);
-
                     const zoomLevel = flatMaps[0].map.getView().getZoom();
                     setInitialZoom(zoomLevel);
-
                     dispatch(setPages(flatMaps));
-
-                    console.log('Valmiit sivut: ', flatMaps);
                 });
             }
         } else {
