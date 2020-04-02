@@ -5,7 +5,7 @@ import { NextComponentType, NextPageContext } from 'next';
 import { Store } from 'redux';
 
 import { CommentObjectType, UserObjectType } from '../generated/graphql';
-import { Auth, UI } from './reducers';
+import { Auth, UI, ResourceState } from './reducers';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
@@ -27,6 +27,7 @@ export interface I18nProps {
 export interface State {
     auth: Auth;
     ui: UI;
+    resource: ResourceState;
 }
 
 export interface LayoutProps extends ContainerProps {
