@@ -1,39 +1,51 @@
 import 'ol/ol.css';
 
-import { Box, CircularProgress, IconButton, Typography } from '@material-ui/core';
-import {
-    FullscreenOutlined,
-    KeyboardArrowDownOutlined,
-    KeyboardArrowUpOutlined,
-    NavigateBeforeOutlined,
-    NavigateNextOutlined,
-} from '@material-ui/icons';
+import { Box, CircularProgress } from '@material-ui/core';
+
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { useSelector, useDispatch, batch } from 'react-redux';
+import { State } from '../../types';
+import { setPages, setCurrentPage, SET_CENTER, PREV_PAGE, NEXT_PAGE } from '../../actions';
 
 /* eslint-disable */
 interface Props {
     file: string;
-    pages: any[];
-    setPages: (pages: any[]) => void;
-    currentPage: number;
-    setCurrentPage: (index: number) => void;
-    voteProps: any;
 }
 
-// This is a secondary PDF viewer, an alternative to PDFViewer.
-// TODO: Fix types and refactor this so it can be used on resource detail.
-export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, currentPage, setCurrentPage, voteProps }) => {
+export const ResourcePreview: React.FC<Props> = ({ file }) => {
     const [touchStart, setTouchStart]: any = useState(0);
-    const [touchEnd, setTouchEnd]: any = useState(0);
+    const [touchEnd, setTouchEnd] = useState(0);
+    const [initialZoom, setInitialZoom] = useState(0);
 
-    const { vote, voteSubmitting, handleVote, points } = voteProps;
+    const dispatch = useDispatch();
+
+    const { pages, currentPage, effect } = useSelector((state: State) => state.resource);
+
+    useEffect(() => {
+        switch (effect) {
+            case SET_CENTER:
+                setCenter();
+                break;
+            case PREV_PAGE:
+                previousPage();
+                break;
+            case NEXT_PAGE:
+                nextPage();
+                break;
+            default:
+                break;
+        }
+    }, [effect]);
 
     const ref = useRef<HTMLDivElement>(null);
 
     const handleTouchStart = (e: any): void => {
-        const startCoordX = e.changedTouches[0].screenX;
-        setTouchStart(startCoordX);
+        if (e.touches.length === 1) {
+            const startCoordX = e.changedTouches[0].screenX;
+            setTouchStart(startCoordX);
+        } else {
+            setTouchStart(null);
+        }
     };
     const handleTouchEnd = (e: any): void => {
         const endCoordX = e.changedTouches[0].screenX;
@@ -45,8 +57,10 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
     };
 
     const setCenter = (): void => {
-        pages[currentPage].map.getView().setCenter(getCenter(pages[currentPage].imageExtent));
-        pages[currentPage].map.getView().setZoom(0);
+        let tempPages = pages;
+        tempPages[currentPage].map.getView().setCenter(getCenter(tempPages[currentPage].imageExtent));
+        tempPages[currentPage].map.getView().setZoom(0);
+        dispatch(setPages(tempPages));
     };
 
     const nextPage = (): void => {
@@ -55,32 +69,35 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
         if (currentPage < numPages - 1) {
             const nextPage = currentPage + 1;
             const tempPages = pages;
-            setPages([]);
+
             tempPages[currentPage].map.setTarget(null);
             pages[currentPage].map.setTarget(null);
 
-            tempPages[nextPage].map.setTarget('map');
+            tempPages[nextPage].map.setTarget(ref.current);
             tempPages[nextPage].map.getView().setCenter(getCenter(tempPages[nextPage].imageExtent));
             tempPages[nextPage].map.getView().setZoom(0);
 
-            setPages(tempPages);
-            setCurrentPage(nextPage);
+            batch(() => {
+                dispatch(setPages(tempPages));
+                dispatch(setCurrentPage(nextPage));
+            });
         }
     };
     const previousPage = (): void => {
         if (currentPage !== 0) {
             const previousPage = currentPage - 1;
             const tempPages = pages;
-            setPages([]);
             tempPages[currentPage].map.setTarget(null);
             pages[currentPage].map.setTarget(null);
 
-            tempPages[previousPage].map.setTarget('map');
+            tempPages[previousPage].map.setTarget(ref.current);
             tempPages[previousPage].map.getView().setCenter(getCenter(tempPages[previousPage].imageExtent));
             tempPages[previousPage].map.getView().setZoom(0);
 
-            setPages(tempPages);
-            setCurrentPage(previousPage);
+            batch(() => {
+                dispatch(setPages(tempPages));
+                dispatch(setCurrentPage(previousPage));
+            });
         }
     };
 
@@ -140,7 +157,6 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
 
                     view: new View({
                         projection: projection,
-                        center: getCenter(imageExtent),
                         zoom: 0,
                         maxZoom: 4,
                         constrainResolution: false,
@@ -153,7 +169,7 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
 
                 let target = null;
                 if (page.pageIndex === 0) {
-                    target = 'map';
+                    target = ref.current;
                 }
                 map.setTarget(target);
 
@@ -172,7 +188,6 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
             return Promise.all(promises);
         };
 
-        PDFJS.disableWorker = true;
         return PDFJS.getDocument(url).promise.then((pages: any) => {
             const promises = renderPages(pages);
             return promises;
@@ -182,9 +197,9 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
     useEffect(() => {
         if (!!pages[currentPage] && !!pages[currentPage].map) {
             const zoomLevel = pages[currentPage].map.getView().getZoom();
-            console.log('ZOOMLEVEL: ' + zoomLevel);
+            console.log('ZOOMLEVEL: ' + zoomLevel + ' INITIAL: ' + initialZoom);
 
-            if (zoomLevel < 1.3) {
+            if (initialZoom >= zoomLevel && !!touchStart) {
                 if (touchEnd < touchStart - 50) {
                     console.log('Swiped left');
                     nextPage();
@@ -225,108 +240,53 @@ export const ResourcePreview: React.FC<Props> = ({ file, pages, setPages, curren
                     flatMaps[0].map.getView().setCenter(getCenter(flatMaps[0].imageExtent));
                     flatMaps[0].map.getView().setZoom(0);
 
-                    setPages(flatMaps);
+                    const zoomLevel = flatMaps[0].map.getView().getZoom();
+                    setInitialZoom(zoomLevel);
+
+                    dispatch(setPages(flatMaps));
+
                     console.log('Valmiit sivut: ', flatMaps);
                 });
             }
         } else {
             const tempPages = pages;
 
-            setPages([]);
-
             tempPages[currentPage].map.setTarget(null);
-            tempPages[currentPage].map.setTarget('map');
+            tempPages[currentPage].map.setTarget(ref.current);
 
             tempPages[currentPage].map.getView().setCenter(getCenter(tempPages[currentPage].imageExtent));
             tempPages[currentPage].map.getView().setZoom(0);
 
-            setPages(tempPages);
+            dispatch(setPages(tempPages));
         }
     }, []);
 
-    const renderCenterImageButton = (
-        <IconButton
-            onClick={(): void => {
-                setCenter();
-            }}
-        >
-            <FullscreenOutlined color="primary" />
-        </IconButton>
-    );
-
-    const renderNavigationButtons = (
-        <Box width="7rem" justifyContent="center" alignItems="center" display="flex">
-            <IconButton disabled={currentPage === 0} onClick={previousPage} size="small">
-                <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'primary'} />
-            </IconButton>
-            <Typography variant="body2">{currentPage + 1 + ' / ' + pages.length}</Typography>
-            <IconButton disabled={currentPage === pages.length - 1} onClick={nextPage} size="small">
-                <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'primary'} />
-            </IconButton>
+    const renderLoading = pages.length === 0 && (
+        <Box position="absolute" display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
+            <CircularProgress color="primary" size={100} />
         </Box>
     );
-
-    const renderVoteButtons = (
-        <Box width="7rem" justifyContent="center" alignItems="center" display="flex">
-            <IconButton
-                color={!!vote && vote.status === 1 ? 'primary' : 'inherit'}
-                onClick={handleVote(1)}
-                disabled={voteSubmitting}
-                size="small"
-            >
-                <KeyboardArrowUpOutlined />
-            </IconButton>
-            <Typography variant="body2">{points}</Typography>
-            <IconButton
-                color={!!vote && vote.status === -1 ? 'primary' : 'inherit'}
-                onClick={handleVote(-1)}
-                disabled={voteSubmitting}
-                size="small"
-            >
-                <KeyboardArrowDownOutlined />
-            </IconButton>
-        </Box>
-    );
-
-    const resourcesRendered = pages.length > 0;
 
     return (
-        <>
-            <div style={{ height: '100%', position: 'relative' }}>
-                <div
-                    style={{
-                        backgroundColor: 'rgb(72, 76, 79,0.7)',
-                        width: '100%',
-                        height: '100%',
-                        position: 'absolute',
-                        overflowY: 'auto',
-                        overflowX: 'auto',
-                    }}
-                    id="map"
-                    ref={ref}
-                    className="map"
-                />
-                {!resourcesRendered && (
-                    <Box display="flex" justifyContent="center" alignItems="center" width="100%" height="100%">
-                        <CircularProgress color="primary" size={100} />
-                    </Box>
-                )}
+        <div
+            style={{
+                position: 'relative',
+                display: 'flex',
+                flex: '1 1 auto',
+            }}
+        >
+            <div
+                style={{
+                    backgroundColor: 'rgb(72, 76, 79,0.7)',
+                    width: '100%',
+                    height: '100%',
+                    overflowY: 'auto',
+                    overflowX: 'auto',
+                }}
+                ref={ref}
+            >
+                {renderLoading}
             </div>
-            <StyledControls>
-                {renderNavigationButtons}
-                {renderCenterImageButton}
-                {renderVoteButtons}
-            </StyledControls>
-        </>
+        </div>
     );
 };
-
-const StyledControls = styled.div`
-    z-index: 999;
-    width: 100%;
-    bottom: 0;
-    display: flex;
-    position: relative;
-    justify-content: space-around;
-    background-color: white;
-`;

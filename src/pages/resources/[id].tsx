@@ -18,12 +18,15 @@ import {
     KeyboardArrowUpOutlined,
     SchoolOutlined,
     ScoreOutlined,
+    NavigateBeforeOutlined,
+    NavigateNextOutlined,
+    FullscreenOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector, batch } from 'react-redux';
 import { compose } from 'redux';
 
 import {
@@ -35,12 +38,12 @@ import {
     UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { toggleNotification } from '../../actions';
+import { toggleNotification, setCenter, setPages, setCurrentPage, nextPage, prevPage } from '../../actions';
 import {
     CreatorListItem,
     DiscussionBox,
     NotFound,
-    PDFViewer,
+    ResourcePreview,
     StarButton,
     StyledBottomNavigation,
     StyledList,
@@ -62,6 +65,15 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const dispatch = useDispatch();
     const confirm = useConfirm();
     const { user } = useSelector((state: State) => state.auth);
+    const { pages, currentPage } = useSelector((state: State) => state.resource);
+
+    useEffect(() => {
+        return () =>
+            batch(() => {
+                dispatch(setPages([]));
+                dispatch(setCurrentPage(0));
+            });
+    }, []);
 
     const {
         renderShareOption,
@@ -151,16 +163,15 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             }
         };
 
-        const renderUpVoteButton = (
-            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                <KeyboardArrowUpOutlined />
-            </IconButton>
-        );
-
-        const renderDownVoteButton = (
-            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                <KeyboardArrowDownOutlined />
-            </IconButton>
+        const renderVoteButtons = (
+            <Box>
+                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                    <KeyboardArrowUpOutlined />
+                </IconButton>
+                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                    <KeyboardArrowDownOutlined />
+                </IconButton>
+            </Box>
         );
 
         const renderInfo = (
@@ -257,25 +268,57 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             resource: resourceId,
         };
 
-        const renderExtraDesktopActions = (
-            <Box display="flex" paddingLeft="0.5rem" paddingBottom="0.5rem">
-                <StarButton {...starButtonProps} />
-                {renderDownVoteButton}
-                {renderUpVoteButton}
+        // previousPage, nextPage, setCenter
+
+        const renderNavigationButtons = (
+            <Box width="7rem" justifyContent="center" alignItems="center" display="flex">
+                <IconButton
+                    disableFocusRipple
+                    disableRipple
+                    disabled={currentPage === 0}
+                    onClick={() => dispatch(prevPage())}
+                    size="medium"
+                >
+                    <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'primary'} />
+                </IconButton>
+                <Typography style={{ minWidth: '3rem' }} variant="body2">
+                    {currentPage + 1 + ' / ' + pages.length}
+                </Typography>
+                <IconButton
+                    disableFocusRipple
+                    disableRipple
+                    disabled={currentPage === pages.length - 1}
+                    onClick={() => dispatch(nextPage())}
+                    size="medium"
+                >
+                    <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'primary'} />
+                </IconButton>
             </Box>
         );
 
-        const renderCustomBottomNavbar = (
-            <StyledBottomNavigation>
-                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" margin="0 1rem">
-                    <StarButton {...starButtonProps} />
-                    <Box display="flex">
-                        <Box marginRight="1rem">{renderUpVoteButton}</Box>
-                        {renderDownVoteButton}
-                    </Box>
-                </Box>
-            </StyledBottomNavigation>
+        const renderCenterImageButton = (
+            <IconButton
+                disableFocusRipple
+                disableRipple
+                onClick={(): void => {
+                    dispatch(setCenter());
+                }}
+            >
+                <FullscreenOutlined color="primary" />
+            </IconButton>
         );
+
+        const renderResourceActions = (
+            <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" padding="0 1rem">
+                <Box display="flex">
+                    <StarButton {...starButtonProps} />
+                    {renderVoteButtons}
+                </Box>
+                {renderNavigationButtons}
+                {renderCenterImageButton}
+            </Box>
+        );
+        const renderCustomBottomNavbar = <StyledBottomNavigation>{renderResourceActions}</StyledBottomNavigation>;
 
         return (
             <TabLayout
@@ -284,11 +327,11 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 backUrl
                 renderInfo={renderInfo}
                 tabLabelLeft={t('common:resource')}
-                renderLeftContent={<PDFViewer file={file} />}
+                renderLeftContent={<ResourcePreview file={file} />}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 optionProps={optionProps}
                 customBottomNavbar={renderCustomBottomNavbar}
-                extraDesktopActions={renderExtraDesktopActions}
+                renderLeftFooter={renderResourceActions}
             />
         );
     } else {
