@@ -1,12 +1,12 @@
-import { Box, CardHeader, Divider, Drawer, Grid, IconButton, Paper, Tab } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Paper, Tab } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
-import { breakpoints } from '../../styles';
+import { breakpointsNum } from '../../styles';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
-import { useOpen, useTabs } from '../../utils';
+import { useBreakPoint, useOpen, useTabs } from '../../utils';
 import { ModalHeader, StyledCard } from '../shared';
 import { StyledTabs } from '../shared/StyledTabs';
 import { MainLayout } from './MainLayout';
@@ -20,7 +20,6 @@ interface Props extends LayoutProps {
     tabLabelLeft: string;
     renderInfo: JSX.Element;
     renderLeftContent: JSX.Element;
-    renderLeftFooter?: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
     renderSecondaryAction?: JSX.Element;
@@ -37,7 +36,6 @@ export const TabLayout: React.FC<Props> = ({
     tabLabelLeft,
     renderInfo,
     renderLeftContent,
-    renderLeftFooter,
     renderRightContent,
     singleColumn,
     optionProps,
@@ -51,24 +49,7 @@ export const TabLayout: React.FC<Props> = ({
     const { renderOptions, renderOptionsHeader, mobileDrawerProps, desktopDrawerProps, openOptions } = optionProps;
     const { t } = useTranslation();
     const infoTitle = t('common:info');
-    const [onDevice, setDevice] = useState('');
-
-    useEffect(() => {
-        // TODO: listen to breakpoint changes, add to redux, implement SSR to guess the device
-        if (typeof window !== 'undefined') {
-            const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
-            const breakpoint = parseInt(breakpoints.MD, 10);
-
-            if (width >= breakpoint) {
-                console.log('ON_DESKTOP');
-                setDevice('DESKTOP');
-            } else {
-                console.log('ON_MOBILE');
-                setDevice('MOBILE');
-            }
-        }
-    }, []);
+    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
@@ -92,7 +73,7 @@ export const TabLayout: React.FC<Props> = ({
         </StyledTabs>
     );
 
-    const renderLeftTab = tabValue === 0 && onDevice === 'MOBILE' && (
+    const renderLeftTab = tabValue === 0 && (
         <Box display="flex" flexGrow="1">
             {renderLeftContent}
         </Box>
@@ -112,7 +93,7 @@ export const TabLayout: React.FC<Props> = ({
         </StyledCard>
     );
 
-    const renderDesktopContent = !!singleColumn ? (
+    const renderDesktopContent = singleColumn ? (
         <StyledCard className="md-up">
             <CardHeader title={title} action={renderDesktopHeaderActions} />
             <Divider />
@@ -123,15 +104,13 @@ export const TabLayout: React.FC<Props> = ({
             {renderRightTab}
         </StyledCard>
     ) : (
-        <Grid container className="md-up">
+        <Grid id="container" container className="md-up">
             <Grid item container xs={12} md={7} lg={8}>
                 <StyledCard>
                     <CardHeader id="main-header" title={title} action={renderDesktopHeaderActions} />
-                    {extraDesktopActions}
+                    <CardContent>{extraDesktopActions}</CardContent>
                     <Divider />
-                    {onDevice === 'DESKTOP' && renderLeftContent}
-                    <Divider />
-                    {renderLeftFooter}
+                    {renderLeftContent}
                 </StyledCard>
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
@@ -187,23 +166,27 @@ export const TabLayout: React.FC<Props> = ({
             headerLeft={headerActionMobile}
             {...props}
         >
-            {renderMobileContent}
-            {renderMobileInfoDrawer}
-            {renderMobileOptionsDrawer}
-            {renderDesktopContent}
-            {renderDesktopInfoDrawer}
-            {renderDesktopOptionsDrawer}
+            {isMobile && renderMobileContent}
+            {isMobile && renderMobileInfoDrawer}
+            {isMobile && renderMobileOptionsDrawer}
+            {!isMobile && renderDesktopContent}
+            {!isMobile && renderDesktopInfoDrawer}
+            {!isMobile && renderDesktopOptionsDrawer}
         </StyledTabLayout>
     );
 };
 
 const StyledTabLayout = styled(MainLayout)`
-    .MuiGrid-root {
+    #container {
         flex-grow: 1;
     }
 
     #main-header {
         text-align: left;
-        padding: 0.5rem 0.5rem 0.5rem 1rem;
+        padding-bottom: 0 !important;
+
+        .MuiCardHeader-content {
+            padding-left: 0.5rem;
+        }
     }
 `;
