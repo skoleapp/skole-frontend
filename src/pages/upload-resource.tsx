@@ -92,8 +92,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
     // Use Cloudmersive API to generate PDF from any commonly used file format.
     const generatePDFAndUpload = async ({ file, ...variables }: UploadResourceFormValues): Promise<void> => {
-        console.log('FILE_COMPRESSED: ', file);
-
         const body = new FormData();
         body.append('file', file);
         setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
@@ -110,6 +108,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
             if (res.status === 200) {
                 const blob = await res.blob();
                 const pdf = new File([blob], 'resource.pdf');
+
                 handleUpload({ file: pdf, ...variables });
             } else {
                 handleFileGenerationError();
@@ -143,8 +142,9 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                 'JPEG',
                 90,
                 0,
-                (file: File) => {
-                    generatePDFAndUpload({ file: file, ...variables });
+                (uri: File) => {
+                    const { file, ...rest } = { ...variables };
+                    generatePDFAndUpload({ file: uri, ...rest });
                 },
                 'blob',
             );
