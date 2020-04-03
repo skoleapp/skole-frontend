@@ -42,13 +42,12 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     const count = R.propOr(0, 'count', users) as number;
 
     const {
-        toggleDrawer,
-        open,
         handleSubmit,
         submitButtonText,
-        renderMobileClearFiltersButton,
         renderDesktopClearFiltersButton,
         ref,
+        drawerProps,
+        handleClearFilters,
     } = useFilters<FilterUsersFormValues>();
 
     // Pre-load query params to the form.
@@ -142,14 +141,13 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     );
 
     return (
-        <FilterLayout<FilterUsersFormValues>
+        <FilterLayout
             title={t('users:title')}
             heading={t('users:heading')}
             renderCardContent={renderCardContent}
-            renderMobileClearFiltersButton={renderMobileClearFiltersButton}
             renderTableContent={renderTableContent}
-            toggleDrawer={toggleDrawer}
-            open={open}
+            drawerProps={drawerProps}
+            handleClearFilters={handleClearFilters}
             backUrl
         />
     );

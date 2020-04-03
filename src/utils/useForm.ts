@@ -1,10 +1,9 @@
 import { ApolloError } from 'apollo-client';
 import { Formik } from 'formik';
-import Maybe from 'graphql/tsutils/Maybe';
-import { MutableRefObject, useRef } from 'react';
+import { useRef } from 'react';
 
-import { ErrorType } from '../../generated/graphql';
 import { i18n } from '../i18n';
+import { MutationErrors, MutationFormError, UseForm } from '../types';
 
 const snakeToCamel = (str: string): string => {
     return str.replace(/([-_][a-z])/g, group =>
@@ -17,20 +16,6 @@ const snakeToCamel = (str: string): string => {
 
 interface FormErrors {
     [key: string]: string;
-}
-
-type MutationFormError = Pick<ErrorType, 'field' | 'messages'>;
-type MutationErrors = Maybe<{ __typename?: 'ErrorType' | undefined } & MutationFormError>[];
-
-export interface UseForm<T> {
-    ref: MutableRefObject<Formik<T> | null>;
-    handleMutationErrors: (err: MutationErrors) => void;
-    onError: (err: ApolloError) => void;
-    setSubmitting: (val: boolean) => void;
-    resetForm: () => void;
-    submitForm: () => Promise<void> | null;
-    setFieldValue: (fieldName: string, val: string | File | File[] | null) => void;
-    setFieldError: (fieldName: string, val: string) => void;
 }
 
 export const useForm = <T>(): UseForm<T> => {

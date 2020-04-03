@@ -2,5 +2,6 @@
     "title": "Ladda Upp Resurs",
     "heading": "Ladda Upp Resurs",
     "fileGenerationError": "Fel vid generering av PDF!",
-    "fileGenerationLoadingText": "Generating PDF..."
+    "fileGenerationLoadingText": "Genererar PDF...",
+    "fileUploadingText": "Laddar upp PDF..."
 }

@@ -1,53 +1,60 @@
 import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton } from '@material-ui/core';
-import { FilterListOutlined } from '@material-ui/icons';
+import { ClearAllOutlined, FilterListOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
 
 import { StyledCard, StyledTable } from '..';
 import { useTranslation } from '../../i18n';
-import { LayoutProps } from '../../types';
-import { UseFilters } from '../../utils/useFilters';
+import { breakpointsNum } from '../../styles';
+import { LayoutProps, UseDrawer, UseFilters } from '../../types';
+import { useBreakPoint } from '../../utils';
 import { ModalHeader } from '../shared';
 import { MainLayout } from './MainLayout';
 
-interface Props extends LayoutProps, Pick<UseFilters<{}>, 'renderMobileClearFiltersButton'> {
+interface Props extends LayoutProps, Pick<UseFilters<{}>, 'drawerProps' | 'handleClearFilters'> {
     renderTableContent: JSX.Element | JSX.Element[];
+    drawerProps: UseDrawer;
 }
 
-export const FilterLayout = <T extends {}>({
+export const FilterLayout: React.FC<Props> = ({
     renderCardContent,
     renderTableContent,
-    renderMobileClearFiltersButton,
-    toggleDrawer,
-    open,
+    drawerProps,
+    handleClearFilters,
     ...props
-}: Props & Pick<UseFilters<T>, 'toggleDrawer' | 'open'>): JSX.Element => {
+}) => {
     const { t } = useTranslation();
+    const { handleOpen: handleOpenFilters, onClose: handleCloseFilters } = drawerProps;
+    const isMobile = useBreakPoint(breakpointsNum.MD);
+
+    const renderMobileClearFiltersButton = (
+        <IconButton onClick={handleClearFilters}>
+            <ClearAllOutlined />
+        </IconButton>
+    );
 
     const renderFiltersButton = (
-        <IconButton onClick={toggleDrawer(true)} color="secondary">
+        <IconButton onClick={handleOpenFilters} color="secondary">
             <FilterListOutlined />
         </IconButton>
     );
 
-    const renderMobileContent = (
-        <Box className="md-down" flexGrow="1" display="flex">
+    const renderMobileContent = isMobile && (
+        <Box flexGrow="1" display="flex">
             <StyledTable>{renderTableContent}</StyledTable>
-            <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>
-                <StyledCard scrollable>
-                    <ModalHeader
-                        onCancel={toggleDrawer(false)}
-                        title={t('common:advancedSearch')}
-                        headerRight={renderMobileClearFiltersButton}
-                    />
-                    <CardContent>{renderCardContent}</CardContent>
-                </StyledCard>
+            <Drawer {...drawerProps}>
+                <ModalHeader
+                    onCancel={handleCloseFilters}
+                    title={t('common:advancedSearch')}
+                    headerRight={renderMobileClearFiltersButton}
+                />
+                <CardContent>{renderCardContent}</CardContent>
             </Drawer>
         </Box>
     );
 
-    const renderDesktopContent = (
-        <Grid container className="md-up">
+    const renderDesktopContent = !isMobile && (
+        <Grid container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
                     <CardHeader subheader={t('common:advancedSearch')} />

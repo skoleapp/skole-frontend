@@ -1,7 +1,7 @@
 import { FormControl, FormHelperText } from '@material-ui/core';
 import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
 import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -33,10 +33,10 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     };
 
     // Allow uploading files using camera.
-    // useEffect(() => {
-    //     const dropzone = document.querySelectorAll('[type="file"]');
-    //     dropzone[0].setAttribute('capture', 'camera');
-    // }, []);
+    useEffect(() => {
+        const dropzone = document.querySelectorAll('[type="file"]');
+        dropzone[0].setAttribute('capture', 'camera');
+    }, []);
 
     return (
         <StyledDropzoneField fullWidth>

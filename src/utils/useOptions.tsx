@@ -1,28 +1,25 @@
 import { ListItemText, MenuItem } from '@material-ui/core';
 import { FlagOutlined, ShareOutlined } from '@material-ui/icons';
-import React, { SyntheticEvent, useState } from 'react';
+import React, { SyntheticEvent } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { toggleNotification } from '../actions';
-import { ModalHeader } from '../components';
 import { useTranslation } from '../i18n';
-import { Anchor, UseOptions } from '../types';
+import { UseOptions } from '../types';
+import { useDrawer } from './useDrawer';
 
 export const useOptions = (): UseOptions => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const [optionsOpen, setOptionsOpen] = useState(false);
-    const openOptions = (): void => setOptionsOpen(true);
-    const closeOptions = (): void => setOptionsOpen(false);
+    const drawerProps = useDrawer(t('common:actions'));
+    const { onClose, renderHeader: renderOptionsHeader } = drawerProps;
 
     const handleShare = (e: SyntheticEvent): void => {
         e.stopPropagation();
         navigator.clipboard.writeText(window.location.href);
         dispatch(toggleNotification(t('notifications:linkCopied')));
-        setOptionsOpen(false);
+        onClose();
     };
-
-    const renderOptionsHeader = <ModalHeader title={t('common:actions')} onCancel={closeOptions} />;
 
     const renderShareOption = (
         <MenuItem onClick={handleShare}>
@@ -40,30 +37,10 @@ export const useOptions = (): UseOptions => {
         </MenuItem>
     );
 
-    const commonDrawerProps = {
-        open: optionsOpen,
-        onClose: closeOptions,
-    };
-
-    const mobileDrawerProps = {
-        ...commonDrawerProps,
-        className: 'md-down',
-        anchor: 'bottom' as Anchor,
-    };
-
-    const desktopDrawerProps = {
-        ...commonDrawerProps,
-        className: 'md-up',
-        anchor: 'left' as Anchor,
-    };
-
     return {
         renderShareOption,
         renderReportOption,
+        drawerProps,
         renderOptionsHeader,
-        openOptions,
-        closeOptions,
-        mobileDrawerProps,
-        desktopDrawerProps,
     };
 };

@@ -64,15 +64,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const dispatch = useDispatch();
     const confirm = useConfirm();
     const { user } = useSelector((state: State) => state.auth);
-
-    const {
-        renderShareOption,
-        renderReportOption,
-        renderOptionsHeader,
-        mobileDrawerProps,
-        desktopDrawerProps,
-        openOptions,
-    } = useOptions();
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
 
     const getFullCourseName = (course: CourseObjectType): string => {
         const { code, name } = course;
@@ -95,7 +87,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
         const isOwnCourse = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
-        const initialVote = R.propOr(null, 'vote', course) as VoteObjectType | null;
+        const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
         const starred = !!course.starred;
         const isOwner = !!user && user.id === creatorId;
 
@@ -263,9 +255,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const optionProps = {
             renderOptions,
             renderOptionsHeader,
-            openOptions,
-            mobileDrawerProps,
-            desktopDrawerProps,
+            drawerProps,
         };
 
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
@@ -294,7 +284,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderCustomBottomNavbar = (
             <StyledBottomNavigation>
-                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" margin="0 1rem">
+                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                     <StarButton {...starButtonProps} />
                     <Box display="flex">
                         <Box marginRight="1rem">{renderUpVoteButton}</Box>
