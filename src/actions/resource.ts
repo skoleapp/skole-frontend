@@ -7,6 +7,12 @@ export const NEXT_PAGE = 'NEXT_PAGE';
 export const SET_PAGES = 'SET_PAGES';
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 export const SET_CURRENT_MAP = 'SET_CURRENT_MAP';
+export const RESET_EFFECT = 'RESET_EFFECT';
+
+export const resetEffect = () => (dispatch: Dispatch<AnyAction>): void => {
+    console.log('RESET_EFFECT');
+    dispatch({ type: RESET_EFFECT });
+};
 
 export const setCenter = () => (dispatch: Dispatch<AnyAction>): void => {
     console.log('SET_CENTER');
@@ -33,7 +39,7 @@ export const setCurrentPage = (currentPage: any) => (dispatch: Dispatch<AnyActio
     dispatch({ type: SET_CURRENT_PAGE, payload: currentPage });
 };
 export const setCurrentMap = (map: any) => (dispatch: Dispatch<AnyAction>): void => {
-    console.log('SET_CURRENT_PAGE');
+    console.log('SET_CURRENT_MAP');
 
     dispatch({ type: SET_CURRENT_MAP, payload: map });
 };

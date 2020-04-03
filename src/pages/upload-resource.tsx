@@ -2,7 +2,6 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
-import Resizer from 'react-image-file-resizer';
 import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
@@ -76,7 +75,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         };
 
         const generatePDF = async (file: any) => {
-            console.log('FILE_2: ', file);
+            console.log('FILE_2_COMPRESSED: ', file);
 
             const body = new FormData();
             body.append('file', file);
@@ -97,7 +96,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                     course: R.propOr('', 'id', course) as string,
                     file: (pdf as unknown) as string,
                 };
-                console.log('FILE_3: ', pdf);
+                console.log('FILE_3_FINAL: ', pdf);
 
                 await createResourceMutation({ variables });
             } else {
@@ -107,7 +106,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
         try {
             if (!!file) {
-                console.log('FILE_1: ', file);
                 if (file.type !== 'application/pdf') {
                     setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
                     await generatePDF(file);

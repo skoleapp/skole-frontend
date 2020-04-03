@@ -23,13 +23,15 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     const maxFileSize = 5000000;
 
     const handleFileChange = (files: File[]): void => {
+        console.log('FILE_1_ORIGINAL: ', files[0]);
+
         if (files[0].type !== 'application/pdf') {
             Resizer.imageFileResizer(
                 files[0],
-                1000,
-                1000,
+                1400,
+                1400,
                 'JPEG',
-                70,
+                90,
                 0,
                 (uri: any) => {
                     form.setFieldValue(field.name, uri);

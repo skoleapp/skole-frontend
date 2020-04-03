@@ -2,9 +2,9 @@ import 'ol/ol.css';
 
 import { Box, CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { batch, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { NEXT_PAGE, PREV_PAGE, SET_CENTER, setCurrentPage, setPages } from '../../actions';
+import { NEXT_PAGE, PREV_PAGE, SET_CENTER, setCurrentPage, setPages, resetEffect } from '../../actions';
 import { State } from '../../types';
 
 /* eslint-disable */
@@ -17,6 +17,8 @@ export const ResourcePreview: React.FC<Props> = ({ file }) => {
     const [touchEnd, setTouchEnd] = useState(0);
     const [initialZoom, setInitialZoom] = useState(0);
 
+    const [currentMap, setCurrentMap]: any = useState(null);
+
     const dispatch = useDispatch();
 
     const { pages, currentPage, effect } = useSelector((state: State) => state.resource);
@@ -25,12 +27,15 @@ export const ResourcePreview: React.FC<Props> = ({ file }) => {
         switch (effect) {
             case SET_CENTER:
                 setCenter();
+                dispatch(resetEffect());
                 break;
             case PREV_PAGE:
                 previousPage();
+                dispatch(resetEffect());
                 break;
             case NEXT_PAGE:
                 nextPage();
+                dispatch(resetEffect());
                 break;
             default:
                 break;
@@ -57,10 +62,10 @@ export const ResourcePreview: React.FC<Props> = ({ file }) => {
     };
 
     const setCenter = (): void => {
-        let tempPages = pages;
-        tempPages[currentPage].map.getView().setCenter(getCenter(tempPages[currentPage].imageExtent));
-        tempPages[currentPage].map.getView().setZoom(0);
-        dispatch(setPages(tempPages));
+        console.log(pages[currentPage].imageExtent);
+        console.log(currentMap);
+        currentMap.getView().setCenter(getCenter(pages[currentPage].imageExtent));
+        currentMap.getView().setZoom(0);
     };
 
     const nextPage = (): void => {
@@ -68,52 +73,30 @@ export const ResourcePreview: React.FC<Props> = ({ file }) => {
 
         if (currentPage < numPages - 1) {
             const nextPage = currentPage + 1;
-            const tempPages = pages;
-
-            tempPages[currentPage].map.setTarget(null);
-            pages[currentPage].map.setTarget(null);
-
-            tempPages[nextPage].map.setTarget(ref.current);
-            tempPages[nextPage].map.getView().setCenter(getCenter(tempPages[nextPage].imageExtent));
-            tempPages[nextPage].map.getView().setZoom(0);
-
-            batch(() => {
-                dispatch(setPages(tempPages));
-                dispatch(setCurrentPage(nextPage));
-            });
+            currentMap.setLayerGroup(pages[nextPage].layer);
+            dispatch(setCurrentPage(nextPage));
         }
     };
     const previousPage = (): void => {
         if (currentPage !== 0) {
             const previousPage = currentPage - 1;
-            const tempPages = pages;
-            tempPages[currentPage].map.setTarget(null);
-            pages[currentPage].map.setTarget(null);
-
-            tempPages[previousPage].map.setTarget(ref.current);
-            tempPages[previousPage].map.getView().setCenter(getCenter(tempPages[previousPage].imageExtent));
-            tempPages[previousPage].map.getView().setZoom(0);
-
-            batch(() => {
-                dispatch(setPages(tempPages));
-                dispatch(setCurrentPage(previousPage));
-            });
+            currentMap.setLayerGroup(pages[previousPage].layer);
+            dispatch(setCurrentPage(previousPage));
         }
     };
 
     interface MapData {
-        map: any;
+        layer: any;
         imageExtent: number[];
     }
 
-    const createMapFromPDF = (url: string): Promise<MapData> => {
-        const Map = require('ol/Map').default;
-        const View = require('ol/View').default;
+    const createPagesFromPDF = (url: string): Promise<MapData> => {
         const Image = require('ol/layer/Image').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
         const Projection = require('ol/proj/Projection').default;
         const PDFJS: any = require('pdfjs-dist');
         const pdfjsWorker: any = require('pdfjs-dist/build/pdf.worker.entry');
+        const Group = require('ol/layer/Group').default;
 
         PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -148,41 +131,28 @@ export const ResourcePreview: React.FC<Props> = ({ file }) => {
                     crossOrigin: 'anonymous',
                 });
 
-                const map = new Map({
+                const layer = new Group({
                     layers: [
                         new Image({
                             source: source,
                         }),
                     ],
-
-                    view: new View({
-                        projection: projection,
-                        zoom: 0,
-                        maxZoom: 4,
-                        constrainResolution: false,
-                        showFullExtent: true,
-                        extent: imageExtent,
-                        enableRotation: false,
-                    }),
-                    controls: [],
                 });
 
-                let target = null;
                 if (page.pageIndex === 0) {
-                    target = ref.current;
+                    //
                 }
-                map.setTarget(target);
 
-                const mapData = { map: map, imageExtent: imageExtent };
+                const mapData = { layer: layer, imageExtent: imageExtent };
 
                 return mapData;
             });
         };
-        const renderPages = (pdfDoc: any): Promise<any> => {
+        const renderPages = (pages: any): Promise<any> => {
             const promises: any[] = [];
 
-            for (let num = 1; num <= pdfDoc.numPages; num++) {
-                promises.push(pdfDoc.getPage(num).then(renderPage));
+            for (let num = 1; num <= pages.numPages; num++) {
+                promises.push(pages.getPage(num).then(renderPage));
             }
 
             return Promise.all(promises);
@@ -195,8 +165,8 @@ export const ResourcePreview: React.FC<Props> = ({ file }) => {
     };
 
     useEffect(() => {
-        if (!!pages[currentPage] && !!pages[currentPage].map) {
-            const zoomLevel = pages[currentPage].map.getView().getZoom();
+        if (!!currentMap) {
+            const zoomLevel = currentMap.getView().getZoom();
             console.log('ZOOMLEVEL: ' + zoomLevel + ' INITIAL: ' + initialZoom);
 
             if (initialZoom >= zoomLevel && !!touchStart) {
@@ -225,39 +195,75 @@ export const ResourcePreview: React.FC<Props> = ({ file }) => {
         };
     }, [ref.current]);
 
+    const createMap = (imageExtent: number[]): any => {
+        const Map = require('ol/Map').default;
+        const View = require('ol/View').default;
+        const Projection = require('ol/proj/Projection').default;
+
+        const projection = new Projection({
+            units: 'pixels',
+            extent: imageExtent,
+        });
+
+        const map = new Map({
+            view: new View({
+                projection: projection,
+                zoom: 0,
+                maxZoom: 4,
+                constrainResolution: false,
+                showFullExtent: true,
+                enableRotation: false,
+                extent: imageExtent,
+            }),
+            controls: [],
+        });
+        return map;
+    };
+
     useEffect(() => {
         if (pages.length === 0) {
             const maps: any[] = [];
             if (!!file) {
                 const url = file;
 
-                const pdfMaps = createMapFromPDF(url);
+                const pdfMaps = createPagesFromPDF(url);
                 maps.push(pdfMaps);
 
                 Promise.all(maps).then((maps: any) => {
                     const flatMaps = maps.flat();
 
-                    flatMaps[0].map.getView().setCenter(getCenter(flatMaps[0].imageExtent));
-                    flatMaps[0].map.getView().setZoom(0);
+                    const imageExtent = flatMaps[0].imageExtent;
+                    const layer = flatMaps[0].layer;
 
-                    const zoomLevel = flatMaps[0].map.getView().getZoom();
+                    const map = createMap(imageExtent);
+
+                    map.setLayerGroup(layer);
+                    map.setTarget(ref.current);
+                    map.getView().setCenter(getCenter(flatMaps[0].imageExtent));
+                    map.getView().setZoom(0); //?
+
+                    const zoomLevel = map.getView().getZoom();
                     setInitialZoom(zoomLevel);
 
+                    setCurrentMap(map);
                     dispatch(setPages(flatMaps));
 
                     console.log('Valmiit sivut: ', flatMaps);
                 });
             }
         } else {
-            const tempPages = pages;
+            const imageExtent = pages[0].imageExtent;
+            const layer = pages[0].layer;
+            const map = createMap(imageExtent);
+            map.setLayerGroup(layer);
+            map.setTarget(ref.current);
+            map.getView().setCenter(getCenter(imageExtent));
+            map.getView().setZoom(0); //?
 
-            tempPages[currentPage].map.setTarget(null);
-            tempPages[currentPage].map.setTarget(ref.current);
+            const zoomLevel = map.getView().getZoom();
+            setInitialZoom(zoomLevel);
 
-            tempPages[currentPage].map.getView().setCenter(getCenter(tempPages[currentPage].imageExtent));
-            tempPages[currentPage].map.getView().setZoom(0);
-
-            dispatch(setPages(tempPages));
+            setCurrentMap(map);
         }
     }, []);
 
