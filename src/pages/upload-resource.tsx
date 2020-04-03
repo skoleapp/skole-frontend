@@ -147,8 +147,8 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                 90,
                 0,
                 (uri: File) => {
-                    let { file, ...rest } = { ...variables };
-                    let newVariables = { file: uri, ...rest };
+                    const { file, ...rest } = { ...variables };
+                    const newVariables = { file: uri, ...rest };
 
                     generatePDFAndUpload(newVariables);
                 },
