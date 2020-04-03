@@ -11,6 +11,13 @@ import { State } from '../../types';
 interface Props {
     file: string;
 }
+export interface Page {
+    layer: object;
+    imageExtent: number[];
+}
+export interface Pages {
+    pages: Page[];
+}
 
 export const PDFViewer: React.FC<Props> = ({ file }) => {
     const [touchStart, setTouchStart]: any = useState(0);
@@ -83,12 +90,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         }
     };
 
-    interface MapData {
-        layer: any;
-        imageExtent: number[];
-    }
-
-    const createPagesFromPDF = (url: string): Promise<MapData> => {
+    const createPagesFromPDF = (url: string): Promise<Page> => {
         const Image = require('ol/layer/Image').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
         const Projection = require('ol/proj/Projection').default;
@@ -146,18 +148,18 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                 return mapData;
             });
         };
-        const renderPages = (pages: any): Promise<any> => {
-            const promises: any[] = [];
+        const renderPages = (PDFJSPages: any): Promise<Page[]> => {
+            const promises: Page[] = [];
 
-            for (let num = 1; num <= pages.numPages; num++) {
-                promises.push(pages.getPage(num).then(renderPage));
+            for (let num = 1; num <= PDFJSPages.numPages; num++) {
+                promises.push(PDFJSPages.getPage(num).then(renderPage));
             }
 
             return Promise.all(promises);
         };
 
-        return PDFJS.getDocument(url).promise.then((pages: any) => {
-            const promises = renderPages(pages);
+        return PDFJS.getDocument(url).promise.then((PDFJSPages: any) => {
+            const promises = renderPages(PDFJSPages);
             return promises;
         });
     };
@@ -217,7 +219,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
 
     useEffect(() => {
         if (pages.length === 0) {
-            const maps: any[] = [];
+            const maps: Promise<Page>[] = [];
             if (!!file) {
                 const url = file;
 
@@ -231,7 +233,6 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                     const layer = flatMaps[0].layer;
 
                     const map = createMap(imageExtent);
-
                     map.setLayerGroup(layer);
                     map.setTarget(ref.current);
                     map.getView().setCenter(getCenter(flatMaps[0].imageExtent));
@@ -239,14 +240,15 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
 
                     const zoomLevel = map.getView().getZoom();
                     setInitialZoom(zoomLevel);
-
                     setCurrentMap(map);
+
                     dispatch(setPages(flatMaps));
                 });
             }
         } else {
             const imageExtent = pages[0].imageExtent;
             const layer = pages[0].layer;
+
             const map = createMap(imageExtent);
             map.setLayerGroup(layer);
             map.setTarget(ref.current);
@@ -255,7 +257,6 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
 
             const zoomLevel = map.getView().getZoom();
             setInitialZoom(zoomLevel);
-
             setCurrentMap(map);
         }
     }, []);

@@ -10,7 +10,6 @@ export const SET_CURRENT_MAP = 'SET_CURRENT_MAP';
 export const RESET_EFFECT = 'RESET_EFFECT';
 
 export const resetEffect = () => (dispatch: Dispatch<AnyAction>): void => {
-    console.log('RESET_EFFECT');
     dispatch({ type: RESET_EFFECT });
 };
 

@@ -1,9 +1,10 @@
 import { AnyAction } from 'redux';
 
 import { NEXT_PAGE, PREV_PAGE, RESET_EFFECT, SET_CENTER, SET_CURRENT_PAGE, SET_PAGES } from '../actions';
+import { Page } from '../components/shared/PDFViewer';
 
 export interface ResourceState {
-    pages: any[];
+    pages: Page[];
     currentPage: number;
     effect: string;
 }
