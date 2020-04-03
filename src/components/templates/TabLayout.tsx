@@ -148,7 +148,7 @@ export const TabLayout: React.FC<Props> = ({
             backUrl
             headerRight={renderMobileHeaderActions}
             headerLeft={headerActionMobile}
-            customBottomNavbar={tabValue === 0 && customBottomNavbar}
+            customBottomNavbar={(tabValue === 0 && customBottomNavbar) || undefined}
             {...props}
         >
             {renderMobileContent}

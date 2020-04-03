@@ -111,7 +111,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                 const blob = await res.blob();
                 const pdf = new File([blob], 'resource.pdf');
                 handleUpload({ file: pdf, ...variables });
-                console.log('FILE_FINAL: ', pdf);
             } else {
                 handleFileGenerationError();
             }
@@ -122,8 +121,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
     const handleSubmit = async (variables: UploadResourceFormValues): Promise<void> => {
         const { file } = variables;
-
-        console.log('FILE_ORIGINAL: ', file);
 
         const imageTypes = [
             'image/apng',
@@ -146,11 +143,8 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                 'JPEG',
                 90,
                 0,
-                (uri: File) => {
-                    const { file, ...rest } = { ...variables };
-                    const newVariables = { file: uri, ...rest };
-
-                    generatePDFAndUpload(newVariables);
+                (file: File) => {
+                    generatePDFAndUpload({ file: file, ...variables });
                 },
                 'blob',
             );
