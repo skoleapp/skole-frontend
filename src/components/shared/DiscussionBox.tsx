@@ -6,8 +6,9 @@ import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
 import { useTranslation } from '../../i18n';
-import { breakpoints } from '../../styles';
+import { breakpoints, breakpointsNum } from '../../styles';
 import { DiscussionBoxProps } from '../../types';
+import { useBreakPoint } from '../../utils';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 
@@ -26,6 +27,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     const toggleCreateCommentModal = (val: boolean): void => setCreateCommentModalOpen(val);
     const openCommentModal = (): void => setCreateCommentModalOpen(true);
     const { t } = useTranslation();
+    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const appendComments = (comment: CommentObjectType): void => {
         setComments([...comments, comment]);
@@ -75,8 +77,8 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
                           </Typography>
                       </Box>
                   )}
-            {!!topComment && (
-                <Box marginTop="auto" className="md-down">
+            {!!topComment && isMobile && (
+                <Box marginTop="auto">
                     <Divider />
                     <Box padding="0.5rem">
                         <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
@@ -88,14 +90,14 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
         </Box>
     );
 
-    const renderInputArea = (
-        <Box className="md-up input-area">
+    const renderInputArea = !isMobile && (
+        <Box className="input-area">
             <CreateCommentForm {...createCommentFormProps} />
         </Box>
     );
 
-    const renderMobileCreateCommentButton = !topComment && (
-        <Fab id="create-comment-button" className="md-down" color="primary" onClick={openCommentModal}>
+    const renderMobileCreateCommentButton = !topComment && isMobile && (
+        <Fab id="create-comment-button" color="primary" onClick={openCommentModal}>
             <AddOutlined />
         </Fab>
     );

@@ -51,13 +51,12 @@ interface Props {
 
 const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
     const {
-        toggleDrawer,
-        open,
         handleSubmit,
         submitButtonText,
-        renderMobileClearFiltersButton,
         renderDesktopClearFiltersButton,
         ref,
+        drawerProps,
+        handleClearFilters,
     } = useFilters<FilterSearchResultsFormValues>();
 
     const { query } = useRouter();
@@ -206,14 +205,13 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
     );
 
     return (
-        <FilterLayout<FilterSearchResultsFormValues>
+        <FilterLayout
             title={t('search:title')}
             heading={t('search:heading')}
             renderCardContent={renderCardContent}
-            renderMobileClearFiltersButton={renderMobileClearFiltersButton}
             renderTableContent={renderTableContent}
-            toggleDrawer={toggleDrawer}
-            open={open}
+            drawerProps={drawerProps}
+            handleClearFilters={handleClearFilters}
             backUrl
             disableSearch
         />

@@ -46,9 +46,5 @@ const StyledSearchWidget = styled.form`
             color: var(--white);
             width: 15rem;
         }
-
-        input[type='submit'] {
-            display: none;
-        }
     }
 `;

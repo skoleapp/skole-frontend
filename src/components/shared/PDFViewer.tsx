@@ -4,7 +4,7 @@ import { Box, CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { NEXT_PAGE, PREV_PAGE, SET_CENTER, setCurrentPage, setPages, resetEffect } from '../../actions';
+import { NEXT_PAGE, PREV_PAGE, resetEffect, SET_CENTER, setCurrentPage, setPages } from '../../actions';
 import { State } from '../../types';
 
 /* eslint-disable */

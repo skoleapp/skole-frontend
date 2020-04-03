@@ -16,3 +16,5 @@ export { useOptions } from './useOptions';
 export { useLanguageSelector } from './useLanguageSelector';
 export { usePagination, useFrontendPagination } from './usePagination';
 export { useVotes } from './useVotes';
+export { useBreakPoint } from './useBreakPoint';
+export { useDrawer } from './useDrawer';

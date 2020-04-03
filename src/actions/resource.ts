@@ -15,31 +15,25 @@ export const resetEffect = () => (dispatch: Dispatch<AnyAction>): void => {
 };
 
 export const setCenter = () => (dispatch: Dispatch<AnyAction>): void => {
-    console.log('SET_CENTER');
     dispatch({ type: SET_CENTER });
 };
-export const prevPage = () => (dispatch: Dispatch<AnyAction>): void => {
-    console.log('PREV_PAGE');
 
+export const prevPage = () => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: PREV_PAGE });
 };
-export const nextPage = () => (dispatch: Dispatch<AnyAction>): void => {
-    console.log('NEXT_PAGE');
 
+export const nextPage = () => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: NEXT_PAGE });
 };
-export const setPages = (pages: any) => (dispatch: Dispatch<AnyAction>): void => {
-    console.log('SET_PAGES');
 
+export const setPages = (pages: number[]) => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: SET_PAGES, payload: pages });
 };
-export const setCurrentPage = (currentPage: any) => (dispatch: Dispatch<AnyAction>): void => {
-    console.log('SET_CURRENT_PAGE');
 
+export const setCurrentPage = (currentPage: number) => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: SET_CURRENT_PAGE, payload: currentPage });
 };
-export const setCurrentMap = (map: any) => (dispatch: Dispatch<AnyAction>): void => {
-    console.log('SET_CURRENT_MAP');
 
+export const setCurrentMap = (map: Map<{}, {}>) => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: SET_CURRENT_MAP, payload: map });
 };

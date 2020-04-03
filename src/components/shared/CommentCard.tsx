@@ -59,22 +59,14 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const creatorId = R.propOr('', 'id', comment.user) as string;
     const isOwner = !!user && user.id === creatorId;
     const commentId = R.propOr('', 'id', comment) as string;
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
+    const { onClose: handleCloseOptions, handleOpen: handleOpenOptions } = drawerProps;
 
     const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
         initialPoints,
         isOwner,
     });
-
-    const {
-        openOptions,
-        closeOptions,
-        renderShareOption,
-        renderReportOption,
-        mobileDrawerProps,
-        desktopDrawerProps,
-        renderOptionsHeader,
-    } = useOptions();
 
     const handleClick = (): void => {
         if (isThread) {
@@ -116,13 +108,13 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const handleDeleteComment = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        closeOptions();
+        handleCloseOptions();
         confirm({ title: t('common:deleteCommentTitle') }).then(() => deleteComment({ variables: { id: comment.id } }));
     };
 
     const handleMoreClick = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        openOptions();
+        handleOpenOptions();
     };
 
     const renderTitle = (
@@ -141,18 +133,6 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
             </ListItemText>
         </MenuItem>
     );
-
-    const renderOptionDrawerContent = (
-        <StyledList>
-            {renderOptionsHeader}
-            {renderShareOption}
-            {renderReportOption}
-            {renderDeleteCommentOption}
-        </StyledList>
-    );
-
-    const renderMobileCommentOptions = <Drawer {...mobileDrawerProps}>{renderOptionDrawerContent}</Drawer>;
-    const renderDesktopCommentOptions = <Drawer {...desktopDrawerProps}>{renderOptionDrawerContent}</Drawer>;
 
     return (
         <StyledCommentCard
@@ -216,8 +196,14 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                     <Grid item xs={4} />
                 </Grid>
             </CardContent>
-            {renderMobileCommentOptions}
-            {renderDesktopCommentOptions}
+            <Drawer {...drawerProps}>
+                {renderOptionsHeader}
+                <StyledList>
+                    {renderShareOption}
+                    {renderReportOption}
+                    {renderDeleteCommentOption}
+                </StyledList>
+            </Drawer>
         </StyledCommentCard>
     );
 };

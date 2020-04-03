@@ -86,10 +86,6 @@ const StyledImagePreviewField = styled(FormControl)`
         width: 100%;
     }
 
-    input {
-        display: none;
-    }
-
     .MuiButton-root {
         margin-top: 0;
     }

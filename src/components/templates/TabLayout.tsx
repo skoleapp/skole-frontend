@@ -1,13 +1,13 @@
-import { Box, CardHeader, Divider, Drawer, Grid, IconButton, Paper, Tab } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
-import { breakpoints } from '../../styles';
+import { breakpointsNum } from '../../styles';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
-import { useOpen, useTabs } from '../../utils';
-import { ModalHeader, StyledCard } from '../shared';
+import { useBreakPoint, useDrawer, useTabs } from '../../utils';
+import { StyledCard } from '../shared';
 import { StyledTabs } from '../shared/StyledTabs';
 import { MainLayout } from './MainLayout';
 
@@ -20,7 +20,6 @@ interface Props extends LayoutProps {
     tabLabelLeft: string;
     renderInfo: JSX.Element;
     renderLeftContent: JSX.Element;
-    renderLeftFooter?: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
     renderSecondaryAction?: JSX.Element;
@@ -37,7 +36,6 @@ export const TabLayout: React.FC<Props> = ({
     tabLabelLeft,
     renderInfo,
     renderLeftContent,
-    renderLeftFooter,
     renderRightContent,
     customBottomNavbar,
     singleColumn,
@@ -48,36 +46,20 @@ export const TabLayout: React.FC<Props> = ({
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
-    const { open: infoOpen, handleOpen: handleOpenInfo, handleClose: handleCloseInfo } = useOpen();
-    const { renderOptions, renderOptionsHeader, mobileDrawerProps, desktopDrawerProps, openOptions } = optionProps;
     const { t } = useTranslation();
-    const infoTitle = t('common:info');
-    const [onDevice, setDevice] = useState('');
-
-    useEffect(() => {
-        // TODO: listen to breakpoint changes, add to redux, implement SSR to guess the device
-        if (typeof window !== 'undefined') {
-            const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
-            const breakpoint = parseInt(breakpoints.MD, 10);
-
-            if (width >= breakpoint) {
-                console.log('ON_DESKTOP');
-                setDevice('DESKTOP');
-            } else {
-                console.log('ON_MOBILE');
-                setDevice('MOBILE');
-            }
-        }
-    }, []);
+    const { renderHeader: renderInfoHeader, ...infoDrawerProps } = useDrawer(t('common:info'));
+    const { handleOpen: handleOpenInfo } = infoDrawerProps;
+    const { renderOptions, renderOptionsHeader, drawerProps: optionDrawerProps } = optionProps;
+    const { handleOpen: handleOpenOptions } = optionDrawerProps;
+    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
-            <Box className="md-up">{headerActionDesktop}</Box>
+            {!isMobile && headerActionDesktop}
             <IconButton onClick={handleOpenInfo} color={color}>
                 <InfoOutlined />
             </IconButton>
-            <IconButton onClick={openOptions} color={color}>
+            <IconButton onClick={handleOpenOptions} color={color}>
                 <MoreHorizOutlined />
             </IconButton>
         </Box>
@@ -93,7 +75,7 @@ export const TabLayout: React.FC<Props> = ({
         </StyledTabs>
     );
 
-    const renderLeftTab = tabValue === 0 && onDevice === 'MOBILE' && (
+    const renderLeftTab = tabValue === 0 && (
         <Box display="flex" flexGrow="1">
             {renderLeftContent}
         </Box>
@@ -105,76 +87,56 @@ export const TabLayout: React.FC<Props> = ({
         </Box>
     );
 
-    const renderMobileContent = (
-        <StyledCard className="md-down">
+    const renderMobileContent = isMobile && (
+        <StyledCard>
             {renderTabs}
             {renderLeftTab}
             {renderRightTab}
         </StyledCard>
     );
 
-    const renderDesktopContent = !!singleColumn ? (
-        <StyledCard className="md-up">
-            <CardHeader title={title} action={renderDesktopHeaderActions} />
-            <Divider />
-            {renderInfo}
-            <Divider />
-            {renderTabs}
-            {renderLeftTab}
-            {renderRightTab}
-        </StyledCard>
-    ) : (
-        <Grid container className="md-up">
-            <Grid item container xs={12} md={7} lg={8}>
-                <StyledCard>
-                    <CardHeader id="main-header" title={title} action={renderDesktopHeaderActions} />
-                    {extraDesktopActions}
-                    <Divider />
-                    {onDevice === 'DESKTOP' && renderLeftContent}
-                    <Divider />
-                    {renderLeftFooter}
-                </StyledCard>
-            </Grid>
-            <Grid item container xs={12} md={5} lg={4}>
-                <StyledCard marginLeft>
-                    <CardHeader title={titleSecondary} />
-                    <Divider />
-                    {renderRightContent}
-                </StyledCard>
-            </Grid>
-        </Grid>
-    );
-
-    const commonInfoDrawerProps = {
-        open: !!infoOpen,
-        onClose: handleCloseInfo,
-    };
-
-    const renderMobileInfoDrawer = (
-        <Drawer className="md-down" anchor="bottom" {...commonInfoDrawerProps}>
-            <Paper>
-                <ModalHeader title={infoTitle} onCancel={handleCloseInfo} />
+    const renderDesktopContent =
+        !isMobile && singleColumn ? (
+            <StyledCard>
+                <CardHeader title={title} action={renderDesktopHeaderActions} />
+                <Divider />
                 {renderInfo}
-            </Paper>
-        </Drawer>
-    );
+                <Divider />
+                {renderTabs}
+                {renderLeftTab}
+                {renderRightTab}
+            </StyledCard>
+        ) : (
+            !isMobile && (
+                <Grid id="container" container>
+                    <Grid item container xs={12} md={7} lg={8}>
+                        <StyledCard>
+                            <CardHeader id="main-header" title={title} action={renderDesktopHeaderActions} />
+                            <CardContent>{extraDesktopActions}</CardContent>
+                            <Divider />
+                            {renderLeftContent}
+                        </StyledCard>
+                    </Grid>
+                    <Grid item container xs={12} md={5} lg={4}>
+                        <StyledCard marginLeft>
+                            <CardHeader title={titleSecondary} />
+                            <Divider />
+                            {renderRightContent}
+                        </StyledCard>
+                    </Grid>
+                </Grid>
+            )
+        );
 
-    const renderDesktopInfoDrawer = (
-        <Drawer className="md-up" anchor="left" {...commonInfoDrawerProps}>
-            <ModalHeader title={infoTitle} onCancel={handleCloseInfo} />
+    const renderInfoDrawer = (
+        <Drawer {...infoDrawerProps}>
+            {renderInfoHeader}
             {renderInfo}
         </Drawer>
     );
 
-    const renderMobileOptionsDrawer = (
-        <Drawer {...mobileDrawerProps}>
-            {renderOptionsHeader}
-            {renderOptions}
-        </Drawer>
-    );
-
-    const renderDesktopOptionsDrawer = (
-        <Drawer {...desktopDrawerProps}>
+    const renderOptionsDrawer = (
+        <Drawer {...optionDrawerProps}>
             {renderOptionsHeader}
             {renderOptions}
         </Drawer>
@@ -190,22 +152,24 @@ export const TabLayout: React.FC<Props> = ({
             {...props}
         >
             {renderMobileContent}
-            {renderMobileInfoDrawer}
-            {renderMobileOptionsDrawer}
             {renderDesktopContent}
-            {renderDesktopInfoDrawer}
-            {renderDesktopOptionsDrawer}
+            {renderInfoDrawer}
+            {renderOptionsDrawer}
         </StyledTabLayout>
     );
 };
 
 const StyledTabLayout = styled(MainLayout)`
-    .MuiGrid-root {
+    #container {
         flex-grow: 1;
     }
 
     #main-header {
         text-align: left;
-        padding: 0.5rem 0.5rem 0.5rem 1rem;
+        padding-bottom: 0 !important;
+
+        .MuiCardHeader-content {
+            padding-left: 0.5rem;
+        }
     }
 `;
