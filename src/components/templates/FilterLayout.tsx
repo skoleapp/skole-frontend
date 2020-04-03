@@ -5,7 +5,9 @@ import styled from 'styled-components';
 
 import { StyledCard, StyledTable } from '..';
 import { useTranslation } from '../../i18n';
+import { breakpointsNum } from '../../styles';
 import { LayoutProps, UseDrawer, UseFilters } from '../../types';
+import { useBreakPoint } from '../../utils';
 import { ModalHeader } from '../shared';
 import { MainLayout } from './MainLayout';
 
@@ -23,6 +25,7 @@ export const FilterLayout: React.FC<Props> = ({
 }) => {
     const { t } = useTranslation();
     const { handleOpen: handleOpenFilters, onClose: handleCloseFilters } = drawerProps;
+    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const renderMobileClearFiltersButton = (
         <IconButton onClick={handleClearFilters}>
@@ -36,8 +39,8 @@ export const FilterLayout: React.FC<Props> = ({
         </IconButton>
     );
 
-    const renderMobileContent = (
-        <Box className="md-down" flexGrow="1" display="flex">
+    const renderMobileContent = isMobile && (
+        <Box flexGrow="1" display="flex">
             <StyledTable>{renderTableContent}</StyledTable>
             <Drawer {...drawerProps}>
                 <ModalHeader
@@ -50,8 +53,8 @@ export const FilterLayout: React.FC<Props> = ({
         </Box>
     );
 
-    const renderDesktopContent = (
-        <Grid container className="md-up">
+    const renderDesktopContent = !isMobile && (
+        <Grid container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
                     <CardHeader subheader={t('common:advancedSearch')} />

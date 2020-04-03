@@ -1,8 +1,6 @@
 import { BottomNavigation } from '@material-ui/core';
 import styled from 'styled-components';
 
-import { breakpoints } from '../../styles';
-
 export const StyledBottomNavigation = styled(BottomNavigation)`
     position: fixed;
     bottom: 0;
@@ -15,9 +13,5 @@ export const StyledBottomNavigation = styled(BottomNavigation)`
     .MuiButtonBase-root,
     .Mui-selected {
         padding: 0 !important;
-    }
-
-    @media only screen and (min-width: ${breakpoints.MD}) {
-        display: none !important;
     }
 `;

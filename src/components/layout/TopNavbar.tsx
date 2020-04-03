@@ -6,8 +6,9 @@ import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
-import { breakpoints } from '../../styles';
+import { breakpoints, breakpointsNum } from '../../styles';
 import { LayoutProps, State } from '../../types';
+import { useBreakPoint } from '../../utils';
 import { ButtonLink, Heading, IconButtonLink } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
 
@@ -16,6 +17,7 @@ type Props = Pick<LayoutProps, 'heading' | 'backUrl' | 'disableSearch' | 'header
 export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, headerRight, headerLeft }) => {
     const { user } = useSelector((state: State) => state.auth);
     const { t } = useTranslation();
+    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const contentProps = {
         display: 'flex',
@@ -24,8 +26,8 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
         alignItems: 'center',
     };
 
-    const renderMobileContent = (
-        <Grid container alignItems="center" className="md-down">
+    const renderMobileContent = isMobile && (
+        <Grid container alignItems="center">
             <Grid item xs={2} container justify="flex-start" wrap="nowrap">
                 {backUrl && (
                     <IconButton onClick={(): void => Router.back()} color="secondary">
@@ -43,8 +45,8 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
         </Grid>
     );
 
-    const renderDesktopContent = (
-        <Box className="md-up" {...contentProps}>
+    const renderDesktopContent = !isMobile && (
+        <Box {...contentProps}>
             <Logo />
             <Box display="flex" alignItems="center">
                 {!disableSearch && <TopNavbarSearchWidget />}

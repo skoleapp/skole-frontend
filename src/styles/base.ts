@@ -1,6 +1,5 @@
 import { css } from 'styled-components';
 
-import { breakpoints } from './breakpoints';
 import { colors } from './colors';
 
 export const base = css`
@@ -30,30 +29,6 @@ export const base = css`
     html,
     body {
         background: var(--secondary);
-
-        .sm-down {
-            @media only screen and (min-width: ${breakpoints.SM}) {
-                display: none !important;
-            }
-        }
-
-        .sm-up {
-            @media only screen and (max-width: ${breakpoints.SM}) {
-                display: none !important;
-            }
-        }
-
-        .md-down {
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                display: none !important;
-            }
-        }
-
-        .md-up {
-            @media only screen and (max-width: ${breakpoints.MD}) {
-                display: none !important;
-            }
-        }
 
         .border-bottom {
             border-bottom: var(--border);

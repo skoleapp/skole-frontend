@@ -21,7 +21,9 @@ import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import styled from 'styled-components';
 
 import { Router, useTranslation } from '../i18n';
+import { breakpointsNum } from '../styles';
 import { TextColor, TextVariant } from '../types';
+import { useBreakPoint } from './useBreakPoint';
 
 interface CustomTableHeadProps {
     titleLeft: string;
@@ -34,23 +36,23 @@ const titleProps = {
     color: 'textSecondary' as TextColor,
 };
 
-const CustomTableHead = ({ titleLeft, titleLeftDesktop, titleRight }: CustomTableHeadProps): JSX.Element => (
-    <TableHead>
-        <TableRow>
-            <TableCell>
-                <Typography className="md-down" {...titleProps}>
-                    {titleLeft}
-                </Typography>
-                <Typography className="md-up" {...titleProps}>
-                    {titleLeftDesktop}
-                </Typography>
-            </TableCell>
-            <TableCell align="right">
-                <Typography {...titleProps}>{titleRight}</Typography>
-            </TableCell>
-        </TableRow>
-    </TableHead>
-);
+const CustomTableHead = ({ titleLeft, titleLeftDesktop, titleRight }: CustomTableHeadProps): JSX.Element => {
+    const isMobile = useBreakPoint(breakpointsNum.MD);
+
+    return (
+        <TableHead>
+            <TableRow>
+                <TableCell>
+                    {isMobile && <Typography {...titleProps}>{titleLeft}</Typography>}
+                    {!isMobile && <Typography {...titleProps}>{titleLeftDesktop}</Typography>}
+                </TableCell>
+                <TableCell align="right">
+                    <Typography {...titleProps}>{titleRight}</Typography>
+                </TableCell>
+            </TableRow>
+        </TableHead>
+    );
+};
 
 interface TablePaginationActionsProps {
     count: number;

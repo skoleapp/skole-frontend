@@ -133,8 +133,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         ];
 
         if (imageTypes.includes(file.type)) {
-            console.log('test 1');
-
             // File is image.
             Resizer.imageFileResizer(
                 file,
