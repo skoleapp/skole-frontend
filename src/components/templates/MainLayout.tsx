@@ -14,7 +14,7 @@ interface Props
         >,
         ContainerProps {
     heading?: string;
-    customBottomNavbar?: JSX.Element;
+    customBottomNavbar?: JSX.Element | boolean;
 }
 
 export const MainLayout: React.FC<Props> = ({

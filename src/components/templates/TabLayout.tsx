@@ -39,6 +39,7 @@ export const TabLayout: React.FC<Props> = ({
     renderLeftContent,
     renderLeftFooter,
     renderRightContent,
+    customBottomNavbar,
     singleColumn,
     optionProps,
     headerActionMobile,
@@ -185,6 +186,7 @@ export const TabLayout: React.FC<Props> = ({
             backUrl
             headerRight={renderMobileHeaderActions}
             headerLeft={headerActionMobile}
+            customBottomNavbar={tabValue === 0 && customBottomNavbar}
             {...props}
         >
             {renderMobileContent}

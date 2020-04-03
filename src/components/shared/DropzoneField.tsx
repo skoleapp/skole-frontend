@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
 import { FormErrorMessage } from './FormErrorMessage';
+import Resizer from 'react-image-file-resizer';
 
 interface Props extends DropzoneAreaProps {
     form: FormikProps<{}>;
@@ -22,7 +23,22 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     const maxFileSize = 5000000;
 
     const handleFileChange = (files: File[]): void => {
-        form.setFieldValue(field.name, files[0]);
+        if (files[0].type !== 'application/pdf') {
+            Resizer.imageFileResizer(
+                files[0],
+                1000,
+                1000,
+                'JPEG',
+                70,
+                0,
+                (uri: any) => {
+                    form.setFieldValue(field.name, uri);
+                },
+                'blob',
+            );
+        } else {
+            form.setFieldValue(field.name, files[0]);
+        }
     };
 
     // TODO: Use form error here, now using notification temporarily as the form error does not work for some reason.

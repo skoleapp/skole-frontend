@@ -69,6 +69,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     // Use Cloudmersive API to generate PDF from any commonly used file format.
     const handleSubmit = async (values: UploadResourceFormValues): Promise<void> => {
         const { resourceTitle, resourceType, course, file } = values;
+        setSubmitting(true);
         const handleFileGenerationError = (): void => {
             setFieldError('file', t('upload-resource:fileGenerationError'));
             setFieldValue('general', '');
@@ -79,8 +80,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
             const body = new FormData();
             body.append('file', file);
-
-            setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
 
             const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
                 method: 'POST',
@@ -110,21 +109,10 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
             if (!!file) {
                 console.log('FILE_1: ', file);
                 if (file.type !== 'application/pdf') {
-                    Resizer.imageFileResizer(
-                        file,
-                        1000,
-                        1000,
-                        'JPEG',
-                        50,
-                        0,
-                        (uri: any) => {
-                            generatePDF(uri);
-                        },
-                        'blob',
-                    );
+                    setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
+                    await generatePDF(file);
                 } else {
                     setFieldValue('general', t('upload-resource:fileUploadingText'));
-
                     const variables = {
                         resourceTitle,
                         resourceType: R.propOr('', 'id', resourceType) as string,
@@ -159,6 +147,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                         label={t('forms:resourceTitle')}
                         placeholder={t('forms:resourceTitle')}
                         variant="outlined"
+                        autoComplete="off"
                         component={TextField}
                         fullWidth
                     />
