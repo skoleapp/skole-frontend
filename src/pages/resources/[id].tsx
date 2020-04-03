@@ -43,7 +43,7 @@ import {
     CreatorListItem,
     DiscussionBox,
     NotFound,
-    ResourcePreview,
+    PDFViewer,
     StarButton,
     StyledBottomNavigation,
     StyledList,
@@ -327,7 +327,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 backUrl
                 renderInfo={renderInfo}
                 tabLabelLeft={t('common:resource')}
-                renderLeftContent={<ResourcePreview file={file} />}
+                renderLeftContent={<PDFViewer file={file} />}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 optionProps={optionProps}
                 customBottomNavbar={renderCustomBottomNavbar}
