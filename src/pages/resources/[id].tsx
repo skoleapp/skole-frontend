@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Box,
     CardContent,
     Grid,
     IconButton,
@@ -69,6 +68,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const confirm = useConfirm();
     const { user } = useSelector((state: State) => state.auth);
     const { pages, currentPage } = useSelector((state: State) => state.resource);
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
 
     useEffect(() => {
         return (): void =>
@@ -77,15 +77,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 dispatch(setCurrentPage(0));
             });
     }, []);
-
-    const {
-        renderShareOption,
-        renderReportOption,
-        renderOptionsHeader,
-        mobileDrawerProps,
-        desktopDrawerProps,
-        openOptions,
-    } = useOptions();
 
     if (resource) {
         const file = mediaURL(resource.file);
@@ -262,9 +253,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const optionProps = {
             renderOptions,
             renderOptionsHeader,
-            openOptions,
-            mobileDrawerProps,
-            desktopDrawerProps,
+            drawerProps,
         };
 
         const renderExtraResourceActions = (

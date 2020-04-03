@@ -1,4 +1,4 @@
-import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Paper, Tab } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { useTranslation } from '../../i18n';
 import { breakpointsNum } from '../../styles';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
-import { useBreakPoint, useOpen, useTabs } from '../../utils';
-import { ModalHeader, StyledCard } from '../shared';
+import { useBreakPoint, useDrawer, useTabs } from '../../utils';
+import { StyledCard } from '../shared';
 import { StyledTabs } from '../shared/StyledTabs';
 import { MainLayout } from './MainLayout';
 
@@ -45,10 +45,11 @@ export const TabLayout: React.FC<Props> = ({
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
-    const { open: infoOpen, handleOpen: handleOpenInfo, handleClose: handleCloseInfo } = useOpen();
-    const { renderOptions, renderOptionsHeader, mobileDrawerProps, desktopDrawerProps, openOptions } = optionProps;
     const { t } = useTranslation();
-    const infoTitle = t('common:info');
+    const { renderHeader: renderInfoHeader, ...infoDrawerProps } = useDrawer(t('common:info'));
+    const { handleOpen: handleOpenInfo } = infoDrawerProps;
+    const { renderOptions, renderOptionsHeader, drawerProps: optionDrawerProps } = optionProps;
+    const { handleOpen: handleOpenOptions } = optionDrawerProps;
     const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
@@ -57,7 +58,7 @@ export const TabLayout: React.FC<Props> = ({
             <IconButton onClick={handleOpenInfo} color={color}>
                 <InfoOutlined />
             </IconButton>
-            <IconButton onClick={openOptions} color={color}>
+            <IconButton onClick={handleOpenOptions} color={color}>
                 <MoreHorizOutlined />
             </IconButton>
         </Box>
@@ -86,7 +87,7 @@ export const TabLayout: React.FC<Props> = ({
     );
 
     const renderMobileContent = (
-        <StyledCard className="md-down">
+        <StyledCard>
             {renderTabs}
             {renderLeftTab}
             {renderRightTab}
@@ -94,7 +95,7 @@ export const TabLayout: React.FC<Props> = ({
     );
 
     const renderDesktopContent = singleColumn ? (
-        <StyledCard className="md-up">
+        <StyledCard>
             <CardHeader title={title} action={renderDesktopHeaderActions} />
             <Divider />
             {renderInfo}
@@ -104,7 +105,7 @@ export const TabLayout: React.FC<Props> = ({
             {renderRightTab}
         </StyledCard>
     ) : (
-        <Grid id="container" container className="md-up">
+        <Grid id="container" container>
             <Grid item container xs={12} md={7} lg={8}>
                 <StyledCard>
                     <CardHeader id="main-header" title={title} action={renderDesktopHeaderActions} />
@@ -123,36 +124,15 @@ export const TabLayout: React.FC<Props> = ({
         </Grid>
     );
 
-    const commonInfoDrawerProps = {
-        open: !!infoOpen,
-        onClose: handleCloseInfo,
-    };
-
-    const renderMobileInfoDrawer = (
-        <Drawer className="md-down" anchor="bottom" {...commonInfoDrawerProps}>
-            <Paper>
-                <ModalHeader title={infoTitle} onCancel={handleCloseInfo} />
-                {renderInfo}
-            </Paper>
-        </Drawer>
-    );
-
-    const renderDesktopInfoDrawer = (
-        <Drawer className="md-up" anchor="left" {...commonInfoDrawerProps}>
-            <ModalHeader title={infoTitle} onCancel={handleCloseInfo} />
+    const renderInfoDrawer = (
+        <Drawer {...infoDrawerProps}>
+            {renderInfoHeader}
             {renderInfo}
         </Drawer>
     );
 
-    const renderMobileOptionsDrawer = (
-        <Drawer {...mobileDrawerProps}>
-            {renderOptionsHeader}
-            {renderOptions}
-        </Drawer>
-    );
-
-    const renderDesktopOptionsDrawer = (
-        <Drawer {...desktopDrawerProps}>
+    const renderOptionsDrawer = (
+        <Drawer {...optionDrawerProps}>
             {renderOptionsHeader}
             {renderOptions}
         </Drawer>
@@ -167,11 +147,9 @@ export const TabLayout: React.FC<Props> = ({
             {...props}
         >
             {isMobile && renderMobileContent}
-            {isMobile && renderMobileInfoDrawer}
-            {isMobile && renderMobileOptionsDrawer}
             {!isMobile && renderDesktopContent}
-            {!isMobile && renderDesktopInfoDrawer}
-            {!isMobile && renderDesktopOptionsDrawer}
+            {renderInfoDrawer}
+            {renderOptionsDrawer}
         </StyledTabLayout>
     );
 };

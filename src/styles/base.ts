@@ -106,5 +106,9 @@ export const base = css`
         .MuiDrawer-paperAnchorLeft {
             width: 20rem;
         }
+
+        .MuiDrawer-paperAnchorBottom {
+            min-height: 100%;
+        }
     }
 `;
