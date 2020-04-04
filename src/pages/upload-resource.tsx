@@ -142,9 +142,8 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                 'JPEG',
                 90,
                 0,
-                (uri: File) => {
-                    const { file, ...rest } = { ...variables };
-                    generatePDFAndUpload({ file: uri, ...rest });
+                (file: File) => {
+                    generatePDFAndUpload({ ...variables, file });
                 },
                 'blob',
             );
