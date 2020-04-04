@@ -70,7 +70,7 @@ const StyledDropzoneField = styled(FormControl)`
         display: flex;
         flex-direction: column;
         align-items: center;
-        min-height: 200px !important;
+        min-height: 200px;
     }
 
     .MuiChip-root {
