@@ -58,7 +58,7 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
                         <IconButtonLink icon={StarOutlined} href="/account/starred" color="secondary" />
                         <Link href={`/users/${user.id}`}>
                             <IconButton color="secondary">
-                                <Avatar src={mediaURL(avatarThumb)} className="avatar-thumb" />
+                                <Avatar src={mediaURL(avatarThumb)} />
                             </IconButton>
                         </Link>
                     </>
@@ -97,6 +97,11 @@ const StyledTopNavBar = styled(AppBar)`
 
     .MuiButton-root {
         margin: 0 0.5rem;
+    }
+
+    .MuiAvatar-root {
+        height: 1.5rem;
+        width: 1.5rem;
     }
 
     .MuiToolbar-root {

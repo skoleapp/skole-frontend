@@ -39,11 +39,6 @@ export const base = css`
             width: 8rem;
             margin: 1rem;
         }
-        .avatar-thumb {
-            height: 1.5rem;
-            width: 1.5rem;
-        }
-
         .MuiFormControl-root {
             margin-top: 0.75rem;
         }
