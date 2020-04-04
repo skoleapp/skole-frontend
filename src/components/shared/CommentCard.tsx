@@ -141,7 +141,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
             disableBorder={disableBorder}
             attachmentOnly={attachmentOnly}
         >
-            <CardHeader avatar={<Avatar src={mediaURL(avatarThumb)} />} title={renderTitle} subheader={created} />
+            <CardHeader
+                avatar={<Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />}
+                title={renderTitle}
+                subheader={created}
+            />
             <CardContent>
                 <Grid container justify="space-between" alignItems="center">
                     <Grid id="content" item container xs={11} justify="flex-start">
@@ -234,11 +238,6 @@ const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...
                 word-break: break-word;
             }
         }
-    }
-
-    .MuiAvatar-root {
-        height: 1.5rem;
-        width: 1.5rem;
     }
 
     .MuiCardHeader-content {

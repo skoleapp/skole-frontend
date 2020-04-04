@@ -8,6 +8,8 @@ import styled from 'styled-components';
 import { toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
 import { FormErrorMessage } from './FormErrorMessage';
+import { useBreakPoint } from '../../utils';
+import { breakpointsNum } from '../../styles';
 
 interface Props extends DropzoneAreaProps {
     form: FormikProps<{}>;
@@ -38,6 +40,10 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
         dropzone[0].setAttribute('capture', 'camera');
     }, []);
 
+    const isMobile = useBreakPoint(breakpointsNum.MD);
+
+    const dropzoneText = isMobile ? t('common:dropzoneTextMobile') : t('common:dropzoneText');
+
     return (
         <StyledDropzoneField fullWidth>
             <DropzoneArea
@@ -46,7 +52,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
                 filesLimit={1}
                 useChipsForPreview
                 showAlerts={false}
-                dropzoneText={t('common:dropzoneText')}
+                dropzoneText={dropzoneText}
                 maxFileSize={maxFileSize}
                 onDropRejected={handleDropRejected}
             />
@@ -64,6 +70,7 @@ const StyledDropzoneField = styled(FormControl)`
         display: flex;
         flex-direction: column;
         align-items: center;
+        min-height: 200px;
     }
 
     .MuiChip-root {
