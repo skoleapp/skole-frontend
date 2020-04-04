@@ -1,5 +1,5 @@
-import { AppBar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
-import { AccountCircleOutlined, ArrowBack, StarOutlined } from '@material-ui/icons';
+import { AppBar, Box, Grid, IconButton, Toolbar, Avatar } from '@material-ui/core';
+import { ArrowBack, StarOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -8,9 +8,11 @@ import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
 import { breakpoints, breakpointsNum } from '../../styles';
 import { LayoutProps, State } from '../../types';
-import { useBreakPoint } from '../../utils';
+import { useBreakPoint, mediaURL } from '../../utils';
 import { ButtonLink, Heading, IconButtonLink } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
+import * as R from 'ramda';
+import { Link } from '../../i18n';
 
 type Props = Pick<LayoutProps, 'heading' | 'backUrl' | 'disableSearch' | 'headerRight' | 'headerLeft'>;
 
@@ -18,6 +20,7 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
     const { user } = useSelector((state: State) => state.auth);
     const { t } = useTranslation();
     const isMobile = useBreakPoint(breakpointsNum.MD);
+    const avatarThumb = R.propOr('', 'avatar', user) as string;
 
     const contentProps = {
         display: 'flex',
@@ -53,7 +56,11 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
                 {!!user ? (
                     <>
                         <IconButtonLink icon={StarOutlined} href="/account/starred" color="secondary" />
-                        <IconButtonLink icon={AccountCircleOutlined} href={`/users/${user.id}`} color="secondary" />
+                        <Link href={`/users/${user.id}`}>
+                            <IconButton color="secondary">
+                                <Avatar src={mediaURL(avatarThumb)} className="avatar-thumb" />
+                            </IconButton>
+                        </Link>
                     </>
                 ) : (
                     <>
