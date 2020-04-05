@@ -14,7 +14,7 @@ const handle = app.getRequestHandler();
     await app.prepare();
     const server = express();
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'production') {
         server.use(
             morgan(
                 ':remote-addr - :remote-user ":method :url" :status :res[content-length] ":referrer" ":user-agent" :response-time ms',
