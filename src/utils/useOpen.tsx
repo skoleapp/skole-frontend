@@ -10,5 +10,6 @@ export const useOpen = (): UseOpen => {
     const [open, setOpen] = useState(false);
     const handleOpen = (): void => setOpen(true);
     const handleClose = (): void => setOpen(false);
+
     return { open, handleOpen, handleClose };
 };

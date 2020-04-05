@@ -4,7 +4,7 @@ import ApolloClient, { ApolloError, ApolloQueryResult } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
 import { NextComponentType, NextPageContext } from 'next';
-import { MutableRefObject } from 'react';
+import { MutableRefObject, SyntheticEvent } from 'react';
 import { Store } from 'redux';
 
 import { CommentObjectType, ErrorType, UserObjectType } from '../generated/graphql';
