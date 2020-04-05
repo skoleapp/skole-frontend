@@ -1,7 +1,6 @@
 import { Box, Tab, Table, TableContainer } from '@material-ui/core';
 import * as R from 'ramda';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { compose } from 'redux';
 
 import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
@@ -16,13 +15,14 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
+import { I18nPage, I18nProps } from '../../types';
+import { useFrontendPagination, useTabs, withAuthSync } from '../../utils';
+import { getUser } from '../../utils/auth';
 
 const StarredPage: I18nPage = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
-    const { user } = useSelector((state: State) => state.auth);
+    const user = getUser();
 
     if (!!user) {
         const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
@@ -114,9 +114,6 @@ const StarredPage: I18nPage = () => {
     }
 };
 
-StarredPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePrivatePage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['starred']) };
-};
+StarredPage.getInitialProps = (): I18nProps => ({ namespacesRequired: includeDefaultNamespaces(['starred']) });
 
-export default compose(withRedux, withApollo)(StarredPage);
+export default compose(withAuthSync, withRedux, withApollo)(StarredPage);

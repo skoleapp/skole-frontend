@@ -2,18 +2,19 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
-import { reAuthenticate, toggleNotification } from '../../actions';
+import { UpdateUserMutation, useUpdateUserMutation } from '../../../generated/graphql';
+import { toggleNotification } from '../../actions';
 import { AvatarField, FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { useForm, usePrivatePage } from '../../utils';
+import { I18nPage, I18nProps } from '../../types';
+import { useForm, withAuthSync } from '../../utils';
+import { getUser } from '../../utils/auth';
 
 export interface UpdateProfileFormValues {
     username: string;
@@ -24,7 +25,7 @@ export interface UpdateProfileFormValues {
 }
 
 const EditProfilePage: I18nPage = () => {
-    const { user } = useSelector((state: State) => state.auth);
+    const user = getUser();
     const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -35,7 +36,7 @@ const EditProfilePage: I18nPage = () => {
                 handleMutationErrors(updateUser.errors);
             } else {
                 dispatch(toggleNotification(t('notifications:profileUpdated')));
-                dispatch(reAuthenticate(updateUser.user as UserObjectType));
+                window.localStorage.setItem('user', JSON.stringify(updateUser.user));
             }
         }
     };
@@ -133,9 +134,8 @@ const EditProfilePage: I18nPage = () => {
     );
 };
 
-EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePrivatePage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['edit-profile']) };
-};
+EditProfilePage.getInitialProps = (): I18nProps => ({
+    namespacesRequired: includeDefaultNamespaces(['edit-profile']),
+});
 
-export default compose(withApollo, withRedux)(EditProfilePage);
+export default compose(withAuthSync, withApollo, withRedux)(EditProfilePage);

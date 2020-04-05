@@ -23,7 +23,7 @@ import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import {
@@ -34,8 +34,8 @@ import {
 } from '../../../generated/graphql';
 import { toggleCommentThread, toggleFileViewer, toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
-import { State } from '../../types';
 import { mediaURL, useOptions, useVotes } from '../../utils';
+import { getUser } from '../../utils/auth';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
 
@@ -49,7 +49,7 @@ interface Props {
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const { user } = useSelector((state: State) => state.auth);
+    const user = getUser();
     const created = moment(comment.created).format('LL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const confirm = useConfirm();

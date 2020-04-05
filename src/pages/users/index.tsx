@@ -23,7 +23,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { mediaURL, useFilters, usePrivatePage } from '../../utils';
+import { mediaURL, useFilters, withAuthSync } from '../../utils';
 import { usePagination } from '../../utils/usePagination';
 
 interface FilterUsersFormValues {
@@ -154,7 +154,6 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
 };
 
 UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await usePrivatePage(ctx);
     const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
 
@@ -166,4 +165,4 @@ UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     }
 };
 
-export default compose(withApollo, withRedux)(UsersPage);
+export default compose(withAuthSync, withApollo, withRedux)(UsersPage);

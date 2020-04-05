@@ -5,8 +5,7 @@ import { SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useAuthSync } from '../utils';
+import { I18nPage, I18nProps } from '../types';
 
 const TermsPage: I18nPage = () => {
     const { t } = useTranslation();
@@ -22,9 +21,8 @@ const TermsPage: I18nPage = () => {
     );
 };
 
-TermsPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await useAuthSync(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['terms']) };
-};
+TermsPage.getInitialProps = (): I18nProps => ({
+    namespacesRequired: includeDefaultNamespaces(['terms']),
+});
 
 export default compose(withApollo, withRedux)(TermsPage);

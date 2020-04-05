@@ -28,7 +28,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useFrontendPagination, useOptions, usePrivatePage } from '../../utils';
+import { useFrontendPagination, useOptions, withAuthSync } from '../../utils';
 
 interface Props extends I18nProps {
     school?: SchoolObjectType;
@@ -224,7 +224,6 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 };
 
 SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await usePrivatePage(ctx);
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 
@@ -240,4 +239,4 @@ SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
     }
 };
 
-export default compose(withApollo, withRedux)(SchoolDetailPage);
+export default compose(withAuthSync, withApollo, withRedux)(SchoolDetailPage);

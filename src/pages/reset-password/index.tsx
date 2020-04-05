@@ -8,8 +8,8 @@ import { FormLayout, FormSubmitSection } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useForm, usePublicPage } from '../../utils';
+import { I18nPage, I18nProps } from '../../types';
+import { useForm } from '../../utils';
 
 const initialValues = {
     email: '',
@@ -57,9 +57,8 @@ const ResetPasswordLinkPage: I18nPage = () => {
     return <FormLayout title={t('reset-password:link')} renderCardContent={renderCardContent} dynamicBackUrl />;
 };
 
-ResetPasswordLinkPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePublicPage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['reset-password']) };
-};
+ResetPasswordLinkPage.getInitialProps = (): I18nProps => ({
+    namespacesRequired: includeDefaultNamespaces(['reset-password']),
+});
 
 export default compose(withApollo, withRedux)(ResetPasswordLinkPage);

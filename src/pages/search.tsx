@@ -26,7 +26,7 @@ import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useFilters, usePrivatePage } from '../utils';
+import { useFilters, withAuthSync } from '../utils';
 import { usePagination } from '../utils/usePagination';
 
 interface FilterSearchResultsFormValues {
@@ -219,7 +219,6 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
 };
 
 SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePrivatePage(ctx);
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
@@ -235,4 +234,4 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     }
 };
 
-export default compose(withApollo, withRedux)(SearchPage);
+export default compose(withAuthSync, withApollo, withRedux)(SearchPage);

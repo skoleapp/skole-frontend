@@ -2,15 +2,15 @@ import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/cor
 import { ArrowBackOutlined, StarOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
 import { Link } from '../../i18n';
 import { breakpoints } from '../../styles';
-import { LayoutProps, State } from '../../types';
+import { LayoutProps } from '../../types';
 import { mediaURL } from '../../utils';
+import { getUser } from '../../utils/auth';
 import { ButtonLink, Heading, IconButtonLink } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
 
@@ -27,7 +27,7 @@ export const TopNavbar: React.FC<Props> = ({
     headerRight,
     headerLeft,
 }) => {
-    const { user } = useSelector((state: State) => state.auth);
+    const user = getUser();
     const { t } = useTranslation();
     const avatarThumb = R.propOr('', 'avatar', user) as string;
 

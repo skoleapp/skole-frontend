@@ -3,14 +3,13 @@ import { AccountCircleOutlined, HomeOutlined, SearchOutlined, StarOutlined } fro
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Router } from '../../i18n';
-import { State } from '../../types';
+import { getUser } from '../../utils/auth';
 import { StyledBottomNavigation } from '../shared';
 
 export const BottomNavbar: React.FC = () => {
-    const { user, authenticated } = useSelector((state: State) => state.auth);
+    const user = getUser();
     const { pathname, query } = useRouter();
     const home = '/';
     const search = '/search';
@@ -48,7 +47,7 @@ export const BottomNavbar: React.FC = () => {
     const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
     const handleAccountClick = (): void => {
-        authenticated ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/login';
+        !!user ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/login';
     };
 
     return (

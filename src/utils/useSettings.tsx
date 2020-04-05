@@ -2,15 +2,14 @@ import { Button, Divider, ListItem, MenuItem } from '@material-ui/core';
 import { ExitToAppOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useApolloClient } from 'react-apollo';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { deAuthenticate, toggleSettings } from '../actions';
+import { toggleNotification, toggleSettings } from '../actions';
 import { StyledList } from '../components/shared/StyledList';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
-import { State } from '../types';
 import { menuItems } from '.';
+import { getUser, logout } from './auth';
 import { useLanguageSelector } from './useLanguageSelector';
 
 interface UseSettings {
@@ -24,8 +23,7 @@ interface Props {
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
 export const useSettings = ({ modal }: Props): UseSettings => {
-    const { authenticated } = useSelector((state: State) => state.auth);
-    const apolloClient = useApolloClient();
+    const authenticated = !!getUser();
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { pathname } = useRouter();
@@ -42,7 +40,8 @@ export const useSettings = ({ modal }: Props): UseSettings => {
 
     const handleLogoutClick = (): void => {
         !!modal && handleClose();
-        dispatch((deAuthenticate(apolloClient) as unknown) as void);
+        logout();
+        dispatch(toggleNotification(t('notifications:signedOut')));
     };
 
     const getSelected = (m: { [key: string]: string }): boolean => !modal && m.href === pathname;

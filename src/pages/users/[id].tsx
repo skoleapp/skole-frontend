@@ -36,7 +36,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { ButtonColor, ButtonVariant, I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
+import { useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 import { mediaURL } from '../../utils';
 
 interface Props extends I18nProps {
@@ -280,7 +280,6 @@ const StyledUserPage = styled(MainLayout)`
 `;
 
 UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await usePrivatePage(ctx);
     const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 
@@ -296,4 +295,4 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     }
 };
 
-export default compose(withRedux, withApollo)(UserPage);
+export default compose(withAuthSync, withRedux, withApollo)(UserPage);

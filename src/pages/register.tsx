@@ -5,19 +5,16 @@ import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { useApolloClient } from 'react-apollo';
-import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { RegisterMutation, useRegisterMutation } from '../../generated/graphql';
-import { authenticate } from '../actions';
+import { RegisterMutation, useRegisterMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useForm, useLanguageSelector, usePublicPage } from '../utils';
+import { I18nPage, I18nProps } from '../types';
+import { login as loginUser, useForm, useLanguageSelector } from '../utils';
 
 export interface RegisterFormValues {
     username: string;
@@ -27,9 +24,7 @@ export interface RegisterFormValues {
 }
 
 const RegisterPage: I18nPage = () => {
-    const client = useApolloClient();
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<RegisterFormValues>();
-    const dispatch = useDispatch();
     const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
@@ -55,13 +50,14 @@ const RegisterPage: I18nPage = () => {
     };
 
     const onCompleted = ({ register, login }: RegisterMutation): void => {
-        if (register && register.errors) {
+        if (!!register && !!register.errors) {
             handleMutationErrors(register.errors);
-        } else if (login && login.errors) {
+        } else if (!!login && !!login.errors) {
             handleMutationErrors(login.errors);
-        } else if (login && login.user) {
+        } else if (!!login && !!login.user && !!login.token) {
+            const { token, user } = login;
+            loginUser({ token, user: user as UserObjectType });
             resetForm();
-            dispatch(authenticate(client, login));
             Router.push('/');
         }
     };
@@ -160,9 +156,8 @@ const RegisterPage: I18nPage = () => {
     );
 };
 
-RegisterPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePublicPage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['register']) };
-};
+RegisterPage.getInitialProps = (): I18nProps => ({
+    namespacesRequired: includeDefaultNamespaces(['register']),
+});
 
 export default compose(withApollo, withRedux)(RegisterPage);

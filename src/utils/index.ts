@@ -1,10 +1,8 @@
 export { getToken } from './getToken';
 export { menuItems } from './menuItems';
 export { redirect } from './redirect';
-export { useAuthSync } from './useAuthSync';
+export { login, logout, withAuthSync, auth } from './auth';
 export { useForm } from './useForm';
-export { usePrivatePage } from './usePrivatePage';
-export { usePublicPage } from './usePublicPage';
 export { useSearch } from './useSearch';
 export { useTabs } from './useTabs';
 export { useAlerts } from './useAlerts';

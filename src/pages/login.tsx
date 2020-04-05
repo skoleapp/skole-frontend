@@ -4,19 +4,16 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useApolloClient } from 'react-apollo';
-import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { LoginMutation, useLoginMutation } from '../../generated/graphql';
-import { authenticate } from '../actions';
+import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useAlerts, useForm, useLanguageSelector, usePublicPage } from '../utils';
+import { login as loginUser, useAlerts, useForm, useLanguageSelector } from '../utils';
 
 const initialValues = {
     username: '',
@@ -30,8 +27,6 @@ export interface LoginFormValues {
 }
 
 const LoginPage: I18nPage = () => {
-    const client = useApolloClient();
-    const dispatch = useDispatch();
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<LoginFormValues>();
     const { t } = useTranslation();
     const { query } = useRouter();
@@ -44,15 +39,15 @@ const LoginPage: I18nPage = () => {
     });
 
     const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
-        if (login) {
-            if (login.errors) {
+        if (!!login) {
+            if (!!login.errors) {
                 handleMutationErrors(login.errors);
-            } else {
-                resetForm();
-                await dispatch(authenticate(client, login));
-
+            } else if (!!login.token && !!login.user) {
+                const { token, user } = login;
                 const { next } = query;
-                const { user } = login;
+
+                loginUser({ token, user: user as UserObjectType });
+                resetForm();
 
                 if (!!next) {
                     Router.push(next as string);
@@ -125,9 +120,8 @@ const LoginPage: I18nPage = () => {
     );
 };
 
-LoginPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePublicPage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['login']) };
-};
+LoginPage.getInitialProps = (): I18nProps => ({
+    namespacesRequired: includeDefaultNamespaces(['login']),
+});
 
-export default compose(withApollo, withRedux)(LoginPage);
+export default compose(withRedux, withApollo)(LoginPage);

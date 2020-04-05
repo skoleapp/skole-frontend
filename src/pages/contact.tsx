@@ -11,8 +11,8 @@ import { FormSubmitSection, SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useAuthSync, useForm } from '../utils';
+import { I18nPage, I18nProps } from '../types';
+import { useForm } from '../utils';
 
 const initialValues = {
     subject: '',
@@ -123,9 +123,8 @@ const ContactPage: I18nPage = () => {
     );
 };
 
-ContactPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await useAuthSync(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['contact']) };
-};
+ContactPage.getInitialProps = (): I18nProps => ({
+    namespacesRequired: includeDefaultNamespaces(['contact']),
+});
 
 export default compose(withApollo, withRedux)(ContactPage);
