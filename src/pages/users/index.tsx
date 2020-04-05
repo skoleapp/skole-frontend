@@ -148,7 +148,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
             renderTableContent={renderTableContent}
             drawerProps={drawerProps}
             handleClearFilters={handleClearFilters}
-            backUrl
+            dynamicBackUrl
         />
     );
 };

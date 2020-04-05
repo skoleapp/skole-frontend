@@ -36,7 +36,11 @@ export interface State {
 export interface LayoutProps extends ContainerProps {
     title?: string;
     heading?: string;
-    backUrl?: boolean;
+    dynamicBackUrl?: boolean;
+    staticBackUrl?: {
+        href: string;
+        as?: string;
+    };
     renderCardContent?: JSX.Element;
     renderAlert?: JSX.Element;
     disableSearch?: boolean;

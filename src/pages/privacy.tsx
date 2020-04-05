@@ -16,7 +16,7 @@ const PrivacyPage: I18nPage = () => {
             title={t('privacy:title')}
             heading={t('privacy:heading')}
             infoContent={t('privacy:content')}
-            backUrl
+            dynamicBackUrl
             infoLayout
         />
     );

@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
-import { ArrowBack, StarOutlined } from '@material-ui/icons';
+import { ArrowBackOutlined, StarOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -14,9 +14,19 @@ import { mediaURL, useBreakPoint } from '../../utils';
 import { ButtonLink, Heading, IconButtonLink } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
 
-type Props = Pick<LayoutProps, 'heading' | 'backUrl' | 'disableSearch' | 'headerRight' | 'headerLeft'>;
+type Props = Pick<
+    LayoutProps,
+    'heading' | 'dynamicBackUrl' | 'staticBackUrl' | 'disableSearch' | 'headerRight' | 'headerLeft'
+>;
 
-export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, headerRight, headerLeft }) => {
+export const TopNavbar: React.FC<Props> = ({
+    heading,
+    dynamicBackUrl,
+    staticBackUrl,
+    disableSearch,
+    headerRight,
+    headerLeft,
+}) => {
     const { user } = useSelector((state: State) => state.auth);
     const { t } = useTranslation();
     const isMobile = useBreakPoint(breakpointsNum.MD);
@@ -29,14 +39,24 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
         alignItems: 'center',
     };
 
+    const renderDynamicBackButton = dynamicBackUrl && (
+        <IconButton onClick={(): void => Router.back()} color="secondary">
+            <ArrowBackOutlined />
+        </IconButton>
+    );
+
+    const renderStaticBackButton = !!staticBackUrl && (
+        <Link href={staticBackUrl.href} as={staticBackUrl.as}>
+            <IconButton color="secondary">
+                <ArrowBackOutlined />
+            </IconButton>
+        </Link>
+    );
+
     const renderMobileContent = isMobile && (
         <Grid container alignItems="center">
             <Grid item xs={2} container justify="flex-start" wrap="nowrap">
-                {backUrl && (
-                    <IconButton onClick={(): void => Router.back()} color="secondary">
-                        <ArrowBack />
-                    </IconButton>
-                )}
+                {renderStaticBackButton || renderDynamicBackButton}
                 {headerLeft}
             </Grid>
             <Grid item xs={8}>

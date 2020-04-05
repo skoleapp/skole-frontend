@@ -43,6 +43,7 @@ import { nextPage, prevPage, setCenter, setCurrentPage, setPages, toggleNotifica
 import {
     CreatorListItem,
     DiscussionBox,
+    NavbarContainer,
     NotFound,
     PDFViewer,
     StarButton,
@@ -94,6 +95,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const initialPoints = R.propOr(0, 'points', resource) as number;
         const starred = !!resource.starred;
         const isOwner = !!user && user.id === creatorId;
+        const staticBackUrl = { href: '/courses/[id]', as: `/courses/${courseId}` };
 
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
             initialVote,
@@ -169,6 +171,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             dispatch(setCenter());
         };
 
+        const renderCourseLink = <TextLink {...staticBackUrl}>{courseName}</TextLink>;
+
         const renderInfo = (
             <CardContent>
                 <StyledList>
@@ -192,10 +196,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </ListItemAvatar>
                         <ListItemText>
                             <Typography variant="body2">
-                                {t('common:course')}:{' '}
-                                <TextLink href={`/courses/${courseId}`} color="primary">
-                                    {courseName}
-                                </TextLink>
+                                {t('common:course')}: {renderCourseLink}
                             </Typography>
                         </ListItemText>
                     </ListItem>
@@ -208,7 +209,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         <ListItemText>
                             <Typography variant="body2">
                                 {t('common:school')}:{' '}
-                                <TextLink href={`/schools/${schoolId}`} color="primary">
+                                <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
                                     {schoolName}
                                 </TextLink>
                             </Typography>
@@ -256,16 +257,26 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             drawerProps,
         };
 
+        const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
+
+        const renderUpVoteButton = (
+            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                <KeyboardArrowUpOutlined />
+            </IconButton>
+        );
+
+        const renderDownVoteButton = (
+            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                <KeyboardArrowDownOutlined />
+            </IconButton>
+        );
+
         const renderExtraResourceActions = (
-            <StyledExtraResourceActions container id="extra-resource-actions" alignItems="center">
+            <StyledExtraResourceActions container alignItems="center">
                 <Grid item xs={4} container id="vote-section">
-                    <StarButton starred={starred} resource={resourceId} />
-                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                        <KeyboardArrowUpOutlined />
-                    </IconButton>
-                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                        <KeyboardArrowDownOutlined />
-                    </IconButton>
+                    {renderStarButton}
+                    {renderUpVoteButton}
+                    {renderDownVoteButton}
                 </Grid>
                 <Grid item xs={4} container alignItems="center" id="page-controls">
                     <IconButton disabled={currentPage === 0} onClick={handlePreviousPage} size="small">
@@ -284,19 +295,41 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </StyledExtraResourceActions>
         );
 
-        const renderCustomBottomNavbar = <StyledBottomNavigation>{renderExtraResourceActions}</StyledBottomNavigation>;
+        const renderCustomBottomNavbar = (
+            <StyledBottomNavigation>
+                <NavbarContainer>{renderExtraResourceActions}</NavbarContainer>
+            </StyledBottomNavigation>
+        );
+
+        const renderCustomBottomNavbarSecondary = (
+            <StyledBottomNavigation>
+                <NavbarContainer>
+                    <Grid container>
+                        <Grid item xs={6} container justify="flex-start">
+                            {renderStarButton}
+                        </Grid>
+                        <Grid item xs={6} container justify="flex-end">
+                            {renderUpVoteButton}
+                            {renderDownVoteButton}
+                        </Grid>
+                    </Grid>
+                </NavbarContainer>
+            </StyledBottomNavigation>
+        );
 
         return (
             <TabLayout
                 title={resourceTitle}
+                subheader={renderCourseLink}
                 titleSecondary={t('common:discussion')}
-                backUrl
+                staticBackUrl={staticBackUrl}
                 renderInfo={renderInfo}
                 tabLabelLeft={t('common:resource')}
                 renderLeftContent={<PDFViewer file={file} />}
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 optionProps={optionProps}
                 customBottomNavbar={renderCustomBottomNavbar}
+                customBottomNavbarSecondary={renderCustomBottomNavbarSecondary}
                 extraDesktopActions={renderExtraResourceActions}
             />
         );

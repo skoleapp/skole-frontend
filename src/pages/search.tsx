@@ -212,7 +212,7 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
             renderTableContent={renderTableContent}
             drawerProps={drawerProps}
             handleClearFilters={handleClearFilters}
-            backUrl
+            dynamicBackUrl
             disableSearch
         />
     );

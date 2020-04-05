@@ -258,7 +258,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 heading={username}
                 title={username}
                 headerRight={isOwnProfile ? <SettingsButton color="secondary" /> : undefined}
-                backUrl
+                dynamicBackUrl
             >
                 <StyledCard>
                     {renderTopSection}
