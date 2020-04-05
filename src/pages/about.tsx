@@ -16,7 +16,7 @@ const AboutPage: I18nPage = () => {
             title={t('about:title')}
             heading={t('about:heading')}
             infoContent={t('about:content')}
-            backUrl
+            dynamicBackUrl
             infoLayout
         />
     );

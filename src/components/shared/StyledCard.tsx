@@ -26,5 +26,11 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
                 padding: 0.25rem;
             }
         }
+
+        .MuiCardHeader-subheader {
+            .MuiTypography-root {
+                font-size: 0.85rem;
+            }
+        }
     }
 `;

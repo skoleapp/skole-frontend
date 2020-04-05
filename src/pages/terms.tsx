@@ -16,7 +16,7 @@ const TermsPage: I18nPage = () => {
             title={t('terms:title')}
             heading={t('terms:heading')}
             infoContent={t('terms:content')}
-            backUrl
+            dynamicBackUrl
             infoLayout
         />
     );

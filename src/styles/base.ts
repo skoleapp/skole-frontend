@@ -44,6 +44,7 @@ export const base = css`
             height: 1.5rem;
             width: 1.5rem;
         }
+
         .MuiFormControl-root {
             margin-top: 0.75rem;
         }

@@ -54,7 +54,7 @@ const ResetPasswordLinkPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('reset-password:link')} renderCardContent={renderCardContent} backUrl />;
+    return <FormLayout title={t('reset-password:link')} renderCardContent={renderCardContent} dynamicBackUrl />;
 };
 
 ResetPasswordLinkPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

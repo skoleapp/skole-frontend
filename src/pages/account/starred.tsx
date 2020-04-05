@@ -105,7 +105,7 @@ const StarredPage: I18nPage = () => {
                 heading={t('starred:heading')}
                 title={t('starred:title')}
                 renderCardContent={renderCardContent}
-                backUrl
+                dynamicBackUrl
                 fullSize
             />
         );

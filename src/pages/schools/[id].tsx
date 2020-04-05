@@ -215,7 +215,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                 renderLeftContent={renderSubjects}
                 renderRightContent={renderCourses}
                 singleColumn
-                backUrl
+                dynamicBackUrl
             />
         );
     } else {

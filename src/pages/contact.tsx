@@ -115,7 +115,7 @@ const ContactPage: I18nPage = () => {
             title={t('contact:title')}
             heading={t('contact:heading')}
             renderCardContent={renderCardContent}
-            backUrl
+            dynamicBackUrl
             formLayout
         />
     );

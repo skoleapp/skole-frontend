@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const NotFound: React.FC<Props> = ({ title }) => (
-    <MainLayout title={title} backUrl>
+    <MainLayout title={title} dynamicBackUrl>
         <StyledCard>
             <CardHeader title={title} />
         </StyledCard>

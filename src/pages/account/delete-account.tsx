@@ -85,7 +85,7 @@ export const DeleteAccountPage: I18nPage = () => {
             title={t('delete-account:title')}
             heading={t('delete-account:heading')}
             renderCardContent={renderCardContent}
-            backUrl
+            dynamicBackUrl
             formLayout
         />
     );

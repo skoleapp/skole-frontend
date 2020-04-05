@@ -2,6 +2,7 @@ import {
     Avatar,
     Box,
     CardContent,
+    Grid,
     IconButton,
     ListItem,
     ListItemAvatar,
@@ -41,6 +42,7 @@ import {
     CreatorListItem,
     DiscussionBox,
     IconButtonLink,
+    NavbarContainer,
     NotFound,
     ResourceTableBody,
     StarButton,
@@ -90,6 +92,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
         const starred = !!course.starred;
         const isOwner = !!user && user.id === creatorId;
+        const staticBackUrl = { href: '/search' };
 
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
             initialVote,
@@ -189,7 +192,11 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         <ListItemText>
                             <Typography variant="body2">
                                 {t('common:school')}:{' '}
-                                <TextLink href={`/schools/${R.propOr('-', 'id', course.school)}`} color="primary">
+                                <TextLink
+                                    href="/schools/[id]"
+                                    as={`/schools/${R.propOr('-', 'id', course.school)}`}
+                                    color="primary"
+                                >
                                     {schoolName}
                                 </TextLink>
                             </Typography>
@@ -284,13 +291,17 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderCustomBottomNavbar = (
             <StyledBottomNavigation>
-                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
-                    <StarButton {...starButtonProps} />
-                    <Box display="flex">
-                        <Box marginRight="1rem">{renderUpVoteButton}</Box>
-                        {renderDownVoteButton}
-                    </Box>
-                </Box>
+                <NavbarContainer>
+                    <Grid container>
+                        <Grid item xs={6} container justify="flex-start">
+                            <StarButton {...starButtonProps} />
+                        </Grid>
+                        <Grid item xs={6} container justify="flex-end">
+                            {renderUpVoteButton}
+                            {renderDownVoteButton}
+                        </Grid>
+                    </Grid>
+                </NavbarContainer>
             </StyledBottomNavigation>
         );
 
@@ -298,7 +309,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             <TabLayout
                 title={fullName}
                 titleSecondary={t('common:discussion')}
-                backUrl
+                staticBackUrl={staticBackUrl}
                 renderInfo={renderInfo}
                 optionProps={optionProps}
                 tabLabelLeft={t('common:resources')}
