@@ -1,10 +1,10 @@
 import { Button, FormControl } from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
+import { ClearAllOutlined } from '@material-ui/icons';
 import { FormikActions } from 'formik';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
@@ -28,11 +28,11 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
         const validQuery: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
         await Router.push({ pathname, query: validQuery });
         actions.setSubmitting(false);
-        handleCloseDrawer();
+        handleCloseDrawer((new Event('Fake event!') as unknown) as SyntheticEvent);
     };
 
     // Clear the query params and reset form.
-    const handleClearFilters = async (): Promise<void> => {
+    const handleClearFilters = async (e: SyntheticEvent): Promise<void> => {
         const queryWithPagination: ParsedUrlQueryInput = R.pickBy(
             (val: string, key: string): boolean => (!!val && key === 'page') || key === 'pageSize',
             query,
@@ -40,12 +40,18 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
 
         await Router.push({ pathname, query: queryWithPagination });
         resetForm();
-        handleCloseDrawer();
+        handleCloseDrawer(e);
     };
 
     const renderDesktopClearFiltersButton = !isMobile ? (
         <FormControl fullWidth>
-            <Button onClick={handleClearFilters} variant="outlined" color="primary" endIcon={<Clear />} fullWidth>
+            <Button
+                onClick={handleClearFilters}
+                variant="outlined"
+                color="primary"
+                endIcon={<ClearAllOutlined />}
+                fullWidth
+            >
                 {t('common:clear')}
             </Button>
         </FormControl>

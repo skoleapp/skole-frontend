@@ -65,8 +65,8 @@ export interface DiscussionBoxProps {
 export type MuiColor = 'inherit' | 'default' | 'primary' | 'secondary' | undefined;
 
 export interface UseDrawer extends DrawerProps {
-    handleOpen: () => void;
-    onClose: () => void;
+    handleOpen: (e: SyntheticEvent) => void;
+    onClose: (e: SyntheticEvent) => void;
     renderHeader: JSX.Element;
 }
 
@@ -126,6 +126,6 @@ export interface UseFilters<T> extends UseForm<T> {
     submitButtonText: string;
     renderDesktopClearFiltersButton?: JSX.Element;
     handleSubmit: (filteredValues: T, actions: FormikActions<T>) => Promise<void>;
-    handleClearFilters: () => Promise<void>;
+    handleClearFilters: (e: SyntheticEvent) => Promise<void>;
     drawerProps: UseDrawer;
 }

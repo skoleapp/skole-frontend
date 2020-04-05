@@ -107,14 +107,8 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     };
 
     const handleDeleteComment = (e: SyntheticEvent): void => {
-        e.stopPropagation();
-        handleCloseOptions();
+        handleCloseOptions(e);
         confirm({ title: t('common:deleteCommentTitle') }).then(() => deleteComment({ variables: { id: comment.id } }));
-    };
-
-    const handleMoreClick = (e: SyntheticEvent): void => {
-        e.stopPropagation();
-        handleOpenOptions();
     };
 
     const renderTitle = (
@@ -193,7 +187,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         </Box>
                     </Grid>
                     <Grid container item xs={4} justify="center">
-                        <IconButton onClick={handleMoreClick}>
+                        <IconButton onClick={handleOpenOptions}>
                             <MoreHorizOutlined />
                         </IconButton>
                     </Grid>

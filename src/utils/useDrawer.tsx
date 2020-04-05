@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 
 import { ModalHeader } from '../components';
 import { breakpointsNum } from '../styles';
@@ -9,12 +9,23 @@ import { useOpen } from './useOpen';
 export const useDrawer = (title?: string): UseDrawer => {
     const { open, handleOpen, handleClose } = useOpen();
     const isMobile = useBreakPoint(breakpointsNum.MD);
-    const renderHeader = <ModalHeader title={title} onCancel={handleClose} />;
+
+    const handleOpenDrawer = (e: SyntheticEvent): void => {
+        e.stopPropagation();
+        handleOpen();
+    };
+
+    const handleCloseDrawer = (e: SyntheticEvent): void => {
+        e.stopPropagation();
+        handleClose();
+    };
+
+    const renderHeader = <ModalHeader title={title} onCancel={handleCloseDrawer} />;
 
     return {
         open,
-        handleOpen,
-        onClose: handleClose,
+        handleOpen: handleOpenDrawer,
+        onClose: handleCloseDrawer,
         anchor: isMobile ? 'bottom' : 'left',
         renderHeader,
     };
