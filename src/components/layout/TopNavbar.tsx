@@ -1,18 +1,18 @@
-import { AppBar, Box, Grid, IconButton, Toolbar, Avatar } from '@material-ui/core';
+import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
 import { ArrowBack, StarOutlined } from '@material-ui/icons';
+import * as R from 'ramda';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
+import { Link } from '../../i18n';
 import { breakpoints, breakpointsNum } from '../../styles';
 import { LayoutProps, State } from '../../types';
-import { useBreakPoint, mediaURL } from '../../utils';
+import { mediaURL, useBreakPoint } from '../../utils';
 import { ButtonLink, Heading, IconButtonLink } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
-import * as R from 'ramda';
-import { Link } from '../../i18n';
 
 type Props = Pick<LayoutProps, 'heading' | 'backUrl' | 'disableSearch' | 'headerRight' | 'headerLeft'>;
 
@@ -56,7 +56,7 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
                 {!!user ? (
                     <>
                         <IconButtonLink icon={StarOutlined} href="/account/starred" color="secondary" />
-                        <Link href={`/users/${user.id}`}>
+                        <Link href={{ pathname: '/users', query: { id: user.id } }}>
                             <IconButton color="secondary">
                                 <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
                             </IconButton>

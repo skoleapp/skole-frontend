@@ -10,8 +10,8 @@ interface Props extends IconButtonProps, LinkProps {
     icon: SvgIconComponent;
 }
 
-export const IconButtonLink: React.FC<Props> = ({ href, icon: Icon, ...props }) => (
-    <Link href={href}>
+export const IconButtonLink: React.FC<Props> = ({ href, as, icon: Icon, ...props }) => (
+    <Link href={href} as={as}>
         <IconButton {...props}>
             <Icon />
         </IconButton>
