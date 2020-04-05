@@ -46,7 +46,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
                 filesLimit={1}
                 useChipsForPreview
                 showAlerts={false}
-                dropzoneText={t('common:dropzoneText')}
+                dropzoneText={t('common:dropzoneTextDesktop')}
                 maxFileSize={maxFileSize}
                 onDropRejected={handleDropRejected}
             />
