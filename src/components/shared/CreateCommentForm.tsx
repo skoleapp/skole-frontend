@@ -208,7 +208,7 @@ export const CreateCommentForm: React.FC<Props> = ({
 
 const StyledTextInput = styled(TextField)`
     .MuiInputBase-root {
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 `;
 

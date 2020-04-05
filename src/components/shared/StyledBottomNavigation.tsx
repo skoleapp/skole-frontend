@@ -11,6 +11,7 @@ export const StyledBottomNavigation = styled(BottomNavigation)`
     border-top: var(--border);
     z-index: 1000;
     padding-bottom: var(--safe-area-inset-bottom);
+
     .MuiButtonBase-root,
     .Mui-selected {
         padding: 0 !important;
