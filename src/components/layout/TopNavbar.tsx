@@ -56,7 +56,7 @@ export const TopNavbar: React.FC<Props> = ({ heading, backUrl, disableSearch, he
                 {!!user ? (
                     <>
                         <IconButtonLink icon={StarOutlined} href="/account/starred" color="secondary" />
-                        <Link href={{ pathname: '/users', query: { id: user.id } }}>
+                        <Link href="/users/[id]" as={`/users/${user.id}`}>
                             <IconButton color="secondary">
                                 <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
                             </IconButton>
