@@ -7,6 +7,8 @@ import styled from 'styled-components';
 
 import { toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
+import { breakpointsNum } from '../../styles';
+import { useBreakPoint } from '../../utils';
 import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends DropzoneAreaProps {
@@ -20,6 +22,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const maxFileSize = 5000000;
+    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const handleFileChange = (files: File[]): void => {
         form.setFieldValue(field.name, files[0]);
@@ -46,7 +49,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
                 filesLimit={1}
                 useChipsForPreview
                 showAlerts={false}
-                dropzoneText={t('common:dropzoneTextDesktop')}
+                dropzoneText={isMobile ? t('common:dropzoneTextMobile') : t('common:dropzoneTextDesktop')}
                 maxFileSize={maxFileSize}
                 onDropRejected={handleDropRejected}
             />
