@@ -13,7 +13,15 @@ const handle = app.getRequestHandler();
 (async (): Promise<void> => {
     await app.prepare();
     const server = express();
-    server.use(morgan('combined'));
+
+    if (process.env.NODE_ENV === 'development') {
+        server.use(
+            morgan(
+                ':remote-addr - :remote-user ":method :url" :status :res[content-length] ":referrer" ":user-agent" :response-time ms',
+            ),
+        );
+    }
+
     server.use(nextI18NextMiddleware(nextI18next));
     server.get('*', (req: IncomingMessage, res: ServerResponse) => handle(req, res));
     await server.listen(port);
