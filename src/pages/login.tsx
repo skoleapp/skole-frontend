@@ -67,7 +67,7 @@ const LoginPage: I18nPage = () => {
 
     const handleSubmit = async (values: LoginFormValues): Promise<void> => {
         const { usernameOrEmail, password } = values;
-        await loginMutation({ variables: { usernameOrEmail, password } });
+        await loginMutation({ variables: { usernameOrEmail, password }, context: { headers: { Authorization: '' } } });
         setSubmitting(false);
     };
 

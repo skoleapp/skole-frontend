@@ -15,10 +15,9 @@ export const useOptions = (): UseOptions => {
     const { onClose, renderHeader: renderOptionsHeader } = drawerProps;
 
     const handleShare = (e: SyntheticEvent): void => {
-        e.stopPropagation();
         navigator.clipboard.writeText(window.location.href);
         dispatch(toggleNotification(t('notifications:linkCopied')));
-        onClose();
+        onClose(e);
     };
 
     const renderShareOption = (

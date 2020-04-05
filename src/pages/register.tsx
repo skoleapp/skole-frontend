@@ -74,7 +74,12 @@ const RegisterPage: I18nPage = () => {
 
     const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
         const { username, email, password, code } = values;
-        await registerMutation({ variables: { username, email, password, code } });
+
+        await registerMutation({
+            variables: { username, email, password, code },
+            context: { headers: { Authorization: '' } },
+        });
+
         setSubmitting(false);
     };
 
