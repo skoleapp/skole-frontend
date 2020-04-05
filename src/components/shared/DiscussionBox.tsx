@@ -90,7 +90,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
         </Box>
     );
 
-    const renderInputArea = !isMobile && (
+    const renderInputArea = (createCommentModalOpen || !isMobile) && (
         <Box className="input-area">
             <CreateCommentForm {...createCommentFormProps} />
         </Box>
