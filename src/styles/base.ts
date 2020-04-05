@@ -26,7 +26,7 @@ export const base = css`
         --border: 1px solid var(--border-color); // Default MUI border.
 
         //iOS
-        --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom);
     }
 
     html,
