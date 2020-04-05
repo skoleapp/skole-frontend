@@ -236,6 +236,7 @@ const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...
             .MuiTypography-root {
                 overflow: hidden;
                 word-break: break-word;
+                text-align: left;
             }
         }
     }

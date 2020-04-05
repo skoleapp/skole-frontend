@@ -20,6 +20,7 @@ export const StyledModal = styled(({ autoHeight, ...other }) => (
         width: 100%;
         overflow-y: scroll;
         padding: 0.5rem;
+        padding-bottom: var(--safe-area-inset-bottom);
 
         ::-webkit-scrollbar {
             display: none;

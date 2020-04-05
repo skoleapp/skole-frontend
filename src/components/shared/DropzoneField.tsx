@@ -7,9 +7,9 @@ import styled from 'styled-components';
 
 import { toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
-import { FormErrorMessage } from './FormErrorMessage';
-import { useBreakPoint } from '../../utils';
 import { breakpointsNum } from '../../styles';
+import { useBreakPoint } from '../../utils';
+import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends DropzoneAreaProps {
     form: FormikProps<{}>;
