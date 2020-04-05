@@ -8,9 +8,7 @@ import React, { SyntheticEvent } from 'react';
 
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
-import { breakpointsNum } from '../styles';
 import { UseFilters } from '../types';
-import { useBreakPoint } from './useBreakPoint';
 import { useDrawer } from './useDrawer';
 import { useForm } from './useForm';
 
@@ -21,7 +19,6 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
     const { onClose: handleCloseDrawer } = drawerProps;
     const { pathname, query } = useRouter();
     const submitButtonText = t('common:apply');
-    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     // Pick non-empty values and reload the page with new query params.
     const handleSubmit = async (filteredValues: {}, actions: FormikActions<T>): Promise<void> => {
@@ -43,8 +40,8 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
         handleCloseDrawer(e);
     };
 
-    const renderDesktopClearFiltersButton = !isMobile ? (
-        <FormControl fullWidth>
+    const renderDesktopClearFiltersButton = (
+        <FormControl className="md-up" fullWidth>
             <Button
                 onClick={handleClearFilters}
                 variant="outlined"
@@ -55,8 +52,6 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
                 {t('common:clear')}
             </Button>
         </FormControl>
-    ) : (
-        undefined
     );
 
     return {

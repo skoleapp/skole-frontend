@@ -7,8 +7,6 @@ import styled from 'styled-components';
 
 import { toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
-import { breakpointsNum } from '../../styles';
-import { useBreakPoint } from '../../utils';
 import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends DropzoneAreaProps {
@@ -40,10 +38,6 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
         dropzone[0].setAttribute('capture', 'camera');
     }, []);
 
-    const isMobile = useBreakPoint(breakpointsNum.MD);
-
-    const dropzoneText = isMobile ? t('common:dropzoneTextMobile') : t('common:dropzoneText');
-
     return (
         <StyledDropzoneField fullWidth>
             <DropzoneArea
@@ -52,7 +46,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
                 filesLimit={1}
                 useChipsForPreview
                 showAlerts={false}
-                dropzoneText={dropzoneText}
+                dropzoneText={t('common:dropzoneText')}
                 maxFileSize={maxFileSize}
                 onDropRejected={handleDropRejected}
             />

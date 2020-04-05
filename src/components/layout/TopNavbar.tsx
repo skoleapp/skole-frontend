@@ -8,9 +8,9 @@ import styled from 'styled-components';
 import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
 import { Link } from '../../i18n';
-import { breakpoints, breakpointsNum } from '../../styles';
+import { breakpoints } from '../../styles';
 import { LayoutProps, State } from '../../types';
-import { mediaURL, useBreakPoint } from '../../utils';
+import { mediaURL } from '../../utils';
 import { ButtonLink, Heading, IconButtonLink } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
 
@@ -29,15 +29,7 @@ export const TopNavbar: React.FC<Props> = ({
 }) => {
     const { user } = useSelector((state: State) => state.auth);
     const { t } = useTranslation();
-    const isMobile = useBreakPoint(breakpointsNum.MD);
     const avatarThumb = R.propOr('', 'avatar', user) as string;
-
-    const contentProps = {
-        display: 'flex',
-        flexGrow: '1',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    };
 
     const renderDynamicBackButton = dynamicBackUrl && (
         <IconButton onClick={(): void => Router.back()} color="secondary">
@@ -53,8 +45,8 @@ export const TopNavbar: React.FC<Props> = ({
         </Link>
     );
 
-    const renderMobileContent = isMobile && (
-        <Grid container alignItems="center">
+    const renderMobileContent = (
+        <Grid className="md-down" container alignItems="center">
             <Grid item xs={2} container justify="flex-start" wrap="nowrap">
                 {renderStaticBackButton || renderDynamicBackButton}
                 {headerLeft}
@@ -68,8 +60,8 @@ export const TopNavbar: React.FC<Props> = ({
         </Grid>
     );
 
-    const renderDesktopContent = !isMobile && (
-        <Box {...contentProps}>
+    const renderDesktopContent = (
+        <Box className="md-up" display="flex" flexGrow="1" justifyContent="space-between" alignItems="center">
             <Logo />
             <Box display="flex" alignItems="center">
                 {!disableSearch && <TopNavbarSearchWidget />}

@@ -2,9 +2,8 @@ import { CardContent, CardHeader, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 
-import { breakpointsNum } from '../../styles';
 import { LayoutProps } from '../../types';
-import { useBreakPoint, useSettings } from '../../utils';
+import { useSettings } from '../../utils';
 import { SettingsButton, StyledCard } from '../shared';
 import { MainLayout } from './MainLayout';
 
@@ -26,7 +25,6 @@ export const SettingsLayout: React.FC<Props> = ({
     ...props
 }) => {
     const { renderSettingsCardContent } = useSettings({ modal: false });
-    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const customColSpan = {
         sm: 8,
@@ -47,16 +45,14 @@ export const SettingsLayout: React.FC<Props> = ({
             {...props}
         >
             <Grid container>
-                {!isMobile && (
-                    <Grid item xs={12} md={4} lg={3}>
-                        <StyledCard>
-                            <CardContent>{renderSettingsCardContent}</CardContent>
-                        </StyledCard>
-                    </Grid>
-                )}
+                <Grid className="md-up" item xs={12} md={4} lg={3}>
+                    <StyledCard>
+                        <CardContent>{renderSettingsCardContent}</CardContent>
+                    </StyledCard>
+                </Grid>
                 <Grid item xs={12} md={8} lg={9} container>
                     <StyledCard marginLeft>
-                        {!isMobile && <CardHeader className="border-bottom" title={heading} />}
+                        <CardHeader className="border-bottom md-up" title={heading} />
                         <Grid container justify="center">
                             <Grid item container direction="column" xs={12} {...layoutProps}>
                                 <CardContent className="container">
