@@ -132,7 +132,10 @@ const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other}
             display: flex;
             flex-direction: column;
             overflow-y: scroll;
-            padding-bottom: ${({ topComment }): string => (!topComment ? '4.5rem' : 'initial')};
+
+            @media only screen and (max-width: ${breakpoints.MD}) {
+                padding-bottom: ${({ topComment }): string => (!topComment ? '4.5rem' : 'initial')};
+            }
 
             .MuiDivider-root#reply {
                 flex-grow: 1;
