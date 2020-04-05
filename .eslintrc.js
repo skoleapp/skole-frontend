@@ -12,7 +12,7 @@ module.exports = {
         'sort-imports': 'off',
         'import/order': 'off',
         'import/prefer-default-export': 'off',
-        'no-unused-vars': 'warn',
+        '@typescript-eslint/no-unused-vars': 'off',
     },
     settings: {
         react: {
