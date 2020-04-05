@@ -35,9 +35,8 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { breakpointsNum } from '../../styles';
 import { ButtonColor, ButtonVariant, I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { useBreakPoint, useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
+import { useFrontendPagination, usePrivatePage, useTabs } from '../../utils';
 import { mediaURL } from '../../utils';
 
 interface Props extends I18nProps {
@@ -47,7 +46,6 @@ interface Props extends I18nProps {
 const UserPage: I18nPage<Props> = ({ user }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
-    const isMobile = useBreakPoint(breakpointsNum.SM);
 
     if (user) {
         const username = R.propOr('-', 'username', user) as string;
@@ -103,11 +101,9 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     <CardContent>
                         <Box display="flex" flexDirection="column" alignItems="center">
                             <Avatar className="main-avatar" src={mediaURL(avatar)} />
-                            {!isMobile && (
-                                <Box marginY="0.5rem">
-                                    <Typography variant="h2">{username}</Typography>
-                                </Box>
-                            )}
+                            <Box className="sm-up" marginY="0.5rem">
+                                <Typography variant="h2">{username}</Typography>
+                            </Box>
                             {!!title && (
                                 <Box marginY="0.5rem">
                                     <Typography variant="subtitle1" color="textSecondary">
@@ -155,8 +151,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                             </StyledList>
                         </CardContent>
                     </Grid>
-                    {isOwnProfile && !isMobile && (
-                        <CardContent>
+                    {isOwnProfile && (
+                        <CardContent className="sm-up">
                             <Grid container alignItems="center" justify="center">
                                 <ButtonLink {...editProfileButtonProps}>{t('profile:editProfile')}</ButtonLink>
                                 <Box marginLeft="0.5rem">
@@ -166,15 +162,13 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                         </CardContent>
                     )}
                 </Grid>
-                {isMobile && (
-                    <Grid item xs={12}>
-                        <CardContent>
-                            <ButtonLink {...editProfileButtonProps} fullWidth>
-                                {t('profile:editProfile')}
-                            </ButtonLink>
-                        </CardContent>
-                    </Grid>
-                )}
+                <Grid className="sm-down" item xs={12}>
+                    <CardContent>
+                        <ButtonLink {...editProfileButtonProps} fullWidth>
+                            {t('profile:editProfile')}
+                        </ButtonLink>
+                    </CardContent>
+                </Grid>
             </Grid>
         );
 

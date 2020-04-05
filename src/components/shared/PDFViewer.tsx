@@ -248,8 +248,8 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                 });
             }
         } else {
-            const imageExtent = pages[0].imageExtent;
-            const layer = pages[0].layer;
+            const imageExtent = pages[currentPage].imageExtent;
+            const layer = pages[currentPage].layer;
 
             const map = createMap(imageExtent);
             map.setLayerGroup(layer);

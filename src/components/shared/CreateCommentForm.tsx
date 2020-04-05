@@ -10,9 +10,8 @@ import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { breakpointsNum } from '../../styles';
 import { CommentTarget } from '../../types';
-import { useBreakPoint, useForm } from '../../utils';
+import { useForm } from '../../utils';
 import { ModalHeader } from './ModalHeader';
 import { StyledModal } from './StyledModal';
 
@@ -46,7 +45,6 @@ export const CreateCommentForm: React.FC<Props> = ({
     const dispatch = useDispatch();
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
-    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);
@@ -130,7 +128,7 @@ export const CreateCommentForm: React.FC<Props> = ({
     );
 
     const renderDesktopInputArea = ({ values }: T): JSX.Element => (
-        <Box id="desktop-input-area" display="flex" alignItems="center">
+        <Box className="md-up" id="desktop-input-area" display="flex" alignItems="center">
             <Box marginRight="0.5rem">
                 <input
                     value=""
@@ -146,7 +144,7 @@ export const CreateCommentForm: React.FC<Props> = ({
                 </label>
             </Box>
             <TextField value={!values.attachment ? values.text : ''} {...textFieldProps} />
-            {!isMobile && <Box marginLeft="0.5rem">{renderSubmitButton}</Box>}
+            <Box marginLeft="0.5rem">{renderSubmitButton}</Box>
         </Box>
     );
 
@@ -162,32 +160,30 @@ export const CreateCommentForm: React.FC<Props> = ({
                     <StyledAttachmentImage>
                         {!!attachment && <Image src={attachment as string} />}
                     </StyledAttachmentImage>
-                    {isMobile && (
-                        <Box display="flex">
-                            <Box>
-                                <input
-                                    value=""
-                                    id={`camera-attachment-${formKey}`}
-                                    accept=".png, .jpg, .jpeg"
-                                    type="file"
-                                    capture="camera"
-                                    onChange={handleAttachmentChange}
-                                />
-                                <label htmlFor={`camera-attachment-${formKey}`}>
-                                    <Fab component="span" size="small">
-                                        <CameraAltOutlined />
-                                    </Fab>
-                                </label>
-                            </Box>
-                            {!!attachment && (
-                                <Box marginLeft="0.5rem">
-                                    <Fab onClick={handleClearAttachment} size="small">
-                                        <ClearOutlined />
-                                    </Fab>
-                                </Box>
-                            )}
+                    <Box display="flex" className="md-down">
+                        <Box>
+                            <input
+                                value=""
+                                id={`camera-attachment-${formKey}`}
+                                accept=".png, .jpg, .jpeg"
+                                type="file"
+                                capture="camera"
+                                onChange={handleAttachmentChange}
+                            />
+                            <label htmlFor={`camera-attachment-${formKey}`}>
+                                <Fab component="span" size="small">
+                                    <CameraAltOutlined />
+                                </Fab>
+                            </label>
                         </Box>
-                    )}
+                        {!!attachment && (
+                            <Box marginLeft="0.5rem">
+                                <Fab onClick={handleClearAttachment} size="small">
+                                    <ClearOutlined />
+                                </Fab>
+                            </Box>
+                        )}
+                    </Box>
                     <StyledTextInput value={values.text} {...textFieldProps} />
                 </Paper>
             </Fade>
@@ -208,7 +204,7 @@ export const CreateCommentForm: React.FC<Props> = ({
 
 const StyledTextInput = styled(TextField)`
     .MuiInputBase-root {
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 `;
 

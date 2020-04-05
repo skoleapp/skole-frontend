@@ -22,6 +22,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const maxFileSize = 5000000;
+    const isMobile = useBreakPoint(breakpointsNum.MD);
 
     const handleFileChange = (files: File[]): void => {
         form.setFieldValue(field.name, files[0]);
@@ -40,10 +41,6 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
         dropzone[0].setAttribute('capture', 'camera');
     }, []);
 
-    const isMobile = useBreakPoint(breakpointsNum.MD);
-
-    const dropzoneText = isMobile ? t('common:dropzoneTextMobile') : t('common:dropzoneText');
-
     return (
         <StyledDropzoneField fullWidth>
             <DropzoneArea
@@ -52,7 +49,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
                 filesLimit={1}
                 useChipsForPreview
                 showAlerts={false}
-                dropzoneText={dropzoneText}
+                dropzoneText={isMobile ? t('common:dropzoneTextMobile') : t('common:dropzoneTextDesktop')}
                 maxFileSize={maxFileSize}
                 onDropRejected={handleDropRejected}
             />
