@@ -188,7 +188,7 @@ export const CreateCommentForm: React.FC<Props> = ({
                             )}
                         </Box>
                     )}
-                    <TextField value={values.text} {...textFieldProps} />
+                    <StyledTextInput value={values.text} {...textFieldProps} />
                 </Paper>
             </Fade>
         </StyledModal>
@@ -205,6 +205,12 @@ export const CreateCommentForm: React.FC<Props> = ({
         </Formik>
     );
 };
+
+const StyledTextInput = styled(TextField)`
+    .MuiInputBase-root {
+        margin-bottom: 1rem;
+    }
+`;
 
 const StyledCreateCommentForm = styled(Form)`
     #desktop-input-area {

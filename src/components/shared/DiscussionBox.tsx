@@ -150,13 +150,14 @@ const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other}
         }
 
         #create-comment-button {
-            position: absolute;
-            bottom: 0.5rem;
+            position: fixed;
+            bottom: calc(var(--safe-area-inset-bottom) + 3.5rem);
             left: 0;
             right: 0;
             margin-left: auto;
             margin-right: auto;
-            opacity: 0.5;
+            opacity: 0.7;
+            z-index: 1001;
         }
     }
 `;
