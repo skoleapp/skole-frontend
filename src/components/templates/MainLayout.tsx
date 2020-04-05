@@ -2,9 +2,8 @@ import { Box, Container, ContainerProps } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 
-import { breakpoints, breakpointsNum } from '../../styles';
+import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { useBreakPoint } from '../../utils';
 import { BottomNavbar, Footer, Head, LanguageSelector, Notifications, Settings, TopNavbar } from '../layout';
 import { AttachmentViewer, CommentThread } from '../layout';
 
@@ -29,30 +28,26 @@ export const MainLayout: React.FC<Props> = ({
     customBottomNavbar,
     disableBottomNavbar,
     ...containerProps
-}) => {
-    const isMobile = useBreakPoint(breakpointsNum.MD);
-
-    return (
-        <StyledMainLayout disableBottomMargin={disableBottomNavbar && !customBottomNavbar}>
-            <Head title={title} />
-            <TopNavbar
-                heading={heading}
-                backUrl={backUrl}
-                disableSearch={disableSearch}
-                headerRight={headerRight}
-                headerLeft={headerLeft}
-            />
-            <Container {...containerProps}>{children}</Container>
-            {(isMobile && customBottomNavbar) || (isMobile && !disableBottomNavbar && <BottomNavbar />)}
-            {!isMobile && <Footer />}
-            <Notifications />
-            <Settings />
-            <CommentThread />
-            <AttachmentViewer />
-            <LanguageSelector />
-        </StyledMainLayout>
-    );
-};
+}) => (
+    <StyledMainLayout disableBottomMargin={disableBottomNavbar && !customBottomNavbar}>
+        <Head title={title} />
+        <TopNavbar
+            heading={heading}
+            backUrl={backUrl}
+            disableSearch={disableSearch}
+            headerRight={headerRight}
+            headerLeft={headerLeft}
+        />
+        <Container {...containerProps}>{children}</Container>
+        {customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />)}
+        <Footer />
+        <Notifications />
+        <Settings />
+        <CommentThread />
+        <AttachmentViewer />
+        <LanguageSelector />
+    </StyledMainLayout>
+);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledMainLayout = styled(({ disableBottomMargin, customBottomNavbar, ...other }) => <Box {...other} />)`
