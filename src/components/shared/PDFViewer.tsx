@@ -69,21 +69,23 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     };
 
     const setCenter = (): void => {
-        currentMap.getView().setCenter(getCenter(pages[currentPage].imageExtent));
-        currentMap.getView().setZoom(0);
+        if (!!currentMap) {
+            currentMap.getView().setCenter(getCenter(pages[currentPage].imageExtent));
+            currentMap.getView().setZoom(0);
+        }
     };
 
     const nextPage = (): void => {
         const numPages = pages.length;
 
-        if (currentPage < numPages - 1) {
+        if (currentPage < numPages - 1 && !!currentMap) {
             const nextPage = currentPage + 1;
             currentMap.setLayerGroup(pages[nextPage].layer);
             dispatch(setCurrentPage(nextPage));
         }
     };
     const previousPage = (): void => {
-        if (currentPage !== 0) {
+        if (currentPage !== 0 && !!currentMap) {
             const previousPage = currentPage - 1;
             currentMap.setLayerGroup(pages[previousPage].layer);
             dispatch(setCurrentPage(previousPage));
