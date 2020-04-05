@@ -91,6 +91,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
                         component={TextField}
                         variant="outlined"
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         name="courseCode"
@@ -99,6 +100,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
                         component={TextField}
                         variant="outlined"
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         name="school"
