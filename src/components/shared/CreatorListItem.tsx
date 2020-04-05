@@ -1,5 +1,6 @@
 import { ListItem, ListItemText, Typography } from '@material-ui/core';
 import moment from 'moment';
+import * as R from 'ramda';
 import React from 'react';
 
 import { UserObjectType } from '../../../generated/graphql';
@@ -11,21 +12,22 @@ export const getCreator = (creatorName?: string): string => {
 };
 
 interface Props {
-    user: UserObjectType;
+    user: UserObjectType | null;
     created: string;
 }
 
 export const CreatorListItem: React.FC<Props> = ({ user, created }) => {
     const { t } = useTranslation();
-    const href = !!user.id ? `/users/${user.id}` : '/';
+    const userId = R.propOr(undefined, 'id', user);
+    const username = R.propOr('Community User', 'username', user) as string;
 
     return (
         <ListItem>
             <ListItemText>
                 <Typography variant="body2" color="textSecondary">
                     {t('common:createdBy')}{' '}
-                    <TextLink href={href} color="primary">
-                        {user.username || 'Community User'}
+                    <TextLink href="/users/[id]" as={!!userId ? `/users/${userId}` : '/users'} color="primary">
+                        {username}
                     </TextLink>{' '}
                     {moment(created)
                         .startOf('day')

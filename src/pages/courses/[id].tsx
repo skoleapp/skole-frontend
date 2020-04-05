@@ -34,7 +34,6 @@ import {
     DeleteCourseMutation,
     ResourceObjectType,
     useDeleteCourseMutation,
-    UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
@@ -226,7 +225,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
-                    <CreatorListItem user={course.user as UserObjectType} created={course.created} />
+                    <CreatorListItem user={course.user} created={course.created} />
                 </StyledList>
             </CardContent>
         );
