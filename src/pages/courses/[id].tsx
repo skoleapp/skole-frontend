@@ -259,9 +259,11 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-            <IconButtonLink href={{ pathname: '/upload-resource', query: { course: courseId } }} color={color}>
-                <CloudUploadOutlined />
-            </IconButtonLink>
+            <IconButtonLink
+                href={{ pathname: '/upload-resource', query: { course: courseId } }}
+                color={color}
+                icon={CloudUploadOutlined}
+            />
         );
 
         const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
