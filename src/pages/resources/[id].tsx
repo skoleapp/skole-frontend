@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Box,
     CardContent,
     Grid,
     IconButton,
@@ -284,7 +285,13 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </StyledExtraResourceActions>
         );
 
-        const renderCustomBottomNavbar = <StyledBottomNavigation>{renderExtraResourceActions}</StyledBottomNavigation>;
+        const renderCustomBottomNavbar = (
+            <StyledBottomNavigation>
+                <Box display="flex" alignItems="center" width="100%" padding="0 1rem">
+                    {renderExtraResourceActions}
+                </Box>
+            </StyledBottomNavigation>
+        );
 
         return (
             <TabLayout
