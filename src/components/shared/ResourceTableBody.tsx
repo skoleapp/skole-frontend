@@ -12,7 +12,7 @@ interface Props {
 export const ResourceTableBody: React.FC<Props> = ({ resources }) => (
     <TableBody>
         {resources.map((r: ResourceObjectType, i: number) => (
-            <Link href={`/resources/${r.id}`} as={`/resources/${r.id}`} key={i}>
+            <Link href={{ pathname: '/resources', query: { id: r.id } }} key={i}>
                 <TableRow>
                     <TableCell>
                         <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>

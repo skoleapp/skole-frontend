@@ -21,7 +21,6 @@ import {
     SubjectOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
-import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -41,6 +40,7 @@ import { toggleNotification } from '../../actions';
 import {
     CreatorListItem,
     DiscussionBox,
+    IconButtonLink,
     NotFound,
     ResourceTableBody,
     StarButton,
@@ -259,11 +259,9 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-            <Link href={{ pathname: '/upload-resource', query: { course: courseId } }}>
-                <IconButton color={color}>
-                    <CloudUploadOutlined />
-                </IconButton>
-            </Link>
+            <IconButtonLink href={{ pathname: '/upload-resource', query: { course: courseId } }} color={color}>
+                <CloudUploadOutlined />
+            </IconButtonLink>
         );
 
         const uploadResourceButtonMobile = renderUploadResourceButton('secondary');

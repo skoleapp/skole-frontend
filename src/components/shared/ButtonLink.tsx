@@ -7,8 +7,8 @@ import { Link } from '../../i18n';
 
 type Props = LinkProps & Omit<ButtonProps, 'href'>;
 
-export const ButtonLink: React.FC<Props> = ({ href, children, ...props }) => (
-    <Link href={href}>
+export const ButtonLink: React.FC<Props> = ({ href, as, children, ...props }) => (
+    <Link href={href} as={as}>
         <Button {...props}>{children}</Button>
     </Link>
 );

@@ -12,7 +12,7 @@ interface Props {
 export const CourseTableBody: React.FC<Props> = ({ courses }) => (
     <TableBody>
         {courses.map((c: CourseObjectType, i: number) => (
-            <Link href={`/courses/${c.id}`} as={`/courses/${c.id}`} key={i}>
+            <Link href={{ pathname: 'courses', query: { id: c.id } }} key={i}>
                 <TableRow>
                     <TableCell>
                         <Typography variant="subtitle1">{R.propOr('-', 'name', c)}</Typography>

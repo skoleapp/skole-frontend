@@ -113,7 +113,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                     {renderTableHead}
                     <TableBody>
                         {userObjects.map((u: UserObjectType, i: number) => (
-                            <Link href={`/users/[id]`} as={`/users/${u.id}`} key={i}>
+                            <Link href={{ pathname: '/users', query: { id: u.id } }} key={i}>
                                 <TableRow>
                                     <TableCell>
                                         <Box display="flex" alignItems="center">
