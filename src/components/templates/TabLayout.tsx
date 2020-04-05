@@ -22,6 +22,7 @@ interface Props extends LayoutProps {
     renderLeftContent: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
+    customBottomNavbarSecondary?: JSX.Element;
     renderSecondaryAction?: JSX.Element;
     headerActionMobile?: JSX.Element;
     headerActionDesktop?: JSX.Element;
@@ -42,6 +43,8 @@ export const TabLayout: React.FC<Props> = ({
     headerActionMobile,
     headerActionDesktop,
     extraDesktopActions,
+    customBottomNavbar,
+    customBottomNavbarSecondary,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
@@ -51,6 +54,9 @@ export const TabLayout: React.FC<Props> = ({
     const { renderOptions, renderOptionsHeader, drawerProps: optionDrawerProps } = optionProps;
     const { handleOpen: handleOpenOptions } = optionDrawerProps;
     const isMobile = useBreakPoint(breakpointsNum.MD);
+
+    const renderCustomBottomNavbar =
+        tabValue === 0 ? customBottomNavbar : customBottomNavbarSecondary || customBottomNavbar;
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
@@ -147,6 +153,7 @@ export const TabLayout: React.FC<Props> = ({
             backUrl
             headerRight={renderMobileHeaderActions}
             headerLeft={headerActionMobile}
+            customBottomNavbar={renderCustomBottomNavbar}
             {...props}
         >
             {renderMobileContent}

@@ -2,6 +2,7 @@ import {
     Avatar,
     Box,
     CardContent,
+    Grid,
     IconButton,
     ListItem,
     ListItemAvatar,
@@ -41,6 +42,7 @@ import {
     CreatorListItem,
     DiscussionBox,
     IconButtonLink,
+    NavbarContainer,
     NotFound,
     ResourceTableBody,
     StarButton,
@@ -284,13 +286,17 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         const renderCustomBottomNavbar = (
             <StyledBottomNavigation>
-                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" padding="0 1rem">
-                    <StarButton {...starButtonProps} />
-                    <Box display="flex">
-                        <Box marginRight="1rem">{renderUpVoteButton}</Box>
-                        {renderDownVoteButton}
-                    </Box>
-                </Box>
+                <NavbarContainer>
+                    <Grid container>
+                        <Grid item xs={6} container justify="flex-start">
+                            <StarButton {...starButtonProps} />
+                        </Grid>
+                        <Grid item xs={6} container justify="flex-end">
+                            {renderUpVoteButton}
+                            {renderDownVoteButton}
+                        </Grid>
+                    </Grid>
+                </NavbarContainer>
             </StyledBottomNavigation>
         );
 

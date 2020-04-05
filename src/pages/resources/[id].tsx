@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Box,
     CardContent,
     Grid,
     IconButton,
@@ -44,6 +43,7 @@ import { nextPage, prevPage, setCenter, setCurrentPage, setPages, toggleNotifica
 import {
     CreatorListItem,
     DiscussionBox,
+    NavbarContainer,
     NotFound,
     PDFViewer,
     StarButton,
@@ -257,16 +257,26 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             drawerProps,
         };
 
+        const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
+
+        const renderUpVoteButton = (
+            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                <KeyboardArrowUpOutlined />
+            </IconButton>
+        );
+
+        const renderDownVoteButton = (
+            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                <KeyboardArrowDownOutlined />
+            </IconButton>
+        );
+
         const renderExtraResourceActions = (
-            <StyledExtraResourceActions container id="extra-resource-actions" alignItems="center">
+            <StyledExtraResourceActions container alignItems="center">
                 <Grid item xs={4} container id="vote-section">
-                    <StarButton starred={starred} resource={resourceId} />
-                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                        <KeyboardArrowUpOutlined />
-                    </IconButton>
-                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                        <KeyboardArrowDownOutlined />
-                    </IconButton>
+                    {renderStarButton}
+                    {renderUpVoteButton}
+                    {renderDownVoteButton}
                 </Grid>
                 <Grid item xs={4} container alignItems="center" id="page-controls">
                     <IconButton disabled={currentPage === 0} onClick={handlePreviousPage} size="small">
@@ -287,9 +297,23 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         const renderCustomBottomNavbar = (
             <StyledBottomNavigation>
-                <Box display="flex" alignItems="center" width="100%" padding="0 1rem">
-                    {renderExtraResourceActions}
-                </Box>
+                <NavbarContainer>{renderExtraResourceActions}</NavbarContainer>
+            </StyledBottomNavigation>
+        );
+
+        const renderCustomBottomNavbarSecondary = (
+            <StyledBottomNavigation>
+                <NavbarContainer>
+                    <Grid container>
+                        <Grid item xs={6} container justify="flex-start">
+                            {renderStarButton}
+                        </Grid>
+                        <Grid item xs={6} container justify="flex-end">
+                            {renderUpVoteButton}
+                            {renderDownVoteButton}
+                        </Grid>
+                    </Grid>
+                </NavbarContainer>
             </StyledBottomNavigation>
         );
 
@@ -304,6 +328,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 renderRightContent={<DiscussionBox {...discussionBoxProps} />}
                 optionProps={optionProps}
                 customBottomNavbar={renderCustomBottomNavbar}
+                customBottomNavbarSecondary={renderCustomBottomNavbarSecondary}
                 extraDesktopActions={renderExtraResourceActions}
             />
         );
