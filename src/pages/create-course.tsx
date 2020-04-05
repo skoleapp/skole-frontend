@@ -131,7 +131,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
             title={t('create-course:title')}
             heading={t('create-course:heading')}
             renderCardContent={renderCardContent}
-            backUrl
+            dynamicBackUrl
         />
     );
 };

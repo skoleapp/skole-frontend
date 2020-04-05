@@ -103,7 +103,7 @@ const ChangePasswordPage: I18nPage = () => {
             title={t('change-password:title')}
             heading={t('change-password:heading')}
             renderCardContent={renderCardContent}
-            backUrl
+            dynamicBackUrl
             formLayout
         />
     );

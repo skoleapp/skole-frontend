@@ -127,7 +127,7 @@ const EditProfilePage: I18nPage = () => {
             title={t('edit-profile:title')}
             heading={t('edit-profile:title')}
             renderCardContent={renderCardContent}
-            backUrl
+            dynamicBackUrl
             formLayout
         />
     );

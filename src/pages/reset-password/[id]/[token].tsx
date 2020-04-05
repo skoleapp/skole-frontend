@@ -69,7 +69,7 @@ const ResetPasswordConfirmPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('reset-password:confirm')} renderCardContent={renderCardContent} backUrl />;
+    return <FormLayout title={t('reset-password:confirm')} renderCardContent={renderCardContent} dynamicBackUrl />;
 };
 
 ResetPasswordConfirmPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

@@ -10,7 +10,13 @@ import { AttachmentViewer, CommentThread } from '../layout';
 interface Props
     extends Pick<
             LayoutProps,
-            'title' | 'backUrl' | 'disableSearch' | 'headerRight' | 'headerLeft' | 'disableBottomNavbar'
+            | 'title'
+            | 'dynamicBackUrl'
+            | 'staticBackUrl'
+            | 'disableSearch'
+            | 'headerRight'
+            | 'headerLeft'
+            | 'disableBottomNavbar'
         >,
         ContainerProps {
     heading?: string;
@@ -20,7 +26,8 @@ interface Props
 export const MainLayout: React.FC<Props> = ({
     title,
     heading,
-    backUrl,
+    dynamicBackUrl,
+    staticBackUrl,
     disableSearch,
     headerRight,
     headerLeft,
@@ -33,7 +40,8 @@ export const MainLayout: React.FC<Props> = ({
         <Head title={title} />
         <TopNavbar
             heading={heading}
-            backUrl={backUrl}
+            dynamicBackUrl={dynamicBackUrl}
+            staticBackUrl={staticBackUrl}
             disableSearch={disableSearch}
             headerRight={headerRight}
             headerLeft={headerLeft}

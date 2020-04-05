@@ -16,6 +16,7 @@ interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderRepo
 }
 
 interface Props extends LayoutProps {
+    subheader?: JSX.Element;
     titleSecondary: string;
     tabLabelLeft: string;
     renderInfo: JSX.Element;
@@ -33,6 +34,7 @@ interface Props extends LayoutProps {
 
 export const TabLayout: React.FC<Props> = ({
     title,
+    subheader,
     titleSecondary,
     tabLabelLeft,
     renderInfo,
@@ -116,7 +118,12 @@ export const TabLayout: React.FC<Props> = ({
                 <Grid id="container" container>
                     <Grid item container xs={12} md={7} lg={8}>
                         <StyledCard>
-                            <CardHeader id="main-header" title={title} action={renderDesktopHeaderActions} />
+                            <CardHeader
+                                id="main-header"
+                                title={title}
+                                subheader={subheader}
+                                action={renderDesktopHeaderActions}
+                            />
                             <CardContent>{extraDesktopActions}</CardContent>
                             <Divider />
                             {renderLeftContent}
@@ -150,7 +157,7 @@ export const TabLayout: React.FC<Props> = ({
     return (
         <StyledTabLayout
             title={title}
-            backUrl
+            dynamicBackUrl
             headerRight={renderMobileHeaderActions}
             headerLeft={headerActionMobile}
             customBottomNavbar={renderCustomBottomNavbar}

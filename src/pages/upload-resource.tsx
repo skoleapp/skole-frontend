@@ -208,7 +208,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         <FormLayout
             title={t('upload-resource:title')}
             heading={t('upload-resource:heading')}
-            backUrl
+            dynamicBackUrl
             renderCardContent={renderCardContent}
         />
     );

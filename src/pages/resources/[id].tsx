@@ -95,6 +95,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const initialPoints = R.propOr(0, 'points', resource) as number;
         const starred = !!resource.starred;
         const isOwner = !!user && user.id === creatorId;
+        const staticBackUrl = { href: '/courses/[id]', as: `/courses/${courseId}` };
 
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
             initialVote,
@@ -170,6 +171,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             dispatch(setCenter());
         };
 
+        const renderCourseLink = <TextLink {...staticBackUrl}>{courseName}</TextLink>;
+
         const renderInfo = (
             <CardContent>
                 <StyledList>
@@ -193,10 +196,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </ListItemAvatar>
                         <ListItemText>
                             <Typography variant="body2">
-                                {t('common:course')}:{' '}
-                                <TextLink href={`/courses/${courseId}`} color="primary">
-                                    {courseName}
-                                </TextLink>
+                                {t('common:course')}: {renderCourseLink}
                             </Typography>
                         </ListItemText>
                     </ListItem>
@@ -209,7 +209,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         <ListItemText>
                             <Typography variant="body2">
                                 {t('common:school')}:{' '}
-                                <TextLink href={`/schools/${schoolId}`} color="primary">
+                                <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
                                     {schoolName}
                                 </TextLink>
                             </Typography>
@@ -320,8 +320,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         return (
             <TabLayout
                 title={resourceTitle}
+                subheader={renderCourseLink}
                 titleSecondary={t('common:discussion')}
-                backUrl
+                staticBackUrl={staticBackUrl}
                 renderInfo={renderInfo}
                 tabLabelLeft={t('common:resource')}
                 renderLeftContent={<PDFViewer file={file} />}
