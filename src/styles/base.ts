@@ -24,6 +24,9 @@ export const base = css`
         --transition: all 0.15s ease-in;
         --border-radius: 0.25rem;
         --border: 1px solid var(--border-color); // Default MUI border.
+
+        //iOS
+        --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
     }
 
     html,
