@@ -108,7 +108,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
             if (res.status === 200) {
                 const blob = await res.blob();
                 const pdf = new File([blob], 'resource.pdf');
-
                 handleUpload({ file: pdf, ...variables });
             } else {
                 handleFileGenerationError();
