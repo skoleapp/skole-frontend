@@ -36,7 +36,6 @@ import {
     ResourceDetailDocument,
     ResourceObjectType,
     useDeleteResourceMutation,
-    UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
 import { nextPage, prevPage, setCenter, setCurrentPage, setPages, toggleNotification } from '../../actions';
@@ -227,7 +226,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                             </Typography>
                         </ListItemText>
                     </ListItem>
-                    <CreatorListItem user={resource.user as UserObjectType} created={resource.created} />
+                    <CreatorListItem user={resource.user} created={resource.created} />
                 </StyledList>
             </CardContent>
         );
