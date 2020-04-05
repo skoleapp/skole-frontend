@@ -55,8 +55,9 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { breakpoints } from '../../styles';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { I18nPage, I18nProps, SkoleContext, State, MuiColor } from '../../types';
 import { mediaURL, useOptions, usePrivatePage, useVotes } from '../../utils';
+import Link from 'next/link';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -82,7 +83,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const file = mediaURL(resource.file);
         const resourceTitle = R.propOr('-', 'title', resource) as string;
         const resourceType = R.propOr('-', 'resourceType', resource);
-        const courseId = R.propOr('', 'id', resource.course);
+        const courseId = R.propOr('', 'id', resource.course) as string;
         const courseName = R.propOr('-', 'name', resource.course) as string;
         const schoolId = R.propOr('', 'id', resource.school);
         const schoolName = R.propOr('-', 'name', resource.school) as string;
@@ -286,6 +287,17 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         const renderCustomBottomNavbar = <StyledBottomNavigation>{renderExtraResourceActions}</StyledBottomNavigation>;
 
+        const renderBackToCourseButton = (color: MuiColor): JSX.Element => (
+            <Link href={`/courses/${courseId}`}>
+                <IconButton color={color}>
+                    <SchoolOutlined />
+                </IconButton>
+            </Link>
+        );
+
+        const backToCourseButtonMobile = renderBackToCourseButton('secondary');
+        const backToCourseButtonDesktop = renderBackToCourseButton('default');
+
         return (
             <TabLayout
                 title={resourceTitle}
@@ -298,6 +310,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 optionProps={optionProps}
                 customBottomNavbar={renderCustomBottomNavbar}
                 extraDesktopActions={renderExtraResourceActions}
+                headerActionDesktop={backToCourseButtonDesktop}
+                headerActionMobile={backToCourseButtonMobile}
             />
         );
     } else {
