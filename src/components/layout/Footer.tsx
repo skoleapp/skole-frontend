@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
+import { breakpoints } from '../../styles';
 import { useLanguageSelector } from '../../utils';
 import { TextLink } from '../shared';
 
@@ -11,7 +12,7 @@ export const Footer: React.FC = () => {
     const { renderLanguageButton } = useLanguageSelector();
 
     return (
-        <StyledFooter container>
+        <StyledFooter className="md-up" container>
             <Grid item xs={12} container>
                 <Grid item xs={4} container>
                     <Grid item xs={12}>
@@ -76,4 +77,8 @@ const StyledFooter = styled(Grid)`
     align-items: center;
     background-color: var(--primary);
     padding: 0.5rem;
+
+    @media only screen and (max-width: ${breakpoints.MD}) {
+        display: none !important;
+    }
 `;

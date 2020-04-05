@@ -1,10 +1,9 @@
 import { BottomNavigation } from '@material-ui/core';
-import React from 'react';
 import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 
-export const StyledBottomNavigation = styled(props => <BottomNavigation className="md-down" {...props} />)`
+export const StyledBottomNavigation = styled(BottomNavigation)`
     position: fixed;
     bottom: 0;
     width: 100%;
