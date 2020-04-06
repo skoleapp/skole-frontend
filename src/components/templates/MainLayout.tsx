@@ -77,7 +77,8 @@ const StyledMainLayout = styled(({ disableBottomMargin, customBottomNavbar, ...o
         }
 
         @media only screen and (max-width: ${breakpoints.MD}) {
-            margin-bottom: ${({ disableBottomMargin }): string => (!disableBottomMargin ? '3rem' : 'initial')};
+            margin-bottom: ${({ disableBottomMargin }): string =>
+                !disableBottomMargin ? 'calc(var(--safe-area-inset-bottom) + 3rem)' : 'initial'};
         }
     }
 `;
