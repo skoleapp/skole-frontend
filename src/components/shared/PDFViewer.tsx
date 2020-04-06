@@ -280,6 +280,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
             <div
                 style={{
                     backgroundColor: 'rgb(72, 76, 79,0.7)',
+                    position: 'absolute',
                     width: '100%',
                     height: '100%',
                     overflowY: 'auto',
