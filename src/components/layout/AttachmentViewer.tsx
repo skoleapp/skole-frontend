@@ -47,9 +47,10 @@ const StyledFileViewer = styled(Backdrop)`
             background-color: transparent !important;
 
             img {
-                width: 100% !important;
+                width: auto !important;
                 height: auto !important;
-                max-height: 75%;
+                max-height: 75% !important;
+                max-width: 100% !important;
                 position: relative !important;
             }
         }
