@@ -21,7 +21,6 @@ import { useForm, useLanguageSelector, usePublicPage } from '../utils';
 
 export interface RegisterFormValues {
     username: string;
-    email: string;
     password: string;
     confirmPassword: string;
     code: string;
@@ -37,9 +36,6 @@ const RegisterPage: I18nPage = () => {
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
-        email: Yup.string()
-            .email(t('validation:invalidEmail'))
-            .required(t('validation:required')),
         password: Yup.string()
             .min(6, t('validation:passwordTooShort'))
             .required(t('validation:required')),
@@ -73,10 +69,10 @@ const RegisterPage: I18nPage = () => {
     const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
-        const { username, email, password, code } = values;
+        const { username, password, code } = values;
 
         await registerMutation({
-            variables: { username, email, password, code },
+            variables: { username, password, code },
             context: { headers: { Authorization: '' } },
         });
 
@@ -93,17 +89,7 @@ const RegisterPage: I18nPage = () => {
                         name="username"
                         component={TextField}
                         variant="outlined"
-                        autoComplete="off"
-                        fullWidth
-                        type="text"
-                    />
-                    <Field
-                        placeholder={t('forms:email')}
-                        label={t('forms:email')}
-                        name="email"
-                        component={TextField}
-                        variant="outlined"
-                        autoComplete="off"
+                        helperText={t('forms:usernameHelperText')}
                         fullWidth
                     />
                     <Field

@@ -1,6 +1,6 @@
 {
-    "usernameOrEmail": "Användarnamn eller e-post",
     "username": "Användarnamn",
+    "usernameHelperText": "Ditt användarnamn kommer att visas för andra användare.",
     "email": "E-post",
     "password": "Lösenord",
     "oldPassword": "Föregående lösenord",

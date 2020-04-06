@@ -1,6 +1,6 @@
 {
-    "usernameOrEmail": "Käyttäjätunnus tai sähköposti",
     "username": "Käyttäjätunnus",
+    "usernameHelperText": "Käyttäjätunnuksesi näkyy muille käyttäjille.",
     "email": "Sähköposti",
     "password": "Salasana",
     "oldPassword": "Vanha salasana",
