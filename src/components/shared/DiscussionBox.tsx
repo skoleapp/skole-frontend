@@ -132,7 +132,8 @@ const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other}
             overflow-y: scroll;
 
             @media only screen and (max-width: ${breakpoints.MD}) {
-                padding-bottom: ${({ topComment }): string => (!topComment ? '4.5rem' : 'initial')};
+                padding-bottom: ${({ topComment }): string =>
+                    !topComment ? 'calc(var(--safe-area-inset-bottom) + 4.5rem)' : 'initial'};
             }
 
             .MuiDivider-root#reply {

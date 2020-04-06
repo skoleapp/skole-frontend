@@ -19,13 +19,13 @@ import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { useAlerts, useForm, useLanguageSelector, usePublicPage } from '../utils';
 
 const initialValues = {
-    usernameOrEmail: '',
+    username: '',
     password: '',
     general: '',
 };
 
 export interface LoginFormValues {
-    usernameOrEmail: string;
+    username: string;
     password: string;
 }
 
@@ -39,7 +39,7 @@ const LoginPage: I18nPage = () => {
     const { renderLanguageButton } = useLanguageSelector();
 
     const validationSchema = Yup.object().shape({
-        usernameOrEmail: Yup.string().required(t('validation:required')),
+        username: Yup.string().required(t('validation:required')),
         password: Yup.string().required(t('validation:required')),
     });
 
@@ -66,8 +66,8 @@ const LoginPage: I18nPage = () => {
     const [loginMutation] = useLoginMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: LoginFormValues): Promise<void> => {
-        const { usernameOrEmail, password } = values;
-        await loginMutation({ variables: { usernameOrEmail, password }, context: { headers: { Authorization: '' } } });
+        const { username, password } = values;
+        await loginMutation({ variables: { username, password }, context: { headers: { Authorization: '' } } });
         setSubmitting(false);
     };
 
@@ -76,10 +76,10 @@ const LoginPage: I18nPage = () => {
             {(props): JSX.Element => (
                 <Form>
                     <Field
-                        placeholder={t('forms:usernameOrEmail')}
-                        name="usernameOrEmail"
+                        placeholder={t('forms:username')}
+                        name="username"
                         component={TextField}
-                        label={t('forms:usernameOrEmail')}
+                        label={t('forms:username')}
                         variant="outlined"
                         fullWidth
                     />
@@ -105,8 +105,8 @@ const LoginPage: I18nPage = () => {
                     >
                         {t('login:createAccount')}
                     </ButtonLink>
-                    {/* <Box marginTop="1rem"> // Hide until reset password feature works.
-                        <TextLink href="/reset-password">{t('login:forgotPassword')}</TextLink>
+                    {/* <Box marginTop="1rem"> // TODO: Show this when reset password works.
+                        <TextLink href="/contact">{t('login:forgotPassword')}</TextLink>
                     </Box> */}
                 </Form>
             )}

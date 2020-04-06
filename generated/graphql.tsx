@@ -124,10 +124,10 @@ export type CreateCourseMutationPayload = {
 
 export type CreateResourceMutationInput = {
   title: Scalars['String'],
+  file?: Maybe<Scalars['String']>,
   resourceType: Scalars['ID'],
   course: Scalars['ID'],
   date?: Maybe<Scalars['Date']>,
-  file?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -195,7 +195,7 @@ export type ErrorType = {
 };
 
 export type LoginMutationInput = {
-  usernameOrEmail: Scalars['String'],
+  username: Scalars['String'],
   password: Scalars['String'],
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -420,7 +420,6 @@ export type QueryCityArgs = {
 
 export type RegisterMutationInput = {
   username: Scalars['String'],
-  email: Scalars['String'],
   password: Scalars['String'],
   code: Scalars['String'],
   clientMutationId?: Maybe<Scalars['String']>,
@@ -515,9 +514,9 @@ export type UpdateCommentMutationPayload = {
 
 export type UpdateResourceMutationInput = {
   title: Scalars['String'],
+  file?: Maybe<Scalars['String']>,
   resourceType: Scalars['ID'],
   date?: Maybe<Scalars['Date']>,
-  file?: Maybe<Scalars['String']>,
   id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -531,7 +530,7 @@ export type UpdateResourceMutationPayload = {
 
 export type UpdateUserMutationInput = {
   username: Scalars['String'],
-  email: Scalars['String'],
+  email?: Maybe<Scalars['String']>,
   title?: Maybe<Scalars['String']>,
   bio?: Maybe<Scalars['String']>,
   avatar?: Maybe<Scalars['String']>,
@@ -593,7 +592,6 @@ export type VoteObjectType = {
 
 export type RegisterMutationVariables = {
   username: Scalars['String'],
-  email: Scalars['String'],
   password: Scalars['String'],
   code: Scalars['String']
 };
@@ -624,7 +622,7 @@ export type RegisterMutation = (
 );
 
 export type LoginMutationVariables = {
-  usernameOrEmail: Scalars['String'],
+  username: Scalars['String'],
   password: Scalars['String']
 };
 
@@ -1202,8 +1200,8 @@ export type PerformVoteMutation = (
 
 
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
-  register(input: {username: $username, email: $email, password: $password, code: $code}) {
+    mutation Register($username: String!, $password: String!, $code: String!) {
+  register(input: {username: $username, password: $password, code: $code}) {
     user {
       id
       created
@@ -1213,7 +1211,7 @@ export const RegisterDocument = gql`
       messages
     }
   }
-  login(input: {usernameOrEmail: $email, password: $password}) {
+  login(input: {username: $username, password: $password}) {
     token
     user {
       id
@@ -1240,8 +1238,8 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const LoginDocument = gql`
-    mutation Login($usernameOrEmail: String!, $password: String!) {
-  login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
+    mutation Login($username: String!, $password: String!) {
+  login(input: {username: $username, password: $password}) {
     token
     user {
       id

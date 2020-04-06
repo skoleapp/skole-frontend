@@ -53,15 +53,17 @@ const ContactPage: I18nPage = () => {
     };
 
     const [contactMutation] = useContactMutation({ onCompleted, onError });
-    // TODO: Finish this.
+
     const handleSubmit = async (values: ContactFormValues): Promise<void> => {
         const { name, subject, email, message } = values;
+
         const variables = {
             name,
             subject,
             email,
             message,
         };
+
         await contactMutation({ variables });
         setSubmitting(false);
     };
