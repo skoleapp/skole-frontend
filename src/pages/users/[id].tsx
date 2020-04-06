@@ -57,7 +57,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const courseCount = R.propOr('-', 'courseCount', user);
         const resourceCount = R.propOr('-', 'resourceCount', user);
         const joined = moment(user.created).format('LL');
-        const isOwnProfile = user.id === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
+        const isOwnProfile = user.id === useSelector((state: State) => state.auth.user.id);
         const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
         const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
 
@@ -162,13 +162,15 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                         </CardContent>
                     )}
                 </Grid>
-                <Grid className="sm-down" item xs={12}>
-                    <CardContent>
-                        <ButtonLink {...editProfileButtonProps} fullWidth>
-                            {t('profile:editProfile')}
-                        </ButtonLink>
-                    </CardContent>
-                </Grid>
+                {isOwnProfile && (
+                    <Grid className="sm-down" item xs={12}>
+                        <CardContent>
+                            <ButtonLink {...editProfileButtonProps} fullWidth>
+                                {t('profile:editProfile')}
+                            </ButtonLink>
+                        </CardContent>
+                    </Grid>
+                )}
             </Grid>
         );
 
