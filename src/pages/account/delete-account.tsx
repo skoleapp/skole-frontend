@@ -11,7 +11,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps } from '../../types';
-import { logout, useForm, withAuthSync } from '../../utils';
+import { useAuth, useForm, withAuthSync } from '../../utils';
 
 const initialValues = {
     password: '',
@@ -26,6 +26,7 @@ export const DeleteAccountPage: I18nPage = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<DeleteAccountFormValues>();
     const { t } = useTranslation();
     const confirm = useConfirm();
+    const { logout } = useAuth();
 
     const onCompleted = ({ deleteUser }: DeleteAccountMutation): void => {
         if (deleteUser) {

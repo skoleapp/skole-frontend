@@ -5,11 +5,11 @@ import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 
 import { Router } from '../../i18n';
-import { getUser } from '../../utils/auth';
+import { useAuth } from '../../utils';
 import { StyledBottomNavigation } from '../shared';
 
 export const BottomNavbar: React.FC = () => {
-    const user = getUser();
+    const { user } = useAuth();
     const { pathname, query } = useRouter();
     const home = '/';
     const search = '/search';

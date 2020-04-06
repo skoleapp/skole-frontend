@@ -36,7 +36,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { ButtonColor, ButtonVariant, I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { useFrontendPagination, useTabs, withAuthSync } from '../../utils';
+import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 import { mediaURL } from '../../utils';
 
 interface Props extends I18nProps {
@@ -47,7 +47,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
 
-    if (user) {
+    if (!!user) {
         const username = R.propOr('-', 'username', user) as string;
         const email = R.propOr('-', 'email', user) as string;
         const title = R.prop('title', user) as string;
@@ -57,7 +57,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const courseCount = R.propOr('-', 'courseCount', user);
         const resourceCount = R.propOr('-', 'resourceCount', user);
         const joined = moment(user.created).format('LL');
-        const isOwnProfile = user.id === useSelector((state: State) => state.auth.user.id);
+        const { user: loggedInUser } = useAuth();
+        const isOwnProfile = user.id === R.propOr('', 'id', loggedInUser);
         const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
         const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
 

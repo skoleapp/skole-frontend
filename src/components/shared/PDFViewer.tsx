@@ -1,8 +1,7 @@
-import 'ol/ol.css';
-
 import { Box, CircularProgress } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import { NEXT_PAGE, PREV_PAGE, resetEffect, SET_CENTER, setCurrentPage, setPages } from '../../actions';
 import { State } from '../../types';
@@ -270,26 +269,25 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     );
 
     return (
-        <div
-            style={{
-                position: 'relative',
-                display: 'flex',
-                flex: '1 1 auto',
-            }}
-        >
-            <div
-                style={{
-                    backgroundColor: 'rgb(72, 76, 79,0.7)',
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    overflowY: 'auto',
-                    overflowX: 'auto',
-                }}
-                ref={ref}
-            >
+        <StyledPDFViewer>
+            <div id="pdf-container" ref={ref}>
                 {renderLoading}
             </div>
-        </div>
+        </StyledPDFViewer>
     );
 };
+
+const StyledPDFViewer = styled(Box)`
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+
+    #pdf-container {
+        background-color: rgb(72, 76, 79,0.7);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+`;

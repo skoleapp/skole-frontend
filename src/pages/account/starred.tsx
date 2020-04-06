@@ -16,13 +16,12 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps } from '../../types';
-import { useFrontendPagination, useTabs, withAuthSync } from '../../utils';
-import { getUser } from '../../utils/auth';
+import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 
 const StarredPage: I18nPage = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
-    const user = getUser();
+    const { user } = useAuth();
 
     if (!!user) {
         const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];

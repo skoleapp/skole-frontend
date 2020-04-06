@@ -1,8 +1,8 @@
-import { ServerStyleSheets } from '@material-ui/styles';
+import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/styles';
 import { DocumentInitialProps, RenderPageResult } from 'next/dist/next-server/lib/utils';
-import Document, { DocumentContext, Head, Main, NextScript } from 'next/document';
-import React from 'react';
-import { ServerStyleSheet } from 'styled-components';
+import NextDocument, { DocumentContext, Head, Main, NextScript } from 'next/document';
+import React, { Fragment } from 'react';
+import { ServerStyleSheet as StyledComponentSheets } from 'styled-components';
 
 const GAScript = {
     __html: `
@@ -13,24 +13,22 @@ const GAScript = {
     `,
 };
 
-export default class SkoleDocument extends Document {
+export default class SkoleDocument extends NextDocument {
     render(): JSX.Element {
         return (
             <html lang="en">
                 <Head>
-                    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159917631-1"></script>
-                    <script dangerouslySetInnerHTML={GAScript} />
                     <meta charSet="UTF-8" />
                     <meta
                         name="viewport"
                         content="viewport-fit=cover, minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
                     />
                     <meta name="apple-mobile-web-app-capable" content="yes" />
-                    <meta name="apple-mobile-web-app-status-bar-style" content="default"></meta>
+                    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
                     <link rel="manifest" href="/manifest.json" />
                     <link rel="shortcut icon" href="/images/favicon.ico" />
                     <link rel="apple-touch-icon" sizes="180x180" href="images/icons/icon-180x180.png" />
-                    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ad3636"></link>
+                    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ad3636" />
                     <link
                         href="images/splashscreens/iphone5_splash.png"
                         media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
@@ -81,6 +79,8 @@ export default class SkoleDocument extends Document {
                         media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
                         rel="apple-touch-startup-image"
                     />
+                    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159917631-1"></script>
+                    <script dangerouslySetInnerHTML={GAScript} />
                 </Head>
                 <body>
                     <Main />
@@ -92,27 +92,30 @@ export default class SkoleDocument extends Document {
 }
 
 SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<DocumentInitialProps> => {
-    const styledComponentsSheet = new ServerStyleSheet();
-    const materialSheets = new ServerStyleSheets();
+    const styledComponentSheet = new StyledComponentSheets();
+    const materialUiSheets = new MaterialUiServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
 
-    ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> => {
-        return originalRenderPage({
-            enhanceApp: App => (props): JSX.Element =>
-                styledComponentsSheet.collectStyles(materialSheets.collect(<App {...props} />)),
-        });
-    };
+    try {
+        ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> =>
+            originalRenderPage({
+                enhanceApp: App => (props): JSX.Element =>
+                    styledComponentSheet.collectStyles(materialUiSheets.collect(<App {...props} />)),
+            });
 
-    const initialProps = await Document.getInitialProps(ctx);
+        const initialProps = await NextDocument.getInitialProps(ctx);
 
-    return {
-        ...initialProps,
-        styles: (
-            <>
-                {initialProps.styles}
-                {styledComponentsSheet.getStyleElement()}
-                {materialSheets.getStyleElement()}
-            </>
-        ),
-    };
+        return {
+            ...initialProps,
+            styles: [
+                <Fragment key="styles">
+                    {initialProps.styles}
+                    {materialUiSheets.getStyleElement()}
+                    {styledComponentSheet.getStyleElement()}
+                </Fragment>,
+            ],
+        };
+    } finally {
+        styledComponentSheet.seal();
+    }
 };

@@ -57,7 +57,7 @@ import { withApollo, withRedux } from '../../lib';
 import { breakpoints } from '../../styles';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
 import { mediaURL, useOptions, useVotes, withAuthSync } from '../../utils';
-import { getUser } from '../../utils/auth';
+import { useAuth } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -67,7 +67,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const confirm = useConfirm();
-    const user = getUser();
+    const { user } = useAuth();
     const { pages, currentPage } = useSelector((state: State) => state.resource);
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
 

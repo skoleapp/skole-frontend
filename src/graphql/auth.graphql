@@ -1,4 +1,4 @@
-mutation Register($username: String!, $password: String!, $code: String!) {
+mutation RegisterAction($username: String!, $password: String!, $code: String!) {
     register(input: { username: $username, password: $password, code: $code }) {
         user {
             id
@@ -13,12 +13,27 @@ mutation Register($username: String!, $password: String!, $code: String!) {
         token
         user {
             id
+            username
+            email
             title
             bio
             avatar
             points
+            courseCount
+            resourceCount
             created
-            email
+            starredCourses {
+                id
+                name
+                code
+                points
+            }
+            starredResources {
+                id
+                title
+                points
+                date
+            }
         }
         errors {
             field
@@ -27,17 +42,32 @@ mutation Register($username: String!, $password: String!, $code: String!) {
     }
 }
 
-mutation Login($username: String!, $password: String!) {
+mutation LoginAction($username: String!, $password: String!) {
     login(input: { username: $username, password: $password }) {
         token
         user {
             id
+            username
+            email
             title
             bio
             avatar
             points
+            courseCount
+            resourceCount
             created
-            email
+            starredCourses {
+                id
+                name
+                code
+                points
+            }
+            starredResources {
+                id
+                title
+                points
+                date
+            }
         }
         errors {
             field

@@ -12,8 +12,8 @@ import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { login as loginUser, useAlerts, useForm, useLanguageSelector } from '../utils';
+import { I18nPage, I18nProps } from '../types';
+import { useAlerts, useAuth, useForm, useLanguageSelector } from '../utils';
 
 const initialValues = {
     username: '',
@@ -32,6 +32,7 @@ const LoginPage: I18nPage = () => {
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
     const { renderLanguageButton } = useLanguageSelector();
+    const { login: loginUser } = useAuth();
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
@@ -46,7 +47,7 @@ const LoginPage: I18nPage = () => {
                 const { token, user } = login;
                 const { next } = query;
 
-                loginUser({ token, user: user as UserObjectType });
+                loginUser(token, user as UserObjectType);
                 resetForm();
 
                 if (!!next) {

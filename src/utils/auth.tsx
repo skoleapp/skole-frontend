@@ -2,34 +2,48 @@ import cookie from 'js-cookie';
 import { NextPage, NextPageContext } from 'next';
 import nextCookie from 'next-cookies';
 import Router from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { UserObjectType } from '../../generated/graphql';
-import { includeDefaultNamespaces } from '../i18n';
-import { I18nProps, SkoleContext } from '../types';
+import { SkoleContext } from '../types';
 
-interface LoginProps {
-    token: string;
-    user: UserObjectType;
+interface UseAuth {
+    user: UserObjectType | null;
+    loading: boolean;
+    updateUser: (user: UserObjectType | null) => void;
+    login: (token: string, user: UserObjectType) => void;
+    logout: () => void;
 }
 
-export const login = ({ token, user }: LoginProps): void => {
-    cookie.set('token', token, { expires: 1 });
-    window.localStorage.setItem('user', JSON.stringify(user));
-};
+export const useAuth = (): UseAuth => {
+    const [user, setUser] = useState<UserObjectType | null>(null);
+    const [loading, setLoading] = useState(true);
 
-export const logout = (): void => {
-    cookie.remove('token');
-    window.localStorage.setItem('logout', String(Date.now())); // Log out from all windows.
-    Router.push('/login');
-};
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setUser(JSON.parse(localStorage.getItem('user') || 'null'));
+            setLoading(false);
+        }
+    }, []);
 
-export const getUser = (): UserObjectType | null => {
-    if (typeof window !== 'undefined') {
-        return JSON.parse(window.localStorage.getItem('user') || '');
-    } else {
-        return null;
-    }
+    const updateUser = (user: UserObjectType | null): void => {
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+    };
+
+    const login = (token: string, user: UserObjectType): void => {
+        cookie.set('token', token, { expires: 1 });
+        updateUser(user);
+    };
+
+    const logout = (): void => {
+        cookie.remove('token');
+        localStorage.setItem('logout', String(Date.now())); // Log out from all windows.
+        updateUser(null);
+        Router.push('/login');
+    };
+
+    return { user, loading, updateUser, login, logout };
 };
 
 export const auth = (ctx: NextPageContext): string | undefined => {
@@ -48,7 +62,7 @@ export const auth = (ctx: NextPageContext): string | undefined => {
     return token;
 };
 
-interface WrapperProps extends I18nProps {
+interface WrapperProps {
     token: string | undefined;
 }
 
@@ -75,8 +89,7 @@ export const withAuthSync = (WrappedComponent: NextPage): JSX.Element => {
     Wrapper.getInitialProps = async (ctx: SkoleContext): Promise<WrapperProps> => {
         const token = auth(ctx);
         const componentProps = WrappedComponent.getInitialProps && (await WrappedComponent.getInitialProps(ctx));
-        const namespacesRequired = includeDefaultNamespaces([]);
-        return { ...componentProps, token, namespacesRequired };
+        return { ...componentProps, token };
     };
 
     return (Wrapper as unknown) as JSX.Element;

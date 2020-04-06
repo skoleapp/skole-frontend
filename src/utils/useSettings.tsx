@@ -9,7 +9,7 @@ import { StyledList } from '../components/shared/StyledList';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { menuItems } from '.';
-import { getUser, logout } from './auth';
+import { useAuth } from './auth';
 import { useLanguageSelector } from './useLanguageSelector';
 
 interface UseSettings {
@@ -23,11 +23,13 @@ interface Props {
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
 export const useSettings = ({ modal }: Props): UseSettings => {
-    const authenticated = !!getUser();
+    const { user } = useAuth();
+    const authenticated = !!user;
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { pathname } = useRouter();
     const { renderCurrentFlag, openLanguageMenu } = useLanguageSelector();
+    const { logout } = useAuth();
 
     const handleClose = (): void => {
         dispatch(toggleSettings(false));

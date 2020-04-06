@@ -1,3 +1,4 @@
+import { Box, CircularProgress, Typography } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
@@ -6,15 +7,15 @@ import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
-import { UpdateUserMutation, useUpdateUserMutation } from '../../../generated/graphql';
+import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { AvatarField, FormSubmitSection, SettingsLayout } from '../../components';
+import { AvatarField, FormSubmitSection, NotFound, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps } from '../../types';
 import { useForm, withAuthSync } from '../../utils';
-import { getUser } from '../../utils/auth';
+import { useAuth } from '../../utils/auth';
 
 export interface UpdateProfileFormValues {
     username: string;
@@ -25,7 +26,7 @@ export interface UpdateProfileFormValues {
 }
 
 const EditProfilePage: I18nPage = () => {
-    const user = getUser();
+    const { user, loading, updateUser: _updateUser } = useAuth();
     const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -36,10 +37,12 @@ const EditProfilePage: I18nPage = () => {
                 handleMutationErrors(updateUser.errors);
             } else {
                 dispatch(toggleNotification(t('notifications:profileUpdated')));
-                window.localStorage.setItem('user', JSON.stringify(updateUser.user));
+                _updateUser(updateUser.user as UserObjectType);
             }
         }
     };
+
+    console.log(user);
 
     const [updateUserMutation] = useUpdateUserMutation({ onCompleted, onError });
 
@@ -72,11 +75,18 @@ const EditProfilePage: I18nPage = () => {
     const validationSchema = Yup.object().shape({
         title: Yup.string(),
         username: Yup.string().required(t('validation:required')),
-        email: Yup.string()
-            .email(t('validation:invalidEmail'))
-            .required(t('validation:required')),
+        email: Yup.string().email(t('validation:invalidEmail')),
         bio: Yup.string(),
     });
+
+    const renderLoading = (
+        <Box display="flex" flexGrow="1" alignItems="center" justifyContent="center">
+            <CircularProgress color="primary" />
+            <Box marginLeft="1rem">
+                <Typography>Loading...</Typography>
+            </Box>
+        </Box>
+    );
 
     const renderCardContent = (
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
@@ -123,19 +133,23 @@ const EditProfilePage: I18nPage = () => {
         </Formik>
     );
 
-    return (
-        <SettingsLayout
-            title={t('edit-profile:title')}
-            heading={t('edit-profile:title')}
-            renderCardContent={renderCardContent}
-            dynamicBackUrl
-            formLayout
-        />
-    );
+    if (!!user || loading) {
+        return (
+            <SettingsLayout
+                title={t('edit-profile:title')}
+                heading={t('edit-profile:title')}
+                renderCardContent={loading ? renderLoading : renderCardContent}
+                dynamicBackUrl
+                formLayout
+            />
+        );
+    } else {
+        return <NotFound title={t('profile:notFound')} />;
+    }
 };
 
 EditProfilePage.getInitialProps = (): I18nProps => ({
-    namespacesRequired: includeDefaultNamespaces(['edit-profile']),
+    namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
 });
 
 export default compose(withAuthSync, withApollo, withRedux)(EditProfilePage);

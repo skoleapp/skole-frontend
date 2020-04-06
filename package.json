@@ -36,7 +36,7 @@
         "express": "^4.17.1",
         "formik": "^1.5.8",
         "formik-material-ui": "1.0.0",
-        "graphql": "^14.5.8",
+        "graphql": "^15.0.0",
         "graphql-tag": "^2.10.1",
         "graphql-toolkit": "^0.7.2",
         "i18next": "^19.0.2",
@@ -55,6 +55,7 @@
         "nprogress": "^0.2.0",
         "ol": "^6.2.1",
         "pdfjs-dist": "^2.2.228",
+        "prop-types": "^15.7.2",
         "ramda": "^0.26.1",
         "react": "^16.9.0",
         "react-apollo": "^3.1.2",
@@ -68,10 +69,11 @@
         "rimraf": "^3.0.0",
         "styled-components": "^4.3.2",
         "typeface-roboto": "^0.0.75",
+        "webpack": "^4.42.1",
         "yup": "^0.27.0"
     },
     "devDependencies": {
-        "@graphql-codegen/cli": "^1.7.0",
+        "@graphql-codegen/cli": "^1.13.1",
         "@graphql-codegen/introspection": "1.7.0",
         "@graphql-codegen/typescript": "1.7.0",
         "@graphql-codegen/typescript-operations": "1.7.0",
@@ -100,7 +102,6 @@
         "redux-devtools-extension": "^2.13.8",
         "ts-node": "^8.5.4",
         "typescript": "^3.6.2",
-        "webpack": "^4.41.2",
-        "webpackbar": "^4.0.0"
+        "webpack": "^4.41.2"
     }
 }

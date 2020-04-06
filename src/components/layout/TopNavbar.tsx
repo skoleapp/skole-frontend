@@ -9,8 +9,7 @@ import { Router } from '../../i18n';
 import { Link } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { mediaURL } from '../../utils';
-import { getUser } from '../../utils/auth';
+import { mediaURL, useAuth } from '../../utils';
 import { ButtonLink, Heading, IconButtonLink } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
 
@@ -27,7 +26,7 @@ export const TopNavbar: React.FC<Props> = ({
     headerRight,
     headerLeft,
 }) => {
-    const user = getUser();
+    const { user } = useAuth();
     const { t } = useTranslation();
     const avatarThumb = R.propOr('', 'avatar', user) as string;
 

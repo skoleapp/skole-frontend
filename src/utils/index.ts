@@ -1,7 +1,7 @@
 export { getToken } from './getToken';
 export { menuItems } from './menuItems';
 export { redirect } from './redirect';
-export { login, logout, withAuthSync, auth } from './auth';
+export { withAuthSync, auth, useAuth } from './auth';
 export { useForm } from './useForm';
 export { useSearch } from './useSearch';
 export { useTabs } from './useTabs';
