@@ -2,18 +2,19 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
-import { reAuthenticate, toggleNotification } from '../../actions';
-import { AvatarField, FormSubmitSection, SettingsLayout } from '../../components';
+import { toggleNotification } from '../../actions';
+import { AvatarField, FormSubmitSection, Loading, NotFound, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { useForm, usePrivatePage } from '../../utils';
+import { I18nPage, I18nProps } from '../../types';
+import { useForm, withAuthSync } from '../../utils';
+import { useAuth } from '../../utils/auth';
 
 export interface UpdateProfileFormValues {
     username: string;
@@ -24,7 +25,7 @@ export interface UpdateProfileFormValues {
 }
 
 const EditProfilePage: I18nPage = () => {
-    const { user } = useSelector((state: State) => state.auth);
+    const { user, loading, updateUser: _updateUser } = useAuth();
     const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -35,7 +36,7 @@ const EditProfilePage: I18nPage = () => {
                 handleMutationErrors(updateUser.errors);
             } else {
                 dispatch(toggleNotification(t('notifications:profileUpdated')));
-                dispatch(reAuthenticate(updateUser.user as UserObjectType));
+                _updateUser(updateUser.user as UserObjectType);
             }
         }
     };
@@ -71,9 +72,7 @@ const EditProfilePage: I18nPage = () => {
     const validationSchema = Yup.object().shape({
         title: Yup.string(),
         username: Yup.string().required(t('validation:required')),
-        email: Yup.string()
-            .email(t('validation:invalidEmail'))
-            .required(t('validation:required')),
+        email: Yup.string().email(t('validation:invalidEmail')),
         bio: Yup.string(),
     });
 
@@ -122,20 +121,23 @@ const EditProfilePage: I18nPage = () => {
         </Formik>
     );
 
-    return (
-        <SettingsLayout
-            title={t('edit-profile:title')}
-            heading={t('edit-profile:title')}
-            renderCardContent={renderCardContent}
-            dynamicBackUrl
-            formLayout
-        />
-    );
+    if (!!user || loading) {
+        return (
+            <SettingsLayout
+                title={t('edit-profile:title')}
+                heading={t('edit-profile:title')}
+                renderCardContent={loading ? <Loading /> : renderCardContent}
+                dynamicBackUrl
+                formLayout
+            />
+        );
+    } else {
+        return <NotFound title={t('profile:notFound')} />;
+    }
 };
 
-EditProfilePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePrivatePage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['edit-profile']) };
-};
+EditProfilePage.getInitialProps = (): I18nProps => ({
+    namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
+});
 
-export default compose(withApollo, withRedux)(EditProfilePage);
+export default compose(withAuthSync, withApollo, withRedux)(EditProfilePage);

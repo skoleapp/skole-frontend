@@ -13,12 +13,27 @@ mutation Register($username: String!, $password: String!, $code: String!) {
         token
         user {
             id
+            username
+            email
             title
             bio
             avatar
             points
+            courseCount
+            resourceCount
             created
-            email
+            starredCourses {
+                id
+                name
+                code
+                points
+            }
+            starredResources {
+                id
+                title
+                points
+                date
+            }
         }
         errors {
             field
@@ -32,12 +47,27 @@ mutation Login($username: String!, $password: String!) {
         token
         user {
             id
+            username
+            email
             title
             bio
             avatar
             points
+            courseCount
+            resourceCount
             created
-            email
+            starredCourses {
+                id
+                name
+                code
+                points
+            }
+            starredResources {
+                id
+                title
+                points
+                date
+            }
         }
         errors {
             field

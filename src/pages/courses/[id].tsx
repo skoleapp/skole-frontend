@@ -54,7 +54,8 @@ import {
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
-import { useFrontendPagination, useOptions, usePrivatePage, useVotes } from '../../utils';
+import { useFrontendPagination, useOptions, useVotes, withAuthSync } from '../../utils';
+import { useAuth } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -64,7 +65,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const confirm = useConfirm();
-    const { user } = useSelector((state: State) => state.auth);
+    const { user } = useAuth();
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
 
     const getFullCourseName = (course: CourseObjectType): string => {
@@ -326,7 +327,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 };
 
 CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await usePrivatePage(ctx);
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 
@@ -342,4 +342,4 @@ CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
     }
 };
 
-export default compose(withApollo, withRedux)(CourseDetailPage);
+export default compose(withAuthSync, withApollo, withRedux)(CourseDetailPage);

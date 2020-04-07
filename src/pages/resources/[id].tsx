@@ -56,7 +56,8 @@ import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { breakpoints } from '../../styles';
 import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { mediaURL, useOptions, usePrivatePage, useVotes } from '../../utils';
+import { mediaURL, useOptions, useVotes, withAuthSync } from '../../utils';
+import { useAuth } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -66,7 +67,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const confirm = useConfirm();
-    const { user } = useSelector((state: State) => state.auth);
+    const { user } = useAuth();
     const { pages, currentPage } = useSelector((state: State) => state.resource);
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
 
@@ -351,7 +352,6 @@ const StyledExtraResourceActions = styled(Grid)`
 `;
 
 ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePrivatePage(ctx);
     const { query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
@@ -367,4 +367,4 @@ ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProp
     }
 };
 
-export default compose(withApollo, withRedux)(ResourceDetailPage);
+export default compose(withAuthSync, withApollo, withRedux)(ResourceDetailPage);

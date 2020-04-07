@@ -21,7 +21,7 @@ import { Router, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useForm, usePrivatePage } from '../utils';
+import { useForm, withAuthSync } from '../utils';
 
 interface UploadResourceFormValues {
     resourceTitle: string;
@@ -214,7 +214,6 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 };
 
 UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    await usePrivatePage(ctx);
     const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
@@ -229,4 +228,4 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
         return nameSpaces;
     }
 };
-export default compose(withApollo, withRedux)(UploadResourcePage);
+export default compose(withAuthSync, withApollo, withRedux)(UploadResourcePage);

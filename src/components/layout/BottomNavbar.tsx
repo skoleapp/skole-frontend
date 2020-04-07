@@ -1,16 +1,16 @@
-import { BottomNavigationAction } from '@material-ui/core';
-import { AccountCircleOutlined, HomeOutlined, SearchOutlined, StarOutlined } from '@material-ui/icons';
+import { Avatar, BottomNavigationAction } from '@material-ui/core';
+import { HomeOutlined, SearchOutlined, StarOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Router } from '../../i18n';
-import { State } from '../../types';
+import { mediaURL, useAuth } from '../../utils';
 import { StyledBottomNavigation } from '../shared';
 
 export const BottomNavbar: React.FC = () => {
-    const { user, authenticated } = useSelector((state: State) => state.auth);
+    const { user } = useAuth();
+    const avatarThumb = R.propOr('', 'avatar', user) as string;
     const { pathname, query } = useRouter();
     const home = '/';
     const search = '/search';
@@ -48,7 +48,7 @@ export const BottomNavbar: React.FC = () => {
     const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
     const handleAccountClick = (): void => {
-        authenticated ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/login';
+        !!user ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/login';
     };
 
     return (
@@ -56,7 +56,11 @@ export const BottomNavbar: React.FC = () => {
             <BottomNavigationAction value={1} onClick={handleRedirect(home)} icon={<HomeOutlined />} />
             <BottomNavigationAction value={2} onClick={handleRedirect(search)} icon={<SearchOutlined />} />
             <BottomNavigationAction value={3} onClick={handleRedirect(starred)} icon={<StarOutlined />} />
-            <BottomNavigationAction value={4} onClick={handleAccountClick} icon={<AccountCircleOutlined />} />
+            <BottomNavigationAction
+                value={4}
+                onClick={handleAccountClick}
+                icon={<Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />}
+            />
         </StyledBottomNavigation>
     );
 };

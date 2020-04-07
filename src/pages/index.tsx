@@ -17,8 +17,8 @@ import { Link, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { breakpoints } from '../styles';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { usePrivatePage, useSearch } from '../utils';
+import { I18nPage, I18nProps } from '../types';
+import { useSearch, withAuthSync } from '../utils';
 
 interface Shortcut {
     text: string;
@@ -177,9 +177,8 @@ const StyledIndexPage = styled(MainLayout)`
     }
 `;
 
-IndexPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePrivatePage(ctx);
+IndexPage.getInitialProps = async (): Promise<I18nProps> => {
     return { namespacesRequired: includeDefaultNamespaces(['index']) };
 };
 
-export default compose(withApollo, withRedux)(IndexPage);
+export default compose(withAuthSync, withApollo, withRedux)(IndexPage);

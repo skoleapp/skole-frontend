@@ -11,8 +11,8 @@ import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useForm, usePrivatePage } from '../../utils';
+import { I18nPage, I18nProps } from '../../types';
+import { useForm, withAuthSync } from '../../utils';
 
 const initialValues = {
     oldPassword: '',
@@ -109,9 +109,8 @@ const ChangePasswordPage: I18nPage = () => {
     );
 };
 
-ChangePasswordPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePrivatePage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['change-password']) };
-};
+ChangePasswordPage.getInitialProps = (): I18nProps => ({
+    namespacesRequired: includeDefaultNamespaces(['change-password']),
+});
 
-export default compose(withApollo, withRedux)(ChangePasswordPage);
+export default compose(withAuthSync, withApollo, withRedux)(ChangePasswordPage);

@@ -2,19 +2,16 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
 import React from 'react';
-import { useApolloClient } from 'react-apollo';
-import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
-import { deAuthenticate } from '../../actions';
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useForm, usePrivatePage } from '../../utils';
+import { I18nPage, I18nProps } from '../../types';
+import { useAuth, useForm, withAuthSync } from '../../utils';
 
 const initialValues = {
     password: '',
@@ -27,10 +24,9 @@ export interface DeleteAccountFormValues {
 
 export const DeleteAccountPage: I18nPage = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<DeleteAccountFormValues>();
-    const dispatch = useDispatch();
-    const apolloClient = useApolloClient();
     const { t } = useTranslation();
     const confirm = useConfirm();
+    const { logout } = useAuth();
 
     const onCompleted = ({ deleteUser }: DeleteAccountMutation): void => {
         if (deleteUser) {
@@ -38,7 +34,7 @@ export const DeleteAccountPage: I18nPage = () => {
                 handleMutationErrors(deleteUser.errors);
             } else {
                 resetForm();
-                dispatch(deAuthenticate(apolloClient));
+                logout();
             }
         }
     };
@@ -91,9 +87,8 @@ export const DeleteAccountPage: I18nPage = () => {
     );
 };
 
-DeleteAccountPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePrivatePage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['delete-account']) };
-};
+DeleteAccountPage.getInitialProps = (): I18nProps => ({
+    namespacesRequired: includeDefaultNamespaces(['delete-account']),
+});
 
-export default compose(withApollo, withRedux)(DeleteAccountPage);
+export default compose(withAuthSync, withApollo, withRedux)(DeleteAccountPage);

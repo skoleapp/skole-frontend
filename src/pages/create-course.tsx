@@ -19,8 +19,8 @@ import { AutoCompleteField, FormLayout, FormSubmitSection } from '../components'
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useForm, usePrivatePage } from '../utils';
+import { I18nPage, I18nProps } from '../types';
+import { useForm, withAuthSync } from '../utils';
 
 interface CreateCourseFormValues {
     courseName: string;
@@ -138,9 +138,8 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
     );
 };
 
-CreateCoursePage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    await usePrivatePage(ctx);
-    return { namespacesRequired: includeDefaultNamespaces(['create-course']) };
-};
+CreateCoursePage.getInitialProps = async (): Promise<I18nProps> => ({
+    namespacesRequired: includeDefaultNamespaces(['create-course']),
+});
 
-export default compose(withRedux, withApollo)(CreateCoursePage);
+export default compose(withAuthSync, withRedux, withApollo)(CreateCoursePage);

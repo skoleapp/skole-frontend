@@ -24,7 +24,7 @@
     "subjects": "Oppiaineet",
     "resources": "Resurssit",
     "resource": "Resurssi",
-    "skoleTeam": "Skole tiimi",
+    "skoleTeam": "Skole-tiimi",
     "save": "Tallenna",
     "confirm": "Vahvista",
     "submit": "Lähetä",
@@ -35,7 +35,6 @@
     "creator": "Luoja",
     "country": "Maa",
     "city": "Kaupunki",
-    "downloads": "Lataukset",
     "download": "Lataa",
     "resourceType": "Resurssin tyyppi",
     "resourcePartType": "Resurssiosan tyyppi",
@@ -64,5 +63,6 @@
     "clickToView": "Klikkaa avataksesi!",
     "starred": "Tähdellä merkityt",
     "settings": "Asetukset",
-    "info": "Info"
+    "info": "Info",
+    "loading": "Ladataan..."
 }
