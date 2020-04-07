@@ -22,36 +22,35 @@ const StarredPage: I18nPage = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const { user } = useAuth();
+    const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
+    const starredResources = R.propOr([], 'starredResources', user) as ResourceObjectType[];
+    const commonPaginationProps = { titleRight: 'common:points' };
+
+    const {
+        renderTablePagination: renderStarredCoursesTablePagination,
+        paginatedItems: paginatedCourses,
+        renderNotFound: renderCoursesNotFound,
+        renderTableHead: renderCoursesTableHead,
+    } = useFrontendPagination({
+        ...commonPaginationProps,
+        items: starredCourses,
+        notFoundText: 'starred:noCourses',
+        titleLeft: 'common:name',
+    });
+
+    const {
+        renderTablePagination: renderStarredResourcesTablePagination,
+        paginatedItems: paginatedResources,
+        renderNotFound: renderResourcesNotFound,
+        renderTableHead: renderResourcesTableHead,
+    } = useFrontendPagination({
+        ...commonPaginationProps,
+        items: starredResources,
+        notFoundText: 'starred:noResources',
+        titleLeft: 'common:title',
+    });
 
     if (!!user) {
-        const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
-        const starredResources = R.propOr([], 'starredResources', user) as ResourceObjectType[];
-        const commonPaginationProps = { titleRight: 'common:points' };
-
-        const {
-            renderTablePagination: renderStarredCoursesTablePagination,
-            paginatedItems: paginatedCourses,
-            renderNotFound: renderCoursesNotFound,
-            renderTableHead: renderCoursesTableHead,
-        } = useFrontendPagination({
-            ...commonPaginationProps,
-            items: starredCourses,
-            notFoundText: 'starred:noCourses',
-            titleLeft: 'common:name',
-        });
-
-        const {
-            renderTablePagination: renderStarredResourcesTablePagination,
-            paginatedItems: paginatedResources,
-            renderNotFound: renderResourcesNotFound,
-            renderTableHead: renderResourcesTableHead,
-        } = useFrontendPagination({
-            ...commonPaginationProps,
-            items: starredResources,
-            notFoundText: 'starred:noResources',
-            titleLeft: 'common:title',
-        });
-
         const renderStarredCourses = !!starredCourses.length ? (
             <StyledTable disableBoxShadow>
                 <TableContainer>

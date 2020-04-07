@@ -1,10 +1,11 @@
-import { Box, CircularProgress } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { NEXT_PAGE, PREV_PAGE, resetEffect, SET_CENTER, setCurrentPage, setPages } from '../../actions';
 import { State } from '../../types';
+import { Loading } from './Loading';
 
 /* eslint-disable */
 interface Props {
@@ -262,16 +263,10 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         }
     }, []);
 
-    const renderLoading = pages.length === 0 && (
-        <Box position="absolute" display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
-            <CircularProgress color="primary" size={100} />
-        </Box>
-    );
-
     return (
         <StyledPDFViewer>
             <div id="pdf-container" ref={ref}>
-                {renderLoading}
+                {pages.length === 0 && <Loading />}
             </div>
         </StyledPDFViewer>
     );
@@ -283,7 +278,7 @@ const StyledPDFViewer = styled(Box)`
     flex: 1 1 auto;
 
     #pdf-container {
-        background-color: rgb(72, 76, 79,0.7);
+        background-color: rgb(72, 76, 79, 0.7);
         position: absolute;
         width: 100%;
         height: 100%;

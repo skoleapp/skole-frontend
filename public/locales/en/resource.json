@@ -1,8 +1,5 @@
 {
     "notFound": "Resource not found...",
     "deleteResource": "Delete resource",
-    "confirmDesc": "Are you sure you want to delete this resource?",
-    "loadingResource": "Loading Resource...",
-    "resourceError": "Error rendering resource.",
-    "resourceNotFound": "No resource found."
+    "confirmDesc": "Are you sure you want to delete this resource?"
 }

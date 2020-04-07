@@ -1,4 +1,3 @@
-export { getToken } from './getToken';
 export { menuItems } from './menuItems';
 export { redirect } from './redirect';
 export { withAuthSync, auth, useAuth } from './auth';

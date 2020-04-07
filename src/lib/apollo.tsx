@@ -5,19 +5,29 @@ import { ApolloLink, GraphQLRequest } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpConfig } from 'apollo-link-http-common';
 import { createUploadLink } from 'apollo-upload-client';
-import { IncomingMessage } from 'http';
 import fetch from 'isomorphic-unfetch';
+import cookie from 'js-cookie';
 import { NextPage } from 'next';
+import nextCookie from 'next-cookies';
 import Head from 'next/head';
 import React from 'react';
 import { WithApolloClient } from 'react-apollo';
 
 import { SkoleContext } from '../types';
-import { getToken } from '../utils';
 
 interface GetToken {
-    getToken: (req?: IncomingMessage) => string;
+    getToken: (ctx?: WithApolloClient<SkoleContext>) => string;
 }
+
+// Parse cookie either in the server or in the browser.
+export const getToken = (ctx?: WithApolloClient<SkoleContext>): string => {
+    if (!!ctx) {
+        const { token } = nextCookie(ctx);
+        return token || '';
+    } else {
+        return cookie.get('token') || '';
+    }
+};
 
 export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.Element => {
     let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
@@ -88,7 +98,7 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.El
             const { AppTree } = ctx;
             const apolloClient = ((ctx.apolloClient as ApolloClient<NormalizedCacheObject> | null) = initApolloClient(
                 {},
-                { getToken: () => getToken(ctx.req) },
+                { getToken: () => getToken(ctx) },
             ));
             const pageProps = PageComponent.getInitialProps ? await PageComponent.getInitialProps(ctx) : {};
 

@@ -15,7 +15,6 @@ import { CloudUploadOutlined, EditOutlined, SchoolOutlined, ScoreOutlined } from
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { compose } from 'redux';
 import styled from 'styled-components';
 

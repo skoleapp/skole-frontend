@@ -35,7 +35,6 @@
     "creator": "Skapare",
     "country": "Land",
     "city": "Stad",
-    "downloads": "Nedladdningar",
     "download": "Ladda ner",
     "resourceType": "Resurstyp",
     "resourcePartType": "Resursdeltyp",
@@ -64,5 +63,6 @@
     "clickToView": "Klicka för att se!",
     "starred": "Stjärnmärkta",
     "settings": "Inställningar",
-    "info": "Info"
+    "info": "Info",
+    "loading": "Laddning..."
 }
