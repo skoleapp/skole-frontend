@@ -613,7 +613,14 @@ export type RegisterMutation = (
     & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email'>
+      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+      & { starredCourses: Maybe<Array<Maybe<(
+        { __typename?: 'CourseObjectType' }
+        & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+      )>>>, starredResources: Maybe<Array<Maybe<(
+        { __typename?: 'ResourceObjectType' }
+        & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
+      )>>> }
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -634,7 +641,14 @@ export type LoginMutation = (
     & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'title' | 'bio' | 'avatar' | 'points' | 'created' | 'email'>
+      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+      & { starredCourses: Maybe<Array<Maybe<(
+        { __typename?: 'CourseObjectType' }
+        & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+      )>>>, starredResources: Maybe<Array<Maybe<(
+        { __typename?: 'ResourceObjectType' }
+        & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
+      )>>> }
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1215,12 +1229,27 @@ export const RegisterDocument = gql`
     token
     user {
       id
+      username
+      email
       title
       bio
       avatar
       points
+      courseCount
+      resourceCount
       created
-      email
+      starredCourses {
+        id
+        name
+        code
+        points
+      }
+      starredResources {
+        id
+        title
+        points
+        date
+      }
     }
     errors {
       field
@@ -1231,9 +1260,28 @@ export const RegisterDocument = gql`
     `;
 export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
-    export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
-      return ApolloReactHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
-    }
+/**
+ * __useRegisterMutation__
+ *
+ * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerMutation, { data, loading, error }] = useRegisterMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        return ApolloReactHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+      }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
@@ -1243,12 +1291,27 @@ export const LoginDocument = gql`
     token
     user {
       id
+      username
+      email
       title
       bio
       avatar
       points
+      courseCount
+      resourceCount
       created
-      email
+      starredCourses {
+        id
+        name
+        code
+        points
+      }
+      starredResources {
+        id
+        title
+        points
+        date
+      }
     }
     errors {
       field
@@ -1259,9 +1322,27 @@ export const LoginDocument = gql`
     `;
 export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
-    export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-      return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
-    }
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+      }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
@@ -1294,14 +1375,29 @@ export const UserMeDocument = gql`
 }
     `;
 
-    export function useUserMeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
-      return ApolloReactHooks.useQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, baseOptions);
-    }
-      export function useUserMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, baseOptions);
+/**
+ * __useUserMeQuery__
+ *
+ * To run a query within a React component, call `useUserMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserMeQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserMeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
+        return ApolloReactHooks.useQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, baseOptions);
       }
-
+export function useUserMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, baseOptions);
+        }
 export type UserMeQueryHookResult = ReturnType<typeof useUserMeQuery>;
+export type UserMeLazyQueryHookResult = ReturnType<typeof useUserMeLazyQuery>;
 export type UserMeQueryResult = ApolloReactCommon.QueryResult<UserMeQuery, UserMeQueryVariables>;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
@@ -1315,9 +1411,27 @@ export const ChangePasswordDocument = gql`
     `;
 export type ChangePasswordMutationFn = ApolloReactCommon.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
 
-    export function useChangePasswordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
-      return ApolloReactHooks.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, baseOptions);
-    }
+/**
+ * __useChangePasswordMutation__
+ *
+ * To run a mutation, you first call `useChangePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
+ *   variables: {
+ *      oldPassword: // value for 'oldPassword'
+ *      newPassword: // value for 'newPassword'
+ *   },
+ * });
+ */
+export function useChangePasswordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, baseOptions);
+      }
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = ApolloReactCommon.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
@@ -1333,9 +1447,26 @@ export const DeleteAccountDocument = gql`
     `;
 export type DeleteAccountMutationFn = ApolloReactCommon.MutationFunction<DeleteAccountMutation, DeleteAccountMutationVariables>;
 
-    export function useDeleteAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteAccountMutation, DeleteAccountMutationVariables>) {
-      return ApolloReactHooks.useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(DeleteAccountDocument, baseOptions);
-    }
+/**
+ * __useDeleteAccountMutation__
+ *
+ * To run a mutation, you first call `useDeleteAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAccountMutation, { data, loading, error }] = useDeleteAccountMutation({
+ *   variables: {
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useDeleteAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteAccountMutation, DeleteAccountMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(DeleteAccountDocument, baseOptions);
+      }
 export type DeleteAccountMutationHookResult = ReturnType<typeof useDeleteAccountMutation>;
 export type DeleteAccountMutationResult = ApolloReactCommon.MutationResult<DeleteAccountMutation>;
 export type DeleteAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteAccountMutation, DeleteAccountMutationVariables>;
@@ -1386,9 +1517,30 @@ export const CreateCommentDocument = gql`
     `;
 export type CreateCommentMutationFn = ApolloReactCommon.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
 
-    export function useCreateCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
-      return ApolloReactHooks.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, baseOptions);
-    }
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *      attachment: // value for 'attachment'
+ *      course: // value for 'course'
+ *      resource: // value for 'resource'
+ *      comment: // value for 'comment'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, baseOptions);
+      }
 export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
 export type CreateCommentMutationResult = ApolloReactCommon.MutationResult<CreateCommentMutation>;
 export type CreateCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
@@ -1405,9 +1557,26 @@ export const DeleteCommentDocument = gql`
     `;
 export type DeleteCommentMutationFn = ApolloReactCommon.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
 
-    export function useDeleteCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
-      return ApolloReactHooks.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, baseOptions);
-    }
+/**
+ * __useDeleteCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, baseOptions);
+      }
 export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
 export type DeleteCommentMutationResult = ApolloReactCommon.MutationResult<DeleteCommentMutation>;
 export type DeleteCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
@@ -1420,14 +1589,29 @@ export const SchoolsDocument = gql`
 }
     `;
 
-    export function useSchoolsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
-      return ApolloReactHooks.useQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
-    }
-      export function useSchoolsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+/**
+ * __useSchoolsQuery__
+ *
+ * To run a query within a React component, call `useSchoolsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchoolsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchoolsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSchoolsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
       }
-
+export function useSchoolsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+        }
 export type SchoolsQueryHookResult = ReturnType<typeof useSchoolsQuery>;
+export type SchoolsLazyQueryHookResult = ReturnType<typeof useSchoolsLazyQuery>;
 export type SchoolsQueryResult = ApolloReactCommon.QueryResult<SchoolsQuery, SchoolsQueryVariables>;
 export const SchoolTypesDocument = gql`
     query SchoolTypes {
@@ -1438,14 +1622,29 @@ export const SchoolTypesDocument = gql`
 }
     `;
 
-    export function useSchoolTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
-      return ApolloReactHooks.useQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
-    }
-      export function useSchoolTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
+/**
+ * __useSchoolTypesQuery__
+ *
+ * To run a query within a React component, call `useSchoolTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchoolTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchoolTypesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSchoolTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
       }
-
+export function useSchoolTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
+        }
 export type SchoolTypesQueryHookResult = ReturnType<typeof useSchoolTypesQuery>;
+export type SchoolTypesLazyQueryHookResult = ReturnType<typeof useSchoolTypesLazyQuery>;
 export type SchoolTypesQueryResult = ApolloReactCommon.QueryResult<SchoolTypesQuery, SchoolTypesQueryVariables>;
 export const CoursesDocument = gql`
     query Courses {
@@ -1456,14 +1655,29 @@ export const CoursesDocument = gql`
 }
     `;
 
-    export function useCoursesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
-      return ApolloReactHooks.useQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
-    }
-      export function useCoursesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
+/**
+ * __useCoursesQuery__
+ *
+ * To run a query within a React component, call `useCoursesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCoursesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCoursesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCoursesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
+        return ApolloReactHooks.useQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
       }
-
+export function useCoursesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
+        }
 export type CoursesQueryHookResult = ReturnType<typeof useCoursesQuery>;
+export type CoursesLazyQueryHookResult = ReturnType<typeof useCoursesLazyQuery>;
 export type CoursesQueryResult = ApolloReactCommon.QueryResult<CoursesQuery, CoursesQueryVariables>;
 export const SubjectsDocument = gql`
     query Subjects {
@@ -1474,14 +1688,29 @@ export const SubjectsDocument = gql`
 }
     `;
 
-    export function useSubjectsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
-      return ApolloReactHooks.useQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
-    }
-      export function useSubjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
+/**
+ * __useSubjectsQuery__
+ *
+ * To run a query within a React component, call `useSubjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSubjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSubjectsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSubjectsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
+        return ApolloReactHooks.useQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
       }
-
+export function useSubjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
+        }
 export type SubjectsQueryHookResult = ReturnType<typeof useSubjectsQuery>;
+export type SubjectsLazyQueryHookResult = ReturnType<typeof useSubjectsLazyQuery>;
 export type SubjectsQueryResult = ApolloReactCommon.QueryResult<SubjectsQuery, SubjectsQueryVariables>;
 export const CountriesDocument = gql`
     query Countries {
@@ -1492,14 +1721,29 @@ export const CountriesDocument = gql`
 }
     `;
 
-    export function useCountriesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
-      return ApolloReactHooks.useQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
-    }
-      export function useCountriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
+/**
+ * __useCountriesQuery__
+ *
+ * To run a query within a React component, call `useCountriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCountriesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCountriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCountriesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
+        return ApolloReactHooks.useQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
       }
-
+export function useCountriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
+        }
 export type CountriesQueryHookResult = ReturnType<typeof useCountriesQuery>;
+export type CountriesLazyQueryHookResult = ReturnType<typeof useCountriesLazyQuery>;
 export type CountriesQueryResult = ApolloReactCommon.QueryResult<CountriesQuery, CountriesQueryVariables>;
 export const CitiesDocument = gql`
     query Cities {
@@ -1510,14 +1754,29 @@ export const CitiesDocument = gql`
 }
     `;
 
-    export function useCitiesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
-      return ApolloReactHooks.useQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
-    }
-      export function useCitiesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
+/**
+ * __useCitiesQuery__
+ *
+ * To run a query within a React component, call `useCitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCitiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCitiesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
+        return ApolloReactHooks.useQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
       }
-
+export function useCitiesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
+        }
 export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
+export type CitiesLazyQueryHookResult = ReturnType<typeof useCitiesLazyQuery>;
 export type CitiesQueryResult = ApolloReactCommon.QueryResult<CitiesQuery, CitiesQueryVariables>;
 export const ResourceTypesDocument = gql`
     query ResourceTypes {
@@ -1528,14 +1787,29 @@ export const ResourceTypesDocument = gql`
 }
     `;
 
-    export function useResourceTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
-      return ApolloReactHooks.useQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
-    }
-      export function useResourceTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+/**
+ * __useResourceTypesQuery__
+ *
+ * To run a query within a React component, call `useResourceTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useResourceTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useResourceTypesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useResourceTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
+        return ApolloReactHooks.useQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
       }
-
+export function useResourceTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+        }
 export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQuery>;
+export type ResourceTypesLazyQueryHookResult = ReturnType<typeof useResourceTypesLazyQuery>;
 export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
 export const ContactDocument = gql`
     mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
@@ -1550,9 +1824,29 @@ export const ContactDocument = gql`
     `;
 export type ContactMutationFn = ApolloReactCommon.MutationFunction<ContactMutation, ContactMutationVariables>;
 
-    export function useContactMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ContactMutation, ContactMutationVariables>) {
-      return ApolloReactHooks.useMutation<ContactMutation, ContactMutationVariables>(ContactDocument, baseOptions);
-    }
+/**
+ * __useContactMutation__
+ *
+ * To run a mutation, you first call `useContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [contactMutation, { data, loading, error }] = useContactMutation({
+ *   variables: {
+ *      subject: // value for 'subject'
+ *      name: // value for 'name'
+ *      email: // value for 'email'
+ *      message: // value for 'message'
+ *   },
+ * });
+ */
+export function useContactMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ContactMutation, ContactMutationVariables>) {
+        return ApolloReactHooks.useMutation<ContactMutation, ContactMutationVariables>(ContactDocument, baseOptions);
+      }
 export type ContactMutationHookResult = ReturnType<typeof useContactMutation>;
 export type ContactMutationResult = ApolloReactCommon.MutationResult<ContactMutation>;
 export type ContactMutationOptions = ApolloReactCommon.BaseMutationOptions<ContactMutation, ContactMutationVariables>;
@@ -1628,14 +1922,30 @@ export const CourseDetailDocument = gql`
 }
     `;
 
-    export function useCourseDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
-      return ApolloReactHooks.useQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
-    }
-      export function useCourseDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
+/**
+ * __useCourseDetailQuery__
+ *
+ * To run a query within a React component, call `useCourseDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCourseDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCourseDetailQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCourseDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
+        return ApolloReactHooks.useQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
       }
-
+export function useCourseDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
+        }
 export type CourseDetailQueryHookResult = ReturnType<typeof useCourseDetailQuery>;
+export type CourseDetailLazyQueryHookResult = ReturnType<typeof useCourseDetailLazyQuery>;
 export type CourseDetailQueryResult = ApolloReactCommon.QueryResult<CourseDetailQuery, CourseDetailQueryVariables>;
 export const DeleteCourseDocument = gql`
     mutation DeleteCourse($id: ID) {
@@ -1650,9 +1960,26 @@ export const DeleteCourseDocument = gql`
     `;
 export type DeleteCourseMutationFn = ApolloReactCommon.MutationFunction<DeleteCourseMutation, DeleteCourseMutationVariables>;
 
-    export function useDeleteCourseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCourseMutation, DeleteCourseMutationVariables>) {
-      return ApolloReactHooks.useMutation<DeleteCourseMutation, DeleteCourseMutationVariables>(DeleteCourseDocument, baseOptions);
-    }
+/**
+ * __useDeleteCourseMutation__
+ *
+ * To run a mutation, you first call `useDeleteCourseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCourseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCourseMutation, { data, loading, error }] = useDeleteCourseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCourseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCourseMutation, DeleteCourseMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteCourseMutation, DeleteCourseMutationVariables>(DeleteCourseDocument, baseOptions);
+      }
 export type DeleteCourseMutationHookResult = ReturnType<typeof useDeleteCourseMutation>;
 export type DeleteCourseMutationResult = ApolloReactCommon.MutationResult<DeleteCourseMutation>;
 export type DeleteCourseMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCourseMutation, DeleteCourseMutationVariables>;
@@ -1671,9 +1998,29 @@ export const CreateCourseDocument = gql`
     `;
 export type CreateCourseMutationFn = ApolloReactCommon.MutationFunction<CreateCourseMutation, CreateCourseMutationVariables>;
 
-    export function useCreateCourseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCourseMutation, CreateCourseMutationVariables>) {
-      return ApolloReactHooks.useMutation<CreateCourseMutation, CreateCourseMutationVariables>(CreateCourseDocument, baseOptions);
-    }
+/**
+ * __useCreateCourseMutation__
+ *
+ * To run a mutation, you first call `useCreateCourseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCourseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCourseMutation, { data, loading, error }] = useCreateCourseMutation({
+ *   variables: {
+ *      courseName: // value for 'courseName'
+ *      courseCode: // value for 'courseCode'
+ *      subject: // value for 'subject'
+ *      school: // value for 'school'
+ *   },
+ * });
+ */
+export function useCreateCourseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCourseMutation, CreateCourseMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateCourseMutation, CreateCourseMutationVariables>(CreateCourseDocument, baseOptions);
+      }
 export type CreateCourseMutationHookResult = ReturnType<typeof useCreateCourseMutation>;
 export type CreateCourseMutationResult = ApolloReactCommon.MutationResult<CreateCourseMutation>;
 export type CreateCourseMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCourseMutation, CreateCourseMutationVariables>;
@@ -1686,14 +2033,30 @@ export const CreateResourceInitialDataDocument = gql`
 }
     `;
 
-    export function useCreateResourceInitialDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
-      return ApolloReactHooks.useQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
-    }
-      export function useCreateResourceInitialDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
+/**
+ * __useCreateResourceInitialDataQuery__
+ *
+ * To run a query within a React component, call `useCreateResourceInitialDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreateResourceInitialDataQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreateResourceInitialDataQuery({
+ *   variables: {
+ *      course: // value for 'course'
+ *   },
+ * });
+ */
+export function useCreateResourceInitialDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
+        return ApolloReactHooks.useQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
       }
-
+export function useCreateResourceInitialDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
+        }
 export type CreateResourceInitialDataQueryHookResult = ReturnType<typeof useCreateResourceInitialDataQuery>;
+export type CreateResourceInitialDataLazyQueryHookResult = ReturnType<typeof useCreateResourceInitialDataLazyQuery>;
 export type CreateResourceInitialDataQueryResult = ApolloReactCommon.QueryResult<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>;
 export const CreateResourceDocument = gql`
     mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
@@ -1710,9 +2073,29 @@ export const CreateResourceDocument = gql`
     `;
 export type CreateResourceMutationFn = ApolloReactCommon.MutationFunction<CreateResourceMutation, CreateResourceMutationVariables>;
 
-    export function useCreateResourceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateResourceMutation, CreateResourceMutationVariables>) {
-      return ApolloReactHooks.useMutation<CreateResourceMutation, CreateResourceMutationVariables>(CreateResourceDocument, baseOptions);
-    }
+/**
+ * __useCreateResourceMutation__
+ *
+ * To run a mutation, you first call `useCreateResourceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateResourceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createResourceMutation, { data, loading, error }] = useCreateResourceMutation({
+ *   variables: {
+ *      resourceTitle: // value for 'resourceTitle'
+ *      resourceType: // value for 'resourceType'
+ *      course: // value for 'course'
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useCreateResourceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateResourceMutation, CreateResourceMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateResourceMutation, CreateResourceMutationVariables>(CreateResourceDocument, baseOptions);
+      }
 export type CreateResourceMutationHookResult = ReturnType<typeof useCreateResourceMutation>;
 export type CreateResourceMutationResult = ApolloReactCommon.MutationResult<CreateResourceMutation>;
 export type CreateResourceMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateResourceMutation, CreateResourceMutationVariables>;
@@ -1783,14 +2166,30 @@ export const ResourceDetailDocument = gql`
 }
     `;
 
-    export function useResourceDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
-      return ApolloReactHooks.useQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
-    }
-      export function useResourceDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
+/**
+ * __useResourceDetailQuery__
+ *
+ * To run a query within a React component, call `useResourceDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useResourceDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useResourceDetailQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useResourceDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
+        return ApolloReactHooks.useQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
       }
-
+export function useResourceDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
+        }
 export type ResourceDetailQueryHookResult = ReturnType<typeof useResourceDetailQuery>;
+export type ResourceDetailLazyQueryHookResult = ReturnType<typeof useResourceDetailLazyQuery>;
 export type ResourceDetailQueryResult = ApolloReactCommon.QueryResult<ResourceDetailQuery, ResourceDetailQueryVariables>;
 export const DeleteResourceDocument = gql`
     mutation DeleteResource($id: ID) {
@@ -1805,9 +2204,26 @@ export const DeleteResourceDocument = gql`
     `;
 export type DeleteResourceMutationFn = ApolloReactCommon.MutationFunction<DeleteResourceMutation, DeleteResourceMutationVariables>;
 
-    export function useDeleteResourceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteResourceMutation, DeleteResourceMutationVariables>) {
-      return ApolloReactHooks.useMutation<DeleteResourceMutation, DeleteResourceMutationVariables>(DeleteResourceDocument, baseOptions);
-    }
+/**
+ * __useDeleteResourceMutation__
+ *
+ * To run a mutation, you first call `useDeleteResourceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteResourceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteResourceMutation, { data, loading, error }] = useDeleteResourceMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteResourceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteResourceMutation, DeleteResourceMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteResourceMutation, DeleteResourceMutationVariables>(DeleteResourceDocument, baseOptions);
+      }
 export type DeleteResourceMutationHookResult = ReturnType<typeof useDeleteResourceMutation>;
 export type DeleteResourceMutationResult = ApolloReactCommon.MutationResult<DeleteResourceMutation>;
 export type DeleteResourceMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteResourceMutation, DeleteResourceMutationVariables>;
@@ -1835,14 +2251,30 @@ export const SchoolDetailDocument = gql`
 }
     `;
 
-    export function useSchoolDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
-      return ApolloReactHooks.useQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
-    }
-      export function useSchoolDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
+/**
+ * __useSchoolDetailQuery__
+ *
+ * To run a query within a React component, call `useSchoolDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchoolDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchoolDetailQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSchoolDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
       }
-
+export function useSchoolDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
+        }
 export type SchoolDetailQueryHookResult = ReturnType<typeof useSchoolDetailQuery>;
+export type SchoolDetailLazyQueryHookResult = ReturnType<typeof useSchoolDetailLazyQuery>;
 export type SchoolDetailQueryResult = ApolloReactCommon.QueryResult<SchoolDetailQuery, SchoolDetailQueryVariables>;
 export const SearchCoursesDocument = gql`
     query SearchCourses($courseName: String, $courseCode: String, $school: ID, $subject: ID, $schoolType: ID, $country: ID, $city: ID, $ordering: String, $page: Int, $pageSize: Int) {
@@ -1882,14 +2314,39 @@ export const SearchCoursesDocument = gql`
 }
     `;
 
-    export function useSearchCoursesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchCoursesQuery, SearchCoursesQueryVariables>) {
-      return ApolloReactHooks.useQuery<SearchCoursesQuery, SearchCoursesQueryVariables>(SearchCoursesDocument, baseOptions);
-    }
-      export function useSearchCoursesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchCoursesQuery, SearchCoursesQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<SearchCoursesQuery, SearchCoursesQueryVariables>(SearchCoursesDocument, baseOptions);
+/**
+ * __useSearchCoursesQuery__
+ *
+ * To run a query within a React component, call `useSearchCoursesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCoursesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchCoursesQuery({
+ *   variables: {
+ *      courseName: // value for 'courseName'
+ *      courseCode: // value for 'courseCode'
+ *      school: // value for 'school'
+ *      subject: // value for 'subject'
+ *      schoolType: // value for 'schoolType'
+ *      country: // value for 'country'
+ *      city: // value for 'city'
+ *      ordering: // value for 'ordering'
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useSearchCoursesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchCoursesQuery, SearchCoursesQueryVariables>) {
+        return ApolloReactHooks.useQuery<SearchCoursesQuery, SearchCoursesQueryVariables>(SearchCoursesDocument, baseOptions);
       }
-
+export function useSearchCoursesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchCoursesQuery, SearchCoursesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SearchCoursesQuery, SearchCoursesQueryVariables>(SearchCoursesDocument, baseOptions);
+        }
 export type SearchCoursesQueryHookResult = ReturnType<typeof useSearchCoursesQuery>;
+export type SearchCoursesLazyQueryHookResult = ReturnType<typeof useSearchCoursesLazyQuery>;
 export type SearchCoursesQueryResult = ApolloReactCommon.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
 export const PerformStarDocument = gql`
     mutation PerformStar($course: ID, $resource: ID) {
@@ -1904,9 +2361,27 @@ export const PerformStarDocument = gql`
     `;
 export type PerformStarMutationFn = ApolloReactCommon.MutationFunction<PerformStarMutation, PerformStarMutationVariables>;
 
-    export function usePerformStarMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PerformStarMutation, PerformStarMutationVariables>) {
-      return ApolloReactHooks.useMutation<PerformStarMutation, PerformStarMutationVariables>(PerformStarDocument, baseOptions);
-    }
+/**
+ * __usePerformStarMutation__
+ *
+ * To run a mutation, you first call `usePerformStarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePerformStarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [performStarMutation, { data, loading, error }] = usePerformStarMutation({
+ *   variables: {
+ *      course: // value for 'course'
+ *      resource: // value for 'resource'
+ *   },
+ * });
+ */
+export function usePerformStarMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PerformStarMutation, PerformStarMutationVariables>) {
+        return ApolloReactHooks.useMutation<PerformStarMutation, PerformStarMutationVariables>(PerformStarDocument, baseOptions);
+      }
 export type PerformStarMutationHookResult = ReturnType<typeof usePerformStarMutation>;
 export type PerformStarMutationResult = ApolloReactCommon.MutationResult<PerformStarMutation>;
 export type PerformStarMutationOptions = ApolloReactCommon.BaseMutationOptions<PerformStarMutation, PerformStarMutationVariables>;
@@ -1928,14 +2403,33 @@ export const UsersDocument = gql`
 }
     `;
 
-    export function useUsersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
-      return ApolloReactHooks.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
-    }
-      export function useUsersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
+/**
+ * __useUsersQuery__
+ *
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersQuery({
+ *   variables: {
+ *      username: // value for 'username'
+ *      ordering: // value for 'ordering'
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useUsersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+        return ApolloReactHooks.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
       }
-
+export function useUsersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
+        }
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = ApolloReactCommon.QueryResult<UsersQuery, UsersQueryVariables>;
 export const UserDetailDocument = gql`
     query UserDetail($id: ID) {
@@ -1966,14 +2460,30 @@ export const UserDetailDocument = gql`
 }
     `;
 
-    export function useUserDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
-      return ApolloReactHooks.useQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
-    }
-      export function useUserDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
-        return ApolloReactHooks.useLazyQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
+/**
+ * __useUserDetailQuery__
+ *
+ * To run a query within a React component, call `useUserDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserDetailQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
+        return ApolloReactHooks.useQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
       }
-
+export function useUserDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
+        }
 export type UserDetailQueryHookResult = ReturnType<typeof useUserDetailQuery>;
+export type UserDetailLazyQueryHookResult = ReturnType<typeof useUserDetailLazyQuery>;
 export type UserDetailQueryResult = ApolloReactCommon.QueryResult<UserDetailQuery, UserDetailQueryVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String) {
@@ -1997,9 +2507,30 @@ export const UpdateUserDocument = gql`
     `;
 export type UpdateUserMutationFn = ApolloReactCommon.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
-    export function useUpdateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
-      return ApolloReactHooks.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
-    }
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      email: // value for 'email'
+ *      title: // value for 'title'
+ *      bio: // value for 'bio'
+ *      avatar: // value for 'avatar'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+      }
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = ApolloReactCommon.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
@@ -2020,9 +2551,29 @@ export const PerformVoteDocument = gql`
     `;
 export type PerformVoteMutationFn = ApolloReactCommon.MutationFunction<PerformVoteMutation, PerformVoteMutationVariables>;
 
-    export function usePerformVoteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PerformVoteMutation, PerformVoteMutationVariables>) {
-      return ApolloReactHooks.useMutation<PerformVoteMutation, PerformVoteMutationVariables>(PerformVoteDocument, baseOptions);
-    }
+/**
+ * __usePerformVoteMutation__
+ *
+ * To run a mutation, you first call `usePerformVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePerformVoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [performVoteMutation, { data, loading, error }] = usePerformVoteMutation({
+ *   variables: {
+ *      status: // value for 'status'
+ *      comment: // value for 'comment'
+ *      course: // value for 'course'
+ *      resource: // value for 'resource'
+ *   },
+ * });
+ */
+export function usePerformVoteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PerformVoteMutation, PerformVoteMutationVariables>) {
+        return ApolloReactHooks.useMutation<PerformVoteMutation, PerformVoteMutationVariables>(PerformVoteDocument, baseOptions);
+      }
 export type PerformVoteMutationHookResult = ReturnType<typeof usePerformVoteMutation>;
 export type PerformVoteMutationResult = ApolloReactCommon.MutationResult<PerformVoteMutation>;
 export type PerformVoteMutationOptions = ApolloReactCommon.BaseMutationOptions<PerformVoteMutation, PerformVoteMutationVariables>;
