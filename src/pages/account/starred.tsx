@@ -52,28 +52,28 @@ const StarredPage: I18nPage = () => {
 
     if (!!user) {
         const renderStarredCourses = !!starredCourses.length ? (
-            <StyledTable disableBoxShadow>
+            <StyledTable>
                 <TableContainer>
-                    <Table stickyHeader>
+                    <Table>
                         {renderCoursesTableHead}
                         <CourseTableBody courses={paginatedCourses} />
+                        {renderStarredCoursesTablePagination}
                     </Table>
                 </TableContainer>
-                {renderStarredCoursesTablePagination}
             </StyledTable>
         ) : (
             renderCoursesNotFound
         );
 
         const renderStarredResources = !!starredResources.length ? (
-            <StyledTable disableBoxShadow>
+            <StyledTable>
                 <TableContainer>
                     <Table>
                         {renderResourcesTableHead}
                         <ResourceTableBody resources={paginatedResources} />
+                        {renderStarredResourcesTablePagination}
                     </Table>
                 </TableContainer>
-                {renderStarredResourcesTablePagination}
             </StyledTable>
         ) : (
             renderResourcesNotFound
@@ -108,7 +108,7 @@ const StarredPage: I18nPage = () => {
             />
         );
     } else {
-        return <NotFound title={t('error:notFound')} />;
+        return <NotFound title={t('_error:notFound')} />;
     }
 };
 

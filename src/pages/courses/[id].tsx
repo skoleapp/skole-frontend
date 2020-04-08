@@ -232,14 +232,14 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const renderResources = !!resources.length ? (
-            <StyledTable disableBoxShadow>
+            <StyledTable>
                 <TableContainer>
                     <Table>
                         {renderTableHead}
                         <ResourceTableBody resources={paginatedItems} />
+                        {renderTablePagination}
                     </Table>
                 </TableContainer>
-                {renderTablePagination}
             </StyledTable>
         ) : (
             renderNotFound

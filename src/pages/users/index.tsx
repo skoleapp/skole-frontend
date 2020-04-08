@@ -18,7 +18,7 @@ import React from 'react';
 import { compose } from 'redux';
 
 import { PaginatedUserObjectType, UserObjectType, UsersDocument } from '../../../generated/graphql';
-import { FilterLayout, FormSubmitSection, SelectField } from '../../components';
+import { FilterLayout, FormSubmitSection, SelectField, StyledTable } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -107,9 +107,9 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     );
 
     const renderTableContent = !!userObjects.length ? (
-        <>
+        <StyledTable>
             <TableContainer>
-                <Table stickyHeader>
+                <Table>
                     {renderTableHead}
                     <TableBody>
                         {userObjects.map((u: UserObjectType, i: number) => (
@@ -132,10 +132,10 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                             </Link>
                         ))}
                     </TableBody>
+                    {renderTablePagination}
                 </Table>
             </TableContainer>
-            {renderTablePagination}
-        </>
+        </StyledTable>
     ) : (
         renderNotFound
     );

@@ -63,7 +63,7 @@ export const FilterLayout: React.FC<Props> = ({
                 <StyledCard marginLeft>
                     <CardHeader subheader={t('common:searchResults')} />
                     <Divider />
-                    <StyledTable disableBoxShadow>{renderTableContent}</StyledTable>
+                    <StyledTable>{renderTableContent}</StyledTable>
                 </StyledCard>
             </Grid>
         </Grid>
