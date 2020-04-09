@@ -10,7 +10,6 @@ export const Loading: React.FC = () => {
         <Box
             position="absolute"
             display="flex"
-            flexGrow="1"
             alignItems="center"
             justifyContent="center"
             height="100%"
