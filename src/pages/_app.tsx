@@ -5,16 +5,22 @@ import 'ol/ol.css';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { ConfirmProvider } from 'material-ui-confirm';
+import { NextPage } from 'next';
 import NextApp from 'next/app';
 import { AppContextType } from 'next/dist/next-server/lib/utils';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
 
-import { appWithTranslation } from '../i18n';
+import { appWithTranslation, includeDefaultNamespaces } from '../i18n';
 import { GlobalStyle, theme } from '../styles';
 
-const SkoleApp = ({ Component, pageProps }): JSX.Element => {
+interface Props {
+    Component: NextPage;
+    pageProps: {};
+}
+
+const SkoleApp = ({ Component, pageProps }: Props): JSX.Element => {
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
 
@@ -40,7 +46,7 @@ const SkoleApp = ({ Component, pageProps }): JSX.Element => {
 
 SkoleApp.getInitialProps = async (ctx: AppContextType<Router>): Promise<{}> => {
     const pageProps = await NextApp.getInitialProps(ctx);
-    return { ...pageProps };
+    return { ...pageProps, namespaces: includeDefaultNamespaces([]) };
 };
 
 export default appWithTranslation(SkoleApp);
