@@ -1,9 +1,9 @@
 import { Box } from '@material-ui/core';
 import { Image as olImage, Map as olMap, View as olView } from 'ol';
-import { Coordinate } from 'ol/coordinate';
-import { Extent } from 'ol/extent';
-import { Group } from 'ol/layer';
-import { ProjectionLike } from 'ol/proj';
+import { Coordinate as olCoordinate } from 'ol/coordinate';
+import { Extent as olExtent } from 'ol/extent';
+import { Group as olGroup } from 'ol/layer';
+import { ProjectionLike as olProjection } from 'ol/proj';
 import { ImageStatic as olImageStatic } from 'ol/source';
 import PDFJS, { PDFDocumentProxy, PDFPageProxy, PDFPromise } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
@@ -18,8 +18,8 @@ interface Props {
     file: string;
 }
 export interface Page {
-    layer: Group;
-    imageExtent: Extent;
+    layer: olGroup;
+    imageExtent: olExtent;
 }
 export interface Pages {
     pages: Page[];
@@ -50,7 +50,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         setTouchEnd(endCoordX);
     };
 
-    const getCenter = (extent: Extent): Coordinate => {
+    const getCenter = (extent: olExtent): olCoordinate => {
         return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     };
 
@@ -105,9 +105,9 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                 const imageWidth = canvas.width;
                 const imageHeight = canvas.height;
 
-                const imageExtent: Extent = [0, 0, imageWidth, imageHeight];
+                const imageExtent: olExtent = [0, 0, imageWidth, imageHeight];
 
-                const projection: ProjectionLike = new Projection({
+                const projection: olProjection = new Projection({
                     code: 'pixel',
                     units: 'pixels',
                     extent: imageExtent,
@@ -124,7 +124,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                     source: source,
                 });
 
-                const layer: Group = new Group({
+                const layer: olGroup = new Group({
                     layers: [imageLayer],
                 });
 
@@ -182,12 +182,12 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         };
     }, [ref.current]);
 
-    const createMap = (imageExtent: Extent): olMap => {
+    const createMap = (imageExtent: olExtent): olMap => {
         const Map = require('ol/Map').default;
         const View = require('ol/View').default;
         const Projection = require('ol/proj/Projection').default;
 
-        const projection: ProjectionLike = new Projection({
+        const projection: olProjection = new Projection({
             code: 'pixel',
             units: 'pixels',
             extent: imageExtent,
