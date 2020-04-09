@@ -92,66 +92,70 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
 
     // Use Cloudmersive API to generate PDF from any commonly used file format.
     const generatePDFAndUpload = async ({ file, ...variables }: UploadResourceFormValues): Promise<void> => {
-        const body = new FormData();
-        body.append('file', file);
-        setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
+        if (!!file) {
+            const body = new FormData();
+            body.append('file', file);
+            setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
 
-        try {
-            const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
-                method: 'POST',
-                body,
-                headers: {
-                    Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
-                },
-            });
+            try {
+                const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
+                    method: 'POST',
+                    body,
+                    headers: {
+                        Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
+                    },
+                });
 
-            if (res.status === 200) {
-                const blob = await res.blob();
-                const pdf = new File([blob], 'resource.pdf');
-                handleUpload({ file: pdf, ...variables });
-            } else {
+                if (res.status === 200) {
+                    const blob = await res.blob();
+                    const pdf = new File([blob], 'resource.pdf');
+                    handleUpload({ file: pdf, ...variables });
+                } else {
+                    handleFileGenerationError();
+                }
+            } catch {
                 handleFileGenerationError();
             }
-        } catch {
-            handleFileGenerationError();
         }
     };
 
     const handleSubmit = async (variables: UploadResourceFormValues): Promise<void> => {
         const { file } = variables;
 
-        const imageTypes = [
-            'image/apng',
-            'image/bmp',
-            'image/gif',
-            'image/x-icon',
-            'image/jpeg',
-            'image/png',
-            'image/svg+xml',
-            'image/tiff',
-            'image/webp	',
-        ];
+        if (!!file) {
+            const imageTypes = [
+                'image/apng',
+                'image/bmp',
+                'image/gif',
+                'image/x-icon',
+                'image/jpeg',
+                'image/png',
+                'image/svg+xml',
+                'image/tiff',
+                'image/webp	',
+            ];
 
-        if (imageTypes.includes(file.type)) {
-            // File is image.
-            Resizer.imageFileResizer(
-                file,
-                1400,
-                1400,
-                'JPEG',
-                90,
-                0,
-                (file: File) => {
-                    generatePDFAndUpload({ ...variables, file });
-                },
-                'blob',
-            );
-        } else if (file.type !== 'application/pdf') {
-            // File is neither image not PDF.
-            generatePDFAndUpload(variables);
-        } else {
-            // File is PDF.
-            handleUpload(variables);
+            if (imageTypes.includes(file.type)) {
+                // File is image.
+                Resizer.imageFileResizer(
+                    file,
+                    1400,
+                    1400,
+                    'JPEG',
+                    90,
+                    0,
+                    (file: File) => {
+                        generatePDFAndUpload({ ...variables, file });
+                    },
+                    'blob',
+                );
+            } else if (file.type !== 'application/pdf') {
+                // File is neither image not PDF.
+                generatePDFAndUpload(variables);
+            } else {
+                // File is PDF.
+                handleUpload(variables);
+            }
         }
     };
 
