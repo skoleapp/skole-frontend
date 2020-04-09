@@ -1,4 +1,11 @@
 import { Box } from '@material-ui/core';
+import { Image as olImage, Map as olMap, View as olView } from 'ol';
+import { Coordinate } from 'ol/coordinate';
+import { Extent } from 'ol/extent';
+import { Group } from 'ol/layer';
+import { ProjectionLike } from 'ol/proj';
+import { ImageStatic as olImageStatic } from 'ol/source';
+import PDFJS, { PDFDocumentProxy, PDFPageProxy, PDFPromise } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -7,51 +14,30 @@ import { NEXT_PAGE, PREV_PAGE, resetEffect, SET_CENTER, setCurrentPage, setPages
 import { State } from '../../types';
 import { Loading } from './Loading';
 
-/* eslint-disable */
 interface Props {
     file: string;
 }
 export interface Page {
-    layer: object;
-    imageExtent: number[];
+    layer: Group;
+    imageExtent: Extent;
 }
 export interface Pages {
     pages: Page[];
 }
 
 export const PDFViewer: React.FC<Props> = ({ file }) => {
-    const [touchStart, setTouchStart]: any = useState(0);
+    const [touchStart, setTouchStart] = useState<number | null>(0);
     const [touchEnd, setTouchEnd] = useState(0);
     const [initialZoom, setInitialZoom] = useState(0);
 
-    const [currentMap, setCurrentMap]: any = useState(null);
+    const [currentMap, setCurrentMap] = useState<olMap | null>(null);
 
     const dispatch = useDispatch();
 
     const { pages, currentPage, effect } = useSelector((state: State) => state.resource);
+    const ref = useRef<HTMLDivElement | null>(null);
 
-    useEffect(() => {
-        switch (effect) {
-            case SET_CENTER:
-                setCenter();
-                dispatch(resetEffect());
-                break;
-            case PREV_PAGE:
-                previousPage();
-                dispatch(resetEffect());
-                break;
-            case NEXT_PAGE:
-                nextPage();
-                dispatch(resetEffect());
-                break;
-            default:
-                break;
-        }
-    }, [effect]);
-
-    const ref = useRef<HTMLDivElement>(null);
-
-    const handleTouchStart = (e: any): void => {
+    const handleTouchStart = (e: TouchEvent): void => {
         if (e.touches.length === 1) {
             const startCoordX = e.changedTouches[0].screenX;
             setTouchStart(startCoordX);
@@ -59,12 +45,12 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
             setTouchStart(null);
         }
     };
-    const handleTouchEnd = (e: any): void => {
+    const handleTouchEnd = (e: TouchEvent): void => {
         const endCoordX = e.changedTouches[0].screenX;
         setTouchEnd(endCoordX);
     };
 
-    const getCenter = (extent: any): any[] => {
+    const getCenter = (extent: Extent): Coordinate => {
         return [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     };
 
@@ -92,20 +78,22 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         }
     };
 
-    const createPagesFromPDF = (url: string): Promise<Page> => {
+    const createPagesFromPDF = (url: string): PDFPromise<PDFPromise<PDFPromise<Page>>[]> => {
         const Image = require('ol/layer/Image').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
         const Projection = require('ol/proj/Projection').default;
-        const PDFJS: any = require('pdfjs-dist');
-        const pdfjsWorker: any = require('pdfjs-dist/build/pdf.worker.entry');
         const Group = require('ol/layer/Group').default;
 
-        PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+        // TODO
+        //PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-        const renderPage = (page: any): any => {
+        const renderPage = (page: PDFPageProxy): PDFPromise<Page> => {
             const viewport = page.getViewport({ scale: 2 });
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
+            if (!ctx || !(ctx instanceof CanvasRenderingContext2D)) {
+                throw new Error('Failed to get 2D context');
+            }
             const renderContext = {
                 canvasContext: ctx,
                 viewport: viewport,
@@ -117,52 +105,52 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                 const imageWidth = canvas.width;
                 const imageHeight = canvas.height;
 
-                const imageExtent = [0, 0, imageWidth, imageHeight];
+                const imageExtent: Extent = [0, 0, imageWidth, imageHeight];
 
-                const projection = new Projection({
+                const projection: ProjectionLike = new Projection({
+                    code: 'pixel',
                     units: 'pixels',
                     extent: imageExtent,
                 });
 
-                const source = new ImageStatic({
-                    imageLoadFunction: (image: any): void => {
-                        image.getImage().src = canvas.toDataURL();
-                    },
+                const source: olImageStatic = new ImageStatic({
                     projection: projection,
                     imageExtent: imageExtent,
                     crossOrigin: 'anonymous',
+                    url: canvas.toDataURL(),
                 });
 
-                const layer = new Group({
-                    layers: [
-                        new Image({
-                            source: source,
-                        }),
-                    ],
+                const imageLayer: olImage = new Image({
+                    source: source,
+                });
+
+                const layer: Group = new Group({
+                    layers: [imageLayer],
                 });
 
                 if (page.pageIndex === 0) {
                     //
                 }
 
-                const mapData = { layer: layer, imageExtent: imageExtent };
+                const mapData: Page = { layer: layer, imageExtent: imageExtent };
 
                 return mapData;
             });
         };
-        const renderPages = (PDFJSPages: any): Promise<Page[]> => {
-            const promises: Page[] = [];
+        const renderPages = (PDFJSPages: PDFDocumentProxy): PDFPromise<PDFPromise<Page>>[] => {
+            const promises = [];
 
-            for (let num = 1; num <= PDFJSPages.numPages; num++) {
-                promises.push(PDFJSPages.getPage(num).then(renderPage));
+            for (let index = 1; index <= PDFJSPages.numPages; index++) {
+                const newPage = PDFJSPages.getPage(index).then(renderPage);
+
+                promises.push(newPage);
             }
 
-            return Promise.all(promises);
+            return promises;
         };
 
-        return PDFJS.getDocument(url).promise.then((PDFJSPages: any) => {
-            const promises = renderPages(PDFJSPages);
-            return promises;
+        return PDFJS.getDocument(url).promise.then((PDFJSPages: PDFDocumentProxy) => {
+            return renderPages(PDFJSPages);
         });
     };
 
@@ -194,58 +182,69 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         };
     }, [ref.current]);
 
-    const createMap = (imageExtent: number[]): any => {
+    const createMap = (imageExtent: Extent): olMap => {
         const Map = require('ol/Map').default;
         const View = require('ol/View').default;
         const Projection = require('ol/proj/Projection').default;
 
-        const projection = new Projection({
+        const projection: ProjectionLike = new Projection({
+            code: 'pixel',
             units: 'pixels',
             extent: imageExtent,
         });
 
-        const map = new Map({
-            view: new View({
-                projection: projection,
-                zoom: 0,
-                maxZoom: 4,
-                constrainResolution: false,
-                showFullExtent: true,
-                enableRotation: false,
-                extent: imageExtent,
-            }),
+        const view: olView = new View({
+            projection: projection,
+            zoom: 0,
+            maxZoom: 4,
+            constrainResolution: false,
+            showFullExtent: true,
+            enableRotation: false,
+            extent: imageExtent,
+        });
+
+        const map: olMap = new Map({
+            view: view,
             controls: [],
         });
+
         return map;
     };
 
     useEffect(() => {
         if (pages.length === 0) {
-            const maps: Promise<Page>[] = [];
             if (!!file) {
                 const url = file;
 
-                const pdfMaps = createPagesFromPDF(url);
-                maps.push(pdfMaps);
+                try {
+                    const pdfMaps = createPagesFromPDF(url);
 
-                Promise.all(maps).then((maps: any) => {
-                    const flatMaps = maps.flat();
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    pdfMaps.then((pdfMaps: any) => {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        Promise.all(pdfMaps).then((pdfMaps: any) => {
+                            const imageExtent = pdfMaps[0].imageExtent;
+                            const layer = pdfMaps[0].layer;
 
-                    const imageExtent = flatMaps[0].imageExtent;
-                    const layer = flatMaps[0].layer;
+                            const map = createMap(imageExtent);
+                            map.setLayerGroup(layer);
+                            if (!!ref.current) {
+                                map.setTarget(ref.current);
+                            }
 
-                    const map = createMap(imageExtent);
-                    map.setLayerGroup(layer);
-                    map.setTarget(ref.current);
-                    map.getView().setCenter(getCenter(flatMaps[0].imageExtent));
-                    map.getView().setZoom(0); //?
+                            map.getView().setCenter(getCenter(pdfMaps[0].imageExtent));
+                            map.getView().setZoom(0); //?
 
-                    const zoomLevel = map.getView().getZoom();
-                    setInitialZoom(zoomLevel);
-                    setCurrentMap(map);
+                            const zoomLevel = map.getView().getZoom();
+                            setInitialZoom(zoomLevel);
+                            setCurrentMap(map);
 
-                    dispatch(setPages(flatMaps));
-                });
+                            dispatch(setPages(pdfMaps));
+                        });
+                    });
+                } catch {
+                    (err: string): void => console.log(err);
+                }
             }
         } else {
             const imageExtent = pages[currentPage].imageExtent;
@@ -253,7 +252,9 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
 
             const map = createMap(imageExtent);
             map.setLayerGroup(layer);
-            map.setTarget(ref.current);
+            if (!!ref.current) {
+                map.setTarget(ref.current);
+            }
             map.getView().setCenter(getCenter(imageExtent));
             map.getView().setZoom(0); //?
 
@@ -262,6 +263,25 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
             setCurrentMap(map);
         }
     }, []);
+
+    useEffect(() => {
+        switch (effect) {
+            case SET_CENTER:
+                setCenter();
+                dispatch(resetEffect());
+                break;
+            case PREV_PAGE:
+                previousPage();
+                dispatch(resetEffect());
+                break;
+            case NEXT_PAGE:
+                nextPage();
+                dispatch(resetEffect());
+                break;
+            default:
+                break;
+        }
+    }, [effect]);
 
     return (
         <StyledPDFViewer>
@@ -286,3 +306,5 @@ const StyledPDFViewer = styled(Box)`
         overflow-x: auto;
     }
 `;
+
+export default PDFViewer;

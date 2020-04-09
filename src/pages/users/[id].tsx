@@ -34,7 +34,7 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { ButtonColor, ButtonVariant, I18nPage, I18nProps, SkoleContext, State } from '../../types';
+import { ButtonColor, ButtonVariant, I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 import { mediaURL } from '../../utils';
 
