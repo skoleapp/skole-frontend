@@ -3,8 +3,9 @@ import { NextPage, NextPageContext } from 'next';
 import nextCookie from 'next-cookies';
 import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useApolloClient } from 'react-apollo';
 
-import { UserObjectType } from '../../generated/graphql';
+import { UserMeDocument, UserObjectType } from '../../generated/graphql';
 import { SkoleContext } from '../types';
 
 interface UseAuth {
@@ -18,18 +19,36 @@ interface UseAuth {
 export const useAuth = (): UseAuth => {
     const [user, setUser] = useState<UserObjectType | null>(null);
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            setUser(JSON.parse(localStorage.getItem('user') || 'null'));
-            setLoading(false);
-        }
-    }, []);
+    const apolloClient = useApolloClient();
 
     const updateUser = (user: UserObjectType | null): void => {
         localStorage.setItem('user', JSON.stringify(user));
+        !!user && cookie.set('user-valid', 'true', { expires: (1 / 24) * (25 / 60) }); // ~ 25 minutes.
         setUser(user);
     };
+
+    const refreshUser = async (): Promise<void> => {
+        try {
+            const { data } = await apolloClient.query({ query: UserMeDocument });
+            updateUser(data.user);
+        } catch {
+            updateUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Periodically refresh user when loading pages.
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            if (!cookie.get('user-valid')) {
+                refreshUser();
+            } else {
+                setUser(JSON.parse(localStorage.getItem('user') || 'null'));
+                setLoading(false);
+            }
+        }
+    }, []);
 
     const login = (token: string, user: UserObjectType): void => {
         cookie.set('token', token, { expires: 1 });
