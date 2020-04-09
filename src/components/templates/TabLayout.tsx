@@ -4,12 +4,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
+import { breakpointsNum } from '../../styles';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
-import { useDrawer, useTabs, useBreakPoint } from '../../utils';
+import { useBreakPoint, useDrawer, useTabs } from '../../utils';
 import { StyledCard } from '../shared';
 import { StyledTabs } from '../shared/StyledTabs';
 import { MainLayout } from './MainLayout';
-import { breakpointsNum } from '../../styles';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
     renderOptions: JSX.Element;
