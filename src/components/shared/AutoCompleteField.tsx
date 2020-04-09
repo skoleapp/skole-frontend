@@ -38,7 +38,11 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
 
     const fetchOptions = async (): Promise<void> => {
         try {
-            const { data } = await apolloClient.query({ query: document });
+            const { data } = await apolloClient.query({
+                query: document,
+                fetchPolicy: 'network-only', // Don't use cache to fetch correct translations.
+            });
+
             data[dataKey] && setOptions(data[dataKey]);
         } catch {
             setOptions([]);
