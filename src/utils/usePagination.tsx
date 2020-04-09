@@ -3,6 +3,7 @@ import {
     CardContent,
     IconButton,
     TableCell,
+    TableFooter,
     TableHead,
     TablePagination,
     TableRow,
@@ -190,15 +191,19 @@ export const usePagination = ({
     const renderNotFound = <NotFound text={t(notFoundText)} />;
 
     const renderTablePagination = (
-        <TablePagination
-            {...commonTablePaginationProps}
-            count={count}
-            rowsPerPage={rowsPerPage}
-            page={page - 1}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            labelRowsPerPage={t('common:resultsPerPage')}
-        />
+        <TableFooter>
+            <TableRow>
+                <TablePagination
+                    {...commonTablePaginationProps}
+                    count={count}
+                    rowsPerPage={rowsPerPage}
+                    page={page - 1}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    labelRowsPerPage={t('common:resultsPerPage')}
+                />
+            </TableRow>
+        </TableFooter>
     );
 
     return { renderTablePagination, renderTableHead, getPaginationQuery, renderNotFound };
@@ -240,15 +245,19 @@ export const useFrontendPagination = <T extends {}>({
     const renderNotFound = <NotFound text={t(notFoundText)} />;
 
     const renderTablePagination = (
-        <TablePagination
-            {...commonTablePaginationProps}
-            count={items.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            labelRowsPerPage={t('common:resultsPerPage')}
-        />
+        <TableFooter>
+            <TableRow>
+                <TablePagination
+                    {...commonTablePaginationProps}
+                    count={items.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    labelRowsPerPage={t('common:resultsPerPage')}
+                />
+            </TableRow>
+        </TableFooter>
     );
 
     return { renderTablePagination, renderTableHead, paginatedItems, renderNotFound };

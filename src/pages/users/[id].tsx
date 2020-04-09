@@ -203,28 +203,28 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         const renderCreatedCourses = !!createdCourses.length ? (
-            <StyledTable disableBoxShadow>
+            <StyledTable>
                 <TableContainer>
-                    <Table stickyHeader>
+                    <Table>
                         {renderCoursesTableHead}
                         <CourseTableBody courses={paginatedCourses} />
+                        {renderCreatedCoursesTablePagination}
                     </Table>
                 </TableContainer>
-                {renderCreatedCoursesTablePagination}
             </StyledTable>
         ) : (
             renderCoursesNotFound
         );
 
         const renderCreatedResources = !!createdResources.length ? (
-            <StyledTable disableBoxShadow>
+            <StyledTable>
                 <TableContainer>
                     <Table>
                         {renderResourcesTableHead}
                         <ResourceTableBody resources={paginatedResources} />
+                        {renderCreatedResourcesTablePagination}
                     </Table>
                 </TableContainer>
-                {renderCreatedResourcesTablePagination}
             </StyledTable>
         ) : (
             renderResourcesNotFound

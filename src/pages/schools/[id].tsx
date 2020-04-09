@@ -169,7 +169,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
         };
 
         const renderSubjects = !!subjects.length ? (
-            <StyledTable disableBoxShadow>
+            <StyledTable>
                 <TableContainer>
                     <Table>
                         <TableBody>
@@ -183,23 +183,23 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
                                 </Link>
                             ))}
                         </TableBody>
+                        {renderSubjectsTablePagination}
                     </Table>
                 </TableContainer>
-                {renderSubjectsTablePagination}
             </StyledTable>
         ) : (
             subjectsNotFound
         );
 
         const renderCourses = !!courses.length ? (
-            <StyledTable disableBoxShadow>
+            <StyledTable>
                 <TableContainer>
                     <Table>
                         {renderCoursesTableHead}
                         <CourseTableBody courses={paginatedCourses} />
+                        {renderCoursesTablePagination}
                     </Table>
                 </TableContainer>
-                {renderCoursesTablePagination}
             </StyledTable>
         ) : (
             coursesNotFound

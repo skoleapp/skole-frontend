@@ -4,14 +4,14 @@ import NextDocument, { DocumentContext, Head, Main, NextScript } from 'next/docu
 import React, { Fragment } from 'react';
 import { ServerStyleSheet as StyledComponentSheets } from 'styled-components';
 
-const GAScript = {
-    __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){window.dataLayer.push(arguments)}
-        gtag("js", new Date());
-        gtag("config", "UA-159917631-1");
-    `,
-};
+// const GAScript = {
+//     __html: `
+//         window.dataLayer = window.dataLayer || [];
+//         function gtag(){window.dataLayer.push(arguments)}
+//         gtag("js", new Date());
+//         gtag("config", "UA-159917631-1");
+//     `,
+// };
 
 export default class SkoleDocument extends NextDocument {
     render(): JSX.Element {
@@ -79,8 +79,8 @@ export default class SkoleDocument extends NextDocument {
                         media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
                         rel="apple-touch-startup-image"
                     />
-                    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159917631-1"></script>
-                    <script dangerouslySetInnerHTML={GAScript} />
+                    {/* <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159917631-1"></script>
+                    <script dangerouslySetInnerHTML={GAScript} /> */}
                 </Head>
                 <body>
                     <Main />

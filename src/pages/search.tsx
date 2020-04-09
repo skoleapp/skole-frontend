@@ -191,15 +191,13 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
     );
 
     const renderTableContent = !!courseObjects.length ? (
-        <>
-            <TableContainer>
-                <Table stickyHeader>
-                    {renderTableHead}
-                    <CourseTableBody courses={courseObjects} />
-                </Table>
-            </TableContainer>
-            {renderTablePagination}
-        </>
+        <TableContainer>
+            <Table>
+                {renderTableHead}
+                <CourseTableBody courses={courseObjects} />
+                {renderTablePagination}
+            </Table>
+        </TableContainer>
     ) : (
         renderNotFound
     );
