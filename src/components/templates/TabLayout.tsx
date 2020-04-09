@@ -51,11 +51,13 @@ export const TabLayout: React.FC<Props> = ({
 }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
-    const { renderHeader: renderInfoHeader, ...infoDrawerProps } = useDrawer(t('common:info'));
-    const { handleOpen: handleOpenInfo } = infoDrawerProps;
     const { renderOptions, renderOptionsHeader, drawerProps: optionDrawerProps } = optionProps;
     const { handleOpen: handleOpenOptions } = optionDrawerProps;
     const isMobile = useBreakPoint(breakpointsNum.MD);
+
+    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(
+        t('common:info'),
+    );
 
     const renderCustomBottomNavbar =
         tabValue === 0 ? customBottomNavbar : customBottomNavbarSecondary || customBottomNavbar;

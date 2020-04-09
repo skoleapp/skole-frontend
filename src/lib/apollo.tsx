@@ -13,6 +13,7 @@ import Head from 'next/head';
 import React from 'react';
 import { WithApolloClient } from 'react-apollo';
 
+import { i18n } from '../i18n';
 import { SkoleContext } from '../types';
 
 interface GetToken {
@@ -48,7 +49,8 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.El
             return {
                 headers: {
                     ...headers,
-                    authorization: token ? `JWT ${token}` : '',
+                    Authorization: token ? `JWT ${token}` : '',
+                    'Accept-Language': i18n.language,
                 },
             };
         });
