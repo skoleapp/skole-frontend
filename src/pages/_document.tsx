@@ -18,17 +18,19 @@ export default class SkoleDocument extends NextDocument {
         return (
             <html lang="en">
                 <Head>
-                    <meta charSet="UTF-8" />
+                    <meta charSet="utf-8" />
+                    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
                     <meta
                         name="viewport"
-                        content="viewport-fit=cover, minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+                        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
                     />
+                    <meta name="apple-mobile-web-app-title" content="Skole" />
                     <meta name="apple-mobile-web-app-capable" content="yes" />
-                    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-                    <link rel="manifest" href="/manifest.json" />
+                    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
                     <link rel="shortcut icon" href="/images/favicon.ico" />
                     <link rel="apple-touch-icon" sizes="180x180" href="images/icons/icon-180x180.png" />
                     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ad3636" />
+                    <link rel="manifest" href="/manifest.json" />
                     <link
                         href="images/splashscreens/iphone5_splash.png"
                         media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
