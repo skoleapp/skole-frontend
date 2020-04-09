@@ -84,6 +84,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         const Projection = require('ol/proj/Projection').default;
         const Group = require('ol/layer/Group').default;
 
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const PDFJSWorker = require('pdfjs-dist/build/pdf.worker.min');
         PDFJS.GlobalWorkerOptions.workerSrc = PDFJSWorker;
 
@@ -211,69 +212,52 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         return map;
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const processPromises = (pages: Promise<Page>[] | Page[]): any => {
-        return new Promise(resolve => {
-            if (pages.length > 0) {
-                if (pages[0] instanceof Promise) {
-                    Promise.all(pages).then((pages: Page[]) => {
-                        dispatch(setPages(pages));
-                        resolve(pages);
-                    });
-                } else {
-                    resolve(pages);
-                }
-            }
-        });
-    };
-
     useEffect(() => {
         if (pages.length === 0) {
             if (!!file) {
                 const url = file;
-
                 try {
                     const pdfMaps = createPagesFromPDF(url);
-
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     pdfMaps.then((pdfMaps: any) => {
-                        pdfMaps[0].then((page: Page) => {
-                            const imageExtent = page.imageExtent;
-                            const layer = page.layer;
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        Promise.all(pdfMaps).then((pdfMaps: any) => {
+                            const imageExtent = pdfMaps[0].imageExtent;
+                            const layer = pdfMaps[0].layer;
 
                             const map = createMap(imageExtent);
                             map.setLayerGroup(layer);
                             if (!!ref.current) {
                                 map.setTarget(ref.current);
                             }
-                            map.getView().setCenter(getCenter(page.imageExtent));
+                            map.getView().setCenter(getCenter(pdfMaps[0].imageExtent));
+                            map.getView().setZoom(0); //?
                             setCurrentMap(map);
 
                             const zoomLevel = map.getView().getZoom();
                             setInitialZoom(zoomLevel);
+                            dispatch(setPages(pdfMaps));
                         });
-                        processPromises(pdfMaps);
                     });
                 } catch {
                     (err: string): void => console.log(err);
                 }
             }
         } else {
-            processPromises(pages).then((pages: Page[]) => {
-                const imageExtent = pages[currentPage].imageExtent;
-                const layer = pages[currentPage].layer;
+            const imageExtent = pages[currentPage].imageExtent;
+            const layer = pages[currentPage].layer;
 
-                const map = createMap(imageExtent);
-                map.setLayerGroup(layer);
-                if (!!ref.current) {
-                    map.setTarget(ref.current);
-                }
-                map.getView().setCenter(getCenter(imageExtent));
-                setCurrentMap(map);
+            const map = createMap(imageExtent);
+            map.setLayerGroup(layer);
+            if (!!ref.current) {
+                map.setTarget(ref.current);
+            }
+            map.getView().setCenter(getCenter(imageExtent));
+            map.getView().setZoom(0); //?
+            setCurrentMap(map);
 
-                const zoomLevel = map.getView().getZoom();
-                setInitialZoom(zoomLevel);
-            });
+            const zoomLevel = map.getView().getZoom();
+            setInitialZoom(zoomLevel);
         }
     }, []);
 
