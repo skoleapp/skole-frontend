@@ -78,7 +78,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         }
     };
 
-    if (course) {
+    if (!!course) {
         const fullName = getFullCourseName(course);
         const subjectName = R.propOr('-', 'name', course.subject) as string;
         const schoolName = R.propOr('-', 'name', course.school) as string;
