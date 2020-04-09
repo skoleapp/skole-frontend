@@ -30,7 +30,7 @@ export const useAuth = (): UseAuth => {
     const refreshUser = async (): Promise<void> => {
         try {
             const { data } = await apolloClient.query({ query: UserMeDocument });
-            updateUser(data.user);
+            updateUser(data.userMe);
         } catch {
             updateUser(null);
         } finally {
