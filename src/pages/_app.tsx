@@ -14,6 +14,15 @@ import React, { useEffect } from 'react';
 
 import { appWithTranslation, includeDefaultNamespaces } from '../i18n';
 import { GlobalStyle, theme } from '../styles';
+import { pageView } from 'src/lib';
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeError', () => NProgress.done());
+
+Router.events.on('routeChangeComplete', (url: string) => {
+    NProgress.done();
+    pageView(url);
+});
 
 interface Props {
     Component: NextPage;
@@ -28,10 +37,6 @@ const SkoleApp = ({ Component, pageProps }: Props): JSX.Element => {
             jssStyles.parentNode.removeChild(jssStyles);
         }
     }, []);
-
-    Router.events.on('routeChangeStart', () => NProgress.start());
-    Router.events.on('routeChangeError', () => NProgress.done());
-    Router.events.on('routeChangeComplete', () => NProgress.done());
 
     return (
         <ThemeProvider theme={theme}>

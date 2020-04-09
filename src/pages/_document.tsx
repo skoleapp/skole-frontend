@@ -1,22 +1,30 @@
 import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/styles';
 import { DocumentInitialProps, RenderPageResult } from 'next/dist/next-server/lib/utils';
-import NextDocument, { DocumentContext, Head, Main, NextScript } from 'next/document';
+import NextDocument, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 import React, { Fragment } from 'react';
+import { GA_TRACKING_ID } from 'src/lib';
 import { ServerStyleSheet as StyledComponentSheets } from 'styled-components';
 
-// const GAScript = {
-//     __html: `
-//         window.dataLayer = window.dataLayer || [];
-//         function gtag(){window.dataLayer.push(arguments)}
-//         gtag("js", new Date());
-//         gtag("config", "UA-159917631-1");
-//     `,
-// };
+const GAScript = {
+    __html: `
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        };
+
+        gtag('js', new Date());
+
+        gtag('config', '${GA_TRACKING_ID}', {
+            page_path: window.location.pathname,
+        });
+    `,
+};
 
 export default class SkoleDocument extends NextDocument {
     render(): JSX.Element {
         return (
-            <html lang="en">
+            <Html>
                 <Head>
                     <meta charSet="utf-8" />
                     <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -79,14 +87,14 @@ export default class SkoleDocument extends NextDocument {
                         media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
                         rel="apple-touch-startup-image"
                     />
-                    {/* <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159917631-1"></script>
-                    <script dangerouslySetInnerHTML={GAScript} /> */}
+                    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
+                    <script dangerouslySetInnerHTML={GAScript} />
                 </Head>
                 <body>
                     <Main />
                     <NextScript />
                 </body>
-            </html>
+            </Html>
         );
     }
 }
