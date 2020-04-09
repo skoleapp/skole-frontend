@@ -7,7 +7,15 @@ export const Loading: React.FC = () => {
     const { t } = useTranslation();
 
     return (
-        <Box display="flex" flexGrow="1" alignItems="center" justifyContent="center" height="100%" width="100%">
+        <Box
+            position="absolute"
+            display="flex"
+            flexGrow="1"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+            width="100%"
+        >
             <CircularProgress color="primary" />
             <Box marginLeft="1rem">
                 <Typography>{t('common:loading')}</Typography>
