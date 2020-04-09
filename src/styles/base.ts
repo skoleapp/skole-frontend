@@ -112,7 +112,7 @@ export const base = css`
         }
 
         .MuiDrawer-paperAnchorLeft {
-            width: 20rem;
+            min-width: 10rem;
         }
 
         .MuiDrawer-paperAnchorBottom {
