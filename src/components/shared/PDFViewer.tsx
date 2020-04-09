@@ -84,10 +84,6 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         const Projection = require('ol/proj/Projection').default;
         const Group = require('ol/layer/Group').default;
 
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const PDFJSWorker = require('pdfjs-dist/build/pdf.worker.min');
-        PDFJS.GlobalWorkerOptions.workerSrc = PDFJSWorker;
-
         const renderPage = (page: PDFPageProxy): PDFPromise<Page> => {
             const viewport = page.getViewport({ scale: 2 });
             const canvas = document.createElement('canvas');
