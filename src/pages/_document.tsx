@@ -20,13 +20,11 @@ export default class SkoleDocument extends NextDocument {
                 <Head>
                     <meta charSet="utf-8" />
                     <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-                    <meta
-                        name="viewport"
-                        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-                    />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+                    <meta name="theme-color" content="#ad3636" />
                     <meta name="apple-mobile-web-app-title" content="Skole" />
                     <meta name="apple-mobile-web-app-capable" content="yes" />
-                    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+                    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
                     <link rel="shortcut icon" href="/images/favicon.ico" />
                     <link rel="apple-touch-icon" sizes="180x180" href="images/icons/icon-180x180.png" />
                     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ad3636" />
