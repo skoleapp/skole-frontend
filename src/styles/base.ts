@@ -63,6 +63,10 @@ export const base = css`
             border-bottom: var(--border);
         }
 
+        .border-top {
+            border-top: var(--border);
+        }
+
         .main-avatar {
             height: 8rem;
             width: 8rem;

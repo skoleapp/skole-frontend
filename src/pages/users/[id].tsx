@@ -1,21 +1,10 @@
-import {
-    Avatar,
-    Box,
-    CardContent,
-    Grid,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Tab,
-    Table,
-    TableContainer,
-    Typography,
-} from '@material-ui/core';
-import { CloudUploadOutlined, EditOutlined, SchoolOutlined, ScoreOutlined } from '@material-ui/icons';
+import { Avatar, Box, CardContent, Grid, Tab, Table, TableContainer, Typography } from '@material-ui/core';
+import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
+import { breakpoints } from 'src/styles';
 import styled from 'styled-components';
 
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
@@ -27,7 +16,6 @@ import {
     ResourceTableBody,
     SettingsButton,
     StyledCard,
-    StyledList,
     StyledTable,
     StyledTabs,
 } from '../../components';
@@ -48,13 +36,12 @@ const UserPage: I18nPage<Props> = ({ user }) => {
 
     if (!!user) {
         const username = R.propOr('-', 'username', user) as string;
-        const email = R.propOr('-', 'email', user) as string;
-        const title = R.prop('title', user) as string;
         const avatar = R.prop('avatar', user) as string;
-        const bio = user.bio || '-';
-        const points = R.propOr('-', 'points', user);
-        const courseCount = R.propOr('-', 'courseCount', user);
-        const resourceCount = R.propOr('-', 'resourceCount', user);
+        const title = user.title || '';
+        const bio = user.bio || '';
+        const points = R.propOr('-', 'points', user) as string;
+        const courseCount = R.propOr('-', 'courseCount', user) as string;
+        const resourceCount = R.propOr('-', 'resourceCount', user) as string;
         const joined = moment(user.created).format('LL');
         const { user: loggedInUser } = useAuth();
         const isOwnProfile = user.id === R.propOr('', 'id', loggedInUser);
@@ -95,75 +82,87 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             endIcon: <EditOutlined />,
         };
 
-        const renderTopSection = (
-            <Grid className="border-bottom" container alignItems="center">
-                <Grid item container xs={12} sm={6} justify="center">
+        const renderTitle = !!title && <Typography variant="subtitle1">{title}</Typography>;
+        const renderCourseCountValue = <Typography variant="body1">{courseCount}</Typography>;
+        const renderResourceCountValue = <Typography variant="body1">{resourceCount}</Typography>;
+
+        const renderBio = !!bio && (
+            <Typography id="bio" variant="body2">
+                {bio}
+            </Typography>
+        );
+
+        const renderJoined = (
+            <Box marginTop="0.5rem">
+                <Typography className="section-help-text" variant="body2" color="textSecondary">
+                    {t('common:joined')} {joined}
+                </Typography>
+            </Box>
+        );
+
+        const renderAvatarCardContent = (
+            <CardContent>
+                <Box display="flex" flexDirection="column">
+                    <Avatar className="main-avatar" src={mediaURL(avatar)} />
+                    <Box className="sm-up" marginY="0.5rem">
+                        <Typography variant="subtitle1">{username}</Typography>
+                    </Box>
+                </Box>
+            </CardContent>
+        );
+
+        const renderPointsValue = <Typography variant="body1">{points}</Typography>;
+
+        const renderPointsTitle = (
+            <Typography className="section-help-text" variant="body2" color="textSecondary">
+                {t('profile:points')}
+            </Typography>
+        );
+
+        const renderCourseCountTitle = (
+            <Typography className="section-help-text" variant="body2" color="textSecondary">
+                {t('profile:courses')}
+            </Typography>
+        );
+
+        const renderResourceCountTitle = (
+            <Typography className="section-help-text" variant="body2" color="textSecondary">
+                {t('profile:resources')}
+            </Typography>
+        );
+
+        const renderMobileTopSection = (
+            <Grid container alignItems="center" className="sm-down">
+                <Grid item container xs={4}>
+                    {renderAvatarCardContent}
+                </Grid>
+                <Grid item container xs={8} direction="column">
                     <CardContent>
-                        <Box display="flex" flexDirection="column" alignItems="center">
-                            <Avatar className="main-avatar" src={mediaURL(avatar)} />
-                            <Box className="sm-up" marginY="0.5rem">
-                                <Typography variant="h2">{username}</Typography>
+                        <Box display="flex" justifyContent="space-around">
+                            <Box>
+                                {renderPointsValue}
+                                {renderPointsTitle}
                             </Box>
-                            {!!title && (
-                                <Box marginY="0.5rem">
-                                    <Typography variant="subtitle1" color="textSecondary">
-                                        {title}
-                                    </Typography>
-                                </Box>
-                            )}
+                            <Box margin="0 1rem">
+                                {renderCourseCountValue}
+                                {renderCourseCountTitle}
+                            </Box>
+                            <Box>
+                                {renderResourceCountValue}
+                                {renderResourceCountTitle}
+                            </Box>
                         </Box>
                     </CardContent>
                 </Grid>
-                <Grid item container xs={12} sm={6} direction="column">
-                    <Grid container alignItems="center" justify="center">
-                        <CardContent>
-                            <StyledList>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            <ScoreOutlined />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText>
-                                        {t('common:points')}: {points}
-                                    </ListItemText>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            <SchoolOutlined />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText>
-                                        {t('common:courses')}: {courseCount}
-                                    </ListItemText>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            <CloudUploadOutlined />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText>
-                                        {t('common:resources')}: {resourceCount}
-                                    </ListItemText>
-                                </ListItem>
-                            </StyledList>
-                        </CardContent>
-                    </Grid>
-                    {isOwnProfile && (
-                        <CardContent className="sm-up">
-                            <Grid container alignItems="center" justify="center">
-                                <ButtonLink {...editProfileButtonProps}>{t('profile:editProfile')}</ButtonLink>
-                                <Box marginLeft="0.5rem">
-                                    <SettingsButton color="primary" />
-                                </Box>
-                            </Grid>
-                        </CardContent>
-                    )}
-                </Grid>
+                <CardContent>
+                    <Box textAlign="left">
+                        {renderTitle}
+                        {renderBio}
+                        {renderJoined}
+                    </Box>
+                </CardContent>
                 {isOwnProfile && (
-                    <Grid className="sm-down" item xs={12}>
+                    <Grid item xs={12}>
                         <CardContent>
                             <ButtonLink {...editProfileButtonProps} fullWidth>
                                 {t('profile:editProfile')}
@@ -174,32 +173,47 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </Grid>
         );
 
-        const renderAccountInfo = (
-            <CardContent className="border-bottom">
-                <Box textAlign="left">
+        const renderDesktopTopSection = (
+            <Grid container alignItems="center" className="sm-up">
+                <Grid item container justify="center" xs={5}>
+                    {renderAvatarCardContent}
+                </Grid>
+                <Grid item container xs={7} direction="column" alignItems="flex-start">
                     {isOwnProfile && (
-                        <>
-                            <Typography className="section-help-text" variant="body2" color="textSecondary">
-                                {t('common:email')}
-                            </Typography>
-                            <Typography variant="body2">{email}</Typography>
-                        </>
+                        <CardContent>
+                            <Grid container alignItems="center" justify="center">
+                                <ButtonLink {...editProfileButtonProps}>{t('profile:editProfile')}</ButtonLink>
+                                <Box marginLeft="0.5rem">
+                                    <SettingsButton color="primary" />
+                                </Box>
+                            </Grid>
+                        </CardContent>
                     )}
-                    <Box marginTop="0.5rem">
-                        <Typography className="section-help-text" variant="body2" color="textSecondary">
-                            {t('common:bio')}
-                        </Typography>
-                        <Typography id="bio" variant="body2">
-                            {bio}
-                        </Typography>
-                    </Box>
-                    <Box marginTop="0.5rem">
-                        <Typography className="section-help-text" variant="body2" color="textSecondary">
-                            {t('common:joined')} {joined}
-                        </Typography>
-                    </Box>
-                </Box>
-            </CardContent>
+                    <CardContent>
+                        <Box display="flex">
+                            <Box display="flex" alignItems="center">
+                                {renderPointsValue}
+                                <Box marginLeft="0.25rem">{renderPointsTitle}</Box>
+                            </Box>
+                            <Box margin="0 1rem" display="flex" alignItems="center">
+                                {renderCourseCountValue}
+                                <Box marginLeft="0.25rem">{renderCourseCountTitle}</Box>
+                            </Box>
+                            <Box display="flex" alignItems="center">
+                                {renderResourceCountValue}
+                                <Box marginLeft="0.25rem">{renderResourceCountTitle}</Box>
+                            </Box>
+                        </Box>
+                    </CardContent>
+                    <CardContent>
+                        <Box textAlign="left">
+                            {renderTitle}
+                            {renderBio}
+                            {renderJoined}
+                        </Box>
+                    </CardContent>
+                </Grid>
+            </Grid>
         );
 
         const renderCreatedCourses = !!createdCourses.length ? (
@@ -231,7 +245,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         const renderTabs = (
-            <Box flexGrow="1" display="flex" flexDirection="column">
+            <Box flexGrow="1" display="flex" flexDirection="column" className="border-top">
                 <StyledTabs value={tabValue} onChange={handleTabChange}>
                     <Tab label={t('common:courses')} />
                     <Tab label={t('common:resources')} />
@@ -254,11 +268,12 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                 heading={username}
                 title={username}
                 headerRight={isOwnProfile ? <SettingsButton color="secondary" /> : undefined}
+                maxWidth="md"
                 dynamicBackUrl
             >
                 <StyledCard>
-                    {renderTopSection}
-                    {renderAccountInfo}
+                    {renderMobileTopSection}
+                    {renderDesktopTopSection}
                     {renderTabs}
                 </StyledCard>
             </StyledUserPage>
@@ -271,6 +286,14 @@ const UserPage: I18nPage<Props> = ({ user }) => {
 const StyledUserPage = styled(MainLayout)`
     .section-help-text {
         font-size: 0.75rem;
+    }
+
+    @media only screen and (max-width: ${breakpoints.SM}) {
+        .main-avatar {
+            width: 4rem;
+            height: 4rem;
+            margin: 0.5rem;
+        }
     }
 
     #bio {

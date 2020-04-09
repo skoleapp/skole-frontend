@@ -1,5 +1,8 @@
 {
     "title": "Profil",
+    "points": "poäng",
+    "courses": "kurser",
+    "resources": "resurser",
     "editProfile": "Redigera Profil",
     "noResources": "Inga uppladdade resurser...",
     "noCourses": "Inga tillagda kurser...",
