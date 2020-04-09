@@ -33,7 +33,6 @@ export const base = css`
     html,
     body {
         background-color: var(--primary) !important; // iOS header background color.
-        -webkit-overflow-scrolling: auto; // Disable over scrolling on iOS.
 
         .sm-down {
             @media only screen and (min-width: ${breakpoints.SM}) {
