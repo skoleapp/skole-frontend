@@ -12,7 +12,7 @@ import React from 'react';
 import { compose } from 'redux';
 import styled from 'styled-components';
 
-import { ButtonLink, IconButtonLink, MainLayout, SettingsButton } from '../components';
+import { ButtonLink, MainLayout } from '../components';
 import { Link, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -66,16 +66,8 @@ const IndexPage: I18nPage = () => {
         </form>
     );
 
-    const renderHeaderLeft = <IconButtonLink href="/upload-resource" icon={CloudUploadOutlined} color="secondary" />;
-    const renderHeaderRight = <SettingsButton color="secondary" />;
-
     return (
-        <StyledIndexPage
-            title={t('index:title')}
-            disableSearch
-            headerRight={renderHeaderRight}
-            headerLeft={renderHeaderLeft}
-        >
+        <StyledIndexPage title={t('index:title')} disableSearch>
             <Box className="slogan">
                 <Typography variant="h1">{t('index:slogan')}</Typography>
             </Box>

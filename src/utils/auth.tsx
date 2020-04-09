@@ -55,7 +55,7 @@ export const auth = (ctx: NextPageContext): string | undefined => {
             ctx.res?.writeHead(302, { Location: '/login' });
             ctx.res?.end();
         } else {
-            Router.push('/login');
+            Router.push({ pathname: '/login', query: { next: ctx.pathname } });
         }
     }
 
