@@ -7,8 +7,8 @@
     "author": "Skole Team",
     "scripts": {
         "dev": "nodemon",
-        "build": "NODE_OPTIONS=--max_old_space_size=2048 next build && tsc --project tsconfig.server.json",
-        "start": "NODE_ENV=production node build/src/server.js",
+        "build": "NODE_OPTIONS=--max_old_space_size=2048 next build && rimraf build && tsc --project tsconfig.server.json",
+        "start": "NODE_ENV=production node build/server.js",
         "type-check": "tsc",
         "gen": "gql-gen --config codegen.yml",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
