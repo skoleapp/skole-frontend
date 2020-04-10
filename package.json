@@ -56,7 +56,6 @@
         "react-redux": "^7.1.1",
         "redux": "^4.0.4",
         "redux-thunk": "^2.3.0",
-        "rimraf": "^3.0.0",
         "styled-components": "^4.3.2",
         "typeface-roboto": "^0.0.75",
         "yup": "^0.27.0"
