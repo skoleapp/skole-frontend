@@ -18,7 +18,6 @@ query UserDetail($id: ID) {
     user(id: $id) {
         id
         username
-        email
         title
         bio
         avatar

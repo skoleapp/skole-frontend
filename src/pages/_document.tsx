@@ -1,34 +1,42 @@
 import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/styles';
 import { DocumentInitialProps, RenderPageResult } from 'next/dist/next-server/lib/utils';
-import NextDocument, { DocumentContext, Head, Main, NextScript } from 'next/document';
+import NextDocument, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 import React, { Fragment } from 'react';
+import { GA_TRACKING_ID } from 'src/lib';
 import { ServerStyleSheet as StyledComponentSheets } from 'styled-components';
 
-// const GAScript = {
-//     __html: `
-//         window.dataLayer = window.dataLayer || [];
-//         function gtag(){window.dataLayer.push(arguments)}
-//         gtag("js", new Date());
-//         gtag("config", "UA-159917631-1");
-//     `,
-// };
+const GAScript = {
+    __html: `
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        };
+
+        gtag('js', new Date());
+
+        gtag('config', '${GA_TRACKING_ID}', {
+            page_path: window.location.pathname,
+        });
+    `,
+};
 
 export default class SkoleDocument extends NextDocument {
     render(): JSX.Element {
         return (
-            <html lang="en">
+            <Html>
                 <Head>
-                    <meta charSet="UTF-8" />
-                    <meta
-                        name="viewport"
-                        content="viewport-fit=cover, minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
-                    />
+                    <meta charSet="utf-8" />
+                    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+                    <meta name="theme-color" content="#ad3636" />
+                    <meta name="apple-mobile-web-app-title" content="Skole" />
                     <meta name="apple-mobile-web-app-capable" content="yes" />
                     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-                    <link rel="manifest" href="/manifest.json" />
                     <link rel="shortcut icon" href="/images/favicon.ico" />
                     <link rel="apple-touch-icon" sizes="180x180" href="images/icons/icon-180x180.png" />
                     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ad3636" />
+                    <link rel="manifest" href="/manifest.json" />
                     <link
                         href="images/splashscreens/iphone5_splash.png"
                         media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
@@ -79,14 +87,14 @@ export default class SkoleDocument extends NextDocument {
                         media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
                         rel="apple-touch-startup-image"
                     />
-                    {/* <script async src="https://www.googletagmanager.com/gtag/js?id=UA-159917631-1"></script>
-                    <script dangerouslySetInnerHTML={GAScript} /> */}
+                    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
+                    <script dangerouslySetInnerHTML={GAScript} />
                 </Head>
                 <body>
                     <Main />
                     <NextScript />
                 </body>
-            </html>
+            </Html>
         );
     }
 }

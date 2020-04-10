@@ -6,8 +6,8 @@
     "license": "ISC",
     "author": "Skole Team",
     "scripts": {
-        "dev": "nodemon src/server.ts",
-        "build": "NODE_OPTIONS=--max_old_space_size=2048 next build && rimraf build && tsc --project tsconfig.server.json",
+        "dev": "nodemon",
+        "build": "NODE_OPTIONS=--max_old_space_size=2048 next build && tsc --project tsconfig.server.json",
         "start": "NODE_ENV=production node build/src/server.js",
         "type-check": "tsc",
         "gen": "gql-gen --config codegen.yml",
@@ -56,7 +56,6 @@
         "react-redux": "^7.1.1",
         "redux": "^4.0.4",
         "redux-thunk": "^2.3.0",
-        "rimraf": "^3.0.0",
         "styled-components": "^4.3.2",
         "typeface-roboto": "^0.0.75",
         "yup": "^0.27.0"
@@ -73,6 +72,7 @@
         "@types/js-cookie": "^2.2.5",
         "@types/morgan": "^1.9.0",
         "@types/next": "^8.0.6",
+        "@types/node": "^13.11.1",
         "@types/nprogress": "^0.2.0",
         "@types/ol": "^6.2.0",
         "@types/pdfjs-dist": "^2.1.3",

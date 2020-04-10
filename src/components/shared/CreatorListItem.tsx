@@ -8,7 +8,7 @@ import { useTranslation } from '../../i18n';
 import { TextLink } from './TextLink';
 
 interface Props {
-    user: UserObjectType | null;
+    user?: UserObjectType | null;
     created: string;
 }
 

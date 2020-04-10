@@ -17,6 +17,10 @@ export const StyledBottomNavigation = styled(BottomNavigation)`
         padding: 0 !important;
     }
 
+    .MuiBottomNavigationAction-root {
+        min-width: 4rem !important;
+    }
+
     @media only screen and (min-width: ${breakpoints.MD}) {
         display: none !important;
     }

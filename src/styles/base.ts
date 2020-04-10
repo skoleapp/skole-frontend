@@ -32,7 +32,7 @@ export const base = css`
 
     html,
     body {
-        background: var(--secondary);
+        background-color: var(--primary) !important; // iOS header background color.
 
         .sm-down {
             @media only screen and (min-width: ${breakpoints.SM}) {
@@ -60,6 +60,10 @@ export const base = css`
 
         .border-bottom {
             border-bottom: var(--border);
+        }
+
+        .border-top {
+            border-top: var(--border);
         }
 
         .main-avatar {
@@ -112,7 +116,7 @@ export const base = css`
         }
 
         .MuiDrawer-paperAnchorLeft {
-            min-width: 10rem;
+            min-width: 20rem;
         }
 
         .MuiDrawer-paperAnchorBottom {

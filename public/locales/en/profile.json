@@ -1,5 +1,8 @@
 {
     "title": "Profile",
+    "points": "points",
+    "courses": "courses",
+    "resources": "resources",
     "editProfile": "Edit Profile",
     "noResources": "This user has no resources...",
     "noCourses": "This user has no courses...",

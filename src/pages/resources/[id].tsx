@@ -79,7 +79,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             });
     }, []);
 
-    if (resource) {
+    if (!!resource) {
         const file = mediaURL(resource.file);
         const resourceTitle = R.propOr('-', 'title', resource) as string;
         const resourceType = R.propOr('-', 'resourceType', resource);

@@ -29,7 +29,7 @@ export type ChangePasswordMutationPayload = {
 export type CityObjectType = {
    __typename?: 'CityObjectType',
   id: Scalars['ID'],
-  name: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
 };
 
 export type CommentObjectType = {
@@ -70,7 +70,7 @@ export type ContactMutationPayload = {
 export type CountryObjectType = {
    __typename?: 'CountryObjectType',
   id: Scalars['ID'],
-  name: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
 };
 
 export type CourseObjectType = {
@@ -454,14 +454,14 @@ export type ResourceObjectType = {
 export type ResourceTypeObjectType = {
    __typename?: 'ResourceTypeObjectType',
   id: Scalars['ID'],
-  name: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
 };
 
 export type SchoolObjectType = {
    __typename?: 'SchoolObjectType',
   id: Scalars['ID'],
-  name: Scalars['String'],
   courses: Array<CourseObjectType>,
+  name?: Maybe<Scalars['String']>,
   schoolType?: Maybe<Scalars['String']>,
   city?: Maybe<Scalars['String']>,
   country?: Maybe<Scalars['String']>,
@@ -473,7 +473,7 @@ export type SchoolObjectType = {
 export type SchoolTypeObjectType = {
    __typename?: 'SchoolTypeObjectType',
   id: Scalars['ID'],
-  name: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
 };
 
 export type StarredMutationInput = {
@@ -492,7 +492,7 @@ export type StarredMutationPayload = {
 export type SubjectObjectType = {
    __typename?: 'SubjectObjectType',
   id: Scalars['ID'],
-  name: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
 };
 
 export type UpdateCommentMutationInput = {
@@ -1155,7 +1155,7 @@ export type UserDetailQuery = (
   { __typename?: 'Query' }
   & { user: Maybe<(
     { __typename?: 'UserObjectType' }
-    & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+    & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
     & { createdCourses: Array<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
@@ -2436,7 +2436,6 @@ export const UserDetailDocument = gql`
   user(id: $id) {
     id
     username
-    email
     title
     bio
     avatar
