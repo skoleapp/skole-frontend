@@ -11,10 +11,10 @@ import { AppContextType } from 'next/dist/next-server/lib/utils';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
+import { pageView } from 'src/lib';
 
 import { appWithTranslation, includeDefaultNamespaces } from '../i18n';
 import { GlobalStyle, theme } from '../styles';
-import { pageView } from 'src/lib';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeError', () => NProgress.done());
