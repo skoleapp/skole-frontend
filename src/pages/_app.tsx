@@ -11,7 +11,10 @@ import { AppContextType } from 'next/dist/next-server/lib/utils';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
+import { setDevice } from 'src/actions';
 import { pageView } from 'src/lib';
+import { breakpointsNum } from 'src/styles';
+import { useBreakPoint } from 'src/utils';
 
 import { appWithTranslation, includeDefaultNamespaces } from '../i18n';
 import { GlobalStyle, theme } from '../styles';
@@ -32,11 +35,11 @@ interface Props {
 const SkoleApp = ({ Component, pageProps }: Props): JSX.Element => {
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
-
         if (jssStyles && jssStyles.parentNode) {
             jssStyles.parentNode.removeChild(jssStyles);
         }
     }, []);
+    setDevice(useBreakPoint(breakpointsNum.MD));
 
     return (
         <ThemeProvider theme={theme}>

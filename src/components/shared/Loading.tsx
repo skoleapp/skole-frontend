@@ -3,14 +3,20 @@ import React from 'react';
 
 import { useTranslation } from '../../i18n';
 
-export const Loading: React.FC = () => {
+interface Props {
+    text?: string;
+}
+
+export const Loading: React.FC<Props> = ({ text }) => {
     const { t } = useTranslation();
+
+    const loadingStatus = !!text ? text : t('common:loading');
 
     return (
         <Box position="absolute" display="flex" alignItems="center" justifyContent="center" height="100%" width="100%">
             <CircularProgress color="primary" />
             <Box marginLeft="1rem">
-                <Typography>{t('common:loading')}</Typography>
+                <Typography>{loadingStatus}</Typography>
             </Box>
         </Box>
     );
