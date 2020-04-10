@@ -5,8 +5,7 @@ import 'ol/ol.css';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { ConfirmProvider } from 'material-ui-confirm';
-import { NextPage } from 'next';
-import NextApp from 'next/app';
+import NextApp, { AppProps } from 'next/app';
 import { AppContextType } from 'next/dist/next-server/lib/utils';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
@@ -27,12 +26,7 @@ Router.events.on('routeChangeComplete', (url: string) => {
     pageView(url);
 });
 
-interface Props {
-    Component: NextPage;
-    pageProps: {};
-}
-
-const SkoleApp = ({ Component, pageProps }: Props): JSX.Element => {
+const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles && jssStyles.parentNode) {
