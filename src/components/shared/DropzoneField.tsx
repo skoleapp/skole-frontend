@@ -2,13 +2,12 @@ import { FormControl, FormHelperText } from '@material-ui/core';
 import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
 import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from 'src/types';
 import styled from 'styled-components';
 
 import { toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
-import { breakpointsNum } from '../../styles';
-import { useBreakPoint } from '../../utils';
 import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends DropzoneAreaProps {
@@ -22,11 +21,11 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const maxFileSize = 5000000;
-    const isMobile = useBreakPoint(breakpointsNum.MD);
-
     const handleFileChange = (files: File[]): void => {
         form.setFieldValue(field.name, files[0]);
     };
+
+    const { isMobile } = useSelector((state: State) => state.ui);
 
     // TODO: Use form error here, now using notification temporarily as the form error does not work for some reason.
     const handleDropRejected = (files: File[]): void => {

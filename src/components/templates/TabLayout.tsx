@@ -1,12 +1,12 @@
 import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
-import { breakpointsNum } from '../../styles';
-import { LayoutProps, MuiColor, UseOptions } from '../../types';
-import { useBreakPoint, useDrawer, useTabs } from '../../utils';
+import { LayoutProps, MuiColor, State, UseOptions } from '../../types';
+import { useDrawer, useTabs } from '../../utils';
 import { StyledCard } from '../shared';
 import { StyledTabs } from '../shared/StyledTabs';
 import { MainLayout } from './MainLayout';
@@ -53,11 +53,10 @@ export const TabLayout: React.FC<Props> = ({
     const { t } = useTranslation();
     const { renderOptions, renderOptionsHeader, drawerProps: optionDrawerProps } = optionProps;
     const { handleOpen: handleOpenOptions } = optionDrawerProps;
-    const isMobile = useBreakPoint(breakpointsNum.MD);
-
     const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(
         t('common:info'),
     );
+    const { isMobile } = useSelector((state: State) => state.ui);
 
     const renderCustomBottomNavbar =
         tabValue === 0 ? customBottomNavbar : customBottomNavbarSecondary || customBottomNavbar;
@@ -162,8 +161,8 @@ export const TabLayout: React.FC<Props> = ({
             customBottomNavbar={renderCustomBottomNavbar}
             {...props}
         >
-            {isMobile && renderMobileContent}
-            {!isMobile && renderDesktopContent}
+            {isMobile === true && renderMobileContent}
+            {isMobile === false && renderDesktopContent}
             {renderInfoDrawer}
             {renderOptionsDrawer}
         </StyledTabLayout>
