@@ -42,7 +42,7 @@ import {
     DiscussionBox,
     IconButtonLink,
     NavbarContainer,
-    NotFound,
+    NotFoundLayout,
     ResourceTableBody,
     StarButton,
     StyledBottomNavigation,
@@ -322,7 +322,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             />
         );
     } else {
-        return <NotFound title={t('course:notFound')} />;
+        return <NotFoundLayout title={t('course:notFound')} />;
     }
 };
 

@@ -1,6 +1,5 @@
 import {
     Box,
-    CardContent,
     IconButton,
     TableCell,
     TableFooter,
@@ -19,7 +18,7 @@ import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent, useState } from 'react';
-import styled from 'styled-components';
+import { NotFoundBox } from 'src/components';
 
 import { Router, useTranslation } from '../i18n';
 import { TextColor, TextVariant } from '../types';
@@ -100,22 +99,6 @@ const TablePaginationActions = ({
     );
 };
 
-interface NotFoundProps {
-    text: string;
-}
-
-const NotFound = ({ text }: NotFoundProps): JSX.Element => (
-    <StyledNotFound>
-        <Typography variant="subtitle2" color="textSecondary">
-            {text}
-        </Typography>
-    </StyledNotFound>
-);
-
-const StyledNotFound = styled(CardContent)`
-    flex-grow: 1;
-`;
-
 const commonTablePaginationProps = {
     rowsPerPageOptions: [5, 10, 25, 50, 100],
     colSpan: 3,
@@ -188,7 +171,7 @@ export const usePagination = ({
         />
     );
 
-    const renderNotFound = <NotFound text={t(notFoundText)} />;
+    const renderNotFound = <NotFoundBox text={t(notFoundText)} />;
 
     const renderTablePagination = (
         <TableFooter>
@@ -242,7 +225,7 @@ export const useFrontendPagination = <T extends {}>({
         />
     );
 
-    const renderNotFound = <NotFound text={t(notFoundText)} />;
+    const renderNotFound = <NotFoundBox text={t(notFoundText)} />;
 
     const renderTablePagination = (
         <TableFooter>

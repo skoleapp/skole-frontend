@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { AvatarField, FormSubmitSection, Loading, NotFound, SettingsLayout } from '../../components';
+import { AvatarField, FormSubmitSection, LoadingBox, NotFoundLayout, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -126,13 +126,13 @@ const EditProfilePage: I18nPage = () => {
             <SettingsLayout
                 title={t('edit-profile:title')}
                 heading={t('edit-profile:title')}
-                renderCardContent={loading ? <Loading /> : renderCardContent}
+                renderCardContent={loading ? <LoadingBox /> : renderCardContent}
                 dynamicBackUrl
                 formLayout
             />
         );
     } else {
-        return <NotFound title={t('profile:notFound')} />;
+        return <NotFoundLayout title={t('profile:notFound')} />;
     }
 };
 

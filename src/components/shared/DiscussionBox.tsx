@@ -10,6 +10,7 @@ import { breakpoints } from '../../styles';
 import { DiscussionBoxProps } from '../../types';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
+import { NotFoundBox } from './NotFoundBox';
 
 export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     commentThread: topComment,
@@ -68,13 +69,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
                           <CommentCard comment={c} {...commentCardProps} />
                       </Box>
                   ))
-                : !topComment && (
-                      <Box marginTop="0.5rem">
-                          <Typography variant="subtitle2" color="textSecondary">
-                              {t('common:noComments')}
-                          </Typography>
-                      </Box>
-                  )}
+                : !topComment && <NotFoundBox text={t('common:noComments')} />}
             {!!topComment && (
                 <Box className="md-down" marginTop="auto">
                     <Divider />

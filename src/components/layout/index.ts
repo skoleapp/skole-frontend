@@ -2,7 +2,6 @@ export { BottomNavbar } from './BottomNavbar';
 export { Footer } from './Footer';
 export { HeadComponent as Head } from './Head';
 export { Logo } from './Logo';
-export { NotFound } from './NotFound';
 export { Notifications } from './Notifications';
 export { SkoleGDPR } from './SkoleGDPR';
 export { TopNavbar } from './TopNavbar';

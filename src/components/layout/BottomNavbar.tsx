@@ -1,5 +1,6 @@
 import { Avatar, BottomNavigationAction } from '@material-ui/core';
 import { CloudUploadOutlined, HomeOutlined, SearchOutlined, StarOutlined } from '@material-ui/icons';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
@@ -51,9 +52,11 @@ export const BottomNavbar: React.FC = () => {
 
     const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
 
-    const handleAccountClick = (): void => {
-        !!user ? Router.push(`/users/${R.propOr('', 'id', user)}`) : '/login';
-    };
+    const renderAvatar = (
+        <Link href="/users/[id]" as={`/users/${R.propOr('', 'id', user)}`}>
+            <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
+        </Link>
+    );
 
     return (
         <StyledBottomNavigation value={value} onChange={handleChange}>
@@ -61,11 +64,7 @@ export const BottomNavbar: React.FC = () => {
             <BottomNavigationAction value={2} onClick={handleRedirect(search)} icon={<SearchOutlined />} />
             <BottomNavigationAction value={3} onClick={handleRedirect(uploadResource)} icon={<CloudUploadOutlined />} />
             <BottomNavigationAction value={4} onClick={handleRedirect(starred)} icon={<StarOutlined />} />
-            <BottomNavigationAction
-                value={5}
-                onClick={handleAccountClick}
-                icon={<Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />}
-            />
+            <BottomNavigationAction value={5} icon={renderAvatar} />
         </StyledBottomNavigation>
     );
 };

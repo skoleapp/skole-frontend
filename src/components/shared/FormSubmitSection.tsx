@@ -1,9 +1,10 @@
-import { Box, Button, ButtonProps, CircularProgress, FormControl, FormHelperText } from '@material-ui/core';
+import { Box, Button, ButtonProps, FormControl } from '@material-ui/core';
 import { Send } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
 
 import { FormErrorMessage } from './FormErrorMessage';
+import { LoadingBox } from './LoadingBox';
 
 interface Props extends FormikProps<{}> {
     submitButtonText: string;
@@ -19,12 +20,9 @@ export const FormSubmitSection: React.FC<Props & ButtonProps> = ({
 }) => (
     <Box display="flex" flexDirection="column" alignItems="center">
         {isSubmitting ? (
-            <Box marginTop="0.5rem" display="flex" justifyContent="center" alignItems="center">
-                <CircularProgress color="primary" />
-                <Box marginLeft="0.5rem">
-                    <FormHelperText>{(values as { general: string }).general}</FormHelperText>
-                </Box>
-            </Box>
+            <FormControl fullWidth>
+                <LoadingBox text={(values as { general: string }).general} />
+            </FormControl>
         ) : (
             <FormControl fullWidth>
                 <Box display="flex" justifyContent="center">

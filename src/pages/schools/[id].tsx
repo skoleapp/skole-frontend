@@ -23,7 +23,7 @@ import {
     SchoolObjectType,
     SubjectObjectType,
 } from '../../../generated/graphql';
-import { CourseTableBody, NotFound, StyledList, StyledTable, TabLayout, TextLink } from '../../components';
+import { CourseTableBody, NotFoundLayout, StyledList, StyledTable, TabLayout, TextLink } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -219,7 +219,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
             />
         );
     } else {
-        return <NotFound title={t('school:notFound')} />;
+        return <NotFoundLayout title={t('school:notFound')} />;
     }
 };
 
