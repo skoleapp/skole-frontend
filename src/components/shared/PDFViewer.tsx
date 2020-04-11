@@ -7,6 +7,7 @@ import { ProjectionLike as olProjection } from 'ol/proj';
 import { ImageStatic as olImageStatic } from 'ol/source';
 import PDFJS, { PDFDocumentProxy, PDFPageProxy, PDFPromise } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -26,9 +27,13 @@ export interface Pages {
 }
 
 export const PDFViewer: React.FC<Props> = ({ file }) => {
+    const { t } = useTranslation();
+
     const [touchStart, setTouchStart] = useState<number | null>(0);
     const [touchEnd, setTouchEnd] = useState(0);
     const [initialZoom, setInitialZoom] = useState(0);
+
+    const [loadingStatus, setLoadingStatus] = useState<string>(t('resource:loadingResoruce'));
 
     const [currentMap, setCurrentMap] = useState<olMap | null>(null);
 
@@ -146,9 +151,17 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
             return promises;
         };
 
-        return PDFJS.getDocument(url).promise.then((PDFJSPages: PDFDocumentProxy) => {
-            return renderPages(PDFJSPages);
-        });
+        const PDFJSDocument = PDFJS.getDocument(url);
+        return PDFJSDocument.promise.then(
+            (pages: PDFDocumentProxy) => {
+                return renderPages(pages);
+            },
+            (err: string) => {
+                console.log(err);
+                setLoadingStatus(t('resource:errorLoadingResource'));
+                return null;
+            },
+        );
     };
 
     useEffect(() => {
@@ -209,31 +222,35 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     };
 
     useEffect(() => {
+        let isSubscribed = true;
         if (pages.length === 0) {
             if (!!file) {
                 const url = file;
                 try {
                     const pdfMaps = createPagesFromPDF(url);
+
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     pdfMaps.then((pdfMaps: any) => {
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        Promise.all(pdfMaps).then((pdfMaps: any) => {
-                            const imageExtent = pdfMaps[0].imageExtent;
-                            const layer = pdfMaps[0].layer;
+                        if (!!pdfMaps && isSubscribed) {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            Promise.all(pdfMaps).then((pdfMaps: any) => {
+                                const imageExtent = pdfMaps[0].imageExtent;
+                                const layer = pdfMaps[0].layer;
 
-                            const map = createMap(imageExtent);
-                            map.setLayerGroup(layer);
-                            if (!!ref.current) {
-                                map.setTarget(ref.current);
-                            }
-                            map.getView().setCenter(getCenter(pdfMaps[0].imageExtent));
-                            map.getView().setZoom(0); //?
-                            setCurrentMap(map);
+                                const map = createMap(imageExtent);
+                                map.setLayerGroup(layer);
+                                if (!!ref.current) {
+                                    map.setTarget(ref.current);
+                                }
+                                map.getView().setCenter(getCenter(pdfMaps[0].imageExtent));
+                                map.getView().setZoom(0);
+                                setCurrentMap(map);
 
-                            const zoomLevel = map.getView().getZoom();
-                            setInitialZoom(zoomLevel);
-                            dispatch(setPages(pdfMaps));
-                        });
+                                const zoomLevel = map.getView().getZoom();
+                                setInitialZoom(zoomLevel);
+                                dispatch(setPages(pdfMaps));
+                            });
+                        }
                     });
                 } catch {
                     (err: string): void => console.log(err);
@@ -249,12 +266,15 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                 map.setTarget(ref.current);
             }
             map.getView().setCenter(getCenter(imageExtent));
-            map.getView().setZoom(0); //?
+            map.getView().setZoom(0);
             setCurrentMap(map);
 
             const zoomLevel = map.getView().getZoom();
             setInitialZoom(zoomLevel);
         }
+        return (): void => {
+            isSubscribed = false;
+        };
     }, []);
 
     useEffect(() => {
@@ -279,7 +299,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     return (
         <StyledPDFViewer>
             <div id="pdf-container" ref={ref}></div>
-            <Loading />
+            <Loading text={loadingStatus} />
         </StyledPDFViewer>
     );
 };
