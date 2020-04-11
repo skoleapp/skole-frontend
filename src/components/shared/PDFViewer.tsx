@@ -12,7 +12,7 @@ import styled from 'styled-components';
 
 import { NEXT_PAGE, PREV_PAGE, resetEffect, SET_CENTER, setCurrentPage, setPages } from '../../actions';
 import { State } from '../../types';
-import { Loading } from './Loading';
+import { LoadingBox } from './LoadingBox';
 
 interface Props {
     file: string;
@@ -29,11 +29,8 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     const [touchStart, setTouchStart] = useState<number | null>(0);
     const [touchEnd, setTouchEnd] = useState(0);
     const [initialZoom, setInitialZoom] = useState(0);
-
     const [currentMap, setCurrentMap] = useState<olMap | null>(null);
-
     const dispatch = useDispatch();
-
     const { pages, currentPage, effect } = useSelector((state: State) => state.resource);
     const ref = useRef<HTMLDivElement | null>(null);
 
@@ -276,15 +273,18 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         }
     }, [effect]);
 
-    if (pages.length === 0) {
-        return <Loading />;
-    } else {
-        return (
-            <StyledPDFViewer>
-                <div id="pdf-container" ref={ref} />
-            </StyledPDFViewer>
-        );
-    }
+    const renderLoading = !currentMap && (
+        <Box id="loading-container">
+            <LoadingBox />
+        </Box>
+    );
+
+    return (
+        <StyledPDFViewer>
+            {renderLoading}
+            <div id="pdf-container" ref={ref} />
+        </StyledPDFViewer>
+    );
 };
 
 const StyledPDFViewer = styled(Box)`
@@ -300,6 +300,15 @@ const StyledPDFViewer = styled(Box)`
         overflow-y: auto;
         overflow-x: auto;
         z-index: 2;
+    }
+
+    #loading-container {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        z-index: 3;
+        background-color: var(--white);
     }
 `;
 

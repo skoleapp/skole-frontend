@@ -4,7 +4,7 @@ import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
 
 import { FormErrorMessage } from './FormErrorMessage';
-import { Loading } from './Loading';
+import { LoadingBox } from './LoadingBox';
 
 interface Props extends FormikProps<{}> {
     submitButtonText: string;
@@ -21,7 +21,7 @@ export const FormSubmitSection: React.FC<Props & ButtonProps> = ({
     <Box display="flex" flexDirection="column" alignItems="center">
         {isSubmitting ? (
             <FormControl fullWidth>
-                <Loading text={(values as { general: string }).general} />
+                <LoadingBox text={(values as { general: string }).general} />
             </FormControl>
         ) : (
             <FormControl fullWidth>
