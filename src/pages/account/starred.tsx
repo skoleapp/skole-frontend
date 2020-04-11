@@ -6,7 +6,7 @@ import { compose } from 'redux';
 import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
 import {
     CourseTableBody,
-    NotFound,
+    NotFoundLayout,
     ResourceTableBody,
     SettingsLayout,
     StyledTable,
@@ -108,7 +108,7 @@ const StarredPage: I18nPage = () => {
             />
         );
     } else {
-        return <NotFound title={t('_error:notFound')} />;
+        return <NotFoundLayout title={t('_error:notFound')} />;
     }
 };
 

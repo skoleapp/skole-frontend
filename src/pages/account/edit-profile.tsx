@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
 import { toggleNotification } from '../../actions';
-import { AvatarField, FormSubmitSection, Loading, NotFound, SettingsLayout } from '../../components';
+import { AvatarField, FormSubmitSection, Loading, NotFoundLayout, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -132,7 +132,7 @@ const EditProfilePage: I18nPage = () => {
             />
         );
     } else {
-        return <NotFound title={t('profile:notFound')} />;
+        return <NotFoundLayout title={t('profile:notFound')} />;
     }
 };
 

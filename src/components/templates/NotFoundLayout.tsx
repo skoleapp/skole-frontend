@@ -7,7 +7,7 @@ interface Props {
     title: string;
 }
 
-export const NotFound: React.FC<Props> = ({ title }) => (
+export const NotFoundLayout: React.FC<Props> = ({ title }) => (
     <MainLayout title={title} dynamicBackUrl>
         <StyledCard>
             <CardHeader title={title} />

@@ -104,7 +104,7 @@ interface NotFoundProps {
     text: string;
 }
 
-const NotFound = ({ text }: NotFoundProps): JSX.Element => (
+const NotFoundLayout = ({ text }: NotFoundProps): JSX.Element => (
     <StyledNotFound>
         <Typography variant="subtitle2" color="textSecondary">
             {text}
@@ -188,7 +188,7 @@ export const usePagination = ({
         />
     );
 
-    const renderNotFound = <NotFound text={t(notFoundText)} />;
+    const renderNotFound = <NotFoundLayout text={t(notFoundText)} />;
 
     const renderTablePagination = (
         <TableFooter>
@@ -242,7 +242,7 @@ export const useFrontendPagination = <T extends {}>({
         />
     );
 
-    const renderNotFound = <NotFound text={t(notFoundText)} />;
+    const renderNotFound = <NotFoundLayout text={t(notFoundText)} />;
 
     const renderTablePagination = (
         <TableFooter>
