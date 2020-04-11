@@ -1,14 +1,4 @@
-import {
-    Avatar,
-    Box,
-    MenuItem,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableRow,
-    Typography,
-} from '@material-ui/core';
+import { Avatar, Box, MenuItem, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import Link from 'next/link';
@@ -18,13 +8,12 @@ import React from 'react';
 import { compose } from 'redux';
 
 import { PaginatedUserObjectType, UserObjectType, UsersDocument } from '../../../generated/graphql';
-import { FilterLayout, FormSubmitSection, SelectField, StyledTable } from '../../components';
+import { FilterLayout, FormSubmitSection, NotFoundBox, PaginatedTable, SelectField } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { mediaURL, useFilters, withAuthSync } from '../../utils';
-import { usePagination } from '../../utils/usePagination';
+import { getPaginationQuery, mediaURL, useFilters, withAuthSync } from '../../utils';
 
 interface FilterUsersFormValues {
     username: string;
@@ -56,21 +45,9 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         ordering: R.propOr('', 'ordering', query) as string,
     };
 
-    const paginationProps = {
-        count,
-        filterValues: initialValues,
-        titleLeft: 'common:username',
-        titleRight: 'common:points',
-        notFoundText: 'users:notFound',
-    };
-
-    const { renderTablePagination, getPaginationQuery, renderNotFound, renderTableHead } = usePagination(
-        paginationProps,
-    );
-
     const handlePreSubmit = <T extends FilterUsersFormValues>(values: T, actions: FormikActions<T>): void => {
         const { username, ordering } = values;
-        const paginationQuery = getPaginationQuery(query);
+        const paginationQuery = getPaginationQuery({ query, extraFilters: initialValues });
 
         const filteredValues = {
             ...paginationQuery, // Define this first to override the values.
@@ -106,38 +83,42 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         </Formik>
     );
 
+    const renderTableBody = (
+        <TableBody>
+            {userObjects.map((u: UserObjectType, i: number) => (
+                <Link href="/users/[id]" as={`/users/${u.id}`} key={i}>
+                    <TableRow>
+                        <TableCell>
+                            <Box display="flex" alignItems="center">
+                                <Avatar src={mediaURL(R.propOr('', 'avatarThumbnail', u))} />
+                                <Box marginLeft="1rem">
+                                    <Typography variant="subtitle1">{R.propOr('-', 'username', u)}</Typography>
+                                </Box>
+                            </Box>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
+                        </TableCell>
+                    </TableRow>
+                </Link>
+            ))}
+        </TableBody>
+    );
+
+    const tableHeadProps = {
+        titleLeft: t('common:username'),
+        titleRight: t('common:points'),
+    };
+
     const renderTableContent = !!userObjects.length ? (
-        <StyledTable>
-            <TableContainer>
-                <Table>
-                    {renderTableHead}
-                    <TableBody>
-                        {userObjects.map((u: UserObjectType, i: number) => (
-                            <Link href="/users/[id]" as={`/users/${u.id}`} key={i}>
-                                <TableRow>
-                                    <TableCell>
-                                        <Box display="flex" alignItems="center">
-                                            <Avatar src={mediaURL(R.propOr('', 'avatarThumbnail', u))} />
-                                            <Box marginLeft="1rem">
-                                                <Typography variant="subtitle1">
-                                                    {R.propOr('-', 'username', u)}
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
-                                    </TableCell>
-                                </TableRow>
-                            </Link>
-                        ))}
-                    </TableBody>
-                    {renderTablePagination}
-                </Table>
-            </TableContainer>
-        </StyledTable>
+        <PaginatedTable
+            count={count}
+            extraFilters={initialValues}
+            tableHeadProps={tableHeadProps}
+            renderTableBody={renderTableBody}
+        />
     ) : (
-        renderNotFound
+        <NotFoundBox text={t('users:notFound')} />
     );
 
     return (

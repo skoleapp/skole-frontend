@@ -1,4 +1,4 @@
-import { ContainerProps, DrawerProps } from '@material-ui/core';
+import { ContainerProps, DrawerProps, TablePaginationProps } from '@material-ui/core';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError, ApolloQueryResult } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
@@ -128,3 +128,8 @@ export interface UseFilters<T> extends UseForm<T> {
     handleClearFilters: (e: SyntheticEvent) => Promise<void>;
     drawerProps: UseDrawer;
 }
+
+export type CustomTablePaginationProps = Pick<
+    TablePaginationProps,
+    'page' | 'count' | 'rowsPerPage' | 'onChangePage' | 'onChangeRowsPerPage'
+>;

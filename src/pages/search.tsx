@@ -1,4 +1,4 @@
-import { MenuItem, Table, TableContainer } from '@material-ui/core';
+import { MenuItem } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
@@ -21,13 +21,20 @@ import {
     SubjectObjectType,
     SubjectsDocument,
 } from '../../generated/graphql';
-import { AutoCompleteField, CourseTableBody, FilterLayout, FormSubmitSection, SelectField } from '../components';
+import {
+    AutoCompleteField,
+    CourseTableBody,
+    FilterLayout,
+    FormSubmitSection,
+    NotFoundBox,
+    PaginatedTable,
+    SelectField,
+} from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo, withRedux } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useFilters, withAuthSync } from '../utils';
-import { usePagination } from '../utils/usePagination';
+import { getPaginationQuery, useFilters, withAuthSync } from '../utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
@@ -76,21 +83,9 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
         ordering: R.propOr('', 'ordering', query) as string,
     };
 
-    const paginationProps = {
-        count,
-        filterValues: initialValues,
-        notFoundText: 'search:noCourses',
-        titleLeft: 'common:name',
-        titleRight: 'common:points',
-    };
-
-    const { renderTablePagination, getPaginationQuery, renderNotFound, renderTableHead } = usePagination(
-        paginationProps,
-    );
-
     const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T, actions: FormikActions<T>): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city, ordering } = values;
-        const paginationQuery = getPaginationQuery(query);
+        const paginationQuery = getPaginationQuery({ query, extraFilters: initialValues });
 
         const filteredValues: FilterSearchResultsFormValues = {
             ...paginationQuery, // Define this first to override the values.
@@ -190,16 +185,20 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
         </Formik>
     );
 
+    const tableHeadProps = {
+        titleLeft: t('common:name'),
+        titleRight: t('common:points'),
+    };
+
     const renderTableContent = !!courseObjects.length ? (
-        <TableContainer>
-            <Table>
-                {renderTableHead}
-                <CourseTableBody courses={courseObjects} />
-                {renderTablePagination}
-            </Table>
-        </TableContainer>
+        <PaginatedTable
+            count={count}
+            tableHeadProps={tableHeadProps}
+            renderTableBody={<CourseTableBody courses={courseObjects} />}
+            extraFilters={initialValues}
+        />
     ) : (
-        renderNotFound
+        <NotFoundBox text={t('search:noCourses')} />
     );
 
     return (

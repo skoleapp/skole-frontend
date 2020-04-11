@@ -40,8 +40,10 @@ import { toggleNotification } from '../../actions';
 import {
     CreatorListItem,
     DiscussionBox,
+    FrontendPaginatedTable,
     IconButtonLink,
     NavbarContainer,
+    NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
     StarButton,
@@ -93,6 +95,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const starred = !!course.starred;
         const isOwner = !!user && user.id === creatorId;
         const staticBackUrl = { href: '/search' };
+        const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
 
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
             initialVote,
@@ -110,18 +113,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             target: { course: Number(course.id) },
             formKey: 'course',
         };
-
-        const frontendPaginationProps = {
-            items: resources,
-            notFoundText: 'course:noResources',
-            titleLeft: 'common:title',
-            titleLeftDesktop: 'common:resources',
-            titleRight: 'common:points',
-        };
-
-        const { renderTablePagination, paginatedItems, renderNotFound, renderTableHead } = useFrontendPagination(
-            frontendPaginationProps,
-        );
 
         const deleteCourseError = (): void => {
             dispatch(toggleNotification(t('notifications:deleteCourseError')));
@@ -231,18 +222,20 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </CardContent>
         );
 
+        const resourceTableHeadProps = {
+            titleLeft: 'common:title',
+            titleLeftDesktop: 'common:resources',
+            titleRight: 'common:points',
+        };
+
         const renderResources = !!resources.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderTableHead}
-                        <ResourceTableBody resources={paginatedItems} />
-                        {renderTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={resourceTableHeadProps}
+                renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+                paginationProps={resourcePaginationProps}
+            />
         ) : (
-            renderNotFound
+            <NotFoundBox text={'course:noResources'} />
         );
 
         const renderOptions = (

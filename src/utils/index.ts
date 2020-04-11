@@ -11,7 +11,7 @@ export { mediaURL } from './mediaURL';
 export { useOpen } from './useOpen';
 export { useOptions } from './useOptions';
 export { useLanguageSelector } from './useLanguageSelector';
-export { usePagination, useFrontendPagination } from './usePagination';
+export { useFrontendPagination, getPaginationQuery } from './pagination';
 export { useVotes } from './useVotes';
 export { useBreakPoint } from './useBreakPoint';
 export { useDrawer } from './useDrawer';

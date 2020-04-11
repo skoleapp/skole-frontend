@@ -28,3 +28,4 @@ export { CreatorListItem } from './CreatorListItem';
 export { NavbarContainer } from './NavbarContainer';
 export { LoadingBox } from './LoadingBox';
 export { NotFoundBox } from './NotFoundBox';
+export { PaginatedTable, FrontendPaginatedTable } from './PaginatedTable';

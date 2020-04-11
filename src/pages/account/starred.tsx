@@ -1,4 +1,4 @@
-import { Box, Tab, Table, TableContainer } from '@material-ui/core';
+import { Box, Tab } from '@material-ui/core';
 import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
@@ -6,10 +6,11 @@ import { compose } from 'redux';
 import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
 import {
     CourseTableBody,
+    FrontendPaginatedTable,
+    NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
     SettingsLayout,
-    StyledTable,
     StyledTabs,
 } from '../../components';
 import { useTranslation } from '../../i18n';
@@ -24,59 +25,40 @@ const StarredPage: I18nPage = () => {
     const { user } = useAuth();
     const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
     const starredResources = R.propOr([], 'starredResources', user) as ResourceObjectType[];
-    const commonPaginationProps = { titleRight: 'common:points' };
+    const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
+    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(starredResources);
 
-    const {
-        renderTablePagination: renderStarredCoursesTablePagination,
-        paginatedItems: paginatedCourses,
-        renderNotFound: renderCoursesNotFound,
-        renderTableHead: renderCoursesTableHead,
-    } = useFrontendPagination({
-        ...commonPaginationProps,
-        items: starredCourses,
-        notFoundText: 'starred:noCourses',
-        titleLeft: 'common:name',
-    });
+    const commonTableHeadProps = { titleRight: t('common:points') };
 
-    const {
-        renderTablePagination: renderStarredResourcesTablePagination,
-        paginatedItems: paginatedResources,
-        renderNotFound: renderResourcesNotFound,
-        renderTableHead: renderResourcesTableHead,
-    } = useFrontendPagination({
-        ...commonPaginationProps,
-        items: starredResources,
-        notFoundText: 'starred:noResources',
-        titleLeft: 'common:title',
-    });
+    const courseTableHeadProps = {
+        titleLeft: t('common:name'),
+        ...commonTableHeadProps,
+    };
+
+    const resourceTableHeadProps = {
+        titleLeft: t('common:title'),
+        ...commonTableHeadProps,
+    };
 
     if (!!user) {
         const renderStarredCourses = !!starredCourses.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderCoursesTableHead}
-                        <CourseTableBody courses={paginatedCourses} />
-                        {renderStarredCoursesTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={courseTableHeadProps}
+                paginationProps={coursePaginationProps}
+                renderTableBody={<CourseTableBody courses={paginatedCourses} />}
+            />
         ) : (
-            renderCoursesNotFound
+            <NotFoundBox text={t('starred:noCourses')} />
         );
 
         const renderStarredResources = !!starredResources.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderResourcesTableHead}
-                        <ResourceTableBody resources={paginatedResources} />
-                        {renderStarredResourcesTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={resourceTableHeadProps}
+                paginationProps={resourcePaginationProps}
+                renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+            />
         ) : (
-            renderResourcesNotFound
+            <NotFoundBox text={t('starred:noResources')} />
         );
 
         const renderCardContent = (

@@ -1,4 +1,4 @@
-import { Avatar, Box, CardContent, Grid, Tab, Table, TableContainer, Typography } from '@material-ui/core';
+import { Avatar, Box, CardContent, Grid, Tab, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
@@ -11,12 +11,13 @@ import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectTyp
 import {
     ButtonLink,
     CourseTableBody,
+    FrontendPaginatedTable,
     MainLayout,
+    NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
     SettingsButton,
     StyledCard,
-    StyledTable,
     StyledTabs,
 } from '../../components';
 import { useTranslation } from '../../i18n';
@@ -47,33 +48,11 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const isOwnProfile = user.id === R.propOr('', 'id', loggedInUser);
         const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
         const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
+        const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
 
-        const commonPaginationProps = {
-            titleLeft: 'common:title',
-            titleRight: 'common:points',
-        };
-
-        const {
-            renderTablePagination: renderCreatedCoursesTablePagination,
-            paginatedItems: paginatedCourses,
-            renderNotFound: renderCoursesNotFound,
-            renderTableHead: renderCoursesTableHead,
-        } = useFrontendPagination({
-            ...commonPaginationProps,
-            items: createdCourses,
-            notFoundText: 'profile:noCourses',
-        });
-
-        const {
-            renderTablePagination: renderCreatedResourcesTablePagination,
-            paginatedItems: paginatedResources,
-            renderNotFound: renderResourcesNotFound,
-            renderTableHead: renderResourcesTableHead,
-        } = useFrontendPagination({
-            ...commonPaginationProps,
-            items: createdResources,
-            notFoundText: 'profile:noResources',
-        });
+        const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(
+            createdResources,
+        );
 
         const editProfileButtonProps = {
             href: '/account/edit-profile',
@@ -216,32 +195,29 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </Grid>
         );
 
+        const commonTableHeadProps = {
+            titleLeft: 'common:title',
+            titleRight: 'common:points',
+        };
+
         const renderCreatedCourses = !!createdCourses.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderCoursesTableHead}
-                        <CourseTableBody courses={paginatedCourses} />
-                        {renderCreatedCoursesTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={commonTableHeadProps}
+                renderTableBody={<CourseTableBody courses={paginatedCourses} />}
+                paginationProps={coursePaginationProps}
+            />
         ) : (
-            renderCoursesNotFound
+            <NotFoundBox text={t('profile:noCourses')} />
         );
 
         const renderCreatedResources = !!createdResources.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderResourcesTableHead}
-                        <ResourceTableBody resources={paginatedResources} />
-                        {renderCreatedResourcesTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={commonTableHeadProps}
+                renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+                paginationProps={resourcePaginationProps}
+            />
         ) : (
-            renderResourcesNotFound
+            <NotFoundBox text={t('profile:noResources')} />
         );
 
         const renderTabs = (
