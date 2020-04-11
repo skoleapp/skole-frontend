@@ -15,6 +15,7 @@ export interface SkoleContext extends NextPageContext {
     apolloState: ApolloQueryResult<{}>;
     reduxStore: Store;
     userMe: UserObjectType;
+    isMobile: boolean;
 }
 
 export type I18nPage<P = {}> = NextComponentType<
@@ -22,7 +23,6 @@ export type I18nPage<P = {}> = NextComponentType<
     { namespacesRequired: string[] },
     P & { namespacesRequired: string[] }
 >;
-
 export interface I18nProps {
     namespacesRequired: string[];
 }

@@ -1,7 +1,9 @@
 import App from 'next/app';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
+import { AnyAction } from 'redux';
+import { toggleMobile } from 'src/actions';
 
 import { I18nPage, I18nProps, SkoleContext, State } from '../types';
 import { initStore } from './store';
@@ -26,6 +28,7 @@ const getOrInitStore = (initialState?: State): Store => {
 
 interface ReduxProps extends I18nProps {
     initialReduxState: State;
+    isMobile: boolean;
 }
 
 interface WithReduxProps extends Omit<I18nProps, 'namespacesRequired'> {
@@ -35,6 +38,12 @@ interface WithReduxProps extends Omit<I18nProps, 'namespacesRequired'> {
 export const withRedux = (PageComponent: I18nPage, { ssr = true } = {}): JSX.Element => {
     const WithRedux = ({ initialReduxState, ...props }: ReduxProps): JSX.Element => {
         const store = getOrInitStore(initialReduxState);
+
+        const { isMobile } = props;
+
+        useEffect(() => {
+            store.dispatch((toggleMobile(isMobile) as unknown) as AnyAction);
+        }, [isMobile]);
 
         return (
             <Provider store={store}>

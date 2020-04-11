@@ -9,14 +9,11 @@ import NextApp, { AppProps } from 'next/app';
 import { AppContextType } from 'next/dist/next-server/lib/utils';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
-import React, { useEffect } from 'react';
-import { setDevice } from 'src/actions';
+import React, { useEffect, useState } from 'react';
 import { pageView } from 'src/lib';
-import { breakpointsNum } from 'src/styles';
-import { useBreakPoint } from 'src/utils';
 
 import { appWithTranslation, includeDefaultNamespaces } from '../i18n';
-import { GlobalStyle, theme } from '../styles';
+import { breakpointsNum, GlobalStyle, theme } from '../styles';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeError', () => NProgress.done());
@@ -26,21 +23,33 @@ Router.events.on('routeChangeComplete', (url: string) => {
     pageView(url);
 });
 
-const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
+interface SkoleAppProps extends AppProps {
+    onMobileGuess: boolean;
+}
+
+const SkoleApp = ({ Component, pageProps, onMobileGuess }: SkoleAppProps): JSX.Element => {
+    const [isMobile, setIsMobile] = useState(onMobileGuess);
+
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles && jssStyles.parentNode) {
             jssStyles.parentNode.removeChild(jssStyles);
         }
+
+        setIsMobile(window.innerWidth < breakpointsNum.MD);
+
+        const resizeFunctionRef = (): void => {
+            setIsMobile(window.innerWidth < breakpointsNum.MD);
+        };
+        window.addEventListener('resize', resizeFunctionRef);
     }, []);
-    setDevice(useBreakPoint(breakpointsNum.MD));
 
     return (
         <ThemeProvider theme={theme}>
             <ConfirmProvider>
                 <CssBaseline />
                 <GlobalStyle />
-                <Component {...pageProps} />
+                <Component {...pageProps} isMobile={isMobile} />
             </ConfirmProvider>
         </ThemeProvider>
     );
@@ -48,7 +57,22 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
 
 SkoleApp.getInitialProps = async (ctx: AppContextType<Router>): Promise<{}> => {
     const pageProps = await NextApp.getInitialProps(ctx);
-    return { ...pageProps, namespaces: includeDefaultNamespaces([]) };
+
+    let onMobileGuess;
+    let userAgent;
+    const { ctx: NextPageContext } = ctx;
+    if (!!NextPageContext.req) {
+        // if you are on the server and you get a 'req' property from your context
+        userAgent = NextPageContext.req.headers['user-agent']; // get the user-agent from the headers
+    } else {
+        userAgent = navigator.userAgent; // if you are on the client you can access the navigator from the window object
+    }
+    if (!!userAgent) {
+        onMobileGuess = Boolean(userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i));
+    }
+
+    console.log('from _app.tsx: guessing if client on mobile: ', onMobileGuess);
+    return { ...pageProps, namespaces: includeDefaultNamespaces([]), onMobileGuess };
 };
 
 export default appWithTranslation(SkoleApp);
