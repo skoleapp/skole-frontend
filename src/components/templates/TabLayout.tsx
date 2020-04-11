@@ -161,8 +161,8 @@ export const TabLayout: React.FC<Props> = ({
             customBottomNavbar={renderCustomBottomNavbar}
             {...props}
         >
-            {isMobile === true && renderMobileContent}
-            {isMobile === false && renderDesktopContent}
+            {isMobile && renderMobileContent}
+            {!isMobile && renderDesktopContent}
             {renderInfoDrawer}
             {renderOptionsDrawer}
         </StyledTabLayout>

@@ -45,6 +45,7 @@ const SkoleApp = ({ Component, pageProps, onMobileGuess }: SkoleAppProps): JSX.E
             setIsMobile(window.innerWidth < breakpointsNum.MD);
         };
         window.addEventListener('resize', resizeFunctionRef);
+        return (): void => window.removeEventListener('resize', resizeFunctionRef);
     }, []);
 
     return (

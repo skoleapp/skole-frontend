@@ -12,7 +12,7 @@ import {
     ButtonLink,
     CourseTableBody,
     MainLayout,
-    NotFound,
+    NotFoundLayout,
     ResourceTableBody,
     SettingsButton,
     StyledCard,
@@ -279,7 +279,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </StyledUserPage>
         );
     } else {
-        return <NotFound title={t('profile:notFound')} />;
+        return <NotFoundLayout title={t('profile:notFound')} />;
     }
 };
 

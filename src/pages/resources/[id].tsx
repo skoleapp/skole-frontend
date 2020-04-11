@@ -43,7 +43,7 @@ import {
     CreatorListItem,
     DiscussionBox,
     NavbarContainer,
-    NotFound,
+    NotFoundLayout,
     PDFViewer,
     StarButton,
     StyledBottomNavigation,
@@ -339,7 +339,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             />
         );
     } else {
-        return <NotFound title={t('resource:notFound')} />;
+        return <NotFoundLayout title={t('resource:notFound')} />;
     }
 };
 
