@@ -37,9 +37,15 @@ interface WithReduxProps extends Omit<I18nProps, 'namespacesRequired'> {
 
 export const withRedux = (PageComponent: I18nPage, { ssr = true } = {}): JSX.Element => {
     const WithRedux = ({ initialReduxState, ...props }: ReduxProps): JSX.Element => {
-        const store = getOrInitStore(initialReduxState);
-
         const { isMobile } = props;
+
+        const { ui } = initialReduxState;
+        const newUi = { ...ui, isMobile };
+
+        const modifiedReduxStore = initialReduxState;
+        modifiedReduxStore['ui'] = newUi;
+
+        const store = getOrInitStore(modifiedReduxStore);
 
         useEffect(() => {
             store.dispatch((toggleMobile(isMobile) as unknown) as AnyAction);
