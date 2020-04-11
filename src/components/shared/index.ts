@@ -27,3 +27,4 @@ export { ResourceTableBody } from './ResourceTableBody';
 export { CreatorListItem } from './CreatorListItem';
 export { NavbarContainer } from './NavbarContainer';
 export { Loading } from './Loading';
+export { NotFoundBox } from './NotFoundBox';
