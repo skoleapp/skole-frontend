@@ -19,6 +19,7 @@ interface Props extends LayoutProps {
     subheader?: JSX.Element;
     titleSecondary: string;
     tabLabelLeft: string;
+    tabLabelRight: string;
     renderInfo: JSX.Element;
     renderLeftContent: JSX.Element;
     renderRightContent: JSX.Element;
@@ -37,6 +38,7 @@ export const TabLayout: React.FC<Props> = ({
     subheader,
     titleSecondary,
     tabLabelLeft,
+    tabLabelRight,
     renderInfo,
     renderLeftContent,
     renderRightContent,
@@ -51,9 +53,13 @@ export const TabLayout: React.FC<Props> = ({
 }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { t } = useTranslation();
-    const { renderOptions, renderOptionsHeader, drawerProps: optionDrawerProps } = optionProps;
-    const { handleOpen: handleOpenOptions } = optionDrawerProps;
     const isMobile = useBreakPoint(breakpointsNum.MD);
+
+    const {
+        renderOptions,
+        renderOptionsHeader,
+        drawerProps: { handleOpen: handleOpenOptions, ...optionDrawerProps },
+    } = optionProps;
 
     const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(
         t('common:info'),
@@ -80,7 +86,7 @@ export const TabLayout: React.FC<Props> = ({
     const renderTabs = (
         <StyledTabs value={tabValue} onChange={handleTabChange}>
             <Tab label={tabLabelLeft} />
-            <Tab label={titleSecondary} />
+            <Tab label={tabLabelRight} />
         </StyledTabs>
     );
 

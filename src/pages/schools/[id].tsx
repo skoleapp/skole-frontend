@@ -45,7 +45,6 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
     const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions();
 
     if (school) {
-        const schoolName = R.propOr('-', 'name', school) as string;
         const schoolType = R.propOr('-', 'schoolType', school) as string;
         const country = R.propOr('-', 'country', school) as string;
         const city = R.propOr('-', 'city', school) as string;
@@ -149,12 +148,6 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 
         const renderOptions = <StyledList>{renderShareOption}</StyledList>;
 
-        const optionProps = {
-            renderOptions,
-            renderOptionsHeader,
-            drawerProps,
-        };
-
         const renderSubjectsTableBody = (
             <TableBody>
                 {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
@@ -170,7 +163,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
         );
 
         const commonTableHeadProps = {
-            titleLeft: 'common:name',
+            titleLeft: t('common:name'),
         };
 
         const renderSubjects = !!subjects.length ? (
@@ -198,19 +191,24 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
             <NotFoundBox text={t('school:noCourses')} />
         );
 
-        return (
-            <TabLayout
-                title={schoolName}
-                titleSecondary={t('common:courses')}
-                tabLabelLeft={t('common:subjects')}
-                renderInfo={renderInfo}
-                optionProps={optionProps}
-                renderLeftContent={renderSubjects}
-                renderRightContent={renderCourses}
-                singleColumn
-                dynamicBackUrl
-            />
-        );
+        const layoutProps = {
+            title: R.propOr('-', 'name', school) as string,
+            titleSecondary: t('common:courses'),
+            tabLabelLeft: `${t('common:subjects')} (${subjectCount})`,
+            tabLabelRight: `${t('common:courses')} (${courseCount})`,
+            renderInfo,
+            optionProps: {
+                renderOptions,
+                renderOptionsHeader,
+                drawerProps,
+            },
+            renderLeftContent: renderSubjects,
+            renderRightContent: renderCourses,
+            singleColumn: true,
+            dynamicBackUrl: true,
+        };
+
+        return <TabLayout {...layoutProps} />;
     } else {
         return <NotFoundLayout title={t('school:notFound')} />;
     }

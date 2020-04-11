@@ -81,7 +81,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
     if (!!resource) {
         const file = mediaURL(resource.file);
-        const resourceTitle = R.propOr('-', 'title', resource) as string;
         const resourceType = R.propOr('-', 'resourceType', resource);
         const courseId = R.propOr('', 'id', resource.course);
         const courseName = R.propOr('-', 'name', resource.course) as string;
@@ -95,7 +94,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const initialPoints = R.propOr(0, 'points', resource) as number;
         const starred = !!resource.starred;
         const isOwner = !!user && user.id === creatorId;
-        const staticBackUrl = { href: '/courses/[id]', as: `/courses/${courseId}` };
 
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
             initialVote,
@@ -107,6 +105,11 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             comments,
             target: { resource: Number(resource.id) },
             formKey: 'resource',
+        };
+
+        const staticBackUrl = {
+            href: '/courses/[id]',
+            as: `/courses/${courseId}`,
         };
 
         const deleteResourceError = (): void => {
@@ -251,12 +254,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </StyledList>
         );
 
-        const optionProps = {
-            renderOptions,
-            renderOptionsHeader,
-            drawerProps,
-        };
-
         const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
 
         const renderUpVoteButton = (
@@ -317,22 +314,29 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </StyledBottomNavigation>
         );
 
-        return (
-            <TabLayout
-                title={resourceTitle}
-                subheader={renderCourseLink}
-                titleSecondary={t('common:discussion')}
-                staticBackUrl={staticBackUrl}
-                renderInfo={renderInfo}
-                tabLabelLeft={t('common:resource')}
-                renderLeftContent={<PDFViewer file={file} />}
-                renderRightContent={<DiscussionBox {...discussionBoxProps} />}
-                optionProps={optionProps}
-                customBottomNavbar={renderCustomBottomNavbar}
-                customBottomNavbarSecondary={renderCustomBottomNavbarSecondary}
-                extraDesktopActions={renderExtraResourceActions}
-            />
-        );
+        const renderPDFViewer = <PDFViewer file={file} />;
+        const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
+
+        const layoutProps = {
+            title: R.propOr('-', 'title', resource) as string,
+            titleSecondary: t('common:discussion'),
+            subheader: renderCourseLink,
+            staticBackUrl: staticBackUrl,
+            renderInfo,
+            optionProps: {
+                renderOptions,
+                renderOptionsHeader,
+                drawerProps,
+            },
+            tabLabelLeft: t('common:resource'),
+            tabLabelRight: `${t('common:discussion')} (${comments.length})`,
+            renderLeftContent: renderPDFViewer,
+            renderRightContent: renderDiscussionBox,
+            customBottomNavbar: renderCustomBottomNavbar,
+            customBottomNavbarSecondary: renderCustomBottomNavbarSecondary,
+        };
+
+        return <TabLayout {...layoutProps} />;
     } else {
         return <NotFoundLayout title={t('resource:notFound')} />;
     }

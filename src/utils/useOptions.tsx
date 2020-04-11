@@ -1,5 +1,6 @@
 import { ListItemText, MenuItem } from '@material-ui/core';
 import { FlagOutlined, ShareOutlined } from '@material-ui/icons';
+import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -39,7 +40,7 @@ export const useOptions = (): UseOptions => {
     return {
         renderShareOption,
         renderReportOption,
-        drawerProps,
+        drawerProps: R.omit(['renderHeader'], drawerProps),
         renderOptionsHeader,
     };
 };

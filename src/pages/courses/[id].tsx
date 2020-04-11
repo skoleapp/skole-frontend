@@ -8,8 +8,6 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
-    Table,
-    TableContainer,
     Typography,
 } from '@material-ui/core';
 import {
@@ -49,7 +47,6 @@ import {
     StarButton,
     StyledBottomNavigation,
     StyledList,
-    StyledTable,
     TabLayout,
     TextLink,
 } from '../../components';
@@ -81,7 +78,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     };
 
     if (!!course) {
-        const fullName = getFullCourseName(course);
         const subjectName = R.propOr('-', 'name', course.subject) as string;
         const schoolName = R.propOr('-', 'name', course.school) as string;
         const creatorId = R.propOr('', 'id', course.user) as string;
@@ -94,7 +90,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
         const starred = !!course.starred;
         const isOwner = !!user && user.id === creatorId;
-        const staticBackUrl = { href: '/search' };
         const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
 
         const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
@@ -223,9 +218,9 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const resourceTableHeadProps = {
-            titleLeft: 'common:title',
-            titleLeftDesktop: 'common:resources',
-            titleRight: 'common:points',
+            titleLeft: t('common:title'),
+            titleLeftDesktop: t('common:resources'),
+            titleRight: t('common:points'),
         };
 
         const renderResources = !!resources.length ? (
@@ -237,6 +232,8 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         ) : (
             <NotFoundBox text={'course:noResources'} />
         );
+
+        const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
 
         const renderOptions = (
             <StyledList>
@@ -251,12 +248,6 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 )}
             </StyledList>
         );
-
-        const optionProps = {
-            renderOptions,
-            renderOptionsHeader,
-            drawerProps,
-        };
 
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
             <IconButtonLink
@@ -298,22 +289,27 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </StyledBottomNavigation>
         );
 
-        return (
-            <TabLayout
-                title={fullName}
-                titleSecondary={t('common:discussion')}
-                staticBackUrl={staticBackUrl}
-                renderInfo={renderInfo}
-                optionProps={optionProps}
-                tabLabelLeft={t('common:resources')}
-                renderLeftContent={renderResources}
-                renderRightContent={<DiscussionBox {...discussionBoxProps} />}
-                headerActionMobile={uploadResourceButtonMobile}
-                headerActionDesktop={uploadResourceButtonDesktop}
-                customBottomNavbar={renderCustomBottomNavbar}
-                extraDesktopActions={renderExtraDesktopActions}
-            />
-        );
+        const layoutProps = {
+            title: getFullCourseName(course),
+            titleSecondary: t('common:discussion'),
+            staticBackUrl: { href: '/search' },
+            renderInfo,
+            optionProps: {
+                renderOptions,
+                renderOptionsHeader,
+                drawerProps,
+            },
+            tabLabelLeft: `${t('common:resources')} (${resourceCount})`,
+            tabLabelRight: `${t('common:discussion')} (${comments.length})`,
+            renderLeftContent: renderResources,
+            renderRightContent: renderDiscussionBox,
+            headerActionMobile: uploadResourceButtonMobile,
+            headerActionDesktop: uploadResourceButtonDesktop,
+            customBottomNavbar: renderCustomBottomNavbar,
+            extraDesktopActions: renderExtraDesktopActions,
+        };
+
+        return <TabLayout {...layoutProps} />;
     } else {
         return <NotFoundLayout title={t('course:notFound')} />;
     }
