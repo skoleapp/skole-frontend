@@ -2,6 +2,6 @@
     "notFound": "Resurssia ei löytynyt...",
     "deleteResource": "Poista resurssi",
     "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?",
-    "loadingResource": "Ladataan rerussia...",
+    "loadingResource": "Ladataan resurssia...",
     "errorLoadingResource": "Virhe ladattaessa resurssia."
 }

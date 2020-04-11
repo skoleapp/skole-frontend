@@ -7,8 +7,8 @@ import { ProjectionLike as olProjection } from 'ol/proj';
 import { ImageStatic as olImageStatic } from 'ol/source';
 import PDFJS, { PDFDocumentProxy, PDFPageProxy, PDFPromise } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'src/i18n';
 import styled from 'styled-components';
 
 import { NEXT_PAGE, PREV_PAGE, resetEffect, SET_CENTER, setCurrentPage, setPages } from '../../actions';
@@ -33,7 +33,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     const [touchEnd, setTouchEnd] = useState(0);
     const [initialZoom, setInitialZoom] = useState(0);
 
-    const [loadingStatus, setLoadingStatus] = useState<string>(t('resource:loadingResoruce'));
+    const [loadingStatus, setLoadingStatus] = useState<string>(t('resource:loadingResource'));
 
     const [currentMap, setCurrentMap] = useState<olMap | null>(null);
     const dispatch = useDispatch();
@@ -314,7 +314,6 @@ const StyledPDFViewer = styled(Box)`
     flex: 1 1 auto;
 
     #pdf-container {
-        background-color: rgb(72, 76, 79, 0.7);
         position: absolute;
         width: 100%;
         height: 100%;
@@ -324,12 +323,11 @@ const StyledPDFViewer = styled(Box)`
     }
 
     #loading-container {
+        background-color: rgb(72, 76, 79, 0.7);
         position: absolute;
         display: flex;
         width: 100%;
         height: 100%;
-        z-index: 3;
-        background-color: var(--white);
     }
 `;
 
