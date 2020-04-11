@@ -1,5 +1,5 @@
 {
     "watch": ["src/server.ts", "public/locales/**/*.json"],
-    "exec": "ts-node --project tsconfig.server.json src/server.ts --max_old_space_size=4096",
+    "exec": "TS_NODE_PROJECT='./tsconfig.server.json' node -r ts-node/register --max-old-space-size=4096",
     "ext": "js ts"
 }

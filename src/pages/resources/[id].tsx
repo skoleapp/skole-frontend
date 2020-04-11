@@ -271,6 +271,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </IconButton>
         );
 
+        const totalPages = pages.length > 0 ? pages.length : 1;
+
         const renderExtraResourceActions = (
             <StyledExtraResourceActions container alignItems="center">
                 <Grid item xs={4} container id="vote-section">
@@ -278,29 +280,22 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     {renderUpVoteButton}
                     {renderDownVoteButton}
                 </Grid>
+
+                <Grid item xs={4} container alignItems="center" id="page-controls">
+                    <IconButton disabled={currentPage === 0} onClick={handlePreviousPage} size="small">
+                        <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
+                    </IconButton>
+                    <Typography variant="body2">{currentPage + 1 + ' / ' + totalPages}</Typography>
+                    <IconButton disabled={currentPage === pages.length - 1} onClick={handleNextPage} size="small">
+                        <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
+                    </IconButton>
+                </Grid>
                 {pages.length > 0 && (
-                    <>
-                        <Grid item xs={4} container alignItems="center" id="page-controls">
-                            <IconButton disabled={currentPage === 0} onClick={handlePreviousPage} size="small">
-                                <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
-                            </IconButton>
-                            <Typography variant="body2">{currentPage + 1 + ' / ' + pages.length}</Typography>
-                            <IconButton
-                                disabled={currentPage === pages.length - 1}
-                                onClick={handleNextPage}
-                                size="small"
-                            >
-                                <NavigateNextOutlined
-                                    color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'}
-                                />
-                            </IconButton>
-                        </Grid>
-                        <Grid item xs={4} container justify="flex-end">
-                            <IconButton onClick={handleCenterImage} size="small">
-                                <FullscreenOutlined />
-                            </IconButton>
-                        </Grid>
-                    </>
+                    <Grid item xs={4} container justify="flex-end">
+                        <IconButton onClick={handleCenterImage} size="small">
+                            <FullscreenOutlined />
+                        </IconButton>
+                    </Grid>
                 )}
             </StyledExtraResourceActions>
         );
