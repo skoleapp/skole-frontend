@@ -276,12 +276,15 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         }
     }, [effect]);
 
-    return (
-        <StyledPDFViewer>
-            <div id="pdf-container" ref={ref}></div>
-            <Loading />
-        </StyledPDFViewer>
-    );
+    if (pages.length === 0) {
+        return <Loading />;
+    } else {
+        return (
+            <StyledPDFViewer>
+                <div id="pdf-container" ref={ref} />
+            </StyledPDFViewer>
+        );
+    }
 };
 
 const StyledPDFViewer = styled(Box)`

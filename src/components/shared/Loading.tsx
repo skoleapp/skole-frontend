@@ -1,17 +1,19 @@
-import { Box, CircularProgress, Typography } from '@material-ui/core';
+import { Box, CircularProgress, FormHelperText } from '@material-ui/core';
 import React from 'react';
 
 import { useTranslation } from '../../i18n';
 
-export const Loading: React.FC = () => {
+interface Props {
+    text?: string;
+}
+
+export const Loading: React.FC<Props> = ({ text }) => {
     const { t } = useTranslation();
 
     return (
-        <Box position="absolute" display="flex" alignItems="center" justifyContent="center" height="100%" width="100%">
+        <Box flexGrow="1" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
             <CircularProgress color="primary" />
-            <Box marginLeft="1rem">
-                <Typography>{t('common:loading')}</Typography>
-            </Box>
+            <FormHelperText>{text || t('common:loading')}</FormHelperText>
         </Box>
     );
 };
