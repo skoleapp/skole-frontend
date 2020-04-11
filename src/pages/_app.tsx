@@ -36,7 +36,10 @@ const SkoleApp = ({ Component, pageProps, onMobileGuess }: SkoleAppProps): JSX.E
             jssStyles.parentNode.removeChild(jssStyles);
         }
 
-        setIsMobile(window.innerWidth < breakpointsNum.MD);
+        const onMobile = window.innerWidth < breakpointsNum.MD;
+        if (onMobile !== onMobileGuess) {
+            setIsMobile(onMobile);
+        }
 
         const resizeFunctionRef = (): void => {
             setIsMobile(window.innerWidth < breakpointsNum.MD);
@@ -71,7 +74,6 @@ SkoleApp.getInitialProps = async (ctx: AppContextType<Router>): Promise<{}> => {
         onMobileGuess = Boolean(userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i));
     }
 
-    console.log('from _app.tsx: guessing if client on mobile: ', onMobileGuess);
     return { ...pageProps, namespaces: includeDefaultNamespaces([]), onMobileGuess };
 };
 
