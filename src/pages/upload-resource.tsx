@@ -3,7 +3,6 @@ import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import {
@@ -15,12 +14,11 @@ import {
     useCreateResourceMutation,
 } from '../../generated/graphql';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
-import { useSkoleContext } from '../context';
 import { Router, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useForm, withAuthSync } from '../utils';
+import { useForm, useNotificationsContext, withAuthSync } from '../utils';
 
 interface UploadResourceFormValues {
     resourceTitle: string;
@@ -34,7 +32,7 @@ interface Props extends I18nProps {
 }
 
 const UploadResourcePage: I18nPage<Props> = ({ course }) => {
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const { ref, setSubmitting, onError, resetForm, handleMutationErrors, setFieldError, setFieldValue } = useForm<
@@ -238,4 +236,4 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
         return nameSpaces;
     }
 };
-export default compose(withAuthSync, withApollo, withRedux)(UploadResourcePage);
+export default withApollo(withAuthSync(UploadResourcePage));

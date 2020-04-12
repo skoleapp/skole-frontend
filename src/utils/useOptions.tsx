@@ -3,14 +3,14 @@ import { FlagOutlined, ShareOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 
-import { useSkoleContext } from '../context';
 import { useTranslation } from '../i18n';
 import { UseOptions } from '../types';
+import { useNotificationsContext } from './context';
 import { useDrawer } from './useDrawer';
 
 export const useOptions = (): UseOptions => {
     const { t } = useTranslation();
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
     const drawerProps = useDrawer(t('common:actions'));
     const { onClose, renderHeader: renderOptionsHeader } = drawerProps;
 

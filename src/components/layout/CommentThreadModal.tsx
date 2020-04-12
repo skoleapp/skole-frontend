@@ -4,12 +4,12 @@ import React from 'react';
 
 import { ModalHeader } from '..';
 import { CommentObjectType } from '../../../generated/graphql';
-import { useSkoleContext } from '../../context';
+import { useCommentThreadContext } from '../../utils';
 import { DiscussionBox } from '../shared';
 import { StyledModal } from '../shared/StyledModal';
 
 export const CommentThreadModal: React.FC = () => {
-    const { topComment, toggleCommentThread } = useSkoleContext();
+    const { topComment, toggleCommentThread } = useCommentThreadContext();
     const handleClose = (): void => toggleCommentThread(null);
 
     const discussionBoxProps = {

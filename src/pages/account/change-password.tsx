@@ -1,17 +1,15 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
-import { useSkoleContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { I18nPage, I18nProps } from '../../types';
-import { useForm, withAuthSync } from '../../utils';
+import { useForm, useNotificationsContext, withAuthSync } from '../../utils';
 
 const initialValues = {
     oldPassword: '',
@@ -28,7 +26,7 @@ export interface ChangePasswordFormValues {
 
 const ChangePasswordPage: I18nPage = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<ChangePasswordFormValues>();
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -118,4 +116,4 @@ ChangePasswordPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['change-password']),
 });
 
-export default compose(withAuthSync, withApollo, withRedux)(ChangePasswordPage);
+export default withApollo(withAuthSync(ChangePasswordPage));

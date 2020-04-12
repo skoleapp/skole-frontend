@@ -22,8 +22,6 @@ import {
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { compose } from 'redux';
 
 import {
     CommentObjectType,
@@ -49,11 +47,10 @@ import {
     TabLayout,
     TextLink,
 } from '../../components';
-import { useSkoleContext } from '../../context';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
-import { useFrontendPagination, useOptions, useVotes, withAuthSync } from '../../utils';
+import { withApollo } from '../../lib';
+import { I18nPage, I18nProps, MuiColor, SkoleContext } from '../../types';
+import { useFrontendPagination, useNotificationsContext, useOptions, useVotes, withAuthSync } from '../../utils';
 import { useAuth } from '../../utils';
 
 interface Props extends I18nProps {
@@ -62,7 +59,7 @@ interface Props extends I18nProps {
 
 const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuth();
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
@@ -87,7 +84,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
-        const isOwnCourse = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
+        const isOwnCourse = creatorId === R.propOr('', 'id', user);
         const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
         const starred = !!course.starred;
         const isOwner = !!user && user.id === creatorId;
@@ -299,6 +296,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 header: fullCourseName,
                 staticBackUrl: { href: '/search' },
             },
+            headerDesktop: fullCourseName,
             headerSecondary: t('common:discussion'),
             renderInfo,
             optionProps: {
@@ -338,4 +336,4 @@ CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
     }
 };
 
-export default compose(withAuthSync, withApollo, withRedux)(CourseDetailPage);
+export default withApollo(withAuthSync(CourseDetailPage));

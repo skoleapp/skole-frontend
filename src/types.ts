@@ -7,16 +7,12 @@ import { NextComponentType, NextPageContext } from 'next';
 import { Extent } from 'ol/extent';
 import { Group } from 'ol/layer';
 import { MutableRefObject, SyntheticEvent } from 'react';
-import { Store } from 'redux';
 
-import { CommentObjectType, ErrorType, UserObjectType } from '../generated/graphql';
-import { ResourceState } from './reducers';
+import { CommentObjectType, ErrorType } from '../generated/graphql';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
     apolloState: ApolloQueryResult<{}>;
-    reduxStore: Store;
-    userMe: UserObjectType;
 }
 
 export type I18nPage<P = {}> = NextComponentType<
@@ -27,10 +23,6 @@ export type I18nPage<P = {}> = NextComponentType<
 
 export interface I18nProps {
     namespacesRequired: string[];
-}
-
-export interface State {
-    resource: ResourceState;
 }
 
 export interface SEOProps {
@@ -148,21 +140,50 @@ export interface PDFPage {
     imageExtent: Extent;
 }
 
-export interface Pages {
+export interface AttachmentViewer {
+    attachment: string | null;
+    toggleAttachmentViewer: (payload: string | null) => void;
+}
+
+export interface CommentThread {
+    topComment: CommentObjectType | null;
+    toggleCommentThread: (payload: CommentObjectType | null) => void;
+}
+
+export interface LanguageSelector {
+    languageSelectorOpen: boolean;
+    toggleLanguageSelector: (payload: boolean) => void;
+}
+
+export interface Notifications {
+    notification: string | null;
+    toggleNotification: (payload: string | null) => void;
+}
+
+export interface Settings {
+    settingsOpen: boolean;
+    toggleSettings: (payload: boolean) => void;
+}
+
+export interface PDFViewer {
     pages: PDFPage[];
+    currentPage: number;
+    effect: string;
+    resetEffect: () => void;
+    setCenter: () => void;
+    prevPage: () => void;
+    nextPage: () => void;
+    setPages: (pages: PDFPage[]) => void;
+    setCurrentPage: (currentPage: number) => void;
 }
 
 export interface SkoleContextType {
-    attachment: string | null;
-    toggleAttachmentViewer: (payload: string | null) => void;
-    topComment: CommentObjectType | null;
-    toggleCommentThread: (payload: CommentObjectType | null) => void;
-    languageSelectorOpen: boolean;
-    toggleLanguageSelector: (payload: boolean) => void;
-    notification: string | null;
-    toggleNotification: (payload: string | null) => void;
-    settingsOpen: boolean;
-    toggleSettings: (payload: boolean) => void;
+    attachmentViewer: AttachmentViewer;
+    commentThread: CommentThread;
+    languageSelector: LanguageSelector;
+    notifications: Notifications;
+    settings: Settings;
+    pdfViewer: PDFViewer;
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;

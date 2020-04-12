@@ -1,17 +1,15 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { ContactMutation, useContactMutation } from '../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../components';
-import { useSkoleContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps } from '../types';
-import { useForm } from '../utils';
+import { useForm, useNotificationsContext } from '../utils';
 
 const initialValues = {
     subject: '',
@@ -29,7 +27,7 @@ export interface ContactFormValues {
 }
 
 const ContactPage: I18nPage = () => {
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
     const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<ContactFormValues>();
     const { t } = useTranslation();
 
@@ -132,4 +130,4 @@ ContactPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['contact']),
 });
 
-export default compose(withApollo, withRedux)(ContactPage);
+export default withApollo(ContactPage);

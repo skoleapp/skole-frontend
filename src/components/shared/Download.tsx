@@ -1,8 +1,8 @@
 import { Button } from '@material-ui/core';
 import { CloudDownload } from '@material-ui/icons';
 import React, { useState } from 'react';
+import { useNotificationsContext } from 'src/utils';
 
-import { useSkoleContext } from '../../context';
 import { useTranslation } from '../../i18n';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
  */
 export const Download: React.FC<Props> = ({ url, fileName }) => {
     const [fetching, setFetching] = useState(false);
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const handleClick = async (): Promise<void> => {

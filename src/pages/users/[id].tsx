@@ -3,7 +3,6 @@ import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 import styled from 'styled-components';
 
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
@@ -21,7 +20,7 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { breakpoints } from '../../styles';
 import { ButtonColor, ButtonVariant, I18nPage, I18nProps, MaxWidth, SkoleContext } from '../../types';
 import { mediaURL, useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
@@ -304,4 +303,4 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     }
 };
 
-export default compose(withAuthSync, withRedux, withApollo)(UserPage);
+export default withApollo(withAuthSync(UserPage));

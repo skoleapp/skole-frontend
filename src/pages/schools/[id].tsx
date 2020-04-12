@@ -13,7 +13,6 @@ import { FlagOutlined, HouseOutlined, LocationCityOutlined, SchoolOutlined, Subj
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 
 import {
     CourseObjectType,
@@ -32,7 +31,7 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useFrontendPagination, useOptions, withAuthSync } from '../../utils';
 
@@ -238,4 +237,4 @@ SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
     }
 };
 
-export default compose(withAuthSync, withApollo, withRedux)(SchoolDetailPage);
+export default withApollo(withAuthSync(SchoolDetailPage));

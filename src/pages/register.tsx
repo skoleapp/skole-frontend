@@ -5,14 +5,13 @@ import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps } from '../types';
 import { useAuth, useForm, useLanguageSelector } from '../utils';
 
@@ -167,4 +166,4 @@ RegisterPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['register']),
 });
 
-export default compose(withApollo, withRedux)(RegisterPage);
+export default withApollo(RegisterPage);

@@ -4,12 +4,11 @@ import Image from 'material-ui-image';
 import React from 'react';
 import styled from 'styled-components';
 
-import { useSkoleContext } from '../../context';
 import { breakpoints } from '../../styles';
-import { mediaURL } from '../../utils';
+import { mediaURL, useAttachmentViewerContext } from '../../utils';
 
 export const AttachmentViewer: React.FC = () => {
-    const { attachment, toggleAttachmentViewer } = useSkoleContext();
+    const { attachment, toggleAttachmentViewer } = useAttachmentViewerContext();
     const handleClose = (): void => toggleAttachmentViewer(null);
 
     return (

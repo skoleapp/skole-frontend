@@ -4,7 +4,6 @@ import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 
 import {
     CitiesDocument,
@@ -32,7 +31,7 @@ import {
 } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 import { getPaginationQuery, useFilters, withAuthSync } from '../utils';
 
@@ -237,4 +236,4 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     }
 };
 
-export default compose(withAuthSync, withApollo, withRedux)(SearchPage);
+export default withApollo(withAuthSync(SearchPage));

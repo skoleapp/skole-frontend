@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
-import { ArrowBackOutlined, StarOutlined } from '@material-ui/icons';
+import { ArrowBackOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
 import styled from 'styled-components';
@@ -61,7 +61,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
                     <>
-                        <IconButtonLink icon={StarOutlined} href="/account/starred" color="secondary" />
+                        <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
                         <Link href="/users/[id]" as={`/users/${user.id}`}>
                             <IconButton color="secondary">
                                 <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />

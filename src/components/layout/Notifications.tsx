@@ -3,11 +3,11 @@ import { Close } from '@material-ui/icons';
 import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
 
-import { useSkoleContext } from '../../context';
 import { breakpoints } from '../../styles';
+import { useNotificationsContext } from '../../utils';
 
 export const Notifications: React.FC = () => {
-    const { notification, toggleNotification } = useSkoleContext();
+    const { notification, toggleNotification } = useNotificationsContext();
 
     const handleClose = (_e: SyntheticEvent | MouseEvent, reason?: string): void => {
         if (reason !== 'clickaway') {

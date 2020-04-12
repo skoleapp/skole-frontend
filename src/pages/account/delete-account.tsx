@@ -2,14 +2,13 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
 import React from 'react';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { I18nPage, I18nProps } from '../../types';
 import { useAuth, useForm, withAuthSync } from '../../utils';
 
@@ -97,4 +96,4 @@ DeleteAccountPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['delete-account']),
 });
 
-export default compose(withAuthSync, withApollo, withRedux)(DeleteAccountPage);
+export default withApollo(withAuthSync(DeleteAccountPage));

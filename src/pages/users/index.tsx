@@ -5,13 +5,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 
 import { PaginatedUserObjectType, UserObjectType, UsersDocument } from '../../../generated/graphql';
 import { FilterLayout, FormSubmitSection, NotFoundBox, PaginatedTable, SelectField } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { getPaginationQuery, mediaURL, useFilters, withAuthSync } from '../../utils';
 
@@ -152,4 +151,4 @@ UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     }
 };
 
-export default compose(withAuthSync, withApollo, withRedux)(UsersPage);
+export default withApollo(withAuthSync(UsersPage));

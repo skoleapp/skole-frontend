@@ -7,14 +7,13 @@ import { HttpConfig } from 'apollo-link-http-common';
 import { createUploadLink } from 'apollo-upload-client';
 import fetch from 'isomorphic-unfetch';
 import cookie from 'js-cookie';
-import { NextPage } from 'next';
 import nextCookie from 'next-cookies';
 import Head from 'next/head';
 import React from 'react';
 import { WithApolloClient } from 'react-apollo';
 
 import { i18n } from '../i18n';
-import { SkoleContext } from '../types';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
 
 interface GetToken {
     getToken: (ctx?: WithApolloClient<SkoleContext>) => string;
@@ -30,7 +29,7 @@ export const getToken = (ctx?: WithApolloClient<SkoleContext>): string => {
     }
 };
 
-export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.Element => {
+export const withApollo = <T extends I18nProps>(PageComponent: I18nPage<T>, { ssr = true } = {}): I18nPage<T> => {
     let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
     const createApolloClient = (initialState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
@@ -63,7 +62,7 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.El
         });
     };
 
-    const initApolloClient = (initState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> | null => {
+    const initApolloClient = (initState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
         if (typeof window === 'undefined') {
             return createApolloClient(initState, { getToken });
         }
@@ -75,12 +74,16 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.El
         return apolloClient;
     };
 
-    const WithApollo = ({ apolloClient, apolloState, ...pageProps }: WithApolloClient<SkoleContext>): JSX.Element => {
+    const WithApollo = ({
+        apolloClient,
+        apolloState,
+        ...pageProps
+    }: WithApolloClient<SkoleContext> & T): JSX.Element => {
         const client = apolloClient || initApolloClient(apolloState, { getToken });
 
         return (
-            <ApolloProvider client={client as ApolloClient<NormalizedCacheObject>}>
-                <PageComponent {...(pageProps as {})} />
+            <ApolloProvider client={client}>
+                <PageComponent {...(pageProps as T)} />
             </ApolloProvider>
         );
     };
@@ -96,44 +99,40 @@ export const withApollo = (PageComponent: NextPage, { ssr = true } = {}): JSX.El
     }
 
     if (ssr || PageComponent.getInitialProps) {
-        WithApollo.getInitialProps = async (ctx: WithApolloClient<SkoleContext>): Promise<{}> => {
+        WithApollo.getInitialProps = async (
+            ctx: WithApolloClient<SkoleContext>,
+        ): Promise<(WithApolloClient<SkoleContext> & T) | {}> => {
             const { AppTree } = ctx;
+
             const apolloClient = ((ctx.apolloClient as ApolloClient<NormalizedCacheObject> | null) = initApolloClient(
                 {},
                 { getToken: () => getToken(ctx) },
             ));
+
             const pageProps = PageComponent.getInitialProps ? await PageComponent.getInitialProps(ctx) : {};
 
             if (typeof window === 'undefined') {
                 if (ctx.res && ctx.res.finished) {
                     return {};
                 }
+
                 if (ssr) {
                     try {
                         const { getDataFromTree } = await import('@apollo/react-ssr');
-                        await getDataFromTree(
-                            <AppTree
-                                pageProps={{
-                                    ...pageProps,
-                                    apolloClient,
-                                }}
-                            />,
-                        );
+                        const customPageProps = { ...pageProps, apolloClient };
+                        await getDataFromTree(<AppTree pageProps={customPageProps} />);
                     } catch (error) {
                         console.error('Error while running `getDataFromTree`', error);
                     }
                 }
+
                 Head.rewind();
             }
 
-            const apolloState = apolloClient && (apolloClient.cache.extract() as unknown);
-
-            return {
-                ...pageProps,
-                apolloState,
-            };
+            const apolloState = apolloClient && apolloClient.cache.extract();
+            return { ...pageProps, apolloState };
         };
     }
 
-    return (WithApollo as unknown) as JSX.Element;
+    return WithApollo as I18nPage<T>;
 };

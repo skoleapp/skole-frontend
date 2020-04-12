@@ -4,15 +4,15 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { StyledList } from '../components/shared/StyledList';
-import { useSkoleContext } from '../context';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
-import { SkoleContextType } from '../types';
+import { Settings } from '../types';
 import { menuItems } from '.';
 import { useAuth } from './auth';
+import { useNotificationsContext, useSettingsContext } from './context';
 import { useLanguageSelector } from './useLanguageSelector';
 
-interface UseSettings extends Pick<SkoleContextType, 'settingsOpen' | 'toggleSettings'> {
+interface UseSettings extends Settings {
     renderSettingsCardContent: JSX.Element;
 }
 
@@ -25,7 +25,8 @@ interface Props {
 export const useSettings = ({ modal }: Props): UseSettings => {
     const { user } = useAuth();
     const authenticated = !!user;
-    const { toggleNotification, settingsOpen, toggleSettings } = useSkoleContext();
+    const { settingsOpen, toggleSettings } = useSettingsContext();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
     const { pathname } = useRouter();
     const { renderCurrentFlag, openLanguageMenu } = useLanguageSelector();

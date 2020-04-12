@@ -1,7 +1,6 @@
 import { Box, Tab } from '@material-ui/core';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 
 import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
 import {
@@ -15,7 +14,7 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { I18nPage, I18nProps } from '../../types';
 import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 
@@ -102,4 +101,4 @@ const StarredPage: I18nPage = () => {
 
 StarredPage.getInitialProps = (): I18nProps => ({ namespacesRequired: includeDefaultNamespaces(['starred']) });
 
-export default compose(withAuthSync, withRedux, withApollo)(StarredPage);
+export default withApollo(withAuthSync(StarredPage));

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import styled from 'styled-components';
 
-import { useSkoleContext } from '../context';
 import { useTranslation } from '../i18n';
-import { SkoleContextType } from '../types';
+import { LanguageSelector } from '../types';
+import { useLanguageSelectorContext } from './context';
 
 interface Language {
     code: string;
@@ -19,7 +19,7 @@ const languages: Language[] = [
     { code: 'SE', label: 'languages:swedish', value: 'sv' },
 ];
 
-interface UseLanguageSelector extends Pick<SkoleContextType, 'toggleLanguageSelector' | 'languageSelectorOpen'> {
+interface UseLanguageSelector extends LanguageSelector {
     renderCurrentFlag: string;
     languageToFlag: (isoCode: string) => string;
     languages: Language[];
@@ -30,7 +30,7 @@ interface UseLanguageSelector extends Pick<SkoleContextType, 'toggleLanguageSele
 export const useLanguageSelector = (): UseLanguageSelector => {
     const { i18n } = useTranslation();
     const [value, setValue] = useState(i18n.language);
-    const { toggleLanguageSelector, languageSelectorOpen } = useSkoleContext();
+    const { toggleLanguageSelector, languageSelectorOpen } = useLanguageSelectorContext();
 
     useEffect(() => {
         setValue(i18n.language);

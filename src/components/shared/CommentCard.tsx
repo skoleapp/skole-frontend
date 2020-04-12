@@ -23,7 +23,6 @@ import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import {
@@ -32,10 +31,16 @@ import {
     useDeleteCommentMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { toggleCommentThread } from '../../actions';
-import { useSkoleContext } from '../../context';
 import { useTranslation } from '../../i18n';
-import { mediaURL, useAuth, useOptions, useVotes } from '../../utils';
+import {
+    mediaURL,
+    useAttachmentViewerContext,
+    useAuth,
+    useCommentThreadContext,
+    useNotificationsContext,
+    useOptions,
+    useVotes,
+} from '../../utils';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
 
@@ -47,7 +52,6 @@ interface Props {
 }
 
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
-    const dispatch = useDispatch();
     const { t } = useTranslation();
     const { user } = useAuth();
     const created = moment(comment.created).format('LL');
@@ -61,7 +65,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const commentId = R.propOr('', 'id', comment) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
     const { onClose: handleCloseOptions, handleOpen: handleOpenOptions } = drawerProps;
-    const { toggleNotification, toggleAttachmentViewer } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
+    const { toggleAttachmentViewer } = useAttachmentViewerContext();
+    const { toggleCommentThread } = useCommentThreadContext();
 
     const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -73,7 +79,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         if (isThread) {
             attachmentOnly && toggleAttachmentViewer(comment.attachment);
         } else {
-            dispatch(toggleCommentThread(comment));
+            toggleCommentThread(comment);
         }
     };
 

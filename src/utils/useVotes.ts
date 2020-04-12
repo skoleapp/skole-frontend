@@ -2,9 +2,9 @@ import { Size } from '@material-ui/core';
 import { useState } from 'react';
 
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from '../../generated/graphql';
-import { useSkoleContext } from '../context';
 import { useTranslation } from '../i18n';
 import { MuiColor } from '../types';
+import { useNotificationsContext } from './context';
 
 interface Variables {
     status: number;
@@ -35,7 +35,7 @@ interface UseVotes {
 export const useVotes = ({ initialVote, initialPoints, isOwner }: UseVotesProps): UseVotes => {
     const [vote, setVote] = useState(initialVote);
     const [points, setPoints] = useState(initialPoints);
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const onError = (): void => {

@@ -1,13 +1,12 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { FormLayout, FormSubmitSection } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { I18nPage, I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -74,4 +73,4 @@ ResetPasswordLinkPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['reset-password']),
 });
 
-export default compose(withApollo, withRedux)(ResetPasswordLinkPage);
+export default withApollo(ResetPasswordLinkPage);

@@ -1,10 +1,10 @@
 import { IconButton } from '@material-ui/core';
-import { StarOutlined } from '@material-ui/icons';
+import { StarBorderOutlined } from '@material-ui/icons';
 import { useState } from 'react';
 import React from 'react';
+import { useNotificationsContext } from 'src/utils';
 
 import { PerformStarMutation, usePerformStarMutation } from '../../../generated/graphql';
-import { useSkoleContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { MuiColor } from '../../types';
 
@@ -16,7 +16,7 @@ interface Props {
 
 export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, resource }) => {
     const [starred, setStarred] = useState(initialStarred);
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const onError = (): void => {
@@ -46,7 +46,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
             disabled={starSubmitting}
             size="small"
         >
-            <StarOutlined />
+            <StarBorderOutlined />
         </IconButton>
     );
 };

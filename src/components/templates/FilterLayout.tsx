@@ -55,14 +55,14 @@ export const FilterLayout: React.FC<Props> = ({
         <Grid className="md-up" container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
-                    <CardHeader subheader={t('common:advancedSearch')} />
+                    <CardHeader title={t('common:advancedSearch')} />
                     <Divider />
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
             </Grid>
             <Grid item container xs={7} md={8} lg={9}>
                 <StyledCard marginLeft>
-                    <CardHeader subheader={t('common:searchResults')} />
+                    <CardHeader title={t('common:searchResults')} />
                     <Divider />
                     <StyledTable>{renderTableContent}</StyledTable>
                 </StyledCard>

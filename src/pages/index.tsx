@@ -9,13 +9,12 @@ import {
     SvgIconComponent,
 } from '@material-ui/icons';
 import React from 'react';
-import { compose } from 'redux';
 import styled from 'styled-components';
 
 import { ButtonLink, MainLayout } from '../components';
 import { Link, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { breakpoints } from '../styles';
 import { I18nPage, I18nProps } from '../types';
 import { useSearch, withAuthSync } from '../utils';
@@ -186,4 +185,4 @@ IndexPage.getInitialProps = async (): Promise<I18nProps> => {
     return { namespacesRequired: includeDefaultNamespaces(['index']) };
 };
 
-export default compose(withAuthSync, withApollo, withRedux)(IndexPage);
+export default withApollo(withAuthSync(IndexPage));

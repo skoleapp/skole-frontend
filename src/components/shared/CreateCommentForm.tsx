@@ -8,9 +8,8 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
-import { useSkoleContext } from '../../context';
 import { CommentTarget } from '../../types';
-import { useForm } from '../../utils';
+import { useForm, useNotificationsContext } from '../../utils';
 import { ModalHeader } from './ModalHeader';
 import { StyledModal } from './StyledModal';
 
@@ -43,7 +42,7 @@ export const CreateCommentForm: React.FC<Props> = ({
     const { t } = useTranslation();
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
 
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);

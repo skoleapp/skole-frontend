@@ -1,10 +1,9 @@
 import React from 'react';
-import { compose } from 'redux';
 
 import { SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps } from '../types';
 
 const AboutPage: I18nPage = () => {
@@ -31,4 +30,4 @@ AboutPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['about']),
 });
 
-export default compose(withApollo, withRedux)(AboutPage);
+export default withApollo(AboutPage);

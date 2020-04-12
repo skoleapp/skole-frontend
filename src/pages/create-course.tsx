@@ -2,7 +2,6 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import {
@@ -14,12 +13,11 @@ import {
     useCreateCourseMutation,
 } from '../../generated/graphql';
 import { AutoCompleteField, FormLayout, FormSubmitSection } from '../components';
-import { useSkoleContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps } from '../types';
-import { useForm, withAuthSync } from '../utils';
+import { useForm, useNotificationsContext, withAuthSync } from '../utils';
 
 interface CreateCourseFormValues {
     courseName: string;
@@ -31,7 +29,7 @@ interface CreateCourseFormValues {
 
 const CreateCoursePage: I18nPage<I18nProps> = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<CreateCourseFormValues>();
-    const { toggleNotification } = useSkoleContext();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -147,4 +145,4 @@ CreateCoursePage.getInitialProps = async (): Promise<I18nProps> => ({
     namespacesRequired: includeDefaultNamespaces(['create-course']),
 });
 
-export default compose(withAuthSync, withRedux, withApollo)(CreateCoursePage);
+export default withApollo(withAuthSync(CreateCoursePage));
