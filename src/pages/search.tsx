@@ -201,18 +201,24 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
         <NotFoundBox text={t('search:noCourses')} />
     );
 
-    return (
-        <FilterLayout
-            title={t('search:title')}
-            heading={t('search:heading')}
-            renderCardContent={renderCardContent}
-            renderTableContent={renderTableContent}
-            drawerProps={drawerProps}
-            handleClearFilters={handleClearFilters}
-            dynamicBackUrl
-            disableSearch
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('search:title'),
+            description: t('search:description'),
+        },
+        topNavbarProps: {
+            header: t('search:header'),
+            dynamicBackUrl: true,
+            disableSearch: true,
+        },
+        desktopHeader: t('search:header'),
+        renderCardContent,
+        renderTableContent,
+        drawerProps,
+        handleClearFilters,
+    };
+
+    return <FilterLayout {...layoutProps} />;
 };
 
 SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {

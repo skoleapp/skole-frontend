@@ -1,5 +1,5 @@
 {
-    "notFound": "Resurssia ei löytynyt...",
+    "description": "Tämä on resurssi-sivu.",
     "deleteResource": "Poista resurssi",
     "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?"
 }

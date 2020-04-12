@@ -1,3 +1,5 @@
 {
-    "notFound": "Etsimääsi sivua ei löytynyt..."
+    "title": "Ei löydetty",
+    "description": "Tämä on 404-sivu.",
+    "header": "Etsimääsi sivua ei löytynyt..."
 }

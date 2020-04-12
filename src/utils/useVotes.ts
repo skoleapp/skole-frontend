@@ -1,9 +1,8 @@
 import { Size } from '@material-ui/core';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from '../../generated/graphql';
-import { toggleNotification } from '../actions';
+import { useSkoleContext } from '../context';
 import { useTranslation } from '../i18n';
 import { MuiColor } from '../types';
 
@@ -36,11 +35,11 @@ interface UseVotes {
 export const useVotes = ({ initialVote, initialPoints, isOwner }: UseVotesProps): UseVotes => {
     const [vote, setVote] = useState(initialVote);
     const [points, setPoints] = useState(initialPoints);
-    const dispatch = useDispatch();
+    const { toggleNotification } = useSkoleContext();
     const { t } = useTranslation();
 
     const onError = (): void => {
-        dispatch(toggleNotification(t('notifications:voteError')));
+        toggleNotification(t('notifications:voteError'));
     };
 
     const onCompleted = ({ performVote }: PerformVoteMutation): void => {

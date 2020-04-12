@@ -11,18 +11,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { NEXT_PAGE, PREV_PAGE, resetEffect, SET_CENTER, setCurrentPage, setPages } from '../../actions';
-import { State } from '../../types';
-import { LoadingBox } from './LoadingBox';
+import { PDFPage, State } from '../../types';
+import { LoadingBox } from '../shared';
 
 interface Props {
     file: string;
-}
-export interface Page {
-    layer: olGroup;
-    imageExtent: olExtent;
-}
-export interface Pages {
-    pages: Page[];
 }
 
 export const PDFViewer: React.FC<Props> = ({ file }) => {
@@ -75,13 +68,13 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         }
     };
 
-    const createPagesFromPDF = (url: string): PDFPromise<PDFPromise<PDFPromise<Page>>[]> => {
+    const createPagesFromPDF = (url: string): PDFPromise<PDFPromise<PDFPromise<PDFPage>>[]> => {
         const Image = require('ol/layer/Image').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
         const Projection = require('ol/proj/Projection').default;
         const Group = require('ol/layer/Group').default;
 
-        const renderPage = (page: PDFPageProxy): PDFPromise<Page> => {
+        const renderPage = (page: PDFPageProxy): PDFPromise<PDFPage> => {
             const viewport = page.getViewport({ scale: 2 });
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
@@ -126,12 +119,12 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                     //
                 }
 
-                const mapData: Page = { layer: layer, imageExtent: imageExtent };
+                const mapData: PDFPage = { layer: layer, imageExtent: imageExtent };
 
                 return mapData;
             });
         };
-        const renderPages = (PDFJSPages: PDFDocumentProxy): PDFPromise<PDFPromise<Page>>[] => {
+        const renderPages = (PDFJSPages: PDFDocumentProxy): PDFPromise<PDFPromise<PDFPage>>[] => {
             const promises = [];
 
             for (let index = 1; index <= PDFJSPages.numPages; index++) {

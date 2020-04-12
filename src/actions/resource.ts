@@ -2,7 +2,7 @@ import { Map } from 'ol';
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 
-import { Page } from '../components/shared/PDFViewer';
+import { PDFPage } from '../types';
 
 export const SET_CENTER = 'SET_CENTER';
 export const PREV_PAGE = 'PREV_PAGE';
@@ -28,7 +28,7 @@ export const nextPage = () => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: NEXT_PAGE });
 };
 
-export const setPages = (pages: Page[]) => (dispatch: Dispatch<AnyAction>): void => {
+export const setPages = (pages: PDFPage[]) => (dispatch: Dispatch<AnyAction>): void => {
     dispatch({ type: SET_PAGES, payload: pages });
 };
 

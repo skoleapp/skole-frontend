@@ -10,15 +10,21 @@ import { I18nPage, I18nProps } from '../types';
 const PrivacyPage: I18nPage = () => {
     const { t } = useTranslation();
 
-    return (
-        <SettingsLayout
-            title={t('privacy:title')}
-            heading={t('privacy:heading')}
-            infoContent={t('privacy:content')}
-            dynamicBackUrl
-            infoLayout
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('privacy:title'),
+            description: t('privacy:description'),
+        },
+        topNavbarProps: {
+            header: t('privacy:header'),
+            dynamicBackUrl: true,
+        },
+        desktopHeader: t('privacy:header'),
+        infoContent: t('privacy:content'),
+        infoLayout: true,
+    };
+
+    return <SettingsLayout {...layoutProps} />;
 };
 
 PrivacyPage.getInitialProps = (): I18nProps => ({ namespacesRequired: includeDefaultNamespaces(['privacy']) });

@@ -1,11 +1,11 @@
 import { Button } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import { toggleLanguageSelector } from '../actions';
+import { useSkoleContext } from '../context';
 import { useTranslation } from '../i18n';
+import { SkoleContextType } from '../types';
 
 interface Language {
     code: string;
@@ -19,7 +19,7 @@ const languages: Language[] = [
     { code: 'SE', label: 'languages:swedish', value: 'sv' },
 ];
 
-interface UseLanguageSelector {
+interface UseLanguageSelector extends Pick<SkoleContextType, 'toggleLanguageSelector' | 'languageSelectorOpen'> {
     renderCurrentFlag: string;
     languageToFlag: (isoCode: string) => string;
     languages: Language[];
@@ -30,7 +30,7 @@ interface UseLanguageSelector {
 export const useLanguageSelector = (): UseLanguageSelector => {
     const { i18n } = useTranslation();
     const [value, setValue] = useState(i18n.language);
-    const dispatch = useDispatch();
+    const { toggleLanguageSelector, languageSelectorOpen } = useSkoleContext();
 
     useEffect(() => {
         setValue(i18n.language);
@@ -42,19 +42,23 @@ export const useLanguageSelector = (): UseLanguageSelector => {
             : isoCode;
     };
 
-    const openLanguageMenu = (): void => {
-        dispatch(toggleLanguageSelector(true));
-    };
-
+    const openLanguageMenu = (): void => toggleLanguageSelector(true);
     const language = languages.find(c => c.value === value) as Language;
-
     const renderCurrentFlag = !!language && !!language.code ? languageToFlag(language.code) : languageToFlag('US');
 
     const renderLanguageButton = (
         <StyledLanguageSelector onClick={openLanguageMenu}>{renderCurrentFlag}</StyledLanguageSelector>
     );
 
-    return { renderCurrentFlag, languageToFlag, languages, openLanguageMenu, renderLanguageButton };
+    return {
+        renderCurrentFlag,
+        languageToFlag,
+        languages,
+        openLanguageMenu,
+        renderLanguageButton,
+        languageSelectorOpen,
+        toggleLanguageSelector,
+    };
 };
 
 const StyledLanguageSelector = styled(Button)`

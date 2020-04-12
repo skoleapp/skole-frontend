@@ -4,11 +4,13 @@ import ApolloClient, { ApolloError, ApolloQueryResult } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
 import { NextComponentType, NextPageContext } from 'next';
+import { Extent } from 'ol/extent';
+import { Group } from 'ol/layer';
 import { MutableRefObject, SyntheticEvent } from 'react';
 import { Store } from 'redux';
 
 import { CommentObjectType, ErrorType, UserObjectType } from '../generated/graphql';
-import { ResourceState, UI } from './reducers';
+import { ResourceState } from './reducers';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
@@ -28,23 +30,30 @@ export interface I18nProps {
 }
 
 export interface State {
-    ui: UI;
     resource: ResourceState;
 }
 
-export interface LayoutProps extends ContainerProps {
+export interface SEOProps {
     title?: string;
-    heading?: string;
+    description?: string;
+}
+
+export interface TopNavbarProps {
+    header?: string;
     dynamicBackUrl?: boolean;
     staticBackUrl?: {
         href: string;
         as?: string;
     };
-    renderCardContent?: JSX.Element;
-    renderAlert?: JSX.Element;
     disableSearch?: boolean;
     headerRight?: JSX.Element;
     headerLeft?: JSX.Element;
+}
+
+export interface LayoutProps {
+    seoProps?: SEOProps;
+    topNavbarProps?: TopNavbarProps;
+    containerProps?: ContainerProps;
     disableBottomNavbar?: boolean;
     customBottomNavbar?: JSX.Element;
 }
@@ -54,7 +63,7 @@ export interface CommentTarget {
 }
 
 export interface DiscussionBoxProps {
-    commentThread?: CommentObjectType | null;
+    topComment?: CommentObjectType | null;
     comments: CommentObjectType[];
     isThread?: boolean;
     target: CommentTarget;
@@ -133,3 +142,27 @@ export type CustomTablePaginationProps = Pick<
     TablePaginationProps,
     'page' | 'count' | 'rowsPerPage' | 'onChangePage' | 'onChangeRowsPerPage'
 >;
+
+export interface PDFPage {
+    layer: Group;
+    imageExtent: Extent;
+}
+
+export interface Pages {
+    pages: PDFPage[];
+}
+
+export interface SkoleContextType {
+    attachment: string | null;
+    toggleAttachmentViewer: (payload: string | null) => void;
+    topComment: CommentObjectType | null;
+    toggleCommentThread: (payload: CommentObjectType | null) => void;
+    languageSelectorOpen: boolean;
+    toggleLanguageSelector: (payload: boolean) => void;
+    notification: string | null;
+    toggleNotification: (payload: string | null) => void;
+    settingsOpen: boolean;
+    toggleSettings: (payload: boolean) => void;
+}
+
+export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;

@@ -20,10 +20,10 @@ import {
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';
-import { getPaginationQuery } from 'src/utils';
 
 import { Router, useTranslation } from '../../i18n';
 import { CustomTablePaginationProps, TextColor, TextVariant } from '../../types';
+import { getPaginationQuery } from '../../utils';
 import { StyledTable } from './StyledTable';
 
 interface CustomTableHeadProps {

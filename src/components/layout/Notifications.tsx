@@ -1,20 +1,17 @@
 import { IconButton, Snackbar, SnackbarOrigin } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import React, { SyntheticEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { toggleNotification } from '../../actions';
+import { useSkoleContext } from '../../context';
 import { breakpoints } from '../../styles';
-import { State } from '../../types';
 
 export const Notifications: React.FC = () => {
-    const { notification } = useSelector((state: State) => state.ui);
-    const dispatch = useDispatch();
+    const { notification, toggleNotification } = useSkoleContext();
 
     const handleClose = (_e: SyntheticEvent | MouseEvent, reason?: string): void => {
         if (reason !== 'clickaway') {
-            dispatch(toggleNotification(null));
+            toggleNotification(null);
         }
     };
 
@@ -36,7 +33,7 @@ export const Notifications: React.FC = () => {
     ];
 
     return (
-        <StyledNotifications
+        <StyledNotification
             anchorOrigin={anchorOrigin}
             open={!!notification}
             autoHideDuration={2000}
@@ -48,7 +45,7 @@ export const Notifications: React.FC = () => {
     );
 };
 
-const StyledNotifications = styled(Snackbar)`
+const StyledNotification = styled(Snackbar)`
     @media only screen and (max-width: ${breakpoints.SM}) {
         margin-bottom: 3rem;
     }

@@ -45,6 +45,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
     const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions();
 
     if (school) {
+        const schoolName = R.propOr('-', 'name', school) as string;
         const schoolType = R.propOr('-', 'schoolType', school) as string;
         const country = R.propOr('-', 'country', school) as string;
         const city = R.propOr('-', 'city', school) as string;
@@ -192,8 +193,16 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
         );
 
         const layoutProps = {
-            title: R.propOr('-', 'name', school) as string,
-            titleSecondary: t('common:courses'),
+            seoProps: {
+                title: schoolName,
+                description: t('school:description'),
+            },
+            topNavbarProps: {
+                dynamicBackUrl: true,
+                header: schoolName,
+            },
+            headerDesktop: schoolName,
+            headerSecondary: t('common:courses'),
             tabLabelLeft: `${t('common:subjects')} (${subjectCount})`,
             tabLabelRight: `${t('common:courses')} (${courseCount})`,
             renderInfo,
@@ -205,12 +214,11 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
             renderLeftContent: renderSubjects,
             renderRightContent: renderCourses,
             singleColumn: true,
-            dynamicBackUrl: true,
         };
 
         return <TabLayout {...layoutProps} />;
     } else {
-        return <NotFoundLayout title={t('school:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 

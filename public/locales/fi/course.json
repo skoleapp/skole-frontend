@@ -1,5 +1,5 @@
 {
-    "notFound": "Kurssia ei löytynyt...",
+    "description": "Tämä on kurssi-sivu.",
     "noResources": "Ei resursseja...",
     "deleteCourse": "Poista kurssi",
     "confirmDesc": "Oletko varma että haluat poistaa tämän kurssin?"

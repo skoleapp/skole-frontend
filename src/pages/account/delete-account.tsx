@@ -76,15 +76,21 @@ export const DeleteAccountPage: I18nPage = () => {
         </Formik>
     );
 
-    return (
-        <SettingsLayout
-            title={t('delete-account:title')}
-            heading={t('delete-account:heading')}
-            renderCardContent={renderCardContent}
-            dynamicBackUrl
-            formLayout
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('delete-account:title'),
+            description: t('delete-account:description'),
+        },
+        topNavbarProps: {
+            header: t('delete-account:header'),
+            dynamicBackUrl: true,
+        },
+        renderCardContent,
+        desktopHeader: t('delete-account:header'),
+        formLayout: true,
+    };
+
+    return <SettingsLayout {...layoutProps} />;
 };
 
 DeleteAccountPage.getInitialProps = (): I18nProps => ({

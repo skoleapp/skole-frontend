@@ -1,17 +1,14 @@
 import { IconButton, IconButtonProps } from '@material-ui/core';
 import { Settings } from '@material-ui/icons';
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { AnyAction } from 'redux';
 
-import { toggleSettings } from '../../actions';
+import { useSkoleContext } from '../../context';
 
 export const SettingsButton: React.FC<IconButtonProps> = props => {
-    const dispatch = useDispatch();
-    const handleSettingsClick = (): AnyAction => dispatch((toggleSettings(true) as unknown) as AnyAction);
+    const { toggleSettings } = useSkoleContext();
 
     return (
-        <IconButton onClick={handleSettingsClick} {...props}>
+        <IconButton onClick={(): void => toggleSettings(true)} {...props}>
             <Settings />
         </IconButton>
     );

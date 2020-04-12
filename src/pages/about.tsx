@@ -10,15 +10,21 @@ import { I18nPage, I18nProps } from '../types';
 const AboutPage: I18nPage = () => {
     const { t } = useTranslation();
 
-    return (
-        <SettingsLayout
-            title={t('about:title')}
-            heading={t('about:heading')}
-            infoContent={t('about:content')}
-            dynamicBackUrl
-            infoLayout
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('about:title'),
+            description: t('about:description'),
+        },
+        topNavbarProps: {
+            header: t('about:header'),
+            dynamicBackUrl: true,
+        },
+        desktopHeader: t('about:header'),
+        infoContent: t('terms:content'),
+        infoLayout: true,
+    };
+
+    return <SettingsLayout {...layoutProps} />;
 };
 
 AboutPage.getInitialProps = (): I18nProps => ({

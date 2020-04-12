@@ -1,6 +1,7 @@
 {
     "title": "Kurssit",
-    "heading": "Kurssit",
+    "description": "Tämä on kurssien hakusivu.",
+    "header": "Kurssit",
     "coursesSubHeader": "Kurssit",
     "noCourses": "Ei kursseja..."
 }

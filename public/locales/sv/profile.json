@@ -1,10 +1,9 @@
 {
-    "title": "Profil",
+    "description": "Detta är en profilsida.",
     "points": "poäng",
     "courses": "kurser",
     "resources": "resurser",
     "editProfile": "Redigera Profil",
     "noResources": "Inga uppladdade resurser...",
-    "noCourses": "Inga tillagda kurser...",
-    "notFound": "Profilen hittades inte..."
+    "noCourses": "Inga tillagda kurser..."
 }

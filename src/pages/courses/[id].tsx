@@ -22,7 +22,7 @@ import {
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { compose } from 'redux';
 
 import {
@@ -34,7 +34,6 @@ import {
     useDeleteCourseMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { toggleNotification } from '../../actions';
 import {
     CreatorListItem,
     DiscussionBox,
@@ -50,6 +49,7 @@ import {
     TabLayout,
     TextLink,
 } from '../../components';
+import { useSkoleContext } from '../../context';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
 import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
@@ -62,7 +62,7 @@ interface Props extends I18nProps {
 
 const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
+    const { toggleNotification } = useSkoleContext();
     const confirm = useConfirm();
     const { user } = useAuth();
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
@@ -78,6 +78,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     };
 
     if (!!course) {
+        const fullCourseName = getFullCourseName(course);
         const subjectName = R.propOr('-', 'name', course.subject) as string;
         const schoolName = R.propOr('-', 'name', course.school) as string;
         const creatorId = R.propOr('', 'id', course.user) as string;
@@ -110,7 +111,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const deleteCourseError = (): void => {
-            dispatch(toggleNotification(t('notifications:deleteCourseError')));
+            toggleNotification(t('notifications:deleteCourseError'));
         };
 
         const deleteCourseCompleted = ({ deleteCourse }: DeleteCourseMutation): void => {
@@ -119,7 +120,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     deleteCourseError();
                 } else {
                     Router.push('/');
-                    dispatch(toggleNotification(t('notifications:courseDeleted')));
+                    toggleNotification(t('notifications:courseDeleted'));
                 }
             }
         };
@@ -290,9 +291,15 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const layoutProps = {
-            title: getFullCourseName(course),
-            titleSecondary: t('common:discussion'),
-            staticBackUrl: { href: '/search' },
+            seoProps: {
+                title: fullCourseName,
+                description: t('course:description'),
+            },
+            topNavbarProps: {
+                header: fullCourseName,
+                staticBackUrl: { href: '/search' },
+            },
+            headerSecondary: t('common:discussion'),
             renderInfo,
             optionProps: {
                 renderOptions,
@@ -311,7 +318,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
 
         return <TabLayout {...layoutProps} />;
     } else {
-        return <NotFoundLayout title={t('course:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 

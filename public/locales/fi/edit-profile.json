@@ -1,6 +1,7 @@
 {
     "title": "Muokkaa profiilia",
-    "heading": "Muokkaa profiilia",
+    "description": "Tämä on profiilin muokkaussivu.",
+    "header": "Muokkaa profiilia",
     "addAvatar": "Lisää avatar",
     "changeAvatar": "Muokkaa avataria",
     "clearAvatar": "Poista avatar"

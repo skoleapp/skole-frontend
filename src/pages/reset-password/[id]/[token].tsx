@@ -69,7 +69,20 @@ const ResetPasswordConfirmPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('reset-password:confirm')} renderCardContent={renderCardContent} dynamicBackUrl />;
+    const layoutProps = {
+        seoProps: {
+            title: t('reset-password:title'),
+            description: t('reset-password:description'),
+        },
+        topNavbarProps: {
+            header: t('reset-password:header'),
+            dynamicBackUrl: true,
+        },
+        renderCardContent: renderCardContent,
+        desktopHeader: t('reset-password:header'),
+    };
+
+    return <FormLayout {...layoutProps} />;
 };
 
 ResetPasswordConfirmPage.getInitialProps = (): I18nProps => ({

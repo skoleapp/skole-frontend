@@ -17,7 +17,6 @@ export { StyledModal } from './StyledModal';
 export { ModalHeader } from './ModalHeader';
 export { DiscussionBox } from './DiscussionBox';
 export { Heading } from './Heading';
-export { PDFViewer } from './PDFViewer';
 export { StyledList } from './StyledList';
 export { StyledTabs } from './StyledTabs';
 export { StyledBottomNavigation } from './StyledBottomNavigation';

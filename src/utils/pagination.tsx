@@ -1,7 +1,8 @@
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import { ChangeEvent, MouseEvent, useState } from 'react';
-import { CustomTablePaginationProps } from 'src/types';
+
+import { CustomTablePaginationProps } from '../types';
 
 interface Props {
     query: {};

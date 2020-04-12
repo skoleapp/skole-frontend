@@ -1,3 +1,5 @@
 {
-    "notFound": "Sidan du sökte hittades inte..."
+    "title": "Hittades inte",
+    "description": "Detta är en 404 sida.",
+    "header": "Sidan du sökte hittades inte..."
 }

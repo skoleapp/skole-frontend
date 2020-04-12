@@ -1,6 +1,7 @@
 {
     "title": "Logga In",
-    "heading": "Logga In",
+    "description": "Detta är en inloggningssida.",
+    "header": "Logga In",
     "createAccount": "Skapa Ett konto",
     "forgotPassword": "Glömt Ditt Lösenord?"
 }

@@ -146,15 +146,21 @@ const RegisterPage: I18nPage = () => {
         </Formik>
     );
 
-    return (
-        <FormLayout
-            title={t('register:title')}
-            heading={t('register:heading')}
-            headerRight={renderLanguageButton}
-            renderCardContent={renderCardContent}
-            disableBottomNavbar
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('register:title'),
+            description: t('register:description'),
+        },
+        topNavbarProps: {
+            header: t('register:header'),
+            headerRight: renderLanguageButton,
+        },
+        desktopHeader: t('register:header'),
+        renderCardContent,
+        disableBottomNavbar: true,
+    };
+
+    return <FormLayout {...layoutProps} />;
 };
 
 RegisterPage.getInitialProps = (): I18nProps => ({

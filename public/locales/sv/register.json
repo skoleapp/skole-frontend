@@ -1,6 +1,7 @@
 {
     "title": "Registrera",
-    "heading": "Registrera",
+    "description": "Det här är en registreringssida.",
+    "header": "Registrera",
     "termsHelpText": "Genom att registrera dig godkänner du våra villkor.",
     "alreadyHaveAccount": "Har du redan ett konto?"
 }

@@ -2,13 +2,12 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
-import { toggleNotification } from '../../actions';
 import { AvatarField, FormSubmitSection, LoadingBox, NotFoundLayout, SettingsLayout } from '../../components';
+import { useSkoleContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -27,7 +26,7 @@ export interface UpdateProfileFormValues {
 const EditProfilePage: I18nPage = () => {
     const { user, loading, updateUser: _updateUser } = useAuth();
     const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
-    const dispatch = useDispatch();
+    const { toggleNotification } = useSkoleContext();
     const { t } = useTranslation();
 
     const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
@@ -35,7 +34,7 @@ const EditProfilePage: I18nPage = () => {
             if (updateUser.errors) {
                 handleMutationErrors(updateUser.errors);
             } else {
-                dispatch(toggleNotification(t('notifications:profileUpdated')));
+                toggleNotification(t('notifications:profileUpdated'));
                 _updateUser(updateUser.user as UserObjectType);
             }
         }
@@ -121,18 +120,24 @@ const EditProfilePage: I18nPage = () => {
         </Formik>
     );
 
+    const layoutProps = {
+        seoProps: {
+            title: t('edit-profile:title'),
+            description: t('edit-profile:description'),
+        },
+        topNavbarProps: {
+            header: t('edit-profile:header'),
+            dynamicBackUrl: true,
+        },
+        renderCardContent: loading ? <LoadingBox /> : renderCardContent,
+        desktopHeader: t('edit-profile:header'),
+        formLayout: true,
+    };
+
     if (!!user || loading) {
-        return (
-            <SettingsLayout
-                title={t('edit-profile:title')}
-                heading={t('edit-profile:title')}
-                renderCardContent={loading ? <LoadingBox /> : renderCardContent}
-                dynamicBackUrl
-                formLayout
-            />
-        );
+        return <SettingsLayout {...layoutProps} />;
     } else {
-        return <NotFoundLayout title={t('profile:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 

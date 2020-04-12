@@ -4,7 +4,7 @@ import {
     ContactSupportOutlined,
     LibraryAddOutlined,
     SchoolOutlined,
-    Search,
+    SearchOutlined,
     SupervisedUserCircleOutlined,
     SvgIconComponent,
 } from '@material-ui/icons';
@@ -53,57 +53,69 @@ const IndexPage: I18nPage = () => {
     const { t } = useTranslation();
     const { searchValue, handleSubmit, handleChange, placeholder } = useSearch();
 
-    const renderSearchWidget = (
-        <form className="search-widget" onSubmit={handleSubmit}>
-            <Box display="flex" justifyContent="center">
-                <Box className="search-input">
-                    <InputBase placeholder={placeholder} onChange={handleChange} value={searchValue} />
-                </Box>
-                <Button type="submit" color="primary" variant="contained">
-                    <Search />
-                </Button>
-            </Box>
-        </form>
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('index:title'),
+            description: t('index:description'),
+        },
+        topNavbarProps: {
+            disableSearch: true,
+        },
+    };
 
     return (
-        <StyledIndexPage title={t('index:title')} disableSearch>
-            <Box className="slogan">
-                <Typography variant="h1">{t('index:slogan')}</Typography>
-            </Box>
-            <Box marginTop="1rem">{renderSearchWidget}</Box>
-            <Box className="shortcuts" display="flex" justifyContent="center" marginTop="1rem">
-                {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
-                    <Link href={href} key={i}>
-                        <Card>
-                            <CardContent>
-                                <Icon color="primary" />
-                                <Typography variant="h2">{t(text)}</Typography>
-                            </CardContent>
-                        </Card>
-                    </Link>
-                ))}
-            </Box>
-            <Box marginTop="2rem">
-                <Typography variant="h3" gutterBottom>
-                    {t('index:contactUsText')}
-                </Typography>
-            </Box>
-            <Box marginY="1rem">
-                <ButtonLink href="/contact" variant="outlined" color="primary" endIcon={<ContactSupportOutlined />}>
-                    {t('index:contactUsButton')}
-                </ButtonLink>
-            </Box>
+        <StyledIndexPage>
+            <MainLayout {...layoutProps}>
+                <Box id="slogan">
+                    <Typography variant="h1">{t('index:slogan')}</Typography>
+                </Box>
+                <Box id="search-widget" marginTop="1rem">
+                    <form onSubmit={handleSubmit}>
+                        <Box display="flex" justifyContent="center">
+                            <Box className="search-input">
+                                <InputBase placeholder={placeholder} onChange={handleChange} value={searchValue} />
+                            </Box>
+                            <Button type="submit" color="primary" variant="contained">
+                                <SearchOutlined />
+                            </Button>
+                        </Box>
+                    </form>
+                </Box>
+                <Box id="shortcuts" display="flex" justifyContent="center" marginTop="1rem">
+                    {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+                        <Link href={href} key={i}>
+                            <Card>
+                                <CardContent>
+                                    <Icon color="primary" />
+                                    <Typography variant="h2">{t(text)}</Typography>
+                                </CardContent>
+                            </Card>
+                        </Link>
+                    ))}
+                </Box>
+                <Box marginTop="2rem">
+                    <Typography variant="h3" gutterBottom>
+                        {t('index:contactUsText')}
+                    </Typography>
+                </Box>
+                <Box marginY="1rem">
+                    <ButtonLink href="/contact" variant="outlined" color="primary" endIcon={<ContactSupportOutlined />}>
+                        {t('index:contactUsButton')}
+                    </ButtonLink>
+                </Box>
+            </MainLayout>
         </StyledIndexPage>
     );
 };
 
-const StyledIndexPage = styled(MainLayout)`
-    @media only screen and (max-width: ${breakpoints.MD}) {
-        padding: 0.5rem !important;
+const StyledIndexPage = styled(Box)`
+    .MuiContainer-root {
+        @media only screen and (max-width: ${breakpoints.MD}) {
+            padding: 0.5rem !important;
+        }
     }
 
-    .slogan {
+    #slogan {
         margin-top: 1rem;
 
         @media only screen and (min-width: ${breakpoints.MD}) {
@@ -111,7 +123,7 @@ const StyledIndexPage = styled(MainLayout)`
         }
     }
 
-    .search-widget {
+    #search-widget {
         .search-input {
             border-radius: var(--border-radius) 0 0 var(--border-radius);
             background-color: var(--white);
@@ -130,12 +142,12 @@ const StyledIndexPage = styled(MainLayout)`
         }
     }
 
-    .shortcuts {
+    #shortcuts {
         flex-flow: row wrap;
 
         .MuiCard-root {
-            margin: 0.5rem;
             cursor: pointer;
+            margin-top: 0.5rem;
             width: 100%;
             padding-bottom: 50%;
             position: relative;
@@ -144,6 +156,7 @@ const StyledIndexPage = styled(MainLayout)`
                 width: 14rem;
                 height: 14rem;
                 padding-bottom: 0;
+                margin: 0.5rem !important;
             }
 
             .MuiCardContent-root {

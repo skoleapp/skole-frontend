@@ -1,3 +1,2 @@
 export * from './rootReducer';
-export * from './ui';
 export * from './resource';

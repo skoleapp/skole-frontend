@@ -1,5 +1,6 @@
 {
     "title": "Meistä",
-    "heading": "Meistä",
+    "description": "Tämä on meistä-sivu.",
+    "header": "Meistä",
     "content": "Skole on opiskelijoiden kehittämä alusta opiskelun avuksi, jolla saat opiskelumateriaalista enemmän irti. Tämä on beta-versio, jonka tarkoituksena on kehittää alustaa paremmaksi käyttäjillemme."
 }

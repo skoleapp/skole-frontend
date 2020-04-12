@@ -80,17 +80,23 @@ const StarredPage: I18nPage = () => {
             </Box>
         );
 
-        return (
-            <SettingsLayout
-                heading={t('starred:heading')}
-                title={t('starred:title')}
-                renderCardContent={renderCardContent}
-                dynamicBackUrl
-                fullSize
-            />
-        );
+        const layoutProps = {
+            seoProps: {
+                title: t('starred:title'),
+                description: t('starred:description'),
+            },
+            topNavbarProps: {
+                header: t('starred:header'),
+                dynamicBackUrl: true,
+            },
+            renderCardContent,
+            desktopHeader: t('starred:header'),
+            fullSize: true,
+        };
+
+        return <SettingsLayout {...layoutProps} />;
     } else {
-        return <NotFoundLayout title={t('_error:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 

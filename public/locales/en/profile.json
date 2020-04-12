@@ -1,10 +1,9 @@
 {
-    "title": "Profile",
+    "description": "This is a profile page.",
     "points": "points",
     "courses": "courses",
     "resources": "resources",
     "editProfile": "Edit Profile",
     "noResources": "This user has no resources...",
-    "noCourses": "This user has no courses...",
-    "notFound": "Profile not found..."
+    "noCourses": "This user has no courses..."
 }

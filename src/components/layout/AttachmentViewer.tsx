@@ -2,33 +2,29 @@ import { Backdrop, Box, IconButton } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
 import Image from 'material-ui-image';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AnyAction } from 'redux';
 import styled from 'styled-components';
 
-import { toggleFileViewer } from '../../actions';
+import { useSkoleContext } from '../../context';
 import { breakpoints } from '../../styles';
-import { State } from '../../types';
 import { mediaURL } from '../../utils';
 
 export const AttachmentViewer: React.FC = () => {
-    const { file } = useSelector((state: State) => state.ui);
-    const dispatch = useDispatch();
-    const handleClose = (): AnyAction => dispatch((toggleFileViewer(null) as unknown) as AnyAction);
+    const { attachment, toggleAttachmentViewer } = useSkoleContext();
+    const handleClose = (): void => toggleAttachmentViewer(null);
 
     return (
-        <StyledFileViewer open={!!file} onClick={handleClose}>
+        <StyledAttachmentViewer open={!!attachment} onClick={handleClose}>
             <IconButton onClick={handleClose}>
                 <CloseOutlined />
             </IconButton>
             <Box id="image-container">
-                <Image src={mediaURL(file as string)} />
+                <Image src={mediaURL(attachment as string)} />
             </Box>
-        </StyledFileViewer>
+        </StyledAttachmentViewer>
     );
 };
 
-const StyledFileViewer = styled(Backdrop)`
+const StyledAttachmentViewer = styled(Backdrop)`
     background-color: var(--dark-opacity) !important;
     z-index: 9999 !important;
     position: relative;

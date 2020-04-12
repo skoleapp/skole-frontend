@@ -1,9 +1,8 @@
 import { Button } from '@material-ui/core';
 import { CloudDownload } from '@material-ui/icons';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { toggleNotification } from '../../actions';
+import { useSkoleContext } from '../../context';
 import { useTranslation } from '../../i18n';
 
 interface Props {
@@ -17,7 +16,7 @@ interface Props {
  */
 export const Download: React.FC<Props> = ({ url, fileName }) => {
     const [fetching, setFetching] = useState(false);
-    const dispatch = useDispatch();
+    const { toggleNotification } = useSkoleContext();
     const { t } = useTranslation();
 
     const handleClick = async (): Promise<void> => {
@@ -35,7 +34,7 @@ export const Download: React.FC<Props> = ({ url, fileName }) => {
             document.body.appendChild(a);
             a.click();
         } catch {
-            dispatch(toggleNotification(t('notification:errorDownLoadingResource')));
+            toggleNotification(t('notification:errorDownLoadingResource'));
         }
     };
 

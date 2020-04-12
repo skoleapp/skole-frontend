@@ -16,8 +16,9 @@ interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderRepo
 }
 
 interface Props extends LayoutProps {
-    subheader?: JSX.Element;
-    titleSecondary: string;
+    headerDesktop?: string;
+    subheaderDesktop?: JSX.Element;
+    headerSecondary: string;
     tabLabelLeft: string;
     tabLabelRight: string;
     renderInfo: JSX.Element;
@@ -26,7 +27,7 @@ interface Props extends LayoutProps {
     customBottomNavbar?: JSX.Element;
     customBottomNavbarSecondary?: JSX.Element;
     renderSecondaryAction?: JSX.Element;
-    headerActionMobile?: JSX.Element;
+    headerLeftMobile?: JSX.Element;
     headerActionDesktop?: JSX.Element;
     extraDesktopActions?: JSX.Element;
     singleColumn?: boolean;
@@ -34,9 +35,9 @@ interface Props extends LayoutProps {
 }
 
 export const TabLayout: React.FC<Props> = ({
-    title,
-    subheader,
-    titleSecondary,
+    headerDesktop,
+    subheaderDesktop,
+    headerSecondary,
     tabLabelLeft,
     tabLabelRight,
     renderInfo,
@@ -44,7 +45,7 @@ export const TabLayout: React.FC<Props> = ({
     renderRightContent,
     singleColumn,
     optionProps,
-    headerActionMobile,
+    headerLeftMobile,
     headerActionDesktop,
     extraDesktopActions,
     customBottomNavbar,
@@ -112,7 +113,7 @@ export const TabLayout: React.FC<Props> = ({
 
     const renderDesktopContent = singleColumn ? (
         <StyledCard className="md-up">
-            <CardHeader title={title} action={renderDesktopHeaderActions} />
+            <CardHeader title={headerDesktop} action={renderDesktopHeaderActions} />
             <Divider />
             {renderInfo}
             <Divider />
@@ -126,8 +127,8 @@ export const TabLayout: React.FC<Props> = ({
                 <StyledCard>
                     <CardHeader
                         id="main-header"
-                        title={title}
-                        subheader={subheader}
+                        title={headerDesktop}
+                        subheader={subheaderDesktop}
                         action={renderDesktopHeaderActions}
                     />
                     <CardContent>{extraDesktopActions}</CardContent>
@@ -137,7 +138,7 @@ export const TabLayout: React.FC<Props> = ({
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
                 <StyledCard marginLeft>
-                    <CardHeader title={titleSecondary} />
+                    <CardHeader title={headerSecondary} />
                     <Divider />
                     {renderRightContent}
                 </StyledCard>
@@ -159,24 +160,28 @@ export const TabLayout: React.FC<Props> = ({
         </Drawer>
     );
 
+    const layoutProps = {
+        ...props,
+        topNavbarProps: {
+            headerRight: renderMobileHeaderActions,
+            headerLeft: headerLeftMobile,
+        },
+        customBottomNavbar: renderCustomBottomNavbar,
+    };
+
     return (
-        <StyledTabLayout
-            title={title}
-            dynamicBackUrl
-            headerRight={renderMobileHeaderActions}
-            headerLeft={headerActionMobile}
-            customBottomNavbar={renderCustomBottomNavbar}
-            {...props}
-        >
-            {isMobile && renderMobileContent}
-            {!isMobile && renderDesktopContent}
-            {renderInfoDrawer}
-            {renderOptionsDrawer}
+        <StyledTabLayout>
+            <MainLayout {...layoutProps}>
+                {isMobile && renderMobileContent}
+                {!isMobile && renderDesktopContent}
+                {renderInfoDrawer}
+                {renderOptionsDrawer}
+            </MainLayout>
         </StyledTabLayout>
     );
 };
 
-const StyledTabLayout = styled(MainLayout)`
+const StyledTabLayout = styled(Box)`
     #container {
         flex-grow: 1;
     }

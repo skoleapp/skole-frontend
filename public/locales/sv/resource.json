@@ -1,5 +1,5 @@
 {
-    "notFound": "Resursen hittades inte...",
+    "description": "Detta är en resurssida.",
     "deleteResource": "Radera resurs",
     "confirmDesc": "Är du säker på att du vill ta bort den här resursen?"
 }

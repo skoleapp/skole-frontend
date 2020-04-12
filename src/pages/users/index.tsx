@@ -121,17 +121,23 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
         <NotFoundBox text={t('users:notFound')} />
     );
 
-    return (
-        <FilterLayout
-            title={t('users:title')}
-            heading={t('users:heading')}
-            renderCardContent={renderCardContent}
-            renderTableContent={renderTableContent}
-            drawerProps={drawerProps}
-            handleClearFilters={handleClearFilters}
-            dynamicBackUrl
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('users:title'),
+            description: t('users:description'),
+        },
+        topNavbarProps: {
+            header: t('users:header'),
+            dynamicBackUrl: true,
+        },
+        desktopHeader: t('users:header'),
+        renderCardContent,
+        renderTableContent,
+        drawerProps,
+        handleClearFilters,
+    };
+
+    return <FilterLayout {...layoutProps} />;
 };
 
 UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {

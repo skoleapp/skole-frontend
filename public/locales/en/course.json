@@ -1,5 +1,5 @@
 {
-    "notFound": "Course not found...",
+    "description": "This is a course page.",
     "noResources": "No Resources...",
     "deleteCourse": "Delete Course",
     "confirmDesc": "Are you sure you want to delete this course?"

@@ -1,5 +1,5 @@
 {
-    "notFound": "Resource not found...",
+    "description": "This is a resource page.",
     "deleteResource": "Delete resource",
     "confirmDesc": "Are you sure you want to delete this resource?"
 }

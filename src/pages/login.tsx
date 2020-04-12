@@ -109,16 +109,22 @@ const LoginPage: I18nPage = () => {
         </Formik>
     );
 
-    return (
-        <FormLayout
-            title={t('login:title')}
-            heading={t('login:heading')}
-            headerRight={renderLanguageButton}
-            renderCardContent={renderCardContent}
-            renderAlert={!!query.next ? renderAlert('warning', t('alerts:loginRequired')) : undefined}
-            disableBottomNavbar
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('login:title'),
+            description: t('login:description'),
+        },
+        topNavbarProps: {
+            header: t('login:header'),
+            headerRight: renderLanguageButton,
+        },
+        desktopHeader: t('login:header'),
+        renderAlert: (!!query.next && renderAlert('warning', t('alerts:loginRequired'))) || undefined,
+        renderCardContent,
+        disableBottomNavbar: true,
+    };
+
+    return <FormLayout {...layoutProps} />;
 };
 
 LoginPage.getInitialProps = (): I18nProps => ({

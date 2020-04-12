@@ -32,7 +32,8 @@ import {
     useDeleteCommentMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { toggleCommentThread, toggleFileViewer, toggleNotification } from '../../actions';
+import { toggleCommentThread } from '../../actions';
+import { useSkoleContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { mediaURL, useAuth, useOptions, useVotes } from '../../utils';
 import { StyledList } from './StyledList';
@@ -60,6 +61,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const commentId = R.propOr('', 'id', comment) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
     const { onClose: handleCloseOptions, handleOpen: handleOpenOptions } = drawerProps;
+    const { toggleNotification, toggleAttachmentViewer } = useSkoleContext();
 
     const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -69,15 +71,13 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const handleClick = (): void => {
         if (isThread) {
-            attachmentOnly && dispatch(toggleFileViewer(comment.attachment));
+            attachmentOnly && toggleAttachmentViewer(comment.attachment);
         } else {
             dispatch(toggleCommentThread(comment));
         }
     };
 
-    const deleteCommentError = (): void => {
-        dispatch(toggleNotification(t('notifications:deleteCommentError')));
-    };
+    const deleteCommentError = (): void => toggleNotification(t('notifications:deleteCommentError'));
 
     const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
         if (!!deleteComment) {
@@ -85,7 +85,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                 deleteCommentError();
             } else {
                 removeComment(comment.id);
-                dispatch(toggleNotification(t('notifications:commentDeleted')));
+                toggleNotification(t('notifications:commentDeleted'));
             }
         }
     };
@@ -102,7 +102,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const handleAttachmentClick = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        dispatch(toggleFileViewer(comment.attachment));
+        toggleAttachmentViewer(comment.attachment);
     };
 
     const handleDeleteComment = (e: SyntheticEvent): void => {

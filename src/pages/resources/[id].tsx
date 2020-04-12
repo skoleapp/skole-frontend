@@ -38,7 +38,7 @@ import {
     useDeleteResourceMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { nextPage, prevPage, setCenter, setCurrentPage, setPages, toggleNotification } from '../../actions';
+import { nextPage, prevPage, setCenter, setCurrentPage, setPages } from '../../actions';
 import {
     CreatorListItem,
     DiscussionBox,
@@ -51,6 +51,7 @@ import {
     TabLayout,
     TextLink,
 } from '../../components';
+import { useSkoleContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
@@ -66,6 +67,7 @@ interface Props extends I18nProps {
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
+    const { toggleNotification } = useSkoleContext();
     const confirm = useConfirm();
     const { user } = useAuth();
     const { pages, currentPage } = useSelector((state: State) => state.resource);
@@ -80,6 +82,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     }, []);
 
     if (!!resource) {
+        const resourceTitle = R.propOr('-', 'title', resource) as string;
         const file = mediaURL(resource.file);
         const resourceType = R.propOr('-', 'resourceType', resource);
         const courseId = R.propOr('', 'id', resource.course);
@@ -113,7 +116,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         };
 
         const deleteResourceError = (): void => {
-            dispatch(toggleNotification(t('notifications:deleteResourceError')));
+            toggleNotification(t('notifications:deleteResourceError'));
         };
 
         const deleteResourceCompleted = ({ deleteResource }: DeleteResourceMutation): void => {
@@ -122,7 +125,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     deleteResourceError();
                 } else {
                     Router.push('/courses/' + courseId);
-                    dispatch(toggleNotification(t('notifications:resourceDeleted')));
+                    toggleNotification(t('notifications:resourceDeleted'));
                 }
             }
         };
@@ -158,7 +161,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 a.click();
                 a.remove();
             } catch {
-                dispatch(toggleNotification(t('notifications:downloadResourceError')));
+                toggleNotification(t('notifications:downloadResourceError'));
             }
         };
 
@@ -318,10 +321,16 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
 
         const layoutProps = {
-            title: R.propOr('-', 'title', resource) as string,
-            titleSecondary: t('common:discussion'),
-            subheader: renderCourseLink,
-            staticBackUrl: staticBackUrl,
+            seoProps: {
+                title: resourceTitle,
+                description: t('resource:description'),
+            },
+            topNavbarProps: {
+                header: resourceTitle,
+                staticBackUrl: staticBackUrl,
+            },
+            headerSecondary: t('common:discussion'),
+            subheaderDesktop: renderCourseLink,
             renderInfo,
             optionProps: {
                 renderOptions,
@@ -338,7 +347,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
 
         return <TabLayout {...layoutProps} />;
     } else {
-        return <NotFoundLayout title={t('resource:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 

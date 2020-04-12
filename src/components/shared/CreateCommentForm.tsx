@@ -5,11 +5,10 @@ import Image from 'material-ui-image';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
-import { toggleNotification } from '../../actions';
+import { useSkoleContext } from '../../context';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
 import { ModalHeader } from './ModalHeader';
@@ -42,25 +41,23 @@ export const CreateCommentForm: React.FC<Props> = ({
     formKey,
 }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
+    const { toggleNotification } = useSkoleContext();
 
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);
         toggleCreateCommentModal(false);
     };
 
-    const onError = (): void => {
-        dispatch(toggleNotification(t('notifications:messageError')));
-    };
+    const onError = (): void => toggleNotification(t('notifications:messageError'));
 
     const onCompleted = ({ createComment }: CreateCommentMutation): void => {
         if (createComment) {
             if (createComment.errors) {
                 onError();
             } else if (createComment.comment) {
-                dispatch(toggleNotification(t('notifications:messageSubmitted')));
+                toggleNotification(t('notifications:messageSubmitted'));
                 appendComments(createComment.comment as CommentObjectType);
             }
         }
@@ -70,7 +67,7 @@ export const CreateCommentForm: React.FC<Props> = ({
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
         if (!attachment && !values.text) {
-            dispatch(toggleNotification(t('notifications:messageEmpty')));
+            toggleNotification(t('notifications:messageEmpty'));
         } else {
             await createCommentMutation({
                 variables: { ...values, attachment: (values.attachment as unknown) as string },

@@ -1,6 +1,7 @@
 {
     "title": "Register",
-    "heading": "Register",
+    "description": "This is a registration page.",
+    "header": "Register",
     "termsHelpText": "By registering you agree to our terms.",
     "alreadyHaveAccount": "Already have an account?"
 }

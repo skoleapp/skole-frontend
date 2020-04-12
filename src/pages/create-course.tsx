@@ -2,7 +2,6 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { compose } from 'redux';
 import * as Yup from 'yup';
 
@@ -14,8 +13,8 @@ import {
     SubjectsDocument,
     useCreateCourseMutation,
 } from '../../generated/graphql';
-import { toggleNotification } from '../actions';
 import { AutoCompleteField, FormLayout, FormSubmitSection } from '../components';
+import { useSkoleContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo, withRedux } from '../lib';
@@ -32,7 +31,7 @@ interface CreateCourseFormValues {
 
 const CreateCoursePage: I18nPage<I18nProps> = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<CreateCourseFormValues>();
-    const dispatch = useDispatch();
+    const { toggleNotification } = useSkoleContext();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -50,7 +49,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
                 handleMutationErrors(createCourse.errors);
             } else if (createCourse.course) {
                 resetForm();
-                dispatch(toggleNotification(t('notifications:courseCreated')));
+                toggleNotification(t('notifications:courseCreated'));
                 await Router.push(`/courses/${createCourse.course.id}`);
             }
         }
@@ -128,14 +127,20 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
         </Formik>
     );
 
-    return (
-        <FormLayout
-            title={t('create-course:title')}
-            heading={t('create-course:heading')}
-            renderCardContent={renderCardContent}
-            dynamicBackUrl
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('create-course:title'),
+            description: t('create-course:description'),
+        },
+        topNavbarProps: {
+            header: t('create-course:header'),
+            dynamicBackUrl: true,
+        },
+        desktopHeader: t('create-course:header'),
+        renderCardContent,
+    };
+
+    return <FormLayout {...layoutProps} />;
 };
 
 CreateCoursePage.getInitialProps = async (): Promise<I18nProps> => ({

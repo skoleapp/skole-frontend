@@ -4,7 +4,6 @@ import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
 import { compose } from 'redux';
-import { breakpoints } from 'src/styles';
 import styled from 'styled-components';
 
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
@@ -23,9 +22,9 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo, withRedux } from '../../lib';
-import { ButtonColor, ButtonVariant, I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
-import { mediaURL } from '../../utils';
+import { breakpoints } from '../../styles';
+import { ButtonColor, ButtonVariant, I18nPage, I18nProps, MaxWidth, SkoleContext } from '../../types';
+import { mediaURL, useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 
 interface Props extends I18nProps {
     user?: UserObjectType;
@@ -196,8 +195,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         );
 
         const commonTableHeadProps = {
-            titleLeft: 'common:title',
-            titleRight: 'common:points',
+            titleLeft: t('common:title'),
+            titleRight: t('common:points'),
         };
 
         const renderCreatedCourses = !!createdCourses.length ? (
@@ -239,27 +238,38 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </Box>
         );
 
+        const layoutProps = {
+            seoProps: {
+                title: username,
+                description: t('profile:description'),
+            },
+            topNavbarProps: {
+                header: username,
+                dynamicBackUrl: true,
+                headerRight: isOwnProfile ? <SettingsButton color="secondary" /> : undefined,
+            },
+            containerProps: {
+                maxWidth: 'md' as MaxWidth,
+            },
+        };
+
         return (
-            <StyledUserPage
-                heading={username}
-                title={username}
-                headerRight={isOwnProfile ? <SettingsButton color="secondary" /> : undefined}
-                maxWidth="md"
-                dynamicBackUrl
-            >
-                <StyledCard>
-                    {renderMobileTopSection}
-                    {renderDesktopTopSection}
-                    {renderTabs}
-                </StyledCard>
+            <StyledUserPage>
+                <MainLayout {...layoutProps}>
+                    <StyledCard>
+                        {renderMobileTopSection}
+                        {renderDesktopTopSection}
+                        {renderTabs}
+                    </StyledCard>
+                </MainLayout>
             </StyledUserPage>
         );
     } else {
-        return <NotFoundLayout title={t('profile:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 
-const StyledUserPage = styled(MainLayout)`
+const StyledUserPage = styled(Box)`
     .section-help-text {
         font-size: 0.75rem;
     }
