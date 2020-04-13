@@ -72,8 +72,8 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                     <Field name="ordering" label={t('forms:ordering')} component={SelectField} fullWidth>
                         <MenuItem value="username">{t('forms:usernameOrdering')}</MenuItem>
                         <MenuItem value="-username">{t('forms:usernameOrderingReverse')}</MenuItem>
-                        <MenuItem value="points">{t('forms:pointsOrdering')}</MenuItem>
-                        <MenuItem value="-points">{t('forms:pointsOrderingReverse')}</MenuItem>
+                        <MenuItem value="score">{t('forms:scoreOrdering')}</MenuItem>
+                        <MenuItem value="-score">{t('forms:scoreOrderingReverse')}</MenuItem>
                     </Field>
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
                     {renderDesktopClearFiltersButton}
@@ -96,7 +96,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
                             </Box>
                         </TableCell>
                         <TableCell align="right">
-                            <Typography variant="subtitle1">{R.propOr('-', 'points', u)}</Typography>
+                            <Typography variant="subtitle1">{R.propOr('-', 'score', u)}</Typography>
                         </TableCell>
                     </TableRow>
                 </Link>
@@ -106,7 +106,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
 
     const tableHeadProps = {
         titleLeft: t('common:username'),
-        titleRight: t('common:points'),
+        titleRight: t('common:score'),
     };
 
     const renderTableContent = !!userObjects.length ? (

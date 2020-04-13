@@ -1,6 +1,6 @@
 {
     "description": "This is a profile page.",
-    "points": "points",
+    "score": "score",
     "courses": "courses",
     "resources": "resources",
     "editProfile": "Edit Profile",

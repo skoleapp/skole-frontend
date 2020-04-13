@@ -60,7 +60,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const confirm = useConfirm();
     const attachmentOnly = comment.text == '' && comment.attachment !== '';
     const initialVote = R.propOr(null, 'vote', comment) as VoteObjectType | null;
-    const initialPoints = R.propOr(0, 'points', comment) as number;
+    const initialScore = R.propOr(0, 'score', comment) as number;
     const creatorId = R.propOr('', 'id', comment.user) as string;
     const isOwner = !!user && user.id === creatorId;
     const commentId = R.propOr('', 'id', comment) as string;
@@ -78,9 +78,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const { toggleAttachmentViewer } = useAttachmentViewerContext();
     const { toggleCommentThread } = useCommentThreadContext();
 
-    const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+    const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
-        initialPoints,
+        initialScore,
         isOwner,
     });
 
@@ -177,7 +177,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                             </span>
                         </Tooltip>
                         <Box>
-                            <Typography variant="body2">{points}</Typography>
+                            <Typography variant="body2">{score}</Typography>
                         </Box>
                         <Tooltip
                             title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:downvoteCommentTooltip')}

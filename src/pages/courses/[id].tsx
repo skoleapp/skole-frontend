@@ -88,7 +88,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const schoolName = R.propOr('-', 'name', course.school) as string;
         const creatorId = R.propOr('', 'id', course.user) as string;
         const courseId = R.propOr('', 'id', course) as string;
-        const initialPoints = R.propOr(0, 'points', course) as number;
+        const initialScore = R.propOr(0, 'score', course) as number;
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
@@ -98,9 +98,9 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const isOwner = !!user && user.id === creatorId;
         const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
 
-        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+        const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
             initialVote,
-            initialPoints,
+            initialScore,
             isOwner,
         });
 
@@ -234,7 +234,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         </ListItemAvatar>
                         <ListItemText>
                             <Typography variant="body2">
-                                {t('common:points')}: {points}
+                                {t('common:score')}: {score}
                             </Typography>
                         </ListItemText>
                     </ListItem>
@@ -258,7 +258,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const resourceTableHeadProps = {
             titleLeft: t('common:title'),
             titleLeftDesktop: t('common:resources'),
-            titleRight: t('common:points'),
+            titleRight: t('common:score'),
         };
 
         const renderResources = !!resources.length ? (

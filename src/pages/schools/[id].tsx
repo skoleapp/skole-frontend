@@ -178,7 +178,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 
         const courseTableHeadProps = {
             ...commonTableHeadProps,
-            titleRight: 'common:points',
+            titleRight: 'common:score',
         };
 
         const renderCourses = !!courses.length ? (

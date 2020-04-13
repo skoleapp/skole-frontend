@@ -174,8 +174,8 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
                     <Field name="ordering" label={t('forms:ordering')} component={SelectField} fullWidth>
                         <MenuItem value="name">{t('forms:nameOrdering')}</MenuItem>
                         <MenuItem value="-name">{t('forms:nameOrderingReverse')}</MenuItem>
-                        <MenuItem value="points">{t('forms:pointsOrdering')}</MenuItem>
-                        <MenuItem value="-points">{t('forms:pointsOrderingReverse')}</MenuItem>
+                        <MenuItem value="score">{t('forms:scoreOrdering')}</MenuItem>
+                        <MenuItem value="-score">{t('forms:scoreOrderingReverse')}</MenuItem>
                     </Field>
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
                     {renderDesktopClearFiltersButton}
@@ -186,7 +186,7 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
 
     const tableHeadProps = {
         titleLeft: t('common:name'),
-        titleRight: t('common:points'),
+        titleRight: t('common:score'),
     };
 
     const renderTableContent = !!courseObjects.length ? (

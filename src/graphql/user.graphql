@@ -8,7 +8,7 @@ query Users($username: String, $ordering: String, $page: Int, $pageSize: Int) {
         objects {
             id
             username
-            points
+            score
             avatarThumbnail
         }
     }
@@ -21,7 +21,7 @@ query UserDetail($id: ID) {
         title
         bio
         avatar
-        points
+        score
         courseCount
         resourceCount
         created
@@ -29,12 +29,12 @@ query UserDetail($id: ID) {
             id
             name
             code
-            points
+            score
         }
         createdResources {
             id
             title
-            points
+            score
             date
         }
     }
@@ -49,7 +49,7 @@ mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: S
             title
             bio
             avatar
-            points
+            score
             created
         }
         errors {

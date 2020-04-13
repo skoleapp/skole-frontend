@@ -15,7 +15,7 @@ interface Variables {
 
 interface UseVotesProps {
     initialVote: VoteObjectType | null;
-    initialPoints: number;
+    initialScore: number;
     isOwner: boolean;
 }
 
@@ -28,13 +28,13 @@ interface VoteButtonProps {
 interface UseVotes {
     upVoteButtonProps: VoteButtonProps;
     downVoteButtonProps: VoteButtonProps;
-    points: number;
+    score: number;
     handleVote: (variables: Variables) => void;
 }
 
-export const useVotes = ({ initialVote, initialPoints, isOwner }: UseVotesProps): UseVotes => {
+export const useVotes = ({ initialVote, initialScore, isOwner }: UseVotesProps): UseVotes => {
     const [vote, setVote] = useState(initialVote);
-    const [points, setPoints] = useState(initialPoints);
+    const [score, setScore] = useState(initialScore);
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
@@ -48,7 +48,7 @@ export const useVotes = ({ initialVote, initialPoints, isOwner }: UseVotesProps)
                 onError();
             } else {
                 setVote(performVote.vote as VoteObjectType);
-                setPoints(performVote.targetPoints as number);
+                setScore(performVote.targetScore as number);
             }
         }
     };
@@ -74,5 +74,5 @@ export const useVotes = ({ initialVote, initialPoints, isOwner }: UseVotesProps)
         color: !!vote && vote.status === -1 ? 'primary' : ('default' as MuiColor),
     };
 
-    return { upVoteButtonProps, downVoteButtonProps, points, handleVote };
+    return { upVoteButtonProps, downVoteButtonProps, score, handleVote };
 };

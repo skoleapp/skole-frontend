@@ -38,7 +38,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const avatar = R.prop('avatar', user) as string;
         const title = user.title || '';
         const bio = user.bio || '';
-        const points = R.propOr('-', 'points', user) as string;
+        const score = R.propOr('-', 'score', user) as string;
         const courseCount = R.propOr('-', 'courseCount', user) as string;
         const resourceCount = R.propOr('-', 'resourceCount', user) as string;
         const joined = moment(user.created).format('LL');
@@ -88,11 +88,11 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </CardContent>
         );
 
-        const renderPointsValue = <Typography variant="body1">{points}</Typography>;
+        const renderScoreValue = <Typography variant="body1">{score}</Typography>;
 
-        const renderPointsTitle = (
+        const renderScoreTitle = (
             <Typography className="section-help-text" variant="body2" color="textSecondary">
-                {t('profile:points')}
+                {t('profile:score')}
             </Typography>
         );
 
@@ -117,8 +117,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     <CardContent>
                         <Box display="flex" justifyContent="space-around">
                             <Box>
-                                {renderPointsValue}
-                                {renderPointsTitle}
+                                {renderScoreValue}
+                                {renderScoreTitle}
                             </Box>
                             <Box margin="0 1rem">
                                 {renderCourseCountValue}
@@ -171,8 +171,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     <CardContent>
                         <Box display="flex">
                             <Box display="flex" alignItems="center">
-                                {renderPointsValue}
-                                <Box marginLeft="0.25rem">{renderPointsTitle}</Box>
+                                {renderScoreValue}
+                                <Box marginLeft="0.25rem">{renderScoreTitle}</Box>
                             </Box>
                             <Box margin="0 1rem" display="flex" alignItems="center">
                                 {renderCourseCountValue}
@@ -197,7 +197,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
 
         const commonTableHeadProps = {
             titleLeft: t('common:title'),
-            titleRight: t('common:points'),
+            titleRight: t('common:score'),
         };
 
         const renderCreatedCourses = !!createdCourses.length ? (

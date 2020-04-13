@@ -28,7 +28,7 @@ const StarredPage: I18nPage = () => {
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(starredResources);
 
-    const commonTableHeadProps = { titleRight: t('common:points') };
+    const commonTableHeadProps = { titleRight: t('common:score') };
 
     const courseTableHeadProps = {
         titleLeft: t('common:name'),

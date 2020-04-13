@@ -33,8 +33,8 @@
     "usernameOrderingReverse": "Användarnamn (Z-Ö)",
     "nameOrdering": "Namn (A-Ö)",
     "nameOrderingReverse": "Namn (Z-Ö)",
-    "pointsOrdering": "Poäng (Stigande)",
-    "pointsOrderingReverse": "Poäng (Nedåtgående)",
+    "scoreOrdering": "Poäng (Stigande)",
+    "scoreOrderingReverse": "Poäng (Nedåtgående)",
     "betaCode": "Betakod",
     "name": "Namn",
     "fileSizeError": "Filen är för stor!"

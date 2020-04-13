@@ -21,7 +21,7 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => (
                         </Typography>
                     </TableCell>
                     <TableCell align="right">
-                        <Typography variant="subtitle1">{R.propOr('-', 'points', r)}</Typography>
+                        <Typography variant="subtitle1">{R.propOr('-', 'score', r)}</Typography>
                     </TableCell>
                 </TableRow>
             </Link>

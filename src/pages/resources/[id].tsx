@@ -92,13 +92,13 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const resourceId = R.propOr('', 'id', resource) as string;
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
         const initialVote = (R.propOr(null, 'vote', resource) as unknown) as VoteObjectType | null;
-        const initialPoints = R.propOr(0, 'points', resource) as number;
+        const initialScore = R.propOr(0, 'score', resource) as number;
         const starred = !!resource.starred;
         const isOwner = !!user && user.id === creatorId;
 
-        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+        const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
             initialVote,
-            initialPoints,
+            initialScore,
             isOwner,
         });
 
@@ -227,7 +227,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </ListItemAvatar>
                         <ListItemText>
                             <Typography variant="body2">
-                                {t('common:points')}: {points}
+                                {t('common:score')}: {score}
                             </Typography>
                         </ListItemText>
                     </ListItem>

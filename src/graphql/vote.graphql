@@ -4,7 +4,7 @@ mutation PerformVote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
             id
             status
         }
-        targetPoints
+        targetScore
         errors {
             field
             messages

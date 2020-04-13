@@ -13,7 +13,7 @@ query SchoolDetail($id: ID) {
             id
             name
             code
-            points
+            score
         }
         subjectCount
         courseCount

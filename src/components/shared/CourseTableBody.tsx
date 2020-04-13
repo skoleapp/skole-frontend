@@ -23,7 +23,7 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => (
                         )}
                     </TableCell>
                     <TableCell align="right">
-                        <Typography variant="subtitle1">{R.propOr('-', 'points', c)}</Typography>
+                        <Typography variant="subtitle1">{R.propOr('-', 'score', c)}</Typography>
                     </TableCell>
                 </TableRow>
             </Link>
