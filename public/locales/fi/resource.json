@@ -11,5 +11,7 @@
     "downvoteTooltip": "Anna tälle resurssille alas-ääni.",
     "upvoteTooltip": "Anna tälle resurssille ylös-ääni.",
     "ownResourceVoteTooltip": "Et voi äänestää omaa resurssiasi.",
-    "fullscreenTooltip": "Näytä koko ruudulla."
+    "fullscreenTooltip": "Keskitä ruudulle.",
+    "loadingResource": "Ladataan resurssia...",
+    "errorLoadingResource": "Virhe ladattaessa resurssia."
 }

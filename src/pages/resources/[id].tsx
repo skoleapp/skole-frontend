@@ -27,7 +27,7 @@ import {
 import { useConfirm } from 'material-ui-confirm';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -74,11 +74,17 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuth();
-    const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
+    const { pages, currentPage, prevPage, nextPage, setCenter, setPages, setCurrentPage } = usePDFViewerContext();
 
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
         t('resource:optionsHeader'),
     );
+    useEffect(() => {
+        return (): void => {
+            setPages([]);
+            setCurrentPage(0);
+        };
+    }, []);
 
     if (!!resource) {
         const resourceTitle = R.propOr('-', 'title', resource) as string;
@@ -284,6 +290,9 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </Tooltip>
         );
 
+        const pagesExist = pages.length > 0;
+        const totalPages = !!pagesExist ? pages.length : 1;
+
         const renderExtraResourceActions = (
             <StyledExtraResourceActions container alignItems="center">
                 <Grid item xs={4} container id="vote-section">
@@ -294,15 +303,19 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 <Grid item xs={4} container alignItems="center" id="page-controls">
                     <Tooltip title={t('common:previousPageTooltip')}>
                         <span>
-                            <IconButton disabled={currentPage === 0} onClick={prevPage} size="small">
+                            <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
                                 <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
                             </IconButton>
                         </span>
                     </Tooltip>
-                    <Typography variant="body2">{currentPage + 1 + ' / ' + pages.length}</Typography>
+                    <Typography variant="body2">{currentPage + 1 + ' / ' + totalPages}</Typography>
                     <Tooltip title={t('common:nextPageTooltip')}>
                         <span>
-                            <IconButton disabled={currentPage === pages.length - 1} onClick={nextPage} size="small">
+                            <IconButton
+                                disabled={!pagesExist || currentPage === pages.length - 1}
+                                onClick={nextPage}
+                                size="small"
+                            >
                                 <NavigateNextOutlined
                                     color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'}
                                 />
@@ -312,9 +325,11 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 </Grid>
                 <Grid item xs={4} container justify="flex-end">
                     <Tooltip title={t('resource:fullscreenTooltip')}>
-                        <IconButton onClick={setCenter} size="small">
-                            <FullscreenOutlined />
-                        </IconButton>
+                        <span>
+                            <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
+                                <FullscreenOutlined />
+                            </IconButton>
+                        </span>
                     </Tooltip>
                 </Grid>
             </StyledExtraResourceActions>

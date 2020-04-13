@@ -11,5 +11,7 @@
     "downvoteTooltip": "Downvote this resource.",
     "upvoteTooltip": "Upvote this resource.",
     "ownResourceVoteTooltip": "You cannot vote your own resource.",
-    "fullscreenTooltip": "Show full screen."
+    "fullscreenTooltip": "Center to screen.",
+    "loadingResource": "Loading resource...",
+    "errorLoadingResource": "Error loading resource."
 }
