@@ -1,18 +1,18 @@
-import { Button, Divider, ListItem, MenuItem } from '@material-ui/core';
+import { Box, Button, MenuItem } from '@material-ui/core';
 import { ExitToAppOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
-import { toggleNotification, toggleSettings } from '../actions';
 import { StyledList } from '../components/shared/StyledList';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
+import { Settings } from '../types';
 import { menuItems } from '.';
 import { useAuth } from './auth';
+import { useNotificationsContext, useSettingsContext } from './context';
 import { useLanguageSelector } from './useLanguageSelector';
 
-interface UseSettings {
+interface UseSettings extends Settings {
     renderSettingsCardContent: JSX.Element;
 }
 
@@ -25,14 +25,15 @@ interface Props {
 export const useSettings = ({ modal }: Props): UseSettings => {
     const { user } = useAuth();
     const authenticated = !!user;
-    const dispatch = useDispatch();
+    const { settingsOpen, toggleSettings } = useSettingsContext();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
     const { pathname } = useRouter();
     const { renderCurrentFlag, openLanguageMenu } = useLanguageSelector();
     const { logout } = useAuth();
 
     const handleClose = (): void => {
-        dispatch(toggleSettings(false));
+        toggleSettings(false);
     };
 
     const handleMenuItemClick = (href: string) => (): void => {
@@ -43,7 +44,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     const handleLogoutClick = (): void => {
         !!modal && handleClose();
         logout();
-        dispatch(toggleNotification(t('notifications:signedOut')));
+        toggleNotification(t('notifications:signedOut'));
     };
 
     const getSelected = (m: { [key: string]: string }): boolean => !modal && m.href === pathname;
@@ -95,34 +96,29 @@ export const useSettings = ({ modal }: Props): UseSettings => {
     );
 
     const renderLoginButton = (
-        <ListItem>
-            <Button fullWidth variant="outlined" color="primary" onClick={handleMenuItemClick('/login')}>
-                {t('common:login')}
-            </Button>
-        </ListItem>
+        <Button fullWidth variant="outlined" color="primary" onClick={handleMenuItemClick('/login')}>
+            {t('common:login')}
+        </Button>
     );
 
     const renderLogoutButton = (
-        <ListItem>
-            <Button
-                fullWidth
-                variant="outlined"
-                color="primary"
-                onClick={handleLogoutClick}
-                endIcon={<ExitToAppOutlined />}
-            >
-                {t('common:logout')}
-            </Button>
-        </ListItem>
+        <Button
+            fullWidth
+            variant="outlined"
+            color="primary"
+            onClick={handleLogoutClick}
+            endIcon={<ExitToAppOutlined />}
+        >
+            {t('common:logout')}
+        </Button>
     );
 
     const renderSettingsCardContent = (
-        <>
+        <Box flexGrow="1" display="flex" flexDirection="column" justifyContent="space-between">
             {authenticated ? renderAuthenticatedMenuList : renderCommonMenuItems}
-            <Divider />
-            {authenticated ? renderLogoutButton : renderLoginButton}
-        </>
+            <Box padding="0.5rem">{authenticated ? renderLogoutButton : renderLoginButton}</Box>
+        </Box>
     );
 
-    return { renderSettingsCardContent };
+    return { renderSettingsCardContent, settingsOpen, toggleSettings };
 };

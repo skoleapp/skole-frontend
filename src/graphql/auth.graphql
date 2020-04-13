@@ -18,7 +18,7 @@ mutation Register($username: String!, $password: String!, $code: String!) {
             title
             bio
             avatar
-            points
+            score
             courseCount
             resourceCount
             created
@@ -26,12 +26,12 @@ mutation Register($username: String!, $password: String!, $code: String!) {
                 id
                 name
                 code
-                points
+                score
             }
             starredResources {
                 id
                 title
-                points
+                score
                 date
             }
         }
@@ -52,7 +52,7 @@ mutation Login($username: String!, $password: String!) {
             title
             bio
             avatar
-            points
+            score
             courseCount
             resourceCount
             created
@@ -60,12 +60,12 @@ mutation Login($username: String!, $password: String!) {
                 id
                 name
                 code
-                points
+                score
             }
             starredResources {
                 id
                 title
-                points
+                score
                 date
             }
         }
@@ -84,7 +84,7 @@ query UserMe {
         title
         bio
         avatar
-        points
+        score
         courseCount
         resourceCount
         created
@@ -92,12 +92,12 @@ query UserMe {
             id
             name
             code
-            points
+            score
         }
         starredResources {
             id
             title
-            points
+            score
             date
         }
     }

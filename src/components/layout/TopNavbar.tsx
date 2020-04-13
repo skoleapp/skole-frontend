@@ -1,5 +1,5 @@
-import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
-import { ArrowBackOutlined, StarOutlined } from '@material-ui/icons';
+import { AppBar, Avatar, Box, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
+import { ArrowBackOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
 import styled from 'styled-components';
@@ -8,18 +8,13 @@ import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
 import { Link } from '../../i18n';
 import { breakpoints } from '../../styles';
-import { LayoutProps } from '../../types';
+import { TopNavbarProps } from '../../types';
 import { mediaURL, useAuth } from '../../utils';
 import { ButtonLink, Heading, IconButtonLink } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
 
-type Props = Pick<
-    LayoutProps,
-    'heading' | 'dynamicBackUrl' | 'staticBackUrl' | 'disableSearch' | 'headerRight' | 'headerLeft'
->;
-
-export const TopNavbar: React.FC<Props> = ({
-    heading,
+export const TopNavbar: React.FC<TopNavbarProps> = ({
+    header,
     dynamicBackUrl,
     staticBackUrl,
     disableSearch,
@@ -46,14 +41,14 @@ export const TopNavbar: React.FC<Props> = ({
 
     const renderMobileContent = (
         <Grid className="md-down" container alignItems="center">
-            <Grid item xs={2} container justify="flex-start" wrap="nowrap">
+            <Grid item xs={4} sm={3} container justify="flex-start" wrap="nowrap">
                 {renderStaticBackButton || renderDynamicBackButton}
                 {headerLeft}
             </Grid>
-            <Grid item xs={8}>
-                {heading ? <Heading text={heading} /> : <Logo />}
+            <Grid item xs={4} sm={6} container justify="center">
+                {header ? <Heading text={header} /> : <Logo />}
             </Grid>
-            <Grid item xs={2} container justify="flex-end">
+            <Grid item xs={4} sm={3} container justify="flex-end">
                 {headerRight}
             </Grid>
         </Grid>
@@ -66,11 +61,15 @@ export const TopNavbar: React.FC<Props> = ({
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
                     <>
-                        <IconButtonLink icon={StarOutlined} href="/account/starred" color="secondary" />
+                        <Tooltip title={t('common:starredTooltip')}>
+                            <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
+                        </Tooltip>
                         <Link href="/users/[id]" as={`/users/${user.id}`}>
-                            <IconButton color="secondary">
-                                <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
-                            </IconButton>
+                            <Tooltip title={t('common:profileTooltip')}>
+                                <IconButton color="secondary">
+                                    <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
+                                </IconButton>
+                            </Tooltip>
                         </Link>
                     </>
                 ) : (

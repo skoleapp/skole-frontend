@@ -5,7 +5,7 @@ const withOffline = require('next-offline');
 module.exports = withCSS(
     withAssetsImport(
         withOffline({
-            target: 'serverless',
+            target: 'server',
             env: {
                 API_URL: process.env.API_URL,
                 BACKEND_URL: process.env.BACKEND_URL,

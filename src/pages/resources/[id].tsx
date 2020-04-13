@@ -7,6 +7,7 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -21,13 +22,12 @@ import {
     NavigateNextOutlined,
     SchoolOutlined,
     ScoreOutlined,
+    TitleOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React, { useEffect } from 'react';
-import { batch, useDispatch, useSelector } from 'react-redux';
-import { compose } from 'redux';
+import React from 'react';
 import styled from 'styled-components';
 
 import {
@@ -38,7 +38,6 @@ import {
     useDeleteResourceMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { nextPage, prevPage, setCenter, setCurrentPage, setPages, toggleNotification } from '../../actions';
 import {
     CreatorListItem,
     DiscussionBox,
@@ -53,10 +52,17 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { breakpoints } from '../../styles';
-import { I18nPage, I18nProps, SkoleContext, State } from '../../types';
-import { mediaURL, useOptions, useVotes, withAuthSync } from '../../utils';
+import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import {
+    mediaURL,
+    useNotificationsContext,
+    useOptions,
+    usePDFViewerContext,
+    useVotes,
+    withAuthSync,
+} from '../../utils';
 import { useAuth } from '../../utils';
 
 interface Props extends I18nProps {
@@ -65,23 +71,18 @@ interface Props extends I18nProps {
 
 const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
+    const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuth();
-    const { pages, currentPage } = useSelector((state: State) => state.resource);
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
+    const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
 
-    useEffect(() => {
-        return (): void =>
-            batch(() => {
-                dispatch(setPages([]));
-                dispatch(setCurrentPage(0));
-            });
-    }, []);
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
+        t('resource:optionsHeader'),
+    );
 
     if (!!resource) {
-        const file = mediaURL(resource.file);
         const resourceTitle = R.propOr('-', 'title', resource) as string;
+        const file = mediaURL(resource.file);
         const resourceType = R.propOr('-', 'resourceType', resource);
         const courseId = R.propOr('', 'id', resource.course);
         const courseName = R.propOr('-', 'name', resource.course) as string;
@@ -90,16 +91,14 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const creatorId = R.propOr('', 'id', resource.user) as string;
         const resourceId = R.propOr('', 'id', resource) as string;
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
-        const isOwnProfile = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
         const initialVote = (R.propOr(null, 'vote', resource) as unknown) as VoteObjectType | null;
-        const initialPoints = R.propOr(0, 'points', resource) as number;
+        const initialScore = R.propOr(0, 'score', resource) as number;
         const starred = !!resource.starred;
         const isOwner = !!user && user.id === creatorId;
-        const staticBackUrl = { href: '/courses/[id]', as: `/courses/${courseId}` };
 
-        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+        const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
             initialVote,
-            initialPoints,
+            initialScore,
             isOwner,
         });
 
@@ -109,8 +108,13 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             formKey: 'resource',
         };
 
+        const staticBackUrl = {
+            href: '/courses/[id]',
+            as: `/courses/${courseId}`,
+        };
+
         const deleteResourceError = (): void => {
-            dispatch(toggleNotification(t('notifications:deleteResourceError')));
+            toggleNotification(t('notifications:deleteResourceError'));
         };
 
         const deleteResourceCompleted = ({ deleteResource }: DeleteResourceMutation): void => {
@@ -119,7 +123,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     deleteResourceError();
                 } else {
                     Router.push('/courses/' + courseId);
-                    dispatch(toggleNotification(t('notifications:resourceDeleted')));
+                    toggleNotification(t('notifications:resourceDeleted'));
                 }
             }
         };
@@ -155,20 +159,8 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 a.click();
                 a.remove();
             } catch {
-                dispatch(toggleNotification(t('notifications:downloadResourceError')));
+                toggleNotification(t('notifications:downloadResourceError'));
             }
-        };
-
-        const handlePreviousPage = (): void => {
-            dispatch(prevPage());
-        };
-
-        const handleNextPage = (): void => {
-            dispatch(nextPage());
-        };
-
-        const handleCenterImage = (): void => {
-            dispatch(setCenter());
         };
 
         const renderCourseLink = <TextLink {...staticBackUrl}>{courseName}</TextLink>;
@@ -176,6 +168,18 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const renderInfo = (
             <CardContent>
                 <StyledList>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <TitleOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:title')}: {resourceTitle}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -223,7 +227,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                         </ListItemAvatar>
                         <ListItemText>
                             <Typography variant="body2">
-                                {t('common:points')}: {points}
+                                {t('common:score')}: {score}
                             </Typography>
                         </ListItemText>
                     </ListItem>
@@ -236,7 +240,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             <StyledList>
                 {renderShareOption}
                 {renderReportOption}
-                {isOwnProfile && (
+                {isOwner && (
                     <MenuItem>
                         <ListItemText onClick={handleDeleteResource}>
                             <DeleteOutline /> {t('resource:deleteResource')}
@@ -251,24 +255,33 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </StyledList>
         );
 
-        const optionProps = {
-            renderOptions,
-            renderOptionsHeader,
-            drawerProps,
-        };
-
-        const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
+        const renderStarButton = (
+            <StarButton
+                starred={starred}
+                resource={resourceId}
+                starredTooltip={t('resource:starredTooltip')}
+                unstarredTooltip={t('resource:unstarredTooltip')}
+            />
+        );
 
         const renderUpVoteButton = (
-            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                <KeyboardArrowUpOutlined />
-            </IconButton>
+            <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}>
+                <span>
+                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
         );
 
         const renderDownVoteButton = (
-            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                <KeyboardArrowDownOutlined />
-            </IconButton>
+            <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}>
+                <span>
+                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
         );
 
         const renderExtraResourceActions = (
@@ -279,18 +292,30 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     {renderDownVoteButton}
                 </Grid>
                 <Grid item xs={4} container alignItems="center" id="page-controls">
-                    <IconButton disabled={currentPage === 0} onClick={handlePreviousPage} size="small">
-                        <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
-                    </IconButton>
+                    <Tooltip title={t('common:previousPageTooltip')}>
+                        <span>
+                            <IconButton disabled={currentPage === 0} onClick={prevPage} size="small">
+                                <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
                     <Typography variant="body2">{currentPage + 1 + ' / ' + pages.length}</Typography>
-                    <IconButton disabled={currentPage === pages.length - 1} onClick={handleNextPage} size="small">
-                        <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
-                    </IconButton>
+                    <Tooltip title={t('common:nextPageTooltip')}>
+                        <span>
+                            <IconButton disabled={currentPage === pages.length - 1} onClick={nextPage} size="small">
+                                <NavigateNextOutlined
+                                    color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'}
+                                />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
                 </Grid>
                 <Grid item xs={4} container justify="flex-end">
-                    <IconButton onClick={handleCenterImage} size="small">
-                        <FullscreenOutlined />
-                    </IconButton>
+                    <Tooltip title={t('resource:fullscreenTooltip')}>
+                        <IconButton onClick={setCenter} size="small">
+                            <FullscreenOutlined />
+                        </IconButton>
+                    </Tooltip>
                 </Grid>
             </StyledExtraResourceActions>
         );
@@ -317,24 +342,41 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </StyledBottomNavigation>
         );
 
-        return (
-            <TabLayout
-                title={resourceTitle}
-                subheader={renderCourseLink}
-                titleSecondary={t('common:discussion')}
-                staticBackUrl={staticBackUrl}
-                renderInfo={renderInfo}
-                tabLabelLeft={t('common:resource')}
-                renderLeftContent={<PDFViewer file={file} />}
-                renderRightContent={<DiscussionBox {...discussionBoxProps} />}
-                optionProps={optionProps}
-                customBottomNavbar={renderCustomBottomNavbar}
-                customBottomNavbarSecondary={renderCustomBottomNavbarSecondary}
-                extraDesktopActions={renderExtraResourceActions}
-            />
-        );
+        const renderPDFViewer = <PDFViewer file={file} />;
+        const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
+
+        const layoutProps = {
+            seoProps: {
+                title: resourceTitle,
+                description: t('resource:description'),
+            },
+            topNavbarProps: {
+                staticBackUrl: staticBackUrl,
+            },
+            headerDesktop: resourceTitle,
+            headerSecondary: t('common:discussion'),
+            subheaderDesktop: renderCourseLink,
+            extraDesktopActions: renderExtraResourceActions,
+            renderInfo,
+            infoTooltip: t('resource:infoTooltip'),
+            infoHeader: t('resource:infoHeader'),
+            optionProps: {
+                renderOptions,
+                renderOptionsHeader,
+                drawerProps,
+                optionsTooltip: t('resource:optionsTooltip'),
+            },
+            tabLabelLeft: t('common:resource'),
+            tabLabelRight: `${t('common:discussion')} (${comments.length})`,
+            renderLeftContent: renderPDFViewer,
+            renderRightContent: renderDiscussionBox,
+            customBottomNavbar: renderCustomBottomNavbar,
+            customBottomNavbarSecondary: renderCustomBottomNavbarSecondary,
+        };
+
+        return <TabLayout {...layoutProps} />;
     } else {
-        return <NotFoundLayout title={t('resource:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 
@@ -367,4 +409,4 @@ ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProp
     }
 };
 
-export default compose(withAuthSync, withApollo, withRedux)(ResourceDetailPage);
+export default withApollo(withAuthSync(ResourceDetailPage));

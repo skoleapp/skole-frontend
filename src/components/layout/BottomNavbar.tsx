@@ -1,5 +1,5 @@
 import { Avatar, BottomNavigationAction } from '@material-ui/core';
-import { CloudUploadOutlined, HomeOutlined, SearchOutlined, StarOutlined } from '@material-ui/icons';
+import { CloudUploadOutlined, HomeOutlined, SearchOutlined, StarBorderOutlined } from '@material-ui/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -63,7 +63,7 @@ export const BottomNavbar: React.FC = () => {
             <BottomNavigationAction value={1} onClick={handleRedirect(home)} icon={<HomeOutlined />} />
             <BottomNavigationAction value={2} onClick={handleRedirect(search)} icon={<SearchOutlined />} />
             <BottomNavigationAction value={3} onClick={handleRedirect(uploadResource)} icon={<CloudUploadOutlined />} />
-            <BottomNavigationAction value={4} onClick={handleRedirect(starred)} icon={<StarOutlined />} />
+            <BottomNavigationAction value={4} onClick={handleRedirect(starred)} icon={<StarBorderOutlined />} />
             <BottomNavigationAction value={5} icon={renderAvatar} />
         </StyledBottomNavigation>
     );

@@ -2,8 +2,9 @@ import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/s
 import { DocumentInitialProps, RenderPageResult } from 'next/dist/next-server/lib/utils';
 import NextDocument, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 import React, { Fragment } from 'react';
-import { GA_TRACKING_ID } from 'src/lib';
 import { ServerStyleSheet as StyledComponentSheets } from 'styled-components';
+
+import { GA_TRACKING_ID } from '../lib';
 
 const GAScript = {
     __html: `

@@ -3,8 +3,6 @@ import { TextField } from 'formik-material-ui';
 import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';
-import { useDispatch } from 'react-redux';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import {
@@ -15,13 +13,12 @@ import {
     ResourceTypesDocument,
     useCreateResourceMutation,
 } from '../../generated/graphql';
-import { toggleNotification } from '../actions';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
 import { Router, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useForm, withAuthSync } from '../utils';
+import { useForm, useNotificationsContext, withAuthSync } from '../utils';
 
 interface UploadResourceFormValues {
     resourceTitle: string;
@@ -35,8 +32,9 @@ interface Props extends I18nProps {
 }
 
 const UploadResourcePage: I18nPage<Props> = ({ course }) => {
-    const dispatch = useDispatch();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
+
     const { ref, setSubmitting, onError, resetForm, handleMutationErrors, setFieldError, setFieldValue } = useForm<
         UploadResourceFormValues
     >();
@@ -58,7 +56,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                 handleMutationErrors(createResource.errors);
             } else if (createResource.resource && createResource.resource.id) {
                 resetForm();
-                dispatch(toggleNotification(t('notifications:resourceUploaded')));
+                toggleNotification(t('notifications:resourceUploaded'));
                 await Router.push(`/resources/${createResource.resource.id}`);
             }
         }
@@ -207,14 +205,20 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
         </Formik>
     );
 
-    return (
-        <FormLayout
-            title={t('upload-resource:title')}
-            heading={t('upload-resource:heading')}
-            dynamicBackUrl
-            renderCardContent={renderCardContent}
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('upload-resource:title'),
+            description: t('upload-resource:description'),
+        },
+        topNavbarProps: {
+            header: t('upload-resource:header'),
+            dynamicBackUrl: true,
+        },
+        desktopHeader: t('upload-resource:header'),
+        renderCardContent,
+    };
+
+    return <FormLayout {...layoutProps} />;
 };
 
 UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
@@ -232,4 +236,4 @@ UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> =
         return nameSpaces;
     }
 };
-export default compose(withAuthSync, withApollo, withRedux)(UploadResourcePage);
+export default withApollo(withAuthSync(UploadResourcePage));

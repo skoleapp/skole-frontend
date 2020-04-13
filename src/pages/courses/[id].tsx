@@ -8,8 +8,7 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
-    Table,
-    TableContainer,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -18,14 +17,14 @@ import {
     HouseOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
+    SchoolOutlined,
     ScoreOutlined,
     SubjectOutlined,
+    VpnKeyOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { compose } from 'redux';
 
 import {
     CommentObjectType,
@@ -36,25 +35,25 @@ import {
     useDeleteCourseMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { toggleNotification } from '../../actions';
 import {
     CreatorListItem,
     DiscussionBox,
+    FrontendPaginatedTable,
     IconButtonLink,
     NavbarContainer,
+    NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
     StarButton,
     StyledBottomNavigation,
     StyledList,
-    StyledTable,
     TabLayout,
     TextLink,
 } from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
-import { I18nPage, I18nProps, MuiColor, SkoleContext, State } from '../../types';
-import { useFrontendPagination, useOptions, useVotes, withAuthSync } from '../../utils';
+import { withApollo } from '../../lib';
+import { I18nPage, I18nProps, MuiColor, SkoleContext } from '../../types';
+import { useFrontendPagination, useNotificationsContext, useOptions, useVotes, withAuthSync } from '../../utils';
 import { useAuth } from '../../utils';
 
 interface Props extends I18nProps {
@@ -63,10 +62,13 @@ interface Props extends I18nProps {
 
 const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
+    const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuth();
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
+
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
+        t('course:optionsHeader'),
+    );
 
     const getFullCourseName = (course: CourseObjectType): string => {
         const { code, name } = course;
@@ -79,24 +81,26 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     };
 
     if (!!course) {
-        const fullName = getFullCourseName(course);
+        const courseName = R.propOr('-', 'name', course);
+        const courseCode = R.propOr('-', 'code', course);
+        const fullCourseName = getFullCourseName(course);
         const subjectName = R.propOr('-', 'name', course.subject) as string;
         const schoolName = R.propOr('-', 'name', course.school) as string;
         const creatorId = R.propOr('', 'id', course.user) as string;
         const courseId = R.propOr('', 'id', course) as string;
-        const initialPoints = R.propOr(0, 'points', course) as number;
+        const initialScore = R.propOr(0, 'score', course) as number;
         const resourceCount = R.propOr('-', 'resourceCount', course);
         const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
         const comments = R.propOr([], 'comments', course) as CommentObjectType[];
-        const isOwnCourse = creatorId === useSelector((state: State) => R.path(['auth', 'user', 'id'], state));
+        const isOwnCourse = creatorId === R.propOr('', 'id', user);
         const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
         const starred = !!course.starred;
         const isOwner = !!user && user.id === creatorId;
-        const staticBackUrl = { href: '/search' };
+        const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
 
-        const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+        const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
             initialVote,
-            initialPoints,
+            initialScore,
             isOwner,
         });
 
@@ -111,20 +115,8 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             formKey: 'course',
         };
 
-        const frontendPaginationProps = {
-            items: resources,
-            notFoundText: 'course:noResources',
-            titleLeft: 'common:title',
-            titleLeftDesktop: 'common:resources',
-            titleRight: 'common:points',
-        };
-
-        const { renderTablePagination, paginatedItems, renderNotFound, renderTableHead } = useFrontendPagination(
-            frontendPaginationProps,
-        );
-
         const deleteCourseError = (): void => {
-            dispatch(toggleNotification(t('notifications:deleteCourseError')));
+            toggleNotification(t('notifications:deleteCourseError'));
         };
 
         const deleteCourseCompleted = ({ deleteCourse }: DeleteCourseMutation): void => {
@@ -133,7 +125,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                     deleteCourseError();
                 } else {
                     Router.push('/');
-                    dispatch(toggleNotification(t('notifications:courseDeleted')));
+                    toggleNotification(t('notifications:courseDeleted'));
                 }
             }
         };
@@ -154,20 +146,52 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const renderUpVoteButton = (
-            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                <KeyboardArrowUpOutlined />
-            </IconButton>
+            <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+                <span>
+                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
         );
 
         const renderDownVoteButton = (
-            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                <KeyboardArrowDownOutlined />
-            </IconButton>
+            <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+                <span>
+                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
         );
 
         const renderInfo = (
             <CardContent>
                 <StyledList>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <SchoolOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:name')}: {courseName}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <VpnKeyOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:courseCode')}: {courseCode}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -210,7 +234,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                         </ListItemAvatar>
                         <ListItemText>
                             <Typography variant="body2">
-                                {t('common:points')}: {points}
+                                {t('common:score')}: {score}
                             </Typography>
                         </ListItemText>
                     </ListItem>
@@ -231,19 +255,23 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </CardContent>
         );
 
+        const resourceTableHeadProps = {
+            titleLeft: t('common:title'),
+            titleLeftDesktop: t('common:resources'),
+            titleRight: t('common:score'),
+        };
+
         const renderResources = !!resources.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderTableHead}
-                        <ResourceTableBody resources={paginatedItems} />
-                        {renderTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={resourceTableHeadProps}
+                renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+                paginationProps={resourcePaginationProps}
+            />
         ) : (
-            renderNotFound
+            <NotFoundBox text={'course:noResources'} />
         );
+
+        const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
 
         const renderOptions = (
             <StyledList>
@@ -259,18 +287,14 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </StyledList>
         );
 
-        const optionProps = {
-            renderOptions,
-            renderOptionsHeader,
-            drawerProps,
-        };
-
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-            <IconButtonLink
-                href={{ pathname: '/upload-resource', query: { course: courseId } }}
-                color={color}
-                icon={CloudUploadOutlined}
-            />
+            <Tooltip title={t('course:uploadResourceTooltip')}>
+                <IconButtonLink
+                    href={{ pathname: '/upload-resource', query: { course: courseId } }}
+                    color={color}
+                    icon={CloudUploadOutlined}
+                />
+            </Tooltip>
         );
 
         const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
@@ -279,6 +303,8 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const starButtonProps = {
             starred,
             course: courseId,
+            starredTooltip: t('course:starredTooltip'),
+            unstarredTooltip: t('course:unstarredTooltip'),
         };
 
         const renderExtraDesktopActions = (
@@ -305,24 +331,38 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
             </StyledBottomNavigation>
         );
 
-        return (
-            <TabLayout
-                title={fullName}
-                titleSecondary={t('common:discussion')}
-                staticBackUrl={staticBackUrl}
-                renderInfo={renderInfo}
-                optionProps={optionProps}
-                tabLabelLeft={t('common:resources')}
-                renderLeftContent={renderResources}
-                renderRightContent={<DiscussionBox {...discussionBoxProps} />}
-                headerActionMobile={uploadResourceButtonMobile}
-                headerActionDesktop={uploadResourceButtonDesktop}
-                customBottomNavbar={renderCustomBottomNavbar}
-                extraDesktopActions={renderExtraDesktopActions}
-            />
-        );
+        const layoutProps = {
+            seoProps: {
+                title: fullCourseName,
+                description: t('course:description'),
+            },
+            topNavbarProps: {
+                staticBackUrl: { href: '/search' },
+            },
+            headerDesktop: fullCourseName,
+            headerSecondary: t('common:discussion'),
+            renderInfo,
+            infoTooltip: t('course:infoTooltip'),
+            infoHeader: t('course:infoHeader'),
+            optionProps: {
+                renderOptions,
+                renderOptionsHeader,
+                drawerProps,
+                optionsTooltip: t('course:optionsTooltip'),
+            },
+            tabLabelLeft: `${t('common:resources')} (${resourceCount})`,
+            tabLabelRight: `${t('common:discussion')} (${comments.length})`,
+            renderLeftContent: renderResources,
+            renderRightContent: renderDiscussionBox,
+            headerLeftMobile: uploadResourceButtonMobile,
+            headerActionDesktop: uploadResourceButtonDesktop,
+            customBottomNavbar: renderCustomBottomNavbar,
+            extraDesktopActions: renderExtraDesktopActions,
+        };
+
+        return <TabLayout {...layoutProps} />;
     } else {
-        return <NotFoundLayout title={t('course:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 
@@ -342,4 +382,4 @@ CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
     }
 };
 
-export default compose(withAuthSync, withApollo, withRedux)(CourseDetailPage);
+export default withApollo(withAuthSync(CourseDetailPage));

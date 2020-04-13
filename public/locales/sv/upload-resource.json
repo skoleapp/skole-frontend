@@ -1,6 +1,7 @@
 {
     "title": "Ladda Upp Resurs",
-    "heading": "Ladda Upp Resurs",
+    "description": "Det här är resursuppdateringssidan.",
+    "header": "Ladda Upp Resurs",
     "fileGenerationError": "Fel vid generering av PDF!",
     "fileGenerationLoadingText": "Genererar PDF...",
     "fileUploadingText": "Laddar upp PDF..."

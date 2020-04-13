@@ -1,5 +1,6 @@
 {
     "title": "Users",
-    "heading": "Users",
+    "description": "This is a search page for users.",
+    "header": "Users",
     "notFound": "Users will show here."
 }

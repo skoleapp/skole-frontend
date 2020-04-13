@@ -5,14 +5,13 @@ import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps } from '../types';
 import { useAuth, useForm, useLanguageSelector } from '../utils';
 
@@ -146,19 +145,25 @@ const RegisterPage: I18nPage = () => {
         </Formik>
     );
 
-    return (
-        <FormLayout
-            title={t('register:title')}
-            heading={t('register:heading')}
-            headerRight={renderLanguageButton}
-            renderCardContent={renderCardContent}
-            disableBottomNavbar
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('register:title'),
+            description: t('register:description'),
+        },
+        topNavbarProps: {
+            header: t('register:header'),
+            headerRight: renderLanguageButton,
+        },
+        desktopHeader: t('register:header'),
+        renderCardContent,
+        disableBottomNavbar: true,
+    };
+
+    return <FormLayout {...layoutProps} />;
 };
 
 RegisterPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['register']),
 });
 
-export default compose(withApollo, withRedux)(RegisterPage);
+export default withApollo(RegisterPage);

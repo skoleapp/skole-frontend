@@ -26,7 +26,7 @@ query ResourceDetail($id: ID) {
         date
         modified
         created
-        points
+        score
         starred
         school {
             id
@@ -57,7 +57,7 @@ query ResourceDetail($id: ID) {
             created
             modified
             created
-            points
+            score
             replyCount
             vote {
                 id
@@ -72,7 +72,7 @@ query ResourceDetail($id: ID) {
                 }
                 text
                 attachment
-                points
+                score
                 vote {
                     id
                     status

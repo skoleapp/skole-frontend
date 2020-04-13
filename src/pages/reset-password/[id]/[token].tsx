@@ -1,13 +1,12 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { FormLayout, FormSubmitSection } from '../../../components';
 import { useTranslation } from '../../../i18n';
 import { includeDefaultNamespaces } from '../../../i18n';
-import { withApollo, withRedux } from '../../../lib';
+import { withApollo } from '../../../lib';
 import { I18nPage, I18nProps } from '../../../types';
 import { useForm } from '../../../utils';
 
@@ -69,11 +68,24 @@ const ResetPasswordConfirmPage: I18nPage = () => {
         </Formik>
     );
 
-    return <FormLayout title={t('reset-password:confirm')} renderCardContent={renderCardContent} dynamicBackUrl />;
+    const layoutProps = {
+        seoProps: {
+            title: t('reset-password:title'),
+            description: t('reset-password:description'),
+        },
+        topNavbarProps: {
+            header: t('reset-password:header'),
+            dynamicBackUrl: true,
+        },
+        renderCardContent: renderCardContent,
+        desktopHeader: t('reset-password:header'),
+    };
+
+    return <FormLayout {...layoutProps} />;
 };
 
 ResetPasswordConfirmPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['reset-password']),
 });
 
-export default compose(withApollo, withRedux)(ResetPasswordConfirmPage);
+export default withApollo(ResetPasswordConfirmPage);

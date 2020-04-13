@@ -1,18 +1,15 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
-import { toggleNotification } from '../../actions';
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { I18nPage, I18nProps } from '../../types';
-import { useForm, withAuthSync } from '../../utils';
+import { useForm, useNotificationsContext, withAuthSync } from '../../utils';
 
 const initialValues = {
     oldPassword: '',
@@ -29,7 +26,7 @@ export interface ChangePasswordFormValues {
 
 const ChangePasswordPage: I18nPage = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<ChangePasswordFormValues>();
-    const dispatch = useDispatch();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -48,7 +45,7 @@ const ChangePasswordPage: I18nPage = () => {
                 handleMutationErrors(changePassword.errors);
             } else {
                 resetForm();
-                dispatch(toggleNotification(t('notifications:passwordChanged')));
+                toggleNotification(t('notifications:passwordChanged'));
             }
         }
     };
@@ -98,19 +95,25 @@ const ChangePasswordPage: I18nPage = () => {
         </Formik>
     );
 
-    return (
-        <SettingsLayout
-            title={t('change-password:title')}
-            heading={t('change-password:heading')}
-            renderCardContent={renderCardContent}
-            dynamicBackUrl
-            formLayout
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('change-password:title'),
+            description: t('change-password:description'),
+        },
+        topNavbarProps: {
+            header: t('change-password:header'),
+            dynamicBackUrl: true,
+        },
+        renderCardContent,
+        desktopHeader: t('change-password:header'),
+        formLayout: true,
+    };
+
+    return <SettingsLayout {...layoutProps} />;
 };
 
 ChangePasswordPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['change-password']),
 });
 
-export default compose(withAuthSync, withApollo, withRedux)(ChangePasswordPage);
+export default withApollo(withAuthSync(ChangePasswordPage));

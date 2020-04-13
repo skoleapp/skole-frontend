@@ -1,6 +1,6 @@
 {
-    "seeCoursesButton": "See Courses!",
+    "description": "This is a school page.",
     "noSubjects": "This school has no subjects...",
     "noCourses": "This school has no courses...",
-    "notFound": "School not found..."
+    "optionsHeader": "School Options"
 }

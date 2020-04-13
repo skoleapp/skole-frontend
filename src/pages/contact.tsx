@@ -1,18 +1,15 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { ContactMutation, useContactMutation } from '../../generated/graphql';
-import { toggleNotification } from '../actions';
 import { FormSubmitSection, SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps } from '../types';
-import { useForm } from '../utils';
+import { useForm, useNotificationsContext } from '../utils';
 
 const initialValues = {
     subject: '',
@@ -30,7 +27,7 @@ export interface ContactFormValues {
 }
 
 const ContactPage: I18nPage = () => {
-    const dispatch = useDispatch();
+    const { toggleNotification } = useNotificationsContext();
     const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<ContactFormValues>();
     const { t } = useTranslation();
 
@@ -48,7 +45,7 @@ const ContactPage: I18nPage = () => {
             handleMutationErrors(createMessage.errors);
         } else if (createMessage) {
             resetForm();
-            dispatch(toggleNotification(t('notifications:messageSubmitted')));
+            toggleNotification(t('notifications:messageSubmitted'));
         }
     };
 
@@ -112,19 +109,25 @@ const ContactPage: I18nPage = () => {
         </Formik>
     );
 
-    return (
-        <SettingsLayout
-            title={t('contact:title')}
-            heading={t('contact:heading')}
-            renderCardContent={renderCardContent}
-            dynamicBackUrl
-            formLayout
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('contact:title'),
+            description: t('contact:description'),
+        },
+        topNavbarProps: {
+            header: t('contact:header'),
+            dynamicBackUrl: true,
+        },
+        desktopHeader: t('contact:header'),
+        renderCardContent,
+        formLayout: true,
+    };
+
+    return <SettingsLayout {...layoutProps} />;
 };
 
 ContactPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['contact']),
 });
 
-export default compose(withApollo, withRedux)(ContactPage);
+export default withApollo(ContactPage);

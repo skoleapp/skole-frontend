@@ -1,17 +1,15 @@
-import { Box, Fab, Fade, IconButton, OutlinedTextFieldProps, Paper, TextField } from '@material-ui/core';
+import { Box, Fab, Fade, IconButton, OutlinedTextFieldProps, Paper, TextField, Tooltip } from '@material-ui/core';
 import { AttachFileOutlined, CameraAltOutlined, ClearOutlined, SendOutlined } from '@material-ui/icons';
 import { Form, Formik, FormikProps } from 'formik';
 import Image from 'material-ui-image';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
-import { toggleNotification } from '../../actions';
 import { CommentTarget } from '../../types';
-import { useForm } from '../../utils';
+import { useForm, useNotificationsContext } from '../../utils';
 import { ModalHeader } from './ModalHeader';
 import { StyledModal } from './StyledModal';
 
@@ -42,25 +40,23 @@ export const CreateCommentForm: React.FC<Props> = ({
     formKey,
 }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
+    const { toggleNotification } = useNotificationsContext();
 
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);
         toggleCreateCommentModal(false);
     };
 
-    const onError = (): void => {
-        dispatch(toggleNotification(t('notifications:messageError')));
-    };
+    const onError = (): void => toggleNotification(t('notifications:messageError'));
 
     const onCompleted = ({ createComment }: CreateCommentMutation): void => {
         if (createComment) {
             if (createComment.errors) {
                 onError();
             } else if (createComment.comment) {
-                dispatch(toggleNotification(t('notifications:messageSubmitted')));
+                toggleNotification(t('notifications:messageSubmitted'));
                 appendComments(createComment.comment as CommentObjectType);
             }
         }
@@ -70,7 +66,7 @@ export const CreateCommentForm: React.FC<Props> = ({
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
         if (!attachment && !values.text) {
-            dispatch(toggleNotification(t('notifications:messageEmpty')));
+            toggleNotification(t('notifications:messageEmpty'));
         } else {
             await createCommentMutation({
                 variables: { ...values, attachment: (values.attachment as unknown) as string },
@@ -128,9 +124,11 @@ export const CreateCommentForm: React.FC<Props> = ({
     };
 
     const renderSubmitButton = (
-        <IconButton onClick={submitForm} color="primary" size="small">
-            <SendOutlined />
-        </IconButton>
+        <Tooltip title={t('common:sendMessageTooltip')}>
+            <IconButton onClick={submitForm} color="primary" size="small">
+                <SendOutlined />
+            </IconButton>
+        </Tooltip>
     );
 
     const renderDesktopInputArea = ({ values }: T): JSX.Element => (
@@ -144,9 +142,11 @@ export const CreateCommentForm: React.FC<Props> = ({
                     onChange={handleAttachmentChange}
                 />
                 <label htmlFor={`attachment-desktop-${formKey}`}>
-                    <IconButton component="span" size="small">
-                        <AttachFileOutlined />
-                    </IconButton>
+                    <Tooltip title={t('common:attachFileTooltip')}>
+                        <IconButton component="span" size="small">
+                            <AttachFileOutlined />
+                        </IconButton>
+                    </Tooltip>
                 </label>
             </Box>
             <TextField onKeyDown={handleKeyDown} value={!values.attachment ? values.text : ''} {...textFieldProps} />
@@ -177,16 +177,20 @@ export const CreateCommentForm: React.FC<Props> = ({
                                 onChange={handleAttachmentChange}
                             />
                             <label htmlFor={`camera-attachment-${formKey}`}>
-                                <Fab component="span" size="small">
-                                    <CameraAltOutlined />
-                                </Fab>
+                                <Tooltip title={t('common:attachFileTooltip')}>
+                                    <Fab component="span" size="small">
+                                        <CameraAltOutlined />
+                                    </Fab>
+                                </Tooltip>
                             </label>
                         </Box>
                         {!!attachment && (
                             <Box marginLeft="0.5rem">
-                                <Fab onClick={handleClearAttachment} size="small">
-                                    <ClearOutlined />
-                                </Fab>
+                                <Tooltip title={t('common:clearAttachmentTooltip')}>
+                                    <Fab onClick={handleClearAttachment} size="small">
+                                        <ClearOutlined />
+                                    </Fab>
+                                </Tooltip>
                             </Box>
                         )}
                     </Box>

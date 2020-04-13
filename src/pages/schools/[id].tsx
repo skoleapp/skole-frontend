@@ -4,10 +4,8 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
-    Table,
     TableBody,
     TableCell,
-    TableContainer,
     TableRow,
     Typography,
 } from '@material-ui/core';
@@ -15,7 +13,6 @@ import { FlagOutlined, HouseOutlined, LocationCityOutlined, SchoolOutlined, Subj
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 
 import {
     CourseObjectType,
@@ -23,10 +20,18 @@ import {
     SchoolObjectType,
     SubjectObjectType,
 } from '../../../generated/graphql';
-import { CourseTableBody, NotFoundLayout, StyledList, StyledTable, TabLayout, TextLink } from '../../components';
+import {
+    CourseTableBody,
+    FrontendPaginatedTable,
+    NotFoundBox,
+    NotFoundLayout,
+    StyledList,
+    TabLayout,
+    TextLink,
+} from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../../types';
 import { useFrontendPagination, useOptions, withAuthSync } from '../../utils';
 
@@ -36,7 +41,7 @@ interface Props extends I18nProps {
 
 const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
     const { t } = useTranslation();
-    const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions();
+    const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions(t('school:optionsHeader'));
 
     if (school) {
         const schoolName = R.propOr('-', 'name', school) as string;
@@ -47,6 +52,8 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
         const subjectCount = R.propOr('-', 'subjectCount', school);
         const subjects = R.propOr([], 'subjects', school) as SubjectObjectType[];
         const courses = R.propOr([], 'courses', school) as CourseObjectType[];
+        const { paginatedItems: paginatedSubjects, ...subjectPaginationProps } = useFrontendPagination(subjects);
+        const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
 
         const schoolTypeLink = {
             pathname: '/search',
@@ -62,27 +69,6 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
             pathname: '/search',
             query: { cityName: R.propOr('', 'city', school) as boolean[] },
         };
-
-        const {
-            renderTablePagination: renderSubjectsTablePagination,
-            paginatedItems: paginatedSubjects,
-            renderNotFound: subjectsNotFound,
-        } = useFrontendPagination({
-            items: subjects,
-            notFoundText: 'school:noSubjects',
-        });
-
-        const {
-            renderTablePagination: renderCoursesTablePagination,
-            paginatedItems: paginatedCourses,
-            renderNotFound: coursesNotFound,
-            renderTableHead: renderCoursesTableHead,
-        } = useFrontendPagination({
-            items: courses,
-            titleLeft: 'common:name',
-            titleRight: 'common:points',
-            notFoundText: 'school:noCourses',
-        });
 
         const renderInfo = (
             <CardContent>
@@ -162,64 +148,76 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
 
         const renderOptions = <StyledList>{renderShareOption}</StyledList>;
 
-        const optionProps = {
-            renderOptions,
-            renderOptionsHeader,
-            drawerProps,
+        const renderSubjectsTableBody = (
+            <TableBody>
+                {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
+                    <Link href={{ pathname: '/search', query: { subject: s.id } }} key={i}>
+                        <TableRow>
+                            <TableCell>
+                                <Typography variant="subtitle1">{R.propOr('-', 'name', s)}</Typography>
+                            </TableCell>
+                        </TableRow>
+                    </Link>
+                ))}
+            </TableBody>
+        );
+
+        const commonTableHeadProps = {
+            titleLeft: t('common:name'),
         };
 
         const renderSubjects = !!subjects.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        <TableBody>
-                            {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
-                                <Link href={{ pathname: '/search', query: { subject: s.id } }} key={i}>
-                                    <TableRow>
-                                        <TableCell>
-                                            <Typography variant="subtitle1">{R.propOr('-', 'name', s)}</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                </Link>
-                            ))}
-                        </TableBody>
-                        {renderSubjectsTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={commonTableHeadProps}
+                renderTableBody={renderSubjectsTableBody}
+                paginationProps={subjectPaginationProps}
+            />
         ) : (
-            subjectsNotFound
+            <NotFoundBox text={t('school:noSubjects')} />
         );
+
+        const courseTableHeadProps = {
+            ...commonTableHeadProps,
+            titleRight: 'common:score',
+        };
 
         const renderCourses = !!courses.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderCoursesTableHead}
-                        <CourseTableBody courses={paginatedCourses} />
-                        {renderCoursesTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={courseTableHeadProps}
+                renderTableBody={<CourseTableBody courses={paginatedCourses} />}
+                paginationProps={coursePaginationProps}
+            />
         ) : (
-            coursesNotFound
+            <NotFoundBox text={t('school:noCourses')} />
         );
 
-        return (
-            <TabLayout
-                title={schoolName}
-                titleSecondary={t('common:courses')}
-                tabLabelLeft={t('common:subjects')}
-                renderInfo={renderInfo}
-                optionProps={optionProps}
-                renderLeftContent={renderSubjects}
-                renderRightContent={renderCourses}
-                singleColumn
-                dynamicBackUrl
-            />
-        );
+        const layoutProps = {
+            seoProps: {
+                title: schoolName,
+                description: t('school:description'),
+            },
+            topNavbarProps: {
+                dynamicBackUrl: true,
+                header: schoolName,
+            },
+            headerDesktop: schoolName,
+            headerSecondary: t('common:courses'),
+            tabLabelLeft: `${t('common:subjects')} (${subjectCount})`,
+            tabLabelRight: `${t('common:courses')} (${courseCount})`,
+            renderInfo,
+            optionProps: {
+                renderOptions,
+                renderOptionsHeader,
+                drawerProps,
+            },
+            renderLeftContent: renderSubjects,
+            renderRightContent: renderCourses,
+            singleColumn: true,
+        };
+
+        return <TabLayout {...layoutProps} />;
     } else {
-        return <NotFoundLayout title={t('school:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 
@@ -239,4 +237,4 @@ SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
     }
 };
 
-export default compose(withAuthSync, withApollo, withRedux)(SchoolDetailPage);
+export default withApollo(withAuthSync(SchoolDetailPage));

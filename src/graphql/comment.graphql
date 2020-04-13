@@ -24,14 +24,14 @@ mutation CreateComment($text: String!, $attachment: String, $course: ID, $resour
                 attachment
                 modified
                 created
-                points
+                score
                 vote {
                     id
                     status
                 }
             }
             replyCount
-            points
+            score
             vote {
                 id
                 status

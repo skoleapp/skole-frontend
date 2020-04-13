@@ -1,11 +1,10 @@
 import { Size } from '@material-ui/core';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from '../../generated/graphql';
-import { toggleNotification } from '../actions';
 import { useTranslation } from '../i18n';
 import { MuiColor } from '../types';
+import { useNotificationsContext } from './context';
 
 interface Variables {
     status: number;
@@ -16,7 +15,7 @@ interface Variables {
 
 interface UseVotesProps {
     initialVote: VoteObjectType | null;
-    initialPoints: number;
+    initialScore: number;
     isOwner: boolean;
 }
 
@@ -29,18 +28,18 @@ interface VoteButtonProps {
 interface UseVotes {
     upVoteButtonProps: VoteButtonProps;
     downVoteButtonProps: VoteButtonProps;
-    points: number;
+    score: number;
     handleVote: (variables: Variables) => void;
 }
 
-export const useVotes = ({ initialVote, initialPoints, isOwner }: UseVotesProps): UseVotes => {
+export const useVotes = ({ initialVote, initialScore, isOwner }: UseVotesProps): UseVotes => {
     const [vote, setVote] = useState(initialVote);
-    const [points, setPoints] = useState(initialPoints);
-    const dispatch = useDispatch();
+    const [score, setScore] = useState(initialScore);
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const onError = (): void => {
-        dispatch(toggleNotification(t('notifications:voteError')));
+        toggleNotification(t('notifications:voteError'));
     };
 
     const onCompleted = ({ performVote }: PerformVoteMutation): void => {
@@ -49,7 +48,7 @@ export const useVotes = ({ initialVote, initialPoints, isOwner }: UseVotesProps)
                 onError();
             } else {
                 setVote(performVote.vote as VoteObjectType);
-                setPoints(performVote.targetPoints as number);
+                setScore(performVote.targetScore as number);
             }
         }
     };
@@ -75,5 +74,5 @@ export const useVotes = ({ initialVote, initialPoints, isOwner }: UseVotesProps)
         color: !!vote && vote.status === -1 ? 'primary' : ('default' as MuiColor),
     };
 
-    return { upVoteButtonProps, downVoteButtonProps, points, handleVote };
+    return { upVoteButtonProps, downVoteButtonProps, score, handleVote };
 };

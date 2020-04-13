@@ -1,10 +1,10 @@
 {
-    "title": "Profiili",
-    "points": "pistettä",
+    "description": "Tämä on profiilisivu.",
+    "score": "pistettä",
     "courses": "kurssia",
     "resources": "resurssia",
     "editProfile": "Muokkaa profiilia",
     "noResources": "Tällä käyttäjällä ei ole resursseja...",
     "noCourses": "Tällä käyttäjällä ei ole kursseja...",
-    "notFound": "Profiilia ei löytynyt..."
+    "settingsTooltip": "Tarkastele asetuksia."
 }

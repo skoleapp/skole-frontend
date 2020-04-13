@@ -1,6 +1,7 @@
 {
     "title": "Log In",
-    "heading": "Log In",
+    "description": "This is a login page.",
+    "header": "Log In",
     "createAccount": "Create Account",
     "forgotPassword": "Forgot Password?"
 }

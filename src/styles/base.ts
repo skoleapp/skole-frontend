@@ -32,8 +32,6 @@ export const base = css`
 
     html,
     body {
-        background-color: var(--primary) !important; // iOS header background color.
-
         .sm-down {
             @media only screen and (min-width: ${breakpoints.SM}) {
                 display: none !important;

@@ -5,7 +5,7 @@ query CourseDetail($id: ID) {
         code
         modified
         created
-        points
+        score
         resourceCount
         starred
         vote {
@@ -27,7 +27,7 @@ query CourseDetail($id: ID) {
         resources {
             id
             title
-            points
+            score
             date
         }
         comments {
@@ -52,14 +52,14 @@ query CourseDetail($id: ID) {
                 attachment
                 modified
                 created
-                points
+                score
                 vote {
                     id
                     status
                 }
             }
             replyCount
-            points
+            score
             vote {
                 id
                 status

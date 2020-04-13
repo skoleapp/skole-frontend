@@ -31,7 +31,7 @@ query SearchCourses(
             id
             name
             code
-            points
+            score
         }
     }
     school(id: $school) {

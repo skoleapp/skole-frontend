@@ -1,6 +1,6 @@
 {
-    "notFound": "Skolan hittades inte...",
-    "seeCoursesButton": "Se Kurser!",
+    "description": "Dettä är en skolasida.",
     "noSubjects": "Den här skolan har inga ämnen...",
-    "noCourses": "Den här skolan har inga kurser..."
+    "noCourses": "Den här skolan har inga kurser...",
+    "optionsHeader": "Skolalternativ"
 }

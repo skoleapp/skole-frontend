@@ -1,85 +1,69 @@
-import { Box, Tab, Table, TableContainer } from '@material-ui/core';
+import { Box, Tab } from '@material-ui/core';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 
 import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
 import {
     CourseTableBody,
+    FrontendPaginatedTable,
+    LoadingBox,
+    NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
     SettingsLayout,
-    StyledTable,
     StyledTabs,
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
+import { withApollo } from '../../lib';
 import { I18nPage, I18nProps } from '../../types';
 import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 
 const StarredPage: I18nPage = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
     const starredResources = R.propOr([], 'starredResources', user) as ResourceObjectType[];
-    const commonPaginationProps = { titleRight: 'common:points' };
+    const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
+    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(starredResources);
 
-    const {
-        renderTablePagination: renderStarredCoursesTablePagination,
-        paginatedItems: paginatedCourses,
-        renderNotFound: renderCoursesNotFound,
-        renderTableHead: renderCoursesTableHead,
-    } = useFrontendPagination({
-        ...commonPaginationProps,
-        items: starredCourses,
-        notFoundText: 'starred:noCourses',
-        titleLeft: 'common:name',
-    });
+    const commonTableHeadProps = { titleRight: t('common:score') };
 
-    const {
-        renderTablePagination: renderStarredResourcesTablePagination,
-        paginatedItems: paginatedResources,
-        renderNotFound: renderResourcesNotFound,
-        renderTableHead: renderResourcesTableHead,
-    } = useFrontendPagination({
-        ...commonPaginationProps,
-        items: starredResources,
-        notFoundText: 'starred:noResources',
-        titleLeft: 'common:title',
-    });
+    const courseTableHeadProps = {
+        titleLeft: t('common:name'),
+        ...commonTableHeadProps,
+    };
 
-    if (!!user) {
+    const resourceTableHeadProps = {
+        titleLeft: t('common:title'),
+        ...commonTableHeadProps,
+    };
+
+    if (!!user || loading) {
         const renderStarredCourses = !!starredCourses.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderCoursesTableHead}
-                        <CourseTableBody courses={paginatedCourses} />
-                        {renderStarredCoursesTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={courseTableHeadProps}
+                paginationProps={coursePaginationProps}
+                renderTableBody={<CourseTableBody courses={paginatedCourses} />}
+            />
         ) : (
-            renderCoursesNotFound
+            <NotFoundBox text={t('starred:noCourses')} />
         );
 
         const renderStarredResources = !!starredResources.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderResourcesTableHead}
-                        <ResourceTableBody resources={paginatedResources} />
-                        {renderStarredResourcesTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={resourceTableHeadProps}
+                paginationProps={resourcePaginationProps}
+                renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+            />
         ) : (
-            renderResourcesNotFound
+            <NotFoundBox text={t('starred:noResources')} />
         );
 
-        const renderCardContent = (
+        const renderCardContent = loading ? (
+            <LoadingBox />
+        ) : (
             <Box flexGrow="1" display="flex" flexDirection="column">
                 <StyledTabs value={tabValue} onChange={handleTabChange}>
                     <Tab label={t('common:courses')} />
@@ -98,20 +82,26 @@ const StarredPage: I18nPage = () => {
             </Box>
         );
 
-        return (
-            <SettingsLayout
-                heading={t('starred:heading')}
-                title={t('starred:title')}
-                renderCardContent={renderCardContent}
-                dynamicBackUrl
-                fullSize
-            />
-        );
+        const layoutProps = {
+            seoProps: {
+                title: t('starred:title'),
+                description: t('starred:description'),
+            },
+            topNavbarProps: {
+                header: t('starred:header'),
+                dynamicBackUrl: true,
+            },
+            renderCardContent,
+            desktopHeader: t('starred:header'),
+            fullSize: true,
+        };
+
+        return <SettingsLayout {...layoutProps} />;
     } else {
-        return <NotFoundLayout title={t('_error:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 
 StarredPage.getInitialProps = (): I18nProps => ({ namespacesRequired: includeDefaultNamespaces(['starred']) });
 
-export default compose(withAuthSync, withRedux, withApollo)(StarredPage);
+export default withApollo(withAuthSync(StarredPage));

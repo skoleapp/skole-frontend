@@ -1,5 +1,6 @@
 {
     "title": "Om oss",
-    "heading": "Om oss",
+    "description": "Det här är en sida om oss.",
+    "header": "Om oss",
     "content": "Skole är en studentutvecklad plattform som hjälper dig att lära dig mer av läromaterialet. Den här är en betaversion som används för att göra plattformen bättre för våra användare."
 }

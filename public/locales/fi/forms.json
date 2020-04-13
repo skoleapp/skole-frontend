@@ -33,8 +33,8 @@
     "usernameOrderingReverse": "Käyttäjätunnus (Z-A)",
     "nameOrdering": "Nimi (A-Z)",
     "nameOrderingReverse": "Nimi (Z-A)",
-    "pointsOrdering": "Pisteet (nouseva)",
-    "pointsOrderingReverse": "Pisteet (laskeva)",
+    "scoreOrdering": "Pisteet (nouseva)",
+    "scoreOrderingReverse": "Pisteet (laskeva)",
     "betaCode": "Betakoodi",
     "name": "Nimi",
     "fileSizeError": "Tiedosto on liian suuri!"

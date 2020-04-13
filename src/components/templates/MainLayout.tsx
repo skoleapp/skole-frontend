@@ -1,59 +1,40 @@
-import { Box, Container, ContainerProps } from '@material-ui/core';
+import { Box, Container } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
-import { BottomNavbar, Footer, Head, LanguageSelector, Notifications, Settings, TopNavbar } from '../layout';
-import { AttachmentViewer, CommentThread } from '../layout';
+import {
+    AttachmentViewer,
+    BottomNavbar,
+    CommentThreadModal,
+    Footer,
+    Head,
+    LanguageSelectorModal,
+    Notifications,
+    SettingsModal,
+    TopNavbar,
+} from '../layout';
 
-interface Props
-    extends Pick<
-            LayoutProps,
-            | 'title'
-            | 'dynamicBackUrl'
-            | 'staticBackUrl'
-            | 'disableSearch'
-            | 'headerRight'
-            | 'headerLeft'
-            | 'disableBottomNavbar'
-        >,
-        ContainerProps {
-    heading?: string;
-    customBottomNavbar?: JSX.Element;
-}
-
-export const MainLayout: React.FC<Props> = ({
-    title,
-    heading,
-    dynamicBackUrl,
-    staticBackUrl,
-    disableSearch,
-    headerRight,
-    headerLeft,
-    children,
-    customBottomNavbar,
+export const MainLayout: React.FC<LayoutProps> = ({
+    seoProps,
+    topNavbarProps,
     disableBottomNavbar,
-    ...containerProps
+    customBottomNavbar,
+    containerProps,
+    children,
 }) => (
     <StyledMainLayout disableBottomMargin={disableBottomNavbar && !customBottomNavbar}>
-        <Head title={title} />
-        <TopNavbar
-            heading={heading}
-            dynamicBackUrl={dynamicBackUrl}
-            staticBackUrl={staticBackUrl}
-            disableSearch={disableSearch}
-            headerRight={headerRight}
-            headerLeft={headerLeft}
-        />
+        <Head {...seoProps} />
+        <TopNavbar {...topNavbarProps} />
         <Container {...containerProps}>{children}</Container>
         {customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />)}
         <Footer />
         <Notifications />
-        <Settings />
-        <CommentThread />
         <AttachmentViewer />
-        <LanguageSelector />
+        <CommentThreadModal />
+        <SettingsModal />
+        <LanguageSelectorModal />
     </StyledMainLayout>
 );
 

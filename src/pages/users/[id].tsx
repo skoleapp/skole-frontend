@@ -1,30 +1,29 @@
-import { Avatar, Box, CardContent, Grid, Tab, Table, TableContainer, Typography } from '@material-ui/core';
+import { Avatar, Box, CardContent, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
-import { breakpoints } from 'src/styles';
 import styled from 'styled-components';
 
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
 import {
     ButtonLink,
     CourseTableBody,
+    FrontendPaginatedTable,
     MainLayout,
+    NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
     SettingsButton,
     StyledCard,
-    StyledTable,
     StyledTabs,
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo, withRedux } from '../../lib';
-import { ButtonColor, ButtonVariant, I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
-import { mediaURL } from '../../utils';
+import { withApollo } from '../../lib';
+import { breakpoints } from '../../styles';
+import { ButtonColor, ButtonVariant, I18nPage, I18nProps, MaxWidth, SkoleContext } from '../../types';
+import { mediaURL, useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 
 interface Props extends I18nProps {
     user?: UserObjectType;
@@ -39,7 +38,7 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const avatar = R.prop('avatar', user) as string;
         const title = user.title || '';
         const bio = user.bio || '';
-        const points = R.propOr('-', 'points', user) as string;
+        const score = R.propOr('-', 'score', user) as string;
         const courseCount = R.propOr('-', 'courseCount', user) as string;
         const resourceCount = R.propOr('-', 'resourceCount', user) as string;
         const joined = moment(user.created).format('LL');
@@ -47,33 +46,11 @@ const UserPage: I18nPage<Props> = ({ user }) => {
         const isOwnProfile = user.id === R.propOr('', 'id', loggedInUser);
         const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
         const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
+        const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
 
-        const commonPaginationProps = {
-            titleLeft: 'common:title',
-            titleRight: 'common:points',
-        };
-
-        const {
-            renderTablePagination: renderCreatedCoursesTablePagination,
-            paginatedItems: paginatedCourses,
-            renderNotFound: renderCoursesNotFound,
-            renderTableHead: renderCoursesTableHead,
-        } = useFrontendPagination({
-            ...commonPaginationProps,
-            items: createdCourses,
-            notFoundText: 'profile:noCourses',
-        });
-
-        const {
-            renderTablePagination: renderCreatedResourcesTablePagination,
-            paginatedItems: paginatedResources,
-            renderNotFound: renderResourcesNotFound,
-            renderTableHead: renderResourcesTableHead,
-        } = useFrontendPagination({
-            ...commonPaginationProps,
-            items: createdResources,
-            notFoundText: 'profile:noResources',
-        });
+        const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(
+            createdResources,
+        );
 
         const editProfileButtonProps = {
             href: '/account/edit-profile',
@@ -111,11 +88,11 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </CardContent>
         );
 
-        const renderPointsValue = <Typography variant="body1">{points}</Typography>;
+        const renderScoreValue = <Typography variant="body1">{score}</Typography>;
 
-        const renderPointsTitle = (
+        const renderScoreTitle = (
             <Typography className="section-help-text" variant="body2" color="textSecondary">
-                {t('profile:points')}
+                {t('profile:score')}
             </Typography>
         );
 
@@ -140,8 +117,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     <CardContent>
                         <Box display="flex" justifyContent="space-around">
                             <Box>
-                                {renderPointsValue}
-                                {renderPointsTitle}
+                                {renderScoreValue}
+                                {renderScoreTitle}
                             </Box>
                             <Box margin="0 1rem">
                                 {renderCourseCountValue}
@@ -184,7 +161,9 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                             <Grid container alignItems="center" justify="center">
                                 <ButtonLink {...editProfileButtonProps}>{t('profile:editProfile')}</ButtonLink>
                                 <Box marginLeft="0.5rem">
-                                    <SettingsButton color="primary" />
+                                    <Tooltip title={t('profile:settingsTooltip')}>
+                                        <SettingsButton color="primary" />
+                                    </Tooltip>
                                 </Box>
                             </Grid>
                         </CardContent>
@@ -192,8 +171,8 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                     <CardContent>
                         <Box display="flex">
                             <Box display="flex" alignItems="center">
-                                {renderPointsValue}
-                                <Box marginLeft="0.25rem">{renderPointsTitle}</Box>
+                                {renderScoreValue}
+                                <Box marginLeft="0.25rem">{renderScoreTitle}</Box>
                             </Box>
                             <Box margin="0 1rem" display="flex" alignItems="center">
                                 {renderCourseCountValue}
@@ -216,32 +195,29 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </Grid>
         );
 
+        const commonTableHeadProps = {
+            titleLeft: t('common:title'),
+            titleRight: t('common:score'),
+        };
+
         const renderCreatedCourses = !!createdCourses.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderCoursesTableHead}
-                        <CourseTableBody courses={paginatedCourses} />
-                        {renderCreatedCoursesTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={commonTableHeadProps}
+                renderTableBody={<CourseTableBody courses={paginatedCourses} />}
+                paginationProps={coursePaginationProps}
+            />
         ) : (
-            renderCoursesNotFound
+            <NotFoundBox text={t('profile:noCourses')} />
         );
 
         const renderCreatedResources = !!createdResources.length ? (
-            <StyledTable>
-                <TableContainer>
-                    <Table>
-                        {renderResourcesTableHead}
-                        <ResourceTableBody resources={paginatedResources} />
-                        {renderCreatedResourcesTablePagination}
-                    </Table>
-                </TableContainer>
-            </StyledTable>
+            <FrontendPaginatedTable
+                tableHeadProps={commonTableHeadProps}
+                renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+                paginationProps={resourcePaginationProps}
+            />
         ) : (
-            renderResourcesNotFound
+            <NotFoundBox text={t('profile:noResources')} />
         );
 
         const renderTabs = (
@@ -263,27 +239,38 @@ const UserPage: I18nPage<Props> = ({ user }) => {
             </Box>
         );
 
+        const layoutProps = {
+            seoProps: {
+                title: username,
+                description: t('profile:description'),
+            },
+            topNavbarProps: {
+                header: username,
+                dynamicBackUrl: true,
+                headerRight: isOwnProfile ? <SettingsButton color="secondary" /> : undefined,
+            },
+            containerProps: {
+                maxWidth: 'md' as MaxWidth,
+            },
+        };
+
         return (
-            <StyledUserPage
-                heading={username}
-                title={username}
-                headerRight={isOwnProfile ? <SettingsButton color="secondary" /> : undefined}
-                maxWidth="md"
-                dynamicBackUrl
-            >
-                <StyledCard>
-                    {renderMobileTopSection}
-                    {renderDesktopTopSection}
-                    {renderTabs}
-                </StyledCard>
+            <StyledUserPage>
+                <MainLayout {...layoutProps}>
+                    <StyledCard>
+                        {renderMobileTopSection}
+                        {renderDesktopTopSection}
+                        {renderTabs}
+                    </StyledCard>
+                </MainLayout>
             </StyledUserPage>
         );
     } else {
-        return <NotFoundLayout title={t('profile:notFound')} />;
+        return <NotFoundLayout />;
     }
 };
 
-const StyledUserPage = styled(MainLayout)`
+const StyledUserPage = styled(Box)`
     .section-help-text {
         font-size: 0.75rem;
     }
@@ -318,4 +305,4 @@ UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
     }
 };
 
-export default compose(withAuthSync, withRedux, withApollo)(UserPage);
+export default withApollo(withAuthSync(UserPage));

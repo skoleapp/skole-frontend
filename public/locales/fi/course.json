@@ -1,6 +1,16 @@
 {
-    "notFound": "Kurssia ei löytynyt...",
+    "description": "Tämä on kurssi-sivu.",
     "noResources": "Ei resursseja...",
     "deleteCourse": "Poista kurssi",
-    "confirmDesc": "Oletko varma että haluat poistaa tämän kurssin?"
+    "confirmDesc": "Oletko varma että haluat poistaa tämän kurssin?",
+    "optionsHeader": "Kurssin vaihtoehdot",
+    "infoHeader": "Kurssin tiedot",
+    "uploadResourceTooltip": "Lisää resurssi tälle kurssille.",
+    "infoTooltip": "Näytä kurssin tiedot.",
+    "optionsTooltip": "Näytä kurssin vaihtoehdot.",
+    "unstarredTooltip": "Merkitse kurssi tähdellä.",
+    "starredTooltip": "Poista tähti kurssilta.",
+    "downvoteTooltip": "Anna tälle kurssille alas-sääni.",
+    "upvoteTooltip": "Anna tälle kurssille ylös-ääni.",
+    "ownCourseVoteTooltip": "Et voi äänestää omaa kurssiasi."
 }

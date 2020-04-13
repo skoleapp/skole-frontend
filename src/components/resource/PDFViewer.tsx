@@ -7,22 +7,14 @@ import { ProjectionLike as olProjection } from 'ol/proj';
 import { ImageStatic as olImageStatic } from 'ol/source';
 import PDFJS, { PDFDocumentProxy, PDFPageProxy, PDFPromise } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { NEXT_PAGE, PREV_PAGE, resetEffect, SET_CENTER, setCurrentPage, setPages } from '../../actions';
-import { State } from '../../types';
-import { LoadingBox } from './LoadingBox';
+import { PDFPage } from '../../types';
+import { usePDFViewerContext } from '../../utils';
+import { LoadingBox } from '../shared';
 
 interface Props {
     file: string;
-}
-export interface Page {
-    layer: olGroup;
-    imageExtent: olExtent;
-}
-export interface Pages {
-    pages: Page[];
 }
 
 export const PDFViewer: React.FC<Props> = ({ file }) => {
@@ -30,9 +22,8 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     const [touchEnd, setTouchEnd] = useState(0);
     const [initialZoom, setInitialZoom] = useState(0);
     const [currentMap, setCurrentMap] = useState<olMap | null>(null);
-    const dispatch = useDispatch();
-    const { pages, currentPage, effect } = useSelector((state: State) => state.resource);
     const ref = useRef<HTMLDivElement | null>(null);
+    const { pages, currentPage, effect, resetEffect, setPages, setCurrentPage } = usePDFViewerContext();
 
     const handleTouchStart = (e: TouchEvent): void => {
         if (e.touches.length === 1) {
@@ -64,24 +55,24 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         if (currentPage < numPages - 1 && !!currentMap) {
             const nextPage = currentPage + 1;
             currentMap.setLayerGroup(pages[nextPage].layer);
-            dispatch(setCurrentPage(nextPage));
+            setCurrentPage(nextPage);
         }
     };
     const previousPage = (): void => {
         if (currentPage !== 0 && !!currentMap) {
             const previousPage = currentPage - 1;
             currentMap.setLayerGroup(pages[previousPage].layer);
-            dispatch(setCurrentPage(previousPage));
+            setCurrentPage(previousPage);
         }
     };
 
-    const createPagesFromPDF = (url: string): PDFPromise<PDFPromise<PDFPromise<Page>>[]> => {
+    const createPagesFromPDF = (url: string): PDFPromise<PDFPromise<PDFPromise<PDFPage>>[]> => {
         const Image = require('ol/layer/Image').default;
         const ImageStatic = require('ol/source/ImageStatic').default;
         const Projection = require('ol/proj/Projection').default;
         const Group = require('ol/layer/Group').default;
 
-        const renderPage = (page: PDFPageProxy): PDFPromise<Page> => {
+        const renderPage = (page: PDFPageProxy): PDFPromise<PDFPage> => {
             const viewport = page.getViewport({ scale: 2 });
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
@@ -126,12 +117,12 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                     //
                 }
 
-                const mapData: Page = { layer: layer, imageExtent: imageExtent };
+                const mapData: PDFPage = { layer: layer, imageExtent: imageExtent };
 
                 return mapData;
             });
         };
-        const renderPages = (PDFJSPages: PDFDocumentProxy): PDFPromise<PDFPromise<Page>>[] => {
+        const renderPages = (PDFJSPages: PDFDocumentProxy): PDFPromise<PDFPromise<PDFPage>>[] => {
             const promises = [];
 
             for (let index = 1; index <= PDFJSPages.numPages; index++) {
@@ -229,7 +220,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
 
                             const zoomLevel = map.getView().getZoom();
                             setInitialZoom(zoomLevel);
-                            dispatch(setPages(pdfMaps));
+                            setPages(pdfMaps);
                         });
                     });
                 } catch {
@@ -256,17 +247,17 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
 
     useEffect(() => {
         switch (effect) {
-            case SET_CENTER:
+            case 'SET_CENTER':
                 setCenter();
-                dispatch(resetEffect());
+                resetEffect();
                 break;
-            case PREV_PAGE:
+            case 'PREV_PAGE':
                 previousPage();
-                dispatch(resetEffect());
+                resetEffect();
                 break;
-            case NEXT_PAGE:
+            case 'NEXT_PAGE':
                 nextPage();
-                dispatch(resetEffect());
+                resetEffect();
                 break;
             default:
                 break;

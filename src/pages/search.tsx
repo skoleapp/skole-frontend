@@ -1,10 +1,9 @@
-import { MenuItem, Table, TableContainer } from '@material-ui/core';
+import { MenuItem } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { compose } from 'redux';
 
 import {
     CitiesDocument,
@@ -21,13 +20,20 @@ import {
     SubjectObjectType,
     SubjectsDocument,
 } from '../../generated/graphql';
-import { AutoCompleteField, CourseTableBody, FilterLayout, FormSubmitSection, SelectField } from '../components';
+import {
+    AutoCompleteField,
+    CourseTableBody,
+    FilterLayout,
+    FormSubmitSection,
+    NotFoundBox,
+    PaginatedTable,
+    SelectField,
+} from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useFilters, withAuthSync } from '../utils';
-import { usePagination } from '../utils/usePagination';
+import { getPaginationQuery, useFilters, withAuthSync } from '../utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
@@ -76,21 +82,9 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
         ordering: R.propOr('', 'ordering', query) as string,
     };
 
-    const paginationProps = {
-        count,
-        filterValues: initialValues,
-        notFoundText: 'search:noCourses',
-        titleLeft: 'common:name',
-        titleRight: 'common:points',
-    };
-
-    const { renderTablePagination, getPaginationQuery, renderNotFound, renderTableHead } = usePagination(
-        paginationProps,
-    );
-
     const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T, actions: FormikActions<T>): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city, ordering } = values;
-        const paginationQuery = getPaginationQuery(query);
+        const paginationQuery = getPaginationQuery({ query, extraFilters: initialValues });
 
         const filteredValues: FilterSearchResultsFormValues = {
             ...paginationQuery, // Define this first to override the values.
@@ -180,8 +174,8 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
                     <Field name="ordering" label={t('forms:ordering')} component={SelectField} fullWidth>
                         <MenuItem value="name">{t('forms:nameOrdering')}</MenuItem>
                         <MenuItem value="-name">{t('forms:nameOrderingReverse')}</MenuItem>
-                        <MenuItem value="points">{t('forms:pointsOrdering')}</MenuItem>
-                        <MenuItem value="-points">{t('forms:pointsOrderingReverse')}</MenuItem>
+                        <MenuItem value="score">{t('forms:scoreOrdering')}</MenuItem>
+                        <MenuItem value="-score">{t('forms:scoreOrderingReverse')}</MenuItem>
                     </Field>
                     <FormSubmitSection submitButtonText={submitButtonText} {...props} />
                     {renderDesktopClearFiltersButton}
@@ -190,30 +184,40 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
         </Formik>
     );
 
+    const tableHeadProps = {
+        titleLeft: t('common:name'),
+        titleRight: t('common:score'),
+    };
+
     const renderTableContent = !!courseObjects.length ? (
-        <TableContainer>
-            <Table>
-                {renderTableHead}
-                <CourseTableBody courses={courseObjects} />
-                {renderTablePagination}
-            </Table>
-        </TableContainer>
+        <PaginatedTable
+            count={count}
+            tableHeadProps={tableHeadProps}
+            renderTableBody={<CourseTableBody courses={courseObjects} />}
+            extraFilters={initialValues}
+        />
     ) : (
-        renderNotFound
+        <NotFoundBox text={t('search:noCourses')} />
     );
 
-    return (
-        <FilterLayout
-            title={t('search:title')}
-            heading={t('search:heading')}
-            renderCardContent={renderCardContent}
-            renderTableContent={renderTableContent}
-            drawerProps={drawerProps}
-            handleClearFilters={handleClearFilters}
-            dynamicBackUrl
-            disableSearch
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('search:title'),
+            description: t('search:description'),
+        },
+        topNavbarProps: {
+            header: t('search:header'),
+            dynamicBackUrl: true,
+            disableSearch: true,
+        },
+        desktopHeader: t('search:header'),
+        renderCardContent,
+        renderTableContent,
+        drawerProps,
+        handleClearFilters,
+    };
+
+    return <FilterLayout {...layoutProps} />;
 };
 
 SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
@@ -232,4 +236,4 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
     }
 };
 
-export default compose(withAuthSync, withApollo, withRedux)(SearchPage);
+export default withApollo(withAuthSync(SearchPage));

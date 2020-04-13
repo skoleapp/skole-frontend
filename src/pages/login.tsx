@@ -4,14 +4,13 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { compose } from 'redux';
 import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApollo, withRedux } from '../lib';
+import { withApollo } from '../lib';
 import { I18nPage, I18nProps } from '../types';
 import { useAlerts, useAuth, useForm, useLanguageSelector } from '../utils';
 
@@ -109,20 +108,26 @@ const LoginPage: I18nPage = () => {
         </Formik>
     );
 
-    return (
-        <FormLayout
-            title={t('login:title')}
-            heading={t('login:heading')}
-            headerRight={renderLanguageButton}
-            renderCardContent={renderCardContent}
-            renderAlert={!!query.next ? renderAlert('warning', t('alerts:loginRequired')) : undefined}
-            disableBottomNavbar
-        />
-    );
+    const layoutProps = {
+        seoProps: {
+            title: t('login:title'),
+            description: t('login:description'),
+        },
+        topNavbarProps: {
+            header: t('login:header'),
+            headerRight: renderLanguageButton,
+        },
+        desktopHeader: t('login:header'),
+        renderAlert: (!!query.next && renderAlert('warning', t('alerts:loginRequired'))) || undefined,
+        renderCardContent,
+        disableBottomNavbar: true,
+    };
+
+    return <FormLayout {...layoutProps} />;
 };
 
 LoginPage.getInitialProps = (): I18nProps => ({
     namespacesRequired: includeDefaultNamespaces(['login']),
 });
 
-export default compose(withRedux, withApollo)(LoginPage);
+export default withApollo(LoginPage);

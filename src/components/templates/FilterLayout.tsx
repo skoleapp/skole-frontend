@@ -5,13 +5,13 @@ import styled from 'styled-components';
 
 import { StyledCard, StyledTable } from '..';
 import { useTranslation } from '../../i18n';
-import { LayoutProps, UseDrawer, UseFilters } from '../../types';
+import { LayoutProps, UseFilters } from '../../types';
 import { ModalHeader } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps, Pick<UseFilters<{}>, 'drawerProps' | 'handleClearFilters'> {
-    renderTableContent: JSX.Element | JSX.Element[];
-    drawerProps: UseDrawer;
+    renderTableContent: JSX.Element;
+    renderCardContent: JSX.Element;
 }
 
 export const FilterLayout: React.FC<Props> = ({
@@ -19,6 +19,7 @@ export const FilterLayout: React.FC<Props> = ({
     renderTableContent,
     drawerProps,
     handleClearFilters,
+    topNavbarProps,
     ...props
 }) => {
     const { t } = useTranslation();
@@ -54,14 +55,14 @@ export const FilterLayout: React.FC<Props> = ({
         <Grid className="md-up" container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
-                    <CardHeader subheader={t('common:advancedSearch')} />
+                    <CardHeader title={t('common:advancedSearch')} />
                     <Divider />
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
             </Grid>
             <Grid item container xs={7} md={8} lg={9}>
                 <StyledCard marginLeft>
-                    <CardHeader subheader={t('common:searchResults')} />
+                    <CardHeader title={t('common:searchResults')} />
                     <Divider />
                     <StyledTable>{renderTableContent}</StyledTable>
                 </StyledCard>
@@ -69,15 +70,19 @@ export const FilterLayout: React.FC<Props> = ({
         </Grid>
     );
 
+    const customTopNavbarProps = { ...topNavbarProps, headerRight: renderFiltersButton };
+
     return (
-        <StyledFilterLayout headerRight={renderFiltersButton} {...props}>
-            {renderMobileContent}
-            {renderDesktopContent}
+        <StyledFilterLayout>
+            <MainLayout {...props} topNavbarProps={customTopNavbarProps}>
+                {renderMobileContent}
+                {renderDesktopContent}
+            </MainLayout>
         </StyledFilterLayout>
     );
 };
 
-const StyledFilterLayout = styled(MainLayout)`
+const StyledFilterLayout = styled(Box)`
     .MuiGrid-root {
         flex-grow: 1;
     }

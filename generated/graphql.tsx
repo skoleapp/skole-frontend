@@ -44,7 +44,7 @@ export type CommentObjectType = {
   modified: Scalars['DateTime'],
   created: Scalars['DateTime'],
   replyComments: Array<CommentObjectType>,
-  points?: Maybe<Scalars['Int']>,
+  score?: Maybe<Scalars['Int']>,
   vote?: Maybe<VoteObjectType>,
   replyCount?: Maybe<Scalars['Int']>,
 };
@@ -86,7 +86,7 @@ export type CourseObjectType = {
   resources: Array<ResourceObjectType>,
   comments: Array<CommentObjectType>,
   starred?: Maybe<Scalars['Boolean']>,
-  points?: Maybe<Scalars['Int']>,
+  score?: Maybe<Scalars['Int']>,
   vote?: Maybe<VoteObjectType>,
   resourceCount?: Maybe<Scalars['Int']>,
 };
@@ -435,6 +435,7 @@ export type RegisterMutationPayload = {
 export type ResourceObjectType = {
    __typename?: 'ResourceObjectType',
   id: Scalars['ID'],
+  resourceType?: Maybe<Scalars['String']>,
   title: Scalars['String'],
   file: Scalars['String'],
   date: Scalars['Date'],
@@ -445,9 +446,8 @@ export type ResourceObjectType = {
   created: Scalars['DateTime'],
   comments: Array<CommentObjectType>,
   starred?: Maybe<Scalars['Boolean']>,
-  points?: Maybe<Scalars['Int']>,
+  score?: Maybe<Scalars['Int']>,
   vote?: Maybe<VoteObjectType>,
-  resourceType?: Maybe<Scalars['String']>,
   school?: Maybe<SchoolObjectType>,
 };
 
@@ -460,10 +460,10 @@ export type ResourceTypeObjectType = {
 export type SchoolObjectType = {
    __typename?: 'SchoolObjectType',
   id: Scalars['ID'],
-  courses: Array<CourseObjectType>,
-  name?: Maybe<Scalars['String']>,
   schoolType?: Maybe<Scalars['String']>,
   city?: Maybe<Scalars['String']>,
+  courses: Array<CourseObjectType>,
+  name?: Maybe<Scalars['String']>,
   country?: Maybe<Scalars['String']>,
   subjects?: Maybe<Array<Maybe<SubjectObjectType>>>,
   subjectCount?: Maybe<Scalars['Int']>,
@@ -548,15 +548,15 @@ export type UserObjectType = {
    __typename?: 'UserObjectType',
   id: Scalars['ID'],
   username: Scalars['String'],
+  email?: Maybe<Scalars['String']>,
   title: Scalars['String'],
   bio: Scalars['String'],
   avatar?: Maybe<Scalars['String']>,
+  score?: Maybe<Scalars['Int']>,
   created: Scalars['DateTime'],
   createdCourses: Array<CourseObjectType>,
   createdResources: Array<ResourceObjectType>,
   votes: Array<VoteObjectType>,
-  email?: Maybe<Scalars['String']>,
-  points?: Maybe<Scalars['Int']>,
   avatarThumbnail?: Maybe<Scalars['String']>,
   courseCount?: Maybe<Scalars['Int']>,
   resourceCount?: Maybe<Scalars['Int']>,
@@ -576,7 +576,7 @@ export type VoteMutationPayload = {
    __typename?: 'VoteMutationPayload',
   vote?: Maybe<VoteObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
-  targetPoints?: Maybe<Scalars['Int']>,
+  targetScore?: Maybe<Scalars['Int']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -613,13 +613,13 @@ export type RegisterMutation = (
     & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created'>
       & { starredCourses: Maybe<Array<Maybe<(
         { __typename?: 'CourseObjectType' }
-        & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+        & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
       )>>>, starredResources: Maybe<Array<Maybe<(
         { __typename?: 'ResourceObjectType' }
-        & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
+        & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
       )>>> }
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
@@ -641,13 +641,13 @@ export type LoginMutation = (
     & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created'>
       & { starredCourses: Maybe<Array<Maybe<(
         { __typename?: 'CourseObjectType' }
-        & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+        & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
       )>>>, starredResources: Maybe<Array<Maybe<(
         { __typename?: 'ResourceObjectType' }
-        & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
+        & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
       )>>> }
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
@@ -663,13 +663,13 @@ export type UserMeQuery = (
   { __typename?: 'Query' }
   & { userMe: Maybe<(
     { __typename?: 'UserObjectType' }
-    & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+    & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created'>
     & { starredCourses: Maybe<Array<Maybe<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
     )>>>, starredResources: Maybe<Array<Maybe<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
     )>>> }
   )> }
 );
@@ -722,13 +722,13 @@ export type CreateCommentMutation = (
     { __typename?: 'CreateCommentMutationPayload' }
     & { comment: Maybe<(
       { __typename?: 'CommentObjectType' }
-      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'score'>
       & { user: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
       )>, replyComments: Array<(
         { __typename?: 'CommentObjectType' }
-        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points'>
+        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
         & { user: Maybe<(
           { __typename?: 'UserObjectType' }
           & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -870,7 +870,7 @@ export type CourseDetailQuery = (
   { __typename?: 'Query' }
   & { course: Maybe<(
     { __typename?: 'CourseObjectType' }
-    & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'points' | 'resourceCount' | 'starred'>
+    & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'score' | 'resourceCount' | 'starred'>
     & { vote: Maybe<(
       { __typename?: 'VoteObjectType' }
       & Pick<VoteObjectType, 'id' | 'status'>
@@ -885,16 +885,16 @@ export type CourseDetailQuery = (
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
     )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
-      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'points'>
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'score'>
       & { user: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
       )>, replyComments: Array<(
         { __typename?: 'CommentObjectType' }
-        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points'>
+        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
         & { user: Maybe<(
           { __typename?: 'UserObjectType' }
           & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -993,7 +993,7 @@ export type ResourceDetailQuery = (
   { __typename?: 'Query' }
   & { resource: Maybe<(
     { __typename?: 'ResourceObjectType' }
-    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'file' | 'date' | 'modified' | 'created' | 'points' | 'starred'>
+    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'file' | 'date' | 'modified' | 'created' | 'score' | 'starred'>
     & { school: Maybe<(
       { __typename?: 'SchoolObjectType' }
       & Pick<SchoolObjectType, 'id' | 'name'>
@@ -1008,7 +1008,7 @@ export type ResourceDetailQuery = (
       & Pick<VoteObjectType, 'id' | 'status'>
     )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
-      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'points' | 'replyCount'>
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score' | 'replyCount'>
       & { user: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -1017,7 +1017,7 @@ export type ResourceDetailQuery = (
         & Pick<VoteObjectType, 'id' | 'status'>
       )>, replyComments: Array<(
         { __typename?: 'CommentObjectType' }
-        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'points'>
+        & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'score'>
         & { user: Maybe<(
           { __typename?: 'UserObjectType' }
           & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -1062,7 +1062,7 @@ export type SchoolDetailQuery = (
       & Pick<SubjectObjectType, 'id' | 'name'>
     )>>>, courses: Array<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
     )> }
   )> }
 );
@@ -1088,7 +1088,7 @@ export type SearchCoursesQuery = (
     & Pick<PaginatedCourseObjectType, 'page' | 'pages' | 'hasPrev' | 'hasNext' | 'count'>
     & { objects: Maybe<Array<Maybe<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
     )>>> }
   )>, school: Maybe<(
     { __typename?: 'SchoolObjectType' }
@@ -1141,7 +1141,7 @@ export type UsersQuery = (
     & Pick<PaginatedUserObjectType, 'page' | 'pages' | 'hasPrev' | 'hasNext' | 'count'>
     & { objects: Maybe<Array<Maybe<(
       { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'username' | 'points' | 'avatarThumbnail'>
+      & Pick<UserObjectType, 'id' | 'username' | 'score' | 'avatarThumbnail'>
     )>>> }
   )> }
 );
@@ -1155,13 +1155,13 @@ export type UserDetailQuery = (
   { __typename?: 'Query' }
   & { user: Maybe<(
     { __typename?: 'UserObjectType' }
-    & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'points' | 'courseCount' | 'resourceCount' | 'created'>
+    & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created'>
     & { createdCourses: Array<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'points'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
     )>, createdResources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'points' | 'date'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
     )> }
   )> }
 );
@@ -1181,7 +1181,7 @@ export type UpdateUserMutation = (
     { __typename?: 'UpdateUserMutationPayload' }
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'points' | 'created'>
+      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'created'>
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1201,7 +1201,7 @@ export type PerformVoteMutation = (
   { __typename?: 'Mutation' }
   & { performVote: Maybe<(
     { __typename?: 'VoteMutationPayload' }
-    & Pick<VoteMutationPayload, 'targetPoints'>
+    & Pick<VoteMutationPayload, 'targetScore'>
     & { vote: Maybe<(
       { __typename?: 'VoteObjectType' }
       & Pick<VoteObjectType, 'id' | 'status'>
@@ -1234,7 +1234,7 @@ export const RegisterDocument = gql`
       title
       bio
       avatar
-      points
+      score
       courseCount
       resourceCount
       created
@@ -1242,12 +1242,12 @@ export const RegisterDocument = gql`
         id
         name
         code
-        points
+        score
       }
       starredResources {
         id
         title
-        points
+        score
         date
       }
     }
@@ -1296,7 +1296,7 @@ export const LoginDocument = gql`
       title
       bio
       avatar
-      points
+      score
       courseCount
       resourceCount
       created
@@ -1304,12 +1304,12 @@ export const LoginDocument = gql`
         id
         name
         code
-        points
+        score
       }
       starredResources {
         id
         title
-        points
+        score
         date
       }
     }
@@ -1355,7 +1355,7 @@ export const UserMeDocument = gql`
     title
     bio
     avatar
-    points
+    score
     courseCount
     resourceCount
     created
@@ -1363,12 +1363,12 @@ export const UserMeDocument = gql`
       id
       name
       code
-      points
+      score
     }
     starredResources {
       id
       title
-      points
+      score
       date
     }
   }
@@ -1495,14 +1495,14 @@ export const CreateCommentDocument = gql`
         attachment
         modified
         created
-        points
+        score
         vote {
           id
           status
         }
       }
       replyCount
-      points
+      score
       vote {
         id
         status
@@ -1858,7 +1858,7 @@ export const CourseDetailDocument = gql`
     code
     modified
     created
-    points
+    score
     resourceCount
     starred
     vote {
@@ -1880,7 +1880,7 @@ export const CourseDetailDocument = gql`
     resources {
       id
       title
-      points
+      score
       date
     }
     comments {
@@ -1905,14 +1905,14 @@ export const CourseDetailDocument = gql`
         attachment
         modified
         created
-        points
+        score
         vote {
           id
           status
         }
       }
       replyCount
-      points
+      score
       vote {
         id
         status
@@ -2109,7 +2109,7 @@ export const ResourceDetailDocument = gql`
     date
     modified
     created
-    points
+    score
     starred
     school {
       id
@@ -2140,7 +2140,7 @@ export const ResourceDetailDocument = gql`
       created
       modified
       created
-      points
+      score
       replyCount
       vote {
         id
@@ -2155,7 +2155,7 @@ export const ResourceDetailDocument = gql`
         }
         text
         attachment
-        points
+        score
         vote {
           id
           status
@@ -2243,7 +2243,7 @@ export const SchoolDetailDocument = gql`
       id
       name
       code
-      points
+      score
     }
     subjectCount
     courseCount
@@ -2288,7 +2288,7 @@ export const SearchCoursesDocument = gql`
       id
       name
       code
-      points
+      score
     }
   }
   school(id: $school) {
@@ -2396,7 +2396,7 @@ export const UsersDocument = gql`
     objects {
       id
       username
-      points
+      score
       avatarThumbnail
     }
   }
@@ -2439,7 +2439,7 @@ export const UserDetailDocument = gql`
     title
     bio
     avatar
-    points
+    score
     courseCount
     resourceCount
     created
@@ -2447,12 +2447,12 @@ export const UserDetailDocument = gql`
       id
       name
       code
-      points
+      score
     }
     createdResources {
       id
       title
-      points
+      score
       date
     }
   }
@@ -2494,7 +2494,7 @@ export const UpdateUserDocument = gql`
       title
       bio
       avatar
-      points
+      score
       created
     }
     errors {
@@ -2540,7 +2540,7 @@ export const PerformVoteDocument = gql`
       id
       status
     }
-    targetPoints
+    targetScore
     errors {
       field
       messages

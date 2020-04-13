@@ -13,7 +13,7 @@ import { CreateCommentForm } from './CreateCommentForm';
 import { NotFoundBox } from './NotFoundBox';
 
 export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
-    commentThread: topComment,
+    topComment,
     comments: initialComments,
     isThread,
     target,

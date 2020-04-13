@@ -1,6 +1,7 @@
 {
     "title": "Courses",
-    "heading": "Courses",
+    "description": "This is a search page for courses.",
+    "header": "Courses",
     "coursesSubHeader": "Courses",
     "noCourses": "No courses..."
 }

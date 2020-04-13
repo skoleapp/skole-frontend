@@ -1,22 +1,22 @@
 import { ListItemText, MenuItem } from '@material-ui/core';
 import { FlagOutlined, ShareOutlined } from '@material-ui/icons';
+import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { toggleNotification } from '../actions';
 import { useTranslation } from '../i18n';
 import { UseOptions } from '../types';
+import { useNotificationsContext } from './context';
 import { useDrawer } from './useDrawer';
 
-export const useOptions = (): UseOptions => {
+export const useOptions = (header: string): UseOptions => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
-    const drawerProps = useDrawer(t('common:actions'));
+    const { toggleNotification } = useNotificationsContext();
+    const drawerProps = useDrawer(header);
     const { onClose, renderHeader: renderOptionsHeader } = drawerProps;
 
     const handleShare = (e: SyntheticEvent): void => {
         navigator.clipboard.writeText(window.location.href);
-        dispatch(toggleNotification(t('notifications:linkCopied')));
+        toggleNotification(t('notifications:linkCopied'));
         onClose(e);
     };
 
@@ -39,7 +39,7 @@ export const useOptions = (): UseOptions => {
     return {
         renderShareOption,
         renderReportOption,
-        drawerProps,
+        drawerProps: R.omit(['renderHeader'], drawerProps),
         renderOptionsHeader,
     };
 };

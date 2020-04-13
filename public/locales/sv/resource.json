@@ -1,5 +1,15 @@
 {
-    "notFound": "Resursen hittades inte...",
+    "description": "Detta är en resurssida.",
     "deleteResource": "Radera resurs",
-    "confirmDesc": "Är du säker på att du vill ta bort den här resursen?"
+    "confirmDesc": "Är du säker på att du vill ta bort den här resursen?",
+    "optionsHeader": "Resursalternativ",
+    "infoHeader": "Resursinformation",
+    "infoTooltip": "Visa resursinformation.",
+    "optionsTooltip": "Visa resursalternativ.",
+    "unstarredTooltip": "Stjärnmärk denna resurs.",
+    "starredTooltip": "Ta bort stjärnmarken från denna resurs.",
+    "downvoteTooltip": "Ned röst denna resurs.",
+    "upvoteTooltip": "Upp röst denna resurs.",
+    "ownResourceVoteTooltip": "Du kan inte röstä på din egen resurs.",
+    "fullscreenTooltip": "Visa hellskärm."
 }

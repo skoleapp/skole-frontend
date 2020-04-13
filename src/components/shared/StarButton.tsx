@@ -1,11 +1,10 @@
-import { IconButton } from '@material-ui/core';
-import { StarOutlined } from '@material-ui/icons';
+import { IconButton, Tooltip } from '@material-ui/core';
+import { StarBorderOutlined } from '@material-ui/icons';
 import { useState } from 'react';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 import { PerformStarMutation, usePerformStarMutation } from '../../../generated/graphql';
-import { toggleNotification } from '../../actions';
+import { useNotificationsContext } from '../..//utils';
 import { useTranslation } from '../../i18n';
 import { MuiColor } from '../../types';
 
@@ -13,15 +12,23 @@ interface Props {
     starred: boolean;
     course?: string;
     resource?: string;
+    starredTooltip?: string;
+    unstarredTooltip?: string;
 }
 
-export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, resource }) => {
+export const StarButton: React.FC<Props> = ({
+    starred: initialStarred,
+    course,
+    resource,
+    starredTooltip,
+    unstarredTooltip,
+}) => {
     const [starred, setStarred] = useState(initialStarred);
-    const dispatch = useDispatch();
+    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const onError = (): void => {
-        dispatch(toggleNotification(t('notifications:starError')));
+        toggleNotification(t('notifications:starError'));
     };
 
     const onCompleted = ({ performStar }: PerformStarMutation): void => {
@@ -41,13 +48,17 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
     };
 
     return (
-        <IconButton
-            onClick={handleStar}
-            color={starred ? 'primary' : ('default' as MuiColor)}
-            disabled={starSubmitting}
-            size="small"
-        >
-            <StarOutlined />
-        </IconButton>
+        <Tooltip title={starred ? starredTooltip : unstarredTooltip || ''}>
+            <span>
+                <IconButton
+                    onClick={handleStar}
+                    color={starred ? 'primary' : ('default' as MuiColor)}
+                    disabled={starSubmitting}
+                    size="small"
+                >
+                    <StarBorderOutlined />
+                </IconButton>
+            </span>
+        </Tooltip>
     );
 };

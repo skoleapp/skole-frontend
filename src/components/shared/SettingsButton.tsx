@@ -1,18 +1,15 @@
 import { IconButton, IconButtonProps } from '@material-ui/core';
-import { Settings } from '@material-ui/icons';
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { AnyAction } from 'redux';
+import { SettingsOutlined } from '@material-ui/icons';
+import React, { forwardRef } from 'react';
 
-import { toggleSettings } from '../../actions';
+import { useSettingsContext } from '../../utils';
 
-export const SettingsButton: React.FC<IconButtonProps> = props => {
-    const dispatch = useDispatch();
-    const handleSettingsClick = (): AnyAction => dispatch((toggleSettings(true) as unknown) as AnyAction);
+export const SettingsButton = forwardRef<HTMLButtonElement, IconButtonProps>((props, ref) => {
+    const { toggleSettings } = useSettingsContext();
 
     return (
-        <IconButton onClick={handleSettingsClick} {...props}>
-            <Settings />
+        <IconButton onClick={(): void => toggleSettings(true)} {...props} ref={ref}>
+            <SettingsOutlined />
         </IconButton>
     );
-};
+});

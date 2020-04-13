@@ -1,12 +1,11 @@
 import Head from 'next/head';
 import React from 'react';
 
-interface Props {
-    title?: string;
-}
+import { SEOProps } from '../../types';
 
-export const HeadComponent: React.FC<Props> = ({ title }) => (
+export const HeadComponent: React.FC<SEOProps> = ({ title, description }) => (
     <Head>
         <title>{`Skole | ${title}`}</title>
+        <meta name="description" content={description} />
     </Head>
 );

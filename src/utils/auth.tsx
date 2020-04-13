@@ -1,12 +1,12 @@
 import cookie from 'js-cookie';
-import { NextPage, NextPageContext } from 'next';
+import { NextPageContext } from 'next';
 import nextCookie from 'next-cookies';
 import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useApolloClient } from 'react-apollo';
 
 import { UserMeDocument, UserObjectType } from '../../generated/graphql';
-import { SkoleContext } from '../types';
+import { I18nPage, I18nProps, SkoleContext } from '../types';
 
 interface UseAuth {
     user: UserObjectType | null;
@@ -81,12 +81,12 @@ export const auth = (ctx: NextPageContext): string | undefined => {
     return token;
 };
 
-interface WrapperProps {
+interface WrapperProps extends I18nProps {
     token: string | undefined;
 }
 
-export const withAuthSync = (WrappedComponent: NextPage): JSX.Element => {
-    const Wrapper = (props: WrapperProps): JSX.Element => {
+export const withAuthSync = <T extends WrapperProps>(WrappedComponent: I18nPage): I18nPage<T> => {
+    const Wrapper = (props: T): JSX.Element => {
         const syncLogout = (e: StorageEvent): void => {
             if (e.key === 'logout') {
                 Router.push('/login');
@@ -102,14 +102,14 @@ export const withAuthSync = (WrappedComponent: NextPage): JSX.Element => {
             };
         }, []);
 
-        return <WrappedComponent {...(props as Omit<WrapperProps, 'token' | 'namespacesRequired'>)} />;
+        return <WrappedComponent {...(props as T)} />;
     };
 
-    Wrapper.getInitialProps = async (ctx: SkoleContext): Promise<WrapperProps> => {
+    Wrapper.getInitialProps = async (ctx: SkoleContext): Promise<T> => {
         const token = auth(ctx);
         const componentProps = WrappedComponent.getInitialProps && (await WrappedComponent.getInitialProps(ctx));
-        return { ...componentProps, token };
+        return { ...(componentProps as T), token };
     };
 
-    return (Wrapper as unknown) as JSX.Element;
+    return Wrapper;
 };

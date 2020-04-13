@@ -1,6 +1,7 @@
 {
     "title": "Rekisteröidy",
-    "heading": "Rekisteröidy",
+    "description": "Tämä on rekisteröitymissivu.",
+    "header": "Rekisteröidy",
     "termsHelpText": "Rekisteröitymällä hyväksyt",
     "alreadyHaveAccount": "Onko sinulla jo tili?"
 }

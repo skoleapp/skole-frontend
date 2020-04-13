@@ -10,9 +10,10 @@ import { AppContextType } from 'next/dist/next-server/lib/utils';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
-import { pageView } from 'src/lib';
 
+import { ContextProvider } from '../context';
 import { appWithTranslation, includeDefaultNamespaces } from '../i18n';
+import { pageView } from '../lib';
 import { GlobalStyle, theme } from '../styles';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -34,11 +35,13 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
 
     return (
         <ThemeProvider theme={theme}>
-            <ConfirmProvider>
-                <CssBaseline />
-                <GlobalStyle />
-                <Component {...pageProps} />
-            </ConfirmProvider>
+            <ContextProvider>
+                <ConfirmProvider>
+                    <CssBaseline />
+                    <GlobalStyle />
+                    <Component {...pageProps} />
+                </ConfirmProvider>
+            </ContextProvider>
         </ThemeProvider>
     );
 };

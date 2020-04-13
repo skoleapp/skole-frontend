@@ -8,6 +8,7 @@ import {
     IconButton,
     ListItemText,
     MenuItem,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -23,7 +24,6 @@ import { useConfirm } from 'material-ui-confirm';
 import moment from 'moment';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import {
@@ -32,9 +32,16 @@ import {
     useDeleteCommentMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { toggleCommentThread, toggleFileViewer, toggleNotification } from '../../actions';
 import { useTranslation } from '../../i18n';
-import { mediaURL, useAuth, useOptions, useVotes } from '../../utils';
+import {
+    mediaURL,
+    useAttachmentViewerContext,
+    useAuth,
+    useCommentThreadContext,
+    useNotificationsContext,
+    useOptions,
+    useVotes,
+} from '../../utils';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
 
@@ -46,7 +53,6 @@ interface Props {
 }
 
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
-    const dispatch = useDispatch();
     const { t } = useTranslation();
     const { user } = useAuth();
     const created = moment(comment.created).format('LL');
@@ -54,30 +60,39 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const confirm = useConfirm();
     const attachmentOnly = comment.text == '' && comment.attachment !== '';
     const initialVote = R.propOr(null, 'vote', comment) as VoteObjectType | null;
-    const initialPoints = R.propOr(0, 'points', comment) as number;
+    const initialScore = R.propOr(0, 'score', comment) as number;
     const creatorId = R.propOr('', 'id', comment.user) as string;
     const isOwner = !!user && user.id === creatorId;
     const commentId = R.propOr('', 'id', comment) as string;
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
-    const { onClose: handleCloseOptions, handleOpen: handleOpenOptions } = drawerProps;
+    const replyCount = R.propOr('-', 'replyCount', comment) as string;
 
-    const { points, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+    const {
+        renderShareOption,
+        renderReportOption,
+        renderOptionsHeader,
+        drawerProps: { handleOpen: handleOpenOptions, ...drawerProps },
+    } = useOptions(t('common:commentOptionsHeader'));
+
+    const { onClose: handleCloseOptions } = drawerProps;
+    const { toggleNotification } = useNotificationsContext();
+    const { toggleAttachmentViewer } = useAttachmentViewerContext();
+    const { toggleCommentThread } = useCommentThreadContext();
+
+    const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
-        initialPoints,
+        initialScore,
         isOwner,
     });
 
     const handleClick = (): void => {
         if (isThread) {
-            attachmentOnly && dispatch(toggleFileViewer(comment.attachment));
+            attachmentOnly && toggleAttachmentViewer(comment.attachment);
         } else {
-            dispatch(toggleCommentThread(comment));
+            toggleCommentThread(comment);
         }
     };
 
-    const deleteCommentError = (): void => {
-        dispatch(toggleNotification(t('notifications:deleteCommentError')));
-    };
+    const deleteCommentError = (): void => toggleNotification(t('notifications:deleteCommentError'));
 
     const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
         if (!!deleteComment) {
@@ -85,7 +100,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                 deleteCommentError();
             } else {
                 removeComment(comment.id);
-                dispatch(toggleNotification(t('notifications:commentDeleted')));
+                toggleNotification(t('notifications:commentDeleted'));
             }
         }
     };
@@ -102,7 +117,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const handleAttachmentClick = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        dispatch(toggleFileViewer(comment.attachment));
+        toggleAttachmentViewer(comment.attachment);
     };
 
     const handleDeleteComment = (e: SyntheticEvent): void => {
@@ -154,15 +169,25 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         )}
                     </Grid>
                     <Grid item container xs={1} direction="column" justify="center" alignItems="center">
-                        <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                            <KeyboardArrowUpOutlined className="vote-button" />
-                        </IconButton>
+                        <Tooltip title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}>
+                            <span>
+                                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                                    <KeyboardArrowUpOutlined className="vote-button" />
+                                </IconButton>
+                            </span>
+                        </Tooltip>
                         <Box>
-                            <Typography variant="body2">{points}</Typography>
+                            <Typography variant="body2">{score}</Typography>
                         </Box>
-                        <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                            <KeyboardArrowDownOutlined className="vote-button" />
-                        </IconButton>
+                        <Tooltip
+                            title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:downvoteCommentTooltip')}
+                        >
+                            <span>
+                                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                                    <KeyboardArrowDownOutlined className="vote-button" />
+                                </IconButton>
+                            </span>
+                        </Tooltip>
                     </Grid>
                 </Grid>
                 <Grid container>
@@ -170,25 +195,31 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         <Box display="flex" alignItems="center" height="100%">
                             {!isThread && (
                                 <>
-                                    <CommentOutlined className="message-icon" />
+                                    <Tooltip title={t('common:commentRepliesTooltip', { replyCount })}>
+                                        <CommentOutlined className="message-icon" />
+                                    </Tooltip>
                                     <Box marginLeft="0.25rem">
-                                        <Typography variant="body2">{R.propOr('-', 'replyCount', comment)}</Typography>
+                                        <Typography variant="body2">{replyCount}</Typography>
                                     </Box>
                                 </>
                             )}
                             {!!comment.attachment && !attachmentOnly && (
                                 <Box marginLeft="0.25rem">
-                                    <IconButton onClick={handleAttachmentClick}>
-                                        <AttachFileOutlined />
-                                    </IconButton>
+                                    <Tooltip title={t('common:commentAttachmentTooltip')}>
+                                        <IconButton onClick={handleAttachmentClick}>
+                                            <AttachFileOutlined />
+                                        </IconButton>
+                                    </Tooltip>
                                 </Box>
                             )}
                         </Box>
                     </Grid>
                     <Grid container item xs={4} justify="center">
-                        <IconButton onClick={handleOpenOptions}>
-                            <MoreHorizOutlined />
-                        </IconButton>
+                        <Tooltip title={t('common:commentOptionsTooltip')}>
+                            <IconButton onClick={handleOpenOptions}>
+                                <MoreHorizOutlined />
+                            </IconButton>
+                        </Tooltip>
                     </Grid>
                     <Grid item xs={4} />
                 </Grid>

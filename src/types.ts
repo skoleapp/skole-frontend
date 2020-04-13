@@ -1,20 +1,18 @@
-import { ContainerProps, DrawerProps } from '@material-ui/core';
+import { ContainerProps, DrawerProps, TablePaginationProps } from '@material-ui/core';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError, ApolloQueryResult } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
 import { NextComponentType, NextPageContext } from 'next';
+import { Extent } from 'ol/extent';
+import { Group } from 'ol/layer';
 import { MutableRefObject, SyntheticEvent } from 'react';
-import { Store } from 'redux';
 
-import { CommentObjectType, ErrorType, UserObjectType } from '../generated/graphql';
-import { ResourceState, UI } from './reducers';
+import { CommentObjectType, ErrorType } from '../generated/graphql';
 
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
     apolloState: ApolloQueryResult<{}>;
-    reduxStore: Store;
-    userMe: UserObjectType;
 }
 
 export type I18nPage<P = {}> = NextComponentType<
@@ -27,24 +25,27 @@ export interface I18nProps {
     namespacesRequired: string[];
 }
 
-export interface State {
-    ui: UI;
-    resource: ResourceState;
+export interface SEOProps {
+    title?: string;
+    description?: string;
 }
 
-export interface LayoutProps extends ContainerProps {
-    title?: string;
-    heading?: string;
+export interface TopNavbarProps {
+    header?: string;
     dynamicBackUrl?: boolean;
     staticBackUrl?: {
         href: string;
         as?: string;
     };
-    renderCardContent?: JSX.Element;
-    renderAlert?: JSX.Element;
     disableSearch?: boolean;
     headerRight?: JSX.Element;
     headerLeft?: JSX.Element;
+}
+
+export interface LayoutProps {
+    seoProps?: SEOProps;
+    topNavbarProps?: TopNavbarProps;
+    containerProps?: ContainerProps;
     disableBottomNavbar?: boolean;
     customBottomNavbar?: JSX.Element;
 }
@@ -54,7 +55,7 @@ export interface CommentTarget {
 }
 
 export interface DiscussionBoxProps {
-    commentThread?: CommentObjectType | null;
+    topComment?: CommentObjectType | null;
     comments: CommentObjectType[];
     isThread?: boolean;
     target: CommentTarget;
@@ -128,3 +129,61 @@ export interface UseFilters<T> extends UseForm<T> {
     handleClearFilters: (e: SyntheticEvent) => Promise<void>;
     drawerProps: UseDrawer;
 }
+
+export type CustomTablePaginationProps = Pick<
+    TablePaginationProps,
+    'page' | 'count' | 'rowsPerPage' | 'onChangePage' | 'onChangeRowsPerPage'
+>;
+
+export interface PDFPage {
+    layer: Group;
+    imageExtent: Extent;
+}
+
+export interface AttachmentViewer {
+    attachment: string | null;
+    toggleAttachmentViewer: (payload: string | null) => void;
+}
+
+export interface CommentThread {
+    topComment: CommentObjectType | null;
+    toggleCommentThread: (payload: CommentObjectType | null) => void;
+}
+
+export interface LanguageSelector {
+    languageSelectorOpen: boolean;
+    toggleLanguageSelector: (payload: boolean) => void;
+}
+
+export interface Notifications {
+    notification: string | null;
+    toggleNotification: (payload: string | null) => void;
+}
+
+export interface Settings {
+    settingsOpen: boolean;
+    toggleSettings: (payload: boolean) => void;
+}
+
+export interface PDFViewer {
+    pages: PDFPage[];
+    currentPage: number;
+    effect: string;
+    resetEffect: () => void;
+    setCenter: () => void;
+    prevPage: () => void;
+    nextPage: () => void;
+    setPages: (pages: PDFPage[]) => void;
+    setCurrentPage: (currentPage: number) => void;
+}
+
+export interface SkoleContextType {
+    attachmentViewer: AttachmentViewer;
+    commentThread: CommentThread;
+    languageSelector: LanguageSelector;
+    notifications: Notifications;
+    settings: Settings;
+    pdfViewer: PDFViewer;
+}
+
+export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
