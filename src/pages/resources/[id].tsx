@@ -7,6 +7,7 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -21,6 +22,7 @@ import {
     NavigateNextOutlined,
     SchoolOutlined,
     ScoreOutlined,
+    TitleOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import Router from 'next/router';
@@ -89,7 +91,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         const creatorId = R.propOr('', 'id', resource.user) as string;
         const resourceId = R.propOr('', 'id', resource) as string;
         const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
-        const isOwnProfile = creatorId === R.propOr('', 'id', user);
         const initialVote = (R.propOr(null, 'vote', resource) as unknown) as VoteObjectType | null;
         const initialPoints = R.propOr(0, 'points', resource) as number;
         const starred = !!resource.starred;
@@ -170,6 +171,18 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
+                                <TitleOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:title')}: {resourceTitle}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
                                 <CloudUploadOutlined />
                             </Avatar>
                         </ListItemAvatar>
@@ -227,7 +240,7 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             <StyledList>
                 {renderShareOption}
                 {renderReportOption}
-                {isOwnProfile && (
+                {isOwner && (
                     <MenuItem>
                         <ListItemText onClick={handleDeleteResource}>
                             <DeleteOutline /> {t('resource:deleteResource')}
@@ -242,18 +255,33 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             </StyledList>
         );
 
-        const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
+        const renderStarButton = (
+            <StarButton
+                starred={starred}
+                resource={resourceId}
+                starredTooltip={t('resource:starredTooltip')}
+                unstarredTooltip={t('resource:unstarredTooltip')}
+            />
+        );
 
         const renderUpVoteButton = (
-            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                <KeyboardArrowUpOutlined />
-            </IconButton>
+            <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}>
+                <span>
+                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
         );
 
         const renderDownVoteButton = (
-            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                <KeyboardArrowDownOutlined />
-            </IconButton>
+            <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}>
+                <span>
+                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
         );
 
         const renderExtraResourceActions = (
@@ -264,18 +292,30 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     {renderDownVoteButton}
                 </Grid>
                 <Grid item xs={4} container alignItems="center" id="page-controls">
-                    <IconButton disabled={currentPage === 0} onClick={prevPage} size="small">
-                        <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
-                    </IconButton>
+                    <Tooltip title={t('common:previousPageTooltip')}>
+                        <span>
+                            <IconButton disabled={currentPage === 0} onClick={prevPage} size="small">
+                                <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
                     <Typography variant="body2">{currentPage + 1 + ' / ' + pages.length}</Typography>
-                    <IconButton disabled={currentPage === pages.length - 1} onClick={nextPage} size="small">
-                        <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
-                    </IconButton>
+                    <Tooltip title={t('common:nextPageTooltip')}>
+                        <span>
+                            <IconButton disabled={currentPage === pages.length - 1} onClick={nextPage} size="small">
+                                <NavigateNextOutlined
+                                    color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'}
+                                />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
                 </Grid>
                 <Grid item xs={4} container justify="flex-end">
-                    <IconButton onClick={setCenter} size="small">
-                        <FullscreenOutlined />
-                    </IconButton>
+                    <Tooltip title={t('resource:fullscreenTooltip')}>
+                        <IconButton onClick={setCenter} size="small">
+                            <FullscreenOutlined />
+                        </IconButton>
+                    </Tooltip>
                 </Grid>
             </StyledExtraResourceActions>
         );
@@ -311,7 +351,6 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                 description: t('resource:description'),
             },
             topNavbarProps: {
-                header: resourceTitle,
                 staticBackUrl: staticBackUrl,
             },
             headerDesktop: resourceTitle,
@@ -319,10 +358,13 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
             subheaderDesktop: renderCourseLink,
             extraDesktopActions: renderExtraResourceActions,
             renderInfo,
+            infoTooltip: t('resource:infoTooltip'),
+            infoHeader: t('resource:infoHeader'),
             optionProps: {
                 renderOptions,
                 renderOptionsHeader,
                 drawerProps,
+                optionsTooltip: t('resource:optionsTooltip'),
             },
             tabLabelLeft: t('common:resource'),
             tabLabelRight: `${t('common:discussion')} (${comments.length})`,

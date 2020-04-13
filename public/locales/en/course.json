@@ -10,7 +10,7 @@
     "optionsTooltip": "View course options.",
     "unstarredTooltip": "Star this course.",
     "starredTooltip": "Unstar this course.",
-    "downvoteTooltip": "Downvote this course",
-    "upvoteTooltip": "Upvote this course",
+    "downvoteTooltip": "Downvote this course.",
+    "upvoteTooltip": "Upvote this course.",
     "ownCourseVoteTooltip": "You cannot vote your own course."
 }

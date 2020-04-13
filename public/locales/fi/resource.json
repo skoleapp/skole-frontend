@@ -1,5 +1,15 @@
 {
     "description": "Tämä on resurssi-sivu.",
     "deleteResource": "Poista resurssi",
-    "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?"
+    "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?",
+    "optionsHeader": "Resurssin vaihtoehdot",
+    "infoHeader": "Resurssin tiedot",
+    "infoTooltip": "Näytä resurssin tiedot.",
+    "optionsTooltip": "Näytä resurssin vaihtoehdot.",
+    "unstarredTooltip": "Merkitse resurssi tähdellä.",
+    "starredTooltip": "Poista tähti resurssilta.",
+    "downvoteTooltip": "Anna tälle resurssille alas-ääni.",
+    "upvoteTooltip": "Anna tälle resurssille ylös-ääni.",
+    "ownResourceVoteTooltip": "Et voi äänestää omaa resurssiasi.",
+    "fullscreenTooltip": "Näytä koko ruudulla."
 }
