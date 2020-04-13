@@ -117,7 +117,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                 });
 
                 if (page.pageIndex === 0) {
-                    console.log('this should pop only once');
+                    //console.log('this should pop only once');
                 }
 
                 const mapData: PDFPage = { layer: layer, imageExtent: imageExtent };
