@@ -9,6 +9,7 @@ import {
     TablePagination,
     TablePaginationProps,
     TableRow,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -72,6 +73,7 @@ const CustomTablePaginationActions = ({
     rowsPerPage,
     onChangePage,
 }: CustomTablePaginationActionsProps): JSX.Element => {
+    const { t } = useTranslation();
     const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, 0);
     const handleBackButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page - 1);
     const handleNextButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page + 1);
@@ -82,26 +84,42 @@ const CustomTablePaginationActions = ({
 
     return (
         <Box display="flex" margin="0.5rem">
-            <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
-                <FirstPageOutlined />
-            </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
-                <KeyboardArrowLeftOutlined />
-            </IconButton>
-            <IconButton
-                onClick={handleNextButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                size="small"
-            >
-                <KeyboardArrowRightOutlined />
-            </IconButton>
-            <IconButton
-                onClick={handleLastPageButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                size="small"
-            >
-                <LastPageOutlined />
-            </IconButton>
+            <Tooltip title={t('common:firstPageTooltip')}>
+                <span>
+                    <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
+                        <FirstPageOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
+            <Tooltip title={t('common:previousPageTooltip')}>
+                <span>
+                    <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
+                        <KeyboardArrowLeftOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
+            <Tooltip title={t('common:nextPageTooltip')}>
+                <span>
+                    <IconButton
+                        onClick={handleNextButtonClick}
+                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                        size="small"
+                    >
+                        <KeyboardArrowRightOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
+            <Tooltip title={t('common:lastPageTooltip')}>
+                <span>
+                    <IconButton
+                        onClick={handleLastPageButtonClick}
+                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                        size="small"
+                    >
+                        <LastPageOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
         </Box>
     );
 };

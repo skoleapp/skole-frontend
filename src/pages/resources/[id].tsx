@@ -73,7 +73,10 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
     const confirm = useConfirm();
     const { user } = useAuth();
     const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
+
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
+        t('resource:optionsHeader'),
+    );
 
     if (!!resource) {
         const resourceTitle = R.propOr('-', 'title', resource) as string;

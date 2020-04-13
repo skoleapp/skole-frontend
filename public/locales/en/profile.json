@@ -5,5 +5,6 @@
     "resources": "resources",
     "editProfile": "Edit Profile",
     "noResources": "This user has no resources...",
-    "noCourses": "This user has no courses..."
+    "noCourses": "This user has no courses...",
+    "settingsTooltip": "View settings."
 }

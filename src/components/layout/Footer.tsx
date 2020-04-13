@@ -13,52 +13,36 @@ export const Footer: React.FC = () => {
     return (
         <StyledFooter className="md-up" container>
             <Grid item xs={12} container>
-                <Grid item xs={4} container>
-                    <Grid item xs={12}>
-                        <Typography variant="subtitle2" color="secondary" gutterBottom>
-                            SKOLE
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextLink href="/about" color="secondary">
-                            {t('common:about')}
-                        </TextLink>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextLink href="/contact" color="secondary">
-                            {t('common:contact')}
-                        </TextLink>
-                    </Grid>
+                <Grid item xs={4} container direction="column" alignItems="center">
+                    <Typography variant="subtitle2" color="secondary" gutterBottom>
+                        SKOLE
+                    </Typography>
+                    <TextLink href="/about" color="secondary">
+                        {t('common:about')}
+                    </TextLink>
+                    <TextLink href="/contact" color="secondary">
+                        {t('common:contact')}
+                    </TextLink>
                 </Grid>
-                <Grid item xs={4} container>
-                    <Grid item xs={12}>
-                        <Typography variant="subtitle2" color="secondary" gutterBottom>
-                            {t('common:language').toUpperCase()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        {renderLanguageButton}
-                    </Grid>
+                <Grid item xs={4} container direction="column" alignItems="center">
+                    <Typography variant="subtitle2" color="secondary" gutterBottom>
+                        {t('common:language').toUpperCase()}
+                    </Typography>
+                    {renderLanguageButton}
                 </Grid>
-                <Grid item xs={4} container>
-                    <Grid item xs={12}>
-                        <Typography variant="subtitle2" color="secondary" gutterBottom>
-                            {t('common:legal').toUpperCase()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextLink href="/terms" color="secondary">
-                            {t('common:terms')}
-                        </TextLink>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextLink href="/privacy" color="secondary">
-                            {t('common:privacy')}
-                        </TextLink>
-                    </Grid>
+                <Grid item xs={4} container direction="column" alignItems="center">
+                    <Typography variant="subtitle2" color="secondary" gutterBottom>
+                        {t('common:legal').toUpperCase()}
+                    </Typography>
+                    <TextLink href="/terms" color="secondary">
+                        {t('common:terms')}
+                    </TextLink>
+                    <TextLink href="/privacy" color="secondary">
+                        {t('common:privacy')}
+                    </TextLink>
                 </Grid>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} container justify="center">
                 <Typography variant="subtitle1" color="secondary">
                     © {new Date().getFullYear()} {t('common:skoleTeam')}
                 </Typography>

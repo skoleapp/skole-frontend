@@ -2,6 +2,6 @@
     "title": "Stjärnmärkt",
     "description": "Det här är en sida för stjärnmärkta kurser och resurser.",
     "header": "Stjärnmärkt",
-    "noResources": "Inga stjärnmärkta resurser...",
-    "noCourses": "Inga stjärnmärkta kurser..."
+    "noResources": "Stjärnmärkta resurser kommer att visas här.",
+    "noCourses": "Stjärnmärkta kurser kurser kommer att visas här."
 }

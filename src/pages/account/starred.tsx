@@ -6,6 +6,7 @@ import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql
 import {
     CourseTableBody,
     FrontendPaginatedTable,
+    LoadingBox,
     NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
@@ -21,7 +22,7 @@ import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../uti
 const StarredPage: I18nPage = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
     const starredResources = R.propOr([], 'starredResources', user) as ResourceObjectType[];
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
@@ -39,7 +40,7 @@ const StarredPage: I18nPage = () => {
         ...commonTableHeadProps,
     };
 
-    if (!!user) {
+    if (!!user || loading) {
         const renderStarredCourses = !!starredCourses.length ? (
             <FrontendPaginatedTable
                 tableHeadProps={courseTableHeadProps}
@@ -60,7 +61,9 @@ const StarredPage: I18nPage = () => {
             <NotFoundBox text={t('starred:noResources')} />
         );
 
-        const renderCardContent = (
+        const renderCardContent = loading ? (
+            <LoadingBox />
+        ) : (
             <Box flexGrow="1" display="flex" flexDirection="column">
                 <StyledTabs value={tabValue} onChange={handleTabChange}>
                     <Tab label={t('common:courses')} />

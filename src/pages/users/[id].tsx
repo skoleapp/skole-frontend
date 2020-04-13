@@ -1,4 +1,4 @@
-import { Avatar, Box, CardContent, Grid, Tab, Typography } from '@material-ui/core';
+import { Avatar, Box, CardContent, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
@@ -161,7 +161,9 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                             <Grid container alignItems="center" justify="center">
                                 <ButtonLink {...editProfileButtonProps}>{t('profile:editProfile')}</ButtonLink>
                                 <Box marginLeft="0.5rem">
-                                    <SettingsButton color="primary" />
+                                    <Tooltip title={t('profile:settingsTooltip')}>
+                                        <SettingsButton color="primary" />
+                                    </Tooltip>
                                 </Box>
                             </Grid>
                         </CardContent>

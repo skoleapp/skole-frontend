@@ -2,6 +2,6 @@
     "title": "Starred",
     "description": "This is a page for starred courses and resources.",
     "header": "Starred",
-    "noResources": "No starred resources...",
-    "noCourses": "No starred courses..."
+    "noResources": "Starred resources will show here.",
+    "noCourses": "Starred courses will show here."
 }

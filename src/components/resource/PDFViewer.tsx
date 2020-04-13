@@ -7,10 +7,10 @@ import { ProjectionLike as olProjection } from 'ol/proj';
 import { ImageStatic as olImageStatic } from 'ol/source';
 import PDFJS, { PDFDocumentProxy, PDFPageProxy, PDFPromise } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
-import { usePDFViewerContext } from 'src/utils';
 import styled from 'styled-components';
 
 import { PDFPage } from '../../types';
+import { usePDFViewerContext } from '../../utils';
 import { LoadingBox } from '../shared';
 
 interface Props {

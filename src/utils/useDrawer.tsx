@@ -6,7 +6,7 @@ import { UseDrawer } from '../types';
 import { useBreakPoint } from './useBreakPoint';
 import { useOpen } from './useOpen';
 
-export const useDrawer = (title?: string): UseDrawer => {
+export const useDrawer = (header?: string): UseDrawer => {
     const { open, handleOpen, handleClose } = useOpen();
     const isMobile = useBreakPoint(breakpointsNum.MD);
 
@@ -20,7 +20,7 @@ export const useDrawer = (title?: string): UseDrawer => {
         handleClose();
     };
 
-    const renderHeader = <ModalHeader title={title} onCancel={handleCloseDrawer} />;
+    const renderHeader = <ModalHeader title={header} onCancel={handleCloseDrawer} />;
 
     return {
         open,

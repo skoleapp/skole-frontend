@@ -1,9 +1,9 @@
 import { Button } from '@material-ui/core';
 import { CloudDownload } from '@material-ui/icons';
 import React, { useState } from 'react';
-import { useNotificationsContext } from 'src/utils';
 
 import { useTranslation } from '../../i18n';
+import { useNotificationsContext } from '../../utils';
 
 interface Props {
     url: string;

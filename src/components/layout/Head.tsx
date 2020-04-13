@@ -6,6 +6,6 @@ import { SEOProps } from '../../types';
 export const HeadComponent: React.FC<SEOProps> = ({ title, description }) => (
     <Head>
         <title>{`Skole | ${title}`}</title>
-        <meta name="description" content={description}></meta>
+        <meta name="description" content={description} />
     </Head>
 );

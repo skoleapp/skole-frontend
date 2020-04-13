@@ -1,18 +1,17 @@
-import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab, Tooltip } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
 
-import { useTranslation } from '../../i18n';
 import { breakpointsNum } from '../../styles';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useBreakPoint, useDrawer, useTabs } from '../../utils';
-import { StyledCard } from '../shared';
-import { StyledTabs } from '../shared/StyledTabs';
+import { StyledCard, StyledTabs } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
     renderOptions: JSX.Element;
+    optionsTooltip?: string;
 }
 
 interface Props extends LayoutProps {
@@ -22,6 +21,8 @@ interface Props extends LayoutProps {
     tabLabelLeft: string;
     tabLabelRight: string;
     renderInfo: JSX.Element;
+    infoTooltip?: string;
+    infoHeader?: string;
     renderLeftContent: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
@@ -41,6 +42,8 @@ export const TabLayout: React.FC<Props> = ({
     tabLabelLeft,
     tabLabelRight,
     renderInfo,
+    infoTooltip,
+    infoHeader,
     renderLeftContent,
     renderRightContent,
     singleColumn,
@@ -50,21 +53,19 @@ export const TabLayout: React.FC<Props> = ({
     extraDesktopActions,
     customBottomNavbar,
     customBottomNavbarSecondary,
+    topNavbarProps,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
-    const { t } = useTranslation();
     const isMobile = useBreakPoint(breakpointsNum.MD);
+    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(infoHeader);
 
     const {
         renderOptions,
         renderOptionsHeader,
         drawerProps: { handleOpen: handleOpenOptions, ...optionDrawerProps },
+        optionsTooltip,
     } = optionProps;
-
-    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(
-        t('common:info'),
-    );
 
     const renderCustomBottomNavbar =
         tabValue === 0 ? customBottomNavbar : customBottomNavbarSecondary || customBottomNavbar;
@@ -72,12 +73,16 @@ export const TabLayout: React.FC<Props> = ({
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
             <Box className="md-up">{headerActionDesktop}</Box>
-            <IconButton onClick={handleOpenInfo} color={color}>
-                <InfoOutlined />
-            </IconButton>
-            <IconButton onClick={handleOpenOptions} color={color}>
-                <MoreHorizOutlined />
-            </IconButton>
+            <Tooltip title={infoTooltip || ''}>
+                <IconButton onClick={handleOpenInfo} color={color}>
+                    <InfoOutlined />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title={optionsTooltip || ''}>
+                <IconButton onClick={handleOpenOptions} color={color}>
+                    <MoreHorizOutlined />
+                </IconButton>
+            </Tooltip>
         </Box>
     );
 
@@ -163,6 +168,7 @@ export const TabLayout: React.FC<Props> = ({
     const layoutProps = {
         ...props,
         topNavbarProps: {
+            ...topNavbarProps,
             headerRight: renderMobileHeaderActions,
             headerLeft: headerLeftMobile,
         },

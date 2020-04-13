@@ -8,6 +8,7 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -16,8 +17,10 @@ import {
     HouseOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
+    SchoolOutlined,
     ScoreOutlined,
     SubjectOutlined,
+    VpnKeyOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
@@ -62,7 +65,10 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuth();
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
+
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
+        t('course:optionsHeader'),
+    );
 
     const getFullCourseName = (course: CourseObjectType): string => {
         const { code, name } = course;
@@ -75,6 +81,8 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     };
 
     if (!!course) {
+        const courseName = R.propOr('-', 'name', course);
+        const courseCode = R.propOr('-', 'code', course);
         const fullCourseName = getFullCourseName(course);
         const subjectName = R.propOr('-', 'name', course.subject) as string;
         const schoolName = R.propOr('-', 'name', course.school) as string;
@@ -138,20 +146,52 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const renderUpVoteButton = (
-            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                <KeyboardArrowUpOutlined />
-            </IconButton>
+            <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+                <span>
+                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
         );
 
         const renderDownVoteButton = (
-            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                <KeyboardArrowDownOutlined />
-            </IconButton>
+            <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+                <span>
+                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
+                </span>
+            </Tooltip>
         );
 
         const renderInfo = (
             <CardContent>
                 <StyledList>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <SchoolOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:name')}: {courseName}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <VpnKeyOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText>
+                            <Typography variant="body2">
+                                {t('common:courseCode')}: {courseCode}
+                            </Typography>
+                        </ListItemText>
+                    </ListItem>
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
@@ -248,11 +288,13 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-            <IconButtonLink
-                href={{ pathname: '/upload-resource', query: { course: courseId } }}
-                color={color}
-                icon={CloudUploadOutlined}
-            />
+            <Tooltip title={t('course:uploadResourceTooltip')}>
+                <IconButtonLink
+                    href={{ pathname: '/upload-resource', query: { course: courseId } }}
+                    color={color}
+                    icon={CloudUploadOutlined}
+                />
+            </Tooltip>
         );
 
         const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
@@ -261,6 +303,8 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         const starButtonProps = {
             starred,
             course: courseId,
+            starredTooltip: t('course:starredTooltip'),
+            unstarredTooltip: t('course:unstarredTooltip'),
         };
 
         const renderExtraDesktopActions = (
@@ -293,22 +337,24 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
                 description: t('course:description'),
             },
             topNavbarProps: {
-                header: fullCourseName,
                 staticBackUrl: { href: '/search' },
             },
             headerDesktop: fullCourseName,
             headerSecondary: t('common:discussion'),
             renderInfo,
+            infoTooltip: t('course:infoTooltip'),
+            infoHeader: t('course:infoHeader'),
             optionProps: {
                 renderOptions,
                 renderOptionsHeader,
                 drawerProps,
+                optionsTooltip: t('course:optionsTooltip'),
             },
             tabLabelLeft: `${t('common:resources')} (${resourceCount})`,
             tabLabelRight: `${t('common:discussion')} (${comments.length})`,
             renderLeftContent: renderResources,
             renderRightContent: renderDiscussionBox,
-            headerActionMobile: uploadResourceButtonMobile,
+            headerLeftMobile: uploadResourceButtonMobile,
             headerActionDesktop: uploadResourceButtonDesktop,
             customBottomNavbar: renderCustomBottomNavbar,
             extraDesktopActions: renderExtraDesktopActions,

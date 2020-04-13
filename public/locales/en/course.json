@@ -2,5 +2,15 @@
     "description": "This is a course page.",
     "noResources": "No Resources...",
     "deleteCourse": "Delete Course",
-    "confirmDesc": "Are you sure you want to delete this course?"
+    "confirmDesc": "Are you sure you want to delete this course?",
+    "optionsHeader": "Course Options",
+    "infoHeader": "Course Information",
+    "uploadResourceTooltip": "Upload resource to this course.",
+    "infoTooltip": "View course information.",
+    "optionsTooltip": "View course options.",
+    "unstarredTooltip": "Star this course.",
+    "starredTooltip": "Unstar this course.",
+    "downvoteTooltip": "Downvote this course",
+    "upvoteTooltip": "Upvote this course",
+    "ownCourseVoteTooltip": "You cannot vote your own course."
 }

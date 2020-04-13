@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
+import { AppBar, Avatar, Box, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
 import { ArrowBackOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
@@ -41,14 +41,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
     const renderMobileContent = (
         <Grid className="md-down" container alignItems="center">
-            <Grid item xs={2} container justify="flex-start" wrap="nowrap">
+            <Grid item xs={4} sm={3} container justify="flex-start" wrap="nowrap">
                 {renderStaticBackButton || renderDynamicBackButton}
                 {headerLeft}
             </Grid>
-            <Grid item xs={8} container justify="center">
+            <Grid item xs={4} sm={6} container justify="center">
                 {header ? <Heading text={header} /> : <Logo />}
             </Grid>
-            <Grid item xs={2} container justify="flex-end">
+            <Grid item xs={4} sm={3} container justify="flex-end">
                 {headerRight}
             </Grid>
         </Grid>
@@ -61,11 +61,15 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
                     <>
-                        <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
+                        <Tooltip title={t('common:starredTooltip')}>
+                            <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
+                        </Tooltip>
                         <Link href="/users/[id]" as={`/users/${user.id}`}>
-                            <IconButton color="secondary">
-                                <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
-                            </IconButton>
+                            <Tooltip title={t('common:profileTooltip')}>
+                                <IconButton color="secondary">
+                                    <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
+                                </IconButton>
+                            </Tooltip>
                         </Link>
                     </>
                 ) : (

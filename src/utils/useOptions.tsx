@@ -8,10 +8,10 @@ import { UseOptions } from '../types';
 import { useNotificationsContext } from './context';
 import { useDrawer } from './useDrawer';
 
-export const useOptions = (): UseOptions => {
+export const useOptions = (header: string): UseOptions => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
-    const drawerProps = useDrawer(t('common:actions'));
+    const drawerProps = useDrawer(header);
     const { onClose, renderHeader: renderOptionsHeader } = drawerProps;
 
     const handleShare = (e: SyntheticEvent): void => {

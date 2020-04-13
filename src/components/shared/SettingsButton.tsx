@@ -1,15 +1,15 @@
 import { IconButton, IconButtonProps } from '@material-ui/core';
-import { Settings } from '@material-ui/icons';
-import React from 'react';
+import { SettingsOutlined } from '@material-ui/icons';
+import React, { forwardRef } from 'react';
 
 import { useSettingsContext } from '../../utils';
 
-export const SettingsButton: React.FC<IconButtonProps> = props => {
+export const SettingsButton = forwardRef<HTMLButtonElement, IconButtonProps>((props, ref) => {
     const { toggleSettings } = useSettingsContext();
 
     return (
-        <IconButton onClick={(): void => toggleSettings(true)} {...props}>
-            <Settings />
+        <IconButton onClick={(): void => toggleSettings(true)} {...props} ref={ref}>
+            <SettingsOutlined />
         </IconButton>
     );
-};
+});
