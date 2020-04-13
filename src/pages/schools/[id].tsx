@@ -41,7 +41,7 @@ interface Props extends I18nProps {
 
 const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
     const { t } = useTranslation();
-    const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions();
+    const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions(t('school:optionsHeader'));
 
     if (school) {
         const schoolName = R.propOr('-', 'name', school) as string;

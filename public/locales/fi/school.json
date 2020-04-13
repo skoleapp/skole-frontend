@@ -1,5 +1,6 @@
 {
     "description": "Tämä on koulusivu.",
     "noSubjects": "Tällä koululla ei ole oppiaineita...",
-    "noCourses": "Tällä koululla ei ole kursseja..."
+    "noCourses": "Tällä koululla ei ole kursseja...",
+    "optionsHeader": "Koulun vaihtoehdot"
 }

@@ -1,5 +1,6 @@
 {
     "description": "This is a school page.",
     "noSubjects": "This school has no subjects...",
-    "noCourses": "This school has no courses..."
+    "noCourses": "This school has no courses...",
+    "optionsHeader": "School Options"
 }
