@@ -4,6 +4,7 @@ import { SkoleContext } from 'src/context';
 import {
     AttachmentViewer,
     CommentThread,
+    DeviceInfo,
     LanguageSelector,
     Notifications,
     PDFViewer,
@@ -18,3 +19,4 @@ export const useLanguageSelectorContext = (): LanguageSelector => useSkoleContex
 export const useNotificationsContext = (): Notifications => useSkoleContext().notifications;
 export const useSettingsContext = (): Settings => useSkoleContext().settings;
 export const usePDFViewerContext = (): PDFViewer => useSkoleContext().pdfViewer;
+export const useDeviceContext = (): DeviceInfo => useSkoleContext().device;

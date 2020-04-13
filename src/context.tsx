@@ -35,6 +35,10 @@ export const SkoleContext = createContext<SkoleContextType>({
         setPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
         setCurrentPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
+    device: {
+        isMobile: null,
+        setMobile: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+    },
 });
 
 export const ContextProvider: React.FC = ({ children }) => {
@@ -58,6 +62,8 @@ export const ContextProvider: React.FC = ({ children }) => {
         currentPage: 0,
         effect: '',
     });
+
+    const [isMobile, setMobile] = useState<boolean | null>(null);
 
     const resetEffect = (): void => setPdf({ ...pdf, effect: '' });
     const setCenter = (): void => setPdf({ ...pdf, effect: 'SET_CENTER' });
@@ -95,6 +101,10 @@ export const ContextProvider: React.FC = ({ children }) => {
             nextPage,
             setPages,
             setCurrentPage,
+        },
+        device: {
+            isMobile,
+            setMobile,
         },
     };
 
