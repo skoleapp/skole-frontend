@@ -8,7 +8,6 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
-    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -47,6 +46,7 @@ import {
     StarButton,
     StyledBottomNavigation,
     StyledList,
+    StyledTooltip,
     TabLayout,
     TextLink,
 } from '../../components';
@@ -146,23 +146,19 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const renderUpVoteButton = (
-            <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
-                <span>
-                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                        <KeyboardArrowUpOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
+            <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                    <KeyboardArrowUpOutlined />
+                </IconButton>
+            </StyledTooltip>
         );
 
         const renderDownVoteButton = (
-            <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
-                <span>
-                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                        <KeyboardArrowDownOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
+            <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                    <KeyboardArrowDownOutlined />
+                </IconButton>
+            </StyledTooltip>
         );
 
         const renderInfo = (
@@ -288,13 +284,13 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-            <Tooltip title={t('course:uploadResourceTooltip')}>
+            <StyledTooltip title={t('course:uploadResourceTooltip')}>
                 <IconButtonLink
                     href={{ pathname: '/upload-resource', query: { course: courseId } }}
                     color={color}
                     icon={CloudUploadOutlined}
                 />
-            </Tooltip>
+            </StyledTooltip>
         );
 
         const uploadResourceButtonMobile = renderUploadResourceButton('secondary');

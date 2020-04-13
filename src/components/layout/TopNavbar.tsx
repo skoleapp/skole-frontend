@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
+import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
 import { ArrowBackOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
@@ -10,7 +10,7 @@ import { Link } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { TopNavbarProps } from '../../types';
 import { mediaURL, useAuth } from '../../utils';
-import { ButtonLink, Heading, IconButtonLink } from '../shared';
+import { ButtonLink, Heading, IconButtonLink, StyledTooltip } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
@@ -61,16 +61,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
                     <>
-                        <Tooltip title={t('common:starredTooltip')}>
+                        <StyledTooltip title={t('common:starredTooltip')}>
                             <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
-                        </Tooltip>
-                        <Link href="/users/[id]" as={`/users/${user.id}`}>
-                            <Tooltip title={t('common:profileTooltip')}>
+                        </StyledTooltip>
+                        <StyledTooltip title={t('common:profileTooltip')}>
+                            <Link href="/users/[id]" as={`/users/${user.id}`}>
                                 <IconButton color="secondary">
                                     <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
                                 </IconButton>
-                            </Tooltip>
-                        </Link>
+                            </Link>
+                        </StyledTooltip>
                     </>
                 ) : (
                     <>

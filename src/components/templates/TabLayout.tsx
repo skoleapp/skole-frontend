@@ -1,4 +1,4 @@
-import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab, Tooltip } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { breakpointsNum } from '../../styles';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useBreakPoint, useDrawer, useTabs } from '../../utils';
-import { StyledCard, StyledTabs } from '../shared';
+import { StyledCard, StyledTabs, StyledTooltip } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
@@ -73,16 +73,16 @@ export const TabLayout: React.FC<Props> = ({
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
             <Box className="md-up">{headerActionDesktop}</Box>
-            <Tooltip title={infoTooltip || ''}>
+            <StyledTooltip title={infoTooltip || ''}>
                 <IconButton onClick={handleOpenInfo} color={color}>
                     <InfoOutlined />
                 </IconButton>
-            </Tooltip>
-            <Tooltip title={optionsTooltip || ''}>
+            </StyledTooltip>
+            <StyledTooltip title={optionsTooltip || ''}>
                 <IconButton onClick={handleOpenOptions} color={color}>
                     <MoreHorizOutlined />
                 </IconButton>
-            </Tooltip>
+            </StyledTooltip>
         </Box>
     );
 

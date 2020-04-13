@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useState } from 'react';
 import React from 'react';
@@ -7,6 +7,7 @@ import { PerformStarMutation, usePerformStarMutation } from '../../../generated/
 import { useNotificationsContext } from '../..//utils';
 import { useTranslation } from '../../i18n';
 import { MuiColor } from '../../types';
+import { StyledTooltip } from './StyledTooltip';
 
 interface Props {
     starred: boolean;
@@ -48,17 +49,15 @@ export const StarButton: React.FC<Props> = ({
     };
 
     return (
-        <Tooltip title={starred ? starredTooltip : unstarredTooltip || ''}>
-            <span>
-                <IconButton
-                    onClick={handleStar}
-                    color={starred ? 'primary' : ('default' as MuiColor)}
-                    disabled={starSubmitting}
-                    size="small"
-                >
-                    <StarBorderOutlined />
-                </IconButton>
-            </span>
-        </Tooltip>
+        <StyledTooltip title={starred ? starredTooltip : unstarredTooltip || ''}>
+            <IconButton
+                onClick={handleStar}
+                color={starred ? 'primary' : ('default' as MuiColor)}
+                disabled={starSubmitting}
+                size="small"
+            >
+                <StarBorderOutlined />
+            </IconButton>
+        </StyledTooltip>
     );
 };

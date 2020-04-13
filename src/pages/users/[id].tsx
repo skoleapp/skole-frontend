@@ -1,4 +1,4 @@
-import { Avatar, Box, CardContent, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
+import { Avatar, Box, CardContent, Grid, Tab, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import * as R from 'ramda';
@@ -17,6 +17,7 @@ import {
     SettingsButton,
     StyledCard,
     StyledTabs,
+    StyledTooltip,
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
@@ -161,9 +162,9 @@ const UserPage: I18nPage<Props> = ({ user }) => {
                             <Grid container alignItems="center" justify="center">
                                 <ButtonLink {...editProfileButtonProps}>{t('profile:editProfile')}</ButtonLink>
                                 <Box marginLeft="0.5rem">
-                                    <Tooltip title={t('profile:settingsTooltip')}>
+                                    <StyledTooltip title={t('profile:settingsTooltip')}>
                                         <SettingsButton color="primary" />
-                                    </Tooltip>
+                                    </StyledTooltip>
                                 </Box>
                             </Grid>
                         </CardContent>
