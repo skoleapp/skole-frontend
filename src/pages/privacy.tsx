@@ -1,12 +1,12 @@
+import { NextPage } from 'next';
 import React from 'react';
 
 import { SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo } from '../lib';
-import { I18nPage, I18nProps } from '../types';
 
-const PrivacyPage: I18nPage = () => {
+const PrivacyPage: NextPage = () => {
     const { t } = useTranslation();
 
     const layoutProps = {
@@ -26,6 +26,5 @@ const PrivacyPage: I18nPage = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-PrivacyPage.getInitialProps = (): I18nProps => ({ namespacesRequired: includeDefaultNamespaces(['privacy']) });
-
+PrivacyPage.getInitialProps = () => ({ namespacesRequired: includeDefaultNamespaces(['privacy']) });
 export default withApollo(PrivacyPage);

@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
+import { NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -9,7 +10,6 @@ import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo } from '../../lib';
-import { I18nPage, I18nProps } from '../../types';
 import { useAuth, useForm, withAuthSync } from '../../utils';
 
 const initialValues = {
@@ -21,7 +21,7 @@ export interface DeleteAccountFormValues {
     password: string;
 }
 
-export const DeleteAccountPage: I18nPage = () => {
+export const DeleteAccountPage: NextPage = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<DeleteAccountFormValues>();
     const { t } = useTranslation();
     const confirm = useConfirm();
@@ -92,7 +92,7 @@ export const DeleteAccountPage: I18nPage = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-DeleteAccountPage.getInitialProps = (): I18nProps => ({
+DeleteAccountPage.getInitialProps = () => ({
     namespacesRequired: includeDefaultNamespaces(['delete-account']),
 });
 

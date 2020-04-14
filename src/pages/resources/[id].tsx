@@ -24,6 +24,7 @@ import {
     TitleOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
+import { NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
@@ -54,7 +55,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo } from '../../lib';
 import { breakpoints } from '../../styles';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { SkoleContext } from '../../types';
 import {
     mediaURL,
     useNotificationsContext,
@@ -65,11 +66,11 @@ import {
 } from '../../utils';
 import { useAuth } from '../../utils';
 
-interface Props extends I18nProps {
+interface Props {
     resource?: ResourceObjectType;
 }
 
-const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
+const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
@@ -396,7 +397,7 @@ const StyledExtraResourceActions = styled(Grid)`
     }
 `;
 
-ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+ResourceDetailPage.getInitialProps = async (ctx: SkoleContext) => {
     const { query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 

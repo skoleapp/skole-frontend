@@ -3,7 +3,7 @@ import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError, ApolloQueryResult } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
-import { NextComponentType, NextPageContext } from 'next';
+import { NextPageContext } from 'next';
 import { Extent } from 'ol/extent';
 import { Group } from 'ol/layer';
 import { MutableRefObject, SyntheticEvent } from 'react';
@@ -13,16 +13,6 @@ import { CommentObjectType, ErrorType } from '../generated/graphql';
 export interface SkoleContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
     apolloState: ApolloQueryResult<{}>;
-}
-
-export type I18nPage<P = {}> = NextComponentType<
-    SkoleContext,
-    { namespacesRequired: string[] },
-    P & { namespacesRequired: string[] }
->;
-
-export interface I18nProps {
-    namespacesRequired: string[];
 }
 
 export interface SEOProps {

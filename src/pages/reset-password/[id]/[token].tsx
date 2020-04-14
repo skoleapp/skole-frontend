@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -7,7 +8,6 @@ import { FormLayout, FormSubmitSection } from '../../../components';
 import { useTranslation } from '../../../i18n';
 import { includeDefaultNamespaces } from '../../../i18n';
 import { withApollo } from '../../../lib';
-import { I18nPage, I18nProps } from '../../../types';
 import { useForm } from '../../../utils';
 
 const initialValues = {
@@ -21,7 +21,7 @@ export interface ResetPasswordConfirmFormValues {
     confirmPassword: string;
 }
 
-const ResetPasswordConfirmPage: I18nPage = () => {
+const ResetPasswordConfirmPage: NextPage = () => {
     const { ref, setSubmitting } = useForm<ResetPasswordConfirmFormValues>();
     const { t } = useTranslation();
 
@@ -84,7 +84,7 @@ const ResetPasswordConfirmPage: I18nPage = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-ResetPasswordConfirmPage.getInitialProps = (): I18nProps => ({
+ResetPasswordConfirmPage.getInitialProps = () => ({
     namespacesRequired: includeDefaultNamespaces(['reset-password']),
 });
 

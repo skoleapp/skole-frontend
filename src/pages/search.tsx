@@ -1,6 +1,7 @@
 import { MenuItem } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -32,7 +33,7 @@ import {
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo } from '../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { SkoleContext } from '../types';
 import { getPaginationQuery, useFilters, withAuthSync } from '../utils';
 
 interface FilterSearchResultsFormValues {
@@ -55,7 +56,7 @@ interface Props {
     city?: CityObjectType;
 }
 
-const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
+const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
     const {
         handleSubmit,
         submitButtonText,
@@ -220,7 +221,7 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
     return <FilterLayout {...layoutProps} />;
 };
 
-SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
+SearchPage.getInitialProps = async (ctx: SkoleContext) => {
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 

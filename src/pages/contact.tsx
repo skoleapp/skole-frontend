@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -8,7 +9,6 @@ import { FormSubmitSection, SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo } from '../lib';
-import { I18nPage, I18nProps } from '../types';
 import { useForm, useNotificationsContext } from '../utils';
 
 const initialValues = {
@@ -26,7 +26,7 @@ export interface ContactFormValues {
     message: string;
 }
 
-const ContactPage: I18nPage = () => {
+const ContactPage: NextPage = () => {
     const { toggleNotification } = useNotificationsContext();
     const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<ContactFormValues>();
     const { t } = useTranslation();
@@ -126,7 +126,7 @@ const ContactPage: I18nPage = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-ContactPage.getInitialProps = (): I18nProps => ({
+ContactPage.getInitialProps = () => ({
     namespacesRequired: includeDefaultNamespaces(['contact']),
 });
 

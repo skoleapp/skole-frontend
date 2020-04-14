@@ -1,6 +1,7 @@
 import { Avatar, Box, CardContent, Grid, Tab, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
+import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import styled from 'styled-components';
@@ -23,14 +24,14 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo } from '../../lib';
 import { breakpoints } from '../../styles';
-import { ButtonColor, ButtonVariant, I18nPage, I18nProps, MaxWidth, SkoleContext } from '../../types';
+import { ButtonColor, ButtonVariant, MaxWidth, SkoleContext } from '../../types';
 import { mediaURL, useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 
-interface Props extends I18nProps {
+interface Props {
     user?: UserObjectType;
 }
 
-const UserPage: I18nPage<Props> = ({ user }) => {
+const UserPage: NextPage<Props> = ({ user }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
 
@@ -290,7 +291,7 @@ const StyledUserPage = styled(Box)`
     }
 `;
 
-UserPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+UserPage.getInitialProps = async (ctx: SkoleContext) => {
     const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 

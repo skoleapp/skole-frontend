@@ -1,12 +1,12 @@
+import { NextPage } from 'next';
 import React from 'react';
 
 import { SettingsLayout } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo } from '../lib';
-import { I18nPage, I18nProps } from '../types';
 
-const TermsPage: I18nPage = () => {
+const TermsPage: NextPage = () => {
     const { t } = useTranslation();
 
     const layoutProps = {
@@ -26,7 +26,7 @@ const TermsPage: I18nPage = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-TermsPage.getInitialProps = (): I18nProps => ({
+TermsPage.getInitialProps = () => ({
     namespacesRequired: includeDefaultNamespaces(['terms']),
 });
 

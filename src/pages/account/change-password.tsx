@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -8,7 +9,6 @@ import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo } from '../../lib';
-import { I18nPage, I18nProps } from '../../types';
 import { useForm, useNotificationsContext, withAuthSync } from '../../utils';
 
 const initialValues = {
@@ -24,7 +24,7 @@ export interface ChangePasswordFormValues {
     confirmNewPassword: string;
 }
 
-const ChangePasswordPage: I18nPage = () => {
+const ChangePasswordPage: NextPage = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<ChangePasswordFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -112,7 +112,7 @@ const ChangePasswordPage: I18nPage = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-ChangePasswordPage.getInitialProps = (): I18nProps => ({
+ChangePasswordPage.getInitialProps = () => ({
     namespacesRequired: includeDefaultNamespaces(['change-password']),
 });
 

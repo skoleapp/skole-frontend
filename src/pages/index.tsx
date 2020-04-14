@@ -8,6 +8,7 @@ import {
     SupervisedUserCircleOutlined,
     SvgIconComponent,
 } from '@material-ui/icons';
+import { NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -16,7 +17,6 @@ import { Link, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo } from '../lib';
 import { breakpoints } from '../styles';
-import { I18nPage, I18nProps } from '../types';
 import { useSearch, withAuthSync } from '../utils';
 
 interface Shortcut {
@@ -48,7 +48,7 @@ const shortcuts = [
     },
 ];
 
-const IndexPage: I18nPage = () => {
+const IndexPage: NextPage = () => {
     const { t } = useTranslation();
     const { searchValue, handleSubmit, handleChange, placeholder } = useSearch();
 
@@ -181,8 +181,8 @@ const StyledIndexPage = styled(Box)`
     }
 `;
 
-IndexPage.getInitialProps = async (): Promise<I18nProps> => {
-    return { namespacesRequired: includeDefaultNamespaces(['index']) };
-};
+IndexPage.getInitialProps = async () => ({
+    namespacesRequired: includeDefaultNamespaces(['index']),
+});
 
 export default withApollo(withAuthSync(IndexPage));

@@ -1,12 +1,12 @@
 import cookie from 'js-cookie';
-import { NextPageContext } from 'next';
+import { NextPage } from 'next';
 import nextCookie from 'next-cookies';
 import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useApolloClient } from 'react-apollo';
+import { SkoleContext } from 'src/types';
 
 import { UserMeDocument, UserObjectType } from '../../generated/graphql';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
 
 interface UseAuth {
     user: UserObjectType | null;
@@ -65,8 +65,10 @@ export const useAuth = (): UseAuth => {
     return { user, loading, updateUser, login, logout };
 };
 
-export const auth = (ctx: NextPageContext): string | undefined => {
+export const auth = (ctx: SkoleContext): string | undefined => {
     const { token } = nextCookie(ctx);
+
+    console.log('token', token);
 
     // If there's no token, it means the user is not logged in.
     if (!token) {
@@ -81,11 +83,7 @@ export const auth = (ctx: NextPageContext): string | undefined => {
     return token;
 };
 
-interface WrapperProps extends I18nProps {
-    token: string | undefined;
-}
-
-export const withAuthSync = <T extends WrapperProps>(WrappedComponent: I18nPage): I18nPage<T> => {
+export const withAuthSync = <T extends {}>(WrappedComponent: NextPage): NextPage<T> => {
     const Wrapper = (props: T): JSX.Element => {
         const syncLogout = (e: StorageEvent): void => {
             if (e.key === 'logout') {
@@ -105,8 +103,9 @@ export const withAuthSync = <T extends WrapperProps>(WrappedComponent: I18nPage)
         return <WrappedComponent {...(props as T)} />;
     };
 
-    Wrapper.getInitialProps = async (ctx: SkoleContext): Promise<T> => {
+    Wrapper.getInitialProps = async (ctx: SkoleContext) => {
         const token = auth(ctx);
+        console.log('token 2', token);
         const componentProps = WrappedComponent.getInitialProps && (await WrappedComponent.getInitialProps(ctx));
         return { ...(componentProps as T), token };
     };

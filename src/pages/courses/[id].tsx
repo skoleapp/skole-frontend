@@ -22,6 +22,7 @@ import {
     VpnKeyOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
+import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 
@@ -52,15 +53,15 @@ import {
 } from '../../components';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApollo } from '../../lib';
-import { I18nPage, I18nProps, MuiColor, SkoleContext } from '../../types';
+import { MuiColor, SkoleContext } from '../../types';
 import { useFrontendPagination, useNotificationsContext, useOptions, useVotes, withAuthSync } from '../../utils';
 import { useAuth } from '../../utils';
 
-interface Props extends I18nProps {
+interface Props {
     course?: CourseObjectType;
 }
 
-const CourseDetailPage: I18nPage<Props> = ({ course }) => {
+const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
@@ -362,7 +363,7 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     }
 };
 
-CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+CourseDetailPage.getInitialProps = async (ctx: SkoleContext) => {
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 

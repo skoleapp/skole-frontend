@@ -7,6 +7,7 @@ import { HttpConfig } from 'apollo-link-http-common';
 import { createUploadLink } from 'apollo-upload-client';
 import fetch from 'isomorphic-unfetch';
 import cookie from 'js-cookie';
+import { NextPage } from 'next';
 import nextCookie from 'next-cookies';
 import Head from 'next/head';
 import React from 'react';
@@ -14,7 +15,7 @@ import { WithApolloClient } from 'react-apollo';
 
 import { env } from '../config';
 import { i18n } from '../i18n';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { SkoleContext } from '../types';
 
 interface GetToken {
     getToken: (ctx?: WithApolloClient<SkoleContext>) => string;
@@ -30,7 +31,7 @@ export const getToken = (ctx?: WithApolloClient<SkoleContext>): string => {
     }
 };
 
-export const withApollo = <T extends I18nProps>(PageComponent: I18nPage<T>, { ssr = true } = {}): I18nPage<T> => {
+export const withApollo = <T extends {}>(PageComponent: NextPage<T>, { ssr = true } = {}) => {
     let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
     const createApolloClient = (initialState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
@@ -100,7 +101,7 @@ export const withApollo = <T extends I18nProps>(PageComponent: I18nPage<T>, { ss
     }
 
     if (ssr || PageComponent.getInitialProps) {
-        WithApollo.getInitialProps = async (
+        WithApollo.initialProps = async (
             ctx: WithApolloClient<SkoleContext>,
         ): Promise<(WithApolloClient<SkoleContext> & T) | {}> => {
             const { AppTree } = ctx;
@@ -135,5 +136,5 @@ export const withApollo = <T extends I18nProps>(PageComponent: I18nPage<T>, { ss
         };
     }
 
-    return WithApollo as I18nPage<T>;
+    return WithApollo;
 };

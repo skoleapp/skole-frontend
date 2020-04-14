@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';
@@ -18,7 +19,7 @@ import { env } from '../config';
 import { Router, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo } from '../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
+import { SkoleContext } from '../types';
 import { useForm, useNotificationsContext, withAuthSync } from '../utils';
 
 interface UploadResourceFormValues {
@@ -28,11 +29,11 @@ interface UploadResourceFormValues {
     file: File | null;
 }
 
-interface Props extends I18nProps {
+interface Props {
     course?: CourseObjectType;
 }
 
-const UploadResourcePage: I18nPage<Props> = ({ course }) => {
+const UploadResourcePage: NextPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
@@ -222,7 +223,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     return <FormLayout {...layoutProps} />;
 };
 
-UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+UploadResourcePage.getInitialProps = async (ctx: SkoleContext) => {
     const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 

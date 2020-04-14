@@ -10,6 +10,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import { FlagOutlined, HouseOutlined, LocationCityOutlined, SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
+import { NextPage } from 'next';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
@@ -32,14 +33,14 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { SkoleContext } from '../../types';
 import { useFrontendPagination, useOptions, withAuthSync } from '../../utils';
 
-interface Props extends I18nProps {
+interface Props {
     school?: SchoolObjectType;
 }
 
-const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
+const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { t } = useTranslation();
     const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions(t('school:optionsHeader'));
 
@@ -221,7 +222,7 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
     }
 };
 
-SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+SchoolDetailPage.getInitialProps = async (ctx: SkoleContext) => {
     const { apolloClient, query } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 

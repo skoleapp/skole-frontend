@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import * as Yup from 'yup';
@@ -9,7 +10,6 @@ import { AvatarField, FormSubmitSection, LoadingBox, NotFoundLayout, SettingsLay
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo } from '../../lib';
-import { I18nPage, I18nProps } from '../../types';
 import { useAuth, useForm, useNotificationsContext, withAuthSync } from '../../utils';
 
 export interface UpdateProfileFormValues {
@@ -20,7 +20,7 @@ export interface UpdateProfileFormValues {
     avatar: string;
 }
 
-const EditProfilePage: I18nPage = () => {
+const EditProfilePage: NextPage = () => {
     const { user, loading, updateUser: _updateUser } = useAuth();
     const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
@@ -138,7 +138,7 @@ const EditProfilePage: I18nPage = () => {
     }
 };
 
-EditProfilePage.getInitialProps = (): I18nProps => ({
+EditProfilePage.getInitialProps = () => ({
     namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
 });
 

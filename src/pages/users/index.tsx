@@ -1,6 +1,7 @@
 import { Avatar, Box, MenuItem, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -11,7 +12,7 @@ import { FilterLayout, FormSubmitSection, NotFoundBox, PaginatedTable, SelectFie
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
+import { SkoleContext } from '../../types';
 import { getPaginationQuery, mediaURL, useFilters, withAuthSync } from '../../utils';
 
 interface FilterUsersFormValues {
@@ -19,11 +20,11 @@ interface FilterUsersFormValues {
     ordering: string;
 }
 
-interface Props extends I18nProps {
+interface Props {
     users?: PaginatedUserObjectType;
 }
 
-const UsersPage: I18nPage<Props> = ({ users }) => {
+const UsersPage: NextPage<Props> = ({ users }) => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const userObjects = R.propOr([], 'objects', users) as UserObjectType[];
@@ -139,7 +140,7 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     return <FilterLayout {...layoutProps} />;
 };
 
-UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
+UsersPage.getInitialProps = async (ctx: SkoleContext) => {
     const { query, apolloClient } = ctx;
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
 

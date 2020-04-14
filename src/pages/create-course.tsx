@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import * as Yup from 'yup';
@@ -16,7 +17,6 @@ import { AutoCompleteField, FormLayout, FormSubmitSection } from '../components'
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApollo } from '../lib';
-import { I18nPage, I18nProps } from '../types';
 import { useForm, useNotificationsContext, withAuthSync } from '../utils';
 
 interface CreateCourseFormValues {
@@ -27,7 +27,7 @@ interface CreateCourseFormValues {
     general: string;
 }
 
-const CreateCoursePage: I18nPage<I18nProps> = () => {
+const CreateCoursePage: NextPage = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<CreateCourseFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -141,7 +141,7 @@ const CreateCoursePage: I18nPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-CreateCoursePage.getInitialProps = async (): Promise<I18nProps> => ({
+CreateCoursePage.getInitialProps = async () => ({
     namespacesRequired: includeDefaultNamespaces(['create-course']),
 });
 

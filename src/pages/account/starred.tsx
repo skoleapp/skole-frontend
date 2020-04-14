@@ -1,4 +1,5 @@
 import { Box, Tab } from '@material-ui/core';
+import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 
@@ -16,10 +17,9 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApollo } from '../../lib';
-import { I18nPage, I18nProps } from '../../types';
 import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
 
-const StarredPage: I18nPage = () => {
+const StarredPage: NextPage = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const { user, loading } = useAuth();
@@ -102,6 +102,5 @@ const StarredPage: I18nPage = () => {
     }
 };
 
-StarredPage.getInitialProps = (): I18nProps => ({ namespacesRequired: includeDefaultNamespaces(['starred']) });
-
+StarredPage.getInitialProps = () => ({ namespacesRequired: includeDefaultNamespaces(['starred']) });
 export default withApollo(withAuthSync(StarredPage));
