@@ -14,6 +14,7 @@ import {
     useCreateResourceMutation,
 } from '../../generated/graphql';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
+import { env } from '../config';
 import { Router, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 import { withApollo } from '../lib';
@@ -100,7 +101,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                     method: 'POST',
                     body,
                     headers: {
-                        Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
+                        Apikey: env.CLOUDMERSIVE_API_KEY || '',
                     },
                 });
 

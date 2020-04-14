@@ -12,6 +12,7 @@ import Head from 'next/head';
 import React from 'react';
 import { WithApolloClient } from 'react-apollo';
 
+import { env } from '../config';
 import { i18n } from '../i18n';
 import { I18nPage, I18nProps, SkoleContext } from '../types';
 
@@ -34,7 +35,7 @@ export const withApollo = <T extends I18nProps>(PageComponent: I18nPage<T>, { ss
 
     const createApolloClient = (initialState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
         const isBrowser = typeof window !== 'undefined';
-        const uri = isBrowser ? process.env.API_URL : process.env.BACKEND_URL;
+        const uri = isBrowser ? env.API_URL : env.BACKEND_URL;
 
         const httpLink = createUploadLink({
             uri: uri + 'graphql/',
