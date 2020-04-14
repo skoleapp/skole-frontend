@@ -1,5 +1,4 @@
 {
-    "watch": ["src/server.ts", "public/locales/**/*.json"],
-    "exec": "TS_NODE_PROJECT='./tsconfig.server.json' node -r ts-node/register --max-old-space-size=2048",
-    "ext": "js ts"
+    "watch": [".babelrc", "public/locales/**/*.json", "next.config.js", "src/*.ts"],
+    "exec": "TS_NODE_PROJECT='./tsconfig.server.json' node -r ts-node/register --max-old-space-size=2048"
 }
