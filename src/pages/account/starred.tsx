@@ -7,7 +7,6 @@ import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql
 import {
     CourseTableBody,
     FrontendPaginatedTable,
-    LoadingBox,
     NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
@@ -16,13 +15,14 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
-import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
+import { requireAuth, useAuth, withAuthSync } from '../../lib';
+import { I18nProps } from '../../types';
+import { useFrontendPagination, useTabs } from '../../utils';
 
-const StarredPage: NextPage = () => {
+const StarredPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
-    const { user, loading } = useAuth();
+    const { user } = useAuth();
     const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
     const starredResources = R.propOr([], 'starredResources', user) as ResourceObjectType[];
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
@@ -40,7 +40,7 @@ const StarredPage: NextPage = () => {
         ...commonTableHeadProps,
     };
 
-    if (!!user || loading) {
+    if (!!user) {
         const renderStarredCourses = !!starredCourses.length ? (
             <FrontendPaginatedTable
                 tableHeadProps={courseTableHeadProps}
@@ -61,9 +61,7 @@ const StarredPage: NextPage = () => {
             <NotFoundBox text={t('starred:noResources')} />
         );
 
-        const renderCardContent = loading ? (
-            <LoadingBox />
-        ) : (
+        const renderCardContent = (
             <Box flexGrow="1" display="flex" flexDirection="column">
                 <StyledTabs value={tabValue} onChange={handleTabChange}>
                     <Tab label={t('common:courses')} />
@@ -102,5 +100,8 @@ const StarredPage: NextPage = () => {
     }
 };
 
-StarredPage.getInitialProps = () => ({ namespacesRequired: includeDefaultNamespaces(['starred']) });
-export default withApollo(withAuthSync(StarredPage));
+export const getServerSideProps = requireAuth(async () => ({
+    props: { namespacesRequired: includeDefaultNamespaces(['starred']) },
+}));
+
+export default withAuthSync(StarredPage);

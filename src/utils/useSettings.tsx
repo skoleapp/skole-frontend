@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { StyledList } from '../components/shared/StyledList';
+import { useNotificationsContext, useSettingsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
+import { useAuth } from '../lib';
 import { Settings } from '../types';
-import { menuItems } from '.';
-import { useAuth } from './auth';
-import { useNotificationsContext, useSettingsContext } from './context';
+import { menuItems } from './menuItems';
 import { useLanguageSelector } from './useLanguageSelector';
 
 interface UseSettings extends Settings {

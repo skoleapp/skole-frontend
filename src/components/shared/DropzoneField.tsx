@@ -4,9 +4,10 @@ import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
+import { useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { breakpointsNum } from '../../styles';
-import { useBreakPoint, useNotificationsContext } from '../../utils';
+import { useBreakPoint } from '../../utils';
 import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends DropzoneAreaProps {

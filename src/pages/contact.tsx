@@ -1,15 +1,16 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
 import { ContactMutation, useContactMutation } from '../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../components';
+import { useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo } from '../lib';
-import { useForm, useNotificationsContext } from '../utils';
+import { I18nProps } from '../types';
+import { useForm } from '../utils';
 
 const initialValues = {
     subject: '',
@@ -26,7 +27,7 @@ export interface ContactFormValues {
     message: string;
 }
 
-const ContactPage: NextPage = () => {
+const ContactPage: NextPage<I18nProps> = () => {
     const { toggleNotification } = useNotificationsContext();
     const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<ContactFormValues>();
     const { t } = useTranslation();
@@ -126,8 +127,10 @@ const ContactPage: NextPage = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-ContactPage.getInitialProps = () => ({
-    namespacesRequired: includeDefaultNamespaces(['contact']),
+export const getServerSideProps: GetServerSideProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['contact']),
+    },
 });
 
-export default withApollo(ContactPage);
+export default ContactPage;

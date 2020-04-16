@@ -1,4 +1,3 @@
-import { ApolloProvider } from '@apollo/react-hooks';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink, GraphQLRequest } from 'apollo-link';
@@ -7,134 +6,102 @@ import { HttpConfig } from 'apollo-link-http-common';
 import { createUploadLink } from 'apollo-upload-client';
 import fetch from 'isomorphic-unfetch';
 import cookie from 'js-cookie';
-import { NextPage } from 'next';
+import { GetServerSideProps } from 'next';
 import nextCookie from 'next-cookies';
 import Head from 'next/head';
 import React from 'react';
-import { WithApolloClient } from 'react-apollo';
 
 import { env } from '../config';
 import { i18n } from '../i18n';
-import { SkoleContext } from '../types';
 
-interface GetToken {
-    getToken: (ctx?: WithApolloClient<SkoleContext>) => string;
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Ctx = any; // TODO: Find proper types for this.
 
-// Parse cookie either in the server or in the browser.
-export const getToken = (ctx?: WithApolloClient<SkoleContext>): string => {
-    if (!!ctx) {
-        const { token } = nextCookie(ctx);
-        return token || '';
-    } else {
-        return cookie.get('token') || '';
-    }
+let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
+
+const createApolloClient = (
+    initialState: NormalizedCacheObject = {},
+    ctx?: Ctx,
+): ApolloClient<NormalizedCacheObject> => {
+    const isBrowser = typeof window !== 'undefined';
+    const uri = isBrowser ? env.API_URL : env.BACKEND_URL;
+    const token = !!ctx ? nextCookie(ctx).token : cookie.get('token');
+
+    const httpLink = createUploadLink({
+        uri: uri + 'graphql/',
+        credentials: 'include',
+        fetch,
+    });
+
+    const authLink = setContext((_req: GraphQLRequest, { headers }: HttpConfig) => ({
+        headers: {
+            ...headers,
+            Authorization: token ? `JWT ${token}` : '',
+            'Accept-Language': i18n.language,
+        },
+    }));
+
+    return new ApolloClient({
+        connectToDevTools: isBrowser,
+        ssrMode: !isBrowser,
+        link: ApolloLink.from([authLink, httpLink]),
+        cache: new InMemoryCache().restore(initialState),
+    });
 };
 
-export const withApollo = <T extends {}>(PageComponent: NextPage<T>, { ssr = true } = {}) => {
-    let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
-
-    const createApolloClient = (initialState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
-        const isBrowser = typeof window !== 'undefined';
-        const uri = isBrowser ? env.API_URL : env.BACKEND_URL;
-
-        const httpLink = createUploadLink({
-            uri: uri + 'graphql/',
-            credentials: 'include',
-            fetch,
-        });
-
-        const authLink = setContext((_req: GraphQLRequest, { headers }: HttpConfig) => {
-            const token = getToken();
-
-            return {
-                headers: {
-                    ...headers,
-                    Authorization: token ? `JWT ${token}` : '',
-                    'Accept-Language': i18n.language,
-                },
-            };
-        });
-
-        return new ApolloClient({
-            connectToDevTools: isBrowser,
-            ssrMode: !isBrowser,
-            link: ApolloLink.from([authLink, httpLink]),
-            cache: new InMemoryCache().restore(initialState),
-        });
-    };
-
-    const initApolloClient = (initState = {}, { getToken }: GetToken): ApolloClient<NormalizedCacheObject> => {
-        if (typeof window === 'undefined') {
-            return createApolloClient(initState, { getToken });
-        }
-
-        if (!apolloClient) {
-            apolloClient = createApolloClient(initState, { getToken });
-        }
-
-        return apolloClient;
-    };
-
-    const WithApollo = ({
-        apolloClient,
-        apolloState,
-        ...pageProps
-    }: WithApolloClient<SkoleContext> & T): JSX.Element => {
-        const client = apolloClient || initApolloClient(apolloState, { getToken });
-
-        return (
-            <ApolloProvider client={client}>
-                <PageComponent {...(pageProps as T)} />
-            </ApolloProvider>
-        );
-    };
-
-    if (process.env.NODE_ENV !== 'production') {
-        const displayName = PageComponent.displayName || PageComponent.name || 'Component';
-
-        if (displayName === 'App') {
-            console.warn('This withApollo HOC only works with PageComponents.');
-        }
-
-        WithApollo.displayName = `withApollo(${displayName})`;
+export const initApolloClient = (
+    initialState?: NormalizedCacheObject,
+    ctx?: Ctx,
+): ApolloClient<NormalizedCacheObject> => {
+    if (typeof window === 'undefined') {
+        return createApolloClient(initialState, ctx);
     }
 
-    if (ssr || PageComponent.getInitialProps) {
-        WithApollo.initialProps = async (
-            ctx: WithApolloClient<SkoleContext>,
-        ): Promise<(WithApolloClient<SkoleContext> & T) | {}> => {
-            const { AppTree } = ctx;
+    if (!apolloClient) {
+        apolloClient = createApolloClient(initialState, ctx);
+    }
 
-            const apolloClient = ((ctx.apolloClient as ApolloClient<NormalizedCacheObject> | null) = initApolloClient(
-                {},
-                { getToken: () => getToken(ctx) },
-            ));
+    return apolloClient;
+};
 
-            const pageProps = PageComponent.getInitialProps ? await PageComponent.getInitialProps(ctx) : {};
+export const initOnContext = (ctx: Ctx): Ctx => {
+    const apolloClient = ctx.apolloClient || initApolloClient(ctx.apolloState || {}, ctx);
+    ctx.apolloClient = apolloClient;
+    apolloClient.toJSON = (): null => null;
+    return ctx;
+};
 
-            if (typeof window === 'undefined') {
-                if (ctx.res && ctx.res.finished) {
-                    return {};
-                }
+// Wrap `getServerSideProps` with this for all pages that require server-side apollo client.
+export const withApolloSSR = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
+    const getServerSideProps: GetServerSideProps = async (ctx: Ctx) => {
+        const { apolloClient } = initOnContext(ctx);
+        const result = await getServerSidePropsInner(ctx);
+        const { AppTree } = ctx;
 
-                if (ssr) {
-                    try {
-                        const { getDataFromTree } = await import('@apollo/react-ssr');
-                        const customPageProps = { ...pageProps, apolloClient };
-                        await getDataFromTree(<AppTree pageProps={customPageProps} />);
-                    } catch (error) {
-                        console.error('Error while running `getDataFromTree`', error);
-                    }
-                }
+        if (ctx.res && ctx.res.finished) {
+            return result;
+        }
 
-                Head.rewind();
+        if (AppTree) {
+            try {
+                const { getDataFromTree } = await import('@apollo/react-ssr');
+                await getDataFromTree(<AppTree pageProps={{ ...result.props, apolloClient }} />);
+            } catch (error) {
+                console.error('Error while running `getDataFromTree`', error);
             }
 
-            const apolloState = apolloClient && apolloClient.cache.extract();
-            return { ...pageProps, apolloState };
-        };
-    }
+            Head.rewind();
+        }
 
-    return WithApollo;
+        return {
+            ...result,
+            props: {
+                ...result.props,
+                apolloState: apolloClient.cache.extract(),
+                apolloClient: ctx.apolloClient.toJSON(),
+            },
+        };
+    };
+
+    return getServerSideProps;
 };

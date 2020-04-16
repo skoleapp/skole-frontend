@@ -6,7 +6,8 @@ import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 
 import { Router } from '../../i18n';
-import { mediaURL, useAuth } from '../../utils';
+import { useAuth } from '../../lib';
+import { mediaURL } from '../../utils';
 import { StyledBottomNavigation } from '../shared';
 
 export const BottomNavbar: React.FC = () => {

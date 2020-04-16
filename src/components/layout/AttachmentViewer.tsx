@@ -4,8 +4,9 @@ import Image from 'material-ui-image';
 import React from 'react';
 import styled from 'styled-components';
 
+import { useAttachmentViewerContext } from '../../context';
 import { breakpoints } from '../../styles';
-import { mediaURL, useAttachmentViewerContext } from '../../utils';
+import { mediaURL } from '../../utils';
 
 export const AttachmentViewer: React.FC = () => {
     const { attachment, toggleAttachmentViewer } = useAttachmentViewerContext();

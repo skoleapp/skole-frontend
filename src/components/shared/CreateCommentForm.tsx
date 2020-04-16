@@ -8,8 +8,9 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
+import { useNotificationsContext } from '../../context';
 import { CommentTarget } from '../../types';
-import { useForm, useNotificationsContext } from '../../utils';
+import { useForm } from '../../utils';
 import { StyledTooltip } from '../shared';
 import { ModalHeader } from './ModalHeader';
 import { StyledModal } from './StyledModal';

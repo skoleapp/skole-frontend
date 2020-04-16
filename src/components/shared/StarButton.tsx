@@ -4,7 +4,7 @@ import { useState } from 'react';
 import React from 'react';
 
 import { PerformStarMutation, usePerformStarMutation } from '../../../generated/graphql';
-import { useNotificationsContext } from '../..//utils';
+import { useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { MuiColor } from '../../types';
 import { StyledTooltip } from './StyledTooltip';

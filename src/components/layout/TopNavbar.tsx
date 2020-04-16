@@ -7,9 +7,10 @@ import styled from 'styled-components';
 import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
 import { Link } from '../../i18n';
+import { useAuth } from '../../lib';
 import { breakpoints } from '../../styles';
 import { TopNavbarProps } from '../../types';
-import { mediaURL, useAuth } from '../../utils';
+import { mediaURL } from '../../utils';
 import { ButtonLink, Heading, IconButtonLink, StyledTooltip } from '../shared';
 import { Logo, TopNavbarSearchWidget } from '.';
 

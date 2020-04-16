@@ -2,7 +2,7 @@ import { Box, Divider, FormControl, Link, Typography } from '@material-ui/core';
 import { HowToRegOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -12,8 +12,9 @@ import { RegisterMutation, useRegisterMutation, UserObjectType } from '../../gen
 import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApollo } from '../lib';
-import { useAuth, useForm, useLanguageSelector } from '../utils';
+import { useAuth } from '../lib';
+import { I18nProps } from '../types';
+import { useForm, useLanguageSelector } from '../utils';
 
 export interface RegisterFormValues {
     username: string;
@@ -22,7 +23,7 @@ export interface RegisterFormValues {
     code: string;
 }
 
-const RegisterPage: NextPage = () => {
+const RegisterPage: NextPage<I18nProps> = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<RegisterFormValues>();
     const { query } = useRouter();
     const { t } = useTranslation();
@@ -162,8 +163,8 @@ const RegisterPage: NextPage = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-RegisterPage.getInitialProps = async () => ({
-    namespacesRequired: includeDefaultNamespaces(['register']),
+export const getServerSideProps: GetServerSideProps = async () => ({
+    props: { namespacesRequired: includeDefaultNamespaces(['register']) },
 });
 
-export default withApollo(RegisterPage);
+export default RegisterPage;

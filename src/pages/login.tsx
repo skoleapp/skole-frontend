@@ -2,7 +2,7 @@ import { Box, Divider } from '@material-ui/core';
 import { AddCircleOutlineOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import * as Yup from 'yup';
@@ -11,8 +11,9 @@ import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated
 import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApollo } from '../lib';
-import { useAlerts, useAuth, useForm, useLanguageSelector } from '../utils';
+import { useAuth } from '../lib';
+import { I18nProps } from '../types';
+import { useAlerts, useForm, useLanguageSelector } from '../utils';
 
 const initialValues = {
     username: '',
@@ -25,7 +26,7 @@ export interface LoginFormValues {
     password: string;
 }
 
-const LoginPage: NextPage = () => {
+const LoginPage: NextPage<I18nProps> = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<LoginFormValues>();
     const { t } = useTranslation();
     const { query } = useRouter();
@@ -126,8 +127,8 @@ const LoginPage: NextPage = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-LoginPage.getInitialProps = async () => ({
-    namespacesRequired: includeDefaultNamespaces(['login']),
+export const getServerSideProps: GetServerSideProps = async () => ({
+    props: { namespacesRequired: includeDefaultNamespaces(['login']) },
 });
 
-export default withApollo(LoginPage);
+export default LoginPage;

@@ -51,22 +51,15 @@ import {
     TabLayout,
     TextLink,
 } from '../../components';
+import { useNotificationsContext, usePDFViewerContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
+import { requireAuth, useAuth, withApolloSSR, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';
-import { SkoleContext } from '../../types';
-import {
-    mediaURL,
-    useNotificationsContext,
-    useOptions,
-    usePDFViewerContext,
-    useVotes,
-    withAuthSync,
-} from '../../utils';
-import { useAuth } from '../../utils';
+import { I18nProps, SkolePageContext } from '../../types';
+import { mediaURL, useOptions, useVotes } from '../../utils';
 
-interface Props {
+interface Props extends I18nProps {
     resource?: ResourceObjectType;
 }
 
@@ -397,20 +390,22 @@ const StyledExtraResourceActions = styled(Grid)`
     }
 `;
 
-ResourceDetailPage.getInitialProps = async (ctx: SkoleContext) => {
-    const { query } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
+export const getServerSideProps = requireAuth(
+    withApolloSSR(async ctx => {
+        const { query, apolloClient } = ctx as SkolePageContext;
+        const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
-    try {
-        const { data } = await ctx.apolloClient.query({
-            query: ResourceDetailDocument,
-            variables: query,
-        });
+        try {
+            const { data } = await apolloClient.query({
+                query: ResourceDetailDocument,
+                variables: query,
+            });
 
-        return { ...data, ...nameSpaces };
-    } catch {
-        return nameSpaces;
-    }
-};
+            return { props: { ...data, ...namespaces } };
+        } catch {
+            return { props: { ...namespaces } };
+        }
+    }),
+);
 
-export default withApollo(withAuthSync(ResourceDetailPage));
+export default withAuthSync(ResourceDetailPage);

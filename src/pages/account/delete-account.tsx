@@ -1,16 +1,16 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
-import { useTranslation } from '../../i18n';
-import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
-import { useAuth, useForm, withAuthSync } from '../../utils';
+import { includeDefaultNamespaces, useTranslation } from '../../i18n';
+import { requireAuth, useAuth, withAuthSync } from '../../lib';
+import { I18nProps } from '../../types';
+import { useForm } from '../../utils';
 
 const initialValues = {
     password: '',
@@ -21,7 +21,7 @@ export interface DeleteAccountFormValues {
     password: string;
 }
 
-export const DeleteAccountPage: NextPage = () => {
+export const DeleteAccountPage: NextPage<I18nProps> = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<DeleteAccountFormValues>();
     const { t } = useTranslation();
     const confirm = useConfirm();
@@ -92,8 +92,10 @@ export const DeleteAccountPage: NextPage = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-DeleteAccountPage.getInitialProps = () => ({
-    namespacesRequired: includeDefaultNamespaces(['delete-account']),
-});
+export const getServerSideProps: GetServerSideProps = requireAuth(async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['delete-account']),
+    },
+}));
 
-export default withApollo(withAuthSync(DeleteAccountPage));
+export default withAuthSync(DeleteAccountPage);

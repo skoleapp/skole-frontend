@@ -10,8 +10,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'src/i18n';
 import styled from 'styled-components';
 
+import { usePDFViewerContext } from '../../context';
 import { PDFPage } from '../../types';
-import { usePDFViewerContext } from '../../utils';
 import { LoadingBox } from '../shared';
 
 interface Props {

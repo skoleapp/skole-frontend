@@ -10,10 +10,11 @@ import {
     Typography,
 } from '@material-ui/core';
 import { FlagOutlined, HouseOutlined, LocationCityOutlined, SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
+import { requireAuth, withApolloSSR, withAuthSync } from 'src/lib';
 
 import {
     CourseObjectType,
@@ -32,11 +33,10 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
-import { SkoleContext } from '../../types';
-import { useFrontendPagination, useOptions, withAuthSync } from '../../utils';
+import { I18nProps, SkolePageContext } from '../../types';
+import { useFrontendPagination, useOptions } from '../../utils';
 
-interface Props {
+interface Props extends I18nProps {
     school?: SchoolObjectType;
 }
 
@@ -222,20 +222,22 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     }
 };
 
-SchoolDetailPage.getInitialProps = async (ctx: SkoleContext) => {
-    const { apolloClient, query } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
+export const getServerSideProps: GetServerSideProps = requireAuth(
+    withApolloSSR(async ctx => {
+        const { apolloClient, query } = ctx as SkolePageContext;
+        const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 
-    try {
-        const { data } = await apolloClient.query({
-            query: SchoolDetailDocument,
-            variables: query,
-        });
+        try {
+            const { data } = await apolloClient.query({
+                query: SchoolDetailDocument,
+                variables: query,
+            });
 
-        return { ...data, ...nameSpaces };
-    } catch {
-        return nameSpaces;
-    }
-};
+            return { props: { ...data, ...namespaces } };
+        } catch {
+            return { props: { ...namespaces } };
+        }
+    }),
+);
 
-export default withApollo(withAuthSync(SchoolDetailPage));
+export default withAuthSync(SchoolDetailPage);

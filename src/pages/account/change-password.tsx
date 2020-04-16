@@ -1,15 +1,17 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
+import { useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
-import { useForm, useNotificationsContext, withAuthSync } from '../../utils';
+import { requireAuth, withAuthSync } from '../../lib';
+import { I18nProps } from '../../types';
+import { useForm } from '../../utils';
 
 const initialValues = {
     oldPassword: '',
@@ -24,7 +26,7 @@ export interface ChangePasswordFormValues {
     confirmNewPassword: string;
 }
 
-const ChangePasswordPage: NextPage = () => {
+const ChangePasswordPage: NextPage<I18nProps> = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<ChangePasswordFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -112,8 +114,10 @@ const ChangePasswordPage: NextPage = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-ChangePasswordPage.getInitialProps = () => ({
-    namespacesRequired: includeDefaultNamespaces(['change-password']),
-});
+export const getServerSideProps: GetServerSideProps = requireAuth(async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['change-password']),
+    },
+}));
 
-export default withApollo(withAuthSync(ChangePasswordPage));
+export default withAuthSync(ChangePasswordPage);

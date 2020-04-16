@@ -1,7 +1,7 @@
 import { Avatar, Box, CardContent, Grid, Tab, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import styled from 'styled-components';
@@ -22,12 +22,13 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
+import { withApolloSSR } from '../../lib';
+import { requireAuth, useAuth, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';
-import { ButtonColor, ButtonVariant, MaxWidth, SkoleContext } from '../../types';
-import { mediaURL, useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
+import { ButtonColor, ButtonVariant, I18nProps, MaxWidth, SkolePageContext } from '../../types';
+import { mediaURL, useFrontendPagination, useTabs } from '../../utils';
 
-interface Props {
+interface Props extends I18nProps {
     user?: UserObjectType;
 }
 
@@ -291,20 +292,22 @@ const StyledUserPage = styled(Box)`
     }
 `;
 
-UserPage.getInitialProps = async (ctx: SkoleContext) => {
-    const { query, apolloClient } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
+export const getServerSideProps: GetServerSideProps = requireAuth(
+    withApolloSSR(async ctx => {
+        const { query, apolloClient } = ctx as SkolePageContext;
+        const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 
-    try {
-        const { data } = await apolloClient.query({
-            query: UserDetailDocument,
-            variables: query,
-        });
+        try {
+            const { data } = await apolloClient.query({
+                query: UserDetailDocument,
+                variables: query,
+            });
 
-        return { ...data, ...nameSpaces };
-    } catch {
-        return nameSpaces;
-    }
-};
+            return { props: { ...data, ...nameSpaces } };
+        } catch {
+            return { props: { ...nameSpaces } };
+        }
+    }),
+);
 
-export default withApollo(withAuthSync(UserPage));
+export default withAuthSync(UserPage);

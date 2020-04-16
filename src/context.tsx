@@ -1,9 +1,26 @@
-import { CommentObjectType } from 'generated/graphql';
+import { CommentObjectType, UserObjectType } from 'generated/graphql';
 import React, { createContext, useState } from 'react';
+import { useContext } from 'react';
 
-import { PDFPage, PDFViewer, SkoleContextType } from './types';
+import {
+    AttachmentViewer,
+    AuthContext,
+    CommentThread,
+    DeviceInfo,
+    LanguageSelector,
+    Notifications,
+    PDFPage,
+    PDFViewer,
+    Settings,
+    SkoleContextType,
+} from './types';
 
-export const SkoleContext = createContext<SkoleContextType>({
+const SkolePageContext = createContext<SkoleContextType>({
+    auth: {
+        user: null,
+        loading: null,
+        setUser: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+    },
     attachmentViewer: {
         attachment: null,
         toggleAttachmentViewer: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
@@ -41,7 +58,28 @@ export const SkoleContext = createContext<SkoleContextType>({
     },
 });
 
-export const ContextProvider: React.FC = ({ children }) => {
+const useSkoleContext = (): SkoleContextType => useContext(SkolePageContext);
+export const useAuthContext = (): AuthContext => useSkoleContext().auth;
+export const useAttachmentViewerContext = (): AttachmentViewer => useSkoleContext().attachmentViewer;
+export const useCommentThreadContext = (): CommentThread => useSkoleContext().commentThread;
+export const useLanguageSelectorContext = (): LanguageSelector => useSkoleContext().languageSelector;
+export const useNotificationsContext = (): Notifications => useSkoleContext().notifications;
+export const useSettingsContext = (): Settings => useSkoleContext().settings;
+export const usePDFViewerContext = (): PDFViewer => useSkoleContext().pdfViewer;
+export const useDeviceContext = (): DeviceInfo => useSkoleContext().device;
+
+interface Props {
+    initialAuthState: {
+        user: UserObjectType | null;
+        loading: boolean;
+    };
+    isMobileGuess: boolean | null;
+}
+
+export const ContextProvider: React.FC<Props> = ({ children, initialAuthState: { user, loading }, isMobileGuess }) => {
+    const [auth, setAuth] = useState<Pick<AuthContext, 'user' | 'loading'>>({ user, loading });
+    const setUser = (user: UserObjectType | null): void => setAuth({ ...auth, user });
+
     const [attachment, setAttachment] = useState<string | null>(null);
     const toggleAttachmentViewer = (payload: string | null): void => setAttachment(payload);
 
@@ -63,7 +101,7 @@ export const ContextProvider: React.FC = ({ children }) => {
         effect: '',
     });
 
-    const [isMobile, setMobile] = useState<boolean | null>(null);
+    const [isMobile, setMobile] = useState<boolean | null>(isMobileGuess);
 
     const resetEffect = (): void => setPdf({ ...pdf, effect: '' });
     const setCenter = (): void => setPdf({ ...pdf, effect: 'SET_CENTER' });
@@ -73,6 +111,11 @@ export const ContextProvider: React.FC = ({ children }) => {
     const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
 
     const contextValue = {
+        auth: {
+            user,
+            loading,
+            setUser,
+        },
         attachmentViewer: {
             attachment,
             toggleAttachmentViewer,
@@ -108,5 +151,5 @@ export const ContextProvider: React.FC = ({ children }) => {
         },
     };
 
-    return <SkoleContext.Provider value={contextValue}>{children}</SkoleContext.Provider>;
+    return <SkolePageContext.Provider value={contextValue}>{children}</SkolePageContext.Provider>;
 };

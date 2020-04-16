@@ -1,13 +1,13 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
+import { I18nProps } from 'src/types';
 import * as Yup from 'yup';
 
 import { FormLayout, FormSubmitSection } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
 import { useForm } from '../../utils';
 
 const initialValues = {
@@ -19,7 +19,7 @@ export interface ResetPasswordLinkFormValues {
     email: string;
 }
 
-const ResetPasswordLinkPage: NextPage = () => {
+const ResetPasswordLinkPage: NextPage<I18nProps> = () => {
     const { ref, setSubmitting } = useForm<ResetPasswordLinkFormValues>();
     const { t } = useTranslation();
 
@@ -69,8 +69,10 @@ const ResetPasswordLinkPage: NextPage = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-ResetPasswordLinkPage.getInitialProps = () => ({
-    namespacesRequired: includeDefaultNamespaces(['reset-password']),
+export const getServerSideProps: GetServerSideProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['reset-password']),
+    },
 });
 
-export default withApollo(ResetPasswordLinkPage);
+export default ResetPasswordLinkPage;

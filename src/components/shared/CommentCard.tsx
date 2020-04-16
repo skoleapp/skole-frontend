@@ -31,16 +31,10 @@ import {
     useDeleteCommentMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
+import { useAttachmentViewerContext, useCommentThreadContext, useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
-import {
-    mediaURL,
-    useAttachmentViewerContext,
-    useAuth,
-    useCommentThreadContext,
-    useNotificationsContext,
-    useOptions,
-    useVotes,
-} from '../../utils';
+import { useAuth } from '../../lib';
+import { mediaURL, useOptions, useVotes } from '../../utils';
 import { StyledTooltip } from '../shared';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';

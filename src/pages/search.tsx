@@ -1,7 +1,7 @@
 import { MenuItem } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -32,9 +32,9 @@ import {
 } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo } from '../lib';
-import { SkoleContext } from '../types';
-import { getPaginationQuery, useFilters, withAuthSync } from '../utils';
+import { requireAuth, withApolloSSR, withAuthSync } from '../lib';
+import { I18nProps, SkolePageContext } from '../types';
+import { getPaginationQuery, useFilters } from '../utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
@@ -47,7 +47,7 @@ interface FilterSearchResultsFormValues {
     ordering: string;
 }
 
-interface Props {
+interface Props extends I18nProps {
     searchCourses?: PaginatedCourseObjectType;
     school?: SchoolObjectType;
     subject?: SubjectObjectType;
@@ -221,20 +221,22 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     return <FilterLayout {...layoutProps} />;
 };
 
-SearchPage.getInitialProps = async (ctx: SkoleContext) => {
-    const { apolloClient, query } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
+export const getServerSideProps: GetServerSideProps = requireAuth(
+    withApolloSSR(async ctx => {
+        const { apolloClient, query } = ctx as SkolePageContext;
+        const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
-    try {
-        const { data } = await apolloClient.query({
-            query: SearchCoursesDocument,
-            variables: query,
-        });
+        try {
+            const { data } = await apolloClient.query({
+                query: SearchCoursesDocument,
+                variables: query,
+            });
 
-        return { ...data, ...nameSpaces };
-    } catch {
-        return nameSpaces;
-    }
-};
+            return { props: { ...data, ...namespaces } };
+        } catch (err) {
+            return { props: { namespaces } };
+        }
+    }),
+);
 
-export default withApollo(withAuthSync(SearchPage));
+export default withAuthSync(SearchPage);

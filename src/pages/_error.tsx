@@ -1,14 +1,16 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 
 import { NotFoundLayout } from '../components';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo } from '../lib';
+import { I18nProps } from '../types';
 
-const ErrorPage: NextPage = () => <NotFoundLayout />;
+const ErrorPage: NextPage<I18nProps> = () => <NotFoundLayout />;
 
-ErrorPage.getInitialProps = () => ({
-    namespacesRequired: includeDefaultNamespaces([]),
+export const getServerSideProps: GetServerSideProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces([]),
+    },
 });
 
-export default withApollo(ErrorPage);
+export default ErrorPage;

@@ -1,8 +1,10 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { useNotificationsContext } from 'src/context';
+import { requireAuth, withAuthSync } from 'src/lib';
 import * as Yup from 'yup';
 
 import {
@@ -16,8 +18,8 @@ import {
 import { AutoCompleteField, FormLayout, FormSubmitSection } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApollo } from '../lib';
-import { useForm, useNotificationsContext, withAuthSync } from '../utils';
+import { I18nProps } from '../types';
+import { useForm } from '../utils';
 
 interface CreateCourseFormValues {
     courseName: string;
@@ -27,7 +29,7 @@ interface CreateCourseFormValues {
     general: string;
 }
 
-const CreateCoursePage: NextPage = () => {
+const CreateCoursePage: NextPage<I18nProps> = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<CreateCourseFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -141,8 +143,10 @@ const CreateCoursePage: NextPage = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-CreateCoursePage.getInitialProps = async () => ({
-    namespacesRequired: includeDefaultNamespaces(['create-course']),
-});
+export const getServerSideProps: GetServerSideProps = requireAuth(async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['create-course']),
+    },
+}));
 
-export default withApollo(withAuthSync(CreateCoursePage));
+export default withAuthSync(CreateCoursePage);
