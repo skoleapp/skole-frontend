@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const StyledTooltip: React.FC<Props & TooltipProps> = ({ children, title, ...props }) => (
-    <Tooltip {...props} title={<Typography variant="body2">{title}</Typography>}>
+    <Tooltip PopperProps={{ className: 'md-up' }} {...props} title={<Typography variant="body2">{title}</Typography>}>
         <span>{children}</span>
     </Tooltip>
 );
