@@ -181,7 +181,7 @@ export const PaginatedTable: React.FC<PaginatedTableProps> = ({
                     {renderTableBody}
                     <CustomTableFooter
                         count={count}
-                        page={page}
+                        page={page - 1}
                         rowsPerPage={rowsPerPage}
                         onChangePage={handleChangePage}
                         onChangeRowsPerPage={handleChangeRowsPerPage}
