@@ -9,9 +9,10 @@ import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
+import { useAuthContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { useAuth } from '../lib';
+import { clientLogin } from '../lib';
 import { I18nProps } from '../types';
 import { useAlerts, useForm, useLanguageSelector } from '../utils';
 
@@ -32,7 +33,7 @@ const LoginPage: NextPage<I18nProps> = () => {
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
     const { renderLanguageButton } = useLanguageSelector();
-    const { login: loginUser } = useAuth();
+    const { setUser } = useAuthContext();
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
@@ -44,15 +45,14 @@ const LoginPage: NextPage<I18nProps> = () => {
             if (!!login.errors) {
                 handleMutationErrors(login.errors);
             } else if (!!login.token && !!login.user) {
-                const { token, user } = login;
                 const { next } = query;
-
-                loginUser(token, user as UserObjectType);
+                clientLogin(login.token);
                 resetForm();
+                setUser(login.user as UserObjectType);
 
                 if (!!next) {
                     Router.push(next as string);
-                } else if (user) {
+                } else {
                     Router.push('/');
                 }
             }

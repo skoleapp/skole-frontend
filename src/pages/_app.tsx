@@ -2,7 +2,7 @@ import 'nprogress/nprogress.css';
 import 'typeface-roboto';
 import 'ol/ol.css';
 
-import { ApolloProvider, useQuery } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
@@ -17,7 +17,7 @@ import React, { useEffect } from 'react';
 
 import { ContextProvider } from '../context';
 import { appWithTranslation } from '../i18n';
-import { initApolloClient, pageView } from '../lib';
+import { initApolloClient, initOnContext, pageView } from '../lib';
 import { GlobalStyle, theme } from '../styles';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -32,11 +32,12 @@ interface Props extends AppProps {
     apolloClient?: ApolloClient<NormalizedCacheObject> | null;
     apolloState?: NormalizedCacheObject;
     isMobileGuess: boolean | null;
+    user: UserObjectType | null;
 }
 
-const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGuess }: Props): JSX.Element => {
+const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGuess, user }: Props): JSX.Element => {
     const client = apolloClient || initApolloClient(apolloState, undefined);
-    const { data, loading } = useQuery(UserMeDocument, { client });
+    const initialContextProps = { user, isMobileGuess };
 
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
@@ -45,11 +46,6 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
             jssStyles.parentNode.removeChild(jssStyles);
         }
     }, []);
-
-    const initialContextProps = {
-        initialAuthState: { user: R.propOr(null, 'userMe', data) as UserObjectType | null, loading },
-        isMobileGuess,
-    };
 
     return (
         <ApolloProvider client={client}>
@@ -67,15 +63,24 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
 };
 
 SkoleApp.getInitialProps = async (ctx: AppContext): Promise<Props> => {
+    const { apolloClient } = initOnContext(ctx.ctx);
+    const pageProps = (await App.getInitialProps(ctx)) as AppProps;
     const userAgent = R.path(['ctx', 'req', 'headers', 'user-agent'], ctx) as string;
+    let user = null;
+
+    try {
+        const { data } = await apolloClient.query({ query: UserMeDocument });
+        user = data.userMe;
+    } catch {
+        user = null;
+    }
 
     // We sniff the user agent in order to pre-populate the context value about the user's device.
     const isMobileGuess = !!userAgent
         ? !!userAgent.match('/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i')
         : null;
 
-    const appProps = (await App.getInitialProps(ctx)) as AppProps;
-    return { ...appProps, isMobileGuess };
+    return { ...pageProps, isMobileGuess, user };
 };
 
 export default appWithTranslation(SkoleApp);

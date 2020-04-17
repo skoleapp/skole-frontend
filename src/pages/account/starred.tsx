@@ -2,6 +2,7 @@ import { Box, Tab } from '@material-ui/core';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { useAuthContext } from 'src/context';
 
 import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
 import {
@@ -15,14 +16,14 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { useAuth, withAuthSync } from '../../lib';
+import { withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useFrontendPagination, useTabs } from '../../utils';
 
 const StarredPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
-    const { user } = useAuth();
+    const { user } = useAuthContext();
     const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
     const starredResources = R.propOr([], 'starredResources', user) as ResourceObjectType[];
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);

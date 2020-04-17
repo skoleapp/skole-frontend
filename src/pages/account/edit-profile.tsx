@@ -6,11 +6,11 @@ import React from 'react';
 import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
-import { AvatarField, FormSubmitSection, LoadingBox, NotFoundLayout, SettingsLayout } from '../../components';
-import { useNotificationsContext } from '../../context';
+import { AvatarField, FormSubmitSection, NotFoundLayout, SettingsLayout } from '../../components';
+import { useAuthContext, useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { useAuth, withApolloSSR, withAuthSync } from '../../lib';
+import { withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -23,7 +23,7 @@ export interface UpdateProfileFormValues {
 }
 
 const EditProfilePage: NextPage<I18nProps> = () => {
-    const { user, loading, setUser } = useAuth();
+    const { user, setUser } = useAuthContext();
     const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -128,22 +128,22 @@ const EditProfilePage: NextPage<I18nProps> = () => {
             header: t('edit-profile:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent: loading ? <LoadingBox /> : renderCardContent,
+        renderCardContent: renderCardContent,
         desktopHeader: t('edit-profile:header'),
         formLayout: true,
     };
 
-    if (!!user || loading) {
+    if (!!user) {
         return <SettingsLayout {...layoutProps} />;
     } else {
         return <NotFoundLayout />;
     }
 };
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async () => ({
+export const getServerSideProps: GetServerSideProps = async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
     },
-}));
+});
 
 export default withAuthSync(EditProfilePage);

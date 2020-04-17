@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/react-hooks';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
@@ -7,8 +8,10 @@ import * as Yup from 'yup';
 
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
-import { includeDefaultNamespaces, useTranslation } from '../../i18n';
-import { useAuth, withAuthSync } from '../../lib';
+import { useAuthContext } from '../../context';
+import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
+import { withAuthSync } from '../../lib';
+import { clientLogout } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -25,15 +28,19 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<DeleteAccountFormValues>();
     const { t } = useTranslation();
     const confirm = useConfirm();
-    const { logout } = useAuth();
+    const apolloClient = useApolloClient();
+    const { setUser } = useAuthContext();
 
-    const onCompleted = ({ deleteUser }: DeleteAccountMutation): void => {
+    const onCompleted = async ({ deleteUser }: DeleteAccountMutation): Promise<void> => {
         if (deleteUser) {
             if (deleteUser.errors) {
                 handleMutationErrors(deleteUser.errors);
             } else {
                 resetForm();
-                logout();
+                clientLogout();
+                setUser(null);
+                await apolloClient.resetStore();
+                Router.push('/login');
             }
         }
     };

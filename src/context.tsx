@@ -18,7 +18,6 @@ import {
 const SkolePageContext = createContext<SkoleContextType>({
     auth: {
         user: null,
-        loading: null,
         setUser: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     attachmentViewer: {
@@ -69,16 +68,12 @@ export const usePDFViewerContext = (): PDFViewer => useSkoleContext().pdfViewer;
 export const useDeviceContext = (): DeviceInfo => useSkoleContext().device;
 
 interface Props {
-    initialAuthState: {
-        user: UserObjectType | null;
-        loading: boolean;
-    };
+    user: UserObjectType | null;
     isMobileGuess: boolean | null;
 }
 
-export const ContextProvider: React.FC<Props> = ({ children, initialAuthState: { user, loading }, isMobileGuess }) => {
-    const [auth, setAuth] = useState<Pick<AuthContext, 'user' | 'loading'>>({ user, loading });
-    const setUser = (user: UserObjectType | null): void => setAuth({ ...auth, user });
+export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, isMobileGuess }) => {
+    const [user, setUser] = useState(initialUser);
 
     const [attachment, setAttachment] = useState<string | null>(null);
     const toggleAttachmentViewer = (payload: string | null): void => setAttachment(payload);
@@ -113,7 +108,6 @@ export const ContextProvider: React.FC<Props> = ({ children, initialAuthState: {
     const contextValue = {
         auth: {
             user,
-            loading,
             setUser,
         },
         attachmentViewer: {

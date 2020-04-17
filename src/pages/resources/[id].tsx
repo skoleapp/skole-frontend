@@ -51,10 +51,10 @@ import {
     TabLayout,
     TextLink,
 } from '../../components';
-import { useNotificationsContext, usePDFViewerContext } from '../../context';
+import { useAuthContext, useNotificationsContext, usePDFViewerContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { useAuth, withApolloSSR, withAuthSync } from '../../lib';
+import { withApolloSSR, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';
 import { I18nProps, SkolePageContext } from '../../types';
 import { mediaURL, useOptions, useVotes } from '../../utils';
@@ -67,7 +67,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user } = useAuth();
+    const { user } = useAuthContext();
     const { pages, currentPage, prevPage, nextPage, setCenter, setPages, setCurrentPage } = usePDFViewerContext();
 
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(

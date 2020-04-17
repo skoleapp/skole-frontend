@@ -31,9 +31,13 @@ import {
     useDeleteCommentMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { useAttachmentViewerContext, useCommentThreadContext, useNotificationsContext } from '../../context';
+import {
+    useAttachmentViewerContext,
+    useAuthContext,
+    useCommentThreadContext,
+    useNotificationsContext,
+} from '../../context';
 import { useTranslation } from '../../i18n';
-import { useAuth } from '../../lib';
 import { mediaURL, useOptions, useVotes } from '../../utils';
 import { StyledTooltip } from '../shared';
 import { StyledList } from './StyledList';
@@ -47,7 +51,7 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const { t } = useTranslation();
-    const { user } = useAuth();
+    const { user } = useAuthContext();
     const created = moment(comment.created).format('LL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const confirm = useConfirm();

@@ -5,38 +5,21 @@ import { useEffect } from 'react';
 import React from 'react';
 import { useAuthContext } from 'src/context';
 
-import { UserObjectType } from '../../generated/graphql';
+import { LoadingBox, MainLayout, StyledCard } from '../components';
 import { Router } from '../i18n';
-import { AuthContext } from '../types';
 
-interface UseAuth extends AuthContext {
-    login: (token: string, user: UserObjectType) => void;
-    logout: () => void;
-}
+export const clientLogin = (token: string): string | undefined => cookie.set('token', token, { expires: 1 }); // One month.
 
-export const useAuth = (): UseAuth => {
-    const { setUser, ...authContext } = useAuthContext();
-
-    const login = (token: string, user: UserObjectType): void => {
-        cookie.set('token', token, { expires: 1 }); // One month.
-        setUser(user);
-    };
-
-    const logout = (): void => {
-        cookie.remove('token');
-        localStorage.setItem('logout', String(Date.now())); // Log out from all windows.
-        setUser(null);
-        Router.push('/login');
-    };
-
-    return { ...authContext, setUser, login, logout };
+export const clientLogout = async (): Promise<void> => {
+    cookie.remove('token');
+    localStorage.setItem('logout', String(Date.now())); // Log out from all windows.
 };
 
 // Wrap all pages that require authentication with this.
 export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithAuthSync: NextPage = pageProps => {
-        const { user, loading } = useAuthContext();
-        const { pathname } = useRouter();
+        const { user } = useAuthContext();
+        const { asPath } = useRouter();
 
         const syncLogout = (e: StorageEvent): void => {
             if (e.key === 'logout') {
@@ -47,17 +30,28 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
         useEffect(() => {
             window.addEventListener('storage', syncLogout);
 
-            if (!user && !loading) {
-                Router.push({ pathname: '/login', query: { next: pathname } });
+            // We need to do the redirect here in case the authentication fails.
+            if (!user) {
+                Router.push({ pathname: '/login', query: { next: asPath } });
             }
 
             return (): void => {
                 window.removeEventListener('storage', syncLogout);
                 window.localStorage.removeItem('logout');
             };
-        }, [user, loading]);
+        }, [user]);
 
-        return <PageComponent {...(pageProps as T)} />;
+        if (!user) {
+            return (
+                <MainLayout>
+                    <StyledCard>
+                        <LoadingBox />
+                    </StyledCard>
+                </MainLayout>
+            );
+        } else {
+            return <PageComponent {...(pageProps as T)} />;
+        }
     };
 
     return WithAuthSync;

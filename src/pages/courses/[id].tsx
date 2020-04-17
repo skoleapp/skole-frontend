@@ -51,9 +51,9 @@ import {
     TabLayout,
     TextLink,
 } from '../../components';
-import { useNotificationsContext } from '../../context';
+import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
-import { useAuth, withApolloSSR, withAuthSync } from '../../lib';
+import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, MuiColor, SkolePageContext } from '../../types';
 import { useFrontendPagination, useOptions, useVotes } from '../../utils';
 
@@ -65,7 +65,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user } = useAuth();
+    const { user } = useAuthContext();
 
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
         t('course:optionsHeader'),

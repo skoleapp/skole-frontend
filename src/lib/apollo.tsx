@@ -8,7 +8,7 @@ import fetch from 'isomorphic-unfetch';
 import cookie from 'js-cookie';
 import { GetServerSideProps } from 'next';
 import nextCookie from 'next-cookies';
-import Head from 'next/head';
+import NextHead from 'next/head';
 import React from 'react';
 
 import { env } from '../config';
@@ -42,8 +42,7 @@ const createApolloClient = (
     }));
 
     return new ApolloClient({
-        connectToDevTools: isBrowser,
-        ssrMode: !isBrowser,
+        ssrMode: !!ctx,
         link: ApolloLink.from([authLink, httpLink]),
         cache: new InMemoryCache().restore(initialState),
     });
@@ -90,7 +89,7 @@ export const withApolloSSR = (getServerSidePropsInner: GetServerSideProps): GetS
                 console.error('Error while running `getDataFromTree`', error);
             }
 
-            Head.rewind();
+            NextHead.rewind();
         }
 
         return {

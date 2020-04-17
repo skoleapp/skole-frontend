@@ -2,12 +2,12 @@ import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/cor
 import { ArrowBackOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
+import { useAuthContext } from 'src/context';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
 import { Link } from '../../i18n';
-import { useAuth } from '../../lib';
 import { breakpoints } from '../../styles';
 import { TopNavbarProps } from '../../types';
 import { mediaURL } from '../../utils';
@@ -22,7 +22,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     headerRight,
     headerLeft,
 }) => {
-    const { user } = useAuth();
+    const { user } = useAuthContext();
     const { t } = useTranslation();
     const avatarThumb = R.propOr('', 'avatar', user) as string;
 

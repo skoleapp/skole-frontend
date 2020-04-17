@@ -136,7 +136,6 @@ export interface PDFPage {
 
 export interface AuthContext {
     user: UserObjectType | null;
-    loading: boolean | null;
     setUser: (user: UserObjectType | null) => void;
 }
 
