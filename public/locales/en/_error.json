@@ -1,5 +1,5 @@
 {
-    "title": "Not Found",
-    "description": "This is a 404 page.",
-    "header": "The page you were looking for was not found..."
+    "title": "Error",
+    "description": "This is an error page.",
+    "header": "Something went wrong..."
 }

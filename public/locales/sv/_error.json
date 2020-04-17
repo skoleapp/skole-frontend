@@ -1,5 +1,5 @@
 {
-    "title": "Hittades inte",
-    "description": "Detta är en 404 sida.",
-    "header": "Sidan du sökte hittades inte..."
+    "title": "Fel",
+    "description": "Detta är en felsida.",
+    "header": "Något gick fel..."
 }

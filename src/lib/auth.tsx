@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import React from 'react';
 import { useAuthContext } from 'src/context';
 
-import { LoadingBox, MainLayout, StyledCard } from '../components';
+import { LoadingLayout } from '../components';
 import { Router } from '../i18n';
 
 export const clientLogin = (token: string): string | undefined => cookie.set('token', token, { expires: 1 }); // One month.
@@ -42,13 +42,7 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
         }, [user]);
 
         if (!user) {
-            return (
-                <MainLayout>
-                    <StyledCard>
-                        <LoadingBox />
-                    </StyledCard>
-                </MainLayout>
-            );
+            return <LoadingLayout />;
         } else {
             return <PageComponent {...(pageProps as T)} />;
         }

@@ -1,4 +1,4 @@
 {
-    "watch": [".babelrc", "public/locales/**/*.json", "next.config.js", "src/server.ts"],
+    "watch": [".babelrc", "public/locales/**/*.json", "next.config.js"],
     "exec": "ts-node --project tsconfig.server.json src/server.ts"
 }

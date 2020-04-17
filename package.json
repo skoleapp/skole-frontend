@@ -6,7 +6,7 @@
     "license": "ISC",
     "author": "Skole Team",
     "scripts": {
-        "dev": "nodemon",
+        "dev": "nodemon src/server.ts",
         "build": "NODE_OPTIONS=--max_old_space_size=2048 next build && rimraf build && tsc --project tsconfig.server.json",
         "start": "NODE_ENV=production node build/server.js",
         "type-check": "tsc",

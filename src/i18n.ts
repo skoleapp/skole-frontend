@@ -16,6 +16,7 @@ export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
     const defaultNamespaces = [
         'common',
         '_error',
+        '404',
         'languages',
         'forms',
         'validation',

@@ -1,5 +1,5 @@
 {
-    "title": "Ei löydetty",
-    "description": "Tämä on 404-sivu.",
-    "header": "Etsimääsi sivua ei löytynyt..."
+    "title": "Virhe",
+    "description": "Tämä on virhesivu.",
+    "header": "Jokin meni pieleen..."
 }
