@@ -32,7 +32,7 @@ import {
 } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { requireAuth, withApolloSSR, withAuthSync } from '../lib';
+import { withApolloSSR, withAuthSync } from '../lib';
 import { I18nProps, SkolePageContext } from '../types';
 import { getPaginationQuery, useFilters } from '../utils';
 
@@ -221,22 +221,20 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     return <FilterLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = requireAuth(
-    withApolloSSR(async ctx => {
-        const { apolloClient, query } = ctx as SkolePageContext;
-        const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { apolloClient, query } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
-        try {
-            const { data } = await apolloClient.query({
-                query: SearchCoursesDocument,
-                variables: query,
-            });
+    try {
+        const { data } = await apolloClient.query({
+            query: SearchCoursesDocument,
+            variables: query,
+        });
 
-            return { props: { ...data, ...namespaces } };
-        } catch (err) {
-            return { props: { namespaces } };
-        }
-    }),
-);
+        return { props: { ...data, ...namespaces } };
+    } catch (err) {
+        return { props: { namespaces } };
+    }
+});
 
 export default withAuthSync(SearchPage);

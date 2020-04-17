@@ -14,7 +14,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
-import { requireAuth, withApolloSSR, withAuthSync } from 'src/lib';
+import { withApolloSSR, withAuthSync } from 'src/lib';
 
 import {
     CourseObjectType,
@@ -222,22 +222,20 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = requireAuth(
-    withApolloSSR(async ctx => {
-        const { apolloClient, query } = ctx as SkolePageContext;
-        const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { apolloClient, query } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 
-        try {
-            const { data } = await apolloClient.query({
-                query: SchoolDetailDocument,
-                variables: query,
-            });
+    try {
+        const { data } = await apolloClient.query({
+            query: SchoolDetailDocument,
+            variables: query,
+        });
 
-            return { props: { ...data, ...namespaces } };
-        } catch {
-            return { props: { ...namespaces } };
-        }
-    }),
-);
+        return { props: { ...data, ...namespaces } };
+    } catch {
+        return { props: { ...namespaces } };
+    }
+});
 
 export default withAuthSync(SchoolDetailPage);

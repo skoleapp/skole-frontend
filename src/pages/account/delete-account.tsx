@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { includeDefaultNamespaces, useTranslation } from '../../i18n';
-import { requireAuth, useAuth, withAuthSync } from '../../lib';
+import { useAuth, withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -92,10 +92,10 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = requireAuth(async () => ({
+export const getServerSideProps: GetServerSideProps = async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['delete-account']),
     },
-}));
+});
 
 export default withAuthSync(DeleteAccountPage);

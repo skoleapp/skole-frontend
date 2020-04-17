@@ -10,7 +10,7 @@ import { AvatarField, FormSubmitSection, LoadingBox, NotFoundLayout, SettingsLay
 import { useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { requireAuth, useAuth, withApolloSSR, withAuthSync } from '../../lib';
+import { useAuth, withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -140,12 +140,10 @@ const EditProfilePage: NextPage<I18nProps> = () => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(
-    requireAuth(async () => ({
-        props: {
-            namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
-        },
-    })),
-);
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
+    },
+}));
 
 export default withAuthSync(EditProfilePage);

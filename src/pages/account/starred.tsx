@@ -1,5 +1,5 @@
 import { Box, Tab } from '@material-ui/core';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 
@@ -15,7 +15,7 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { requireAuth, useAuth, withAuthSync } from '../../lib';
+import { useAuth, withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useFrontendPagination, useTabs } from '../../utils';
 
@@ -100,8 +100,8 @@ const StarredPage: NextPage<I18nProps> = () => {
     }
 };
 
-export const getServerSideProps = requireAuth(async () => ({
+export const getServerSideProps: GetServerSideProps = async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['starred']) },
-}));
+});
 
 export default withAuthSync(StarredPage);

@@ -5,7 +5,7 @@ import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';
 import { useNotificationsContext } from 'src/context';
-import { requireAuth, withApolloSSR, withAuthSync } from 'src/lib';
+import { withApolloSSR, withAuthSync } from 'src/lib';
 import * as Yup from 'yup';
 
 import {
@@ -224,22 +224,20 @@ const UploadResourcePage: NextPage<Props> = ({ course }) => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = requireAuth(
-    withApolloSSR(async ctx => {
-        const { query, apolloClient } = ctx as SkolePageContext;
-        const namespaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { query, apolloClient } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
-        try {
-            const { data } = await apolloClient.query({
-                query: CreateResourceInitialDataDocument,
-                variables: query,
-            });
+    try {
+        const { data } = await apolloClient.query({
+            query: CreateResourceInitialDataDocument,
+            variables: query,
+        });
 
-            return { props: { ...data, ...namespaces } };
-        } catch {
-            return { props: { ...namespaces } };
-        }
-    }),
-);
+        return { props: { ...data, ...namespaces } };
+    } catch {
+        return { props: { ...namespaces } };
+    }
+});
 
 export default withAuthSync(UploadResourcePage);

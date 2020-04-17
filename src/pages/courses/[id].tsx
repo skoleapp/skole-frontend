@@ -53,7 +53,7 @@ import {
 } from '../../components';
 import { useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
-import { requireAuth, useAuth, withApolloSSR, withAuthSync } from '../../lib';
+import { useAuth, withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, MuiColor, SkolePageContext } from '../../types';
 import { useFrontendPagination, useOptions, useVotes } from '../../utils';
 
@@ -363,22 +363,20 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = requireAuth(
-    withApolloSSR(async ctx => {
-        const { apolloClient, query } = ctx as SkolePageContext;
-        const namespaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { apolloClient, query } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 
-        try {
-            const { data } = await apolloClient.query({
-                query: CourseDetailDocument,
-                variables: query,
-            });
+    try {
+        const { data } = await apolloClient.query({
+            query: CourseDetailDocument,
+            variables: query,
+        });
 
-            return { props: { ...data, ...namespaces } };
-        } catch {
-            return { props: { ...namespaces } };
-        }
-    }),
-);
+        return { props: { ...data, ...namespaces } };
+    } catch {
+        return { props: { ...namespaces } };
+    }
+});
 
 export default withAuthSync(CourseDetailPage);

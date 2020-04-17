@@ -23,7 +23,7 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR } from '../../lib';
-import { requireAuth, useAuth, withAuthSync } from '../../lib';
+import { useAuth, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';
 import { ButtonColor, ButtonVariant, I18nProps, MaxWidth, SkolePageContext } from '../../types';
 import { mediaURL, useFrontendPagination, useTabs } from '../../utils';
@@ -292,22 +292,20 @@ const StyledUserPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = requireAuth(
-    withApolloSSR(async ctx => {
-        const { query, apolloClient } = ctx as SkolePageContext;
-        const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { query, apolloClient } = ctx as SkolePageContext;
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 
-        try {
-            const { data } = await apolloClient.query({
-                query: UserDetailDocument,
-                variables: query,
-            });
+    try {
+        const { data } = await apolloClient.query({
+            query: UserDetailDocument,
+            variables: query,
+        });
 
-            return { props: { ...data, ...nameSpaces } };
-        } catch {
-            return { props: { ...nameSpaces } };
-        }
-    }),
-);
+        return { props: { ...data, ...nameSpaces } };
+    } catch {
+        return { props: { ...nameSpaces } };
+    }
+});
 
 export default withAuthSync(UserPage);

@@ -9,7 +9,7 @@ import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { requireAuth, withAuthSync } from '../../lib';
+import { withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -114,10 +114,10 @@ const ChangePasswordPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = requireAuth(async () => ({
+export const getServerSideProps: GetServerSideProps = async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['change-password']),
     },
-}));
+});
 
 export default withAuthSync(ChangePasswordPage);

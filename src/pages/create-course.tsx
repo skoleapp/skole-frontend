@@ -4,7 +4,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useNotificationsContext } from 'src/context';
-import { requireAuth, withAuthSync } from 'src/lib';
+import { withAuthSync } from 'src/lib';
 import * as Yup from 'yup';
 
 import {
@@ -143,10 +143,10 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = requireAuth(async () => ({
+export const getServerSideProps: GetServerSideProps = async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['create-course']),
     },
-}));
+});
 
 export default withAuthSync(CreateCoursePage);

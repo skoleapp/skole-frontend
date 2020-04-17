@@ -1,12 +1,12 @@
 import cookie from 'js-cookie';
-import { GetServerSideProps, NextPage } from 'next';
-import nextCookie from 'next-cookies';
-import Router from 'next/router';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import React from 'react';
 import { useAuthContext } from 'src/context';
 
 import { UserObjectType } from '../../generated/graphql';
+import { Router } from '../i18n';
 import { AuthContext } from '../types';
 
 interface UseAuth extends AuthContext {
@@ -32,26 +32,12 @@ export const useAuth = (): UseAuth => {
     return { ...authContext, setUser, login, logout };
 };
 
-// Wrap `getServerSideProps` with this for all pages that require authentication.
-export const requireAuth = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
-    const getServerSideProps: GetServerSideProps = async ctx => {
-        const token = nextCookie(ctx);
-
-        // If there's no token, it means the user is not logged in.
-        if (!token) {
-            ctx.res?.writeHead(302, { Location: '/login' });
-            ctx.res?.end();
-        }
-
-        return await getServerSidePropsInner(ctx);
-    };
-
-    return getServerSideProps;
-};
-
 // Wrap all pages that require authentication with this.
 export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithAuthSync: NextPage = pageProps => {
+        const { user, loading } = useAuthContext();
+        const { pathname } = useRouter();
+
         const syncLogout = (e: StorageEvent): void => {
             if (e.key === 'logout') {
                 Router.push('/login');
@@ -61,11 +47,15 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
         useEffect(() => {
             window.addEventListener('storage', syncLogout);
 
+            if (!user && !loading) {
+                Router.push({ pathname: '/login', query: { next: pathname } });
+            }
+
             return (): void => {
                 window.removeEventListener('storage', syncLogout);
                 window.localStorage.removeItem('logout');
             };
-        }, []);
+        }, [user, loading]);
 
         return <PageComponent {...(pageProps as T)} />;
     };

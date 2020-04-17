@@ -11,7 +11,7 @@ import { PaginatedUserObjectType, UserObjectType, UsersDocument } from '../../..
 import { FilterLayout, FormSubmitSection, NotFoundBox, PaginatedTable, SelectField } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { requireAuth, withApolloSSR, withAuthSync } from '../../lib';
+import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, SkolePageContext } from '../../types';
 import { getPaginationQuery, mediaURL, useFilters } from '../../utils';
 
@@ -140,18 +140,16 @@ const UsersPage: NextPage<Props> = ({ users }) => {
     return <FilterLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = requireAuth(
-    withApolloSSR(async ctx => {
-        const { query, apolloClient } = ctx as SkolePageContext;
-        const namespaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { query, apolloClient } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
 
-        try {
-            const { data } = await apolloClient.query({ query: UsersDocument, variables: query });
-            return { props: { ...data, ...namespaces } };
-        } catch {
-            return { props: { ...namespaces } };
-        }
-    }),
-);
+    try {
+        const { data } = await apolloClient.query({ query: UsersDocument, variables: query });
+        return { props: { ...data, ...namespaces } };
+    } catch {
+        return { props: { ...namespaces } };
+    }
+});
 
 export default withAuthSync(UsersPage);

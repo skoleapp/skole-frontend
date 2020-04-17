@@ -24,7 +24,7 @@ import {
     TitleOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
@@ -54,7 +54,7 @@ import {
 import { useNotificationsContext, usePDFViewerContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { requireAuth, useAuth, withApolloSSR, withAuthSync } from '../../lib';
+import { useAuth, withApolloSSR, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';
 import { I18nProps, SkolePageContext } from '../../types';
 import { mediaURL, useOptions, useVotes } from '../../utils';
@@ -390,22 +390,20 @@ const StyledExtraResourceActions = styled(Grid)`
     }
 `;
 
-export const getServerSideProps = requireAuth(
-    withApolloSSR(async ctx => {
-        const { query, apolloClient } = ctx as SkolePageContext;
-        const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { query, apolloClient } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
-        try {
-            const { data } = await apolloClient.query({
-                query: ResourceDetailDocument,
-                variables: query,
-            });
+    try {
+        const { data } = await apolloClient.query({
+            query: ResourceDetailDocument,
+            variables: query,
+        });
 
-            return { props: { ...data, ...namespaces } };
-        } catch {
-            return { props: { ...namespaces } };
-        }
-    }),
-);
+        return { props: { ...data, ...namespaces } };
+    } catch {
+        return { props: { ...namespaces } };
+    }
+});
 
 export default withAuthSync(ResourceDetailPage);
