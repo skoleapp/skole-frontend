@@ -12,5 +12,4 @@ export { useOptions } from './useOptions';
 export { useLanguageSelector } from './useLanguageSelector';
 export { useFrontendPagination, getPaginationQuery } from './pagination';
 export { useVotes } from './useVotes';
-export { useBreakPoint } from './useBreakPoint';
 export { useDrawer } from './useDrawer';

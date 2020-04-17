@@ -1,12 +1,12 @@
 import { CommentObjectType, UserObjectType } from 'generated/graphql';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { useContext } from 'react';
 
+import { breakpointsNum } from './styles';
 import {
     AttachmentViewer,
     AuthContext,
     CommentThread,
-    DeviceInfo,
     LanguageSelector,
     Notifications,
     PDFPage,
@@ -51,10 +51,7 @@ const SkolePageContext = createContext<SkoleContextType>({
         setPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
         setCurrentPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
-    device: {
-        isMobile: null,
-        setMobile: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-    },
+    isMobile: null,
 });
 
 const useSkoleContext = (): SkoleContextType => useContext(SkolePageContext);
@@ -65,7 +62,7 @@ export const useLanguageSelectorContext = (): LanguageSelector => useSkoleContex
 export const useNotificationsContext = (): Notifications => useSkoleContext().notifications;
 export const useSettingsContext = (): Settings => useSkoleContext().settings;
 export const usePDFViewerContext = (): PDFViewer => useSkoleContext().pdfViewer;
-export const useDeviceContext = (): DeviceInfo => useSkoleContext().device;
+export const useDeviceContext = (): boolean | null => useSkoleContext().isMobile;
 
 interface Props {
     user: UserObjectType | null;
@@ -96,14 +93,27 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
         effect: '',
     });
 
-    const [isMobile, setMobile] = useState<boolean | null>(isMobileGuess);
-
     const resetEffect = (): void => setPdf({ ...pdf, effect: '' });
     const setCenter = (): void => setPdf({ ...pdf, effect: 'SET_CENTER' });
     const prevPage = (): void => setPdf({ ...pdf, effect: 'PREV_PAGE' });
     const nextPage = (): void => setPdf({ ...pdf, effect: 'NEXT_PAGE' });
     const setPages = (pages: PDFPage[]): void => setPdf({ ...pdf, pages });
     const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
+
+    // Load initial value based on guess from user agent.
+    const [isMobile, setIsMobile] = useState(isMobileGuess);
+
+    useEffect(() => {
+        setIsMobile(window.innerWidth < breakpointsNum.MD); // Make sure correct value is applied on client side.
+
+        const resizeFunctionRef = (): void => {
+            setIsMobile(window.innerWidth < breakpointsNum.MD);
+        };
+
+        // Listen for changes and update the state accordingly.
+        window.addEventListener('resize', resizeFunctionRef);
+        return (): void => window.removeEventListener('resize', resizeFunctionRef);
+    }, []);
 
     const contextValue = {
         auth: {
@@ -139,10 +149,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setPages,
             setCurrentPage,
         },
-        device: {
-            isMobile,
-            setMobile,
-        },
+        isMobile,
     };
 
     return <SkolePageContext.Provider value={contextValue}>{children}</SkolePageContext.Provider>;

@@ -175,10 +175,6 @@ export interface PDFViewer {
     setPages: (pages: PDFPage[]) => void;
     setCurrentPage: (currentPage: number) => void;
 }
-export interface DeviceInfo {
-    isMobile: boolean | null;
-    setMobile: (payload: boolean) => void;
-}
 
 export interface SkoleContextType {
     auth: AuthContext;
@@ -188,7 +184,7 @@ export interface SkoleContextType {
     notifications: Notifications;
     settings: Settings;
     pdfViewer: PDFViewer;
-    device: DeviceInfo;
+    isMobile: boolean | null;
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;

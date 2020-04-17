@@ -3,9 +3,9 @@ import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
 
-import { breakpointsNum } from '../../styles';
+import { useDeviceContext } from '../../context';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
-import { useBreakPoint, useDrawer, useTabs } from '../../utils';
+import { useDrawer, useTabs } from '../../utils';
 import { StyledCard, StyledTabs, StyledTooltip } from '../shared';
 import { MainLayout } from './MainLayout';
 
@@ -57,7 +57,7 @@ export const TabLayout: React.FC<Props> = ({
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
-    const isMobile = useBreakPoint(breakpointsNum.MD);
+    const isMobile = useDeviceContext();
     const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(infoHeader);
 
     const {
