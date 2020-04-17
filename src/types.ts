@@ -184,7 +184,7 @@ export interface SkoleContextType {
     notifications: Notifications;
     settings: Settings;
     pdfViewer: PDFViewer;
-    isMobile: boolean | null;
+    isMobileGuess: boolean | null;
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;

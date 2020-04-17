@@ -51,7 +51,7 @@ const SkolePageContext = createContext<SkoleContextType>({
         setPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
         setCurrentPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
-    isMobile: null,
+    isMobileGuess: null,
 });
 
 const useSkoleContext = (): SkoleContextType => useContext(SkolePageContext);
@@ -62,7 +62,27 @@ export const useLanguageSelectorContext = (): LanguageSelector => useSkoleContex
 export const useNotificationsContext = (): Notifications => useSkoleContext().notifications;
 export const useSettingsContext = (): Settings => useSkoleContext().settings;
 export const usePDFViewerContext = (): PDFViewer => useSkoleContext().pdfViewer;
-export const useDeviceContext = (): boolean | null => useSkoleContext().isMobile;
+
+// Allow using custom breakpoints, use MD as default.
+export const useDeviceContext = (breakpoint: number = breakpointsNum.MD): boolean => {
+    const { isMobileGuess } = useSkoleContext();
+    const [isMobile, setIsMobile] = useState(isMobileGuess);
+
+    useEffect(() => {
+        setIsMobile(window.innerWidth < breakpoint); // Make sure correct value is applied on client side.
+
+        const resizeFunctionRef = (): void => {
+            setIsMobile(window.innerWidth < breakpoint);
+        };
+
+        // Listen for changes and update the state accordingly.
+        window.addEventListener('resize', resizeFunctionRef);
+        return (): void => window.removeEventListener('resize', resizeFunctionRef);
+    }, []);
+
+    // If guess value is null resolve value into mobile.
+    return isMobile === null ? true : !!isMobile;
+};
 
 interface Props {
     user: UserObjectType | null;
@@ -100,21 +120,6 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const setPages = (pages: PDFPage[]): void => setPdf({ ...pdf, pages });
     const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
 
-    // Load initial value based on guess from user agent.
-    const [isMobile, setIsMobile] = useState(isMobileGuess);
-
-    useEffect(() => {
-        setIsMobile(window.innerWidth < breakpointsNum.MD); // Make sure correct value is applied on client side.
-
-        const resizeFunctionRef = (): void => {
-            setIsMobile(window.innerWidth < breakpointsNum.MD);
-        };
-
-        // Listen for changes and update the state accordingly.
-        window.addEventListener('resize', resizeFunctionRef);
-        return (): void => window.removeEventListener('resize', resizeFunctionRef);
-    }, []);
-
     const contextValue = {
         auth: {
             user,
@@ -149,7 +154,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setPages,
             setCurrentPage,
         },
-        isMobile,
+        isMobileGuess,
     };
 
     return <SkolePageContext.Provider value={contextValue}>{children}</SkolePageContext.Provider>;

@@ -2,7 +2,7 @@ import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/cor
 import { ArrowBackOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
-import { useAuthContext } from 'src/context';
+import { useAuthContext, useDeviceContext } from 'src/context';
 import styled from 'styled-components';
 
 import { useTranslation } from '../../i18n';
@@ -25,6 +25,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     const { user } = useAuthContext();
     const { t } = useTranslation();
     const avatarThumb = R.propOr('', 'avatar', user) as string;
+    const isMobile = useDeviceContext();
 
     const renderDynamicBackButton = dynamicBackUrl && (
         <IconButton onClick={(): void => Router.back()} color="secondary">
@@ -40,8 +41,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Link>
     );
 
-    const renderMobileContent = (
-        <Grid className="md-down" container alignItems="center">
+    const renderMobileContent = isMobile && (
+        <Grid container alignItems="center">
             <Grid item xs={4} sm={3} container justify="flex-start" wrap="nowrap">
                 {renderStaticBackButton || renderDynamicBackButton}
                 {headerLeft}
@@ -55,8 +56,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Grid>
     );
 
-    const renderDesktopContent = (
-        <Box className="md-up" display="flex" flexGrow="1" justifyContent="space-between" alignItems="center">
+    const renderDesktopContent = !isMobile && (
+        <Box display="flex" flexGrow="1" justifyContent="space-between" alignItems="center">
             <Logo />
             <Box display="flex" alignItems="center">
                 {!disableSearch && <TopNavbarSearchWidget />}

@@ -108,47 +108,51 @@ export const TabLayout: React.FC<Props> = ({
         </Box>
     );
 
-    const renderMobileContent = (
-        <StyledCard className="md-down">
+    const renderMobileContent = isMobile && (
+        <StyledCard>
             {renderTabs}
             {renderLeftTab}
             {renderRightTab}
         </StyledCard>
     );
 
-    const renderDesktopContent = singleColumn ? (
-        <StyledCard className="md-up">
-            <CardHeader title={headerDesktop} action={renderDesktopHeaderActions} />
-            <Divider />
-            {renderInfo}
-            <Divider />
-            {renderTabs}
-            {renderLeftTab}
-            {renderRightTab}
-        </StyledCard>
-    ) : (
-        <Grid className="md-up" id="container" container>
-            <Grid item container xs={12} md={7} lg={8}>
+    const renderDesktopContent = !isMobile && (
+        <>
+            {singleColumn ? (
                 <StyledCard>
-                    <CardHeader
-                        id="main-header"
-                        title={headerDesktop}
-                        subheader={subheaderDesktop}
-                        action={renderDesktopHeaderActions}
-                    />
-                    <CardContent>{extraDesktopActions}</CardContent>
+                    <CardHeader title={headerDesktop} action={renderDesktopHeaderActions} />
                     <Divider />
-                    {renderLeftContent}
-                </StyledCard>
-            </Grid>
-            <Grid item container xs={12} md={5} lg={4}>
-                <StyledCard marginLeft>
-                    <CardHeader title={headerSecondary} />
+                    {renderInfo}
                     <Divider />
-                    {renderRightContent}
+                    {renderTabs}
+                    {renderLeftTab}
+                    {renderRightTab}
                 </StyledCard>
-            </Grid>
-        </Grid>
+            ) : (
+                <Grid id="container" container>
+                    <Grid item container xs={12} md={7} lg={8}>
+                        <StyledCard>
+                            <CardHeader
+                                id="main-header"
+                                title={headerDesktop}
+                                subheader={subheaderDesktop}
+                                action={renderDesktopHeaderActions}
+                            />
+                            <CardContent>{extraDesktopActions}</CardContent>
+                            <Divider />
+                            {renderLeftContent}
+                        </StyledCard>
+                    </Grid>
+                    <Grid item container xs={12} md={5} lg={4}>
+                        <StyledCard marginLeft>
+                            <CardHeader title={headerSecondary} />
+                            <Divider />
+                            {renderRightContent}
+                        </StyledCard>
+                    </Grid>
+                </Grid>
+            )}
+        </>
     );
 
     const renderInfoDrawer = (
@@ -178,8 +182,8 @@ export const TabLayout: React.FC<Props> = ({
     return (
         <StyledTabLayout>
             <MainLayout {...layoutProps}>
-                {isMobile && renderMobileContent}
-                {!isMobile && renderDesktopContent}
+                {renderMobileContent}
+                {renderDesktopContent}
                 {renderInfoDrawer}
                 {renderOptionsDrawer}
             </MainLayout>
