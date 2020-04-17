@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { StyledCard, StyledTable } from '..';
+import { useDeviceContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { LayoutProps, UseFilters } from '../../types';
 import { ModalHeader } from '../shared';
@@ -24,6 +25,7 @@ export const FilterLayout: React.FC<Props> = ({
 }) => {
     const { t } = useTranslation();
     const { handleOpen: handleOpenFilters, onClose: handleCloseFilters } = drawerProps;
+    const isMobile = useDeviceContext();
 
     const renderMobileClearFiltersButton = (
         <IconButton onClick={handleClearFilters}>
@@ -37,8 +39,8 @@ export const FilterLayout: React.FC<Props> = ({
         </IconButton>
     );
 
-    const renderMobileContent = (
-        <Box className="md-down" flexGrow="1" display="flex">
+    const renderMobileContent = isMobile && (
+        <Box flexGrow="1" display="flex">
             <StyledTable>{renderTableContent}</StyledTable>
             <Drawer {...drawerProps}>
                 <ModalHeader
@@ -51,8 +53,8 @@ export const FilterLayout: React.FC<Props> = ({
         </Box>
     );
 
-    const renderDesktopContent = (
-        <Grid className="md-up" container>
+    const renderDesktopContent = !isMobile && (
+        <Grid container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
                     <CardHeader title={t('common:advancedSearch')} />
