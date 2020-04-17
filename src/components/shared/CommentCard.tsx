@@ -8,7 +8,6 @@ import {
     IconButton,
     ListItemText,
     MenuItem,
-    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -32,19 +31,17 @@ import {
     useDeleteCommentMutation,
     VoteObjectType,
 } from '../../../generated/graphql';
-import { useTranslation } from '../../i18n';
 import {
-    mediaURL,
     useAttachmentViewerContext,
-    useAuth,
+    useAuthContext,
     useCommentThreadContext,
     useNotificationsContext,
-    useOptions,
-    useVotes,
-} from '../../utils';
+} from '../../context';
+import { useTranslation } from '../../i18n';
+import { mediaURL, useOptions, useVotes } from '../../utils';
+import { StyledTooltip } from '../shared';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
-
 interface Props {
     comment: CommentObjectType;
     isThread?: boolean;
@@ -54,7 +51,7 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const { t } = useTranslation();
-    const { user } = useAuth();
+    const { user } = useAuthContext();
     const created = moment(comment.created).format('LL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const confirm = useConfirm();
@@ -169,25 +166,23 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         )}
                     </Grid>
                     <Grid item container xs={1} direction="column" justify="center" alignItems="center">
-                        <Tooltip title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}>
-                            <span>
-                                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                                    <KeyboardArrowUpOutlined className="vote-button" />
-                                </IconButton>
-                            </span>
-                        </Tooltip>
+                        <StyledTooltip
+                            title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}
+                        >
+                            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                                <KeyboardArrowUpOutlined className="vote-button" />
+                            </IconButton>
+                        </StyledTooltip>
                         <Box>
                             <Typography variant="body2">{score}</Typography>
                         </Box>
-                        <Tooltip
+                        <StyledTooltip
                             title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:downvoteCommentTooltip')}
                         >
-                            <span>
-                                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                                    <KeyboardArrowDownOutlined className="vote-button" />
-                                </IconButton>
-                            </span>
-                        </Tooltip>
+                            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                                <KeyboardArrowDownOutlined className="vote-button" />
+                            </IconButton>
+                        </StyledTooltip>
                     </Grid>
                 </Grid>
                 <Grid container>
@@ -195,9 +190,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         <Box display="flex" alignItems="center" height="100%">
                             {!isThread && (
                                 <>
-                                    <Tooltip title={t('common:commentRepliesTooltip', { replyCount })}>
+                                    <StyledTooltip title={t('common:commentRepliesTooltip', { replyCount })}>
                                         <CommentOutlined className="message-icon" />
-                                    </Tooltip>
+                                    </StyledTooltip>
                                     <Box marginLeft="0.25rem">
                                         <Typography variant="body2">{replyCount}</Typography>
                                     </Box>
@@ -205,21 +200,21 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                             )}
                             {!!comment.attachment && !attachmentOnly && (
                                 <Box marginLeft="0.25rem">
-                                    <Tooltip title={t('common:commentAttachmentTooltip')}>
+                                    <StyledTooltip title={t('common:commentAttachmentTooltip')}>
                                         <IconButton onClick={handleAttachmentClick}>
                                             <AttachFileOutlined />
                                         </IconButton>
-                                    </Tooltip>
+                                    </StyledTooltip>
                                 </Box>
                             )}
                         </Box>
                     </Grid>
                     <Grid container item xs={4} justify="center">
-                        <Tooltip title={t('common:commentOptionsTooltip')}>
+                        <StyledTooltip title={t('common:commentOptionsTooltip')}>
                             <IconButton onClick={handleOpenOptions}>
                                 <MoreHorizOutlined />
                             </IconButton>
-                        </Tooltip>
+                        </StyledTooltip>
                     </Grid>
                     <Grid item xs={4} />
                 </Grid>

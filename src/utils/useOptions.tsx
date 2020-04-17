@@ -3,9 +3,9 @@ import { FlagOutlined, ShareOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 
+import { useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { UseOptions } from '../types';
-import { useNotificationsContext } from './context';
 import { useDrawer } from './useDrawer';
 
 export const useOptions = (header: string): UseOptions => {

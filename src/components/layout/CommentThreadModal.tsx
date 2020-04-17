@@ -4,7 +4,7 @@ import React from 'react';
 
 import { ModalHeader } from '..';
 import { CommentObjectType } from '../../../generated/graphql';
-import { useCommentThreadContext } from '../../utils';
+import { useCommentThreadContext } from '../../context';
 import { DiscussionBox } from '../shared';
 import { StyledModal } from '../shared/StyledModal';
 

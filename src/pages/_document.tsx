@@ -1,6 +1,7 @@
 import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/styles';
 import { DocumentInitialProps, RenderPageResult } from 'next/dist/next-server/lib/utils';
 import NextDocument, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
+import NextHead from 'next/head';
 import React, { Fragment } from 'react';
 import { ServerStyleSheet as StyledComponentSheets } from 'styled-components';
 
@@ -113,6 +114,7 @@ SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<DocumentIn
             });
 
         const initialProps = await NextDocument.getInitialProps(ctx);
+        NextHead.rewind(); // TODO: Testing this, remove if it doesn't fix memory leak issues.
 
         return {
             ...initialProps,

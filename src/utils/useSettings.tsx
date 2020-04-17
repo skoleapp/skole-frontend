@@ -1,15 +1,16 @@
+import { useApolloClient } from '@apollo/react-hooks';
 import { Box, Button, MenuItem } from '@material-ui/core';
 import { ExitToAppOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
 
 import { StyledList } from '../components/shared/StyledList';
+import { useAuthContext, useNotificationsContext, useSettingsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
+import { clientLogout } from '../lib';
 import { Settings } from '../types';
-import { menuItems } from '.';
-import { useAuth } from './auth';
-import { useNotificationsContext, useSettingsContext } from './context';
+import { menuItems } from './menuItems';
 import { useLanguageSelector } from './useLanguageSelector';
 
 interface UseSettings extends Settings {
@@ -23,14 +24,14 @@ interface Props {
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
 export const useSettings = ({ modal }: Props): UseSettings => {
-    const { user } = useAuth();
+    const { user, setUser } = useAuthContext();
     const authenticated = !!user;
     const { settingsOpen, toggleSettings } = useSettingsContext();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
     const { pathname } = useRouter();
     const { renderCurrentFlag, openLanguageMenu } = useLanguageSelector();
-    const { logout } = useAuth();
+    const apolloClient = useApolloClient();
 
     const handleClose = (): void => {
         toggleSettings(false);
@@ -41,9 +42,12 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         Router.push(href);
     };
 
-    const handleLogoutClick = (): void => {
+    const handleLogoutClick = async (): Promise<void> => {
         !!modal && handleClose();
-        logout();
+        clientLogout();
+        setUser(null);
+        await apolloClient.resetStore();
+        Router.push('/login');
         toggleNotification(t('notifications:signedOut'));
     };
 

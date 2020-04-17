@@ -73,7 +73,6 @@
     "commentOptionsTooltip": "View comment options.",
     "commentAttachmentTooltip": "View comment attachment.",
     "commentRepliesTooltip": "This comment has {{replyCount}} replies.",
-    "closeMenuTooltip": "Close menu.",
     "attachFileTooltip": "Attach picture.",
     "clearAttachmentTooltip": "Clear attachment.",
     "sendMessageTooltip": "Send message.",

@@ -1,6 +1,7 @@
 import { MenuItem } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -31,9 +32,9 @@ import {
 } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo } from '../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { getPaginationQuery, useFilters, withAuthSync } from '../utils';
+import { withApolloSSR, withAuthSync } from '../lib';
+import { I18nProps, SkolePageContext } from '../types';
+import { getPaginationQuery, useFilters } from '../utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
@@ -46,7 +47,7 @@ interface FilterSearchResultsFormValues {
     ordering: string;
 }
 
-interface Props {
+interface Props extends I18nProps {
     searchCourses?: PaginatedCourseObjectType;
     school?: SchoolObjectType;
     subject?: SubjectObjectType;
@@ -55,7 +56,7 @@ interface Props {
     city?: CityObjectType;
 }
 
-const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
+const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
     const {
         handleSubmit,
         submitButtonText,
@@ -220,9 +221,9 @@ const SearchPage: I18nPage<Props> = ({ searchCourses, school, subject, schoolTyp
     return <FilterLayout {...layoutProps} />;
 };
 
-SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    const { apolloClient, query } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { apolloClient, query } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
     try {
         const { data } = await apolloClient.query({
@@ -230,10 +231,10 @@ SearchPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
             variables: query,
         });
 
-        return { ...data, ...nameSpaces };
-    } catch {
-        return nameSpaces;
+        return { props: { ...data, ...namespaces } };
+    } catch (err) {
+        return { props: { namespaces } };
     }
-};
+});
 
-export default withApollo(withAuthSync(SearchPage));
+export default withAuthSync(SearchPage);

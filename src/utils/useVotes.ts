@@ -2,9 +2,9 @@ import { Size } from '@material-ui/core';
 import { useState } from 'react';
 
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from '../../generated/graphql';
+import { useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { MuiColor } from '../types';
-import { useNotificationsContext } from './context';
 
 interface Variables {
     status: number;

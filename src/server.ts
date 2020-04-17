@@ -10,9 +10,9 @@ const port = process.env.PORT || 3001;
 const app = next({ dev: process.env.NODE_ENV !== 'production' });
 const handle = app.getRequestHandler();
 
-(async (): Promise<void> => {
-    await app.prepare();
+app.prepare().then(() => {
     const server = express();
+    server.use(nextI18NextMiddleware(nextI18next));
 
     if (process.env.NODE_ENV === 'production') {
         server.use(
@@ -22,8 +22,7 @@ const handle = app.getRequestHandler();
         );
     }
 
-    server.use(nextI18NextMiddleware(nextI18next));
-    server.get('*', (req: IncomingMessage, res: ServerResponse) => handle(req, res));
-    await server.listen(port);
+    server.all('*', (req: IncomingMessage, res: ServerResponse) => handle(req, res));
+    server.listen(port);
     console.log(`Server running on http://localhost:${port}!`);
-})();
+});

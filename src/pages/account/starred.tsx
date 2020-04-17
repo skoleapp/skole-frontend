@@ -1,12 +1,13 @@
 import { Box, Tab } from '@material-ui/core';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { useAuthContext } from 'src/context';
 
 import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
 import {
     CourseTableBody,
     FrontendPaginatedTable,
-    LoadingBox,
     NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
@@ -15,14 +16,14 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
-import { I18nPage, I18nProps } from '../../types';
-import { useAuth, useFrontendPagination, useTabs, withAuthSync } from '../../utils';
+import { withAuthSync } from '../../lib';
+import { I18nProps } from '../../types';
+import { useFrontendPagination, useTabs } from '../../utils';
 
-const StarredPage: I18nPage = () => {
+const StarredPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
-    const { user, loading } = useAuth();
+    const { user } = useAuthContext();
     const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
     const starredResources = R.propOr([], 'starredResources', user) as ResourceObjectType[];
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
@@ -40,7 +41,7 @@ const StarredPage: I18nPage = () => {
         ...commonTableHeadProps,
     };
 
-    if (!!user || loading) {
+    if (!!user) {
         const renderStarredCourses = !!starredCourses.length ? (
             <FrontendPaginatedTable
                 tableHeadProps={courseTableHeadProps}
@@ -61,9 +62,7 @@ const StarredPage: I18nPage = () => {
             <NotFoundBox text={t('starred:noResources')} />
         );
 
-        const renderCardContent = loading ? (
-            <LoadingBox />
-        ) : (
+        const renderCardContent = (
             <Box flexGrow="1" display="flex" flexDirection="column">
                 <StyledTabs value={tabValue} onChange={handleTabChange}>
                     <Tab label={t('common:courses')} />
@@ -102,6 +101,8 @@ const StarredPage: I18nPage = () => {
     }
 };
 
-StarredPage.getInitialProps = (): I18nProps => ({ namespacesRequired: includeDefaultNamespaces(['starred']) });
+export const getServerSideProps: GetServerSideProps = async () => ({
+    props: { namespacesRequired: includeDefaultNamespaces(['starred']) },
+});
 
-export default withApollo(withAuthSync(StarredPage));
+export default withAuthSync(StarredPage);

@@ -1,8 +1,11 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';
+import { useNotificationsContext } from 'src/context';
+import { withApolloSSR, withAuthSync } from 'src/lib';
 import * as Yup from 'yup';
 
 import {
@@ -14,11 +17,11 @@ import {
     useCreateResourceMutation,
 } from '../../generated/graphql';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
+import { env } from '../config';
 import { Router, useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { withApollo } from '../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../types';
-import { useForm, useNotificationsContext, withAuthSync } from '../utils';
+import { I18nProps, SkolePageContext } from '../types';
+import { useForm } from '../utils';
 
 interface UploadResourceFormValues {
     resourceTitle: string;
@@ -31,7 +34,7 @@ interface Props extends I18nProps {
     course?: CourseObjectType;
 }
 
-const UploadResourcePage: I18nPage<Props> = ({ course }) => {
+const UploadResourcePage: NextPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
@@ -100,7 +103,7 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
                     method: 'POST',
                     body,
                     headers: {
-                        Apikey: process.env.CLOUDMERSIVE_API_KEY || '',
+                        Apikey: env.CLOUDMERSIVE_API_KEY || '',
                     },
                 });
 
@@ -221,19 +224,20 @@ const UploadResourcePage: I18nPage<Props> = ({ course }) => {
     return <FormLayout {...layoutProps} />;
 };
 
-UploadResourcePage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    const { query, apolloClient } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { query, apolloClient } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
-    if (!!query.course) {
-        try {
-            const { data } = await apolloClient.query({ query: CreateResourceInitialDataDocument, variables: query });
-            return { ...data, ...nameSpaces };
-        } catch {
-            return nameSpaces;
-        }
-    } else {
-        return nameSpaces;
+    try {
+        const { data } = await apolloClient.query({
+            query: CreateResourceInitialDataDocument,
+            variables: query,
+        });
+
+        return { props: { ...data, ...namespaces } };
+    } catch {
+        return { props: { ...namespaces } };
     }
-};
-export default withApollo(withAuthSync(UploadResourcePage));
+});
+
+export default withAuthSync(UploadResourcePage);

@@ -4,9 +4,8 @@ import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
+import { useDeviceContext, useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
-import { breakpointsNum } from '../../styles';
-import { useBreakPoint, useNotificationsContext } from '../../utils';
 import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends DropzoneAreaProps {
@@ -20,7 +19,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const maxFileSize = 5000000;
-    const isMobile = useBreakPoint(breakpointsNum.MD);
+    const isMobile = useDeviceContext();
 
     const handleFileChange = (files: File[]): void => {
         form.setFieldValue(field.name, files[0]);

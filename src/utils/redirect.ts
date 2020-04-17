@@ -1,10 +1,10 @@
 import Router from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 
-import { SkoleContext } from '../types';
+import { SkolePageContext } from '../types';
 
 // Redirect either on the server or in the browser.
-export const redirect = (context: SkoleContext, pathname: string, query?: ParsedUrlQueryInput): void => {
+export const redirect = (context: SkolePageContext, pathname: string, query?: ParsedUrlQueryInput): void => {
     if (context.res) {
         context.res.writeHead(303, { Location: pathname });
         context.res.end();

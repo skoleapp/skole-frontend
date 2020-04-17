@@ -1,25 +1,19 @@
 import { ContainerProps, DrawerProps, TablePaginationProps } from '@material-ui/core';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
-import ApolloClient, { ApolloError, ApolloQueryResult } from 'apollo-client';
+import ApolloClient, { ApolloError } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
-import { NextComponentType, NextPageContext } from 'next';
+import { NextPageContext } from 'next';
 import { Extent } from 'ol/extent';
 import { Group } from 'ol/layer';
 import { MutableRefObject, SyntheticEvent } from 'react';
 
-import { CommentObjectType, ErrorType } from '../generated/graphql';
+import { CommentObjectType, ErrorType, UserObjectType } from '../generated/graphql';
 
-export interface SkoleContext extends NextPageContext {
+export interface SkolePageContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
-    apolloState: ApolloQueryResult<{}>;
+    apolloState: NormalizedCacheObject;
 }
-
-export type I18nPage<P = {}> = NextComponentType<
-    SkoleContext,
-    { namespacesRequired: string[] },
-    P & { namespacesRequired: string[] }
->;
 
 export interface I18nProps {
     namespacesRequired: string[];
@@ -140,6 +134,11 @@ export interface PDFPage {
     imageExtent: Extent;
 }
 
+export interface AuthContext {
+    user: UserObjectType | null;
+    setUser: (user: UserObjectType | null) => void;
+}
+
 export interface AttachmentViewer {
     attachment: string | null;
     toggleAttachmentViewer: (payload: string | null) => void;
@@ -178,12 +177,14 @@ export interface PDFViewer {
 }
 
 export interface SkoleContextType {
+    auth: AuthContext;
     attachmentViewer: AttachmentViewer;
     commentThread: CommentThread;
     languageSelector: LanguageSelector;
     notifications: Notifications;
     settings: Settings;
     pdfViewer: PDFViewer;
+    isMobile: boolean | null;
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;

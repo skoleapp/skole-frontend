@@ -3,8 +3,8 @@ import { Close } from '@material-ui/icons';
 import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
 
+import { useNotificationsContext } from '../../context';
 import { breakpoints } from '../../styles';
-import { useNotificationsContext } from '../../utils';
 
 export const Notifications: React.FC = () => {
     const { notification, toggleNotification } = useNotificationsContext();

@@ -1,6 +1,7 @@
 import { Avatar, Box, MenuItem, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -10,9 +11,9 @@ import { PaginatedUserObjectType, UserObjectType, UsersDocument } from '../../..
 import { FilterLayout, FormSubmitSection, NotFoundBox, PaginatedTable, SelectField } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { getPaginationQuery, mediaURL, useFilters, withAuthSync } from '../../utils';
+import { withApolloSSR, withAuthSync } from '../../lib';
+import { I18nProps, SkolePageContext } from '../../types';
+import { getPaginationQuery, mediaURL, useFilters } from '../../utils';
 
 interface FilterUsersFormValues {
     username: string;
@@ -23,7 +24,7 @@ interface Props extends I18nProps {
     users?: PaginatedUserObjectType;
 }
 
-const UsersPage: I18nPage<Props> = ({ users }) => {
+const UsersPage: NextPage<Props> = ({ users }) => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const userObjects = R.propOr([], 'objects', users) as UserObjectType[];
@@ -139,16 +140,16 @@ const UsersPage: I18nPage<Props> = ({ users }) => {
     return <FilterLayout {...layoutProps} />;
 };
 
-UsersPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    const { query, apolloClient } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { query, apolloClient } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['users']) };
 
     try {
         const { data } = await apolloClient.query({ query: UsersDocument, variables: query });
-        return { ...data, ...nameSpaces };
+        return { props: { ...data, ...namespaces } };
     } catch {
-        return nameSpaces;
+        return { props: { ...namespaces } };
     }
-};
+});
 
-export default withApollo(withAuthSync(UsersPage));
+export default withAuthSync(UsersPage);

@@ -2,17 +2,19 @@ import { Box, Divider } from '@material-ui/core';
 import { AddCircleOutlineOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
+import { useAuthContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApollo } from '../lib';
-import { I18nPage, I18nProps } from '../types';
-import { useAlerts, useAuth, useForm, useLanguageSelector } from '../utils';
+import { clientLogin } from '../lib';
+import { I18nProps } from '../types';
+import { useAlerts, useForm, useLanguageSelector } from '../utils';
 
 const initialValues = {
     username: '',
@@ -25,13 +27,13 @@ export interface LoginFormValues {
     password: string;
 }
 
-const LoginPage: I18nPage = () => {
+const LoginPage: NextPage<I18nProps> = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<LoginFormValues>();
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
     const { renderLanguageButton } = useLanguageSelector();
-    const { login: loginUser } = useAuth();
+    const { setUser } = useAuthContext();
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
@@ -43,15 +45,14 @@ const LoginPage: I18nPage = () => {
             if (!!login.errors) {
                 handleMutationErrors(login.errors);
             } else if (!!login.token && !!login.user) {
-                const { token, user } = login;
                 const { next } = query;
-
-                loginUser(token, user as UserObjectType);
+                clientLogin(login.token);
                 resetForm();
+                setUser(login.user as UserObjectType);
 
                 if (!!next) {
                     Router.push(next as string);
-                } else if (user) {
+                } else {
                     Router.push('/');
                 }
             }
@@ -126,8 +127,8 @@ const LoginPage: I18nPage = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-LoginPage.getInitialProps = (): I18nProps => ({
-    namespacesRequired: includeDefaultNamespaces(['login']),
+export const getServerSideProps: GetServerSideProps = async () => ({
+    props: { namespacesRequired: includeDefaultNamespaces(['login']) },
 });
 
-export default withApollo(LoginPage);
+export default LoginPage;

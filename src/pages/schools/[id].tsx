@@ -10,9 +10,11 @@ import {
     Typography,
 } from '@material-ui/core';
 import { FlagOutlined, HouseOutlined, LocationCityOutlined, SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
+import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
+import { withApolloSSR, withAuthSync } from 'src/lib';
 
 import {
     CourseObjectType,
@@ -31,15 +33,14 @@ import {
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import { useFrontendPagination, useOptions, withAuthSync } from '../../utils';
+import { I18nProps, SkolePageContext } from '../../types';
+import { useFrontendPagination, useOptions } from '../../utils';
 
 interface Props extends I18nProps {
     school?: SchoolObjectType;
 }
 
-const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
+const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { t } = useTranslation();
     const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions(t('school:optionsHeader'));
 
@@ -221,9 +222,9 @@ const SchoolDetailPage: I18nPage<Props> = ({ school }) => {
     }
 };
 
-SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    const { apolloClient, query } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { apolloClient, query } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 
     try {
         const { data } = await apolloClient.query({
@@ -231,10 +232,10 @@ SchoolDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
             variables: query,
         });
 
-        return { ...data, ...nameSpaces };
+        return { props: { ...data, ...namespaces } };
     } catch {
-        return nameSpaces;
+        return { props: { ...namespaces } };
     }
-};
+});
 
-export default withApollo(withAuthSync(SchoolDetailPage));
+export default withAuthSync(SchoolDetailPage);

@@ -7,6 +7,7 @@ export const nextI18next = new NextI18Next({
     otherLanguages: ['fi', 'sv'],
     localePath: typeof window === 'undefined' ? 'public/locales' : 'locales',
     fallbackLng: 'en',
+    strictMode: false,
 });
 
 nextI18next.i18n.languages = ['en', 'fi', 'sv'];
@@ -15,6 +16,7 @@ export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
     const defaultNamespaces = [
         'common',
         '_error',
+        '404',
         'languages',
         'forms',
         'validation',

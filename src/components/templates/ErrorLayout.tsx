@@ -5,13 +5,13 @@ import { useTranslation } from '../../i18n';
 import { StyledCard } from '../shared';
 import { MainLayout } from './MainLayout';
 
-export const NotFoundLayout: React.FC = () => {
+export const ErrorLayout: React.FC = () => {
     const { t } = useTranslation();
 
     const layoutProps = {
         seoProps: {
-            title: t('404:title'),
-            description: t('404:description'),
+            title: t('_error:title'),
+            description: t('_error:description'),
         },
         topNavbarProps: {
             dynamicBackUrl: true,
@@ -21,7 +21,7 @@ export const NotFoundLayout: React.FC = () => {
     return (
         <MainLayout {...layoutProps}>
             <StyledCard>
-                <CardHeader title={t('404:header')} />
+                <CardHeader title={t('_error:header')} />
             </StyledCard>
         </MainLayout>
     );

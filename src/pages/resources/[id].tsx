@@ -7,7 +7,6 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
-    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -25,9 +24,10 @@ import {
     TitleOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
+import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -47,38 +47,38 @@ import {
     StarButton,
     StyledBottomNavigation,
     StyledList,
+    StyledTooltip,
     TabLayout,
     TextLink,
 } from '../../components';
+import { useAuthContext, useNotificationsContext, usePDFViewerContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
+import { withApolloSSR, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';
-import { I18nPage, I18nProps, SkoleContext } from '../../types';
-import {
-    mediaURL,
-    useNotificationsContext,
-    useOptions,
-    usePDFViewerContext,
-    useVotes,
-    withAuthSync,
-} from '../../utils';
-import { useAuth } from '../../utils';
+import { I18nProps, SkolePageContext } from '../../types';
+import { mediaURL, useOptions, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
 }
 
-const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
+const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user } = useAuth();
-    const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
+    const { user } = useAuthContext();
+    const { pages, currentPage, prevPage, nextPage, setCenter, setPages, setCurrentPage } = usePDFViewerContext();
 
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
         t('resource:optionsHeader'),
     );
+    useEffect(() => {
+        return (): void => {
+            setPages([]);
+            setCurrentPage(0);
+        };
+    }, []);
 
     if (!!resource) {
         const resourceTitle = R.propOr('-', 'title', resource) as string;
@@ -265,24 +265,23 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
         );
 
         const renderUpVoteButton = (
-            <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}>
-                <span>
-                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                        <KeyboardArrowUpOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
+            <StyledTooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}>
+                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                    <KeyboardArrowUpOutlined />
+                </IconButton>
+            </StyledTooltip>
         );
 
         const renderDownVoteButton = (
-            <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}>
-                <span>
-                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                        <KeyboardArrowDownOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
+            <StyledTooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}>
+                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                    <KeyboardArrowDownOutlined />
+                </IconButton>
+            </StyledTooltip>
         );
+
+        const pagesExist = pages.length > 0;
+        const totalPages = !!pagesExist ? pages.length : 1;
 
         const renderExtraResourceActions = (
             <StyledExtraResourceActions container alignItems="center">
@@ -292,30 +291,28 @@ const ResourceDetailPage: I18nPage<Props> = ({ resource }) => {
                     {renderDownVoteButton}
                 </Grid>
                 <Grid item xs={4} container alignItems="center" id="page-controls">
-                    <Tooltip title={t('common:previousPageTooltip')}>
-                        <span>
-                            <IconButton disabled={currentPage === 0} onClick={prevPage} size="small">
-                                <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
-                    <Typography variant="body2">{currentPage + 1 + ' / ' + pages.length}</Typography>
-                    <Tooltip title={t('common:nextPageTooltip')}>
-                        <span>
-                            <IconButton disabled={currentPage === pages.length - 1} onClick={nextPage} size="small">
-                                <NavigateNextOutlined
-                                    color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'}
-                                />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
+                    <StyledTooltip title={t('common:previousPageTooltip')}>
+                        <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
+                            <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
+                        </IconButton>
+                    </StyledTooltip>
+                    <Typography variant="body2">{currentPage + 1 + ' / ' + totalPages}</Typography>
+                    <StyledTooltip title={t('common:nextPageTooltip')}>
+                        <IconButton
+                            disabled={!pagesExist || currentPage === pages.length - 1}
+                            onClick={nextPage}
+                            size="small"
+                        >
+                            <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
+                        </IconButton>
+                    </StyledTooltip>
                 </Grid>
                 <Grid item xs={4} container justify="flex-end">
-                    <Tooltip title={t('resource:fullscreenTooltip')}>
-                        <IconButton onClick={setCenter} size="small">
+                    <StyledTooltip title={t('resource:fullscreenTooltip')}>
+                        <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
                             <FullscreenOutlined />
                         </IconButton>
-                    </Tooltip>
+                    </StyledTooltip>
                 </Grid>
             </StyledExtraResourceActions>
         );
@@ -393,20 +390,20 @@ const StyledExtraResourceActions = styled(Grid)`
     }
 `;
 
-ResourceDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<I18nProps> => {
-    const { query } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { query, apolloClient } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
     try {
-        const { data } = await ctx.apolloClient.query({
+        const { data } = await apolloClient.query({
             query: ResourceDetailDocument,
             variables: query,
         });
 
-        return { ...data, ...nameSpaces };
+        return { props: { ...data, ...namespaces } };
     } catch {
-        return nameSpaces;
+        return { props: { ...namespaces } };
     }
-};
+});
 
-export default withApollo(withAuthSync(ResourceDetailPage));
+export default withAuthSync(ResourceDetailPage);

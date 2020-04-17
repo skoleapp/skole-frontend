@@ -73,7 +73,6 @@
     "commentOptionsTooltip": "Näytä kommentin vaihtoehdot.",
     "commentAttachmentTooltip": "Näytä kommentin kuvaliite.",
     "commentRepliesTooltip": "Tällä kommentilla on {{replyCount}} vastausta.",
-    "closeMenuTooltip": "Sulje valikko.",
     "attachFileTooltip": "Lisää kuvaliite.",
     "clearAttachmentTooltip": "Poista liite.",
     "sendMessageTooltip": "Lähetä viesti.",

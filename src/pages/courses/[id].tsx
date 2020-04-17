@@ -8,7 +8,6 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
-    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -23,6 +22,7 @@ import {
     VpnKeyOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 
@@ -47,24 +47,25 @@ import {
     StarButton,
     StyledBottomNavigation,
     StyledList,
+    StyledTooltip,
     TabLayout,
     TextLink,
 } from '../../components';
+import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
-import { withApollo } from '../../lib';
-import { I18nPage, I18nProps, MuiColor, SkoleContext } from '../../types';
-import { useFrontendPagination, useNotificationsContext, useOptions, useVotes, withAuthSync } from '../../utils';
-import { useAuth } from '../../utils';
+import { withApolloSSR, withAuthSync } from '../../lib';
+import { I18nProps, MuiColor, SkolePageContext } from '../../types';
+import { useFrontendPagination, useOptions, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
 }
 
-const CourseDetailPage: I18nPage<Props> = ({ course }) => {
+const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user } = useAuth();
+    const { user } = useAuthContext();
 
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
         t('course:optionsHeader'),
@@ -146,23 +147,19 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         };
 
         const renderUpVoteButton = (
-            <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
-                <span>
-                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                        <KeyboardArrowUpOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
+            <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                    <KeyboardArrowUpOutlined />
+                </IconButton>
+            </StyledTooltip>
         );
 
         const renderDownVoteButton = (
-            <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
-                <span>
-                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                        <KeyboardArrowDownOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
+            <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                    <KeyboardArrowDownOutlined />
+                </IconButton>
+            </StyledTooltip>
         );
 
         const renderInfo = (
@@ -288,13 +285,13 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
         );
 
         const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-            <Tooltip title={t('course:uploadResourceTooltip')}>
+            <StyledTooltip title={t('course:uploadResourceTooltip')}>
                 <IconButtonLink
                     href={{ pathname: '/upload-resource', query: { course: courseId } }}
                     color={color}
                     icon={CloudUploadOutlined}
                 />
-            </Tooltip>
+            </StyledTooltip>
         );
 
         const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
@@ -366,9 +363,9 @@ const CourseDetailPage: I18nPage<Props> = ({ course }) => {
     }
 };
 
-CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => {
-    const { apolloClient, query } = ctx;
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { apolloClient, query } = ctx as SkolePageContext;
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 
     try {
         const { data } = await apolloClient.query({
@@ -376,10 +373,10 @@ CourseDetailPage.getInitialProps = async (ctx: SkoleContext): Promise<Props> => 
             variables: query,
         });
 
-        return { ...data, ...nameSpaces };
+        return { props: { ...data, ...namespaces } };
     } catch {
-        return nameSpaces;
+        return { props: { ...namespaces } };
     }
-};
+});
 
-export default withApollo(withAuthSync(CourseDetailPage));
+export default withAuthSync(CourseDetailPage);

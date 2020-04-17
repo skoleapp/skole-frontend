@@ -1,16 +1,19 @@
+import { useApolloClient } from '@apollo/react-hooks';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
+import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
-import { useTranslation } from '../../i18n';
-import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
-import { I18nPage, I18nProps } from '../../types';
-import { useAuth, useForm, withAuthSync } from '../../utils';
+import { useAuthContext } from '../../context';
+import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
+import { withAuthSync } from '../../lib';
+import { clientLogout } from '../../lib';
+import { I18nProps } from '../../types';
+import { useForm } from '../../utils';
 
 const initialValues = {
     password: '',
@@ -21,19 +24,23 @@ export interface DeleteAccountFormValues {
     password: string;
 }
 
-export const DeleteAccountPage: I18nPage = () => {
+export const DeleteAccountPage: NextPage<I18nProps> = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<DeleteAccountFormValues>();
     const { t } = useTranslation();
     const confirm = useConfirm();
-    const { logout } = useAuth();
+    const apolloClient = useApolloClient();
+    const { setUser } = useAuthContext();
 
-    const onCompleted = ({ deleteUser }: DeleteAccountMutation): void => {
+    const onCompleted = async ({ deleteUser }: DeleteAccountMutation): Promise<void> => {
         if (deleteUser) {
             if (deleteUser.errors) {
                 handleMutationErrors(deleteUser.errors);
             } else {
                 resetForm();
-                logout();
+                clientLogout();
+                setUser(null);
+                await apolloClient.resetStore();
+                Router.push('/login');
             }
         }
     };
@@ -92,8 +99,10 @@ export const DeleteAccountPage: I18nPage = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-DeleteAccountPage.getInitialProps = (): I18nProps => ({
-    namespacesRequired: includeDefaultNamespaces(['delete-account']),
+export const getServerSideProps: GetServerSideProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['delete-account']),
+    },
 });
 
-export default withApollo(withAuthSync(DeleteAccountPage));
+export default withAuthSync(DeleteAccountPage);

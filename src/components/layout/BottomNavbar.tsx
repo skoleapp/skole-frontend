@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
+import { useAuthContext } from 'src/context';
 
 import { Router } from '../../i18n';
-import { mediaURL, useAuth } from '../../utils';
+import { mediaURL } from '../../utils';
 import { StyledBottomNavigation } from '../shared';
 
 export const BottomNavbar: React.FC = () => {
-    const { user } = useAuth();
+    const { user } = useAuthContext();
     const avatarThumb = R.propOr('', 'avatar', user) as string;
     const { pathname, query } = useRouter();
     const home = '/';

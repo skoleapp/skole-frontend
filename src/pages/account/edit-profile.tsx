@@ -1,16 +1,18 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
-import { AvatarField, FormSubmitSection, LoadingBox, NotFoundLayout, SettingsLayout } from '../../components';
+import { AvatarField, FormSubmitSection, NotFoundLayout, SettingsLayout } from '../../components';
+import { useAuthContext, useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApollo } from '../../lib';
-import { I18nPage, I18nProps } from '../../types';
-import { useAuth, useForm, useNotificationsContext, withAuthSync } from '../../utils';
+import { withAuthSync } from '../../lib';
+import { I18nProps } from '../../types';
+import { useForm } from '../../utils';
 
 export interface UpdateProfileFormValues {
     username: string;
@@ -20,8 +22,8 @@ export interface UpdateProfileFormValues {
     avatar: string;
 }
 
-const EditProfilePage: I18nPage = () => {
-    const { user, loading, updateUser: _updateUser } = useAuth();
+const EditProfilePage: NextPage<I18nProps> = () => {
+    const { user, setUser } = useAuthContext();
     const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -32,7 +34,7 @@ const EditProfilePage: I18nPage = () => {
                 handleMutationErrors(updateUser.errors);
             } else {
                 toggleNotification(t('notifications:profileUpdated'));
-                _updateUser(updateUser.user as UserObjectType);
+                setUser(updateUser.user as UserObjectType);
             }
         }
     };
@@ -126,20 +128,22 @@ const EditProfilePage: I18nPage = () => {
             header: t('edit-profile:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent: loading ? <LoadingBox /> : renderCardContent,
+        renderCardContent: renderCardContent,
         desktopHeader: t('edit-profile:header'),
         formLayout: true,
     };
 
-    if (!!user || loading) {
+    if (!!user) {
         return <SettingsLayout {...layoutProps} />;
     } else {
         return <NotFoundLayout />;
     }
 };
 
-EditProfilePage.getInitialProps = (): I18nProps => ({
-    namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
+export const getServerSideProps: GetServerSideProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
+    },
 });
 
-export default withApollo(withAuthSync(EditProfilePage));
+export default withAuthSync(EditProfilePage);
