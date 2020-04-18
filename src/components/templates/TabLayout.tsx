@@ -17,7 +17,7 @@ interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderRepo
 interface Props extends LayoutProps {
     headerDesktop?: string;
     subheaderDesktop?: JSX.Element;
-    headerSecondary: string;
+    headerSecondary?: string;
     tabLabelLeft: string;
     tabLabelRight: string;
     renderInfo: JSX.Element;
@@ -31,8 +31,8 @@ interface Props extends LayoutProps {
     headerLeftMobile?: JSX.Element;
     headerActionDesktop?: JSX.Element;
     extraDesktopActions?: JSX.Element;
-    singleColumn?: boolean;
     optionProps: OptionProps;
+    responsive?: boolean;
 }
 
 export const TabLayout: React.FC<Props> = ({
@@ -46,7 +46,6 @@ export const TabLayout: React.FC<Props> = ({
     infoHeader,
     renderLeftContent,
     renderRightContent,
-    singleColumn,
     optionProps,
     headerLeftMobile,
     headerActionDesktop,
@@ -54,6 +53,7 @@ export const TabLayout: React.FC<Props> = ({
     customBottomNavbar,
     customBottomNavbarSecondary,
     topNavbarProps,
+    responsive,
     ...props
 }) => {
     const { tabValue, handleTabChange } = useTabs();
@@ -72,7 +72,7 @@ export const TabLayout: React.FC<Props> = ({
 
     const renderHeaderActions = (color: MuiColor): JSX.Element => (
         <Box display="flex">
-            <Box className="md-up">{headerActionDesktop}</Box>
+            {!isMobile && headerActionDesktop}
             <StyledTooltip title={infoTooltip || ''}>
                 <IconButton onClick={handleOpenInfo} color={color}>
                     <InfoOutlined />
@@ -108,7 +108,7 @@ export const TabLayout: React.FC<Props> = ({
         </Box>
     );
 
-    const renderMobileContent = isMobile && (
+    const renderMobileContent = isMobile && !responsive && (
         <StyledCard>
             {renderTabs}
             {renderLeftTab}
@@ -116,43 +116,41 @@ export const TabLayout: React.FC<Props> = ({
         </StyledCard>
     );
 
-    const renderDesktopContent = !isMobile && (
-        <>
-            {singleColumn ? (
+    const renderDesktopContent = !isMobile && !responsive && (
+        <Grid id="container" container>
+            <Grid item container xs={12} md={7} lg={8}>
                 <StyledCard>
-                    <CardHeader title={headerDesktop} action={renderDesktopHeaderActions} />
+                    <CardHeader
+                        id="main-header"
+                        title={headerDesktop}
+                        subheader={subheaderDesktop}
+                        action={renderDesktopHeaderActions}
+                    />
+                    <CardContent>{extraDesktopActions}</CardContent>
                     <Divider />
-                    {renderInfo}
-                    <Divider />
-                    {renderTabs}
-                    {renderLeftTab}
-                    {renderRightTab}
+                    {renderLeftContent}
                 </StyledCard>
-            ) : (
-                <Grid id="container" container>
-                    <Grid item container xs={12} md={7} lg={8}>
-                        <StyledCard>
-                            <CardHeader
-                                id="main-header"
-                                title={headerDesktop}
-                                subheader={subheaderDesktop}
-                                action={renderDesktopHeaderActions}
-                            />
-                            <CardContent>{extraDesktopActions}</CardContent>
-                            <Divider />
-                            {renderLeftContent}
-                        </StyledCard>
-                    </Grid>
-                    <Grid item container xs={12} md={5} lg={4}>
-                        <StyledCard marginLeft>
-                            <CardHeader title={headerSecondary} />
-                            <Divider />
-                            {renderRightContent}
-                        </StyledCard>
-                    </Grid>
-                </Grid>
+            </Grid>
+            <Grid item container xs={12} md={5} lg={4}>
+                <StyledCard marginLeft>
+                    <CardHeader title={headerSecondary} />
+                    <Divider />
+                    {renderRightContent}
+                </StyledCard>
+            </Grid>
+        </Grid>
+    );
+
+    // Responsive template for both mobile and desktop
+    const renderResponsiveContent = !!responsive && (
+        <StyledCard>
+            {!isMobile && (
+                <CardHeader title={headerDesktop} action={renderDesktopHeaderActions} className="border-bottom" />
             )}
-        </>
+            {renderTabs}
+            {renderLeftTab}
+            {renderRightTab}
+        </StyledCard>
     );
 
     const renderInfoDrawer = (
@@ -184,6 +182,7 @@ export const TabLayout: React.FC<Props> = ({
             <MainLayout {...layoutProps}>
                 {renderMobileContent}
                 {renderDesktopContent}
+                {renderResponsiveContent}
                 {renderInfoDrawer}
                 {renderOptionsDrawer}
             </MainLayout>

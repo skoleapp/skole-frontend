@@ -10,6 +10,7 @@ export const StyledTable = styled(Paper)`
     .MuiTableContainer-root {
         flex-grow: 1;
         display: flex;
+        position: relative;
 
         .MuiTable-root {
             flex-grow: 1;
@@ -19,6 +20,13 @@ export const StyledTable = styled(Paper)`
             .MuiTableHead-root {
                 display: flex;
 
+                @media only screen and (min-width: ${breakpoints.MD}) {
+                    position: absolute;
+                    top: 0;
+                    height: 2.5rem;
+                    width: 100%;
+                }
+
                 .MuiTableRow-root {
                     flex-grow: 1;
                     display: flex;
@@ -26,6 +34,8 @@ export const StyledTable = styled(Paper)`
                     .MuiTableCell-root {
                         flex-grow: 1;
                         padding: 0.5rem;
+                        display: flex;
+                        align-items: center;
                     }
                 }
             }
@@ -35,8 +45,17 @@ export const StyledTable = styled(Paper)`
                 display: flex;
                 flex-direction: column;
 
+                @media only screen and (min-width: ${breakpoints.MD}) {
+                    position: absolute;
+                    top: 2.5rem;
+                    bottom: 4rem;
+                    width: 100%;
+                    overflow-y: scroll;
+                }
+
                 .MuiTableRow-root {
                     display: flex;
+                    min-height: 2.5rem;
 
                     &:hover {
                         background-color: var(--hover-opacity);
@@ -66,11 +85,25 @@ export const StyledTable = styled(Paper)`
                 justify-content: center;
                 border-top: var(--border);
 
-                .MuiTablePagination-root {
-                    .MuiTablePagination-toolbar {
-                        @media only screen and (max-width: ${breakpoints.MD}) {
-                            flex-direction: column;
-                            padding: 0.5rem;
+                @media only screen and (min-width: ${breakpoints.MD}) {
+                    position: absolute;
+                    bottom: 0;
+                    height: 4rem;
+                    width: 100%;
+                }
+
+                .MuiTableRow-footer {
+                    display: flex;
+                    align-items: center;
+
+                    .MuiTablePagination-root {
+                        border-bottom: none;
+
+                        .MuiTablePagination-toolbar {
+                            @media only screen and (max-width: ${breakpoints.MD}) {
+                                flex-direction: column;
+                                padding: 0.5rem;
+                            }
                         }
                     }
                 }

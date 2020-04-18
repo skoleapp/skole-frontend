@@ -2,5 +2,8 @@
     "description": "This is a school page.",
     "noSubjects": "This school has no subjects...",
     "noCourses": "This school has no courses...",
-    "optionsHeader": "School Options"
+    "optionsHeader": "School Options",
+    "infoHeader": "School Information",
+    "infoTooltip": "View school information.",
+    "optionsTooltip": "View school options."
 }
