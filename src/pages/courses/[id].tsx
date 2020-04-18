@@ -265,7 +265,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
                 paginationProps={resourcePaginationProps}
             />
         ) : (
-            <NotFoundBox text={'course:noResources'} />
+            <NotFoundBox text={t('course:noResources')} />
         );
 
         const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;

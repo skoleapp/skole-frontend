@@ -2,6 +2,7 @@ import { Box, Container } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 
+import { useDeviceContext } from '../../context';
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
 import {
@@ -23,20 +24,24 @@ export const MainLayout: React.FC<LayoutProps> = ({
     customBottomNavbar,
     containerProps,
     children,
-}) => (
-    <StyledMainLayout disableBottomMargin={disableBottomNavbar && !customBottomNavbar}>
-        <Head {...seoProps} />
-        <TopNavbar {...topNavbarProps} />
-        <Container {...containerProps}>{children}</Container>
-        {customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />)}
-        <Footer />
-        <Notifications />
-        <AttachmentViewer />
-        <CommentThreadModal />
-        <SettingsModal />
-        <LanguageSelectorModal />
-    </StyledMainLayout>
-);
+}) => {
+    const isMobile = useDeviceContext();
+
+    return (
+        <StyledMainLayout disableBottomMargin={disableBottomNavbar && !customBottomNavbar}>
+            <Head {...seoProps} />
+            <TopNavbar {...topNavbarProps} />
+            <Container {...containerProps}>{children}</Container>
+            {customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />)}
+            {!isMobile && <Footer />}
+            <Notifications />
+            <AttachmentViewer />
+            <CommentThreadModal />
+            <SettingsModal />
+            <LanguageSelectorModal />
+        </StyledMainLayout>
+    );
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledMainLayout = styled(({ disableBottomMargin, customBottomNavbar, ...other }) => <Box {...other} />)`

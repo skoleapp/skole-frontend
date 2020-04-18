@@ -118,7 +118,7 @@ export interface UseForm<T> {
 
 export interface UseFilters<T> extends UseForm<T> {
     submitButtonText: string;
-    renderDesktopClearFiltersButton?: JSX.Element;
+    renderDesktopClearFiltersButton?: JSX.Element | false;
     handleSubmit: (filteredValues: T, actions: FormikActions<T>) => Promise<void>;
     handleClearFilters: (e: SyntheticEvent) => Promise<void>;
     drawerProps: UseDrawer;

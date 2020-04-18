@@ -20,6 +20,7 @@ import {
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';
+import { useDeviceContext } from 'src/context';
 
 import { Router, useTranslation } from '../../i18n';
 import { CustomTablePaginationProps, TextColor, TextVariant } from '../../types';
@@ -42,23 +43,23 @@ const CustomTableHead = ({
     titleLeft,
     titleLeftDesktop = titleLeft,
     titleRight,
-}: CustomTableHeadProps): JSX.Element => (
-    <TableHead>
-        <TableRow>
-            <TableCell>
-                <Typography className="md-down" {...titleProps}>
-                    {titleLeft}
-                </Typography>
-                <Typography className="md-up" {...titleProps}>
-                    {titleLeftDesktop}
-                </Typography>
-            </TableCell>
-            <TableCell align="right">
-                <Typography {...titleProps}>{titleRight}</Typography>
-            </TableCell>
-        </TableRow>
-    </TableHead>
-);
+}: CustomTableHeadProps): JSX.Element => {
+    const isMobile = useDeviceContext();
+
+    return (
+        <TableHead>
+            <TableRow>
+                <TableCell>
+                    {isMobile && <Typography {...titleProps}>{titleLeft}</Typography>}
+                    {!isMobile && <Typography {...titleProps}>{titleLeftDesktop}</Typography>}
+                </TableCell>
+                <TableCell align="right">
+                    <Typography {...titleProps}>{titleRight}</Typography>
+                </TableCell>
+            </TableRow>
+        </TableHead>
+    );
+};
 
 interface CustomTablePaginationActionsProps {
     count: number;
