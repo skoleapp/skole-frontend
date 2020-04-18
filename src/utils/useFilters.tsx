@@ -6,6 +6,7 @@ import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 
+import { useDeviceContext } from '../context';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { UseFilters } from '../types';
@@ -19,6 +20,7 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
     const { onClose: handleCloseDrawer } = drawerProps;
     const { pathname, query } = useRouter();
     const submitButtonText = t('common:apply');
+    const isMobile = useDeviceContext();
 
     // Pick non-empty values and reload the page with new query params.
     const handleSubmit = async (filteredValues: {}, actions: FormikActions<T>): Promise<void> => {
@@ -40,8 +42,8 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
         handleCloseDrawer(e);
     };
 
-    const renderDesktopClearFiltersButton = (
-        <FormControl className="md-up" fullWidth>
+    const renderDesktopClearFiltersButton = !isMobile && (
+        <FormControl fullWidth>
             <Button
                 onClick={handleClearFilters}
                 variant="outlined"

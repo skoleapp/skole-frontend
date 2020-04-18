@@ -2,5 +2,8 @@
     "description": "Tämä on koulusivu.",
     "noSubjects": "Tällä koululla ei ole oppiaineita...",
     "noCourses": "Tällä koululla ei ole kursseja...",
-    "optionsHeader": "Koulun vaihtoehdot"
+    "optionsHeader": "Koulun vaihtoehdot",
+    "infoHeader": "Koulun tiedot",
+    "infoTooltip": "Näytä koulun tiedot.",
+    "optionsTooltip": "Näytä koulun vaihtoehdot."
 }

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
-import { useNotificationsContext } from '../../context';
+import { useDeviceContext, useNotificationsContext } from '../../context';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
 import { StyledTooltip } from '../shared';
@@ -45,6 +45,7 @@ export const CreateCommentForm: React.FC<Props> = ({
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const { toggleNotification } = useNotificationsContext();
+    const isMobile = useDeviceContext();
 
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);
@@ -133,28 +134,64 @@ export const CreateCommentForm: React.FC<Props> = ({
         </StyledTooltip>
     );
 
-    const renderDesktopInputArea = ({ values }: T): JSX.Element => (
-        <Box className="md-up" id="desktop-input-area" display="flex" alignItems="center">
-            <Box marginRight="0.5rem">
+    const renderAttachmentButtons = isMobile && (
+        <Box display="flex">
+            <Box>
                 <input
                     value=""
-                    id={`attachment-desktop-${formKey}`}
+                    id={`camera-attachment-${formKey}`}
                     accept=".png, .jpg, .jpeg"
                     type="file"
+                    capture="camera"
                     onChange={handleAttachmentChange}
                 />
-                <label htmlFor={`attachment-desktop-${formKey}`}>
+                <label htmlFor={`camera-attachment-${formKey}`}>
                     <StyledTooltip title={t('common:attachFileTooltip')}>
-                        <IconButton component="span" size="small">
-                            <AttachFileOutlined />
-                        </IconButton>
+                        <Fab component="span" size="small">
+                            <CameraAltOutlined />
+                        </Fab>
                     </StyledTooltip>
                 </label>
             </Box>
-            <TextField onKeyDown={handleKeyDown} value={!values.attachment ? values.text : ''} {...textFieldProps} />
-            <Box marginLeft="0.5rem">{renderSubmitButton}</Box>
+            {!!attachment && (
+                <Box marginLeft="0.5rem">
+                    <StyledTooltip title={t('common:clearAttachmentTooltip')}>
+                        <Fab onClick={handleClearAttachment} size="small">
+                            <ClearOutlined />
+                        </Fab>
+                    </StyledTooltip>
+                </Box>
+            )}
         </Box>
     );
+
+    const renderDesktopInputArea = ({ values }: T): false | JSX.Element =>
+        !isMobile && (
+            <Box id="desktop-input-area" display="flex" alignItems="center">
+                <Box marginRight="0.5rem">
+                    <input
+                        value=""
+                        id={`attachment-desktop-${formKey}`}
+                        accept=".png, .jpg, .jpeg"
+                        type="file"
+                        onChange={handleAttachmentChange}
+                    />
+                    <label htmlFor={`attachment-desktop-${formKey}`}>
+                        <StyledTooltip title={t('common:attachFileTooltip')}>
+                            <IconButton component="span" size="small">
+                                <AttachFileOutlined />
+                            </IconButton>
+                        </StyledTooltip>
+                    </label>
+                </Box>
+                <TextField
+                    onKeyDown={handleKeyDown}
+                    value={!values.attachment ? values.text : ''}
+                    {...textFieldProps}
+                />
+                <Box marginLeft="0.5rem">{renderSubmitButton}</Box>
+            </Box>
+        );
 
     const renderCreateCommentModal = ({ values }: T): JSX.Element => (
         <StyledModal open={createCommentModalOpen} onClose={handleCloseCreateCommentModal} autoHeight>
@@ -168,34 +205,7 @@ export const CreateCommentForm: React.FC<Props> = ({
                     <StyledAttachmentImage>
                         {!!attachment && <Image src={attachment as string} />}
                     </StyledAttachmentImage>
-                    <Box display="flex" className="md-down">
-                        <Box>
-                            <input
-                                value=""
-                                id={`camera-attachment-${formKey}`}
-                                accept=".png, .jpg, .jpeg"
-                                type="file"
-                                capture="camera"
-                                onChange={handleAttachmentChange}
-                            />
-                            <label htmlFor={`camera-attachment-${formKey}`}>
-                                <StyledTooltip title={t('common:attachFileTooltip')}>
-                                    <Fab component="span" size="small">
-                                        <CameraAltOutlined />
-                                    </Fab>
-                                </StyledTooltip>
-                            </label>
-                        </Box>
-                        {!!attachment && (
-                            <Box marginLeft="0.5rem">
-                                <StyledTooltip title={t('common:clearAttachmentTooltip')}>
-                                    <Fab onClick={handleClearAttachment} size="small">
-                                        <ClearOutlined />
-                                    </Fab>
-                                </StyledTooltip>
-                            </Box>
-                        )}
-                    </Box>
+                    {renderAttachmentButtons}
                     <TextField onKeyDown={handleKeyDown} value={values.text} {...textFieldProps} />
                 </Paper>
             </Fade>

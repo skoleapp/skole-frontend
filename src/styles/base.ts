@@ -1,11 +1,10 @@
 import { css } from 'styled-components';
 
-import { breakpoints } from './breakpoints';
 import { colors } from './colors';
 
 export const base = css`
     :root {
-        /* Colors */
+        // Colors
         --primary: ${colors.primary};
         --secondary: ${colors.secondary};
 
@@ -32,57 +31,7 @@ export const base = css`
 
     html,
     body {
-        .sm-down {
-            @media only screen and (min-width: ${breakpoints.SM}) {
-                display: none !important;
-            }
-        }
-
-        .sm-up {
-            @media only screen and (max-width: ${breakpoints.SM}) {
-                display: none !important;
-            }
-        }
-
-        .md-down {
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                display: none !important;
-            }
-        }
-
-        .md-up {
-            @media only screen and (max-width: ${breakpoints.MD}) {
-                display: none !important;
-            }
-        }
-
-        .border-bottom {
-            border-bottom: var(--border);
-        }
-
-        .border-top {
-            border-top: var(--border);
-        }
-
-        .main-avatar {
-            height: 8rem;
-            width: 8rem;
-            margin: 1rem;
-        }
-
-        .avatar-thumbnail {
-            height: 1.5rem;
-            width: 1.5rem;
-        }
-
-        .MuiFormControl-root {
-            margin-top: 0.75rem;
-        }
-
-        input[type='submit'],
-        input[type='file'] {
-            display: none;
-        }
+        // MUI overrides
 
         .MuiLink-root {
             cursor: pointer;
@@ -119,6 +68,36 @@ export const base = css`
 
         .MuiDrawer-paperAnchorBottom {
             min-height: 100%;
+        }
+
+        // Custom classes
+
+        .border-bottom {
+            border-bottom: var(--border);
+        }
+
+        .border-top {
+            border-top: var(--border);
+        }
+
+        .main-avatar {
+            height: 8rem;
+            width: 8rem;
+            margin: 1rem;
+        }
+
+        .avatar-thumbnail {
+            height: 1.5rem;
+            width: 1.5rem;
+        }
+
+        .MuiFormControl-root {
+            margin-top: 0.75rem;
+        }
+
+        input[type='submit'],
+        input[type='file'] {
+            display: none;
         }
     }
 `;

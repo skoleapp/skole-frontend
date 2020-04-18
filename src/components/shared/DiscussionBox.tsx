@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
+import { useDeviceContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { DiscussionBoxProps } from '../../types';
@@ -27,6 +28,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     const toggleCreateCommentModal = (val: boolean): void => setCreateCommentModalOpen(val);
     const openCommentModal = (): void => setCreateCommentModalOpen(true);
     const { t } = useTranslation();
+    const isMobile = useDeviceContext();
 
     const appendComments = (comment: CommentObjectType): void => {
         setComments([...comments, comment]);
@@ -60,6 +62,17 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
         </>
     );
 
+    const renderReplyButton = !!topComment && isMobile && (
+        <Box marginTop="auto">
+            <Divider />
+            <Box padding="0.5rem">
+                <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
+                    {t('common:reply')}
+                </Button>
+            </Box>
+        </Box>
+    );
+
     const renderMessageArea = (
         <Box className="message-area">
             {renderTopComment}
@@ -70,27 +83,18 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
                       </Box>
                   ))
                 : !topComment && <NotFoundBox text={t('common:noComments')} />}
-            {!!topComment && (
-                <Box className="md-down" marginTop="auto">
-                    <Divider />
-                    <Box padding="0.5rem">
-                        <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
-                            {t('common:reply')}
-                        </Button>
-                    </Box>
-                </Box>
-            )}
+            {renderReplyButton}
         </Box>
     );
 
-    const renderInputArea = (
-        <Box className="input-area md-up">
+    const renderDesktopInputArea = !isMobile && (
+        <Box className="input-area">
             <CreateCommentForm {...createCommentFormProps} />
         </Box>
     );
 
-    const renderMobileCreateCommentButton = !topComment && (
-        <Fab className="md-down" id="create-comment-button" color="primary" onClick={openCommentModal}>
+    const renderMobileCreateCommentButton = !topComment && isMobile && (
+        <Fab id="create-comment-button" color="primary" onClick={openCommentModal}>
             <AddOutlined />
         </Fab>
     );
@@ -99,7 +103,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
         <StyledDiscussionBox topComment={topComment}>
             <Box className="discussion-container">
                 {renderMessageArea}
-                {renderInputArea}
+                {renderDesktopInputArea}
                 {renderMobileCreateCommentButton}
             </Box>
         </StyledDiscussionBox>

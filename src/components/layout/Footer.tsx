@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
     const { renderLanguageButton } = useLanguageSelector();
 
     return (
-        <StyledFooter className="md-up" container>
+        <StyledFooter container>
             <Grid item xs={12} container>
                 <Grid item xs={4} container direction="column" alignItems="center">
                     <Typography variant="subtitle2" color="secondary" gutterBottom>

@@ -1,8 +1,9 @@
 import { Box, CardContent, CardHeader, Grid, Typography } from '@material-ui/core';
 import React from 'react';
-import { useTranslation } from 'src/i18n';
 import styled from 'styled-components';
 
+import { useDeviceContext } from '../../context';
+import { useTranslation } from '../../i18n';
 import { LayoutProps } from '../../types';
 import { useSettings } from '../../utils';
 import { SettingsButton, StyledCard } from '../shared';
@@ -29,6 +30,7 @@ export const SettingsLayout: React.FC<Props> = ({
 }) => {
     const { renderSettingsCardContent } = useSettings({ modal: false });
     const { t } = useTranslation();
+    const isMobile = useDeviceContext();
 
     const customColSpan = {
         sm: 8,
@@ -45,19 +47,23 @@ export const SettingsLayout: React.FC<Props> = ({
         headerRight: renderHeaderRight,
     };
 
+    const renderSettingsColumn = !isMobile && (
+        <Grid item xs={12} md={4} lg={3}>
+            <StyledCard>
+                <CardHeader className="border-bottom" title={t('common:settings')} />
+                <CardContent className="container">{renderSettingsCardContent}</CardContent>
+            </StyledCard>
+        </Grid>
+    );
+
     return (
         <StyledSettingsLayout fullSize={fullSize}>
             <MainLayout {...props} topNavbarProps={customTopNavbarProps}>
                 <Grid container>
-                    <Grid className="md-up" item xs={12} md={4} lg={3}>
-                        <StyledCard>
-                            <CardHeader className="border-bottom" title={t('common:settings')} />
-                            <CardContent className="container">{renderSettingsCardContent}</CardContent>
-                        </StyledCard>
-                    </Grid>
+                    {renderSettingsColumn}
                     <Grid item xs={12} md={8} lg={9} container>
                         <StyledCard marginLeft>
-                            <CardHeader className="border-bottom md-up" title={desktopHeader} />
+                            {!isMobile && <CardHeader className="border-bottom" title={desktopHeader} />}
                             <Grid container justify="center">
                                 <Grid item container direction="column" xs={12} {...layoutProps}>
                                     <CardContent className="container">

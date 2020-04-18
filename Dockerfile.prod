@@ -1,9 +1,5 @@
 FROM node:12.13.0-alpine
 
-ARG API_URL
-ARG BACKEND_URL
-ARG CLOUDMERSIVE_API_KEY
-
 RUN mkdir /app
 WORKDIR /app
 

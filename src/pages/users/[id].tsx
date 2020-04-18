@@ -4,7 +4,7 @@ import moment from 'moment';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useAuthContext } from 'src/context';
+import { useAuthContext, useDeviceContext } from 'src/context';
 import styled from 'styled-components';
 
 import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
@@ -25,7 +25,7 @@ import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR } from '../../lib';
 import { withAuthSync } from '../../lib';
-import { breakpoints } from '../../styles';
+import { breakpoints, breakpointsNum } from '../../styles';
 import { ButtonColor, ButtonVariant, I18nProps, MaxWidth, SkolePageContext } from '../../types';
 import { mediaURL, useFrontendPagination, useTabs } from '../../utils';
 
@@ -50,6 +50,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
+    const isMobile = useDeviceContext(breakpointsNum.SM);
 
     const editProfileButtonProps = {
         href: '/account/edit-profile',
@@ -76,13 +77,17 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </Box>
     );
 
+    const renderMobileUserName = isMobile && (
+        <Box marginY="0.5rem">
+            <Typography variant="subtitle1">{username}</Typography>
+        </Box>
+    );
+
     const renderAvatarCardContent = (
         <CardContent>
             <Box display="flex" flexDirection="column">
                 <Avatar className="main-avatar" src={mediaURL(avatar)} />
-                <Box className="sm-up" marginY="0.5rem">
-                    <Typography variant="subtitle1">{username}</Typography>
-                </Box>
+                {renderMobileUserName}
             </Box>
         </CardContent>
     );
@@ -107,8 +112,8 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </Typography>
     );
 
-    const renderMobileTopSection = (
-        <Grid container alignItems="center" className="sm-down">
+    const renderMobileTopSection = isMobile && (
+        <Grid container alignItems="center">
             <Grid item container xs={4}>
                 {renderAvatarCardContent}
             </Grid>
@@ -149,8 +154,8 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </Grid>
     );
 
-    const renderDesktopTopSection = (
-        <Grid container alignItems="center" className="sm-up">
+    const renderDesktopTopSection = !isMobile && (
+        <Grid container alignItems="center">
             <Grid item container justify="center" xs={5}>
                 {renderAvatarCardContent}
             </Grid>
