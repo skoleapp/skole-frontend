@@ -1,12 +1,11 @@
 import { Avatar, BottomNavigationAction } from '@material-ui/core';
 import { CloudUploadOutlined, HomeOutlined, SearchOutlined, StarBorderOutlined } from '@material-ui/icons';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { useAuthContext } from 'src/context';
 
-import { Router } from '../../i18n';
+import { Link, Router } from '../../i18n';
 import { mediaURL } from '../../utils';
 import { StyledBottomNavigation } from '../shared';
 

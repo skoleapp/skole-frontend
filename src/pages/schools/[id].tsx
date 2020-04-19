@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core';
 import { FlagOutlined, HouseOutlined, LocationCityOutlined, SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
-import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { withApolloSSR, withAuthSync } from 'src/lib';
@@ -32,7 +31,7 @@ import {
     TextLink,
 } from '../../components';
 import { useTranslation } from '../../i18n';
-import { includeDefaultNamespaces } from '../../i18n';
+import { includeDefaultNamespaces, Link } from '../../i18n';
 import { I18nProps, SkolePageContext } from '../../types';
 import { useFrontendPagination, useOptions } from '../../utils';
 

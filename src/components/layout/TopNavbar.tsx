@@ -67,11 +67,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                             <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
                         </StyledTooltip>
                         <StyledTooltip title={t('common:profileTooltip')}>
-                            <Link href="/users/[id]" as={`/users/${user.id}`}>
-                                <IconButton color="secondary">
-                                    <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
-                                </IconButton>
-                            </Link>
+                            <span>
+                                <Link href="/users/[id]" as={`/users/${user.id}`}>
+                                    <IconButton color="secondary">
+                                        <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
+                                    </IconButton>
+                                </Link>
+                            </span>
                         </StyledTooltip>
                     </>
                 ) : (

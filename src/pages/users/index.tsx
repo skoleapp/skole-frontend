@@ -2,7 +2,6 @@ import { Avatar, Box, MenuItem, TableBody, TableCell, TableRow, Typography } fro
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -10,7 +9,7 @@ import React from 'react';
 import { PaginatedUserObjectType, UserObjectType, UsersDocument } from '../../../generated/graphql';
 import { FilterLayout, FormSubmitSection, NotFoundBox, PaginatedTable, SelectField } from '../../components';
 import { useTranslation } from '../../i18n';
-import { includeDefaultNamespaces } from '../../i18n';
+import { includeDefaultNamespaces, Link } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, SkolePageContext } from '../../types';
 import { getPaginationQuery, mediaURL, useFilters } from '../../utils';
