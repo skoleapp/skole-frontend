@@ -149,6 +149,11 @@ export interface CommentThread {
     toggleCommentThread: (payload: CommentObjectType | null) => void;
 }
 
+export interface CommentModal {
+    commentModalOpen: boolean;
+    toggleCommentModal: (payload: boolean) => void;
+}
+
 export interface LanguageSelector {
     languageSelectorOpen: boolean;
     toggleLanguageSelector: (payload: boolean) => void;
@@ -180,6 +185,7 @@ export interface SkoleContextType {
     auth: AuthContext;
     attachmentViewer: AttachmentViewer;
     commentThread: CommentThread;
+    commentModal: CommentModal;
     languageSelector: LanguageSelector;
     notifications: Notifications;
     settings: Settings;

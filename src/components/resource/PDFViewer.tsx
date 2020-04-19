@@ -26,7 +26,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     const [initialZoom, setInitialZoom] = useState(0);
     const [currentMap, setCurrentMap] = useState<olMap | null>(null);
     const ref = useRef<HTMLDivElement | null>(null);
-    const { pages, currentPage, effect, resetEffect, setPages, setCurrentPage } = usePDFViewerContext();
+    const { pages, currentPage, effect, resetEffect, setPages } = usePDFViewerContext();
 
     const handleTouchStart = (e: TouchEvent): void => {
         if (e.touches.length === 1) {
@@ -52,22 +52,8 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         }
     };
 
-    const nextPage = (): void => {
-        const numPages = pages.length;
-
-        if (currentPage < numPages - 1 && !!currentMap) {
-            const nextPage = currentPage + 1;
-            currentMap.setLayerGroup(pages[nextPage].layer);
-            setCurrentPage(nextPage);
-        }
-    };
-    const previousPage = (): void => {
-        if (currentPage !== 0 && !!currentMap) {
-            const previousPage = currentPage - 1;
-            currentMap.setLayerGroup(pages[previousPage].layer);
-            setCurrentPage(previousPage);
-        }
-    };
+    const nextPage = (): false | void => !!currentMap && currentMap.setLayerGroup(pages[currentPage].layer);
+    const previousPage = (): false | void => !!currentMap && currentMap.setLayerGroup(pages[currentPage].layer);
 
     const createPagesFromPDF = (url: string): PDFPromise<PDFPromise<PDFPromise<PDFPage>>[]> => {
         const Image = require('ol/layer/Image').default;

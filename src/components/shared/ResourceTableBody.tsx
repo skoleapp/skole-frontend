@@ -1,9 +1,9 @@
 import { TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 
 import { ResourceObjectType } from '../../../generated/graphql';
+import { Link } from '../../i18n';
 
 interface Props {
     resources: ResourceObjectType[];

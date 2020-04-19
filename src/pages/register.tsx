@@ -1,4 +1,4 @@
-import { Box, Divider, FormControl, Link, Typography } from '@material-ui/core';
+import { Box, Divider, FormControl, Typography } from '@material-ui/core';
 import { HowToRegOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -9,7 +9,7 @@ import React from 'react';
 import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation, UserObjectType } from '../../generated/graphql';
-import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useAuthContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
@@ -123,9 +123,9 @@ const RegisterPage: NextPage<I18nProps> = () => {
                     <FormControl fullWidth>
                         <Typography variant="body2" color="textSecondary">
                             {t('register:termsHelpText')}{' '}
-                            <Link href="/terms" target="_blank">
+                            <TextLink href="/terms" target="_blank">
                                 {t('common:terms')}
-                            </Link>
+                            </TextLink>
                             .
                         </Typography>
                     </FormControl>

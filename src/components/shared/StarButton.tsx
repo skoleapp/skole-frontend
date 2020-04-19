@@ -1,4 +1,4 @@
-import { IconButton } from '@material-ui/core';
+import { IconButton, TooltipProps } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useState } from 'react';
 import React from 'react';
@@ -15,6 +15,7 @@ interface Props {
     resource?: string;
     starredTooltip?: string;
     unstarredTooltip?: string;
+    tooltipProps?: Pick<TooltipProps, 'placement'>;
 }
 
 export const StarButton: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const StarButton: React.FC<Props> = ({
     resource,
     starredTooltip,
     unstarredTooltip,
+    tooltipProps,
 }) => {
     const [starred, setStarred] = useState(initialStarred);
     const { toggleNotification } = useNotificationsContext();
@@ -49,15 +51,17 @@ export const StarButton: React.FC<Props> = ({
     };
 
     return (
-        <StyledTooltip title={starred ? starredTooltip : unstarredTooltip || ''}>
-            <IconButton
-                onClick={handleStar}
-                color={starred ? 'primary' : ('default' as MuiColor)}
-                disabled={starSubmitting}
-                size="small"
-            >
-                <StarBorderOutlined />
-            </IconButton>
+        <StyledTooltip {...tooltipProps} title={starred ? starredTooltip : unstarredTooltip || ''}>
+            <span>
+                <IconButton
+                    onClick={handleStar}
+                    color={starred ? 'primary' : ('default' as MuiColor)}
+                    disabled={starSubmitting}
+                    size="small"
+                >
+                    <StarBorderOutlined />
+                </IconButton>
+            </span>
         </StyledTooltip>
     );
 };

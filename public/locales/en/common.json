@@ -69,7 +69,7 @@
     "commentOptionsHeader": "Comment Options",
     "ownCommentVoteTooltip": "You cannot vote your own comment.",
     "upvoteCommentTooltip": "Upvote comment.",
-    "downVoteCommentTooltip": "Downvote comment.",
+    "downvoteCommentTooltip": "Downvote comment.",
     "commentOptionsTooltip": "View comment options.",
     "commentAttachmentTooltip": "View comment attachment.",
     "commentRepliesTooltip": "This comment has {{replyCount}} replies.",
@@ -79,5 +79,14 @@
     "lastPageTooltip": "Go to last page.",
     "nextPageTooltip": "Go to next page.",
     "previousPageTooltip": "Go to previous page.",
-    "firstPageTooltip": "Go to first page."
+    "firstPageTooltip": "Go to first page.",
+    "date": "Date",
+    "courseNameNA": "Course N/A",
+    "courseCodeNA": "Course Code N/A",
+    "schoolNameNA": "School N/A",
+    "subjectNA": "Subject N/A",
+    "NA": "Not Available",
+    "titleNA": "Title N/A",
+    "dateNA": "Date N/A",
+    "resourceTypeNA": "Resource Type N/A"
 }

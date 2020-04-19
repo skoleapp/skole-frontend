@@ -33,6 +33,7 @@ import {
     DeleteCourseMutation,
     ResourceObjectType,
     useDeleteCourseMutation,
+    UserObjectType,
     VoteObjectType,
 } from '../../../generated/graphql';
 import {
@@ -66,297 +67,310 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuthContext();
+    const courseName = R.propOr(t('common:courseNameNA'), 'name', course) as string;
+    const courseCode = R.propOr(t('common:courseCodeNA'), 'code', course);
+    const subjectName = R.path(['subject', 'name'], course) as string;
+    const schoolName = R.path(['school', 'name'], course) as string;
+    const creatorId = R.pathOr('', ['user', 'id'], course) as string;
+    const courseId = R.propOr('', 'id', course) as string;
+    const initialScore = R.propOr(0, 'score', course) as number;
+    const resourceCount = R.propOr(t('common:NA'), 'resourceCount', course);
+    const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
+    const comments = R.propOr([], 'comments', course) as CommentObjectType[];
+    const isOwnCourse = creatorId === R.propOr('', 'id', user);
+    const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
+    const starred = !!R.propOr(undefined, 'starred', course);
+    const isOwner = !!user && user.id === creatorId;
+    const schoolId = R.pathOr('', ['school', 'id'], course);
+    const subjectId = R.path(['subject', 'id'], course) as boolean[];
+    const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
+    const created = R.propOr(undefined, 'created', course) as string;
+
+    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
 
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
         t('course:optionsHeader'),
     );
 
-    const getFullCourseName = (course: CourseObjectType): string => {
-        const { code, name } = course;
+    const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+        initialVote,
+        initialScore,
+        isOwner,
+    });
 
-        if (code && name) {
-            return `${course.name} ${course.code}`;
-        } else {
-            return course.name || 'N/A';
+    const subjectLink = {
+        pathname: '/search',
+        query: { subjectId },
+    };
+
+    const discussionBoxProps = {
+        comments,
+        target: { course: Number(courseId) },
+        formKey: 'course',
+    };
+
+    const deleteCourseError = (): void => {
+        toggleNotification(t('notifications:deleteCourseError'));
+    };
+
+    const deleteCourseCompleted = ({ deleteCourse }: DeleteCourseMutation): void => {
+        if (!!deleteCourse) {
+            if (!!deleteCourse.errors) {
+                deleteCourseError();
+            } else {
+                Router.push('/');
+                toggleNotification(t('notifications:courseDeleted'));
+            }
         }
     };
 
-    if (!!course) {
-        const courseName = R.propOr('-', 'name', course);
-        const courseCode = R.propOr('-', 'code', course);
-        const fullCourseName = getFullCourseName(course);
-        const subjectName = R.propOr('-', 'name', course.subject) as string;
-        const schoolName = R.propOr('-', 'name', course.school) as string;
-        const creatorId = R.propOr('', 'id', course.user) as string;
-        const courseId = R.propOr('', 'id', course) as string;
-        const initialScore = R.propOr(0, 'score', course) as number;
-        const resourceCount = R.propOr('-', 'resourceCount', course);
-        const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
-        const comments = R.propOr([], 'comments', course) as CommentObjectType[];
-        const isOwnCourse = creatorId === R.propOr('', 'id', user);
-        const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
-        const starred = !!course.starred;
-        const isOwner = !!user && user.id === creatorId;
-        const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
+    const [deleteCourse] = useDeleteCourseMutation({
+        onCompleted: deleteCourseCompleted,
+        onError: deleteCourseError,
+    });
 
-        const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
-            initialVote,
-            initialScore,
-            isOwner,
+    const handleDeleteCourse = (): void => {
+        confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') }).then(() => {
+            deleteCourse({ variables: { id: courseId } });
         });
+    };
 
-        const subjectLink = {
-            pathname: '/search',
-            query: { subjectId: R.propOr('', 'id', course.subject) as boolean[] },
-        };
+    const handleVoteClick = (status: number) => (): void => {
+        handleVote({ status: status, course: courseId });
+    };
 
-        const discussionBoxProps = {
-            comments,
-            target: { course: Number(course.id) },
-            formKey: 'course',
-        };
+    const renderSubjectLink =
+        !!subjectId && !!subjectName ? (
+            <TextLink href={subjectLink} color="primary">
+                {subjectName}
+            </TextLink>
+        ) : (
+            t('common:subjectNameNA')
+        );
 
-        const deleteCourseError = (): void => {
-            toggleNotification(t('notifications:deleteCourseError'));
-        };
+    const renderSchoolLink =
+        !!schoolId && !!schoolName ? (
+            <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
+                {schoolName}
+            </TextLink>
+        ) : (
+            t('common:schoolNameNA')
+        );
 
-        const deleteCourseCompleted = ({ deleteCourse }: DeleteCourseMutation): void => {
-            if (!!deleteCourse) {
-                if (!!deleteCourse.errors) {
-                    deleteCourseError();
-                } else {
-                    Router.push('/');
-                    toggleNotification(t('notifications:courseDeleted'));
-                }
-            }
-        };
+    const subheaderDesktop = (
+        <Typography variant="subtitle1">
+            {renderSubjectLink} - {renderSchoolLink}
+        </Typography>
+    );
 
-        const [deleteCourse] = useDeleteCourseMutation({
-            onCompleted: deleteCourseCompleted,
-            onError: deleteCourseError,
-        });
-
-        const handleDeleteCourse = (): void => {
-            confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') }).then(() => {
-                deleteCourse({ variables: { id: courseId } });
-            });
-        };
-
-        const handleVoteClick = (status: number) => (): void => {
-            handleVote({ status: status, course: courseId });
-        };
-
-        const renderUpVoteButton = (
-            <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+    const renderUpVoteButton = (
+        <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+            <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                     <KeyboardArrowUpOutlined />
                 </IconButton>
-            </StyledTooltip>
-        );
+            </span>
+        </StyledTooltip>
+    );
 
-        const renderDownVoteButton = (
-            <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+    const renderDownVoteButton = (
+        <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+            <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                     <KeyboardArrowDownOutlined />
                 </IconButton>
-            </StyledTooltip>
-        );
+            </span>
+        </StyledTooltip>
+    );
 
-        const renderInfo = (
-            <CardContent>
-                <StyledList>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <SchoolOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            <Typography variant="body2">
-                                {t('common:name')}: {courseName}
-                            </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <VpnKeyOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            <Typography variant="body2">
-                                {t('common:courseCode')}: {courseCode}
-                            </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <SubjectOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            <Typography variant="body2">
-                                {t('common:subject')}:{' '}
-                                <TextLink href={subjectLink} color="primary">
-                                    {subjectName}
-                                </TextLink>
-                            </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <HouseOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            <Typography variant="body2">
-                                {t('common:school')}:{' '}
-                                <TextLink
-                                    href="/schools/[id]"
-                                    as={`/schools/${R.propOr('-', 'id', course.school)}`}
-                                    color="primary"
-                                >
-                                    {schoolName}
-                                </TextLink>
-                            </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <ScoreOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            <Typography variant="body2">
-                                {t('common:score')}: {score}
-                            </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <CloudUploadOutlined />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText>
-                            <Typography variant="body2">
-                                {t('common:resources')}: {resourceCount}
-                            </Typography>
-                        </ListItemText>
-                    </ListItem>
-                    <CreatorListItem user={course.user} created={course.created} />
-                </StyledList>
-            </CardContent>
-        );
-
-        const resourceTableHeadProps = {
-            titleLeft: t('common:title'),
-            titleLeftDesktop: t('common:resources'),
-            titleRight: t('common:score'),
-        };
-
-        const renderResources = !!resources.length ? (
-            <FrontendPaginatedTable
-                tableHeadProps={resourceTableHeadProps}
-                renderTableBody={<ResourceTableBody resources={paginatedResources} />}
-                paginationProps={resourcePaginationProps}
-            />
-        ) : (
-            <NotFoundBox text={t('course:noResources')} />
-        );
-
-        const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
-
-        const renderOptions = (
+    const renderInfo = (
+        <CardContent>
             <StyledList>
-                {renderShareOption}
-                {renderReportOption}
-                {isOwnCourse && (
-                    <MenuItem>
-                        <ListItemText onClick={handleDeleteCourse}>
-                            <DeleteOutline /> {t('course:deleteCourse')}
-                        </ListItemText>
-                    </MenuItem>
-                )}
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <SchoolOutlined />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText>
+                        <Typography variant="body2">
+                            {t('common:name')}: {courseName}
+                        </Typography>
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <VpnKeyOutlined />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText>
+                        <Typography variant="body2">
+                            {t('common:courseCode')}: {courseCode}
+                        </Typography>
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <SubjectOutlined />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText>
+                        <Typography variant="body2">
+                            {t('common:subject')}: {renderSubjectLink}
+                        </Typography>
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <HouseOutlined />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText>
+                        <Typography variant="body2">
+                            {t('common:school')}: {renderSchoolLink}
+                        </Typography>
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <ScoreOutlined />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText>
+                        <Typography variant="body2">
+                            {t('common:score')}: {score}
+                        </Typography>
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <CloudUploadOutlined />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText>
+                        <Typography variant="body2">
+                            {t('common:resources')}: {resourceCount}
+                        </Typography>
+                    </ListItemText>
+                </ListItem>
+                <CreatorListItem user={courseUser} created={created} />
             </StyledList>
-        );
+        </CardContent>
+    );
 
-        const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-            <StyledTooltip title={t('course:uploadResourceTooltip')}>
-                <IconButtonLink
-                    href={{ pathname: '/upload-resource', query: { course: courseId } }}
-                    color={color}
-                    icon={CloudUploadOutlined}
-                />
-            </StyledTooltip>
-        );
+    const resourceTableHeadProps = {
+        titleLeft: t('common:title'),
+        titleLeftDesktop: t('common:resources'),
+        titleRight: t('common:score'),
+    };
 
-        const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
-        const uploadResourceButtonDesktop = renderUploadResourceButton('default');
+    const renderResources = !!resources.length ? (
+        <FrontendPaginatedTable
+            tableHeadProps={resourceTableHeadProps}
+            renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+            paginationProps={resourcePaginationProps}
+        />
+    ) : (
+        <NotFoundBox text={t('course:noResources')} />
+    );
 
-        const starButtonProps = {
-            starred,
-            course: courseId,
-            starredTooltip: t('course:starredTooltip'),
-            unstarredTooltip: t('course:unstarredTooltip'),
-        };
+    const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
 
-        const renderExtraDesktopActions = (
-            <Box display="flex" paddingLeft="0.5rem" paddingBottom="0.5rem">
-                <StarButton {...starButtonProps} />
-                {renderDownVoteButton}
-                {renderUpVoteButton}
-            </Box>
-        );
+    const renderOptions = (
+        <StyledList>
+            {renderShareOption}
+            {renderReportOption}
+            {isOwnCourse && (
+                <MenuItem>
+                    <ListItemText onClick={handleDeleteCourse}>
+                        <DeleteOutline /> {t('course:deleteCourse')}
+                    </ListItemText>
+                </MenuItem>
+            )}
+        </StyledList>
+    );
 
-        const renderCustomBottomNavbar = (
-            <StyledBottomNavigation>
-                <NavbarContainer>
-                    <Grid container>
-                        <Grid item xs={6} container justify="flex-start">
-                            <StarButton {...starButtonProps} />
-                        </Grid>
-                        <Grid item xs={6} container justify="flex-end">
-                            {renderUpVoteButton}
-                            {renderDownVoteButton}
-                        </Grid>
+    const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
+        <StyledTooltip title={t('course:uploadResourceTooltip')}>
+            <IconButtonLink
+                href={{ pathname: '/upload-resource', query: { course: courseId } }}
+                color={color}
+                icon={CloudUploadOutlined}
+            />
+        </StyledTooltip>
+    );
+
+    const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
+    const uploadResourceButtonDesktop = renderUploadResourceButton('default');
+
+    const starButtonProps = {
+        starred,
+        course: courseId,
+        starredTooltip: t('course:starredTooltip'),
+        unstarredTooltip: t('course:unstarredTooltip'),
+    };
+
+    const renderExtraDesktopActions = (
+        <Box display="flex">
+            <StarButton {...starButtonProps} />
+            {renderDownVoteButton}
+            {renderUpVoteButton}
+        </Box>
+    );
+
+    const renderCustomBottomNavbar = (
+        <StyledBottomNavigation>
+            <NavbarContainer>
+                <Grid container>
+                    <Grid item xs={6} container justify="flex-start">
+                        <StarButton {...starButtonProps} />
                     </Grid>
-                </NavbarContainer>
-            </StyledBottomNavigation>
-        );
+                    <Grid item xs={6} container justify="flex-end">
+                        {renderUpVoteButton}
+                        {renderDownVoteButton}
+                    </Grid>
+                </Grid>
+            </NavbarContainer>
+        </StyledBottomNavigation>
+    );
 
-        const layoutProps = {
-            seoProps: {
-                title: fullCourseName,
-                description: t('course:description'),
-            },
-            topNavbarProps: {
-                staticBackUrl: { href: '/search' },
-            },
-            headerDesktop: fullCourseName,
-            headerSecondary: t('common:discussion'),
-            renderInfo,
-            infoTooltip: t('course:infoTooltip'),
-            infoHeader: t('course:infoHeader'),
-            optionProps: {
-                renderOptions,
-                renderOptionsHeader,
-                drawerProps,
-                optionsTooltip: t('course:optionsTooltip'),
-            },
-            tabLabelLeft: `${t('common:resources')} (${resourceCount})`,
-            tabLabelRight: `${t('common:discussion')} (${comments.length})`,
-            renderLeftContent: renderResources,
-            renderRightContent: renderDiscussionBox,
-            headerLeftMobile: uploadResourceButtonMobile,
-            headerActionDesktop: uploadResourceButtonDesktop,
-            customBottomNavbar: renderCustomBottomNavbar,
-            extraDesktopActions: renderExtraDesktopActions,
-        };
+    const layoutProps = {
+        seoProps: {
+            title: courseName,
+            description: t('course:description'),
+        },
+        topNavbarProps: {
+            staticBackUrl: { href: '/search' },
+        },
+        headerDesktop: courseName,
+        subheaderDesktop,
+        headerSecondary: t('common:discussion'),
+        subheaderSecondary: t('course:discussionSubheader'),
+        renderInfo,
+        infoTooltip: t('course:infoTooltip'),
+        infoHeader: t('course:infoHeader'),
+        optionProps: {
+            renderOptions,
+            renderOptionsHeader,
+            drawerProps,
+            optionsTooltip: t('course:optionsTooltip'),
+        },
+        tabLabelLeft: `${t('common:resources')} (${resourceCount})`,
+        tabLabelRight: `${t('common:discussion')} (${comments.length})`,
+        renderLeftContent: renderResources,
+        renderRightContent: renderDiscussionBox,
+        headerLeftMobile: uploadResourceButtonMobile,
+        headerActionDesktop: uploadResourceButtonDesktop,
+        customBottomNavbar: renderCustomBottomNavbar,
+        extraDesktopActions: renderExtraDesktopActions,
+    };
 
+    if (!!course) {
         return <TabLayout {...layoutProps} />;
     } else {
         return <NotFoundLayout />;

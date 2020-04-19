@@ -86,32 +86,40 @@ const CustomTablePaginationActions = ({
     return (
         <Box display="flex" margin="0.5rem">
             <StyledTooltip title={t('common:firstPageTooltip')}>
-                <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
-                    <FirstPageOutlined />
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
+                        <FirstPageOutlined />
+                    </IconButton>
+                </span>
             </StyledTooltip>
             <StyledTooltip title={t('common:previousPageTooltip')}>
-                <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
-                    <KeyboardArrowLeftOutlined />
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
+                        <KeyboardArrowLeftOutlined />
+                    </IconButton>
+                </span>
             </StyledTooltip>
             <StyledTooltip title={t('common:nextPageTooltip')}>
-                <IconButton
-                    onClick={handleNextButtonClick}
-                    disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                    size="small"
-                >
-                    <KeyboardArrowRightOutlined />
-                </IconButton>
+                <span>
+                    <IconButton
+                        onClick={handleNextButtonClick}
+                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                        size="small"
+                    >
+                        <KeyboardArrowRightOutlined />
+                    </IconButton>
+                </span>
             </StyledTooltip>
             <StyledTooltip title={t('common:lastPageTooltip')}>
-                <IconButton
-                    onClick={handleLastPageButtonClick}
-                    disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                    size="small"
-                >
-                    <LastPageOutlined />
-                </IconButton>
+                <span>
+                    <IconButton
+                        onClick={handleLastPageButtonClick}
+                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                        size="small"
+                    >
+                        <LastPageOutlined />
+                    </IconButton>
+                </span>
             </StyledTooltip>
         </Box>
     );
