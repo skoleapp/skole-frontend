@@ -124,8 +124,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
 
     const resetEffect = (): void => setPdf({ ...pdf, effect: '' });
     const setCenter = (): void => setPdf({ ...pdf, effect: 'SET_CENTER' });
-    const prevPage = (): void => setPdf({ ...pdf, effect: 'PREV_PAGE' });
-    const nextPage = (): void => setPdf({ ...pdf, effect: 'NEXT_PAGE' });
+    const prevPage = (): void => setPdf({ ...pdf, currentPage: pdf.currentPage - 1, effect: 'PREV_PAGE' });
+    const nextPage = (): void => setPdf({ ...pdf, currentPage: pdf.currentPage + 1, effect: 'NEXT_PAGE' });
     const setPages = (pages: PDFPage[]): void => setPdf({ ...pdf, pages });
     const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
 

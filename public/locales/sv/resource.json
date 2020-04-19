@@ -13,5 +13,6 @@
     "ownResourceVoteTooltip": "Du kan inte röstä på din egen resurs.",
     "fullscreenTooltip": "Visa helskärm.",
     "loadingResource": "Laddar resurs...",
-    "errorLoadingResource": "Fel vid inläsning av resurs."
+    "errorLoadingResource": "Fel vid inläsning av resurs.",
+    "discussionSubheader": "Här kan du ha allmän diskussion om resursen."
 }

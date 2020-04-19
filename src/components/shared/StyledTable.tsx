@@ -48,7 +48,7 @@ export const StyledTable = styled(Paper)`
                 @media only screen and (min-width: ${breakpoints.MD}) {
                     position: absolute;
                     top: 2.5rem;
-                    bottom: 4rem;
+                    bottom: 4.5rem;
                     width: 100%;
                     overflow-y: scroll;
                 }
@@ -88,7 +88,7 @@ export const StyledTable = styled(Paper)`
                 @media only screen and (min-width: ${breakpoints.MD}) {
                     position: absolute;
                     bottom: 0;
-                    height: 4rem;
+                    height: 4.5rem;
                     width: 100%;
                 }
 

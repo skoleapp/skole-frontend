@@ -69,7 +69,7 @@
     "commentOptionsHeader": "Kommentin vaihtoehdot",
     "ownCommentVoteTooltip": "Et voi äänestää omia kommenttejasi.",
     "upvoteCommentTooltip": "Anna tälle kommentille ylös-ääni.",
-    "downVoteCommentTooltip": "Anna tälle kommentille alas-ääni.",
+    "downvoteCommentTooltip": "Anna tälle kommentille alas-ääni.",
     "commentOptionsTooltip": "Näytä kommentin vaihtoehdot.",
     "commentAttachmentTooltip": "Näytä kommentin kuvaliite.",
     "commentRepliesTooltip": "Tällä kommentilla on {{replyCount}} vastausta.",
@@ -79,5 +79,14 @@
     "lastPageTooltip": "Siirry viimeiselle sivulle.",
     "nextPageTooltip": "Siirry seuraavalle sivulle.",
     "previousPageTooltip": "Siirry edelliselle sivulle.",
-    "firstPageTooltip": "Siirry ensimmäiselle sivulle."
+    "firstPageTooltip": "Siirry ensimmäiselle sivulle.",
+    "date": "Päivämäärä",
+    "courseNameNA": "Kurssi N/A",
+    "courseCodeNA": "Kurssikoodi N/A",
+    "schoolNameNA": "Koulu N/A",
+    "subjectNA": "Oppiaine N/A",
+    "NA": "Ei saatavilla",
+    "titleNA": "Otsikko N/A",
+    "dateNA": "Päivämäärä N/A",
+    "resourceTypeNA": "Resurssityyppi N/A"
 }

@@ -141,7 +141,7 @@ const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other}
         .input-area {
             @media only screen and (min-width: ${breakpoints.MD}) {
                 border-top: var(--border);
-                padding: ${({ topComment }): string | false => (!!topComment ? '0.5rem 0 0 0' : '0.5rem 0 0.5rem 0')};
+                padding: ${({ topComment }): string | false => (!!topComment ? '0.5rem 0 0 0' : '0.5rem')};
             }
         }
 

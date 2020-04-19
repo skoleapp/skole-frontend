@@ -13,5 +13,6 @@
     "ownResourceVoteTooltip": "You cannot vote your own resource.",
     "fullscreenTooltip": "Center to screen.",
     "loadingResource": "Loading resource...",
-    "errorLoadingResource": "Error loading resource."
+    "errorLoadingResource": "Error loading resource.",
+    "discussionSubheader": "Here you can discuss generally about the resource."
 }

@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 
-export const StyledTooltip = styled(props => <Tooltip {...props} PopperProps={{ className: 'md-up' }} />)`
-    .md-up {
+export const StyledTooltip = styled(props => <Tooltip {...props} PopperProps={{ className: 'styled-tooltip' }} />)`
+    .styled-tooltip {
         @media only screen and (max-width: ${breakpoints.MD}) {
             display: none !important;
         }

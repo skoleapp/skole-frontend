@@ -13,5 +13,6 @@
     "ownResourceVoteTooltip": "Et voi äänestää omaa resurssiasi.",
     "fullscreenTooltip": "Keskitä ruudulle.",
     "loadingResource": "Ladataan resurssia...",
-    "errorLoadingResource": "Virhe ladattaessa resurssia."
+    "errorLoadingResource": "Virhe ladattaessa resurssia.",
+    "discussionSubheader": "Täällä voit käydä yleistä keskustelua resurssista."
 }
