@@ -169,9 +169,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         <StyledTooltip
                             title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}
                         >
-                            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                                <KeyboardArrowUpOutlined className="vote-button" />
-                            </IconButton>
+                            <span>
+                                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                                    <KeyboardArrowUpOutlined className="vote-button" />
+                                </IconButton>
+                            </span>
                         </StyledTooltip>
                         <Box>
                             <Typography variant="body2">{score}</Typography>
@@ -179,9 +181,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         <StyledTooltip
                             title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:downvoteCommentTooltip')}
                         >
-                            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                                <KeyboardArrowDownOutlined className="vote-button" />
-                            </IconButton>
+                            <span>
+                                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                                    <KeyboardArrowDownOutlined className="vote-button" />
+                                </IconButton>
+                            </span>
                         </StyledTooltip>
                     </Grid>
                 </Grid>

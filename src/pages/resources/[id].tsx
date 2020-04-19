@@ -266,17 +266,21 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 
         const renderUpVoteButton = (
             <StyledTooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}>
-                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                    <KeyboardArrowUpOutlined />
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                </span>
             </StyledTooltip>
         );
 
         const renderDownVoteButton = (
             <StyledTooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}>
-                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                    <KeyboardArrowDownOutlined />
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
+                </span>
             </StyledTooltip>
         );
 
@@ -292,26 +296,34 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                 </Grid>
                 <Grid item xs={4} container alignItems="center" id="page-controls">
                     <StyledTooltip title={t('common:previousPageTooltip')}>
-                        <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
-                            <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
-                        </IconButton>
+                        <span>
+                            <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
+                                <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
+                            </IconButton>
+                        </span>
                     </StyledTooltip>
                     <Typography variant="body2">{currentPage + 1 + ' / ' + totalPages}</Typography>
                     <StyledTooltip title={t('common:nextPageTooltip')}>
-                        <IconButton
-                            disabled={!pagesExist || currentPage === pages.length - 1}
-                            onClick={nextPage}
-                            size="small"
-                        >
-                            <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
-                        </IconButton>
+                        <span>
+                            <IconButton
+                                disabled={!pagesExist || currentPage === pages.length - 1}
+                                onClick={nextPage}
+                                size="small"
+                            >
+                                <NavigateNextOutlined
+                                    color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'}
+                                />
+                            </IconButton>
+                        </span>
                     </StyledTooltip>
                 </Grid>
                 <Grid item xs={4} container justify="flex-end">
                     <StyledTooltip title={t('resource:fullscreenTooltip')}>
-                        <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
-                            <FullscreenOutlined />
-                        </IconButton>
+                        <span>
+                            <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
+                                <FullscreenOutlined />
+                            </IconButton>
+                        </span>
                     </StyledTooltip>
                 </Grid>
             </StyledExtraResourceActions>

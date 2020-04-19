@@ -50,14 +50,16 @@ export const StarButton: React.FC<Props> = ({
 
     return (
         <StyledTooltip title={starred ? starredTooltip : unstarredTooltip || ''}>
-            <IconButton
-                onClick={handleStar}
-                color={starred ? 'primary' : ('default' as MuiColor)}
-                disabled={starSubmitting}
-                size="small"
-            >
-                <StarBorderOutlined />
-            </IconButton>
+            <span>
+                <IconButton
+                    onClick={handleStar}
+                    color={starred ? 'primary' : ('default' as MuiColor)}
+                    disabled={starSubmitting}
+                    size="small"
+                >
+                    <StarBorderOutlined />
+                </IconButton>
+            </span>
         </StyledTooltip>
     );
 };

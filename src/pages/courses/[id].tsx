@@ -148,17 +148,21 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
 
         const renderUpVoteButton = (
             <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
-                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                    <KeyboardArrowUpOutlined />
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                </span>
             </StyledTooltip>
         );
 
         const renderDownVoteButton = (
             <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
-                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                    <KeyboardArrowDownOutlined />
-                </IconButton>
+                <span>
+                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
+                </span>
             </StyledTooltip>
         );
 
