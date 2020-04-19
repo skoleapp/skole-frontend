@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
-import { useDeviceContext } from '../../context';
+import { useCommentModalContext, useDeviceContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { DiscussionBoxProps } from '../../types';
@@ -24,9 +24,8 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     const initialReplyCount = R.propOr('-', 'replyCount', topComment);
     const [replyCount, setReplyCount] = useState(initialReplyCount);
     const updateReplyCount = (): void => setReplyCount(comments.length);
-    const [createCommentModalOpen, setCreateCommentModalOpen] = useState(false);
-    const toggleCreateCommentModal = (val: boolean): void => setCreateCommentModalOpen(val);
-    const openCommentModal = (): void => setCreateCommentModalOpen(true);
+    const { toggleCommentModal } = useCommentModalContext();
+    const openCommentModal = (): void => toggleCommentModal(true);
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
 
@@ -45,8 +44,6 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     const createCommentFormProps = {
         target,
         appendComments,
-        createCommentModalOpen,
-        toggleCreateCommentModal,
         formKey,
     };
 
@@ -87,7 +84,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
         </Box>
     );
 
-    const renderDesktopInputArea = !isMobile && (
+    const renderInputArea = (
         <Box className="input-area">
             <CreateCommentForm {...createCommentFormProps} />
         </Box>
@@ -103,7 +100,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
         <StyledDiscussionBox topComment={topComment}>
             <Box className="discussion-container">
                 {renderMessageArea}
-                {renderDesktopInputArea}
+                {renderInputArea}
                 {renderMobileCreateCommentButton}
             </Box>
         </StyledDiscussionBox>
@@ -142,11 +139,9 @@ const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other}
         }
 
         .input-area {
-            padding: 0.5rem;
-            border-top: var(--border);
-
             @media only screen and (min-width: ${breakpoints.MD}) {
-                padding: ${({ topComment }): string | false => !!topComment && '0.5rem 0 0 0 !important'};
+                border-top: var(--border);
+                padding: ${({ topComment }): string | false => (!!topComment ? '0.5rem 0 0 0' : '0.5rem 0 0.5rem 0')};
             }
         }
 

@@ -6,6 +6,7 @@ import { breakpointsNum } from './styles';
 import {
     AttachmentViewer,
     AuthContext,
+    CommentModal,
     CommentThread,
     LanguageSelector,
     Notifications,
@@ -27,6 +28,10 @@ const SkolePageContext = createContext<SkoleContextType>({
     commentThread: {
         topComment: null,
         toggleCommentThread: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+    },
+    commentModal: {
+        commentModalOpen: false,
+        toggleCommentModal: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     languageSelector: {
         languageSelectorOpen: false,
@@ -58,6 +63,7 @@ const useSkoleContext = (): SkoleContextType => useContext(SkolePageContext);
 export const useAuthContext = (): AuthContext => useSkoleContext().auth;
 export const useAttachmentViewerContext = (): AttachmentViewer => useSkoleContext().attachmentViewer;
 export const useCommentThreadContext = (): CommentThread => useSkoleContext().commentThread;
+export const useCommentModalContext = (): CommentModal => useSkoleContext().commentModal;
 export const useLanguageSelectorContext = (): LanguageSelector => useSkoleContext().languageSelector;
 export const useNotificationsContext = (): Notifications => useSkoleContext().notifications;
 export const useSettingsContext = (): Settings => useSkoleContext().settings;
@@ -98,6 +104,9 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
     const toggleCommentThread = (payload: CommentObjectType | null): void => setTopComment(payload);
 
+    const [commentModalOpen, setCommentModalOpen] = useState(false);
+    const toggleCommentModal = (payload: boolean): void => setCommentModalOpen(payload);
+
     const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);
     const toggleLanguageSelector = (open: boolean): void => setLanguageSelectorOpen(open);
 
@@ -132,6 +141,10 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
         commentThread: {
             topComment,
             toggleCommentThread,
+        },
+        commentModal: {
+            commentModalOpen,
+            toggleCommentModal,
         },
         languageSelector: {
             languageSelectorOpen,

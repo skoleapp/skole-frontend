@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
-import { useDeviceContext, useNotificationsContext } from '../../context';
+import { useCommentModalContext, useDeviceContext, useNotificationsContext } from '../../context';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
 import { StyledTooltip } from '../shared';
@@ -18,8 +18,6 @@ import { StyledModal } from './StyledModal';
 interface Props {
     target: CommentTarget;
     appendComments: (comments: CommentObjectType) => void;
-    createCommentModalOpen: boolean;
-    toggleCreateCommentModal: (val: boolean) => void;
     formKey: string;
 }
 
@@ -34,22 +32,17 @@ interface CreateCommentFormValues {
 
 type T = FormikProps<CreateCommentFormValues>;
 
-export const CreateCommentForm: React.FC<Props> = ({
-    appendComments,
-    target,
-    createCommentModalOpen,
-    toggleCreateCommentModal,
-    formKey,
-}) => {
+export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, formKey }) => {
     const { t } = useTranslation();
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const { toggleNotification } = useNotificationsContext();
+    const { commentModalOpen, toggleCommentModal } = useCommentModalContext();
     const isMobile = useDeviceContext();
 
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);
-        toggleCreateCommentModal(false);
+        toggleCommentModal(false);
     };
 
     const onError = (): void => toggleNotification(t('notifications:messageError'));
@@ -76,7 +69,7 @@ export const CreateCommentForm: React.FC<Props> = ({
             });
 
             resetForm();
-            toggleCreateCommentModal(false);
+            toggleCommentModal(false);
         }
 
         setSubmitting(false);
@@ -95,7 +88,7 @@ export const CreateCommentForm: React.FC<Props> = ({
         reader.onloadend = (): void => {
             setFieldValue('attachment', attachment);
             setAttachment(reader.result);
-            toggleCreateCommentModal(true);
+            toggleCommentModal(true);
         };
     };
 
@@ -194,8 +187,8 @@ export const CreateCommentForm: React.FC<Props> = ({
         );
 
     const renderCreateCommentModal = ({ values }: T): JSX.Element => (
-        <StyledModal open={createCommentModalOpen} onClose={handleCloseCreateCommentModal} autoHeight>
-            <Fade in={createCommentModalOpen}>
+        <StyledModal open={commentModalOpen} onClose={handleCloseCreateCommentModal} autoHeight>
+            <Fade in={commentModalOpen}>
                 <Paper>
                     <ModalHeader
                         onCancel={handleCloseCreateCommentModal}
