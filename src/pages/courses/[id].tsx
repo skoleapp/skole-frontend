@@ -67,9 +67,8 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuthContext();
-    const courseName = R.propOr(t('common:courseNameNA'), 'name', course);
+    const courseName = R.propOr(t('common:courseNameNA'), 'name', course) as string;
     const courseCode = R.propOr(t('common:courseCodeNA'), 'code', course);
-    const fullCourseName = `${courseName} - ${courseCode}`;
     const subjectName = R.path(['subject', 'name'], course) as string;
     const schoolName = R.path(['school', 'name'], course) as string;
     const creatorId = R.pathOr('', ['user', 'id'], course) as string;
@@ -342,13 +341,13 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
 
     const layoutProps = {
         seoProps: {
-            title: fullCourseName,
+            title: courseName,
             description: t('course:description'),
         },
         topNavbarProps: {
             staticBackUrl: { href: '/search' },
         },
-        headerDesktop: fullCourseName,
+        headerDesktop: courseName,
         subheaderDesktop,
         headerSecondary: t('common:discussion'),
         subheaderSecondary: t('course:discussionSubheader'),
