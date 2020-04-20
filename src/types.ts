@@ -173,7 +173,6 @@ export interface PDFViewer {
     pages: PDFPage[];
     currentPage: number;
     effect: string;
-    resetEffect: () => void;
     setCenter: () => void;
     prevPage: () => void;
     nextPage: () => void;

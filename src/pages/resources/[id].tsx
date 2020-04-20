@@ -28,7 +28,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -70,7 +70,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuthContext();
-    const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
+    const { pages, currentPage, prevPage, nextPage, setCenter, setPages, setCurrentPage } = usePDFViewerContext();
     const resourceTitle = R.propOr(t('common:titleNA'), 'title', resource) as string;
     const resourceDate = R.propOr(t('common:dateNA'), 'date', resource) as string;
     const fullResourceTitle = `${resourceTitle} - ${resourceDate}`;
@@ -89,6 +89,13 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const isOwner = !!user && user.id === creatorId;
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
+
+    useEffect(() => {
+        return (): void => {
+            setPages([]);
+            setCurrentPage(0);
+        };
+    }, []);
 
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
         t('resource:optionsHeader'),

@@ -49,7 +49,6 @@ const SkolePageContext = createContext<SkoleContextType>({
         pages: [],
         currentPage: 0,
         effect: '',
-        resetEffect: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
         setCenter: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
         prevPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
         nextPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
@@ -122,10 +121,9 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
         effect: '',
     });
 
-    const resetEffect = (): void => setPdf({ ...pdf, effect: '' });
-    const setCenter = (): void => setPdf({ ...pdf, effect: 'SET_CENTER' });
-    const prevPage = (): void => setPdf({ ...pdf, currentPage: pdf.currentPage - 1, effect: 'PREV_PAGE' });
-    const nextPage = (): void => setPdf({ ...pdf, currentPage: pdf.currentPage + 1, effect: 'NEXT_PAGE' });
+    const setCenter = (): void => setPdf({ ...pdf, effect: 'SET_CENTER' + new Date().valueOf() });
+    const prevPage = (): void => setPdf({ ...pdf, effect: 'PREV_PAGE' + new Date().valueOf() });
+    const nextPage = (): void => setPdf({ ...pdf, effect: 'NEXT_PAGE' + new Date().valueOf() });
     const setPages = (pages: PDFPage[]): void => setPdf({ ...pdf, pages });
     const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
 
@@ -160,7 +158,6 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
         },
         pdfViewer: {
             ...pdf,
-            resetEffect,
             setCenter,
             prevPage,
             nextPage,

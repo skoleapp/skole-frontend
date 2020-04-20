@@ -26,7 +26,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     const [initialZoom, setInitialZoom] = useState(0);
     const [currentMap, setCurrentMap] = useState<olMap | null>(null);
     const ref = useRef<HTMLDivElement | null>(null);
-    const { pages, currentPage, effect, resetEffect, setPages } = usePDFViewerContext();
+    const { pages, currentPage, effect, setPages, setCurrentPage } = usePDFViewerContext();
 
     const handleTouchStart = (e: TouchEvent): void => {
         if (e.touches.length === 1) {
@@ -52,8 +52,20 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         }
     };
 
-    const nextPage = (): false | void => !!currentMap && currentMap.setLayerGroup(pages[currentPage].layer);
-    const previousPage = (): false | void => !!currentMap && currentMap.setLayerGroup(pages[currentPage].layer);
+    const nextPage = (): void => {
+        if (!!currentMap && currentPage < pages.length - 1) {
+            currentMap.setLayerGroup(pages[currentPage + 1].layer);
+            setCurrentPage(currentPage + 1);
+            setCenter();
+        }
+    };
+    const previousPage = (): void => {
+        if (!!currentMap && currentPage !== 0) {
+            currentMap.setLayerGroup(pages[currentPage - 1].layer);
+            setCurrentPage(currentPage - 1);
+            setCenter();
+        }
+    };
 
     const createPagesFromPDF = (url: string): PDFPromise<PDFPromise<PDFPromise<PDFPage>>[]> => {
         const Image = require('ol/layer/Image').default;
@@ -249,21 +261,12 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     }, []);
 
     useEffect(() => {
-        switch (effect) {
-            case 'SET_CENTER':
-                setCenter();
-                resetEffect();
-                break;
-            case 'PREV_PAGE':
-                previousPage();
-                resetEffect();
-                break;
-            case 'NEXT_PAGE':
-                nextPage();
-                resetEffect();
-                break;
-            default:
-                break;
+        if (effect.startsWith('NEXT_PAGE')) {
+            nextPage();
+        } else if (effect.startsWith('PREV_PAGE')) {
+            previousPage();
+        } else if (effect.startsWith('SET_CENTER')) {
+            setCenter();
         }
     }, [effect]);
 
