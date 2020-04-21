@@ -404,7 +404,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         extraDesktopActions: renderExtraResourceActions,
         renderInfo,
         infoTooltip: t('resource:infoTooltip'),
-        infoHeader: t('resource:infoHeader'),
         optionProps: {
             renderOptions,
             renderOptionsHeader,

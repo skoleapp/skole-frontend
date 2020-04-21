@@ -23,7 +23,6 @@ interface Props extends LayoutProps {
     tabLabelRight: string;
     renderInfo: JSX.Element;
     infoTooltip?: string;
-    infoHeader?: string;
     renderLeftContent: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
@@ -45,7 +44,6 @@ export const TabLayout: React.FC<Props> = ({
     tabLabelRight,
     renderInfo,
     infoTooltip,
-    infoHeader,
     renderLeftContent,
     renderRightContent,
     optionProps,
@@ -60,7 +58,7 @@ export const TabLayout: React.FC<Props> = ({
 }) => {
     const { tabValue, handleTabChange } = useTabs();
     const isMobile = useDeviceContext();
-    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(infoHeader);
+    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer();
 
     const {
         renderOptions,

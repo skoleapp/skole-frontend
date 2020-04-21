@@ -2,8 +2,6 @@
     "description": "Tämä on resurssi-sivu.",
     "deleteResource": "Poista resurssi",
     "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?",
-    "optionsHeader": "Resurssin vaihtoehdot",
-    "infoHeader": "Resurssin tiedot",
     "infoTooltip": "Näytä resurssin tiedot.",
     "optionsTooltip": "Näytä resurssin vaihtoehdot.",
     "unstarredTooltip": "Merkitse resurssi tähdellä.",

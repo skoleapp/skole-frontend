@@ -5,7 +5,7 @@ import { useDeviceContext } from '../context';
 import { UseDrawer } from '../types';
 import { useOpen } from './useOpen';
 
-export const useDrawer = (header?: string): UseDrawer => {
+export const useDrawer = (): UseDrawer => {
     const { open, handleOpen, handleClose } = useOpen();
     const isMobile = useDeviceContext();
 
@@ -19,7 +19,7 @@ export const useDrawer = (header?: string): UseDrawer => {
         handleClose();
     };
 
-    const renderHeader = <ModalHeader title={header} onCancel={handleCloseDrawer} />;
+    const renderHeader = <ModalHeader onCancel={handleCloseDrawer} />;
 
     return {
         open,

@@ -87,10 +87,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const created = R.propOr(undefined, 'created', course) as string;
 
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
-
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
-        t('course:optionsHeader'),
-    );
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -353,7 +350,6 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         subheaderSecondary: t('course:discussionSubheader'),
         renderInfo,
         infoTooltip: t('course:infoTooltip'),
-        infoHeader: t('course:infoHeader'),
         optionProps: {
             renderOptions,
             renderOptionsHeader,

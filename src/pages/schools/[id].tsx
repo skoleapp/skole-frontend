@@ -202,7 +202,6 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         tabLabelRight: `${t('common:courses')} (${courseCount})`,
         renderInfo,
         infoTooltip: t('school:infoTooltip'),
-        infoHeader: t('school:infoHeader'),
         optionProps: {
             renderOptions,
             renderOptionsHeader,

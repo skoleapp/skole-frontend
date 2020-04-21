@@ -11,8 +11,9 @@ import { Link } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { TopNavbarProps } from '../../types';
 import { mediaURL } from '../../utils';
-import { ButtonLink, Heading, IconButtonLink, StyledTooltip } from '../shared';
-import { Logo, TopNavbarSearchWidget } from '.';
+import { ButtonLink, IconButtonLink, StyledHeaderText, StyledTooltip } from '../shared';
+import { Logo } from './Logo';
+import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
     header,
@@ -50,7 +51,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {headerLeft}
             </Grid>
             <Grid item xs={dense ? 4 : 8} container justify="center">
-                {header ? <Heading text={header} /> : <Logo />}
+                {header ? <StyledHeaderText text={header} /> : <Logo />}
             </Grid>
             {!!headerRightSecondary && (
                 <Grid item xs={dense ? 2 : 1} container justify="flex-end">

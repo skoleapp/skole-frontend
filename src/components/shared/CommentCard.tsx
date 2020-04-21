@@ -68,7 +68,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         renderReportOption,
         renderOptionsHeader,
         drawerProps: { handleOpen: handleOpenOptions, ...drawerProps },
-    } = useOptions(t('common:commentOptionsHeader'));
+    } = useOptions();
 
     const { onClose: handleCloseOptions } = drawerProps;
     const { toggleNotification } = useNotificationsContext();

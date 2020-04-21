@@ -16,7 +16,7 @@ import { useForm } from './useForm';
 export const useFilters = <T extends {}>(): UseFilters<T> => {
     const { t } = useTranslation();
     const { resetForm, setSubmitting, ...other } = useForm<T>();
-    const drawerProps = useDrawer(t('common:advancedSearch'));
+    const drawerProps = useDrawer();
     const { onClose: handleCloseDrawer } = drawerProps;
     const { pathname, query } = useRouter();
     const submitButtonText = t('common:apply');
