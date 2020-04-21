@@ -15,11 +15,9 @@ export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) =
     <StyledModalHeader>
         <Grid container alignItems="center">
             <Grid item xs={2}>
-                {!!onCancel && (
-                    <IconButton onClick={onCancel} size="small">
-                        <CloseOutlined />
-                    </IconButton>
-                )}
+                <IconButton onClick={onCancel} size="small">
+                    <CloseOutlined />
+                </IconButton>
             </Grid>
             {!!title && (
                 <Grid item container xs={8} justify="center">

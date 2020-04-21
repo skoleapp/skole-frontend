@@ -33,6 +33,8 @@ export interface TopNavbarProps {
     };
     disableSearch?: boolean;
     headerRight?: JSX.Element;
+    headerRightSecondary?: JSX.Element;
+    headerRightSecondary?: JSX.Element;
     headerLeft?: JSX.Element;
 }
 

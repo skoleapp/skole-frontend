@@ -26,7 +26,6 @@ interface CreateCommentFormValues {
     attachment: File | null;
     course?: string;
     resource?: string;
-    resourcePart?: string;
     comment?: string;
 }
 

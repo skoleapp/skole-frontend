@@ -72,24 +72,32 @@ export const TabLayout: React.FC<Props> = ({
     const renderCustomBottomNavbar =
         tabValue === 0 ? customBottomNavbar : customBottomNavbarSecondary || customBottomNavbar;
 
-    const renderHeaderActions = (color: MuiColor): JSX.Element => (
+    const renderHeaderRight = (color: MuiColor): JSX.Element => (
+        <StyledTooltip title={optionsTooltip || ''}>
+            <IconButton onClick={handleOpenOptions} color={color}>
+                <MoreHorizOutlined />
+            </IconButton>
+        </StyledTooltip>
+    );
+
+    const renderHeaderRightSecondary = (color: MuiColor): JSX.Element => (
+        <StyledTooltip title={infoTooltip || ''}>
+            <IconButton onClick={handleOpenInfo} color={color}>
+                <InfoOutlined />
+            </IconButton>
+        </StyledTooltip>
+    );
+
+    const renderDesktopHeaderActions = (
         <Box display="flex">
             {!isMobile && headerActionDesktop}
-            <StyledTooltip title={infoTooltip || ''}>
-                <IconButton onClick={handleOpenInfo} color={color}>
-                    <InfoOutlined />
-                </IconButton>
-            </StyledTooltip>
-            <StyledTooltip title={optionsTooltip || ''}>
-                <IconButton onClick={handleOpenOptions} color={color}>
-                    <MoreHorizOutlined />
-                </IconButton>
-            </StyledTooltip>
+            {renderHeaderRightSecondary('default')}
+            {renderHeaderRight('default')}
         </Box>
     );
 
-    const renderMobileHeaderActions = renderHeaderActions('secondary');
-    const renderDesktopHeaderActions = renderHeaderActions('default');
+    const renderMobileHeaderRight = renderHeaderRight('secondary');
+    const renderMobileHeaderRightSecondary = renderHeaderRightSecondary('secondary');
 
     const renderTabs = (
         <StyledTabs value={tabValue} onChange={handleTabChange}>
@@ -173,7 +181,8 @@ export const TabLayout: React.FC<Props> = ({
         ...props,
         topNavbarProps: {
             ...topNavbarProps,
-            headerRight: renderMobileHeaderActions,
+            headerRight: renderMobileHeaderRight,
+            headerRightSecondary: renderMobileHeaderRightSecondary,
             headerLeft: headerLeftMobile,
         },
         customBottomNavbar: renderCustomBottomNavbar,
