@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
+import { AppBar, Avatar, Box, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
 import { ArrowBackOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
@@ -11,7 +11,7 @@ import { Link } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { TopNavbarProps } from '../../types';
 import { mediaURL } from '../../utils';
-import { ButtonLink, IconButtonLink, StyledHeaderText, StyledTooltip } from '../shared';
+import { ButtonLink, IconButtonLink, StyledHeaderText } from '../shared';
 import { Logo } from './Logo';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
@@ -71,10 +71,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
                     <>
-                        <StyledTooltip title={t('common:starredTooltip')}>
+                        <Tooltip title={t('common:starredTooltip')}>
                             <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
-                        </StyledTooltip>
-                        <StyledTooltip title={t('common:profileTooltip')}>
+                        </Tooltip>
+                        <Tooltip title={t('common:profileTooltip')}>
                             <span>
                                 <Link href="/users/[id]" as={`/users/${user.id}`}>
                                     <IconButton color="secondary">
@@ -82,7 +82,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                                     </IconButton>
                                 </Link>
                             </span>
-                        </StyledTooltip>
+                        </Tooltip>
                     </>
                 ) : (
                     <>

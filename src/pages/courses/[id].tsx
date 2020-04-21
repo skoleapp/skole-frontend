@@ -8,6 +8,7 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -48,7 +49,6 @@ import {
     StarButton,
     StyledBottomNavigation,
     StyledList,
-    StyledTooltip,
     TabLayout,
     TextLink,
 } from '../../components';
@@ -154,23 +154,23 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderUpVoteButton = (
-        <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+        <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                     <KeyboardArrowUpOutlined />
                 </IconButton>
             </span>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const renderDownVoteButton = (
-        <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+        <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                     <KeyboardArrowDownOutlined />
                 </IconButton>
             </span>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const renderInfo = (
@@ -286,13 +286,13 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-        <StyledTooltip title={t('course:uploadResourceTooltip')}>
+        <Tooltip title={t('course:uploadResourceTooltip')}>
             <IconButtonLink
                 href={{ pathname: '/upload-resource', query: { course: courseId } }}
                 color={color}
                 icon={CloudUploadOutlined}
             />
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const uploadResourceButtonMobile = renderUploadResourceButton('secondary');

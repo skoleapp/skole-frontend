@@ -1,4 +1,15 @@
-import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab, Typography } from '@material-ui/core';
+import {
+    Box,
+    CardContent,
+    CardHeader,
+    Divider,
+    Drawer,
+    Grid,
+    IconButton,
+    Tab,
+    Tooltip,
+    Typography,
+} from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
@@ -6,7 +17,7 @@ import styled from 'styled-components';
 import { useDeviceContext } from '../../context';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useDrawer, useTabs } from '../../utils';
-import { StyledCard, StyledTabs, StyledTooltip } from '../shared';
+import { StyledCard, StyledTabs } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
@@ -71,19 +82,19 @@ export const TabLayout: React.FC<Props> = ({
         tabValue === 0 ? customBottomNavbar : customBottomNavbarSecondary || customBottomNavbar;
 
     const renderHeaderRight = (color: MuiColor): JSX.Element => (
-        <StyledTooltip title={optionsTooltip || ''}>
+        <Tooltip title={optionsTooltip || ''}>
             <IconButton onClick={handleOpenOptions} color={color}>
                 <MoreHorizOutlined />
             </IconButton>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const renderHeaderRightSecondary = (color: MuiColor): JSX.Element => (
-        <StyledTooltip title={infoTooltip || ''}>
+        <Tooltip title={infoTooltip || ''}>
             <IconButton onClick={handleOpenInfo} color={color}>
                 <InfoOutlined />
             </IconButton>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const renderDesktopHeaderActions = (

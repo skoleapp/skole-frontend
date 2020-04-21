@@ -1,4 +1,4 @@
-import { Box, Fab, Fade, IconButton, OutlinedTextFieldProps, Paper, TextField } from '@material-ui/core';
+import { Box, Fab, Fade, IconButton, OutlinedTextFieldProps, Paper, TextField, Tooltip } from '@material-ui/core';
 import { AttachFileOutlined, CameraAltOutlined, ClearOutlined, SendOutlined } from '@material-ui/icons';
 import { Form, Formik, FormikProps } from 'formik';
 import Image from 'material-ui-image';
@@ -11,7 +11,6 @@ import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } fr
 import { useCommentModalContext, useDeviceContext, useNotificationsContext } from '../../context';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
-import { StyledTooltip } from '../shared';
 import { ModalHeader } from './ModalHeader';
 import { StyledModal } from './StyledModal';
 
@@ -119,11 +118,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
     };
 
     const renderSubmitButton = (
-        <StyledTooltip title={t('common:sendMessageTooltip')}>
+        <Tooltip title={t('common:sendMessageTooltip')}>
             <IconButton onClick={submitForm} color="primary" size="small">
                 <SendOutlined />
             </IconButton>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const renderAttachmentButtons = isMobile && (
@@ -138,20 +137,20 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
                     onChange={handleAttachmentChange}
                 />
                 <label htmlFor={`camera-attachment-${formKey}`}>
-                    <StyledTooltip title={t('common:attachFileTooltip')}>
+                    <Tooltip title={t('common:attachFileTooltip')}>
                         <Fab component="span" size="small">
                             <CameraAltOutlined />
                         </Fab>
-                    </StyledTooltip>
+                    </Tooltip>
                 </label>
             </Box>
             {!!attachment && (
                 <Box marginLeft="0.5rem">
-                    <StyledTooltip title={t('common:clearAttachmentTooltip')}>
+                    <Tooltip title={t('common:clearAttachmentTooltip')}>
                         <Fab onClick={handleClearAttachment} size="small">
                             <ClearOutlined />
                         </Fab>
-                    </StyledTooltip>
+                    </Tooltip>
                 </Box>
             )}
         </Box>
@@ -169,11 +168,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
                         onChange={handleAttachmentChange}
                     />
                     <label htmlFor={`attachment-desktop-${formKey}`}>
-                        <StyledTooltip title={t('common:attachFileTooltip')}>
+                        <Tooltip title={t('common:attachFileTooltip')}>
                             <IconButton component="span" size="small">
                                 <AttachFileOutlined />
                             </IconButton>
-                        </StyledTooltip>
+                        </Tooltip>
                     </label>
                 </Box>
                 <TextField

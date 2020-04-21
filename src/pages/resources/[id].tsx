@@ -50,7 +50,6 @@ import {
     StarButton,
     StyledBottomNavigation,
     StyledList,
-    StyledTooltip,
     TabLayout,
     TextLink,
 } from '../../components';
@@ -275,34 +274,27 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             resource={resourceId}
             starredTooltip={t('resource:starredTooltip')}
             unstarredTooltip={t('resource:unstarredTooltip')}
-            tooltipProps={{ placement: 'right' }}
         />
     );
 
     const renderUpVoteButton = (
-        <StyledTooltip
-            title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}
-            placement="right"
-        >
+        <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                     <KeyboardArrowUpOutlined />
                 </IconButton>
             </span>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const renderDownVoteButton = (
-        <StyledTooltip
-            title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}
-            placement="right"
-        >
+        <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                     <KeyboardArrowDownOutlined />
                 </IconButton>
             </span>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const pagesExist = pages.length > 0;

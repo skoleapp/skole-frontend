@@ -28,4 +28,3 @@ export { NavbarContainer } from './NavbarContainer';
 export { LoadingBox } from './LoadingBox';
 export { NotFoundBox } from './NotFoundBox';
 export { PaginatedTable, FrontendPaginatedTable } from './PaginatedTable';
-export { StyledTooltip } from './StyledTooltip';

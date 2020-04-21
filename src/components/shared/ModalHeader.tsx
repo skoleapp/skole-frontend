@@ -5,7 +5,6 @@ import { useTranslation } from 'src/i18n';
 import styled from 'styled-components';
 
 import { StyledHeaderText } from './StyledHeaderText';
-import { StyledTooltip } from './StyledTooltip';
 
 interface Props {
     title?: string;

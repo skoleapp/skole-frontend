@@ -8,6 +8,7 @@ import {
     IconButton,
     ListItemText,
     MenuItem,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -39,7 +40,6 @@ import {
 } from '../../context';
 import { useTranslation } from '../../i18n';
 import { mediaURL, useOptions, useVotes } from '../../utils';
-import { StyledTooltip } from '../shared';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
 interface Props {
@@ -166,19 +166,17 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         )}
                     </Grid>
                     <Grid item container xs={1} direction="column" justify="center" alignItems="center">
-                        <StyledTooltip
-                            title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}
-                        >
+                        <Tooltip title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}>
                             <span>
                                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                                     <KeyboardArrowUpOutlined className="vote-button" />
                                 </IconButton>
                             </span>
-                        </StyledTooltip>
+                        </Tooltip>
                         <Box>
                             <Typography variant="body2">{score}</Typography>
                         </Box>
-                        <StyledTooltip
+                        <Tooltip
                             title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:downvoteCommentTooltip')}
                         >
                             <span>
@@ -186,7 +184,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                                     <KeyboardArrowDownOutlined className="vote-button" />
                                 </IconButton>
                             </span>
-                        </StyledTooltip>
+                        </Tooltip>
                     </Grid>
                 </Grid>
                 <Grid container>
@@ -194,9 +192,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         <Box display="flex" alignItems="center" height="100%">
                             {!isThread && (
                                 <>
-                                    <StyledTooltip title={t('common:commentRepliesTooltip', { replyCount })}>
+                                    <Tooltip title={t('common:commentRepliesTooltip', { replyCount })}>
                                         <CommentOutlined className="message-icon" />
-                                    </StyledTooltip>
+                                    </Tooltip>
                                     <Box marginLeft="0.25rem">
                                         <Typography variant="body2">{replyCount}</Typography>
                                     </Box>
@@ -204,21 +202,21 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                             )}
                             {!!comment.attachment && !attachmentOnly && (
                                 <Box marginLeft="0.25rem">
-                                    <StyledTooltip title={t('common:commentAttachmentTooltip')}>
+                                    <Tooltip title={t('common:commentAttachmentTooltip')}>
                                         <IconButton onClick={handleAttachmentClick}>
                                             <AttachFileOutlined />
                                         </IconButton>
-                                    </StyledTooltip>
+                                    </Tooltip>
                                 </Box>
                             )}
                         </Box>
                     </Grid>
                     <Grid container item xs={4} justify="center">
-                        <StyledTooltip title={t('common:commentOptionsTooltip')}>
+                        <Tooltip title={t('common:commentOptionsTooltip')}>
                             <IconButton onClick={handleOpenOptions}>
                                 <MoreHorizOutlined />
                             </IconButton>
-                        </StyledTooltip>
+                        </Tooltip>
                     </Grid>
                     <Grid item xs={4} />
                 </Grid>
