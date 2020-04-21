@@ -7,6 +7,7 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -28,7 +29,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import {
@@ -70,17 +71,17 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuthContext();
-    const { pages, currentPage, prevPage, nextPage, setCenter, setPages, setCurrentPage } = usePDFViewerContext();
-    const resourceTitle = R.propOr(t('common:titleNA'), 'title', resource) as string;
-    const resourceDate = R.propOr(t('common:dateNA'), 'date', resource) as string;
+    const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
+    const resourceTitle = R.propOr('-', 'title', resource) as string;
+    const resourceDate = R.propOr('-', 'date', resource) as string;
+    const resourceType = R.propOr('-', 'resourceType', resource);
+    const courseName = R.pathOr('-', ['course', 'name'], resource) as string;
+    const schoolName = R.pathOr('-', ['school', 'name'], resource) as string;
+    const courseId = R.pathOr('', ['course', 'id'], resource);
+    const schoolId = R.pathOr('', ['school', 'id'], resource);
+    const creatorId = R.pathOr('', ['user', 'id'], resource) as string;
     const fullResourceTitle = `${resourceTitle} - ${resourceDate}`;
     const file = mediaURL(R.propOr(undefined, 'file', resource));
-    const resourceType = R.propOr(t('common:resourceTypeNA'), 'resourceType', resource);
-    const courseId = R.pathOr('', ['course', 'id'], resource);
-    const courseName = R.path(['course', 'name'], resource) as string;
-    const schoolId = R.pathOr('', ['school', 'id'], resource);
-    const schoolName = R.path(['school', 'name'], resource) as string;
-    const creatorId = R.pathOr('', ['user', 'id'], resource) as string;
     const resourceId = R.propOr('', 'id', resource) as string;
     const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
     const initialVote = (R.propOr(null, 'vote', resource) as unknown) as VoteObjectType | null;
@@ -89,17 +90,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const isOwner = !!user && user.id === creatorId;
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
-
-    useEffect(() => {
-        return (): void => {
-            setPages([]);
-            setCurrentPage(0);
-        };
-    }, []);
-
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
-        t('resource:optionsHeader'),
-    );
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -111,6 +102,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         comments,
         target: { resource: Number(resourceId) },
         formKey: 'resource',
+        placeholderText: t('resource:commentsPlaceholder'),
     };
 
     const staticBackUrl = {
@@ -168,22 +160,14 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         }
     };
 
-    const renderCourseLink =
-        !!courseId && !!courseName ? <TextLink {...staticBackUrl}>{courseName}</TextLink> : t('common:courseNameNA');
+    const renderCourseLink = !!courseId ? <TextLink {...staticBackUrl}>{courseName}</TextLink> : undefined;
 
-    const renderSchoolLink =
-        !!schoolId && !!schoolName ? (
-            <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
-                {schoolName}
-            </TextLink>
-        ) : (
-            t('common:schoolNameNA')
-        );
-
-    const subheaderDesktop = (
-        <Typography variant="subtitle1">
-            {renderCourseLink} - {renderSchoolLink}
-        </Typography>
+    const renderSchoolLink = !!schoolId ? (
+        <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
+            {schoolName}
+        </TextLink>
+    ) : (
+        undefined
     );
 
     const renderInfo = (
@@ -332,15 +316,15 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                 {renderDownVoteButton}
             </Grid>
             <Grid item xs={4} container alignItems="center" id="page-controls">
-                <StyledTooltip title={t('common:previousPageTooltip')} placement="left">
+                <Tooltip title={t('common:previousPageTooltip')}>
                     <span>
                         <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
                             <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
                         </IconButton>
                     </span>
-                </StyledTooltip>
+                </Tooltip>
                 <Typography variant="body2">{currentPage + 1 + ' / ' + totalPages}</Typography>
-                <StyledTooltip title={t('common:nextPageTooltip')} placement="right">
+                <Tooltip title={t('common:nextPageTooltip')}>
                     <span>
                         <IconButton
                             disabled={!pagesExist || currentPage === pages.length - 1}
@@ -350,16 +334,16 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                             <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
                         </IconButton>
                     </span>
-                </StyledTooltip>
+                </Tooltip>
             </Grid>
             <Grid item xs={4} container justify="flex-end">
-                <StyledTooltip title={t('resource:fullscreenTooltip')} placement="left">
+                <Tooltip title={t('resource:fullscreenTooltip')}>
                     <span>
                         <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
                             <FullscreenOutlined />
                         </IconButton>
                     </span>
-                </StyledTooltip>
+                </Tooltip>
             </Grid>
         </StyledExtraResourceActions>
     );
@@ -399,8 +383,8 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         },
         headerDesktop: fullResourceTitle,
         headerSecondary: t('common:discussion'),
-        subheaderSecondary: t('resource:discussionSubheader'),
-        subheaderDesktop,
+        subheaderDesktop: renderCourseLink,
+        subheaderDesktopSecondary: renderSchoolLink,
         extraDesktopActions: renderExtraResourceActions,
         renderInfo,
         infoTooltip: t('resource:infoTooltip'),

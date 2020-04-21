@@ -55,7 +55,6 @@
     "dropzoneTextMobile": "Ladda upp fil",
     "dropzoneTextDesktop": "Klicka här för att ladda upp filen",
     "share": "Dela",
-    "noComments": "Kommentarer kommer att visas här.",
     "maxFileSize": "Maximal filstorlek",
     "resultsPerPage": "Resultat Per Sida",
     "clickToView": "Klicka för att se!",
@@ -79,13 +78,5 @@
     "previousPageTooltip": "Gå till föregoende sida.",
     "firstPageTooltip": "Gå till första sidan.",
     "date": "Datum",
-    "courseNameNA": "Kurs N/A",
-    "courseCodeNA": "Kurskod N/A",
-    "schoolNameNA": "Skola N/A",
-    "subjectNA": "Subjekt N/A",
-    "NA": "Inte tillgänglig",
-    "titleNA": "Titel N/A",
-    "dateNA": "Datum N/A",
-    "resourceTypeNA": "Resurstyp N/A",
     "close": "Stänga"
 }

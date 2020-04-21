@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton } from '@material-ui/core';
+import { Box, Grid, IconButton, Tooltip } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
 import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'src/i18n';
@@ -20,11 +20,11 @@ export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) =
         <StyledModalHeader>
             <Grid container alignItems="center">
                 <Grid item xs={2}>
-                    <StyledTooltip title={t('common:close')}>
+                    <Tooltip title={t('common:close')}>
                         <IconButton onClick={onCancel} size="small">
                             <CloseOutlined />
                         </IconButton>
-                    </StyledTooltip>
+                    </Tooltip>
                 </Grid>
                 <Grid item container xs={8} justify="center">
                     <StyledHeaderText text={title} />

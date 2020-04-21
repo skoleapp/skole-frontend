@@ -1,4 +1,4 @@
-import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab, Typography } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
@@ -17,8 +17,8 @@ interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderRepo
 interface Props extends LayoutProps {
     headerDesktop?: string;
     subheaderDesktop?: JSX.Element | string;
+    subheaderDesktopSecondary?: JSX.Element | string;
     headerSecondary?: string;
-    subheaderSecondary?: string;
     tabLabelLeft: string;
     tabLabelRight: string;
     renderInfo: JSX.Element;
@@ -38,8 +38,8 @@ interface Props extends LayoutProps {
 export const TabLayout: React.FC<Props> = ({
     headerDesktop,
     subheaderDesktop,
+    subheaderDesktopSecondary,
     headerSecondary,
-    subheaderSecondary,
     tabLabelLeft,
     tabLabelRight,
     renderInfo,
@@ -124,6 +124,13 @@ export const TabLayout: React.FC<Props> = ({
         </StyledCard>
     );
 
+    const renderSubheaderDesktop = (
+        <Box>
+            <Typography variant="subtitle1">{subheaderDesktop}</Typography>
+            <Typography variant="subtitle1">{subheaderDesktopSecondary}</Typography>
+        </Box>
+    );
+
     const renderDesktopContent = !isMobile && !responsive && (
         <Grid id="container" container>
             <Grid item container xs={12} md={7} lg={8}>
@@ -131,7 +138,7 @@ export const TabLayout: React.FC<Props> = ({
                     <CardHeader
                         id="main-header"
                         title={headerDesktop}
-                        subheader={subheaderDesktop}
+                        subheader={renderSubheaderDesktop}
                         action={renderDesktopHeaderActions}
                     />
                     <CardContent>{extraDesktopActions}</CardContent>
@@ -141,7 +148,7 @@ export const TabLayout: React.FC<Props> = ({
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
                 <StyledCard marginLeft>
-                    <CardHeader title={headerSecondary} subheader={subheaderSecondary} />
+                    <CardHeader title={headerSecondary} />
                     <Divider />
                     {renderRightContent}
                 </StyledCard>

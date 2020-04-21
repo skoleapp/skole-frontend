@@ -11,5 +11,5 @@
     "downvoteTooltip": "Ned röst denna kurs.",
     "upvoteTooltip": "Upp röst denna kurs.",
     "ownCourseVoteTooltip": "Du kan inte röstä på din egen kurs.",
-    "discussionSubheader": "Här kan du ha allmän diskussion om kursen."
+    "commentsPlaceholder": "Här kan du ha allmän diskussion om kursen."
 }

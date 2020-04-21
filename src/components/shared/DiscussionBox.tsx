@@ -19,6 +19,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     isThread,
     target,
     formKey,
+    placeholderText,
 }) => {
     const [comments, setComments] = useState(initialComments);
     const initialReplyCount = R.propOr('-', 'replyCount', topComment);
@@ -79,7 +80,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
                           <CommentCard comment={c} {...commentCardProps} />
                       </Box>
                   ))
-                : !topComment && <NotFoundBox text={t('common:noComments')} />}
+                : !topComment && <NotFoundBox text={placeholderText} />}
             {renderReplyButton}
         </Box>
     );

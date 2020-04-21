@@ -34,7 +34,6 @@ export interface TopNavbarProps {
     disableSearch?: boolean;
     headerRight?: JSX.Element;
     headerRightSecondary?: JSX.Element;
-    headerRightSecondary?: JSX.Element;
     headerLeft?: JSX.Element;
 }
 
@@ -56,6 +55,7 @@ export interface DiscussionBoxProps {
     isThread?: boolean;
     target: CommentTarget;
     formKey: string;
+    placeholderText: string;
 }
 
 export type MuiColor = 'inherit' | 'default' | 'primary' | 'secondary' | undefined;

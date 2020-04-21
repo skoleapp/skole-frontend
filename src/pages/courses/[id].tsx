@@ -67,21 +67,21 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuthContext();
-    const courseName = R.propOr(t('common:courseNameNA'), 'name', course) as string;
-    const courseCode = R.propOr(t('common:courseCodeNA'), 'code', course);
-    const subjectName = R.path(['subject', 'name'], course) as string;
-    const schoolName = R.path(['school', 'name'], course) as string;
+    const courseName = R.propOr('-', 'name', course) as string;
+    const courseCode = R.propOr('-', 'code', course);
+    const subjectName = R.pathOr('-', ['subject', 'name'], course) as string;
+    const schoolName = R.pathOr('-', ['school', 'name'], course) as string;
+    const resourceCount = R.propOr('-', 'resourceCount', course);
     const creatorId = R.pathOr('', ['user', 'id'], course) as string;
     const courseId = R.propOr('', 'id', course) as string;
+    const schoolId = R.pathOr('', ['school', 'id'], course);
     const initialScore = R.propOr(0, 'score', course) as number;
-    const resourceCount = R.propOr(t('common:NA'), 'resourceCount', course);
     const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
     const comments = R.propOr([], 'comments', course) as CommentObjectType[];
     const isOwnCourse = creatorId === R.propOr('', 'id', user);
     const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
     const starred = !!R.propOr(undefined, 'starred', course);
     const isOwner = !!user && user.id === creatorId;
-    const schoolId = R.pathOr('', ['school', 'id'], course);
     const subjectId = R.path(['subject', 'id'], course) as boolean[];
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
@@ -104,6 +104,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         comments,
         target: { course: Number(courseId) },
         formKey: 'course',
+        placeholderText: t('course:commentsPlaceholder'),
     };
 
     const deleteCourseError = (): void => {
@@ -136,28 +137,20 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         handleVote({ status: status, course: courseId });
     };
 
-    const renderSubjectLink =
-        !!subjectId && !!subjectName ? (
-            <TextLink href={subjectLink} color="primary">
-                {subjectName}
-            </TextLink>
-        ) : (
-            t('common:subjectNameNA')
-        );
+    const renderSubjectLink = !!subjectId ? (
+        <TextLink href={subjectLink} color="primary">
+            {subjectName}
+        </TextLink>
+    ) : (
+        undefined
+    );
 
-    const renderSchoolLink =
-        !!schoolId && !!schoolName ? (
-            <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
-                {schoolName}
-            </TextLink>
-        ) : (
-            t('common:schoolNameNA')
-        );
-
-    const subheaderDesktop = (
-        <Typography variant="subtitle1">
-            {renderSubjectLink} - {renderSchoolLink}
-        </Typography>
+    const renderSchoolLink = !!schoolId ? (
+        <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
+            {schoolName}
+        </TextLink>
+    ) : (
+        undefined
     );
 
     const renderUpVoteButton = (
@@ -345,9 +338,9 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             staticBackUrl: { href: '/search' },
         },
         headerDesktop: courseName,
-        subheaderDesktop,
+        subheaderDesktop: renderSubjectLink,
+        subheaderDesktopSecondary: renderSchoolLink,
         headerSecondary: t('common:discussion'),
-        subheaderSecondary: t('course:discussionSubheader'),
         renderInfo,
         infoTooltip: t('course:infoTooltip'),
         optionProps: {

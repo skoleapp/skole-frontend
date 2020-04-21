@@ -11,5 +11,5 @@
     "downvoteTooltip": "Downvote this course.",
     "upvoteTooltip": "Upvote this course.",
     "ownCourseVoteTooltip": "You cannot vote your own course.",
-    "discussionSubheader": "Here you can discuss generally about the course."
+    "commentsPlaceholder": "Here you can discuss generally about the course."
 }

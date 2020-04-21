@@ -55,7 +55,6 @@
     "dropzoneTextMobile": "Liitä tiedosto tästä",
     "dropzoneTextDesktop": "Raahaa tiedosto tai klikkaa tästä",
     "share": "Jaa",
-    "noComments": "Kommentit näkyvät täällä.",
     "maxFileSize": "Maksimi tiedostokoko",
     "resultsPerPage": "Tuloksia per sivu",
     "clickToView": "Klikkaa avataksesi!",
@@ -79,13 +78,5 @@
     "previousPageTooltip": "Siirry edelliselle sivulle.",
     "firstPageTooltip": "Siirry ensimmäiselle sivulle.",
     "date": "Päivämäärä",
-    "courseNameNA": "Kurssi N/A",
-    "courseCodeNA": "Kurssikoodi N/A",
-    "schoolNameNA": "Koulu N/A",
-    "subjectNA": "Oppiaine N/A",
-    "NA": "Ei saatavilla",
-    "titleNA": "Otsikko N/A",
-    "dateNA": "Päivämäärä N/A",
-    "resourceTypeNA": "Resurssityyppi N/A",
     "close": "Sulje"
 }
