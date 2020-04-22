@@ -96,7 +96,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-        if (!e.shiftKey && e.key === 'Enter') {
+        if (!e.shiftKey && e.key === 'Enter' && !isMobile) {
             submitForm();
         }
     };
