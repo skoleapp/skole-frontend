@@ -11,7 +11,7 @@ import { useDrawer } from './useDrawer';
 export const useOptions = (): UseOptions => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
-    const drawerProps = useDrawer();
+    const drawerProps = useDrawer(t('common:options'));
     const { onClose, renderHeader: renderOptionsHeader } = drawerProps;
 
     const handleShare = (e: SyntheticEvent): void => {

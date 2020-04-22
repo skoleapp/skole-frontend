@@ -7,12 +7,12 @@ import styled from 'styled-components';
 import { StyledHeaderText } from './StyledHeaderText';
 
 interface Props {
-    title?: string;
+    text?: string;
     onCancel: (e: SyntheticEvent) => void;
     headerRight?: JSX.Element;
 }
 
-export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) => {
+export const ModalHeader: React.FC<Props> = ({ text, onCancel, headerRight }) => {
     const { t } = useTranslation();
 
     return (
@@ -26,7 +26,7 @@ export const ModalHeader: React.FC<Props> = ({ title, onCancel, headerRight }) =
                     </Tooltip>
                 </Grid>
                 <Grid item container xs={8} justify="center">
-                    <StyledHeaderText text={title} />
+                    <StyledHeaderText text={text} />
                 </Grid>
                 <Grid item container xs={2} justify="flex-end">
                     {headerRight}

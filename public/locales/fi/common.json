@@ -37,9 +37,8 @@
     "city": "Kaupunki",
     "download": "Lataa",
     "resourceType": "Resurssin tyyppi",
-    "exerciseNumber": "Exercise Number",
     "description": "Description",
-    "advancedSearch": "Tarkennettu haku",
+    "filters": "Suodattimet",
     "searchResults": "Hakutulokset",
     "editProfile": "Muokkaa profiilia",
     "changePassword": "Vaihda salasana",
@@ -60,6 +59,8 @@
     "clickToView": "Klikkaa avataksesi!",
     "starred": "Tähdellä merkityt",
     "settings": "Asetukset",
+    "options": "Vaihtoehdot",
+    "info": "Tiedot",
     "loading": "Ladataan...",
     "communityUser": "Yhteisökäyttäjä",
     "starredTooltip": "Tarkastele tähdellä merkittyjä kursseja ja resurssejasi.",
@@ -69,7 +70,7 @@
     "downvoteCommentTooltip": "Anna tälle kommentille alas-ääni.",
     "commentOptionsTooltip": "Näytä kommentin vaihtoehdot.",
     "commentAttachmentTooltip": "Näytä kommentin kuvaliite.",
-    "commentRepliesTooltip": "Tällä kommentilla on {{replyCount}} vastausta.",
+    "commentRepliesTooltip": "Tällä kommentilla on {{ replyCount }} vastausta.",
     "attachFileTooltip": "Lisää kuvaliite.",
     "clearAttachmentTooltip": "Poista liite.",
     "sendMessageTooltip": "Lähetä viesti.",
@@ -78,5 +79,6 @@
     "previousPageTooltip": "Siirry edelliselle sivulle.",
     "firstPageTooltip": "Siirry ensimmäiselle sivulle.",
     "date": "Päivämäärä",
-    "close": "Sulje"
+    "close": "Sulje",
+    "commentReplyPlaceholder": "Täällä voit vastata {{ username }}:n kommenttiin."
 }

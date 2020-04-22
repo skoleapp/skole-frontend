@@ -37,9 +37,8 @@
     "city": "City",
     "download": "Download",
     "resourceType": "Resource Type",
-    "exerciseNumber": "Exercise Number",
     "description": "Description",
-    "advancedSearch": "Advanced Search",
+    "filters": "Filters",
     "searchResults": "Search Results",
     "editProfile": "Edit Profile",
     "changePassword": "Change Password",
@@ -60,6 +59,8 @@
     "clickToView": "Click to view!",
     "starred": "Starred",
     "settings": "Settings",
+    "options": "Options",
+    "info": "Info",
     "loading": "Loading...",
     "communityUser": "Community User",
     "starredTooltip": "View your starred courses and resources.",
@@ -69,7 +70,7 @@
     "downvoteCommentTooltip": "Downvote comment.",
     "commentOptionsTooltip": "View comment options.",
     "commentAttachmentTooltip": "View comment attachment.",
-    "commentRepliesTooltip": "This comment has {{replyCount}} replies.",
+    "commentRepliesTooltip": "This comment has {{ replyCount }} replies.",
     "attachFileTooltip": "Attach picture.",
     "clearAttachmentTooltip": "Clear attachment.",
     "sendMessageTooltip": "Send message.",
@@ -78,5 +79,6 @@
     "previousPageTooltip": "Go to previous page.",
     "firstPageTooltip": "Go to first page.",
     "date": "Date",
-    "close": "Close"
+    "close": "Close",
+    "commentReplyPlaceholder": "Here you can reply to {{ username }}'s comment."
 }

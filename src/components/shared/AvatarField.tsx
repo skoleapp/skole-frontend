@@ -18,7 +18,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
 }) => {
     const { t } = useTranslation();
     const [preview, setPreview] = useState(mediaURL(values.avatar));
-    const { renderHeader, handleOpen, ...drawerProps } = useDrawer();
+    const { renderHeader, handleOpen, ...drawerProps } = useDrawer(t('edit-profile:avatar'));
     const { onClose: handleCloseDrawer } = drawerProps;
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {

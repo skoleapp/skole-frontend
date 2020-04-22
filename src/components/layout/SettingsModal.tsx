@@ -6,11 +6,11 @@ import { useDrawer, useSettings } from '../../utils';
 import { ModalHeader } from '../shared';
 
 export const SettingsModal: React.FC = () => {
-    const { renderSettingsCardContent, settingsOpen, toggleSettings } = useSettings({ modal: true });
     const { t } = useTranslation();
-    const { anchor } = useDrawer();
+    const { renderSettingsCardContent, settingsOpen, toggleSettings } = useSettings({ modal: true });
+    const { anchor } = useDrawer(t('common:settings'));
     const handleClose = (): void => toggleSettings(false);
-    const renderModalHeader = <ModalHeader onCancel={handleClose} title={t('common:settings')} />;
+    const renderModalHeader = <ModalHeader onCancel={handleClose} text={t('common:settings')} />;
 
     return (
         <Drawer open={settingsOpen} anchor={anchor} onClose={handleClose}>

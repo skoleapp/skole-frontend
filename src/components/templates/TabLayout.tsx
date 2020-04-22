@@ -15,6 +15,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { useDeviceContext } from '../../context';
+import { useTranslation } from '../../i18n';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useDrawer, useTabs } from '../../utils';
 import { StyledCard, StyledTabs } from '../shared';
@@ -67,9 +68,13 @@ export const TabLayout: React.FC<Props> = ({
     responsive,
     ...props
 }) => {
+    const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const isMobile = useDeviceContext();
-    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer();
+
+    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(
+        t('common:info'),
+    );
 
     const {
         renderOptions,

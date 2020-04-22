@@ -45,7 +45,7 @@ export const FilterLayout: React.FC<Props> = ({
             <Drawer {...drawerProps}>
                 <ModalHeader
                     onCancel={handleCloseFilters}
-                    title={t('common:advancedSearch')}
+                    text={t('common:filters')}
                     headerRight={renderMobileClearFiltersButton}
                 />
                 <CardContent>{renderCardContent}</CardContent>
@@ -57,7 +57,7 @@ export const FilterLayout: React.FC<Props> = ({
         <Grid container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
-                    <CardHeader title={t('common:advancedSearch')} />
+                    <CardHeader title={t('common:filters')} />
                     <Divider />
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
