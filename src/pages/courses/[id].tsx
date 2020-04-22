@@ -1,26 +1,9 @@
-import {
-    Avatar,
-    Box,
-    CardContent,
-    Grid,
-    IconButton,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    MenuItem,
-    Tooltip,
-    Typography,
-} from '@material-ui/core';
+import { Box, Grid, IconButton, ListItemText, MenuItem, Tooltip } from '@material-ui/core';
 import {
     CloudUploadOutlined,
     DeleteOutline,
-    HouseOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
-    SchoolOutlined,
-    ScoreOutlined,
-    SubjectOutlined,
-    VpnKeyOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
@@ -38,10 +21,10 @@ import {
     VoteObjectType,
 } from '../../../generated/graphql';
 import {
-    CreatorListItem,
     DiscussionBox,
     FrontendPaginatedTable,
     IconButtonLink,
+    InfoModalContent,
     NavbarContainer,
     NotFoundBox,
     NotFoundLayout,
@@ -67,15 +50,15 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuthContext();
-    const courseName = R.propOr('-', 'name', course) as string;
-    const courseCode = R.propOr('-', 'code', course);
-    const subjectName = R.pathOr('-', ['subject', 'name'], course) as string;
-    const schoolName = R.pathOr('-', ['school', 'name'], course) as string;
-    const resourceCount = R.propOr('-', 'resourceCount', course);
+    const courseName = R.propOr('', 'name', course) as string;
+    const courseCode = R.propOr('', 'code', course) as string;
+    const subjectName = R.pathOr('', ['subject', 'name'], course) as string;
+    const schoolName = R.pathOr('', ['school', 'name'], course) as string;
+    const resourceCount = String(R.propOr('', 'resourceCount', course));
     const creatorId = R.pathOr('', ['user', 'id'], course) as string;
     const courseId = R.propOr('', 'id', course) as string;
     const schoolId = R.pathOr('', ['school', 'id'], course);
-    const initialScore = R.propOr(0, 'score', course) as number;
+    const initialScore = String(R.propOr(0, 'score', course));
     const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
     const comments = R.propOr([], 'comments', course) as CommentObjectType[];
     const isOwnCourse = creatorId === R.propOr('', 'id', user);
@@ -85,9 +68,8 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const subjectId = R.path(['subject', 'id'], course) as boolean[];
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
-
-    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
+    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -173,85 +155,34 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </Tooltip>
     );
 
-    const renderInfo = (
-        <CardContent>
-            <StyledList>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <SchoolOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:name')}: {courseName}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <VpnKeyOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:courseCode')}: {courseCode}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <SubjectOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:subject')}: {renderSubjectLink}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <HouseOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:school')}: {renderSchoolLink}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ScoreOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:score')}: {score}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <CloudUploadOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:resources')}: {resourceCount}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <CreatorListItem user={courseUser} created={created} />
-            </StyledList>
-        </CardContent>
-    );
+    const infoItems = [
+        {
+            label: t('common:name'),
+            value: courseName,
+        },
+        {
+            label: t('common:courseCode'),
+            value: courseCode,
+        },
+        {
+            label: t('common:subject'),
+            value: renderSubjectLink,
+        },
+        {
+            label: t('common:school'),
+            value: renderSchoolLink,
+        },
+        {
+            label: t('common:score'),
+            value: score,
+        },
+        {
+            label: t('common:resources'),
+            value: resourceCount,
+        },
+    ];
+
+    const renderInfo = <InfoModalContent user={courseUser} created={created} infoItems={infoItems} />;
 
     const resourceTableHeadProps = {
         titleLeft: t('common:title'),
@@ -342,6 +273,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         subheaderDesktopSecondary: renderSchoolLink,
         headerSecondary: t('common:discussion'),
         renderInfo,
+        infoHeader: t('course:infoHeader'),
         infoTooltip: t('course:infoTooltip'),
         optionProps: {
             renderOptions,

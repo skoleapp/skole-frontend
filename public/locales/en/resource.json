@@ -12,5 +12,6 @@
     "fullscreenTooltip": "Center to screen.",
     "loadingResource": "Loading resource...",
     "errorLoadingResource": "Error loading resource.",
-    "commentsPlaceholder": "Here you can discuss generally about the resource."
+    "commentsPlaceholder": "Here you can discuss generally about the resource.",
+    "infoHeader": "Resource Info"
 }

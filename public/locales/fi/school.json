@@ -3,5 +3,6 @@
     "noSubjects": "Tällä koululla ei ole oppiaineita...",
     "noCourses": "Tällä koululla ei ole kursseja...",
     "infoTooltip": "Näytä koulun tiedot.",
-    "optionsTooltip": "Näytä koulun vaihtoehdot."
+    "optionsTooltip": "Näytä koulun vaihtoehdot.",
+    "infoHeader": "Koulun tiedot"
 }

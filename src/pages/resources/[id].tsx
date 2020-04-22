@@ -1,29 +1,12 @@
-import {
-    Avatar,
-    CardContent,
-    Grid,
-    IconButton,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    MenuItem,
-    Tooltip,
-    Typography,
-} from '@material-ui/core';
+import { Grid, IconButton, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
 import {
     CloudDownloadOutlined,
-    CloudUploadOutlined,
     DeleteOutline,
     FullscreenOutlined,
-    HouseOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
     NavigateBeforeOutlined,
     NavigateNextOutlined,
-    ScheduleOutlined,
-    SchoolOutlined,
-    ScoreOutlined,
-    TitleOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
@@ -42,8 +25,8 @@ import {
     VoteObjectType,
 } from '../../../generated/graphql';
 import {
-    CreatorListItem,
     DiscussionBox,
+    InfoModalContent,
     NavbarContainer,
     NotFoundLayout,
     PDFViewer,
@@ -71,20 +54,20 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const confirm = useConfirm();
     const { user } = useAuthContext();
     const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
-    const resourceTitle = R.propOr('-', 'title', resource) as string;
-    const resourceDate = R.propOr('-', 'date', resource) as string;
-    const resourceType = R.propOr('-', 'resourceType', resource);
-    const courseName = R.pathOr('-', ['course', 'name'], resource) as string;
-    const schoolName = R.pathOr('-', ['school', 'name'], resource) as string;
-    const courseId = R.pathOr('', ['course', 'id'], resource);
-    const schoolId = R.pathOr('', ['school', 'id'], resource);
+    const resourceTitle = R.propOr('', 'title', resource) as string;
+    const resourceDate = R.propOr('', 'date', resource) as string;
+    const resourceType = R.propOr('', 'resourceType', resource) as string;
+    const courseName = R.pathOr('', ['course', 'name'], resource) as string;
+    const schoolName = R.pathOr('', ['school', 'name'], resource) as string;
+    const courseId = R.pathOr('', ['course', 'id'], resource) as string;
+    const schoolId = R.pathOr('', ['school', 'id'], resource) as string;
     const creatorId = R.pathOr('', ['user', 'id'], resource) as string;
     const fullResourceTitle = `${resourceTitle} - ${resourceDate}`;
     const file = mediaURL(R.propOr(undefined, 'file', resource));
     const resourceId = R.propOr('', 'id', resource) as string;
     const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
     const initialVote = (R.propOr(null, 'vote', resource) as unknown) as VoteObjectType | null;
-    const initialScore = R.propOr(0, 'score', resource) as number;
+    const initialScore = String(R.propOr(0, 'score', resource));
     const starred = !!R.propOr(undefined, 'starred', resource);
     const isOwner = !!user && user.id === creatorId;
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
@@ -169,85 +152,34 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         undefined
     );
 
-    const renderInfo = (
-        <CardContent>
-            <StyledList>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <TitleOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:title')}: {resourceTitle}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ScheduleOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:date')}: {resourceDate}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <CloudUploadOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:resourceType')}: {resourceType}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <SchoolOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:course')}: {renderCourseLink}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <HouseOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:school')}: {renderSchoolLink}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ScoreOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:score')}: {score}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <CreatorListItem user={resourceUser} created={created} />
-            </StyledList>
-        </CardContent>
-    );
+    const infoItems = [
+        {
+            label: t('common:title'),
+            value: resourceTitle,
+        },
+        {
+            label: t('common:date'),
+            value: resourceDate,
+        },
+        {
+            label: t('common:resourceType'),
+            value: resourceType,
+        },
+        {
+            label: t('common:score'),
+            value: score,
+        },
+        {
+            label: t('common:course'),
+            value: renderCourseLink,
+        },
+        {
+            label: t('common:school'),
+            value: renderSchoolLink,
+        },
+    ];
+
+    const renderInfo = <InfoModalContent user={resourceUser} created={created} infoItems={infoItems} />;
 
     const renderOptions = (
         <StyledList>
@@ -379,6 +311,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         subheaderDesktopSecondary: renderSchoolLink,
         extraDesktopActions: renderExtraResourceActions,
         renderInfo,
+        infoHeader: t('resource:infoHeader'),
         infoTooltip: t('resource:infoTooltip'),
         optionProps: {
             renderOptions,

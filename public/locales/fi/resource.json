@@ -12,5 +12,6 @@
     "fullscreenTooltip": "Keskitä ruudulle.",
     "loadingResource": "Ladataan resurssia...",
     "errorLoadingResource": "Virhe ladattaessa resurssia.",
-    "commentsPlaceholder": "Täällä voit käydä yleistä keskustelua resurssista."
+    "commentsPlaceholder": "Täällä voit käydä yleistä keskustelua resurssista.",
+    "infoHeader": "Resurssin tiedot"
 }

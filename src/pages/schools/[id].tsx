@@ -1,15 +1,4 @@
-import {
-    Avatar,
-    CardContent,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    TableBody,
-    TableCell,
-    TableRow,
-    Typography,
-} from '@material-ui/core';
-import { FlagOutlined, HouseOutlined, LocationCityOutlined, SchoolOutlined, SubjectOutlined } from '@material-ui/icons';
+import { TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -24,6 +13,7 @@ import {
 import {
     CourseTableBody,
     FrontendPaginatedTable,
+    InfoModalContent,
     NotFoundBox,
     NotFoundLayout,
     StyledList,
@@ -41,109 +31,81 @@ interface Props extends I18nProps {
 
 const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { t } = useTranslation();
-    const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions(t('school:optionsHeader'));
-    const schoolName = R.propOr('-', 'name', school) as string;
-    const schoolType = R.propOr('-', 'schoolType', school) as string;
-    const country = R.propOr('-', 'country', school) as string;
-    const city = R.propOr('-', 'city', school) as string;
-    const courseCount = R.propOr('-', 'courseCount', school);
-    const subjectCount = R.propOr('-', 'subjectCount', school);
+    const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions();
+    const schoolName = R.propOr('', 'name', school) as string;
+    const schoolType = R.propOr('', 'schoolType', school) as string;
+    const country = R.propOr('', 'country', school) as string;
+    const city = R.propOr('', 'city', school) as string;
+    const courseCount = R.propOr('', 'courseCount', school) as string;
+    const subjectCount = R.propOr('', 'subjectCount', school) as string;
     const subjects = R.propOr([], 'subjects', school) as SubjectObjectType[];
     const courses = R.propOr([], 'courses', school) as CourseObjectType[];
+    const countryId = R.pathOr('', ['country', 'id'], school);
+    const cityId = R.pathOr('', ['city', 'id'], school);
     const { paginatedItems: paginatedSubjects, ...subjectPaginationProps } = useFrontendPagination(subjects);
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
 
     const schoolTypeLink = {
         pathname: '/search',
-        query: { schoolType: R.propOr('', 'schoolType', school) as boolean[] },
+        query: { schoolType },
     };
 
     const countryLink = {
         pathname: '/search',
-        query: { countryName: R.propOr('', 'country', school) as boolean[] },
+        query: { country: countryId },
     };
 
     const cityLink = {
         pathname: '/search',
-        query: { cityName: R.propOr('', 'city', school) as boolean[] },
+        query: { city: cityId },
     };
 
-    const renderInfo = (
-        <CardContent>
-            <StyledList>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <SchoolOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:courses')}: {courseCount}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <SubjectOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:subjects')}: {subjectCount}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <HouseOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:schoolType')}:{' '}
-                            <TextLink href={schoolTypeLink} color="primary">
-                                {schoolType}
-                            </TextLink>
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <FlagOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:country')}:{' '}
-                            <TextLink href={countryLink} color="primary">
-                                {country}
-                            </TextLink>
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <LocationCityOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:city')}:{' '}
-                            <TextLink href={cityLink} color="primary">
-                                {city}
-                            </TextLink>
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-            </StyledList>
-        </CardContent>
+    const renderSchoolTypeLink = (
+        <TextLink href={schoolTypeLink} color="primary">
+            {schoolType}
+        </TextLink>
     );
 
+    const renderCountryLink = (
+        <TextLink href={countryLink} color="primary">
+            {country}
+        </TextLink>
+    );
+
+    const renderCityLink = (
+        <TextLink href={cityLink} color="primary">
+            {city}
+        </TextLink>
+    );
+
+    const infoItems = [
+        {
+            label: t('common:name'),
+            value: schoolName,
+        },
+        {
+            label: t('common:courses'),
+            value: courseCount,
+        },
+        {
+            label: t('common:subjects'),
+            value: subjectCount,
+        },
+        {
+            label: t('common:schoolType'),
+            value: renderSchoolTypeLink,
+        },
+        {
+            label: t('common:country'),
+            value: renderCountryLink,
+        },
+        {
+            label: t('common:city'),
+            value: renderCityLink,
+        },
+    ];
+
+    const renderInfo = <InfoModalContent infoItems={infoItems} />;
     const renderOptions = <StyledList>{renderShareOption}</StyledList>;
 
     const renderSubjectsTableBody = (
@@ -201,6 +163,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         tabLabelLeft: `${t('common:subjects')} (${subjectCount})`,
         tabLabelRight: `${t('common:courses')} (${courseCount})`,
         renderInfo,
+        infoHeader: t('school:infoHeader'),
         infoTooltip: t('school:infoTooltip'),
         optionProps: {
             renderOptions,
@@ -228,6 +191,9 @@ export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx =>
         const { data } = await apolloClient.query({
             query: SchoolDetailDocument,
             variables: query,
+            context: {
+                headers: { 'Accept-Language': 'fi' },
+            },
         });
 
         return { props: { ...data, ...namespaces } };

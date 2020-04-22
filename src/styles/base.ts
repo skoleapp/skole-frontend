@@ -99,5 +99,11 @@ export const base = css`
         input[type='file'] {
             display: none;
         }
+
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
 `;

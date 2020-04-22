@@ -3,5 +3,6 @@
     "noSubjects": "Den här skolan har inga ämnen...",
     "noCourses": "Den här skolan har inga kurser...",
     "infoTooltip": "Visa skolinformation.",
-    "optionsTooltip": "Visa skolalternativ."
+    "optionsTooltip": "Visa skolalternativ.",
+    "infoHeader": "Skolinfo"
 }

@@ -22,22 +22,22 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     placeholderText,
 }) => {
     const [comments, setComments] = useState(initialComments);
-    const initialReplyCount = R.propOr('-', 'replyCount', topComment);
+    const initialReplyCount = R.propOr('', 'replyCount', topComment);
     const [replyCount, setReplyCount] = useState(initialReplyCount);
-    const updateReplyCount = (): void => setReplyCount(comments.length);
     const { toggleCommentModal } = useCommentModalContext();
     const openCommentModal = (): void => toggleCommentModal(true);
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
+    const updateReplyCount = (replyCount: number): void => setReplyCount(replyCount);
 
     const appendComments = (comment: CommentObjectType): void => {
         setComments([...comments, comment]);
-        updateReplyCount();
+        isThread && updateReplyCount(comments.length + 1);
     };
 
     const removeComment = (id: string): void => {
         setComments(comments.filter((c: CommentObjectType): boolean => c.id !== id));
-        updateReplyCount();
+        isThread && updateReplyCount(comments.length - 1);
     };
 
     const commentCardProps = { isThread, removeComment };
@@ -80,7 +80,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
                           <CommentCard comment={c} {...commentCardProps} />
                       </Box>
                   ))
-                : !topComment && <NotFoundBox text={placeholderText} />}
+                : !topComment && !!placeholderText && <NotFoundBox text={placeholderText} />}
             {renderReplyButton}
         </Box>
     );

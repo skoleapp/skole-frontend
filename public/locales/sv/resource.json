@@ -12,5 +12,6 @@
     "fullscreenTooltip": "Visa helskärm.",
     "loadingResource": "Laddar resurs...",
     "errorLoadingResource": "Fel vid inläsning av resurs.",
-    "commentsPlaceholder": "Här kan du ha allmän diskussion om resursen."
+    "commentsPlaceholder": "Här kan du ha allmän diskussion om resursen.",
+    "infoHeader": "Resursinformation"
 }

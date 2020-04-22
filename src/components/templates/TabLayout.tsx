@@ -15,7 +15,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { useDeviceContext } from '../../context';
-import { useTranslation } from '../../i18n';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useDrawer, useTabs } from '../../utils';
 import { StyledCard, StyledTabs } from '../shared';
@@ -35,6 +34,7 @@ interface Props extends LayoutProps {
     tabLabelRight: string;
     renderInfo: JSX.Element;
     infoTooltip?: string;
+    infoHeader: string;
     renderLeftContent: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
@@ -56,6 +56,7 @@ export const TabLayout: React.FC<Props> = ({
     tabLabelRight,
     renderInfo,
     infoTooltip,
+    infoHeader,
     renderLeftContent,
     renderRightContent,
     optionProps,
@@ -68,13 +69,9 @@ export const TabLayout: React.FC<Props> = ({
     responsive,
     ...props
 }) => {
-    const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const isMobile = useDeviceContext();
-
-    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(
-        t('common:info'),
-    );
+    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(infoHeader);
 
     const {
         renderOptions,

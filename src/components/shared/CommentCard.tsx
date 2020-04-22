@@ -57,11 +57,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const confirm = useConfirm();
     const attachmentOnly = comment.text == '' && comment.attachment !== '';
     const initialVote = R.propOr(null, 'vote', comment) as VoteObjectType | null;
-    const initialScore = R.propOr(0, 'score', comment) as number;
+    const initialScore = String(R.propOr(0, 'score', comment));
     const creatorId = R.propOr('', 'id', comment.user) as string;
     const isOwner = !!user && user.id === creatorId;
     const commentId = R.propOr('', 'id', comment) as string;
-    const replyCount = R.propOr('-', 'replyCount', comment) as string;
+    const replyCount = R.propOr('', 'replyCount', comment) as string;
 
     const {
         renderShareOption,
