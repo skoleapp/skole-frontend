@@ -141,37 +141,37 @@ export interface AuthContext {
     setUser: (user: UserObjectType | null) => void;
 }
 
-export interface AttachmentViewer {
+export interface AttachmentViewerContext {
     attachment: string | null;
     toggleAttachmentViewer: (payload: string | null) => void;
 }
 
-export interface CommentThread {
+export interface CommentThreadContext {
     topComment: CommentObjectType | null;
     toggleCommentThread: (payload: CommentObjectType | null) => void;
 }
 
-export interface CommentModal {
+export interface CommentModalContext {
     commentModalOpen: boolean;
     toggleCommentModal: (payload: boolean) => void;
 }
 
-export interface LanguageSelector {
+export interface LanguageSelectorContext {
     languageSelectorOpen: boolean;
     toggleLanguageSelector: (payload: boolean) => void;
 }
 
-export interface Notifications {
+export interface NotificationsContext {
     notification: string | null;
     toggleNotification: (payload: string | null) => void;
 }
 
-export interface Settings {
+export interface SettingsContext {
     settingsOpen: boolean;
     toggleSettings: (payload: boolean) => void;
 }
 
-export interface PDFViewer {
+export interface PDFViewerContext {
     pages: PDFPage[];
     currentPage: number;
     effect: string;
@@ -182,16 +182,22 @@ export interface PDFViewer {
     setCurrentPage: (currentPage: number) => void;
 }
 
+export interface DiscussionBoxContext {
+    comments: CommentObjectType[] | null;
+    setComments: (comments: CommentObjectType[]) => void;
+}
+
 export interface SkoleContextType {
     auth: AuthContext;
-    attachmentViewer: AttachmentViewer;
-    commentThread: CommentThread;
-    commentModal: CommentModal;
-    languageSelector: LanguageSelector;
-    notifications: Notifications;
-    settings: Settings;
-    pdfViewer: PDFViewer;
+    attachmentViewer: AttachmentViewerContext;
+    commentThread: CommentThreadContext;
+    commentModal: CommentModalContext;
+    languageSelector: LanguageSelectorContext;
+    notifications: NotificationsContext;
+    settings: SettingsContext;
+    pdfViewer: PDFViewerContext;
     isMobileGuess: boolean | null;
+    discussionBox: DiscussionBoxContext;
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;

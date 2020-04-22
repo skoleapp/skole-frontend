@@ -4,15 +4,16 @@ import { useContext } from 'react';
 
 import { breakpointsNum } from './styles';
 import {
-    AttachmentViewer,
+    AttachmentViewerContext,
     AuthContext,
-    CommentModal,
-    CommentThread,
-    LanguageSelector,
-    Notifications,
+    CommentModalContext,
+    CommentThreadContext,
+    DiscussionBoxContext,
+    LanguageSelectorContext,
+    NotificationsContext,
     PDFPage,
-    PDFViewer,
-    Settings,
+    PDFViewerContext,
+    SettingsContext,
     SkoleContextType,
 } from './types';
 
@@ -56,17 +57,30 @@ const SkolePageContext = createContext<SkoleContextType>({
         setCurrentPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     isMobileGuess: null,
+    discussionBox: {
+        comments: null,
+        setComments: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+    },
 });
 
 const useSkoleContext = (): SkoleContextType => useContext(SkolePageContext);
 export const useAuthContext = (): AuthContext => useSkoleContext().auth;
-export const useAttachmentViewerContext = (): AttachmentViewer => useSkoleContext().attachmentViewer;
-export const useCommentThreadContext = (): CommentThread => useSkoleContext().commentThread;
-export const useCommentModalContext = (): CommentModal => useSkoleContext().commentModal;
-export const useLanguageSelectorContext = (): LanguageSelector => useSkoleContext().languageSelector;
-export const useNotificationsContext = (): Notifications => useSkoleContext().notifications;
-export const useSettingsContext = (): Settings => useSkoleContext().settings;
-export const usePDFViewerContext = (): PDFViewer => useSkoleContext().pdfViewer;
+export const useAttachmentViewerContext = (): AttachmentViewerContext => useSkoleContext().attachmentViewer;
+export const useCommentThreadContext = (): CommentThreadContext => useSkoleContext().commentThread;
+export const useCommentModalContext = (): CommentModalContext => useSkoleContext().commentModal;
+export const useLanguageSelectorContext = (): LanguageSelectorContext => useSkoleContext().languageSelector;
+export const useNotificationsContext = (): NotificationsContext => useSkoleContext().notifications;
+export const useSettingsContext = (): SettingsContext => useSkoleContext().settings;
+export const usePDFViewerContext = (): PDFViewerContext => useSkoleContext().pdfViewer;
+
+interface UseDiscussionBoxContext extends Pick<DiscussionBoxContext, 'setComments'> {
+    comments: CommentObjectType[];
+}
+
+export const useDiscussionBoxContext = (initialComments: CommentObjectType[]): UseDiscussionBoxContext => {
+    const { comments, setComments } = useSkoleContext().discussionBox;
+    return { comments: comments || initialComments, setComments };
+};
 
 // Allow using custom breakpoints, use MD as default.
 export const useDeviceContext = (breakpoint: number = breakpointsNum.MD): boolean => {
@@ -115,7 +129,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [settingsOpen, setSettingsOpen] = useState(false);
     const toggleSettings = (open: boolean): void => setSettingsOpen(open);
 
-    const [pdf, setPdf] = useState<Pick<PDFViewer, 'pages' | 'currentPage' | 'effect'>>({
+    const [pdf, setPdf] = useState<Pick<PDFViewerContext, 'pages' | 'currentPage' | 'effect'>>({
         pages: [],
         currentPage: 0,
         effect: '',
@@ -126,6 +140,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const nextPage = (): void => setPdf({ ...pdf, effect: 'NEXT_PAGE' + new Date().valueOf() });
     const setPages = (pages: PDFPage[]): void => setPdf({ ...pdf, pages });
     const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
+
+    const [comments, setComments] = useState(null);
 
     const contextValue = {
         auth: {
@@ -165,6 +181,10 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setCurrentPage,
         },
         isMobileGuess,
+        discussionBox: {
+            comments,
+            setComments,
+        },
     };
 
     return <SkolePageContext.Provider value={contextValue}>{children}</SkolePageContext.Provider>;

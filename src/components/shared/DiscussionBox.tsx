@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
-import { useCommentModalContext, useDeviceContext } from '../../context';
+import { useCommentModalContext, useDeviceContext, useDiscussionBoxContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { DiscussionBoxProps } from '../../types';
@@ -21,7 +21,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     formKey,
     placeholderText,
 }) => {
-    const [comments, setComments] = useState(initialComments);
+    const { comments, setComments } = useDiscussionBoxContext(initialComments);
     const initialReplyCount = R.propOr('', 'replyCount', topComment);
     const [replyCount, setReplyCount] = useState(initialReplyCount);
     const { toggleCommentModal } = useCommentModalContext();

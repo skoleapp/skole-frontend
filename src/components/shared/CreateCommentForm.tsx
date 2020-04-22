@@ -191,7 +191,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
                     <ModalHeader
                         onCancel={handleCloseCreateCommentModal}
                         headerRight={renderSubmitButton}
-                        title={t('common:createComment')}
+                        text={t('common:createComment')}
                     />
                     <StyledAttachmentImage>
                         {!!attachment && <Image src={attachment as string} />}
