@@ -123,7 +123,7 @@ export interface UseFilters<T> extends UseForm<T> {
     renderDesktopClearFiltersButton?: JSX.Element | false;
     handleSubmit: (filteredValues: T, actions: FormikActions<T>) => Promise<void>;
     handleClearFilters: (e: SyntheticEvent) => Promise<void>;
-    drawerProps: UseDrawer;
+    drawerProps: Omit<UseDrawer, 'renderHeader'>;
 }
 
 export type CustomTablePaginationProps = Pick<

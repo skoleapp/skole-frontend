@@ -24,7 +24,8 @@ export const FilterLayout: React.FC<Props> = ({
     ...props
 }) => {
     const { t } = useTranslation();
-    const { handleOpen: handleOpenFilters, onClose: handleCloseFilters } = drawerProps;
+    const { handleOpen, ...commonDrawerProps } = drawerProps;
+    const { onClose: handleCloseDrawer } = drawerProps;
     const isMobile = useDeviceContext();
 
     const renderMobileClearFiltersButton = (
@@ -34,7 +35,7 @@ export const FilterLayout: React.FC<Props> = ({
     );
 
     const renderFiltersButton = (
-        <IconButton onClick={handleOpenFilters} color="secondary">
+        <IconButton onClick={handleOpen} color="secondary">
             <FilterListOutlined />
         </IconButton>
     );
@@ -42,9 +43,9 @@ export const FilterLayout: React.FC<Props> = ({
     const renderMobileContent = isMobile && (
         <Box flexGrow="1" display="flex">
             <StyledTable>{renderTableContent}</StyledTable>
-            <Drawer {...drawerProps}>
+            <Drawer {...commonDrawerProps}>
                 <ModalHeader
-                    onCancel={handleCloseFilters}
+                    onCancel={handleCloseDrawer}
                     text={t('common:filters')}
                     headerRight={renderMobileClearFiltersButton}
                 />

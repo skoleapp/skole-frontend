@@ -58,7 +58,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                     {headerRightSecondary}
                 </Grid>
             )}
-            <Grid item xs={!!headerRightSecondary ? 1 : 2} container justify="flex-end">
+            <Grid item xs={!!headerRightSecondary ? 2 : dense ? 4 : 2} container justify="flex-end">
                 {headerRight}
             </Grid>
         </Grid>
