@@ -9,11 +9,11 @@ import { useAuthContext, useNotificationsContext, useSettingsContext } from '../
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { clientLogout } from '../lib';
-import { Settings } from '../types';
+import { SettingsContext } from '../types';
 import { menuItems } from './menuItems';
 import { useLanguageSelector } from './useLanguageSelector';
 
-interface UseSettings extends Settings {
+interface UseSettings extends SettingsContext {
     renderSettingsCardContent: JSX.Element;
 }
 
