@@ -8,7 +8,7 @@ import React from 'react';
 import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated/graphql';
-import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
+import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useAuthContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
@@ -101,9 +101,9 @@ const LoginPage: NextPage<I18nProps> = () => {
                     >
                         {t('login:createAccount')}
                     </ButtonLink>
-                    {/* <Box marginTop="1rem"> // TODO: Show this when reset password works.
-                        <TextLink href="/contact">{t('login:forgotPassword')}</TextLink>
-                    </Box> */}
+                    <Box marginTop="1rem">
+                        <TextLink href="/reset-password">{t('login:forgotPassword')}</TextLink>
+                    </Box>
                 </Form>
             )}
         </Formik>
