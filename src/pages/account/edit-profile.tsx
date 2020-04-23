@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
@@ -6,7 +7,7 @@ import React from 'react';
 import * as Yup from 'yup';
 
 import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
-import { AvatarField, FormSubmitSection, NotFoundLayout, SettingsLayout } from '../../components';
+import { AvatarField, FormSubmitSection, NotFoundLayout, SettingsLayout, TextLink } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
@@ -24,6 +25,7 @@ export interface UpdateProfileFormValues {
 
 const EditProfilePage: NextPage<I18nProps> = () => {
     const { user, setUser } = useAuthContext();
+    const active = R.propOr(false, 'isActive', user);
     const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -115,6 +117,13 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
+                    {!active && (
+                        <Box marginTop="1rem" marginBottom="0.5rem">
+                            <TextLink href="/account/activate" color="primary">
+                                {t('common:verifyAccount')}
+                            </TextLink>
+                        </Box>
+                    )}
                 </Form>
             )}
         </Formik>

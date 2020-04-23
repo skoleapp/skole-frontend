@@ -78,5 +78,6 @@
     "firstPageTooltip": "Siirry ensimmäiselle sivulle.",
     "date": "Päivämäärä",
     "close": "Sulje",
-    "options": "Vaihtoehdot"
+    "options": "Vaihtoehdot",
+    "verifyAccount": "Vahvista tili"
 }

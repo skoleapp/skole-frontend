@@ -1,9 +1,5 @@
 mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
     register(input: { username: $username, email: $email, password: $password, code: $code }) {
-        user {
-            id
-            created
-        }
         errors {
             field
             messages
@@ -13,27 +9,7 @@ mutation Register($username: String!, $email: String!, $password: String!, $code
         token
         user {
             id
-            username
-            email
-            title
-            bio
-            avatar
-            score
-            courseCount
-            resourceCount
             created
-            starredCourses {
-                id
-                name
-                code
-                score
-            }
-            starredResources {
-                id
-                title
-                score
-                date
-            }
         }
         errors {
             field
@@ -47,27 +23,7 @@ mutation Login($username: String!, $password: String!) {
         token
         user {
             id
-            username
-            email
-            title
-            bio
-            avatar
-            score
-            courseCount
-            resourceCount
             created
-            starredCourses {
-                id
-                name
-                code
-                score
-            }
-            starredResources {
-                id
-                title
-                score
-                date
-            }
         }
         errors {
             field
@@ -88,6 +44,7 @@ query UserMe {
         courseCount
         resourceCount
         created
+        isActive
         starredCourses {
             id
             name

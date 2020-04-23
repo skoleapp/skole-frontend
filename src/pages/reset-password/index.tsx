@@ -45,6 +45,7 @@ const ResetPasswordLinkPage: NextPage<I18nProps> = () => {
                         component={TextField}
                         label={t('forms:email')}
                         variant="outlined"
+                        helperText={t('reset-password:helpText')}
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />

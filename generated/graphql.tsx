@@ -616,6 +616,7 @@ export type UserObjectType = {
   avatar?: Maybe<Scalars['String']>,
   score?: Maybe<Scalars['Int']>,
   created: Scalars['DateTime'],
+  isActive: Scalars['Boolean'],
   createdCourses: Array<CourseObjectType>,
   createdResources: Array<ResourceObjectType>,
   votes: Array<VoteObjectType>,
@@ -677,10 +678,7 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: Maybe<(
     { __typename?: 'RegisterMutationPayload' }
-    & { user: Maybe<(
-      { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'created'>
-    )>, errors: Maybe<Array<Maybe<(
+    & { errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
@@ -689,14 +687,7 @@ export type RegisterMutation = (
     & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created'>
-      & { starredCourses: Maybe<Array<Maybe<(
-        { __typename?: 'CourseObjectType' }
-        & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
-      )>>>, starredResources: Maybe<Array<Maybe<(
-        { __typename?: 'ResourceObjectType' }
-        & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
-      )>>> }
+      & Pick<UserObjectType, 'id' | 'created'>
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -717,14 +708,7 @@ export type LoginMutation = (
     & Pick<LoginMutationPayload, 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created'>
-      & { starredCourses: Maybe<Array<Maybe<(
-        { __typename?: 'CourseObjectType' }
-        & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
-      )>>>, starredResources: Maybe<Array<Maybe<(
-        { __typename?: 'ResourceObjectType' }
-        & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
-      )>>> }
+      & Pick<UserObjectType, 'id' | 'created'>
     )>, errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -739,7 +723,7 @@ export type UserMeQuery = (
   { __typename?: 'Query' }
   & { userMe: Maybe<(
     { __typename?: 'UserObjectType' }
-    & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created'>
+    & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created' | 'isActive'>
     & { starredCourses: Maybe<Array<Maybe<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
@@ -1292,10 +1276,6 @@ export type PerformVoteMutation = (
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
   register(input: {username: $username, email: $email, password: $password, code: $code}) {
-    user {
-      id
-      created
-    }
     errors {
       field
       messages
@@ -1305,27 +1285,7 @@ export const RegisterDocument = gql`
     token
     user {
       id
-      username
-      email
-      title
-      bio
-      avatar
-      score
-      courseCount
-      resourceCount
       created
-      starredCourses {
-        id
-        name
-        code
-        score
-      }
-      starredResources {
-        id
-        title
-        score
-        date
-      }
     }
     errors {
       field
@@ -1368,27 +1328,7 @@ export const LoginDocument = gql`
     token
     user {
       id
-      username
-      email
-      title
-      bio
-      avatar
-      score
-      courseCount
-      resourceCount
       created
-      starredCourses {
-        id
-        name
-        code
-        score
-      }
-      starredResources {
-        id
-        title
-        score
-        date
-      }
     }
     errors {
       field
@@ -1436,6 +1376,7 @@ export const UserMeDocument = gql`
     courseCount
     resourceCount
     created
+    isActive
     starredCourses {
       id
       name
