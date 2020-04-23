@@ -1,8 +1,10 @@
-FROM node:12.13.0-alpine
+FROM node:14.0.0-alpine3.11
 
-RUN mkdir /app
-WORKDIR /app
+USER node
+RUN mkdir /home/node/app
+RUN mkdir /home/node/app/.next
+WORKDIR /home/node/app
 
-COPY package.json .
-COPY yarn.lock .
+COPY --chown=node:node package.json .
+COPY --chown=node:node yarn.lock .
 RUN yarn install
