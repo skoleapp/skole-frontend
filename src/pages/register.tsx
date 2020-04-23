@@ -19,6 +19,7 @@ import { useForm, useLanguageSelector } from '../utils';
 
 export interface RegisterFormValues {
     username: string;
+    email: string;
     password: string;
     confirmPassword: string;
     code: string;
@@ -35,6 +36,9 @@ const RegisterPage: NextPage<I18nProps> = () => {
         username: Yup.string().required(t('validation:required')),
         password: Yup.string()
             .min(6, t('validation:passwordTooShort'))
+            .required(t('validation:required')),
+        email: Yup.string()
+            .email(t('validation:invalidEmail'))
             .required(t('validation:required')),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
@@ -67,10 +71,10 @@ const RegisterPage: NextPage<I18nProps> = () => {
     const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
-        const { username, password, code } = values;
+        const { username, email, password, code } = values;
 
         await registerMutation({
-            variables: { username, password, code },
+            variables: { username, email, password, code },
             context: { headers: { Authorization: '' } },
         });
 
@@ -88,6 +92,15 @@ const RegisterPage: NextPage<I18nProps> = () => {
                         component={TextField}
                         variant="outlined"
                         helperText={t('forms:usernameHelperText')}
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:email')}
+                        label={t('forms:email')}
+                        name="email"
+                        component={TextField}
+                        variant="outlined"
+                        helperText={t('forms:emailHelperText')}
                         fullWidth
                     />
                     <Field

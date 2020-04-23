@@ -2,6 +2,8 @@
     "username": "Username",
     "usernameHelperText": "Your username will show to other users.",
     "email": "Email",
+    "invalidEmail": "Invalid email.",
+    "emailHelperText": "Your email will be visible only for you. We will not spam you.",
     "password": "Password",
     "oldPassword": "Old Password",
     "newPassword": "New Password",

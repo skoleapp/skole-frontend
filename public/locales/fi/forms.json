@@ -2,6 +2,8 @@
     "username": "Käyttäjätunnus",
     "usernameHelperText": "Käyttäjätunnuksesi näkyy muille käyttäjille.",
     "email": "Sähköposti",
+    "invalidEmail": "Virheellinen sähköposti.",
+    "emailHelperText": "Sähköpostisi näkyy vain sinulle. Emme lähetä sinulle roskapostia.",
     "password": "Salasana",
     "oldPassword": "Vanha salasana",
     "newPassword": "Uusi salasana",

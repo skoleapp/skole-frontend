@@ -212,8 +212,12 @@ export type Mutation = {
    __typename?: 'Mutation',
   performStar?: Maybe<StarredMutationPayload>,
   performVote?: Maybe<VoteMutationPayload>,
-  login?: Maybe<LoginMutationPayload>,
   register?: Maybe<RegisterMutationPayload>,
+  verifyAccount?: Maybe<VerifyAccountMutationPayload>,
+  resendVerification?: Maybe<ResendVerificationEmailMutationPayload>,
+  sendPasswordResetEmail?: Maybe<SendPasswordResetEmailMutationPayload>,
+  resetPassword?: Maybe<ResetPasswordMutationPayload>,
+  login?: Maybe<LoginMutationPayload>,
   updateUser?: Maybe<UpdateUserMutationPayload>,
   changePassword?: Maybe<ChangePasswordMutationPayload>,
   deleteUser?: Maybe<DeleteUserMutationPayload>,
@@ -239,13 +243,33 @@ export type MutationPerformVoteArgs = {
 };
 
 
-export type MutationLoginArgs = {
-  input: LoginMutationInput
+export type MutationRegisterArgs = {
+  input: RegisterMutationInput
 };
 
 
-export type MutationRegisterArgs = {
-  input: RegisterMutationInput
+export type MutationVerifyAccountArgs = {
+  input: VerifyAccountMutationInput
+};
+
+
+export type MutationResendVerificationArgs = {
+  input: ResendVerificationEmailMutationInput
+};
+
+
+export type MutationSendPasswordResetEmailArgs = {
+  input: SendPasswordResetEmailMutationInput
+};
+
+
+export type MutationResetPasswordArgs = {
+  input: ResetPasswordMutationInput
+};
+
+
+export type MutationLoginArgs = {
+  input: LoginMutationInput
 };
 
 
@@ -420,6 +444,7 @@ export type QueryCityArgs = {
 
 export type RegisterMutationInput = {
   username: Scalars['String'],
+  email: Scalars['String'],
   password: Scalars['String'],
   code: Scalars['String'],
   clientMutationId?: Maybe<Scalars['String']>,
@@ -429,6 +454,34 @@ export type RegisterMutationPayload = {
    __typename?: 'RegisterMutationPayload',
   user?: Maybe<UserObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type ResendVerificationEmailMutationInput = {
+  email: Scalars['String'],
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type ResendVerificationEmailMutationPayload = {
+   __typename?: 'ResendVerificationEmailMutationPayload',
+  email: Scalars['String'],
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type ResetPasswordMutationInput = {
+  token?: Maybe<Scalars['String']>,
+  newPassword: Scalars['String'],
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type ResetPasswordMutationPayload = {
+   __typename?: 'ResetPasswordMutationPayload',
+  token?: Maybe<Scalars['String']>,
+  newPassword: Scalars['String'],
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -476,6 +529,19 @@ export type SchoolTypeObjectType = {
   name?: Maybe<Scalars['String']>,
 };
 
+export type SendPasswordResetEmailMutationInput = {
+  email: Scalars['String'],
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type SendPasswordResetEmailMutationPayload = {
+   __typename?: 'SendPasswordResetEmailMutationPayload',
+  email: Scalars['String'],
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
 export type StarredMutationInput = {
   course?: Maybe<Scalars['ID']>,
   resource?: Maybe<Scalars['ID']>,
@@ -498,9 +564,6 @@ export type SubjectObjectType = {
 export type UpdateCommentMutationInput = {
   text?: Maybe<Scalars['String']>,
   attachment?: Maybe<Scalars['String']>,
-  course?: Maybe<Scalars['ID']>,
-  resource?: Maybe<Scalars['ID']>,
-  comment?: Maybe<Scalars['ID']>,
   id?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -514,7 +577,6 @@ export type UpdateCommentMutationPayload = {
 
 export type UpdateResourceMutationInput = {
   title: Scalars['String'],
-  file?: Maybe<Scalars['String']>,
   resourceType: Scalars['ID'],
   date?: Maybe<Scalars['Date']>,
   id?: Maybe<Scalars['ID']>,
@@ -530,7 +592,7 @@ export type UpdateResourceMutationPayload = {
 
 export type UpdateUserMutationInput = {
   username: Scalars['String'],
-  email?: Maybe<Scalars['String']>,
+  email: Scalars['String'],
   title?: Maybe<Scalars['String']>,
   bio?: Maybe<Scalars['String']>,
   avatar?: Maybe<Scalars['String']>,
@@ -564,6 +626,19 @@ export type UserObjectType = {
   starredResources?: Maybe<Array<Maybe<ResourceObjectType>>>,
 };
 
+export type VerifyAccountMutationInput = {
+  token?: Maybe<Scalars['String']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
+export type VerifyAccountMutationPayload = {
+   __typename?: 'VerifyAccountMutationPayload',
+  token?: Maybe<Scalars['String']>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
+  clientMutationId?: Maybe<Scalars['String']>,
+};
+
 export type VoteMutationInput = {
   status: Scalars['Int'],
   comment?: Maybe<Scalars['ID']>,
@@ -592,6 +667,7 @@ export type VoteObjectType = {
 
 export type RegisterMutationVariables = {
   username: Scalars['String'],
+  email: Scalars['String'],
   password: Scalars['String'],
   code: Scalars['String']
 };
@@ -1214,8 +1290,8 @@ export type PerformVoteMutation = (
 
 
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $password: String!, $code: String!) {
-  register(input: {username: $username, password: $password, code: $code}) {
+    mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
+  register(input: {username: $username, email: $email, password: $password, code: $code}) {
     user {
       id
       created
@@ -1274,6 +1350,7 @@ export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMuta
  * const [registerMutation, { data, loading, error }] = useRegisterMutation({
  *   variables: {
  *      username: // value for 'username'
+ *      email: // value for 'email'
  *      password: // value for 'password'
  *      code: // value for 'code'
  *   },
