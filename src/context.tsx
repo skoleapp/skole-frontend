@@ -141,7 +141,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const setPages = (pages: PDFPage[]): void => setPdf({ ...pdf, pages });
     const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
 
-    const [comments, setComments] = useState(null);
+    const [comments, setComments] = useState<CommentObjectType[] | null>(null);
 
     const contextValue = {
         auth: {
