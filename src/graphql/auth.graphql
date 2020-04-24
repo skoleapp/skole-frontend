@@ -98,3 +98,23 @@ mutation ResetPassword($token: String, $newPassword: String!) {
         }
     }
 }
+
+mutation ResendVerificationEmail($email: String!) {
+    resendVerificationEmail(input: { email: $email }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation VerifyAccount($token: String) {
+    verifyAccount(input: { token: $token }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}

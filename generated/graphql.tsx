@@ -21,9 +21,8 @@ export type ChangePasswordMutationInput = {
 
 export type ChangePasswordMutationPayload = {
    __typename?: 'ChangePasswordMutationPayload',
-  user?: Maybe<UserObjectType>,
-  errors?: Maybe<Array<Maybe<ErrorType>>>,
   message?: Maybe<Scalars['String']>,
+  errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -206,6 +205,7 @@ export type LoginMutationPayload = {
   user?: Maybe<UserObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
   token?: Maybe<Scalars['String']>,
+  message?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -215,7 +215,7 @@ export type Mutation = {
   performVote?: Maybe<VoteMutationPayload>,
   register?: Maybe<RegisterMutationPayload>,
   verifyAccount?: Maybe<VerifyAccountMutationPayload>,
-  resendVerification?: Maybe<ResendVerificationEmailMutationPayload>,
+  resendVerificationEmail?: Maybe<ResendVerificationEmailMutationPayload>,
   sendPasswordResetEmail?: Maybe<SendPasswordResetEmailMutationPayload>,
   resetPassword?: Maybe<ResetPasswordMutationPayload>,
   login?: Maybe<LoginMutationPayload>,
@@ -254,7 +254,7 @@ export type MutationVerifyAccountArgs = {
 };
 
 
-export type MutationResendVerificationArgs = {
+export type MutationResendVerificationEmailArgs = {
   input: ResendVerificationEmailMutationInput
 };
 
@@ -453,7 +453,7 @@ export type RegisterMutationInput = {
 
 export type RegisterMutationPayload = {
    __typename?: 'RegisterMutationPayload',
-  user?: Maybe<UserObjectType>,
+  message?: Maybe<Scalars['String']>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
@@ -797,6 +797,40 @@ export type ResetPasswordMutation = (
   & { resetPassword: Maybe<(
     { __typename?: 'ResetPasswordMutationPayload' }
     & Pick<ResetPasswordMutationPayload, 'message'>
+    & { errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
+  )> }
+);
+
+export type ResendVerificationEmailMutationVariables = {
+  email: Scalars['String']
+};
+
+
+export type ResendVerificationEmailMutation = (
+  { __typename?: 'Mutation' }
+  & { resendVerificationEmail: Maybe<(
+    { __typename?: 'ResendVerificationEmailMutationPayload' }
+    & Pick<ResendVerificationEmailMutationPayload, 'message'>
+    & { errors: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
+  )> }
+);
+
+export type VerifyAccountMutationVariables = {
+  token?: Maybe<Scalars['String']>
+};
+
+
+export type VerifyAccountMutation = (
+  { __typename?: 'Mutation' }
+  & { verifyAccount: Maybe<(
+    { __typename?: 'VerifyAccountMutationPayload' }
+    & Pick<VerifyAccountMutationPayload, 'message'>
     & { errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1599,6 +1633,78 @@ export function useResetPasswordMutation(baseOptions?: ApolloReactHooks.Mutation
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
 export type ResetPasswordMutationResult = ApolloReactCommon.MutationResult<ResetPasswordMutation>;
 export type ResetPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const ResendVerificationEmailDocument = gql`
+    mutation ResendVerificationEmail($email: String!) {
+  resendVerificationEmail(input: {email: $email}) {
+    message
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type ResendVerificationEmailMutationFn = ApolloReactCommon.MutationFunction<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>;
+
+/**
+ * __useResendVerificationEmailMutation__
+ *
+ * To run a mutation, you first call `useResendVerificationEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResendVerificationEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resendVerificationEmailMutation, { data, loading, error }] = useResendVerificationEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useResendVerificationEmailMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>) {
+        return ApolloReactHooks.useMutation<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>(ResendVerificationEmailDocument, baseOptions);
+      }
+export type ResendVerificationEmailMutationHookResult = ReturnType<typeof useResendVerificationEmailMutation>;
+export type ResendVerificationEmailMutationResult = ApolloReactCommon.MutationResult<ResendVerificationEmailMutation>;
+export type ResendVerificationEmailMutationOptions = ApolloReactCommon.BaseMutationOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>;
+export const VerifyAccountDocument = gql`
+    mutation VerifyAccount($token: String) {
+  verifyAccount(input: {token: $token}) {
+    message
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type VerifyAccountMutationFn = ApolloReactCommon.MutationFunction<VerifyAccountMutation, VerifyAccountMutationVariables>;
+
+/**
+ * __useVerifyAccountMutation__
+ *
+ * To run a mutation, you first call `useVerifyAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyAccountMutation, { data, loading, error }] = useVerifyAccountMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useVerifyAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<VerifyAccountMutation, VerifyAccountMutationVariables>) {
+        return ApolloReactHooks.useMutation<VerifyAccountMutation, VerifyAccountMutationVariables>(VerifyAccountDocument, baseOptions);
+      }
+export type VerifyAccountMutationHookResult = ReturnType<typeof useVerifyAccountMutation>;
+export type VerifyAccountMutationResult = ApolloReactCommon.MutationResult<VerifyAccountMutation>;
+export type VerifyAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<VerifyAccountMutation, VerifyAccountMutationVariables>;
 export const CreateCommentDocument = gql`
     mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $comment: ID) {
   createComment(input: {text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment}) {

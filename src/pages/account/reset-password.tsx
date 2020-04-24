@@ -153,7 +153,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
     );
 
     const renderEmailSubmitted = (
-        <Box textAlign="center">
+        <Box flexGrow="1" textAlign="center">
             <Typography variant="body2">{t('reset-password:emailSubmitted')}</Typography>
         </Box>
     );
