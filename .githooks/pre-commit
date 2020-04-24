@@ -5,9 +5,7 @@ export PATH=/usr/local/bin:$PATH
 
 status_before=$(git status -vv)
 
-docker-compose run --no-deps --rm frontend sh -c "
-    yarn prettier --write '**/*.{ts,tsx,js,json}'
-"
+pretty-quick --staged
 
 status_after=$(git status -vv)
 
