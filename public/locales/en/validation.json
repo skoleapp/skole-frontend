@@ -4,5 +4,6 @@
     "passwordsNotMatch": "Passwords do not match.",
     "required": "This field is required.",
     "unexpectedError": "Unexpected error.",
-    "networkError": "Network error."
+    "networkError": "Network error.",
+    "fileSizeError": "File is too large!"
 }

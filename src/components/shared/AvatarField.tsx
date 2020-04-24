@@ -25,7 +25,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
         const reader = new FileReader();
         const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
         if (avatar.size > 2000000) {
-            setFieldError('avatar', t('forms:fileSizeError'));
+            setFieldError('avatar', t('validation:fileSizeError'));
         } else {
             reader.readAsDataURL(avatar);
             reader.onloadend = (): void => {

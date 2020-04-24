@@ -64,6 +64,12 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         </MenuItem>
     ));
 
+    const renderCommonAccountMenuItems = menuItems.commonAccount.map((m, i) => (
+        <MenuItem key={i} onClick={handleMenuItemClick(m.href)} selected={getSelected(m)}>
+            {t(m.text)}
+        </MenuItem>
+    ));
+
     const renderAboutMenuItems = menuItems.about.map((m, i) => (
         <MenuItem key={i} onClick={handleMenuItemClick(m.href)} selected={getSelected(m)}>
             {t(m.text)}
@@ -84,6 +90,7 @@ export const useSettings = ({ modal }: Props): UseSettings => {
 
     const renderCommonMenuItems = (
         <StyledList>
+            {renderCommonAccountMenuItems}
             {renderLanguageMenuItem}
             {renderAboutMenuItems}
             {renderLegalItems}

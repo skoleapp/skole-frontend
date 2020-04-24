@@ -1,5 +1,5 @@
 import { Box, Divider } from '@material-ui/core';
-import { AddCircleOutlineOutlined } from '@material-ui/icons';
+import { LibraryAddOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
@@ -96,7 +96,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                         href="/register"
                         variant="outlined"
                         color="primary"
-                        endIcon={<AddCircleOutlineOutlined />}
+                        endIcon={<LibraryAddOutlined />}
                         fullWidth
                     >
                         {t('login:createAccount')}

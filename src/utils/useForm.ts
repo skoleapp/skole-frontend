@@ -61,6 +61,7 @@ export const useForm = <T>(): UseForm<T> => {
         setFormErrors(formErrors);
     };
 
+    const unexpectedError = (): void => setFormErrors({ general: i18n.t('validation:unexpectedError') });
     const setSubmitting = (val: boolean): void | null => ref && ref.current && ref.current.setSubmitting(val);
     const resetForm = (): void | null => ref && ref.current && ref.current.resetForm();
     const submitForm = (): Promise<void> | null => ref && ref.current && ref.current.submitForm();
@@ -82,5 +83,6 @@ export const useForm = <T>(): UseForm<T> => {
         submitForm,
         setFieldValue,
         setFieldError,
+        unexpectedError,
     };
 };

@@ -116,6 +116,7 @@ export interface UseForm<T> {
     submitForm: () => Promise<void> | null;
     setFieldValue: (fieldName: string, val: string | File | File[] | null) => void;
     setFieldError: (fieldName: string, val: string) => void;
+    unexpectedError: () => void;
 }
 
 export interface UseFilters<T> extends UseForm<T> {

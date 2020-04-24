@@ -42,6 +42,7 @@
     "searchResults": "Hakutulokset",
     "editProfile": "Muokkaa profiilia",
     "changePassword": "Vaihda salasana",
+    "resetPassword": "Nollaa salasana",
     "deleteAccount": "Poista tili",
     "course": "Kurssi",
     "name": "Nimi",

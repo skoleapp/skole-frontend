@@ -39,6 +39,5 @@
     "scoreOrdering": "Poäng (Stigande)",
     "scoreOrderingReverse": "Poäng (Nedåtgående)",
     "betaCode": "Betakod",
-    "name": "Namn",
-    "fileSizeError": "Filen är för stor!"
+    "name": "Namn"
 }

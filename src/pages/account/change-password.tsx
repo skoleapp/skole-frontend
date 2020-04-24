@@ -27,7 +27,10 @@ export interface ChangePasswordFormValues {
 }
 
 const ChangePasswordPage: NextPage<I18nProps> = () => {
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<ChangePasswordFormValues>();
+    const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
+        ChangePasswordFormValues
+    >();
+
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
@@ -45,9 +48,11 @@ const ChangePasswordPage: NextPage<I18nProps> = () => {
         if (changePassword) {
             if (changePassword.errors) {
                 handleMutationErrors(changePassword.errors);
-            } else {
+            } else if (changePassword.message) {
                 resetForm();
-                toggleNotification(t('notifications:passwordChanged'));
+                toggleNotification(changePassword.message);
+            } else {
+                unexpectedError();
             }
         }
     };

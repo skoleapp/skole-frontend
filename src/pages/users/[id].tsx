@@ -1,5 +1,5 @@
 import { Avatar, Box, CardContent, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
-import { EditOutlined, HowToRegOutlined } from '@material-ui/icons';
+import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -37,7 +37,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const { user: loggedInUser } = useAuthContext();
-    const active = R.propOr(false, 'isActive', loggedInUser);
+    const verified = R.propOr(false, 'verified', loggedInUser);
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
     const title = R.propOr('', 'title', user) as string;
@@ -65,9 +65,9 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </ButtonLink>
     );
 
-    const renderVerifyAccountLink = isOwnProfile && !active && (
+    const renderVerifyAccountLink = isOwnProfile && !verified && (
         <Box marginTop="0.5rem">
-            <TextLink href="/account/activate" color="primary">
+            <TextLink href="/account/verify" color="primary">
                 {t('common:verifyAccount')}
             </TextLink>
         </Box>

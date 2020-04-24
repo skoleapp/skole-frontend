@@ -13,8 +13,18 @@ export const menuItems = {
             href: '/account/change-password',
         },
         {
+            text: 'common:verifyAccount',
+            href: '/account/verify-account',
+        },
+        {
             text: 'common:deleteAccount',
             href: '/account/delete-account',
+        },
+    ],
+    commonAccount: [
+        {
+            text: 'common:resetPassword',
+            href: '/account/reset-password',
         },
     ],
     language: [

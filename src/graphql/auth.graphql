@@ -62,6 +62,7 @@ query UserMe {
 
 mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
     changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
+        message
         errors {
             field
             messages
@@ -71,6 +72,26 @@ mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
 
 mutation DeleteAccount($password: String!) {
     deleteUser(input: { password: $password }) {
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation SendPasswordResetEmail($email: String!) {
+    sendPasswordResetEmail(input: { email: $email }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation ResetPassword($token: String, $newPassword: String!) {
+    resetPassword(input: { token: $token, newPassword: $newPassword }) {
+        message
         errors {
             field
             messages

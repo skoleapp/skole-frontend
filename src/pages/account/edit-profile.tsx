@@ -25,7 +25,7 @@ export interface UpdateProfileFormValues {
 
 const EditProfilePage: NextPage<I18nProps> = () => {
     const { user, setUser } = useAuthContext();
-    const active = R.propOr(false, 'isActive', user);
+    const verified = R.propOr(false, 'verified', user);
     const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -117,9 +117,9 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
-                    {!active && (
+                    {!verified && (
                         <Box marginTop="1rem" marginBottom="0.5rem">
-                            <TextLink href="/account/activate" color="primary">
+                            <TextLink href="/account/verify" color="primary">
                                 {t('common:verifyAccount')}
                             </TextLink>
                         </Box>

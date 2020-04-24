@@ -39,6 +39,5 @@
     "scoreOrdering": "Score (Ascending)",
     "scoreOrderingReverse": "Score (Descending)",
     "betaCode": "Beta Code",
-    "name": "Name",
-    "fileSizeError": "File is too large!"
+    "name": "Name"
 }
