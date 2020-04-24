@@ -5,7 +5,7 @@ mutation Register($username: String!, $email: String!, $password: String!, $code
             messages
         }
     }
-    login(input: { username: $username, password: $password }) {
+    login(input: { usernameOrEmail: $username, password: $password }) {
         token
         user {
             id
@@ -18,8 +18,8 @@ mutation Register($username: String!, $email: String!, $password: String!, $code
     }
 }
 
-mutation Login($username: String!, $password: String!) {
-    login(input: { username: $username, password: $password }) {
+mutation Login($usernameOrEmail: String!, $password: String!) {
+    login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
         token
         user {
             id
@@ -44,7 +44,7 @@ query UserMe {
         courseCount
         resourceCount
         created
-        isActive
+        verified
         starredCourses {
             id
             name

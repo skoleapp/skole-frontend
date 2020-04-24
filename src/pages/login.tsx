@@ -17,13 +17,13 @@ import { I18nProps } from '../types';
 import { useAlerts, useForm, useLanguageSelector } from '../utils';
 
 const initialValues = {
-    username: '',
+    usernameOrEmail: '',
     password: '',
     general: '',
 };
 
 export interface LoginFormValues {
-    username: string;
+    usernameOrEmail: string;
     password: string;
 }
 
@@ -36,7 +36,7 @@ const LoginPage: NextPage<I18nProps> = () => {
     const { setUser } = useAuthContext();
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required(t('validation:required')),
+        usernameOrEmail: Yup.string().required(t('validation:required')),
         password: Yup.string().required(t('validation:required')),
     });
 
@@ -62,8 +62,8 @@ const LoginPage: NextPage<I18nProps> = () => {
     const [loginMutation] = useLoginMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: LoginFormValues): Promise<void> => {
-        const { username, password } = values;
-        await loginMutation({ variables: { username, password }, context: { headers: { Authorization: '' } } });
+        const { usernameOrEmail, password } = values;
+        await loginMutation({ variables: { usernameOrEmail, password }, context: { headers: { Authorization: '' } } });
         setSubmitting(false);
     };
 
@@ -72,10 +72,10 @@ const LoginPage: NextPage<I18nProps> = () => {
             {(props): JSX.Element => (
                 <Form>
                     <Field
-                        placeholder={t('forms:username')}
-                        name="username"
+                        placeholder={t('forms:usernameOrEmail')}
+                        name="usernameOrEmail"
                         component={TextField}
-                        label={t('forms:username')}
+                        label={t('forms:usernameOrEmail')}
                         variant="outlined"
                         fullWidth
                     />
@@ -102,7 +102,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                         {t('login:createAccount')}
                     </ButtonLink>
                     <Box marginTop="1rem">
-                        <TextLink href="/reset-password">{t('login:forgotPassword')}</TextLink>
+                        <TextLink href="/account/reset-password">{t('login:forgotPassword')}</TextLink>
                     </Box>
                 </Form>
             )}

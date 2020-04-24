@@ -1,5 +1,6 @@
 {
     "username": "Käyttäjätunnus",
+    "usernameOrEmail": "Käyttäjätunnus tai sähköposti",
     "usernameHelperText": "Käyttäjätunnuksesi näkyy muille käyttäjille.",
     "email": "Sähköposti",
     "invalidEmail": "Virheellinen sähköposti.",

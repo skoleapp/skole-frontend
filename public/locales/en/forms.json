@@ -1,5 +1,6 @@
 {
     "username": "Username",
+    "usernameOrEmail": "Username or Email",
     "usernameHelperText": "Your username will show to other users.",
     "email": "Email",
     "invalidEmail": "Invalid email.",
