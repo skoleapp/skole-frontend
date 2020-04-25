@@ -79,7 +79,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
     });
 
     const onEmailFormCompleted = ({ sendPasswordResetEmail }: SendPasswordResetEmailMutation): void => {
-        if (sendPasswordResetEmail) {
+        if (!!sendPasswordResetEmail) {
             if (sendPasswordResetEmail.errors) {
                 handleEmailFormMutationErrors(sendPasswordResetEmail.errors);
             } else if (sendPasswordResetEmail.message) {
@@ -93,10 +93,10 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
     };
 
     const onPasswordFormCompleted = ({ resetPassword }: ResetPasswordMutation): void => {
-        if (resetPassword) {
-            if (resetPassword.errors) {
+        if (!!resetPassword) {
+            if (!!resetPassword.errors) {
                 handlePasswordFormMutationErrors(resetPassword.errors);
-            } else if (resetPassword.message) {
+            } else if (!!resetPassword.message) {
                 resetPasswordForm();
                 toggleNotification(resetPassword.message);
                 Router.push('/login');

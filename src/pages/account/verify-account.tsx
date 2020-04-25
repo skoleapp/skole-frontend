@@ -50,9 +50,9 @@ const VerifyAccountPage: NextPage<I18nProps> = () => {
 
     const onEmailFormCompleted = ({ resendVerificationEmail }: ResendVerificationEmailMutation): void => {
         if (!!resendVerificationEmail) {
-            if (resendVerificationEmail.errors) {
+            if (!!resendVerificationEmail.errors) {
                 handleEmailFormMutationErrors(resendVerificationEmail.errors);
-            } else if (resendVerificationEmail.message) {
+            } else if (!!resendVerificationEmail.message) {
                 resetEmailForm();
                 toggleNotification(resendVerificationEmail.message);
                 setEmailSubmitted(true);
@@ -66,9 +66,9 @@ const VerifyAccountPage: NextPage<I18nProps> = () => {
 
     const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
         if (!!verifyAccount) {
-            if (verifyAccount.errors) {
+            if (!!verifyAccount.errors) {
                 handleConfirmationFormMutationErrors(verifyAccount.errors);
-            } else if (verifyAccount.message) {
+            } else if (!!verifyAccount.message) {
                 resetConfirmationForm();
                 toggleNotification(verifyAccount.message);
                 setVerified(true);

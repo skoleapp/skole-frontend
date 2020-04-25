@@ -26,18 +26,22 @@ export interface UpdateProfileFormValues {
 const EditProfilePage: NextPage<I18nProps> = () => {
     const { user, setUser } = useAuthContext();
     const verified = R.propOr(false, 'verified', user);
-    const { ref, handleMutationErrors, onError, setSubmitting } = useForm<UpdateProfileFormValues>();
+    const { ref, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
     const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
-        if (updateUser) {
-            if (updateUser.errors) {
+        if (!!updateUser) {
+            if (!!updateUser.errors) {
                 handleMutationErrors(updateUser.errors);
-            } else {
-                toggleNotification(t('notifications:profileUpdated'));
+            } else if (!!updateUser.message) {
+                toggleNotification(updateUser.message);
                 setUser(updateUser.user as UserObjectType);
+            } else {
+                unexpectedError();
             }
+        } else {
+            unexpectedError();
         }
     };
 
@@ -119,7 +123,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
                     {!verified && (
                         <Box marginTop="1rem" marginBottom="0.5rem">
-                            <TextLink href="/account/verify" color="primary">
+                            <TextLink href="/account/verify-account" color="primary">
                                 {t('common:verifyAccount')}
                             </TextLink>
                         </Box>

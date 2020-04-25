@@ -72,6 +72,7 @@ mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
 
 mutation DeleteAccount($password: String!) {
     deleteUser(input: { password: $password }) {
+        message
         errors {
             field
             messages

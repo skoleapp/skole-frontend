@@ -604,6 +604,7 @@ export type UpdateUserMutationPayload = {
    __typename?: 'UpdateUserMutationPayload',
   user?: Maybe<UserObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -617,11 +618,11 @@ export type UserObjectType = {
   avatar?: Maybe<Scalars['String']>,
   score?: Maybe<Scalars['Int']>,
   created: Scalars['DateTime'],
+  verified?: Maybe<Scalars['Boolean']>,
   createdCourses: Array<CourseObjectType>,
   createdResources: Array<ResourceObjectType>,
   votes: Array<VoteObjectType>,
   avatarThumbnail?: Maybe<Scalars['String']>,
-  verified?: Maybe<Scalars['Boolean']>,
   courseCount?: Maybe<Scalars['Int']>,
   resourceCount?: Maybe<Scalars['Int']>,
   starredCourses?: Maybe<Array<Maybe<CourseObjectType>>>,
@@ -762,6 +763,7 @@ export type DeleteAccountMutation = (
   { __typename?: 'Mutation' }
   & { deleteUser: Maybe<(
     { __typename?: 'DeleteUserMutationPayload' }
+    & Pick<DeleteUserMutationPayload, 'message'>
     & { errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1310,6 +1312,7 @@ export type UpdateUserMutation = (
   { __typename?: 'Mutation' }
   & { updateUser: Maybe<(
     { __typename?: 'UpdateUserMutationPayload' }
+    & Pick<UpdateUserMutationPayload, 'message'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'created'>
@@ -1528,6 +1531,7 @@ export type ChangePasswordMutationOptions = ApolloReactCommon.BaseMutationOption
 export const DeleteAccountDocument = gql`
     mutation DeleteAccount($password: String!) {
   deleteUser(input: {password: $password}) {
+    message
     errors {
       field
       messages
@@ -2722,6 +2726,7 @@ export type UserDetailQueryResult = ApolloReactCommon.QueryResult<UserDetailQuer
 export const UpdateUserDocument = gql`
     mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String) {
   updateUser(input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar}) {
+    message
     user {
       id
       username

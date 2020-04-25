@@ -8,10 +8,9 @@ import * as Yup from 'yup';
 
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
-import { useAuthContext } from '../../context';
+import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
-import { withAuthSync } from '../../lib';
-import { clientLogout } from '../../lib';
+import { clientLogout, withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -25,23 +24,31 @@ export interface DeleteAccountFormValues {
 }
 
 export const DeleteAccountPage: NextPage<I18nProps> = () => {
-    const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<DeleteAccountFormValues>();
+    const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
+        DeleteAccountFormValues
+    >();
     const { t } = useTranslation();
     const confirm = useConfirm();
     const apolloClient = useApolloClient();
     const { setUser } = useAuthContext();
+    const { toggleNotification } = useNotificationsContext();
 
     const onCompleted = async ({ deleteUser }: DeleteAccountMutation): Promise<void> => {
-        if (deleteUser) {
-            if (deleteUser.errors) {
+        if (!!deleteUser) {
+            if (!!deleteUser.errors) {
                 handleMutationErrors(deleteUser.errors);
-            } else {
+            } else if (!!deleteUser.message) {
                 resetForm();
+                toggleNotification(deleteUser.message);
                 clientLogout();
                 setUser(null);
                 await apolloClient.resetStore();
                 Router.push('/login');
+            } else {
+                unexpectedError();
             }
+        } else {
+            unexpectedError();
         }
     };
 

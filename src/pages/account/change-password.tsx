@@ -45,10 +45,10 @@ const ChangePasswordPage: NextPage<I18nProps> = () => {
     });
 
     const onCompleted = async ({ changePassword }: ChangePasswordMutation): Promise<void> => {
-        if (changePassword) {
-            if (changePassword.errors) {
+        if (!!changePassword) {
+            if (!!changePassword.errors) {
                 handleMutationErrors(changePassword.errors);
-            } else if (changePassword.message) {
+            } else if (!!changePassword.message) {
                 resetForm();
                 toggleNotification(changePassword.message);
             } else {

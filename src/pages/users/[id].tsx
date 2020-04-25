@@ -67,7 +67,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
 
     const renderVerifyAccountLink = isOwnProfile && !verified && (
         <Box marginTop="0.5rem">
-            <TextLink href="/account/verify" color="primary">
+            <TextLink href="/account/verify-account" color="primary">
                 {t('common:verifyAccount')}
             </TextLink>
         </Box>
