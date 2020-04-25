@@ -123,20 +123,16 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         handleVote({ status: status, course: courseId });
     };
 
-    const renderSubjectLink = !!subjectId ? (
+    const renderSubjectLink = !!subjectId && (
         <TextLink href={subjectLink} color="primary">
             {subjectName}
         </TextLink>
-    ) : (
-        undefined
     );
 
-    const renderSchoolLink = !!schoolId ? (
+    const renderSchoolLink = !!schoolId && (
         <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
             {schoolName}
         </TextLink>
-    ) : (
-        undefined
     );
 
     const renderUpVoteButton = (

@@ -27,8 +27,8 @@ interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderRepo
 
 interface Props extends LayoutProps {
     headerDesktop?: string;
-    subheaderDesktop?: JSX.Element | string;
-    subheaderDesktopSecondary?: JSX.Element | string;
+    subheaderDesktop?: JSX.Element | string | boolean;
+    subheaderDesktopSecondary?: JSX.Element | string | boolean;
     headerSecondary?: string;
     tabLabelLeft: string;
     tabLabelRight: string;

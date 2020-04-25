@@ -146,14 +146,12 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         }
     };
 
-    const renderCourseLink = !!courseId ? <TextLink {...staticBackUrl}>{courseName}</TextLink> : undefined;
+    const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
 
-    const renderSchoolLink = !!schoolId ? (
+    const renderSchoolLink = !!schoolId && (
         <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
             {schoolName}
         </TextLink>
-    ) : (
-        undefined
     );
 
     const infoItems = [

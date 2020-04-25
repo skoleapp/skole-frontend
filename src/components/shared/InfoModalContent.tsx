@@ -9,7 +9,7 @@ import { TextLink } from './TextLink';
 
 interface InfoItem {
     label: string;
-    value?: JSX.Element | string | number;
+    value?: JSX.Element | string | number | boolean;
 }
 
 interface Props {

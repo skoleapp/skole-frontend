@@ -263,7 +263,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         topNavbarProps: {
             header: username,
             dynamicBackUrl: true,
-            headerRight: isOwnProfile ? <SettingsButton color="secondary" /> : undefined,
+            headerRight: isOwnProfile && <SettingsButton color="secondary" />,
         },
         containerProps: {
             maxWidth: 'md' as MaxWidth,
