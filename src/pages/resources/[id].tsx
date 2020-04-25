@@ -12,7 +12,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -73,6 +73,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
+    const { setPages, setCurrentPage } = usePDFViewerContext();
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -91,6 +92,13 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         href: '/courses/[id]',
         as: `/courses/${courseId}`,
     };
+
+    useEffect(() => {
+        return (): void => {
+            setPages([]);
+            setCurrentPage(0);
+        };
+    }, []);
 
     const deleteResourceError = (): void => {
         toggleNotification(t('notifications:deleteResourceError'));
