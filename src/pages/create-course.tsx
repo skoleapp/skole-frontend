@@ -30,9 +30,12 @@ interface CreateCourseFormValues {
 }
 
 const CreateCoursePage: NextPage<I18nProps> = () => {
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<CreateCourseFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
+
+    const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
+        CreateCourseFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
         courseName: Yup.string().required(t('validation:required')),
@@ -44,14 +47,18 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
     });
 
     const onCompleted = async ({ createCourse }: CreateCourseMutation): Promise<void> => {
-        if (createCourse) {
-            if (createCourse.errors) {
+        if (!!createCourse) {
+            if (!!createCourse.errors) {
                 handleMutationErrors(createCourse.errors);
-            } else if (createCourse.course) {
+            } else if (!!createCourse.course && !!createCourse.message) {
                 resetForm();
-                toggleNotification(t('notifications:courseCreated'));
+                toggleNotification(createCourse.message);
                 await Router.push(`/courses/${createCourse.course.id}`);
+            } else {
+                unexpectedError();
             }
+        } else {
+            unexpectedError();
         }
     };
 

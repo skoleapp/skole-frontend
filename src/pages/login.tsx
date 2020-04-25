@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
-import { useAuthContext } from '../context';
+import { useAuthContext, useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { clientLogin } from '../lib';
@@ -28,12 +28,16 @@ export interface LoginFormValues {
 }
 
 const LoginPage: NextPage<I18nProps> = () => {
-    const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<LoginFormValues>();
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
     const { renderLanguageButton } = useLanguageSelector();
     const { setUser } = useAuthContext();
+    const { toggleNotification } = useNotificationsContext();
+
+    const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
+        LoginFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
         usernameOrEmail: Yup.string().required(t('validation:required')),
@@ -44,10 +48,11 @@ const LoginPage: NextPage<I18nProps> = () => {
         if (!!login) {
             if (!!login.errors) {
                 handleMutationErrors(login.errors);
-            } else if (!!login.token && !!login.user) {
+            } else if (!!login.token && !!login.user && !!login.message) {
                 const { next } = query;
                 clientLogin(login.token);
                 resetForm();
+                toggleNotification(login.message);
                 setUser(login.user as UserObjectType);
 
                 if (!!next) {
@@ -55,7 +60,11 @@ const LoginPage: NextPage<I18nProps> = () => {
                 } else {
                     Router.push('/');
                 }
+            } else {
+                unexpectedError();
             }
+        } else {
+            unexpectedError();
         }
     };
 

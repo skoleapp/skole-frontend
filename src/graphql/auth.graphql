@@ -1,5 +1,6 @@
 mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
     register(input: { username: $username, email: $email, password: $password, code: $code }) {
+        message
         errors {
             field
             messages
@@ -20,6 +21,7 @@ mutation Register($username: String!, $email: String!, $password: String!, $code
 
 mutation Login($usernameOrEmail: String!, $password: String!) {
     login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+        message
         token
         user {
             id

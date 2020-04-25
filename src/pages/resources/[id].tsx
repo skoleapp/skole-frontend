@@ -100,10 +100,14 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         if (!!deleteResource) {
             if (!!deleteResource.errors) {
                 deleteResourceError();
-            } else {
+            } else if (deleteResource.message) {
                 Router.push('/courses/' + courseId);
-                toggleNotification(t('notifications:resourceDeleted'));
+                toggleNotification(deleteResource.message);
+            } else {
+                deleteResourceError();
             }
+        } else {
+            deleteResourceError();
         }
     };
 

@@ -38,9 +38,16 @@ const UploadResourcePage: NextPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
-    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, setFieldError, setFieldValue } = useForm<
-        UploadResourceFormValues
-    >();
+    const {
+        ref,
+        setSubmitting,
+        onError,
+        resetForm,
+        handleMutationErrors,
+        setFieldError,
+        setFieldValue,
+        unexpectedError,
+    } = useForm<UploadResourceFormValues>();
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:required')),
@@ -54,14 +61,18 @@ const UploadResourcePage: NextPage<Props> = ({ course }) => {
     });
 
     const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {
-        if (createResource) {
-            if (createResource.errors) {
+        if (!!createResource) {
+            if (!!createResource.errors) {
                 handleMutationErrors(createResource.errors);
-            } else if (createResource.resource && createResource.resource.id) {
+            } else if (!!createResource.resource && !!createResource.resource.id && !!createResource.message) {
                 resetForm();
-                toggleNotification(t('notifications:resourceUploaded'));
+                toggleNotification(createResource.message);
                 await Router.push(`/resources/${createResource.resource.id}`);
+            } else {
+                unexpectedError();
             }
+        } else {
+            unexpectedError();
         }
     };
 

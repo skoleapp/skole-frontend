@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
-import { useAuthContext } from '../context';
+import { useAuthContext, useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { clientLogin } from '../lib';
@@ -26,11 +26,15 @@ export interface RegisterFormValues {
 }
 
 const RegisterPage: NextPage<I18nProps> = () => {
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<RegisterFormValues>();
     const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
     const { setUser } = useAuthContext();
+    const { toggleNotification } = useNotificationsContext();
+
+    const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
+        RegisterFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
@@ -60,11 +64,14 @@ const RegisterPage: NextPage<I18nProps> = () => {
             handleMutationErrors(register.errors);
         } else if (!!login && !!login.errors) {
             handleMutationErrors(login.errors);
-        } else if (!!login && !!login.token && !!login.user) {
+        } else if (!!login && !!login.token && !!login.user && !!register && !!register.message) {
             clientLogin(login.token);
             resetForm();
+            toggleNotification(register.message);
             setUser(login.user as UserObjectType);
             Router.push('/');
+        } else {
+            unexpectedError();
         }
     };
 

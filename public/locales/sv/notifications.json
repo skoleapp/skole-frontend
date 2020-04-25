@@ -1,18 +1,12 @@
 {
-    "resourceUploaded": "Resurs uppladdad!",
-    "messageSubmitted": "Meddelande skickat!",
-    "courseCreated": "Kurs skapad!",
     "signedOut": "Utloggad!",
     "errorDownloadingResource": "Fel vid nedladdning!",
     "voteError": "Fel vid omröstning!",
     "starError": "Fel vid favorisering!",
     "deleteCommentError": "Fel vid radering av kommentar!",
-    "commentDeleted": "Kommentar raderad!",
     "messageEmpty": "Meddelandet kan inte vara tomt!",
     "linkCopied": "Länk kopierad till klippbord!",
     "deleteResourceError": "Oväntat fel vid radering!",
-    "resourceDeleted": "Resurs raderad!",
-    "courseDeleted": "Kurs raderad!",
     "deleteCourseError": "Oväntat fel vid radering!",
     "downloadResourceError": "Fel vid nedladdning!",
     "messageError": "Fel vid skickande av meddelande!"

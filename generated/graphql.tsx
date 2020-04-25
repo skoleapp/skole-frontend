@@ -104,6 +104,7 @@ export type CreateCommentMutationPayload = {
    __typename?: 'CreateCommentMutationPayload',
   comment?: Maybe<CommentObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -119,6 +120,7 @@ export type CreateCourseMutationPayload = {
    __typename?: 'CreateCourseMutationPayload',
   course?: Maybe<CourseObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -135,6 +137,7 @@ export type CreateResourceMutationPayload = {
    __typename?: 'CreateResourceMutationPayload',
   resource?: Maybe<ResourceObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -573,6 +576,7 @@ export type UpdateCommentMutationPayload = {
    __typename?: 'UpdateCommentMutationPayload',
   comment?: Maybe<CommentObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -588,6 +592,7 @@ export type UpdateResourceMutationPayload = {
    __typename?: 'UpdateResourceMutationPayload',
   resource?: Maybe<ResourceObjectType>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
+  message?: Maybe<Scalars['String']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -680,6 +685,7 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: Maybe<(
     { __typename?: 'RegisterMutationPayload' }
+    & Pick<RegisterMutationPayload, 'message'>
     & { errors: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -707,7 +713,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login: Maybe<(
     { __typename?: 'LoginMutationPayload' }
-    & Pick<LoginMutationPayload, 'token'>
+    & Pick<LoginMutationPayload, 'message' | 'token'>
     & { user: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'created'>
@@ -1072,6 +1078,7 @@ export type CreateCourseMutation = (
   { __typename?: 'Mutation' }
   & { createCourse: Maybe<(
     { __typename?: 'CreateCourseMutationPayload' }
+    & Pick<CreateCourseMutationPayload, 'message'>
     & { course: Maybe<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id'>
@@ -1107,6 +1114,7 @@ export type CreateResourceMutation = (
   { __typename?: 'Mutation' }
   & { createResource: Maybe<(
     { __typename?: 'CreateResourceMutationPayload' }
+    & Pick<CreateResourceMutationPayload, 'message'>
     & { resource: Maybe<(
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id'>
@@ -1350,6 +1358,7 @@ export type PerformVoteMutation = (
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
   register(input: {username: $username, email: $email, password: $password, code: $code}) {
+    message
     errors {
       field
       messages
@@ -1399,6 +1408,7 @@ export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<Regi
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
+    message
     token
     user {
       id
@@ -2225,6 +2235,7 @@ export type DeleteCourseMutationOptions = ApolloReactCommon.BaseMutationOptions<
 export const CreateCourseDocument = gql`
     mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
   createCourse(input: {name: $courseName, code: $courseCode, subject: $subject, school: $school}) {
+    message
     course {
       id
     }
@@ -2300,6 +2311,7 @@ export type CreateResourceInitialDataQueryResult = ApolloReactCommon.QueryResult
 export const CreateResourceDocument = gql`
     mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
   createResource(input: {title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file}) {
+    message
     resource {
       id
     }

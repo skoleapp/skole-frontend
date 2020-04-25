@@ -1,18 +1,12 @@
 {
-    "resourceUploaded": "Resurssi lisätty!",
-    "messageSubmitted": "Viesti lähetetty!",
-    "courseCreated": "Kurssi luotu!",
     "signedOut": "Kirjauduttu ulos!",
     "errorDownloadingResource": "Virhe ladattaessa tiedostoa!",
     "voteError": "Virhe äänestyksessä!",
     "starError": "Virhe merkittäessä tähdellä!",
     "deleteCommentError": "Virhe poistettaessa kommenttia!",
-    "commentDeleted": "Kommentti poistettu!",
     "messageEmpty": "Viesti ei voi olla tyhjä!",
     "linkCopied": "Linkki kopioitu leikepöydälle!",
     "deleteResourceError": "Resurssin poistamisessa tapahtui odottamaton virhe!",
-    "resourceDeleted": "Resurssi poistettu!",
-    "courseDeleted": "Kurssi poistettu!",
     "deleteCourseError": "Kurssin poistamisessa tapahtui odottamaton virhe!",
     "downloadResourceError": "Virhe ladattaessa tiedostoa!",
     "messageError": "Virhe lähetettäessä viestiä!"

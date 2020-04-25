@@ -46,13 +46,17 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
     const onError = (): void => toggleNotification(t('notifications:messageError'));
 
     const onCompleted = ({ createComment }: CreateCommentMutation): void => {
-        if (createComment) {
-            if (createComment.errors) {
+        if (!!createComment) {
+            if (!!createComment.errors) {
                 onError();
-            } else if (createComment.comment) {
-                toggleNotification(t('notifications:messageSubmitted'));
+            } else if (!!createComment.comment && !!createComment.message) {
+                toggleNotification(createComment.message);
                 appendComments(createComment.comment as CommentObjectType);
+            } else {
+                onError();
             }
+        } else {
+            onError();
         }
     };
 
