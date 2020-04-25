@@ -191,9 +191,6 @@ export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx =>
         const { data } = await apolloClient.query({
             query: SchoolDetailDocument,
             variables: query,
-            context: {
-                headers: { 'Accept-Language': 'fi' },
-            },
         });
 
         return { props: { ...data, ...namespaces } };
