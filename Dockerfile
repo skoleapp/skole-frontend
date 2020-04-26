@@ -13,4 +13,5 @@ RUN yarn install
 FROM dev AS circleci
 
 COPY --chown=node:node . .
+
 CMD yarn lint && yarn type-check
