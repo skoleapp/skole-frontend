@@ -859,6 +859,7 @@ export type CreateCommentMutation = (
   { __typename?: 'Mutation' }
   & { createComment: Maybe<(
     { __typename?: 'CreateCommentMutationPayload' }
+    & Pick<CreateCommentMutationPayload, 'message'>
     & { comment: Maybe<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'score'>
@@ -1722,6 +1723,7 @@ export type VerifyAccountMutationOptions = ApolloReactCommon.BaseMutationOptions
 export const CreateCommentDocument = gql`
     mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $comment: ID) {
   createComment(input: {text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment}) {
+    message
     comment {
       id
       user {
