@@ -8,6 +8,7 @@ import {
     IconButton,
     ListItemText,
     MenuItem,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -39,7 +40,6 @@ import {
 } from '../../context';
 import { useTranslation } from '../../i18n';
 import { mediaURL, useOptions, useVotes } from '../../utils';
-import { StyledTooltip } from '../shared';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
 interface Props {
@@ -57,18 +57,18 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const confirm = useConfirm();
     const attachmentOnly = comment.text == '' && comment.attachment !== '';
     const initialVote = R.propOr(null, 'vote', comment) as VoteObjectType | null;
-    const initialScore = R.propOr(0, 'score', comment) as number;
+    const initialScore = String(R.propOr(0, 'score', comment));
     const creatorId = R.propOr('', 'id', comment.user) as string;
     const isOwner = !!user && user.id === creatorId;
     const commentId = R.propOr('', 'id', comment) as string;
-    const replyCount = R.propOr('-', 'replyCount', comment) as string;
+    const replyCount = R.propOr('', 'replyCount', comment) as string;
 
     const {
         renderShareOption,
         renderReportOption,
         renderOptionsHeader,
         drawerProps: { handleOpen: handleOpenOptions, ...drawerProps },
-    } = useOptions(t('common:commentOptionsHeader'));
+    } = useOptions();
 
     const { onClose: handleCloseOptions } = drawerProps;
     const { toggleNotification } = useNotificationsContext();
@@ -95,10 +95,14 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         if (!!deleteComment) {
             if (!!deleteComment.errors) {
                 deleteCommentError();
-            } else {
+            } else if (!!deleteComment.message) {
                 removeComment(comment.id);
-                toggleNotification(t('notifications:commentDeleted'));
+                toggleNotification(deleteComment.message);
+            } else {
+                deleteCommentError();
             }
+        } else {
+            deleteCommentError();
         }
     };
 
@@ -166,19 +170,17 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         )}
                     </Grid>
                     <Grid item container xs={1} direction="column" justify="center" alignItems="center">
-                        <StyledTooltip
-                            title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}
-                        >
+                        <Tooltip title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}>
                             <span>
                                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                                     <KeyboardArrowUpOutlined className="vote-button" />
                                 </IconButton>
                             </span>
-                        </StyledTooltip>
+                        </Tooltip>
                         <Box>
                             <Typography variant="body2">{score}</Typography>
                         </Box>
-                        <StyledTooltip
+                        <Tooltip
                             title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:downvoteCommentTooltip')}
                         >
                             <span>
@@ -186,7 +188,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                                     <KeyboardArrowDownOutlined className="vote-button" />
                                 </IconButton>
                             </span>
-                        </StyledTooltip>
+                        </Tooltip>
                     </Grid>
                 </Grid>
                 <Grid container>
@@ -194,9 +196,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                         <Box display="flex" alignItems="center" height="100%">
                             {!isThread && (
                                 <>
-                                    <StyledTooltip title={t('common:commentRepliesTooltip', { replyCount })}>
+                                    <Tooltip title={t('common:commentRepliesTooltip', { replyCount })}>
                                         <CommentOutlined className="message-icon" />
-                                    </StyledTooltip>
+                                    </Tooltip>
                                     <Box marginLeft="0.25rem">
                                         <Typography variant="body2">{replyCount}</Typography>
                                     </Box>
@@ -204,21 +206,21 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                             )}
                             {!!comment.attachment && !attachmentOnly && (
                                 <Box marginLeft="0.25rem">
-                                    <StyledTooltip title={t('common:commentAttachmentTooltip')}>
+                                    <Tooltip title={t('common:commentAttachmentTooltip')}>
                                         <IconButton onClick={handleAttachmentClick}>
                                             <AttachFileOutlined />
                                         </IconButton>
-                                    </StyledTooltip>
+                                    </Tooltip>
                                 </Box>
                             )}
                         </Box>
                     </Grid>
                     <Grid container item xs={4} justify="center">
-                        <StyledTooltip title={t('common:commentOptionsTooltip')}>
+                        <Tooltip title={t('common:commentOptionsTooltip')}>
                             <IconButton onClick={handleOpenOptions}>
                                 <MoreHorizOutlined />
                             </IconButton>
-                        </StyledTooltip>
+                        </Tooltip>
                     </Grid>
                     <Grid item xs={4} />
                 </Grid>

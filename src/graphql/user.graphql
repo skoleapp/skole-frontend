@@ -42,6 +42,7 @@ query UserDetail($id: ID) {
 
 mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String) {
     updateUser(input: { username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar }) {
+        message
         user {
             id
             username

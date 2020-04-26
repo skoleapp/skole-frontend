@@ -1,7 +1,10 @@
 {
     "username": "Username",
+    "usernameOrEmail": "Username or Email",
     "usernameHelperText": "Your username will show to other users.",
     "email": "Email",
+    "invalidEmail": "Invalid email.",
+    "emailHelperText": "Your email will be visible only for you. We will not spam you.",
     "password": "Password",
     "oldPassword": "Old Password",
     "newPassword": "New Password",
@@ -36,6 +39,5 @@
     "scoreOrdering": "Score (Ascending)",
     "scoreOrderingReverse": "Score (Descending)",
     "betaCode": "Beta Code",
-    "name": "Name",
-    "fileSizeError": "File is too large!"
+    "name": "Name"
 }

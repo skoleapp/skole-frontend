@@ -7,7 +7,7 @@ import { ModalHeader, StyledList } from '../shared';
 
 export const LanguageSelectorModal: React.FC = () => {
     const { t, i18n } = useTranslation();
-    const { anchor } = useDrawer();
+    const { anchor } = useDrawer(t('common:language'));
     const { languageSelectorOpen, toggleLanguageSelector, languages, languageToFlag } = useLanguageSelector();
 
     const handleLanguageChange = (val: string) => (): void => {
@@ -31,7 +31,7 @@ export const LanguageSelectorModal: React.FC = () => {
 
     return (
         <Drawer open={languageSelectorOpen} anchor={anchor} onClose={handleClose}>
-            <ModalHeader title={t('common:language')} onCancel={handleClose} />
+            <ModalHeader text={t('common:language')} onCancel={handleClose} />
             {renderLanguageList}
         </Drawer>
     );

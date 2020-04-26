@@ -1,0 +1,9 @@
+{
+    "title": "Verifiera konto",
+    "description": "Detta är en kontokontrollsida.",
+    "header": "Verifiera konto",
+    "emailHelpText": "Klicka på knappen nedan så skickar vi dig en länk via e-post som du kan använda för att verifiera ditt konto.",
+    "confirmationHelpText": "Bra! Klicka nu på knappen nedan för att avsluta kontokontrollen.",
+    "emailSubmitted": "Nästan klar! Kontrollera din e-post för en länk som du kan använda för att verifiera ditt konto.",
+    "verified": "Ditt konto är verifierat! Du kan fortsätta använda Skole."
+}

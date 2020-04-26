@@ -9,6 +9,7 @@ import cookie from 'js-cookie';
 import { GetServerSideProps } from 'next';
 import nextCookie from 'next-cookies';
 import NextHead from 'next/head';
+import * as R from 'ramda';
 import React from 'react';
 
 import { env } from '../config';
@@ -26,6 +27,7 @@ const createApolloClient = (
     const isBrowser = typeof window !== 'undefined';
     const uri = isBrowser ? env.API_URL : env.BACKEND_URL;
     const token = !!ctx ? nextCookie(ctx).token : cookie.get('token');
+    const language = R.pathOr(i18n.language, ['req', 'language'], ctx);
 
     const httpLink = createUploadLink({
         uri: uri + 'graphql/',
@@ -37,7 +39,7 @@ const createApolloClient = (
         headers: {
             ...headers,
             Authorization: token ? `JWT ${token}` : '',
-            'Accept-Language': i18n.language,
+            'Accept-Language': language,
         },
     }));
 

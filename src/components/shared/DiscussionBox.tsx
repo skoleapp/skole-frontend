@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
-import { useCommentModalContext, useDeviceContext } from '../../context';
+import { useCommentModalContext, useDeviceContext, useDiscussionBoxContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { DiscussionBoxProps } from '../../types';
@@ -19,24 +19,25 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     isThread,
     target,
     formKey,
+    placeholderText,
 }) => {
-    const [comments, setComments] = useState(initialComments);
-    const initialReplyCount = R.propOr('-', 'replyCount', topComment);
+    const { comments, setComments } = useDiscussionBoxContext(initialComments);
+    const initialReplyCount = R.propOr('', 'replyCount', topComment);
     const [replyCount, setReplyCount] = useState(initialReplyCount);
-    const updateReplyCount = (): void => setReplyCount(comments.length);
     const { toggleCommentModal } = useCommentModalContext();
     const openCommentModal = (): void => toggleCommentModal(true);
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
+    const updateReplyCount = (replyCount: number): void => setReplyCount(replyCount);
 
     const appendComments = (comment: CommentObjectType): void => {
         setComments([...comments, comment]);
-        updateReplyCount();
+        isThread && updateReplyCount(comments.length + 1);
     };
 
     const removeComment = (id: string): void => {
         setComments(comments.filter((c: CommentObjectType): boolean => c.id !== id));
-        updateReplyCount();
+        isThread && updateReplyCount(comments.length - 1);
     };
 
     const commentCardProps = { isThread, removeComment };
@@ -79,7 +80,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
                           <CommentCard comment={c} {...commentCardProps} />
                       </Box>
                   ))
-                : !topComment && <NotFoundBox text={t('common:noComments')} />}
+                : !topComment && !!placeholderText && <NotFoundBox text={placeholderText} />}
             {renderReplyButton}
         </Box>
     );

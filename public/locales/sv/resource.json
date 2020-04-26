@@ -2,8 +2,6 @@
     "description": "Detta är en resurssida.",
     "deleteResource": "Radera resurs",
     "confirmDesc": "Är du säker på att du vill ta bort den här resursen?",
-    "optionsHeader": "Resursalternativ",
-    "infoHeader": "Resursinformation",
     "infoTooltip": "Visa resursinformation.",
     "optionsTooltip": "Visa resursalternativ.",
     "unstarredTooltip": "Stjärnmärk denna resurs.",
@@ -14,5 +12,6 @@
     "fullscreenTooltip": "Visa helskärm.",
     "loadingResource": "Laddar resurs...",
     "errorLoadingResource": "Fel vid inläsning av resurs.",
-    "discussionSubheader": "Här kan du ha allmän diskussion om resursen."
+    "commentsPlaceholder": "Här kan du ha allmän diskussion om resursen.",
+    "infoHeader": "Resursinformation"
 }

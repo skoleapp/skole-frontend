@@ -2,6 +2,7 @@ mutation CreateComment($text: String!, $attachment: String, $course: ID, $resour
     createComment(
         input: { text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment }
     ) {
+        message
         comment {
             id
             user {

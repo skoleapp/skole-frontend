@@ -19,7 +19,7 @@ export const useDrawer = (header?: string): UseDrawer => {
         handleClose();
     };
 
-    const renderHeader = <ModalHeader title={header} onCancel={handleCloseDrawer} />;
+    const renderHeader = <ModalHeader text={header} onCancel={handleCloseDrawer} />;
 
     return {
         open,

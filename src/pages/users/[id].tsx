@@ -1,4 +1,4 @@
-import { Avatar, Box, CardContent, Grid, Tab, Typography } from '@material-ui/core';
+import { Avatar, Box, CardContent, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import { GetServerSideProps, NextPage } from 'next';
@@ -19,14 +19,14 @@ import {
     SettingsButton,
     StyledCard,
     StyledTabs,
-    StyledTooltip,
+    TextLink,
 } from '../../components';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR } from '../../lib';
 import { withAuthSync } from '../../lib';
 import { breakpoints, breakpointsNum } from '../../styles';
-import { ButtonColor, ButtonVariant, I18nProps, MaxWidth, SkolePageContext } from '../../types';
+import { I18nProps, MaxWidth, SkolePageContext } from '../../types';
 import { mediaURL, useFrontendPagination, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
@@ -37,6 +37,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const { user: loggedInUser } = useAuthContext();
+    const verified = R.propOr(false, 'verified', loggedInUser);
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
     const title = R.propOr('', 'title', user) as string;
@@ -52,12 +53,25 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
     const isMobile = useDeviceContext(breakpointsNum.SM);
 
-    const editProfileButtonProps = {
-        href: '/account/edit-profile',
-        color: 'primary' as ButtonColor,
-        variant: 'outlined' as ButtonVariant,
-        endIcon: <EditOutlined />,
-    };
+    const renderEditProfileButton = (
+        <ButtonLink
+            href="/account/edit-profile"
+            color="primary"
+            variant="outlined"
+            endIcon={<EditOutlined />}
+            fullWidth={isMobile}
+        >
+            {t('profile:editProfile')}
+        </ButtonLink>
+    );
+
+    const renderVerifyAccountLink = isOwnProfile && !verified && (
+        <Box marginTop="0.5rem">
+            <TextLink href="/account/verify-account" color="primary">
+                {t('common:verifyAccount')}
+            </TextLink>
+        </Box>
+    );
 
     const renderTitle = !!title && <Typography variant="subtitle1">{title}</Typography>;
     const renderCourseCountValue = <Typography variant="body1">{courseCount}</Typography>;
@@ -77,7 +91,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </Box>
     );
 
-    const renderMobileUserName = isMobile && (
+    const renderUserName = (
         <Box marginY="0.5rem">
             <Typography variant="subtitle1">{username}</Typography>
         </Box>
@@ -87,7 +101,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         <CardContent>
             <Box display="flex" flexDirection="column">
                 <Avatar className="main-avatar" src={mediaURL(avatar)} />
-                {renderMobileUserName}
+                {renderUserName}
             </Box>
         </CardContent>
     );
@@ -140,15 +154,12 @@ const UserPage: NextPage<Props> = ({ user }) => {
                     {renderTitle}
                     {renderBio}
                     {renderJoined}
+                    {renderVerifyAccountLink}
                 </Box>
             </CardContent>
             {isOwnProfile && (
                 <Grid item xs={12}>
-                    <CardContent>
-                        <ButtonLink {...editProfileButtonProps} fullWidth>
-                            {t('profile:editProfile')}
-                        </ButtonLink>
-                    </CardContent>
+                    <CardContent>{renderEditProfileButton}</CardContent>
                 </Grid>
             )}
         </Grid>
@@ -163,11 +174,11 @@ const UserPage: NextPage<Props> = ({ user }) => {
                 {isOwnProfile && (
                     <CardContent>
                         <Grid container alignItems="center" justify="center">
-                            <ButtonLink {...editProfileButtonProps}>{t('profile:editProfile')}</ButtonLink>
+                            {renderEditProfileButton}
                             <Box marginLeft="0.5rem">
-                                <StyledTooltip title={t('profile:settingsTooltip')}>
+                                <Tooltip title={t('profile:settingsTooltip')}>
                                     <SettingsButton color="primary" />
-                                </StyledTooltip>
+                                </Tooltip>
                             </Box>
                         </Grid>
                     </CardContent>
@@ -193,6 +204,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                         {renderTitle}
                         {renderBio}
                         {renderJoined}
+                        {renderVerifyAccountLink}
                     </Box>
                 </CardContent>
             </Grid>
@@ -251,7 +263,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         topNavbarProps: {
             header: username,
             dynamicBackUrl: true,
-            headerRight: isOwnProfile ? <SettingsButton color="secondary" /> : undefined,
+            headerRight: isOwnProfile && <SettingsButton color="secondary" />,
         },
         containerProps: {
             maxWidth: 'md' as MaxWidth,

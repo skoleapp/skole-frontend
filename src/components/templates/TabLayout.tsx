@@ -1,4 +1,15 @@
-import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, Tab } from '@material-ui/core';
+import {
+    Box,
+    CardContent,
+    CardHeader,
+    Divider,
+    Drawer,
+    Grid,
+    IconButton,
+    Tab,
+    Tooltip,
+    Typography,
+} from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
@@ -6,7 +17,7 @@ import styled from 'styled-components';
 import { useDeviceContext } from '../../context';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useDrawer, useTabs } from '../../utils';
-import { StyledCard, StyledTabs, StyledTooltip } from '../shared';
+import { StyledCard, StyledTabs } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
@@ -16,14 +27,14 @@ interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderRepo
 
 interface Props extends LayoutProps {
     headerDesktop?: string;
-    subheaderDesktop?: JSX.Element | string;
+    subheaderDesktop?: JSX.Element | string | boolean;
+    subheaderDesktopSecondary?: JSX.Element | string | boolean;
     headerSecondary?: string;
-    subheaderSecondary?: string;
     tabLabelLeft: string;
     tabLabelRight: string;
     renderInfo: JSX.Element;
     infoTooltip?: string;
-    infoHeader?: string;
+    infoHeader: string;
     renderLeftContent: JSX.Element;
     renderRightContent: JSX.Element;
     customBottomNavbar?: JSX.Element;
@@ -39,8 +50,8 @@ interface Props extends LayoutProps {
 export const TabLayout: React.FC<Props> = ({
     headerDesktop,
     subheaderDesktop,
+    subheaderDesktopSecondary,
     headerSecondary,
-    subheaderSecondary,
     tabLabelLeft,
     tabLabelRight,
     renderInfo,
@@ -72,24 +83,32 @@ export const TabLayout: React.FC<Props> = ({
     const renderCustomBottomNavbar =
         tabValue === 0 ? customBottomNavbar : customBottomNavbarSecondary || customBottomNavbar;
 
-    const renderHeaderActions = (color: MuiColor): JSX.Element => (
+    const renderHeaderRight = (color: MuiColor): JSX.Element => (
+        <Tooltip title={optionsTooltip || ''}>
+            <IconButton onClick={handleOpenOptions} color={color}>
+                <MoreHorizOutlined />
+            </IconButton>
+        </Tooltip>
+    );
+
+    const renderHeaderRightSecondary = (color: MuiColor): JSX.Element => (
+        <Tooltip title={infoTooltip || ''}>
+            <IconButton onClick={handleOpenInfo} color={color}>
+                <InfoOutlined />
+            </IconButton>
+        </Tooltip>
+    );
+
+    const renderDesktopHeaderActions = (
         <Box display="flex">
             {!isMobile && headerActionDesktop}
-            <StyledTooltip title={infoTooltip || ''}>
-                <IconButton onClick={handleOpenInfo} color={color}>
-                    <InfoOutlined />
-                </IconButton>
-            </StyledTooltip>
-            <StyledTooltip title={optionsTooltip || ''}>
-                <IconButton onClick={handleOpenOptions} color={color}>
-                    <MoreHorizOutlined />
-                </IconButton>
-            </StyledTooltip>
+            {renderHeaderRightSecondary('default')}
+            {renderHeaderRight('default')}
         </Box>
     );
 
-    const renderMobileHeaderActions = renderHeaderActions('secondary');
-    const renderDesktopHeaderActions = renderHeaderActions('default');
+    const renderMobileHeaderRight = renderHeaderRight('secondary');
+    const renderMobileHeaderRightSecondary = renderHeaderRightSecondary('secondary');
 
     const renderTabs = (
         <StyledTabs value={tabValue} onChange={handleTabChange}>
@@ -118,6 +137,13 @@ export const TabLayout: React.FC<Props> = ({
         </StyledCard>
     );
 
+    const renderSubheaderDesktop = (
+        <Box>
+            <Typography variant="subtitle1">{subheaderDesktop}</Typography>
+            <Typography variant="subtitle1">{subheaderDesktopSecondary}</Typography>
+        </Box>
+    );
+
     const renderDesktopContent = !isMobile && !responsive && (
         <Grid id="container" container>
             <Grid item container xs={12} md={7} lg={8}>
@@ -125,7 +151,7 @@ export const TabLayout: React.FC<Props> = ({
                     <CardHeader
                         id="main-header"
                         title={headerDesktop}
-                        subheader={subheaderDesktop}
+                        subheader={renderSubheaderDesktop}
                         action={renderDesktopHeaderActions}
                     />
                     <CardContent>{extraDesktopActions}</CardContent>
@@ -135,7 +161,7 @@ export const TabLayout: React.FC<Props> = ({
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
                 <StyledCard marginLeft>
-                    <CardHeader title={headerSecondary} subheader={subheaderSecondary} />
+                    <CardHeader title={headerSecondary} />
                     <Divider />
                     {renderRightContent}
                 </StyledCard>
@@ -173,7 +199,8 @@ export const TabLayout: React.FC<Props> = ({
         ...props,
         topNavbarProps: {
             ...topNavbarProps,
-            headerRight: renderMobileHeaderActions,
+            headerRight: renderMobileHeaderRight,
+            headerRightSecondary: renderMobileHeaderRightSecondary,
             headerLeft: headerLeftMobile,
         },
         customBottomNavbar: renderCustomBottomNavbar,

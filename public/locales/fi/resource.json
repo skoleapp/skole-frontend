@@ -2,8 +2,6 @@
     "description": "Tämä on resurssi-sivu.",
     "deleteResource": "Poista resurssi",
     "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?",
-    "optionsHeader": "Resurssin vaihtoehdot",
-    "infoHeader": "Resurssin tiedot",
     "infoTooltip": "Näytä resurssin tiedot.",
     "optionsTooltip": "Näytä resurssin vaihtoehdot.",
     "unstarredTooltip": "Merkitse resurssi tähdellä.",
@@ -14,5 +12,6 @@
     "fullscreenTooltip": "Keskitä ruudulle.",
     "loadingResource": "Ladataan resurssia...",
     "errorLoadingResource": "Virhe ladattaessa resurssia.",
-    "discussionSubheader": "Täällä voit käydä yleistä keskustelua resurssista."
+    "commentsPlaceholder": "Täällä voit käydä yleistä keskustelua resurssista.",
+    "infoHeader": "Resurssin tiedot"
 }

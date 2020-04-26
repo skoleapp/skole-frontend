@@ -4,5 +4,6 @@
     "passwordsNotMatch": "Lösenorden stämmer inte överens",
     "required": "This fält krävs.",
     "unexpectedError": "Oväntat fel.",
-    "networkError": "Nätverksfel."
+    "networkError": "Nätverksfel.",
+    "fileSizeError": "Filen är för stor!"
 }

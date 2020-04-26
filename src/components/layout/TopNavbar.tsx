@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Grid, IconButton, Toolbar } from '@material-ui/core';
+import { AppBar, Avatar, Box, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
 import { ArrowBackOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
@@ -11,8 +11,9 @@ import { Link } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { TopNavbarProps } from '../../types';
 import { mediaURL } from '../../utils';
-import { ButtonLink, Heading, IconButtonLink, StyledTooltip } from '../shared';
-import { Logo, TopNavbarSearchWidget } from '.';
+import { ButtonLink, IconButtonLink, StyledHeaderText } from '../shared';
+import { Logo } from './Logo';
+import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
     header,
@@ -20,12 +21,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     staticBackUrl,
     disableSearch,
     headerRight,
+    headerRightSecondary,
     headerLeft,
 }) => {
     const { user } = useAuthContext();
     const { t } = useTranslation();
     const avatarThumb = R.propOr('', 'avatar', user) as string;
     const isMobile = useDeviceContext();
+    const dense = !!headerLeft || !!headerRightSecondary;
 
     const renderDynamicBackButton = dynamicBackUrl && (
         <IconButton onClick={(): void => Router.back()} color="secondary">
@@ -43,14 +46,19 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
     const renderMobileContent = isMobile && (
         <Grid container alignItems="center">
-            <Grid item xs={4} sm={3} container justify="flex-start" wrap="nowrap">
+            <Grid item xs={dense ? 4 : 2} container justify="flex-start" wrap="nowrap">
                 {renderStaticBackButton || renderDynamicBackButton}
                 {headerLeft}
             </Grid>
-            <Grid item xs={4} sm={6} container justify="center">
-                {header ? <Heading text={header} /> : <Logo />}
+            <Grid item xs={dense ? 4 : 8} container justify="center">
+                {header ? <StyledHeaderText text={header} /> : <Logo />}
             </Grid>
-            <Grid item xs={4} sm={3} container justify="flex-end">
+            {!!headerRightSecondary && (
+                <Grid item xs={dense ? 2 : 1} container justify="flex-end">
+                    {headerRightSecondary}
+                </Grid>
+            )}
+            <Grid item xs={!!headerRightSecondary ? 2 : dense ? 4 : 2} container justify="flex-end">
                 {headerRight}
             </Grid>
         </Grid>
@@ -63,10 +71,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
                     <>
-                        <StyledTooltip title={t('common:starredTooltip')}>
+                        <Tooltip title={t('common:starredTooltip')}>
                             <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
-                        </StyledTooltip>
-                        <StyledTooltip title={t('common:profileTooltip')}>
+                        </Tooltip>
+                        <Tooltip title={t('common:profileTooltip')}>
                             <span>
                                 <Link href="/users/[id]" as={`/users/${user.id}`}>
                                     <IconButton color="secondary">
@@ -74,7 +82,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                                     </IconButton>
                                 </Link>
                             </span>
-                        </StyledTooltip>
+                        </Tooltip>
                     </>
                 ) : (
                     <>

@@ -2,6 +2,7 @@
     "title": "Edit Profile",
     "description": "This is an edit profile page.",
     "header": "Edit Profile",
+    "avatar": "Avatar",
     "addAvatar": "Add Avatar",
     "changeAvatar": "Change Avatar",
     "clearAvatar": "Clear Avatar"

@@ -16,7 +16,7 @@ import { useForm } from './useForm';
 export const useFilters = <T extends {}>(): UseFilters<T> => {
     const { t } = useTranslation();
     const { resetForm, setSubmitting, ...other } = useForm<T>();
-    const drawerProps = useDrawer(t('common:advancedSearch'));
+    const drawerProps = useDrawer();
     const { onClose: handleCloseDrawer } = drawerProps;
     const { pathname, query } = useRouter();
     const submitButtonText = t('common:apply');
@@ -27,7 +27,8 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
         const validQuery: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
         await Router.push({ pathname, query: validQuery });
         actions.setSubmitting(false);
-        handleCloseDrawer((new Event('Fake event!') as unknown) as SyntheticEvent);
+        const fakeEvent = (new Event('Fake event!') as unknown) as SyntheticEvent;
+        handleCloseDrawer(fakeEvent);
     };
 
     // Clear the query params and reset form.
@@ -63,7 +64,7 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
         handleClearFilters,
         resetForm,
         setSubmitting,
-        drawerProps,
+        drawerProps: R.pick(['open', 'handleOpen', 'onClose', 'anchor'], drawerProps),
         ...other,
     };
 };

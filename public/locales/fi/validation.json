@@ -4,5 +4,6 @@
     "passwordsNotMatch": "Salasanat eivät täsmää.",
     "required": "Tämä kenttä on vaadittu.",
     "unexpectedError": "Odottamaton virhe.",
-    "networkError": "Yhteysvirhe."
+    "networkError": "Yhteysvirhe.",
+    "fileSizeError": "Tiedosto on liian suuri!"
 }

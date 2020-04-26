@@ -18,14 +18,14 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
 }) => {
     const { t } = useTranslation();
     const [preview, setPreview] = useState(mediaURL(values.avatar));
-    const { renderHeader, handleOpen, ...drawerProps } = useDrawer(t('edit-profile:changeAvatar'));
+    const { renderHeader, handleOpen, ...drawerProps } = useDrawer(t('edit-profile:avatar'));
     const { onClose: handleCloseDrawer } = drawerProps;
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();
         const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
         if (avatar.size > 2000000) {
-            setFieldError('avatar', t('forms:fileSizeError'));
+            setFieldError('avatar', t('validation:fileSizeError'));
         } else {
             reader.readAsDataURL(avatar);
             reader.onloadend = (): void => {

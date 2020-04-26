@@ -15,7 +15,7 @@ interface Variables {
 
 interface UseVotesProps {
     initialVote: VoteObjectType | null;
-    initialScore: number;
+    initialScore: string;
     isOwner: boolean;
 }
 
@@ -28,7 +28,7 @@ interface VoteButtonProps {
 interface UseVotes {
     upVoteButtonProps: VoteButtonProps;
     downVoteButtonProps: VoteButtonProps;
-    score: number;
+    score: string;
     handleVote: (variables: Variables) => void;
 }
 
@@ -48,7 +48,7 @@ export const useVotes = ({ initialVote, initialScore, isOwner }: UseVotesProps):
                 onError();
             } else {
                 setVote(performVote.vote as VoteObjectType);
-                setScore(performVote.targetScore as number);
+                setScore(String(performVote.targetScore));
             }
         }
     };

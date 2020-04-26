@@ -1,25 +1,9 @@
-import {
-    Avatar,
-    Box,
-    CardContent,
-    Grid,
-    IconButton,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    MenuItem,
-    Typography,
-} from '@material-ui/core';
+import { Box, Grid, IconButton, ListItemText, MenuItem, Tooltip } from '@material-ui/core';
 import {
     CloudUploadOutlined,
     DeleteOutline,
-    HouseOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
-    SchoolOutlined,
-    ScoreOutlined,
-    SubjectOutlined,
-    VpnKeyOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
@@ -37,10 +21,10 @@ import {
     VoteObjectType,
 } from '../../../generated/graphql';
 import {
-    CreatorListItem,
     DiscussionBox,
     FrontendPaginatedTable,
     IconButtonLink,
+    InfoModalContent,
     NavbarContainer,
     NotFoundBox,
     NotFoundLayout,
@@ -48,7 +32,6 @@ import {
     StarButton,
     StyledBottomNavigation,
     StyledList,
-    StyledTooltip,
     TabLayout,
     TextLink,
 } from '../../components';
@@ -67,30 +50,26 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuthContext();
-    const courseName = R.propOr(t('common:courseNameNA'), 'name', course) as string;
-    const courseCode = R.propOr(t('common:courseCodeNA'), 'code', course);
-    const subjectName = R.path(['subject', 'name'], course) as string;
-    const schoolName = R.path(['school', 'name'], course) as string;
+    const courseName = R.propOr('', 'name', course) as string;
+    const courseCode = R.propOr('', 'code', course) as string;
+    const subjectName = R.pathOr('', ['subject', 'name'], course) as string;
+    const schoolName = R.pathOr('', ['school', 'name'], course) as string;
+    const resourceCount = String(R.propOr('', 'resourceCount', course));
     const creatorId = R.pathOr('', ['user', 'id'], course) as string;
     const courseId = R.propOr('', 'id', course) as string;
-    const initialScore = R.propOr(0, 'score', course) as number;
-    const resourceCount = R.propOr(t('common:NA'), 'resourceCount', course);
+    const schoolId = R.pathOr('', ['school', 'id'], course);
+    const initialScore = String(R.propOr(0, 'score', course));
     const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
     const comments = R.propOr([], 'comments', course) as CommentObjectType[];
     const isOwnCourse = creatorId === R.propOr('', 'id', user);
     const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
     const starred = !!R.propOr(undefined, 'starred', course);
     const isOwner = !!user && user.id === creatorId;
-    const schoolId = R.pathOr('', ['school', 'id'], course);
     const subjectId = R.path(['subject', 'id'], course) as boolean[];
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
-
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
-
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
-        t('course:optionsHeader'),
-    );
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -107,6 +86,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         comments,
         target: { course: Number(courseId) },
         formKey: 'course',
+        placeholderText: t('course:commentsPlaceholder'),
     };
 
     const deleteCourseError = (): void => {
@@ -117,10 +97,14 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         if (!!deleteCourse) {
             if (!!deleteCourse.errors) {
                 deleteCourseError();
-            } else {
+            } else if (!!deleteCourse.message) {
                 Router.push('/');
-                toggleNotification(t('notifications:courseDeleted'));
+                toggleNotification(deleteCourse.message);
+            } else {
+                deleteCourseError();
             }
+        } else {
+            deleteCourseError();
         }
     };
 
@@ -139,129 +123,66 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         handleVote({ status: status, course: courseId });
     };
 
-    const renderSubjectLink =
-        !!subjectId && !!subjectName ? (
-            <TextLink href={subjectLink} color="primary">
-                {subjectName}
-            </TextLink>
-        ) : (
-            t('common:subjectNameNA')
-        );
+    const renderSubjectLink = !!subjectId && (
+        <TextLink href={subjectLink} color="primary">
+            {subjectName}
+        </TextLink>
+    );
 
-    const renderSchoolLink =
-        !!schoolId && !!schoolName ? (
-            <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
-                {schoolName}
-            </TextLink>
-        ) : (
-            t('common:schoolNameNA')
-        );
-
-    const subheaderDesktop = (
-        <Typography variant="subtitle1">
-            {renderSubjectLink} - {renderSchoolLink}
-        </Typography>
+    const renderSchoolLink = !!schoolId && (
+        <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
+            {schoolName}
+        </TextLink>
     );
 
     const renderUpVoteButton = (
-        <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+        <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                     <KeyboardArrowUpOutlined />
                 </IconButton>
             </span>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const renderDownVoteButton = (
-        <StyledTooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+        <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                     <KeyboardArrowDownOutlined />
                 </IconButton>
             </span>
-        </StyledTooltip>
+        </Tooltip>
     );
 
-    const renderInfo = (
-        <CardContent>
-            <StyledList>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <SchoolOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:name')}: {courseName}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <VpnKeyOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:courseCode')}: {courseCode}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <SubjectOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:subject')}: {renderSubjectLink}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <HouseOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:school')}: {renderSchoolLink}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ScoreOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:score')}: {score}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <CloudUploadOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:resources')}: {resourceCount}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <CreatorListItem user={courseUser} created={created} />
-            </StyledList>
-        </CardContent>
-    );
+    const infoItems = [
+        {
+            label: t('common:name'),
+            value: courseName,
+        },
+        {
+            label: t('common:courseCode'),
+            value: courseCode,
+        },
+        {
+            label: t('common:subject'),
+            value: renderSubjectLink,
+        },
+        {
+            label: t('common:school'),
+            value: renderSchoolLink,
+        },
+        {
+            label: t('common:score'),
+            value: score,
+        },
+        {
+            label: t('common:resources'),
+            value: resourceCount,
+        },
+    ];
+
+    const renderInfo = <InfoModalContent user={courseUser} created={created} infoItems={infoItems} />;
 
     const resourceTableHeadProps = {
         titleLeft: t('common:title'),
@@ -296,13 +217,13 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-        <StyledTooltip title={t('course:uploadResourceTooltip')}>
+        <Tooltip title={t('course:uploadResourceTooltip')}>
             <IconButtonLink
                 href={{ pathname: '/upload-resource', query: { course: courseId } }}
                 color={color}
                 icon={CloudUploadOutlined}
             />
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
@@ -348,12 +269,12 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             staticBackUrl: { href: '/search' },
         },
         headerDesktop: courseName,
-        subheaderDesktop,
+        subheaderDesktop: renderSubjectLink,
+        subheaderDesktopSecondary: renderSchoolLink,
         headerSecondary: t('common:discussion'),
-        subheaderSecondary: t('course:discussionSubheader'),
         renderInfo,
-        infoTooltip: t('course:infoTooltip'),
         infoHeader: t('course:infoHeader'),
+        infoTooltip: t('course:infoTooltip'),
         optionProps: {
             renderOptions,
             renderOptionsHeader,

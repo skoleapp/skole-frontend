@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 
 import { RegisterMutation, useRegisterMutation, UserObjectType } from '../../generated/graphql';
 import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
-import { useAuthContext } from '../context';
+import { useAuthContext, useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { clientLogin } from '../lib';
@@ -19,22 +19,30 @@ import { useForm, useLanguageSelector } from '../utils';
 
 export interface RegisterFormValues {
     username: string;
+    email: string;
     password: string;
     confirmPassword: string;
     code: string;
 }
 
 const RegisterPage: NextPage<I18nProps> = () => {
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError } = useForm<RegisterFormValues>();
     const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
     const { setUser } = useAuthContext();
+    const { toggleNotification } = useNotificationsContext();
+
+    const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
+        RegisterFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
         password: Yup.string()
             .min(6, t('validation:passwordTooShort'))
+            .required(t('validation:required')),
+        email: Yup.string()
+            .email(t('validation:invalidEmail'))
             .required(t('validation:required')),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
@@ -56,21 +64,24 @@ const RegisterPage: NextPage<I18nProps> = () => {
             handleMutationErrors(register.errors);
         } else if (!!login && !!login.errors) {
             handleMutationErrors(login.errors);
-        } else if (!!login && !!login.token && !!login.user) {
+        } else if (!!login && !!login.token && !!login.user && !!register && !!register.message) {
             clientLogin(login.token);
             resetForm();
+            toggleNotification(register.message);
             setUser(login.user as UserObjectType);
             Router.push('/');
+        } else {
+            unexpectedError();
         }
     };
 
     const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
-        const { username, password, code } = values;
+        const { username, email, password, code } = values;
 
         await registerMutation({
-            variables: { username, password, code },
+            variables: { username, email, password, code },
             context: { headers: { Authorization: '' } },
         });
 
@@ -88,6 +99,15 @@ const RegisterPage: NextPage<I18nProps> = () => {
                         component={TextField}
                         variant="outlined"
                         helperText={t('forms:usernameHelperText')}
+                        fullWidth
+                    />
+                    <Field
+                        placeholder={t('forms:email')}
+                        label={t('forms:email')}
+                        name="email"
+                        component={TextField}
+                        variant="outlined"
+                        helperText={t('forms:emailHelperText')}
                         fullWidth
                     />
                     <Field

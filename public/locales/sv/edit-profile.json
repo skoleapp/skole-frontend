@@ -2,6 +2,7 @@
     "title": "Redigera Profil",
     "description": "Detta är en redigeringsprofilsida.",
     "header": "Redigera Profil",
+    "avatar": "Avatar",
     "addAvatar": "Lägg till avatar",
     "changeAvatar": "Byt Foton",
     "clearAvatar": "Ta bort"

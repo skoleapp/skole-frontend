@@ -1,28 +1,12 @@
-import {
-    Avatar,
-    CardContent,
-    Grid,
-    IconButton,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    MenuItem,
-    Typography,
-} from '@material-ui/core';
+import { Grid, IconButton, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
 import {
     CloudDownloadOutlined,
-    CloudUploadOutlined,
     DeleteOutline,
     FullscreenOutlined,
-    HouseOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
     NavigateBeforeOutlined,
     NavigateNextOutlined,
-    ScheduleOutlined,
-    SchoolOutlined,
-    ScoreOutlined,
-    TitleOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
@@ -41,15 +25,14 @@ import {
     VoteObjectType,
 } from '../../../generated/graphql';
 import {
-    CreatorListItem,
     DiscussionBox,
+    InfoModalContent,
     NavbarContainer,
     NotFoundLayout,
     PDFViewer,
     StarButton,
     StyledBottomNavigation,
     StyledList,
-    StyledTooltip,
     TabLayout,
     TextLink,
 } from '../../components';
@@ -70,36 +53,27 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuthContext();
-    const { pages, currentPage, prevPage, nextPage, setCenter, setPages, setCurrentPage } = usePDFViewerContext();
-    const resourceTitle = R.propOr(t('common:titleNA'), 'title', resource) as string;
-    const resourceDate = R.propOr(t('common:dateNA'), 'date', resource) as string;
+    const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
+    const resourceTitle = R.propOr('', 'title', resource) as string;
+    const resourceDate = R.propOr('', 'date', resource) as string;
+    const resourceType = R.propOr('', 'resourceType', resource) as string;
+    const courseName = R.pathOr('', ['course', 'name'], resource) as string;
+    const schoolName = R.pathOr('', ['school', 'name'], resource) as string;
+    const courseId = R.pathOr('', ['course', 'id'], resource) as string;
+    const schoolId = R.pathOr('', ['school', 'id'], resource) as string;
+    const creatorId = R.pathOr('', ['user', 'id'], resource) as string;
     const fullResourceTitle = `${resourceTitle} - ${resourceDate}`;
     const file = mediaURL(R.propOr(undefined, 'file', resource));
-    const resourceType = R.propOr(t('common:resourceTypeNA'), 'resourceType', resource);
-    const courseId = R.pathOr('', ['course', 'id'], resource);
-    const courseName = R.path(['course', 'name'], resource) as string;
-    const schoolId = R.pathOr('', ['school', 'id'], resource);
-    const schoolName = R.path(['school', 'name'], resource) as string;
-    const creatorId = R.pathOr('', ['user', 'id'], resource) as string;
     const resourceId = R.propOr('', 'id', resource) as string;
     const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
     const initialVote = (R.propOr(null, 'vote', resource) as unknown) as VoteObjectType | null;
-    const initialScore = R.propOr(0, 'score', resource) as number;
+    const initialScore = String(R.propOr(0, 'score', resource));
     const starred = !!R.propOr(undefined, 'starred', resource);
     const isOwner = !!user && user.id === creatorId;
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
-
-    useEffect(() => {
-        return (): void => {
-            setPages([]);
-            setCurrentPage(0);
-        };
-    }, []);
-
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(
-        t('resource:optionsHeader'),
-    );
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
+    const { setPages, setCurrentPage } = usePDFViewerContext();
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -111,12 +85,20 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         comments,
         target: { resource: Number(resourceId) },
         formKey: 'resource',
+        placeholderText: t('resource:commentsPlaceholder'),
     };
 
     const staticBackUrl = {
         href: '/courses/[id]',
         as: `/courses/${courseId}`,
     };
+
+    useEffect(() => {
+        return (): void => {
+            setPages([]);
+            setCurrentPage(0);
+        };
+    }, []);
 
     const deleteResourceError = (): void => {
         toggleNotification(t('notifications:deleteResourceError'));
@@ -126,10 +108,14 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         if (!!deleteResource) {
             if (!!deleteResource.errors) {
                 deleteResourceError();
-            } else {
+            } else if (deleteResource.message) {
                 Router.push('/courses/' + courseId);
-                toggleNotification(t('notifications:resourceDeleted'));
+                toggleNotification(deleteResource.message);
+            } else {
+                deleteResourceError();
             }
+        } else {
+            deleteResourceError();
         }
     };
 
@@ -168,103 +154,42 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         }
     };
 
-    const renderCourseLink =
-        !!courseId && !!courseName ? <TextLink {...staticBackUrl}>{courseName}</TextLink> : t('common:courseNameNA');
+    const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
 
-    const renderSchoolLink =
-        !!schoolId && !!schoolName ? (
-            <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
-                {schoolName}
-            </TextLink>
-        ) : (
-            t('common:schoolNameNA')
-        );
-
-    const subheaderDesktop = (
-        <Typography variant="subtitle1">
-            {renderCourseLink} - {renderSchoolLink}
-        </Typography>
+    const renderSchoolLink = !!schoolId && (
+        <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
+            {schoolName}
+        </TextLink>
     );
 
-    const renderInfo = (
-        <CardContent>
-            <StyledList>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <TitleOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:title')}: {resourceTitle}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ScheduleOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:date')}: {resourceDate}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <CloudUploadOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:resourceType')}: {resourceType}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <SchoolOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:course')}: {renderCourseLink}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <HouseOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:school')}: {renderSchoolLink}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ScoreOutlined />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>
-                        <Typography variant="body2">
-                            {t('common:score')}: {score}
-                        </Typography>
-                    </ListItemText>
-                </ListItem>
-                <CreatorListItem user={resourceUser} created={created} />
-            </StyledList>
-        </CardContent>
-    );
+    const infoItems = [
+        {
+            label: t('common:title'),
+            value: resourceTitle,
+        },
+        {
+            label: t('common:date'),
+            value: resourceDate,
+        },
+        {
+            label: t('common:resourceType'),
+            value: resourceType,
+        },
+        {
+            label: t('common:score'),
+            value: score,
+        },
+        {
+            label: t('common:course'),
+            value: renderCourseLink,
+        },
+        {
+            label: t('common:school'),
+            value: renderSchoolLink,
+        },
+    ];
+
+    const renderInfo = <InfoModalContent user={resourceUser} created={created} infoItems={infoItems} />;
 
     const renderOptions = (
         <StyledList>
@@ -291,34 +216,27 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             resource={resourceId}
             starredTooltip={t('resource:starredTooltip')}
             unstarredTooltip={t('resource:unstarredTooltip')}
-            tooltipProps={{ placement: 'right' }}
         />
     );
 
     const renderUpVoteButton = (
-        <StyledTooltip
-            title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}
-            placement="right"
-        >
+        <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                     <KeyboardArrowUpOutlined />
                 </IconButton>
             </span>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const renderDownVoteButton = (
-        <StyledTooltip
-            title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}
-            placement="right"
-        >
+        <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                     <KeyboardArrowDownOutlined />
                 </IconButton>
             </span>
-        </StyledTooltip>
+        </Tooltip>
     );
 
     const pagesExist = pages.length > 0;
@@ -332,15 +250,15 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                 {renderDownVoteButton}
             </Grid>
             <Grid item xs={4} container alignItems="center" id="page-controls">
-                <StyledTooltip title={t('common:previousPageTooltip')} placement="left">
+                <Tooltip title={t('common:previousPageTooltip')}>
                     <span>
                         <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
                             <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
                         </IconButton>
                     </span>
-                </StyledTooltip>
+                </Tooltip>
                 <Typography variant="body2">{currentPage + 1 + ' / ' + totalPages}</Typography>
-                <StyledTooltip title={t('common:nextPageTooltip')} placement="right">
+                <Tooltip title={t('common:nextPageTooltip')}>
                     <span>
                         <IconButton
                             disabled={!pagesExist || currentPage === pages.length - 1}
@@ -350,16 +268,16 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                             <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
                         </IconButton>
                     </span>
-                </StyledTooltip>
+                </Tooltip>
             </Grid>
             <Grid item xs={4} container justify="flex-end">
-                <StyledTooltip title={t('resource:fullscreenTooltip')} placement="left">
+                <Tooltip title={t('resource:fullscreenTooltip')}>
                     <span>
                         <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
                             <FullscreenOutlined />
                         </IconButton>
                     </span>
-                </StyledTooltip>
+                </Tooltip>
             </Grid>
         </StyledExtraResourceActions>
     );
@@ -399,12 +317,12 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         },
         headerDesktop: fullResourceTitle,
         headerSecondary: t('common:discussion'),
-        subheaderSecondary: t('resource:discussionSubheader'),
-        subheaderDesktop,
+        subheaderDesktop: renderCourseLink,
+        subheaderDesktopSecondary: renderSchoolLink,
         extraDesktopActions: renderExtraResourceActions,
         renderInfo,
-        infoTooltip: t('resource:infoTooltip'),
         infoHeader: t('resource:infoHeader'),
+        infoTooltip: t('resource:infoTooltip'),
         optionProps: {
             renderOptions,
             renderOptionsHeader,

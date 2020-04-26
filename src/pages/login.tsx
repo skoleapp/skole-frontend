@@ -1,5 +1,5 @@
 import { Box, Divider } from '@material-ui/core';
-import { AddCircleOutlineOutlined } from '@material-ui/icons';
+import { LibraryAddOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
@@ -8,8 +8,8 @@ import React from 'react';
 import * as Yup from 'yup';
 
 import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated/graphql';
-import { ButtonLink, FormLayout, FormSubmitSection } from '../components';
-import { useAuthContext } from '../context';
+import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
+import { useAuthContext, useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { clientLogin } from '../lib';
@@ -17,26 +17,30 @@ import { I18nProps } from '../types';
 import { useAlerts, useForm, useLanguageSelector } from '../utils';
 
 const initialValues = {
-    username: '',
+    usernameOrEmail: '',
     password: '',
     general: '',
 };
 
 export interface LoginFormValues {
-    username: string;
+    usernameOrEmail: string;
     password: string;
 }
 
 const LoginPage: NextPage<I18nProps> = () => {
-    const { ref, setSubmitting, resetForm, handleMutationErrors, onError } = useForm<LoginFormValues>();
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
     const { renderLanguageButton } = useLanguageSelector();
     const { setUser } = useAuthContext();
+    const { toggleNotification } = useNotificationsContext();
+
+    const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
+        LoginFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required(t('validation:required')),
+        usernameOrEmail: Yup.string().required(t('validation:required')),
         password: Yup.string().required(t('validation:required')),
     });
 
@@ -44,10 +48,11 @@ const LoginPage: NextPage<I18nProps> = () => {
         if (!!login) {
             if (!!login.errors) {
                 handleMutationErrors(login.errors);
-            } else if (!!login.token && !!login.user) {
+            } else if (!!login.token && !!login.user && !!login.message) {
                 const { next } = query;
                 clientLogin(login.token);
                 resetForm();
+                toggleNotification(login.message);
                 setUser(login.user as UserObjectType);
 
                 if (!!next) {
@@ -55,15 +60,19 @@ const LoginPage: NextPage<I18nProps> = () => {
                 } else {
                     Router.push('/');
                 }
+            } else {
+                unexpectedError();
             }
+        } else {
+            unexpectedError();
         }
     };
 
     const [loginMutation] = useLoginMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: LoginFormValues): Promise<void> => {
-        const { username, password } = values;
-        await loginMutation({ variables: { username, password }, context: { headers: { Authorization: '' } } });
+        const { usernameOrEmail, password } = values;
+        await loginMutation({ variables: { usernameOrEmail, password }, context: { headers: { Authorization: '' } } });
         setSubmitting(false);
     };
 
@@ -72,10 +81,10 @@ const LoginPage: NextPage<I18nProps> = () => {
             {(props): JSX.Element => (
                 <Form>
                     <Field
-                        placeholder={t('forms:username')}
-                        name="username"
+                        placeholder={t('forms:usernameOrEmail')}
+                        name="usernameOrEmail"
                         component={TextField}
-                        label={t('forms:username')}
+                        label={t('forms:usernameOrEmail')}
                         variant="outlined"
                         fullWidth
                     />
@@ -96,14 +105,14 @@ const LoginPage: NextPage<I18nProps> = () => {
                         href="/register"
                         variant="outlined"
                         color="primary"
-                        endIcon={<AddCircleOutlineOutlined />}
+                        endIcon={<LibraryAddOutlined />}
                         fullWidth
                     >
                         {t('login:createAccount')}
                     </ButtonLink>
-                    {/* <Box marginTop="1rem"> // TODO: Show this when reset password works.
-                        <TextLink href="/contact">{t('login:forgotPassword')}</TextLink>
-                    </Box> */}
+                    <Box marginTop="1rem">
+                        <TextLink href="/account/reset-password">{t('login:forgotPassword')}</TextLink>
+                    </Box>
                 </Form>
             )}
         </Formik>

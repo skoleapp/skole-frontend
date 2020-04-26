@@ -1,7 +1,10 @@
 {
     "username": "Användarnamn",
+    "usernameOrEmail": "Användarnamn eller e-post",
     "usernameHelperText": "Ditt användarnamn kommer att visas för andra användare.",
     "email": "E-post",
+    "invalidEmail": "Ogiltig e-post.",
+    "emailHelperText": "Din e-postadress kommer bara att visas för dig. Vi skräppostar dig inte.",
     "password": "Lösenord",
     "oldPassword": "Föregående lösenord",
     "newPassword": "Nytt lösenord",
@@ -36,6 +39,5 @@
     "scoreOrdering": "Poäng (Stigande)",
     "scoreOrderingReverse": "Poäng (Nedåtgående)",
     "betaCode": "Betakod",
-    "name": "Namn",
-    "fileSizeError": "Filen är för stor!"
+    "name": "Namn"
 }

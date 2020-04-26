@@ -1,7 +1,10 @@
 {
     "username": "Käyttäjätunnus",
+    "usernameOrEmail": "Käyttäjätunnus tai sähköposti",
     "usernameHelperText": "Käyttäjätunnuksesi näkyy muille käyttäjille.",
     "email": "Sähköposti",
+    "invalidEmail": "Virheellinen sähköposti.",
+    "emailHelperText": "Sähköpostisi näkyy vain sinulle. Emme lähetä sinulle roskapostia.",
     "password": "Salasana",
     "oldPassword": "Vanha salasana",
     "newPassword": "Uusi salasana",
@@ -26,7 +29,7 @@
     "message": "Viesti",
     "sendMessage": "Lähetä Viesti",
     "resourceTitle": "Resurssin Otsikko",
-    "resourceType": "Resurssin Tyyppi",
+    "resourceType": "Resurssityyppi",
     "course": "Kurssi",
     "ordering": "Järjestys",
     "usernameOrdering": "Käyttätunnus (A-Z)",
@@ -36,6 +39,5 @@
     "scoreOrdering": "Pisteet (nouseva)",
     "scoreOrderingReverse": "Pisteet (laskeva)",
     "betaCode": "Betakoodi",
-    "name": "Nimi",
-    "fileSizeError": "Tiedosto on liian suuri!"
+    "name": "Nimi"
 }

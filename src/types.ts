@@ -32,7 +32,8 @@ export interface TopNavbarProps {
         as?: string;
     };
     disableSearch?: boolean;
-    headerRight?: JSX.Element;
+    headerRight?: JSX.Element | boolean;
+    headerRightSecondary?: JSX.Element;
     headerLeft?: JSX.Element;
 }
 
@@ -54,6 +55,7 @@ export interface DiscussionBoxProps {
     isThread?: boolean;
     target: CommentTarget;
     formKey: string;
+    placeholderText?: string;
 }
 
 export type MuiColor = 'inherit' | 'default' | 'primary' | 'secondary' | undefined;
@@ -114,6 +116,7 @@ export interface UseForm<T> {
     submitForm: () => Promise<void> | null;
     setFieldValue: (fieldName: string, val: string | File | File[] | null) => void;
     setFieldError: (fieldName: string, val: string) => void;
+    unexpectedError: () => void;
 }
 
 export interface UseFilters<T> extends UseForm<T> {
@@ -121,7 +124,7 @@ export interface UseFilters<T> extends UseForm<T> {
     renderDesktopClearFiltersButton?: JSX.Element | false;
     handleSubmit: (filteredValues: T, actions: FormikActions<T>) => Promise<void>;
     handleClearFilters: (e: SyntheticEvent) => Promise<void>;
-    drawerProps: UseDrawer;
+    drawerProps: Omit<UseDrawer, 'renderHeader'>;
 }
 
 export type CustomTablePaginationProps = Pick<
@@ -139,37 +142,37 @@ export interface AuthContext {
     setUser: (user: UserObjectType | null) => void;
 }
 
-export interface AttachmentViewer {
+export interface AttachmentViewerContext {
     attachment: string | null;
     toggleAttachmentViewer: (payload: string | null) => void;
 }
 
-export interface CommentThread {
+export interface CommentThreadContext {
     topComment: CommentObjectType | null;
     toggleCommentThread: (payload: CommentObjectType | null) => void;
 }
 
-export interface CommentModal {
+export interface CommentModalContext {
     commentModalOpen: boolean;
     toggleCommentModal: (payload: boolean) => void;
 }
 
-export interface LanguageSelector {
+export interface LanguageSelectorContext {
     languageSelectorOpen: boolean;
     toggleLanguageSelector: (payload: boolean) => void;
 }
 
-export interface Notifications {
+export interface NotificationsContext {
     notification: string | null;
     toggleNotification: (payload: string | null) => void;
 }
 
-export interface Settings {
+export interface SettingsContext {
     settingsOpen: boolean;
     toggleSettings: (payload: boolean) => void;
 }
 
-export interface PDFViewer {
+export interface PDFViewerContext {
     pages: PDFPage[];
     currentPage: number;
     effect: string;
@@ -180,16 +183,22 @@ export interface PDFViewer {
     setCurrentPage: (currentPage: number) => void;
 }
 
+export interface DiscussionBoxContext {
+    comments: CommentObjectType[] | null;
+    setComments: (comments: CommentObjectType[]) => void;
+}
+
 export interface SkoleContextType {
     auth: AuthContext;
-    attachmentViewer: AttachmentViewer;
-    commentThread: CommentThread;
-    commentModal: CommentModal;
-    languageSelector: LanguageSelector;
-    notifications: Notifications;
-    settings: Settings;
-    pdfViewer: PDFViewer;
+    attachmentViewer: AttachmentViewerContext;
+    commentThread: CommentThreadContext;
+    commentModal: CommentModalContext;
+    languageSelector: LanguageSelectorContext;
+    notifications: NotificationsContext;
+    settings: SettingsContext;
+    pdfViewer: PDFViewerContext;
     isMobileGuess: boolean | null;
+    discussionBox: DiscussionBoxContext;
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;

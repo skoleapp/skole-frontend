@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { useLanguageSelectorContext } from '../context';
 import { useTranslation } from '../i18n';
-import { LanguageSelector } from '../types';
+import { LanguageSelectorContext } from '../types';
 
 interface Language {
     code: string;
@@ -19,7 +19,7 @@ const languages: Language[] = [
     { code: 'SE', label: 'languages:swedish', value: 'sv' },
 ];
 
-interface UseLanguageSelector extends LanguageSelector {
+interface UseLanguageSelector extends LanguageSelectorContext {
     renderCurrentFlag: string;
     languageToFlag: (isoCode: string) => string;
     languages: Language[];

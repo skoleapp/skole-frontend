@@ -28,7 +28,7 @@ export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     // TODO: Use form error here, now using notification temporarily as the form error does not work for some reason.
     const handleDropRejected = (files: File[]): void => {
         if (files[0].size > maxFileSize) {
-            toggleNotification(t('forms:fileSizeError'));
+            toggleNotification(t('validation:fileSizeError'));
         }
     };
 

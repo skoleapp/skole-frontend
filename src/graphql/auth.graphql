@@ -1,39 +1,16 @@
-mutation Register($username: String!, $password: String!, $code: String!) {
-    register(input: { username: $username, password: $password, code: $code }) {
-        user {
-            id
-            created
-        }
+mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
+    register(input: { username: $username, email: $email, password: $password, code: $code }) {
+        message
         errors {
             field
             messages
         }
     }
-    login(input: { username: $username, password: $password }) {
+    login(input: { usernameOrEmail: $username, password: $password }) {
         token
         user {
             id
-            username
-            email
-            title
-            bio
-            avatar
-            score
-            courseCount
-            resourceCount
             created
-            starredCourses {
-                id
-                name
-                code
-                score
-            }
-            starredResources {
-                id
-                title
-                score
-                date
-            }
         }
         errors {
             field
@@ -42,32 +19,13 @@ mutation Register($username: String!, $password: String!, $code: String!) {
     }
 }
 
-mutation Login($username: String!, $password: String!) {
-    login(input: { username: $username, password: $password }) {
+mutation Login($usernameOrEmail: String!, $password: String!) {
+    login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+        message
         token
         user {
             id
-            username
-            email
-            title
-            bio
-            avatar
-            score
-            courseCount
-            resourceCount
             created
-            starredCourses {
-                id
-                name
-                code
-                score
-            }
-            starredResources {
-                id
-                title
-                score
-                date
-            }
         }
         errors {
             field
@@ -88,6 +46,7 @@ query UserMe {
         courseCount
         resourceCount
         created
+        verified
         starredCourses {
             id
             name
@@ -105,6 +64,7 @@ query UserMe {
 
 mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
     changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
+        message
         errors {
             field
             messages
@@ -114,6 +74,47 @@ mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
 
 mutation DeleteAccount($password: String!) {
     deleteUser(input: { password: $password }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation SendPasswordResetEmail($email: String!) {
+    sendPasswordResetEmail(input: { email: $email }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation ResetPassword($token: String, $newPassword: String!) {
+    resetPassword(input: { token: $token, newPassword: $newPassword }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation ResendVerificationEmail($email: String!) {
+    resendVerificationEmail(input: { email: $email }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation VerifyAccount($token: String) {
+    verifyAccount(input: { token: $token }) {
+        message
         errors {
             field
             messages

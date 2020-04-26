@@ -28,9 +28,12 @@ export interface ContactFormValues {
 }
 
 const ContactPage: NextPage<I18nProps> = () => {
-    const { toggleNotification } = useNotificationsContext();
-    const { ref, setSubmitting, onError, resetForm, handleMutationErrors } = useForm<ContactFormValues>();
     const { t } = useTranslation();
+    const { toggleNotification } = useNotificationsContext();
+
+    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, unexpectedError } = useForm<
+        ContactFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
         subject: Yup.string().required(t('validation:required')),
@@ -42,11 +45,17 @@ const ContactPage: NextPage<I18nProps> = () => {
     });
 
     const onCompleted = ({ createMessage }: ContactMutation): void => {
-        if (createMessage && createMessage.errors) {
-            handleMutationErrors(createMessage.errors);
-        } else if (createMessage) {
-            resetForm();
-            toggleNotification(t('notifications:messageSubmitted'));
+        if (!!createMessage) {
+            if (!!createMessage.errors) {
+                handleMutationErrors(createMessage.errors);
+            } else if (!!createMessage.message) {
+                resetForm();
+                toggleNotification(createMessage.message);
+            } else {
+                unexpectedError();
+            }
+        } else {
+            unexpectedError();
         }
     };
 

@@ -7,6 +7,7 @@ query CreateResourceInitialData($course: ID) {
 
 mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
     createResource(input: { title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file }) {
+        message
         resource {
             id
         }

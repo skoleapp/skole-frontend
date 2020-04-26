@@ -9,6 +9,7 @@ import {
     TablePagination,
     TablePaginationProps,
     TableRow,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
 import {
@@ -26,7 +27,6 @@ import { Router, useTranslation } from '../../i18n';
 import { CustomTablePaginationProps, TextColor, TextVariant } from '../../types';
 import { getPaginationQuery } from '../../utils';
 import { StyledTable } from './StyledTable';
-import { StyledTooltip } from './StyledTooltip';
 
 interface CustomTableHeadProps {
     titleLeft?: string;
@@ -85,21 +85,21 @@ const CustomTablePaginationActions = ({
 
     return (
         <Box display="flex" margin="0.5rem">
-            <StyledTooltip title={t('common:firstPageTooltip')}>
+            <Tooltip title={t('common:firstPageTooltip')}>
                 <span>
                     <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
                         <FirstPageOutlined />
                     </IconButton>
                 </span>
-            </StyledTooltip>
-            <StyledTooltip title={t('common:previousPageTooltip')}>
+            </Tooltip>
+            <Tooltip title={t('common:previousPageTooltip')}>
                 <span>
                     <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
                         <KeyboardArrowLeftOutlined />
                     </IconButton>
                 </span>
-            </StyledTooltip>
-            <StyledTooltip title={t('common:nextPageTooltip')}>
+            </Tooltip>
+            <Tooltip title={t('common:nextPageTooltip')}>
                 <span>
                     <IconButton
                         onClick={handleNextButtonClick}
@@ -109,8 +109,8 @@ const CustomTablePaginationActions = ({
                         <KeyboardArrowRightOutlined />
                     </IconButton>
                 </span>
-            </StyledTooltip>
-            <StyledTooltip title={t('common:lastPageTooltip')}>
+            </Tooltip>
+            <Tooltip title={t('common:lastPageTooltip')}>
                 <span>
                     <IconButton
                         onClick={handleLastPageButtonClick}
@@ -120,7 +120,7 @@ const CustomTablePaginationActions = ({
                         <LastPageOutlined />
                     </IconButton>
                 </span>
-            </StyledTooltip>
+            </Tooltip>
         </Box>
     );
 };
