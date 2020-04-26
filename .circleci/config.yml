@@ -6,12 +6,9 @@ jobs:
       ignore:
         - develop
     machine:
-      image: ubuntu-1604:201903-01 
+      image: ubuntu-1604:201903-01
     steps:
       - checkout
       - run:
           name: "Run linter and type-check"
-          command: >
-            docker-compose -f docker-compose.circleci.yml run --rm frontend sh -c "
-              yarn lint && yarn type-check
-            "
+          command: docker run --rm $(docker build -q .)
