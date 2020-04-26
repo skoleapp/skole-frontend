@@ -1,0 +1,317 @@
+query UserMe {
+    userMe {
+        id
+        username
+        email
+        title
+        bio
+        avatar
+        score
+        courseCount
+        resourceCount
+        created
+        verified
+        starredCourses {
+            id
+            name
+            code
+            score
+        }
+        starredResources {
+            id
+            title
+            score
+            date
+        }
+    }
+}
+
+query UserDetail($id: ID) {
+    user(id: $id) {
+        id
+        username
+        title
+        bio
+        avatar
+        score
+        courseCount
+        resourceCount
+        created
+        createdCourses {
+            id
+            name
+            code
+            score
+        }
+        createdResources {
+            id
+            title
+            score
+            date
+        }
+    }
+}
+
+query SearchCourses(
+    $courseName: String
+    $courseCode: String
+    $school: ID
+    $subject: ID
+    $schoolType: ID
+    $country: ID
+    $city: ID
+    $ordering: String
+    $page: Int
+    $pageSize: Int
+) {
+    searchCourses(
+        courseName: $courseName
+        courseCode: $courseCode
+        school: $school
+        subject: $subject
+        schoolType: $schoolType
+        country: $country
+        city: $city
+        ordering: $ordering
+        page: $page
+        pageSize: $pageSize
+    ) {
+        page
+        pages
+        hasPrev
+        hasNext
+        count
+        objects {
+            id
+            name
+            code
+            score
+        }
+    }
+    school(id: $school) {
+        id
+        name
+    }
+    subject(id: $subject) {
+        id
+        name
+    }
+    schoolType(id: $schoolType) {
+        id
+        name
+    }
+    country(id: $country) {
+        id
+        name
+    }
+    city(id: $city) {
+        id
+        name
+    }
+}
+
+query CourseDetail($id: ID) {
+    course(id: $id) {
+        id
+        name
+        code
+        modified
+        created
+        score
+        resourceCount
+        starred
+        vote {
+            id
+            status
+        }
+        subject {
+            id
+            name
+        }
+        school {
+            id
+            name
+        }
+        user {
+            id
+            username
+        }
+        resources {
+            id
+            title
+            score
+            date
+        }
+        comments {
+            id
+            user {
+                id
+                username
+                avatarThumbnail
+            }
+            text
+            attachment
+            modified
+            created
+            replyComments {
+                id
+                user {
+                    id
+                    username
+                    avatarThumbnail
+                }
+                text
+                attachment
+                modified
+                created
+                score
+                vote {
+                    id
+                    status
+                }
+            }
+            replyCount
+            score
+            vote {
+                id
+                status
+            }
+        }
+    }
+}
+
+query ResourceDetail($id: ID) {
+    resource(id: $id) {
+        id
+        title
+        resourceType
+        file
+        date
+        modified
+        created
+        score
+        starred
+        school {
+            id
+            name
+        }
+        course {
+            id
+            name
+        }
+        user {
+            id
+            username
+        }
+        vote {
+            id
+            status
+        }
+        comments {
+            user {
+                id
+                username
+                avatarThumbnail
+            }
+            id
+            text
+            attachment
+            modified
+            created
+            modified
+            created
+            score
+            replyCount
+            vote {
+                id
+                status
+            }
+            replyComments {
+                id
+                user {
+                    id
+                    username
+                    avatarThumbnail
+                }
+                text
+                attachment
+                score
+                vote {
+                    id
+                    status
+                }
+            }
+        }
+    }
+}
+
+query SchoolDetail($id: ID) {
+    school(id: $id) {
+        id
+        name
+        city
+        country
+        schoolType
+        subjects {
+            id
+            name
+        }
+        courses {
+            id
+            name
+            code
+            score
+        }
+        subjectCount
+        courseCount
+    }
+}
+
+query Schools {
+    schools {
+        id
+        name
+    }
+}
+
+query SchoolTypes {
+    schoolTypes {
+        id
+        name
+    }
+}
+
+query Courses {
+    courses {
+        id
+        name
+    }
+}
+
+query Countries {
+    countries {
+        id
+        name
+    }
+}
+
+query Cities {
+    cities {
+        id
+        name
+    }
+}
+
+query ResourceTypes {
+    resourceTypes {
+        id
+        name
+    }
+}
+
+query Subjects {
+    subjects {
+        id
+        name
+    }
+}

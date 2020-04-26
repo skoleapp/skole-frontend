@@ -1,0 +1,259 @@
+mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
+    register(input: { username: $username, email: $email, password: $password, code: $code }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+    login(input: { usernameOrEmail: $username, password: $password }) {
+        token
+        user {
+            id
+            created
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation Login($usernameOrEmail: String!, $password: String!) {
+    login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+        message
+        token
+        user {
+            id
+            created
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation ResendVerificationEmail($email: String!) {
+    resendVerificationEmail(input: { email: $email }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation VerifyAccount($token: String) {
+    verifyAccount(input: { token: $token }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation SendPasswordResetEmail($email: String!) {
+    sendPasswordResetEmail(input: { email: $email }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation ResetPassword($token: String, $newPassword: String!) {
+    resetPassword(input: { token: $token, newPassword: $newPassword }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String) {
+    updateUser(input: { username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar }) {
+        message
+        user {
+            id
+            username
+            email
+            title
+            bio
+            avatar
+            score
+            created
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
+    changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DeleteAccount($password: String!) {
+    deleteUser(input: { password: $password }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation PerformStar($course: ID, $resource: ID) {
+    performStar(input: { course: $course, resource: $resource }) {
+        starred
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation PerformVote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
+    performVote(input: { status: $status, comment: $comment, course: $course, resource: $resource }) {
+        vote {
+            id
+            status
+        }
+        targetScore
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $comment: ID) {
+    createComment(
+        input: { text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment }
+    ) {
+        message
+        comment {
+            id
+            user {
+                id
+                username
+                avatarThumbnail
+            }
+            text
+            attachment
+            modified
+            created
+            replyComments {
+                id
+                user {
+                    id
+                    username
+                    avatarThumbnail
+                }
+                text
+                attachment
+                modified
+                created
+                score
+                vote {
+                    id
+                    status
+                }
+            }
+            replyCount
+            score
+            vote {
+                id
+                status
+            }
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DeleteComment($id: ID) {
+    deleteComment(input: { id: $id }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
+    createMessage(input: { subject: $subject, name: $name, email: $email, message: $message }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
+    createCourse(input: { name: $courseName, code: $courseCode, subject: $subject, school: $school }) {
+        message
+        course {
+            id
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DeleteCourse($id: ID) {
+    deleteCourse(input: { id: $id }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+query CreateResourceInitialData($course: ID) {
+    course(id: $course) {
+        id
+        name
+    }
+}
+
+mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
+    createResource(input: { title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file }) {
+        message
+        resource {
+            id
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DeleteResource($id: ID) {
+    deleteResource(input: { id: $id }) {
+        message
+        errors {
+            field
+            messages
+        }
+    }
+}

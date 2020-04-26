@@ -31,7 +31,7 @@ export const InfoModalContent: React.FC<Props> = ({ user, created, infoItems }) 
                         {R.propOr('-', 'username', user)}
                     </TextLink>
                 ) : (
-                    <TextLink href="/users">{t('common:communityUser')}</TextLink>
+                    t('common:communityUser')
                 )}{' '}
                 {moment(created)
                     .startOf('day')

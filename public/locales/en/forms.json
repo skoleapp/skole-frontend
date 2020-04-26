@@ -32,8 +32,6 @@
     "resourceType": "Resource Type",
     "course": "Course",
     "ordering": "Ordering",
-    "usernameOrdering": "Username (A-Z)",
-    "usernameOrderingReverse": "Username (Z-A)",
     "nameOrdering": "Name (A-Z)",
     "nameOrderingReverse": "Name (Z-A)",
     "scoreOrdering": "Score (Ascending)",

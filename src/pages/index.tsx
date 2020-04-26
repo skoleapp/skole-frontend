@@ -5,7 +5,6 @@ import {
     LibraryAddOutlined,
     SchoolOutlined,
     SearchOutlined,
-    SupervisedUserCircleOutlined,
     SvgIconComponent,
 } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
@@ -40,11 +39,6 @@ const shortcuts = [
         text: 'index:createCourse',
         icon: LibraryAddOutlined,
         href: '/create-course',
-    },
-    {
-        text: 'index:users',
-        icon: SupervisedUserCircleOutlined,
-        href: '/users',
     },
 ];
 
