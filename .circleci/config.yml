@@ -11,4 +11,4 @@ jobs:
       - checkout
       - run:
           name: "Run linter and type-check"
-          command: docker build -t frontend-circleci . && docker run frontend-circleci
+          command: docker build --target circleci --tag frontend . && docker run frontend
