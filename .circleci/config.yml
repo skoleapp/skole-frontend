@@ -10,7 +10,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Run type-check and linting"
+          name: "Run linter and type-check"
           command: >
-            docker-compose -f docker-compose.circleci.yml
-            run --rm frontend sh -c "yarn type-check && yarn lint"
+            docker-compose -f docker-compose.circleci.yml run --rm frontend sh -c "
+              yarn lint && yarn type-check
+            "
