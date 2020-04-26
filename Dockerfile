@@ -9,9 +9,12 @@ COPY --chown=node:node package.json .
 COPY --chown=node:node yarn.lock .
 RUN yarn install
 
+CMD ["yarn", "dev"]
+
 
 FROM dev AS circleci
 
 COPY --chown=node:node . .
 
-CMD yarn lint && yarn type-check
+CMD yarn lint \
+    && yarn type-check

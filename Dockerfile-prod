@@ -10,3 +10,5 @@ RUN yarn install
 
 COPY --chown=node:node . .
 RUN yarn build
+
+CMD ["yarn", "start"]
