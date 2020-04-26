@@ -1,10 +1,12 @@
-version: "3"
+version: "3.7"
 
 services:
   frontend:
     container_name: frontend
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/.next
+      - .:/home/node/app
+      - /home/node/app/node_modules
+      - /home/node/app/.next
