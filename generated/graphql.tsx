@@ -346,19 +346,8 @@ export type PaginatedCourseObjectType = {
   objects?: Maybe<Array<Maybe<CourseObjectType>>>,
 };
 
-export type PaginatedUserObjectType = {
-   __typename?: 'PaginatedUserObjectType',
-  page?: Maybe<Scalars['Int']>,
-  pages?: Maybe<Scalars['Int']>,
-  hasNext?: Maybe<Scalars['Boolean']>,
-  hasPrev?: Maybe<Scalars['Boolean']>,
-  count?: Maybe<Scalars['Int']>,
-  objects?: Maybe<Array<Maybe<UserObjectType>>>,
-};
-
 export type Query = {
    __typename?: 'Query',
-  users?: Maybe<PaginatedUserObjectType>,
   user?: Maybe<UserObjectType>,
   userMe?: Maybe<UserObjectType>,
   subjects?: Maybe<Array<Maybe<SubjectObjectType>>>,
@@ -377,14 +366,6 @@ export type Query = {
   comment?: Maybe<CommentObjectType>,
   cities?: Maybe<Array<Maybe<CityObjectType>>>,
   city?: Maybe<CityObjectType>,
-};
-
-
-export type QueryUsersArgs = {
-  page?: Maybe<Scalars['Int']>,
-  pageSize?: Maybe<Scalars['Int']>,
-  username?: Maybe<Scalars['String']>,
-  ordering?: Maybe<Scalars['String']>
 };
 
 
@@ -602,6 +583,8 @@ export type UpdateUserMutationInput = {
   title?: Maybe<Scalars['String']>,
   bio?: Maybe<Scalars['String']>,
   avatar?: Maybe<Scalars['String']>,
+  school?: Maybe<Scalars['ID']>,
+  subject?: Maybe<Scalars['ID']>,
   clientMutationId?: Maybe<Scalars['String']>,
 };
 
@@ -630,6 +613,8 @@ export type UserObjectType = {
   avatarThumbnail?: Maybe<Scalars['String']>,
   courseCount?: Maybe<Scalars['Int']>,
   resourceCount?: Maybe<Scalars['Int']>,
+  school?: Maybe<SchoolObjectType>,
+  subject?: Maybe<SubjectObjectType>,
   starredCourses?: Maybe<Array<Maybe<CourseObjectType>>>,
   starredResources?: Maybe<Array<Maybe<ResourceObjectType>>>,
 };
@@ -798,7 +783,9 @@ export type UpdateUserMutationVariables = {
   email: Scalars['String'],
   title?: Maybe<Scalars['String']>,
   bio?: Maybe<Scalars['String']>,
-  avatar?: Maybe<Scalars['String']>
+  avatar?: Maybe<Scalars['String']>,
+  school?: Maybe<Scalars['ID']>,
+  subject?: Maybe<Scalars['ID']>
 };
 
 
@@ -1072,7 +1059,13 @@ export type UserMeQuery = (
   & { userMe: Maybe<(
     { __typename?: 'UserObjectType' }
     & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created' | 'verified'>
-    & { starredCourses: Maybe<Array<Maybe<(
+    & { school: Maybe<(
+      { __typename?: 'SchoolObjectType' }
+      & Pick<SchoolObjectType, 'id' | 'name'>
+    )>, subject: Maybe<(
+      { __typename?: 'SubjectObjectType' }
+      & Pick<SubjectObjectType, 'id' | 'name'>
+    )>, starredCourses: Maybe<Array<Maybe<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
     )>>>, starredResources: Maybe<Array<Maybe<(
@@ -1091,7 +1084,7 @@ export type UserDetailQuery = (
   { __typename?: 'Query' }
   & { user: Maybe<(
     { __typename?: 'UserObjectType' }
-    & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created'>
+    & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created' | 'verified'>
     & { createdCourses: Array<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
@@ -1574,8 +1567,8 @@ export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPassword
 export type ResetPasswordMutationResult = ApolloReactCommon.MutationResult<ResetPasswordMutation>;
 export type ResetPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String) {
-  updateUser(input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar}) {
+    mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String, $school: ID, $subject: ID) {
+  updateUser(input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar, school: $school, subject: $subject}) {
     message
     user {
       id
@@ -1614,6 +1607,8 @@ export type UpdateUserMutationFn = ApolloReactCommon.MutationFunction<UpdateUser
  *      title: // value for 'title'
  *      bio: // value for 'bio'
  *      avatar: // value for 'avatar'
+ *      school: // value for 'school'
+ *      subject: // value for 'subject'
  *   },
  * });
  */
@@ -2130,6 +2125,14 @@ export const UserMeDocument = gql`
     resourceCount
     created
     verified
+    school {
+      id
+      name
+    }
+    subject {
+      id
+      name
+    }
     starredCourses {
       id
       name
@@ -2182,6 +2185,7 @@ export const UserDetailDocument = gql`
     courseCount
     resourceCount
     created
+    verified
     createdCourses {
       id
       name

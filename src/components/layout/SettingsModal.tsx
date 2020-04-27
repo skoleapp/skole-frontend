@@ -6,7 +6,7 @@ import { ModalHeader, StyledDrawer } from '../shared';
 
 export const SettingsModal: React.FC = () => {
     const { t } = useTranslation();
-    const { renderSettingsCardContent, settingsOpen, toggleSettings } = useSettings({ modal: true });
+    const { renderSettingsMenuList, settingsOpen, toggleSettings } = useSettings({ modal: true });
     const { anchor } = useDrawer(t('common:settings'));
     const handleClose = (): void => toggleSettings(false);
     const renderModalHeader = <ModalHeader onCancel={handleClose} text={t('common:settings')} />;
@@ -14,7 +14,7 @@ export const SettingsModal: React.FC = () => {
     return (
         <StyledDrawer fullHeight open={settingsOpen} anchor={anchor} onClose={handleClose}>
             {renderModalHeader}
-            {renderSettingsCardContent}
+            {renderSettingsMenuList}
         </StyledDrawer>
     );
 };

@@ -86,7 +86,7 @@ const StyledSettingsLayout = styled(({ fullSize, ...other }) => <Box {...other} 
     .container {
         flex-grow: 1;
         display: flex;
-        padding: ${({ fullSize }): string => (fullSize ? '0 !important' : 'initial')};
+        padding: ${({ fullSize }): string => fullSize && '0 !important'};
 
         form {
             width: 100%;

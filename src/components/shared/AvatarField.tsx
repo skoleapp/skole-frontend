@@ -25,6 +25,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();
         const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
+
         if (avatar.size > 2000000) {
             setFieldError('avatar', t('validation:fileSizeError'));
         } else {
@@ -72,7 +73,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
     );
 
     return (
-        <StyledImagePreviewField fullWidth>
+        <StyledAvatarField fullWidth>
             <Box display="flex" flexDirection="column" alignItems="center">
                 <Avatar className="main-avatar" src={preview} />
                 <Box width="12rem">
@@ -84,7 +85,13 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
                         capture="camera"
                         onChange={handleAvatarChange}
                     />
-                    <Button onClick={handleOpen} variant="text" color="primary" component="span">
+                    <Button
+                        id="change-avatar-button"
+                        onClick={handleOpen}
+                        variant="text"
+                        color="primary"
+                        component="span"
+                    >
                         {t('edit-profile:changeAvatar')}
                     </Button>
                 </Box>
@@ -98,20 +105,12 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
                     {renderRemoveAvatar}
                 </StyledList>
             </StyledDrawer>
-        </StyledImagePreviewField>
+        </StyledAvatarField>
     );
 };
 
-const StyledImagePreviewField = styled(FormControl)`
-    label {
-        width: 100%;
-    }
-
-    .MuiButton-root {
-        margin-top: 0;
-    }
-
-    .MuiIconButton-root {
-        margin-left: 0.5rem;
+const StyledAvatarField = styled(FormControl)`
+    #change-avatar-button {
+        margin-top: 0.5rem;
     }
 `;

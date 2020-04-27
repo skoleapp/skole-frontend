@@ -74,8 +74,26 @@ mutation ResetPassword($token: String, $newPassword: String!) {
     }
 }
 
-mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String) {
-    updateUser(input: { username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar }) {
+mutation UpdateUser(
+    $username: String!
+    $email: String!
+    $title: String
+    $bio: String
+    $avatar: String
+    $school: ID
+    $subject: ID
+) {
+    updateUser(
+        input: {
+            username: $username
+            email: $email
+            title: $title
+            bio: $bio
+            avatar: $avatar
+            school: $school
+            subject: $subject
+        }
+    ) {
         message
         user {
             id

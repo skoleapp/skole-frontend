@@ -80,5 +80,6 @@
     "date": "Datum",
     "close": "Stänga",
     "options": "Alternativ",
-    "verifyAccount": "Verifiera konto"
+    "verifyAccount": "Verifiera konto",
+    "languageTooltip": "Ändra språk."
 }

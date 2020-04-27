@@ -80,5 +80,6 @@
     "date": "Date",
     "close": "Close",
     "options": "Options",
-    "verifyAccount": "Verify account"
+    "verifyAccount": "Verify account",
+    "languageTooltip": "Change language."
 }

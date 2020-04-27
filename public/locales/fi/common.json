@@ -80,5 +80,6 @@
     "date": "Päivämäärä",
     "close": "Sulje",
     "options": "Vaihtoehdot",
-    "verifyAccount": "Vahvista tili"
+    "verifyAccount": "Vahvista tili",
+    "languageTooltip": "Vaihda kieltä."
 }

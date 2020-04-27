@@ -5,5 +5,7 @@
     "avatar": "Avatar",
     "addAvatar": "Lägg till avatar",
     "changeAvatar": "Byt Foton",
-    "clearAvatar": "Ta bort"
+    "clearAvatar": "Ta bort",
+    "schoolHelpText": "Genom att lägga till skola kan vi automatiskt visa dig innehåll baserat på din skola.",
+    "subjectHelpText": "Genom att lägga till ämne kan vi automatiskt visa innehåll baserat på ditt ämne."
 }

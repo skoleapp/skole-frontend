@@ -11,6 +11,14 @@ query UserMe {
         resourceCount
         created
         verified
+        school {
+            id
+            name
+        }
+        subject {
+            id
+            name
+        }
         starredCourses {
             id
             name
@@ -37,6 +45,7 @@ query UserDetail($id: ID) {
         courseCount
         resourceCount
         created
+        verified
         createdCourses {
             id
             name

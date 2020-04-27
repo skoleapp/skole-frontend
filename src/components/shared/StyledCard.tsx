@@ -17,7 +17,7 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
 
     .MuiCardHeader-root,
     .MuiCardContent-root {
-        padding: 0.5rem !important;
+        padding: 0.5rem;
 
         .MuiCardHeader-action {
             margin: 0;

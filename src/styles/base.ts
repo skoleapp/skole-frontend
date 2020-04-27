@@ -1,5 +1,6 @@
 import { css } from 'styled-components';
 
+import { breakpoints } from './breakpoints';
 import { colors } from './colors';
 
 export const base = css`
@@ -75,7 +76,6 @@ export const base = css`
         .main-avatar {
             height: 8rem;
             width: 8rem;
-            margin: 1rem;
         }
 
         .avatar-thumbnail {

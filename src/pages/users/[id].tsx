@@ -37,7 +37,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const { user: loggedInUser } = useAuthContext();
-    const verified = R.propOr(false, 'verified', loggedInUser);
+    const verified = R.propOr(null, 'verified', user);
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
     const title = R.propOr('', 'title', user) as string;
@@ -65,7 +65,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </ButtonLink>
     );
 
-    const renderVerifyAccountLink = isOwnProfile && !verified && (
+    const renderVerifyAccountLink = isOwnProfile && verified === false && (
         <Box marginTop="0.5rem">
             <TextLink href="/account/verify-account" color="primary">
                 {t('common:verifyAccount')}
