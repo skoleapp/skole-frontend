@@ -1,15 +1,4 @@
-import {
-    Box,
-    CardContent,
-    CardHeader,
-    Divider,
-    Drawer,
-    Grid,
-    IconButton,
-    Tab,
-    Tooltip,
-    Typography,
-} from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Grid, IconButton, Tab, Tooltip, Typography } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
@@ -17,7 +6,7 @@ import styled from 'styled-components';
 import { useDeviceContext } from '../../context';
 import { LayoutProps, MuiColor, UseOptions } from '../../types';
 import { useDrawer, useTabs } from '../../utils';
-import { StyledCard, StyledTabs } from '../shared';
+import { StyledCard, StyledDrawer, StyledTabs } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
@@ -182,17 +171,17 @@ export const TabLayout: React.FC<Props> = ({
     );
 
     const renderInfoDrawer = (
-        <Drawer {...infoDrawerProps}>
+        <StyledDrawer {...infoDrawerProps}>
             {renderInfoHeader}
             {renderInfo}
-        </Drawer>
+        </StyledDrawer>
     );
 
     const renderOptionsDrawer = (
-        <Drawer {...optionDrawerProps}>
+        <StyledDrawer {...optionDrawerProps}>
             {renderOptionsHeader}
             {renderOptions}
-        </Drawer>
+        </StyledDrawer>
     );
 
     const layoutProps = {

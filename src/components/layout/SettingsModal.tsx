@@ -1,9 +1,8 @@
-import { Drawer } from '@material-ui/core';
 import React from 'react';
 
 import { useTranslation } from '../../i18n';
 import { useDrawer, useSettings } from '../../utils';
-import { ModalHeader } from '../shared';
+import { ModalHeader, StyledDrawer } from '../shared';
 
 export const SettingsModal: React.FC = () => {
     const { t } = useTranslation();
@@ -13,9 +12,9 @@ export const SettingsModal: React.FC = () => {
     const renderModalHeader = <ModalHeader onCancel={handleClose} text={t('common:settings')} />;
 
     return (
-        <Drawer open={settingsOpen} anchor={anchor} onClose={handleClose}>
+        <StyledDrawer fullHeight open={settingsOpen} anchor={anchor} onClose={handleClose}>
             {renderModalHeader}
             {renderSettingsCardContent}
-        </Drawer>
+        </StyledDrawer>
     );
 };

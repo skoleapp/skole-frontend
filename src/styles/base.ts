@@ -62,14 +62,6 @@ export const base = css`
             }
         }
 
-        .MuiDrawer-paperAnchorLeft {
-            min-width: 20rem;
-        }
-
-        .MuiDrawer-paperAnchorBottom {
-            min-height: 100%;
-        }
-
         // Custom classes
 
         .border-bottom {

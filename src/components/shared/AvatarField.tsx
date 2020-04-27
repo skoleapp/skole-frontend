@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Drawer, FormControl, ListItemText, MenuItem } from '@material-ui/core';
+import { Avatar, Box, Button, FormControl, ListItemText, MenuItem } from '@material-ui/core';
 import { ClearOutlined, EditOutlined, LibraryAddOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import * as R from 'ramda';
@@ -9,6 +9,7 @@ import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
 import { mediaURL, useDrawer } from '../../utils';
 import { FormErrorMessage } from './FormErrorMessage';
+import { StyledDrawer } from './StyledDrawer';
 import { StyledList } from './StyledList';
 
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
@@ -89,14 +90,14 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
                 </Box>
                 <ErrorMessage name="avatar" component={FormErrorMessage} />
             </Box>
-            <Drawer {...drawerProps}>
+            <StyledDrawer {...drawerProps}>
                 {renderHeader}
                 <StyledList>
                     {renderAddAvatar}
                     {renderChangeAvatar}
                     {renderRemoveAvatar}
                 </StyledList>
-            </Drawer>
+            </StyledDrawer>
         </StyledImagePreviewField>
     );
 };

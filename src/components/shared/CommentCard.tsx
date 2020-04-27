@@ -3,7 +3,6 @@ import {
     Box,
     CardContent,
     CardHeader,
-    Drawer,
     Grid,
     IconButton,
     ListItemText,
@@ -40,6 +39,7 @@ import {
 } from '../../context';
 import { useTranslation } from '../../i18n';
 import { mediaURL, useOptions, useVotes } from '../../utils';
+import { StyledDrawer } from './StyledDrawer';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
 interface Props {
@@ -143,6 +143,96 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         </MenuItem>
     );
 
+    const renderCardHeader = (
+        <CardHeader
+            avatar={<Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />}
+            title={renderTitle}
+            subheader={created}
+        />
+    );
+
+    const renderCardContent = (
+        <CardContent>
+            <Grid container justify="space-between" alignItems="center">
+                <Grid id="content" item container xs={11} justify="flex-start">
+                    {attachmentOnly ? (
+                        <Box display="flex">
+                            <CameraAltOutlined />
+                            <Box marginLeft="0.5rem">
+                                <Typography variant="body2">{t('common:clickToView')}</Typography>
+                            </Box>
+                        </Box>
+                    ) : (
+                        <Typography variant="body2">{comment.text}</Typography>
+                    )}
+                </Grid>
+                <Grid item container xs={1} direction="column" justify="center" alignItems="center">
+                    <Tooltip title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}>
+                        <span>
+                            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                                <KeyboardArrowUpOutlined className="vote-button" />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Box>
+                        <Typography variant="body2">{score}</Typography>
+                    </Box>
+                    <Tooltip title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:downvoteCommentTooltip')}>
+                        <span>
+                            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                                <KeyboardArrowDownOutlined className="vote-button" />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                </Grid>
+            </Grid>
+            <Grid container>
+                <Grid item xs={4}>
+                    <Box display="flex" alignItems="center" height="100%">
+                        {!isThread && (
+                            <>
+                                <Tooltip title={t('common:commentRepliesTooltip', { replyCount })}>
+                                    <CommentOutlined className="message-icon" />
+                                </Tooltip>
+                                <Box marginLeft="0.25rem">
+                                    <Typography variant="body2">{replyCount}</Typography>
+                                </Box>
+                            </>
+                        )}
+                        {!!comment.attachment && !attachmentOnly && (
+                            <Box marginLeft="0.25rem">
+                                <Tooltip title={t('common:commentAttachmentTooltip')}>
+                                    <IconButton onClick={handleAttachmentClick}>
+                                        <AttachFileOutlined />
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
+                        )}
+                    </Box>
+                </Grid>
+                <Grid container item xs={4} justify="center">
+                    <Tooltip title={t('common:commentOptionsTooltip')}>
+                        <IconButton onClick={handleOpenOptions}>
+                            <MoreHorizOutlined />
+                        </IconButton>
+                    </Tooltip>
+                </Grid>
+                <Grid item xs={4} />
+            </Grid>
+        </CardContent>
+    );
+
+    const renderOptions = (
+        <StyledDrawer {...drawerProps}>
+            {renderOptionsHeader}
+            <StyledList>
+                {renderShareOption}
+                {renderReportOption}
+                {renderDeleteCommentOption}
+            </StyledList>
+        </StyledDrawer>
+    );
+
     return (
         <StyledCommentCard
             isThread={isThread}
@@ -150,89 +240,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
             disableBorder={disableBorder}
             attachmentOnly={attachmentOnly}
         >
-            <CardHeader
-                avatar={<Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />}
-                title={renderTitle}
-                subheader={created}
-            />
-            <CardContent>
-                <Grid container justify="space-between" alignItems="center">
-                    <Grid id="content" item container xs={11} justify="flex-start">
-                        {attachmentOnly ? (
-                            <Box display="flex">
-                                <CameraAltOutlined />
-                                <Box marginLeft="0.5rem">
-                                    <Typography variant="body2">{t('common:clickToView')}</Typography>
-                                </Box>
-                            </Box>
-                        ) : (
-                            <Typography variant="body2">{comment.text}</Typography>
-                        )}
-                    </Grid>
-                    <Grid item container xs={1} direction="column" justify="center" alignItems="center">
-                        <Tooltip title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}>
-                            <span>
-                                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                                    <KeyboardArrowUpOutlined className="vote-button" />
-                                </IconButton>
-                            </span>
-                        </Tooltip>
-                        <Box>
-                            <Typography variant="body2">{score}</Typography>
-                        </Box>
-                        <Tooltip
-                            title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:downvoteCommentTooltip')}
-                        >
-                            <span>
-                                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                                    <KeyboardArrowDownOutlined className="vote-button" />
-                                </IconButton>
-                            </span>
-                        </Tooltip>
-                    </Grid>
-                </Grid>
-                <Grid container>
-                    <Grid item xs={4}>
-                        <Box display="flex" alignItems="center" height="100%">
-                            {!isThread && (
-                                <>
-                                    <Tooltip title={t('common:commentRepliesTooltip', { replyCount })}>
-                                        <CommentOutlined className="message-icon" />
-                                    </Tooltip>
-                                    <Box marginLeft="0.25rem">
-                                        <Typography variant="body2">{replyCount}</Typography>
-                                    </Box>
-                                </>
-                            )}
-                            {!!comment.attachment && !attachmentOnly && (
-                                <Box marginLeft="0.25rem">
-                                    <Tooltip title={t('common:commentAttachmentTooltip')}>
-                                        <IconButton onClick={handleAttachmentClick}>
-                                            <AttachFileOutlined />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Box>
-                            )}
-                        </Box>
-                    </Grid>
-                    <Grid container item xs={4} justify="center">
-                        <Tooltip title={t('common:commentOptionsTooltip')}>
-                            <IconButton onClick={handleOpenOptions}>
-                                <MoreHorizOutlined />
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
-                    <Grid item xs={4} />
-                </Grid>
-            </CardContent>
-            <Drawer {...drawerProps}>
-                {renderOptionsHeader}
-                <StyledList>
-                    {renderShareOption}
-                    {renderReportOption}
-                    {renderDeleteCommentOption}
-                </StyledList>
-            </Drawer>
+            {renderCardHeader}
+            {renderCardContent}
+            {renderOptions}
         </StyledCommentCard>
     );
 };

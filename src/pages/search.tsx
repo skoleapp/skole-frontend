@@ -1,4 +1,4 @@
-import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, MenuItem } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Grid, IconButton, MenuItem } from '@material-ui/core';
 import { ClearAllOutlined, FilterListOutlined } from '@material-ui/icons';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -34,6 +34,7 @@ import {
     PaginatedTable,
     SelectField,
     StyledCard,
+    StyledDrawer,
     StyledTable,
 } from '../components';
 import { useTranslation } from '../i18n';
@@ -225,14 +226,14 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     const renderMobileContent = isMobile && (
         <Box flexGrow="1" display="flex">
             <StyledTable>{renderTableContent}</StyledTable>
-            <Drawer {...commonDrawerProps}>
+            <StyledDrawer fullHeight {...commonDrawerProps}>
                 <ModalHeader
                     onCancel={handleCloseDrawer}
                     text={t('common:filters')}
                     headerRight={renderMobileClearFiltersButton}
                 />
                 <CardContent>{renderCardContent}</CardContent>
-            </Drawer>
+            </StyledDrawer>
         </Box>
     );
 
