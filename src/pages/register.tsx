@@ -178,7 +178,6 @@ const RegisterPage: NextPage<I18nProps> = () => {
         },
         desktopHeader: t('register:header'),
         renderCardContent,
-        disableBottomNavbar: true,
     };
 
     return <FormLayout {...layoutProps} />;

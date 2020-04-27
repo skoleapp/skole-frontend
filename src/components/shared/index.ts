@@ -9,7 +9,7 @@ export { AutoCompleteField } from './AutoCompleteField';
 export { Download } from './Download';
 export { AvatarField } from './AvatarField';
 export { DropzoneField } from './DropzoneField';
-export { SelectField } from './SelectField';
+export { NativeSelectField } from './NativeSelectField';
 export { SettingsButton } from './SettingsButton';
 export { CommentCard } from './CommentCard';
 export { CreateCommentForm } from './CreateCommentForm';

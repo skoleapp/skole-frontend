@@ -10,6 +10,7 @@ import { useDeviceContext } from '../context';
 import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { UseFilters } from '../types';
+import { getPaginationQuery } from './pagination';
 import { useDrawer } from './useDrawer';
 import { useForm } from './useForm';
 
@@ -33,12 +34,8 @@ export const useFilters = <T extends {}>(): UseFilters<T> => {
 
     // Clear the query params and reset form.
     const handleClearFilters = async (e: SyntheticEvent): Promise<void> => {
-        const queryWithPagination: ParsedUrlQueryInput = R.pickBy(
-            (val: string, key: string): boolean => (!!val && key === 'page') || key === 'pageSize',
-            query,
-        );
-
-        await Router.push({ pathname, query: queryWithPagination });
+        const paginationQuery = getPaginationQuery(query);
+        await Router.push({ pathname, query: paginationQuery });
         resetForm();
         handleCloseDrawer(e);
     };

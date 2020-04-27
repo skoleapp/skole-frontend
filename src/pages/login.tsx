@@ -130,7 +130,6 @@ const LoginPage: NextPage<I18nProps> = () => {
         desktopHeader: t('login:header'),
         renderAlert: (!!query.next && renderAlert('warning', t('alerts:loginRequired'))) || undefined,
         renderCardContent,
-        disableBottomNavbar: true,
     };
 
     return <FormLayout {...layoutProps} />;

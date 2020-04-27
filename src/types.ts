@@ -41,7 +41,7 @@ export interface LayoutProps {
     seoProps?: SEOProps;
     topNavbarProps?: TopNavbarProps;
     containerProps?: ContainerProps;
-    disableBottomNavbar?: boolean;
+    customTopNavbar?: JSX.Element;
     customBottomNavbar?: JSX.Element;
 }
 

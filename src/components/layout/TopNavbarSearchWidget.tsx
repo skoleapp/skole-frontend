@@ -1,22 +1,22 @@
 import { Box, InputBase } from '@material-ui/core';
-import { Search } from '@material-ui/icons';
+import { SearchOutlined } from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
 
 import { useSearch } from '../../utils';
 
 export const TopNavbarSearchWidget: React.FC = () => {
-    const { searchValue, handleSubmit, handleChange, placeholder } = useSearch();
+    const { handleSubmit, inputProps } = useSearch();
 
     const handleSearchIconClick = (): void => {
-        document.getElementById('myInput')?.focus();
+        document.getElementById('top-navbar-input-base')?.focus();
     };
 
     return (
         <StyledSearchWidget onSubmit={handleSubmit}>
-            <Box className="search-input">
-                <Search onClick={handleSearchIconClick} />
-                <InputBase placeholder={placeholder} onChange={handleChange} value={searchValue} id="myInput" />
+            <Box id="top-navbar-search-input">
+                <SearchOutlined onClick={handleSearchIconClick} />
+                <InputBase id="top-navbar-input-base" {...inputProps} />
                 <input type="submit" value="Submit" />
             </Box>
         </StyledSearchWidget>
@@ -24,7 +24,7 @@ export const TopNavbarSearchWidget: React.FC = () => {
 };
 
 const StyledSearchWidget = styled.form`
-    .search-input {
+    #top-navbar-search-input {
         border-radius: var(--border-radius);
         background-color: rgba(255, 255, 255, 0.15);
         margin: 0 0.5rem;
@@ -39,6 +39,7 @@ const StyledSearchWidget = styled.form`
             margin: 0.25rem;
             align-self: center;
             color: var(--secondary);
+            cursor: pointer;
         }
 
         input {

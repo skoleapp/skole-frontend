@@ -10,6 +10,6 @@ export { mediaURL } from './mediaURL';
 export { useOpen } from './useOpen';
 export { useOptions } from './useOptions';
 export { useLanguageSelector } from './useLanguageSelector';
-export { useFrontendPagination, getPaginationQuery } from './pagination';
+export { useFrontendPagination, getPaginationQuery, getQueryWithPagination } from './pagination';
 export { useVotes } from './useVotes';
 export { useDrawer } from './useDrawer';

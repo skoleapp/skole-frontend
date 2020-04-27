@@ -44,7 +44,7 @@ const shortcuts = [
 
 const IndexPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
-    const { searchValue, handleSubmit, handleChange, placeholder } = useSearch();
+    const { handleSubmit, inputProps } = useSearch();
 
     const layoutProps = {
         seoProps: {
@@ -65,8 +65,8 @@ const IndexPage: NextPage<I18nProps> = () => {
                 <Box id="search-widget" marginTop="1rem">
                     <form onSubmit={handleSubmit}>
                         <Box display="flex" justifyContent="center">
-                            <Box className="search-input">
-                                <InputBase placeholder={placeholder} onChange={handleChange} value={searchValue} />
+                            <Box id="search-widget-input">
+                                <InputBase {...inputProps} />
                             </Box>
                             <Button type="submit" color="primary" variant="contained">
                                 <SearchOutlined />
@@ -117,7 +117,7 @@ const StyledIndexPage = styled(Box)`
     }
 
     #search-widget {
-        .search-input {
+        #search-widget-input {
             border-radius: var(--border-radius) 0 0 var(--border-radius);
             background-color: var(--white);
             display: flex;
