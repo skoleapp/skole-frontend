@@ -25,7 +25,7 @@ import { useDeviceContext } from 'src/context';
 
 import { Router, useTranslation } from '../../i18n';
 import { CustomTablePaginationProps, TextColor, TextVariant } from '../../types';
-import { getPaginationQuery } from '../../utils';
+import { getQueryWithPagination } from '../../utils';
 import { StyledTable } from './StyledTable';
 
 interface CustomTableHeadProps {
@@ -169,7 +169,7 @@ export const PaginatedTable: React.FC<PaginatedTableProps> = ({
     const rowsPerPage = Number(R.propOr(10, 'pageSize', query));
 
     const handleReloadPage = (values: {}): void => {
-        const query = getPaginationQuery({ query: values, extraFilters });
+        const query = getQueryWithPagination({ query: values, extraFilters });
         Router.push({ pathname, query });
     };
 
