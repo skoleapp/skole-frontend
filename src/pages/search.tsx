@@ -1,10 +1,13 @@
-import { MenuItem } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Divider, Drawer, Grid, IconButton, MenuItem } from '@material-ui/core';
+import { ClearAllOutlined, FilterListOutlined } from '@material-ui/icons';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import { useDeviceContext } from 'src/context';
+import styled from 'styled-components';
 
 import {
     CitiesDocument,
@@ -24,11 +27,14 @@ import {
 import {
     AutoCompleteField,
     CourseTableBody,
-    FilterLayout,
     FormSubmitSection,
+    MainLayout,
+    ModalHeader,
     NotFoundBox,
     PaginatedTable,
     SelectField,
+    StyledCard,
+    StyledTable,
 } from '../components';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
@@ -66,8 +72,11 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         handleClearFilters,
     } = useFilters<FilterSearchResultsFormValues>();
 
+    const { handleOpen, ...commonDrawerProps } = drawerProps;
+    const { onClose: handleCloseDrawer } = drawerProps;
     const { query } = useRouter();
     const { t } = useTranslation();
+    const isMobile = useDeviceContext();
     const courseObjects = R.propOr([], 'objects', searchCourses) as CourseObjectType[];
     const count = R.propOr(0, 'count', searchCourses) as number;
 
@@ -201,6 +210,51 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         <NotFoundBox text={t('search:noCourses')} />
     );
 
+    const renderMobileClearFiltersButton = (
+        <IconButton onClick={handleClearFilters}>
+            <ClearAllOutlined />
+        </IconButton>
+    );
+
+    const renderFiltersButton = (
+        <IconButton onClick={handleOpen} color="secondary">
+            <FilterListOutlined />
+        </IconButton>
+    );
+
+    const renderMobileContent = isMobile && (
+        <Box flexGrow="1" display="flex">
+            <StyledTable>{renderTableContent}</StyledTable>
+            <Drawer {...commonDrawerProps}>
+                <ModalHeader
+                    onCancel={handleCloseDrawer}
+                    text={t('common:filters')}
+                    headerRight={renderMobileClearFiltersButton}
+                />
+                <CardContent>{renderCardContent}</CardContent>
+            </Drawer>
+        </Box>
+    );
+
+    const renderDesktopContent = !isMobile && (
+        <Grid container>
+            <Grid item container xs={5} md={4} lg={3}>
+                <StyledCard>
+                    <CardHeader title={t('common:filters')} />
+                    <Divider />
+                    <CardContent>{renderCardContent}</CardContent>
+                </StyledCard>
+            </Grid>
+            <Grid item container xs={7} md={8} lg={9}>
+                <StyledCard marginLeft>
+                    <CardHeader title={t('common:searchResults')} />
+                    <Divider />
+                    <StyledTable>{renderTableContent}</StyledTable>
+                </StyledCard>
+            </Grid>
+        </Grid>
+    );
+
     const layoutProps = {
         seoProps: {
             title: t('search:title'),
@@ -208,18 +262,27 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         },
         topNavbarProps: {
             header: t('search:header'),
+            headerRight: renderFiltersButton,
             dynamicBackUrl: true,
             disableSearch: true,
         },
-        desktopHeader: t('search:header'),
-        renderCardContent,
-        renderTableContent,
-        drawerProps,
-        handleClearFilters,
     };
 
-    return <FilterLayout {...layoutProps} />;
+    return (
+        <StyledSearchPage>
+            <MainLayout {...layoutProps}>
+                {renderMobileContent}
+                {renderDesktopContent}
+            </MainLayout>
+        </StyledSearchPage>
+    );
 };
+
+const StyledSearchPage = styled(Box)`
+    .MuiGrid-root {
+        flex-grow: 1;
+    }
+`;
 
 export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
     const { apolloClient, query } = ctx as SkolePageContext;
