@@ -11,7 +11,8 @@
         "start": "NODE_ENV=production node build/server.js",
         "type-check": "tsc",
         "gen": "gql-gen --config codegen.yml",
-        "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+        "format": "yarn prettier --write '**/*.{ts,tsx,js,json}'",
+        "lint": "yarn prettier --check '**/*.{ts,tsx,js,json}' && eslint . --ext .js,.jsx,.ts,.tsx"
     },
     "dependencies": {
         "@apollo/react-common": "^3.1.4",
