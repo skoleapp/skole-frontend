@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Box, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
-import { ArrowBackOutlined, StarBorderOutlined } from '@material-ui/icons';
+import { ArrowBackOutlined, HowToRegOutlined, LibraryAddOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
 import { useAuthContext, useDeviceContext } from 'src/context';
@@ -86,10 +86,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                     </>
                 ) : (
                     <>
-                        <ButtonLink href="/login" color="secondary">
+                        <ButtonLink href="/login" color="secondary" endIcon={<HowToRegOutlined />}>
                             {t('common:login')}
                         </ButtonLink>
-                        <ButtonLink href="/register" color="secondary">
+                        <ButtonLink href="/register" color="secondary" endIcon={<LibraryAddOutlined />}>
                             {t('common:register')}
                         </ButtonLink>
                     </>

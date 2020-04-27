@@ -1,6 +1,5 @@
 import { css } from 'styled-components';
 
-import { breakpoints } from './breakpoints';
 import { colors } from './colors';
 
 export const base = css`

@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/react-hooks';
-import { ListItemText, MenuItem } from '@material-ui/core';
+import { Box, ListItemText, MenuItem } from '@material-ui/core';
 import {
     AssignmentOutlined,
     ContactSupportOutlined,
@@ -101,13 +101,9 @@ interface UseSettings extends SettingsContext {
     renderSettingsMenuList: JSX.Element;
 }
 
-interface Props {
-    modal: boolean;
-}
-
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
-export const useSettings = ({ modal }: Props): UseSettings => {
+export const useSettings = (modal: boolean): UseSettings => {
     const { user, setUser } = useAuthContext();
     const verified = R.propOr(null, 'verified', user);
     const authenticated = !!user;
@@ -231,6 +227,9 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         </StyledList>
     );
 
-    const renderSettingsMenuList = authenticated ? renderAuthenticatedMenuList : renderCommonMenuItems;
+    const renderSettingsMenuList = (
+        <Box flexGrow="1">{authenticated ? renderAuthenticatedMenuList : renderCommonMenuItems}</Box>
+    );
+
     return { renderSettingsMenuList, settingsOpen, toggleSettings };
 };
