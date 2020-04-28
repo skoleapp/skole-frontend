@@ -32,8 +32,6 @@
     "resourceType": "Resurstyp",
     "course": "Kurs",
     "ordering": "Ordning",
-    "usernameOrdering": "Användarnamn (A-Ö)",
-    "usernameOrderingReverse": "Användarnamn (Z-Ö)",
     "nameOrdering": "Namn (A-Ö)",
     "nameOrderingReverse": "Namn (Z-Ö)",
     "scoreOrdering": "Poäng (Stigande)",

@@ -1,7 +1,6 @@
 {
     "title": "Kurser",
     "description": "Detta är en söksida för kurser.",
-    "header": "Kurser",
     "coursesSubHeader": "Kurser",
     "noCourses": "Inga kurser..."
 }

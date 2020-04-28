@@ -4,23 +4,26 @@ import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 
 interface UseSearch {
-    searchValue: string;
     handleSubmit: (e: SyntheticEvent) => void;
-    handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    placeholder: string;
+    inputProps: {
+        value: string;
+        onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+        placeholder: string;
+    };
 }
 
 export const useSearch = (): UseSearch => {
-    const [searchValue, setSearchValue] = useState('');
+    const [value, setValue] = useState('');
     const { t } = useTranslation();
     const placeholder = t('forms:searchCourses');
 
     const handleSubmit = (e: SyntheticEvent): void => {
         e.preventDefault();
-        Router.push({ pathname: '/search', query: { courseName: searchValue } });
+        setValue('');
+        Router.push({ pathname: '/search', query: { courseName: value } });
     };
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
+    const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
 
-    return { searchValue, handleSubmit, handleChange, placeholder };
+    return { handleSubmit, inputProps: { value, onChange, placeholder } };
 };

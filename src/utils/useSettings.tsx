@@ -1,7 +1,22 @@
 import { useApolloClient } from '@apollo/react-hooks';
-import { Box, Button, MenuItem } from '@material-ui/core';
-import { ExitToAppOutlined } from '@material-ui/icons';
+import { Box, ListItemText, MenuItem } from '@material-ui/core';
+import {
+    AssignmentOutlined,
+    ContactSupportOutlined,
+    DeleteForeverOutlined,
+    EditOutlined,
+    ExitToAppOutlined,
+    HelpOutlineOutlined,
+    HowToRegOutlined,
+    LanguageOutlined,
+    LockOutlined,
+    SecurityOutlined,
+    SettingsBackupRestoreOutlined,
+    StarBorderOutlined,
+    VerifiedUserOutlined,
+} from '@material-ui/icons';
 import { useRouter } from 'next/router';
+import * as R from 'ramda';
 import React from 'react';
 
 import { StyledList } from '../components/shared/StyledList';
@@ -10,27 +25,93 @@ import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { clientLogout } from '../lib';
 import { SettingsContext } from '../types';
-import { menuItems } from './menuItems';
 import { useLanguageSelector } from './useLanguageSelector';
 
-interface UseSettings extends SettingsContext {
-    renderSettingsCardContent: JSX.Element;
-}
+export const menuItems = {
+    account: [
+        {
+            icon: StarBorderOutlined,
+            text: 'common:starred',
+            href: '/account/starred',
+        },
+        {
+            icon: EditOutlined,
+            text: 'common:editProfile',
+            href: '/account/edit-profile',
+        },
+        {
+            icon: LockOutlined,
+            text: 'common:changePassword',
+            href: '/account/change-password',
+        },
+        {
+            icon: DeleteForeverOutlined,
+            text: 'common:deleteAccount',
+            href: '/account/delete-account',
+        },
+    ],
+    commonAccount: [
+        {
+            icon: SettingsBackupRestoreOutlined,
+            text: 'common:resetPassword',
+            href: '/account/reset-password',
+        },
+    ],
+    language: [
+        {
+            title: 'languages:english',
+            value: 'en',
+        },
+        {
+            title: 'languages:finnish',
+            value: 'fi',
+        },
+        {
+            title: 'languages:swedish',
+            value: 'sv',
+        },
+    ],
+    about: [
+        {
+            icon: HelpOutlineOutlined,
+            text: 'common:about',
+            href: '/about',
+        },
+        {
+            icon: ContactSupportOutlined,
+            text: 'common:contact',
+            href: '/contact',
+        },
+    ],
+    legal: [
+        {
+            icon: AssignmentOutlined,
+            text: 'common:terms',
+            href: '/terms',
+        },
+        {
+            icon: SecurityOutlined,
+            text: 'common:privacy',
+            href: '/privacy',
+        },
+    ],
+};
 
-interface Props {
-    modal: boolean;
+interface UseSettings extends SettingsContext {
+    renderSettingsMenuList: JSX.Element;
 }
 
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
-export const useSettings = ({ modal }: Props): UseSettings => {
+export const useSettings = (modal: boolean): UseSettings => {
     const { user, setUser } = useAuthContext();
+    const verified = R.propOr(null, 'verified', user);
     const authenticated = !!user;
     const { settingsOpen, toggleSettings } = useSettingsContext();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
     const { pathname } = useRouter();
-    const { renderCurrentFlag, openLanguageMenu } = useLanguageSelector();
+    const { openLanguageMenu } = useLanguageSelector();
     const apolloClient = useApolloClient();
 
     const handleClose = (): void => {
@@ -51,40 +132,77 @@ export const useSettings = ({ modal }: Props): UseSettings => {
         toggleNotification(t('notifications:signedOut'));
     };
 
-    const getSelected = (m: { [key: string]: string }): boolean => !modal && m.href === pathname;
+    const getSelected = (href: string): boolean => !modal && href === pathname;
 
     const handleLanguageClick = (): void => {
         handleClose();
         openLanguageMenu();
     };
 
-    const renderAccountMenuItems = menuItems.account.map((m, i) => (
-        <MenuItem key={i} onClick={handleMenuItemClick(m.href)} selected={getSelected(m)}>
-            {t(m.text)}
+    const renderAccountMenuItems = menuItems.account.map(({ icon: Icon, href, text }, i) => (
+        <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
+            <ListItemText>
+                <Icon /> {t(text)}
+            </ListItemText>
         </MenuItem>
     ));
 
-    const renderCommonAccountMenuItems = menuItems.commonAccount.map((m, i) => (
-        <MenuItem key={i} onClick={handleMenuItemClick(m.href)} selected={getSelected(m)}>
-            {t(m.text)}
+    const renderVerifyAccountMenuItem = verified === false && (
+        <MenuItem
+            onClick={handleMenuItemClick('/account/verify-account')}
+            selected={getSelected('/account/verify-account')}
+        >
+            <ListItemText>
+                <VerifiedUserOutlined /> {t('common:verifyAccount')}
+            </ListItemText>
+        </MenuItem>
+    );
+
+    const renderCommonAccountMenuItems = menuItems.commonAccount.map(({ icon: Icon, href, text }, i) => (
+        <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
+            <ListItemText>
+                <Icon /> {t(text)}
+            </ListItemText>
         </MenuItem>
     ));
 
-    const renderAboutMenuItems = menuItems.about.map((m, i) => (
-        <MenuItem key={i} onClick={handleMenuItemClick(m.href)} selected={getSelected(m)}>
-            {t(m.text)}
+    const renderAboutMenuItems = menuItems.about.map(({ icon: Icon, href, text }, i) => (
+        <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
+            <ListItemText>
+                <Icon /> {t(text)}
+            </ListItemText>
         </MenuItem>
     ));
 
-    const renderLegalItems = menuItems.legal.map((m, i) => (
-        <MenuItem key={i} onClick={handleMenuItemClick(m.href)} selected={getSelected(m)}>
-            {t(m.text)}
+    const renderLegalItems = menuItems.legal.map(({ icon: Icon, href, text }, i) => (
+        <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
+            <ListItemText>
+                <Icon /> {t(text)}
+            </ListItemText>
         </MenuItem>
     ));
 
     const renderLanguageMenuItem = (
         <MenuItem onClick={handleLanguageClick}>
-            {t('common:language')} {renderCurrentFlag}
+            <ListItemText>
+                <LanguageOutlined /> {t('common:language')}
+            </ListItemText>
+        </MenuItem>
+    );
+
+    const renderLoginMenuItem = (
+        <MenuItem onClick={handleMenuItemClick('/login')}>
+            <ListItemText>
+                <HowToRegOutlined /> {t('common:login')}
+            </ListItemText>
+        </MenuItem>
+    );
+
+    const renderLogoutMenuItem = (
+        <MenuItem onClick={handleLogoutClick}>
+            <ListItemText>
+                <ExitToAppOutlined /> {t('common:logout')}
+            </ListItemText>
         </MenuItem>
     );
 
@@ -94,42 +212,24 @@ export const useSettings = ({ modal }: Props): UseSettings => {
             {renderLanguageMenuItem}
             {renderAboutMenuItems}
             {renderLegalItems}
+            {renderLoginMenuItem}
         </StyledList>
     );
 
     const renderAuthenticatedMenuList = (
         <StyledList>
             {renderAccountMenuItems}
+            {renderVerifyAccountMenuItem}
             {renderLanguageMenuItem}
             {renderAboutMenuItems}
             {renderLegalItems}
+            {renderLogoutMenuItem}
         </StyledList>
     );
 
-    const renderLoginButton = (
-        <Button fullWidth variant="outlined" color="primary" onClick={handleMenuItemClick('/login')}>
-            {t('common:login')}
-        </Button>
+    const renderSettingsMenuList = (
+        <Box flexGrow="1">{authenticated ? renderAuthenticatedMenuList : renderCommonMenuItems}</Box>
     );
 
-    const renderLogoutButton = (
-        <Button
-            fullWidth
-            variant="outlined"
-            color="primary"
-            onClick={handleLogoutClick}
-            endIcon={<ExitToAppOutlined />}
-        >
-            {t('common:logout')}
-        </Button>
-    );
-
-    const renderSettingsCardContent = (
-        <Box flexGrow="1" display="flex" flexDirection="column" justifyContent="space-between">
-            {authenticated ? renderAuthenticatedMenuList : renderCommonMenuItems}
-            <Box padding="0.5rem">{authenticated ? renderLogoutButton : renderLoginButton}</Box>
-        </Box>
-    );
-
-    return { renderSettingsCardContent, settingsOpen, toggleSettings };
+    return { renderSettingsMenuList, settingsOpen, toggleSettings };
 };

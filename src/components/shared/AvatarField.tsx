@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Drawer, FormControl, ListItemText, MenuItem } from '@material-ui/core';
+import { Avatar, Box, Button, FormControl, ListItemText, MenuItem } from '@material-ui/core';
 import { ClearOutlined, EditOutlined, LibraryAddOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import * as R from 'ramda';
@@ -9,6 +9,7 @@ import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
 import { mediaURL, useDrawer } from '../../utils';
 import { FormErrorMessage } from './FormErrorMessage';
+import { StyledDrawer } from './StyledDrawer';
 import { StyledList } from './StyledList';
 
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
@@ -24,6 +25,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();
         const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
+
         if (avatar.size > 2000000) {
             setFieldError('avatar', t('validation:fileSizeError'));
         } else {
@@ -71,7 +73,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
     );
 
     return (
-        <StyledImagePreviewField fullWidth>
+        <StyledAvatarField fullWidth>
             <Box display="flex" flexDirection="column" alignItems="center">
                 <Avatar className="main-avatar" src={preview} />
                 <Box width="12rem">
@@ -83,34 +85,32 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
                         capture="camera"
                         onChange={handleAvatarChange}
                     />
-                    <Button onClick={handleOpen} variant="text" color="primary" component="span">
+                    <Button
+                        id="change-avatar-button"
+                        onClick={handleOpen}
+                        variant="text"
+                        color="primary"
+                        component="span"
+                    >
                         {t('edit-profile:changeAvatar')}
                     </Button>
                 </Box>
                 <ErrorMessage name="avatar" component={FormErrorMessage} />
             </Box>
-            <Drawer {...drawerProps}>
+            <StyledDrawer {...drawerProps}>
                 {renderHeader}
                 <StyledList>
                     {renderAddAvatar}
                     {renderChangeAvatar}
                     {renderRemoveAvatar}
                 </StyledList>
-            </Drawer>
-        </StyledImagePreviewField>
+            </StyledDrawer>
+        </StyledAvatarField>
     );
 };
 
-const StyledImagePreviewField = styled(FormControl)`
-    label {
-        width: 100%;
-    }
-
-    .MuiButton-root {
-        margin-top: 0;
-    }
-
-    .MuiIconButton-root {
-        margin-left: 0.5rem;
+const StyledAvatarField = styled(FormControl)`
+    #change-avatar-button {
+        margin-top: 0.5rem;
     }
 `;

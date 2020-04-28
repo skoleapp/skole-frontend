@@ -9,11 +9,15 @@ interface Props {
     extraFilters: {};
 }
 
-export const getPaginationQuery = ({ query, extraFilters }: Props): ParsedUrlQueryInput => {
+export const getQueryWithPagination = ({ query, extraFilters }: Props): ParsedUrlQueryInput => {
     return R.pickBy(
         (val: string, key: string): boolean => (!!val && key === 'page') || key === 'pageSize' || key in extraFilters,
         query,
     );
+};
+
+export const getPaginationQuery = (query: ParsedUrlQueryInput): ParsedUrlQueryInput => {
+    return R.pickBy((val: string, key: string): boolean => (!!val && key === 'page') || key === 'pageSize', query);
 };
 
 interface UseFrontendPagination<T> extends CustomTablePaginationProps {

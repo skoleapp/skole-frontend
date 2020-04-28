@@ -37,7 +37,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const { user: loggedInUser } = useAuthContext();
-    const verified = R.propOr(false, 'verified', loggedInUser);
+    const verified = R.propOr(null, 'verified', user);
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
     const title = R.propOr('', 'title', user) as string;
@@ -65,7 +65,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </ButtonLink>
     );
 
-    const renderVerifyAccountLink = isOwnProfile && !verified && (
+    const renderVerifyAccountLink = isOwnProfile && verified === false && (
         <Box marginTop="0.5rem">
             <TextLink href="/account/verify-account" color="primary">
                 {t('common:verifyAccount')}
@@ -288,21 +288,26 @@ const UserPage: NextPage<Props> = ({ user }) => {
 };
 
 const StyledUserPage = styled(Box)`
-    .section-help-text {
-        font-size: 0.75rem;
-    }
+    .MuiCardContent-root {
+        padding-bottom: 0.5rem !important;
 
-    @media only screen and (max-width: ${breakpoints.SM}) {
-        .main-avatar {
-            width: 4rem;
-            height: 4rem;
-            margin: 0.5rem;
+        .section-help-text {
+            font-size: 0.75rem;
         }
-    }
 
-    #bio {
-        overflow: hidden;
-        word-break: break-word;
+        .main-avatar {
+            margin: 0.5rem;
+
+            @media only screen and (max-width: ${breakpoints.SM}) {
+                width: 4rem;
+                height: 4rem;
+            }
+        }
+
+        #bio {
+            overflow: hidden;
+            word-break: break-word;
+        }
     }
 `;
 

@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button, Tooltip } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import styled from 'styled-components';
@@ -28,7 +28,7 @@ interface UseLanguageSelector extends LanguageSelectorContext {
 }
 
 export const useLanguageSelector = (): UseLanguageSelector => {
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [value, setValue] = useState(i18n.language);
     const { toggleLanguageSelector, languageSelectorOpen } = useLanguageSelectorContext();
 
@@ -47,7 +47,9 @@ export const useLanguageSelector = (): UseLanguageSelector => {
     const renderCurrentFlag = !!language && !!language.code ? languageToFlag(language.code) : languageToFlag('US');
 
     const renderLanguageButton = (
-        <StyledLanguageSelector onClick={openLanguageMenu}>{renderCurrentFlag}</StyledLanguageSelector>
+        <Tooltip title={t('common:languageTooltip')}>
+            <StyledLanguageSelector onClick={openLanguageMenu}>{renderCurrentFlag}</StyledLanguageSelector>
+        </Tooltip>
     );
 
     return {

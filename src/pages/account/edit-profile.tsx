@@ -6,8 +6,23 @@ import * as R from 'ramda';
 import React from 'react';
 import * as Yup from 'yup';
 
-import { UpdateUserMutation, UserObjectType, useUpdateUserMutation } from '../../../generated/graphql';
-import { AvatarField, FormSubmitSection, NotFoundLayout, SettingsLayout, TextLink } from '../../components';
+import {
+    SchoolObjectType,
+    SchoolsDocument,
+    SubjectObjectType,
+    SubjectsDocument,
+    UpdateUserMutation,
+    UserObjectType,
+    useUpdateUserMutation,
+} from '../../../generated/graphql';
+import {
+    AutoCompleteField,
+    AvatarField,
+    FormSubmitSection,
+    NotFoundLayout,
+    SettingsLayout,
+    TextLink,
+} from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
@@ -21,11 +36,13 @@ export interface UpdateProfileFormValues {
     title: string;
     bio: string;
     avatar: string;
+    school: SchoolObjectType | null;
+    subject: SubjectObjectType | null;
 }
 
 const EditProfilePage: NextPage<I18nProps> = () => {
     const { user, setUser } = useAuthContext();
-    const verified = R.propOr(false, 'verified', user);
+    const verified = R.propOr(null, 'verified', user);
     const { ref, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -48,7 +65,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
     const [updateUserMutation] = useUpdateUserMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: UpdateProfileFormValues): Promise<void> => {
-        const { username, email, title, bio, avatar } = values;
+        const { username, email, title, bio, avatar, school, subject } = values;
 
         await updateUserMutation({
             variables: {
@@ -57,6 +74,8 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                 title,
                 bio,
                 avatar,
+                school: R.propOr('', 'id', school),
+                subject: R.propOr('', 'id', subject),
             },
         });
 
@@ -70,6 +89,8 @@ const EditProfilePage: NextPage<I18nProps> = () => {
         email: R.propOr('', 'email', user) as string,
         bio: R.propOr('', 'bio', user) as string,
         avatar: R.propOr('', 'avatar', user) as string,
+        school: R.propOr(null, 'school', user) as SchoolObjectType,
+        subject: R.propOr(null, 'subject', user) as SubjectObjectType,
         general: '',
     };
 
@@ -78,6 +99,8 @@ const EditProfilePage: NextPage<I18nProps> = () => {
         username: Yup.string().required(t('validation:required')),
         email: Yup.string().email(t('validation:invalidEmail')),
         bio: Yup.string(),
+        school: Yup.object().nullable(),
+        subject: Yup.object().nullable(),
     });
 
     const renderCardContent = (
@@ -116,12 +139,34 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                         component={TextField}
                         label={t('forms:bio')}
                         variant="outlined"
-                        rows="5"
+                        rows="4"
                         multiline
                         fullWidth
                     />
+                    <Field
+                        name="school"
+                        label={t('forms:school')}
+                        placeholder={t('forms:school')}
+                        dataKey="schools"
+                        document={SchoolsDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        helperText={t('edit-profile:schoolHelpText')}
+                        fullWidth
+                    />
+                    <Field
+                        name="subject"
+                        label={t('forms:subject')}
+                        placeholder={t('forms:subject')}
+                        dataKey="subjects"
+                        document={SubjectsDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        helperText={t('edit-profile:subjectHelpText')}
+                        fullWidth
+                    />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
-                    {!verified && (
+                    {verified === false && (
                         <Box marginTop="1rem" marginBottom="0.5rem">
                             <TextLink href="/account/verify-account" color="primary">
                                 {t('common:verifyAccount')}
@@ -142,7 +187,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
             header: t('edit-profile:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent: renderCardContent,
+        renderCardContent,
         desktopHeader: t('edit-profile:header'),
         formLayout: true,
     };

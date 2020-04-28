@@ -62,14 +62,6 @@ export const base = css`
             }
         }
 
-        .MuiDrawer-paperAnchorLeft {
-            min-width: 20rem;
-        }
-
-        .MuiDrawer-paperAnchorBottom {
-            min-height: 100%;
-        }
-
         // Custom classes
 
         .border-bottom {
@@ -83,7 +75,6 @@ export const base = css`
         .main-avatar {
             height: 8rem;
             width: 8rem;
-            margin: 1rem;
         }
 
         .avatar-thumbnail {

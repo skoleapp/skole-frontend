@@ -28,7 +28,7 @@ export const SettingsLayout: React.FC<Props> = ({
     fullSize,
     ...props
 }) => {
-    const { renderSettingsCardContent } = useSettings({ modal: false });
+    const { renderSettingsMenuList } = useSettings(false);
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
 
@@ -51,7 +51,7 @@ export const SettingsLayout: React.FC<Props> = ({
         <Grid item xs={12} md={4} lg={3}>
             <StyledCard>
                 <CardHeader className="border-bottom" title={t('common:settings')} />
-                <CardContent className="container">{renderSettingsCardContent}</CardContent>
+                <CardContent className="container">{renderSettingsMenuList}</CardContent>
             </StyledCard>
         </Grid>
     );
@@ -86,7 +86,7 @@ const StyledSettingsLayout = styled(({ fullSize, ...other }) => <Box {...other} 
     .container {
         flex-grow: 1;
         display: flex;
-        padding: ${({ fullSize }): string => (fullSize ? '0 !important' : 'initial')};
+        padding: ${({ fullSize }): string => fullSize && '0 !important'};
 
         form {
             width: 100%;

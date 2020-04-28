@@ -1,9 +1,9 @@
-import { Drawer, MenuItem } from '@material-ui/core';
+import { MenuItem } from '@material-ui/core';
 import React from 'react';
 
 import { useTranslation } from '../../i18n';
 import { useDrawer, useLanguageSelector } from '../../utils';
-import { ModalHeader, StyledList } from '../shared';
+import { ModalHeader, StyledDrawer, StyledList } from '../shared';
 
 export const LanguageSelectorModal: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -30,9 +30,9 @@ export const LanguageSelectorModal: React.FC = () => {
     );
 
     return (
-        <Drawer open={languageSelectorOpen} anchor={anchor} onClose={handleClose}>
+        <StyledDrawer open={languageSelectorOpen} anchor={anchor} onClose={handleClose}>
             <ModalHeader text={t('common:language')} onCancel={handleClose} />
             {renderLanguageList}
-        </Drawer>
+        </StyledDrawer>
     );
 };

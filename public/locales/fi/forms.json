@@ -32,8 +32,6 @@
     "resourceType": "Resurssityyppi",
     "course": "Kurssi",
     "ordering": "Järjestys",
-    "usernameOrdering": "Käyttätunnus (A-Z)",
-    "usernameOrderingReverse": "Käyttäjätunnus (Z-A)",
     "nameOrdering": "Nimi (A-Z)",
     "nameOrderingReverse": "Nimi (Z-A)",
     "scoreOrdering": "Pisteet (nouseva)",

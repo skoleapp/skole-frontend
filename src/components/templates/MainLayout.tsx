@@ -2,7 +2,7 @@ import { Box, Container } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 
-import { useDeviceContext } from '../../context';
+import { useAuthContext, useDeviceContext } from '../../context';
 import { breakpoints } from '../../styles';
 import { LayoutProps } from '../../types';
 import {
@@ -20,19 +20,20 @@ import {
 export const MainLayout: React.FC<LayoutProps> = ({
     seoProps,
     topNavbarProps,
-    disableBottomNavbar,
+    customTopNavbar,
     customBottomNavbar,
     containerProps,
     children,
 }) => {
     const isMobile = useDeviceContext();
+    const authenticated = !!useAuthContext().user;
 
     return (
-        <StyledMainLayout disableBottomMargin={disableBottomNavbar && !customBottomNavbar}>
+        <StyledMainLayout disableBottomMargin={!authenticated && !customBottomNavbar}>
             <Head {...seoProps} />
-            <TopNavbar {...topNavbarProps} />
+            {(isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />}
             <Container {...containerProps}>{children}</Container>
-            {customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />)}
+            {customBottomNavbar || (authenticated && <BottomNavbar />)}
             {!isMobile && <Footer />}
             <Notifications />
             <AttachmentViewer />

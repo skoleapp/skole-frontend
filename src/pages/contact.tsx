@@ -110,7 +110,7 @@ const ContactPage: NextPage<I18nProps> = () => {
                         placeholder={t('forms:message')}
                         label={t('forms:message')}
                         variant="outlined"
-                        rows="5"
+                        rows="4"
                         fullWidth
                         multiline
                     />
