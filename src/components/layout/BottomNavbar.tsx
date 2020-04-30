@@ -4,9 +4,10 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { useAuthContext } from 'src/context';
+import { UrlObject } from 'url';
 
 import { Link, Router } from '../../i18n';
-import { mediaURL } from '../../utils';
+import { mediaURL, useSearch } from '../../utils';
 import { StyledBottomNavigation } from '../shared';
 
 export const BottomNavbar: React.FC = () => {
@@ -14,7 +15,7 @@ export const BottomNavbar: React.FC = () => {
     const avatarThumb = R.propOr('', 'avatar', user) as string;
     const { pathname, query } = useRouter();
     const home = '/';
-    const search = '/search';
+    const { searchUrl } = useSearch();
     const uploadResource = '/upload-resource';
     const starred = '/account/starred';
     const userDetail = '/users/[id]';
@@ -24,7 +25,7 @@ export const BottomNavbar: React.FC = () => {
             case home: {
                 return 1;
             }
-            case search: {
+            case searchUrl.pathname: {
                 return 2;
             }
             case uploadResource: {
@@ -50,7 +51,7 @@ export const BottomNavbar: React.FC = () => {
         setValue(newValue);
     };
 
-    const handleRedirect = (href: string) => (): Promise<boolean> => Router.push(href);
+    const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
 
     const renderAvatar = (
         <Link href="/users/[id]" as={`/users/${R.propOr('', 'id', user)}`}>
@@ -61,7 +62,7 @@ export const BottomNavbar: React.FC = () => {
     return (
         <StyledBottomNavigation value={value} onChange={handleChange}>
             <BottomNavigationAction value={1} onClick={handleRedirect(home)} icon={<HomeOutlined />} />
-            <BottomNavigationAction value={2} onClick={handleRedirect(search)} icon={<SearchOutlined />} />
+            <BottomNavigationAction value={2} onClick={handleRedirect(searchUrl)} icon={<SearchOutlined />} />
             <BottomNavigationAction value={3} onClick={handleRedirect(uploadResource)} icon={<CloudUploadOutlined />} />
             <BottomNavigationAction value={4} onClick={handleRedirect(starred)} icon={<StarBorderOutlined />} />
             <BottomNavigationAction value={5} icon={renderAvatar} />

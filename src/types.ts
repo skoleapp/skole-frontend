@@ -7,6 +7,7 @@ import { NextPageContext } from 'next';
 import { Extent } from 'ol/extent';
 import { Group } from 'ol/layer';
 import { MutableRefObject, SyntheticEvent } from 'react';
+import { UrlObject } from 'url';
 
 import { CommentObjectType, ErrorType, UserObjectType } from '../generated/graphql';
 
@@ -27,10 +28,7 @@ export interface SEOProps {
 export interface TopNavbarProps {
     header?: string;
     dynamicBackUrl?: boolean;
-    staticBackUrl?: {
-        href: string;
-        as?: string;
-    };
+    staticBackUrl?: string | UrlObject;
     disableSearch?: boolean;
     headerRight?: JSX.Element | boolean;
     headerRightSecondary?: JSX.Element;

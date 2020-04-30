@@ -39,7 +39,7 @@ import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, MuiColor, SkolePageContext } from '../../types';
-import { useFrontendPagination, useOptions, useVotes } from '../../utils';
+import { useFrontendPagination, useOptions, useSearch, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -50,6 +50,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user } = useAuthContext();
+    const { searchUrl } = useSearch();
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
     const subjectName = R.pathOr('', ['subject', 'name'], course) as string;
@@ -78,8 +79,8 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     });
 
     const subjectLink = {
-        pathname: '/search',
-        query: { subjectId },
+        ...searchUrl,
+        query: { ...searchUrl.query, subject: Number(subjectId) },
     };
 
     const discussionBoxProps = {
@@ -266,7 +267,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             description: t('course:description'),
         },
         topNavbarProps: {
-            staticBackUrl: { href: '/search' },
+            staticBackUrl: searchUrl,
         },
         headerDesktop: courseName,
         subheaderDesktop: renderSubjectLink,
