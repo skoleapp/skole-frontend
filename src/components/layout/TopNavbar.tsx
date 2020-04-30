@@ -53,12 +53,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             <Grid item xs={dense ? 4 : 8} container justify="center">
                 {header ? <StyledHeaderText text={header} /> : <Logo />}
             </Grid>
-            {!!headerRightSecondary && (
-                <Grid item xs={dense ? 2 : 1} container justify="flex-end">
-                    {headerRightSecondary}
-                </Grid>
-            )}
-            <Grid item xs={!!headerRightSecondary ? 2 : dense ? 4 : 2} container justify="flex-end">
+            <Grid item xs={dense ? 4 : 2} container justify="flex-end">
+                {headerRightSecondary}
                 {headerRight}
             </Grid>
         </Grid>

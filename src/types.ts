@@ -28,7 +28,10 @@ export interface SEOProps {
 export interface TopNavbarProps {
     header?: string;
     dynamicBackUrl?: boolean;
-    staticBackUrl?: string | UrlObject;
+    staticBackUrl?: {
+        href: string | UrlObject;
+        as?: string | UrlObject;
+    };
     disableSearch?: boolean;
     headerRight?: JSX.Element | boolean;
     headerRightSecondary?: JSX.Element;

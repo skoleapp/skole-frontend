@@ -267,7 +267,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             description: t('course:description'),
         },
         topNavbarProps: {
-            staticBackUrl: searchUrl,
+            staticBackUrl: { href: searchUrl },
         },
         headerDesktop: courseName,
         subheaderDesktop: renderSubjectLink,
