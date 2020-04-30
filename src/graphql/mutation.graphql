@@ -222,8 +222,8 @@ mutation DeleteComment($id: ID) {
     }
 }
 
-mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
-    createMessage(input: { subject: $subject, name: $name, email: $email, message: $message }) {
+mutation Contact($subject: String!, $email: String!, $message: String!) {
+    createContactMessage(input: { subject: $subject, email: $email, message: $message }) {
         message
         errors {
             field

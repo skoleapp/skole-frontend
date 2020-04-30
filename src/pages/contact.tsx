@@ -21,7 +21,6 @@ const initialValues = {
 };
 
 export interface ContactFormValues {
-    name: string;
     subject: string;
     email: string;
     message: string;
@@ -37,20 +36,19 @@ const ContactPage: NextPage<I18nProps> = () => {
 
     const validationSchema = Yup.object().shape({
         subject: Yup.string().required(t('validation:required')),
-        name: Yup.string(),
         email: Yup.string()
             .email(t('validation:invalidEmail'))
             .required(t('validation:required')),
         message: Yup.string().required(t('validation:required')),
     });
 
-    const onCompleted = ({ createMessage }: ContactMutation): void => {
-        if (!!createMessage) {
-            if (!!createMessage.errors) {
-                handleMutationErrors(createMessage.errors);
-            } else if (!!createMessage.message) {
+    const onCompleted = ({ createContactMessage }: ContactMutation): void => {
+        if (!!createContactMessage) {
+            if (!!createContactMessage.errors) {
+                handleMutationErrors(createContactMessage.errors);
+            } else if (!!createContactMessage.message) {
                 resetForm();
-                toggleNotification(createMessage.message);
+                toggleNotification(createContactMessage.message);
             } else {
                 unexpectedError();
             }
@@ -62,10 +60,9 @@ const ContactPage: NextPage<I18nProps> = () => {
     const [contactMutation] = useContactMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: ContactFormValues): Promise<void> => {
-        const { name, subject, email, message } = values;
+        const { subject, email, message } = values;
 
         const variables = {
-            name,
             subject,
             email,
             message,
@@ -79,14 +76,6 @@ const ContactPage: NextPage<I18nProps> = () => {
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field
-                        name="name"
-                        component={TextField}
-                        label={t('forms:name')}
-                        placeholder={t('forms:name')}
-                        variant="outlined"
-                        fullWidth
-                    />
                     <Field
                         name="subject"
                         component={TextField}

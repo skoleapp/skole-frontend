@@ -58,7 +58,6 @@ export type CommentObjectType = {
 
 export type ContactMutationInput = {
   subject: Scalars['String'],
-  name?: Maybe<Scalars['String']>,
   email: Scalars['String'],
   message: Scalars['String'],
   clientMutationId?: Maybe<Scalars['String']>,
@@ -67,7 +66,6 @@ export type ContactMutationInput = {
 export type ContactMutationPayload = {
    __typename?: 'ContactMutationPayload',
   subject: Scalars['String'],
-  name?: Maybe<Scalars['String']>,
   email: Scalars['String'],
   message?: Maybe<Scalars['String']>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
@@ -237,7 +235,7 @@ export type Mutation = {
   deleteResource?: Maybe<DeleteResourceMutationPayload>,
   createCourse?: Maybe<CreateCourseMutationPayload>,
   deleteCourse?: Maybe<DeleteCourseMutationPayload>,
-  createMessage?: Maybe<ContactMutationPayload>,
+  createContactMessage?: Maybe<ContactMutationPayload>,
   createComment?: Maybe<CreateCommentMutationPayload>,
   updateComment?: Maybe<UpdateCommentMutationPayload>,
   deleteComment?: Maybe<DeleteCommentMutationPayload>,
@@ -324,7 +322,7 @@ export type MutationDeleteCourseArgs = {
 };
 
 
-export type MutationCreateMessageArgs = {
+export type MutationCreateContactMessageArgs = {
   input: ContactMutationInput
 };
 
@@ -370,7 +368,6 @@ export type Query = {
   course?: Maybe<CourseObjectType>,
   countries?: Maybe<Array<Maybe<CountryObjectType>>>,
   country?: Maybe<CountryObjectType>,
-  comment?: Maybe<CommentObjectType>,
   cities?: Maybe<Array<Maybe<CityObjectType>>>,
   city?: Maybe<CityObjectType>,
 };
@@ -421,11 +418,6 @@ export type QueryCourseArgs = {
 
 
 export type QueryCountryArgs = {
-  id?: Maybe<Scalars['ID']>
-};
-
-
-export type QueryCommentArgs = {
   id?: Maybe<Scalars['ID']>
 };
 
@@ -953,7 +945,6 @@ export type DeleteCommentMutation = (
 
 export type ContactMutationVariables = {
   subject: Scalars['String'],
-  name?: Maybe<Scalars['String']>,
   email: Scalars['String'],
   message: Scalars['String']
 };
@@ -961,7 +952,7 @@ export type ContactMutationVariables = {
 
 export type ContactMutation = (
   { __typename?: 'Mutation' }
-  & { createMessage: Maybe<(
+  & { createContactMessage: Maybe<(
     { __typename?: 'ContactMutationPayload' }
     & Pick<ContactMutationPayload, 'message'>
     & { errors: Maybe<Array<Maybe<(
@@ -1898,8 +1889,8 @@ export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteComment
 export type DeleteCommentMutationResult = ApolloReactCommon.MutationResult<DeleteCommentMutation>;
 export type DeleteCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
 export const ContactDocument = gql`
-    mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
-  createMessage(input: {subject: $subject, name: $name, email: $email, message: $message}) {
+    mutation Contact($subject: String!, $email: String!, $message: String!) {
+  createContactMessage(input: {subject: $subject, email: $email, message: $message}) {
     message
     errors {
       field
@@ -1924,7 +1915,6 @@ export type ContactMutationFn = ApolloReactCommon.MutationFunction<ContactMutati
  * const [contactMutation, { data, loading, error }] = useContactMutation({
  *   variables: {
  *      subject: // value for 'subject'
- *      name: // value for 'name'
  *      email: // value for 'email'
  *      message: // value for 'message'
  *   },
