@@ -27,7 +27,6 @@ const createApolloClient = (
     const isBrowser = typeof window !== 'undefined';
     const uri = isBrowser ? env.API_URL : env.BACKEND_URL;
     const token = !!ctx ? nextCookie(ctx).token : cookie.get('token');
-    const language = R.pathOr(i18n.language, ['req', 'language'], ctx);
 
     const httpLink = createUploadLink({
         uri: uri + 'graphql/',
@@ -39,7 +38,7 @@ const createApolloClient = (
         headers: {
             ...headers,
             Authorization: token ? `JWT ${token}` : '',
-            'Accept-Language': language,
+            'Accept-Language': i18n.language || R.path(['req', 'language'], ctx),
         },
     }));
 

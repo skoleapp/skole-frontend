@@ -24,8 +24,7 @@ import {
     TextLink,
 } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
-import { useTranslation } from '../../i18n';
-import { includeDefaultNamespaces } from '../../i18n';
+import { includeDefaultNamespaces, useTranslation } from '../../i18n';
 import { withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
@@ -151,7 +150,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                         document={SchoolsDocument}
                         component={AutoCompleteField}
                         variant="outlined"
-                        helperText={t('edit-profile:schoolHelpText')}
+                        helperText={t('forms:schoolHelpText')}
                         fullWidth
                     />
                     <Field
@@ -162,7 +161,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                         document={SubjectsDocument}
                         component={AutoCompleteField}
                         variant="outlined"
-                        helperText={t('edit-profile:subjectHelpText')}
+                        helperText={t('forms:subjectHelpText')}
                         fullWidth
                     />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />

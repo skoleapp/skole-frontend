@@ -13,6 +13,13 @@ export type Scalars = {
   Date: any,
 };
 
+export type BadgeObjectType = {
+   __typename?: 'BadgeObjectType',
+  id: Scalars['ID'],
+  name?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+};
+
 export type ChangePasswordMutationInput = {
   oldPassword: Scalars['String'],
   newPassword: Scalars['String'],
@@ -430,6 +437,8 @@ export type QueryCityArgs = {
 export type RegisterMutationInput = {
   username: Scalars['String'],
   email: Scalars['String'],
+  school?: Maybe<Scalars['ID']>,
+  subject?: Maybe<Scalars['ID']>,
   password: Scalars['String'],
   code: Scalars['String'],
   clientMutationId?: Maybe<Scalars['String']>,
@@ -615,6 +624,8 @@ export type UserObjectType = {
   resourceCount?: Maybe<Scalars['Int']>,
   school?: Maybe<SchoolObjectType>,
   subject?: Maybe<SubjectObjectType>,
+  rank?: Maybe<Scalars['String']>,
+  badges?: Maybe<Array<Maybe<BadgeObjectType>>>,
   starredCourses?: Maybe<Array<Maybe<CourseObjectType>>>,
   starredResources?: Maybe<Array<Maybe<ResourceObjectType>>>,
 };
@@ -661,6 +672,8 @@ export type VoteObjectType = {
 export type RegisterMutationVariables = {
   username: Scalars['String'],
   email: Scalars['String'],
+  school?: Maybe<Scalars['ID']>,
+  subject?: Maybe<Scalars['ID']>,
   password: Scalars['String'],
   code: Scalars['String']
 };
@@ -1330,8 +1343,8 @@ export type SubjectsQuery = (
 
 
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
-  register(input: {username: $username, email: $email, password: $password, code: $code}) {
+    mutation Register($username: String!, $email: String!, $school: ID, $subject: ID, $password: String!, $code: String!) {
+  register(input: {username: $username, email: $email, school: $school, subject: $subject, password: $password, code: $code}) {
     message
     errors {
       field
@@ -1368,6 +1381,8 @@ export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMuta
  *   variables: {
  *      username: // value for 'username'
  *      email: // value for 'email'
+ *      school: // value for 'school'
+ *      subject: // value for 'subject'
  *      password: // value for 'password'
  *      code: // value for 'code'
  *   },

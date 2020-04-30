@@ -37,5 +37,7 @@
     "scoreOrdering": "Score (Ascending)",
     "scoreOrderingReverse": "Score (Descending)",
     "betaCode": "Beta Code",
-    "name": "Name"
+    "name": "Name",
+    "schoolHelpText": "By adding school we will be able to automatically show you content based on your school.",
+    "subjectHelpText": "By adding subject we will be able to automatically show you content based on your subject."
 }
