@@ -6,5 +6,8 @@
     "editProfile": "Redigera Profil",
     "noResources": "Inga uppladdade resurser...",
     "noCourses": "Inga tillagda kurser...",
-    "settingsTooltip": "Visa inställningar."
+    "settingsTooltip": "Visa inställningar.",
+    "badges": "Brickor",
+    "rank": "Rankning",
+    "rankTooltip": "Denna användares rankning är {{ rank }}."
 }
