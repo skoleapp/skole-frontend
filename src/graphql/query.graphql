@@ -282,6 +282,17 @@ query SchoolDetail($id: ID) {
     }
 }
 
+query CreateResourceInitialData($school: ID, $course: ID) {
+    school(id: $school) {
+        id
+        name
+    }
+    course(id: $course) {
+        id
+        name
+    }
+}
+
 query Schools {
     schools {
         id
@@ -296,8 +307,8 @@ query SchoolTypes {
     }
 }
 
-query Courses {
-    courses {
+query Courses($school: ID) {
+    courses(school: $school) {
         id
         name
     }

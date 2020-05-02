@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import { useRef } from 'react';
 
 import { i18n } from '../i18n';
-import { MutationErrors, MutationFormError, UseForm } from '../types';
+import { FieldValue, MutationErrors, MutationFormError, UseForm } from '../types';
 
 const snakeToCamel = (str: string): string => {
     return str.replace(/([-_][a-z])/g, group =>
@@ -66,7 +66,7 @@ export const useForm = <T>(): UseForm<T> => {
     const resetForm = (): void | null => ref && ref.current && ref.current.resetForm();
     const submitForm = (): Promise<void> | null => ref && ref.current && ref.current.submitForm();
 
-    const setFieldValue = (fieldName: string, val: string | File | File[] | null): void => {
+    const setFieldValue = (fieldName: string, val: FieldValue): void => {
         ref && ref.current && ref.current.setFieldValue(fieldName, val);
     };
 
