@@ -1,5 +1,5 @@
 import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
-import { EditOutlined, StarBorderOutlined, StarOutlined } from '@material-ui/icons';
+import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -136,13 +136,13 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const renderResourceCountValue = <Typography variant="body1">{resourceCount}</Typography>;
 
     const renderRank = !!rank && (
-        <Box marginTop="0.25rem" id="rank">
-            <Tooltip title={t('profile:rankTooltip', { rank })}>
-                <StarBorderOutlined color="disabled" />
-            </Tooltip>
+        <Box marginTop="0.25rem">
             <Typography className="section-help-text" variant="body2" color="textSecondary">
-                {rank}
+                {t('profile:rank')}
             </Typography>
+            <Tooltip title={t('profile:rankTooltip', { rank })}>
+                <Chip size="small" label={rank} />
+            </Tooltip>
         </Box>
     );
 
@@ -343,15 +343,6 @@ const StyledUserPage = styled(Box)`
         #bio {
             overflow: hidden;
             word-break: break-word;
-        }
-
-        #rank {
-            display: flex;
-            align-items: center;
-
-            .MuiSvgIcon-root {
-                margin-right: 0.25rem;
-            }
         }
     }
 

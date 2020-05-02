@@ -8,5 +8,6 @@
     "noCourses": "Inga tillagda kurser...",
     "settingsTooltip": "Visa inställningar.",
     "badges": "{{ badgeCount }} bricka",
+    "rank": "Rankning",
     "rankTooltip": "Denna användares rankning är {{ rank }}."
 }

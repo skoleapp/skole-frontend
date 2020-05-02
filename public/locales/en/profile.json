@@ -8,5 +8,6 @@
     "noCourses": "This user has no courses...",
     "settingsTooltip": "View settings.",
     "badges": "{{ badgeCount }} badges",
+    "rank": "Rank",
     "rankTooltip": "This user's rank is {{ rank }}."
 }
