@@ -220,7 +220,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
         <Tooltip title={t('course:uploadResourceTooltip')}>
             <IconButtonLink
-                href={{ pathname: '/upload-resource', query: { course: courseId } }}
+                href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}
                 color={color}
                 icon={CloudUploadOutlined}
             />

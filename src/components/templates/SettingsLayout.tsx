@@ -51,7 +51,7 @@ export const SettingsLayout: React.FC<Props> = ({
         <Grid item xs={12} md={4} lg={3}>
             <StyledCard>
                 <CardHeader className="border-bottom" title={t('common:settings')} />
-                <CardContent className="container">{renderSettingsMenuList}</CardContent>
+                <CardContent>{renderSettingsMenuList}</CardContent>
             </StyledCard>
         </Grid>
     );

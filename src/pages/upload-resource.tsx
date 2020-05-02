@@ -14,6 +14,8 @@ import {
     CreateResourceInitialDataDocument,
     CreateResourceMutation,
     ResourceTypesDocument,
+    SchoolObjectType,
+    SchoolsDocument,
     useCreateResourceMutation,
 } from '../../generated/graphql';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
@@ -26,15 +28,17 @@ import { useForm } from '../utils';
 interface UploadResourceFormValues {
     resourceTitle: string;
     resourceType: string;
+    school: SchoolObjectType | null;
     course: CourseObjectType | null;
     file: File | null;
 }
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
+    school?: SchoolObjectType;
 }
 
-const UploadResourcePage: NextPage<Props> = ({ course }) => {
+const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
@@ -54,6 +58,7 @@ const UploadResourcePage: NextPage<Props> = ({ course }) => {
         resourceType: Yup.object()
             .nullable()
             .required(t('validation:required')),
+        school: Yup.object().nullable(),
         course: Yup.object()
             .nullable()
             .required(t('validation:required')),
@@ -174,6 +179,7 @@ const UploadResourcePage: NextPage<Props> = ({ course }) => {
     const initialValues = {
         resourceTitle: '',
         resourceType: '',
+        school: school || null,
         course: course || null,
         file: null,
         general: '',
@@ -203,6 +209,16 @@ const UploadResourcePage: NextPage<Props> = ({ course }) => {
                         fullWidth
                     />
                     <Field
+                        name="school"
+                        label={t('forms:school')}
+                        placeholder={t('forms:school')}
+                        dataKey="schools"
+                        document={SchoolsDocument}
+                        variant="outlined"
+                        component={AutoCompleteField}
+                        fullWidth
+                    />
+                    <Field
                         name="course"
                         label={t('forms:course')}
                         placeholder={t('forms:course')}
@@ -210,6 +226,7 @@ const UploadResourcePage: NextPage<Props> = ({ course }) => {
                         document={CoursesDocument}
                         variant="outlined"
                         component={AutoCompleteField}
+                        variables={{ school: R.pathOr(undefined, ['values', 'school', 'id'], props) }} // Filter courses based on selected school.
                         fullWidth
                     />
                     <Field name="file" component={DropzoneField} />

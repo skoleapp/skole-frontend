@@ -1,23 +1,21 @@
 import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
-import { Autocomplete, RenderInputParams } from '@material-ui/lab';
+import { Autocomplete, AutocompleteProps, RenderInputParams } from '@material-ui/lab';
 import { FieldAttributes, FormikProps, getIn } from 'formik';
 import { DocumentNode } from 'graphql';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { useApolloClient } from 'react-apollo';
+import { OperationVariables, useApolloClient } from 'react-apollo';
 
-import { SchoolTypeObjectType } from '../../../generated/graphql';
-
-interface Props {
+interface Props extends AutocompleteProps {
     field: FieldAttributes<{}>;
     form: FormikProps<{}>;
     labelKey: string; // Used to access the label on the object.
     dataKey: string; // Used to access the data after a successful query.
     document: DocumentNode; // GraphQL document the query is made with.
-    disabled?: boolean;
+    variables: OperationVariables; // Custom variables for GraphQL query.
 }
 
-export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends SchoolTypeObjectType>({
+export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}>({
     field,
     form,
     labelKey = 'name',
@@ -25,6 +23,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
     document,
     helperText,
     disabled,
+    variables,
     ...props
 }: Props & TextFieldProps) => {
     const [open, setOpen] = useState(false);
@@ -40,6 +39,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
         try {
             const { data } = await apolloClient.query({
                 query: document,
+                variables,
                 fetchPolicy: 'no-cache', // Disable caching so we can always fetch correct translations.
             });
 

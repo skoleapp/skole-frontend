@@ -6,5 +6,8 @@
     "editProfile": "Muokkaa profiilia",
     "noResources": "Tällä käyttäjällä ei ole resursseja...",
     "noCourses": "Tällä käyttäjällä ei ole kursseja...",
-    "settingsTooltip": "Tarkastele asetuksia."
+    "settingsTooltip": "Tarkastele asetuksia.",
+    "badges": "Merkit",
+    "rank": "Arvo",
+    "rankTooltip": "Tämän käyttäjän arvo on {{ rank }}."
 }
