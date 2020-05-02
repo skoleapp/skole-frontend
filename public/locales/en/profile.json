@@ -6,5 +6,6 @@
     "editProfile": "Edit Profile",
     "noResources": "This user has no resources...",
     "noCourses": "This user has no courses...",
-    "settingsTooltip": "View settings."
+    "settingsTooltip": "View settings.",
+    "badges": "{{ badgeCount }} badges"
 }

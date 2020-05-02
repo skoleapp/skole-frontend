@@ -1,4 +1,4 @@
-import { Avatar, Box, CardContent, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
+import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import { GetServerSideProps, NextPage } from 'next';
@@ -7,7 +7,13 @@ import React from 'react';
 import { useAuthContext, useDeviceContext } from 'src/context';
 import styled from 'styled-components';
 
-import { CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from '../../../generated/graphql';
+import {
+    BadgeObjectType,
+    CourseObjectType,
+    ResourceObjectType,
+    UserDetailDocument,
+    UserObjectType,
+} from '../../../generated/graphql';
 import {
     ButtonLink,
     CourseTableBody,
@@ -41,19 +47,20 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
     const title = R.propOr('', 'title', user) as string;
-    const bio = R.propOr('', 'bio', 'user') as string;
+    const bio = R.propOr('', 'bio', user) as string;
     const score = R.propOr('-', 'score', user) as string;
     const courseCount = R.propOr('-', 'courseCount', user) as string;
     const resourceCount = R.propOr('-', 'resourceCount', user) as string;
     const joined = moment(R.propOr('', 'created', user)).format('LL');
     const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', loggedInUser);
+    const badges = R.propOr([], 'badges', user) as BadgeObjectType[];
     const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
     const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
     const isMobile = useDeviceContext(breakpointsNum.SM);
 
-    const renderEditProfileButton = (
+    const renderEditProfileButton = isOwnProfile && (
         <ButtonLink
             href="/account/edit-profile"
             color="primary"
@@ -65,35 +72,33 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </ButtonLink>
     );
 
-    const renderVerifyAccountLink = isOwnProfile && verified === false && (
-        <Box marginTop="0.5rem">
-            <TextLink href="/account/verify-account" color="primary">
-                {t('common:verifyAccount')}
-            </TextLink>
+    const renderSettingsButton = isOwnProfile && (
+        <Box marginLeft="0.5rem">
+            <Tooltip title={t('profile:settingsTooltip')}>
+                <SettingsButton color="primary" />
+            </Tooltip>
         </Box>
     );
 
-    const renderTitle = !!title && <Typography variant="subtitle1">{title}</Typography>;
-    const renderCourseCountValue = <Typography variant="body1">{courseCount}</Typography>;
-    const renderResourceCountValue = <Typography variant="body1">{resourceCount}</Typography>;
-
-    const renderBio = !!bio && (
-        <Typography id="bio" variant="body2">
-            {bio}
+    const renderTitle = !!title && (
+        <Typography variant="subtitle1" color="textSecondary">
+            {title}
         </Typography>
     );
 
-    const renderJoined = (
-        <Box marginTop="0.5rem">
-            <Typography className="section-help-text" variant="body2" color="textSecondary">
-                {t('common:joined')} {joined}
+    const renderBio = !!bio && (
+        <Box marginTop="0.25rem">
+            <Typography id="bio" variant="body2">
+                {bio}
             </Typography>
         </Box>
     );
 
-    const renderUserName = (
-        <Box marginY="0.5rem">
-            <Typography variant="subtitle1">{username}</Typography>
+    const renderJoined = (
+        <Box marginTop="0.25rem">
+            <Typography className="section-help-text" variant="body2" color="textSecondary">
+                {t('common:joined')} {joined}
+            </Typography>
         </Box>
     );
 
@@ -101,12 +106,11 @@ const UserPage: NextPage<Props> = ({ user }) => {
         <CardContent>
             <Box display="flex" flexDirection="column">
                 <Avatar className="main-avatar" src={mediaURL(avatar)} />
-                {renderUserName}
+                {!isMobile && <Typography variant="subtitle1">{username}</Typography>}
+                {!isMobile && renderTitle}
             </Box>
         </CardContent>
     );
-
-    const renderScoreValue = <Typography variant="body1">{score}</Typography>;
 
     const renderScoreTitle = (
         <Typography className="section-help-text" variant="body2" color="textSecondary">
@@ -126,64 +130,84 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </Typography>
     );
 
-    const renderMobileTopSection = isMobile && (
-        <Grid container alignItems="center">
-            <Grid item container xs={4}>
-                {renderAvatarCardContent}
-            </Grid>
-            <Grid item container xs={8} direction="column">
-                <CardContent>
-                    <Box display="flex" justifyContent="space-around">
-                        <Box>
-                            {renderScoreValue}
-                            {renderScoreTitle}
-                        </Box>
-                        <Box margin="0 1rem">
-                            {renderCourseCountValue}
-                            {renderCourseCountTitle}
-                        </Box>
-                        <Box>
-                            {renderResourceCountValue}
-                            {renderResourceCountTitle}
-                        </Box>
+    const renderScoreValue = <Typography variant="body1">{score}</Typography>;
+    const renderCourseCountValue = <Typography variant="body1">{courseCount}</Typography>;
+    const renderResourceCountValue = <Typography variant="body1">{resourceCount}</Typography>;
+
+    const renderBadges = !!badges.length && (
+        <Box marginTop="0.25rem">
+            <Typography className="section-help-text" variant="body2" color="textSecondary">
+                {t('profile:badges', { badgeCount: badges.length })}
+            </Typography>
+            <Box display="flex" marginLeft="-0.25rem">
+                {badges.map(({ name, description }, i) => (
+                    <Box key={i}>
+                        <Tooltip title={description}>
+                            <Chip className="badge" size="small" label={name} />
+                        </Tooltip>
                     </Box>
-                </CardContent>
-            </Grid>
-            <CardContent>
+                ))}
+            </Box>
+        </Box>
+    );
+
+    const renderVerifyAccountLink = isOwnProfile && verified === false && (
+        <Box marginTop="0.25rem">
+            <TextLink href="/account/verify-account" color="primary">
+                {t('common:verifyAccount')}
+            </TextLink>
+        </Box>
+    );
+
+    const renderMobileTopSection = isMobile && (
+        <CardContent>
+            <Grid container alignItems="center">
+                <Grid item container xs={4}>
+                    {renderAvatarCardContent}
+                </Grid>
+                <Grid item container xs={8} direction="column">
+                    <CardContent>
+                        <Box display="flex" justifyContent="space-around">
+                            <Box>
+                                {renderScoreValue}
+                                {renderScoreTitle}
+                            </Box>
+                            <Box margin="0 1rem">
+                                {renderCourseCountValue}
+                                {renderCourseCountTitle}
+                            </Box>
+                            <Box>
+                                {renderResourceCountValue}
+                                {renderResourceCountTitle}
+                            </Box>
+                        </Box>
+                    </CardContent>
+                </Grid>
                 <Box textAlign="left">
                     {renderTitle}
                     {renderBio}
-                    {renderJoined}
+                    {renderBadges}
                     {renderVerifyAccountLink}
+                    {renderJoined}
                 </Box>
-            </CardContent>
-            {isOwnProfile && (
-                <Grid item xs={12}>
-                    <CardContent>{renderEditProfileButton}</CardContent>
-                </Grid>
-            )}
-        </Grid>
+                <Box marginTop="0.25rem" width="100%">
+                    {renderEditProfileButton}
+                </Box>
+            </Grid>
+        </CardContent>
     );
 
     const renderDesktopTopSection = !isMobile && (
-        <Grid container alignItems="center">
-            <Grid item container justify="center" xs={5}>
-                {renderAvatarCardContent}
-            </Grid>
-            <Grid item container xs={7} direction="column" alignItems="flex-start">
-                {isOwnProfile && (
-                    <CardContent>
-                        <Grid container alignItems="center" justify="center">
-                            {renderEditProfileButton}
-                            <Box marginLeft="0.5rem">
-                                <Tooltip title={t('profile:settingsTooltip')}>
-                                    <SettingsButton color="primary" />
-                                </Tooltip>
-                            </Box>
-                        </Grid>
-                    </CardContent>
-                )}
-                <CardContent>
+        <CardContent>
+            <Grid container alignItems="center">
+                <Grid item container justify="center" xs={5}>
+                    {renderAvatarCardContent}
+                </Grid>
+                <Grid item container xs={7} direction="column" alignItems="flex-start">
+                    <Box display="flex" alignItems="center">
+                        {renderEditProfileButton}
+                        {renderSettingsButton}
+                    </Box>
                     <Box display="flex">
                         <Box display="flex" alignItems="center">
                             {renderScoreValue}
@@ -198,17 +222,15 @@ const UserPage: NextPage<Props> = ({ user }) => {
                             <Box marginLeft="0.25rem">{renderResourceCountTitle}</Box>
                         </Box>
                     </Box>
-                </CardContent>
-                <CardContent>
                     <Box textAlign="left">
-                        {renderTitle}
                         {renderBio}
-                        {renderJoined}
+                        {renderBadges}
                         {renderVerifyAccountLink}
+                        {renderJoined}
                     </Box>
-                </CardContent>
+                </Grid>
             </Grid>
-        </Grid>
+        </CardContent>
     );
 
     const commonTableHeadProps = {
@@ -308,6 +330,10 @@ const StyledUserPage = styled(Box)`
             overflow: hidden;
             word-break: break-word;
         }
+    }
+
+    .badge {
+        margin: 0.25rem !important;
     }
 `;
 

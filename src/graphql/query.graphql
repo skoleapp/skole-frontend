@@ -46,6 +46,11 @@ query UserDetail($id: ID) {
         resourceCount
         created
         verified
+        badges {
+            id
+            name
+            description
+        }
         createdCourses {
             id
             name
