@@ -6,7 +6,7 @@ const config = {
         dest: 'public',
         register: false,
         skipWaiting: false,
-        //disable: prod ? false : true,
+        disable: prod ? false : true,
     },
     publicRuntimeConfig: {
         API_URL: process.env.API_URL,
