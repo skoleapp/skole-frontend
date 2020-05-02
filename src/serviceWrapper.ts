@@ -1,13 +1,16 @@
 // Makke fix this pls
 
 import { useConfirm } from 'material-ui-confirm';
-import { useEffect } from 'react';
+import { useEffect, FunctionComponent, ReactElement } from 'react';
 import { Workbox } from 'workbox-window';
 
 import { useTranslation } from './i18n';
 
-//@ts-ignore
-export const ServiceWrapper = ({ children }: any): any => {
+interface Props {
+    children: ReactElement;
+}
+
+export const ServiceWrapper: FunctionComponent<Props> = ({ children }): ReactElement => {
     const { t } = useTranslation();
     const confirm = useConfirm();
 
@@ -28,7 +31,7 @@ export const ServiceWrapper = ({ children }: any): any => {
                         });
                         workbox.messageSW({ type: 'SKIP_WAITING' });
                     })
-                    .catch((err: any) => {
+                    .catch((err: string) => {
                         console.log(err);
                     });
             });
