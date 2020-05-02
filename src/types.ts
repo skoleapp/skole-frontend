@@ -9,7 +9,7 @@ import { Group } from 'ol/layer';
 import { MutableRefObject, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
 
-import { CommentObjectType, ErrorType, UserObjectType } from '../generated/graphql';
+import { CommentObjectType, ErrorType, SchoolObjectType, UserObjectType } from '../generated/graphql';
 
 export interface SkolePageContext extends NextPageContext {
     apolloClient: ApolloClient<NormalizedCacheObject>;
@@ -108,6 +108,9 @@ export type ButtonVariant = 'text' | 'outlined' | 'contained' | undefined;
 export type MutationFormError = Pick<ErrorType, 'field' | 'messages'>;
 export type MutationErrors = Maybe<{ __typename?: 'ErrorType' | undefined } & MutationFormError>[];
 
+// This is a custom type for field values. Add more options when needed.
+export type FieldValue = string | File | File[] | SchoolObjectType | null;
+
 export interface UseForm<T> {
     ref: MutableRefObject<Formik<T> | null>;
     handleMutationErrors: (err: MutationErrors) => void;
@@ -115,7 +118,7 @@ export interface UseForm<T> {
     setSubmitting: (val: boolean) => void;
     resetForm: () => void;
     submitForm: () => Promise<void> | null;
-    setFieldValue: (fieldName: string, val: string | File | File[] | null) => void;
+    setFieldValue: (fieldName: string, val: FieldValue) => void;
     setFieldError: (fieldName: string, val: string) => void;
     unexpectedError: () => void;
 }

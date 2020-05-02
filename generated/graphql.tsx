@@ -414,6 +414,11 @@ export type QuerySearchCoursesArgs = {
 };
 
 
+export type QueryCoursesArgs = {
+  school?: Maybe<Scalars['ID']>
+};
+
+
 export type QueryCourseArgs = {
   id?: Maybe<Scalars['ID']>
 };
@@ -1005,19 +1010,6 @@ export type DeleteCourseMutation = (
   )> }
 );
 
-export type CreateResourceInitialDataQueryVariables = {
-  course?: Maybe<Scalars['ID']>
-};
-
-
-export type CreateResourceInitialDataQuery = (
-  { __typename?: 'Query' }
-  & { course: Maybe<(
-    { __typename?: 'CourseObjectType' }
-    & Pick<CourseObjectType, 'id' | 'name'>
-  )> }
-);
-
 export type CreateResourceMutationVariables = {
   resourceTitle: Scalars['String'],
   resourceType: Scalars['ID'],
@@ -1261,6 +1253,23 @@ export type SchoolDetailQuery = (
   )> }
 );
 
+export type CreateResourceInitialDataQueryVariables = {
+  school?: Maybe<Scalars['ID']>,
+  course?: Maybe<Scalars['ID']>
+};
+
+
+export type CreateResourceInitialDataQuery = (
+  { __typename?: 'Query' }
+  & { school: Maybe<(
+    { __typename?: 'SchoolObjectType' }
+    & Pick<SchoolObjectType, 'id' | 'name'>
+  )>, course: Maybe<(
+    { __typename?: 'CourseObjectType' }
+    & Pick<CourseObjectType, 'id' | 'name'>
+  )> }
+);
+
 export type SchoolsQueryVariables = {};
 
 
@@ -1283,7 +1292,9 @@ export type SchoolTypesQuery = (
   )>>> }
 );
 
-export type CoursesQueryVariables = {};
+export type CoursesQueryVariables = {
+  school?: Maybe<Scalars['ID']>
+};
 
 
 export type CoursesQuery = (
@@ -2011,40 +2022,6 @@ export function useDeleteCourseMutation(baseOptions?: ApolloReactHooks.MutationH
 export type DeleteCourseMutationHookResult = ReturnType<typeof useDeleteCourseMutation>;
 export type DeleteCourseMutationResult = ApolloReactCommon.MutationResult<DeleteCourseMutation>;
 export type DeleteCourseMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCourseMutation, DeleteCourseMutationVariables>;
-export const CreateResourceInitialDataDocument = gql`
-    query CreateResourceInitialData($course: ID) {
-  course(id: $course) {
-    id
-    name
-  }
-}
-    `;
-
-/**
- * __useCreateResourceInitialDataQuery__
- *
- * To run a query within a React component, call `useCreateResourceInitialDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useCreateResourceInitialDataQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCreateResourceInitialDataQuery({
- *   variables: {
- *      course: // value for 'course'
- *   },
- * });
- */
-export function useCreateResourceInitialDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
-        return ApolloReactHooks.useQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
-      }
-export function useCreateResourceInitialDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
-        }
-export type CreateResourceInitialDataQueryHookResult = ReturnType<typeof useCreateResourceInitialDataQuery>;
-export type CreateResourceInitialDataLazyQueryHookResult = ReturnType<typeof useCreateResourceInitialDataLazyQuery>;
-export type CreateResourceInitialDataQueryResult = ApolloReactCommon.QueryResult<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>;
 export const CreateResourceDocument = gql`
     mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
   createResource(input: {title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file}) {
@@ -2555,6 +2532,45 @@ export function useSchoolDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type SchoolDetailQueryHookResult = ReturnType<typeof useSchoolDetailQuery>;
 export type SchoolDetailLazyQueryHookResult = ReturnType<typeof useSchoolDetailLazyQuery>;
 export type SchoolDetailQueryResult = ApolloReactCommon.QueryResult<SchoolDetailQuery, SchoolDetailQueryVariables>;
+export const CreateResourceInitialDataDocument = gql`
+    query CreateResourceInitialData($school: ID, $course: ID) {
+  school(id: $school) {
+    id
+    name
+  }
+  course(id: $course) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useCreateResourceInitialDataQuery__
+ *
+ * To run a query within a React component, call `useCreateResourceInitialDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreateResourceInitialDataQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreateResourceInitialDataQuery({
+ *   variables: {
+ *      school: // value for 'school'
+ *      course: // value for 'course'
+ *   },
+ * });
+ */
+export function useCreateResourceInitialDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
+        return ApolloReactHooks.useQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
+      }
+export function useCreateResourceInitialDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
+        }
+export type CreateResourceInitialDataQueryHookResult = ReturnType<typeof useCreateResourceInitialDataQuery>;
+export type CreateResourceInitialDataLazyQueryHookResult = ReturnType<typeof useCreateResourceInitialDataLazyQuery>;
+export type CreateResourceInitialDataQueryResult = ApolloReactCommon.QueryResult<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>;
 export const SchoolsDocument = gql`
     query Schools {
   schools {
@@ -2622,8 +2638,8 @@ export type SchoolTypesQueryHookResult = ReturnType<typeof useSchoolTypesQuery>;
 export type SchoolTypesLazyQueryHookResult = ReturnType<typeof useSchoolTypesLazyQuery>;
 export type SchoolTypesQueryResult = ApolloReactCommon.QueryResult<SchoolTypesQuery, SchoolTypesQueryVariables>;
 export const CoursesDocument = gql`
-    query Courses {
-  courses {
+    query Courses($school: ID) {
+  courses(school: $school) {
     id
     name
   }
@@ -2642,6 +2658,7 @@ export const CoursesDocument = gql`
  * @example
  * const { data, loading, error } = useCoursesQuery({
  *   variables: {
+ *      school: // value for 'school'
  *   },
  * });
  */

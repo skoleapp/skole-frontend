@@ -255,13 +255,6 @@ mutation DeleteCourse($id: ID) {
     }
 }
 
-query CreateResourceInitialData($course: ID) {
-    course(id: $course) {
-        id
-        name
-    }
-}
-
 mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
     createResource(input: { title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file }) {
         message
