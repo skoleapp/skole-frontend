@@ -1,22 +1,21 @@
-// Makke fix this pls
-
 import { useConfirm } from 'material-ui-confirm';
-import { FunctionComponent, ReactElement, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Workbox } from 'workbox-window';
 
 import { useTranslation } from './i18n';
 
 interface Props {
-    children: ReactElement;
+    children: React.ReactNode;
 }
 
-export const ServiceWrapper: FunctionComponent<Props> = ({ children }): ReactElement => {
+// eslint-disable-next-line
+export const ServiceWrapper: React.FC<Props> = ({ children }): any => {
     const { t } = useTranslation();
     const confirm = useConfirm();
 
     useEffect(() => {
         //Property 'workbox' does not exist on type 'Window & typeof globalThis'.
-        // eslint-disable-next-line
+        // @ts-ignore
         const workbox: Workbox = window.workbox;
         if (typeof window !== 'undefined' && 'serviceWorker' in navigator && workbox !== undefined) {
             workbox.addEventListener('waiting', () => {
