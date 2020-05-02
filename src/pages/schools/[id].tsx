@@ -23,7 +23,7 @@ import {
 import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Link } from '../../i18n';
 import { I18nProps, SkolePageContext } from '../../types';
-import { useFrontendPagination, useOptions } from '../../utils';
+import { useFrontendPagination, useOptions, useSearch } from '../../utils';
 
 interface Props extends I18nProps {
     school?: SchoolObjectType;
@@ -32,6 +32,7 @@ interface Props extends I18nProps {
 const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { t } = useTranslation();
     const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions();
+    const { searchUrl } = useSearch();
     const schoolName = R.propOr('', 'name', school) as string;
     const schoolType = R.propOr('', 'schoolType', school) as string;
     const country = R.propOr('', 'country', school) as string;
@@ -46,18 +47,18 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
 
     const schoolTypeLink = {
-        pathname: '/search',
-        query: { schoolType },
+        ...searchUrl,
+        query: { ...searchUrl.query, schoolType },
     };
 
     const countryLink = {
-        pathname: '/search',
-        query: { country: countryId },
+        ...searchUrl,
+        query: { ...searchUrl.query, country: countryId },
     };
 
     const cityLink = {
-        pathname: '/search',
-        query: { city: cityId },
+        ...searchUrl,
+        query: { ...searchUrl.query, city: cityId },
     };
 
     const renderSchoolTypeLink = (
@@ -111,7 +112,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const renderSubjectsTableBody = (
         <TableBody>
             {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
-                <Link href={{ pathname: '/search', query: { subject: s.id } }} key={i}>
+                <Link href={{ ...searchUrl, query: { ...searchUrl.query, subject: s.id } }} key={i}>
                     <TableRow>
                         <TableCell>
                             <Typography variant="subtitle1">{R.propOr('-', 'name', s)}</Typography>

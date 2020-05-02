@@ -1,5 +1,14 @@
-mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
-    register(input: { username: $username, email: $email, password: $password, code: $code }) {
+mutation Register($username: String!, $email: String!, $school: ID, $subject: ID, $password: String!, $code: String!) {
+    register(
+        input: {
+            username: $username
+            email: $email
+            school: $school
+            subject: $subject
+            password: $password
+            code: $code
+        }
+    ) {
         message
         errors {
             field
@@ -214,7 +223,7 @@ mutation DeleteComment($id: ID) {
 }
 
 mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
-    createMessage(input: { subject: $subject, name: $name, email: $email, message: $message }) {
+    createContactMessage(input: { subject: $subject, name: $name, email: $email, message: $message }) {
         message
         errors {
             field

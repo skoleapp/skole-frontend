@@ -10,6 +10,7 @@ import {
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
+import { UrlObject } from 'url';
 
 import { ButtonLink, MainLayout } from '../components';
 import { includeDefaultNamespaces, Link, useTranslation } from '../i18n';
@@ -21,30 +22,30 @@ import { useSearch } from '../utils';
 interface Shortcut {
     text: string;
     icon: SvgIconComponent;
-    href: string;
+    href: string | UrlObject;
 }
-
-const shortcuts = [
-    {
-        text: 'index:browseCourses',
-        icon: SchoolOutlined,
-        href: '/search',
-    },
-    {
-        text: 'index:uploadResource',
-        icon: CloudUploadOutlined,
-        href: '/upload-resource',
-    },
-    {
-        text: 'index:createCourse',
-        icon: LibraryAddOutlined,
-        href: '/create-course',
-    },
-];
 
 const IndexPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
-    const { handleSubmit, inputProps } = useSearch();
+    const { handleSubmit, searchUrl, inputProps } = useSearch();
+
+    const shortcuts = [
+        {
+            text: 'index:browseCourses',
+            icon: SchoolOutlined,
+            href: searchUrl,
+        },
+        {
+            text: 'index:uploadResource',
+            icon: CloudUploadOutlined,
+            href: '/upload-resource',
+        },
+        {
+            text: 'index:createCourse',
+            icon: LibraryAddOutlined,
+            href: '/create-course',
+        },
+    ];
 
     const layoutProps = {
         seoProps: {

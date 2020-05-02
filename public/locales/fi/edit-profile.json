@@ -5,7 +5,5 @@
     "avatar": "Avatar",
     "addAvatar": "Lisää avatar",
     "changeAvatar": "Muokkaa avataria",
-    "clearAvatar": "Poista avatar",
-    "schoolHelpText": "Lisäämällä koulun voimme näyttää sinulle automaattisesti sisältöä perustuen oppilaitokseesi.",
-    "subjectHelpText": "Lisäämällä oppiaineen voimme näyttää sinulle automaattisesti sisältöä perustuen oppiaineesesi."
+    "clearAvatar": "Poista avatar"
 }

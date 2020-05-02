@@ -8,8 +8,16 @@ import * as R from 'ramda';
 import React from 'react';
 import * as Yup from 'yup';
 
-import { RegisterMutation, useRegisterMutation, UserObjectType } from '../../generated/graphql';
-import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
+import {
+    RegisterMutation,
+    SchoolObjectType,
+    SchoolsDocument,
+    SubjectObjectType,
+    SubjectsDocument,
+    useRegisterMutation,
+    UserObjectType,
+} from '../../generated/graphql';
+import { AutoCompleteField, ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useAuthContext, useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
@@ -20,6 +28,8 @@ import { useForm, useLanguageSelector } from '../utils';
 export interface RegisterFormValues {
     username: string;
     email: string;
+    school: SchoolObjectType | null;
+    subject: SubjectObjectType | null;
     password: string;
     confirmPassword: string;
     code: string;
@@ -44,6 +54,8 @@ const RegisterPage: NextPage<I18nProps> = () => {
         email: Yup.string()
             .email(t('validation:invalidEmail'))
             .required(t('validation:required')),
+        school: Yup.object().nullable(),
+        subject: Yup.object().nullable(),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
             .required(t('validation:required')),
@@ -53,6 +65,8 @@ const RegisterPage: NextPage<I18nProps> = () => {
     const initialValues = {
         username: '',
         email: '',
+        school: null,
+        subject: null,
         password: '',
         confirmPassword: '',
         code: R.propOr('', 'code', query) as string,
@@ -78,10 +92,17 @@ const RegisterPage: NextPage<I18nProps> = () => {
     const [registerMutation] = useRegisterMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: RegisterFormValues): Promise<void> => {
-        const { username, email, password, code } = values;
+        const { username, email, school, subject, password, code } = values;
 
         await registerMutation({
-            variables: { username, email, password, code },
+            variables: {
+                username,
+                email,
+                school: R.propOr('', 'id', school),
+                subject: R.propOr('', 'id', subject),
+                password,
+                code,
+            },
             context: { headers: { Authorization: '' } },
         });
 
@@ -108,6 +129,28 @@ const RegisterPage: NextPage<I18nProps> = () => {
                         component={TextField}
                         variant="outlined"
                         helperText={t('forms:emailHelperText')}
+                        fullWidth
+                    />
+                    <Field
+                        name="school"
+                        label={t('forms:school')}
+                        placeholder={t('forms:school')}
+                        dataKey="schools"
+                        document={SchoolsDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        helperText={t('forms:schoolHelpText')}
+                        fullWidth
+                    />
+                    <Field
+                        name="subject"
+                        label={t('forms:subject')}
+                        placeholder={t('forms:subject')}
+                        dataKey="subjects"
+                        document={SubjectsDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        helperText={t('forms:subjectHelpText')}
                         fullWidth
                     />
                     <Field

@@ -13,7 +13,7 @@ interface Props {
     form: FormikProps<{}>;
     labelKey: string; // Used to access the label on the object.
     dataKey: string; // Used to access the data after a successful query.
-    document: DocumentNode;
+    document: DocumentNode; // GraphQL document the query is made with.
     disabled?: boolean;
 }
 
@@ -40,7 +40,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends Sc
         try {
             const { data } = await apolloClient.query({
                 query: document,
-                fetchPolicy: 'network-only', // Don't use cache to fetch correct translations.
+                fetchPolicy: 'no-cache', // Disable caching so we can always fetch correct translations.
             });
 
             data[dataKey] && setOptions(data[dataKey]);
