@@ -149,7 +149,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const renderBadges = !!badges.length && (
         <Box marginTop="0.25rem">
             <Typography className="section-help-text" variant="body2" color="textSecondary">
-                {t('profile:badges', { badgeCount: badges.length })}
+                {t('profile:badges')}
             </Typography>
             <Box display="flex" margin="0 -0.25rem -0.25rem -0.25rem">
                 {badges.map(({ name, description }, i) => (

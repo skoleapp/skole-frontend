@@ -7,7 +7,7 @@
     "noResources": "Inga uppladdade resurser...",
     "noCourses": "Inga tillagda kurser...",
     "settingsTooltip": "Visa inställningar.",
-    "badges": "{{ badgeCount }} bricka",
+    "badges": "Brickor",
     "rank": "Rankning",
     "rankTooltip": "Denna användares rankning är {{ rank }}."
 }
