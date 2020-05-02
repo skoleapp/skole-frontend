@@ -7,5 +7,6 @@
     "noResources": "This user has no resources...",
     "noCourses": "This user has no courses...",
     "settingsTooltip": "View settings.",
-    "badges": "{{ badgeCount }} badges"
+    "badges": "{{ badgeCount }} badges",
+    "rankTooltip": "This user's rank is {{ rank }}."
 }

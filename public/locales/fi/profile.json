@@ -7,5 +7,6 @@
     "noResources": "Tällä käyttäjällä ei ole resursseja...",
     "noCourses": "Tällä käyttäjällä ei ole kursseja...",
     "settingsTooltip": "Tarkastele asetuksia.",
-    "badges": "{{ badgeCount }} merkkiä"
+    "badges": "{{ badgeCount }} merkkiä",
+    "rankTooltip": "Tämän käyttäjän arvo on {{ rank }}."
 }

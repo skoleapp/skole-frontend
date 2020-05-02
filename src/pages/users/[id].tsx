@@ -1,5 +1,5 @@
 import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
-import { EditOutlined } from '@material-ui/icons';
+import { EditOutlined, StarBorderOutlined, StarOutlined } from '@material-ui/icons';
 import moment from 'moment';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -44,6 +44,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const { tabValue, handleTabChange } = useTabs();
     const { user: loggedInUser } = useAuthContext();
     const verified = R.propOr(null, 'verified', user);
+    const rank = R.propOr('', 'rank', user) as string;
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
     const title = R.propOr('', 'title', user) as string;
@@ -134,12 +135,23 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const renderCourseCountValue = <Typography variant="body1">{courseCount}</Typography>;
     const renderResourceCountValue = <Typography variant="body1">{resourceCount}</Typography>;
 
+    const renderRank = !!rank && (
+        <Box marginTop="0.25rem" id="rank">
+            <Tooltip title={t('profile:rankTooltip', { rank })}>
+                <StarBorderOutlined color="disabled" />
+            </Tooltip>
+            <Typography className="section-help-text" variant="body2" color="textSecondary">
+                {rank}
+            </Typography>
+        </Box>
+    );
+
     const renderBadges = !!badges.length && (
         <Box marginTop="0.25rem">
             <Typography className="section-help-text" variant="body2" color="textSecondary">
                 {t('profile:badges', { badgeCount: badges.length })}
             </Typography>
-            <Box display="flex" marginLeft="-0.25rem">
+            <Box display="flex" margin="0 -0.25rem -0.25rem -0.25rem">
                 {badges.map(({ name, description }, i) => (
                     <Box key={i}>
                         <Tooltip title={description}>
@@ -186,6 +198,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                 <Box textAlign="left">
                     {renderTitle}
                     {renderBio}
+                    {renderRank}
                     {renderBadges}
                     {renderVerifyAccountLink}
                     {renderJoined}
@@ -224,6 +237,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                     </Box>
                     <Box textAlign="left">
                         {renderBio}
+                        {renderRank}
                         {renderBadges}
                         {renderVerifyAccountLink}
                         {renderJoined}
@@ -329,6 +343,15 @@ const StyledUserPage = styled(Box)`
         #bio {
             overflow: hidden;
             word-break: break-word;
+        }
+
+        #rank {
+            display: flex;
+            align-items: center;
+
+            .MuiSvgIcon-root {
+                margin-right: 0.25rem;
+            }
         }
     }
 

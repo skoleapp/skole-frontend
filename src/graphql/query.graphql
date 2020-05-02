@@ -46,6 +46,7 @@ query UserDetail($id: ID) {
         resourceCount
         created
         verified
+        rank
         badges {
             id
             name

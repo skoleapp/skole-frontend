@@ -1091,7 +1091,7 @@ export type UserDetailQuery = (
   { __typename?: 'Query' }
   & { user: Maybe<(
     { __typename?: 'UserObjectType' }
-    & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created' | 'verified'>
+    & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created' | 'verified' | 'rank'>
     & { badges: Maybe<Array<Maybe<(
       { __typename?: 'BadgeObjectType' }
       & Pick<BadgeObjectType, 'id' | 'name' | 'description'>
@@ -2198,6 +2198,7 @@ export const UserDetailDocument = gql`
     resourceCount
     created
     verified
+    rank
     badges {
       id
       name
