@@ -20,12 +20,16 @@ export const ServiceWrapper = ({ children }: any) => {
                     title: t('common:newVersionAvailable'),
                     confirmationText: t('common:confirmUpdate'),
                     cancellationText: t('common:declineUpdate'),
-                }).then(() => {
-                    workbox.addEventListener('controlling', _ => {
-                        window.location.reload();
+                })
+                    .then(() => {
+                        workbox.addEventListener('controlling', _ => {
+                            window.location.reload();
+                        });
+                        workbox.messageSW({ type: 'SKIP_WAITING' });
+                    })
+                    .catch((err: any) => {
+                        console.log(err);
                     });
-                    workbox.messageSW({ type: 'SKIP_WAITING' });
-                });
             });
             workbox.register();
         }
