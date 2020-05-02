@@ -22,6 +22,7 @@ const initialValues = {
 
 export interface ContactFormValues {
     subject: string;
+    name: string;
     email: string;
     message: string;
 }
@@ -36,6 +37,7 @@ const ContactPage: NextPage<I18nProps> = () => {
 
     const validationSchema = Yup.object().shape({
         subject: Yup.string().required(t('validation:required')),
+        name: Yup.string(),
         email: Yup.string()
             .email(t('validation:invalidEmail'))
             .required(t('validation:required')),
@@ -60,10 +62,11 @@ const ContactPage: NextPage<I18nProps> = () => {
     const [contactMutation] = useContactMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: ContactFormValues): Promise<void> => {
-        const { subject, email, message } = values;
+        const { subject, name, email, message } = values;
 
         const variables = {
             subject,
+            name,
             email,
             message,
         };
@@ -81,6 +84,15 @@ const ContactPage: NextPage<I18nProps> = () => {
                         component={TextField}
                         label={t('forms:messageSubject')}
                         placeholder={t('forms:messageSubject')}
+                        variant="outlined"
+                        fullWidth
+                        autoComplete="off"
+                    />
+                    <Field
+                        name="name"
+                        component={TextField}
+                        label={t('forms:name')}
+                        placeholder={t('forms:name')}
                         variant="outlined"
                         fullWidth
                         autoComplete="off"

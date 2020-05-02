@@ -58,6 +58,7 @@ export type CommentObjectType = {
 
 export type ContactMutationInput = {
   subject: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
   email: Scalars['String'],
   message: Scalars['String'],
   clientMutationId?: Maybe<Scalars['String']>,
@@ -66,6 +67,7 @@ export type ContactMutationInput = {
 export type ContactMutationPayload = {
    __typename?: 'ContactMutationPayload',
   subject: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
   email: Scalars['String'],
   message?: Maybe<Scalars['String']>,
   errors?: Maybe<Array<Maybe<ErrorType>>>,
@@ -945,6 +947,7 @@ export type DeleteCommentMutation = (
 
 export type ContactMutationVariables = {
   subject: Scalars['String'],
+  name?: Maybe<Scalars['String']>,
   email: Scalars['String'],
   message: Scalars['String']
 };
@@ -1089,7 +1092,10 @@ export type UserDetailQuery = (
   & { user: Maybe<(
     { __typename?: 'UserObjectType' }
     & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created' | 'verified'>
-    & { createdCourses: Array<(
+    & { badges: Maybe<Array<Maybe<(
+      { __typename?: 'BadgeObjectType' }
+      & Pick<BadgeObjectType, 'id' | 'name' | 'description'>
+    )>>>, createdCourses: Array<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
     )>, createdResources: Array<(
@@ -1889,8 +1895,8 @@ export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteComment
 export type DeleteCommentMutationResult = ApolloReactCommon.MutationResult<DeleteCommentMutation>;
 export type DeleteCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
 export const ContactDocument = gql`
-    mutation Contact($subject: String!, $email: String!, $message: String!) {
-  createContactMessage(input: {subject: $subject, email: $email, message: $message}) {
+    mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
+  createContactMessage(input: {subject: $subject, name: $name, email: $email, message: $message}) {
     message
     errors {
       field
@@ -1915,6 +1921,7 @@ export type ContactMutationFn = ApolloReactCommon.MutationFunction<ContactMutati
  * const [contactMutation, { data, loading, error }] = useContactMutation({
  *   variables: {
  *      subject: // value for 'subject'
+ *      name: // value for 'name'
  *      email: // value for 'email'
  *      message: // value for 'message'
  *   },
@@ -2191,6 +2198,11 @@ export const UserDetailDocument = gql`
     resourceCount
     created
     verified
+    badges {
+      id
+      name
+      description
+    }
     createdCourses {
       id
       name
