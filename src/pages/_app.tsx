@@ -16,10 +16,9 @@ import * as R from 'ramda';
 import React, { useEffect } from 'react';
 
 import { ContextProvider } from '../context';
-import { ServiceWrapper } from '../serviceWrapper';
-
 import { appWithTranslation } from '../i18n';
 import { initApolloClient, initOnContext, pageView } from '../lib';
+import { ServiceWrapper } from '../serviceWrapper';
 import { GlobalStyle, theme } from '../styles';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
