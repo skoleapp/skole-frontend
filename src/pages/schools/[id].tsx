@@ -31,9 +31,9 @@ interface Props extends I18nProps {
 
 const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { t } = useTranslation();
-    const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions();
     const { searchUrl } = useSearch();
     const schoolName = R.propOr('', 'name', school) as string;
+    const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions(schoolName);
     const schoolType = R.propOr('', 'schoolType', school) as string;
     const country = R.propOr('', 'country', school) as string;
     const city = R.propOr('', 'city', school) as string;

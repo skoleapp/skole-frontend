@@ -69,7 +69,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const subjectId = R.path(['subject', 'id'], course) as boolean[];
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions();
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(courseName);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({

@@ -61,7 +61,7 @@ const IndexPage: NextPage<I18nProps> = () => {
         <StyledIndexPage>
             <MainLayout {...layoutProps}>
                 <Box id="slogan">
-                    <Typography variant="h1">{t('index:slogan')}</Typography>
+                    <Typography variant="h1">{t('common:slogan')}</Typography>
                 </Box>
                 <Box id="search-widget" marginTop="1rem">
                     <form onSubmit={handleSubmit}>

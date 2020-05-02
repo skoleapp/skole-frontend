@@ -5,18 +5,37 @@ import React, { SyntheticEvent } from 'react';
 
 import { useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
-import { UseOptions } from '../types';
+import { ShareNavigator, UseOptions } from '../types';
 import { useDrawer } from './useDrawer';
 
-export const useOptions = (): UseOptions => {
+export const useOptions = (shareText?: string): UseOptions => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const drawerProps = useDrawer(t('common:options'));
     const { onClose, renderHeader: renderOptionsHeader } = drawerProps;
 
     const handleShare = (e: SyntheticEvent): void => {
-        navigator.clipboard.writeText(window.location.href);
-        toggleNotification(t('notifications:linkCopied'));
+        const shareNavigator: ShareNavigator = window.navigator;
+
+        if (!!shareNavigator && !!shareNavigator.share) {
+            shareNavigator
+                .share({
+                    title: 'Skole',
+                    text: shareText || t('common:slogan'),
+                    url: window.location.href,
+                })
+                .then(() => {
+                    toggleNotification(t('notifications:linkShared'));
+                })
+                .catch(() => {
+                    toggleNotification(t('notifications:sharingError'));
+                });
+        } else if (!!shareNavigator && !!shareNavigator.clipboard) {
+            shareNavigator.clipboard.writeText(window.location.href);
+            toggleNotification(t('notifications:linkCopied'));
+        } else {
+            toggleNotification(t('notifications:sharingError'));
+        }
         onClose(e);
     };
 
