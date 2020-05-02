@@ -1,12 +1,13 @@
 // Makke fix this pls
 
-import { useTranslation } from './i18n';
 import { useConfirm } from 'material-ui-confirm';
 import { useEffect } from 'react';
 import { Workbox } from 'workbox-window';
 
+import { useTranslation } from './i18n';
+
 //@ts-ignore
-export const ServiceWrapper = ({ children }: any) => {
+export const ServiceWrapper = ({ children }: any): any => {
     const { t } = useTranslation();
     const confirm = useConfirm();
 
@@ -15,14 +16,14 @@ export const ServiceWrapper = ({ children }: any) => {
         //@ts-ignore
         const workbox: Workbox = window.workbox;
         if (typeof window !== 'undefined' && 'serviceWorker' in navigator && workbox !== undefined) {
-            workbox.addEventListener('waiting', _ => {
+            workbox.addEventListener('waiting', () => {
                 confirm({
                     title: t('common:newVersionAvailable'),
                     confirmationText: t('common:confirmUpdate'),
                     cancellationText: t('common:declineUpdate'),
                 })
                     .then(() => {
-                        workbox.addEventListener('controlling', _ => {
+                        workbox.addEventListener('controlling', () => {
                             window.location.reload();
                         });
                         workbox.messageSW({ type: 'SKIP_WAITING' });
