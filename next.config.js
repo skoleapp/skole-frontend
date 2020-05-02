@@ -1,6 +1,13 @@
-const withOffline = require('next-offline');
+const withPWA = require('next-pwa');
+const prod = process.env.NODE_ENV === 'production';
 
 const config = {
+    pwa: {
+        dest: 'public',
+        register: false,
+        skipWaiting: false,
+        //disable: prod ? false : true,
+    },
     publicRuntimeConfig: {
         API_URL: process.env.API_URL,
         BACKEND_URL: process.env.BACKEND_URL,
@@ -9,31 +16,6 @@ const config = {
     typescript: {
         ignoreDevErrors: true,
     },
-    workboxOpts: {
-        swDest: 'static/service-worker.js',
-        runtimeCaching: [
-            {
-                urlPattern: /^https?.*/,
-                handler: 'NetworkFirst',
-                options: {
-                    cacheName: 'offlineCache',
-                    expiration: {
-                        maxEntries: 200,
-                    },
-                },
-            },
-        ],
-    },
-    experimental: {
-        async rewrites() {
-            return [
-                {
-                    source: '/service-worker.js',
-                    destination: '/_next/static/service-worker.js',
-                },
-            ];
-        },
-    },
 };
 
-module.exports = withOffline(config);
+module.exports = withPWA(config);
