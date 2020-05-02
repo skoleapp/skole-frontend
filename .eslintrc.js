@@ -13,6 +13,7 @@ module.exports = {
         'import/order': 'off',
         'import/prefer-default-export': 'off',
         'react/display-name': 'off',
+        '@typescript-eslint/ban-ts-ignore': 'off',
     },
     settings: {
         react: {
