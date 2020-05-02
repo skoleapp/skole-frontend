@@ -9,5 +9,7 @@
     "deleteResourceError": "Oväntat fel vid radering!",
     "deleteCourseError": "Oväntat fel vid radering!",
     "downloadResourceError": "Fel vid nedladdning!",
-    "messageError": "Fel vid skickande av meddelande!"
+    "messageError": "Fel vid skickande av meddelande!",
+    "sharingError": "Fel vid delning!",
+    "linkShared": "Länken delad!"
 }

@@ -9,5 +9,7 @@
     "deleteResourceError": "Unexpected error while deleting resource!",
     "deleteCourseError": "Unexpected error while deleting course!",
     "downloadResourceError": "Error while downloading resource!",
-    "messageError": "Error while sending message!"
+    "messageError": "Error while sending message!",
+    "sharingError": "Error while sharing!",
+    "linkShared": "Link shared!"
 }

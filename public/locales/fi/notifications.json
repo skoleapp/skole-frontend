@@ -9,5 +9,7 @@
     "deleteResourceError": "Resurssin poistamisessa tapahtui odottamaton virhe!",
     "deleteCourseError": "Kurssin poistamisessa tapahtui odottamaton virhe!",
     "downloadResourceError": "Virhe ladattaessa tiedostoa!",
-    "messageError": "Virhe lähetettäessä viestiä!"
+    "messageError": "Virhe lähetettäessä viestiä!",
+    "sharingError": "Virhe jakamisessa!",
+    "linkShared": "Linkki jaettu!"
 }

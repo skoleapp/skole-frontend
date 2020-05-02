@@ -203,3 +203,13 @@ export interface SkoleContextType {
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
+
+export interface ShareDataType {
+    title?: string;
+    text?: string;
+    url?: string;
+}
+
+export interface ShareNavigator extends Navigator {
+    share?: (data?: ShareDataType) => Promise<void>;
+}
