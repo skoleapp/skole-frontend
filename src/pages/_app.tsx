@@ -16,6 +16,8 @@ import * as R from 'ramda';
 import React, { useEffect } from 'react';
 
 import { ContextProvider } from '../context';
+import { ServiceWrapper } from '../serviceWrapper';
+
 import { appWithTranslation } from '../i18n';
 import { initApolloClient, initOnContext, pageView } from '../lib';
 import { GlobalStyle, theme } from '../styles';
@@ -52,9 +54,11 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
             <ContextProvider {...initialContextProps}>
                 <ThemeProvider theme={theme}>
                     <ConfirmProvider>
-                        <CssBaseline />
-                        <GlobalStyle />
-                        <Component {...pageProps} />
+                        <ServiceWrapper>
+                            <CssBaseline />
+                            <GlobalStyle />
+                            <Component {...pageProps} />
+                        </ServiceWrapper>
                     </ConfirmProvider>
                 </ThemeProvider>
             </ContextProvider>
