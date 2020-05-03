@@ -2,10 +2,10 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useState } from 'react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { PerformStarMutation, usePerformStarMutation } from '../../../generated/graphql';
 import { useNotificationsContext } from '../../context';
-import { useTranslation } from '../../i18n';
 import { MuiColor } from '../../types';
 
 interface Props {

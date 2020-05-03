@@ -2,6 +2,7 @@ import { TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { withApolloSSR, withAuthSync } from 'src/lib';
 
 import {
@@ -20,7 +21,6 @@ import {
     TabLayout,
     TextLink,
 } from '../../components';
-import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Link } from '../../i18n';
 import { I18nProps, SkolePageContext } from '../../types';
 import { useFrontendPagination, useOptions, useSearch } from '../../utils';

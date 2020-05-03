@@ -21,9 +21,10 @@ import {
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDeviceContext } from 'src/context';
 
-import { Router, useTranslation } from '../../i18n';
+import { Router } from '../../i18n';
 import { CustomTablePaginationProps, TextColor, TextVariant } from '../../types';
 import { getQueryWithPagination } from '../../utils';
 import { StyledTable } from './StyledTable';

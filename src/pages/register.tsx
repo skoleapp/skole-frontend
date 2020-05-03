@@ -6,6 +6,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import {
@@ -19,7 +20,6 @@ import {
 } from '../../generated/graphql';
 import { AutoCompleteField, ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useAuthContext, useNotificationsContext } from '../context';
-import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { clientLogin } from '../lib';
 import { I18nProps } from '../types';

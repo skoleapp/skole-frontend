@@ -2,11 +2,11 @@ import { Box, Button, Divider, Fab, Typography } from '@material-ui/core';
 import { AddOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
 import { useCommentModalContext, useDeviceContext, useDiscussionBoxContext } from '../../context';
-import { useTranslation } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { DiscussionBoxProps } from '../../types';
 import { CommentCard } from './CommentCard';

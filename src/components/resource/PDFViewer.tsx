@@ -7,7 +7,7 @@ import { ProjectionLike as olProjection } from 'ol/proj';
 import { ImageStatic as olImageStatic } from 'ol/source';
 import PDFJS, { PDFDocumentProxy, PDFPageProxy, PDFPromise } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'src/i18n';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { usePDFViewerContext } from '../../context';

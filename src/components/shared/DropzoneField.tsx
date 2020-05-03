@@ -2,10 +2,10 @@ import { FormControl, FormHelperText } from '@material-ui/core';
 import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
 import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { useDeviceContext, useNotificationsContext } from '../../context';
-import { useTranslation } from '../../i18n';
 import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends DropzoneAreaProps {

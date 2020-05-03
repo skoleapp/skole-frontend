@@ -13,6 +13,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import {
@@ -37,7 +38,6 @@ import {
     TextLink,
 } from '../../components';
 import { useAuthContext, useNotificationsContext, usePDFViewerContext } from '../../context';
-import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';

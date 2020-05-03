@@ -1,10 +1,10 @@
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuthContext } from 'src/context';
 import { UrlObject } from 'url';
 
-import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 
 interface SearchUrl extends UrlObject {

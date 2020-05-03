@@ -4,12 +4,13 @@ import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
-import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
+import { includeDefaultNamespaces, Router } from '../../i18n';
 import { clientLogout, withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
@@ -27,6 +28,7 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
         DeleteAccountFormValues
     >();
+
     const { t } = useTranslation();
     const confirm = useConfirm();
     const apolloClient = useApolloClient();

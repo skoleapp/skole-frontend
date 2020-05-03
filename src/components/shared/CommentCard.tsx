@@ -20,9 +20,9 @@ import {
     MoreHorizOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
-import moment from 'moment';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import {
@@ -37,8 +37,7 @@ import {
     useCommentThreadContext,
     useNotificationsContext,
 } from '../../context';
-import { useTranslation } from '../../i18n';
-import { mediaURL, useOptions, useVotes } from '../../utils';
+import { mediaURL, useMoment, useOptions, useVotes } from '../../utils';
 import { StyledDrawer } from './StyledDrawer';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
@@ -52,6 +51,7 @@ interface Props {
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const { t } = useTranslation();
     const { user } = useAuthContext();
+    const moment = useMoment();
     const created = moment(comment.created).format('LL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const confirm = useConfirm();

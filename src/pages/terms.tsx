@@ -1,9 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'src/types';
 
 import { SettingsLayout } from '../components';
-import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
 
 const TermsPage: NextPage<I18nProps> = () => {

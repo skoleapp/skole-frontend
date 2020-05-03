@@ -2,9 +2,9 @@ import { ListItemText, MenuItem } from '@material-ui/core';
 import { FlagOutlined, ShareOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useNotificationsContext } from '../context';
-import { useTranslation } from '../i18n';
 import { UseOptions } from '../types';
 import { useDrawer } from './useDrawer';
 

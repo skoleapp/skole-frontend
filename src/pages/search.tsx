@@ -6,6 +6,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDeviceContext } from 'src/context';
 import styled from 'styled-components';
 
@@ -37,7 +38,6 @@ import {
     StyledDrawer,
     StyledTable,
 } from '../components';
-import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApolloSSR, withAuthSync } from '../lib';
 import { I18nProps, SkolePageContext } from '../types';

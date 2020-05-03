@@ -14,9 +14,10 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ContextProvider } from '../context';
-import { appWithTranslation, useTranslation } from '../i18n';
+import { appWithTranslation } from '../i18n';
 import { initApolloClient, initOnContext, pageView, PWAProvider } from '../lib';
 import { GlobalStyle, theme } from '../styles';
 

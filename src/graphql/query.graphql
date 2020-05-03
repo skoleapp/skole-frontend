@@ -19,6 +19,11 @@ query UserMe {
             id
             name
         }
+    }
+}
+
+query Starred {
+    userMe {
         starredCourses {
             id
             name

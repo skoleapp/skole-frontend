@@ -5,9 +5,9 @@ import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useDeviceContext } from '../context';
-import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { UseFilters } from '../types';
 import { getPaginationQuery } from './pagination';

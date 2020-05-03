@@ -9,6 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
     CommentObjectType,
@@ -36,7 +37,7 @@ import {
     TextLink,
 } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
-import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
+import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, MuiColor, SkolePageContext } from '../../types';
 import { useFrontendPagination, useOptions, useSearch, useVotes } from '../../utils';

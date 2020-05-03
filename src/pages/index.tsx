@@ -9,11 +9,12 @@ import {
 } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { UrlObject } from 'url';
 
 import { ButtonLink, MainLayout } from '../components';
-import { includeDefaultNamespaces, Link, useTranslation } from '../i18n';
+import { includeDefaultNamespaces, Link } from '../i18n';
 import { withAuthSync } from '../lib';
 import { breakpoints } from '../styles';
 import { I18nProps } from '../types';

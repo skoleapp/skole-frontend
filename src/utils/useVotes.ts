@@ -1,9 +1,9 @@
 import { Size } from '@material-ui/core';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from '../../generated/graphql';
 import { useNotificationsContext } from '../context';
-import { useTranslation } from '../i18n';
 import { MuiColor } from '../types';
 
 interface Variables {
