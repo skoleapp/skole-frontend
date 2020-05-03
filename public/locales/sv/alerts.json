@@ -1,3 +1,5 @@
 {
-    "loginRequired": "Du måste logga in för att fortsätta."
+    "loginRequired": "Du måste logga in för att fortsätta.",
+    "newVersionTitle": "En ny version av appen är tillgänglig.",
+    "newVersionDesc": "Bekräfta för att uppdatera."
 }

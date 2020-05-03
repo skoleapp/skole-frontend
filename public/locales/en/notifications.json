@@ -11,5 +11,6 @@
     "downloadResourceError": "Error while downloading resource!",
     "messageError": "Error while sending message!",
     "sharingError": "Error while sharing!",
-    "linkShared": "Link shared!"
+    "linkShared": "Link shared!",
+    "appUpdated": "App has been updated!"
 }

@@ -31,3 +31,7 @@ yarn-error.log*
 .idea/tasks.xml
 .idea/usage.statistics.xml
 .idea/workspace.xml
+
+# serviceWorker files
+public/sw.*
+public/workbox-*

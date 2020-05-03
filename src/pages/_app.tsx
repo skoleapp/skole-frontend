@@ -16,8 +16,8 @@ import * as R from 'ramda';
 import React, { useEffect } from 'react';
 
 import { ContextProvider } from '../context';
-import { appWithTranslation } from '../i18n';
-import { initApolloClient, initOnContext, pageView } from '../lib';
+import { appWithTranslation, useTranslation } from '../i18n';
+import { initApolloClient, initOnContext, pageView, PWAProvider } from '../lib';
 import { GlobalStyle, theme } from '../styles';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -36,8 +36,14 @@ interface Props extends AppProps {
 }
 
 const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGuess, user }: Props): JSX.Element => {
+    const { t } = useTranslation();
     const client = apolloClient || initApolloClient(apolloState, undefined);
     const initialContextProps = { user, isMobileGuess };
+
+    const defaultConfirmOptions = {
+        confirmationText: t('common:confirm'),
+        cancellationText: t('common:cancel'),
+    };
 
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
@@ -51,10 +57,12 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
         <ApolloProvider client={client}>
             <ContextProvider {...initialContextProps}>
                 <ThemeProvider theme={theme}>
-                    <ConfirmProvider>
-                        <CssBaseline />
-                        <GlobalStyle />
-                        <Component {...pageProps} />
+                    <ConfirmProvider defaultOptions={defaultConfirmOptions}>
+                        <PWAProvider>
+                            <CssBaseline />
+                            <GlobalStyle />
+                            <Component {...pageProps} />
+                        </PWAProvider>
                     </ConfirmProvider>
                 </ThemeProvider>
             </ContextProvider>

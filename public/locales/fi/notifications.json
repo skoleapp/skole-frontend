@@ -11,5 +11,6 @@
     "downloadResourceError": "Virhe ladattaessa tiedostoa!",
     "messageError": "Virhe lähetettäessä viestiä!",
     "sharingError": "Virhe jakamisessa!",
-    "linkShared": "Linkki jaettu!"
+    "linkShared": "Linkki jaettu!",
+    "appUpdated": "Sovellus päivitetty!"
 }
