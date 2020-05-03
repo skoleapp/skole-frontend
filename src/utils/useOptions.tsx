@@ -5,38 +5,52 @@ import React, { SyntheticEvent } from 'react';
 
 import { useNotificationsContext } from '../context';
 import { useTranslation } from '../i18n';
-import { ShareNavigator, UseOptions } from '../types';
+import { UseOptions } from '../types';
 import { useDrawer } from './useDrawer';
+
+interface ShareData {
+    title?: string;
+    text?: string;
+    url?: string;
+}
+
+interface ShareNavigator extends Navigator {
+    share?: (data?: ShareData) => Promise<void>;
+}
+
+interface ShareNavigatorWindow extends Window {
+    navigator: ShareNavigator;
+}
 
 export const useOptions = (shareText?: string): UseOptions => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const drawerProps = useDrawer(t('common:options'));
-    const { onClose, renderHeader: renderOptionsHeader } = drawerProps;
+    const { onClose: closeOptions, renderHeader: renderOptionsHeader } = drawerProps;
 
-    const handleShare = (e: SyntheticEvent): void => {
-        const shareNavigator: ShareNavigator = window.navigator;
+    const handleShare = async (e: SyntheticEvent): Promise<void> => {
+        const { navigator } = window as ShareNavigatorWindow;
 
-        if (!!shareNavigator && !!shareNavigator.share) {
-            shareNavigator
-                .share({
+        if (!!navigator && !!navigator.share) {
+            try {
+                await navigator.share({
                     title: 'Skole',
                     text: shareText || t('common:slogan'),
                     url: window.location.href,
-                })
-                .then(() => {
-                    toggleNotification(t('notifications:linkShared'));
-                })
-                .catch(() => {
-                    toggleNotification(t('notifications:sharingError'));
                 });
-        } else if (!!shareNavigator && !!shareNavigator.clipboard) {
-            shareNavigator.clipboard.writeText(window.location.href);
+
+                toggleNotification(t('notifications:linkShared'));
+            } catch {
+                toggleNotification(t('notifications:sharingError'));
+            }
+        } else if (!!navigator && !!navigator.clipboard) {
+            navigator.clipboard.writeText(window.location.href);
             toggleNotification(t('notifications:linkCopied'));
         } else {
             toggleNotification(t('notifications:sharingError'));
         }
-        onClose(e);
+
+        closeOptions(e);
     };
 
     const renderShareOption = (

@@ -121,9 +121,14 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         toggleAttachmentViewer(comment.attachment);
     };
 
-    const handleDeleteComment = (e: SyntheticEvent): void => {
-        handleCloseOptions(e);
-        confirm({ title: t('common:deleteCommentTitle') }).then(() => deleteComment({ variables: { id: comment.id } }));
+    const handleDeleteComment = async (e: SyntheticEvent): Promise<void> => {
+        try {
+            await confirm({ title: t('common:deleteCommentTitle') });
+            deleteComment({ variables: { id: comment.id } });
+        } catch {
+        } finally {
+            handleCloseOptions(e);
+        }
     };
 
     const renderTitle = (

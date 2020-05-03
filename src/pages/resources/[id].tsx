@@ -12,7 +12,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React, { useEffect } from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -73,6 +73,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(fullResourceTitle);
+    const { onClose: closeOptions } = drawerProps;
     const { setPages, setCurrentPage } = usePDFViewerContext();
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
@@ -124,10 +125,14 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         onError: deleteResourceError,
     });
 
-    const handleDeleteResource = (): void => {
-        confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') }).then(() => {
+    const handleDeleteResource = async (e: SyntheticEvent): Promise<void> => {
+        try {
+            await confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') });
             deleteResource({ variables: { id: resourceId } });
-        });
+        } catch {
+        } finally {
+            closeOptions(e);
+        }
     };
 
     const handleVoteClick = (status: number) => (): void => {

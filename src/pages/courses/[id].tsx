@@ -8,7 +8,7 @@ import {
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 
 import {
     CommentObjectType,
@@ -70,6 +70,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(courseName);
+    const { onClose: closeOptions } = drawerProps;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
@@ -114,10 +115,14 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         onError: deleteCourseError,
     });
 
-    const handleDeleteCourse = (): void => {
-        confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') }).then(() => {
+    const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
+        try {
+            await confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') });
             deleteCourse({ variables: { id: courseId } });
-        });
+        } catch {
+        } finally {
+            closeOptions(e);
+        }
     };
 
     const handleVoteClick = (status: number) => (): void => {
