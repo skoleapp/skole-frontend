@@ -33,6 +33,5 @@ yarn-error.log*
 .idea/workspace.xml
 
 # serviceWorker files
-public/sw.js
-public/sw.js.map
-public/workbox*
+public/sw.*
+public/workbox-*

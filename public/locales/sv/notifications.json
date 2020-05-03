@@ -11,5 +11,6 @@
     "downloadResourceError": "Fel vid nedladdning!",
     "messageError": "Fel vid skickande av meddelande!",
     "sharingError": "Fel vid delning!",
-    "linkShared": "Länken delad!"
+    "linkShared": "Länken delad!",
+    "appUpdated": "App uppdaterad!"
 }
