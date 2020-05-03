@@ -10,6 +10,7 @@ import {
     HowToRegOutlined,
     LanguageOutlined,
     LockOutlined,
+    QuestionAnswerOutlined,
     SecurityOutlined,
     SettingsBackupRestoreOutlined,
     StarBorderOutlined,
@@ -81,6 +82,11 @@ export const menuItems = {
             icon: ContactSupportOutlined,
             text: 'common:contact',
             href: '/contact',
+        },
+        {
+            icon: QuestionAnswerOutlined,
+            text: 'common:faq',
+            href: '/faq',
         },
     ],
     legal: [

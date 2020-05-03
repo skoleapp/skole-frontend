@@ -10,7 +10,7 @@ import { SettingsButton, StyledCard } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps {
-    renderCardContent?: JSX.Element;
+    renderCardContent?: JSX.Element | JSX.Element[];
     desktopHeader?: string;
     formLayout?: boolean;
     infoLayout?: boolean;
@@ -91,5 +91,9 @@ const StyledSettingsLayout = styled(({ fullSize, ...other }) => <Box {...other} 
         form {
             width: 100%;
         }
+    }
+
+    .container {
+        flex-direction: column;
     }
 `;
