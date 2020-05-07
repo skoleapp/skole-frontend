@@ -1,9 +1,9 @@
-import moment, { Moment, MomentFormatSpecification, MomentInput } from 'moment';
+import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
-type UseMoment = (inp?: MomentInput, format?: MomentFormatSpecification, strict?: boolean) => Moment;
-
-export const useMoment = (): UseMoment => {
+// Moment instance will get its types automatically.
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const useMoment = () => {
     const { i18n } = useTranslation();
     moment.locale(i18n.language);
     return moment;
