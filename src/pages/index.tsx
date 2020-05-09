@@ -129,16 +129,32 @@ const StyledIndexPage = styled(Box)`
 
     #top-section-container {
         position: relative;
-        min-height: 18rem;
+        min-height: 15rem;
+
+        @media only screen and (min-width: ${breakpoints.MD}) {
+            min-height: 18rem;
+        }
 
         #top-section-background {
             z-index: 0;
             background: url('/images/home-background.jpg') no-repeat center center/cover;
             position: absolute;
-            top: -1rem;
-            right: calc(-100vw + ${breakpoints.LG} / 2 - 1rem);
-            left: calc(-100vw + ${breakpoints.LG} / 2 - 1rem);
+            top: -0.5rem;
+            right: -0.5rem;
+            left: -0.5rem;
             bottom: 0;
+
+            @media only screen and (min-width: ${breakpoints.MD}) {
+                top: -1rem;
+                left: -1rem;
+                right: -1rem;
+            }
+
+            @media only screen and (min-width: ${breakpoints.LG}) {
+                // FIXME: Not working properly, add proper logic for optimal width.
+                right: calc(-100vw + ${breakpoints.LG} / 2 - 1rem);
+                left: calc(-100vw + ${breakpoints.LG} / 2 - 1rem);
+            }
         }
 
         #top-section-background:after {
@@ -150,7 +166,7 @@ const StyledIndexPage = styled(Box)`
             bottom: 0;
             z-index: 1;
             background-color: var(--primary);
-            opacity: 0.5;
+            opacity: 0.6;
         }
 
         #top-section-content {
