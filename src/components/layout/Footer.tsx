@@ -23,6 +23,9 @@ export const Footer: React.FC = () => {
                     <TextLink href="/contact" color="secondary">
                         {t('common:contact')}
                     </TextLink>
+                    <TextLink href="/faq" color="secondary">
+                        {t('common:faq')}
+                    </TextLink>
                 </Grid>
                 <Grid item xs={4} container direction="column" alignItems="center">
                     <Typography variant="subtitle2" color="secondary" gutterBottom>
