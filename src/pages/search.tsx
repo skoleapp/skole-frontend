@@ -3,6 +3,7 @@ import {
     Button,
     CardContent,
     CardHeader,
+    Chip,
     Divider,
     FormControl,
     Grid,
@@ -83,7 +84,10 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     const isMobile = useDeviceContext();
     const courseObjects = R.propOr([], 'objects', searchCourses) as CourseObjectType[];
     const count = R.propOr(0, 'count', searchCourses) as number;
-    const [searchValue, setSearchValue] = useState(query.courseName || '');
+    const courseName = R.propOr('', 'courseName', query) as string;
+    const courseCode = R.propOr('', 'courseCode', query) as string;
+    const ordering = R.propOr('', 'ordering', query) as string;
+    const [searchValue, setSearchValue] = useState(courseName);
     const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
 
     // Pick non-empty values and reload the page with new query params.
@@ -105,18 +109,30 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
 
     // Pre-load query params to the form.
     const initialValues = {
-        courseName: R.propOr('', 'courseName', query) as string,
-        courseCode: R.propOr('', 'courseCode', query) as string,
+        courseName,
+        courseCode,
         school: school || null,
         subject: subject || null,
         schoolType: schoolType || null,
         country: country || null,
         city: city || null,
-        ordering: R.propOr('', 'ordering', query) as string,
+        ordering,
     };
 
     const queryWithPagination = getQueryWithPagination({ query, extraFilters: initialValues });
     const paginationQuery = getPaginationQuery(query);
+
+    const validFilterNames: {} = R.pickBy((val: string) => !!val, {
+        courseName,
+        courseCode,
+        school: R.propOr(null, 'name', school) as string | null,
+        subject: R.propOr(null, 'name', subject) as string | null,
+        schoolType: R.propOr(null, 'name', schoolType) as string | null,
+        country: R.propOr(null, 'name', country) as string | null,
+        city: R.propOr(null, 'name', city) as string | null,
+    });
+
+    const validFilterNamesArr: string[] = Object.values(validFilterNames);
 
     const handleSearchIconClick = (): void => {
         const input = document.getElementById('search-navbar-input-base');
@@ -150,6 +166,34 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
 
         handleSubmitFilters(filteredValues);
     };
+
+    const handleDeleteFilter = (f: string) => async (): Promise<void> => {
+        setSubmitting(true);
+        const newFilterNames: {} = R.pickBy((val: string) => val !== f, validFilterNames);
+        const newFilterKeysArr = Object.keys(newFilterNames);
+
+        const newFilters: {} = R.pickBy(
+            (_: string, key: string) => newFilterKeysArr.includes(key),
+            queryWithPagination,
+        );
+
+        const query: ParsedUrlQueryInput = R.pickBy((val: string) => !!val, {
+            ...newFilters,
+            ...paginationQuery,
+            ordering,
+        });
+
+        await Router.push({ pathname, query });
+        resetForm();
+    };
+
+    const renderFilterNames = !!validFilterNamesArr.length && (
+        <Box id="filter-names" className="border-bottom">
+            {validFilterNamesArr.map((f, i) => (
+                <Chip key={i} label={f} onDelete={handleDeleteFilter(f)} />
+            ))}
+        </Box>
+    );
 
     const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
@@ -271,7 +315,8 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     );
 
     const renderMobileContent = isMobile && (
-        <Box flexGrow="1" display="flex">
+        <Box flexGrow="1" display="flex" flexDirection="column">
+            {renderFilterNames}
             <StyledTable>{renderTableContent}</StyledTable>
             <StyledDrawer fullHeight {...drawerProps}>
                 <ModalHeader
@@ -297,6 +342,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
                 <StyledCard marginLeft>
                     <CardHeader title={t('common:searchResults')} />
                     <Divider />
+                    {renderFilterNames}
                     <StyledTable>{renderTableContent}</StyledTable>
                 </StyledCard>
             </Grid>
@@ -374,6 +420,18 @@ const StyledSearchPage = styled(Box)`
                     padding: 0.75rem;
                 }
             }
+        }
+    }
+
+    #filter-names {
+        background-color: var(--white);
+        display: flex;
+        flex-flow: row wrap;
+        padding-top: 0.25rem;
+        padding-left: 0.25rem;
+
+        .MuiChip-root {
+            margin: 0 0.25rem 0.25rem 0;
         }
     }
 `;
