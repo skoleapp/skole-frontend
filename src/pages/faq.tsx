@@ -7,7 +7,6 @@ import { I18nProps } from 'src/types';
 import { SettingsLayout } from '../components';
 import { includeDefaultNamespaces } from '../i18n';
 
-// TODO: Add FAQs here.
 const faqs = [
     {
         title: 'faq:title-1',
@@ -27,8 +26,10 @@ const FAQPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
 
     const renderCardContent = faqs.map(({ title, text }, i) => (
-        <Box key={i} marginTop="0.5rem">
-            <Typography variant="subtitle1">{t(title)}</Typography>
+        <Box key={i} marginY="0.5rem" textAlign="left">
+            <Typography variant="h2" gutterBottom>
+                {t(title)}
+            </Typography>
             <Typography variant="body2">{t(text)}</Typography>
         </Box>
     ));

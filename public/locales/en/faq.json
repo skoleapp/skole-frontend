@@ -2,10 +2,10 @@
     "title": "FAQ",
     "description": "This is an FAQ page.",
     "header": "FAQ",
-    "title-1": "Placeholder for title 1",
-    "text-1": "Placeholder for text 1.",
-    "title-2": "Placeholder for title 2",
-    "text-2": "Placeholder for text 2.",
-    "title-3": "Placeholder for title 3",
-    "text-3": "Placeholder for text 3."
+    "title-1": "How do I level up my account?",
+    "text-1": "You can level up your account be earning points. You will earn points when users upvote your content, be it courses, resources or comments.",
+    "title-2": "How can I find my favorite content?",
+    "text-2": "All fo your created courses and resources will show on your profile. You can also star courses and resources, after which they will show among your starred items. You can view your starred items by clicking the star icon.",
+    "title-3": "How can I find the content from my school or subject?",
+    "text-3": "You may select your school and subject on your profile. We will automatically provide you with content based on these preferences."
 }
