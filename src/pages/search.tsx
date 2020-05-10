@@ -349,32 +349,36 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         </Grid>
     );
 
+    const renderSearchNavbarStartAdornment = !!searchValue ? (
+        <IconButton onClick={handleSearchInputUnFocus} color="primary">
+            <ArrowBackOutlined />
+        </IconButton>
+    ) : (
+        <IconButton onClick={handleSearchIconClick}>
+            <SearchOutlined color="primary" />
+        </IconButton>
+    );
+
+    const renderSearchNavbarEndAdornment = (
+        <IconButton onClick={handleOpenFilters} color="primary">
+            <FilterListOutlined />
+        </IconButton>
+    );
+
     const customTopNavbar = (
         <Box id="search-navbar">
             <form onSubmit={handleSubmitSearchInput}>
-                <Box display="flex" justifyContent="center">
-                    <Box id="search-navbar-input">
-                        {!!searchValue ? (
-                            <IconButton onClick={handleSearchInputUnFocus} color="primary">
-                                <ArrowBackOutlined />
-                            </IconButton>
-                        ) : (
-                            <IconButton onClick={handleSearchIconClick}>
-                                <SearchOutlined color="primary" />
-                            </IconButton>
-                        )}
-                        <InputBase
-                            placeholder={t('forms:searchCourses')}
-                            id="search-navbar-input-base"
-                            onBlur={handleSearchInputUnFocus}
-                            value={searchValue}
-                            onChange={onSearchChange}
-                        />
-                    </Box>
-                    <IconButton onClick={handleOpenFilters} color="primary">
-                        <FilterListOutlined />
-                    </IconButton>
-                </Box>
+                <InputBase
+                    placeholder={t('forms:searchCourses')}
+                    id="search-navbar-input-base"
+                    onBlur={handleSearchInputUnFocus}
+                    value={searchValue}
+                    onChange={onSearchChange}
+                    startAdornment={renderSearchNavbarStartAdornment}
+                    endAdornment={renderSearchNavbarEndAdornment}
+                    autoComplete="off"
+                    fullWidth
+                />
             </form>
         </Box>
     );
@@ -407,20 +411,6 @@ const StyledSearchPage = styled(Box)`
 
     #search-navbar {
         background-color: var(--white);
-
-        #search-navbar-input {
-            display: flex;
-            align-items: center;
-            width: 100%;
-
-            .MuiInputBase-root {
-                flex-grow: 1;
-
-                input {
-                    padding: 0.75rem;
-                }
-            }
-        }
     }
 
     #filter-names {
