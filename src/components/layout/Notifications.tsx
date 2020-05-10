@@ -9,8 +9,6 @@ import { breakpoints } from '../../styles';
 
 export const Notifications: React.FC = () => {
     const { notification, toggleNotification } = useNotificationsContext();
-
-    // TODO: Test on QA whether this fixes issue with persisting notifications after page changes and remove this if it is not fixed.
     Router.events.on('routeChangeComplete', () => toggleNotification(null));
 
     const handleClose = (_e: SyntheticEvent | MouseEvent, reason?: string): void => {
