@@ -4,6 +4,7 @@ import {
     CardContent,
     CardHeader,
     Chip,
+    CircularProgress,
     Divider,
     FormControl,
     Grid,
@@ -88,6 +89,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     const courseCode = R.propOr('', 'courseCode', query) as string;
     const ordering = R.propOr('', 'ordering', query) as string;
     const [searchValue, setSearchValue] = useState(courseName);
+    const [searchInputSubmitting, setSearchInputSubmitting] = useState(false);
     const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
 
     // Pick non-empty values and reload the page with new query params.
@@ -139,14 +141,18 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         !!input && input.focus();
     };
 
-    const handleSearchInputUnFocus = async (): Promise<void> => {
+    const handleClearSearchInput = async (): Promise<void> => {
+        setSearchInputSubmitting(true);
         setSearchValue('');
         await Router.push({ pathname, query: { ...paginationQuery } });
+        setSearchInputSubmitting(false);
     };
 
-    const handleSubmitSearchInput = (e: SyntheticEvent): void => {
+    const handleSubmitSearchInput = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
-        Router.push({ pathname, query: { ...paginationQuery, courseName: searchValue } });
+        setSearchInputSubmitting(true);
+        await Router.push({ pathname, query: { ...paginationQuery, courseName: searchValue } });
+        setSearchInputSubmitting(false);
     };
 
     const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T): void => {
@@ -169,8 +175,10 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
 
     const handleDeleteFilter = (f: string) => async (): Promise<void> => {
         setSubmitting(true);
+        setSearchInputSubmitting(true);
         const newFilterNames: {} = R.pickBy((val: string) => val !== f, validFilterNames);
         const newFilterKeysArr = Object.keys(newFilterNames);
+        !newFilterKeysArr.includes('courseName') && handleClearSearchInput();
 
         const newFilters: {} = R.pickBy(
             (_: string, key: string) => newFilterKeysArr.includes(key),
@@ -185,6 +193,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
 
         await Router.push({ pathname, query });
         resetForm();
+        setSearchInputSubmitting(false);
     };
 
     const renderFilterNames = !!validFilterNamesArr.length && (
@@ -205,6 +214,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
                             label={t('forms:courseName')}
                             placeholder={t('forms:courseName')}
                             variant="outlined"
+                            autoComplete="off"
                             component={TextField}
                             fullWidth
                         />
@@ -214,6 +224,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
                         label={t('forms:courseCode')}
                         placeholder={t('forms:courseCode')}
                         variant="outlined"
+                        autoComplete="off"
                         component={TextField}
                         fullWidth
                     />
@@ -281,6 +292,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
                                 variant="outlined"
                                 color="primary"
                                 endIcon={<ClearAllOutlined />}
+                                disabled={props.isSubmitting}
                                 fullWidth
                             >
                                 {t('common:clear')}
@@ -350,16 +362,21 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     );
 
     const renderSearchNavbarStartAdornment = !!searchValue ? (
-        <IconButton onClick={handleSearchInputUnFocus} color="primary">
+        <IconButton onClick={handleClearSearchInput} color="primary" disabled={searchInputSubmitting}>
             <ArrowBackOutlined />
         </IconButton>
     ) : (
-        <IconButton onClick={handleSearchIconClick}>
-            <SearchOutlined color="primary" />
+        <IconButton onClick={handleSearchIconClick} color="primary" disabled={searchInputSubmitting}>
+            <SearchOutlined />
         </IconButton>
     );
 
-    const renderSearchNavbarEndAdornment = (
+    // Loading spinner container has exact same padding as IconButton.
+    const renderSearchNavbarEndAdornment = searchInputSubmitting ? (
+        <Box padding="12px">
+            <CircularProgress color="primary" size={20} />
+        </Box>
+    ) : (
         <IconButton onClick={handleOpenFilters} color="primary">
             <FilterListOutlined />
         </IconButton>
@@ -371,11 +388,11 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
                 <InputBase
                     placeholder={t('forms:searchCourses')}
                     id="search-navbar-input-base"
-                    onBlur={handleSearchInputUnFocus}
                     value={searchValue}
                     onChange={onSearchChange}
                     startAdornment={renderSearchNavbarStartAdornment}
                     endAdornment={renderSearchNavbarEndAdornment}
+                    disabled={searchInputSubmitting}
                     autoComplete="off"
                     fullWidth
                 />
