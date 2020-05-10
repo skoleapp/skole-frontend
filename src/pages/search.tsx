@@ -99,7 +99,8 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     const paginationQuery = getPaginationQuery(query);
 
     const handleSearchIconClick = (): void => {
-        document.getElementById('search-navbar-input-base')?.focus();
+        const input = document.getElementById('search-navbar-input-base');
+        !!input && input.focus();
     };
 
     const handleSearchInputUnFocus = async (): Promise<void> => {

@@ -5,7 +5,7 @@ import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useNotificationsContext } from '../context';
-import { UseOptions } from '../types';
+import { UseDrawer, UseOptions } from '../types';
 import { useDrawer } from './useDrawer';
 
 interface ShareData {
@@ -72,7 +72,7 @@ export const useOptions = (shareText?: string): UseOptions => {
     return {
         renderShareOption,
         renderReportOption,
-        drawerProps: R.omit(['renderHeader'], drawerProps),
+        drawerProps: R.omit(['renderHeader'], drawerProps) as Omit<UseDrawer, 'renderHeader'>,
         renderOptionsHeader,
     };
 };

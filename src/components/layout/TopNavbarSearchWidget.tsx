@@ -9,7 +9,8 @@ export const TopNavbarSearchWidget: React.FC = () => {
     const { handleSubmit, inputProps } = useSearch();
 
     const handleSearchIconClick = (): void => {
-        document.getElementById('top-navbar-input-base')?.focus();
+        const input = document.getElementById('top-navbar-input-base');
+        !!input && input.focus();
     };
 
     return (
