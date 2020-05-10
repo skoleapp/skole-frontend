@@ -1,5 +1,4 @@
 import { Size } from '@material-ui/core';
-import * as R from 'ramda';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

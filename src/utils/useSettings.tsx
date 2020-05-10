@@ -17,7 +17,6 @@ import {
     VerifiedUserOutlined,
 } from '@material-ui/icons';
 import { useRouter } from 'next/router';
-import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
