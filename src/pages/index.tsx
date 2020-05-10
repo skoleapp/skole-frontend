@@ -230,10 +230,6 @@ const StyledIndexPage = styled(Box)`
                 justify-content: center;
                 align-items: center;
 
-                .MuiTypography-root {
-                    font-weight: 400;
-                }
-
                 .MuiAvatar-root {
                     height: 5rem;
                     width: 5rem;
