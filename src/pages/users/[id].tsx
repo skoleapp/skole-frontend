@@ -219,7 +219,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                         {renderEditProfileButton}
                         {renderSettingsButton}
                     </Box>
-                    <Box display="flex">
+                    <Box display="flex" marginTop="0.25rem">
                         <Box display="flex" alignItems="center">
                             {renderScoreValue}
                             <Box marginLeft="0.25rem">{renderScoreTitle}</Box>
@@ -233,7 +233,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                             <Box marginLeft="0.25rem">{renderResourceCountTitle}</Box>
                         </Box>
                     </Box>
-                    <Box textAlign="left">
+                    <Box textAlign="left" marginTop="0.25rem">
                         {renderBio}
                         {renderRank}
                         {renderBadges}
