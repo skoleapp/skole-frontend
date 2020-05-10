@@ -156,14 +156,30 @@ export type SubjectObjectType = {
 export type SchoolObjectType = {
    __typename?: 'SchoolObjectType';
   id: Scalars['ID'];
-  schoolType?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
+  schoolType?: Maybe<SchoolTypeObjectType>;
+  city?: Maybe<CityObjectType>;
   courses: Array<CourseObjectType>;
   name?: Maybe<Scalars['String']>;
-  country?: Maybe<Scalars['String']>;
+  country?: Maybe<CountryObjectType>;
   subjects?: Maybe<Array<Maybe<SubjectObjectType>>>;
-  subjectCount?: Maybe<Scalars['Int']>;
-  courseCount?: Maybe<Scalars['Int']>;
+};
+
+export type SchoolTypeObjectType = {
+   __typename?: 'SchoolTypeObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+};
+
+export type CityObjectType = {
+   __typename?: 'CityObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+};
+
+export type CountryObjectType = {
+   __typename?: 'CountryObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type ResourceObjectType = {
@@ -220,12 +236,6 @@ export type BadgeObjectType = {
   description?: Maybe<Scalars['String']>;
 };
 
-export type SchoolTypeObjectType = {
-   __typename?: 'SchoolTypeObjectType';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-};
-
 export type ResourceTypeObjectType = {
    __typename?: 'ResourceTypeObjectType';
   id: Scalars['ID'];
@@ -240,18 +250,6 @@ export type PaginatedCourseObjectType = {
   hasPrev?: Maybe<Scalars['Boolean']>;
   count?: Maybe<Scalars['Int']>;
   objects?: Maybe<Array<Maybe<CourseObjectType>>>;
-};
-
-export type CountryObjectType = {
-   __typename?: 'CountryObjectType';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-};
-
-export type CityObjectType = {
-   __typename?: 'CityObjectType';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -1327,8 +1325,17 @@ export type SchoolDetailQuery = (
   { __typename?: 'Query' }
   & { school?: Maybe<(
     { __typename?: 'SchoolObjectType' }
-    & Pick<SchoolObjectType, 'id' | 'name' | 'city' | 'country' | 'schoolType' | 'subjectCount' | 'courseCount'>
-    & { subjects?: Maybe<Array<Maybe<(
+    & Pick<SchoolObjectType, 'id' | 'name'>
+    & { city?: Maybe<(
+      { __typename?: 'CityObjectType' }
+      & Pick<CityObjectType, 'id' | 'name'>
+    )>, country?: Maybe<(
+      { __typename?: 'CountryObjectType' }
+      & Pick<CountryObjectType, 'id' | 'name'>
+    )>, schoolType?: Maybe<(
+      { __typename?: 'SchoolTypeObjectType' }
+      & Pick<SchoolTypeObjectType, 'id' | 'name'>
+    )>, subjects?: Maybe<Array<Maybe<(
       { __typename?: 'SubjectObjectType' }
       & Pick<SubjectObjectType, 'id' | 'name'>
     )>>>, courses: Array<(
@@ -2604,9 +2611,18 @@ export const SchoolDetailDocument = gql`
   school(id: $id) {
     id
     name
-    city
-    country
-    schoolType
+    city {
+      id
+      name
+    }
+    country {
+      id
+      name
+    }
+    schoolType {
+      id
+      name
+    }
     subjects {
       id
       name
@@ -2617,8 +2633,6 @@ export const SchoolDetailDocument = gql`
       code
       score
     }
-    subjectCount
-    courseCount
   }
 }
     `;

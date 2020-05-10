@@ -269,9 +269,18 @@ query SchoolDetail($id: ID) {
     school(id: $id) {
         id
         name
-        city
-        country
-        schoolType
+        city {
+            id
+            name
+        }
+        country {
+            id
+            name
+        }
+        schoolType {
+            id
+            name
+        }
         subjects {
             id
             name
@@ -282,8 +291,6 @@ query SchoolDetail($id: ID) {
             code
             score
         }
-        subjectCount
-        courseCount
     }
 }
 
