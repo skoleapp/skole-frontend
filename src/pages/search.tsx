@@ -76,6 +76,11 @@ interface Props extends I18nProps {
     city?: CityObjectType;
 }
 
+interface ValidFilter {
+    name: string;
+    value: string;
+}
+
 const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
     const { t } = useTranslation();
     const { ref, resetForm, setSubmitting } = useForm<FilterSearchResultsFormValues>();
@@ -106,6 +111,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         const paginationQuery = getPaginationQuery(query);
         await Router.push({ pathname, query: paginationQuery });
         resetForm();
+        setSearchValue('');
         handleCloseFilters(e);
     };
 
@@ -124,17 +130,38 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     const queryWithPagination = getQueryWithPagination({ query, extraFilters: initialValues });
     const paginationQuery = getPaginationQuery(query);
 
-    const validFilterNames: {} = R.pickBy((val: string) => !!val, {
-        courseName,
-        courseCode,
-        school: R.propOr(null, 'name', school) as string | null,
-        subject: R.propOr(null, 'name', subject) as string | null,
-        schoolType: R.propOr(null, 'name', schoolType) as string | null,
-        country: R.propOr(null, 'name', country) as string | null,
-        city: R.propOr(null, 'name', city) as string | null,
-    });
+    const filtersArr = [
+        {
+            name: 'courseName',
+            value: courseName,
+        },
+        {
+            name: 'courseCode',
+            value: courseCode,
+        },
+        {
+            name: 'school',
+            value: R.propOr(undefined, 'name', school) as string,
+        },
+        {
+            name: 'subject',
+            value: R.propOr(undefined, 'name', subject) as string,
+        },
+        {
+            name: 'schoolType',
+            value: R.propOr(undefined, 'name', schoolType) as string,
+        },
+        {
+            name: 'country',
+            value: R.propOr(undefined, 'name', country) as string,
+        },
+        {
+            name: 'city',
+            value: R.propOr(undefined, 'name', city) as string,
+        },
+    ];
 
-    const validFilterNamesArr: string[] = Object.values(validFilterNames);
+    const validFilters: ValidFilter[] = filtersArr.filter(f => !!f.value);
 
     const handleSearchIconClick = (): void => {
         const input = document.getElementById('search-navbar-input-base');
@@ -173,33 +200,25 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         handleSubmitFilters(filteredValues);
     };
 
-    const handleDeleteFilter = (f: string) => async (): Promise<void> => {
+    const handleDeleteFilter = (filterName: string) => async (): Promise<void> => {
         setSubmitting(true);
         setSearchInputSubmitting(true);
-        const newFilterNames: {} = R.pickBy((val: string) => val !== f, validFilterNames);
-        const newFilterKeysArr = Object.keys(newFilterNames);
-        !newFilterKeysArr.includes('courseName') && handleClearSearchInput();
 
-        const newFilters: {} = R.pickBy(
-            (_: string, key: string) => newFilterKeysArr.includes(key),
+        const query: ParsedUrlQueryInput = R.pickBy(
+            (_: string, key: string) => key !== filterName,
             queryWithPagination,
         );
 
-        const query: ParsedUrlQueryInput = R.pickBy((val: string) => !!val, {
-            ...newFilters,
-            ...paginationQuery,
-            ordering,
-        });
-
+        filterName === 'courseName' && handleClearSearchInput();
         await Router.push({ pathname, query });
         resetForm();
         setSearchInputSubmitting(false);
     };
 
-    const renderFilterNames = !!validFilterNamesArr.length && (
+    const renderFilterNames = !!validFilters.length && (
         <Box id="filter-names" className="border-bottom">
-            {validFilterNamesArr.map((f, i) => (
-                <Chip key={i} label={f} onDelete={handleDeleteFilter(f)} />
+            {validFilters.map(({ name, value }, i) => (
+                <Chip key={i} label={value} onDelete={handleDeleteFilter(name)} />
             ))}
         </Box>
     );
