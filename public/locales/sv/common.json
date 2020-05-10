@@ -83,5 +83,6 @@
     "verifyAccount": "Verifiera konto",
     "languageTooltip": "Ändra språk.",
     "slogan": "För studenter.",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "notVerifiedTooltip": "Den här åtgärden är endast tillåten för användare som har verifierat sina konton."
 }

@@ -5,7 +5,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PerformStarMutation, usePerformStarMutation } from '../../../generated/graphql';
-import { useNotificationsContext } from '../../context';
+import { useAuthContext, useNotificationsContext } from '../../context';
 import { MuiColor } from '../../types';
 
 interface Props {
@@ -23,9 +23,11 @@ export const StarButton: React.FC<Props> = ({
     starredTooltip,
     unstarredTooltip,
 }) => {
+    const { t } = useTranslation();
+    const { verified, notVerifiedTooltip } = useAuthContext();
     const [starred, setStarred] = useState(initialStarred);
     const { toggleNotification } = useNotificationsContext();
-    const { t } = useTranslation();
+    const tooltip = !!notVerifiedTooltip ? notVerifiedTooltip : starred ? starredTooltip : unstarredTooltip || '';
 
     const onError = (): void => {
         toggleNotification(t('notifications:starError'));
@@ -48,12 +50,12 @@ export const StarButton: React.FC<Props> = ({
     };
 
     return (
-        <Tooltip title={starred ? starredTooltip : unstarredTooltip || ''}>
+        <Tooltip title={tooltip}>
             <span>
                 <IconButton
                     onClick={handleStar}
                     color={starred ? 'primary' : ('default' as MuiColor)}
-                    disabled={starSubmitting}
+                    disabled={starSubmitting || verified === false}
                     size="small"
                 >
                     <StarBorderOutlined />

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
-import { useCommentModalContext, useDeviceContext, useNotificationsContext } from '../../context';
+import { useAuthContext, useCommentModalContext, useDeviceContext, useNotificationsContext } from '../../context';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
 import { ModalHeader } from './ModalHeader';
@@ -32,6 +32,8 @@ type T = FormikProps<CreateCommentFormValues>;
 
 export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, formKey }) => {
     const { t } = useTranslation();
+    const { verified, notVerifiedTooltip } = useAuthContext();
+    const disabled = verified === false;
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const { toggleNotification } = useNotificationsContext();
@@ -119,13 +121,20 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
         multiline: true,
         autoComplete: 'off',
         fullWidth: true,
+        disabled,
     };
 
+    const submitButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('common:sendMessageTooltip');
+    const attachmentButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('common:attachFileTooltip');
+    const inputTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : '';
+
     const renderSubmitButton = (
-        <Tooltip title={t('common:sendMessageTooltip')}>
-            <IconButton onClick={submitForm} color="primary" size="small">
-                <SendOutlined />
-            </IconButton>
+        <Tooltip title={submitButtonTooltip}>
+            <span>
+                <IconButton onClick={submitForm} disabled={disabled} color="primary" size="small">
+                    <SendOutlined />
+                </IconButton>
+            </span>
         </Tooltip>
     );
 
@@ -139,12 +148,15 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
                     type="file"
                     capture="camera"
                     onChange={handleAttachmentChange}
+                    disabled={disabled}
                 />
                 <label htmlFor={`camera-attachment-${formKey}`}>
-                    <Tooltip title={t('common:attachFileTooltip')}>
-                        <Fab component="span" size="small">
-                            <CameraAltOutlined />
-                        </Fab>
+                    <Tooltip title={attachmentButtonTooltip}>
+                        <span>
+                            <Fab disabled={disabled} component="span" size="small">
+                                <CameraAltOutlined />
+                            </Fab>
+                        </span>
                     </Tooltip>
                 </label>
             </Box>
@@ -170,20 +182,27 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
                         accept=".png, .jpg, .jpeg"
                         type="file"
                         onChange={handleAttachmentChange}
+                        disabled={disabled}
                     />
                     <label htmlFor={`attachment-desktop-${formKey}`}>
-                        <Tooltip title={t('common:attachFileTooltip')}>
-                            <IconButton component="span" size="small">
-                                <AttachFileOutlined />
-                            </IconButton>
+                        <Tooltip title={attachmentButtonTooltip}>
+                            <span>
+                                <IconButton disabled={disabled} component="span" size="small">
+                                    <AttachFileOutlined />
+                                </IconButton>
+                            </span>
                         </Tooltip>
                     </label>
                 </Box>
-                <TextField
-                    onKeyDown={handleKeyDown}
-                    value={!values.attachment ? values.text : ''}
-                    {...textFieldProps}
-                />
+                <Tooltip title={inputTooltip}>
+                    <span id="desktop-input-container">
+                        <TextField
+                            onKeyDown={handleKeyDown}
+                            value={!values.attachment ? values.text : ''}
+                            {...textFieldProps}
+                        />
+                    </span>
+                </Tooltip>
                 <Box marginLeft="0.5rem">{renderSubmitButton}</Box>
             </Box>
         );
@@ -201,7 +220,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
                         {!!attachment && <Image src={attachment as string} />}
                     </StyledAttachmentImage>
                     {renderAttachmentButtons}
-                    <TextField onKeyDown={handleKeyDown} value={values.text} {...textFieldProps} />
+                    <Tooltip title={inputTooltip}>
+                        <span>
+                            <TextField onKeyDown={handleKeyDown} value={values.text} {...textFieldProps} />
+                        </span>
+                    </Tooltip>
                 </Paper>
             </Fade>
         </StyledModal>
@@ -223,6 +246,10 @@ const StyledCreateCommentForm = styled(Form)`
     #desktop-input-area {
         .MuiFormControl-root {
             margin-top: 0;
+        }
+
+        #desktop-input-container {
+            flex-grow: 1;
         }
     }
 `;

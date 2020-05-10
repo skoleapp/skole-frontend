@@ -50,7 +50,7 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const { t } = useTranslation();
-    const { user } = useAuthContext();
+    const { user, verified, notVerifiedTooltip } = useAuthContext();
     const moment = useMoment();
     const created = moment(comment.created).format('LL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
@@ -80,6 +80,18 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         initialScore,
         isOwner,
     });
+
+    const upVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('common:ownCommentVoteTooltip')
+        : t('common:upvoteCommentTooltip');
+
+    const downVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('common:ownCommentVoteTooltip')
+        : t('common:downvoteCommentTooltip');
 
     const handleClick = (): void => {
         if (isThread) {
@@ -141,7 +153,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     );
 
     const renderDeleteCommentOption = isOwner && (
-        <MenuItem>
+        <MenuItem disabled={verified === false}>
             <ListItemText onClick={handleDeleteComment}>
                 <DeleteOutline /> {t('common:deleteComment')}
             </ListItemText>
@@ -172,7 +184,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                     )}
                 </Grid>
                 <Grid item container xs={1} direction="column" justify="center" alignItems="center">
-                    <Tooltip title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:upvoteCommentTooltip')}>
+                    <Tooltip title={upVoteButtonTooltip}>
                         <span>
                             <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                                 <KeyboardArrowUpOutlined className="vote-button" />
@@ -182,7 +194,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                     <Box>
                         <Typography variant="body2">{score}</Typography>
                     </Box>
-                    <Tooltip title={isOwner ? t('common:ownCommentVoteTooltip') : t('common:downvoteCommentTooltip')}>
+                    <Tooltip title={downVoteButtonTooltip}>
                         <span>
                             <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                                 <KeyboardArrowDownOutlined className="vote-button" />

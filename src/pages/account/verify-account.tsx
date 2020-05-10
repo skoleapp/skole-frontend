@@ -40,8 +40,7 @@ const VerifyAccountPage: NextPage<I18nProps> = () => {
 
     const { t } = useTranslation();
     const { query } = useRouter();
-    const { user } = useAuthContext();
-    const initialVerified = R.propOr(false, 'verified', user);
+    const { user, verified: initialVerified } = useAuthContext();
     const email = R.propOr('', 'email', user) as string;
     const token = (query.token as string) || '';
     const [emailSubmitted, setEmailSubmitted] = useState(false);

@@ -83,5 +83,6 @@
     "verifyAccount": "Verify account",
     "languageTooltip": "Change language.",
     "slogan": "For students.",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "notVerifiedTooltip": "This action is only allowed for users who have verified their accounts."
 }

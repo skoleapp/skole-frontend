@@ -42,8 +42,7 @@ export interface UpdateProfileFormValues {
 
 const EditProfilePage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
-    const { user, setUser } = useAuthContext();
-    const verified = R.propOr(null, 'verified', user);
+    const { user, setUser, verified } = useAuthContext();
     const { ref, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
 

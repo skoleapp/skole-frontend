@@ -52,7 +52,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user } = useAuthContext();
+    const { user, verified, notVerifiedTooltip } = useAuthContext();
     const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
     const resourceTitle = R.propOr('', 'title', resource) as string;
     const resourceDate = R.propOr('', 'date', resource) as string;
@@ -81,6 +81,18 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         initialScore,
         isOwner,
     });
+
+    const upVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('resource:ownResourceVoteTooltip')
+        : t('resource:upvoteTooltip');
+
+    const downVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('resource:ownResourceVoteTooltip')
+        : t('resource:downvoteTooltip');
 
     const discussionBoxProps = {
         comments,
@@ -201,7 +213,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             {renderShareOption}
             {renderReportOption}
             {isOwner && (
-                <MenuItem>
+                <MenuItem disabled={verified === false}>
                     <ListItemText onClick={handleDeleteResource}>
                         <DeleteOutline /> {t('resource:deleteResource')}
                     </ListItemText>
@@ -225,7 +237,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderUpVoteButton = (
-        <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}>
+        <Tooltip title={upVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                     <KeyboardArrowUpOutlined />
@@ -235,7 +247,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderDownVoteButton = (
-        <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}>
+        <Tooltip title={downVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                     <KeyboardArrowDownOutlined />

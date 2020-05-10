@@ -110,8 +110,7 @@ interface UseSettings extends SettingsContext {
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
 export const useSettings = (modal: boolean): UseSettings => {
-    const { user, setUser } = useAuthContext();
-    const verified = R.propOr(null, 'verified', user);
+    const { user, setUser, verified } = useAuthContext();
     const authenticated = !!user;
     const { settingsOpen, toggleSettings } = useSettingsContext();
     const { toggleNotification } = useNotificationsContext();

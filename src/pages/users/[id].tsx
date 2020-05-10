@@ -41,8 +41,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const { t } = useTranslation();
     const moment = useMoment();
     const { tabValue, handleTabChange } = useTabs();
-    const { user: loggedInUser } = useAuthContext();
-    const verified = R.propOr(null, 'verified', user);
+    const { user: loggedInUser, verified } = useAuthContext();
     const rank = R.propOr('', 'rank', user) as string;
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;

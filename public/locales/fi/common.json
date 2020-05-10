@@ -83,5 +83,6 @@
     "verifyAccount": "Vahvista tili",
     "languageTooltip": "Vaihda kieltä.",
     "slogan": "Opiskelijoille.",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "notVerifiedTooltip": "Tämä toiminto on sallittu ainoastaan käyttäjille jotka ovat vahvistaneet tilinsä."
 }

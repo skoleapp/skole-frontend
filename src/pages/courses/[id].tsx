@@ -50,7 +50,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user } = useAuthContext();
+    const { user, verified, notVerifiedTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
@@ -79,6 +79,20 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         initialScore,
         isOwner,
     });
+
+    const upVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwnCourse
+        ? t('course:ownCourseVoteTooltip')
+        : t('course:upvoteTooltip');
+
+    const downVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwnCourse
+        ? t('course:ownCourseVoteTooltip')
+        : t('course:downvoteTooltip');
+
+    const uploadResourceButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('course:uploadResourceTooltip');
 
     const subjectLink = {
         ...searchUrl,
@@ -143,7 +157,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderUpVoteButton = (
-        <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+        <Tooltip title={upVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                     <KeyboardArrowUpOutlined />
@@ -153,7 +167,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderDownVoteButton = (
-        <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+        <Tooltip title={downVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                     <KeyboardArrowDownOutlined />
@@ -214,7 +228,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             {renderShareOption}
             {renderReportOption}
             {isOwnCourse && (
-                <MenuItem>
+                <MenuItem disabled={verified === false}>
                     <ListItemText onClick={handleDeleteCourse}>
                         <DeleteOutline /> {t('course:deleteCourse')}
                     </ListItemText>
@@ -224,12 +238,15 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-        <Tooltip title={t('course:uploadResourceTooltip')}>
-            <IconButtonLink
-                href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}
-                color={color}
-                icon={CloudUploadOutlined}
-            />
+        <Tooltip title={uploadResourceButtonTooltip}>
+            <span>
+                <IconButtonLink
+                    href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}
+                    color={color}
+                    icon={CloudUploadOutlined}
+                    disabled={verified === false}
+                />
+            </span>
         </Tooltip>
     );
 
