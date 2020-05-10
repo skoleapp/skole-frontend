@@ -1,9 +1,20 @@
-import { Box, CardContent, CardHeader, Divider, Grid, IconButton, InputBase } from '@material-ui/core';
+import {
+    Box,
+    Button,
+    CardContent,
+    CardHeader,
+    Divider,
+    FormControl,
+    Grid,
+    IconButton,
+    InputBase,
+} from '@material-ui/core';
 import { ArrowBackOutlined, ClearAllOutlined, FilterListOutlined, SearchOutlined } from '@material-ui/icons';
-import { Field, Form, Formik, FormikActions } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -40,8 +51,8 @@ import {
 } from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { withApolloSSR, withAuthSync } from '../lib';
-import { I18nProps, SkolePageContext } from '../types';
-import { getPaginationQuery, getQueryWithPagination, useFilters } from '../utils';
+import { I18nProps, SkolePageContext, UseDrawer } from '../types';
+import { getPaginationQuery, getQueryWithPagination, useDrawer, useForm } from '../utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
@@ -64,24 +75,33 @@ interface Props extends I18nProps {
 }
 
 const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
-    const {
-        handleSubmit,
-        submitButtonText,
-        renderDesktopClearFiltersButton,
-        ref,
-        drawerProps,
-        handleClearFilters,
-    } = useFilters<FilterSearchResultsFormValues>();
-
-    const { handleOpen, ...commonDrawerProps } = drawerProps;
-    const { onClose: handleCloseDrawer } = drawerProps;
-    const { query, pathname } = useRouter();
     const { t } = useTranslation();
+    const { ref, resetForm, setSubmitting } = useForm<FilterSearchResultsFormValues>();
+    const { onClose: handleCloseFilters, handleOpen: handleOpenFilters, ...fullDrawerProps } = useDrawer();
+    const drawerProps = R.omit(['renderHeader'], fullDrawerProps) as Omit<UseDrawer, 'renderHeader'>;
+    const { pathname, query } = useRouter();
     const isMobile = useDeviceContext();
     const courseObjects = R.propOr([], 'objects', searchCourses) as CourseObjectType[];
     const count = R.propOr(0, 'count', searchCourses) as number;
     const [searchValue, setSearchValue] = useState(query.courseName || '');
     const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
+
+    // Pick non-empty values and reload the page with new query params.
+    const handleSubmitFilters = async (filteredValues: {}): Promise<void> => {
+        const validQuery: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
+        await Router.push({ pathname, query: validQuery });
+        setSubmitting(false);
+        const fakeEvent = (new Event('Fake event!') as unknown) as SyntheticEvent;
+        handleCloseFilters(fakeEvent);
+    };
+
+    // Clear the query params and reset form.
+    const handleClearFilters = async (e: SyntheticEvent): Promise<void> => {
+        const paginationQuery = getPaginationQuery(query);
+        await Router.push({ pathname, query: paginationQuery });
+        resetForm();
+        handleCloseFilters(e);
+    };
 
     // Pre-load query params to the form.
     const initialValues = {
@@ -113,7 +133,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         Router.push({ pathname, query: { ...paginationQuery, courseName: searchValue } });
     };
 
-    const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T, actions: FormikActions<T>): void => {
+    const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T): void => {
         const { courseName, courseCode, school, subject, schoolType, country, city, ordering } = values;
 
         const filteredValues: FilterSearchResultsFormValues = {
@@ -128,93 +148,101 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
             ordering,
         };
 
-        handleSubmit(filteredValues, actions);
+        handleSubmitFilters(filteredValues);
     };
 
     const renderCardContent = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Box>
-                        {!isMobile && (
-                            <Field
-                                name="courseName"
-                                label={t('forms:courseName')}
-                                placeholder={t('forms:courseName')}
-                                variant="outlined"
-                                component={TextField}
-                                fullWidth
-                            />
-                        )}
+                    {!isMobile && (
                         <Field
-                            name="courseCode"
-                            label={t('forms:courseCode')}
-                            placeholder={t('forms:courseCode')}
+                            name="courseName"
+                            label={t('forms:courseName')}
+                            placeholder={t('forms:courseName')}
                             variant="outlined"
                             component={TextField}
                             fullWidth
                         />
-                        <Field
-                            name="subject"
-                            label={t('forms:subject')}
-                            placeholder={t('forms:subject')}
-                            dataKey="subjects"
-                            document={SubjectsDocument}
-                            component={AutoCompleteField}
-                            variant="outlined"
-                            fullWidth
-                        />
-                        <Field
-                            name="school"
-                            label={t('forms:school')}
-                            placeholder={t('forms:school')}
-                            dataKey="schools"
-                            document={SchoolsDocument}
-                            component={AutoCompleteField}
-                            variant="outlined"
-                            fullWidth
-                        />
-                        <Field
-                            name="schoolType"
-                            label={t('forms:schoolType')}
-                            placeholder={t('forms:schoolType')}
-                            dataKey="schoolTypes"
-                            document={SchoolTypesDocument}
-                            component={AutoCompleteField}
-                            variant="outlined"
-                            fullWidth
-                        />
-                        <Field
-                            name="city"
-                            label={t('forms:city')}
-                            placeholder={t('forms:city')}
-                            dataKey="cities"
-                            document={CitiesDocument}
-                            component={AutoCompleteField}
-                            variant="outlined"
-                            fullWidth
-                        />
-                        <Field
-                            name="country"
-                            label={t('forms:country')}
-                            placeholder={t('forms:country')}
-                            dataKey="countries"
-                            document={CountriesDocument}
-                            component={AutoCompleteField}
-                            variant="outlined"
-                            fullWidth
-                        />
-                        <Field name="ordering" label={t('forms:ordering')} component={NativeSelectField} fullWidth>
-                            <option value="name">{t('forms:nameOrdering')}</option>
-                            <option value="-name">{t('forms:nameOrderingReverse')}</option>
-                            <option value="score">{t('forms:scoreOrdering')}</option>
-                            <option value="-score">{t('forms:scoreOrderingReverse')}</option>
-                        </Field>
-                    </Box>
-                    <Box>
-                        <FormSubmitSection submitButtonText={submitButtonText} {...props} />
-                        {renderDesktopClearFiltersButton}
-                    </Box>
+                    )}
+                    <Field
+                        name="courseCode"
+                        label={t('forms:courseCode')}
+                        placeholder={t('forms:courseCode')}
+                        variant="outlined"
+                        component={TextField}
+                        fullWidth
+                    />
+                    <Field
+                        name="subject"
+                        label={t('forms:subject')}
+                        placeholder={t('forms:subject')}
+                        dataKey="subjects"
+                        document={SubjectsDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="school"
+                        label={t('forms:school')}
+                        placeholder={t('forms:school')}
+                        dataKey="schools"
+                        document={SchoolsDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="schoolType"
+                        label={t('forms:schoolType')}
+                        placeholder={t('forms:schoolType')}
+                        dataKey="schoolTypes"
+                        document={SchoolTypesDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="city"
+                        label={t('forms:city')}
+                        placeholder={t('forms:city')}
+                        dataKey="cities"
+                        document={CitiesDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field
+                        name="country"
+                        label={t('forms:country')}
+                        placeholder={t('forms:country')}
+                        dataKey="countries"
+                        document={CountriesDocument}
+                        component={AutoCompleteField}
+                        variant="outlined"
+                        fullWidth
+                    />
+                    <Field name="ordering" label={t('forms:ordering')} component={NativeSelectField} fullWidth>
+                        <option value="name">{t('forms:nameOrdering')}</option>
+                        <option value="-name">{t('forms:nameOrderingReverse')}</option>
+                        <option value="score">{t('forms:scoreOrdering')}</option>
+                        <option value="-score">{t('forms:scoreOrderingReverse')}</option>
+                    </Field>
+                    <FormSubmitSection submitButtonText={t('common:apply')} {...props} />
+                    {!isMobile && (
+                        <FormControl fullWidth>
+                            <Button
+                                onClick={handleClearFilters}
+                                variant="outlined"
+                                color="primary"
+                                endIcon={<ClearAllOutlined />}
+                                fullWidth
+                            >
+                                {t('common:clear')}
+                            </Button>
+                        </FormControl>
+                    )}
                 </Form>
             )}
         </Formik>
@@ -245,9 +273,9 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     const renderMobileContent = isMobile && (
         <Box flexGrow="1" display="flex">
             <StyledTable>{renderTableContent}</StyledTable>
-            <StyledDrawer fullHeight {...commonDrawerProps}>
+            <StyledDrawer fullHeight {...drawerProps}>
                 <ModalHeader
-                    onCancel={handleCloseDrawer}
+                    onCancel={handleCloseFilters}
                     text={t('common:filters')}
                     headerRight={renderMobileClearFiltersButton}
                 />
@@ -262,7 +290,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
                 <StyledCard>
                     <CardHeader title={t('common:filters')} />
                     <Divider />
-                    <CardContent id="filters-container">{renderCardContent}</CardContent>
+                    <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
             </Grid>
             <Grid item container xs={7} md={8} lg={9}>
@@ -297,7 +325,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
                             onChange={onSearchChange}
                         />
                     </Box>
-                    <IconButton onClick={handleOpen} color="primary">
+                    <IconButton onClick={handleOpenFilters} color="primary">
                         <FilterListOutlined />
                     </IconButton>
                 </Box>
@@ -329,18 +357,6 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
 const StyledSearchPage = styled(Box)`
     .MuiGrid-root {
         flex-grow: 1;
-
-        #filters-container {
-            flex-grow: 1;
-            display: flex;
-
-            form {
-                flex-grow: 1;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
-        }
     }
 
     #search-navbar {
