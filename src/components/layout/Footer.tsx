@@ -1,8 +1,8 @@
 import { Grid, Typography } from '@material-ui/core';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { useTranslation } from '../../i18n';
 import { useLanguageSelector } from '../../utils';
 import { TextLink } from '../shared';
 
@@ -22,6 +22,9 @@ export const Footer: React.FC = () => {
                     </TextLink>
                     <TextLink href="/contact" color="secondary">
                         {t('common:contact')}
+                    </TextLink>
+                    <TextLink href="/faq" color="secondary">
+                        {t('common:faq')}
                     </TextLink>
                 </Grid>
                 <Grid item xs={4} container direction="column" alignItems="center">

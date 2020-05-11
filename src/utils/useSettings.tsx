@@ -10,18 +10,18 @@ import {
     HowToRegOutlined,
     LanguageOutlined,
     LockOutlined,
+    QuestionAnswerOutlined,
     SecurityOutlined,
     SettingsBackupRestoreOutlined,
     StarBorderOutlined,
     VerifiedUserOutlined,
 } from '@material-ui/icons';
 import { useRouter } from 'next/router';
-import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { StyledList } from '../components/shared/StyledList';
 import { useAuthContext, useNotificationsContext, useSettingsContext } from '../context';
-import { useTranslation } from '../i18n';
 import { Router } from '../i18n';
 import { clientLogout } from '../lib';
 import { SettingsContext } from '../types';
@@ -82,6 +82,11 @@ export const menuItems = {
             text: 'common:contact',
             href: '/contact',
         },
+        {
+            icon: QuestionAnswerOutlined,
+            text: 'common:faq',
+            href: '/faq',
+        },
     ],
     legal: [
         {
@@ -104,8 +109,7 @@ interface UseSettings extends SettingsContext {
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
 export const useSettings = (modal: boolean): UseSettings => {
-    const { user, setUser } = useAuthContext();
-    const verified = R.propOr(null, 'verified', user);
+    const { user, setUser, verified } = useAuthContext();
     const authenticated = !!user;
     const { settingsOpen, toggleSettings } = useSettingsContext();
     const { toggleNotification } = useNotificationsContext();

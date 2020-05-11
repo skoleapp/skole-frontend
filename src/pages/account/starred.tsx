@@ -2,9 +2,9 @@ import { Box, Tab } from '@material-ui/core';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useAuthContext } from 'src/context';
+import { useTranslation } from 'react-i18next';
 
-import { CourseObjectType, ResourceObjectType } from '../../../generated/graphql';
+import { CourseObjectType, ResourceObjectType, StarredDocument, UserObjectType } from '../../../generated/graphql';
 import {
     CourseTableBody,
     FrontendPaginatedTable,
@@ -14,21 +14,22 @@ import {
     SettingsLayout,
     StyledTabs,
 } from '../../components';
-import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withAuthSync } from '../../lib';
-import { I18nProps } from '../../types';
+import { withApolloSSR, withAuthSync } from '../../lib';
+import { I18nProps, SkolePageContext } from '../../types';
 import { useFrontendPagination, useTabs } from '../../utils';
 
-const StarredPage: NextPage<I18nProps> = () => {
+interface Props extends I18nProps {
+    userMe?: UserObjectType | null;
+}
+
+const StarredPage: NextPage<Props> = ({ userMe }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
-    const { user } = useAuthContext();
-    const starredCourses = R.propOr([], 'starredCourses', user) as CourseObjectType[];
-    const starredResources = R.propOr([], 'starredResources', user) as ResourceObjectType[];
+    const starredCourses = R.propOr([], 'starredCourses', userMe) as CourseObjectType[];
+    const starredResources = R.propOr([], 'starredResources', userMe) as ResourceObjectType[];
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(starredResources);
-
     const commonTableHeadProps = { titleRight: t('common:score') };
 
     const courseTableHeadProps = {
@@ -41,7 +42,7 @@ const StarredPage: NextPage<I18nProps> = () => {
         ...commonTableHeadProps,
     };
 
-    if (!!user) {
+    if (!!userMe) {
         const renderStarredCourses = !!starredCourses.length ? (
             <FrontendPaginatedTable
                 tableHeadProps={courseTableHeadProps}
@@ -101,8 +102,16 @@ const StarredPage: NextPage<I18nProps> = () => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
-    props: { namespacesRequired: includeDefaultNamespaces(['starred']) },
+export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
+    const { apolloClient } = ctx as SkolePageContext;
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['starred']) };
+
+    try {
+        const { data } = await apolloClient.query({ query: StarredDocument });
+        return { props: { ...data, ...nameSpaces } };
+    } catch {
+        return { props: { ...nameSpaces } };
+    }
 });
 
 export default withAuthSync(StarredPage);

@@ -3,6 +3,7 @@ import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNotificationsContext } from 'src/context';
 import { withAuthSync } from 'src/lib';
 import * as Yup from 'yup';
@@ -16,7 +17,6 @@ import {
     useCreateCourseMutation,
 } from '../../generated/graphql';
 import { AutoCompleteField, FormLayout, FormSubmitSection } from '../components';
-import { useTranslation } from '../i18n';
 import { includeDefaultNamespaces, Router } from '../i18n';
 import { I18nProps } from '../types';
 import { useForm } from '../utils';

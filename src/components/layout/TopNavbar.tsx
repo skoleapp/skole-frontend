@@ -2,10 +2,10 @@ import { AppBar, Avatar, Box, Grid, IconButton, Toolbar, Tooltip } from '@materi
 import { ArrowBackOutlined, HowToRegOutlined, LibraryAddOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuthContext, useDeviceContext } from 'src/context';
 import styled from 'styled-components';
 
-import { useTranslation } from '../../i18n';
 import { Router } from '../../i18n';
 import { Link } from '../../i18n';
 import { breakpoints } from '../../styles';

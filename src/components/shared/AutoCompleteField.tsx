@@ -27,8 +27,8 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     ...props
 }: Props & TextFieldProps) => {
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState([]);
-    const loading = open && options.length === 0;
     const apolloClient = useApolloClient();
     const { name, value } = field;
     const { touched, errors, isSubmitting } = form;
@@ -36,6 +36,8 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     const showError = getIn(touched, name) && !!fieldError;
 
     const fetchOptions = async (): Promise<void> => {
+        setLoading(true);
+
         try {
             const { data } = await apolloClient.query({
                 query: document,
@@ -46,19 +48,13 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
             data[dataKey] && setOptions(data[dataKey]);
         } catch {
             setOptions([]);
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        if (!loading) {
-            return undefined;
-        }
-
-        fetchOptions();
-    }, [loading]);
-
-    useEffect(() => {
-        !open && setOptions([]);
+        open ? fetchOptions() : setOptions([]);
     }, [open]);
 
     const handleAutoCompleteChange = (_e: ChangeEvent<{}>, val: T): void => {

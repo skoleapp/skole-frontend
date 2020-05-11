@@ -2,6 +2,7 @@ import { TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { withApolloSSR, withAuthSync } from 'src/lib';
 
 import {
@@ -20,7 +21,6 @@ import {
     TabLayout,
     TextLink,
 } from '../../components';
-import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces, Link } from '../../i18n';
 import { I18nProps, SkolePageContext } from '../../types';
 import { useFrontendPagination, useOptions, useSearch } from '../../utils';
@@ -34,13 +34,14 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { searchUrl } = useSearch();
     const schoolName = R.propOr('', 'name', school) as string;
     const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions(schoolName);
-    const schoolType = R.propOr('', 'schoolType', school) as string;
-    const country = R.propOr('', 'country', school) as string;
-    const city = R.propOr('', 'city', school) as string;
-    const courseCount = R.propOr('', 'courseCount', school) as string;
-    const subjectCount = R.propOr('', 'subjectCount', school) as string;
+    const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school) as string;
+    const schoolTypeId = R.pathOr('', ['schoolType', 'id'], school) as string;
+    const country = R.pathOr('', ['country', 'name'], school) as string;
+    const city = R.pathOr('', ['city', 'name'], school) as string;
     const subjects = R.propOr([], 'subjects', school) as SubjectObjectType[];
     const courses = R.propOr([], 'courses', school) as CourseObjectType[];
+    const subjectCount = subjects.length;
+    const courseCount = courses.length;
     const countryId = R.pathOr('', ['country', 'id'], school);
     const cityId = R.pathOr('', ['city', 'id'], school);
     const { paginatedItems: paginatedSubjects, ...subjectPaginationProps } = useFrontendPagination(subjects);
@@ -48,7 +49,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
 
     const schoolTypeLink = {
         ...searchUrl,
-        query: { ...searchUrl.query, schoolType },
+        query: { ...searchUrl.query, schoolType: schoolTypeId },
     };
 
     const countryLink = {
@@ -63,7 +64,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
 
     const renderSchoolTypeLink = (
         <TextLink href={schoolTypeLink} color="primary">
-            {schoolType}
+            {schoolTypeName}
         </TextLink>
     );
 

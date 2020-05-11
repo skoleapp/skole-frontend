@@ -3,9 +3,9 @@ import { ClearOutlined, EditOutlined, LibraryAddOutlined } from '@material-ui/ic
 import { ErrorMessage, FormikProps } from 'formik';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { useTranslation } from '../../i18n';
 import { UpdateProfileFormValues } from '../../pages/account/edit-profile';
 import { mediaURL, useDrawer } from '../../utils';
 import { FormErrorMessage } from './FormErrorMessage';

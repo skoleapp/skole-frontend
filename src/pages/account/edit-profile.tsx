@@ -4,6 +4,7 @@ import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import {
@@ -24,7 +25,7 @@ import {
     TextLink,
 } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
-import { includeDefaultNamespaces, useTranslation } from '../../i18n';
+import { includeDefaultNamespaces } from '../../i18n';
 import { withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
@@ -40,11 +41,10 @@ export interface UpdateProfileFormValues {
 }
 
 const EditProfilePage: NextPage<I18nProps> = () => {
-    const { user, setUser } = useAuthContext();
-    const verified = R.propOr(null, 'verified', user);
+    const { t } = useTranslation();
+    const { user, setUser, verified } = useAuthContext();
     const { ref, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
-    const { t } = useTranslation();
 
     const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
         if (!!updateUser) {

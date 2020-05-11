@@ -4,6 +4,7 @@ import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNotificationsContext } from 'src/context';
 import { I18nProps } from 'src/types';
 import * as Yup from 'yup';
@@ -15,7 +16,7 @@ import {
     useSendPasswordResetEmailMutation,
 } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
-import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
+import { includeDefaultNamespaces, Router } from '../../i18n';
 import { useForm } from '../../utils';
 
 const emailFormInitialValues = {

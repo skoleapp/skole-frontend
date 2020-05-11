@@ -1,9 +1,9 @@
 import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
-import moment from 'moment';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuthContext, useDeviceContext } from 'src/context';
 import styled from 'styled-components';
 
@@ -27,13 +27,11 @@ import {
     StyledTabs,
     TextLink,
 } from '../../components';
-import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApolloSSR } from '../../lib';
-import { withAuthSync } from '../../lib';
+import { withApolloSSR, withAuthSync } from '../../lib';
 import { breakpoints, breakpointsNum } from '../../styles';
 import { I18nProps, MaxWidth, SkolePageContext } from '../../types';
-import { mediaURL, useFrontendPagination, useTabs } from '../../utils';
+import { mediaURL, useFrontendPagination, useMoment, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     user?: UserObjectType;
@@ -41,9 +39,9 @@ interface Props extends I18nProps {
 
 const UserPage: NextPage<Props> = ({ user }) => {
     const { t } = useTranslation();
+    const moment = useMoment();
     const { tabValue, handleTabChange } = useTabs();
-    const { user: loggedInUser } = useAuthContext();
-    const verified = R.propOr(null, 'verified', user);
+    const { user: loggedInUser, verified } = useAuthContext();
     const rank = R.propOr('', 'rank', user) as string;
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
@@ -221,7 +219,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                         {renderEditProfileButton}
                         {renderSettingsButton}
                     </Box>
-                    <Box display="flex">
+                    <Box display="flex" marginTop="0.25rem">
                         <Box display="flex" alignItems="center">
                             {renderScoreValue}
                             <Box marginLeft="0.25rem">{renderScoreTitle}</Box>
@@ -235,7 +233,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                             <Box marginLeft="0.25rem">{renderResourceCountTitle}</Box>
                         </Box>
                     </Box>
-                    <Box textAlign="left">
+                    <Box textAlign="left" marginTop="0.25rem">
                         {renderBio}
                         {renderRank}
                         {renderBadges}

@@ -10,12 +10,12 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { withAuthSync } from 'src/lib';
 import { I18nProps } from 'src/types';
 
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
-import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { useForm } from '../../utils';
 
@@ -40,8 +40,7 @@ const VerifyAccountPage: NextPage<I18nProps> = () => {
 
     const { t } = useTranslation();
     const { query } = useRouter();
-    const { user } = useAuthContext();
-    const initialVerified = R.propOr(false, 'verified', user);
+    const { user, verified: initialVerified } = useAuthContext();
     const email = R.propOr('', 'email', user) as string;
     const token = (query.token as string) || '';
     const [emailSubmitted, setEmailSubmitted] = useState(false);

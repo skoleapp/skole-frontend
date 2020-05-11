@@ -2,12 +2,12 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import { ChangePasswordMutation, useChangePasswordMutation } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useNotificationsContext } from '../../context';
-import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';

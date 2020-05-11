@@ -1,9 +1,9 @@
 import { Size } from '@material-ui/core';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from '../../generated/graphql';
-import { useNotificationsContext } from '../context';
-import { useTranslation } from '../i18n';
+import { useAuthContext, useNotificationsContext } from '../context';
 import { MuiColor } from '../types';
 
 interface Variables {
@@ -33,10 +33,11 @@ interface UseVotes {
 }
 
 export const useVotes = ({ initialVote, initialScore, isOwner }: UseVotesProps): UseVotes => {
+    const { t } = useTranslation();
+    const { verified } = useAuthContext();
     const [vote, setVote] = useState(initialVote);
     const [score, setScore] = useState(initialScore);
     const { toggleNotification } = useNotificationsContext();
-    const { t } = useTranslation();
 
     const onError = (): void => {
         toggleNotification(t('notifications:voteError'));
@@ -61,7 +62,7 @@ export const useVotes = ({ initialVote, initialScore, isOwner }: UseVotesProps):
 
     const commonVoteButtonProps = {
         size: 'small' as Size,
-        disabled: voteSubmitting || isOwner,
+        disabled: voteSubmitting || isOwner || verified === false,
     };
 
     const upVoteButtonProps = {

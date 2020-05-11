@@ -1,10 +1,10 @@
 import { Box, CardContent, Grid, Typography } from '@material-ui/core';
 import { UserObjectType } from 'generated/graphql';
-import moment from 'moment';
 import * as R from 'ramda';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMoment } from 'src/utils';
 
-import { useTranslation } from '../../i18n';
 import { TextLink } from './TextLink';
 
 interface InfoItem {
@@ -20,6 +20,7 @@ interface Props {
 
 export const InfoModalContent: React.FC<Props> = ({ user, created, infoItems }) => {
     const { t } = useTranslation();
+    const moment = useMoment();
     const userId = R.propOr(undefined, 'id', user);
 
     const renderCreated = !!user && !!created && (

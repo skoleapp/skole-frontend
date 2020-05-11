@@ -1,6 +1,8 @@
 import { CommentObjectType, UserObjectType } from 'generated/graphql';
+import * as R from 'ramda';
 import React, { createContext, useEffect, useState } from 'react';
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { breakpointsNum } from './styles';
 import {
@@ -64,7 +66,20 @@ const SkolePageContext = createContext<SkoleContextType>({
 });
 
 const useSkoleContext = (): SkoleContextType => useContext(SkolePageContext);
-export const useAuthContext = (): AuthContext => useSkoleContext().auth;
+
+interface UseAuthContext extends AuthContext {
+    verified: boolean | null;
+    notVerifiedTooltip: string | false;
+}
+
+export const useAuthContext = (): UseAuthContext => {
+    const { t } = useTranslation();
+    const { user, setUser } = useSkoleContext().auth;
+    const verified = R.propOr(null, 'verified', user) as boolean | null;
+    const notVerifiedTooltip = verified === false && t('common:notVerifiedTooltip');
+    return { user, setUser, verified, notVerifiedTooltip };
+};
+
 export const useAttachmentViewerContext = (): AttachmentViewerContext => useSkoleContext().attachmentViewer;
 export const useCommentThreadContext = (): CommentThreadContext => useSkoleContext().commentThread;
 export const useCommentModalContext = (): CommentModalContext => useSkoleContext().commentModal;

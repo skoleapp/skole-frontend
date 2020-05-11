@@ -12,7 +12,8 @@ import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React, { useEffect } from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import {
@@ -37,7 +38,6 @@ import {
     TextLink,
 } from '../../components';
 import { useAuthContext, useNotificationsContext, usePDFViewerContext } from '../../context';
-import { useTranslation } from '../../i18n';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';
@@ -52,7 +52,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user } = useAuthContext();
+    const { user, verified, notVerifiedTooltip } = useAuthContext();
     const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
     const resourceTitle = R.propOr('', 'title', resource) as string;
     const resourceDate = R.propOr('', 'date', resource) as string;
@@ -73,6 +73,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(fullResourceTitle);
+    const { onClose: closeOptions } = drawerProps;
     const { setPages, setCurrentPage } = usePDFViewerContext();
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
@@ -80,6 +81,18 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         initialScore,
         isOwner,
     });
+
+    const upVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('resource:ownResourceVoteTooltip')
+        : t('resource:upvoteTooltip');
+
+    const downVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('resource:ownResourceVoteTooltip')
+        : t('resource:downvoteTooltip');
 
     const discussionBoxProps = {
         comments,
@@ -124,10 +137,14 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         onError: deleteResourceError,
     });
 
-    const handleDeleteResource = (): void => {
-        confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') }).then(() => {
+    const handleDeleteResource = async (e: SyntheticEvent): Promise<void> => {
+        try {
+            await confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') });
             deleteResource({ variables: { id: resourceId } });
-        });
+        } catch {
+        } finally {
+            closeOptions(e);
+        }
     };
 
     const handleVoteClick = (status: number) => (): void => {
@@ -196,7 +213,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             {renderShareOption}
             {renderReportOption}
             {isOwner && (
-                <MenuItem>
+                <MenuItem disabled={verified === false}>
                     <ListItemText onClick={handleDeleteResource}>
                         <DeleteOutline /> {t('resource:deleteResource')}
                     </ListItemText>
@@ -220,7 +237,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderUpVoteButton = (
-        <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:upvoteTooltip')}>
+        <Tooltip title={upVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                     <KeyboardArrowUpOutlined />
@@ -230,7 +247,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderDownVoteButton = (
-        <Tooltip title={isOwner ? t('resource:ownResourceVoteTooltip') : t('resource:downvoteTooltip')}>
+        <Tooltip title={downVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                     <KeyboardArrowDownOutlined />

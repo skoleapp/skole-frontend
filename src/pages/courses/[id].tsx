@@ -8,7 +8,8 @@ import {
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
     CommentObjectType,
@@ -36,7 +37,7 @@ import {
     TextLink,
 } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
-import { includeDefaultNamespaces, Router, useTranslation } from '../../i18n';
+import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, MuiColor, SkolePageContext } from '../../types';
 import { useFrontendPagination, useOptions, useSearch, useVotes } from '../../utils';
@@ -49,7 +50,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user } = useAuthContext();
+    const { user, verified, notVerifiedTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
@@ -70,6 +71,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(courseName);
+    const { onClose: closeOptions } = drawerProps;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
@@ -77,6 +79,20 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         initialScore,
         isOwner,
     });
+
+    const upVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwnCourse
+        ? t('course:ownCourseVoteTooltip')
+        : t('course:upvoteTooltip');
+
+    const downVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwnCourse
+        ? t('course:ownCourseVoteTooltip')
+        : t('course:downvoteTooltip');
+
+    const uploadResourceButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('course:uploadResourceTooltip');
 
     const subjectLink = {
         ...searchUrl,
@@ -114,10 +130,14 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         onError: deleteCourseError,
     });
 
-    const handleDeleteCourse = (): void => {
-        confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') }).then(() => {
+    const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
+        try {
+            await confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') });
             deleteCourse({ variables: { id: courseId } });
-        });
+        } catch {
+        } finally {
+            closeOptions(e);
+        }
     };
 
     const handleVoteClick = (status: number) => (): void => {
@@ -137,7 +157,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderUpVoteButton = (
-        <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:upvoteTooltip')}>
+        <Tooltip title={upVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
                     <KeyboardArrowUpOutlined />
@@ -147,7 +167,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderDownVoteButton = (
-        <Tooltip title={isOwnCourse ? t('course:ownCourseVoteTooltip') : t('course:downvoteTooltip')}>
+        <Tooltip title={downVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
                     <KeyboardArrowDownOutlined />
@@ -208,7 +228,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             {renderShareOption}
             {renderReportOption}
             {isOwnCourse && (
-                <MenuItem>
+                <MenuItem disabled={verified === false}>
                     <ListItemText onClick={handleDeleteCourse}>
                         <DeleteOutline /> {t('course:deleteCourse')}
                     </ListItemText>
@@ -218,12 +238,15 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-        <Tooltip title={t('course:uploadResourceTooltip')}>
-            <IconButtonLink
-                href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}
-                color={color}
-                icon={CloudUploadOutlined}
-            />
+        <Tooltip title={uploadResourceButtonTooltip}>
+            <span>
+                <IconButtonLink
+                    href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}
+                    color={color}
+                    icon={CloudUploadOutlined}
+                    disabled={verified === false}
+                />
+            </span>
         </Tooltip>
     );
 

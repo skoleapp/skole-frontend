@@ -1,5 +1,6 @@
 import { IconButton, Snackbar, SnackbarOrigin } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import Router from 'next/router';
 import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
 
@@ -8,6 +9,7 @@ import { breakpoints } from '../../styles';
 
 export const Notifications: React.FC = () => {
     const { notification, toggleNotification } = useNotificationsContext();
+    Router.events.on('routeChangeComplete', () => toggleNotification(null));
 
     const handleClose = (_e: SyntheticEvent | MouseEvent, reason?: string): void => {
         if (reason !== 'clickaway') {
