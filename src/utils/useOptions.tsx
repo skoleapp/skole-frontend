@@ -38,8 +38,6 @@ export const useOptions = (shareText?: string): UseOptions => {
                     text: shareText || t('common:slogan'),
                     url: window.location.href,
                 });
-
-                toggleNotification(t('notifications:linkShared'));
             } catch {
                 toggleNotification(t('notifications:sharingError'));
             }

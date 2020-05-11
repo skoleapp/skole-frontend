@@ -72,7 +72,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const isOwner = !!user && user.id === creatorId;
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(fullResourceTitle);
+    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(resourceTitle);
     const { onClose: closeOptions } = drawerProps;
     const { setPages, setCurrentPage } = usePDFViewerContext();
 
