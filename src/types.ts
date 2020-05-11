@@ -207,11 +207,95 @@ export interface SkoleContextType {
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
 
-interface CustomApolloClient extends ApolloClient<NormalizedCacheObject> {
-    toJSON: () => void;
+export interface LTWH {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
 }
 
-export interface ApolloContext extends NextPageContext {
-    apolloClient: CustomApolloClient;
-    apolloState: {};
+export interface Scaled {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    width: number;
+    height: number;
 }
+
+export interface Position {
+    boundingRect: LTWH;
+    rects: Array<LTWH>;
+    pageNumber: number;
+}
+
+export interface ScaledPosition {
+    boundingRect: Scaled;
+    rects: Array<Scaled>;
+    pageNumber: number;
+    usePdfCoordinates?: boolean;
+}
+
+export interface NewHighlight {
+    position: ScaledPosition;
+    content: {
+        text?: string;
+        image?: string;
+    };
+    comment: {
+        text: string;
+        emoji: string;
+    };
+}
+
+export type Highlight = NewHighlight & {
+    id: string;
+};
+
+export type ViewportHighlight = Highlight & {
+    position: Position;
+};
+
+export interface ViewPort {
+    convertToPdfPoint: (x: number, y: number) => Array<number>;
+    convertToViewportRectangle: (pdfRectangle: Array<number>) => Array<number>;
+    width: number;
+    height: number;
+}
+
+export interface PDFJSDocument {
+    numPages: number;
+}
+
+export type PDFJSViewer = {
+    container: HTMLDivElement;
+    viewer: HTMLDivElement;
+    getPageView: (
+        page: number,
+    ) => {
+        textLayer: { textLayerDiv: HTMLDivElement };
+        viewport: ViewPort;
+        div: HTMLDivElement;
+        canvas: HTMLCanvasElement;
+    };
+    setDocument: (document: PDFJSDocument) => Promise<void>;
+    scrollPageIntoView: (options: { pageNumber: number; destArray: Array<{}> }) => void;
+    currentScaleValue: string;
+};
+
+export type PDFJSLinkService = {
+    setDocument: (document: Record<string, {}>) => void;
+    setViewer: (viewer: PDFJSViewer) => void;
+};
+
+export type PDFJS = {
+    TextLayerBuilder: {
+        prototype: {
+            _bindMouse: () => void;
+        };
+    };
+    PDFViewer: (options: Record<string, any>) => PDFJSViewer;
+    PDFLinkService: () => PDFJSLinkService;
+    getDocument: (url: string) => Promise<PDFJSDocument>;
+    disableWorker: boolean;
+};
