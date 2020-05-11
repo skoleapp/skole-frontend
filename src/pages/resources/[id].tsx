@@ -74,7 +74,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const created = R.propOr(undefined, 'created', resource) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(resourceTitle);
     const { onClose: closeOptions } = drawerProps;
-
     const { setPages, setCurrentPage } = usePDFViewerContext();
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
