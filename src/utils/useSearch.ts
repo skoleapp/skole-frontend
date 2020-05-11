@@ -1,3 +1,4 @@
+import { InputProps } from '@material-ui/core';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
@@ -14,17 +15,15 @@ interface SearchUrl extends UrlObject {
 interface UseSearch {
     handleSubmit: (e: SyntheticEvent) => void;
     searchUrl: SearchUrl;
-    inputProps: {
-        value: string;
-        onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-        placeholder: string;
-    };
+    inputProps: InputProps;
 }
 
 export const useSearch = (): UseSearch => {
     const [value, setValue] = useState('');
     const { t } = useTranslation();
     const { user } = useAuthContext();
+    const placeholder = t('forms:searchCourses');
+    const autoComplete = 'off';
 
     // Construct a query from user's selected school and subject.
     const school = R.pathOr(undefined, ['school', 'id'], user);
@@ -39,6 +38,6 @@ export const useSearch = (): UseSearch => {
     };
 
     const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
-    const inputProps = { value, onChange, placeholder: t('forms:searchCourses'), autoComplete: 'off' };
-    return { handleSubmit, searchUrl, inputProps };
+
+    return { handleSubmit, searchUrl, inputProps: { value, onChange, placeholder, autoComplete } };
 };
