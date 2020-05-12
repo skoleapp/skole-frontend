@@ -6,6 +6,7 @@ import Maybe from 'graphql/tsutils/Maybe';
 import { NextPageContext } from 'next';
 import { Extent } from 'ol/extent';
 import { Group } from 'ol/layer';
+import { PDFDocumentProxy } from 'pdfjs-dist';
 import { MutableRefObject, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
 
@@ -236,7 +237,8 @@ export interface ScaledPosition {
     usePdfCoordinates?: boolean;
 }
 
-export interface NewHighlight {
+export interface Highlight {
+    id: string;
     position: ScaledPosition;
     content: {
         text?: string;
@@ -247,10 +249,6 @@ export interface NewHighlight {
         emoji: string;
     };
 }
-
-export type Highlight = NewHighlight & {
-    id: string;
-};
 
 export type ViewportHighlight = Highlight & {
     position: Position;
@@ -263,11 +261,7 @@ export interface ViewPort {
     height: number;
 }
 
-export interface PDFJSDocument {
-    numPages: number;
-}
-
-export type PDFJSViewer = {
+export interface PDFJSViewer {
     container: HTMLDivElement;
     viewer: HTMLDivElement;
     getPageView: (
@@ -278,24 +272,24 @@ export type PDFJSViewer = {
         div: HTMLDivElement;
         canvas: HTMLCanvasElement;
     };
-    setDocument: (document: PDFJSDocument) => Promise<void>;
+    setDocument: (document: PDFDocumentProxy) => Promise<void>;
     scrollPageIntoView: (options: { pageNumber: number; destArray: Array<{}> }) => void;
     currentScaleValue: string;
-};
+}
 
 export type PDFJSLinkService = {
     setDocument: (document: Record<string, {}>) => void;
     setViewer: (viewer: PDFJSViewer) => void;
 };
 
-export type PDFJS = {
+export interface PDFJS {
     TextLayerBuilder: {
         prototype: {
             _bindMouse: () => void;
         };
     };
-    PDFViewer: (options: Record<string, any>) => PDFJSViewer;
+    PDFViewer: (options: Record<string, {}>) => PDFJSViewer;
     PDFLinkService: () => PDFJSLinkService;
-    getDocument: (url: string) => Promise<PDFJSDocument>;
+    getDocument: (url: string) => Promise<PDFDocumentProxy>;
     disableWorker: boolean;
-};
+}
