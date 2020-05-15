@@ -1,4 +1,5 @@
-import React, { ReactElement, useState, useEffect, useRef } from 'react';
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import React, { Children, cloneElement, ReactElement, useEffect, useRef, useState } from 'react';
 import { LTWH } from 'src/types';
 import { usePrevious } from 'src/utils';
 
@@ -12,79 +13,52 @@ interface Props {
 const clamp = (value: number, left: number, right: number): number => Math.min(Math.max(value, left), right);
 
 const TipContainer: React.FC<Props> = ({ children, style, scrollTop, pageBoundingRect }) => {
-    const [state, setState] = useState({ height: 0, width: 0 })
+    const [state, setState] = useState({ height: 0, width: 0 });
     const prevChildren = usePrevious(children);
-    const ref = useRef()
+    const ref = useRef<HTMLDivElement>(null);
 
-    const updatePosition = () => {
-        const { offsetHeight, offsetWidth } = ref.current;
-
-        this.setState({
-            height: offsetHeight,
-            width: offsetWidth,
-        });
+    const updatePosition = (): void => {
+        if (!!ref.current) {
+            const { offsetHeight, offsetWidth } = ref.current;
+            setState({ height: offsetHeight, width: offsetWidth });
+        }
     };
 
     useEffect(() => {
         if (prevChildren !== children) {
-            updatePosition()
+            updatePosition();
         }
-    }, [prevChildren])
+    }, [prevChildren]);
 
-    componentDidUpdate(nextProps: Props) {
-        if (this.props.children !== nextProps.children) {
-            this.updatePosition();
-        }
-    }
+    const { height, width } = state;
+    const isStyleCalculationInProgress = width === 0 && height === 0;
+    const visibility = isStyleCalculationInProgress ? 'hidden' : 'visible';
+    const shouldMove = style.top - height - 5 < scrollTop;
+    const top = shouldMove ? style.bottom + 5 : style.top - height - 5;
+    const left = clamp(style.left - width / 2, 0, pageBoundingRect.width - width);
 
-    componentDidMount() {
-        setTimeout(this.updatePosition, 0);
-    }
+    const containerStyle: CSSProperties = {
+        visibility,
+        top,
+        left,
+    };
 
-    render() {
-        const { children, style, scrollTop, pageBoundingRect } = this.props;
+    const childrenWithProps = Children.map(children, child =>
+        cloneElement(child, {
+            onUpdate: () =>
+                setState({
+                    width: 0,
+                    height: 0,
+                }),
+            popup: {
+                position: shouldMove ? 'below' : 'above',
+            },
+        }),
+    );
 
-        const { height, width } = this.state;
-
-        const isStyleCalculationInProgress = width === 0 && height === 0;
-
-        const shouldMove = style.top - height - 5 < scrollTop;
-
-        const top = shouldMove ? style.bottom + 5 : style.top - height - 5;
-
-        const left = clamp(style.left - width / 2, 0, pageBoundingRect.width - width);
-
-        const childrenWithProps = React.Children.map(children, child =>
-            React.cloneElement(child, {
-                onUpdate: () => {
-                    this.setState(
-                        {
-                            width: 0,
-                            height: 0,
-                        },
-                        () => {
-                            setTimeout(this.updatePosition, 0);
-                        },
-                    );
-                },
-                popup: {
-                    position: shouldMove ? 'below' : 'above',
-                },
-            }),
-        );
-
-        return (
-            <div
-                className="PdfHighlighter__tip-container"
-                style={{
-                    visibility: isStyleCalculationInProgress ? 'hidden' : 'visible',
-                    top,
-                    left,
-                }}
-                ref="container"
-            >
-                {childrenWithProps}
-            </div>
-        );
-    }
-}
+    return (
+        <div style={containerStyle} ref={ref}>
+            {childrenWithProps}
+        </div>
+    );
+};
