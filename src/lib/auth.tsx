@@ -29,7 +29,7 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
         useEffect(() => {
             window.addEventListener('storage', syncLogout);
 
-            // We need to do the redirect here in case the authentication fails.
+            // Redirect in case of authentication fail.
             if (!user) {
                 Router.push({ pathname: '/login', query: { next: asPath } });
             }
