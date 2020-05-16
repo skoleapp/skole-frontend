@@ -226,13 +226,13 @@ export interface Scaled {
 
 export interface Position {
     boundingRect: LTWH;
-    rects: Array<LTWH>;
+    rects: LTWH[];
     pageNumber: number;
 }
 
 export interface ScaledPosition {
     boundingRect: Scaled;
-    rects: Array<Scaled>;
+    rects: Scaled[];
     pageNumber: number;
     usePdfCoordinates?: boolean;
 }
@@ -255,8 +255,8 @@ export type ViewportHighlight = Highlight & {
 };
 
 export interface ViewPort {
-    convertToPdfPoint: (x: number, y: number) => Array<number>;
-    convertToViewportRectangle: (pdfRectangle: Array<number>) => Array<number>;
+    convertToPdfPoint: (x: number, y: number) => number[];
+    convertToViewportRectangle: (pdfRectangle: number[]) => number[];
     width: number;
     height: number;
 }
@@ -273,7 +273,7 @@ export interface PDFJSViewer {
         canvas: HTMLCanvasElement;
     };
     setDocument: (document: PDFDocumentProxy) => Promise<void>;
-    scrollPageIntoView: (options: { pageNumber: number; destArray: Array<unknown> }) => void;
+    scrollPageIntoView: (options: { pageNumber: number; destArray: unknown[] }) => void;
     currentScaleValue: string;
 }
 

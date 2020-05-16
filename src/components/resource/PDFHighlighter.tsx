@@ -52,7 +52,7 @@ interface Props {
         screenshot: (position: LTWH) => string,
         isScrolledTo: boolean,
     ) => ReactElement;
-    highlights: Array<Highlight>;
+    highlights: Highlight[];
     onScrollChange: () => void;
     scrollRef: (scrollTo: (highlight: Highlight) => void) => void;
     pdfDocument: PDFDocumentProxy;
@@ -128,10 +128,10 @@ export const PDFHighlighter: React.FC<Props> = ({
         );
     };
 
-    const groupHighlightsByPage = (highlights: Array<Highlight>): { [pageNumber: string]: Array<Highlight> } => {
+    const groupHighlightsByPage = (highlights: Highlight[]): { [pageNumber: string]: Highlight[] } => {
         return [...highlights, state.ghostHighlight]
             .filter(Boolean)
-            .reduce((res: { [pageNumber: number]: Array<Highlight> }, highlight) => {
+            .reduce((res: { [pageNumber: number]: Highlight[] }, highlight) => {
                 const { pageNumber } = (highlight as Highlight).position;
                 res[pageNumber] = res[pageNumber] || [];
                 res[pageNumber].push(highlight as Highlight);
@@ -277,7 +277,7 @@ export const PDFHighlighter: React.FC<Props> = ({
                 () =>
                     setState({
                         ...state,
-                        ghostHighlight: { position: scaledPosition },
+                        ghostHighlight: { position: scaledPosition } as Highlight,
                     }),
             ),
         );
@@ -450,7 +450,7 @@ export const PDFHighlighter: React.FC<Props> = ({
                         ghostHighlight: {
                             position: scaledPosition,
                             content: { image },
-                        },
+                        } as Highlight,
                     }),
             ),
         );

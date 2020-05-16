@@ -69,7 +69,7 @@ export const getAreaAsPng = (canvas: HTMLCanvasElement, position: LTWH): string 
     return newCanvas.toDataURL('image/png');
 };
 
-export const getBoundingRect = (clientRects: Array<LTWH>): LTWH => {
+export const getBoundingRect = (clientRects: LTWH[]): LTWH => {
     const rects = Array.from(clientRects).map(rect => {
         const { left, top, width, height } = rect;
         const X0 = left;
@@ -100,8 +100,8 @@ export const getBoundingRect = (clientRects: Array<LTWH>): LTWH => {
     };
 };
 
-export const optimizeClientRects = (clientRects: Array<LTWH>): Array<LTWH> => {
-    const sort = (rects: Array<LTWH>): Array<LTWH> => {
+export const optimizeClientRects = (clientRects: LTWH[]): LTWH[] => {
+    const sort = (rects: LTWH[]): LTWH[] => {
         return rects.sort((A, B) => {
             const top = A.top - B.top;
 
@@ -180,7 +180,7 @@ export const optimizeClientRects = (clientRects: Array<LTWH>): Array<LTWH> => {
     return firstPass.filter(rect => !toRemove.has(rect));
 };
 
-export const getClientRects = (range: Range, containerEl: HTMLElement, shouldOptimize = true): Array<LTWH> => {
+export const getClientRects = (range: Range, containerEl: HTMLElement, shouldOptimize = true): LTWH[] => {
     const clientRects = Array.from(range.getClientRects());
     const offset = containerEl.getBoundingClientRect();
 
