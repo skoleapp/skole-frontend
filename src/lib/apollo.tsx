@@ -14,19 +14,17 @@ import React from 'react';
 
 import { env } from '../config';
 import { i18n } from '../i18n';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Ctx = any; // TODO: Find proper types for this.
+import { ApolloContext } from '../types';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
 const createApolloClient = (
     initialState: NormalizedCacheObject = {},
-    ctx?: Ctx,
+    ctx?: ApolloContext,
 ): ApolloClient<NormalizedCacheObject> => {
     const isBrowser = typeof window !== 'undefined';
     const uri = isBrowser ? env.API_URL : env.BACKEND_URL;
-    const token = !!ctx ? nextCookie(ctx).token : cookie.get('token');
+    const token = !!ctx ? nextCookie(ctx as { req?: { headers: { cookie?: string } } }).token : cookie.get('token');
 
     const httpLink = createUploadLink({
         uri: uri + 'graphql/',
@@ -51,7 +49,7 @@ const createApolloClient = (
 
 export const initApolloClient = (
     initialState?: NormalizedCacheObject,
-    ctx?: Ctx,
+    ctx?: ApolloContext,
 ): ApolloClient<NormalizedCacheObject> => {
     if (typeof window === 'undefined') {
         return createApolloClient(initialState, ctx);
@@ -64,7 +62,7 @@ export const initApolloClient = (
     return apolloClient;
 };
 
-export const initOnContext = (ctx: Ctx): Ctx => {
+export const initOnContext = (ctx: ApolloContext): ApolloContext => {
     const apolloClient = ctx.apolloClient || initApolloClient(ctx.apolloState || {}, ctx);
     ctx.apolloClient = apolloClient;
     apolloClient.toJSON = (): null => null;
@@ -73,10 +71,10 @@ export const initOnContext = (ctx: Ctx): Ctx => {
 
 // Wrap `getServerSideProps` with this for all pages that require server-side apollo client.
 export const withApolloSSR = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
-    const getServerSideProps: GetServerSideProps = async (ctx: Ctx) => {
-        const { apolloClient } = initOnContext(ctx);
+    const getServerSideProps: GetServerSideProps = async ctx => {
+        const { apolloClient } = initOnContext(ctx as ApolloContext);
         const result = await getServerSidePropsInner(ctx);
-        const { AppTree } = ctx;
+        const { AppTree } = ctx as ApolloContext;
 
         if (ctx.res && ctx.res.finished) {
             return result;
@@ -98,7 +96,7 @@ export const withApolloSSR = (getServerSidePropsInner: GetServerSideProps): GetS
             props: {
                 ...result.props,
                 apolloState: apolloClient.cache.extract(),
-                apolloClient: ctx.apolloClient.toJSON(),
+                apolloClient: (ctx as ApolloContext).apolloClient.toJSON(),
             },
         };
     };

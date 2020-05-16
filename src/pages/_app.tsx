@@ -15,10 +15,11 @@ import NProgress from 'nprogress';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ApolloContext } from 'src/types';
 
 import { ContextProvider } from '../context';
 import { appWithTranslation } from '../i18n';
-import { initApolloClient, initOnContext, pageView, PWAProvider } from '../lib';
+import { clientLogout, initApolloClient, initOnContext, pageView, PWAProvider } from '../lib';
 import { GlobalStyle, theme } from '../styles';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -52,6 +53,11 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
         if (jssStyles && jssStyles.parentNode) {
             jssStyles.parentNode.removeChild(jssStyles);
         }
+
+        if (!user) {
+            // Log out if authentication fails.
+            clientLogout();
+        }
     }, []);
 
     return (
@@ -72,7 +78,7 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
 };
 
 SkoleApp.getInitialProps = async (ctx: AppContext): Promise<Props> => {
-    const { apolloClient } = initOnContext(ctx.ctx);
+    const { apolloClient } = initOnContext(ctx.ctx as ApolloContext);
     const pageProps = (await App.getInitialProps(ctx)) as AppProps;
     const userAgent = R.path(['ctx', 'req', 'headers', 'user-agent'], ctx) as string;
     let user = null;
