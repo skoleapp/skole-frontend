@@ -46,7 +46,7 @@ export const scaledToViewport = (scaled: Scaled, viewport: ViewPort, usePdfCoord
     };
 };
 
-export const getAreaAsPNG = (canvas: HTMLCanvasElement, position: LTWH): string => {
+export const getAreaAsPng = (canvas: HTMLCanvasElement, position: LTWH): string => {
     const { left, top, width, height } = position;
 
     // TODO: Cache this?

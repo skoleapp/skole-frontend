@@ -273,12 +273,12 @@ export interface PDFJSViewer {
         canvas: HTMLCanvasElement;
     };
     setDocument: (document: PDFDocumentProxy) => Promise<void>;
-    scrollPageIntoView: (options: { pageNumber: number; destArray: Array<{}> }) => void;
+    scrollPageIntoView: (options: { pageNumber: number; destArray: Array<unknown> }) => void;
     currentScaleValue: string;
 }
 
 export type PDFJSLinkService = {
-    setDocument: (document: Record<string, {}>) => void;
+    setDocument: (document: PDFDocumentProxy) => void;
     setViewer: (viewer: PDFJSViewer) => void;
 };
 

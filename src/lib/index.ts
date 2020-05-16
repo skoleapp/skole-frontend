@@ -5,7 +5,7 @@ export { PWAProvider } from './pwa';
 export {
     viewportToScaled,
     scaledToViewport,
-    getAreaAsPNG,
+    getAreaAsPng,
     getBoundingRect,
     optimizeClientRects,
     getClientRects,
