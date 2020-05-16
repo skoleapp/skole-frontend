@@ -1,7 +1,8 @@
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import React, { Children, cloneElement, ReactElement, useEffect, useRef, useState } from 'react';
-import { LTWH } from 'src/types';
-import { usePrevious } from 'src/utils';
+
+import { LTWH } from '../../types';
+import { usePrevious } from '../../utils';
 
 interface Props {
     children: ReactElement;
@@ -12,7 +13,7 @@ interface Props {
 
 const clamp = (value: number, left: number, right: number): number => Math.min(Math.max(value, left), right);
 
-const TipContainer: React.FC<Props> = ({ children, style, scrollTop, pageBoundingRect }) => {
+export const TipContainer: React.FC<Props> = ({ children, style, scrollTop, pageBoundingRect }) => {
     const [state, setState] = useState({ height: 0, width: 0 });
     const prevChildren = usePrevious(children);
     const ref = useRef<HTMLDivElement>(null);
@@ -43,7 +44,7 @@ const TipContainer: React.FC<Props> = ({ children, style, scrollTop, pageBoundin
         left,
     };
 
-    const childrenWithProps = Children.map(children, child =>
+    const childrenWithProps = Children.map<ReactElement, ReactElement>(children, child =>
         cloneElement(child, {
             onUpdate: () =>
                 setState({
