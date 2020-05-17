@@ -208,6 +208,15 @@ export interface SkoleContextType {
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
 
+interface CustomApolloClient extends ApolloClient<NormalizedCacheObject> {
+    toJSON: () => void;
+}
+
+export interface ApolloContext extends NextPageContext {
+    apolloClient: CustomApolloClient;
+    apolloState: {};
+}
+
 export interface LTWH {
     left: number;
     top: number;
