@@ -15,12 +15,12 @@ import NProgress from 'nprogress';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApolloContext } from 'src/types';
 
 import { ContextProvider } from '../context';
 import { appWithTranslation } from '../i18n';
-import { clientLogout, initApolloClient, initOnContext, pageView, PWAProvider } from '../lib';
+import { initApolloClient, initOnContext, pageView, PWAProvider } from '../lib';
 import { GlobalStyle, theme } from '../styles';
+import { ApolloContext } from '../types';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeError', () => NProgress.done());
@@ -52,11 +52,6 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
 
         if (jssStyles && jssStyles.parentNode) {
             jssStyles.parentNode.removeChild(jssStyles);
-        }
-
-        if (!user) {
-            // Log out if authentication fails.
-            clientLogout();
         }
     }, []);
 
@@ -92,7 +87,7 @@ SkoleApp.getInitialProps = async (ctx: AppContext): Promise<Props> => {
 
     // We sniff the user agent in order to pre-populate the context value about the user's device.
     const isMobileGuess = !!userAgent
-        ? !!userAgent.match('/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i')
+        ? !!userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i)
         : null;
 
     return { ...pageProps, isMobileGuess, user };
