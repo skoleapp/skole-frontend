@@ -6,6 +6,7 @@ import { Highlight } from '../../types';
 import { PDFLoader } from './PDFLoader';
 import { LoadingBox } from '../shared';
 import { PDFHighlighter } from './PDFHighlighter';
+import { HighlightTip } from './HighlightTip';
 // import URLSearchParams from "url-search-params";
 
 // import testHighlights from "./test-highlights";
@@ -270,14 +271,15 @@ export const SecondaryPDFViewer: React.FC<Props> = ({
         scrollToHighlight();
     }
 
-    const handleSelectionFinished = (position, content, hideTipAndSelection, transformSelection) => (
-        <Tip
-            onOpen={transformSelection}
-            onConfirm={comment => {
-                this.addHighlight({ content, position, comment });
+    const handleConfirmHighlight = comment => {
+        addHighlight({ content, position, comment });
+        hideTipAndSelection();
+    }
 
-                hideTipAndSelection();
-            }}
+    const handleSelectionFinished = (position, content, hideTipAndSelection, transformSelection) => (
+        <HighlightTip
+            onOpen={transformSelection}
+            onConfirm={handleConfirmHighlight}
         />
     )
 
