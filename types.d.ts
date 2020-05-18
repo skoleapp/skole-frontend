@@ -1,2 +1,2 @@
 declare module 'react-image-file-resizer';
-declare module 'react-pdf-highlighter';
+declare module 'pdfjs-dist/web/pdf_viewer';

@@ -1,4 +1,5 @@
 import 'pdfjs-dist/web/pdf_viewer.css';
+import 'pdfjs-dist/web/pdf_viewer.js';
 
 import { Box } from '@material-ui/core';
 import { PDFDocumentProxy } from 'pdfjs-dist';
@@ -86,9 +87,9 @@ export const PDFHighlighter: React.FC<Props> = ({
         tip: null,
     });
 
-    const viewerRef = useRef<PDFViewer>(null);
+    const viewerRef = useRef<PDFJSViewer | null>(null);
     const viewer = viewerRef.current as PDFJSViewer;
-    const linkServiceRef = useRef<PDFLinkService>(null);
+    const linkServiceRef = useRef<PDFJSLinkService | null>(null);
     const linkService = linkServiceRef.current as PDFJSLinkService;
     const containerRef = useRef<HTMLDivElement>(null);
     const handleContextMenu = (e: SyntheticEvent): void => e.preventDefault();
@@ -403,7 +404,7 @@ export const PDFHighlighter: React.FC<Props> = ({
         hideTipAndSelection();
     };
 
-    const toggleTextSelection = (flag: boolean): void => {
+    const toggleTextSelection = (flag: boolean) => (): void => {
         viewer.viewer.classList.toggle('PdfHighlighter--disable-selection', flag);
     };
 
@@ -411,8 +412,8 @@ export const PDFHighlighter: React.FC<Props> = ({
         setState({ ...state, isAreaSelectionInProgress: isVisible });
     };
 
-    const handleShouldStart = (e: MouseEvent): void => {
-        enableAreaSelection(e) && e.target instanceof HTMLElement && Boolean(e.target.closest('.page'));
+    const handleShouldStart = (e: MouseEvent): boolean => {
+        return enableAreaSelection(e) && e.target instanceof HTMLElement && Boolean(e.target.closest('.page'));
     };
 
     const handleSelection = (startTarget: HTMLElement, boundingRect: LTWH, resetSelection: () => void): void => {

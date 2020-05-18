@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef } from 'react';
 import { Router } from "../../i18n"
-import { Highlight } from '../../types';
+import { Highlight, ScaledPosition } from '../../types';
 import { PDFLoader } from './PDFLoader';
 import { LoadingBox } from '../shared';
 import { PDFHighlighter } from './PDFHighlighter';
@@ -250,7 +250,7 @@ export const SecondaryPDFViewer: React.FC<Props> = ({
         scrollToHighlight();
     }, [query.highlight]);
 
-    const updateHighlight = (highlightId: string, position: Record<string, {}>, content: Record<string, {}>): void => {
+    const updateHighlight = (highlightId: string, position: ScaledPosition, content: Record<string, {}>): void => {
         const newHighlights = highlights.map(h =>
             h.id === highlightId
                 ? {
@@ -271,15 +271,16 @@ export const SecondaryPDFViewer: React.FC<Props> = ({
         scrollToHighlight();
     }
 
-    const handleConfirmHighlight = comment => {
-        addHighlight({ content, position, comment });
-        hideTipAndSelection();
-    }
-
-    const handleSelectionFinished = (position, content, hideTipAndSelection, transformSelection) => (
+    const handleSelectionFinished = (position: ScaledPosition, content: Record<string, {}>, hideTipAndSelection: () => void, transformSelection: () => void) => (
         <HighlightTip
             onOpen={transformSelection}
-            onConfirm={handleConfirmHighlight}
+            onConfirm={(comment: {
+                text: string;
+                emoji: string;
+            }): void => {
+                addHighlight({ content, position, comment });
+                hideTipAndSelection();
+            }}
         />
     )
 
