@@ -121,6 +121,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
                         variant="outlined"
                         helperText={t('forms:usernameHelperText')}
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         placeholder={t('forms:email')}
@@ -130,6 +131,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
                         variant="outlined"
                         helperText={t('forms:emailHelperText')}
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         name="school"
@@ -159,29 +161,29 @@ const RegisterPage: NextPage<I18nProps> = () => {
                         name="password"
                         component={TextField}
                         variant="outlined"
-                        autoComplete="new-password"
                         type="password"
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         placeholder={t('forms:confirmPassword')}
                         label={t('forms:confirmPassword')}
                         name="confirmPassword"
                         type="password"
-                        autoComplete="off"
                         component={TextField}
                         variant="outlined"
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         placeholder={t('forms:betaCode')}
                         label={t('forms:betaCode')}
                         name="code"
-                        autoComplete="off"
                         component={TextField}
                         variant="outlined"
                         fullWidth
                         disabled={!!query.code}
+                        autoComplete="off"
                     />
                     <FormControl fullWidth>
                         <Typography variant="body2" color="textSecondary">

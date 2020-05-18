@@ -84,6 +84,7 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
                         component={TextField}
                         fullWidth
                         type="password"
+                        autoComplete="off"
                     />
                     <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
                 </Form>

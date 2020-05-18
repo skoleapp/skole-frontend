@@ -87,6 +87,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                         label={t('forms:usernameOrEmail')}
                         variant="outlined"
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         placeholder={t('forms:password')}
@@ -96,6 +97,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                         variant="outlined"
                         type="password"
                         fullWidth
+                        autoComplete="off"
                     />
                     <FormSubmitSection submitButtonText={t('common:login')} {...props} />
                     <Box marginY="1rem">
