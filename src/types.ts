@@ -246,17 +246,21 @@ export interface ScaledPosition {
     usePdfCoordinates?: boolean;
 }
 
+export interface HighlightContent {
+    text?: string;
+    image?: string;
+}
+
+export interface HighlightComment {
+    text: string;
+    emoji: string;
+}
+
 export interface Highlight {
     id: string;
     position: ScaledPosition;
-    content: {
-        text?: string;
-        image?: string;
-    };
-    comment: {
-        text: string;
-        emoji: string;
-    };
+    content: HighlightContent;
+    comment: HighlightComment;
 }
 
 export type ViewportHighlight = Highlight & {

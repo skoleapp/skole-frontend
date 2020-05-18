@@ -19,6 +19,7 @@ import {
 } from '../../lib';
 import {
     Highlight,
+    HighlightComment,
     LTWH,
     PDFJSLinkService,
     PDFJSViewer,
@@ -37,7 +38,7 @@ interface State {
     range: Range | null;
     tip: {
         highlight: ViewportHighlight;
-        callback: (highlight: ViewportHighlight) => ReactElement;
+        callback: (highlight: ViewportHighlight) => HighlightComment;
     } | null;
     isAreaSelectionInProgress: boolean;
     scrolledToHighlightId: string;

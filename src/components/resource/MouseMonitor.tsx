@@ -17,11 +17,8 @@ export const MouseMonitor: React.FC<Props> = ({ onMoveAway, paddingX, paddingY, 
 
         // TODO: See if possible to optimize.
         const { left, top, width, height } = containerRef.current.getBoundingClientRect();
-
         const inBoundsX = clientX > left - paddingX && clientX < left + width + paddingX;
-
         const inBoundsY = clientY > top - paddingY && clientY < top + height + paddingY;
-
         const isNear = inBoundsX && inBoundsY;
 
         if (!isNear) {

@@ -1,12 +1,16 @@
 import { Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState, useRef } from 'react';
-import { Router } from "../../i18n"
-import { Highlight, ScaledPosition } from '../../types';
-import { PDFLoader } from './PDFLoader';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
+
+import { Router } from '../../i18n';
+import { Highlight, HighlightComment, LTWH, Scaled, ScaledPosition, ViewportHighlight } from '../../types';
 import { LoadingBox } from '../shared';
-import { PDFHighlighter } from './PDFHighlighter';
+import { AreaHighlight } from './AreaHighlight';
+import { Highlight as HighlightComponent } from './Highlight';
+import { HighlightPopup } from './HighlightPopup';
 import { HighlightTip } from './HighlightTip';
+import { PDFHighlighter } from './PDFHighlighter';
+import { PDFLoader } from './PDFLoader';
 // import URLSearchParams from "url-search-params";
 
 // import testHighlights from "./test-highlights";
@@ -16,19 +20,8 @@ import { HighlightTip } from './HighlightTip';
 // import "./style/App.css";
 
 interface HighLightPopupProps {
-    comment: {
-        text: string;
-        emoji: string;
-    };
+    comment: {};
 }
-
-const HighlightPopup: React.FC<HighLightPopupProps> = ({ comment }) => {
-    return comment.text ? (
-        <Box>
-            {comment.emoji} {comment.text}
-        </Box>
-    ) : null;
-};
 
 const testHighlights = [
     {
@@ -231,12 +224,12 @@ export const SecondaryPDFViewer: React.FC<Props> = ({
     highlights: initialHighlights = testHighlights,
 }) => {
     const [highlights, setHighlights] = useState<Highlight[]>(initialHighlights);
-    const { query, pathname, } = useRouter();
+    const { query, pathname } = useRouter();
     const resetHash = (): Promise<boolean> => Router.push(pathname);
-    const scrollViewerToRef = useRef<Function | null>(null)
-    const scrollViewerTo = scrollViewerToRef.current as Function
-    const getHighlightById = (id: string | string[]) => highlights.find(highlight => highlight.id === id);
-    const addHighlight = (highlight: Highlight) => setHighlights([...highlights, highlight]);
+    const scrollViewerToRef = useRef<Function | null>(null);
+    const scrollViewerTo = scrollViewerToRef.current as Function;
+    const getHighlightById = (id: string | string[]) => highlights.find(highlight => highlight.id === id);
+    const addHighlight = (highlight: Omit<Highlight, 'id'>) => setHighlights([...highlights, highlight as Highlight]);
 
     const scrollToHighlight = (): void => {
         const highlight = getHighlightById(query.highlight);
@@ -250,7 +243,7 @@ export const SecondaryPDFViewer: React.FC<Props> = ({
         scrollToHighlight();
     }, [query.highlight]);
 
-    const updateHighlight = (highlightId: string, position: ScaledPosition, content: Record<string, {}>): void => {
+    const updateHighlight = (highlightId: string, position: object, content: object): void => {
         const newHighlights = highlights.map(h =>
             h.id === highlightId
                 ? {
@@ -264,82 +257,92 @@ export const SecondaryPDFViewer: React.FC<Props> = ({
         setHighlights(newHighlights);
     };
 
-    const handleEnableAreaSelection = (e: MouseEvent) => e.altKey
+    const handleEnableAreaSelection = (e: MouseEvent) => e.altKey;
 
     const handleScrollRef = (scrollTo: (highlight: Highlight) => void) => {
-        scrollViewerToRef.current = scrollTo
+        scrollViewerToRef.current = scrollTo;
         scrollToHighlight();
-    }
+    };
 
-    const handleSelectionFinished = (position: ScaledPosition, content: Record<string, {}>, hideTipAndSelection: () => void, transformSelection: () => void) => (
+    const handleSelectionFinished = (
+        position: ScaledPosition,
+        content: Record<string, {}>,
+        hideTipAndSelection: () => void,
+        transformSelection: () => void,
+    ): ReactElement => (
         <HighlightTip
             onOpen={transformSelection}
-            onConfirm={(comment: {
-                text: string;
-                emoji: string;
-            }): void => {
+            onConfirm={(comment: { text: string; emoji: string }): void => {
                 addHighlight({ content, position, comment });
                 hideTipAndSelection();
             }}
         />
-    )
+    );
 
     const handleHighlightTransform = (
-        highlight,
-        index,
-        setTip,
-        hideTip,
-        viewportToScaled,
-        screenshot,
-        isScrolledTo,
-    ) => {
-        const isTextHighlight = !Boolean(highlight.content && highlight.content.image);
+        highlight: ViewportHighlight,
+        index: number,
+        setTip: (highlight: ViewportHighlight, callback: (highlight: ViewportHighlight) => ReactElement) => void,
+        hideTip: () => void,
+        viewportToScaled: (boundingRect: LTWH) => Scaled,
+        screenshot: (boundingRect: LTWH) => string,
+        isScrolledTo: boolean,
+    ): ReactElement => {
+        const isTextHighlight = !!highlight.content && !!highlight.content.image;
+
+        const handleAreaHighlightChange = (boundingRect: LTWH): void => {
+            updateHighlight(
+                highlight.id,
+                { boundingRect: viewportToScaled(boundingRect) },
+                { image: screenshot(boundingRect) },
+            );
+        };
 
         const component = isTextHighlight ? (
-            <Highlight
-                isScrolledTo={isScrolledTo}
-                position={highlight.position}
-                comment={highlight.comment}
-            />
+            <HighlightComponent isScrolledTo={isScrolledTo} position={highlight.position} comment={highlight.comment} />
         ) : (
-            <AreaHighlight
-                highlight={highlight}
-                onChange={boundingRect => {
-                    this.updateHighlight(
-                        highlight.id,
-                        { boundingRect: viewportToScaled(boundingRect) },
-                        { image: screenshot(boundingRect) },
-                    );
-                }}
-            />
+            <AreaHighlight highlight={highlight} onChange={handleAreaHighlightChange} />
         );
 
+        const renderPopupContent = ({ text, emoji }: HighlightComment): ReactElement => (
+            <Box>
+                {emoji} {text}
+            </Box>
+        );
+
+        const handleMouseOver = (popupContent: ReactElement): void => {
+            setTip(highlight, () => popupContent);
+        };
+
         return (
-            <Popup
-                popupContent={<HighlightPopup {...highlight} />}
-                onMouseOver={popupContent => setTip(highlight, highlight => popupContent)}
+            <HighlightPopup
+                popupContent={renderPopupContent(highlight.comment)}
+                onMouseOver={handleMouseOver}
                 onMouseOut={hideTip}
                 key={index}
-                children={component}
-            />
+            >
+                {component}
+            </HighlightPopup>
         );
-    }
+    };
+
+    const handleError = (err: Error): void => console.log(err);
 
     return (
         <Box>
-                <PDFLoader url={url} beforeLoad={<LoadingBox />} onError={(err: Error) => console.log(err)}>
-                    {pdfDocument => (
-                        <PDFHighlighter
-                            pdfDocument={pdfDocument}
-                            enableAreaSelection={handleEnableAreaSelection}
-                            onScrollChange={resetHash}
-                            scrollRef={handleScrollRef}
-                            onSelectionFinished={handleSelectionFinished}
-                            highlightTransform={handleHighlightTransform}
-                            highlights={highlights}
-                        />
-                    )}
-                </PdfLoader>
+            <PDFLoader url={url} beforeLoad={<LoadingBox />} onError={handleError}>
+                {(pdfDocument): ReactElement => (
+                    <PDFHighlighter
+                        pdfDocument={pdfDocument}
+                        enableAreaSelection={handleEnableAreaSelection}
+                        onScrollChange={resetHash}
+                        scrollRef={handleScrollRef}
+                        onSelectionFinished={handleSelectionFinished}
+                        highlightTransform={handleHighlightTransform}
+                        highlights={highlights}
+                    />
+                )}
+            </PDFLoader>
         </Box>
     );
 };
