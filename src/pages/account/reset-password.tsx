@@ -146,6 +146,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
                         variant="outlined"
                         helperText={t('reset-password:helpText')}
                         fullWidth
+                        autoComplete="off"
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
@@ -176,6 +177,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
                         variant="outlined"
                         type="password"
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         placeholder={t('forms:confirmNewPassword')}
@@ -185,6 +187,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
                         variant="outlined"
                         type="password"
                         fullWidth
+                        autoComplete="off"
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>

@@ -233,9 +233,9 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
                             label={t('forms:courseName')}
                             placeholder={t('forms:courseName')}
                             variant="outlined"
-                            autoComplete="off"
                             component={TextField}
                             fullWidth
+                            autoComplete="off"
                         />
                     )}
                     <Field
@@ -243,9 +243,9 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
                         label={t('forms:courseCode')}
                         placeholder={t('forms:courseCode')}
                         variant="outlined"
-                        autoComplete="off"
                         component={TextField}
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         name="subject"

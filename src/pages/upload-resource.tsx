@@ -195,9 +195,9 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
                         label={t('forms:resourceTitle')}
                         placeholder={t('forms:resourceTitle')}
                         variant="outlined"
-                        autoComplete="off"
                         component={TextField}
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         name="resourceType"

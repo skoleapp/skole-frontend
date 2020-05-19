@@ -104,6 +104,7 @@ const ContactPage: NextPage<I18nProps> = () => {
                         placeholder={t('forms:email')}
                         variant="outlined"
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         name="message"

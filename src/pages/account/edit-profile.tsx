@@ -123,6 +123,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                         label={t('forms:username')}
                         variant="outlined"
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         placeholder={t('forms:email')}
@@ -131,6 +132,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                         label={t('forms:email')}
                         variant="outlined"
                         fullWidth
+                        autoComplete="off"
                     />
                     <Field
                         placeholder={t('forms:bio')}

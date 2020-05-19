@@ -25,7 +25,6 @@ export const useSearch = (): UseSearch => {
     const [value, setValue] = useState('');
     const { t } = useTranslation();
     const { user } = useAuthContext();
-    const placeholder = t('forms:searchCourses');
 
     // Construct a query from user's selected school and subject.
     const school = R.pathOr(undefined, ['school', 'id'], user);
@@ -40,6 +39,6 @@ export const useSearch = (): UseSearch => {
     };
 
     const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
-
-    return { handleSubmit, searchUrl, inputProps: { value, onChange, placeholder } };
+    const inputProps = { value, onChange, placeholder: t('forms:searchCourses'), autoComplete: 'off' };
+    return { handleSubmit, searchUrl, inputProps };
 };
