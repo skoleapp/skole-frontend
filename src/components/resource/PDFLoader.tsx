@@ -1,10 +1,10 @@
-import { getDocument, PDFDocumentProxy, PDFLoadingTask } from 'pdfjs-dist';
-import { ReactElement, useEffect, useState } from 'react';
+import { getDocument, PDFDocumentProxy } from 'pdfjs-dist';
+import { useEffect, useState } from 'react';
 
 interface Props {
     url: string;
-    beforeLoad: ReactElement;
-    children: (pdfDocument: PDFDocumentProxy) => ReactElement;
+    beforeLoad: JSX.Element;
+    children: (pdfDocument: PDFDocumentProxy) => JSX.Element;
     onError: (error: Error) => void;
 }
 

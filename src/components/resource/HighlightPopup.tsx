@@ -1,11 +1,11 @@
 import { Box } from '@material-ui/core';
-import React, { ReactElement, useState } from 'react';
+import React, { useState } from 'react';
 
 import { MouseMonitor } from './MouseMonitor';
 
 interface Props {
-    onMouseOver: (content: ReactElement) => void;
-    popupContent: ReactElement;
+    onMouseOver: (content: JSX.Element) => void;
+    popupContent: JSX.Element;
     onMouseOut: () => void;
 }
 

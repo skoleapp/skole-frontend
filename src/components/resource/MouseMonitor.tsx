@@ -1,10 +1,10 @@
-import React, { cloneElement, ReactElement, useEffect, useRef } from 'react';
+import React, { cloneElement, useEffect, useRef } from 'react';
 
 interface Props {
     onMoveAway: () => void;
     paddingX: number;
     paddingY: number;
-    children: ReactElement;
+    children: JSX.Element;
 }
 
 export const MouseMonitor: React.FC<Props> = ({ onMoveAway, paddingX, paddingY, children, ...props }) => {

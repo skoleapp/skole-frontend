@@ -1,11 +1,11 @@
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
-import React, { Children, cloneElement, ReactElement, useEffect, useRef, useState } from 'react';
+import React, { Children, cloneElement, useEffect, useRef, useState } from 'react';
 
 import { LTWH } from '../../types';
 import { usePrevious } from '../../utils';
 
 interface Props {
-    children: ReactElement;
+    children: JSX.Element;
     style: { top: number; left: number; bottom: number };
     scrollTop: number;
     pageBoundingRect: LTWH;
@@ -44,7 +44,7 @@ export const TipContainer: React.FC<Props> = ({ children, style, scrollTop, page
         left,
     };
 
-    const childrenWithProps = Children.map<ReactElement, ReactElement>(children, child =>
+    const childrenWithProps = Children.map<JSX.Element, JSX.Element>(children, child =>
         cloneElement(child, {
             onUpdate: () =>
                 setState({
