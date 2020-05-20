@@ -1,6 +1,8 @@
 import { Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
+import { getDocument, PDFDocumentProxy } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Router } from '../../i18n';
 import { Highlight, HighlightComment, LTWH, Scaled, ScaledPosition, ViewportHighlight } from '../../types';
@@ -11,22 +13,25 @@ import { HighlightPopup } from './HighlightPopup';
 import { HighlightTip } from './HighlightTip';
 import { mockedHighlights, mockedUrl } from './mock-data';
 import { PDFHighlighter } from './PDFHighlighter';
-import { PDFLoader } from './PDFLoader';
 
 interface Props {
-    url: string;
-    highlights: Highlight[];
+    url?: string;
+    highlights?: Highlight[];
 }
 
 export const SecondaryPDFViewer: React.FC<Props> = ({
     url = mockedUrl,
     highlights: initialHighlights = mockedHighlights,
 }) => {
+    const { t } = useTranslation();
+    const [document, setDocument] = useState<PDFDocumentProxy | null>(null);
+    const [loading, setLoading] = useState(false);
     const [highlights, setHighlights] = useState<Highlight[]>(initialHighlights);
     const { query, pathname } = useRouter();
     const resetHash = (): Promise<boolean> => Router.push(pathname);
     const scrollViewerToRef = useRef<Function | null>(null);
     const scrollViewerTo = scrollViewerToRef.current as Function;
+    const getAreaSelection = (e: MouseEvent): boolean => !!e.altKey;
 
     const getHighlightById = (id: string | string[]): Highlight | undefined => {
         return highlights.find(highlight => highlight.id === id);
@@ -43,6 +48,22 @@ export const SecondaryPDFViewer: React.FC<Props> = ({
             scrollViewerTo(highlight);
         }
     };
+
+    const fetchDocument = async (): Promise<void> => {
+        setLoading(true);
+
+        try {
+            const document = await getDocument({ url }).promise;
+            setDocument(document);
+        } catch {
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchDocument();
+    }, []);
 
     useEffect(() => {
         scrollToHighlight();
@@ -61,8 +82,6 @@ export const SecondaryPDFViewer: React.FC<Props> = ({
 
         setHighlights(newHighlights);
     };
-
-    const getAreaSelection = (e: MouseEvent): boolean => !!e.altKey;
 
     const handleScrollRef = (scrollTo: (highlight: Highlight) => void): void => {
         scrollViewerToRef.current = scrollTo;
@@ -131,21 +150,21 @@ export const SecondaryPDFViewer: React.FC<Props> = ({
         );
     };
 
-    const handleError = (err: Error): void => console.log(err);
-
-    return (
-        <PDFLoader url={url} beforeLoad={<LoadingBox />} onError={handleError}>
-            {(pdfDocument): JSX.Element => (
-                <PDFHighlighter
-                    pdfDocument={pdfDocument}
-                    enableAreaSelection={getAreaSelection}
-                    onScrollChange={resetHash}
-                    scrollRef={handleScrollRef}
-                    onSelectionFinished={handleSelectionFinished}
-                    highlightTransform={handleHighlightTransform}
-                    highlights={highlights}
-                />
-            )}
-        </PDFLoader>
-    );
+    if (loading) {
+        return <LoadingBox text={t('resource:loadingResource')} />;
+    } else if (!!document) {
+        return (
+            <PDFHighlighter
+                pdfDocument={document}
+                enableAreaSelection={getAreaSelection}
+                onScrollChange={resetHash}
+                scrollRef={handleScrollRef}
+                onSelectionFinished={handleSelectionFinished}
+                highlightTransform={handleHighlightTransform}
+                highlights={highlights}
+            />
+        );
+    } else {
+        return <p>{t('resource:errorLoadingResource')}</p>;
+    }
 };

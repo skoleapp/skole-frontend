@@ -141,7 +141,7 @@ export const MouseSelection: React.FC<Props> = ({ onSelection, onDragStart, onDr
                 }
             };
 
-            if (document.body) {
+            if (typeof document !== 'undefined' && !!document.body) {
                 document.body.addEventListener('mouseup', onMouseUp);
             }
         });

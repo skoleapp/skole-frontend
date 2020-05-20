@@ -12,7 +12,8 @@
         "type-check": "tsc",
         "gen": "graphql-codegen --config codegen.yml",
         "format": "yarn prettier --write '**/*.{ts,tsx,js,json}'",
-        "lint": "yarn prettier --check '**/*.{ts,tsx,js,json}' && eslint . --ext .js,.jsx,.ts,.tsx"
+        "lint": "yarn prettier --check '**/*.{ts,tsx,js,json}' && eslint . --ext .js,.jsx,.ts,.tsx",
+        "init-webviewer": "node copy-webviewer-files.js"
     },
     "dependencies": {
         "@apollo/react-common": "3.1.4",
@@ -21,6 +22,7 @@
         "@material-ui/core": "4.8.3",
         "@material-ui/icons": "4.5.1",
         "@material-ui/lab": "4.0.0-alpha.39",
+        "@pdftron/webviewer": "^6.3.1",
         "@types/react-dom": "^16.9.8",
         "@types/react-rnd": "^8.0.0",
         "@types/workbox-window": "4.3.3",
@@ -59,6 +61,7 @@
         "react-dom": "16.9.0",
         "react-i18next": "11.4.0",
         "react-image-file-resizer": "0.2.1",
+        "react-pdf": "^4.1.0",
         "react-pdf-highlighter": "^3.1.0",
         "react-rnd": "^10.1.10",
         "styled-components": "4.3.2",
@@ -84,6 +87,7 @@
         "@types/pdfjs-dist": "2.1.3",
         "@types/ramda": "0.26.33",
         "@types/react": "16.9.2",
+        "@types/react-pdf": "^4.0.5",
         "@types/styled-components": "4.1.18",
         "@types/yup": "0.26.23",
         "@typescript-eslint/eslint-plugin": "2.13.0",

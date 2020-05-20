@@ -123,6 +123,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                 return mapData;
             });
         };
+
         const renderPages = (PDFJSPages: PDFDocumentProxy): PDFPromise<PDFPromise<PDFPage>>[] => {
             const promises = [];
 

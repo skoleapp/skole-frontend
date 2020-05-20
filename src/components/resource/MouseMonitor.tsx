@@ -27,7 +27,9 @@ export const MouseMonitor: React.FC<Props> = ({ onMoveAway, paddingX, paddingY, 
     };
 
     useEffect(() => {
-        document.addEventListener('mousemove', onMouseMove);
+        if (typeof document !== 'undefined') {
+            document.addEventListener('mousemove', onMouseMove);
+        }
 
         return (): void => {
             document.removeEventListener('mousemove', onMouseMove);

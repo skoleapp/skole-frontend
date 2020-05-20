@@ -1644,6 +1644,11 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
+"@pdftron/webviewer@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@pdftron/webviewer/-/webviewer-6.3.1.tgz#fb539245d86f08df8bf16a77d917314959746538"
+  integrity sha512-MFDcNy2TZqubdYRe1HgUrUARhXym8ibGGCsz2BdYgLNi0Pf8zkN73BLTE/w5zmkSqOXnq3cCDV8/C1mjO3Lw8Q==
+
 "@rollup/plugin-node-resolve@^7.1.1":
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-7.1.3.tgz#80de384edfbd7bfc9101164910f86078151a3eca"
@@ -1874,6 +1879,11 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
+"@types/pdfjs-dist@*":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-2.1.4.tgz#4ed2ad0506852d630956ff60b21096f6d7078881"
+  integrity sha512-KnEc8W2IcntVL/SKfRWy2lcJax07xEaO7ghcT0/hc2Lp5UOcmaXAi887RKOLhP8BLKsVGJ7uYH0mYo1uSvbu2A==
+
 "@types/pdfjs-dist@2.1.3":
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-2.1.3.tgz#68b6bbbe5ef0cdab7f8301f5a85a5a33b9c2080b"
@@ -1918,6 +1928,14 @@
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.62.10.tgz#82c481df21db4e7460755dc3fc7091e333a1d2bd"
   integrity sha512-QR4PGrzZ3IvRIHlScyIPuv2GV8tD/BMICZz514KGvn3KHbh0mLphHHemtHZC1o8u4xM5LxwVpMpMYHQ+ncSfag==
   dependencies:
+    "@types/react" "*"
+
+"@types/react-pdf@^4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@types/react-pdf/-/react-pdf-4.0.5.tgz#d0d380eaa7202c079fd38f392ea5cf3b1c3c81aa"
+  integrity sha512-8ZjzH8vu/SCxrqFclzWo7kGJLLJn29Gu2g+9NCkT9Ekw285i6rH6QNl+/dDVqeo1+ZnQfqo4bpXHoV4ZumzLHg==
+  dependencies:
+    "@types/pdfjs-dist" "*"
     "@types/react" "*"
 
 "@types/react-rnd@^8.0.0":
@@ -6623,7 +6641,7 @@ lodash.memoize@^4.1.2:
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
-lodash.once@^4.0.0:
+lodash.once@^4.0.0, lodash.once@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
   integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
@@ -6749,6 +6767,11 @@ make-error@^1.1.1:
   resolved "https://registry.yarnpkg.com/make-error/-/make-error-1.3.6.tgz#2eb2e37ea9b67c4891f684a1394799af484cf7a2"
   integrity sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==
 
+make-event-props@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/make-event-props/-/make-event-props-1.2.0.tgz#96b87d88919533b8f8934b58b4c3d5679459a0cf"
+  integrity sha512-BmWFkm/jZzVH9A0tEBdkjAARUz/eha+5IRyfOndeSMKRadkgR5DawoBHoRwLxkYmjJOI5bHkXKpaZocxj+dKgg==
+
 map-cache@^0.2.0, map-cache@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
@@ -6832,6 +6855,11 @@ merge-anything@^2.2.4:
   integrity sha512-l5XlriUDJKQT12bH+rVhAHjwIuXWdAIecGwsYjv2LJo+dA1AeRTmeQS+3QBpO6lEthBMDi2IUMpLC1yyRvGlwQ==
   dependencies:
     is-what "^3.3.1"
+
+merge-class-names@^1.1.1:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/merge-class-names/-/merge-class-names-1.3.0.tgz#c4cdc1a981a81dd9afc27aa4287e912a337c5dee"
+  integrity sha512-k0Qaj36VBpKgdc8c188LEZvo6v/zzry/FUufwopWbMSp6/knfVFU/KIB55/hJjeIpg18IH2WskXJCRnM/1BrdQ==
 
 merge-descriptors@1.0.1:
   version "1.0.1"
@@ -7759,6 +7787,14 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+pdfjs-dist@2.1.266:
+  version "2.1.266"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.1.266.tgz#cded02268b389559e807f410d2a729db62160026"
+  integrity sha512-Jy7o1wE3NezPxozexSbq4ltuLT0Z21ew/qrEiAEeUZzHxMHGk4DUV1D7RuCXg5vJDvHmjX1YssN+we9QfRRgXQ==
+  dependencies:
+    node-ensure "^0.0.0"
+    worker-loader "^2.0.0"
+
 pdfjs-dist@2.2.228:
   version "2.2.228"
   resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.2.228.tgz#777b068a0a16c96418433303807c183058b47aaa"
@@ -8582,6 +8618,18 @@ react-pdf-highlighter@^3.1.0:
     pdfjs-dist "2.2.228"
     react-pointable "^1.1.1"
     react-rnd "^7.1.5"
+
+react-pdf@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-pdf/-/react-pdf-4.1.0.tgz#fcb874f28050fe9593c4e04652c7bff94bb1acf9"
+  integrity sha512-SYwkWc+vRQHfrpDls3DOgn4G+wT0mYGJRor20e28GPRW8VB+6o8WqZ4QZxsl50z+dKM7UscXFnK/02eN3NXi2g==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    lodash.once "^4.1.1"
+    make-event-props "^1.1.0"
+    merge-class-names "^1.1.1"
+    pdfjs-dist "2.1.266"
+    prop-types "^15.6.2"
 
 react-pointable@^1.1.1:
   version "1.1.3"

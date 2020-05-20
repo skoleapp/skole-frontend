@@ -1,4 +1,3 @@
-import 'pdfjs-dist/web/pdf_viewer.css';
 import 'pdfjs-dist/web/pdf_viewer.js';
 
 import { Box } from '@material-ui/core';
@@ -111,8 +110,8 @@ export const PDFHighlighter: React.FC<Props> = ({
         };
     };
 
-    const findOrCreateContainerLayer = (container: HTMLElement, className: string): Element => {
-        let layer = container.querySelector(`.${className}`);
+    const findOrCreateContainerLayer = (container: HTMLElement, className: string): HTMLDivElement => {
+        let layer: HTMLDivElement | null = container.querySelector(`.${className}`);
 
         if (!layer) {
             layer = document.createElement('div');
@@ -589,7 +588,7 @@ export const PDFHighlighter: React.FC<Props> = ({
     useEffect(() => {
         linkServiceRef.current = new PDFLinkService();
 
-        viewerRef.current = new PDFViewer({
+        const viewer = new PDFViewer({
             container: containerRef.current,
             enhanceTextSelection: true,
             removePageBorders: true,
@@ -599,10 +598,13 @@ export const PDFHighlighter: React.FC<Props> = ({
         viewer.setDocument(pdfDocument);
         linkService.setDocument(pdfDocument);
         linkService.setViewer(viewer);
-        document.addEventListener('selectionchange', onSelectionChange);
-        document.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('pagesinit', onDocumentReady);
-        document.addEventListener('textlayerrendered', renderHighlights);
+
+        if (typeof document !== 'undefined') {
+            document.addEventListener('selectionchange', onSelectionChange);
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('pagesinit', onDocumentReady);
+            document.addEventListener('textlayerrendered', renderHighlights);
+        }
 
         return (): void => {
             document.removeEventListener('selectionchange', onSelectionChange);
@@ -655,7 +657,6 @@ export const PDFHighlighter: React.FC<Props> = ({
         };
 
         const scaledPosition = viewportPositionToScaled(viewportPosition);
-
         const image = screenshot(pageBoundingRect, page.number);
 
         renderTipAtPosition(

@@ -224,6 +224,11 @@ export interface LTWH {
     height: number;
 }
 
+export interface WH {
+    width: number;
+    height: number;
+}
+
 export interface Scaled {
     x1: number;
     y1: number;

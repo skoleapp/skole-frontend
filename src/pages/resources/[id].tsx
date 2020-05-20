@@ -14,6 +14,7 @@ import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { SkolePDFViewer } from 'src/components/resource/SkolePDFViewer';
 import styled from 'styled-components';
 
 import {
@@ -30,7 +31,6 @@ import {
     InfoModalContent,
     NavbarContainer,
     NotFoundLayout,
-    PDFViewer,
     StarButton,
     StyledBottomNavigation,
     StyledList,
@@ -321,7 +321,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledBottomNavigation>
     );
 
-    const renderPDFViewer = <PDFViewer file={file} />;
+    const renderPDFViewer = <SkolePDFViewer file={file} />;
     const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
 
     const layoutProps = {
