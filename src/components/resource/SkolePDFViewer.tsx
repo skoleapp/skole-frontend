@@ -2,7 +2,9 @@ import { Box } from '@material-ui/core';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
 import { Document, Page } from 'react-pdf';
-import { LTWH } from 'src/types';
+import { LTWH, Position, Scaled, ScaledPosition, WH } from 'src/types';
+import { useStateRef } from 'src/utils';
+import styled from 'styled-components';
 
 interface Coords {
     x: number;
@@ -17,15 +19,16 @@ interface State {
 
 interface MouseSelectionProps {
     onSelection: (startTarget: HTMLElement, boundingRect: LTWH) => void;
-    onChange: (isVisible: boolean) => void;
+    onChange: (drawing: boolean) => void;
 }
 
 const initialState = { start: null, end: null, locked: false };
 
 const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }) => {
-    const [state, setState] = useState<State>(initialState);
-    const { start, end, locked } = state;
-    const ref = useRef<HTMLDivElement>(null);
+    const [stateRef, setState] = useStateRef<State>(initialState); // Need to use mutable ref instead of immutable state.
+    const reset = (): void => setState(initialState);
+    const { start, end } = stateRef.current;
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const getBoundingRect = (start: Coords, end: Coords): LTWH => ({
         left: Math.min(end.x, start.x),
@@ -35,12 +38,7 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
     });
 
     useEffect(() => {
-        const isVisible = !!start && !!end;
-        onChange(isVisible);
-    }, []);
-
-    useEffect(() => {
-        const container = !!ref.current && ref.current.parentElement;
+        const container = !!containerRef.current && containerRef.current.parentElement;
 
         if (!!container) {
             // Get coordinates on container element.
@@ -53,103 +51,230 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
                 };
             };
 
-            container.addEventListener('mousedown', (e: MouseEvent) => {
-                // Reset state if Alt-key is not pressed.
-                if (!e.altKey) {
-                    setState(initialState);
-                }
-
-                setState({
-                    start: containerCoords(e.pageX, e.pageY),
-                    end: null,
-                    locked: false,
-                });
-            });
-
             container.addEventListener('mousemove', (e: MouseEvent) => {
+                const { start, locked } = stateRef.current;
+
                 if (!!start && !locked) {
                     setState({
-                        ...state,
+                        ...stateRef.current,
                         end: containerCoords(e.pageX, e.pageY),
                     });
                 }
             });
 
-            document.addEventListener('mouseup', (e: MouseEvent): void => {
-                if (start) {
-                    const end = containerCoords(e.pageX, e.pageY);
-                    const boundingRect = getBoundingRect(start, end);
+            container.addEventListener('mousedown', (e: MouseEvent) => {
+                const startTarget = e.target;
 
-                    // Target out of bounds or Alt-key released.
-                    if (!container.contains(e.target as Node) || !e.altKey) {
-                        setState(initialState);
-                        return;
-                    }
-
-                    // Lock state.
+                // Reset state if Alt-key is not pressed.
+                if (!!e.altKey) {
                     setState({
-                        ...state,
-                        end,
-                        locked: true,
+                        start: containerCoords(e.pageX, e.pageY),
+                        end: null,
+                        locked: false,
                     });
 
-                    if (!!start && !!end) {
-                        onSelection(startTarget, boundingRect);
-                        setState(initialState);
-                    }
+                    document.addEventListener('mouseup', (e: MouseEvent): void => {
+                        const { start } = stateRef.current;
+
+                        if (!!start) {
+                            const end = containerCoords(e.pageX, e.pageY);
+                            const boundingRect = getBoundingRect(start, end);
+
+                            if (container.contains(e.target as Node) && !!e.altKey) {
+                                // Lock state.
+                                setState({
+                                    ...stateRef.current,
+                                    end,
+                                    locked: true,
+                                });
+
+                                if (!!end) {
+                                    onSelection(startTarget as HTMLElement, boundingRect);
+                                }
+                            } else {
+                                reset();
+                            }
+                        } else {
+                            reset();
+                        }
+                    });
+                } else {
+                    reset();
                 }
             });
         }
     }, []);
 
-    const renderRect = start && end && <Box style={getBoundingRect(start, end)} />;
-    return <div ref={ref}>{renderRect}</div>;
+    useEffect(() => {
+        const drawing = !!start && !!end;
+        onChange(drawing);
+    }, [start, end]);
+
+    return (
+        <StyledMouseSelection ref={containerRef}>
+            {!!start && !!end && <Box id="mouse-selection" style={getBoundingRect(start, end)} />}
+        </StyledMouseSelection>
+    );
 };
+
+const StyledMouseSelection = styled.div`
+    #mouse-selection {
+        position: absolute;
+        border: 1px dashed #333;
+        background: rgba(252, 232, 151, 1);
+        mix-blend-mode: multiply;
+    }
+`;
 
 interface PDFViewerProps {
     file: string;
 }
 
 interface PDFViewerState {
-    document: PDFDocumentProxy | null;
     numPages: number | null;
     drawing: boolean;
 }
 
+interface PageFromElement {
+    node: HTMLElement;
+    number: number;
+}
+
 export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
+    const documentRef = useRef<PDFDocumentProxy | null>(null);
+
     const [state, setState] = useState<PDFViewerState>({
-        document: null,
         numPages: null,
         drawing: false,
     });
 
-    const { numPages } = state;
-
     const onDocumentLoadSuccess = (document: PDFDocumentProxy): void => {
         const { numPages } = document;
-        setState({ ...state, document });
         setState({ ...state, numPages });
+        documentRef.current = document;
     };
 
     const handleMouseSelectionChange = (drawing: boolean): void => {
         setState({ ...state, drawing });
     };
 
-    const handleSelection = async (startTarget: HTMLElement, boundingRect: LTWH): Promise<void> => {
-        console.log('start target', startTarget);
-        console.log('bounding rect', boundingRect);
+    const getPageFromElement = (target: HTMLElement): PageFromElement | null => {
+        const node = target.closest('.react-pdf__Page');
+
+        if (!!(node instanceof HTMLElement)) {
+            const number = Number(node.dataset.pageNumber);
+            return { node, number };
+        } else {
+            return null;
+        }
     };
 
-    const renderPages = Array.from(new Array(numPages), (_, index) => (
+    const viewportToScaled = (rect: LTWH, { width, height }: WH): Scaled => ({
+        x1: rect.left,
+        y1: rect.top,
+        x2: rect.left + rect.width,
+        y2: rect.top + rect.height,
+        width,
+        height,
+    });
+
+    const viewportPositionToScaled = async ({
+        pageNumber,
+        boundingRect,
+        rects,
+    }: Position): Promise<ScaledPosition | null> => {
+        const pdfDocument = documentRef.current;
+
+        if (!!pdfDocument) {
+            const viewport = (await pdfDocument.getPage(pageNumber)).getViewport({ scale: 1 });
+
+            return {
+                boundingRect: viewportToScaled(boundingRect, viewport),
+                rects: (rects || []).map(rect => viewportToScaled(rect, viewport)),
+                pageNumber,
+            };
+        } else {
+            return null;
+        }
+    };
+
+    const screenshot = (target: HTMLElement, position: LTWH): string | void => {
+        const canvas = target.closest('canvas');
+        const { left, top, width, height } = position;
+        const newCanvas = document.createElement('canvas');
+
+        newCanvas.width = width;
+        newCanvas.height = height;
+        const newCanvasContext = newCanvas.getContext('2d');
+
+        if (!!newCanvasContext && !!canvas) {
+            const dpr: number = window.devicePixelRatio;
+            newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
+            return newCanvas.toDataURL('image/png');
+        }
+    };
+
+    const handleSelection = async (startTarget: HTMLElement, boundingRect: LTWH): Promise<void> => {
+        const page = getPageFromElement(startTarget);
+
+        if (!!page) {
+            const pageNumber = page.number;
+
+            const pageBoundingRect = {
+                ...boundingRect,
+                top: boundingRect.top - page.node.offsetTop,
+                left: boundingRect.left - page.node.offsetLeft,
+            };
+
+            const viewportPosition = {
+                boundingRect: pageBoundingRect,
+                rects: [],
+                pageNumber,
+            };
+
+            const scaledPosition = await viewportPositionToScaled(viewportPosition);
+            const image = screenshot(startTarget, pageBoundingRect);
+
+            console.log('scaled position', scaledPosition);
+            console.log('image', image);
+
+            // renderTipAtPosition(
+            //     viewportPosition,
+            //     onSelectionFinished(
+            //         scaledPosition,
+            //         { image },
+            //         () => hideTipAndSelection(),
+            //         () =>
+            //             setState({
+            //                 ...state,
+            //                 ghostHighlight: {
+            //                     position: scaledPosition,
+            //                     content: { image },
+            //                 } as Highlight,
+            //             }),
+            //     ),
+            // );
+
+            // renderHighlights();
+        }
+    };
+
+    const renderPages = Array.from(new Array(state.numPages), (_, index) => (
         <Page key={`page_${index + 1}`} pageNumber={index + 1} />
     ));
 
     const renderMouseSelection = <MouseSelection onChange={handleMouseSelectionChange} onSelection={handleSelection} />;
 
     return (
-        <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
+        <StyledSkolePDFViewer file={file} onLoadSuccess={onDocumentLoadSuccess}>
             {renderPages}
             {renderMouseSelection}
-        </Document>
+        </StyledSkolePDFViewer>
     );
 };
+
+const StyledSkolePDFViewer = styled(Document)`
+    .react-pdf__Page__canvas {
+        width: 100% !important;
+    }
+`;

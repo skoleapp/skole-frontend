@@ -13,3 +13,4 @@ export { useVotes } from './useVotes';
 export { useDrawer } from './useDrawer';
 export { useMoment } from './useMoment';
 export { usePrevious } from './usePrevious';
+export { useStateRef } from './useStateRef';
