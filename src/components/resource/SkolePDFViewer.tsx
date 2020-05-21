@@ -65,7 +65,6 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
             container.addEventListener('mousedown', (e: MouseEvent) => {
                 const startTarget = e.target;
 
-                // Reset state if Alt-key is not pressed.
                 if (!!e.altKey) {
                     setState({
                         start: containerCoords(e.pageX, e.pageY),
@@ -98,8 +97,6 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
                             reset();
                         }
                     });
-                } else {
-                    reset();
                 }
             });
         }
@@ -112,17 +109,16 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
 
     return (
         <StyledMouseSelection ref={containerRef}>
-            {!!start && !!end && <Box id="mouse-selection" style={getBoundingRect(start, end)} />}
+            {!!start && !!end && <Box style={getBoundingRect(start, end)} />}
         </StyledMouseSelection>
     );
 };
 
 const StyledMouseSelection = styled.div`
-    #mouse-selection {
+    > div {
         position: absolute;
-        border: 1px dashed #333;
-        background: rgba(252, 232, 151, 1);
-        mix-blend-mode: multiply;
+        border: 0.05rem dashed #000000;
+        background-color: rgba(252, 232, 151, 0.5);
     }
 `;
 
@@ -198,6 +194,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         }
     };
 
+    // Get closest PDF page and take screenshot of selected area.
     const screenshot = (target: HTMLElement, position: LTWH): string | void => {
         const canvas = target.closest('canvas');
         const { left, top, width, height } = position;
@@ -260,7 +257,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     };
 
     const renderPages = Array.from(new Array(state.numPages), (_, index) => (
-        <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+        <Page key={`page_${index + 1}`} pageNumber={index + 1} renderTextLayer={false} />
     ));
 
     const renderMouseSelection = <MouseSelection onChange={handleMouseSelectionChange} onSelection={handleSelection} />;
@@ -274,7 +271,8 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
 };
 
 const StyledSkolePDFViewer = styled(Document)`
-    .react-pdf__Page__canvas {
-        width: 100% !important;
-    }
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: #6e6e6e;
 `;
