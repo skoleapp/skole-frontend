@@ -7,6 +7,7 @@ import {
     PrintOutlined,
     RemoveOutlined,
     RotateLeftOutlined,
+    RotateRightOutlined,
     TabUnselectedOutlined,
 } from '@material-ui/icons';
 import { PDFDocumentProxy } from 'pdfjs-dist';
@@ -142,6 +143,8 @@ interface PDFViewerProps {
 interface PDFViewerState {
     numPages: number | null;
     drawing: boolean;
+    rotate: number;
+    scale: number;
 }
 
 interface PageFromElement {
@@ -156,7 +159,30 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const [state, setState] = useState<PDFViewerState>({
         numPages: null,
         drawing: false,
+        rotate: 0,
+        scale: 1,
     });
+
+    const { rotate, scale } = state;
+
+    const handleRotate = (): void => {
+        if (rotate === 270) {
+            setState({ ...state, rotate: 0 });
+        } else {
+            setState({ ...state, rotate: rotate + 90 });
+        }
+    };
+
+    const toggleFullScreen = (): void => {
+        if (scale === 1.5) {
+            setState({ ...state, scale: 1 });
+        } else {
+            setState({ ...state, scale: 1.5 });
+        }
+    };
+
+    const handleScaleUp = (): void => setState({ ...state, scale: scale + 0.1 });
+    const handleScaleDown = (): void => setState({ ...state, scale: scale - 0.1 });
 
     const onDocumentLoadSuccess = (document: PDFDocumentProxy): void => {
         const { numPages } = document;
@@ -271,7 +297,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     };
 
     const renderPages = Array.from(new Array(state.numPages), (_, index) => (
-        <Page key={`page_${index + 1}`} pageNumber={index + 1} renderTextLayer={false} />
+        <Page key={`page_${index + 1}`} pageNumber={index + 1} renderTextLayer={false} scale={scale} />
     ));
 
     const renderMouseSelection = <MouseSelection onChange={handleMouseSelectionChange} onSelection={handleSelection} />;
@@ -290,8 +316,8 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
                     <IconButton size="small" color="inherit">
                         <TabUnselectedOutlined />
                     </IconButton>
-                    <IconButton size="small" color="inherit">
-                        <RotateLeftOutlined />
+                    <IconButton size="small" color="inherit" onClick={handleRotate}>
+                        <RotateRightOutlined />
                     </IconButton>
                     <IconButton size="small" color="inherit">
                         <CloudDownloadOutlined />
@@ -306,13 +332,13 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
 
     const renderPdfControls = (
         <Box id="pdf-controls">
-            <Fab size="small">
+            <Fab size="small" onClick={toggleFullScreen}>
                 <FullscreenOutlined />
             </Fab>
-            <Fab size="small">
+            <Fab size="small" onClick={handleScaleUp}>
                 <AddOutlined />
             </Fab>
-            <Fab size="small">
+            <Fab size="small" onClick={handleScaleDown}>
                 <RemoveOutlined />
             </Fab>
         </Box>
@@ -324,6 +350,8 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
             onLoadSuccess={onDocumentLoadSuccess}
             loading={renderLoading}
             error={t('resource:resourceError')}
+            noData={t('resource:resourceError')}
+            rotate={rotate}
         >
             {renderPages}
             {renderMouseSelection}
@@ -369,6 +397,9 @@ const StyledSkolePDFViewer = styled(Document)`
     }
 
     .react-pdf__message--loading {
+        height: 100%;
+        width: 100%;
         background-color: var(--white);
+        display: flex;
     }
 `;

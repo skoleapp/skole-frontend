@@ -25,6 +25,7 @@ export const LoadingBox: React.FC<Props> = ({ text }) => {
 const StyledLoadingBox = styled(Box)`
     flex-grow: 1;
     display: flex;
-    flex-direction: center;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 `;
