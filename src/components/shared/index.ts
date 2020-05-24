@@ -29,3 +29,4 @@ export { NotFoundBox } from './NotFoundBox';
 export { PaginatedTable, FrontendPaginatedTable } from './PaginatedTable';
 export { InfoModalContent } from './InfoModalContent';
 export { StyledDrawer } from './StyledDrawer';
+export { StyledBreadcrumb } from './StyledBreadcrumb';

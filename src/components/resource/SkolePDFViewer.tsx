@@ -1,10 +1,23 @@
-import { Box } from '@material-ui/core';
+import { Box, Fab, Grid, IconButton, Typography } from '@material-ui/core';
+import {
+    AddOutlined,
+    CloudDownloadOutlined,
+    FullscreenOutlined,
+    PhotoSizeSelectActualOutlined,
+    PrintOutlined,
+    RemoveOutlined,
+    RotateLeftOutlined,
+    TabUnselectedOutlined,
+} from '@material-ui/icons';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
 import { LTWH, Position, Scaled, ScaledPosition, WH } from 'src/types';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
+
+import { LoadingBox } from '../shared';
 
 interface Coords {
     x: number;
@@ -137,6 +150,7 @@ interface PageFromElement {
 }
 
 export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
+    const { t } = useTranslation();
     const documentRef = useRef<PDFDocumentProxy | null>(null);
 
     const [state, setState] = useState<PDFViewerState>({
@@ -261,11 +275,60 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     ));
 
     const renderMouseSelection = <MouseSelection onChange={handleMouseSelectionChange} onSelection={handleSelection} />;
+    const renderLoading = <LoadingBox text={t('resource:loadingResource')} />;
+
+    const renderToolbar = (
+        <Box id="toolbar">
+            <Grid container alignItems="center">
+                <Grid item xs={4} container justify="flex-start">
+                    <Typography variant="subtitle1">test_resource.pdf</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                    <Typography variant="subtitle1">1 / 1</Typography>
+                </Grid>
+                <Grid item xs={4} container justify="flex-end">
+                    <IconButton size="small" color="inherit">
+                        <TabUnselectedOutlined />
+                    </IconButton>
+                    <IconButton size="small" color="inherit">
+                        <RotateLeftOutlined />
+                    </IconButton>
+                    <IconButton size="small" color="inherit">
+                        <CloudDownloadOutlined />
+                    </IconButton>
+                    <IconButton size="small" color="inherit">
+                        <PrintOutlined />
+                    </IconButton>
+                </Grid>
+            </Grid>
+        </Box>
+    );
+
+    const renderPdfControls = (
+        <Box id="pdf-controls">
+            <Fab size="small">
+                <FullscreenOutlined />
+            </Fab>
+            <Fab size="small">
+                <AddOutlined />
+            </Fab>
+            <Fab size="small">
+                <RemoveOutlined />
+            </Fab>
+        </Box>
+    );
 
     return (
-        <StyledSkolePDFViewer file={file} onLoadSuccess={onDocumentLoadSuccess}>
+        <StyledSkolePDFViewer
+            file={file}
+            onLoadSuccess={onDocumentLoadSuccess}
+            loading={renderLoading}
+            error={t('resource:resourceError')}
+        >
             {renderPages}
             {renderMouseSelection}
+            {renderToolbar}
+            {renderPdfControls}
         </StyledSkolePDFViewer>
     );
 };
@@ -274,5 +337,38 @@ const StyledSkolePDFViewer = styled(Document)`
     position: relative;
     display: flex;
     justify-content: center;
-    background-color: #6e6e6e;
+    align-items: center;
+    background-color: rgb(82, 86, 89);
+    height: 100%;
+
+    #toolbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: rgb(50, 54, 57);
+        color: var(--white);
+        padding: 0.5rem;
+
+        .MuiButtonBase-root {
+            padding: 0.25rem;
+        }
+    }
+
+    #pdf-controls {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem;
+
+        .MuiFab-root {
+            margin: 0.5rem;
+        }
+    }
+
+    .react-pdf__message--loading {
+        background-color: var(--white);
+    }
 `;

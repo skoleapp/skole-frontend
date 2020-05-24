@@ -1,9 +1,11 @@
-import { ContainerProps, DrawerProps, TablePaginationProps } from '@material-ui/core';
+import { ChipProps, ContainerProps, DrawerProps, TablePaginationProps } from '@material-ui/core';
+import { SvgIconComponent } from '@material-ui/icons';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
 import { NextPageContext } from 'next';
+import { LinkProps } from 'next/link';
 import { Extent } from 'ol/extent';
 import { Group } from 'ol/layer';
 import { PDFDocumentProxy } from 'pdfjs-dist';
@@ -178,14 +180,12 @@ export interface SettingsContext {
 }
 
 export interface PDFViewerContext {
-    pages: PDFPage[];
+    numPages: number;
     currentPage: number;
-    effect: string;
-    setCenter: () => void;
-    prevPage: () => void;
-    nextPage: () => void;
-    setPages: (pages: PDFPage[]) => void;
-    setCurrentPage: (currentPage: number) => void;
+    areaSelected: boolean;
+    setNumPages: () => void;
+    setCurrentPage: () => void;
+    setAreaSelected: () => void;
 }
 
 export interface DiscussionBoxContext {
@@ -207,6 +207,12 @@ export interface SkoleContextType {
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
+
+export interface StyledBreadcrumbProps {
+    linkProps: LinkProps;
+    icon: SvgIconComponent;
+    text: string;
+}
 
 interface CustomApolloClient extends ApolloClient<NormalizedCacheObject> {
     toJSON: () => void;

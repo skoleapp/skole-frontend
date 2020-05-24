@@ -1,5 +1,6 @@
-import { Grid, IconButton, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
+import { Box, Grid, IconButton, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
 import {
+    AssignmentOutlined,
     CloudDownloadOutlined,
     DeleteOutline,
     FullscreenOutlined,
@@ -7,6 +8,7 @@ import {
     KeyboardArrowUpOutlined,
     NavigateBeforeOutlined,
     NavigateNextOutlined,
+    SchoolOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
@@ -53,7 +55,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user, verified, notVerifiedTooltip } = useAuthContext();
-    const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
     const resourceTitle = R.propOr('', 'title', resource) as string;
     const resourceDate = R.propOr('', 'date', resource) as string;
     const resourceType = R.propOr('', 'resourceType', resource) as string;
@@ -74,7 +75,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const created = R.propOr(undefined, 'created', resource) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(resourceTitle);
     const { onClose: closeOptions } = drawerProps;
-    const { setPages, setCurrentPage } = usePDFViewerContext();
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -105,13 +105,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         href: '/courses/[id]',
         as: `/courses/${courseId}`,
     };
-
-    useEffect(() => {
-        return (): void => {
-            setPages([]);
-            setCurrentPage(0);
-        };
-    }, []);
 
     const deleteResourceError = (): void => {
         toggleNotification(t('notifications:deleteResourceError'));
@@ -256,9 +249,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </Tooltip>
     );
 
-    const pagesExist = pages.length > 0;
-    const totalPages = !!pagesExist ? pages.length : 1;
-
     const renderExtraResourceActions = (
         <StyledExtraResourceActions container alignItems="center">
             <Grid item xs={4} container id="vote-section">
@@ -266,7 +256,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                 {renderUpVoteButton}
                 {renderDownVoteButton}
             </Grid>
-            <Grid item xs={4} container alignItems="center" id="page-controls">
+            {/* <Grid item xs={4} container alignItems="center" id="page-controls">
                 <Tooltip title={t('common:previousPageTooltip')}>
                     <span>
                         <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
@@ -286,8 +276,8 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                         </IconButton>
                     </span>
                 </Tooltip>
-            </Grid>
-            <Grid item xs={4} container justify="flex-end">
+            </Grid> */}
+            {/* <Grid item xs={4} container justify="flex-end">
                 <Tooltip title={t('resource:fullscreenTooltip')}>
                     <span>
                         <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
@@ -295,8 +285,29 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                         </IconButton>
                     </span>
                 </Tooltip>
-            </Grid>
+            </Grid> */}
         </StyledExtraResourceActions>
+    );
+
+    const extraBreadcrumbs = [
+        {
+            linkProps: { ...staticBackUrl, color: 'inherit' },
+            icon: SchoolOutlined,
+            text: courseName,
+        },
+        {
+            linkProps: { href: '/resources/[id]', as: `/resources/${resourceId}`, color: 'textPrimary' },
+            icon: AssignmentOutlined,
+            text: fullResourceTitle,
+        },
+    ];
+
+    const headerActionDesktop = (
+        <Box>
+            {renderStarButton}
+            {renderUpVoteButton}
+            {renderDownVoteButton}
+        </Box>
     );
 
     const renderCustomBottomNavbar = (
@@ -334,9 +345,11 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         },
         headerDesktop: fullResourceTitle,
         headerSecondary: t('common:discussion'),
-        subheaderDesktop: renderCourseLink,
-        subheaderDesktopSecondary: renderSchoolLink,
-        extraDesktopActions: renderExtraResourceActions,
+        // subheaderDesktop: renderCourseLink,
+        // subheaderDesktopSecondary: renderSchoolLink,
+        headerActionDesktop,
+        // extraDesktopActions: renderExtraResourceActions,
+        extraBreadcrumbs,
         renderInfo,
         infoHeader: t('resource:infoHeader'),
         infoTooltip: t('resource:infoTooltip'),

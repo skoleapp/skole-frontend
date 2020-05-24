@@ -49,14 +49,12 @@ const SkolePageContext = createContext<SkoleContextType>({
         toggleSettings: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     pdfViewer: {
-        pages: [],
+        numPages: 0,
         currentPage: 0,
-        effect: '',
-        setCenter: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        prevPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        nextPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        setPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+        areaSelected: false,
+        setNumPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
         setCurrentPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+        setAreaSelected: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     isMobileGuess: null,
     discussionBox: {
@@ -144,17 +142,15 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [settingsOpen, setSettingsOpen] = useState(false);
     const toggleSettings = (open: boolean): void => setSettingsOpen(open);
 
-    const [pdf, setPdf] = useState<Pick<PDFViewerContext, 'pages' | 'currentPage' | 'effect'>>({
-        pages: [],
+    const [pdf, setPdf] = useState<Pick<PDFViewerContext, 'numPages' | 'currentPage' | 'areaSelected'>>({
+        numPages: 0,
         currentPage: 0,
-        effect: '',
+        areaSelected: false,
     });
 
-    const setCenter = (): void => setPdf({ ...pdf, effect: 'SET_CENTER' + new Date().valueOf() });
-    const prevPage = (): void => setPdf({ ...pdf, effect: 'PREV_PAGE' + new Date().valueOf() });
-    const nextPage = (): void => setPdf({ ...pdf, effect: 'NEXT_PAGE' + new Date().valueOf() });
-    const setPages = (pages: PDFPage[]): void => setPdf({ ...pdf, pages });
+    const setNumPages = (numPages: number): void => setPdf({ ...pdf, numPages });
     const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
+    const setAreaSelected = (areaSelected: boolean): void => setPdf({ ...pdf, areaSelected });
 
     const [comments, setComments] = useState<CommentObjectType[] | null>(null);
 
@@ -189,11 +185,9 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
         },
         pdfViewer: {
             ...pdf,
-            setCenter,
-            prevPage,
-            nextPage,
-            setPages,
+            setNumPages,
             setCurrentPage,
+            setAreaSelected,
         },
         isMobileGuess,
         discussionBox: {

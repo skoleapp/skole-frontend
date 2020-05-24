@@ -1,12 +1,30 @@
-import { Box, CardContent, CardHeader, Divider, Grid, IconButton, Tab, Tooltip, Typography } from '@material-ui/core';
-import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
+import {
+    Box,
+    Breadcrumbs,
+    CardHeader,
+    Chip,
+    Divider,
+    Grid,
+    IconButton,
+    Tab,
+    Tooltip,
+    Typography,
+} from '@material-ui/core';
+import {
+    HomeOutlined,
+    InfoOutlined,
+    MoreHorizOutlined,
+    NavigateNextOutlined,
+    SearchOutlined,
+} from '@material-ui/icons';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { useDeviceContext } from '../../context';
-import { LayoutProps, MuiColor, UseOptions } from '../../types';
+import { LayoutProps, MaxWidth, MuiColor, StyledBreadcrumbProps, UseOptions } from '../../types';
 import { useDrawer, useTabs } from '../../utils';
-import { StyledCard, StyledDrawer, StyledTabs } from '../shared';
+import { StyledBreadcrumb, StyledCard, StyledDrawer, StyledTabs, TextLink } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
@@ -16,8 +34,8 @@ interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderRepo
 
 interface Props extends LayoutProps {
     headerDesktop?: string;
-    subheaderDesktop?: JSX.Element | string | boolean;
-    subheaderDesktopSecondary?: JSX.Element | string | boolean;
+    // subheaderDesktop?: JSX.Element | string | boolean;
+    // subheaderDesktopSecondary?: JSX.Element | string | boolean;
     headerSecondary?: string;
     tabLabelLeft: string;
     tabLabelRight: string;
@@ -31,15 +49,16 @@ interface Props extends LayoutProps {
     renderSecondaryAction?: JSX.Element;
     headerLeftMobile?: JSX.Element;
     headerActionDesktop?: JSX.Element;
-    extraDesktopActions?: JSX.Element;
+    // extraDesktopActions?: JSX.Element;
+    extraBreadcrumbs: StyledBreadcrumbProps[];
     optionProps: OptionProps;
     responsive?: boolean;
 }
 
 export const TabLayout: React.FC<Props> = ({
     headerDesktop,
-    subheaderDesktop,
-    subheaderDesktopSecondary,
+    // subheaderDesktop,
+    // subheaderDesktopSecondary,
     headerSecondary,
     tabLabelLeft,
     tabLabelRight,
@@ -51,13 +70,15 @@ export const TabLayout: React.FC<Props> = ({
     optionProps,
     headerLeftMobile,
     headerActionDesktop,
-    extraDesktopActions,
+    extraBreadcrumbs,
+    // extraDesktopActions,
     customBottomNavbar,
     customBottomNavbarSecondary,
     topNavbarProps,
     responsive,
     ...props
 }) => {
+    const { t } = useTranslation();
     const { tabValue, handleTabChange } = useTabs();
     const isMobile = useDeviceContext();
     const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(infoHeader);
@@ -90,7 +111,7 @@ export const TabLayout: React.FC<Props> = ({
 
     const renderDesktopHeaderActions = (
         <Box display="flex">
-            {!isMobile && headerActionDesktop}
+            {headerActionDesktop}
             {renderHeaderRightSecondary('default')}
             {renderHeaderRight('default')}
         </Box>
@@ -126,11 +147,43 @@ export const TabLayout: React.FC<Props> = ({
         </StyledCard>
     );
 
-    const renderSubheaderDesktop = (
-        <Box>
-            <Typography variant="subtitle1">{subheaderDesktop}</Typography>
-            <Typography variant="subtitle1">{subheaderDesktopSecondary}</Typography>
-        </Box>
+    // const renderSubheaderDesktop = (
+    //     <Box>
+    //         <Typography variant="subtitle1">{subheaderDesktop}</Typography>
+    //         <Typography variant="subtitle1">{subheaderDesktopSecondary}</Typography>
+    //     </Box>
+    // );
+
+    const StyledBreadcrumbs = styled(Breadcrumbs)`
+        .MuiBreadcrumbs-li {
+            .MuiLink-root {
+                display: flex;
+            }
+
+            .MuiSvgIcon-root {
+                color: default;
+                margin-right: 0.25rem;
+            }
+        }
+    `;
+
+    const renderBreadCrumbs = (
+        <StyledBreadcrumbs>
+            <TextLink href="/" color="inherit">
+                <HomeOutlined fontSize="small" color="inherit" />
+                {t('common:home')}
+            </TextLink>
+            <TextLink href="/search" color="inherit">
+                <SearchOutlined fontSize="small" color="inherit" />
+                {t('common:search')}
+            </TextLink>
+            {extraBreadcrumbs.map(({ linkProps, icon: Icon, text }, i) => (
+                <TextLink key={i} {...linkProps}>
+                    <Icon fontSize="small" />
+                    {text}
+                </TextLink>
+            ))}
+        </StyledBreadcrumbs>
     );
 
     const renderDesktopContent = !isMobile && !responsive && (
@@ -139,11 +192,11 @@ export const TabLayout: React.FC<Props> = ({
                 <StyledCard>
                     <CardHeader
                         id="main-header"
-                        title={headerDesktop}
-                        subheader={renderSubheaderDesktop}
+                        title={renderBreadCrumbs}
+                        // subheader={renderBreadCrumbs}
                         action={renderDesktopHeaderActions}
                     />
-                    <CardContent>{extraDesktopActions}</CardContent>
+                    {/* <CardContent>{extraDesktopActions}</CardContent> */}
                     <Divider />
                     {renderLeftContent}
                 </StyledCard>
@@ -193,6 +246,9 @@ export const TabLayout: React.FC<Props> = ({
             headerLeft: headerLeftMobile,
         },
         customBottomNavbar: renderCustomBottomNavbar,
+        containerProps: {
+            maxWidth: 'xl' as MaxWidth,
+        },
     };
 
     return (
@@ -215,10 +271,9 @@ const StyledTabLayout = styled(Box)`
 
     #main-header {
         text-align: left;
-        padding-bottom: 0 !important;
 
-        .MuiCardHeader-content {
-            padding-left: 0.5rem;
+        .MuiCardHeader-subheader {
+            margin-top: 0.25rem;
         }
     }
 `;
