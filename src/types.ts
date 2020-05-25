@@ -210,7 +210,6 @@ export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
 
 export interface StyledBreadcrumbProps {
     linkProps: LinkProps;
-    icon: SvgIconComponent;
     text: string;
 }
 

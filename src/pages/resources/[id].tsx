@@ -292,12 +292,10 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const extraBreadcrumbs = [
         {
             linkProps: { ...staticBackUrl, color: 'inherit' },
-            icon: SchoolOutlined,
             text: courseName,
         },
         {
             linkProps: { href: '/resources/[id]', as: `/resources/${resourceId}`, color: 'textPrimary' },
-            icon: AssignmentOutlined,
             text: fullResourceTitle,
         },
     ];

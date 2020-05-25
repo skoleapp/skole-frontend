@@ -1,8 +1,11 @@
-import { Box, Fab, Grid, IconButton, Typography } from '@material-ui/core';
+import { Box, Fab, Grid, IconButton, InputBase, TextField, Typography } from '@material-ui/core';
 import {
     AddOutlined,
     CloudDownloadOutlined,
     FullscreenOutlined,
+    KeyboardArrowDownOutlined,
+    KeyboardArrowUp,
+    KeyboardArrowUpOutlined,
     PhotoSizeSelectActualOutlined,
     PrintOutlined,
     RemoveOutlined,
@@ -14,6 +17,8 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
+import { useDeviceContext } from 'src/context';
+import { breakpoints } from 'src/styles';
 import { LTWH, Position, Scaled, ScaledPosition, WH } from 'src/types';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
@@ -141,7 +146,6 @@ interface PDFViewerProps {
 }
 
 interface PDFViewerState {
-    numPages: number | null;
     drawing: boolean;
     rotate: number;
     scale: number;
@@ -154,10 +158,12 @@ interface PageFromElement {
 
 export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const { t } = useTranslation();
+    const isMobile = useDeviceContext();
     const documentRef = useRef<PDFDocumentProxy | null>(null);
+    const [numPages, setNumPages] = useState<number | null>(null);
+    const [pageNumber, setPageNumber] = useState(1);
 
     const [state, setState] = useState<PDFViewerState>({
-        numPages: null,
         drawing: false,
         rotate: 0,
         scale: 1,
@@ -183,10 +189,12 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
 
     const handleScaleUp = (): void => setState({ ...state, scale: scale + 0.1 });
     const handleScaleDown = (): void => setState({ ...state, scale: scale - 0.1 });
+    const changePage = (pageNumber: number): void => setPageNumber(pageNumber);
 
     const onDocumentLoadSuccess = (document: PDFDocumentProxy): void => {
         const { numPages } = document;
-        setState({ ...state, numPages });
+        setNumPages(numPages);
+        setPageNumber(1);
         documentRef.current = document;
     };
 
@@ -296,21 +304,29 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         }
     };
 
-    const renderPages = Array.from(new Array(state.numPages), (_, index) => (
+    const renderPages = Array.from(new Array(numPages), (_, index) => (
         <Page key={`page_${index + 1}`} pageNumber={index + 1} renderTextLayer={false} scale={scale} />
     ));
 
     const renderMouseSelection = <MouseSelection onChange={handleMouseSelectionChange} onSelection={handleSelection} />;
     const renderLoading = <LoadingBox text={t('resource:loadingResource')} />;
 
-    const renderToolbar = (
+    const renderToolbar = !isMobile && (
         <Box id="toolbar">
             <Grid container alignItems="center">
                 <Grid item xs={4} container justify="flex-start">
                     <Typography variant="subtitle1">test_resource.pdf</Typography>
                 </Grid>
-                <Grid item xs={4}>
-                    <Typography variant="subtitle1">1 / 1</Typography>
+                <Grid item xs={4} container justify="center">
+                    <IconButton size="small" color="inherit">
+                        <KeyboardArrowUpOutlined />
+                    </IconButton>
+                    <Typography id="page-numbers" variant="subtitle1">
+                        <TextField value={pageNumber} type="number" color="secondary" /> / {numPages}
+                    </Typography>
+                    <IconButton size="small" color="inherit">
+                        <KeyboardArrowDownOutlined />
+                    </IconButton>
                 </Grid>
                 <Grid item xs={4} container justify="flex-end">
                     <IconButton size="small" color="inherit">
@@ -353,9 +369,9 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
             noData={t('resource:resourceError')}
             rotate={rotate}
         >
+            {renderToolbar}
             {renderPages}
             {renderMouseSelection}
-            {renderToolbar}
             {renderPdfControls}
         </StyledSkolePDFViewer>
     );
@@ -363,23 +379,55 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
 
 const StyledSkolePDFViewer = styled(Document)`
     position: relative;
+    flex-grow: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: rgb(82, 86, 89);
-    height: 100%;
+    overflow: auto;
+
+    .react-pdf__Page {
+        @media only screen and (min-width: ${breakpoints.MD}) {
+            margin-top: 0.5rem;
+        }
+    }
 
     #toolbar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
+        display: flex;
         background-color: rgb(50, 54, 57);
-        color: var(--white);
+        color: var(--secondary);
         padding: 0.5rem;
+        width: 100%;
 
         .MuiButtonBase-root {
             padding: 0.25rem;
+        }
+
+        #page-numbers {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 0.5rem;
+
+            // Disable native spinners.
+            input[type='number']::-webkit-inner-spin-button,
+            input[type='number']::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            .MuiTextField-root {
+                width: 2rem;
+                height: 2rem;
+                background-color: rgb(38, 39, 41);
+                margin: 0 0.25rem 0 0;
+                border-radius: 0.1rem;
+
+                .MuiInputBase-root {
+                    color: var(--white) !important;
+                }
+            }
         }
     }
 

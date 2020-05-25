@@ -170,16 +170,13 @@ export const TabLayout: React.FC<Props> = ({
     const renderBreadCrumbs = (
         <StyledBreadcrumbs>
             <TextLink href="/" color="inherit">
-                <HomeOutlined fontSize="small" color="inherit" />
                 {t('common:home')}
             </TextLink>
             <TextLink href="/search" color="inherit">
-                <SearchOutlined fontSize="small" color="inherit" />
                 {t('common:search')}
             </TextLink>
-            {extraBreadcrumbs.map(({ linkProps, icon: Icon, text }, i) => (
+            {extraBreadcrumbs.map(({ linkProps, text }, i) => (
                 <TextLink key={i} {...linkProps}>
-                    <Icon fontSize="small" />
                     {text}
                 </TextLink>
             ))}
