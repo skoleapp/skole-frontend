@@ -128,7 +128,7 @@ export const TabLayout: React.FC<Props> = ({
     );
 
     const renderLeftTab = tabValue === 0 && (
-        <Box display="flex" flexGrow="1">
+        <Box display="flex" flexGrow="1" position="relative">
             {renderLeftContent}
         </Box>
     );
@@ -195,7 +195,9 @@ export const TabLayout: React.FC<Props> = ({
                     />
                     {/* <CardContent>{extraDesktopActions}</CardContent> */}
                     <Divider />
-                    {renderLeftContent}
+                    <Box position="relative" flexGrow="1" display="flex">
+                        {renderLeftContent}
+                    </Box>
                 </StyledCard>
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>

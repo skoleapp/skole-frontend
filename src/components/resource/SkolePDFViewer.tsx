@@ -1,24 +1,19 @@
-import { Box, Fab, Grid, IconButton, InputBase, TextField, Typography } from '@material-ui/core';
+import { Box, Fab, Grid, IconButton, TextField, Typography } from '@material-ui/core';
 import {
     AddOutlined,
     CloudDownloadOutlined,
     FullscreenOutlined,
-    KeyboardArrowDownOutlined,
-    KeyboardArrowUp,
-    KeyboardArrowUpOutlined,
-    PhotoSizeSelectActualOutlined,
     PrintOutlined,
     RemoveOutlined,
-    RotateLeftOutlined,
     RotateRightOutlined,
     TabUnselectedOutlined,
 } from '@material-ui/icons';
 import { PDFDocumentProxy } from 'pdfjs-dist';
-import React, { useEffect, useRef, useState } from 'react';
+import * as R from 'ramda';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
 import { useDeviceContext } from 'src/context';
-import { breakpoints } from 'src/styles';
 import { LTWH, Position, Scaled, ScaledPosition, WH } from 'src/types';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
@@ -156,11 +151,16 @@ interface PageFromElement {
     number: number;
 }
 
+interface PDFPage {
+    scrollIntoView: () => void;
+}
+
 export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
-    const documentRef = useRef<PDFDocumentProxy | null>(null);
-    const [numPages, setNumPages] = useState<number | null>(null);
+    const documentRef = useRef<Document>(null);
+    const pdfDocument: PDFDocumentProxy | undefined = R.path(['state', 'pdf'], documentRef.current);
+    const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
 
     const [state, setState] = useState<PDFViewerState>({
@@ -170,6 +170,14 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     });
 
     const { rotate, scale } = state;
+
+    useEffect(() => {
+        const documentSelector = document.getElementById('pdf-viewer-container');
+
+        if (!!documentSelector) {
+            documentSelector.addEventListener('gestureend', (e: any): void => setState({ ...state, scale: e.scale }));
+        }
+    }, []);
 
     const handleRotate = (): void => {
         if (rotate === 270) {
@@ -187,15 +195,30 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         }
     };
 
-    const handleScaleUp = (): void => setState({ ...state, scale: scale + 0.1 });
-    const handleScaleDown = (): void => setState({ ...state, scale: scale - 0.1 });
-    const changePage = (pageNumber: number): void => setPageNumber(pageNumber);
+    const handleScaleUp = (): void => {
+        if (scale < 2) {
+            setState({ ...state, scale: scale + 0.1 });
+        }
+    };
+
+    const handleScaleDown = (): void => {
+        if (scale > 0.1) {
+            setState({ ...state, scale: scale - 0.1 });
+        }
+    };
+
+    const handleChangePage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        const val = Number(e.target.value);
+        setPageNumber(val);
+
+        const page: PDFPage | undefined = R.path(['pages', val - 1], documentRef.current);
+        page && page.scrollIntoView();
+    };
 
     const onDocumentLoadSuccess = (document: PDFDocumentProxy): void => {
         const { numPages } = document;
         setNumPages(numPages);
         setPageNumber(1);
-        documentRef.current = document;
     };
 
     const handleMouseSelectionChange = (drawing: boolean): void => {
@@ -227,8 +250,6 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         boundingRect,
         rects,
     }: Position): Promise<ScaledPosition | null> => {
-        const pdfDocument = documentRef.current;
-
         if (!!pdfDocument) {
             const viewport = (await pdfDocument.getPage(pageNumber)).getViewport({ scale: 1 });
 
@@ -305,7 +326,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     };
 
     const renderPages = Array.from(new Array(numPages), (_, index) => (
-        <Page key={`page_${index + 1}`} pageNumber={index + 1} renderTextLayer={false} scale={scale} />
+        <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scale} />
     ));
 
     const renderMouseSelection = <MouseSelection onChange={handleMouseSelectionChange} onSelection={handleSelection} />;
@@ -318,15 +339,19 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
                     <Typography variant="subtitle1">test_resource.pdf</Typography>
                 </Grid>
                 <Grid item xs={4} container justify="center">
-                    <IconButton size="small" color="inherit">
-                        <KeyboardArrowUpOutlined />
-                    </IconButton>
-                    <Typography id="page-numbers" variant="subtitle1">
-                        <TextField value={pageNumber} type="number" color="secondary" /> / {numPages}
-                    </Typography>
-                    <IconButton size="small" color="inherit">
-                        <KeyboardArrowDownOutlined />
-                    </IconButton>
+                    <Box id="page-numbers">
+                        <TextField
+                            value={pageNumber}
+                            onChange={handleChangePage}
+                            type="number"
+                            color="secondary"
+                            inputProps={{ min: '1' }}
+                        />{' '}
+                        /{' '}
+                        <Typography id="num-pages" variant="subtitle1">
+                            {numPages}
+                        </Typography>
+                    </Box>
                 </Grid>
                 <Grid item xs={4} container justify="flex-end">
                     <IconButton size="small" color="inherit">
@@ -346,7 +371,24 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         </Box>
     );
 
-    const renderPdfControls = (
+    const renderDocument = (
+        <PinchZoomPan>
+            <Document
+                file={file}
+                onLoadSuccess={onDocumentLoadSuccess}
+                loading={renderLoading}
+                error={t('resource:resourceError')}
+                noData={t('resource:resourceError')}
+                rotate={rotate}
+                ref={documentRef}
+            >
+                {renderPages}
+                {renderMouseSelection}
+            </Document>
+        </PinchZoomPan>
+    );
+
+    const renderScaleControls = !isMobile && (
         <Box id="pdf-controls">
             <Fab size="small" onClick={toggleFullScreen}>
                 <FullscreenOutlined />
@@ -361,44 +403,25 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     );
 
     return (
-        <StyledSkolePDFViewer
-            file={file}
-            onLoadSuccess={onDocumentLoadSuccess}
-            loading={renderLoading}
-            error={t('resource:resourceError')}
-            noData={t('resource:resourceError')}
-            rotate={rotate}
-        >
+        <StyledSkolePDFViewer id="pdf-viewer-container">
             {renderToolbar}
-            {renderPages}
-            {renderMouseSelection}
-            {renderPdfControls}
+            {renderDocument}
+            {renderScaleControls}
         </StyledSkolePDFViewer>
     );
 };
 
-const StyledSkolePDFViewer = styled(Document)`
-    position: relative;
-    flex-grow: 1;
+const StyledSkolePDFViewer = styled(Box)`
+    position: absolute;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(82, 86, 89);
-    overflow: auto;
-
-    .react-pdf__Page {
-        @media only screen and (min-width: ${breakpoints.MD}) {
-            margin-top: 0.5rem;
-        }
-    }
 
     #toolbar {
-        display: flex;
         background-color: rgb(50, 54, 57);
         color: var(--secondary);
         padding: 0.5rem;
-        width: 100%;
 
         .MuiButtonBase-root {
             padding: 0.25rem;
@@ -408,14 +431,6 @@ const StyledSkolePDFViewer = styled(Document)`
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 0.5rem;
-
-            // Disable native spinners.
-            input[type='number']::-webkit-inner-spin-button,
-            input[type='number']::-webkit-outer-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
 
             .MuiTextField-root {
                 width: 2rem;
@@ -428,13 +443,45 @@ const StyledSkolePDFViewer = styled(Document)`
                     color: var(--white) !important;
                 }
             }
+
+            #num-pages {
+                margin-left: 0.25rem;
+            }
+        }
+    }
+
+    .react-pdf__Document {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgb(82, 86, 89);
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0.25rem 0;
+
+        .react-pdf__Page {
+            margin: 0.25rem 0;
+
+            .react-pdf__Page__canvas {
+                // width: 100% !important;
+                // height: auto !important;
+            }
+        }
+
+        .react-pdf__message--loading {
+            height: 100%;
+            width: 100%;
+            background-color: var(--white);
+            display: flex;
+            margin: -0.5rem 0;
         }
     }
 
     #pdf-controls {
         position: absolute;
-        bottom: 0;
-        right: 0;
+        bottom: 1rem;
+        right: 1rem;
         display: flex;
         flex-direction: column;
         padding: 0.5rem;
@@ -442,12 +489,5 @@ const StyledSkolePDFViewer = styled(Document)`
         .MuiFab-root {
             margin: 0.5rem;
         }
-    }
-
-    .react-pdf__message--loading {
-        height: 100%;
-        width: 100%;
-        background-color: var(--white);
-        display: flex;
     }
 `;
