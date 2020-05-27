@@ -11,6 +11,7 @@ import {
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import PanZoom from 'react-easy-panzoom';
 import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
 import { useDeviceContext } from 'src/context';
@@ -140,12 +141,6 @@ interface PDFViewerProps {
     file: string;
 }
 
-interface PDFViewerState {
-    drawing: boolean;
-    rotate: number;
-    scale: number;
-}
-
 interface PageFromElement {
     node: HTMLElement;
     number: number;
@@ -162,50 +157,31 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const pdfDocument: PDFDocumentProxy | undefined = R.path(['state', 'pdf'], documentRef.current);
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
+    const [rotate, setRotate] = useState(0);
+    const [drawing, setDrawing] = useState(false);
+    const [scale, setScale] = useState(1.0);
+    const handleScaleUp = (): false | void => setScale(scale => (scale < 3.0 ? scale + 0.1 : scale));
+    const handleScaleDown = (): false | void => setScale(scale => (scale > 0.5 ? scale - 0.1 : scale));
+    const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
+    const toggleFullScreen = (): false | void => (scale === 1.5 ? setScale(1) : setScale(1.5));
+    const handleMouseSelectionChange = (drawing: boolean): void => setDrawing(drawing);
 
-    const [state, setState] = useState<PDFViewerState>({
-        drawing: false,
-        rotate: 0,
-        scale: 1,
-    });
+    const onWheel = (e: WheelEvent): void => {
+        const { ctrlKey, deltaY } = e;
 
-    const { rotate, scale } = state;
+        if (ctrlKey) {
+            deltaY < 0 ? handleScaleUp() : handleScaleDown();
+        }
+    };
 
     useEffect(() => {
-        const documentSelector = document.getElementById('pdf-viewer-container');
+        const documentNode = document.querySelector('.react-pdf__Document');
+        !!documentNode && documentNode.addEventListener('wheel', onWheel as EventListener);
 
-        if (!!documentSelector) {
-            documentSelector.addEventListener('gestureend', (e: any): void => setState({ ...state, scale: e.scale }));
-        }
+        return (): void => {
+            !!documentNode && documentNode.removeEventListener('wheel', onWheel as EventListener);
+        };
     }, []);
-
-    const handleRotate = (): void => {
-        if (rotate === 270) {
-            setState({ ...state, rotate: 0 });
-        } else {
-            setState({ ...state, rotate: rotate + 90 });
-        }
-    };
-
-    const toggleFullScreen = (): void => {
-        if (scale === 1.5) {
-            setState({ ...state, scale: 1 });
-        } else {
-            setState({ ...state, scale: 1.5 });
-        }
-    };
-
-    const handleScaleUp = (): void => {
-        if (scale < 2) {
-            setState({ ...state, scale: scale + 0.1 });
-        }
-    };
-
-    const handleScaleDown = (): void => {
-        if (scale > 0.1) {
-            setState({ ...state, scale: scale - 0.1 });
-        }
-    };
 
     const handleChangePage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const val = Number(e.target.value);
@@ -219,10 +195,6 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         const { numPages } = document;
         setNumPages(numPages);
         setPageNumber(1);
-    };
-
-    const handleMouseSelectionChange = (drawing: boolean): void => {
-        setState({ ...state, drawing });
     };
 
     const getPageFromElement = (target: HTMLElement): PageFromElement | null => {
@@ -372,20 +344,18 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     );
 
     const renderDocument = (
-        <PinchZoomPan>
-            <Document
-                file={file}
-                onLoadSuccess={onDocumentLoadSuccess}
-                loading={renderLoading}
-                error={t('resource:resourceError')}
-                noData={t('resource:resourceError')}
-                rotate={rotate}
-                ref={documentRef}
-            >
-                {renderPages}
-                {renderMouseSelection}
-            </Document>
-        </PinchZoomPan>
+        <Document
+            file={file}
+            onLoadSuccess={onDocumentLoadSuccess}
+            loading={renderLoading}
+            error={t('resource:resourceError')}
+            noData={t('resource:resourceError')}
+            rotate={rotate}
+            ref={documentRef}
+        >
+            {renderPages}
+            {renderMouseSelection}
+        </Document>
     );
 
     const renderScaleControls = !isMobile && (
@@ -403,7 +373,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     );
 
     return (
-        <StyledSkolePDFViewer id="pdf-viewer-container">
+        <StyledSkolePDFViewer>
             {renderToolbar}
             {renderDocument}
             {renderScaleControls}
@@ -456,17 +426,11 @@ const StyledSkolePDFViewer = styled(Box)`
         flex-direction: column;
         align-items: center;
         background-color: rgb(82, 86, 89);
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: auto;
         padding: 0.25rem 0;
 
         .react-pdf__Page {
             margin: 0.25rem 0;
-
-            .react-pdf__Page__canvas {
-                // width: 100% !important;
-                // height: auto !important;
-            }
         }
 
         .react-pdf__message--loading {
