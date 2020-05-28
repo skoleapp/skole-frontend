@@ -11,10 +11,10 @@ import {
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import PanZoom from 'react-easy-panzoom';
 import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
 import { useDeviceContext } from 'src/context';
+import { breakpoints } from 'src/styles';
 import { LTWH, Position, Scaled, ScaledPosition, WH } from 'src/types';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
@@ -154,7 +154,6 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const documentRef = useRef<Document>(null);
-    const pdfDocument: PDFDocumentProxy | undefined = R.path(['state', 'pdf'], documentRef.current);
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
     const [rotate, setRotate] = useState(0);
@@ -163,7 +162,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const handleScaleUp = (): false | void => setScale(scale => (scale < 3.0 ? scale + 0.1 : scale));
     const handleScaleDown = (): false | void => setScale(scale => (scale > 0.5 ? scale - 0.1 : scale));
     const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
-    const toggleFullScreen = (): false | void => (scale === 1.5 ? setScale(1) : setScale(1.5));
+    const toggleFullScreen = (): false | void => (scale === 1.0 ? setScale(0.75) : setScale(1.0));
     const handleMouseSelectionChange = (drawing: boolean): void => setDrawing(drawing);
 
     const onWheel = (e: WheelEvent): void => {
@@ -186,7 +185,6 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const handleChangePage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const val = Number(e.target.value);
         setPageNumber(val);
-
         const page: PDFPage | undefined = R.path(['pages', val - 1], documentRef.current);
         page && page.scrollIntoView();
     };
@@ -222,6 +220,8 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         boundingRect,
         rects,
     }: Position): Promise<ScaledPosition | null> => {
+        const pdfDocument: PDFDocumentProxy | undefined = R.path(['state', 'pdf'], documentRef.current);
+
         if (!!pdfDocument) {
             const viewport = (await pdfDocument.getPage(pageNumber)).getViewport({ scale: 1 });
 
@@ -297,6 +297,8 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         }
     };
 
+    console.log('scale', scale);
+
     const renderPages = Array.from(new Array(numPages), (_, index) => (
         <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scale} />
     ));
@@ -358,7 +360,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         </Document>
     );
 
-    const renderScaleControls = !isMobile && (
+    const renderScaleControls = (
         <Box id="pdf-controls">
             <Fab size="small" onClick={toggleFullScreen}>
                 <FullscreenOutlined />
@@ -373,7 +375,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     );
 
     return (
-        <StyledSkolePDFViewer>
+        <StyledSkolePDFViewer scale={scale}>
             {renderToolbar}
             {renderDocument}
             {renderScaleControls}
@@ -381,7 +383,8 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     );
 };
 
-const StyledSkolePDFViewer = styled(Box)`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledSkolePDFViewer = styled(({ scale, ...props }) => <Box {...props} />)`
     position: absolute;
     width: 100%;
     height: 100%;
@@ -431,6 +434,13 @@ const StyledSkolePDFViewer = styled(Box)`
 
         .react-pdf__Page {
             margin: 0.25rem 0;
+            position: static !important;
+
+            .react-pdf__Page__canvas {
+                margin: 0 auto;
+                width: ${({ scale }): string => `calc(100% * ${scale})`} !important;
+                height: auto !important;
+            }
         }
 
         .react-pdf__message--loading {
