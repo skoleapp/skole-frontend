@@ -1,8 +1,11 @@
-import { Box, Fab, Grid, IconButton, TextField, Typography } from '@material-ui/core';
+import { Box, Button, Fab, Grid, IconButton, TextField, Typography } from '@material-ui/core';
 import {
     AddOutlined,
+    CancelOutlined,
+    ClearAllOutlined,
     CloudDownloadOutlined,
     FullscreenOutlined,
+    KeyboardArrowRightOutlined,
     PrintOutlined,
     RemoveOutlined,
     RotateRightOutlined,
@@ -53,7 +56,8 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
     });
 
     useEffect(() => {
-        const container = !!containerRef.current && containerRef.current.parentElement;
+        // const container = !!containerRef.current && containerRef.current.parentElement;
+        const container = document.querySelector('.react-pdf__Document');
 
         if (!!container) {
             // Get coordinates on container element.
@@ -66,7 +70,7 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
                 };
             };
 
-            container.addEventListener('mousemove', (e: MouseEvent) => {
+            const onMouseMove = (e: MouseEvent): void => {
                 const { start, locked } = stateRef.current;
 
                 if (!!start && !locked) {
@@ -75,10 +79,36 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
                         end: containerCoords(e.pageX, e.pageY),
                     });
                 }
-            });
+            };
 
-            container.addEventListener('mousedown', (e: MouseEvent) => {
+            const onMouseDown = (e: MouseEvent): void => {
                 const startTarget = e.target;
+
+                const onMouseUp = (e: MouseEvent): void => {
+                    const { start } = stateRef.current;
+
+                    if (!!start) {
+                        const end = containerCoords(e.pageX, e.pageY);
+                        const boundingRect = getBoundingRect(start, end);
+
+                        if (container.contains(e.target as Node) && !!e.altKey) {
+                            // Lock state.
+                            setState({
+                                ...stateRef.current,
+                                end,
+                                locked: true,
+                            });
+
+                            if (!!end) {
+                                onSelection(startTarget as HTMLElement, boundingRect);
+                            }
+                        } else {
+                            reset();
+                        }
+                    } else {
+                        reset();
+                    }
+                };
 
                 if (!!e.altKey) {
                     setState({
@@ -87,33 +117,17 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
                         locked: false,
                     });
 
-                    document.addEventListener('mouseup', (e: MouseEvent): void => {
-                        const { start } = stateRef.current;
-
-                        if (!!start) {
-                            const end = containerCoords(e.pageX, e.pageY);
-                            const boundingRect = getBoundingRect(start, end);
-
-                            if (container.contains(e.target as Node) && !!e.altKey) {
-                                // Lock state.
-                                setState({
-                                    ...stateRef.current,
-                                    end,
-                                    locked: true,
-                                });
-
-                                if (!!end) {
-                                    onSelection(startTarget as HTMLElement, boundingRect);
-                                }
-                            } else {
-                                reset();
-                            }
-                        } else {
-                            reset();
-                        }
-                    });
+                    document.addEventListener('mouseup', onMouseUp);
                 }
-            });
+            };
+
+            container.addEventListener('mousemove', onMouseMove);
+            container.addEventListener('mousedown', onMouseDown);
+
+            return (): void => {
+                container.removeEventListener('mousemove', onMouseMove);
+                container.removeEventListener('mousedown', onMouseDown);
+            };
         }
     }, []);
 
@@ -164,6 +178,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
     const toggleFullScreen = (): false | void => (scale === 1.0 ? setScale(0.75) : setScale(1.0));
     const handleMouseSelectionChange = (drawing: boolean): void => setDrawing(drawing);
+    const handleCancelDraw = (): void => setDrawing(false);
 
     const onWheel = (e: WheelEvent): void => {
         const { ctrlKey, deltaY } = e;
@@ -273,8 +288,8 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
             const scaledPosition = await viewportPositionToScaled(viewportPosition);
             const image = screenshot(startTarget, pageBoundingRect);
 
-            console.log('scaled position', scaledPosition);
-            console.log('image', image);
+            // console.log('scaled position', scaledPosition);
+            // console.log('image', image);
 
             // renderTipAtPosition(
             //     viewportPosition,
@@ -297,52 +312,67 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         }
     };
 
-    console.log('scale', scale);
-
     const renderPages = Array.from(new Array(numPages), (_, index) => (
-        <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scale} />
+        <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scale} renderTextLayer={false} />
     ));
 
     const renderMouseSelection = <MouseSelection onChange={handleMouseSelectionChange} onSelection={handleSelection} />;
     const renderLoading = <LoadingBox text={t('resource:loadingResource')} />;
 
-    const renderToolbar = !isMobile && (
-        <Box id="toolbar">
-            <Grid container alignItems="center">
-                <Grid item xs={4} container justify="flex-start">
-                    <Typography variant="subtitle1">test_resource.pdf</Typography>
-                </Grid>
-                <Grid item xs={4} container justify="center">
-                    <Box id="page-numbers">
-                        <TextField
-                            value={pageNumber}
-                            onChange={handleChangePage}
-                            type="number"
-                            color="secondary"
-                            inputProps={{ min: '1' }}
-                        />{' '}
-                        /{' '}
-                        <Typography id="num-pages" variant="subtitle1">
-                            {numPages}
-                        </Typography>
-                    </Box>
-                </Grid>
-                <Grid item xs={4} container justify="flex-end">
-                    <IconButton size="small" color="inherit">
-                        <TabUnselectedOutlined />
-                    </IconButton>
-                    <IconButton size="small" color="inherit" onClick={handleRotate}>
-                        <RotateRightOutlined />
-                    </IconButton>
-                    <IconButton size="small" color="inherit">
-                        <CloudDownloadOutlined />
-                    </IconButton>
-                    <IconButton size="small" color="inherit">
-                        <PrintOutlined />
-                    </IconButton>
-                </Grid>
+    const renderDrawingToolbarContent = (
+        <Grid container alignItems="center">
+            <Grid item xs={6} container justify="flex-start">
+                <Button onClick={handleCancelDraw} startIcon={<CancelOutlined />} color="primary">
+                    {t('common:cancel')}
+                </Button>
             </Grid>
-        </Box>
+            <Grid item xs={6} container justify="flex-end">
+                <Button endIcon={<KeyboardArrowRightOutlined />} variant="contained" color="primary">
+                    {t('common:continue')}
+                </Button>
+            </Grid>
+        </Grid>
+    );
+
+    const renderPreviewToolbarContent = (
+        <Grid container alignItems="center">
+            <Grid item xs={4} container justify="flex-start">
+                <Typography variant="subtitle1">test_resource.pdf</Typography>
+            </Grid>
+            <Grid item xs={4} container justify="center">
+                <Box id="page-numbers">
+                    <TextField
+                        value={pageNumber}
+                        onChange={handleChangePage}
+                        type="number"
+                        color="secondary"
+                        inputProps={{ min: '1' }}
+                    />{' '}
+                    /{' '}
+                    <Typography id="num-pages" variant="subtitle1">
+                        {numPages}
+                    </Typography>
+                </Box>
+            </Grid>
+            <Grid item xs={4} container justify="flex-end">
+                <IconButton size="small" color="inherit">
+                    <TabUnselectedOutlined />
+                </IconButton>
+                <IconButton size="small" color="inherit" onClick={handleRotate}>
+                    <RotateRightOutlined />
+                </IconButton>
+                <IconButton size="small" color="inherit">
+                    <CloudDownloadOutlined />
+                </IconButton>
+                <IconButton size="small" color="inherit">
+                    <PrintOutlined />
+                </IconButton>
+            </Grid>
+        </Grid>
+    );
+
+    const renderToolbar = !isMobile && (
+        <Box id="toolbar">{drawing ? renderDrawingToolbarContent : renderPreviewToolbarContent}</Box>
     );
 
     const renderDocument = (
@@ -360,7 +390,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         </Document>
     );
 
-    const renderScaleControls = (
+    const renderScaleControls = !isMobile && (
         <Box id="pdf-controls">
             <Fab size="small" onClick={toggleFullScreen}>
                 <FullscreenOutlined />
@@ -375,7 +405,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     );
 
     return (
-        <StyledSkolePDFViewer scale={scale}>
+        <StyledSkolePDFViewer scale={scale} drawing={drawing}>
             {renderToolbar}
             {renderDocument}
             {renderScaleControls}
@@ -384,7 +414,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledSkolePDFViewer = styled(({ scale, ...props }) => <Box {...props} />)`
+const StyledSkolePDFViewer = styled(({ scale, drawing, ...props }) => <Box {...props} />)`
     position: absolute;
     width: 100%;
     height: 100%;
@@ -392,11 +422,12 @@ const StyledSkolePDFViewer = styled(({ scale, ...props }) => <Box {...props} />)
     flex-direction: column;
 
     #toolbar {
-        background-color: rgb(50, 54, 57);
+        background-color: ${({ drawing }): string => (drawing ? 'var(--white)' : 'rgb(50, 54, 57)')};
         color: var(--secondary);
         padding: 0.5rem;
+        border-bottom: ${({ drawing }): string => (drawing ? 'var(--border)' : 'none')};
 
-        .MuiButtonBase-root {
+        .MuiIconButton-root {
             padding: 0.25rem;
         }
 
@@ -430,10 +461,9 @@ const StyledSkolePDFViewer = styled(({ scale, ...props }) => <Box {...props} />)
         align-items: center;
         background-color: rgb(82, 86, 89);
         overflow: auto;
-        padding: 0.25rem 0;
+        position: relative;
 
         .react-pdf__Page {
-            margin: 0.25rem 0;
             position: static !important;
 
             .react-pdf__Page__canvas {
@@ -448,7 +478,6 @@ const StyledSkolePDFViewer = styled(({ scale, ...props }) => <Box {...props} />)
             width: 100%;
             background-color: var(--white);
             display: flex;
-            margin: -0.5rem 0;
         }
     }
 
