@@ -2,7 +2,6 @@ import { Box, Button, Fab, Grid, IconButton, TextField, Typography } from '@mate
 import {
     AddOutlined,
     CancelOutlined,
-    ClearAllOutlined,
     CloudDownloadOutlined,
     FullscreenOutlined,
     KeyboardArrowRightOutlined,
@@ -13,12 +12,11 @@ import {
 } from '@material-ui/icons';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import * as R from 'ramda';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
-import { useDeviceContext } from 'src/context';
-import { breakpoints } from 'src/styles';
-import { LTWH, Position, Scaled, ScaledPosition, WH } from 'src/types';
+import { useCommentModalContext, useDeviceContext, usePDFViewerContext } from 'src/context';
+import { LTWH } from 'src/types';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
@@ -46,7 +44,7 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
     const [stateRef, setState] = useStateRef<State>(initialState); // Need to use mutable ref instead of immutable state.
     const reset = (): void => setState(initialState);
     const { start, end } = stateRef.current;
-    const containerRef = useRef<HTMLDivElement>(null);
+    const drawing = !!start && !!end;
 
     const getBoundingRect = (start: Coords, end: Coords): LTWH => ({
         left: Math.min(end.x, start.x),
@@ -56,7 +54,6 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
     });
 
     useEffect(() => {
-        // const container = !!containerRef.current && containerRef.current.parentElement;
         const container = document.querySelector('.react-pdf__Document');
 
         if (!!container) {
@@ -121,34 +118,27 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
                 }
             };
 
-            container.addEventListener('mousemove', onMouseMove);
-            container.addEventListener('mousedown', onMouseDown);
+            container.addEventListener('mousemove', onMouseMove as EventListener);
+            container.addEventListener('mousedown', onMouseDown as EventListener);
 
             return (): void => {
-                container.removeEventListener('mousemove', onMouseMove);
-                container.removeEventListener('mousedown', onMouseDown);
+                container.removeEventListener('mousemove', onMouseMove as EventListener);
+                container.removeEventListener('mousedown', onMouseDown as EventListener);
             };
         }
     }, []);
 
     useEffect(() => {
-        const drawing = !!start && !!end;
         onChange(drawing);
     }, [start, end]);
 
-    return (
-        <StyledMouseSelection ref={containerRef}>
-            {!!start && !!end && <Box style={getBoundingRect(start, end)} />}
-        </StyledMouseSelection>
-    );
+    return drawing && !!start && !!end ? <StyledMouseSelection style={getBoundingRect(start, end)} /> : null;
 };
 
-const StyledMouseSelection = styled.div`
-    > div {
-        position: absolute;
-        border: 0.05rem dashed #000000;
-        background-color: rgba(252, 232, 151, 0.5);
-    }
+const StyledMouseSelection = styled(Box)`
+    position: absolute;
+    border: 0.05rem dashed #000000;
+    background-color: rgba(252, 232, 151, 0.5);
 `;
 
 interface PDFViewerProps {
@@ -168,18 +158,31 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const documentRef = useRef<Document>(null);
-    const [numPages, setNumPages] = useState(1);
-    const [pageNumber, setPageNumber] = useState(1);
-    const [rotate, setRotate] = useState(0);
-    const [drawing, setDrawing] = useState(false);
-    const [scale, setScale] = useState(1.0);
+    const { toggleCommentModal } = useCommentModalContext();
+
+    const {
+        numPages,
+        setNumPages,
+        pageNumber,
+        setPageNumber,
+        rotate,
+        drawing,
+        setDrawing,
+        setScreenshot,
+        scale,
+        setScale,
+        handleRotate,
+    } = usePDFViewerContext();
+
     const handleScaleUp = (): false | void => setScale(scale => (scale < 3.0 ? scale + 0.1 : scale));
     const handleScaleDown = (): false | void => setScale(scale => (scale > 0.5 ? scale - 0.1 : scale));
-    const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
-    const toggleFullScreen = (): false | void => (scale === 1.0 ? setScale(0.75) : setScale(1.0));
     const handleMouseSelectionChange = (drawing: boolean): void => setDrawing(drawing);
     const handleCancelDraw = (): void => setDrawing(false);
 
+    // On mobile scale down and on desktop scale up.
+    const toggleFullScreen = (): false | void => (scale === 1.0 ? setScale(isMobile ? 0.75 : 1.25) : setScale(1.0));
+
+    // Update document scale based on mouse wheel events.
     const onWheel = (e: WheelEvent): void => {
         const { ctrlKey, deltaY } = e;
 
@@ -197,6 +200,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         };
     }, []);
 
+    // Scroll into page from given page number.
     const handleChangePage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const val = Number(e.target.value);
         setPageNumber(val);
@@ -210,6 +214,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         setPageNumber(1);
     };
 
+    // Find closest page canvas from DOM node.
     const getPageFromElement = (target: HTMLElement): PageFromElement | null => {
         const node = target.closest('.react-pdf__Page');
 
@@ -221,37 +226,39 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         }
     };
 
-    const viewportToScaled = (rect: LTWH, { width, height }: WH): Scaled => ({
-        x1: rect.left,
-        y1: rect.top,
-        x2: rect.left + rect.width,
-        y2: rect.top + rect.height,
-        width,
-        height,
-    });
+    // Some magic.
+    // const viewportToScaled = (rect: LTWH, { width, height }: WH): Scaled => ({
+    //     x1: rect.left,
+    //     y1: rect.top,
+    //     x2: rect.left + rect.width,
+    //     y2: rect.top + rect.height,
+    //     width,
+    //     height,
+    // });
 
-    const viewportPositionToScaled = async ({
-        pageNumber,
-        boundingRect,
-        rects,
-    }: Position): Promise<ScaledPosition | null> => {
-        const pdfDocument: PDFDocumentProxy | undefined = R.path(['state', 'pdf'], documentRef.current);
+    // Get scaled position based on document viewport.
+    // const viewportPositionToScaled = async ({
+    //     pageNumber,
+    //     boundingRect,
+    //     rects,
+    // }: Position): Promise<ScaledPosition | null> => {
+    //     const pdfDocument: PDFDocumentProxy | undefined = R.path(['state', 'pdf'], documentRef.current);
 
-        if (!!pdfDocument) {
-            const viewport = (await pdfDocument.getPage(pageNumber)).getViewport({ scale: 1 });
+    //     if (!!pdfDocument) {
+    //         const viewport = (await pdfDocument.getPage(pageNumber)).getViewport({ scale: 1 });
 
-            return {
-                boundingRect: viewportToScaled(boundingRect, viewport),
-                rects: (rects || []).map(rect => viewportToScaled(rect, viewport)),
-                pageNumber,
-            };
-        } else {
-            return null;
-        }
-    };
+    //         return {
+    //             boundingRect: viewportToScaled(boundingRect, viewport),
+    //             rects: (rects || []).map(rect => viewportToScaled(rect, viewport)),
+    //             pageNumber,
+    //         };
+    //     } else {
+    //         return null;
+    //     }
+    // };
 
     // Get closest PDF page and take screenshot of selected area.
-    const screenshot = (target: HTMLElement, position: LTWH): string | void => {
+    const getScreenshot = (target: HTMLElement, position: LTWH): string | null => {
         const canvas = target.closest('canvas');
         const { left, top, width, height } = position;
         const newCanvas = document.createElement('canvas');
@@ -264,6 +271,8 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
             const dpr: number = window.devicePixelRatio;
             newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
             return newCanvas.toDataURL('image/png');
+        } else {
+            return null;
         }
     };
 
@@ -271,7 +280,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         const page = getPageFromElement(startTarget);
 
         if (!!page) {
-            const pageNumber = page.number;
+            // const pageNumber = page.number;
 
             const pageBoundingRect = {
                 ...boundingRect,
@@ -279,14 +288,15 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
                 left: boundingRect.left - page.node.offsetLeft,
             };
 
-            const viewportPosition = {
-                boundingRect: pageBoundingRect,
-                rects: [],
-                pageNumber,
-            };
+            // const viewportPosition = {
+            //     boundingRect: pageBoundingRect,
+            //     rects: [],
+            //     pageNumber,
+            // };
 
-            const scaledPosition = await viewportPositionToScaled(viewportPosition);
-            const image = screenshot(startTarget, pageBoundingRect);
+            // const scaledPosition = await viewportPositionToScaled(viewportPosition);
+            const screenshot = getScreenshot(startTarget, pageBoundingRect);
+            setScreenshot(screenshot);
 
             // console.log('scaled position', scaledPosition);
             // console.log('image', image);
@@ -312,6 +322,10 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         }
     };
 
+    const handleDrawContinue = (): void => {
+        toggleCommentModal(true);
+    };
+
     const renderPages = Array.from(new Array(numPages), (_, index) => (
         <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scale} renderTextLayer={false} />
     ));
@@ -327,7 +341,12 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
                 </Button>
             </Grid>
             <Grid item xs={6} container justify="flex-end">
-                <Button endIcon={<KeyboardArrowRightOutlined />} variant="contained" color="primary">
+                <Button
+                    onClick={handleDrawContinue}
+                    endIcon={<KeyboardArrowRightOutlined />}
+                    variant="contained"
+                    color="primary"
+                >
                     {t('common:continue')}
                 </Button>
             </Grid>
@@ -465,10 +484,14 @@ const StyledSkolePDFViewer = styled(({ scale, drawing, ...props }) => <Box {...p
 
         .react-pdf__Page {
             position: static !important;
+            margin: 0 auto;
+            display: flex;
 
             .react-pdf__Page__canvas {
                 margin: 0 auto;
-                width: ${({ scale }): string => `calc(100% * ${scale})`} !important;
+
+                width: ${({ scale }): string =>
+                    `calc(100% * ${scale})`} !important; // Automatically update width based on scale.
                 height: auto !important;
             }
         }

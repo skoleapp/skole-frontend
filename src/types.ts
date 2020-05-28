@@ -9,7 +9,7 @@ import { LinkProps } from 'next/link';
 import { Extent } from 'ol/extent';
 import { Group } from 'ol/layer';
 import { PDFDocumentProxy } from 'pdfjs-dist';
-import { MutableRefObject, SyntheticEvent } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
 
 import { CommentObjectType, ErrorType, SchoolObjectType, UserObjectType } from '../generated/graphql';
@@ -181,11 +181,17 @@ export interface SettingsContext {
 
 export interface PDFViewerContext {
     numPages: number;
-    currentPage: number;
-    areaSelected: boolean;
-    setNumPages: () => void;
-    setCurrentPage: () => void;
-    setAreaSelected: () => void;
+    setNumPages: Dispatch<SetStateAction<number>>;
+    pageNumber: number;
+    setPageNumber: Dispatch<SetStateAction<number>>;
+    rotate: number;
+    drawing: boolean;
+    setDrawing: Dispatch<SetStateAction<boolean>>;
+    screenshot: string | null;
+    setScreenshot: Dispatch<SetStateAction<string | null>>;
+    scale: number;
+    setScale: Dispatch<SetStateAction<number>>;
+    handleRotate: () => void;
 }
 
 export interface DiscussionBoxContext {

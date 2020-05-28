@@ -3,12 +3,18 @@ import { AttachFileOutlined, CameraAltOutlined, ClearOutlined, SendOutlined } fr
 import { Form, Formik, FormikProps } from 'formik';
 import Image from 'material-ui-image';
 import * as R from 'ramda';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
-import { useAuthContext, useCommentModalContext, useDeviceContext, useNotificationsContext } from '../../context';
+import {
+    useAuthContext,
+    useCommentModalContext,
+    useDeviceContext,
+    useNotificationsContext,
+    usePDFViewerContext,
+} from '../../context';
 import { CommentTarget } from '../../types';
 import { useForm } from '../../utils';
 import { ModalHeader } from './ModalHeader';
@@ -35,10 +41,15 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
     const { verified, notVerifiedTooltip } = useAuthContext();
     const disabled = verified === false;
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
-    const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const { toggleNotification } = useNotificationsContext();
     const { commentModalOpen, toggleCommentModal } = useCommentModalContext();
+    const { screenshot } = usePDFViewerContext();
+    const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const isMobile = useDeviceContext();
+
+    useEffect(() => {
+        !!screenshot && setAttachment(screenshot);
+    }, [screenshot]);
 
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);

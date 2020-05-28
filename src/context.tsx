@@ -142,15 +142,13 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [settingsOpen, setSettingsOpen] = useState(false);
     const toggleSettings = (open: boolean): void => setSettingsOpen(open);
 
-    const [pdf, setPdf] = useState<Pick<PDFViewerContext, 'numPages' | 'currentPage' | 'areaSelected'>>({
-        numPages: 0,
-        currentPage: 0,
-        areaSelected: false,
-    });
-
-    const setNumPages = (numPages: number): void => setPdf({ ...pdf, numPages });
-    const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
-    const setAreaSelected = (areaSelected: boolean): void => setPdf({ ...pdf, areaSelected });
+    const [numPages, setNumPages] = useState(1);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [rotate, setRotate] = useState(0);
+    const [drawing, setDrawing] = useState(false);
+    const [screenshot, setScreenshot] = useState(null);
+    const [scale, setScale] = useState(1.0);
+    const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
     const [comments, setComments] = useState<CommentObjectType[] | null>(null);
 
@@ -184,10 +182,18 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             toggleSettings,
         },
         pdfViewer: {
-            ...pdf,
+            numPages,
             setNumPages,
-            setCurrentPage,
-            setAreaSelected,
+            pageNumber,
+            setPageNumber,
+            rotate,
+            drawing,
+            setDrawing,
+            screenshot,
+            setScreenshot,
+            scale,
+            setScale,
+            handleRotate,
         },
         isMobileGuess,
         discussionBox: {
