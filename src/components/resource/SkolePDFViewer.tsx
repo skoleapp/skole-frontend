@@ -1,8 +1,9 @@
-import { Box, Button, Fab, Grid, IconButton, TextField, Typography } from '@material-ui/core';
+import { Box, Button, Fab, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
 import {
     AddOutlined,
     CancelOutlined,
     CloudDownloadOutlined,
+    FullscreenExit,
     FullscreenOutlined,
     KeyboardArrowRightOutlined,
     PrintOutlined,
@@ -15,11 +16,10 @@ import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
-import { useCommentModalContext, useDeviceContext, usePDFViewerContext } from 'src/context';
-import { LTWH } from 'src/types';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
+import { useCommentModalContext, useDeviceContext, useNotificationsContext, usePDFViewerContext } from '../../context';
 import { LoadingBox } from '../shared';
 
 interface Coords {
@@ -33,18 +33,26 @@ interface State {
     end: Coords | null;
 }
 
+export interface LTWH {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+}
+
 interface MouseSelectionProps {
     onSelection: (startTarget: HTMLElement, boundingRect: LTWH) => void;
-    onChange: (drawing: boolean) => void;
 }
 
 const initialState = { start: null, end: null, locked: false };
 
-const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }) => {
+const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) => {
+    const { drawMode, setDrawMode, setScreenshot } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // Need to use mutable ref instead of immutable state.
-    const reset = (): void => setState(initialState);
+    const [drawingAllowedRef, setDrawingAllowedRef] = useStateRef(false);
     const { start, end } = stateRef.current;
-    const drawing = !!start && !!end;
+    // const drawing = !!start && !!end;
+    const reset = (): void => setState(initialState);
 
     const getBoundingRect = (start: Coords, end: Coords): LTWH => ({
         left: Math.min(end.x, start.x),
@@ -88,7 +96,7 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
                         const end = containerCoords(e.pageX, e.pageY);
                         const boundingRect = getBoundingRect(start, end);
 
-                        if (container.contains(e.target as Node) && !!e.altKey) {
+                        if (container.contains(e.target as Node) && (!!e.altKey || drawingAllowedRef.current)) {
                             // Lock state.
                             setState({
                                 ...stateRef.current,
@@ -107,7 +115,9 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
                     }
                 };
 
-                if (!!e.altKey) {
+                console.log('allowed', drawingAllowedRef.current);
+
+                if (!!e.altKey || drawingAllowedRef.current) {
                     setState({
                         start: containerCoords(e.pageX, e.pageY),
                         end: null,
@@ -128,11 +138,24 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection, onChange }
         }
     }, []);
 
+    // Only toggle draw mode on here.
     useEffect(() => {
-        onChange(drawing);
-    }, [start, end]);
+        const { start, end } = stateRef.current;
+        const drawing = !!start && !!end;
+        drawing && setDrawMode(drawing);
+    }, [stateRef.current]);
 
-    return drawing && !!start && !!end ? <StyledMouseSelection style={getBoundingRect(start, end)} /> : null;
+    // Update mutable drawing allowed state based on context state.
+    useEffect(() => {
+        setDrawingAllowedRef(drawMode);
+
+        if (!drawMode) {
+            reset();
+            setScreenshot(null);
+        }
+    }, [drawMode]);
+
+    return drawMode && !!start && !!end ? <StyledMouseSelection style={getBoundingRect(start, end)} /> : null;
 };
 
 const StyledMouseSelection = styled(Box)`
@@ -154,30 +177,41 @@ interface PDFPage {
     scrollIntoView: () => void;
 }
 
-export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
-    const { t } = useTranslation();
-    const isMobile = useDeviceContext();
-    const documentRef = useRef<Document>(null);
-    const { toggleCommentModal } = useCommentModalContext();
-
+export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const {
         numPages,
         setNumPages,
         pageNumber,
         setPageNumber,
         rotate,
-        drawing,
-        setDrawing,
+        drawMode,
+        setDrawMode,
+        screenshot,
         setScreenshot,
         scale,
         setScale,
         handleRotate,
     } = usePDFViewerContext();
 
-    const handleScaleUp = (): false | void => setScale(scale => (scale < 3.0 ? scale + 0.1 : scale));
+    const { t } = useTranslation();
+    const isMobile = useDeviceContext();
+    const { toggleNotification } = useNotificationsContext();
+    const documentRef = useRef<Document>(null);
+    const { toggleCommentModal } = useCommentModalContext();
+    const isFullscreen = scale > 1;
+    const handleCancelDraw = (): void => setDrawMode(false);
+    const handleStartDrawing = (): void => setDrawMode(true);
+
+    // Scale up by 10% if under limit.
+    const handleScaleUp = (): false | void => setScale(scale => (scale < 2.5 ? scale + 0.1 : scale));
+
+    // Scale down by 10% if over limit.
     const handleScaleDown = (): false | void => setScale(scale => (scale > 0.5 ? scale - 0.1 : scale));
-    const handleMouseSelectionChange = (drawing: boolean): void => setDrawing(drawing);
-    const handleCancelDraw = (): void => setDrawing(false);
+
+    const handleContinueDraw = (): void => {
+        setDrawMode(false);
+        toggleCommentModal(true);
+    };
 
     // On mobile scale down and on desktop scale up.
     const toggleFullScreen = (): false | void => (scale === 1.0 ? setScale(isMobile ? 0.75 : 1.25) : setScale(1.0));
@@ -226,37 +260,6 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         }
     };
 
-    // Some magic.
-    // const viewportToScaled = (rect: LTWH, { width, height }: WH): Scaled => ({
-    //     x1: rect.left,
-    //     y1: rect.top,
-    //     x2: rect.left + rect.width,
-    //     y2: rect.top + rect.height,
-    //     width,
-    //     height,
-    // });
-
-    // Get scaled position based on document viewport.
-    // const viewportPositionToScaled = async ({
-    //     pageNumber,
-    //     boundingRect,
-    //     rects,
-    // }: Position): Promise<ScaledPosition | null> => {
-    //     const pdfDocument: PDFDocumentProxy | undefined = R.path(['state', 'pdf'], documentRef.current);
-
-    //     if (!!pdfDocument) {
-    //         const viewport = (await pdfDocument.getPage(pageNumber)).getViewport({ scale: 1 });
-
-    //         return {
-    //             boundingRect: viewportToScaled(boundingRect, viewport),
-    //             rects: (rects || []).map(rect => viewportToScaled(rect, viewport)),
-    //             pageNumber,
-    //         };
-    //     } else {
-    //         return null;
-    //     }
-    // };
-
     // Get closest PDF page and take screenshot of selected area.
     const getScreenshot = (target: HTMLElement, position: LTWH): string | null => {
         const canvas = target.closest('canvas');
@@ -267,85 +270,66 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         newCanvas.height = height;
         const newCanvasContext = newCanvas.getContext('2d');
 
-        if (!!newCanvasContext && !!canvas) {
+        if (!!newCanvas && !!newCanvasContext && !!canvas) {
             const dpr: number = window.devicePixelRatio;
             newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
             return newCanvas.toDataURL('image/png');
         } else {
+            toggleNotification(t('resource:markAreaError'));
             return null;
         }
     };
 
-    const handleSelection = async (startTarget: HTMLElement, boundingRect: LTWH): Promise<void> => {
+    const handleSelection = (startTarget: HTMLElement, boundingRect: LTWH): void => {
         const page = getPageFromElement(startTarget);
+        console.log('page', page);
 
         if (!!page) {
-            // const pageNumber = page.number;
-
             const pageBoundingRect = {
                 ...boundingRect,
                 top: boundingRect.top - page.node.offsetTop,
                 left: boundingRect.left - page.node.offsetLeft,
             };
 
-            // const viewportPosition = {
-            //     boundingRect: pageBoundingRect,
-            //     rects: [],
-            //     pageNumber,
-            // };
-
-            // const scaledPosition = await viewportPositionToScaled(viewportPosition);
             const screenshot = getScreenshot(startTarget, pageBoundingRect);
             setScreenshot(screenshot);
-
-            // console.log('scaled position', scaledPosition);
-            // console.log('image', image);
-
-            // renderTipAtPosition(
-            //     viewportPosition,
-            //     onSelectionFinished(
-            //         scaledPosition,
-            //         { image },
-            //         () => hideTipAndSelection(),
-            //         () =>
-            //             setState({
-            //                 ...state,
-            //                 ghostHighlight: {
-            //                     position: scaledPosition,
-            //                     content: { image },
-            //                 } as Highlight,
-            //             }),
-            //     ),
-            // );
-
-            // renderHighlights();
         }
-    };
-
-    const handleDrawContinue = (): void => {
-        toggleCommentModal(true);
     };
 
     const renderPages = Array.from(new Array(numPages), (_, index) => (
         <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scale} renderTextLayer={false} />
     ));
 
-    const renderMouseSelection = <MouseSelection onChange={handleMouseSelectionChange} onSelection={handleSelection} />;
+    const renderMouseSelection = <MouseSelection onSelection={handleSelection} />;
     const renderLoading = <LoadingBox text={t('resource:loadingResource')} />;
 
-    const renderDrawingToolbarContent = (
+    const renderError = (
+        <Box flexGrow="1" display="flex" justifyContent="center" alignItems="center">
+            <Typography variant="body2" color="textSecondary">
+                {t('resource:errorLoadingResource')}
+            </Typography>
+        </Box>
+    );
+
+    const renderDrawModeToolbarContent = (
         <Grid container alignItems="center">
-            <Grid item xs={6} container justify="flex-start">
+            <Grid item xs={3} container justify="flex-start">
                 <Button onClick={handleCancelDraw} startIcon={<CancelOutlined />} color="primary">
                     {t('common:cancel')}
                 </Button>
             </Grid>
-            <Grid item xs={6} container justify="flex-end">
+            <Grid item xs={6}>
+                <Typography variant="subtitle2" color="textSecondary">
+                    {t('resource:drawModeInfo')}
+                </Typography>
+            </Grid>
+            <Grid item xs={3} container justify="flex-end">
                 <Button
-                    onClick={handleDrawContinue}
+                    onClick={handleContinueDraw}
                     endIcon={<KeyboardArrowRightOutlined />}
                     variant="contained"
                     color="primary"
+                    disabled={!screenshot}
                 >
                     {t('common:continue')}
                 </Button>
@@ -374,24 +358,32 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
                 </Box>
             </Grid>
             <Grid item xs={4} container justify="flex-end">
-                <IconButton size="small" color="inherit">
-                    <TabUnselectedOutlined />
-                </IconButton>
-                <IconButton size="small" color="inherit" onClick={handleRotate}>
-                    <RotateRightOutlined />
-                </IconButton>
-                <IconButton size="small" color="inherit">
-                    <CloudDownloadOutlined />
-                </IconButton>
-                <IconButton size="small" color="inherit">
-                    <PrintOutlined />
-                </IconButton>
+                <Tooltip title={t('resource:markAreaTooltip')}>
+                    <IconButton onClick={handleStartDrawing} size="small" color="inherit">
+                        <TabUnselectedOutlined />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title={t('resource:rotateTooltip')}>
+                    <IconButton size="small" color="inherit" onClick={handleRotate}>
+                        <RotateRightOutlined />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title={t('resource:downloadResourceTooltip')}>
+                    <IconButton size="small" color="inherit">
+                        <CloudDownloadOutlined />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title={t('resource:printResourceTooltip')}>
+                    <IconButton size="small" color="inherit">
+                        <PrintOutlined />
+                    </IconButton>
+                </Tooltip>
             </Grid>
         </Grid>
     );
 
     const renderToolbar = !isMobile && (
-        <Box id="toolbar">{drawing ? renderDrawingToolbarContent : renderPreviewToolbarContent}</Box>
+        <Box id="toolbar">{drawMode ? renderDrawModeToolbarContent : renderPreviewToolbarContent}</Box>
     );
 
     const renderDocument = (
@@ -399,8 +391,8 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
             file={file}
             onLoadSuccess={onDocumentLoadSuccess}
             loading={renderLoading}
-            error={t('resource:resourceError')}
-            noData={t('resource:resourceError')}
+            error={renderError}
+            noData={renderError}
             rotate={rotate}
             ref={documentRef}
         >
@@ -411,20 +403,26 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
 
     const renderScaleControls = !isMobile && (
         <Box id="pdf-controls">
-            <Fab size="small" onClick={toggleFullScreen}>
-                <FullscreenOutlined />
-            </Fab>
-            <Fab size="small" onClick={handleScaleUp}>
-                <AddOutlined />
-            </Fab>
-            <Fab size="small" onClick={handleScaleDown}>
-                <RemoveOutlined />
-            </Fab>
+            <Tooltip title={isFullscreen ? t('resource:exitFullscreenTooltip') : t('resource:enterFullscreenTooltip')}>
+                <Fab size="small" color="secondary" onClick={toggleFullScreen}>
+                    {isFullscreen ? <FullscreenExit /> : <FullscreenOutlined />}
+                </Fab>
+            </Tooltip>
+            <Tooltip title={t('resource:zoomInTooltip')}>
+                <Fab size="small" color="secondary" onClick={handleScaleUp}>
+                    <AddOutlined />
+                </Fab>
+            </Tooltip>
+            <Tooltip title={t('resource:zoomOutTooltip')}>
+                <Fab size="small" color="secondary" onClick={handleScaleDown}>
+                    <RemoveOutlined />
+                </Fab>
+            </Tooltip>
         </Box>
     );
 
     return (
-        <StyledSkolePDFViewer scale={scale} drawing={drawing}>
+        <StyledSkolePDFViewer scale={scale} drawMode={drawMode}>
             {renderToolbar}
             {renderDocument}
             {renderScaleControls}
@@ -433,7 +431,7 @@ export const SkolePDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledSkolePDFViewer = styled(({ scale, drawing, ...props }) => <Box {...props} />)`
+const StyledSkolePDFViewer = styled(({ scale, drawMode, ...props }) => <Box {...props} />)`
     position: absolute;
     width: 100%;
     height: 100%;
@@ -441,10 +439,10 @@ const StyledSkolePDFViewer = styled(({ scale, drawing, ...props }) => <Box {...p
     flex-direction: column;
 
     #toolbar {
-        background-color: ${({ drawing }): string => (drawing ? 'var(--white)' : 'rgb(50, 54, 57)')};
+        background-color: ${({ drawMode }): string => (drawMode ? 'var(--white)' : 'rgb(50, 54, 57)')};
         color: var(--secondary);
         padding: 0.5rem;
-        border-bottom: ${({ drawing }): string => (drawing ? 'var(--border)' : 'none')};
+        border-bottom: ${({ drawMode }): string => (drawMode ? 'var(--border)' : 'none')};
 
         .MuiIconButton-root {
             padding: 0.25rem;
@@ -489,14 +487,15 @@ const StyledSkolePDFViewer = styled(({ scale, drawing, ...props }) => <Box {...p
 
             .react-pdf__Page__canvas {
                 margin: 0 auto;
-
                 width: ${({ scale }): string =>
                     `calc(100% * ${scale})`} !important; // Automatically update width based on scale.
                 height: auto !important;
             }
         }
 
-        .react-pdf__message--loading {
+        .react-pdf__message--loading,
+        .react-pdf__message--no-data,
+        .react-pdf__message--error {
             height: 100%;
             width: 100%;
             background-color: var(--white);

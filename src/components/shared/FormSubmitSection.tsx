@@ -2,6 +2,7 @@ import { Box, Button, ButtonProps, FormControl } from '@material-ui/core';
 import { Send } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
+import styled from 'styled-components';
 
 import { FormErrorMessage } from './FormErrorMessage';
 import { LoadingBox } from './LoadingBox';
@@ -10,15 +11,14 @@ interface Props extends FormikProps<{}> {
     submitButtonText: string;
 }
 
-export const FormSubmitSection: React.FC<Props & ButtonProps> = ({
+export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | 'endIcon'>> = ({
     isSubmitting,
     submitButtonText,
     endIcon,
     variant,
-    color,
     values,
 }) => (
-    <Box display="flex" flexDirection="column" alignItems="center">
+    <StyledFormSubmitSection display="flex" flexDirection="column" alignItems="center">
         {isSubmitting ? (
             <FormControl fullWidth>
                 <LoadingBox text={(values as { general: string }).general} />
@@ -36,11 +36,21 @@ export const FormSubmitSection: React.FC<Props & ButtonProps> = ({
                 disabled={isSubmitting}
                 variant={variant || 'contained'}
                 endIcon={endIcon || <Send />}
-                color={color || 'primary'}
                 fullWidth
             >
                 {submitButtonText}
             </Button>
         </FormControl>
-    </Box>
+    </StyledFormSubmitSection>
 );
+
+const StyledFormSubmitSection = styled(Box)`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button[type='submit'] {
+        background-color: var(--contrast);
+        color: var(--white);
+    }
+`;

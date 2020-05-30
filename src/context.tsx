@@ -13,7 +13,6 @@ import {
     DiscussionBoxContext,
     LanguageSelectorContext,
     NotificationsContext,
-    PDFPage,
     PDFViewerContext,
     SettingsContext,
     SkoleContextType,
@@ -49,12 +48,18 @@ const SkolePageContext = createContext<SkoleContextType>({
         toggleSettings: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     pdfViewer: {
-        numPages: 0,
-        currentPage: 0,
-        areaSelected: false,
-        setNumPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        setCurrentPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        setAreaSelected: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+        numPages: 1,
+        setNumPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        pageNumber: 1,
+        setPageNumber: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        rotate: 0,
+        drawing: false,
+        setDrawing: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        screenshot: null,
+        setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        scale: 1.0,
+        setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        handleRotate: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
     isMobileGuess: null,
     discussionBox: {
@@ -145,8 +150,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
     const [rotate, setRotate] = useState(0);
-    const [drawing, setDrawing] = useState(false);
-    const [screenshot, setScreenshot] = useState(null);
+    const [drawMode, setDrawMode] = useState(false);
+    const [screenshot, setScreenshot] = useState<string | null>(null);
     const [scale, setScale] = useState(1.0);
     const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
@@ -187,8 +192,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             pageNumber,
             setPageNumber,
             rotate,
-            drawing,
-            setDrawing,
+            drawMode,
+            setDrawMode,
             screenshot,
             setScreenshot,
             scale,

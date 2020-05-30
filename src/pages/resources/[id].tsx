@@ -1,14 +1,9 @@
 import { Box, Grid, IconButton, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
 import {
-    AssignmentOutlined,
     CloudDownloadOutlined,
     DeleteOutline,
-    FullscreenOutlined,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
-    NavigateBeforeOutlined,
-    NavigateNextOutlined,
-    SchoolOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
@@ -16,7 +11,6 @@ import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SkolePDFViewer } from 'src/components/resource/SkolePDFViewer';
 import styled from 'styled-components';
 
 import {
@@ -33,13 +27,14 @@ import {
     InfoModalContent,
     NavbarContainer,
     NotFoundLayout,
+    SkolePdfViewer,
     StarButton,
     StyledBottomNavigation,
     StyledList,
     TabLayout,
     TextLink,
 } from '../../components';
-import { useAuthContext, useNotificationsContext, usePDFViewerContext } from '../../context';
+import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';
@@ -330,7 +325,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledBottomNavigation>
     );
 
-    const renderPDFViewer = <SkolePDFViewer file={file} />;
+    const renderPDFViewer = <SkolePdfViewer file={file} />;
     const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
 
     const layoutProps = {

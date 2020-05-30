@@ -43,10 +43,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { commentModalOpen, toggleCommentModal } = useCommentModalContext();
-    const { screenshot } = usePDFViewerContext();
+    const { screenshot, setScreenshot } = usePDFViewerContext();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const isMobile = useDeviceContext();
 
+    // Use screenshot as attachment is area has been marked.
     useEffect(() => {
         !!screenshot && setAttachment(screenshot);
     }, [screenshot]);
@@ -54,6 +55,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);
         toggleCommentModal(false);
+        setScreenshot(null);
     };
 
     const onError = (): void => toggleNotification(t('notifications:messageError'));

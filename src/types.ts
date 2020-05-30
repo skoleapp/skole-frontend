@@ -185,8 +185,8 @@ export interface PDFViewerContext {
     pageNumber: number;
     setPageNumber: Dispatch<SetStateAction<number>>;
     rotate: number;
-    drawing: boolean;
-    setDrawing: Dispatch<SetStateAction<boolean>>;
+    drawMode: boolean;
+    setDrawMode: Dispatch<SetStateAction<boolean>>;
     screenshot: string | null;
     setScreenshot: Dispatch<SetStateAction<string | null>>;
     scale: number;
@@ -226,99 +226,4 @@ interface CustomApolloClient extends ApolloClient<NormalizedCacheObject> {
 export interface ApolloContext extends NextPageContext {
     apolloClient: CustomApolloClient;
     apolloState: {};
-}
-
-export interface LTWH {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-}
-
-export interface WH {
-    width: number;
-    height: number;
-}
-
-export interface Scaled {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    width: number;
-    height: number;
-}
-
-export interface Position {
-    boundingRect: LTWH;
-    rects: LTWH[];
-    pageNumber: number;
-}
-
-export interface ScaledPosition {
-    boundingRect: Scaled;
-    rects: Scaled[];
-    pageNumber: number;
-    usePdfCoordinates?: boolean;
-}
-
-export interface HighlightContent {
-    text?: string;
-    image?: string;
-}
-
-export interface HighlightComment {
-    text: string;
-    emoji: string;
-}
-
-export interface Highlight {
-    id: string;
-    position: ScaledPosition;
-    content: HighlightContent;
-    comment: HighlightComment;
-}
-
-export type ViewportHighlight = Highlight & {
-    position: Position;
-};
-
-export interface ViewPort {
-    convertToPdfPoint: (x: number, y: number) => number[];
-    convertToViewportRectangle: (pdfRectangle: number[]) => number[];
-    width: number;
-    height: number;
-}
-
-export interface PDFJSViewer {
-    container: HTMLDivElement;
-    viewer: HTMLDivElement;
-    getPageView: (
-        page: number,
-    ) => {
-        textLayer: { textLayerDiv: HTMLDivElement };
-        viewport: ViewPort;
-        div: HTMLDivElement;
-        canvas: HTMLCanvasElement;
-    };
-    setDocument: (document: PDFDocumentProxy) => Promise<void>;
-    scrollPageIntoView: (options: { pageNumber: number; destArray: unknown[] }) => void;
-    currentScaleValue: string;
-}
-
-export type PDFJSLinkService = {
-    setDocument: (document: PDFDocumentProxy) => void;
-    setViewer: (viewer: PDFJSViewer) => void;
-};
-
-export interface PDFJS {
-    TextLayerBuilder: {
-        prototype: {
-            _bindMouse: () => void;
-        };
-    };
-    PDFViewer: (options: Record<string, {}>) => PDFJSViewer;
-    PDFLinkService: () => PDFJSLinkService;
-    getDocument: (url: string) => Promise<PDFDocumentProxy>;
-    disableWorker: boolean;
 }

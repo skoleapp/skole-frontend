@@ -1,7 +1,6 @@
 import { Avatar, Box, Button, Card, CardContent, InputBase, Typography } from '@material-ui/core';
 import {
     CloudUploadOutlined,
-    ContactSupportOutlined,
     LibraryAddOutlined,
     SchoolOutlined,
     SearchOutlined,
@@ -13,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { UrlObject } from 'url';
 
-import { ButtonLink, MainLayout } from '../components';
+import { MainLayout } from '../components';
 import { includeDefaultNamespaces, Link } from '../i18n';
 import { withAuthSync } from '../lib';
 import { breakpoints } from '../styles';
@@ -68,7 +67,7 @@ const IndexPage: NextPage<I18nProps> = () => {
                             <Typography variant="h1">{t('common:slogan')}</Typography>
                         </Box>
                         <Box marginTop="1rem">
-                            <Typography variant="body2">{t('index:marketingText')}</Typography>
+                            <Typography variant="subtitle1">{t('index:marketingText')}</Typography>
                         </Box>
                         <Box id="search-widget" marginTop="1rem">
                             <form onSubmit={handleSubmit}>
@@ -85,7 +84,7 @@ const IndexPage: NextPage<I18nProps> = () => {
                     </Box>
                 </Box>
                 <Box marginTop="1rem">
-                    <Typography variant="h3" color="primary">
+                    <Typography variant="h2" color="primary">
                         {t('index:marketingText2')}
                     </Typography>
                 </Box>
@@ -104,16 +103,6 @@ const IndexPage: NextPage<I18nProps> = () => {
                             </Card>
                         </Link>
                     ))}
-                </Box>
-                <Box marginTop="2rem">
-                    <Typography variant="subtitle1" color="primary" gutterBottom>
-                        {t('index:contactUsText')}
-                    </Typography>
-                </Box>
-                <Box marginTop="0.5rem">
-                    <ButtonLink href="/contact" variant="outlined" color="primary" endIcon={<ContactSupportOutlined />}>
-                        {t('index:contactUsButton')}
-                    </ButtonLink>
                 </Box>
             </MainLayout>
         </StyledIndexPage>
@@ -137,7 +126,7 @@ const StyledIndexPage = styled(Box)`
 
         #top-section-background {
             z-index: 0;
-            background: url('/images/home-background.jpg') no-repeat center center/cover;
+            background-color: var(--primary-light);
             position: absolute;
             top: -0.5rem;
             right: -0.5rem;
@@ -149,24 +138,6 @@ const StyledIndexPage = styled(Box)`
                 left: -1rem;
                 right: -1rem;
             }
-
-            @media only screen and (min-width: ${breakpoints.LG}) {
-                // FIXME: Not working properly, add proper logic for optimal width.
-                right: calc(-100vw + ${breakpoints.LG} / 2 - 1rem);
-                left: calc(-100vw + ${breakpoints.LG} / 2 - 1rem);
-            }
-        }
-
-        #top-section-background:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1;
-            background-color: var(--primary);
-            opacity: 0.6;
         }
 
         #top-section-content {
@@ -190,7 +161,6 @@ const StyledIndexPage = styled(Box)`
                     display: flex;
                     width: 100%;
                     max-width: 20rem;
-                    border: 0.05rem solid var(--primary);
 
                     input {
                         padding: 0.75rem;
@@ -199,6 +169,7 @@ const StyledIndexPage = styled(Box)`
 
                 .MuiButton-root {
                     border-radius: 0 var(--border-radius) var(--border-radius) 0;
+                    background-color: var(--contrast);
                 }
             }
         }
@@ -234,7 +205,7 @@ const StyledIndexPage = styled(Box)`
                     height: 5rem;
                     width: 5rem;
                     margin: 0.5rem;
-                    background-color: var(--primary);
+                    background-color: var(--primary-light);
 
                     .MuiSvgIcon-root {
                         height: 3rem;

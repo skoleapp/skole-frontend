@@ -4,34 +4,41 @@ import { colors } from './colors';
 
 export const base = css`
     :root {
-        // Colors
-        --primary: ${colors.primary};
-        --secondary: ${colors.secondary};
+        // Colors.
 
+        --primary: ${colors.primary};
+        --primary-light: ${colors.primaryLight};
+        --primary-dark: ${colors.primaryDark};
+        --secondary: ${colors.secondary};
+        --secondary-light: ${colors.secondaryLight};
+        --secondary-dark: ${colors.secondaryDark};
+        --contrast: ${colors.contrast};
+        --warning: ${colors.warning};
+        --info: ${colors.info};
+        --success: ${colors.success};
+        --error: ${colors.error};
         --white: ${colors.white};
         --black: ${colors.black};
         --gray: ${colors.gray};
-
-        --success: ${colors.success};
-        --danger: ${colors.danger};
-
+        --contrast: ${colors.contrast};
         --hover-opacity: rgba(0, 0, 0, 0.05);
         --border-color: rgba(0, 0, 0, 0.12);
         --light-opacity: rgba(0, 0, 0, 0.25);
         --dark-opacity: rgba(0, 0, 0, 0.75);
 
-        // Misc
-        --transition: all 0.15s ease-in;
+        // Misc.
+
         --border-radius: 0.25rem;
         --border: 1px solid var(--border-color); // Default MUI border.
 
-        //iOS
+        //iOS.
+
         --safe-area-inset-bottom: env(safe-area-inset-bottom);
     }
 
     html,
     body {
-        // MUI overrides
+        // MUI overrides.
 
         .MuiLink-root {
             cursor: pointer;
@@ -62,7 +69,7 @@ export const base = css`
             }
         }
 
-        // Custom classes
+        // Custom classes.
 
         .border-bottom {
             border-bottom: var(--border);
