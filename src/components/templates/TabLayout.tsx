@@ -1,22 +1,5 @@
-import {
-    Box,
-    Breadcrumbs,
-    CardHeader,
-    Chip,
-    Divider,
-    Grid,
-    IconButton,
-    Tab,
-    Tooltip,
-    Typography,
-} from '@material-ui/core';
-import {
-    HomeOutlined,
-    InfoOutlined,
-    MoreHorizOutlined,
-    NavigateNextOutlined,
-    SearchOutlined,
-} from '@material-ui/icons';
+import { Box, Breadcrumbs, CardHeader, Divider, Grid, IconButton, Tab, Tooltip } from '@material-ui/core';
+import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -24,7 +7,7 @@ import styled from 'styled-components';
 import { useDeviceContext } from '../../context';
 import { LayoutProps, MaxWidth, MuiColor, StyledBreadcrumbProps, UseOptions } from '../../types';
 import { useDrawer, useTabs } from '../../utils';
-import { StyledBreadcrumb, StyledCard, StyledDrawer, StyledTabs, TextLink } from '../shared';
+import { StyledCard, StyledDrawer, StyledTabs, TextLink } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface OptionProps extends Omit<UseOptions, 'renderShareOption' | 'renderReportOption' | 'closeOptions'> {
@@ -187,14 +170,14 @@ export const TabLayout: React.FC<Props> = ({
         <Grid id="container" container>
             <Grid item container xs={12} md={7} lg={8}>
                 <StyledCard>
-                    <CardHeader
+                    {/* <CardHeader
                         id="main-header"
                         title={renderBreadCrumbs}
                         // subheader={renderBreadCrumbs}
                         action={renderDesktopHeaderActions}
-                    />
+                    /> */}
                     {/* <CardContent>{extraDesktopActions}</CardContent> */}
-                    <Divider />
+                    {/* <Divider /> */}
                     <Box position="relative" flexGrow="1" display="flex">
                         {renderLeftContent}
                     </Box>

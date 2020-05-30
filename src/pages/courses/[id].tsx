@@ -73,26 +73,15 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(courseName);
     const { onClose: closeOptions } = drawerProps;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
+    const upVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('course:upvoteTooltip');
+    const downVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('course:downvoteTooltip');
+    const uploadResourceButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('course:uploadResourceTooltip');
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
         initialScore,
         isOwner,
     });
-
-    const upVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
-        : isOwnCourse
-        ? t('course:ownCourseVoteTooltip')
-        : t('course:upvoteTooltip');
-
-    const downVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
-        : isOwnCourse
-        ? t('course:ownCourseVoteTooltip')
-        : t('course:downvoteTooltip');
-
-    const uploadResourceButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('course:uploadResourceTooltip');
 
     const subjectLink = {
         ...searchUrl,
@@ -156,7 +145,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </TextLink>
     );
 
-    const renderUpVoteButton = (
+    const renderUpVoteButton = !isOwnCourse && (
         <Tooltip title={upVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
@@ -166,7 +155,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </Tooltip>
     );
 
-    const renderDownVoteButton = (
+    const renderDownVoteButton = !isOwnCourse && (
         <Tooltip title={downVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>

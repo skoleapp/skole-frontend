@@ -8,7 +8,6 @@
     "starredTooltip": "Unstar this resource.",
     "downvoteTooltip": "Downvote this resource.",
     "upvoteTooltip": "Upvote this resource.",
-    "ownResourceVoteTooltip": "You cannot vote your own resource.",
     "fullscreenTooltip": "Center to screen.",
     "loadingResource": "Loading resource...",
     "errorLoadingResource": "Error loading resource.",

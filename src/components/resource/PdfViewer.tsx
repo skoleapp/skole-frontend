@@ -2,174 +2,33 @@ import { Box, Button, Fab, Grid, IconButton, TextField, Tooltip, Typography } fr
 import {
     AddOutlined,
     CancelOutlined,
-    CloudDownloadOutlined,
     FullscreenExit,
     FullscreenOutlined,
     KeyboardArrowRightOutlined,
-    PrintOutlined,
     RemoveOutlined,
     RotateRightOutlined,
-    TabUnselectedOutlined,
 } from '@material-ui/icons';
 import { PDFDocumentProxy } from 'pdfjs-dist';
-import printJS from 'print-js';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
-import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
+import { MouseSelection } from '..';
 import { useCommentModalContext, useDeviceContext, useNotificationsContext, usePDFViewerContext } from '../../context';
+import { LTWH } from '../../types';
 import { LoadingBox } from '../shared';
-
-interface Coords {
-    x: number;
-    y: number;
-}
-
-interface State {
-    locked: boolean;
-    start: Coords | null;
-    end: Coords | null;
-}
-
-export interface LTWH {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-}
-
-interface MouseSelectionProps {
-    onSelection: (startTarget: HTMLElement, boundingRect: LTWH) => void;
-}
-
-const initialState = { start: null, end: null, locked: false };
-
-const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) => {
-    const { drawMode, setDrawMode, setScreenshot } = usePDFViewerContext();
-    const [stateRef, setState] = useStateRef<State>(initialState); // Need to use mutable ref instead of immutable state.
-    const [drawingAllowedRef, setDrawingAllowedRef] = useStateRef(false);
-    const { start, end } = stateRef.current;
-    // const drawing = !!start && !!end;
-    const reset = (): void => setState(initialState);
-
-    const getBoundingRect = (start: Coords, end: Coords): LTWH => ({
-        left: Math.min(end.x, start.x),
-        top: Math.min(end.y, start.y),
-        width: Math.abs(end.x - start.x),
-        height: Math.abs(end.y - start.y),
-    });
-
-    useEffect(() => {
-        const container = document.querySelector('.react-pdf__Document');
-
-        if (!!container) {
-            // Get coordinates on container element.
-            const containerCoords = (pageX: number, pageY: number): Coords => {
-                const { left, top } = container.getBoundingClientRect();
-
-                return {
-                    x: pageX - left + container.scrollLeft,
-                    y: pageY - top + container.scrollTop,
-                };
-            };
-
-            const onMouseMove = (e: MouseEvent): void => {
-                const { start, locked } = stateRef.current;
-
-                if (!!start && !locked) {
-                    setState({
-                        ...stateRef.current,
-                        end: containerCoords(e.pageX, e.pageY),
-                    });
-                }
-            };
-
-            const onMouseDown = (e: MouseEvent): void => {
-                const startTarget = e.target;
-
-                const onMouseUp = (e: MouseEvent): void => {
-                    const { start } = stateRef.current;
-                    const { currentTarget } = e;
-
-                    // Emulate listen once.
-                    !!currentTarget && currentTarget.removeEventListener('mouseup', onMouseUp as EventListener);
-
-                    if (!!start) {
-                        const end = containerCoords(e.pageX, e.pageY);
-                        const boundingRect = getBoundingRect(start, end);
-
-                        if (container.contains(e.target as Node) && drawingAllowedRef.current) {
-                            // Lock state.
-                            setState({
-                                ...stateRef.current,
-                                end,
-                                locked: true,
-                            });
-
-                            if (!!end) {
-                                onSelection(startTarget as HTMLElement, boundingRect);
-                            }
-                        } else {
-                            reset();
-                        }
-                    } else {
-                        reset();
-                    }
-                };
-
-                if (drawingAllowedRef.current) {
-                    setState({
-                        start: containerCoords(e.pageX, e.pageY),
-                        end: null,
-                        locked: false,
-                    });
-
-                    document.body.addEventListener('mouseup', onMouseUp);
-                }
-            };
-
-            container.addEventListener('mousemove', onMouseMove as EventListener);
-            container.addEventListener('mousedown', onMouseDown as EventListener);
-
-            return (): void => {
-                container.removeEventListener('mousemove', onMouseMove as EventListener);
-                container.removeEventListener('mousedown', onMouseDown as EventListener);
-            };
-        }
-    }, []);
-
-    // Only toggle draw mode on here.
-    useEffect(() => {
-        const { start, end } = stateRef.current;
-        const drawing = !!start && !!end;
-        drawing && setDrawMode(drawing);
-    }, [stateRef.current]);
-
-    // Update mutable drawing allowed state based on context state.
-    useEffect(() => {
-        setDrawingAllowedRef(drawMode);
-
-        if (!drawMode) {
-            reset();
-            setScreenshot(null);
-        }
-    }, [drawMode]);
-
-    return drawMode && !!start && !!end ? <StyledMouseSelection style={getBoundingRect(start, end)} /> : null;
-};
-
-const StyledMouseSelection = styled(Box)`
-    position: absolute;
-    border: 0.05rem dashed #000000;
-    background-color: rgba(252, 232, 151, 0.5);
-`;
 
 interface PDFViewerProps {
     file: string;
     title: string;
+    renderStarButton: JSX.Element;
+    renderUpVoteButton: JSX.Element | false;
+    renderDownVoteButton: JSX.Element | false;
+    renderMarkAreaButton: JSX.Element;
+    renderDownloadButton: JSX.Element;
+    renderPrintButton: JSX.Element;
 }
 
 interface PageFromElement {
@@ -181,7 +40,16 @@ interface PDFPage {
     scrollIntoView: () => void;
 }
 
-export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file, title }) => {
+export const PdfViewer: React.FC<PDFViewerProps> = ({
+    file,
+    title,
+    renderStarButton,
+    renderUpVoteButton,
+    renderDownVoteButton,
+    renderMarkAreaButton,
+    renderDownloadButton,
+    renderPrintButton,
+}) => {
     const {
         numPages,
         setNumPages,
@@ -205,8 +73,6 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file, title }) => {
     const documentRef = useRef<Document>(null);
     const { toggleCommentModal } = useCommentModalContext();
     const handleCancelDraw = (): void => setDrawMode(false);
-    const handleStartDrawing = (): void => setDrawMode(true);
-    const handlePrintPdf = (): void => printJS(file);
 
     const toggleFullScreen = (): void => {
         // Set scale to 75% when exiting fullscreen.
@@ -243,12 +109,24 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file, title }) => {
         }
     };
 
+    const onGestureEnd = (e: Event): void => {
+        if (e.scale < 1.0) {
+            // User moved fingers closer together
+            handleScaleUp();
+        } else if (e.scale > 1.0) {
+            // User moved fingers further apart
+            handleScaleDown();
+        }
+    };
+
     useEffect(() => {
         const documentNode = document.querySelector('.react-pdf__Document');
         !!documentNode && documentNode.addEventListener('wheel', onWheel as EventListener);
+        !!documentNode && documentNode.addEventListener('gestureend', onGestureEnd);
 
         return (): void => {
             !!documentNode && documentNode.removeEventListener('wheel', onWheel as EventListener);
+            !!documentNode && documentNode.removeEventListener('gestureend', onGestureEnd as EventListener);
         };
     }, []);
 
@@ -313,32 +191,13 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file, title }) => {
         }
     };
 
-    const handleDownloadPdf = async (): Promise<void> => {
-        try {
-            const res = await fetch(file, {
-                headers: new Headers({ Origin: location.origin }),
-                mode: 'cors',
-            });
-
-            const blob = await res.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.download = title;
-            a.href = blobUrl;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-        } catch {
-            toggleNotification(t('notifications:downloadResourceError'));
-        }
-    };
-
     const renderPages = Array.from(new Array(numPages), (_, index) => (
         <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scale} renderTextLayer={false} />
     ));
 
     const renderMouseSelection = <MouseSelection onSelection={handleSelection} />;
     const renderLoading = <LoadingBox text={t('resource:loadingResource')} />;
+    const renderTitle = <Typography variant="subtitle1">{title}</Typography>;
 
     const renderError = (
         <Box flexGrow="1" display="flex" justifyContent="center" alignItems="center">
@@ -374,47 +233,52 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file, title }) => {
         </Grid>
     );
 
+    const renderPageNumberInput = (
+        <TextField
+            value={pageNumber}
+            onChange={handleChangePage}
+            type="number"
+            color="secondary"
+            inputProps={{ min: '1' }}
+        />
+    );
+
+    const renderNumPages = (
+        <Typography id="num-pages" variant="subtitle1">
+            {numPages}
+        </Typography>
+    );
+
+    const renderPageNumbers = (
+        <Box id="page-numbers">
+            {renderPageNumberInput} / {renderNumPages}
+        </Box>
+    );
+
+    const renderRotateButton = (
+        <Tooltip title={t('resource:rotateTooltip')}>
+            <IconButton size="small" color="inherit" onClick={handleRotate}>
+                <RotateRightOutlined />
+            </IconButton>
+        </Tooltip>
+    );
+
     const renderPreviewToolbarContent = (
         <Grid container alignItems="center">
             <Grid item xs={4} container justify="flex-start">
-                <Typography variant="subtitle1">test_resource.pdf</Typography>
+                {renderTitle}
             </Grid>
             <Grid item xs={4} container justify="center">
-                <Box id="page-numbers">
-                    <TextField
-                        value={pageNumber}
-                        onChange={handleChangePage}
-                        type="number"
-                        color="secondary"
-                        inputProps={{ min: '1' }}
-                    />{' '}
-                    /{' '}
-                    <Typography id="num-pages" variant="subtitle1">
-                        {numPages}
-                    </Typography>
-                </Box>
+                {renderPageNumbers}
             </Grid>
             <Grid item xs={4} container justify="flex-end">
-                <Tooltip title={t('resource:markAreaTooltip')}>
-                    <IconButton onClick={handleStartDrawing} size="small" color="inherit">
-                        <TabUnselectedOutlined />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title={t('resource:rotateTooltip')}>
-                    <IconButton size="small" color="inherit" onClick={handleRotate}>
-                        <RotateRightOutlined />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title={t('resource:downloadResourceTooltip')}>
-                    <IconButton onClick={handleDownloadPdf} size="small" color="inherit">
-                        <CloudDownloadOutlined />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title={t('resource:printResourceTooltip')}>
-                    <IconButton onClick={handlePrintPdf} size="small" color="inherit">
-                        <PrintOutlined />
-                    </IconButton>
-                </Tooltip>
+                {renderStarButton}
+                {renderUpVoteButton}
+                {renderDownVoteButton}
+                {renderMarkAreaButton}
+                {renderRotateButton}
+                {renderDownloadButton}
+                {renderPrintButton}
             </Grid>
         </Grid>
     );
@@ -435,27 +299,38 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file, title }) => {
         >
             {renderPages}
             {renderMouseSelection}
-            {/* <iframe name="print-window" id="print-window" src={file} title={title} /> */}
         </Document>
+    );
+
+    const renderFullscreenButton = (
+        <Tooltip title={fullscreen ? t('resource:exitFullscreenTooltip') : t('resource:enterFullscreenTooltip')}>
+            <Fab size="small" color="secondary" onClick={toggleFullScreen}>
+                {fullscreen ? <FullscreenExit /> : <FullscreenOutlined />}
+            </Fab>
+        </Tooltip>
+    );
+
+    const renderDownscaleButton = (
+        <Tooltip title={t('resource:zoomInTooltip')}>
+            <Fab size="small" color="secondary" onClick={handleScaleUp}>
+                <AddOutlined />
+            </Fab>
+        </Tooltip>
+    );
+
+    const renderUpscaleButton = (
+        <Tooltip title={t('resource:zoomOutTooltip')}>
+            <Fab size="small" color="secondary" onClick={handleScaleDown}>
+                <RemoveOutlined />
+            </Fab>
+        </Tooltip>
     );
 
     const renderScaleControls = !isMobile && !drawMode && (
         <Box id="pdf-controls">
-            <Tooltip title={fullscreen ? t('resource:exitFullscreenTooltip') : t('resource:enterFullscreenTooltip')}>
-                <Fab size="small" color="secondary" onClick={toggleFullScreen}>
-                    {fullscreen ? <FullscreenExit /> : <FullscreenOutlined />}
-                </Fab>
-            </Tooltip>
-            <Tooltip title={t('resource:zoomInTooltip')}>
-                <Fab size="small" color="secondary" onClick={handleScaleUp}>
-                    <AddOutlined />
-                </Fab>
-            </Tooltip>
-            <Tooltip title={t('resource:zoomOutTooltip')}>
-                <Fab size="small" color="secondary" onClick={handleScaleDown}>
-                    <RemoveOutlined />
-                </Fab>
-            </Tooltip>
+            {renderFullscreenButton}
+            {renderDownscaleButton}
+            {renderUpscaleButton}
         </Box>
     );
 
@@ -522,16 +397,15 @@ const StyledSkolePDFViewer = styled(({ scale, fullscreen, drawMode, ...props }) 
             position: static !important;
             margin: 0 auto;
             display: flex;
-            width: ${({ scale, fullscreen }): string =>
-                fullscreen ? '100%' : `calc(100% * ${scale})`}; // Automatically update width based on fullscreen state.
+
+            // Automatically update width based on scale and fullscreen state.
+
+            width: ${({ scale, fullscreen }): string => (fullscreen ? '100%' : `calc(100% * ${scale})`)};
 
             .react-pdf__Page__canvas {
                 margin: 0 auto;
                 height: auto !important;
-                width: ${({ scale, fullscreen }): string =>
-                    fullscreen
-                        ? '100%'
-                        : `calc(100% * ${scale})`} !important; // Automatically update width based on scale and fullscreen state.
+                width: ${({ scale, fullscreen }): string => (fullscreen ? '100%' : `calc(100% * ${scale})`)} !important;
             }
         }
 
@@ -543,10 +417,6 @@ const StyledSkolePDFViewer = styled(({ scale, fullscreen, drawMode, ...props }) 
             background-color: var(--white);
             display: flex;
         }
-
-        // iframe[name='print-window'] {
-        //     display: none;
-        // }
     }
 
     #pdf-controls {

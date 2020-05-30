@@ -1,15 +1,23 @@
-import { Box, Grid, IconButton, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
+import { Box, Grid, IconButton, ListItemText, MenuItem, Tooltip } from '@material-ui/core';
 import {
     CloudDownloadOutlined,
     DeleteOutline,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
+    PrintOutlined,
+    TabUnselectedOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import Router from 'next/router';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+const printJS = dynamic(import('print-js'), { ssr: false });
+
 import * as R from 'ramda';
-import React, { SyntheticEvent, useEffect } from 'react';
+import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -27,14 +35,14 @@ import {
     InfoModalContent,
     NavbarContainer,
     NotFoundLayout,
-    SkolePdfViewer,
+    PdfViewer,
     StarButton,
     StyledBottomNavigation,
     StyledList,
     TabLayout,
     TextLink,
 } from '../../components';
-import { useAuthContext, useNotificationsContext } from '../../context';
+import { useAuthContext, useDeviceContext, useNotificationsContext, usePDFViewerContext } from '../../context';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { breakpoints } from '../../styles';
@@ -47,6 +55,7 @@ interface Props extends I18nProps {
 
 const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
+    const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user, verified, notVerifiedTooltip } = useAuthContext();
@@ -69,25 +78,19 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(resourceTitle);
+    const { setDrawMode } = usePDFViewerContext();
     const { onClose: closeOptions } = drawerProps;
+    const handleStartDrawing = (): void => setDrawMode(true);
+    const handlePrintPdf = (): void => printJS(file);
+    const upVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('resource:upvoteTooltip');
+    const downVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('resource:downvoteTooltip');
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
         initialScore,
         isOwner,
+        color: isMobile ? 'default' : 'secondary',
     });
-
-    const upVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
-        : isOwner
-        ? t('resource:ownResourceVoteTooltip')
-        : t('resource:upvoteTooltip');
-
-    const downVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
-        : isOwner
-        ? t('resource:ownResourceVoteTooltip')
-        : t('resource:downvoteTooltip');
 
     const discussionBoxProps = {
         comments,
@@ -140,6 +143,26 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     };
 
     const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
+
+    const handleDownloadPdf = async (): Promise<void> => {
+        try {
+            const res = await fetch(file, {
+                headers: new Headers({ Origin: location.origin }),
+                mode: 'cors',
+            });
+
+            const blob = await res.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.download = fullResourceTitle;
+            a.href = blobUrl;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } catch {
+            toggleNotification(t('notifications:downloadResourceError'));
+        }
+    };
 
     const renderSchoolLink = !!schoolId && (
         <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
@@ -201,10 +224,11 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             resource={resourceId}
             starredTooltip={t('resource:starredTooltip')}
             unstarredTooltip={t('resource:unstarredTooltip')}
+            color={isMobile ? 'default' : 'secondary'}
         />
     );
 
-    const renderUpVoteButton = (
+    const renderUpVoteButton = !isOwner && (
         <Tooltip title={upVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
@@ -214,7 +238,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </Tooltip>
     );
 
-    const renderDownVoteButton = (
+    const renderDownVoteButton = !isOwner && (
         <Tooltip title={downVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
@@ -289,14 +313,39 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledBottomNavigation>
     );
 
+    const renderMarkAreaButton = (
+        <Tooltip title={t('resource:markAreaTooltip')}>
+            <IconButton onClick={handleStartDrawing} size="small" color="inherit">
+                <TabUnselectedOutlined />
+            </IconButton>
+        </Tooltip>
+    );
+
+    const renderDownloadButton = (
+        <Tooltip title={t('resource:downloadResourceTooltip')}>
+            <IconButton onClick={handleDownloadPdf} size="small" color="inherit">
+                <CloudDownloadOutlined />
+            </IconButton>
+        </Tooltip>
+    );
+
+    const renderPrintButton = (
+        <Tooltip title={t('resource:printResourceTooltip')}>
+            <IconButton onClick={handlePrintPdf} size="small" color="inherit">
+                <PrintOutlined />
+            </IconButton>
+        </Tooltip>
+    );
+
     const renderCustomBottomNavbarSecondary = (
         <StyledBottomNavigation>
             <NavbarContainer>
                 <Grid container>
                     <Grid item xs={6} container justify="flex-start">
-                        {renderStarButton}
+                        {renderMarkAreaButton}
                     </Grid>
                     <Grid item xs={6} container justify="flex-end">
+                        {renderStarButton}
                         {renderUpVoteButton}
                         {renderDownVoteButton}
                     </Grid>
@@ -305,7 +354,18 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledBottomNavigation>
     );
 
-    const renderPDFViewer = <SkolePdfViewer file={file} title={fullResourceTitle} />;
+    const pdfViewerProps = {
+        file,
+        title: fullResourceTitle,
+        renderStarButton,
+        renderUpVoteButton,
+        renderDownVoteButton,
+        renderMarkAreaButton,
+        renderDownloadButton,
+        renderPrintButton,
+    };
+
+    const renderPDFViewer = <PdfViewer {...pdfViewerProps} />;
     const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
 
     const layoutProps = {

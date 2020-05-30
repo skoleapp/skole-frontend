@@ -1,1 +1,2 @@
-export { SkolePdfViewer } from './SkolePdfViewer';
+export { PdfViewer } from './PdfViewer';
+export { MouseSelection } from './MouseSelection';

@@ -53,13 +53,15 @@ const SkolePageContext = createContext<SkoleContextType>({
         pageNumber: 1,
         setPageNumber: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         rotate: 0,
-        drawing: false,
-        setDrawing: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        handleRotate: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        drawMode: false,
+        setDrawMode: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         screenshot: null,
         setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         scale: 1.0,
+        fullscreen: false,
+        setFullscreen: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        handleRotate: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
     isMobileGuess: null,
     discussionBox: {
@@ -152,7 +154,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [rotate, setRotate] = useState(0);
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
-    const [scale, setScale] = useState(1.0);
+    const [scale, setScale] = useState(isMobileGuess ? 1.0 : 0.75); // Initialize at 75% on desktop.
     const [fullscreen, setFullscreen] = useState(false);
     const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
@@ -193,6 +195,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             pageNumber,
             setPageNumber,
             rotate,
+            handleRotate,
             drawMode,
             setDrawMode,
             screenshot,
@@ -201,7 +204,6 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setScale,
             fullscreen,
             setFullscreen,
-            handleRotate,
         },
         isMobileGuess,
         discussionBox: {

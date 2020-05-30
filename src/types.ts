@@ -185,6 +185,7 @@ export interface PDFViewerContext {
     pageNumber: number;
     setPageNumber: Dispatch<SetStateAction<number>>;
     rotate: number;
+    handleRotate: () => void;
     drawMode: boolean;
     setDrawMode: Dispatch<SetStateAction<boolean>>;
     screenshot: string | null;
@@ -193,7 +194,6 @@ export interface PDFViewerContext {
     setScale: Dispatch<SetStateAction<number>>;
     fullscreen: boolean;
     setFullscreen: Dispatch<SetStateAction<boolean>>;
-    handleRotate: () => void;
 }
 
 export interface DiscussionBoxContext {
@@ -228,4 +228,11 @@ interface CustomApolloClient extends ApolloClient<NormalizedCacheObject> {
 export interface ApolloContext extends NextPageContext {
     apolloClient: CustomApolloClient;
     apolloState: {};
+}
+
+export interface LTWH {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
 }
