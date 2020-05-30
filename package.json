@@ -54,6 +54,7 @@
         "nprogress": "0.2.0",
         "ol": "6.2.1",
         "pdfjs-dist": "^2.3.200",
+        "print-js": "^1.0.63",
         "prop-types": "15.7.2",
         "ramda": "0.26.1",
         "react": "16.9.0",

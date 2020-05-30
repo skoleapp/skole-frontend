@@ -92,7 +92,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     );
 
     const renderMobileCreateCommentButton = !topComment && isMobile && (
-        <Fab id="create-comment-button" color="primary" onClick={openCommentModal}>
+        <Fab id="create-comment-button" color="secondary" onClick={openCommentModal}>
             <AddOutlined />
         </Fab>
     );

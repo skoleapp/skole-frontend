@@ -139,26 +139,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         handleVote({ status: status, resource: resourceId });
     };
 
-    const handleDownloadResource = async (): Promise<void> => {
-        try {
-            const res = await fetch(file, {
-                headers: new Headers({ Origin: location.origin }),
-                mode: 'cors',
-            });
-
-            const blob = await res.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.download = fullResourceTitle;
-            a.href = blobUrl;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-        } catch {
-            toggleNotification(t('notifications:downloadResourceError'));
-        }
-    };
-
     const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
 
     const renderSchoolLink = !!schoolId && (
@@ -207,11 +187,11 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                     </ListItemText>
                 </MenuItem>
             )}
-            <MenuItem onClick={handleDownloadResource}>
+            {/* <MenuItem onClick={handleDownloadResource}>
                 <ListItemText>
                     <CloudDownloadOutlined /> {t('common:download')}
                 </ListItemText>
-            </MenuItem>
+            </MenuItem> */}
         </StyledList>
     );
 
@@ -325,7 +305,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledBottomNavigation>
     );
 
-    const renderPDFViewer = <SkolePdfViewer file={file} />;
+    const renderPDFViewer = <SkolePdfViewer file={file} title={fullResourceTitle} />;
     const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
 
     const layoutProps = {

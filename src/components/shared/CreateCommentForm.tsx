@@ -166,7 +166,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
                 <label htmlFor={`camera-attachment-${formKey}`}>
                     <Tooltip title={attachmentButtonTooltip}>
                         <span>
-                            <Fab disabled={disabled} component="span" size="small">
+                            <Fab disabled={disabled} size="small" color="secondary">
                                 <CameraAltOutlined />
                             </Fab>
                         </span>
@@ -176,7 +176,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
             {!!attachment && (
                 <Box marginLeft="0.5rem">
                     <Tooltip title={t('common:clearAttachmentTooltip')}>
-                        <Fab onClick={handleClearAttachment} size="small">
+                        <Fab onClick={handleClearAttachment} size="small" color="secondary">
                             <ClearOutlined />
                         </Fab>
                     </Tooltip>

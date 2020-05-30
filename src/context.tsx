@@ -153,6 +153,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
     const [scale, setScale] = useState(1.0);
+    const [fullscreen, setFullscreen] = useState(false);
     const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
     const [comments, setComments] = useState<CommentObjectType[] | null>(null);
@@ -198,6 +199,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setScreenshot,
             scale,
             setScale,
+            fullscreen,
+            setFullscreen,
             handleRotate,
         },
         isMobileGuess,

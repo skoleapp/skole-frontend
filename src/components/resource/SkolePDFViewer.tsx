@@ -12,6 +12,7 @@ import {
     TabUnselectedOutlined,
 } from '@material-ui/icons';
 import { PDFDocumentProxy } from 'pdfjs-dist';
+import printJS from 'print-js';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -91,12 +92,16 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) => {
 
                 const onMouseUp = (e: MouseEvent): void => {
                     const { start } = stateRef.current;
+                    const { currentTarget } = e;
+
+                    // Emulate listen once.
+                    !!currentTarget && currentTarget.removeEventListener('mouseup', onMouseUp as EventListener);
 
                     if (!!start) {
                         const end = containerCoords(e.pageX, e.pageY);
                         const boundingRect = getBoundingRect(start, end);
 
-                        if (container.contains(e.target as Node) && (!!e.altKey || drawingAllowedRef.current)) {
+                        if (container.contains(e.target as Node) && drawingAllowedRef.current) {
                             // Lock state.
                             setState({
                                 ...stateRef.current,
@@ -115,16 +120,14 @@ const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) => {
                     }
                 };
 
-                console.log('allowed', drawingAllowedRef.current);
-
-                if (!!e.altKey || drawingAllowedRef.current) {
+                if (drawingAllowedRef.current) {
                     setState({
                         start: containerCoords(e.pageX, e.pageY),
                         end: null,
                         locked: false,
                     });
 
-                    document.addEventListener('mouseup', onMouseUp);
+                    document.body.addEventListener('mouseup', onMouseUp);
                 }
             };
 
@@ -166,6 +169,7 @@ const StyledMouseSelection = styled(Box)`
 
 interface PDFViewerProps {
     file: string;
+    title: string;
 }
 
 interface PageFromElement {
@@ -177,7 +181,7 @@ interface PDFPage {
     scrollIntoView: () => void;
 }
 
-export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
+export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file, title }) => {
     const {
         numPages,
         setNumPages,
@@ -190,6 +194,8 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
         setScreenshot,
         scale,
         setScale,
+        fullscreen,
+        setFullscreen,
         handleRotate,
     } = usePDFViewerContext();
 
@@ -198,23 +204,35 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
     const { toggleNotification } = useNotificationsContext();
     const documentRef = useRef<Document>(null);
     const { toggleCommentModal } = useCommentModalContext();
-    const isFullscreen = scale > 1;
     const handleCancelDraw = (): void => setDrawMode(false);
     const handleStartDrawing = (): void => setDrawMode(true);
+    const handlePrintPdf = (): void => printJS(file);
+
+    const toggleFullScreen = (): void => {
+        // Set scale to 75% when exiting fullscreen.
+        if (fullscreen) {
+            setScale(0.75);
+        }
+
+        setFullscreen(!fullscreen);
+    };
 
     // Scale up by 10% if under limit.
-    const handleScaleUp = (): false | void => setScale(scale => (scale < 2.5 ? scale + 0.1 : scale));
+    const handleScaleUp = (): void => {
+        setFullscreen(false);
+        setScale(scale => (scale < 2.5 ? scale + 0.1 : scale));
+    };
 
     // Scale down by 10% if over limit.
-    const handleScaleDown = (): false | void => setScale(scale => (scale > 0.5 ? scale - 0.1 : scale));
+    const handleScaleDown = (): void => {
+        setFullscreen(false);
+        setScale(scale => (scale > 0.5 ? scale - 0.1 : scale));
+    };
 
     const handleContinueDraw = (): void => {
         setDrawMode(false);
         toggleCommentModal(true);
     };
-
-    // On mobile scale down and on desktop scale up.
-    const toggleFullScreen = (): false | void => (scale === 1.0 ? setScale(isMobile ? 0.75 : 1.25) : setScale(1.0));
 
     // Update document scale based on mouse wheel events.
     const onWheel = (e: WheelEvent): void => {
@@ -282,7 +300,6 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
 
     const handleSelection = (startTarget: HTMLElement, boundingRect: LTWH): void => {
         const page = getPageFromElement(startTarget);
-        console.log('page', page);
 
         if (!!page) {
             const pageBoundingRect = {
@@ -293,6 +310,26 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
 
             const screenshot = getScreenshot(startTarget, pageBoundingRect);
             setScreenshot(screenshot);
+        }
+    };
+
+    const handleDownloadPdf = async (): Promise<void> => {
+        try {
+            const res = await fetch(file, {
+                headers: new Headers({ Origin: location.origin }),
+                mode: 'cors',
+            });
+
+            const blob = await res.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.download = title;
+            a.href = blobUrl;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } catch {
+            toggleNotification(t('notifications:downloadResourceError'));
         }
     };
 
@@ -369,12 +406,12 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
                     </IconButton>
                 </Tooltip>
                 <Tooltip title={t('resource:downloadResourceTooltip')}>
-                    <IconButton size="small" color="inherit">
+                    <IconButton onClick={handleDownloadPdf} size="small" color="inherit">
                         <CloudDownloadOutlined />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title={t('resource:printResourceTooltip')}>
-                    <IconButton size="small" color="inherit">
+                    <IconButton onClick={handlePrintPdf} size="small" color="inherit">
                         <PrintOutlined />
                     </IconButton>
                 </Tooltip>
@@ -398,14 +435,15 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
         >
             {renderPages}
             {renderMouseSelection}
+            {/* <iframe name="print-window" id="print-window" src={file} title={title} /> */}
         </Document>
     );
 
-    const renderScaleControls = !isMobile && (
+    const renderScaleControls = !isMobile && !drawMode && (
         <Box id="pdf-controls">
-            <Tooltip title={isFullscreen ? t('resource:exitFullscreenTooltip') : t('resource:enterFullscreenTooltip')}>
+            <Tooltip title={fullscreen ? t('resource:exitFullscreenTooltip') : t('resource:enterFullscreenTooltip')}>
                 <Fab size="small" color="secondary" onClick={toggleFullScreen}>
-                    {isFullscreen ? <FullscreenExit /> : <FullscreenOutlined />}
+                    {fullscreen ? <FullscreenExit /> : <FullscreenOutlined />}
                 </Fab>
             </Tooltip>
             <Tooltip title={t('resource:zoomInTooltip')}>
@@ -422,7 +460,7 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
     );
 
     return (
-        <StyledSkolePDFViewer scale={scale} drawMode={drawMode}>
+        <StyledSkolePDFViewer scale={scale} fullscreen={fullscreen} drawMode={drawMode}>
             {renderToolbar}
             {renderDocument}
             {renderScaleControls}
@@ -431,7 +469,7 @@ export const SkolePdfViewer: React.FC<PDFViewerProps> = ({ file }) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledSkolePDFViewer = styled(({ scale, drawMode, ...props }) => <Box {...props} />)`
+const StyledSkolePDFViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <Box {...props} />)`
     position: absolute;
     width: 100%;
     height: 100%;
@@ -484,12 +522,16 @@ const StyledSkolePDFViewer = styled(({ scale, drawMode, ...props }) => <Box {...
             position: static !important;
             margin: 0 auto;
             display: flex;
+            width: ${({ scale, fullscreen }): string =>
+                fullscreen ? '100%' : `calc(100% * ${scale})`}; // Automatically update width based on fullscreen state.
 
             .react-pdf__Page__canvas {
                 margin: 0 auto;
-                width: ${({ scale }): string =>
-                    `calc(100% * ${scale})`} !important; // Automatically update width based on scale.
                 height: auto !important;
+                width: ${({ scale, fullscreen }): string =>
+                    fullscreen
+                        ? '100%'
+                        : `calc(100% * ${scale})`} !important; // Automatically update width based on scale and fullscreen state.
             }
         }
 
@@ -501,6 +543,10 @@ const StyledSkolePDFViewer = styled(({ scale, drawMode, ...props }) => <Box {...
             background-color: var(--white);
             display: flex;
         }
+
+        // iframe[name='print-window'] {
+        //     display: none;
+        // }
     }
 
     #pdf-controls {

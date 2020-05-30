@@ -191,6 +191,8 @@ export interface PDFViewerContext {
     setScreenshot: Dispatch<SetStateAction<string | null>>;
     scale: number;
     setScale: Dispatch<SetStateAction<number>>;
+    fullscreen: boolean;
+    setFullscreen: Dispatch<SetStateAction<boolean>>;
     handleRotate: () => void;
 }
 
