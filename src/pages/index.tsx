@@ -117,7 +117,6 @@ const StyledIndexPage = styled(Box)`
     }
 
     #top-section-container {
-        position: relative;
         min-height: 15rem;
 
         @media only screen and (min-width: ${breakpoints.MD}) {
@@ -127,16 +126,14 @@ const StyledIndexPage = styled(Box)`
         #top-section-background {
             z-index: 0;
             background-color: var(--primary-light);
-            position: absolute;
-            top: -0.5rem;
-            right: -0.5rem;
-            left: -0.5rem;
-            bottom: 0;
+            position: fixed;
+            top: 3rem;
+            left: 0;
+            right: 0;
+            min-height: 15rem;
 
             @media only screen and (min-width: ${breakpoints.MD}) {
-                top: -1rem;
-                left: -1rem;
-                right: -1rem;
+                min-height: 18rem;
             }
         }
 
