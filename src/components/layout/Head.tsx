@@ -27,7 +27,10 @@ export const HeadComponent: React.FC<SEOProps> = ({ title, description }) => (
         <meta name="description" content={description} />
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no viewport-fit=cover" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1 user-scalable=no viewport-fit=cover"
+        />
         <meta name="theme-color" content={colors.primary} />
         <meta name="apple-mobile-web-app-title" content="Skole" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

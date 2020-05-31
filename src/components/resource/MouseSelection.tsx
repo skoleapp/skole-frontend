@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
-import { usePDFViewerContext } from '../../context';
+import { useDeviceContext, usePDFViewerContext } from '../../context';
 import { LTWH } from '../../types';
 
 interface Coords {
@@ -24,7 +24,8 @@ interface MouseSelectionProps {
 const initialState = { start: null, end: null, locked: false };
 
 export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) => {
-    const { drawMode, setDrawMode, setScreenshot } = usePDFViewerContext();
+    const isMobile = useDeviceContext();
+    const { drawMode, setScreenshot } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // Need to use mutable ref instead of immutable state.
     const [drawingAllowedRef, setDrawingAllowedRef] = useStateRef(false);
     const { start, end } = stateRef.current;
@@ -51,7 +52,7 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
                 };
             };
 
-            // Update mutable state when mouse moves.
+            // Update mutable state when mouse moves (desktop).
             const onMouseMove = (e: MouseEvent): void => {
                 const { start, locked } = stateRef.current;
 
@@ -63,8 +64,8 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
                 }
             };
 
-            // Call selection function when a valid rectangle is drawn.
-            const onMouseDown = (e: MouseEvent): void => {
+            // Call selection function when a valid rectangle is drawn (desktop).
+            const onMouseDown = (e: MouseEvent): (() => void) | void => {
                 const startTarget = e.target;
 
                 const onMouseUp = (e: MouseEvent): void => {
@@ -104,26 +105,94 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
                         locked: false,
                     });
 
-                    document.body.addEventListener('mouseup', onMouseUp);
+                    document.body.addEventListener('mouseup', onMouseUp as EventListener);
+
+                    return (): void => {
+                        document.body.removeEventListener('mouseup', onMouseUp as EventListener);
+                    };
                 }
             };
 
-            container.addEventListener('mousemove', onMouseMove as EventListener);
-            container.addEventListener('mousedown', onMouseDown as EventListener);
+            // Update mutable state when touch moves (mobile).
+            const onTouchMove = (e: TouchEvent): void => {
+                const { start, locked } = stateRef.current;
 
-            return (): void => {
-                container.removeEventListener('mousemove', onMouseMove as EventListener);
-                container.removeEventListener('mousedown', onMouseDown as EventListener);
+                if (!!start && !locked) {
+                    setState({
+                        ...stateRef.current,
+                        end: containerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
+                    });
+                }
             };
-        }
-    }, []);
 
-    // Only toggle draw mode on here.
-    useEffect(() => {
-        const { start, end } = stateRef.current;
-        const drawing = !!start && !!end;
-        drawing && setDrawMode(drawing);
-    }, [stateRef.current]);
+            // Call selection function when a valid rectangle is drawn (mobile).
+            const onTouchStart = (e: TouchEvent): (() => void) | void => {
+                const startTarget = e.target;
+
+                const onTouchUp = (e: TouchEvent): void => {
+                    const { start } = stateRef.current;
+                    const { currentTarget } = e;
+
+                    // Emulate listen once.
+                    !!currentTarget && currentTarget.removeEventListener('mouseup', onTouchUp as EventListener);
+
+                    if (!!start) {
+                        const end = containerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+                        const boundingRect = getBoundingRect(start, end);
+
+                        if (container.contains(e.target as Node) && drawingAllowedRef.current) {
+                            // Lock state.
+                            setState({
+                                ...stateRef.current,
+                                end,
+                                locked: true,
+                            });
+
+                            if (!!end) {
+                                onSelection(startTarget as HTMLElement, boundingRect);
+                            }
+                        } else {
+                            reset();
+                        }
+                    } else {
+                        reset();
+                    }
+                };
+
+                if (drawingAllowedRef.current) {
+                    setState({
+                        start: containerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
+                        end: null,
+                        locked: false,
+                    });
+
+                    document.body.addEventListener('touchend', onTouchUp as EventListener);
+
+                    return (): void => {
+                        document.body.removeEventListener('touchend', onTouchUp as EventListener);
+                    };
+                }
+            };
+
+            if (isMobile) {
+                container.addEventListener('touchmove', onTouchMove as EventListener);
+                container.addEventListener('touchstart', onTouchStart as EventListener);
+
+                return (): void => {
+                    container.removeEventListener('touchmove', onTouchMove as EventListener);
+                    container.removeEventListener('touchstart', onTouchStart as EventListener);
+                };
+            } else {
+                container.addEventListener('mousemove', onMouseMove as EventListener);
+                container.addEventListener('mousedown', onMouseDown as EventListener);
+
+                return (): void => {
+                    container.removeEventListener('mousemove', onMouseMove as EventListener);
+                    container.removeEventListener('mousedown', onMouseDown as EventListener);
+                };
+            }
+        }
+    }, [isMobile]);
 
     // Update mutable drawing allowed state based on context state.
     useEffect(() => {

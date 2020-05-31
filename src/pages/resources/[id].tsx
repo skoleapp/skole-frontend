@@ -1,8 +1,10 @@
-import { Box, Grid, IconButton, ListItemText, MenuItem, Tooltip } from '@material-ui/core';
+import { Box, Button, Grid, IconButton, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
 import {
+    CancelOutlined,
     CloudDownloadOutlined,
     DeleteOutline,
     KeyboardArrowDownOutlined,
+    KeyboardArrowRightOutlined,
     KeyboardArrowUpOutlined,
     PrintOutlined,
     TabUnselectedOutlined,
@@ -14,12 +16,11 @@ import Router from 'next/router';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
-const printJS = dynamic(import('print-js'), { ssr: false });
+const printJS = dynamic(() => import('print-js'), { ssr: false });
 
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 import {
     CommentObjectType,
@@ -42,10 +43,15 @@ import {
     TabLayout,
     TextLink,
 } from '../../components';
-import { useAuthContext, useDeviceContext, useNotificationsContext, usePDFViewerContext } from '../../context';
+import {
+    useAuthContext,
+    useCommentModalContext,
+    useDeviceContext,
+    useNotificationsContext,
+    usePDFViewerContext,
+} from '../../context';
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
-import { breakpoints } from '../../styles';
 import { I18nProps, SkolePageContext } from '../../types';
 import { mediaURL, useOptions, useVotes } from '../../utils';
 
@@ -78,12 +84,19 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(resourceTitle);
-    const { setDrawMode } = usePDFViewerContext();
+    const { setDrawMode, drawMode, screenshot } = usePDFViewerContext();
     const { onClose: closeOptions } = drawerProps;
     const handleStartDrawing = (): void => setDrawMode(true);
     const handlePrintPdf = (): void => printJS(file);
+    const handleCancelDraw = (): void => setDrawMode(false);
     const upVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('resource:upvoteTooltip');
     const downVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('resource:downvoteTooltip');
+    const { toggleCommentModal } = useCommentModalContext();
+
+    const handleContinueDraw = (): void => {
+        setDrawMode(false);
+        toggleCommentModal(true);
+    };
 
     const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
         initialVote,
@@ -248,45 +261,45 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </Tooltip>
     );
 
-    const renderExtraResourceActions = (
-        <StyledExtraResourceActions container alignItems="center">
-            <Grid item xs={4} container id="vote-section">
-                {renderStarButton}
-                {renderUpVoteButton}
-                {renderDownVoteButton}
-            </Grid>
-            {/* <Grid item xs={4} container alignItems="center" id="page-controls">
-                <Tooltip title={t('common:previousPageTooltip')}>
-                    <span>
-                        <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
-                            <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
-                        </IconButton>
-                    </span>
-                </Tooltip>
-                <Typography variant="body2">{currentPage + 1 + ' / ' + totalPages}</Typography>
-                <Tooltip title={t('common:nextPageTooltip')}>
-                    <span>
-                        <IconButton
-                            disabled={!pagesExist || currentPage === pages.length - 1}
-                            onClick={nextPage}
-                            size="small"
-                        >
-                            <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
-                        </IconButton>
-                    </span>
-                </Tooltip>
-            </Grid> */}
-            {/* <Grid item xs={4} container justify="flex-end">
-                <Tooltip title={t('resource:fullscreenTooltip')}>
-                    <span>
-                        <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
-                            <FullscreenOutlined />
-                        </IconButton>
-                    </span>
-                </Tooltip>
-            </Grid> */}
-        </StyledExtraResourceActions>
-    );
+    // const renderExtraResourceActions = (
+    //     <StyledExtraResourceActions container alignItems="center">
+    //         <Grid item xs={4} container id="vote-section">
+    //             {renderStarButton}
+    //             {renderUpVoteButton}
+    //             {renderDownVoteButton}
+    //         </Grid>
+    //         <Grid item xs={4} container alignItems="center" id="page-controls">
+    //             <Tooltip title={t('common:previousPageTooltip')}>
+    //                 <span>
+    //                     <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
+    //                         <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
+    //                     </IconButton>
+    //                 </span>
+    //             </Tooltip>
+    //             <Typography variant="body2">{currentPage + 1 + ' / ' + totalPages}</Typography>
+    //             <Tooltip title={t('common:nextPageTooltip')}>
+    //                 <span>
+    //                     <IconButton
+    //                         disabled={!pagesExist || currentPage === pages.length - 1}
+    //                         onClick={nextPage}
+    //                         size="small"
+    //                     >
+    //                         <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
+    //                     </IconButton>
+    //                 </span>
+    //             </Tooltip>
+    //         </Grid>
+    //         <Grid item xs={4} container justify="flex-end">
+    //             <Tooltip title={t('resource:fullscreenTooltip')}>
+    //                 <span>
+    //                     <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
+    //                         <FullscreenOutlined />
+    //                     </IconButton>
+    //                 </span>
+    //             </Tooltip>
+    //         </Grid>
+    //     </StyledExtraResourceActions>
+    // );
 
     const extraBreadcrumbs = [
         {
@@ -307,15 +320,9 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </Box>
     );
 
-    const renderCustomBottomNavbar = (
-        <StyledBottomNavigation>
-            <NavbarContainer>{renderExtraResourceActions}</NavbarContainer>
-        </StyledBottomNavigation>
-    );
-
     const renderMarkAreaButton = (
         <Tooltip title={t('resource:markAreaTooltip')}>
-            <IconButton onClick={handleStartDrawing} size="small" color="inherit">
+            <IconButton onClick={handleStartDrawing} size="small" color={isMobile ? 'default' : 'secondary'}>
                 <TabUnselectedOutlined />
             </IconButton>
         </Tooltip>
@@ -323,7 +330,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 
     const renderDownloadButton = (
         <Tooltip title={t('resource:downloadResourceTooltip')}>
-            <IconButton onClick={handleDownloadPdf} size="small" color="inherit">
+            <IconButton onClick={handleDownloadPdf} size="small" color="secondary">
                 <CloudDownloadOutlined />
             </IconButton>
         </Tooltip>
@@ -331,24 +338,63 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 
     const renderPrintButton = (
         <Tooltip title={t('resource:printResourceTooltip')}>
-            <IconButton onClick={handlePrintPdf} size="small" color="inherit">
+            <IconButton onClick={handlePrintPdf} size="small" color="secondary">
                 <PrintOutlined />
             </IconButton>
         </Tooltip>
     );
 
+    const renderDrawModeContent = (
+        <Grid container alignItems="center">
+            <Grid item xs={6} container justify="flex-start">
+                <Button onClick={handleCancelDraw} startIcon={<CancelOutlined />} color="primary">
+                    {t('common:cancel')}
+                </Button>
+            </Grid>
+            {/* <Grid item xs={6}>
+                <Typography variant="subtitle2" color="textSecondary">
+                    {t('resource:drawModeInfo')}
+                </Typography>
+            </Grid> */}
+            <Grid item xs={6} container justify="flex-end">
+                <Button
+                    onClick={handleContinueDraw}
+                    endIcon={<KeyboardArrowRightOutlined />}
+                    color="primary"
+                    disabled={!screenshot}
+                >
+                    {t('common:continue')}
+                </Button>
+            </Grid>
+        </Grid>
+    );
+
+    const renderPreviewBottomNavbarContent = (
+        <Grid container>
+            <Grid item xs={6} container justify="flex-start">
+                {renderMarkAreaButton}
+            </Grid>
+            <Grid item xs={6} container justify="flex-end">
+                {renderStarButton}
+                {renderUpVoteButton}
+                {renderDownVoteButton}
+            </Grid>
+        </Grid>
+    );
+
+    const renderCustomBottomNavbar = (
+        <StyledBottomNavigation>
+            <NavbarContainer>{drawMode ? renderDrawModeContent : renderPreviewBottomNavbarContent}</NavbarContainer>
+        </StyledBottomNavigation>
+    );
+
     const renderCustomBottomNavbarSecondary = (
         <StyledBottomNavigation>
             <NavbarContainer>
-                <Grid container>
-                    <Grid item xs={6} container justify="flex-start">
-                        {renderMarkAreaButton}
-                    </Grid>
-                    <Grid item xs={6} container justify="flex-end">
-                        {renderStarButton}
-                        {renderUpVoteButton}
-                        {renderDownVoteButton}
-                    </Grid>
+                <Grid container justify="flex-end">
+                    {renderStarButton}
+                    {renderUpVoteButton}
+                    {renderDownVoteButton}
                 </Grid>
             </NavbarContainer>
         </StyledBottomNavigation>
@@ -363,6 +409,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         renderMarkAreaButton,
         renderDownloadButton,
         renderPrintButton,
+        renderDrawModeContent,
     };
 
     const renderPDFViewer = <PdfViewer {...pdfViewerProps} />;
@@ -407,18 +454,18 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     }
 };
 
-const StyledExtraResourceActions = styled(Grid)`
-    #vote-section,
-    #page-controls {
-        justify-content: space-around;
+// const StyledExtraResourceActions = styled(Grid)`
+//     #vote-section,
+//     #page-controls {
+//         justify-content: space-around;
 
-        @media only screen and (min-width: ${breakpoints.MD}) {
-            &#vote-section {
-                justify-content: flex-start;
-            }
-        }
-    }
-`;
+//         @media only screen and (min-width: ${breakpoints.MD}) {
+//             &#vote-section {
+//                 justify-content: flex-start;
+//             }
+//         }
+//     }
+// `;
 
 export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
     const { query, apolloClient } = ctx as SkolePageContext;

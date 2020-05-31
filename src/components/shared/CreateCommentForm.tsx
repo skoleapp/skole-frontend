@@ -47,7 +47,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const isMobile = useDeviceContext();
 
-    // Use screenshot as attachment is area has been marked.
+    // Use screenshot as attachment if area has been marked.
     useEffect(() => {
         !!screenshot && setAttachment(screenshot);
     }, [screenshot]);

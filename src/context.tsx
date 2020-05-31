@@ -59,9 +59,9 @@ const SkolePageContext = createContext<SkoleContextType>({
         screenshot: null,
         setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         scale: 1.0,
+        setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         fullscreen: false,
         setFullscreen: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
     isMobileGuess: null,
     discussionBox: {

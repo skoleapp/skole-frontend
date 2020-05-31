@@ -10,7 +10,6 @@ import ApolloClient from 'apollo-client';
 import { UserMeDocument, UserObjectType } from 'generated/graphql';
 import { ConfirmProvider } from 'material-ui-confirm';
 import App, { AppContext, AppProps } from 'next/app';
-import Head from 'next/head';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import * as R from 'ramda';
@@ -62,12 +61,6 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
                 <ThemeProvider theme={theme}>
                     <ConfirmProvider defaultOptions={defaultConfirmOptions}>
                         <PWAProvider>
-                            <Head>
-                                <meta
-                                    name="viewport"
-                                    content="width=device-width, initial-scale=1.0, user-scalable=no viewport-fit=cover"
-                                />
-                            </Head>
                             <CssBaseline />
                             <GlobalStyle />
                             <Component {...pageProps} />

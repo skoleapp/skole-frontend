@@ -1,10 +1,9 @@
-import { Box, Button, Fab, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
+import Hammer from '@egjs/hammerjs';
+import { Box, Fab, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
 import {
     AddOutlined,
-    CancelOutlined,
-    FullscreenExit,
+    FullscreenExitOutlined,
     FullscreenOutlined,
-    KeyboardArrowRightOutlined,
     RemoveOutlined,
     RotateRightOutlined,
 } from '@material-ui/icons';
@@ -16,7 +15,7 @@ import { Document, Page } from 'react-pdf';
 import styled from 'styled-components';
 
 import { MouseSelection } from '..';
-import { useCommentModalContext, useDeviceContext, useNotificationsContext, usePDFViewerContext } from '../../context';
+import { useDeviceContext, useNotificationsContext, usePDFViewerContext } from '../../context';
 import { LTWH } from '../../types';
 import { LoadingBox } from '../shared';
 
@@ -29,6 +28,7 @@ interface PDFViewerProps {
     renderMarkAreaButton: JSX.Element;
     renderDownloadButton: JSX.Element;
     renderPrintButton: JSX.Element;
+    renderDrawModeContent: JSX.Element;
 }
 
 interface PageFromElement {
@@ -49,6 +49,7 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
     renderMarkAreaButton,
     renderDownloadButton,
     renderPrintButton,
+    renderDrawModeContent,
 }) => {
     const {
         numPages,
@@ -57,8 +58,6 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
         setPageNumber,
         rotate,
         drawMode,
-        setDrawMode,
-        screenshot,
         setScreenshot,
         scale,
         setScale,
@@ -71,8 +70,7 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const documentRef = useRef<Document>(null);
-    const { toggleCommentModal } = useCommentModalContext();
-    const handleCancelDraw = (): void => setDrawMode(false);
+    const disableFullscreen = (): false | void => fullscreen && setFullscreen(false);
 
     const toggleFullScreen = (): void => {
         // Set scale to 75% when exiting fullscreen.
@@ -85,19 +83,14 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
 
     // Scale up by 10% if under limit.
     const handleScaleUp = (): void => {
-        setFullscreen(false);
-        setScale(scale => (scale < 2.5 ? scale + 0.1 : scale));
+        disableFullscreen();
+        setScale(scale => (scale < 2.5 ? scale + 0.05 : scale));
     };
 
     // Scale down by 10% if over limit.
     const handleScaleDown = (): void => {
-        setFullscreen(false);
-        setScale(scale => (scale > 0.5 ? scale - 0.1 : scale));
-    };
-
-    const handleContinueDraw = (): void => {
-        setDrawMode(false);
-        toggleCommentModal(true);
+        disableFullscreen();
+        setScale(scale => (scale > 0.5 ? scale - 0.05 : scale));
     };
 
     // Update document scale based on mouse wheel events.
@@ -109,25 +102,23 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
         }
     };
 
-    const onGestureEnd = (e: Event): void => {
-        if (e.scale < 1.0) {
-            // User moved fingers closer together
-            handleScaleUp();
-        } else if (e.scale > 1.0) {
-            // User moved fingers further apart
-            handleScaleDown();
-        }
-    };
-
     useEffect(() => {
+        const documentContainerNode = document.querySelector('#document-container');
         const documentNode = document.querySelector('.react-pdf__Document');
-        !!documentNode && documentNode.addEventListener('wheel', onWheel as EventListener);
-        !!documentNode && documentNode.addEventListener('gestureend', onGestureEnd);
 
-        return (): void => {
-            !!documentNode && documentNode.removeEventListener('wheel', onWheel as EventListener);
-            !!documentNode && documentNode.removeEventListener('gestureend', onGestureEnd as EventListener);
-        };
+        // Update document scale based on pinch events (mobile).
+        const hammer = new Hammer(documentContainerNode);
+        hammer.get('pinch').set({ enable: true });
+        hammer.on('pinchin', handleScaleDown);
+        hammer.on('pinchout', handleScaleUp);
+
+        if (!!documentNode) {
+            documentNode.addEventListener('wheel', onWheel as EventListener);
+
+            return (): void => {
+                documentNode.removeEventListener('wheel', onWheel as EventListener);
+            };
+        }
     }, []);
 
     // Scroll into page from given page number.
@@ -207,32 +198,6 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
         </Box>
     );
 
-    const renderDrawModeToolbarContent = (
-        <Grid container alignItems="center">
-            <Grid item xs={3} container justify="flex-start">
-                <Button onClick={handleCancelDraw} startIcon={<CancelOutlined />} color="primary">
-                    {t('common:cancel')}
-                </Button>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="subtitle2" color="textSecondary">
-                    {t('resource:drawModeInfo')}
-                </Typography>
-            </Grid>
-            <Grid item xs={3} container justify="flex-end">
-                <Button
-                    onClick={handleContinueDraw}
-                    endIcon={<KeyboardArrowRightOutlined />}
-                    variant="contained"
-                    color="primary"
-                    disabled={!screenshot}
-                >
-                    {t('common:continue')}
-                </Button>
-            </Grid>
-        </Grid>
-    );
-
     const renderPageNumberInput = (
         <TextField
             value={pageNumber}
@@ -284,7 +249,7 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderToolbar = !isMobile && (
-        <Box id="toolbar">{drawMode ? renderDrawModeToolbarContent : renderPreviewToolbarContent}</Box>
+        <Box id="toolbar">{drawMode ? renderDrawModeContent : renderPreviewToolbarContent}</Box>
     );
 
     const renderDocument = (
@@ -305,7 +270,7 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
     const renderFullscreenButton = (
         <Tooltip title={fullscreen ? t('resource:exitFullscreenTooltip') : t('resource:enterFullscreenTooltip')}>
             <Fab size="small" color="secondary" onClick={toggleFullScreen}>
-                {fullscreen ? <FullscreenExit /> : <FullscreenOutlined />}
+                {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             </Fab>
         </Tooltip>
     );
@@ -335,16 +300,16 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
     );
 
     return (
-        <StyledSkolePDFViewer scale={scale} fullscreen={fullscreen} drawMode={drawMode}>
+        <StyledPdfViewer id="document-container" scale={scale} fullscreen={fullscreen} drawMode={drawMode}>
             {renderToolbar}
             {renderDocument}
             {renderScaleControls}
-        </StyledSkolePDFViewer>
+        </StyledPdfViewer>
     );
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledSkolePDFViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <Box {...props} />)`
+const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <Box {...props} />)`
     position: absolute;
     width: 100%;
     height: 100%;
@@ -390,7 +355,7 @@ const StyledSkolePDFViewer = styled(({ scale, fullscreen, drawMode, ...props }) 
         flex-direction: column;
         align-items: center;
         background-color: rgb(82, 86, 89);
-        overflow: auto;
+        overflow: ${({ drawMode }): string => (drawMode ? 'hidden' : 'auto')};
         position: relative;
 
         .react-pdf__Page {
