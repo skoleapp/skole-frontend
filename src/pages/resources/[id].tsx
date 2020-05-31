@@ -84,14 +84,18 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(resourceTitle);
-    const { setDrawMode, drawMode, screenshot } = usePDFViewerContext();
+    const { setDrawMode, drawMode, screenshot, setRotate } = usePDFViewerContext();
     const { onClose: closeOptions } = drawerProps;
-    const handleStartDrawing = (): void => setDrawMode(true);
     const handlePrintPdf = (): void => printJS(file);
     const handleCancelDraw = (): void => setDrawMode(false);
     const upVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('resource:upvoteTooltip');
     const downVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('resource:downvoteTooltip');
     const { toggleCommentModal } = useCommentModalContext();
+
+    const handleStartDrawing = (): void => {
+        setRotate(0);
+        setDrawMode(true);
+    };
 
     const handleContinueDraw = (): void => {
         setDrawMode(false);

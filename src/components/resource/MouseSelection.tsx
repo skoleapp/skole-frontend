@@ -25,12 +25,13 @@ const initialState = { start: null, end: null, locked: false };
 
 export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) => {
     const isMobile = useDeviceContext();
-    const { drawMode, setScreenshot } = usePDFViewerContext();
+    const { drawMode, setDrawMode, setScreenshot } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // Need to use mutable ref instead of immutable state.
     const [drawingAllowedRef, setDrawingAllowedRef] = useStateRef(false);
     const { start, end } = stateRef.current;
     const reset = (): void => setState(initialState);
 
+    // Get rectangle coordinates on container element.
     const getBoundingRect = (start: Coords, end: Coords): LTWH => ({
         left: Math.min(end.x, start.x),
         top: Math.min(end.y, start.y),
@@ -98,6 +99,8 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
                     }
                 };
 
+                console.log(e);
+
                 if (drawingAllowedRef.current) {
                     setState({
                         start: containerCoords(e.pageX, e.pageY),
@@ -159,9 +162,11 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
                     }
                 };
 
+                console.log(e);
+
                 if (drawingAllowedRef.current) {
                     setState({
-                        start: containerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
+                        start: containerCoords(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
                         end: null,
                         locked: false,
                     });
@@ -198,11 +203,21 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
     useEffect(() => {
         setDrawingAllowedRef(drawMode);
 
+        // Draw mode manually toggle off.
         if (!drawMode) {
             reset();
-            setScreenshot(null);
+            // setScreenshot(null);
         }
     }, [drawMode]);
+
+    useEffect(() => {
+        // Reset when demounting.
+        return (): void => {
+            reset();
+            // setScreenshot(null);
+            setDrawMode(false);
+        };
+    }, []);
 
     return drawMode && !!start && !!end ? <StyledMouseSelection style={getBoundingRect(start, end)} /> : null;
 };

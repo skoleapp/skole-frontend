@@ -76,6 +76,8 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
         // Set scale to 75% when exiting fullscreen.
         if (fullscreen) {
             setScale(0.75);
+        } else {
+            setScale(1.0);
         }
 
         setFullscreen(!fullscreen);
@@ -106,6 +108,7 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
         const documentContainerNode = document.querySelector('#document-container');
         const documentNode = document.querySelector('.react-pdf__Document');
 
+        // TODO: Optimize this for a smoother pinch experience on mobile.
         // Update document scale based on pinch events (mobile).
         const hammer = new Hammer(documentContainerNode);
         hammer.get('pinch').set({ enable: true });
@@ -127,6 +130,7 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
         setPageNumber(val);
         const page: PDFPage | undefined = R.path(['pages', val - 1], documentRef.current);
         page && page.scrollIntoView();
+        window.scrollTo(0, 0); // Prevent window scrolling.
     };
 
     const onDocumentLoadSuccess = (document: PDFDocumentProxy): void => {
@@ -162,7 +166,6 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
             newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
             return newCanvas.toDataURL('image/png');
         } else {
-            toggleNotification(t('resource:markAreaError'));
             return null;
         }
     };
@@ -204,7 +207,7 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
             onChange={handleChangePage}
             type="number"
             color="secondary"
-            inputProps={{ min: '1' }}
+            inputProps={{ min: 1, max: numPages }}
         />
     );
 
@@ -355,8 +358,10 @@ const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <B
         flex-direction: column;
         align-items: center;
         background-color: rgb(82, 86, 89);
-        overflow: ${({ drawMode }): string => (drawMode ? 'hidden' : 'auto')};
         position: relative;
+
+        // Disable scrolling when draw mode is on.
+        overflow: ${({ drawMode }): string => (drawMode ? 'hidden' : 'auto')};
 
         .react-pdf__Page {
             position: static !important;
@@ -364,7 +369,6 @@ const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <B
             display: flex;
 
             // Automatically update width based on scale and fullscreen state.
-
             width: ${({ scale, fullscreen }): string => (fullscreen ? '100%' : `calc(100% * ${scale})`)};
 
             .react-pdf__Page__canvas {

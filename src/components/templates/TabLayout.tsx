@@ -1,10 +1,10 @@
 import { Box, Breadcrumbs, CardHeader, Divider, Grid, IconButton, Tab, Tooltip } from '@material-ui/core';
 import { InfoOutlined, MoreHorizOutlined } from '@material-ui/icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { useDeviceContext } from '../../context';
+import { useCommentModalContext, useDeviceContext } from '../../context';
 import { LayoutProps, MaxWidth, MuiColor, StyledBreadcrumbProps, UseOptions } from '../../types';
 import { useDrawer, useTabs } from '../../utils';
 import { StyledCard, StyledDrawer, StyledTabs, TextLink } from '../shared';
@@ -62,9 +62,10 @@ export const TabLayout: React.FC<Props> = ({
     ...props
 }) => {
     const { t } = useTranslation();
-    const { tabValue, handleTabChange } = useTabs();
+    const { tabValue, setTabValue, handleTabChange } = useTabs();
     const isMobile = useDeviceContext();
     const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(infoHeader);
+    const { commentModalOpen } = useCommentModalContext();
 
     const {
         renderOptions,
@@ -75,6 +76,11 @@ export const TabLayout: React.FC<Props> = ({
 
     const renderCustomBottomNavbar =
         tabValue === 0 ? customBottomNavbar : customBottomNavbarSecondary || customBottomNavbar;
+
+    // If comment modal is opened in main tab, automatically switch to discussion tab.
+    useEffect(() => {
+        commentModalOpen && tabValue === 0 && setTabValue(1);
+    }, [commentModalOpen]);
 
     const renderHeaderRight = (color: MuiColor): JSX.Element => (
         <Tooltip title={optionsTooltip || ''}>
