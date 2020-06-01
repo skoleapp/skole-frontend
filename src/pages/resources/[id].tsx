@@ -441,15 +441,11 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     //     </Breadcrumbs>
     // );
 
-    const renderResourceTitle = (
-        <Typography variant="subtitle1">{`${t('common:discussion')} (${comments.length})`}</Typography>
-    );
-
     const renderDiscussionHeader = (
         <Box id="discussion-header">
             <Grid container alignItems="center">
                 <Grid item xs={6} container justify="flex-start">
-                    <Chip label={renderResourceTitle} variant="outlined" color="secondary" />
+                    <Typography variant="subtitle1">{`${t('common:discussion')} (${comments.length})`}</Typography>
                 </Grid>
                 <Grid item xs={6} container justify="flex-end">
                     {renderStarButton}
@@ -568,7 +564,7 @@ const StyledResourceDetailPage = styled(Box)`
 
         #discussion-header {
             height: 3rem;
-            background-color: rgb(50, 54, 57);
+            background-color: var(--gray);
             color: var(--secondary);
             padding: 0.5rem;
 

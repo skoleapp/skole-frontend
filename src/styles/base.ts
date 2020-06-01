@@ -1,10 +1,10 @@
 import { css } from 'styled-components';
 
-import { colors } from './colors';
+import { colors } from './theme';
 
 export const base = css`
     :root {
-        // Colors.
+        // MUI Colors.
 
         --primary: ${colors.primary};
         --primary-light: ${colors.primaryLight};
@@ -12,19 +12,24 @@ export const base = css`
         --secondary: ${colors.secondary};
         --secondary-light: ${colors.secondaryLight};
         --secondary-dark: ${colors.secondaryDark};
-        --contrast: ${colors.contrast};
         --warning: ${colors.warning};
         --info: ${colors.info};
         --success: ${colors.success};
         --error: ${colors.error};
         --white: ${colors.white};
         --black: ${colors.black};
-        --gray: ${colors.gray};
-        --contrast: ${colors.contrast};
+
+        // Other Colors.
+
+        --gray: #323639;
+        --gray-light: #525659;
+        --gray-dark: #262729;
+        --contrast: #00c9ae;
         --hover-opacity: rgba(0, 0, 0, 0.05);
         --border-color: rgba(0, 0, 0, 0.12);
-        --light-opacity: rgba(0, 0, 0, 0.25);
-        --dark-opacity: rgba(0, 0, 0, 0.75);
+        --opacity: rgba(0, 0, 0, 0.5);
+        --opacity-light: rgba(0, 0, 0, 0.25);
+        --opacity-dark: rgba(0, 0, 0, 0.75);
 
         // Misc.
 

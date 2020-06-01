@@ -309,7 +309,7 @@ const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...
     .MuiSvgIcon-root {
         height: 1.25rem;
         width: 1.25rem;
-        color: var(--dark-opacity);
+        color: var(--opacity-dark);
 
         &.vote-button {
             height: 1.5rem;

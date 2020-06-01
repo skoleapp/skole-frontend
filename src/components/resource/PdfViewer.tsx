@@ -1,5 +1,5 @@
 import Hammer from '@egjs/hammerjs';
-import { Box, Chip, Fab, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Box, Fab, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
 import {
     AddOutlined,
     FullscreenExitOutlined,
@@ -184,7 +184,6 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
 
     const renderMouseSelection = <MouseSelection onSelection={handleSelection} />;
     const renderLoading = <LoadingBox text={t('resource:loadingResource')} />;
-    const renderTitle = <Typography variant="subtitle1">{title}</Typography>;
 
     const renderError = (
         <Box flexGrow="1" display="flex" justifyContent="center" alignItems="center">
@@ -227,7 +226,9 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
     const renderPreviewToolbarContent = (
         <Grid container alignItems="center">
             <Grid item xs={5} container justify="flex-start">
-                <Chip label={renderTitle} variant="outlined" color="secondary" />
+                <Typography variant="subtitle1" className="truncate">
+                    {title}
+                </Typography>
             </Grid>
             <Grid item xs={2} container justify="center">
                 {renderPageNumbers}
@@ -310,7 +311,7 @@ const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <B
     flex-direction: column;
 
     #toolbar {
-        background-color: rgb(50, 54, 57);
+        background-color: var(--gray);
         color: var(--secondary);
         padding: 0.5rem;
 
@@ -326,7 +327,7 @@ const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <B
             .MuiTextField-root {
                 width: 2rem;
                 height: 2rem;
-                background-color: rgb(38, 39, 41);
+                background-color: var(--gray-dark);
                 margin: 0 0.25rem 0 0;
                 border-radius: 0.1rem;
 
@@ -346,7 +347,7 @@ const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <B
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: rgb(82, 86, 89);
+        background-color: var(--gray-light);
         position: relative;
 
         // Disable scrolling when draw mode is on.

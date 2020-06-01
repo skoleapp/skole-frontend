@@ -1,4 +1,4 @@
-import { Backdrop, Box, IconButton } from '@material-ui/core';
+import { Backdrop, Box, IconButton, Typography } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
 import Image from 'material-ui-image';
 import React from 'react';
@@ -10,13 +10,19 @@ import { mediaURL } from '../../utils';
 
 export const AttachmentViewer: React.FC = () => {
     const { attachment, toggleAttachmentViewer } = useAttachmentViewerContext();
+    const attachmentName = attachment && attachment.split('/').pop();
     const handleClose = (): void => toggleAttachmentViewer(null);
 
     return (
         <StyledAttachmentViewer open={!!attachment} onClick={handleClose}>
-            <IconButton onClick={handleClose}>
-                <CloseOutlined />
-            </IconButton>
+            <Box id="toolbar">
+                <Typography className="truncate" variant="subtitle1" color="secondary">
+                    {attachmentName}
+                </Typography>
+                <IconButton onClick={handleClose} color="secondary" size="small">
+                    <CloseOutlined />
+                </IconButton>
+            </Box>
             <Box id="image-container">
                 <Image src={mediaURL(attachment as string)} />
             </Box>
@@ -25,13 +31,23 @@ export const AttachmentViewer: React.FC = () => {
 };
 
 const StyledAttachmentViewer = styled(Backdrop)`
-    background-color: var(--dark-opacity) !important;
+    background-color: var(--opacity-dark) !important;
     z-index: 9999 !important;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    #toolbar {
+        height: 3rem;
+        width: 100%;
+        padding: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--black); // Applied on top of backdrop background.
+    }
 
     #image-container {
-        height: 100vh;
-        width: 100vh;
+        flex-grow: 1;
         display: flex;
 
         > div {
@@ -54,12 +70,5 @@ const StyledAttachmentViewer = styled(Backdrop)`
         @media only screen and (min-width: ${breakpoints.MD}) {
             padding: 10rem;
         }
-    }
-
-    .MuiIconButton-root {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        color: var(--white);
     }
 `;
