@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
+import { AppBar, Avatar, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
 import { ArrowBackOutlined, HowToRegOutlined, LibraryAddOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
@@ -61,9 +61,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     );
 
     const renderDesktopContent = !isMobile && (
-        <Box display="flex" flexGrow="1" justifyContent="space-between" alignItems="center">
-            <Logo />
-            <Box display="flex" alignItems="center">
+        <Grid container alignItems="center">
+            <Grid item xs={7} container>
+                <Logo />
+            </Grid>
+            <Grid item xs={5} container alignItems="center" justify="flex-end">
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
                     <>
@@ -90,8 +92,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                         </ButtonLink>
                     </>
                 )}
-            </Box>
-        </Box>
+            </Grid>
+        </Grid>
     );
 
     return (

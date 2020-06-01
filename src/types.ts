@@ -185,7 +185,7 @@ export interface PDFViewerContext {
     pageNumber: number;
     setPageNumber: Dispatch<SetStateAction<number>>;
     rotate: number;
-    setRotate: () => void;
+    setRotate: Dispatch<SetStateAction<number>>;
     handleRotate: () => void;
     drawMode: boolean;
     setDrawMode: Dispatch<SetStateAction<boolean>>;

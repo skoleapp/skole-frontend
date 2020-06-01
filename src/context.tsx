@@ -155,7 +155,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [rotate, setRotate] = useState(0);
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
-    const [scale, setScale] = useState(isMobileGuess ? 1.0 : 0.75); // Initialize at 75% on desktop.
+    const [scale, setScale] = useState(1.0);
     const [fullscreen, setFullscreen] = useState(false);
     const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 

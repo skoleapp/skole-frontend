@@ -25,7 +25,7 @@ const initialState = { start: null, end: null, locked: false };
 
 export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) => {
     const isMobile = useDeviceContext();
-    const { drawMode, setDrawMode, setScreenshot } = usePDFViewerContext();
+    const { drawMode, setDrawMode } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // Need to use mutable ref instead of immutable state.
     const [drawingAllowedRef, setDrawingAllowedRef] = useStateRef(false);
     const { start, end } = stateRef.current;
@@ -99,8 +99,6 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
                     }
                 };
 
-                console.log(e);
-
                 if (drawingAllowedRef.current) {
                     setState({
                         start: containerCoords(e.pageX, e.pageY),
@@ -161,8 +159,6 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
                         reset();
                     }
                 };
-
-                console.log(e);
 
                 if (drawingAllowedRef.current) {
                     setState({
@@ -225,5 +221,5 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
 const StyledMouseSelection = styled(Box)`
     position: absolute;
     border: 0.05rem dashed #000000;
-    background-color: rgba(252, 232, 151, 0.5);
+    background-color: rgba(173, 54, 54, 0.5); // Primary color with opacity.
 `;

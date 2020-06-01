@@ -1,5 +1,5 @@
 import Hammer from '@egjs/hammerjs';
-import { Box, Fab, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Box, Chip, Fab, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
 import {
     AddOutlined,
     FullscreenExitOutlined,
@@ -15,20 +15,17 @@ import { Document, Page } from 'react-pdf';
 import styled from 'styled-components';
 
 import { MouseSelection } from '..';
-import { useDeviceContext, useNotificationsContext, usePDFViewerContext } from '../../context';
+import { useDeviceContext, usePDFViewerContext } from '../../context';
 import { LTWH } from '../../types';
 import { LoadingBox } from '../shared';
 
 interface PDFViewerProps {
     file: string;
     title: string;
-    renderStarButton: JSX.Element;
-    renderUpVoteButton: JSX.Element | false;
-    renderDownVoteButton: JSX.Element | false;
     renderMarkAreaButton: JSX.Element;
+    renderDrawModeContent: JSX.Element;
     renderDownloadButton: JSX.Element;
     renderPrintButton: JSX.Element;
-    renderDrawModeContent: JSX.Element;
 }
 
 interface PageFromElement {
@@ -43,13 +40,10 @@ interface PDFPage {
 export const PdfViewer: React.FC<PDFViewerProps> = ({
     file,
     title,
-    renderStarButton,
-    renderUpVoteButton,
-    renderDownVoteButton,
     renderMarkAreaButton,
+    renderDrawModeContent,
     renderDownloadButton,
     renderPrintButton,
-    renderDrawModeContent,
 }) => {
     const {
         numPages,
@@ -68,7 +62,6 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
 
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
-    const { toggleNotification } = useNotificationsContext();
     const documentRef = useRef<Document>(null);
     const disableFullscreen = (): false | void => fullscreen && setFullscreen(false);
 
@@ -233,16 +226,13 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
 
     const renderPreviewToolbarContent = (
         <Grid container alignItems="center">
-            <Grid item xs={4} container justify="flex-start">
-                {renderTitle}
+            <Grid item xs={5} container justify="flex-start">
+                <Chip label={renderTitle} variant="outlined" color="secondary" />
             </Grid>
-            <Grid item xs={4} container justify="center">
+            <Grid item xs={2} container justify="center">
                 {renderPageNumbers}
             </Grid>
-            <Grid item xs={4} container justify="flex-end">
-                {renderStarButton}
-                {renderUpVoteButton}
-                {renderDownVoteButton}
+            <Grid item xs={5} container justify="flex-end">
                 {renderMarkAreaButton}
                 {renderRotateButton}
                 {renderDownloadButton}
@@ -320,12 +310,11 @@ const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <B
     flex-direction: column;
 
     #toolbar {
-        background-color: ${({ drawMode }): string => (drawMode ? 'var(--white)' : 'rgb(50, 54, 57)')};
+        background-color: rgb(50, 54, 57);
         color: var(--secondary);
         padding: 0.5rem;
-        border-bottom: ${({ drawMode }): string => (drawMode ? 'var(--border)' : 'none')};
 
-        .MuiIconButton-root {
+        .MuiButton-root {
             padding: 0.25rem;
         }
 

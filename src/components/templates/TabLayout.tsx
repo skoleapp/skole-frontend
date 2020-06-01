@@ -53,7 +53,7 @@ export const TabLayout: React.FC<Props> = ({
     optionProps,
     headerLeftMobile,
     headerActionDesktop,
-    extraBreadcrumbs,
+    // extraBreadcrumbs,
     // extraDesktopActions,
     customBottomNavbar,
     customBottomNavbarSecondary,
@@ -61,7 +61,7 @@ export const TabLayout: React.FC<Props> = ({
     responsive,
     ...props
 }) => {
-    const { t } = useTranslation();
+    // const { t } = useTranslation();
     const { tabValue, setTabValue, handleTabChange } = useTabs();
     const isMobile = useDeviceContext();
     const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(infoHeader);
@@ -143,34 +143,34 @@ export const TabLayout: React.FC<Props> = ({
     //     </Box>
     // );
 
-    const StyledBreadcrumbs = styled(Breadcrumbs)`
-        .MuiBreadcrumbs-li {
-            .MuiLink-root {
-                display: flex;
-            }
+    // const StyledBreadcrumbs = styled(Breadcrumbs)`
+    //     .MuiBreadcrumbs-li {
+    //         .MuiLink-root {
+    //             display: flex;
+    //         }
 
-            .MuiSvgIcon-root {
-                color: default;
-                margin-right: 0.25rem;
-            }
-        }
-    `;
+    //         .MuiSvgIcon-root {
+    //             color: default;
+    //             margin-right: 0.25rem;
+    //         }
+    //     }
+    // `;
 
-    const renderBreadCrumbs = (
-        <StyledBreadcrumbs>
-            <TextLink href="/" color="inherit">
-                {t('common:home')}
-            </TextLink>
-            <TextLink href="/search" color="inherit">
-                {t('common:search')}
-            </TextLink>
-            {extraBreadcrumbs.map(({ linkProps, text }, i) => (
-                <TextLink key={i} {...linkProps}>
-                    {text}
-                </TextLink>
-            ))}
-        </StyledBreadcrumbs>
-    );
+    // const renderBreadCrumbs = (
+    //     <StyledBreadcrumbs>
+    //         <TextLink href="/" color="inherit">
+    //             {t('common:home')}
+    //         </TextLink>
+    //         <TextLink href="/search" color="inherit">
+    //             {t('common:search')}
+    //         </TextLink>
+    //         {extraBreadcrumbs.map(({ linkProps, text }, i) => (
+    //             <TextLink key={i} {...linkProps}>
+    //                 {text}
+    //             </TextLink>
+    //         ))}
+    //     </StyledBreadcrumbs>
+    // );
 
     const renderDesktopContent = !isMobile && !responsive && (
         <Grid id="container" container>

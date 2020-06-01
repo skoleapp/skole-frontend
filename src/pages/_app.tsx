@@ -1,6 +1,5 @@
 import 'nprogress/nprogress.css';
 import 'typeface-roboto';
-import 'pdfjs-dist/web/pdf_viewer.css';
 
 import { ApolloProvider } from '@apollo/react-hooks';
 import { CssBaseline } from '@material-ui/core';

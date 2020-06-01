@@ -5597,29 +5597,22 @@ i18next-browser-languagedetector@^4.0.0:
   dependencies:
     "@babel/runtime" "^7.5.5"
 
-i18next-fs-backend@^1.0.1:
+i18next-fs-backend@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-1.0.3.tgz#2bfb81c1951d0c55ee6f82f9277ef950a55ba80d"
   integrity sha512-ppSvicYolLrWEVQ7Eb27708GFYikq1bXGM9Wmz/5faM6V2nvhnHPP3fDLQ26E2cNZAKGeT/9znK08jSgei4leA==
 
-i18next-http-backend@^1.0.4:
+i18next-http-backend@^1.0.8:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/i18next-http-backend/-/i18next-http-backend-1.0.13.tgz#4575b3588f79df4ee5d4919f93ec9b9026adf1c5"
   integrity sha512-7wWg+3pnwRHgNLwQZZGsYLo7ftRHkN+GL94sh7YoGv4+Adscc8DWLIFUF9v5bNQF5xvExAfRyVIAKdVI6dKjAg==
   dependencies:
     node-fetch "2.6.0"
 
-i18next-http-middleware@^1.0.0:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/i18next-http-middleware/-/i18next-http-middleware-1.3.1.tgz#5cad04a4b5f7c2935bc7965ccd9837b73c4f081c"
-  integrity sha512-jKzaCx/W/a7SV+fafNhgQ1QcMu8TChiytGVZP/CTzdWKWJZ7drS+V40pDsNWw8i3Ciw9GZCCnxrNiIbkwBczLw==
-
-i18next@19.4.4:
-  version "19.4.4"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.4.4.tgz#c0a18bc2f2be554da636e67bfbf5200c7948b60d"
-  integrity sha512-ofaHtdsDdX3A5nYur1HWblB7J4hIcjr2ACdnwTAJgc8hTfPbyzZfGX0hVkKpI3vzDIgO6Uzc4v1ffW2W6gG6zw==
-  dependencies:
-    "@babel/runtime" "^7.3.1"
+i18next-http-middleware@>=1.0.2:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/i18next-http-middleware/-/i18next-http-middleware-2.1.0.tgz#0396971fe6d9fcf82c109f6ee72268d89776d7d1"
+  integrity sha512-OgtOFDjsIL9R4eXWrpge9TCMc52L2kL1d/9HsErPA14DyqfHc7NVCampFIuqTfpmc4janwcG66r5r5p9zdrS+Q==
 
 i18next@^19.0.3:
   version "19.4.5"
@@ -7110,19 +7103,19 @@ next-cookies@2.0.3:
   dependencies:
     universal-cookie "^4.0.2"
 
-next-i18next@4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/next-i18next/-/next-i18next-4.4.0.tgz#d811e686bd09acf3f0073602727ff82a44e51a79"
-  integrity sha512-cFl1K9mcQ/HRLwNdFXwJJGjtpr5URgUSbZihtFwsUD7Ib81pzSi4UfTUiCdS9Kn2gRSbtUxVWkrukGbu6rcepQ==
+next-i18next@4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/next-i18next/-/next-i18next-4.4.2.tgz#ba7ed45d93b9123baa6f06abc29c784e06e2c088"
+  integrity sha512-J7A0x4MFqDw2O2nJGId98pmeSTNwRpMHTSNboi4xeQsvl4PN5T3MrA/LZN0GJCa8rsRWR63dkNVYN8fx5OOg1A==
   dependencies:
     core-js "^2"
     detect-node "^2.0.4"
     hoist-non-react-statics "^3.2.0"
     i18next "^19.0.3"
     i18next-browser-languagedetector "^4.0.0"
-    i18next-fs-backend "^1.0.1"
-    i18next-http-backend "^1.0.4"
-    i18next-http-middleware "^1.0.0"
+    i18next-fs-backend "^1.0.2"
+    i18next-http-backend "^1.0.8"
+    i18next-http-middleware ">=1.0.2"
     path-match "^1.2.4"
     prop-types "^15.6.2"
     react-i18next "^11.0.0"
@@ -8483,14 +8476,6 @@ react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
-
-react-i18next@11.4.0:
-  version "11.4.0"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.4.0.tgz#dde6bf3a695910af7a4270fea2e111bc331cf151"
-  integrity sha512-lyOZSSQkif4H9HnHN3iEKVkryLI+WkdZSEw3VAZzinZLopfYRMHVY5YxCopdkXPLEHs6S5GjKYPh3+j0j336Fg==
-  dependencies:
-    "@babel/runtime" "^7.3.1"
-    html-parse-stringify2 "2.0.1"
 
 react-i18next@^11.0.0:
   version "11.5.0"
