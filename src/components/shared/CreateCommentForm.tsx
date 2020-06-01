@@ -16,7 +16,7 @@ import {
     usePDFViewerContext,
 } from '../../context';
 import { CommentTarget } from '../../types';
-import { useForm } from '../../utils';
+import { dataURItoFile, useForm } from '../../utils';
 import { ModalHeader } from './ModalHeader';
 import { StyledModal } from './StyledModal';
 
@@ -49,7 +49,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
 
     // Use screenshot as attachment if area has been marked.
     useEffect(() => {
-        !!screenshot && setAttachment(screenshot);
+        if (!!screenshot) {
+            setAttachment(screenshot); // Already in data URL form.
+            const screenShotFile = dataURItoFile(screenshot);
+            setFieldValue('attachment', screenShotFile);
+        }
     }, [screenshot]);
 
     const handleCloseCreateCommentModal = (): void => {
@@ -78,6 +82,8 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
     const [createCommentMutation] = useCreateCommentMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
+        console.log(values);
+
         if (!attachment && !values.text) {
             toggleNotification(t('notifications:messageEmpty'));
         } else {

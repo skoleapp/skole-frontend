@@ -1,22 +1,9 @@
-import {
-    Box,
-    Button,
-    Chip,
-    Grid,
-    IconButton,
-    ListItemText,
-    MenuItem,
-    Tab,
-    Tooltip,
-    Typography,
-} from '@material-ui/core';
+import { Box, Button, Grid, IconButton, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
 import {
     CancelOutlined,
     CloudDownloadOutlined,
     DeleteOutline,
-    InfoOutlined,
     KeyboardArrowRightOutlined,
-    MoreHorizOutlined,
     PrintOutlined,
     TabUnselectedOutlined,
     ThumbDownOutlined,
@@ -66,7 +53,7 @@ import {
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, MaxWidth, SkolePageContext } from '../../types';
-import { mediaURL, useDrawer, useOptions, useTabs, useVotes } from '../../utils';
+import { mediaURL, useActionsDrawer, useInfoDrawer, useTabs, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -98,24 +85,33 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const created = R.propOr(undefined, 'created', resource) as string;
     const { setDrawMode, drawMode, screenshot, setRotate } = usePDFViewerContext();
     const handleCancelDraw = (): void => setDrawMode(false);
-    const upVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('resource:upvoteTooltip');
-    const downVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('resource:downvoteTooltip');
+
+    const upVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('resource:ownResourceVoteTooltip')
+        : t('common:upvoteTooltip');
+
+    const downVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('resource:ownResourceVoteTooltip')
+        : t('common:downvoteTooltip');
+
     const { toggleCommentModal } = useCommentModalContext();
     const { tabValue, setTabValue, handleTabChange } = useTabs();
     const { commentModalOpen } = useCommentModalContext();
 
-    const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(
-        t('resource:infoHeader'),
-    );
+    const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
 
     const {
+        renderActionsHeader,
+        handleCloseActions,
         renderShareOption,
         renderReportOption,
-        renderOptionsHeader,
-        drawerProps: { handleOpen: handleOpenOptions, ...optionDrawerProps },
-    } = useOptions(resourceTitle);
-
-    const { onClose: closeOptions } = optionDrawerProps;
+        renderActionsButton,
+        ...actionsDrawerProps
+    } = useActionsDrawer(resourceTitle);
 
     // If comment modal is opened in main tab, automatically switch to discussion tab.
     useEffect(() => {
@@ -136,7 +132,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         initialVote,
         initialScore,
         isOwner,
-        color: isMobile ? 'default' : 'secondary',
     });
 
     const staticBackUrl = {
@@ -169,12 +164,13 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     });
 
     const handleDeleteResource = async (e: SyntheticEvent): Promise<void> => {
+        handleCloseActions(e);
+
         try {
             await confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') });
             deleteResource({ variables: { id: resourceId } });
         } catch {
-        } finally {
-            closeOptions(e);
+            // User cancelled.
         }
     };
 
@@ -185,7 +181,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
 
     const handleDownloadPdf = async (e: SyntheticEvent): Promise<void> => {
-        closeOptions(e);
+        handleCloseActions(e);
 
         try {
             const res = await fetch(file, {
@@ -207,7 +203,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     };
 
     const handlePrintPdf = async (e: SyntheticEvent): Promise<void> => {
-        closeOptions(e);
+        handleCloseActions(e);
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore: `print-js` is imported at the top.
         printJS(file);
@@ -246,17 +242,9 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         },
     ];
 
-    const renderStarButton = (
-        <StarButton
-            starred={starred}
-            resource={resourceId}
-            starredTooltip={t('resource:starredTooltip')}
-            unstarredTooltip={t('resource:unstarredTooltip')}
-            color={isMobile ? 'default' : 'secondary'}
-        />
-    );
+    const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
 
-    const renderUpVoteButton = !isOwner && (
+    const renderUpVoteButton = (
         <Tooltip title={upVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
@@ -266,7 +254,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </Tooltip>
     );
 
-    const renderDownVoteButton = !isOwner && (
+    const renderDownVoteButton = (
         <Tooltip title={downVoteButtonTooltip}>
             <span>
                 <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
@@ -285,7 +273,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderDownloadButton = (
-        <Tooltip title={t('resource:downloadResourceTooltip')}>
+        <Tooltip title={t('resource:downloadTooltip')}>
             <IconButton onClick={handleDownloadPdf} size="small" color="secondary">
                 <CloudDownloadOutlined />
             </IconButton>
@@ -293,14 +281,12 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderPrintButton = (
-        <Tooltip title={t('resource:printResourceTooltip')}>
+        <Tooltip title={t('resource:printTooltip')}>
             <IconButton onClick={handlePrintPdf} size="small" color="secondary">
                 <PrintOutlined />
             </IconButton>
         </Tooltip>
     );
-
-    const renderDrawModeTitle = <Typography variant="subtitle1">{t('resource:drawMode')}</Typography>;
 
     const renderDrawModeContent = (
         <Grid container alignItems="center">
@@ -315,7 +301,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             </Grid>
             {!isMobile && (
                 <Grid item xs={2}>
-                    <Chip label={renderDrawModeTitle} variant="outlined" color="secondary" />
+                    <Typography variant="subtitle1">{t('resource:drawMode')}</Typography>
                 </Grid>
             )}
             <Grid item xs={isMobile ? 6 : 5} container justify="flex-end">
@@ -360,22 +346,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                 </Grid>
             </NavbarContainer>
         </StyledBottomNavigation>
-    );
-
-    const renderInfoButton = (
-        <Tooltip title={t('resource:infoTooltip')}>
-            <IconButton onClick={handleOpenInfo} color="secondary">
-                <InfoOutlined />
-            </IconButton>
-        </Tooltip>
-    );
-
-    const renderActionsButton = (
-        <Tooltip title={t('resource:optionsTooltip')}>
-            <IconButton onClick={handleOpenOptions} color="secondary">
-                <MoreHorizOutlined />
-            </IconButton>
-        </Tooltip>
     );
 
     const pdfViewerProps = {
@@ -423,23 +393,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             {renderRightTab}
         </StyledCard>
     );
-
-    // const renderBreadcrumbs = (
-    //     <Breadcrumbs>
-    //         <TextLink href="/" color="secondary">
-    //             {t('common:home')}
-    //         </TextLink>
-    //         <TextLink href="/search" color="secondary">
-    //             {t('common:search')}
-    //         </TextLink>
-    //         <TextLink {...staticBackUrl} color="secondary">
-    //             {courseName}
-    //         </TextLink>
-    //         <TextLink href="/resources/[id]" as={`/resources/${resourceId}`} color="secondary">
-    //             {fullResourceTitle}
-    //         </TextLink>
-    //     </Breadcrumbs>
-    // );
 
     const renderDiscussionHeader = (
         <Box id="discussion-header">
@@ -509,7 +462,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </MenuItem>
     );
 
-    const renderOptions = (
+    const renderActions = (
         <StyledList>
             {renderShareOption}
             {renderReportOption}
@@ -519,10 +472,10 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledList>
     );
 
-    const renderOptionsDrawer = (
-        <StyledDrawer {...optionDrawerProps}>
-            {renderOptionsHeader}
-            {renderOptions}
+    const renderActionsDrawer = (
+        <StyledDrawer {...actionsDrawerProps}>
+            {renderActionsHeader}
+            {renderActions}
         </StyledDrawer>
     );
 
@@ -549,7 +502,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
                     {renderMobileContent}
                     {renderDesktopContent}
                     {renderInfoDrawer}
-                    {renderOptionsDrawer}
+                    {renderActionsDrawer}
                 </MainLayout>
             </StyledResourceDetailPage>
         );
@@ -564,9 +517,10 @@ const StyledResourceDetailPage = styled(Box)`
 
         #discussion-header {
             height: 3rem;
-            background-color: var(--gray);
-            color: var(--secondary);
+            // background-color: var(--gray);
+            // color: var(--secondary);
             padding: 0.5rem;
+            border-bottom: var(--border);
 
             .MuiIconButton-root {
                 padding: 0.25rem;

@@ -149,12 +149,12 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
         const canvas = target.closest('canvas');
         const { left, top, width, height } = position;
         const newCanvas = document.createElement('canvas');
-
         newCanvas.width = width;
         newCanvas.height = height;
         const newCanvasContext = newCanvas.getContext('2d');
 
         if (!!newCanvas && !!newCanvasContext && !!canvas) {
+            // FIXME: This might cause issues on some small devices, resulting in misaligned screenshots.
             const dpr: number = window.devicePixelRatio;
             newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
             return newCanvas.toDataURL('image/png');
@@ -294,7 +294,13 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
     );
 
     return (
-        <StyledPdfViewer id="document-container" scale={scale} fullscreen={fullscreen} drawMode={drawMode}>
+        <StyledPdfViewer
+            id="document-container"
+            scale={scale}
+            fullscreen={fullscreen}
+            drawMode={drawMode}
+            isMobile={isMobile}
+        >
             {renderToolbar}
             {renderDocument}
             {renderScaleControls}
@@ -303,7 +309,7 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <Box {...props} />)`
+const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, isMobile, ...props }) => <Box {...props} />)`
     position: absolute;
     width: 100%;
     height: 100%;
@@ -350,8 +356,8 @@ const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, ...props }) => <B
         background-color: var(--gray-light);
         position: relative;
 
-        // Disable scrolling when draw mode is on.
-        overflow: ${({ drawMode }): string => (drawMode ? 'hidden' : 'auto')};
+        // Disable scrolling when draw mode is on on mobile.
+        overflow: ${({ drawMode, isMobile }): string => (drawMode && isMobile ? 'hidden' : 'auto')};
 
         .react-pdf__Page {
             position: static !important;

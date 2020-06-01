@@ -17,7 +17,6 @@ interface UseVotesProps {
     initialVote: VoteObjectType | null;
     initialScore: string;
     isOwner: boolean;
-    color?: MuiColor;
 }
 
 interface VoteButtonProps {
@@ -33,7 +32,7 @@ interface UseVotes {
     handleVote: (variables: Variables) => void;
 }
 
-export const useVotes = ({ initialVote, initialScore, isOwner, color = 'default' }: UseVotesProps): UseVotes => {
+export const useVotes = ({ initialVote, initialScore, isOwner }: UseVotesProps): UseVotes => {
     const { t } = useTranslation();
     const { verified } = useAuthContext();
     const [vote, setVote] = useState(initialVote);
@@ -68,12 +67,12 @@ export const useVotes = ({ initialVote, initialScore, isOwner, color = 'default'
 
     const upVoteButtonProps = {
         ...commonVoteButtonProps,
-        color: !!vote && vote.status === 1 ? 'primary' : color,
+        color: !!vote && vote.status === 1 ? 'primary' : ('default' as MuiColor),
     };
 
     const downVoteButtonProps = {
         ...commonVoteButtonProps,
-        color: !!vote && vote.status === -1 ? 'primary' : color,
+        color: !!vote && vote.status === -1 ? 'primary' : ('default' as MuiColor),
     };
 
     return { upVoteButtonProps, downVoteButtonProps, score, handleVote };

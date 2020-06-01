@@ -202,7 +202,6 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
         // Draw mode manually toggle off.
         if (!drawMode) {
             reset();
-            // setScreenshot(null);
         }
     }, [drawMode]);
 
@@ -210,7 +209,6 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
         // Reset when demounting.
         return (): void => {
             reset();
-            // setScreenshot(null);
             setDrawMode(false);
         };
     }, []);

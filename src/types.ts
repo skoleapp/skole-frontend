@@ -70,13 +70,6 @@ export interface UseDrawer extends DrawerProps {
     renderHeader: JSX.Element;
 }
 
-export interface UseOptions {
-    renderShareOption: JSX.Element;
-    renderReportOption: JSX.Element;
-    renderOptionsHeader: JSX.Element;
-    drawerProps: Omit<UseDrawer, 'renderHeader'>;
-}
-
 export type TextVariant =
     | 'subtitle1'
     | 'inherit'

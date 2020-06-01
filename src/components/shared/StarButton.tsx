@@ -11,23 +11,19 @@ interface Props extends IconButtonProps {
     starred: boolean;
     course?: string;
     resource?: string;
-    starredTooltip?: string;
-    unstarredTooltip?: string;
 }
 
-export const StarButton: React.FC<Props> = ({
-    starred: initialStarred,
-    course,
-    resource,
-    starredTooltip,
-    unstarredTooltip,
-    color = 'default',
-}) => {
+export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, resource }) => {
     const { t } = useTranslation();
     const { verified, notVerifiedTooltip } = useAuthContext();
     const [starred, setStarred] = useState(initialStarred);
     const { toggleNotification } = useNotificationsContext();
-    const tooltip = !!notVerifiedTooltip ? notVerifiedTooltip : starred ? starredTooltip : unstarredTooltip || '';
+
+    const tooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : starred
+        ? t('common:unstarTooltip')
+        : t('common:starTooltip') || '';
 
     const onError = (): void => {
         toggleNotification(t('notifications:starError'));
@@ -54,7 +50,7 @@ export const StarButton: React.FC<Props> = ({
             <span>
                 <IconButton
                     onClick={handleStar}
-                    color={starred ? 'primary' : color}
+                    color={starred ? 'primary' : 'default'}
                     disabled={starSubmitting || verified === false}
                     size="small"
                 >
