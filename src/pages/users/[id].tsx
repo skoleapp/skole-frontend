@@ -129,9 +129,9 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </Typography>
     );
 
-    const renderScoreValue = <Typography variant="body1">{score}</Typography>;
-    const renderCourseCountValue = <Typography variant="body1">{courseCount}</Typography>;
-    const renderResourceCountValue = <Typography variant="body1">{resourceCount}</Typography>;
+    const renderScoreValue = <Typography variant="body2">{score}</Typography>;
+    const renderCourseCountValue = <Typography variant="body2">{courseCount}</Typography>;
+    const renderResourceCountValue = <Typography variant="body2">{resourceCount}</Typography>;
 
     const renderRank = !!rank && (
         <Box marginTop="0.25rem">

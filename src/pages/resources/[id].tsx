@@ -49,7 +49,7 @@ import {
 import { includeDefaultNamespaces } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, MaxWidth, SkolePageContext } from '../../types';
-import { mediaURL, useActionsDrawer, useInfoDrawer, useTabs, useVotes } from '../../utils';
+import { mediaURL, useActionsDrawer, useInfoDrawer, useShare, useTabs, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -84,6 +84,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const handleCancelDraw = (): void => setDrawMode(false);
     const { toggleCommentModal } = useCommentModalContext();
     const { tabValue, setTabValue, handleTabChange } = useTabs();
+    const { renderShareButton } = useShare(resourceTitle);
     const { commentModalOpen } = useCommentModalContext();
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
 
@@ -346,6 +347,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         renderStarButton,
         renderUpVoteButton,
         renderDownVoteButton,
+        renderShareButton,
         renderInfoButton,
         renderActionsButton,
     };

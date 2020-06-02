@@ -13,4 +13,5 @@ export { useDrawer, useInfoDrawer, useActionsDrawer } from './drawers';
 export { useMoment } from './useMoment';
 export { usePrevious } from './usePrevious';
 export { useStateRef } from './useStateRef';
-export { dataURItoFile } from './dataUriToFile';
+export { dataURItoFile } from './dataURIToFile';
+export { useShare } from './useShare';

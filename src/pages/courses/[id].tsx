@@ -1,5 +1,5 @@
 import { Box, Grid, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
-import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
+import { CloudUploadOutlined, DeleteOutline, SchoolOutlined } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -39,7 +39,15 @@ import { useAuthContext, useDeviceContext, useNotificationsContext } from '../..
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, SkolePageContext } from '../../types';
-import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useTabs, useVotes } from '../../utils';
+import {
+    useActionsDrawer,
+    useFrontendPagination,
+    useInfoDrawer,
+    useSearch,
+    useShare,
+    useTabs,
+    useVotes,
+} from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -74,6 +82,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
     const { tabValue, handleTabChange } = useTabs();
+    const { renderShareButton } = useShare(courseName);
 
     const {
         renderActionsHeader,
@@ -189,6 +198,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         renderStarButton,
         renderUpVoteButton,
         renderDownVoteButton,
+        renderShareButton,
         renderInfoButton,
         renderActionsButton,
     };
@@ -248,13 +258,19 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </Tooltip>
     );
 
+    const renderCourseName = (
+        <Typography id="course-name" variant="subtitle1" className="truncate">
+            {courseName}
+        </Typography>
+    );
+
     const renderResourcesHeader = (
         <Box className="custom-header">
-            <Grid container alignItems="center">
-                <Grid item xs={6} container justify="flex-start">
-                    <Typography variant="subtitle1">{courseName}</Typography>
+            <Grid container alignItems="center" justify="space-between">
+                <Grid item xs={11} container justify="flex-start" alignItems="center">
+                    <SchoolOutlined color="primary" /> {renderCourseName}
                 </Grid>
-                <Grid item xs={6} container justify="flex-end">
+                <Grid item xs={1} container justify="flex-end">
                     {renderUploadResourceButton}
                 </Grid>
             </Grid>

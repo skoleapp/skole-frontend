@@ -36,7 +36,7 @@ interface CustomTableHeadProps {
 }
 
 const titleProps = {
-    variant: 'subtitle1' as TextVariant,
+    variant: 'body2' as TextVariant,
     color: 'textSecondary' as TextColor,
 };
 

@@ -4,9 +4,10 @@ import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ModalHeader } from '../components';
-import { useDeviceContext, useNotificationsContext } from '../context';
+import { useDeviceContext } from '../context';
 import { UseDrawer } from '../types';
 import { useOpen } from './useOpen';
+import { useShare } from './useShare';
 
 export const useDrawer = (header?: string): UseDrawer => {
     const { open, handleOpen, handleClose } = useOpen();
@@ -57,24 +58,10 @@ export const useInfoDrawer = (): UseInfoDrawer => {
     return { renderInfoHeader, renderInfoButton, ...infoDrawerProps };
 };
 
-interface ShareData {
-    title?: string;
-    text?: string;
-    url?: string;
-}
-
-interface ShareNavigator extends Navigator {
-    share?: (data?: ShareData) => Promise<void>;
-}
-
-interface ShareNavigatorWindow extends Window {
-    navigator: ShareNavigator;
-}
-
 interface UseActionsDrawer extends DrawerProps {
     renderActionsHeader: JSX.Element;
     handleCloseActions: (e: SyntheticEvent) => void;
-    renderShareAction: JSX.Element;
+    renderShareAction: false | JSX.Element;
     renderReportAction: JSX.Element;
     renderActionsButton: JSX.Element;
 }
@@ -82,7 +69,7 @@ interface UseActionsDrawer extends DrawerProps {
 export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
-    const { toggleNotification } = useNotificationsContext();
+    const { handleShare } = useShare(shareText);
 
     const {
         renderHeader: renderActionsHeader,
@@ -91,31 +78,13 @@ export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
         ...actionsDrawerProps
     } = useDrawer(t('common:actions'));
 
-    const handleShare = async (e: SyntheticEvent): Promise<void> => {
-        const { navigator } = window as ShareNavigatorWindow;
-
-        if (!!navigator && !!navigator.share) {
-            try {
-                await navigator.share({
-                    title: 'Skole',
-                    text: shareText || t('common:slogan'),
-                    url: window.location.href,
-                });
-            } catch {
-                toggleNotification(t('notifications:sharingError'));
-            }
-        } else if (!!navigator && !!navigator.clipboard) {
-            navigator.clipboard.writeText(window.location.href);
-            toggleNotification(t('notifications:linkCopied'));
-        } else {
-            toggleNotification(t('notifications:sharingError'));
-        }
-
+    const handlePreShare = (e: SyntheticEvent): void => {
         handleCloseActions(e);
+        handleShare();
     };
 
-    const renderShareAction = (
-        <MenuItem onClick={handleShare}>
+    const renderShareAction = isMobile && (
+        <MenuItem onClick={handlePreShare}>
             <ListItemText>
                 <ShareOutlined /> {t('common:share')}
             </ListItemText>

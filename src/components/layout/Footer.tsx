@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
         <StyledFooter container>
             <Grid item xs={12} container>
                 <Grid item xs={4} container direction="column" alignItems="center">
-                    <Typography variant="subtitle2" color="secondary" gutterBottom>
+                    <Typography variant="subtitle1" color="secondary" gutterBottom>
                         SKOLE
                     </Typography>
                     <TextLink href="/about" color="secondary">
@@ -28,13 +28,13 @@ export const Footer: React.FC = () => {
                     </TextLink>
                 </Grid>
                 <Grid item xs={4} container direction="column" alignItems="center">
-                    <Typography variant="subtitle2" color="secondary" gutterBottom>
+                    <Typography variant="subtitle1" color="secondary" gutterBottom>
                         {t('common:language').toUpperCase()}
                     </Typography>
                     {renderLanguageButton}
                 </Grid>
                 <Grid item xs={4} container direction="column" alignItems="center">
-                    <Typography variant="subtitle2" color="secondary" gutterBottom>
+                    <Typography variant="subtitle1" color="secondary" gutterBottom>
                         {t('common:legal').toUpperCase()}
                     </Typography>
                     <TextLink href="/terms" color="secondary">

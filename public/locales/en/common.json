@@ -91,5 +91,6 @@
     "upVoteTooltip": "Upvote.",
     "info": "Info",
     "delete": "Delete",
-    "print": "Print"
+    "print": "Print",
+    "shareTooltip": "Share."
 }

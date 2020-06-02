@@ -1,4 +1,5 @@
-import { TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import { Box, Grid, Tab, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import { HomeOutlined } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -15,15 +16,18 @@ import {
     CourseTableBody,
     FrontendPaginatedTable,
     InfoModalContent,
+    MainLayout,
     NotFoundBox,
     NotFoundLayout,
+    StyledCard,
+    StyledDrawer,
     StyledList,
-    TabLayout,
+    StyledTabs,
     TextLink,
 } from '../../components';
 import { includeDefaultNamespaces, Link } from '../../i18n';
 import { I18nProps, SkolePageContext } from '../../types';
-import { useFrontendPagination, useOptions, useSearch } from '../../utils';
+import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
     school?: SchoolObjectType;
@@ -33,7 +37,6 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { t } = useTranslation();
     const { searchUrl } = useSearch();
     const schoolName = R.propOr('', 'name', school) as string;
-    const { renderShareOption, renderOptionsHeader, drawerProps } = useOptions(schoolName);
     const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school) as string;
     const schoolTypeId = R.pathOr('', ['schoolType', 'id'], school) as string;
     const country = R.pathOr('', ['country', 'name'], school) as string;
@@ -46,6 +49,13 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const cityId = R.pathOr('', ['city', 'id'], school);
     const { paginatedItems: paginatedSubjects, ...subjectPaginationProps } = useFrontendPagination(subjects);
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
+    const { tabValue, handleTabChange } = useTabs();
+    const { renderShareButton } = useShare(schoolName);
+    const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
+
+    const { renderActionsHeader, renderActionsButton, renderShareAction, ...actionsDrawerProps } = useActionsDrawer(
+        schoolName,
+    );
 
     const schoolTypeLink = {
         ...searchUrl,
@@ -107,9 +117,6 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         },
     ];
 
-    const renderInfo = <InfoModalContent infoItems={infoItems} />;
-    const renderOptions = <StyledList>{renderShareOption}</StyledList>;
-
     const renderSubjectsTableBody = (
         <TableBody>
             {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
@@ -153,6 +160,73 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         <NotFoundBox text={t('school:noCourses')} />
     );
 
+    const renderSchoolName = (
+        <Typography id="school-name" variant="subtitle1" className="truncate">
+            {schoolName}
+        </Typography>
+    );
+
+    const renderSchoolHeader = (
+        <Box className="custom-header">
+            <Grid container alignItems="center">
+                <Grid item xs={10} container justify="flex-start" alignItems="center">
+                    <HomeOutlined color="primary" /> {renderSchoolName}
+                </Grid>
+                <Grid item xs={2} container justify="flex-end">
+                    {renderShareButton}
+                    {renderInfoButton}
+                    {renderActionsButton}
+                </Grid>
+            </Grid>
+        </Box>
+    );
+
+    const renderTabs = (
+        <StyledTabs value={tabValue} onChange={handleTabChange}>
+            <Tab label={`${t('common:subjects')} (${subjectCount})`} />
+            <Tab label={`${t('common:courses')} (${courseCount})`} />
+        </StyledTabs>
+    );
+
+    const renderLeftTab = tabValue === 0 && (
+        <Box display="flex" flexGrow="1" position="relative">
+            {renderSubjects}
+        </Box>
+    );
+
+    const renderRightTab = tabValue === 1 && (
+        <Box display="flex" flexGrow="1">
+            {renderCourses}
+        </Box>
+    );
+
+    const renderContent = (
+        <StyledCard>
+            {renderSchoolHeader}
+            {renderTabs}
+            {renderLeftTab}
+            {renderRightTab}
+        </StyledCard>
+    );
+
+    const renderInfo = <InfoModalContent infoItems={infoItems} />;
+
+    const renderInfoDrawer = (
+        <StyledDrawer {...infoDrawerProps}>
+            {renderInfoHeader}
+            {renderInfo}
+        </StyledDrawer>
+    );
+
+    const renderActions = <StyledList>{renderShareAction}</StyledList>;
+
+    const renderActionsDrawer = (
+        <StyledDrawer {...actionsDrawerProps}>
+            {renderActionsHeader}
+            {renderActions}
+        </StyledDrawer>
+    );
+
     const layoutProps = {
         seoProps: {
             title: schoolName,
@@ -164,22 +238,16 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         headerDesktop: schoolName,
         tabLabelLeft: `${t('common:subjects')} (${subjectCount})`,
         tabLabelRight: `${t('common:courses')} (${courseCount})`,
-        renderInfo,
-        infoHeader: t('school:infoHeader'),
-        infoTooltip: t('school:infoTooltip'),
-        optionProps: {
-            renderOptions,
-            renderOptionsHeader,
-            drawerProps,
-            optionsTooltip: t('school:optionsTooltip'),
-        },
-        renderLeftContent: renderSubjects,
-        renderRightContent: renderCourses,
-        responsive: true,
     };
 
-    if (school) {
-        return <TabLayout {...layoutProps} />;
+    if (!!school) {
+        return (
+            <MainLayout {...layoutProps}>
+                {renderContent}
+                {renderInfoDrawer}
+                {renderActionsDrawer}
+            </MainLayout>
+        );
     } else {
         return <NotFoundLayout />;
     }

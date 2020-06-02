@@ -2,6 +2,7 @@ import Hammer from '@egjs/hammerjs';
 import { Box, Fab, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
 import {
     AddOutlined,
+    AssignmentOutlined,
     FullscreenExitOutlined,
     FullscreenOutlined,
     RemoveOutlined,
@@ -223,12 +224,16 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         </Tooltip>
     );
 
+    const renderResourceTitle = (
+        <Typography id="resource-name" variant="subtitle1" className="truncate">
+            {title}
+        </Typography>
+    );
+
     const renderPreviewToolbarContent = (
         <Grid container alignItems="center">
-            <Grid item xs={5} container justify="flex-start">
-                <Typography variant="subtitle1" className="truncate">
-                    {title}
-                </Typography>
+            <Grid item xs={5} container justify="flex-start" alignItems="center">
+                <AssignmentOutlined color="secondary" /> {renderResourceTitle}
             </Grid>
             <Grid item xs={2} container justify="center">
                 {renderPageNumbers}

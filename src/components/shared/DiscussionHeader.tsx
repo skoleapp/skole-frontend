@@ -7,6 +7,7 @@ interface Props {
     renderStarButton: JSX.Element;
     renderUpVoteButton: JSX.Element;
     renderDownVoteButton: JSX.Element;
+    renderShareButton: JSX.Element;
     renderInfoButton: JSX.Element;
     renderActionsButton: JSX.Element;
 }
@@ -16,6 +17,7 @@ export const DiscussionHeader: React.FC<Props> = ({
     renderStarButton,
     renderUpVoteButton,
     renderDownVoteButton,
+    renderShareButton,
     renderInfoButton,
     renderActionsButton,
 }) => {
@@ -32,6 +34,7 @@ export const DiscussionHeader: React.FC<Props> = ({
                     {renderStarButton}
                     {renderUpVoteButton}
                     {renderDownVoteButton}
+                    {renderShareButton}
                     {renderInfoButton}
                     {renderActionsButton}
                 </Grid>

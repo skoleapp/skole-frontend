@@ -121,6 +121,12 @@ export const base = css`
             .MuiIconButton-root {
                 padding: 0.25rem;
             }
+
+            #course-name,
+            #resource-name,
+            #school-name {
+                margin-left: 0.5rem;
+            }
         }
     }
 `;
