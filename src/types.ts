@@ -1,14 +1,10 @@
-import { ChipProps, ContainerProps, DrawerProps, TablePaginationProps } from '@material-ui/core';
-import { SvgIconComponent } from '@material-ui/icons';
+import { ContainerProps, DrawerProps, IconButtonProps, Size, TablePaginationProps } from '@material-ui/core';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
 import { NextPageContext } from 'next';
 import { LinkProps } from 'next/link';
-import { Extent } from 'ol/extent';
-import { Group } from 'ol/layer';
-import { PDFDocumentProxy } from 'pdfjs-dist';
 import { Dispatch, MutableRefObject, SetStateAction, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
 
@@ -131,11 +127,6 @@ export type CustomTablePaginationProps = Pick<
     TablePaginationProps,
     'page' | 'count' | 'rowsPerPage' | 'onChangePage' | 'onChangeRowsPerPage'
 >;
-
-export interface PDFPage {
-    layer: Group;
-    imageExtent: Extent;
-}
 
 export interface AuthContext {
     user: UserObjectType | null;

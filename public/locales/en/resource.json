@@ -1,7 +1,7 @@
 {
     "description": "This is a resource page.",
-    "deleteResource": "Delete resource",
-    "confirmDesc": "Are you sure you want to delete this resource?",
+    "deleteResourceTitle": "Delete Resource",
+    "deleteResourceDescription": "Are you sure you want to delete this resource?",
     "enterFullscreenTooltip": "Enter fullscreen.",
     "exitFullscreenTooltip": "Exit fullscreen.",
     "zoomInTooltip": "Zoom in.",
@@ -9,10 +9,10 @@
     "loadingResource": "Loading resource...",
     "errorLoadingResource": "Error loading resource.",
     "commentsPlaceholder": "Here you can discuss generally about the resource.",
-    "print": "Print",
     "markAreaTooltip": "Mark area.",
     "downloadTooltip": "Download.",
     "printTooltip": "Print.",
     "drawMode": "Draw Mode",
-    "rotateTooltip": "Rotate."
+    "rotateTooltip": "Rotate.",
+    "ownResourceVoteTooltip": "You cannot vote your own resource."
 }

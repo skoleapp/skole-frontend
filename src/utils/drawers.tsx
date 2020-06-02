@@ -74,8 +74,8 @@ interface ShareNavigatorWindow extends Window {
 interface UseActionsDrawer extends DrawerProps {
     renderActionsHeader: JSX.Element;
     handleCloseActions: (e: SyntheticEvent) => void;
-    renderShareOption: JSX.Element;
-    renderReportOption: JSX.Element;
+    renderShareAction: JSX.Element;
+    renderReportAction: JSX.Element;
     renderActionsButton: JSX.Element;
 }
 
@@ -114,7 +114,7 @@ export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
         handleCloseActions(e);
     };
 
-    const renderShareOption = (
+    const renderShareAction = (
         <MenuItem onClick={handleShare}>
             <ListItemText>
                 <ShareOutlined /> {t('common:share')}
@@ -122,7 +122,7 @@ export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
         </MenuItem>
     );
 
-    const renderReportOption = (
+    const renderReportAction = (
         <MenuItem disabled>
             <ListItemText>
                 <FlagOutlined /> {t('common:reportAbuse')}
@@ -141,8 +141,8 @@ export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
     return {
         renderActionsHeader,
         handleCloseActions,
-        renderShareOption,
-        renderReportOption,
+        renderShareAction,
+        renderReportAction,
         renderActionsButton,
         ...actionsDrawerProps,
     };

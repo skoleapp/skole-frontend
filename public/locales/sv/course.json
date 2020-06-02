@@ -8,8 +8,8 @@
     "optionsTooltip": "Visa kursalternativ.",
     "unstarredTooltip": "Stjärnmärk denna kurs.",
     "starredTooltip": "Ta bort stjärnmarken från denna kurs.",
-    "downvoteTooltip": "Ned röst denna kurs.",
-    "upvoteTooltip": "Upp röst denna kurs.",
+    "downVoteTooltip": "Ned röst denna kurs.",
+    "upVoteTooltip": "Upp röst denna kurs.",
     "commentsPlaceholder": "Här kan du ha allmän diskussion om kursen.",
     "infoHeader": "Kursinformation"
 }

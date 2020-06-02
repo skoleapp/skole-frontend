@@ -61,37 +61,39 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const isOwner = !!user && user.id === creatorId;
     const commentId = R.propOr('', 'id', comment) as string;
     const replyCount = R.propOr('', 'replyCount', comment) as string;
-
-    const {
-        renderActionsHeader,
-        handleCloseActions,
-        renderShareOption,
-        renderReportOption,
-        renderActionsButton,
-        ...actionsDrawerProps
-    } = useActionsDrawer();
-
     const { toggleNotification } = useNotificationsContext();
     const { toggleAttachmentViewer } = useAttachmentViewerContext();
     const { toggleCommentThread } = useCommentThreadContext();
 
-    const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
-        initialVote,
-        initialScore,
-        isOwner,
-    });
+    const {
+        renderActionsHeader,
+        handleCloseActions,
+        renderShareAction,
+        renderReportAction,
+        renderActionsButton,
+        ...actionsDrawerProps
+    } = useActionsDrawer();
 
     const upVoteButtonTooltip = !!notVerifiedTooltip
         ? notVerifiedTooltip
         : isOwner
         ? t('common:ownCommentVoteTooltip')
-        : t('common:upvoteTooltip');
+        : t('common:upVoteTooltip');
 
     const downVoteButtonTooltip = !!notVerifiedTooltip
         ? notVerifiedTooltip
         : isOwner
         ? t('common:ownCommentVoteTooltip')
-        : t('common:downvoteTooltip');
+        : t('common:downVoteTooltip');
+
+    const { score, upVoteButtonProps, downVoteButtonProps } = useVotes({
+        initialVote,
+        initialScore,
+        isOwner,
+        variables: { comment: commentId },
+        upVoteButtonTooltip,
+        downVoteButtonTooltip,
+    });
 
     const handleClick = (): void => {
         if (isThread) {
@@ -123,11 +125,6 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         onError: deleteCommentError,
     });
 
-    const handleVoteClick = (status: number) => (e: SyntheticEvent): void => {
-        e.stopPropagation();
-        handleVote({ status: status, course: commentId });
-    };
-
     const handleAttachmentClick = (e: SyntheticEvent): void => {
         e.stopPropagation();
         toggleAttachmentViewer(comment.attachment);
@@ -137,7 +134,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         handleCloseActions(e);
 
         try {
-            await confirm({ title: t('common:deleteCommentTitle') });
+            await confirm({ title: t('common:deleteCommentTitle'), description: t('common:deleteCommentDescription') });
             deleteComment({ variables: { id: comment.id } });
         } catch {
             // User cancelled.
@@ -180,7 +177,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         <Grid item container xs={1} direction="column" justify="center" alignItems="center">
             <Tooltip title={upVoteButtonTooltip}>
                 <span>
-                    <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
+                    <IconButton {...upVoteButtonProps}>
                         <KeyboardArrowUpOutlined className="vote-button" />
                     </IconButton>
                 </span>
@@ -190,7 +187,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
             </Box>
             <Tooltip title={downVoteButtonTooltip}>
                 <span>
-                    <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
+                    <IconButton {...downVoteButtonProps}>
                         <KeyboardArrowDownOutlined className="vote-button" />
                     </IconButton>
                 </span>
@@ -244,19 +241,19 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         </CardContent>
     );
 
-    const renderDeleteOption = isOwner && (
+    const renderDeleteAction = isOwner && (
         <MenuItem disabled={verified === false}>
             <ListItemText onClick={handleDeleteComment}>
-                <DeleteOutline /> {t('common:deleteComment')}
+                <DeleteOutline /> {t('common:delete')}
             </ListItemText>
         </MenuItem>
     );
 
     const renderActions = (
         <StyledList>
-            {renderShareOption}
-            {renderReportOption}
-            {renderDeleteOption}
+            {renderShareAction}
+            {renderReportAction}
+            {renderDeleteAction}
         </StyledList>
     );
 

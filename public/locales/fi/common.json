@@ -87,7 +87,7 @@
     "actionsTooltip": "Näytä toiminnot.",
     "starTooltip": "Merkitse tähdellä.",
     "unstarTooltip": "Poista tähti.",
-    "downvoteTooltip": "Anna alas-ääni.",
-    "upvoteTooltip": "Anna ylös-ääni.",
+    "downVoteTooltip": "Anna alas-ääni.",
+    "upVoteTooltip": "Anna ylös-ääni.",
     "info": "Tiedot"
 }

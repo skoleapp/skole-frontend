@@ -37,7 +37,7 @@ interface PDFPage {
     scrollIntoView: () => void;
 }
 
-export const PdfViewer: React.FC<PDFViewerProps> = ({
+export const PDFViewer: React.FC<PDFViewerProps> = ({
     file,
     title,
     renderMarkAreaButton,
@@ -243,7 +243,9 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderToolbar = !isMobile && (
-        <Box id="toolbar">{drawMode ? renderDrawModeContent : renderPreviewToolbarContent}</Box>
+        <Box id="toolbar" className="custom-header">
+            {drawMode ? renderDrawModeContent : renderPreviewToolbarContent}
+        </Box>
     );
 
     const renderDocument = (
@@ -294,7 +296,7 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
     );
 
     return (
-        <StyledPdfViewer
+        <StyledPDFViewer
             id="document-container"
             scale={scale}
             fullscreen={fullscreen}
@@ -304,12 +306,12 @@ export const PdfViewer: React.FC<PDFViewerProps> = ({
             {renderToolbar}
             {renderDocument}
             {renderScaleControls}
-        </StyledPdfViewer>
+        </StyledPDFViewer>
     );
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, isMobile, ...props }) => <Box {...props} />)`
+const StyledPDFViewer = styled(({ scale, fullscreen, drawMode, isMobile, ...props }) => <Box {...props} />)`
     position: absolute;
     width: 100%;
     height: 100%;
@@ -319,11 +321,6 @@ const StyledPdfViewer = styled(({ scale, fullscreen, drawMode, isMobile, ...prop
     #toolbar {
         background-color: var(--gray);
         color: var(--secondary);
-        padding: 0.5rem;
-
-        .MuiButton-root {
-            padding: 0.25rem;
-        }
 
         #page-numbers {
             display: flex;

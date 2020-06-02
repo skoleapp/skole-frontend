@@ -1,10 +1,5 @@
-import { Box, Grid, IconButton, ListItemText, MenuItem, Tooltip } from '@material-ui/core';
-import {
-    CloudUploadOutlined,
-    DeleteOutline,
-    KeyboardArrowDownOutlined,
-    KeyboardArrowUpOutlined,
-} from '@material-ui/icons';
+import { Box, Grid, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
+import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -23,24 +18,28 @@ import {
 } from '../../../generated/graphql';
 import {
     DiscussionBox,
+    DiscussionHeader,
     FrontendPaginatedTable,
     IconButtonLink,
     InfoModalContent,
+    MainLayout,
     NavbarContainer,
     NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
     StarButton,
     StyledBottomNavigation,
+    StyledCard,
+    StyledDrawer,
     StyledList,
-    TabLayout,
+    StyledTabs,
     TextLink,
 } from '../../components';
-import { useAuthContext, useNotificationsContext } from '../../context';
+import { useAuthContext, useDeviceContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
-import { I18nProps, MuiColor, SkolePageContext } from '../../types';
-import { useFrontendPagination, useOptions, useSearch, useVotes } from '../../utils';
+import { I18nProps, SkolePageContext } from '../../types';
+import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useTabs, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -48,6 +47,7 @@ interface Props extends I18nProps {
 
 const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { t } = useTranslation();
+    const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { user, verified, notVerifiedTooltip } = useAuthContext();
@@ -70,29 +70,43 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const subjectId = R.path(['subject', 'id'], course) as boolean[];
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(courseName);
-    const { onClose: closeOptions } = drawerProps;
+    const numComments = comments.length;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
-    const upVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('course:upvoteTooltip');
-    const downVoteButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('course:downvoteTooltip');
-    const uploadResourceButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('course:uploadResourceTooltip');
+    const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
+    const { tabValue, handleTabChange } = useTabs();
 
-    const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+    const {
+        renderActionsHeader,
+        handleCloseActions,
+        renderShareAction,
+        renderReportAction,
+        renderActionsButton,
+        ...actionsDrawerProps
+    } = useActionsDrawer(courseName);
+
+    const upVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('course:ownCourseVoteTooltip')
+        : t('common:upVoteTooltip');
+    const downVoteButtonTooltip = !!notVerifiedTooltip
+        ? notVerifiedTooltip
+        : isOwner
+        ? t('course:ownCourseVoteTooltip')
+        : t('common:downVoteTooltip');
+
+    const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
         initialScore,
         isOwner,
+        variables: { resource: courseId },
+        upVoteButtonTooltip,
+        downVoteButtonTooltip,
     });
 
     const subjectLink = {
         ...searchUrl,
         query: { ...searchUrl.query, subject: Number(subjectId) },
-    };
-
-    const discussionBoxProps = {
-        comments,
-        target: { course: Number(courseId) },
-        formKey: 'course',
-        placeholderText: t('course:commentsPlaceholder'),
     };
 
     const deleteCourseError = (): void => {
@@ -121,16 +135,12 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
 
     const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
         try {
-            await confirm({ title: t('course:deleteCourse'), description: t('course:confirmDesc') });
+            await confirm({ title: t('course:deleteCourseTitle'), description: t('course:deleteCourseDescription') });
             deleteCourse({ variables: { id: courseId } });
         } catch {
         } finally {
-            closeOptions(e);
+            handleCloseActions(e);
         }
-    };
-
-    const handleVoteClick = (status: number) => (): void => {
-        handleVote({ status: status, course: courseId });
     };
 
     const renderSubjectLink = !!subjectId && (
@@ -143,26 +153,6 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
             {schoolName}
         </TextLink>
-    );
-
-    const renderUpVoteButton = !isOwnCourse && (
-        <Tooltip title={upVoteButtonTooltip}>
-            <span>
-                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                    <KeyboardArrowUpOutlined />
-                </IconButton>
-            </span>
-        </Tooltip>
-    );
-
-    const renderDownVoteButton = !isOwnCourse && (
-        <Tooltip title={downVoteButtonTooltip}>
-            <span>
-                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                    <KeyboardArrowDownOutlined />
-                </IconButton>
-            </span>
-        </Tooltip>
     );
 
     const infoItems = [
@@ -192,7 +182,42 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         },
     ];
 
-    const renderInfo = <InfoModalContent user={courseUser} created={created} infoItems={infoItems} />;
+    const renderStarButton = <StarButton starred={starred} course={courseId} />;
+
+    const discussionHeaderProps = {
+        numComments,
+        renderStarButton,
+        renderUpVoteButton,
+        renderDownVoteButton,
+        renderInfoButton,
+        renderActionsButton,
+    };
+
+    const discussionBoxProps = {
+        comments,
+        target: { course: Number(courseId) },
+        formKey: 'course',
+        placeholderText: t('course:commentsPlaceholder'),
+    };
+
+    const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
+    const renderDiscussion = <DiscussionBox {...discussionBoxProps} />;
+
+    const renderCustomBottomNavbar = (
+        <StyledBottomNavigation>
+            <NavbarContainer>
+                <Grid container>
+                    <Grid item xs={6} container justify="flex-start">
+                        {renderStarButton}
+                    </Grid>
+                    <Grid item xs={6} container justify="flex-end">
+                        {renderUpVoteButton}
+                        {renderDownVoteButton}
+                    </Grid>
+                </Grid>
+            </NavbarContainer>
+        </StyledBottomNavigation>
+    );
 
     const resourceTableHeadProps = {
         titleLeft: t('common:title'),
@@ -210,28 +235,12 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         <NotFoundBox text={t('course:noResources')} />
     );
 
-    const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
-
-    const renderOptions = (
-        <StyledList>
-            {renderShareOption}
-            {renderReportOption}
-            {isOwnCourse && (
-                <MenuItem disabled={verified === false}>
-                    <ListItemText onClick={handleDeleteCourse}>
-                        <DeleteOutline /> {t('course:deleteCourse')}
-                    </ListItemText>
-                </MenuItem>
-            )}
-        </StyledList>
-    );
-
-    const renderUploadResourceButton = (color: MuiColor): JSX.Element => (
-        <Tooltip title={uploadResourceButtonTooltip}>
+    const renderUploadResourceButton = (
+        <Tooltip title={!!notVerifiedTooltip ? notVerifiedTooltip : t('course:uploadResourceTooltip')}>
             <span>
                 <IconButtonLink
                     href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}
-                    color={color}
+                    color={isMobile ? 'secondary' : 'default'}
                     icon={CloudUploadOutlined}
                     disabled={verified === false}
                 />
@@ -239,38 +248,95 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </Tooltip>
     );
 
-    const uploadResourceButtonMobile = renderUploadResourceButton('secondary');
-    const uploadResourceButtonDesktop = renderUploadResourceButton('default');
-
-    const starButtonProps = {
-        starred,
-        course: courseId,
-        starredTooltip: t('course:starredTooltip'),
-        unstarredTooltip: t('course:unstarredTooltip'),
-    };
-
-    const renderExtraDesktopActions = (
-        <Box display="flex">
-            <StarButton {...starButtonProps} />
-            {renderDownVoteButton}
-            {renderUpVoteButton}
+    const renderResourcesHeader = (
+        <Box className="custom-header">
+            <Grid container alignItems="center">
+                <Grid item xs={6} container justify="flex-start">
+                    <Typography variant="subtitle1">{courseName}</Typography>
+                </Grid>
+                <Grid item xs={6} container justify="flex-end">
+                    {renderUploadResourceButton}
+                </Grid>
+            </Grid>
         </Box>
     );
 
-    const renderCustomBottomNavbar = (
-        <StyledBottomNavigation>
-            <NavbarContainer>
-                <Grid container>
-                    <Grid item xs={6} container justify="flex-start">
-                        <StarButton {...starButtonProps} />
-                    </Grid>
-                    <Grid item xs={6} container justify="flex-end">
-                        {renderUpVoteButton}
-                        {renderDownVoteButton}
-                    </Grid>
-                </Grid>
-            </NavbarContainer>
-        </StyledBottomNavigation>
+    const renderTabs = (
+        <StyledTabs value={tabValue} onChange={handleTabChange}>
+            <Tab label={`${t('common:resources')} (${resourceCount})`} />
+            <Tab label={`${t('common:discussion')} (${numComments})`} />
+        </StyledTabs>
+    );
+
+    const renderLeftTab = tabValue === 0 && (
+        <Box display="flex" flexGrow="1" position="relative">
+            {renderResources}
+        </Box>
+    );
+
+    const renderRightTab = tabValue === 1 && (
+        <Box display="flex" flexGrow="1">
+            {renderDiscussion}
+        </Box>
+    );
+
+    const renderMobileContent = isMobile && (
+        <StyledCard>
+            {renderTabs}
+            {renderLeftTab}
+            {renderRightTab}
+        </StyledCard>
+    );
+
+    const renderDesktopContent = !isMobile && (
+        <Grid className="desktop-content" container>
+            <Grid item container md={7} lg={8}>
+                <StyledCard>
+                    {renderResourcesHeader}
+                    <Box position="relative" flexGrow="1" display="flex">
+                        {renderResources}
+                    </Box>
+                </StyledCard>
+            </Grid>
+            <Grid item container md={5} lg={4}>
+                <StyledCard marginLeft>
+                    {renderDiscussionHeader}
+                    {renderDiscussion}
+                </StyledCard>
+            </Grid>
+        </Grid>
+    );
+
+    const renderInfo = <InfoModalContent user={courseUser} created={created} infoItems={infoItems} />;
+
+    const renderInfoDrawer = (
+        <StyledDrawer {...infoDrawerProps}>
+            {renderInfoHeader}
+            {renderInfo}
+        </StyledDrawer>
+    );
+
+    const renderDeleteAction = isOwnCourse && (
+        <MenuItem disabled={verified === false}>
+            <ListItemText onClick={handleDeleteCourse}>
+                <DeleteOutline /> {t('common:delete')}
+            </ListItemText>
+        </MenuItem>
+    );
+
+    const renderActions = (
+        <StyledList>
+            {renderShareAction}
+            {renderReportAction}
+            {renderDeleteAction}
+        </StyledList>
+    );
+
+    const renderActionsDrawer = (
+        <StyledDrawer {...actionsDrawerProps}>
+            {renderActionsHeader}
+            {renderActions}
+        </StyledDrawer>
     );
 
     const layoutProps = {
@@ -280,32 +346,22 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         },
         topNavbarProps: {
             staticBackUrl: { href: searchUrl },
+            headerRight: renderActionsButton,
+            headerRightSecondary: renderInfoButton,
+            headerLeft: renderUploadResourceButton,
         },
-        headerDesktop: courseName,
-        subheaderDesktop: renderSubjectLink,
-        subheaderDesktopSecondary: renderSchoolLink,
-        headerSecondary: t('common:discussion'),
-        renderInfo,
-        infoHeader: t('course:infoHeader'),
-        infoTooltip: t('course:infoTooltip'),
-        optionProps: {
-            renderOptions,
-            renderOptionsHeader,
-            drawerProps,
-            optionsTooltip: t('course:optionsTooltip'),
-        },
-        tabLabelLeft: `${t('common:resources')} (${resourceCount})`,
-        tabLabelRight: `${t('common:discussion')} (${comments.length})`,
-        renderLeftContent: renderResources,
-        renderRightContent: renderDiscussionBox,
-        headerLeftMobile: uploadResourceButtonMobile,
-        headerActionDesktop: uploadResourceButtonDesktop,
         customBottomNavbar: renderCustomBottomNavbar,
-        extraDesktopActions: renderExtraDesktopActions,
     };
 
     if (!!course) {
-        return <TabLayout {...layoutProps} />;
+        return (
+            <MainLayout {...layoutProps}>
+                {renderMobileContent}
+                {renderDesktopContent}
+                {renderInfoDrawer}
+                {renderActionsDrawer}
+            </MainLayout>
+        );
     } else {
         return <NotFoundLayout />;
     }

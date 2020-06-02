@@ -1,4 +1,4 @@
-import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useState } from 'react';
 import React from 'react';

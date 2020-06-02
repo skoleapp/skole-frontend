@@ -1,2 +1,2 @@
-export { PdfViewer } from './PdfViewer';
+export { PDFViewer } from './PDFViewer';
 export { MouseSelection } from './MouseSelection';

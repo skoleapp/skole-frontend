@@ -87,7 +87,7 @@
     "actionsTooltip": "Visa handlingar.",
     "starTooltip": "Stjärnmärka.",
     "unstarTooltip": "Ta bort stjärnan.",
-    "downvoteTooltip": "Ned röst.",
-    "upvoteTooltip": "Röstä upp.",
+    "downVoteTooltip": "Ned röst.",
+    "upVoteTooltip": "Röstä upp.",
     "info": "Info"
 }

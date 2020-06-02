@@ -108,5 +108,19 @@ export const base = css`
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
+        .desktop-content {
+            flex-grow: 1;
+        }
+
+        .custom-header {
+            height: 3rem;
+            padding: 0.5rem;
+            border-bottom: var(--border);
+
+            .MuiIconButton-root {
+                padding: 0.25rem;
+            }
+        }
     }
 `;
