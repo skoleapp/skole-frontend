@@ -8,7 +8,8 @@
     "linkCopied": "Linkki kopioitu leikepöydälle!",
     "deleteResourceError": "Resurssin poistamisessa tapahtui odottamaton virhe!",
     "deleteCourseError": "Kurssin poistamisessa tapahtui odottamaton virhe!",
-    "downloadResourceError": "Virhe ladattaessa tiedostoa!",
+    "downloadResourceError": "Virhe ladattaessa resurssia!",
+    "printResourceError": "Virhe tulostettaessa resurssia!",
     "messageError": "Virhe lähetettäessä viestiä!",
     "sharingError": "Virhe jakamisessa!",
     "appUpdated": "Sovellus päivitetty!"

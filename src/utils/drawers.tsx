@@ -48,7 +48,7 @@ export const useInfoDrawer = (): UseInfoDrawer => {
     );
 
     const renderInfoButton = (
-        <Tooltip title={t('common:infoTooltip')}>
+        <Tooltip title={t('tooltips:info')}>
             <IconButton onClick={handleOpenInfo} color={isMobile ? 'secondary' : 'default'}>
                 <InfoOutlined />
             </IconButton>
@@ -100,7 +100,7 @@ export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
     );
 
     const renderActionsButton = (
-        <Tooltip title={t('common:actionsTooltip')}>
+        <Tooltip title={t('tooltips:actions')}>
             <IconButton onClick={handleOpenActions} color={isMobile ? 'secondary' : 'default'}>
                 <MoreHorizOutlined />
             </IconButton>

@@ -56,16 +56,21 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
 
     const [deleteAccountMutation] = useDeleteAccountMutation({ onCompleted, onError });
 
-    const handleSubmit = (values: DeleteAccountFormValues): void => {
+    const handleSubmit = async (values: DeleteAccountFormValues): Promise<void> => {
         setSubmitting(false);
 
-        confirm({ title: t('delete-account:confirmTitle'), description: t('delete-account:confirmDesc') }).then(
-            async () => {
-                setSubmitting(true);
-                await deleteAccountMutation({ variables: { password: values.password } });
-                setSubmitting(false);
-            },
-        );
+        try {
+            await confirm({
+                title: t('delete-account:deleteAccountTitle'),
+                description: t('delete-account:deleteAccountDescription'),
+            });
+
+            setSubmitting(true);
+            await deleteAccountMutation({ variables: { password: values.password } });
+            setSubmitting(false);
+        } catch {
+            // User cancelled.
+        }
     };
 
     const validationSchema = Yup.object().shape({

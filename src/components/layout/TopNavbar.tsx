@@ -69,10 +69,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {!disableSearch && <TopNavbarSearchWidget />}
                 {!!user ? (
                     <>
-                        <Tooltip title={t('common:starredTooltip')}>
+                        <Tooltip title={t('tooltips:starred')}>
                             <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
                         </Tooltip>
-                        <Tooltip title={t('common:profileTooltip')}>
+                        <Tooltip title={t('tooltips:profile')}>
                             <span>
                                 <Link href="/users/[id]" as={`/users/${user.id}`}>
                                     <IconButton color="secondary">

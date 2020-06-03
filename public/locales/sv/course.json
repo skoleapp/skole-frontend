@@ -1,15 +1,7 @@
 {
     "description": "Detta är en kurssida.",
     "noResources": "Inga resurser har lagts till på denna kurs ändå",
-    "deleteCourse": "Ta bort kurs",
-    "confirmDesc": "Är du säker på att du vill ta bort den här kursen?",
-    "uploadResourceTooltip": "Ladda upp resurs till denna kurs.",
-    "infoTooltip": "Visa kursinformation.",
-    "optionsTooltip": "Visa kursalternativ.",
-    "unstarredTooltip": "Stjärnmärk denna kurs.",
-    "starredTooltip": "Ta bort stjärnmarken från denna kurs.",
-    "downVoteTooltip": "Ned röst denna kurs.",
-    "upVoteTooltip": "Upp röst denna kurs.",
-    "commentsPlaceholder": "Här kan du ha allmän diskussion om kursen.",
-    "infoHeader": "Kursinformation"
+    "deleteCourseTitle": "Ta bort kurs",
+    "deleteCourseDescription": "Är du säker på att du vill ta bort den här kursen?",
+    "commentsPlaceholder": "Här kan du ha allmän diskussion om kursen."
 }

@@ -49,7 +49,7 @@ export const useShare = (shareText?: string): UseShare => {
     };
 
     const renderShareButton = (
-        <Tooltip title={t('common:shareTooltip')}>
+        <Tooltip title={t('tooltips:share')}>
             <IconButton onClick={handleShare}>
                 <ShareOutlined />
             </IconButton>

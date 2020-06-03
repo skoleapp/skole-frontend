@@ -217,7 +217,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderRotateButton = (
-        <Tooltip title={t('resource:rotateTooltip')}>
+        <Tooltip title={t('tooltips:rotate')}>
             <IconButton size="small" color="inherit" onClick={handleRotate}>
                 <RotateRightOutlined />
             </IconButton>
@@ -269,7 +269,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderFullscreenButton = (
-        <Tooltip title={fullscreen ? t('resource:exitFullscreenTooltip') : t('resource:enterFullscreenTooltip')}>
+        <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
             <Fab size="small" color="secondary" onClick={toggleFullScreen}>
                 {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             </Fab>
@@ -277,7 +277,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderDownscaleButton = (
-        <Tooltip title={t('resource:zoomInTooltip')}>
+        <Tooltip title={t('tooltips:zoomIn')}>
             <Fab size="small" color="secondary" onClick={handleScaleUp}>
                 <AddOutlined />
             </Fab>
@@ -285,7 +285,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderUpscaleButton = (
-        <Tooltip title={t('resource:zoomOutTooltip')}>
+        <Tooltip title={t('tooltips:zoomOut')}>
             <Fab size="small" color="secondary" onClick={handleScaleDown}>
                 <RemoveOutlined />
             </Fab>

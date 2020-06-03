@@ -86,21 +86,21 @@ const CustomTablePaginationActions = ({
 
     return (
         <Box display="flex" margin="0.5rem">
-            <Tooltip title={t('common:firstPageTooltip')}>
+            <Tooltip title={t('common:firstPage')}>
                 <span>
                     <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
                         <FirstPageOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('common:previousPageTooltip')}>
+            <Tooltip title={t('common:previousPage')}>
                 <span>
                     <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
                         <KeyboardArrowLeftOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('common:nextPageTooltip')}>
+            <Tooltip title={t('common:nextPage')}>
                 <span>
                     <IconButton
                         onClick={handleNextButtonClick}
@@ -111,7 +111,7 @@ const CustomTablePaginationActions = ({
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('common:lastPageTooltip')}>
+            <Tooltip title={t('common:lastPage')}>
                 <span>
                     <IconButton
                         onClick={handleLastPageButtonClick}

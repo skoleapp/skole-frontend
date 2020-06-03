@@ -3,7 +3,5 @@
     "noResources": "No resources have been added to this course yet.",
     "deleteCourseTitle": "Delete Course",
     "deleteCourseDescription": "Are you sure you want to delete this course?",
-    "uploadResourceTooltip": "Upload resource to this course.",
-    "commentsPlaceholder": "Here you can discuss generally about the course.",
-    "ownCourseVoteTooltip": "You cannot vote you own course."
+    "commentsPlaceholder": "Here you can discuss generally about the course."
 }

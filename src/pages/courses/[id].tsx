@@ -58,7 +58,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user, verified, notVerifiedTooltip } = useAuthContext();
+    const { user, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
@@ -93,16 +93,16 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         ...actionsDrawerProps
     } = useActionsDrawer(courseName);
 
-    const upVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
+    const upVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
         : isOwner
-        ? t('course:ownCourseVoteTooltip')
-        : t('common:upVoteTooltip');
-    const downVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
+        ? t('tooltips:voteOwnCourse')
+        : t('tooltips:upVote');
+    const downVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
         : isOwner
-        ? t('course:ownCourseVoteTooltip')
-        : t('common:downVoteTooltip');
+        ? t('tooltips:voteOwnCourse')
+        : t('tooltips:downVote');
 
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
@@ -246,7 +246,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderUploadResourceButton = (
-        <Tooltip title={!!notVerifiedTooltip ? notVerifiedTooltip : t('course:uploadResourceTooltip')}>
+        <Tooltip title={!!verificationRequiredTooltip ? verificationRequiredTooltip : t('tooltips:uploadResource')}>
             <span>
                 <IconButtonLink
                     href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}

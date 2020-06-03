@@ -15,15 +15,15 @@ interface Props extends IconButtonProps {
 
 export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, resource }) => {
     const { t } = useTranslation();
-    const { verified, notVerifiedTooltip } = useAuthContext();
+    const { verified, verificationRequiredTooltip } = useAuthContext();
     const [starred, setStarred] = useState(initialStarred);
     const { toggleNotification } = useNotificationsContext();
 
-    const tooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
+    const tooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
         : starred
-        ? t('common:unstarTooltip')
-        : t('common:starTooltip') || '';
+        ? t('tooltips:unstar')
+        : t('tooltips:tooltips') || '';
 
     const onError = (): void => {
         toggleNotification(t('notifications:starError'));

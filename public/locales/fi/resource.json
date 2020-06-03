@@ -1,18 +1,9 @@
 {
     "description": "Tämä on resurssi-sivu.",
-    "deleteResource": "Poista resurssi",
-    "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?",
-    "enterFullscreenTooltip": "Näytä koko ruudulla.",
-    "exitFullscreenTooltip": "Poistu koko ruudulta.",
-    "zoomInTooltip": "Suurenna.",
-    "zoomOutTooltip": "Pienennä.",
+    "deleteResourceTitle": "Poista resurssi",
+    "deleteResourceDescription": "Oletko varma että haluat poistaa tämän resurssin?",
     "loadingResource": "Ladataan resurssia...",
     "errorLoadingResource": "Virhe ladattaessa resurssia.",
     "commentsPlaceholder": "Täällä voit keskustella resurssista.",
-    "print": "Tulosta",
-    "markAreaTooltip": "Merkitse alue.",
-    "downloadTooltip": "Lataaa.",
-    "printTooltip": "Tulosta.",
-    "drawMode": "Piirtotila",
-    "rotateTooltip": "Kierrä."
+    "drawMode": "Piirtotila"
 }

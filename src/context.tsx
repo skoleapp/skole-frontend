@@ -75,15 +75,15 @@ const useSkoleContext = (): SkoleContextType => useContext(SkolePageContext);
 
 interface UseAuthContext extends AuthContext {
     verified: boolean | null;
-    notVerifiedTooltip: string | false;
+    verificationRequiredTooltip: string | false;
 }
 
 export const useAuthContext = (): UseAuthContext => {
     const { t } = useTranslation();
     const { user, setUser } = useSkoleContext().auth;
     const verified = R.propOr(null, 'verified', user) as boolean | null;
-    const notVerifiedTooltip = verified === false && t('common:notVerifiedTooltip');
-    return { user, setUser, verified, notVerifiedTooltip };
+    const verificationRequiredTooltip = verified === false && t('tooltips:verificationRequired');
+    return { user, setUser, verified, verificationRequiredTooltip };
 };
 
 export const useAttachmentViewerContext = (): AttachmentViewerContext => useSkoleContext().attachmentViewer;

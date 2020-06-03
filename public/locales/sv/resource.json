@@ -1,18 +1,9 @@
 {
     "description": "Detta är en resurssida.",
-    "deleteResource": "Radera resurs",
-    "confirmDesc": "Är du säker på att du vill ta bort den här resursen?",
-    "enterFullscreenTooltip": "Ange helskärm.",
-    "exitFullscreenTooltip": "Avsluta helskärm.",
-    "zoomInTooltip": "Zooma in.",
-    "zoomOutTooltip": "Zooma ut.",
+    "deleteResourceTitle": "Radera resurs",
+    "deleteResourceDescription": "Är du säker på att du vill ta bort den här resursen?",
     "loadingResource": "Laddar resurs...",
     "errorLoadingResource": "Fel vid inläsning av resurs.",
     "commentsPlaceholder": "Här kan du ha allmän diskussion om resursen.",
-    "print": "Skriva ut",
-    "markAreaTooltip": "Markera området.",
-    "downloadTooltip": "Ladda ner.",
-    "printTooltip": "Skriva ut.",
-    "drawMode": "Rita-läge",
-    "rotateTooltip": "Rotera."
+    "drawMode": "Rita-läge"
 }

@@ -47,7 +47,7 @@ export const useLanguageSelector = (): UseLanguageSelector => {
     const renderCurrentFlag = !!language && !!language.code ? languageToFlag(language.code) : languageToFlag('US');
 
     const renderLanguageButton = (
-        <Tooltip title={t('common:languageTooltip')}>
+        <Tooltip title={t('tooltips:language')}>
             <StyledLanguageSelector onClick={openLanguageMenu}>{renderCurrentFlag}</StyledLanguageSelector>
         </Tooltip>
     );

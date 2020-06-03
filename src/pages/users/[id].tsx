@@ -73,7 +73,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
 
     const renderSettingsButton = isOwnProfile && (
         <Box marginLeft="0.5rem">
-            <Tooltip title={t('profile:settingsTooltip')}>
+            <Tooltip title={t('tooltips:settings')}>
                 <SettingsButton color="primary" />
             </Tooltip>
         </Box>
@@ -135,7 +135,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
 
     const renderRank = !!rank && (
         <Box marginTop="0.5rem">
-            <Tooltip title={t('profile:rankTooltip', { rank })}>
+            <Tooltip title={t('tooltips:rank', { rank })}>
                 <Chip size="small" label={rank} />
             </Tooltip>
         </Box>

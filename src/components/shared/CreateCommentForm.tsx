@@ -38,7 +38,7 @@ type T = FormikProps<CreateCommentFormValues>;
 
 export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, formKey }) => {
     const { t } = useTranslation();
-    const { verified, notVerifiedTooltip } = useAuthContext();
+    const { verified, verificationRequiredTooltip } = useAuthContext();
     const disabled = verified === false;
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const { toggleNotification } = useNotificationsContext();
@@ -141,9 +141,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
         disabled,
     };
 
-    const submitButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('common:sendMessageTooltip');
-    const attachmentButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('common:attachFileTooltip');
-    const inputTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : '';
+    const submitButtonTooltip = !!verificationRequiredTooltip ? verificationRequiredTooltip : t('tooltips:sendMessage');
+    const attachmentButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
+        : t('tooltips:attachFile');
+    const inputTooltip = !!verificationRequiredTooltip ? verificationRequiredTooltip : '';
 
     const renderSubmitButton = (
         <Tooltip title={submitButtonTooltip}>
@@ -179,7 +181,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
             </Box>
             {!!attachment && (
                 <Box marginLeft="0.5rem">
-                    <Tooltip title={t('common:clearAttachmentTooltip')}>
+                    <Tooltip title={t('tooltips:clearAttachment')}>
                         <Fab onClick={handleClearAttachment} size="small" color="secondary">
                             <ClearOutlined />
                         </Fab>

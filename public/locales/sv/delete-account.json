@@ -2,6 +2,6 @@
     "title": "Radera Konto",
     "description": "Det här är en kontos borttagningssida.",
     "header": "Radera Konto",
-    "confirmTitle": "Är du säker på att du vill ta bort ditt konto?",
-    "confirmDesc": "Den här åtgärden kan inte återställas och ditt konto kommer att försvinna för alltid!"
+    "deleteAccountTitle": "Är du säker på att du vill ta bort ditt konto?",
+    "deleteAccountDescription": "Den här åtgärden kan inte återställas och ditt konto kommer att försvinna för alltid!"
 }

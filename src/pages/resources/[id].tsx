@@ -60,7 +60,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user, verified, notVerifiedTooltip } = useAuthContext();
+    const { user, verified, verificationRequiredTooltip } = useAuthContext();
     const resourceTitle = R.propOr('', 'title', resource) as string;
     const resourceDate = R.propOr('', 'date', resource) as string;
     const resourceType = R.propOr('', 'resourceType', resource) as string;
@@ -97,17 +97,17 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         ...actionsDrawerProps
     } = useActionsDrawer(resourceTitle);
 
-    const upVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
+    const upVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
         : isOwner
-        ? t('resource:ownResourceVoteTooltip')
-        : t('common:upVoteTooltip');
+        ? t('tooltips:voteOwnResource')
+        : t('tooltips:upVote');
 
-    const downVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
+    const downVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
         : isOwner
-        ? t('resource:ownResourceVoteTooltip')
-        : t('common:downVoteTooltip');
+        ? t('tooltips:voteOwnResource')
+        : t('tooltips:downVote');
 
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
@@ -250,7 +250,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
 
     const renderMarkAreaButton = (
-        <Tooltip title={t('resource:markAreaTooltip')}>
+        <Tooltip title={t('tooltips:markArea')}>
             <IconButton onClick={handleStartDrawing} size="small" color={isMobile ? 'default' : 'secondary'}>
                 <TabUnselectedOutlined />
             </IconButton>
@@ -258,7 +258,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderDownloadButton = (
-        <Tooltip title={t('resource:downloadTooltip')}>
+        <Tooltip title={t('tooltips:download')}>
             <IconButton onClick={handleDownloadPDF} size="small" color="secondary">
                 <CloudDownloadOutlined />
             </IconButton>
@@ -266,7 +266,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderPrintButton = (
-        <Tooltip title={t('resource:printTooltip')}>
+        <Tooltip title={t('tooltips:print')}>
             <IconButton onClick={handlePrintPDF} size="small" color="secondary">
                 <PrintOutlined />
             </IconButton>

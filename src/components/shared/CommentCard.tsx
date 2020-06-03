@@ -49,7 +49,7 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const { t } = useTranslation();
-    const { user, verified, notVerifiedTooltip } = useAuthContext();
+    const { user, verified, verificationRequiredTooltip } = useAuthContext();
     const moment = useMoment();
     const created = moment(comment.created).format('LL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
@@ -74,17 +74,17 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         ...actionsDrawerProps
     } = useActionsDrawer();
 
-    const upVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
+    const upVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
         : isOwner
-        ? t('common:ownCommentVoteTooltip')
-        : t('common:upVoteTooltip');
+        ? t('tooltips:voteOwnComment')
+        : t('tooltips:upVote');
 
-    const downVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
+    const downVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
         : isOwner
-        ? t('common:ownCommentVoteTooltip')
-        : t('common:downVoteTooltip');
+        ? t('tooltips:voteOwnComment')
+        : t('tooltips:downVote');
 
     const { score, upVoteButtonProps, downVoteButtonProps } = useVotes({
         initialVote,
@@ -197,7 +197,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const renderReplyCount = !isThread && (
         <>
-            <Tooltip title={t('common:commentRepliesTooltip', { replyCount })}>
+            <Tooltip title={t('tooltips:commentReplies', { replyCount })}>
                 <CommentOutlined className="message-icon" />
             </Tooltip>
             <Box marginLeft="0.25rem">
@@ -208,7 +208,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const renderAttachment = !!comment.attachment && !attachmentOnly && (
         <Box marginLeft="0.25rem">
-            <Tooltip title={t('common:attachmentTooltip')}>
+            <Tooltip title={t('tooltips:attachment')}>
                 <IconButton onClick={handleAttachmentClick}>
                     <AttachFileOutlined />
                 </IconButton>
