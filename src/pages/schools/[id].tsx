@@ -1,9 +1,10 @@
 import { Box, Grid, Tab, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { HomeOutlined } from '@material-ui/icons';
+import { LocationCityOutlined } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDeviceContext } from 'src/context';
 import { withApolloSSR, withAuthSync } from 'src/lib';
 
 import {
@@ -35,6 +36,7 @@ interface Props extends I18nProps {
 
 const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { t } = useTranslation();
+    const isMobile = useDeviceContext();
     const { searchUrl } = useSearch();
     const schoolName = R.propOr('', 'name', school) as string;
     const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school) as string;
@@ -161,16 +163,16 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     );
 
     const renderSchoolName = (
-        <Typography id="school-name" variant="subtitle1" className="truncate">
+        <Typography className="custom-header-text" variant="subtitle1">
             {schoolName}
         </Typography>
     );
 
-    const renderSchoolHeader = (
+    const renderSchoolHeader = !isMobile && (
         <Box className="custom-header">
             <Grid container alignItems="center">
                 <Grid item xs={10} container justify="flex-start" alignItems="center">
-                    <HomeOutlined color="primary" /> {renderSchoolName}
+                    <LocationCityOutlined color="primary" /> {renderSchoolName}
                 </Grid>
                 <Grid item xs={2} container justify="flex-end">
                     {renderShareButton}

@@ -2,16 +2,21 @@ import {
     Box,
     Button,
     CardContent,
-    CardHeader,
     Chip,
     CircularProgress,
-    Divider,
     FormControl,
     Grid,
     IconButton,
     InputBase,
+    Typography,
 } from '@material-ui/core';
-import { ArrowBackOutlined, ClearAllOutlined, FilterListOutlined, SearchOutlined } from '@material-ui/icons';
+import {
+    ArrowBackOutlined,
+    ClearAllOutlined,
+    FilterListOutlined,
+    PageviewOutlined,
+    SearchOutlined,
+} from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
@@ -360,19 +365,37 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         </Box>
     );
 
+    const renderFiltersHeader = (
+        <Typography className="custom-header-text" variant="subtitle1">
+            {t('common:filters')}
+        </Typography>
+    );
+
+    const renderSearchResultsHeader = (
+        <Typography className="custom-header-text" variant="subtitle1">
+            {t('common:searchResults')}
+        </Typography>
+    );
+
     const renderDesktopContent = !isMobile && (
         <Grid container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
-                    <CardHeader title={t('common:filters')} />
-                    <Divider />
+                    <Box className="custom-header">
+                        <Grid container alignItems="center">
+                            <FilterListOutlined color="primary" /> {renderFiltersHeader}
+                        </Grid>
+                    </Box>
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
             </Grid>
             <Grid item container xs={7} md={8} lg={9}>
                 <StyledCard marginLeft>
-                    <CardHeader title={t('common:searchResults')} />
-                    <Divider />
+                    <Box className="custom-header">
+                        <Grid container alignItems="center">
+                            <PageviewOutlined color="primary" /> {renderSearchResultsHeader}
+                        </Grid>
+                    </Box>
                     {renderFilterNames}
                     <StyledTable>{renderTableContent}</StyledTable>
                 </StyledCard>

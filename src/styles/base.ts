@@ -24,7 +24,6 @@ export const base = css`
         --gray: #323639;
         --gray-light: #525659;
         --gray-dark: #262729;
-        --contrast: #00c9ae;
         --hover-opacity: rgba(0, 0, 0, 0.05);
         --border-color: rgba(0, 0, 0, 0.12);
         --opacity: rgba(0, 0, 0, 0.5);
@@ -122,9 +121,7 @@ export const base = css`
                 padding: 0.25rem;
             }
 
-            #course-name,
-            #resource-name,
-            #school-name {
+            .custom-header-text {
                 margin-left: 0.5rem;
             }
         }

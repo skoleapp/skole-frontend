@@ -259,7 +259,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderCourseName = (
-        <Typography id="course-name" variant="subtitle1" className="truncate">
+        <Typography className="custom-header-text truncate" variant="subtitle1">
             {courseName}
         </Typography>
     );

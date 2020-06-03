@@ -82,8 +82,6 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
     const [createCommentMutation] = useCreateCommentMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
-        console.log(values);
-
         if (!attachment && !values.text) {
             toggleNotification(t('notifications:messageEmpty'));
         } else {

@@ -166,7 +166,6 @@ const StyledIndexPage = styled(Box)`
 
                 .MuiButton-root {
                     border-radius: 0 var(--border-radius) var(--border-radius) 0;
-                    background-color: var(--contrast);
                 }
             }
         }

@@ -158,7 +158,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             // FIXME: This might cause issues on some small devices, resulting in misaligned screenshots.
             const dpr: number = window.devicePixelRatio;
             newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
-            return newCanvas.toDataURL('image/png');
+            return newCanvas.toDataURL('image/jpeg');
         } else {
             return null;
         }
@@ -225,7 +225,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderResourceTitle = (
-        <Typography id="resource-name" variant="subtitle1" className="truncate">
+        <Typography className="custom-header-text truncate" variant="subtitle1">
             {title}
         </Typography>
     );
