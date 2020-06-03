@@ -1,4 +1,5 @@
 import { Box, Grid, Typography } from '@material-ui/core';
+import { ChatOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,22 +23,26 @@ export const DiscussionHeader: React.FC<Props> = ({
     renderActionsButton,
 }) => {
     const { t } = useTranslation();
-    const renderText = <Typography variant="subtitle1">{`${t('common:discussion')} (${numComments})`}</Typography>;
+    const renderText = (
+        <Typography className="custom-header-text" variant="subtitle1">{`${t(
+            'common:discussion',
+        )} (${numComments})`}</Typography>
+    );
 
     return (
         <Box className="custom-header">
-            <Grid container alignItems="center">
-                <Grid item xs={6} container justify="flex-start">
-                    {renderText}
-                </Grid>
-                <Grid item xs={6} container justify="flex-end">
+            <Grid container justify="space-between">
+                <Box display="flex" justifyContent="flex-start" alignItems="center">
+                    <ChatOutlined /> {renderText}
+                </Box>
+                <Box display="flex" justifyContent="flex-end" alignItems="center">
                     {renderStarButton}
                     {renderUpVoteButton}
                     {renderDownVoteButton}
                     {renderShareButton}
                     {renderInfoButton}
                     {renderActionsButton}
-                </Grid>
+                </Box>
             </Grid>
         </Box>
     );

@@ -1,4 +1,4 @@
-import { Avatar, Box, CardContent, Chip, Divider, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
+import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -332,10 +332,10 @@ const StyledUserPage = styled(Box)`
             overflow: hidden;
             word-break: break-word;
         }
-    }
 
-    .badge {
-        margin: 0.25rem !important;
+        .badge {
+            margin: 0.25rem !important;
+        }
     }
 `;
 

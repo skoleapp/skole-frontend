@@ -27,7 +27,7 @@ const FAQPage: NextPage<I18nProps> = () => {
 
     const renderCardContent = faqs.map(({ title, text }, i) => (
         <Box key={i} marginY="0.5rem" textAlign="left">
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h3" gutterBottom>
                 {t(title)}
             </Typography>
             <Typography variant="body2">{t(text)}</Typography>

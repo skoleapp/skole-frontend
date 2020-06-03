@@ -309,7 +309,6 @@ const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...
 
     .MuiCardHeader-content {
         display: flex;
-        font-size: 0.65rem;
 
         .MuiCardHeader-subheader {
             margin-left: 1rem;

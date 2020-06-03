@@ -47,6 +47,59 @@ const IndexPage: NextPage<I18nProps> = () => {
         },
     ];
 
+    const renderSearch = (
+        <Box id="top-section-container">
+            <Box id="top-section-background" />
+            <Box id="top-section-content">
+                <Box id="slogan">
+                    <Typography variant="h1">{t('common:slogan')}</Typography>
+                </Box>
+                <Box marginTop="1rem">
+                    <Typography variant="subtitle1">{t('index:marketingText')}</Typography>
+                </Box>
+                <Box id="search-widget" marginTop="1rem">
+                    <form onSubmit={handleSubmit}>
+                        <Box display="flex" justifyContent="center">
+                            <Box id="search-widget-input">
+                                <InputBase {...inputProps} />
+                            </Box>
+                            <Button type="submit" color="primary" variant="contained">
+                                <SearchOutlined />
+                            </Button>
+                        </Box>
+                    </form>
+                </Box>
+            </Box>
+        </Box>
+    );
+
+    const renderMarketingText = (
+        <Box marginTop="1rem">
+            <Typography variant="h2" color="primary">
+                {t('index:marketingText2')}
+            </Typography>
+        </Box>
+    );
+
+    const renderShortcuts = (
+        <Box id="shortcuts" display="flex" justifyContent="center" marginTop="1rem">
+            {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+                <Link href={href} key={i}>
+                    <Card>
+                        <CardContent>
+                            <Avatar>
+                                <Icon />
+                            </Avatar>
+                            <Typography variant="h2" color="primary">
+                                {t(text)}
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Link>
+            ))}
+        </Box>
+    );
+
     const layoutProps = {
         seoProps: {
             title: t('index:title'),
@@ -60,50 +113,9 @@ const IndexPage: NextPage<I18nProps> = () => {
     return (
         <StyledIndexPage>
             <MainLayout {...layoutProps}>
-                <Box id="top-section-container">
-                    <Box id="top-section-background" />
-                    <Box id="top-section-content">
-                        <Box id="slogan">
-                            <Typography variant="h1">{t('common:slogan')}</Typography>
-                        </Box>
-                        <Box marginTop="1rem">
-                            <Typography variant="subtitle1">{t('index:marketingText')}</Typography>
-                        </Box>
-                        <Box id="search-widget" marginTop="1rem">
-                            <form onSubmit={handleSubmit}>
-                                <Box display="flex" justifyContent="center">
-                                    <Box id="search-widget-input">
-                                        <InputBase {...inputProps} />
-                                    </Box>
-                                    <Button type="submit" color="primary" variant="contained">
-                                        <SearchOutlined />
-                                    </Button>
-                                </Box>
-                            </form>
-                        </Box>
-                    </Box>
-                </Box>
-                <Box marginTop="1rem">
-                    <Typography variant="h2" color="primary">
-                        {t('index:marketingText2')}
-                    </Typography>
-                </Box>
-                <Box id="shortcuts" display="flex" justifyContent="center" marginTop="1rem">
-                    {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
-                        <Link href={href} key={i}>
-                            <Card>
-                                <CardContent>
-                                    <Avatar>
-                                        <Icon />
-                                    </Avatar>
-                                    <Typography variant="h2" color="primary">
-                                        {t(text)}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Link>
-                    ))}
-                </Box>
+                {renderSearch}
+                {renderMarketingText}
+                {renderShortcuts}
             </MainLayout>
         </StyledIndexPage>
     );

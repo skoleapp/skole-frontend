@@ -170,15 +170,15 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
 
     const renderSchoolHeader = !isMobile && (
         <Box className="custom-header">
-            <Grid container alignItems="center">
-                <Grid item xs={10} container justify="flex-start" alignItems="center">
-                    <LocationCityOutlined color="primary" /> {renderSchoolName}
-                </Grid>
-                <Grid item xs={2} container justify="flex-end">
+            <Grid container justify="space-between">
+                <Box display="flex" justifyContent="flex-start" alignItems="center">
+                    <LocationCityOutlined /> {renderSchoolName}
+                </Box>
+                <Box display="flex" justifyContent="flex-end" alignItems="center">
                     {renderShareButton}
                     {renderInfoButton}
                     {renderActionsButton}
-                </Grid>
+                </Box>
             </Grid>
         </Box>
     );

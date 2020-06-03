@@ -266,13 +266,13 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
 
     const renderResourcesHeader = (
         <Box className="custom-header">
-            <Grid container alignItems="center" justify="space-between">
-                <Grid item xs={11} container justify="flex-start" alignItems="center">
-                    <SchoolOutlined color="primary" /> {renderCourseName}
-                </Grid>
-                <Grid item xs={1} container justify="flex-end">
+            <Grid container justify="space-between">
+                <Box display="flex" justifyContent="flex-start" alignItems="center">
+                    <SchoolOutlined /> {renderCourseName}
+                </Box>
+                <Box display="flex" justifyContent="flex-end" alignItems="center">
                     {renderUploadResourceButton}
-                </Grid>
+                </Box>
             </Grid>
         </Box>
     );

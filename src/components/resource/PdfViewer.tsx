@@ -231,14 +231,14 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderPreviewToolbarContent = (
-        <Grid container alignItems="center">
+        <Grid container>
             <Grid item xs={5} container justify="flex-start" alignItems="center">
                 <AssignmentOutlined color="secondary" /> {renderResourceTitle}
             </Grid>
-            <Grid item xs={2} container justify="center">
+            <Grid item xs={2} container justify="center" alignItems="center">
                 {renderPageNumbers}
             </Grid>
-            <Grid item xs={5} container justify="flex-end">
+            <Grid item xs={5} container justify="flex-end" alignItems="center">
                 {renderMarkAreaButton}
                 {renderRotateButton}
                 {renderDownloadButton}

@@ -18,19 +18,9 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card
     .MuiCardHeader-root,
     .MuiCardContent-root {
         padding: 0.5rem;
+    }
 
-        // .MuiCardHeader-action {
-        //     margin: 0;
-
-        //     .MuiButtonBase-root {
-        //         padding: 0.25rem;
-        //     }
-        // }
-
-        // .MuiCardHeader-subheader {
-        //     .MuiTypography-root {
-        //         font-size: 0.85rem;
-        //     }
-        // }
+    .MuiCardHeader-root {
+        height: 3rem;
     }
 `;

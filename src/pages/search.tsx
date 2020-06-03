@@ -381,20 +381,16 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         <Grid container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
-                    <Box className="custom-header">
-                        <Grid container alignItems="center">
-                            <FilterListOutlined color="primary" /> {renderFiltersHeader}
-                        </Grid>
+                    <Box className="custom-header" display="flex" alignItems="center">
+                        <FilterListOutlined /> {renderFiltersHeader}
                     </Box>
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
             </Grid>
             <Grid item container xs={7} md={8} lg={9}>
                 <StyledCard marginLeft>
-                    <Box className="custom-header">
-                        <Grid container alignItems="center">
-                            <PageviewOutlined color="primary" /> {renderSearchResultsHeader}
-                        </Grid>
+                    <Box className="custom-header" display="flex" alignItems="center">
+                        <PageviewOutlined /> {renderSearchResultsHeader}
                     </Box>
                     {renderFilterNames}
                     <StyledTable>{renderTableContent}</StyledTable>
