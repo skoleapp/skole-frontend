@@ -1,46 +1,35 @@
 import { Box, Button, Divider, Fab, Typography } from '@material-ui/core';
 import { AddOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CommentObjectType } from '../../../generated/graphql';
-import { useCommentModalContext, useDeviceContext, useDiscussionBoxContext } from '../../context';
+import { useCommentModalContext, useDeviceContext, useDiscussionContext } from '../../context';
 import { breakpoints } from '../../styles';
-import { DiscussionBoxProps } from '../../types';
+import { TopLevelCommentThreadProps } from '../../types';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 import { NotFoundBox } from './NotFoundBox';
 
-export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
-    topComment,
-    comments: initialComments,
-    isThread,
+export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
+    initialComments,
     target,
     formKey,
     placeholderText,
 }) => {
-    const { comments, setComments } = useDiscussionBoxContext(initialComments);
-    const initialReplyCount = R.propOr('', 'replyCount', topComment);
-    const [replyCount, setReplyCount] = useState(initialReplyCount);
-    const { toggleCommentModal } = useCommentModalContext();
-    const openCommentModal = (): void => toggleCommentModal(true);
-    const { t } = useTranslation();
+    const { topLevelComments, setTopLevelComments } = useDiscussionContext(initialComments);
     const isMobile = useDeviceContext();
-    const updateReplyCount = (replyCount: number): void => setReplyCount(replyCount);
+    const { toggleCommentModal } = useCommentModalContext();
+    const appendComments = (comment: CommentObjectType): void => setTopLevelComments([...topLevelComments, comment]);
+    const openCommentModal = (): void => toggleCommentModal(true);
+    const removeComment = (id: string): void => setTopLevelComments(topLevelComments.filter(c => c.id !== id));
 
-    const appendComments = (comment: CommentObjectType): void => {
-        setComments([...comments, comment]);
-        isThread && updateReplyCount(comments.length + 1);
+    const commentCardProps = {
+        isThread: false,
+        removeComment,
     };
-
-    const removeComment = (id: string): void => {
-        setComments(comments.filter((c: CommentObjectType): boolean => c.id !== id));
-        isThread && updateReplyCount(comments.length - 1);
-    };
-
-    const commentCardProps = { isThread, removeComment };
 
     const createCommentFormProps = {
         target,
@@ -48,17 +37,99 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
         formKey,
     };
 
+    const renderTopLevelComments = !!topLevelComments.length
+        ? topLevelComments.map((c, i) => (
+              <Box key={i}>
+                  <CommentCard {...commentCardProps} comment={c} />
+              </Box>
+          ))
+        : !!placeholderText && <NotFoundBox text={placeholderText} />;
+
+    const renderMessageArea = <Box className="message-area">{renderTopLevelComments}</Box>;
+
+    const renderInputArea = (
+        <Box className="input-area">
+            <CreateCommentForm {...createCommentFormProps} />
+        </Box>
+    );
+
+    const renderCreateCommentButton = isMobile && (
+        <Fab id="create-comment-button" color="secondary" onClick={openCommentModal}>
+            <AddOutlined />
+        </Fab>
+    );
+
+    return (
+        <StyledDiscussionBox>
+            <Box className="discussion-container">
+                {renderMessageArea}
+                {renderInputArea}
+                {renderCreateCommentButton}
+            </Box>
+        </StyledDiscussionBox>
+    );
+};
+
+export const ReplyCommentThread: React.FC = () => {
+    const { t } = useTranslation();
+    const isMobile = useDeviceContext();
+    const { topComment, toggleTopComment } = useDiscussionContext();
+    const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
+    const { toggleCommentModal } = useCommentModalContext();
+    const target = { comment: Number(R.propOr(undefined, 'id', topComment)) };
+    const formKey = 'comment-thread';
+    const openCommentModal = (): void => toggleCommentModal(true);
+
+    const appendComments = (comment: CommentObjectType): void => {
+        if (!!topComment) {
+            toggleTopComment({
+                ...topComment,
+                replyComments: [...topComment.replyComments, comment],
+            });
+        }
+    };
+
+    const removeComment = (id: string): void => {
+        if (!!topComment) {
+            if (id === topComment.id) {
+                toggleTopComment(null); // Close modal if top comment gets deleted.
+            } else {
+                const filteredReplyComments: CommentObjectType[] = replyComments.filter(c => c.id !== id);
+                toggleTopComment({ ...topComment, replyComments: filteredReplyComments });
+            }
+        }
+    };
+
+    const commentCardProps = {
+        isThread: true,
+        removeComment,
+    };
+
+    const createCommentFormProps = {
+        target,
+        formKey,
+        appendComments,
+    };
+
     const renderTopComment = !!topComment && (
         <>
-            <CommentCard comment={topComment} {...commentCardProps} disableBorder />
+            <CommentCard {...commentCardProps} comment={topComment} disableBorder />
             <Box padding="0.25rem 0.5rem" display="flex" alignItems="center">
                 <Typography variant="body2" color="textSecondary">
-                    {replyCount} replies
+                    {replyComments.length} replies
                 </Typography>
                 <Divider id="reply" />
             </Box>
         </>
     );
+
+    const renderReplyComments =
+        !!replyComments.length &&
+        replyComments.map((c, i) => (
+            <Box key={i}>
+                <CommentCard {...commentCardProps} comment={c} />
+            </Box>
+        ));
 
     const renderReplyButton = !!topComment && isMobile && (
         <Box marginTop="auto">
@@ -74,13 +145,7 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
     const renderMessageArea = (
         <Box className="message-area">
             {renderTopComment}
-            {!!comments.length
-                ? comments.map((c: CommentObjectType, i: number) => (
-                      <Box key={i}>
-                          <CommentCard comment={c} {...commentCardProps} />
-                      </Box>
-                  ))
-                : !topComment && !!placeholderText && <NotFoundBox text={placeholderText} />}
+            {renderReplyComments}
             {renderReplyButton}
         </Box>
     );
@@ -91,25 +156,18 @@ export const DiscussionBox: React.FC<DiscussionBoxProps> = ({
         </Box>
     );
 
-    const renderMobileCreateCommentButton = !topComment && isMobile && (
-        <Fab id="create-comment-button" color="secondary" onClick={openCommentModal}>
-            <AddOutlined />
-        </Fab>
-    );
-
     return (
-        <StyledDiscussionBox topComment={topComment}>
+        <StyledDiscussionBox>
             <Box className="discussion-container">
                 {renderMessageArea}
                 {renderInputArea}
-                {renderMobileCreateCommentButton}
             </Box>
         </StyledDiscussionBox>
     );
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other} />)`
+export const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other} />)`
     position: relative;
     flex-grow: 1;
 

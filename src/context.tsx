@@ -9,8 +9,7 @@ import {
     AttachmentViewerContext,
     AuthContext,
     CommentModalContext,
-    CommentThreadContext,
-    DiscussionBoxContext,
+    DiscussionContext,
     LanguageSelectorContext,
     NotificationsContext,
     PDFViewerContext,
@@ -26,10 +25,6 @@ const SkolePageContext = createContext<SkoleContextType>({
     attachmentViewer: {
         attachment: null,
         toggleAttachmentViewer: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-    },
-    commentThread: {
-        topComment: null,
-        toggleCommentThread: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     commentModal: {
         commentModalOpen: false,
@@ -65,9 +60,11 @@ const SkolePageContext = createContext<SkoleContextType>({
         setFullscreen: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
     isMobileGuess: null,
-    discussionBox: {
-        comments: null,
-        setComments: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+    discussion: {
+        topLevelComments: [],
+        setTopLevelComments: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+        topComment: null,
+        toggleTopComment: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
 });
 
@@ -87,20 +84,31 @@ export const useAuthContext = (): UseAuthContext => {
 };
 
 export const useAttachmentViewerContext = (): AttachmentViewerContext => useSkoleContext().attachmentViewer;
-export const useCommentThreadContext = (): CommentThreadContext => useSkoleContext().commentThread;
 export const useCommentModalContext = (): CommentModalContext => useSkoleContext().commentModal;
 export const useLanguageSelectorContext = (): LanguageSelectorContext => useSkoleContext().languageSelector;
 export const useNotificationsContext = (): NotificationsContext => useSkoleContext().notifications;
 export const useSettingsContext = (): SettingsContext => useSkoleContext().settings;
 export const usePDFViewerContext = (): PDFViewerContext => useSkoleContext().pdfViewer;
 
-interface UseDiscussionBoxContext extends Pick<DiscussionBoxContext, 'setComments'> {
-    comments: CommentObjectType[];
+interface UseDiscussionContext extends DiscussionContext {
+    commentCount: number;
 }
 
-export const useDiscussionBoxContext = (initialComments: CommentObjectType[]): UseDiscussionBoxContext => {
-    const { comments, setComments } = useSkoleContext().discussionBox;
-    return { comments: comments || initialComments, setComments };
+export const useDiscussionContext = (initialComments?: CommentObjectType[]): UseDiscussionContext => {
+    const {
+        topLevelComments: contextTopLevelComments,
+        setTopLevelComments,
+        ...discussionContext
+    } = useSkoleContext().discussion;
+
+    const topLevelComments: CommentObjectType[] = !!contextTopLevelComments.length
+        ? contextTopLevelComments
+        : initialComments || [];
+
+    const commentCount =
+        topLevelComments.length + topLevelComments.reduce((acc, cur) => acc + cur.replyComments.length, 0);
+
+    return { topLevelComments, setTopLevelComments, commentCount, ...discussionContext };
 };
 
 // Allow using custom breakpoints, use MD as default.
@@ -135,9 +143,6 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [attachment, setAttachment] = useState<string | null>(null);
     const toggleAttachmentViewer = (payload: string | null): void => setAttachment(payload);
 
-    const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
-    const toggleCommentThread = (payload: CommentObjectType | null): void => setTopComment(payload);
-
     const [commentModalOpen, setCommentModalOpen] = useState(false);
     const toggleCommentModal = (payload: boolean): void => setCommentModalOpen(payload);
 
@@ -159,7 +164,9 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [fullscreen, setFullscreen] = useState(false);
     const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
-    const [comments, setComments] = useState<CommentObjectType[] | null>(null);
+    const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]);
+    const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
+    const toggleTopComment = (payload: CommentObjectType | null): void => setTopComment(payload);
 
     const contextValue = {
         auth: {
@@ -169,10 +176,6 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
         attachmentViewer: {
             attachment,
             toggleAttachmentViewer,
-        },
-        commentThread: {
-            topComment,
-            toggleCommentThread,
         },
         commentModal: {
             commentModalOpen,
@@ -208,9 +211,11 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setFullscreen,
         },
         isMobileGuess,
-        discussionBox: {
-            comments,
-            setComments,
+        discussion: {
+            topLevelComments,
+            setTopLevelComments,
+            topComment,
+            toggleTopComment,
         },
     };
 

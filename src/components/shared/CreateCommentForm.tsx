@@ -5,6 +5,7 @@ import Image from 'material-ui-image';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CommentTarget } from 'src/types';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
@@ -15,16 +16,9 @@ import {
     useNotificationsContext,
     usePDFViewerContext,
 } from '../../context';
-import { CommentTarget } from '../../types';
 import { dataURItoFile, useForm } from '../../utils';
 import { ModalHeader } from './ModalHeader';
 import { StyledModal } from './StyledModal';
-
-interface Props {
-    target: CommentTarget;
-    appendComments: (comments: CommentObjectType) => void;
-    formKey: string;
-}
 
 interface CreateCommentFormValues {
     text: string;
@@ -36,7 +30,13 @@ interface CreateCommentFormValues {
 
 type T = FormikProps<CreateCommentFormValues>;
 
-export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, formKey }) => {
+interface CreateCommentFormProps {
+    target: CommentTarget;
+    appendComments: (comments: CommentObjectType) => void;
+    formKey: string;
+}
+
+export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target, formKey }) => {
     const { t } = useTranslation();
     const { verified, verificationRequiredTooltip } = useAuthContext();
     const disabled = verified === false;

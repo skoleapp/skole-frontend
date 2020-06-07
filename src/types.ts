@@ -1,7 +1,7 @@
 import { ContainerProps, DrawerProps, IconButtonProps, Size, TablePaginationProps } from '@material-ui/core';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError } from 'apollo-client';
-import { Formik, FormikActions } from 'formik';
+import { Formik, FormikActions, FormikProps } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
 import { NextPageContext } from 'next';
 import { LinkProps } from 'next/link';
@@ -49,10 +49,8 @@ export interface CommentTarget {
     [key: string]: number;
 }
 
-export interface DiscussionBoxProps {
-    topComment?: CommentObjectType | null;
-    comments: CommentObjectType[];
-    isThread?: boolean;
+export interface TopLevelCommentThreadProps {
+    initialComments: CommentObjectType[];
     target: CommentTarget;
     formKey: string;
     placeholderText?: string;
@@ -138,11 +136,6 @@ export interface AttachmentViewerContext {
     toggleAttachmentViewer: (payload: string | null) => void;
 }
 
-export interface CommentThreadContext {
-    topComment: CommentObjectType | null;
-    toggleCommentThread: (payload: CommentObjectType | null) => void;
-}
-
 export interface CommentModalContext {
     commentModalOpen: boolean;
     toggleCommentModal: (payload: boolean) => void;
@@ -181,22 +174,23 @@ export interface PDFViewerContext {
     setFullscreen: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface DiscussionBoxContext {
-    comments: CommentObjectType[] | null;
-    setComments: (comments: CommentObjectType[]) => void;
+export interface DiscussionContext {
+    topLevelComments: CommentObjectType[];
+    setTopLevelComments: (comments: CommentObjectType[]) => void;
+    topComment: CommentObjectType | null;
+    toggleTopComment: (payload: CommentObjectType | null) => void;
 }
 
 export interface SkoleContextType {
     auth: AuthContext;
     attachmentViewer: AttachmentViewerContext;
-    commentThread: CommentThreadContext;
     commentModal: CommentModalContext;
     languageSelector: LanguageSelectorContext;
     notifications: NotificationsContext;
     settings: SettingsContext;
     pdfViewer: PDFViewerContext;
     isMobileGuess: boolean | null;
-    discussionBox: DiscussionBoxContext;
+    discussion: DiscussionContext;
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;

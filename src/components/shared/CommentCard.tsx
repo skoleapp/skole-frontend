@@ -33,7 +33,7 @@ import {
 import {
     useAttachmentViewerContext,
     useAuthContext,
-    useCommentThreadContext,
+    useDiscussionContext,
     useNotificationsContext,
 } from '../../context';
 import { mediaURL, useActionsDrawer, useMoment, useVotes } from '../../utils';
@@ -63,7 +63,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const replyCount = R.propOr('', 'replyCount', comment) as string;
     const { toggleNotification } = useNotificationsContext();
     const { toggleAttachmentViewer } = useAttachmentViewerContext();
-    const { toggleCommentThread } = useCommentThreadContext();
+    const { toggleTopComment } = useDiscussionContext();
 
     const {
         renderActionsHeader,
@@ -99,7 +99,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         if (isThread) {
             attachmentOnly && toggleAttachmentViewer(comment.attachment);
         } else {
-            toggleCommentThread(comment);
+            toggleTopComment(comment);
         }
     };
 

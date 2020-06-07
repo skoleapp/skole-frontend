@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-    numComments: number;
+    commentCount: number;
     renderStarButton: JSX.Element;
     renderUpVoteButton: JSX.Element;
     renderDownVoteButton: JSX.Element;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const DiscussionHeader: React.FC<Props> = ({
-    numComments,
+    commentCount,
     renderStarButton,
     renderUpVoteButton,
     renderDownVoteButton,
@@ -26,7 +26,7 @@ export const DiscussionHeader: React.FC<Props> = ({
     const renderText = (
         <Typography className="custom-header-text" variant="subtitle1">{`${t(
             'common:discussion',
-        )} (${numComments})`}</Typography>
+        )} (${commentCount})`}</Typography>
     );
 
     return (

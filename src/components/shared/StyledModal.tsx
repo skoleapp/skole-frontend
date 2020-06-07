@@ -28,7 +28,7 @@ export const StyledModal = styled(({ autoHeight, ...other }) => (
 
         @media only screen and (min-width: ${breakpoints.MD}) {
             height: ${({ autoHeight }): string => (!!autoHeight ? 'auto' : '100%')};
-            max-width: 25rem;
+            max-width: 30rem;
             max-height: 50rem;
         }
     }

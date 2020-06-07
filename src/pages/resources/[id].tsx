@@ -24,7 +24,6 @@ import {
     VoteObjectType,
 } from '../../../generated/graphql';
 import {
-    DiscussionBox,
     DiscussionHeader,
     InfoModalContent,
     MainLayout,
@@ -38,6 +37,7 @@ import {
     StyledList,
     StyledTabs,
     TextLink,
+    TopLevelCommentThread,
 } from '../../components';
 import {
     useAuthContext,
@@ -352,7 +352,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         renderActionsButton,
     };
 
-    const discussionBoxProps = {
+    const commentThreadProps = {
         comments,
         target: { resource: Number(resourceId) },
         formKey: 'resource',
@@ -360,7 +360,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     };
 
     const renderPDFViewer = <PDFViewer {...pdfViewerProps} />;
-    const renderDiscussion = <DiscussionBox {...discussionBoxProps} />;
+    const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
     const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
 
     const renderTabs = (

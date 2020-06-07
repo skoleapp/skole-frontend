@@ -17,7 +17,6 @@ import {
     VoteObjectType,
 } from '../../../generated/graphql';
 import {
-    DiscussionBox,
     DiscussionHeader,
     FrontendPaginatedTable,
     IconButtonLink,
@@ -34,8 +33,9 @@ import {
     StyledList,
     StyledTabs,
     TextLink,
+    TopLevelCommentThread,
 } from '../../components';
-import { useAuthContext, useDeviceContext, useNotificationsContext } from '../../context';
+import { useAuthContext, useDeviceContext, useDiscussionContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router } from '../../i18n';
 import { withApolloSSR, withAuthSync } from '../../lib';
 import { I18nProps, SkolePageContext } from '../../types';
@@ -70,7 +70,8 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const schoolId = R.pathOr('', ['school', 'id'], course);
     const initialScore = String(R.propOr(0, 'score', course));
     const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
-    const comments = R.propOr([], 'comments', course) as CommentObjectType[];
+    const initialComments = R.propOr([], 'comments', course) as CommentObjectType[];
+    const { commentCount } = useDiscussionContext(initialComments);
     const isOwnCourse = creatorId === R.propOr('', 'id', user);
     const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
     const starred = !!R.propOr(undefined, 'starred', course);
@@ -78,7 +79,6 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const subjectId = R.path(['subject', 'id'], course) as boolean[];
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
-    const numComments = comments.length;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
     const { tabValue, handleTabChange } = useTabs();
@@ -194,7 +194,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const renderStarButton = <StarButton starred={starred} course={courseId} />;
 
     const discussionHeaderProps = {
-        numComments,
+        commentCount,
         renderStarButton,
         renderUpVoteButton,
         renderDownVoteButton,
@@ -203,15 +203,15 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         renderActionsButton,
     };
 
-    const discussionBoxProps = {
-        comments,
+    const commentThreadProps = {
+        initialComments,
         target: { course: Number(courseId) },
         formKey: 'course',
         placeholderText: t('course:commentsPlaceholder'),
     };
 
     const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
-    const renderDiscussion = <DiscussionBox {...discussionBoxProps} />;
+    const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
     const renderCustomBottomNavbar = (
         <StyledBottomNavigation>
@@ -280,7 +280,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const renderTabs = (
         <StyledTabs value={tabValue} onChange={handleTabChange}>
             <Tab label={`${t('common:resources')} (${resourceCount})`} />
-            <Tab label={`${t('common:discussion')} (${numComments})`} />
+            <Tab label={`${t('common:discussion')} (${commentCount})`} />
         </StyledTabs>
     );
 
