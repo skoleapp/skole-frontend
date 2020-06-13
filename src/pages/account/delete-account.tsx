@@ -11,7 +11,7 @@ import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../genera
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router } from '../../i18n';
-import { clientLogout, withAuthSync } from '../../lib';
+import { removeTokenCookie, withAuthSync } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -42,7 +42,7 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
             } else if (!!deleteUser.message) {
                 resetForm();
                 toggleNotification(deleteUser.message);
-                clientLogout();
+                removeTokenCookie();
                 setUser(null);
                 await apolloClient.resetStore();
                 Router.push('/login');

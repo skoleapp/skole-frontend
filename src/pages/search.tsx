@@ -19,7 +19,7 @@ import {
 } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage, NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
@@ -57,8 +57,8 @@ import {
     StyledTable,
 } from '../components';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApolloSSR, withAuthSync } from '../lib';
-import { I18nProps, SkolePageContext, UseDrawer } from '../types';
+import { initApolloClient, withAuthSync } from '../lib';
+import { I18nProps, UseDrawer } from '../types';
 import { getPaginationQuery, getQueryWithPagination, useDrawer, useForm } from '../utils';
 
 interface FilterSearchResultsFormValues {
@@ -481,20 +481,20 @@ const StyledSearchPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { apolloClient, query } = ctx as SkolePageContext;
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const apolloClient = initApolloClient(ctx as NextPageContext);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
     try {
         const { data } = await apolloClient.query({
             query: SearchCoursesDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
         return { props: { ...data, ...namespaces } };
     } catch (err) {
         return { props: { namespaces } };
     }
-});
+};
 
 export default withAuthSync(SearchPage);

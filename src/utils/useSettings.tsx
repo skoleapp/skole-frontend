@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { StyledList } from '../components/shared/StyledList';
 import { useAuthContext, useNotificationsContext, useSettingsContext } from '../context';
 import { Router } from '../i18n';
-import { clientLogout } from '../lib';
+import { removeTokenCookie } from '../lib';
 import { SettingsContext } from '../types';
 import { useLanguageSelector } from './useLanguageSelector';
 
@@ -129,7 +129,7 @@ export const useSettings = (modal: boolean): UseSettings => {
 
     const handleLogoutClick = async (): Promise<void> => {
         !!modal && handleClose();
-        clientLogout();
+        removeTokenCookie();
         setUser(null);
         await apolloClient.resetStore();
         Router.push('/login');

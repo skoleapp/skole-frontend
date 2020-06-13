@@ -1,7 +1,7 @@
 import { Box, Grid, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
 import { CloudUploadOutlined, DeleteOutline, SchoolOutlined } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage, NextPageContext } from 'next';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -37,8 +37,8 @@ import {
 } from '../../components';
 import { useAuthContext, useDeviceContext, useDiscussionContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router } from '../../i18n';
-import { withApolloSSR, withAuthSync } from '../../lib';
-import { I18nProps, SkolePageContext } from '../../types';
+import { initApolloClient, withAuthSync } from '../../lib';
+import { I18nProps } from '../../types';
 import {
     useActionsDrawer,
     useFrontendPagination,
@@ -70,8 +70,8 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const schoolId = R.pathOr('', ['school', 'id'], course);
     const initialScore = String(R.propOr(0, 'score', course));
     const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
-    const initialComments = R.propOr([], 'comments', course) as CommentObjectType[];
-    const { commentCount } = useDiscussionContext(initialComments);
+    const comments = R.propOr([], 'comments', course) as CommentObjectType[];
+    const { commentCount } = useDiscussionContext(comments);
     const isOwnCourse = creatorId === R.propOr('', 'id', user);
     const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
     const starred = !!R.propOr(undefined, 'starred', course);
@@ -204,7 +204,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     };
 
     const commentThreadProps = {
-        initialComments,
+        comments,
         target: { course: Number(courseId) },
         formKey: 'course',
         placeholderText: t('course:commentsPlaceholder'),
@@ -383,20 +383,20 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { apolloClient, query } = ctx as SkolePageContext;
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const apolloClient = initApolloClient(ctx as NextPageContext);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 
     try {
         const { data } = await apolloClient.query({
             query: CourseDetailDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
         return { props: { ...data, ...namespaces } };
     } catch {
         return { props: { ...namespaces } };
     }
-});
+};
 
 export default withAuthSync(CourseDetailPage);

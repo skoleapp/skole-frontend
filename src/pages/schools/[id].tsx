@@ -1,11 +1,11 @@
 import { Box, Grid, Tab, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { LocationCityOutlined } from '@material-ui/icons';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage, NextPageContext } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDeviceContext } from 'src/context';
-import { withApolloSSR, withAuthSync } from 'src/lib';
+import { initApolloClient, withAuthSync } from 'src/lib';
 
 import {
     CourseObjectType,
@@ -27,7 +27,7 @@ import {
     TextLink,
 } from '../../components';
 import { includeDefaultNamespaces, Link } from '../../i18n';
-import { I18nProps, SkolePageContext } from '../../types';
+import { I18nProps } from '../../types';
 import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
@@ -255,20 +255,20 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { apolloClient, query } = ctx as SkolePageContext;
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const apolloClient = initApolloClient(ctx as NextPageContext);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 
     try {
         const { data } = await apolloClient.query({
             query: SchoolDetailDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
         return { props: { ...data, ...namespaces } };
     } catch {
         return { props: { ...namespaces } };
     }
-});
+};
 
 export default withAuthSync(SchoolDetailPage);

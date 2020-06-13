@@ -7,7 +7,9 @@ import { ThemeProvider } from '@material-ui/styles';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { UserMeDocument, UserObjectType } from 'generated/graphql';
+import { IncomingMessage } from 'http';
 import { ConfirmProvider } from 'material-ui-confirm';
+import { NextPage } from 'next';
 import App, { AppContext, AppProps } from 'next/app';
 import Router from 'next/router';
 import NProgress from 'nprogress';
@@ -17,9 +19,8 @@ import { useTranslation } from 'react-i18next';
 
 import { ContextProvider } from '../context';
 import { appWithTranslation } from '../i18n';
-import { initApolloClient, initOnContext, pageView, PWAProvider } from '../lib';
+import { initApolloClient, pageView, PWAProvider } from '../lib';
 import { GlobalStyle, theme } from '../styles';
-import { ApolloContext } from '../types';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeError', () => NProgress.done());
@@ -30,16 +31,18 @@ Router.events.on('routeChangeComplete', (url: string) => {
 });
 
 interface Props extends AppProps {
-    apolloClient?: ApolloClient<NormalizedCacheObject> | null;
-    apolloState?: NormalizedCacheObject;
-    isMobileGuess: boolean | null;
     user: UserObjectType | null;
+    isMobileGuess: boolean | null;
 }
 
-const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGuess, user }: Props): JSX.Element => {
+const SkoleApp = ({ Component, pageProps, isMobileGuess, user }: Props) => {
     const { t } = useTranslation();
-    const client = apolloClient || initApolloClient(apolloState, undefined);
-    const initialContextProps = { user, isMobileGuess };
+    const apolloClient = initApolloClient();
+
+    const initialContextProps = {
+        user,
+        isMobileGuess,
+    };
 
     const defaultConfirmOptions = {
         confirmationText: t('common:confirm'),
@@ -55,7 +58,7 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
     }, []);
 
     return (
-        <ApolloProvider client={client}>
+        <ApolloProvider client={apolloClient}>
             <ContextProvider {...initialContextProps}>
                 <ThemeProvider theme={theme}>
                     <ConfirmProvider defaultOptions={defaultConfirmOptions}>
@@ -71,10 +74,10 @@ const SkoleApp = ({ Component, apolloClient, apolloState, pageProps, isMobileGue
     );
 };
 
-SkoleApp.getInitialProps = async (ctx: AppContext): Promise<Props> => {
-    const { apolloClient } = initOnContext(ctx.ctx as ApolloContext);
-    const pageProps = (await App.getInitialProps(ctx)) as AppProps;
-    const userAgent = R.path(['ctx', 'req', 'headers', 'user-agent'], ctx) as string;
+SkoleApp.getInitialProps = async (appContext: AppContext): Promise<Props> => {
+    const appProps = (await App.getInitialProps(appContext)) as AppProps;
+    const apolloClient = initApolloClient(appContext.ctx);
+    const userAgent = R.path(['ctx', 'req', 'headers', 'user-agent'], appContext) as string;
     let user = null;
 
     try {
@@ -89,7 +92,7 @@ SkoleApp.getInitialProps = async (ctx: AppContext): Promise<Props> => {
         ? !!userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i)
         : null;
 
-    return { ...pageProps, isMobileGuess, user };
+    return { user, isMobileGuess, ...appProps };
 };
 
 export default appWithTranslation(SkoleApp);

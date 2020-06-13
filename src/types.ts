@@ -1,7 +1,7 @@
-import { ContainerProps, DrawerProps, IconButtonProps, Size, TablePaginationProps } from '@material-ui/core';
+import { ContainerProps, DrawerProps, TablePaginationProps } from '@material-ui/core';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError } from 'apollo-client';
-import { Formik, FormikActions, FormikProps } from 'formik';
+import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
 import { NextPageContext } from 'next';
 import { LinkProps } from 'next/link';
@@ -9,11 +9,6 @@ import { Dispatch, MutableRefObject, SetStateAction, SyntheticEvent } from 'reac
 import { UrlObject } from 'url';
 
 import { CommentObjectType, ErrorType, SchoolObjectType, UserObjectType } from '../generated/graphql';
-
-export interface SkolePageContext extends NextPageContext {
-    apolloClient: ApolloClient<NormalizedCacheObject>;
-    apolloState: NormalizedCacheObject;
-}
 
 export interface I18nProps {
     namespacesRequired: string[];
@@ -50,7 +45,7 @@ export interface CommentTarget {
 }
 
 export interface TopLevelCommentThreadProps {
-    initialComments: CommentObjectType[];
+    comments: CommentObjectType[];
     target: CommentTarget;
     formKey: string;
     placeholderText?: string;

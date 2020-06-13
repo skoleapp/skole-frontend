@@ -1,5 +1,5 @@
 import { Box, Tab } from '@material-ui/core';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage, NextPageContext } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,8 +15,8 @@ import {
     StyledTabs,
 } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApolloSSR, withAuthSync } from '../../lib';
-import { I18nProps, SkolePageContext } from '../../types';
+import { initApolloClient, withAuthSync } from '../../lib';
+import { I18nProps } from '../../types';
 import { useFrontendPagination, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
@@ -102,8 +102,8 @@ const StarredPage: NextPage<Props> = ({ userMe }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { apolloClient } = ctx as SkolePageContext;
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const apolloClient = initApolloClient(ctx as NextPageContext);
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['starred']) };
 
     try {
@@ -112,6 +112,6 @@ export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx =>
     } catch {
         return { props: { ...nameSpaces } };
     }
-});
+};
 
 export default withAuthSync(StarredPage);

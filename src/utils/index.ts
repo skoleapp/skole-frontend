@@ -1,4 +1,3 @@
-export { redirect } from './redirect';
 export { useForm } from './useForm';
 export { useSearch } from './useSearch';
 export { useTabs } from './useTabs';

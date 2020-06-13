@@ -14,7 +14,7 @@ import { CreateCommentForm } from './CreateCommentForm';
 import { NotFoundBox } from './NotFoundBox';
 
 export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
-    initialComments,
+    comments: initialComments,
     target,
     formKey,
     placeholderText,

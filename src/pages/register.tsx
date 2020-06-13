@@ -21,7 +21,7 @@ import {
 import { AutoCompleteField, ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useAuthContext, useNotificationsContext } from '../context';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { clientLogin } from '../lib';
+import { setTokenCookie } from '../lib';
 import { I18nProps } from '../types';
 import { useForm, useLanguageSelector } from '../utils';
 
@@ -79,7 +79,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
         } else if (!!login && !!login.errors) {
             handleMutationErrors(login.errors);
         } else if (!!login && !!login.token && !!login.user && !!register && !!register.message) {
-            clientLogin(login.token);
+            setTokenCookie(login.token);
             resetForm();
             toggleNotification(register.message);
             setUser(login.user as UserObjectType);

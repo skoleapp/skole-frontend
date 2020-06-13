@@ -8,7 +8,7 @@ import {
     TabUnselectedOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage, NextPageContext } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
@@ -47,8 +47,8 @@ import {
     usePDFViewerContext,
 } from '../../context';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApolloSSR, withAuthSync } from '../../lib';
-import { I18nProps, MaxWidth, SkolePageContext } from '../../types';
+import { initApolloClient, withAuthSync } from '../../lib';
+import { I18nProps, MaxWidth } from '../../types';
 import { mediaURL, useActionsDrawer, useInfoDrawer, useShare, useTabs, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
@@ -79,7 +79,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const isOwner = !!user && user.id === creatorId;
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
-    const numComments = comments.length;
+    const commentCount = comments.length;
     const { setDrawMode, drawMode, screenshot, setRotate } = usePDFViewerContext();
     const handleCancelDraw = (): void => setDrawMode(false);
     const { toggleCommentModal } = useCommentModalContext();
@@ -343,7 +343,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     };
 
     const discussionHeaderProps = {
-        numComments,
+        commentCount,
         renderStarButton,
         renderUpVoteButton,
         renderDownVoteButton,
@@ -366,7 +366,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const renderTabs = (
         <StyledTabs value={tabValue} onChange={handleTabChange}>
             <Tab label={t('common:resource')} />
-            <Tab label={`${t('common:discussion')} (${numComments})`} />
+            <Tab label={`${t('common:discussion')} (${commentCount})`} />
         </StyledTabs>
     );
 
@@ -488,20 +488,20 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { query, apolloClient } = ctx as SkolePageContext;
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const apolloClient = initApolloClient(ctx as NextPageContext);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
     try {
         const { data } = await apolloClient.query({
             query: ResourceDetailDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
         return { props: { ...data, ...namespaces } };
     } catch {
         return { props: { ...namespaces } };
     }
-});
+};
 
 export default withAuthSync(ResourceDetailPage);

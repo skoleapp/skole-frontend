@@ -1,12 +1,10 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage, NextPageContext } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Resizer from 'react-image-file-resizer';
-import { useNotificationsContext } from 'src/context';
-import { withApolloSSR, withAuthSync } from 'src/lib';
 import * as Yup from 'yup';
 
 import {
@@ -21,9 +19,11 @@ import {
 } from '../../generated/graphql';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
 import { env } from '../config';
+import { useNotificationsContext } from '../context';
 import { Router } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { I18nProps, SkolePageContext } from '../types';
+import { initApolloClient, withAuthSync } from '../lib';
+import { I18nProps } from '../types';
 import { useForm } from '../utils';
 
 interface UploadResourceFormValues {
@@ -253,20 +253,20 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { query, apolloClient } = ctx as SkolePageContext;
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const apolloClient = initApolloClient(ctx as NextPageContext);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
     try {
         const { data } = await apolloClient.query({
             query: CreateResourceInitialDataDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
         return { props: { ...data, ...namespaces } };
     } catch {
         return { props: { ...namespaces } };
     }
-});
+};
 
 export default withAuthSync(UploadResourcePage);

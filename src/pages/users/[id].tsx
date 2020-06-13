@@ -1,6 +1,6 @@
 import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
 import { EditOutlined } from '@material-ui/icons';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage, NextPageContext } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,9 +28,9 @@ import {
     TextLink,
 } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApolloSSR, withAuthSync } from '../../lib';
+import { initApolloClient, withAuthSync } from '../../lib';
 import { breakpoints, breakpointsNum } from '../../styles';
-import { I18nProps, MaxWidth, SkolePageContext } from '../../types';
+import { I18nProps, MaxWidth } from '../../types';
 import { mediaURL, useFrontendPagination, useMoment, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
@@ -339,20 +339,20 @@ const StyledUserPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { query, apolloClient } = ctx as SkolePageContext;
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const apolloClient = initApolloClient(ctx as NextPageContext);
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 
     try {
         const { data } = await apolloClient.query({
             query: UserDetailDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
         return { props: { ...data, ...nameSpaces } };
     } catch {
         return { props: { ...nameSpaces } };
     }
-});
+};
 
 export default withAuthSync(UserPage);

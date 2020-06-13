@@ -1,4 +1,3 @@
-import cookie from 'js-cookie';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -6,13 +5,6 @@ import React from 'react';
 import { useAuthContext } from 'src/context';
 
 import { Router } from '../i18n';
-
-export const clientLogin = (token: string): string | undefined => cookie.set('token', token, { expires: 1 }); // One month.
-
-export const clientLogout = async (): Promise<void> => {
-    cookie.remove('token');
-    localStorage.setItem('logout', String(Date.now())); // Log out from all windows.
-};
 
 // Wrap all pages that require authentication with this.
 export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
