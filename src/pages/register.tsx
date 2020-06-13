@@ -21,7 +21,7 @@ import {
 import { AutoCompleteField, ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useAuthContext, useNotificationsContext } from '../context';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { setTokenCookie } from '../lib';
+import { setTokenCookie, withUserAgent } from '../lib';
 import { I18nProps } from '../types';
 import { useForm, useLanguageSelector } from '../utils';
 
@@ -228,8 +228,8 @@ const RegisterPage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['register']) },
-});
+}));
 
 export default RegisterPage;

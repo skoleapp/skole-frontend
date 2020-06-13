@@ -37,7 +37,7 @@ import {
 } from '../../components';
 import { useAuthContext, useDeviceContext, useDiscussionContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router } from '../../i18n';
-import { initApolloClient, withAuthSync } from '../../lib';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps } from '../../types';
 import {
     useActionsDrawer,
@@ -383,8 +383,10 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(null, ctx);
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 
     try {
@@ -393,10 +395,10 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
             variables: ctx.query,
         });
 
-        return { props: { ...data, ...namespaces } };
+        return { props: { ...data, ...namespaces, initialApolloState } };
     } catch {
-        return { props: { ...namespaces } };
+        return { props: { ...namespaces, initialApolloState } };
     }
-};
+});
 
 export default withAuthSync(CourseDetailPage);

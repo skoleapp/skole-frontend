@@ -3,6 +3,7 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -11,7 +12,7 @@ import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../genera
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router } from '../../i18n';
-import { removeTokenCookie, withAuthSync } from '../../lib';
+import { removeTokenCookie, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -114,10 +115,12 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['delete-account']),
     },
-});
+}));
 
 export default withAuthSync(DeleteAccountPage);

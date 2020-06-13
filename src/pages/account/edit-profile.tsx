@@ -200,12 +200,12 @@ const EditProfilePage: NextPage<I18nProps> = () => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = withSSRAuth(
-    withUserAgent(async () => ({
-        props: {
-            namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
-        },
-    })),
-);
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
+    },
+}));
 
 export default withAuthSync(EditProfilePage);

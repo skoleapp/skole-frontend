@@ -47,7 +47,7 @@ import {
     usePDFViewerContext,
 } from '../../context';
 import { includeDefaultNamespaces } from '../../i18n';
-import { initApolloClient, withAuthSync } from '../../lib';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps, MaxWidth } from '../../types';
 import { mediaURL, useActionsDrawer, useInfoDrawer, useShare, useTabs, useVotes } from '../../utils';
 
@@ -488,8 +488,10 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(null, ctx);
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
     try {
@@ -498,10 +500,10 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
             variables: ctx.query,
         });
 
-        return { props: { ...data, ...namespaces } };
+        return { props: { ...data, ...namespaces, initialApolloState } };
     } catch {
-        return { props: { ...namespaces } };
+        return { props: { ...namespaces, initialApolloState } };
     }
-};
+});
 
 export default withAuthSync(ResourceDetailPage);

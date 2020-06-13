@@ -1,10 +1,11 @@
 import { GetServerSideProps } from 'next';
 import * as R from 'ramda';
 
-// We sniff the user agent in order to pre-populate the context value about the user's device.
-export const withUserAgent = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
+// Here we pre-populate the context value with the user's device to conditionally pre-render content.
+// Wrap all pages that support `getServerSideProps` with this.
+export const withUserAgent = (getInnerProps: GetServerSideProps): GetServerSideProps => {
     const getServerSideProps: GetServerSideProps = async ctx => {
-        const result = await getServerSidePropsInner(ctx);
+        const result = await getInnerProps(ctx);
         const userAgent = R.path(['req', 'headers', 'user-agent'], ctx) as string;
 
         const isMobileGuess = !!userAgent

@@ -9,6 +9,7 @@ import { useAuthContext } from '../context';
 import { Router } from '../i18n';
 import { initApolloClient } from './apollo';
 
+// Sync authentication between pages -> automatically redirect to login if multiple browser windows are open.
 // Wrap all pages that require authentication with this.
 export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithAuthSync: NextPage = pageProps => {
@@ -35,6 +36,7 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
     return WithAuthSync;
 };
 
+// Redirect unauthenticated users to login before rendering page.
 // Wrap `getServerSideProps` method with this for all pages that require authentication.
 export const withSSRAuth = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
     const getServerSideProps: GetServerSideProps = async ctx => {

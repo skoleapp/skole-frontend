@@ -62,6 +62,19 @@ export const initApolloClient = (
     return _apolloClient;
 };
 
+// A client side hook to retrieve apollo client with initial state from cache.
 export const useApollo = (initialState: NormalizedCacheObject): ApolloClient<NormalizedCacheObject> => {
     return useMemo(() => initApolloClient(initialState), [initialState]);
+};
+
+interface UseSSRApollo {
+    apolloClient: ApolloClient<NormalizedCacheObject>;
+    initialApolloState: NormalizedCacheObject;
+}
+
+// An SSR hook to initialize apollo client and state from cache.
+export const useSSRApollo = (ctx: SSRContext): UseSSRApollo => {
+    const apolloClient = initApolloClient(null, ctx);
+    const initialApolloState = apolloClient.cache.extract();
+    return { apolloClient, initialApolloState };
 };

@@ -5,7 +5,6 @@ import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDeviceContext } from 'src/context';
-import { initApolloClient, withAuthSync, withSSRAuth, withUserAgent } from 'src/lib';
 
 import {
     CourseObjectType,
@@ -27,6 +26,7 @@ import {
     TextLink,
 } from '../../components';
 import { includeDefaultNamespaces, Link } from '../../i18n';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps } from '../../types';
 import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useTabs } from '../../utils';
 
@@ -255,23 +255,22 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = withSSRAuth(
-    withUserAgent(async ctx => {
-        const apolloClient = initApolloClient(null, ctx);
-        const initialApolloState = apolloClient.cache.extract();
-        const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
+const wrappers = R.compose(withUserAgent, withSSRAuth);
 
-        try {
-            const { data } = await apolloClient.query({
-                query: SchoolDetailDocument,
-                variables: ctx.query,
-            });
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
+    const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 
-            return { props: { ...data, ...namespaces, initialApolloState } };
-        } catch {
-            return { props: { ...namespaces, initialApolloState } };
-        }
-    }),
-);
+    try {
+        const { data } = await apolloClient.query({
+            query: SchoolDetailDocument,
+            variables: ctx.query,
+        });
+
+        return { props: { ...data, ...namespaces, initialApolloState } };
+    } catch {
+        return { props: { ...namespaces, initialApolloState } };
+    }
+});
 
 export default withAuthSync(SchoolDetailPage);

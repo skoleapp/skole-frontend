@@ -19,13 +19,12 @@ import {
 } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage, NextPageContext } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDeviceContext } from 'src/context';
 import styled from 'styled-components';
 
 import {
@@ -56,8 +55,9 @@ import {
     StyledDrawer,
     StyledTable,
 } from '../components';
+import { useDeviceContext } from '../context';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { initApolloClient, withAuthSync } from '../lib';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../lib';
 import { I18nProps, UseDrawer } from '../types';
 import { getPaginationQuery, getQueryWithPagination, useDrawer, useForm } from '../utils';
 
@@ -481,8 +481,10 @@ const StyledSearchPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(null, ctx);
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
     try {
@@ -491,10 +493,10 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
             variables: ctx.query,
         });
 
-        return { props: { ...data, ...namespaces } };
+        return { props: { ...data, ...namespaces, initialApolloState } };
     } catch (err) {
-        return { props: { namespaces } };
+        return { props: { namespaces, initialApolloState } };
     }
-};
+});
 
 export default withAuthSync(SearchPage);

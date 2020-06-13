@@ -22,7 +22,7 @@ import { env } from '../config';
 import { useNotificationsContext } from '../context';
 import { Router } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { initApolloClient, withAuthSync } from '../lib';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../lib';
 import { I18nProps } from '../types';
 import { useForm } from '../utils';
 
@@ -253,8 +253,10 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(null, ctx);
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+    const { apolloClient } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
     try {
@@ -267,6 +269,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     } catch {
         return { props: { ...namespaces } };
     }
-};
+});
 
 export default withAuthSync(UploadResourcePage);

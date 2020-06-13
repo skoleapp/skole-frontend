@@ -9,6 +9,7 @@ import { ContactMutation, useContactMutation } from '../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../components';
 import { useNotificationsContext } from '../context';
 import { includeDefaultNamespaces } from '../i18n';
+import { withUserAgent } from '../lib';
 import { I18nProps } from '../types';
 import { useForm } from '../utils';
 
@@ -139,10 +140,10 @@ const ContactPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['contact']),
     },
-});
+}));
 
 export default ContactPage;

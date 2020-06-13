@@ -7,6 +7,7 @@ import {
     SvgIconComponent,
 } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -229,10 +230,10 @@ const StyledIndexPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = withSSRAuth(
-    withUserAgent(async () => ({
-        props: { namespacesRequired: includeDefaultNamespaces(['index']) },
-    })),
-);
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
+    props: { namespacesRequired: includeDefaultNamespaces(['index']) },
+}));
 
 export default withAuthSync(IndexPage);

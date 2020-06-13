@@ -11,12 +11,12 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { withAuthSync } from 'src/lib';
-import { I18nProps } from 'src/types';
 
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces } from '../../i18n';
+import { withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
+import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
 const VerifyAccountPage: NextPage<I18nProps> = () => {
@@ -175,10 +175,12 @@ const VerifyAccountPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['verify-account']),
     },
-});
+}));
 
 export default withAuthSync(VerifyAccountPage);
