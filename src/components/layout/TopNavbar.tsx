@@ -60,38 +60,44 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Grid>
     );
 
+    const renderSearch = !disableSearch && !!user && <TopNavbarSearchWidget />;
+
+    const renderAvatar = !!user && (
+        <>
+            <Tooltip title={t('tooltips:starred')}>
+                <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
+            </Tooltip>
+            <Tooltip title={t('tooltips:profile')}>
+                <span>
+                    <Link href="/users/[id]" as={`/users/${user.id}`}>
+                        <IconButton color="secondary">
+                            <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
+                        </IconButton>
+                    </Link>
+                </span>
+            </Tooltip>
+        </>
+    );
+
+    const renderAuthButtons = (
+        <>
+            <ButtonLink href="/login" color="secondary" endIcon={<HowToRegOutlined />}>
+                {t('common:login')}
+            </ButtonLink>
+            <ButtonLink href="/register" color="secondary" endIcon={<LibraryAddOutlined />}>
+                {t('common:register')}
+            </ButtonLink>
+        </>
+    );
+
     const renderDesktopContent = !isMobile && (
         <Grid container alignItems="center">
             <Grid item xs={7} container>
                 <Logo />
             </Grid>
             <Grid item xs={5} container alignItems="center" justify="flex-end">
-                {!disableSearch && <TopNavbarSearchWidget />}
-                {!!user ? (
-                    <>
-                        <Tooltip title={t('tooltips:starred')}>
-                            <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
-                        </Tooltip>
-                        <Tooltip title={t('tooltips:profile')}>
-                            <span>
-                                <Link href="/users/[id]" as={`/users/${user.id}`}>
-                                    <IconButton color="secondary">
-                                        <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
-                                    </IconButton>
-                                </Link>
-                            </span>
-                        </Tooltip>
-                    </>
-                ) : (
-                    <>
-                        <ButtonLink href="/login" color="secondary" endIcon={<HowToRegOutlined />}>
-                            {t('common:login')}
-                        </ButtonLink>
-                        <ButtonLink href="/register" color="secondary" endIcon={<LibraryAddOutlined />}>
-                            {t('common:register')}
-                        </ButtonLink>
-                    </>
-                )}
+                {renderSearch}
+                {renderAvatar || renderAuthButtons}
             </Grid>
         </Grid>
     );
