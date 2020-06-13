@@ -482,7 +482,7 @@ const StyledSearchPage = styled(Box)`
 `;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(ctx as NextPageContext);
+    const apolloClient = initApolloClient(null, ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
     try {

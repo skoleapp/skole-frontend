@@ -340,7 +340,7 @@ const StyledUserPage = styled(Box)`
 `;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(ctx as NextPageContext);
+    const apolloClient = initApolloClient(null, ctx);
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 
     try {

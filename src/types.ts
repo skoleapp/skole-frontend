@@ -3,8 +3,10 @@ import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
+import { IncomingMessage, ServerResponse } from 'http';
 import { NextPageContext } from 'next';
 import { LinkProps } from 'next/link';
+import { ParsedUrlQuery } from 'querystring';
 import { Dispatch, MutableRefObject, SetStateAction, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
 
@@ -209,4 +211,14 @@ export interface LTWH {
     top: number;
     width: number;
     height: number;
+}
+
+// Types for SSR context used with Next.js data fetching methods.
+export interface SSRContext {
+    req: IncomingMessage;
+    res: ServerResponse;
+    params?: ParsedUrlQuery;
+    query: ParsedUrlQuery;
+    preview?: boolean;
+    previewData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }

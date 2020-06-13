@@ -8,7 +8,7 @@ import {
     TabUnselectedOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
-import { GetServerSideProps, NextPage, NextPageContext } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
@@ -489,7 +489,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(ctx as NextPageContext);
+    const apolloClient = initApolloClient(null, ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
     try {

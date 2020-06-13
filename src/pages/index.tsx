@@ -14,7 +14,7 @@ import { UrlObject } from 'url';
 
 import { MainLayout } from '../components';
 import { includeDefaultNamespaces, Link } from '../i18n';
-import { withAuthSync } from '../lib';
+import { withAuthSync, withSSRAuth, withUserAgent } from '../lib';
 import { breakpoints } from '../styles';
 import { I18nProps } from '../types';
 import { useSearch } from '../utils';
@@ -229,8 +229,10 @@ const StyledIndexPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = async () => ({
-    props: { namespacesRequired: includeDefaultNamespaces(['index']) },
-});
+export const getServerSideProps: GetServerSideProps = withSSRAuth(
+    withUserAgent(async () => ({
+        props: { namespacesRequired: includeDefaultNamespaces(['index']) },
+    })),
+);
 
 export default withAuthSync(IndexPage);

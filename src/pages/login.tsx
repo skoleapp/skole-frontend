@@ -12,7 +12,7 @@ import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated
 import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useAuthContext, useNotificationsContext } from '../context';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { setTokenCookie } from '../lib';
+import { setTokenCookie, withUserAgent } from '../lib';
 import { I18nProps } from '../types';
 import { useAlerts, useForm, useLanguageSelector } from '../utils';
 
@@ -142,8 +142,8 @@ const LoginPage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['login']) },
-});
+}));
 
 export default LoginPage;

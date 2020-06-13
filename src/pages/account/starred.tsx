@@ -1,5 +1,5 @@
 import { Box, Tab } from '@material-ui/core';
-import { GetServerSideProps, NextPage, NextPageContext } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -103,7 +103,7 @@ const StarredPage: NextPage<Props> = ({ userMe }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(ctx as NextPageContext);
+    const apolloClient = initApolloClient(null, ctx);
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['starred']) };
 
     try {

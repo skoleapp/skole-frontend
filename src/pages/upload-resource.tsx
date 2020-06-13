@@ -1,6 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage, NextPageContext } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -254,7 +254,7 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(ctx as NextPageContext);
+    const apolloClient = initApolloClient(null, ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
     try {

@@ -1,7 +1,7 @@
 import { Box, Grid, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
 import { CloudUploadOutlined, DeleteOutline, SchoolOutlined } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
-import { GetServerSideProps, NextPage, NextPageContext } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -384,7 +384,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(ctx as NextPageContext);
+    const apolloClient = initApolloClient(null, ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
 
     try {

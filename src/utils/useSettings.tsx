@@ -129,10 +129,10 @@ export const useSettings = (modal: boolean): UseSettings => {
 
     const handleLogoutClick = async (): Promise<void> => {
         !!modal && handleClose();
+        await Router.push('/login');
         removeTokenCookie();
         setUser(null);
         await apolloClient.resetStore();
-        Router.push('/login');
         toggleNotification(t('notifications:signedOut'));
     };
 

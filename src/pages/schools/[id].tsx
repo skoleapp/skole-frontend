@@ -1,11 +1,11 @@
 import { Box, Grid, Tab, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { LocationCityOutlined } from '@material-ui/icons';
-import { GetServerSideProps, NextPage, NextPageContext } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDeviceContext } from 'src/context';
-import { initApolloClient, withAuthSync } from 'src/lib';
+import { initApolloClient, withAuthSync, withSSRAuth, withUserAgent } from 'src/lib';
 
 import {
     CourseObjectType,
@@ -255,20 +255,23 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const apolloClient = initApolloClient(ctx as NextPageContext);
-    const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
+export const getServerSideProps: GetServerSideProps = withSSRAuth(
+    withUserAgent(async ctx => {
+        const apolloClient = initApolloClient(null, ctx);
+        const initialApolloState = apolloClient.cache.extract();
+        const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 
-    try {
-        const { data } = await apolloClient.query({
-            query: SchoolDetailDocument,
-            variables: ctx.query,
-        });
+        try {
+            const { data } = await apolloClient.query({
+                query: SchoolDetailDocument,
+                variables: ctx.query,
+            });
 
-        return { props: { ...data, ...namespaces } };
-    } catch {
-        return { props: { ...namespaces } };
-    }
-};
+            return { props: { ...data, ...namespaces, initialApolloState } };
+        } catch {
+            return { props: { ...namespaces, initialApolloState } };
+        }
+    }),
+);
 
 export default withAuthSync(SchoolDetailPage);

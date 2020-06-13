@@ -1,8 +1,10 @@
-import { parse, serialize } from 'cookie';
+import { parse } from 'cookie';
+import { serialize } from 'cookie';
 import { IncomingMessage } from 'http';
+import * as R from 'ramda';
 
 const TOKEN_NAME = 'token';
-export const MAX_AGE = 60 * 60 * 24 * 30; // One month.
+const MAX_AGE = 60 * 60 * 24 * 30; // 1 month.
 
 export const setTokenCookie = (token: string): void => {
     document.cookie = serialize(TOKEN_NAME, token, {
@@ -22,12 +24,12 @@ export const removeTokenCookie = (): void => {
     });
 };
 
-const parseCookies = (req: IncomingMessage): { [key: string]: string } => {
-    const cookie = req.headers.cookie;
-    return parse(cookie || '');
+const parseCookies = (req?: IncomingMessage): { [key: string]: string } => {
+    const cookie = typeof window === 'undefined' ? R.pathOr('', ['headers', 'cookie'], req) : document.cookie;
+    return parse(cookie);
 };
 
-export const getTokenCookie = (req: IncomingMessage): string => {
+export const getTokenCookie = (req?: IncomingMessage): string => {
     const cookies = parseCookies(req);
     return cookies[TOKEN_NAME];
 };

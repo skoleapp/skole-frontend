@@ -4,20 +4,23 @@ import { ApolloLink, GraphQLRequest } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpConfig } from 'apollo-link-http-common';
 import { createUploadLink } from 'apollo-upload-client';
+import { IncomingMessage } from 'http';
 import fetch from 'isomorphic-unfetch';
-import { NextPageContext } from 'next';
 import * as R from 'ramda';
-import { i18n } from 'src/i18n';
+import { useMemo } from 'react';
+import { SSRContext } from 'src/types';
 
 import { env } from '../config';
+import { i18n } from '../i18n';
 import { getTokenCookie } from './auth-cookies';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
-const createApolloClient = (ctx?: NextPageContext): ApolloClient<NormalizedCacheObject> => {
+const createApolloClient = (ctx?: SSRContext): ApolloClient<NormalizedCacheObject> => {
     const isBrowser = typeof window !== 'undefined';
     const uri = isBrowser ? env.API_URL : env.BACKEND_URL;
-    const token = !!ctx && !!ctx.req && getTokenCookie(ctx.req);
+    const request: IncomingMessage | undefined = R.propOr(undefined, 'req', ctx);
+    const token = getTokenCookie(request);
 
     const httpLink = createUploadLink({
         uri: uri + 'graphql/',
@@ -40,8 +43,16 @@ const createApolloClient = (ctx?: NextPageContext): ApolloClient<NormalizedCache
     });
 };
 
-export const initApolloClient = (ctx?: NextPageContext): ApolloClient<NormalizedCacheObject> => {
+export const initApolloClient = (
+    initialState: NormalizedCacheObject | null = null,
+    ctx?: SSRContext,
+): ApolloClient<NormalizedCacheObject> => {
     const _apolloClient = apolloClient || createApolloClient(ctx);
+
+    // If your page has Next.js data fetching methods that use Apollo Client, the initial state gets hydrated here.
+    if (initialState) {
+        _apolloClient.cache.restore(initialState);
+    }
 
     // For SSG and SSR always create a new Apollo Client.
     if (typeof window === 'undefined') return _apolloClient;
@@ -49,4 +60,8 @@ export const initApolloClient = (ctx?: NextPageContext): ApolloClient<Normalized
     if (!apolloClient) apolloClient = _apolloClient;
 
     return _apolloClient;
+};
+
+export const useApollo = (initialState: NormalizedCacheObject): ApolloClient<NormalizedCacheObject> => {
+    return useMemo(() => initApolloClient(initialState), [initialState]);
 };
