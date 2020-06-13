@@ -5,7 +5,6 @@ import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
 import { IncomingMessage, ServerResponse } from 'http';
 import { NextPageContext } from 'next';
-import { LinkProps } from 'next/link';
 import { ParsedUrlQuery } from 'querystring';
 import { Dispatch, MutableRefObject, SetStateAction, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
@@ -191,11 +190,6 @@ export interface SkoleContextType {
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
-
-export interface StyledBreadcrumbProps {
-    linkProps: LinkProps;
-    text: string;
-}
 
 interface CustomApolloClient extends ApolloClient<NormalizedCacheObject> {
     toJSON: () => void;
