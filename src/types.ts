@@ -152,6 +152,11 @@ export interface SettingsContext {
     toggleSettings: (payload: boolean) => void;
 }
 
+export interface PDFTranslation {
+    x: number;
+    y: number;
+}
+
 export interface PDFViewerContext {
     numPages: number;
     setNumPages: Dispatch<SetStateAction<number>>;
@@ -166,6 +171,8 @@ export interface PDFViewerContext {
     setScreenshot: Dispatch<SetStateAction<string | null>>;
     scale: number;
     setScale: Dispatch<SetStateAction<number>>;
+    translation: PDFTranslation;
+    setTranslation: Dispatch<SetStateAction<PDFTranslation>>;
     fullscreen: boolean;
     setFullscreen: Dispatch<SetStateAction<boolean>>;
 }

@@ -1,4 +1,3 @@
-import Hammer from '@egjs/hammerjs';
 import { Box, Fab, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
 import {
     AddOutlined,
@@ -12,12 +11,14 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MapInteractionCSS } from 'react-map-interaction';
 import { Document, Page } from 'react-pdf';
+import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
 import { MouseSelection } from '..';
 import { useDeviceContext, usePDFViewerContext } from '../../context';
-import { LTWH } from '../../types';
+import { LTWH, PDFTranslation } from '../../types';
 import { LoadingBox } from '../shared';
 
 interface PDFViewerProps {
@@ -38,6 +39,9 @@ interface PDFPage {
     scrollIntoView: () => void;
 }
 
+type StartPointers = TouchList | MouseEvent[];
+type MouseOrTouch = MouseEvent | Touch;
+
 export const PDFViewer: React.FC<PDFViewerProps> = ({
     file,
     title,
@@ -56,10 +60,19 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         setScreenshot,
         scale,
         setScale,
+        translation,
+        setTranslation,
         fullscreen,
         setFullscreen,
         handleRotate,
     } = usePDFViewerContext();
+
+    const minScale = 1;
+    const maxScale = 5;
+    const minTransX = -Infinity;
+    const minTransY = -Infinity;
+    const maxTransX = Infinity;
+    const maxTransY = Infinity;
 
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
@@ -98,22 +111,154 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         }
     };
 
-    useEffect(() => {
-        const documentContainerNode = document.querySelector('#document-container');
-        const documentNode = document.querySelector('.react-pdf__Document');
+    const [startPointersRef, setStartPointers] = useStateRef<StartPointers>([]);
 
-        // TODO: Optimize this for a smoother pinch experience on mobile.
-        // Update document scale based on pinch events (mobile).
-        const hammer = new Hammer(documentContainerNode);
-        hammer.get('pinch').set({ enable: true });
-        hammer.on('pinchin', handleScaleDown);
-        hammer.on('pinchout', handleScaleUp);
+    const handleSetStartPointers = (pointers: TouchList | MouseEvent[]): void =>
+        setStartPointers(() => (!!pointers.length ? pointers : startPointersRef.current));
+
+    const onTouchStart = (e: TouchEvent): void => handleSetStartPointers(e.touches);
+
+    const onMouseDown = (e: MouseEvent): void => {
+        e.preventDefault();
+        handleSetStartPointers([e]);
+    };
+
+    // Return touch point on element.
+    const getTouchPoint = (t: MouseOrTouch): PDFTranslation => ({ x: t.clientX, y: t.clientY });
+
+    // Return distance between points.
+    const getDistance = (p1: PDFTranslation, p2: PDFTranslation): number => {
+        const dx = p1.x - p2.x;
+        const dy = p1.y - p2.y;
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    };
+
+    // Get distance between fingers.
+    const touchDistance = (t0: MouseOrTouch, t1: MouseOrTouch): number => {
+        const p0 = getTouchPoint(t0);
+        const p1 = getTouchPoint(t1);
+        return getDistance(p0, p1);
+    };
+
+    // Get clamped scale if maximum scale has been exceeded.
+    const getClampedScale = (min: number, value: number, max: number): number => Math.max(min, Math.min(value, max));
+
+    // Get clamped translation if translation bounds have been exceeded.
+    const getClampedTranslation = (desiredTranslation: PDFTranslation): PDFTranslation => {
+        const { x, y } = desiredTranslation;
+
+        return {
+            x: getClampedScale(minTransX, x, maxTransX),
+            y: getClampedScale(minTransY, y, maxTransY),
+        };
+    };
+
+    // Get mid point between translation points.
+    const getMidPoint = (p1: PDFTranslation, p2: PDFTranslation): PDFTranslation => ({
+        x: (p1.x + p2.x) / 2,
+        y: (p1.y + p2.y) / 2,
+    });
+
+    const getContainerBoundingClientRect = (): DOMRect => {
+        const containerNode = document.querySelector('.react-pdf__Document') as HTMLDivElement;
+        return containerNode.getBoundingClientRect();
+    };
+
+    // Return calculated translation from container position.
+    const getTranslatedOrigin = (): PDFTranslation => {
+        const clientOffset = getContainerBoundingClientRect();
+
+        return {
+            x: clientOffset.left + translation.x,
+            y: clientOffset.top + translation.y,
+        };
+    };
+
+    // From a given screen point return it as a point in the coordinate system of the given translation.
+    const getClientPosToTranslatedPos = ({ x, y }: PDFTranslation): PDFTranslation => {
+        const origin = getTranslatedOrigin();
+
+        return {
+            x: x - origin.x,
+            y: y - origin.y,
+        };
+    };
+
+    // The amount that a value of a dimension will change given a new scale.
+    const coordChange = (coordinate: number, scaleRatio: number): number => scaleRatio * coordinate - coordinate;
+
+    // Given the start touches and new e.touches, scale and translation such that the initial midpoint remains as the new midpoint.
+    // This is to achieve the effect of keeping the content that was directly in the middle of the two fingers as the focal point throughout the zoom.
+    const scaleFromMultiTouch = (e: TouchEvent): void => {
+        const startPointers = startPointersRef.current;
+        const newTouches = e.touches;
+
+        // Calculate new scale.
+        const dist0 = touchDistance(startPointers[0], startPointers[1]);
+        const dist1 = touchDistance(newTouches[0], newTouches[1]);
+        const scaleChange = dist1 / dist0;
+        const targetScale = scale + (scaleChange - 1) * scale;
+        const newScale = getClampedScale(minScale, targetScale, maxScale);
+
+        // Calculate mid points.
+        const startMidpoint = getMidPoint(getTouchPoint(startPointers[0]), getTouchPoint(startPointers[1]));
+        const newMidPoint = getMidPoint(getTouchPoint(newTouches[0]), getTouchPoint(newTouches[1]));
+
+        // The amount we need to translate by in order for the mid point to stay in the middle (before thinking about scaling factor).
+        const dragDelta = {
+            x: newMidPoint.x - startMidpoint.x,
+            y: newMidPoint.y - startMidpoint.y,
+        };
+
+        const scaleRatio = newScale / scale;
+
+        // The point originally in the middle of the fingers on the initial zoom start
+        const focalPoint = getClientPosToTranslatedPos(startMidpoint);
+
+        // The amount that the middle point has changed from this scaling
+        const focalPtDelta = {
+            x: coordChange(focalPoint.x, scaleRatio),
+            y: coordChange(focalPoint.y, scaleRatio),
+        };
+
+        // Translation is the original translation, plus the amount we dragged, minus what the scaling will do to the focal point.
+        // Subtracting the scaling factor keeps the midpoint in the middle of the touch points.
+        const newTranslation = {
+            x: translation.x - focalPtDelta.x + dragDelta.x,
+            y: translation.y - focalPtDelta.y + dragDelta.y,
+        };
+
+        setScale(() => newScale);
+        setTranslation(() => getClampedTranslation(newTranslation));
+    };
+
+    const onTouchMove = (e: TouchEvent): void => {
+        e.preventDefault();
+        const isPinchAction = e.touches.length === 2 && startPointersRef.current.length > 1;
+
+        if (isPinchAction) {
+            scaleFromMultiTouch(e);
+        }
+    };
+
+    const onTouchEnd = (e: TouchEvent): void => handleSetStartPointers(e.touches);
+
+    useEffect(() => {
+        const documentNode = document.querySelector('.react-pdf__Document');
 
         if (!!documentNode) {
             documentNode.addEventListener('wheel', onWheel as EventListener);
+            documentNode.addEventListener('touchstart', onTouchStart as EventListener);
+            documentNode.addEventListener('mousedown', onMouseDown as EventListener);
+            documentNode.addEventListener('touchmove', onTouchMove as EventListener);
+            documentNode.addEventListener('touchend', onTouchEnd as EventListener);
 
             return (): void => {
                 documentNode.removeEventListener('wheel', onWheel as EventListener);
+                documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
+                documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
+                documentNode.removeEventListener('touchmove', onTouchMove as EventListener);
+                documentNode.removeEventListener('touchend', onTouchEnd as EventListener);
             };
         }
     }, []);
@@ -254,18 +399,20 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderDocument = (
-        <Document
-            file={file}
-            onLoadSuccess={onDocumentLoadSuccess}
-            loading={renderLoading}
-            error={renderError}
-            noData={renderError}
-            rotate={rotate}
-            ref={documentRef}
-        >
-            {renderPages}
-            {renderMouseSelection}
-        </Document>
+        <MapInteractionCSS>
+            <Document
+                file={file}
+                onLoadSuccess={onDocumentLoadSuccess}
+                loading={renderLoading}
+                error={renderError}
+                noData={renderError}
+                rotate={rotate}
+                ref={documentRef}
+            >
+                {renderPages}
+                {renderMouseSelection}
+            </Document>
+        </MapInteractionCSS>
     );
 
     const renderFullscreenButton = (
@@ -302,11 +449,12 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
     return (
         <StyledPDFViewer
-            id="document-container"
             scale={scale}
+            translation={translation}
             fullscreen={fullscreen}
             drawMode={drawMode}
             isMobile={isMobile}
+            id="document-container"
         >
             {renderToolbar}
             {renderDocument}
@@ -316,7 +464,9 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledPDFViewer = styled(({ scale, fullscreen, drawMode, isMobile, ...props }) => <Box {...props} />)`
+const StyledPDFViewer = styled(({ scale, translation, fullscreen, drawMode, isMobile, ...props }) => (
+    <Box {...props} />
+))`
     position: absolute;
     width: 100%;
     height: 100%;
@@ -368,6 +518,9 @@ const StyledPDFViewer = styled(({ scale, fullscreen, drawMode, isMobile, ...prop
 
             // Automatically update width based on scale and fullscreen state.
             width: ${({ scale, fullscreen }): string => (fullscreen ? '100%' : `calc(100% * ${scale})`)};
+
+            transform: ${({ scale, translation }): string =>
+                `translate(${translation.x}px, ${translation.y}px) scale(${scale})`};
 
             .react-pdf__Page__canvas {
                 margin: 0 auto;

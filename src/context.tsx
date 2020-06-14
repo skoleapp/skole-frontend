@@ -56,6 +56,8 @@ const SkolePageContext = createContext<SkoleContextType>({
         setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         scale: 1.0,
         setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        translation: { x: 0, y: 0 },
+        setTranslation: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         fullscreen: false,
         setFullscreen: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
@@ -161,6 +163,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
     const [scale, setScale] = useState(1.0);
+    const [translation, setTranslation] = useState({ x: 0, y: 0 });
     const [fullscreen, setFullscreen] = useState(false);
     const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
@@ -207,6 +210,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setScreenshot,
             scale,
             setScale,
+            translation,
+            setTranslation,
             fullscreen,
             setFullscreen,
         },
