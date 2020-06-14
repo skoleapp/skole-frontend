@@ -16,6 +16,9 @@ import {
     SettingsContext,
     SkoleContextType,
 } from './types';
+import { useStateRef } from './utils';
+
+const initialTranslation = { x: 0, y: 0 };
 
 const SkolePageContext = createContext<SkoleContextType>({
     auth: {
@@ -54,10 +57,11 @@ const SkolePageContext = createContext<SkoleContextType>({
         setDrawMode: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         screenshot: null,
         setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        scale: 1.0,
+        scaleRef: 1.0,
         setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        translation: { x: 0, y: 0 },
+        translation: initialTranslation,
         setTranslation: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        resetTranslation: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         fullscreen: false,
         setFullscreen: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
@@ -162,8 +166,9 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [rotate, setRotate] = useState(0);
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
-    const [scale, setScale] = useState(1.0);
-    const [translation, setTranslation] = useState({ x: 0, y: 0 });
+    const [scaleRef, setScale] = useStateRef(1.0);
+    const [translation, setTranslation] = useState(initialTranslation);
+    const resetTranslation = (): void => setTranslation(initialTranslation);
     const [fullscreen, setFullscreen] = useState(false);
     const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
@@ -208,10 +213,11 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setDrawMode,
             screenshot,
             setScreenshot,
-            scale,
+            scaleRef,
             setScale,
             translation,
             setTranslation,
+            resetTranslation,
             fullscreen,
             setFullscreen,
         },

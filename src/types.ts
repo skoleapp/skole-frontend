@@ -169,10 +169,11 @@ export interface PDFViewerContext {
     setDrawMode: Dispatch<SetStateAction<boolean>>;
     screenshot: string | null;
     setScreenshot: Dispatch<SetStateAction<string | null>>;
-    scale: number;
+    scaleRef: MutableRefObject<number>;
     setScale: Dispatch<SetStateAction<number>>;
     translation: PDFTranslation;
     setTranslation: Dispatch<SetStateAction<PDFTranslation>>;
+    resetTranslation: () => void;
     fullscreen: boolean;
     setFullscreen: Dispatch<SetStateAction<boolean>>;
 }

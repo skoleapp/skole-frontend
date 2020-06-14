@@ -9,9 +9,9 @@ import {
 } from '@material-ui/icons';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import * as R from 'ramda';
-import React, { ChangeEvent, useEffect, useRef } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MapInteractionCSS } from 'react-map-interaction';
+// import { MapInteractionCSS } from 'react-map-interaction';
 import { Document, Page } from 'react-pdf';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
@@ -58,10 +58,11 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         rotate,
         drawMode,
         setScreenshot,
-        scale,
+        scaleRef,
         setScale,
         translation,
         setTranslation,
+        resetTranslation,
         fullscreen,
         setFullscreen,
         handleRotate,
@@ -78,6 +79,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     const isMobile = useDeviceContext();
     const documentRef = useRef<Document>(null);
     const disableFullscreen = (): false | void => fullscreen && setFullscreen(false);
+    const [ctrlKey, setCtrlKey] = useState(false);
 
     const toggleFullScreen = (): void => {
         // Set scale to 75% when exiting fullscreen.
@@ -87,6 +89,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             setScale(1.0);
         }
 
+        resetTranslation();
         setFullscreen(!fullscreen);
     };
 
@@ -102,12 +105,17 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         setScale(scale => (scale > 0.5 ? scale - 0.05 : scale));
     };
 
-    // Update document scale based on mouse wheel events.
-    const onWheel = (e: WheelEvent): void => {
-        const { ctrlKey, deltaY } = e;
+    // Change cursor mode when CTRL key is pressed.
+    const onKeyDown = (e: KeyboardEvent): void => {
+        if (e.ctrlKey) {
+            setCtrlKey(true);
+        }
+    };
 
-        if (ctrlKey) {
-            deltaY < 0 ? handleScaleUp() : handleScaleDown();
+    // Reset cursor mode when CTRL key is released.
+    const onKeyUp = (e: KeyboardEvent): void => {
+        if (e.key == 'Control') {
+            setCtrlKey(false);
         }
     };
 
@@ -115,13 +123,6 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
     const handleSetStartPointers = (pointers: TouchList | MouseEvent[]): void =>
         setStartPointers(() => (!!pointers.length ? pointers : startPointersRef.current));
-
-    const onTouchStart = (e: TouchEvent): void => handleSetStartPointers(e.touches);
-
-    const onMouseDown = (e: MouseEvent): void => {
-        e.preventDefault();
-        handleSetStartPointers([e]);
-    };
 
     // Return touch point on element.
     const getTouchPoint = (t: MouseOrTouch): PDFTranslation => ({ x: t.clientX, y: t.clientY });
@@ -191,6 +192,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     // This is to achieve the effect of keeping the content that was directly in the middle of the two fingers as the focal point throughout the zoom.
     const scaleFromMultiTouch = (e: TouchEvent): void => {
         const startPointers = startPointersRef.current;
+        const scale = scaleRef.current;
         const newTouches = e.touches;
 
         // Calculate new scale.
@@ -232,8 +234,51 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         setTranslation(() => getClampedTranslation(newTranslation));
     };
 
-    const onTouchMove = (e: TouchEvent): void => {
+    // Scale the document from a given point where cursor is upon mouse wheel press.
+    const scaleFromPoint = (newScale: number, focalPoint: PDFTranslation): void => {
+        const scale = scaleRef.current;
+        const scaleRatio = newScale / (scale !== 0 ? scale : 1);
+
+        const focalPointDelta = {
+            x: coordChange(focalPoint.x, scaleRatio),
+            y: coordChange(focalPoint.y, scaleRatio),
+        };
+
+        const newTranslation = {
+            x: translation.x - focalPointDelta.x,
+            y: translation.y - focalPointDelta.y,
+        };
+
+        setScale(() => newScale);
+        setTranslation(() => getClampedTranslation(newTranslation));
+    };
+
+    // Update document scale based on mouse wheel events.
+    const onWheel = (e: WheelEvent): void => {
+        if (e.ctrlKey) {
+            // e.preventDefault();
+            // deltaY < 0 ? handleScaleUp() : handleScaleDown();
+
+            disableFullscreen();
+            e.preventDefault(); // Disables scroll behavior.
+            e.stopPropagation();
+            // const scaleChange = 2 ** (e.deltaY * 0.002);
+            const scaleChange = e.deltaY < 0 ? 0.05 : -0.05;
+            const newScale = getClampedScale(minScale, scaleRef.current + scaleChange, maxScale);
+            const mousePos = getClientPosToTranslatedPos({ x: e.clientX, y: e.clientY });
+            scaleFromPoint(newScale, mousePos);
+        }
+    };
+
+    const onTouchStart = (e: TouchEvent): void => handleSetStartPointers(e.touches);
+
+    const onMouseDown = (e: MouseEvent): void => {
         e.preventDefault();
+        handleSetStartPointers([e]);
+    };
+
+    const onTouchMove = (e: TouchEvent): void => {
+        // e.preventDefault();
         const isPinchAction = e.touches.length === 2 && startPointersRef.current.length > 1;
 
         if (isPinchAction) {
@@ -246,21 +291,29 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     useEffect(() => {
         const documentNode = document.querySelector('.react-pdf__Document');
 
+        document.addEventListener('keydown', onKeyDown);
+        document.addEventListener('keyup', onKeyUp);
+
         if (!!documentNode) {
             documentNode.addEventListener('wheel', onWheel as EventListener);
             documentNode.addEventListener('touchstart', onTouchStart as EventListener);
             documentNode.addEventListener('mousedown', onMouseDown as EventListener);
             documentNode.addEventListener('touchmove', onTouchMove as EventListener);
             documentNode.addEventListener('touchend', onTouchEnd as EventListener);
+        }
 
-            return (): void => {
+        return (): void => {
+            document.removeEventListener('keydown', onKeyDown);
+            document.removeEventListener('keyup', onKeyUp);
+
+            if (!!documentNode) {
                 documentNode.removeEventListener('wheel', onWheel as EventListener);
                 documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
                 documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
                 documentNode.removeEventListener('touchmove', onTouchMove as EventListener);
                 documentNode.removeEventListener('touchend', onTouchEnd as EventListener);
-            };
-        }
+            }
+        };
     }, []);
 
     // Scroll into page from given page number.
@@ -268,7 +321,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         const val = Number(e.target.value);
         setPageNumber(val);
         const page: PDFPage | undefined = R.path(['pages', val - 1], documentRef.current);
-        page && page.scrollIntoView();
+        page && page.scrollIntoView(); // TODO: Find a way to use the `smooth` behavior.
         window.scrollTo(0, 0); // Prevent window scrolling.
     };
 
@@ -325,7 +378,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     };
 
     const renderPages = Array.from(new Array(numPages), (_, index) => (
-        <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scale} renderTextLayer={false} />
+        <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scaleRef.current} renderTextLayer={false} />
     ));
 
     const renderMouseSelection = <MouseSelection onSelection={handleSelection} />;
@@ -399,20 +452,18 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderDocument = (
-        <MapInteractionCSS>
-            <Document
-                file={file}
-                onLoadSuccess={onDocumentLoadSuccess}
-                loading={renderLoading}
-                error={renderError}
-                noData={renderError}
-                rotate={rotate}
-                ref={documentRef}
-            >
-                {renderPages}
-                {renderMouseSelection}
-            </Document>
-        </MapInteractionCSS>
+        <Document
+            file={file}
+            onLoadSuccess={onDocumentLoadSuccess}
+            loading={renderLoading}
+            error={renderError}
+            noData={renderError}
+            rotate={rotate}
+            ref={documentRef}
+        >
+            {renderPages}
+            {renderMouseSelection}
+        </Document>
     );
 
     const renderFullscreenButton = (
@@ -449,11 +500,12 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
     return (
         <StyledPDFViewer
-            scale={scale}
+            scale={scaleRef.current}
             translation={translation}
             fullscreen={fullscreen}
             drawMode={drawMode}
             isMobile={isMobile}
+            ctrlKey={ctrlKey}
             id="document-container"
         >
             {renderToolbar}
@@ -464,7 +516,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledPDFViewer = styled(({ scale, translation, fullscreen, drawMode, isMobile, ...props }) => (
+const StyledPDFViewer = styled(({ scale, translation, fullscreen, drawMode, isMobile, ctrlKey, ...props }) => (
     <Box {...props} />
 ))`
     position: absolute;
@@ -508,6 +560,9 @@ const StyledPDFViewer = styled(({ scale, translation, fullscreen, drawMode, isMo
         background-color: var(--gray-light);
         position: relative;
 
+        // On desktop show different cursor when CTRL key is pressed.
+        cursor: ${({ ctrlKey }): string => (ctrlKey ? 'all-scroll' : 'inherit')};
+
         // Disable scrolling when draw mode is on on mobile.
         overflow: ${({ drawMode, isMobile }): string => (drawMode && isMobile ? 'hidden' : 'auto')};
 
@@ -519,7 +574,7 @@ const StyledPDFViewer = styled(({ scale, translation, fullscreen, drawMode, isMo
             // Automatically update width based on scale and fullscreen state.
             width: ${({ scale, fullscreen }): string => (fullscreen ? '100%' : `calc(100% * ${scale})`)};
 
-            transform: ${({ scale, translation }): string =>
+            // transform: ${({ scale, translation }): string =>
                 `translate(${translation.x}px, ${translation.y}px) scale(${scale})`};
 
             .react-pdf__Page__canvas {
