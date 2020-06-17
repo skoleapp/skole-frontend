@@ -11,7 +11,6 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-// import { MapInteractionCSS } from 'react-map-interaction';
 import { Document, Page } from 'react-pdf';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
@@ -288,6 +287,30 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
     const onTouchEnd = (e: TouchEvent): void => handleSetStartPointers(e.touches);
 
+    const isElementInViewport = (el: Element): boolean => {
+        const rect = el.getBoundingClientRect();
+
+        return (
+            rect.bottom >= 0 &&
+            rect.right >= 0 &&
+            rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.left <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    };
+
+    const onScroll = (): void => {
+        const pages = document.querySelectorAll('.react-pdf__Page');
+        const currentPage = Array.from(pages).find(el => !!isElementInViewport(el));
+
+        console.log(currentPage);
+
+        if (!!currentPage) {
+            const pageNumber = currentPage.getAttribute('data-page-number');
+            console.log('number', pageNumber);
+            setPageNumber(Number(pageNumber));
+        }
+    };
+
     useEffect(() => {
         const documentNode = document.querySelector('.react-pdf__Document');
 
@@ -295,6 +318,10 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         document.addEventListener('keyup', onKeyUp);
 
         if (!!documentNode) {
+            // Update current page when scrolling/resizing.
+            documentNode.addEventListener('scroll', onScroll);
+            documentNode.addEventListener('resize', onScroll);
+
             documentNode.addEventListener('wheel', onWheel as EventListener);
             documentNode.addEventListener('touchstart', onTouchStart as EventListener);
             documentNode.addEventListener('mousedown', onMouseDown as EventListener);
@@ -377,8 +404,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         }
     };
 
-    const renderPages = Array.from(new Array(numPages), (_, index) => (
-        <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={scaleRef.current} renderTextLayer={false} />
+    const renderPages = Array.from(new Array(numPages), (_, i) => (
+        <Page key={`page_${i + 1}`} pageNumber={i + 1} scale={scaleRef.current} renderTextLayer={false} />
     ));
 
     const renderMouseSelection = <MouseSelection onSelection={handleSelection} />;
