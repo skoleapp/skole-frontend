@@ -157,6 +157,8 @@ export interface PDFTranslation {
     y: number;
 }
 
+export type StartPointers = TouchList | MouseEvent[];
+
 export interface PDFViewerContext {
     numPages: number;
     setNumPages: Dispatch<SetStateAction<number>>;
@@ -169,13 +171,17 @@ export interface PDFViewerContext {
     setDrawMode: Dispatch<SetStateAction<boolean>>;
     screenshot: string | null;
     setScreenshot: Dispatch<SetStateAction<string | null>>;
-    scaleRef: MutableRefObject<number>;
+    scale: number;
     setScale: Dispatch<SetStateAction<number>>;
     translation: PDFTranslation;
     setTranslation: Dispatch<SetStateAction<PDFTranslation>>;
     resetTranslation: () => void;
     fullscreen: boolean;
     setFullscreen: Dispatch<SetStateAction<boolean>>;
+    ctrlKey: boolean;
+    setCtrlKey: Dispatch<SetStateAction<boolean>>;
+    startPointers: StartPointers;
+    setStartPointers: Dispatch<SetStateAction<StartPointers>>;
 }
 
 export interface DiscussionContext {
