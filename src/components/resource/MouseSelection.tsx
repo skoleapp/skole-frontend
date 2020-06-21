@@ -17,15 +17,16 @@ interface State {
     end: Coords | null;
 }
 
-interface MouseSelectionProps {
-    onSelection: (startTarget: HTMLElement, boundingRect: LTWH) => void;
+interface PageFromElement {
+    node: HTMLElement;
+    number: number;
 }
 
 const initialState = { start: null, end: null, locked: false };
 
-export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) => {
+export const MouseSelection: React.FC = () => {
     const isMobile = useDeviceContext();
-    const { drawMode, setDrawMode } = usePDFViewerContext();
+    const { drawMode, setDrawMode, setScreenshot } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // Need to use mutable ref instead of immutable state.
     const [drawingAllowedRef, setDrawingAllowedRef] = useStateRef(false);
     const { start, end } = stateRef.current;
@@ -38,6 +39,52 @@ export const MouseSelection: React.FC<MouseSelectionProps> = ({ onSelection }) =
         width: Math.abs(end.x - start.x),
         height: Math.abs(end.y - start.y),
     });
+
+    // Find closest page canvas from DOM node.
+    const getPageFromElement = (target: HTMLElement): PageFromElement | null => {
+        const node = target.closest('.react-pdf__Page');
+
+        if (!!(node instanceof HTMLElement)) {
+            const number = Number(node.dataset.pageNumber);
+            return { node, number };
+        } else {
+            return null;
+        }
+    };
+
+    // Get closest PDF page and take screenshot of selected area.
+    const getScreenshot = (target: HTMLElement, position: LTWH): string | null => {
+        const canvas = target.closest('canvas');
+        const { left, top, width, height } = position;
+        const newCanvas = document.createElement('canvas');
+        newCanvas.width = width;
+        newCanvas.height = height;
+        const newCanvasContext = newCanvas.getContext('2d');
+
+        if (!!newCanvas && !!newCanvasContext && !!canvas) {
+            // FIXME: This might cause issues on some small devices, resulting in misaligned screenshots.
+            const dpr: number = window.devicePixelRatio;
+            newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
+            return newCanvas.toDataURL('image/jpeg');
+        } else {
+            return null;
+        }
+    };
+
+    const onSelection = (startTarget: HTMLElement, boundingRect: LTWH): void => {
+        const page = getPageFromElement(startTarget);
+
+        if (!!page) {
+            const pageBoundingRect = {
+                ...boundingRect,
+                top: boundingRect.top - page.node.offsetTop,
+                left: boundingRect.left - page.node.offsetLeft,
+            };
+
+            const screenshot = getScreenshot(startTarget, pageBoundingRect);
+            setScreenshot(screenshot);
+        }
+    };
 
     useEffect(() => {
         const container = document.querySelector('.react-pdf__Document');

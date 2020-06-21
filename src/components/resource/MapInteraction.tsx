@@ -1,51 +1,31 @@
-import { Box } from '@material-ui/core';
-import React, { ReactElement, useEffect, useState } from 'react';
+import { Box, Fab, Tooltip } from '@material-ui/core';
+import { AddOutlined, FullscreenExitOutlined, FullscreenOutlined, RemoveOutlined } from '@material-ui/icons';
+import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { useDeviceContext, usePDFViewerContext } from '../../context';
-import { PDFTranslation } from '../../types';
+import { MapInteractionProps, PDFTranslation } from '../../types';
 
+type StartPointers = TouchList | MouseEvent[];
 type MouseOrTouch = MouseEvent | Touch;
 
-interface Props {
-    children: ReactElement;
-}
-
-export const MapInteraction: React.FC<Props> = ({ children }) => {
-    const {
-        translation,
-        setTranslation,
-        scale,
-        setScale,
-        setCtrlKey,
-        drawMode,
-        fullscreen,
-        ctrlKey,
-        startPointers,
-        setStartPointers,
-    } = usePDFViewerContext();
-
+export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, scale, onChange, children }) => {
+    const { t } = useTranslation();
+    const { drawMode } = usePDFViewerContext();
     const isMobile = useDeviceContext();
-    const minScale = 1;
-    const maxScale = 5;
+    const ref = useRef<HTMLDivElement | null>(null);
+    const [fullscreen, setFullscreen] = useState(false);
+    const [startPointers, setStartPointers] = useState<StartPointers>([]);
+    const minScale = 0.75;
+    const maxScale = 2.5;
     const minTransX = -Infinity;
     const minTransY = -Infinity;
     const maxTransX = Infinity;
     const maxTransY = Infinity;
+    const defaultTranslation = { x: 0, y: 0 };
 
-    // Change cursor mode when CTRL key is pressed.
-    const onKeyDown = (e: KeyboardEvent): void => {
-        if (e.ctrlKey) {
-            setCtrlKey(true);
-        }
-    };
-
-    // Reset cursor mode when CTRL key is released.
-    const onKeyUp = (e: KeyboardEvent): void => {
-        if (e.key == 'Control') {
-            setCtrlKey(false);
-        }
-    };
+    const disableFullscreen = (): false | void => setFullscreen(fullscreen => fullscreen && false);
 
     const handleSetStartPointers = (pointers: TouchList | MouseEvent[]): void =>
         setStartPointers(() => (!!pointers.length ? pointers : startPointers));
@@ -87,7 +67,7 @@ export const MapInteraction: React.FC<Props> = ({ children }) => {
     });
 
     const getContainerBoundingClientRect = (): DOMRect => {
-        const containerNode = document.querySelector('.react-pdf__Document') as HTMLDivElement;
+        const containerNode = ref.current as HTMLDivElement;
         return containerNode.getBoundingClientRect();
     };
 
@@ -154,8 +134,7 @@ export const MapInteraction: React.FC<Props> = ({ children }) => {
             y: translation.y - focalPtDelta.y + dragDelta.y,
         };
 
-        setScale(() => newScale);
-        setTranslation(() => getClampedTranslation(newTranslation));
+        onChange({ scale: newScale, translation: getClampedTranslation(newTranslation) });
     };
 
     // Scale the document from a given point where cursor is upon mouse wheel press.
@@ -172,22 +151,17 @@ export const MapInteraction: React.FC<Props> = ({ children }) => {
             y: translation.y - focalPointDelta.y,
         };
 
-        setScale(() => newScale);
-        setTranslation(() => getClampedTranslation(newTranslation));
+        onChange({ scale: newScale, translation: getClampedTranslation(newTranslation) });
     };
 
     // Update document scale based on mouse wheel events.
     const onWheel = (e: WheelEvent): void => {
         if (e.ctrlKey) {
-            // e.preventDefault();
-            // e.deltaY < 0 ? handleScaleUp() : handleScaleDown();
-
-            // disableFullscreen();
+            disableFullscreen();
             e.preventDefault(); // Disables scroll behavior.
-            e.stopPropagation();
+            // e.stopPropagation();
             const scaleChange = 2 ** (e.deltaY * 0.002);
-            // const scaleChange = e.deltaY < 0 ? 0.05 : -0.05;
-            const newScale = getClampedScale(minScale, scale + scaleChange, maxScale);
+            const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
             const mousePos = getClientPosToTranslatedPos({ x: e.clientX, y: e.clientY });
             scaleFromPoint(newScale, mousePos);
         }
@@ -214,80 +188,116 @@ export const MapInteraction: React.FC<Props> = ({ children }) => {
     useEffect(() => {
         const documentNode = document.querySelector('.react-pdf__Document');
 
-        document.addEventListener('keydown', onKeyDown);
-        document.addEventListener('keyup', onKeyUp);
-
         if (!!documentNode) {
             // TODO: Add a listener that updates the page number based on scroll position.
             documentNode.addEventListener('wheel', onWheel as EventListener);
-            documentNode.addEventListener('touchstart', onTouchStart as EventListener);
-            documentNode.addEventListener('mousedown', onMouseDown as EventListener);
-            documentNode.addEventListener('touchmove', onTouchMove as EventListener);
-            documentNode.addEventListener('touchend', onTouchEnd as EventListener);
+            // documentNode.addEventListener('touchstart', onTouchStart as EventListener);
+            // documentNode.addEventListener('mousedown', onMouseDown as EventListener);
+            // documentNode.addEventListener('touchmove', onTouchMove as EventListener);
+            // documentNode.addEventListener('touchend', onTouchEnd as EventListener);
+
+            return (): void => {
+                documentNode.removeEventListener('wheel', onWheel as EventListener);
+                // documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
+                // documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
+                // documentNode.removeEventListener('touchmove', onTouchMove as EventListener);
+                // documentNode.removeEventListener('touchend', onTouchEnd as EventListener);
+            };
+        }
+    }, [translation, scale]);
+
+    const toggleFullScreen = (): void => {
+        let scale;
+
+        if (fullscreen) {
+            scale = 0.75;
+        } else {
+            scale = 1.0;
         }
 
-        return (): void => {
-            document.removeEventListener('keydown', onKeyDown);
-            document.removeEventListener('keyup', onKeyUp);
+        setFullscreen(!fullscreen);
+        onChange({ translation: defaultTranslation, scale });
+    };
 
-            if (!!documentNode) {
-                documentNode.removeEventListener('wheel', onWheel as EventListener);
-                documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
-                documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
-                documentNode.removeEventListener('touchmove', onTouchMove as EventListener);
-                documentNode.removeEventListener('touchend', onTouchEnd as EventListener);
-            }
-        };
-    }, []);
+    // Scale up by 5% if under limit.
+    const scaleUp = (): void => {
+        disableFullscreen();
+        const newScale = scale < maxScale ? scale + 0.05 : scale;
+        onChange({ translation: defaultTranslation, scale: newScale });
+    };
+
+    // Scale down by 5% if over limit.
+    const scaleDown = (): void => {
+        disableFullscreen();
+        const newScale = scale > minScale ? scale - 0.05 : scale;
+        onChange({ translation: defaultTranslation, scale: newScale });
+    };
+
+    const renderFullscreenButton = (
+        <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
+            <Fab size="small" color="secondary" onClick={toggleFullScreen}>
+                {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+            </Fab>
+        </Tooltip>
+    );
+
+    const renderDownscaleButton = (
+        <Tooltip title={t('tooltips:zoomIn')}>
+            <Fab size="small" color="secondary" onClick={scaleUp}>
+                <AddOutlined />
+            </Fab>
+        </Tooltip>
+    );
+
+    const renderUpscaleButton = (
+        <Tooltip title={t('tooltips:zoomOut')}>
+            <Fab size="small" color="secondary" onClick={scaleDown}>
+                <RemoveOutlined />
+            </Fab>
+        </Tooltip>
+    );
+
+    const renderControls = !isMobile && !drawMode && (
+        <Box id="controls">
+            {renderFullscreenButton}
+            {renderDownscaleButton}
+            {renderUpscaleButton}
+        </Box>
+    );
+
+    // This is a little trick to allow the following UX:
+    // We want the parent of this component to decide if elements inside the map are clickable.
+    // Normally, you wouldn't want to trigger a click event when the user *drags* on an element (only if they click and then release w/o dragging at all).
+    // However we don't want to assume this behavior here, so we call `preventDefault` and then let the parent check `e.defaultPrevented`.
+    // That value being true means that we are signalling that a drag event ended, not a click.
+    // const handleEventCapture = () => {};
 
     return (
         <StyledMapInteraction
-            scale={scale}
-            translation={translation}
-            fullscreen={fullscreen}
-            drawMode={drawMode}
-            isMobile={isMobile}
-            ctrlKey={ctrlKey}
+            ref={ref}
+            // onClickCapture={handleEventCapture}
+            // onTouchEndCapture={handleEventCapture}
         >
-            {children}
+            {children({ translation: getClampedTranslation(translation), scale })}
+            {renderControls}
         </StyledMapInteraction>
     );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledMapInteraction = styled(({ scale, translation, fullscreen, drawMode, isMobile, ctrlKey, ...props }) => (
-    <Box {...props} />
-))`
-.react-pdf__Document {
+const StyledMapInteraction = styled(Box)`
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--gray-light);
     position: relative;
 
-    // On desktop show different cursor when CTRL key is pressed.
-    cursor: ${({ ctrlKey }): string => (ctrlKey ? 'all-scroll' : 'inherit')};
-
-    // Disable scrolling when draw mode is on on mobile.
-    overflow: ${({ drawMode, isMobile }): string => (drawMode && isMobile ? 'hidden' : 'auto')};
-
-    .react-pdf__Page {
-        position: static !important;
-        margin: 0 auto;
+    #controls {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
         display: flex;
+        flex-direction: column;
+        padding: 0.5rem;
 
-        // Automatically update width based on scale and fullscreen state.
-        width: ${({ scale, fullscreen }): string => (fullscreen ? '100%' : `calc(100% * ${scale})`)};
-
-        // transform: ${({ scale, translation }): string =>
-            `translate(${translation.x}px, ${translation.y}px) scale(${scale})`};
-
-        .react-pdf__Page__canvas {
-            margin: 0 auto;
-            height: auto !important;
-            width: ${({ scale, fullscreen }): string => (fullscreen ? '100%' : `calc(100% * ${scale})`)} !important;
+        .MuiFab-root {
+            margin: 0.5rem;
         }
     }
-}
 `;

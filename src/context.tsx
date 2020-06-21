@@ -15,10 +15,7 @@ import {
     PDFViewerContext,
     SettingsContext,
     SkoleContextType,
-    StartPointers,
 } from './types';
-
-const initialTranslation = { x: 0, y: 0 };
 
 const SkolePageContext = createContext<SkoleContextType>({
     auth: {
@@ -46,28 +43,10 @@ const SkolePageContext = createContext<SkoleContextType>({
         toggleSettings: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     pdfViewer: {
-        numPages: 1,
-        setNumPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        pageNumber: 1,
-        setPageNumber: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        rotate: 0,
-        setRotate: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        handleRotate: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         drawMode: false,
         setDrawMode: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         screenshot: null,
         setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        scale: 1.0,
-        setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        translation: initialTranslation,
-        setTranslation: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        resetTranslation: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        fullscreen: false,
-        setFullscreen: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        ctrlKey: false,
-        setCtrlKey: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        startPointers: [],
-        setStartPointers: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
     isMobileGuess: null,
     discussion: {
@@ -165,18 +144,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [settingsOpen, setSettingsOpen] = useState(false);
     const toggleSettings = (open: boolean): void => setSettingsOpen(open);
 
-    const [numPages, setNumPages] = useState(1);
-    const [pageNumber, setPageNumber] = useState(1);
-    const [rotate, setRotate] = useState(0);
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
-    const [scale, setScale] = useState(1.0);
-    const [translation, setTranslation] = useState(initialTranslation);
-    const resetTranslation = (): void => setTranslation(() => initialTranslation);
-    const [fullscreen, setFullscreen] = useState(false);
-    const handleRotate = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
-    const [ctrlKey, setCtrlKey] = useState(false);
-    const [startPointers, setStartPointers] = useState<StartPointers>([]);
 
     const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]);
     const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
@@ -208,28 +177,10 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             toggleSettings,
         },
         pdfViewer: {
-            numPages,
-            setNumPages,
-            pageNumber,
-            setPageNumber,
-            rotate,
-            setRotate,
-            handleRotate,
             drawMode,
             setDrawMode,
             screenshot,
             setScreenshot,
-            scale,
-            setScale,
-            translation,
-            setTranslation,
-            resetTranslation,
-            fullscreen,
-            setFullscreen,
-            ctrlKey,
-            setCtrlKey,
-            startPointers,
-            setStartPointers,
         },
         isMobileGuess,
         discussion: {

@@ -6,7 +6,7 @@ import Maybe from 'graphql/tsutils/Maybe';
 import { IncomingMessage, ServerResponse } from 'http';
 import { NextPageContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { Dispatch, MutableRefObject, SetStateAction, SyntheticEvent } from 'react';
+import { Dispatch, MutableRefObject, ReactElement, SetStateAction, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
 
 import { CommentObjectType, ErrorType, SchoolObjectType, UserObjectType } from '../generated/graphql';
@@ -157,31 +157,11 @@ export interface PDFTranslation {
     y: number;
 }
 
-export type StartPointers = TouchList | MouseEvent[];
-
 export interface PDFViewerContext {
-    numPages: number;
-    setNumPages: Dispatch<SetStateAction<number>>;
-    pageNumber: number;
-    setPageNumber: Dispatch<SetStateAction<number>>;
-    rotate: number;
-    setRotate: Dispatch<SetStateAction<number>>;
-    handleRotate: () => void;
     drawMode: boolean;
     setDrawMode: Dispatch<SetStateAction<boolean>>;
     screenshot: string | null;
     setScreenshot: Dispatch<SetStateAction<string | null>>;
-    scale: number;
-    setScale: Dispatch<SetStateAction<number>>;
-    translation: PDFTranslation;
-    setTranslation: Dispatch<SetStateAction<PDFTranslation>>;
-    resetTranslation: () => void;
-    fullscreen: boolean;
-    setFullscreen: Dispatch<SetStateAction<boolean>>;
-    ctrlKey: boolean;
-    setCtrlKey: Dispatch<SetStateAction<boolean>>;
-    startPointers: StartPointers;
-    setStartPointers: Dispatch<SetStateAction<StartPointers>>;
 }
 
 export interface DiscussionContext {
@@ -229,4 +209,16 @@ export interface SSRContext {
     query: ParsedUrlQuery;
     preview?: boolean;
     previewData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+export interface MapPositionProps {
+    scale: number;
+    translation: PDFTranslation;
+}
+
+export interface MapInteractionProps {
+    onChange: (props: MapPositionProps) => void;
+    children: (props: MapPositionProps) => ReactElement;
+    translation: PDFTranslation;
+    scale: number;
 }
