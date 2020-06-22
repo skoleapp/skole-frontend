@@ -37,7 +37,7 @@ const ChangePasswordPage: NextPage<I18nProps> = () => {
     const validationSchema = Yup.object().shape({
         oldPassword: Yup.string().required(t('validation:required')),
         newPassword: Yup.string()
-            .min(6, t('validation:passwordTooShort'))
+            .min(8, t('validation:passwordTooShort'))
             .required(t('validation:required')),
         confirmNewPassword: Yup.string()
             .oneOf([Yup.ref('newPassword'), null], t('validation:passwordsNotMatch'))
