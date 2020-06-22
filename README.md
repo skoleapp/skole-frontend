@@ -9,4 +9,3 @@
 -   To run linting (preferably outside container), run `yarn lint:fix`.
 -   To generate graphql code (inside container), run `yarn gen`.
 -   To format project, run `yarn format`.
-
