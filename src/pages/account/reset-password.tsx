@@ -72,7 +72,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
 
     const passwordValidationSchema = Yup.object().shape({
         newPassword: Yup.string()
-            .min(6, t('validation:passwordTooShort'))
+            .min(8, t('validation:passwordTooShort'))
             .required(t('validation:required')),
         confirmNewPassword: Yup.string()
             .oneOf([Yup.ref('newPassword'), null], t('validation:passwordsNotMatch'))

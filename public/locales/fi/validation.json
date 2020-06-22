@@ -1,6 +1,6 @@
 {
     "invalidEmail": "Virheellinen sähköposti.",
-    "passwordTooShort": "Salasanan tulee olla vähintään 6 merkkiä pitkä.",
+    "passwordTooShort": "Salasanan tulee olla vähintään 8 merkkiä pitkä.",
     "passwordsNotMatch": "Salasanat eivät täsmää.",
     "required": "Tämä kenttä on vaadittu.",
     "unexpectedError": "Odottamaton virhe.",

@@ -49,7 +49,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
         password: Yup.string()
-            .min(6, t('validation:passwordTooShort'))
+            .min(8, t('validation:passwordTooShort'))
             .required(t('validation:required')),
         email: Yup.string()
             .email(t('validation:invalidEmail'))
