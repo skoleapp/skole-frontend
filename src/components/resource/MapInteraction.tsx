@@ -1,6 +1,6 @@
 import { Box, Fab, Tooltip } from '@material-ui/core';
 import { AddOutlined, FullscreenExitOutlined, FullscreenOutlined, RemoveOutlined } from '@material-ui/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -14,10 +14,9 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
     const { t } = useTranslation();
     const { drawMode } = usePDFViewerContext();
     const isMobile = useDeviceContext();
-    const ref = useRef<HTMLDivElement | null>(null);
     const [fullscreen, setFullscreen] = useState(false);
     const [startPointers, setStartPointers] = useState<StartPointers>([]);
-    const minScale = 0.75;
+    const minScale = 0.5;
     const maxScale = 2.5;
     const minTransX = -Infinity;
     const minTransY = -Infinity;
@@ -66,10 +65,9 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
         y: (p1.y + p2.y) / 2,
     });
 
-    const getContainerBoundingClientRect = (): DOMRect => {
-        const containerNode = ref.current as HTMLDivElement;
-        return containerNode.getBoundingClientRect();
-    };
+    const getContainerNode = (): HTMLDivElement => document.querySelector('#container') as HTMLDivElement;
+    const getContainerBoundingClientRect = (): DOMRect => getContainerNode().getBoundingClientRect();
+    const getMapInteractionNode = (): HTMLDivElement => document.querySelector('#map-interaction') as HTMLDivElement;
 
     // Return calculated translation from container position.
     const getTranslatedOrigin = (): PDFTranslation => {
@@ -92,7 +90,7 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
     };
 
     // The amount that a value of a dimension will change given a new scale.
-    const coordChange = (coordinate: number, scaleRatio: number): number => scaleRatio * coordinate - coordinate;
+    const getCoordChange = (coordinate: number, scaleRatio: number): number => scaleRatio * coordinate - coordinate;
 
     // Given the start touches and new e.touches, scale and translation such that the initial midpoint remains as the new midpoint.
     // This is to achieve the effect of keeping the content that was directly in the middle of the two fingers as the focal point throughout the zoom.
@@ -105,6 +103,7 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
         const scaleChange = dist1 / dist0;
         const targetScale = scale + (scaleChange - 1) * scale;
         const newScale = getClampedScale(minScale, targetScale, maxScale);
+        const scaleRatio = newScale / scale;
 
         // Calculate mid points.
         const startMidpoint = getMidPoint(getTouchPoint(startPointers[0]), getTouchPoint(startPointers[1]));
@@ -116,15 +115,13 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
             y: newMidPoint.y - startMidpoint.y,
         };
 
-        const scaleRatio = newScale / scale;
-
         // The point originally in the middle of the fingers on the initial zoom start
         const focalPoint = getClientPosToTranslatedPos(startMidpoint);
 
         // The amount that the middle point has changed from this scaling
         const focalPtDelta = {
-            x: coordChange(focalPoint.x, scaleRatio),
-            y: coordChange(focalPoint.y, scaleRatio),
+            x: getCoordChange(focalPoint.x, scaleRatio),
+            y: getCoordChange(focalPoint.y, scaleRatio),
         };
 
         // Translation is the original translation, plus the amount we dragged, minus what the scaling will do to the focal point.
@@ -139,11 +136,11 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
 
     // Scale the document from a given point where cursor is upon mouse wheel press.
     const scaleFromPoint = (newScale: number, focalPoint: PDFTranslation): void => {
-        const scaleRatio = newScale / (scale !== 0 ? scale : 1);
+        const scaleRatio = newScale / scale;
 
         const focalPointDelta = {
-            x: coordChange(focalPoint.x, scaleRatio),
-            y: coordChange(focalPoint.y, scaleRatio),
+            x: getCoordChange(focalPoint.x, scaleRatio),
+            y: getCoordChange(focalPoint.y, scaleRatio),
         };
 
         const newTranslation = {
@@ -162,7 +159,7 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
             // e.stopPropagation();
             const scaleChange = 2 ** (e.deltaY * 0.002);
             const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
-            const mousePos = getClientPosToTranslatedPos({ x: e.clientX, y: e.clientY });
+            const mousePos = getClientPosToTranslatedPos({ x: 0, y: e.clientY });
             scaleFromPoint(newScale, mousePos);
         }
     };
@@ -175,7 +172,7 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
     };
 
     const onTouchMove = (e: TouchEvent): void => {
-        // e.preventDefault();
+        e.preventDefault();
         const isPinchAction = e.touches.length === 2 && startPointers.length > 1;
 
         if (isPinchAction) {
@@ -186,31 +183,37 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
     const onTouchEnd = (e: TouchEvent): void => handleSetStartPointers(e.touches);
 
     useEffect(() => {
-        const documentNode = document.querySelector('.react-pdf__Document');
+        const containerNode = getContainerNode();
 
-        if (!!documentNode) {
+        if (!!containerNode) {
             // TODO: Add a listener that updates the page number based on scroll position.
-            documentNode.addEventListener('wheel', onWheel as EventListener);
-            // documentNode.addEventListener('touchstart', onTouchStart as EventListener);
-            // documentNode.addEventListener('mousedown', onMouseDown as EventListener);
-            // documentNode.addEventListener('touchmove', onTouchMove as EventListener);
-            // documentNode.addEventListener('touchend', onTouchEnd as EventListener);
+            containerNode.addEventListener('wheel', onWheel as EventListener);
+            containerNode.addEventListener('touchstart', onTouchStart as EventListener);
+            containerNode.addEventListener('mousedown', onMouseDown as EventListener);
+            containerNode.addEventListener('touchmove', onTouchMove as EventListener);
+            containerNode.addEventListener('touchend', onTouchEnd as EventListener);
 
             return (): void => {
-                documentNode.removeEventListener('wheel', onWheel as EventListener);
-                // documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
-                // documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
-                // documentNode.removeEventListener('touchmove', onTouchMove as EventListener);
-                // documentNode.removeEventListener('touchend', onTouchEnd as EventListener);
+                containerNode.removeEventListener('wheel', onWheel as EventListener);
+                containerNode.removeEventListener('touchstart', onTouchStart as EventListener);
+                containerNode.removeEventListener('mousedown', onMouseDown as EventListener);
+                containerNode.removeEventListener('touchmove', onTouchMove as EventListener);
+                containerNode.removeEventListener('touchend', onTouchEnd as EventListener);
             };
         }
     }, [translation, scale]);
+
+    // Automatically scroll to center when zooming in on desktop.
+    useEffect(() => {
+        const mapInteractionNode = getMapInteractionNode();
+        mapInteractionNode.scrollLeft = (mapInteractionNode.scrollWidth - mapInteractionNode.clientWidth) / 2;
+    }, [scale]);
 
     const toggleFullScreen = (): void => {
         let scale;
 
         if (fullscreen) {
-            scale = 0.75;
+            scale = minScale;
         } else {
             scale = 1.0;
         }
@@ -223,14 +226,14 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
     const scaleUp = (): void => {
         disableFullscreen();
         const newScale = scale < maxScale ? scale + 0.05 : scale;
-        onChange({ translation: defaultTranslation, scale: newScale });
+        scaleFromPoint(newScale, defaultTranslation);
     };
 
     // Scale down by 5% if over limit.
     const scaleDown = (): void => {
         disableFullscreen();
         const newScale = scale > minScale ? scale - 0.05 : scale;
-        onChange({ translation: defaultTranslation, scale: newScale });
+        scaleFromPoint(newScale, defaultTranslation);
     };
 
     const renderFullscreenButton = (
@@ -274,9 +277,9 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
 
     return (
         <StyledMapInteraction
-            ref={ref}
             // onClickCapture={handleEventCapture}
             // onTouchEndCapture={handleEventCapture}
+            id="container"
         >
             {children({ translation: getClampedTranslation(translation), scale })}
             {renderControls}
@@ -286,6 +289,7 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
 
 const StyledMapInteraction = styled(Box)`
     flex-grow: 1;
+    display: flex;
     position: relative;
 
     #controls {

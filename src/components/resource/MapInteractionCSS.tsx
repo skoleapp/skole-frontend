@@ -12,7 +12,7 @@ interface ChildProps {
 }
 
 // This component provides a map like interaction to any content that you place in it.
-// It will let the user zoom and pan the children by scaling and translating children using CSS.
+// It will let the user zoom the children by scaling and translating children using CSS.
 export const MapInteractionCSS: React.FC<Omit<MapInteractionProps, 'children'>> = props => {
     const { drawMode } = usePDFViewerContext();
     const isMobile = useDeviceContext();
@@ -45,9 +45,6 @@ export const MapInteractionCSS: React.FC<Omit<MapInteractionProps, 'children'>> 
     return (
         <MapInteraction {...props}>
             {({ translation, scale }: ChildProps): JSX.Element => {
-                // Translate first and then scale. Otherwise, the scale would affect the translation.
-                const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`;
-
                 const mapInteractionProps = {
                     ctrlKey,
                     drawMode,
@@ -55,12 +52,12 @@ export const MapInteractionCSS: React.FC<Omit<MapInteractionProps, 'children'>> 
                 };
 
                 const containerProps = {
-                    transform,
+                    translation,
                     scale,
                 };
 
                 return (
-                    <StyledMapInteractionCSS {...mapInteractionProps}>
+                    <StyledMapInteractionCSS id="map-interaction" {...mapInteractionProps}>
                         <StyledContainer {...containerProps}>{props.children}</StyledContainer>
                     </StyledMapInteractionCSS>
                 );
@@ -78,27 +75,21 @@ const StyledMapInteractionCSS = styled(({ ctrlKey, drawMode, isMobile, ...props 
         },
     }),
 )`
-    position: absolute;
-    height: 100%;
-    width: 100%;
+    position: relative;
+    flex-grow: 1;
     background-color: var(--gray-light);
+    display: flex;
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledContainer = styled(({ transform, scale, fullscreen, ...props }) => <Box {...props} />).attrs(
-    ({ transform }) => ({
+const StyledContainer = styled(({ translation, scale, fullscreen, ...props }) => <Box {...props} />).attrs(
+    ({ translation, scale }) => ({
         style: {
-            transform: transform,
+            transform: `translate(${translation.x}px, ${translation.y}px) scale(${scale})`, // Translate first and then scale. Otherwise, the scale would affect the translation.
         },
     }),
 )`
-    display: inline-block;
+    position: absolute;
+    flex-grow: 1;
     transform-origin: 0 0;
-
-    // .react-pdf__Page,
-    // .react-pdf__Page__canvas {
-    //     margin: 0 auto;
-    //     height: auto !important;
-    //     width: ${({ scale }): string => `calc(100% * ${scale})`} !important;
-    // }
 `;

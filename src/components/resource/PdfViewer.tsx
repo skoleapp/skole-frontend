@@ -4,6 +4,7 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import * as R from 'ramda';
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+// import { MapInteractionCSS } from 'react-map-interaction';
 import { Document, Page } from 'react-pdf';
 import styled from 'styled-components';
 
@@ -68,7 +69,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     };
 
     const renderPages = Array.from(new Array(numPages), (_, i) => (
-        <Page key={`page_${i + 1}`} pageNumber={i + 1} renderTextLayer={false} />
+        <Page key={`page_${i + 1}`} scale={scale} pageNumber={i + 1} renderTextLayer={false} />
     ));
 
     const renderMouseSelection = <MouseSelection />;
@@ -197,6 +198,19 @@ const StyledPDFViewer = styled(Box)`
             #num-pages {
                 margin-left: 0.25rem;
             }
+        }
+    }
+
+    .react-pdf__Document {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .react-pdf__Page,
+        .react-pdf__Page__canvas {
+            margin: 0 auto !important;
+            height: auto !important;
+            width: 100% !important;
         }
     }
 
