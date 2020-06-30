@@ -16,7 +16,7 @@ import {
     useNotificationsContext,
     usePDFViewerContext,
 } from '../../context';
-import { dataURItoFile, useForm } from '../../utils';
+import { useForm } from '../../utils';
 import { ModalHeader } from './ModalHeader';
 import { StyledModal } from './StyledModal';
 
@@ -46,6 +46,21 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const { screenshot, setScreenshot } = usePDFViewerContext();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const isMobile = useDeviceContext();
+
+    // Converts a data URI string into a File object.
+    const dataURItoFile = (dataURI: string): File => {
+        const BASE64_MARKER = ';base64,';
+        const mime = dataURI.split(BASE64_MARKER)[0].split(':')[1];
+        const filename = 'screenshot' + '.' + mime.split('/')[1];
+        const bytes = atob(dataURI.split(BASE64_MARKER)[1]);
+        const writer = new Uint8Array(new ArrayBuffer(bytes.length));
+
+        for (let i = 0; i < bytes.length; i++) {
+            writer[i] = bytes.charCodeAt(i);
+        }
+
+        return new File([writer.buffer], filename, { type: mime });
+    };
 
     // Use screenshot as attachment if area has been marked.
     useEffect(() => {

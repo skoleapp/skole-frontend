@@ -16,12 +16,12 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
     const isMobile = useDeviceContext();
     const [fullscreen, setFullscreen] = useState(false);
     const [startPointers, setStartPointers] = useState<StartPointers>([]);
-    const minScale = 0.5;
-    const maxScale = 2.5;
+    const minScale = 0.75;
+    const maxScale = 1.75;
     const minTransX = -Infinity;
-    const minTransY = -Infinity;
     const maxTransX = Infinity;
-    const maxTransY = Infinity;
+    const minTransY = 0;
+    const maxTransY = -Infinity;
     const defaultTranslation = { x: 0, y: 0 };
 
     const disableFullscreen = (): false | void => setFullscreen(fullscreen => fullscreen && false);
@@ -137,6 +137,16 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
     // Scale the document from a given point where cursor is upon mouse wheel press.
     const scaleFromPoint = (newScale: number, focalPoint: PDFTranslation): void => {
         const scaleRatio = newScale / scale;
+        // const { width: containerWidth } = getContainerBoundingClientRect();
+
+        // Prevent transform cutting areas when zooming in on desktop.
+        if (newScale > 1.0) {
+            // focalPoint.x = -containerWidth * scale;
+            focalPoint.x = 0;
+            focalPoint.y = defaultTranslation.y;
+        } else {
+            focalPoint.x = defaultTranslation.x;
+        }
 
         const focalPointDelta = {
             x: getCoordChange(focalPoint.x, scaleRatio),
@@ -156,7 +166,7 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
         if (e.ctrlKey) {
             disableFullscreen();
             e.preventDefault(); // Disables scroll behavior.
-            // e.stopPropagation();
+            e.stopPropagation();
             const scaleChange = 2 ** (e.deltaY * 0.002);
             const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
             const mousePos = getClientPosToTranslatedPos({ x: 0, y: e.clientY });
