@@ -87,11 +87,13 @@ const StyledContainer = styled(({ translation, scale, fullscreen, ...props }) =>
     ({ translation, scale }) => ({
         style: {
             transform: `translate(${translation.x}px, ${translation.y}px) scale(${scale})`, // Translate first and then scale. Otherwise, the scale would affect the translation.
-            width: `calc(100% * ${scale})`, // Translate first and then scale. Otherwise, the scale would affect the translation.
+            width: `calc(100% * ${scale})`,
         },
     }),
 )`
     position: absolute;
     flex-grow: 1;
-    transform-origin: 50% 0;
+    // transform-origin: 50% 0;
+    transform-origin: 0 0;
+    right: 0;
 `;

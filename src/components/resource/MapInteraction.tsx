@@ -68,6 +68,7 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
     const getContainerNode = (): HTMLDivElement => document.querySelector('#container') as HTMLDivElement;
     const getContainerBoundingClientRect = (): DOMRect => getContainerNode().getBoundingClientRect();
     const getMapInteractionNode = (): HTMLDivElement => document.querySelector('#map-interaction') as HTMLDivElement;
+    const getMapInteractionBoundingClientRect = (): DOMRect => getMapInteractionNode().getBoundingClientRect();
 
     // Return calculated translation from container position.
     const getTranslatedOrigin = (): PDFTranslation => {
@@ -137,15 +138,12 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
     // Scale the document from a given point where cursor is upon mouse wheel press.
     const scaleFromPoint = (newScale: number, focalPoint: PDFTranslation): void => {
         const scaleRatio = newScale / scale;
-        // const { width: containerWidth } = getContainerBoundingClientRect();
+        const { width: containerWidth } = getMapInteractionBoundingClientRect();
 
-        // Prevent transform cutting areas when zooming in on desktop.
+        // Prevent translation cutting areas when zooming in on desktop.
         if (newScale > 1.0) {
-            // focalPoint.x = -containerWidth * scale;
-            focalPoint.x = 0;
+            focalPoint.x = -(containerWidth - 14.5) * scale; // Subtract 14.5px from container width, otherwise it leaves a nasty offset probably due to scroll bars.
             focalPoint.y = defaultTranslation.y;
-        } else {
-            focalPoint.x = defaultTranslation.x;
         }
 
         const focalPointDelta = {
@@ -166,7 +164,6 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
         if (e.ctrlKey) {
             disableFullscreen();
             e.preventDefault(); // Disables scroll behavior.
-            e.stopPropagation();
             const scaleChange = 2 ** (e.deltaY * 0.002);
             const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
             const mousePos = getClientPosToTranslatedPos({ x: 0, y: e.clientY });
@@ -232,14 +229,14 @@ export const MapInteraction: React.FC<MapInteractionProps> = ({ translation, sca
         onChange({ translation: defaultTranslation, scale });
     };
 
-    // Scale up by 5% if under limit.
+    // Scale up by 5% if under maximum limit.
     const scaleUp = (): void => {
         disableFullscreen();
         const newScale = scale < maxScale ? scale + 0.05 : scale;
         scaleFromPoint(newScale, defaultTranslation);
     };
 
-    // Scale down by 5% if over limit.
+    // Scale down by 5% if over minimum limit.
     const scaleDown = (): void => {
         disableFullscreen();
         const newScale = scale > minScale ? scale - 0.05 : scale;
