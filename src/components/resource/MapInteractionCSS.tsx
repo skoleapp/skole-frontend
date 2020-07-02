@@ -93,7 +93,8 @@ const StyledContainer = styled(({ translation, scale, fullscreen, ...props }) =>
 )`
     position: absolute;
     flex-grow: 1;
-    // transform-origin: 50% 0;
-    transform-origin: 0 0;
-    right: 0;
+
+    // When in fullscreen and zooming in from that, we set the transform origin to top left.
+    // Otherwise we center the document.
+    transform-origin: ${({ scale }): string => (scale < 1 ? '50% 0' : '0 0')};
 `;
