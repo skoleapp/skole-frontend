@@ -4,12 +4,10 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import * as R from 'ramda';
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-// import { MapInteractionCSS } from 'react-map-interaction';
 import { Document, Page } from 'react-pdf';
 import styled from 'styled-components';
 
 import { useDeviceContext, usePDFViewerContext } from '../../context';
-import { MapPositionProps } from '../../types';
 import { LoadingBox } from '../shared';
 import { MapInteractionCSS } from './MapInteractionCSS';
 import { MouseSelection } from './MouseSelection';
@@ -27,8 +25,6 @@ interface PDFPage {
     scrollIntoView: () => void;
 }
 
-const defaultTranslation = { x: 0, y: 0 };
-
 export const PDFViewer: React.FC<PDFViewerProps> = ({
     file,
     title,
@@ -41,8 +37,6 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const documentRef = useRef<Document>(null);
-    const [translation, setTranslation] = useState(defaultTranslation);
-    const [scale, setScale] = useState(1.0);
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
     const [rotate, setRotate] = useState(0);
@@ -57,11 +51,6 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         window.scrollTo(0, 0); // Prevent window scrolling.
     };
 
-    const handleMapChange = ({ translation, scale }: MapPositionProps): void => {
-        setTranslation(translation);
-        setScale(scale);
-    };
-
     const onDocumentLoadSuccess = (document: PDFDocumentProxy): void => {
         const { numPages } = document;
         setNumPages(numPages);
@@ -69,7 +58,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     };
 
     const renderPages = Array.from(new Array(numPages), (_, i) => (
-        <Page key={`page_${i + 1}`} scale={scale} pageNumber={i + 1} renderTextLayer={false} />
+        <Page key={`page_${i + 1}`} pageNumber={i + 1} renderTextLayer={false} />
     ));
 
     const renderMouseSelection = <MouseSelection />;
@@ -143,7 +132,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderDocument = (
-        <MapInteractionCSS scale={scale} translation={translation} onChange={handleMapChange}>
+        <MapInteractionCSS>
             <Document
                 file={file}
                 onLoadSuccess={onDocumentLoadSuccess}
@@ -205,6 +194,9 @@ const StyledPDFViewer = styled(Box)`
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        // Disable pointer events on the document itself so the map interaction component will pick up the touch events.
+        pointer-events: none;
 
         .react-pdf__Page,
         .react-pdf__Page__canvas {

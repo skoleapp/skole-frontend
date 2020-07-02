@@ -152,11 +152,6 @@ export interface SettingsContext {
     toggleSettings: (payload: boolean) => void;
 }
 
-export interface PDFTranslation {
-    x: number;
-    y: number;
-}
-
 export interface PDFViewerContext {
     drawMode: boolean;
     setDrawMode: Dispatch<SetStateAction<boolean>>;
@@ -211,14 +206,15 @@ export interface SSRContext {
     previewData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-export interface MapPositionProps {
-    scale: number;
-    translation: PDFTranslation;
+export interface PDFTranslation {
+    x: number;
+    y: number;
 }
 
-export interface MapInteractionProps {
-    onChange: (props: MapPositionProps) => void;
-    children: (props: MapPositionProps) => ReactElement;
-    translation: PDFTranslation;
+export interface MapInteractionCSSProps {
     scale: number;
+    translation: PDFTranslation;
+    drawMode: boolean;
+    isMobile: boolean;
+    ctrlKey: boolean;
 }
