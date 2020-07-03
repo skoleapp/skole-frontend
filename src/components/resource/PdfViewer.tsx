@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import { useDeviceContext, usePDFViewerContext } from '../../context';
 import { LoadingBox } from '../shared';
-import { AreaSelection, MapInteractionCSS } from '.';
+import { AreaSelection, MapInteraction } from '.';
 
 interface PDFViewerProps {
     file: string;
@@ -126,7 +126,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     );
 
     const renderDocument = (
-        <MapInteractionCSS>
+        <MapInteraction>
             <Document
                 file={file}
                 onLoadSuccess={onDocumentLoadSuccess}
@@ -139,7 +139,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
                 {renderPages}
                 {renderAreaSelection}
             </Document>
-        </MapInteractionCSS>
+        </MapInteraction>
     );
 
     return (

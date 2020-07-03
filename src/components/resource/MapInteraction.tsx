@@ -1,21 +1,21 @@
 import { Box, Fab, Tooltip } from '@material-ui/core';
 import { AddOutlined, FullscreenExitOutlined, FullscreenOutlined, RemoveOutlined } from '@material-ui/icons';
-import React, { ReactElement, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { defaultScale, defaultTranslation, useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
 import { useDeviceContext, usePDFViewerContext } from '../../context';
-import { MapInteractionCSSProps, PDFTranslation } from '../../types';
-
-interface Props {
-    children: (props: MapInteractionCSSProps) => ReactElement;
-}
 
 interface StartPointersInfo {
     translation: PDFTranslation;
     scale: number;
     pointers: TouchList;
+}
+
+interface PDFTranslation {
+    x: number;
+    y: number;
 }
 
 const minScale = 0.75;
@@ -24,7 +24,7 @@ const maxScale = 1.75;
 // TODO: Add a listener that updates the page number based on scroll position.
 // TODO: Find a way to improve the performance as the animations are now a bit laggy at least on mobile.
 // TODO: Improve zoom on mobile when user has scrolled down to a point.
-export const MapInteractionController: React.FC<Props> = ({ children }) => {
+export const MapInteraction: React.FC = ({ children }) => {
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -256,7 +256,7 @@ export const MapInteractionController: React.FC<Props> = ({ children }) => {
             containerNode.removeEventListener('touchmove', onTouchMove as EventListener);
             containerNode.removeEventListener('touchend', onTouchEnd as EventListener);
         };
-    }, [scale, translation]);
+    }, [scale, translation, drawMode]);
 
     // Listen for key presses in order to show different cursor when CTRL key is pressed.
     useEffect(() => {
@@ -335,23 +335,32 @@ export const MapInteractionController: React.FC<Props> = ({ children }) => {
         </Box>
     );
 
-    const childProps = {
-        translation: getClampedTranslation(translation),
-        scale,
-        drawMode,
-        isMobile,
-        ctrlKey,
-    };
+    const cursor = `${drawMode ? 'pointer' : ctrlKey ? 'all-scroll' : 'default'}`; // On desktop show different cursor when CTRL key is pressed.
+    const overflow = `${drawMode && isMobile ? 'hidden' : 'auto'}`; // Disable scrolling when draw mode is on on mobile.
+    const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
+    const transformOrigin = scale < 1 ? '50% 0' : '0 0'; // When in fullscreen and zooming in from that, we set the transform origin to top left. Otherwise we center the document.
+    const width = `calc(100% * ${scale})`;
+    const mapInteractionProps = { cursor, overflow };
+    const containerProps = { transform, transformOrigin, width };
+
+    const renderMapInteractionCSS = (
+        <StyledMapInteractionCSS id="map-interaction" {...mapInteractionProps}>
+            <StyledContainer {...containerProps}>{children}</StyledContainer>
+        </StyledMapInteractionCSS>
+    );
 
     return (
+        // Ignore: This is an issue with MUI: https://github.com/mui-org/material-ui/issues/17010#issuecomment-584223410
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
         <StyledMapInteraction ref={containerRef}>
-            {children(childProps)}
+            {renderMapInteractionCSS}
             {renderControls}
         </StyledMapInteraction>
     );
 };
 
-const StyledMapInteraction = styled.div`
+const StyledMapInteraction = styled(Box)`
     flex-grow: 1;
     display: flex;
     position: relative;
@@ -368,4 +377,34 @@ const StyledMapInteraction = styled.div`
             margin: 0.5rem;
         }
     }
+`;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledMapInteractionCSS = styled(({ cursor, overflow, ...props }) => <Box {...props} />).attrs(
+    ({ cursor, overflow }) => ({
+        style: {
+            cursor,
+            overflow,
+        },
+    }),
+)`
+    position: relative;
+    flex-grow: 1;
+    background-color: var(--gray-light);
+    display: flex;
+    justify-content: center;
+`;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledContainer = styled(({ transform, transformOrigin, width, ...props }) => <Box {...props} />).attrs(
+    ({ transform, transformOrigin, width }) => ({
+        style: {
+            transform,
+            transformOrigin,
+            width,
+        },
+    }),
+)`
+    position: absolute;
+    flex-grow: 1;
 `;

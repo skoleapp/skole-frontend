@@ -215,16 +215,3 @@ export interface SSRContext {
     preview?: boolean;
     previewData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
-
-export interface PDFTranslation {
-    x: number;
-    y: number;
-}
-
-export interface MapInteractionCSSProps {
-    scale: number;
-    translation: PDFTranslation;
-    drawMode: boolean;
-    isMobile: boolean;
-    ctrlKey: boolean;
-}
