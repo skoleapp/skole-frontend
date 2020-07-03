@@ -10,7 +10,7 @@ import { MapInteractionController } from './MapInteractionController';
 export const MapInteractionCSS: React.FC = ({ children }) => (
     <MapInteractionController>
         {({ translation, scale, drawMode, isMobile, ctrlKey }: MapInteractionCSSProps): JSX.Element => {
-            const cursor = `${ctrlKey ? 'all-scroll' : 'inherit'}`; // On desktop show different cursor when CTRL key is pressed.
+            const cursor = `${drawMode ? 'pointer' : ctrlKey ? 'all-scroll' : 'default'}`; // On desktop show different cursor when CTRL key is pressed.
             const overflow = `${drawMode && isMobile ? 'hidden' : 'auto'}`; // Disable scrolling when draw mode is on on mobile.
             const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
             const transformOrigin = scale < 1 ? '50% 0' : '0 0'; // When in fullscreen and zooming in from that, we set the transform origin to top left. Otherwise we center the document.
@@ -19,7 +19,7 @@ export const MapInteractionCSS: React.FC = ({ children }) => (
             const containerProps = { transform, transformOrigin, width };
 
             return (
-                <StyledMapInteractionCSS {...mapInteractionProps}>
+                <StyledMapInteractionCSS id="map-interaction" {...mapInteractionProps}>
                     <StyledContainer {...containerProps}>{children}</StyledContainer>
                 </StyledMapInteractionCSS>
             );
@@ -41,9 +41,6 @@ const StyledMapInteractionCSS = styled(({ cursor, overflow, ...props }) => <Box 
     background-color: var(--gray-light);
     display: flex;
     justify-content: center;
-
-    width: 100%;
-    height: 100%;
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,8 +1,8 @@
 import { Box, Fab, Tooltip } from '@material-ui/core';
 import { AddOutlined, FullscreenExitOutlined, FullscreenOutlined, RemoveOutlined } from '@material-ui/icons';
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useStateRef } from 'src/utils';
+import { defaultScale, defaultTranslation, useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
 import { useDeviceContext, usePDFViewerContext } from '../../context';
@@ -18,22 +18,31 @@ interface StartPointersInfo {
     pointers: TouchList;
 }
 
-const defaultTranslation = { x: 0, y: 0 };
-const defaultScale = 1.0;
 const minScale = 0.75;
 const maxScale = 1.75;
 
+// TODO: Add a listener that updates the page number based on scroll position.
+// TODO: Find a way to improve the performance as the animations are now a bit laggy at least on mobile.
+// TODO: Improve zoom on mobile when user has scrolled down to a point.
 export const MapInteractionController: React.FC<Props> = ({ children }) => {
     const { t } = useTranslation();
-    const { drawMode } = usePDFViewerContext();
     const isMobile = useDeviceContext();
-    const [fullscreen, setFullscreen] = useState(false);
-    const disableFullscreen = (): false | void => fullscreen && setFullscreen(false);
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [ctrlKey, setCtrlKey] = useState(false);
-    const [scale, setScale] = useState(defaultScale);
-    const [translation, setTranslation] = useState(defaultTranslation);
-    const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref objects instead of immutable state to keep track with the start pointer info during gestures.
+    const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
+
+    const {
+        drawMode,
+        fullscreen,
+        setFullscreen,
+        ctrlKey,
+        setCtrlKey,
+        scale,
+        setScale,
+        translation,
+        setTranslation,
+    } = usePDFViewerContext();
+
+    const disableFullscreen = (): false | void => fullscreen && setFullscreen(false);
 
     // Change cursor mode when CTRL key is pressed.
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -83,6 +92,7 @@ export const MapInteractionController: React.FC<Props> = ({ children }) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const getContainerNode = (): HTMLDivElement => containerRef.current!;
     const getContainerBoundingClientRect = (): DOMRect => getContainerNode().getBoundingClientRect();
+    const getMapInteractionNode = (): HTMLDivElement => document.querySelector('#map-interaction') as HTMLDivElement;
 
     // Get clamped translation if translation bounds have been exceeded.
     const getClampedTranslation = (desiredTranslation: PDFTranslation): PDFTranslation => {
@@ -199,7 +209,7 @@ export const MapInteractionController: React.FC<Props> = ({ children }) => {
     const onWheel = (e: WheelEvent): void => {
         if (e.ctrlKey) {
             disableFullscreen();
-            // e.preventDefault(); // Disables scroll behavior.
+            e.preventDefault(); // Disables scroll behavior.
             const scaleChange = 2 ** (e.deltaY * 0.002);
             const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
             const mousePos = getClientPosToTranslatedPos({ x: 0, y: e.clientY });
@@ -207,52 +217,48 @@ export const MapInteractionController: React.FC<Props> = ({ children }) => {
         }
     };
 
-    const onTouchStart = (e: TouchEvent): void => {
-        e.preventDefault();
-        setPointerState(e.touches);
-    };
-
-    // const onMouseDown = (e: MouseEvent): void => {
-    //     e.preventDefault();
-    //     setPointerState([e]);
-    // };
+    const onTouchStart = (e: TouchEvent): void => setPointerState(e.touches);
 
     const onTouchMove = (e: TouchEvent): void => {
         if (!!startPointersInfo.current) {
-            e.preventDefault(); // Disables scroll behavior.
             const isPinchAction = e.touches.length === 2 && startPointersInfo.current.pointers.length > 1;
 
             if (isPinchAction) {
+                e.preventDefault(); // Prevent scrolling.
                 scaleFromMultiTouch(e);
             }
         }
     };
 
-    const onTouchEnd = (e: TouchEvent): void => setPointerState(e.touches);
-    // const onMouseUp = (): void => setPointerState([]);
+    const onTouchEnd = (e: TouchEvent): void => {
+        setPointerState(e.touches);
+
+        // Bounce back to original size if pinched out.
+        if (scale < defaultScale) {
+            setScale(defaultScale);
+            setTranslation(defaultTranslation);
+        }
+    };
 
     useEffect(() => {
         const containerNode = getContainerNode();
 
-        if (!!containerNode) {
-            // TODO: Add a listener that updates the page number based on scroll position.
-            containerNode.addEventListener('wheel', onWheel as EventListener, { passive: true });
+        if (!!containerNode && !drawMode) {
+            containerNode.addEventListener('wheel', onWheel as EventListener);
             containerNode.addEventListener('touchstart', onTouchStart as EventListener, { passive: true });
-            // containerNode.addEventListener('mousedown', onMouseDown as EventListener);
-            containerNode.addEventListener('touchmove', onTouchMove as EventListener, { passive: true });
+            containerNode.addEventListener('touchmove', onTouchMove as EventListener);
             containerNode.addEventListener('touchend', onTouchEnd as EventListener, { passive: true });
-            // containerNode.addEventListener('mouseup', onMouseUp as EventListener, { capture: true });
-
-            return (): void => {
-                containerNode.removeEventListener('wheel', onWheel as EventListener);
-                containerNode.removeEventListener('touchstart', onTouchStart as EventListener);
-                // containerNode.removeEventListener('mousedown', onMouseDown as EventListener);
-                containerNode.removeEventListener('touchmove', onTouchMove as EventListener);
-                containerNode.removeEventListener('touchend', onTouchEnd as EventListener);
-            };
         }
+
+        return (): void => {
+            containerNode.removeEventListener('wheel', onWheel as EventListener);
+            containerNode.removeEventListener('touchstart', onTouchStart as EventListener);
+            containerNode.removeEventListener('touchmove', onTouchMove as EventListener);
+            containerNode.removeEventListener('touchend', onTouchEnd as EventListener);
+        };
     }, [scale, translation]);
 
+    // Listen for key presses in order to show different cursor when CTRL key is pressed.
     useEffect(() => {
         document.addEventListener('keydown', onKeyDown);
         document.addEventListener('keyup', onKeyUp);
@@ -264,10 +270,10 @@ export const MapInteractionController: React.FC<Props> = ({ children }) => {
     }, []);
 
     // Automatically scroll to center when zooming in on desktop.
-    // useEffect(() => {
-    //     const mapInteractionNode = getMapInteractionNode();
-    //     mapInteractionNode.scrollLeft = (mapInteractionNode.scrollWidth - mapInteractionNode.clientWidth) / 2;
-    // }, [scale]);
+    useEffect(() => {
+        const mapInteractionNode = getMapInteractionNode();
+        mapInteractionNode.scrollLeft = (mapInteractionNode.scrollWidth - mapInteractionNode.clientWidth) / 2;
+    }, [scale]);
 
     const toggleFullScreen = (): void => {
         let scale;

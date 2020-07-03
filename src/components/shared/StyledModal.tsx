@@ -31,5 +31,9 @@ export const StyledModal = styled(({ autoHeight, ...other }) => (
             max-width: 30rem;
             max-height: 50rem;
         }
+
+        @media only screen and (max-width: ${breakpoints.MD}) {
+            border-radius: 0;
+        }
     }
 `;

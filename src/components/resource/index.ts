@@ -1,4 +1,4 @@
 export { PDFViewer } from './PDFViewer';
-export { MouseSelection } from './MouseSelection';
+export { AreaSelection } from './AreaSelection';
 export { MapInteractionController } from './MapInteractionController';
 export { MapInteractionCSS } from './MapInteractionCSS';

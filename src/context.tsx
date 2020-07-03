@@ -16,6 +16,7 @@ import {
     SettingsContext,
     SkoleContextType,
 } from './types';
+import { defaultScale, defaultTranslation } from './utils';
 
 const SkolePageContext = createContext<SkoleContextType>({
     auth: {
@@ -47,6 +48,16 @@ const SkolePageContext = createContext<SkoleContextType>({
         setDrawMode: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         screenshot: null,
         setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        rotate: 0,
+        setRotate: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        fullscreen: false,
+        setFullscreen: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        ctrlKey: false,
+        setCtrlKey: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        scale: 1.0,
+        setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        translation: { x: 0, y: 0 },
+        setTranslation: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
     isMobileGuess: null,
     discussion: {
@@ -146,6 +157,11 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
 
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
+    const [rotate, setRotate] = useState(0);
+    const [fullscreen, setFullscreen] = useState(false);
+    const [ctrlKey, setCtrlKey] = useState(false);
+    const [scale, setScale] = useState(defaultScale);
+    const [translation, setTranslation] = useState(defaultTranslation);
 
     const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]);
     const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
@@ -181,6 +197,16 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setDrawMode,
             screenshot,
             setScreenshot,
+            rotate,
+            setRotate,
+            fullscreen,
+            setFullscreen,
+            ctrlKey,
+            setCtrlKey,
+            scale,
+            setScale,
+            translation,
+            setTranslation,
         },
         isMobileGuess,
         discussion: {

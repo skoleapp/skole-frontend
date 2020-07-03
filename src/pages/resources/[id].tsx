@@ -49,7 +49,16 @@ import {
 import { includeDefaultNamespaces } from '../../i18n';
 import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps, MaxWidth } from '../../types';
-import { mediaURL, useActionsDrawer, useInfoDrawer, useShare, useTabs, useVotes } from '../../utils';
+import {
+    defaultScale,
+    defaultTranslation,
+    mediaURL,
+    useActionsDrawer,
+    useInfoDrawer,
+    useShare,
+    useTabs,
+    useVotes,
+} from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -80,13 +89,21 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const commentCount = comments.length;
-    const { setDrawMode, drawMode, screenshot, setRotate } = usePDFViewerContext();
-    const handleCancelDraw = (): void => setDrawMode(false);
     const { toggleCommentModal } = useCommentModalContext();
     const { tabValue, setTabValue, handleTabChange } = useTabs();
     const { renderShareButton } = useShare(resourceTitle);
     const { commentModalOpen } = useCommentModalContext();
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
+
+    const {
+        setDrawMode,
+        drawMode,
+        screenshot,
+        setRotate,
+        setFullscreen,
+        setScale,
+        setTranslation,
+    } = usePDFViewerContext();
 
     const {
         renderActionsHeader,
@@ -123,9 +140,14 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         commentModalOpen && tabValue === 0 && setTabValue(1);
     }, [commentModalOpen]);
 
+    const handleCancelDraw = (): void => setDrawMode(false);
+
     const handleStartDrawing = (): void => {
         setRotate(0);
         setDrawMode(true);
+        setFullscreen(true);
+        setScale(defaultScale);
+        setTranslation(defaultTranslation);
     };
 
     const handleContinueDraw = (): void => {

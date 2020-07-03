@@ -6,7 +6,7 @@ import Maybe from 'graphql/tsutils/Maybe';
 import { IncomingMessage, ServerResponse } from 'http';
 import { NextPageContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { Dispatch, MutableRefObject, ReactElement, SetStateAction, SyntheticEvent } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
 
 import { CommentObjectType, ErrorType, SchoolObjectType, UserObjectType } from '../generated/graphql';
@@ -157,6 +157,16 @@ export interface PDFViewerContext {
     setDrawMode: Dispatch<SetStateAction<boolean>>;
     screenshot: string | null;
     setScreenshot: Dispatch<SetStateAction<string | null>>;
+    rotate: number;
+    setRotate: Dispatch<SetStateAction<number>>;
+    fullscreen: boolean;
+    setFullscreen: Dispatch<SetStateAction<boolean>>;
+    ctrlKey: boolean;
+    setCtrlKey: Dispatch<SetStateAction<boolean>>;
+    scale: number;
+    setScale: Dispatch<SetStateAction<number>>;
+    translation: PDFTranslation;
+    setTranslation: Dispatch<SetStateAction<PDFTranslation>>;
 }
 
 export interface DiscussionContext {

@@ -23,17 +23,20 @@ export const DiscussionHeader: React.FC<Props> = ({
     renderActionsButton,
 }) => {
     const { t } = useTranslation();
+    const title = `${t('common:discussion')} (${commentCount})`;
+    const renderIcon = <ChatOutlined />;
+
     const renderText = (
-        <Typography className="custom-header-text" variant="subtitle1">{`${t(
-            'common:discussion',
-        )} (${commentCount})`}</Typography>
+        <Typography className="custom-header-text" variant="subtitle1">
+            {title}
+        </Typography>
     );
 
     return (
         <Box className="custom-header">
             <Grid container justify="space-between">
                 <Box display="flex" justifyContent="flex-start" alignItems="center">
-                    <ChatOutlined /> {renderText}
+                    {renderIcon} {renderText}
                 </Box>
                 <Box display="flex" justifyContent="flex-end" alignItems="center">
                     {renderStarButton}
