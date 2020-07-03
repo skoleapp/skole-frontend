@@ -153,6 +153,7 @@ export interface SettingsContext {
 }
 
 export interface PDFViewerContext {
+    documentRef: MutableRefObject<Document | null> | null;
     drawMode: boolean;
     setDrawMode: Dispatch<SetStateAction<boolean>>;
     screenshot: string | null;
@@ -167,6 +168,10 @@ export interface PDFViewerContext {
     setScale: Dispatch<SetStateAction<number>>;
     translation: PDFTranslation;
     setTranslation: Dispatch<SetStateAction<PDFTranslation>>;
+    numPages: number;
+    setNumPages: Dispatch<SetStateAction<number>>;
+    pageNumber: number;
+    setPageNumber: Dispatch<SetStateAction<number>>;
 }
 
 export interface DiscussionContext {
@@ -214,4 +219,9 @@ export interface SSRContext {
     query: ParsedUrlQuery;
     preview?: boolean;
     previewData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+export interface PDFTranslation {
+    x: number;
+    y: number;
 }

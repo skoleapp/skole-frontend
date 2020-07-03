@@ -75,6 +75,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         setFieldValue('attachment', null);
         toggleCommentModal(false);
         setScreenshot(null);
+        setAttachment(null);
     };
 
     const onError = (): void => toggleNotification(t('notifications:messageError'));

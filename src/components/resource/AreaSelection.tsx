@@ -4,17 +4,12 @@ import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
 import { usePDFViewerContext } from '../../context';
-import { LTWH } from '../../types';
-
-interface Coords {
-    x: number;
-    y: number;
-}
+import { LTWH, PDFTranslation } from '../../types';
 
 interface State {
     locked: boolean;
-    start: Coords | null;
-    end: Coords | null;
+    start: PDFTranslation | null;
+    end: PDFTranslation | null;
 }
 
 interface PageFromElement {
@@ -36,7 +31,7 @@ export const AreaSelection: React.FC = () => {
     const getDocumentNode = (): Element => document.querySelector('.react-pdf__Document')!;
 
     // Get rectangle coordinates on container element.
-    const getBoundingRect = (start: Coords, end: Coords): LTWH => ({
+    const getBoundingRect = (start: PDFTranslation, end: PDFTranslation): LTWH => ({
         left: Math.min(end.x, start.x),
         top: Math.min(end.y, start.y),
         width: Math.abs(end.x - start.x),
@@ -90,7 +85,7 @@ export const AreaSelection: React.FC = () => {
     };
 
     // Get coordinates on container element.
-    const containerCoords = (pageX: number, pageY: number): Coords => {
+    const containerPDFTranslation = (pageX: number, pageY: number): PDFTranslation => {
         const documentNode = getDocumentNode();
         const { left, top } = documentNode.getBoundingClientRect();
 
@@ -107,7 +102,7 @@ export const AreaSelection: React.FC = () => {
         if (!!start && !locked) {
             setState({
                 ...stateRef.current,
-                end: containerCoords(e.pageX, e.pageY),
+                end: containerPDFTranslation(e.pageX, e.pageY),
             });
         }
     };
@@ -125,7 +120,7 @@ export const AreaSelection: React.FC = () => {
             !!currentTarget && currentTarget.removeEventListener('mouseup', onMouseUp as EventListener);
 
             if (!!start) {
-                const end = containerCoords(e.pageX, e.pageY);
+                const end = containerPDFTranslation(e.pageX, e.pageY);
                 const boundingRect = getBoundingRect(start, end);
 
                 if (documentNode.contains(e.target as Node) && drawingAllowedRef.current) {
@@ -149,7 +144,7 @@ export const AreaSelection: React.FC = () => {
 
         if (drawingAllowedRef.current) {
             setState({
-                start: containerCoords(e.pageX, e.pageY),
+                start: containerPDFTranslation(e.pageX, e.pageY),
                 end: null,
                 locked: false,
             });
@@ -170,7 +165,7 @@ export const AreaSelection: React.FC = () => {
         if (!!start && !locked) {
             setState({
                 ...stateRef.current,
-                end: containerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
+                end: containerPDFTranslation(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
             });
         }
     };
@@ -189,7 +184,7 @@ export const AreaSelection: React.FC = () => {
             !!currentTarget && currentTarget.removeEventListener('mouseup', onTouchUp as EventListener);
 
             if (!!start) {
-                const end = containerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+                const end = containerPDFTranslation(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
                 const boundingRect = getBoundingRect(start, end);
 
                 if (documentNode.contains(e.target as Node) && drawingAllowedRef.current) {
@@ -213,7 +208,7 @@ export const AreaSelection: React.FC = () => {
 
         if (drawingAllowedRef.current) {
             setState({
-                start: containerCoords(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
+                start: containerPDFTranslation(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
                 end: null,
                 locked: false,
             });

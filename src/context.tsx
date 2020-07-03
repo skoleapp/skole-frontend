@@ -1,6 +1,6 @@
 import { CommentObjectType, UserObjectType } from 'generated/graphql';
 import * as R from 'ramda';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -44,6 +44,7 @@ const SkolePageContext = createContext<SkoleContextType>({
         toggleSettings: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     pdfViewer: {
+        documentRef: null,
         drawMode: false,
         setDrawMode: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         screenshot: null,
@@ -58,6 +59,10 @@ const SkolePageContext = createContext<SkoleContextType>({
         setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         translation: { x: 0, y: 0 },
         setTranslation: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        numPages: 1,
+        setNumPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        pageNumber: 1,
+        setPageNumber: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
     isMobileGuess: null,
     discussion: {
@@ -155,6 +160,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [settingsOpen, setSettingsOpen] = useState(false);
     const toggleSettings = (open: boolean): void => setSettingsOpen(open);
 
+    const documentRef = useRef<Document>(null);
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
     const [rotate, setRotate] = useState(0);
@@ -162,6 +168,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [ctrlKey, setCtrlKey] = useState(false);
     const [scale, setScale] = useState(defaultScale);
     const [translation, setTranslation] = useState(defaultTranslation);
+    const [numPages, setNumPages] = useState(1);
+    const [pageNumber, setPageNumber] = useState(1);
 
     const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]);
     const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
@@ -193,6 +201,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             toggleSettings,
         },
         pdfViewer: {
+            documentRef,
             drawMode,
             setDrawMode,
             screenshot,
@@ -207,6 +216,10 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setScale,
             translation,
             setTranslation,
+            numPages,
+            setNumPages,
+            pageNumber,
+            setPageNumber,
         },
         isMobileGuess,
         discussion: {

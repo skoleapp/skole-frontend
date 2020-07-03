@@ -1,12 +1,5 @@
-import { Box, Button, Grid, IconButton, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
-import {
-    CancelOutlined,
-    CloudDownloadOutlined,
-    DeleteOutline,
-    KeyboardArrowRightOutlined,
-    PrintOutlined,
-    TabUnselectedOutlined,
-} from '@material-ui/icons';
+import { Box, Grid, ListItemText, MenuItem, Tab } from '@material-ui/core';
+import { CloudDownloadOutlined, DeleteOutline, PrintOutlined } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
@@ -25,11 +18,14 @@ import {
 } from '../../../generated/graphql';
 import {
     DiscussionHeader,
+    DrawModeButton,
+    DrawModeControls,
     InfoModalContent,
     MainLayout,
     NavbarContainer,
     NotFoundLayout,
     PDFViewer,
+    ResourceToolbar,
     StarButton,
     StyledBottomNavigation,
     StyledCard,
@@ -78,7 +74,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const courseId = R.pathOr('', ['course', 'id'], resource) as string;
     const schoolId = R.pathOr('', ['school', 'id'], resource) as string;
     const creatorId = R.pathOr('', ['user', 'id'], resource) as string;
-    const fullResourceTitle = `${resourceTitle} - ${resourceDate}`;
+    const title = `${resourceTitle} - ${resourceDate}`;
     const file = mediaURL(R.propOr(undefined, 'file', resource));
     const resourceId = R.propOr('', 'id', resource) as string;
     const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
@@ -89,21 +85,12 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const commentCount = comments.length;
-    const { toggleCommentModal } = useCommentModalContext();
     const { tabValue, setTabValue, handleTabChange } = useTabs();
     const { renderShareButton } = useShare(resourceTitle);
     const { commentModalOpen } = useCommentModalContext();
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
 
-    const {
-        setDrawMode,
-        drawMode,
-        screenshot,
-        setRotate,
-        setFullscreen,
-        setScale,
-        setTranslation,
-    } = usePDFViewerContext();
+    const { setDrawMode, drawMode, setRotate, setFullscreen, setScale, setTranslation } = usePDFViewerContext();
 
     const {
         renderActionsHeader,
@@ -140,19 +127,12 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         commentModalOpen && tabValue === 0 && setTabValue(1);
     }, [commentModalOpen]);
 
-    const handleCancelDraw = (): void => setDrawMode(false);
-
-    const handleStartDrawing = (): void => {
+    const handleDrawModeButtonClick = (): void => {
         setRotate(0);
         setDrawMode(true);
         setFullscreen(true);
         setScale(defaultScale);
         setTranslation(defaultTranslation);
-    };
-
-    const handleContinueDraw = (): void => {
-        setDrawMode(false);
-        toggleCommentModal(true);
     };
 
     const staticBackUrl = {
@@ -199,7 +179,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         }
     };
 
-    const handleDownloadPDF = async (e: SyntheticEvent): Promise<void> => {
+    const handleDownloadButtonClick = async (e: SyntheticEvent): Promise<void> => {
         handleCloseActions(e);
 
         try {
@@ -211,7 +191,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             const blob = await res.blob();
             const blobUrl = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.download = fullResourceTitle;
+            a.download = title;
             a.href = blobUrl;
             document.body.appendChild(a);
             a.click();
@@ -221,7 +201,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         }
     };
 
-    const handlePrintPDF = async (e: SyntheticEvent): Promise<void> => {
+    const handlePrintButtonClick = async (e: SyntheticEvent): Promise<void> => {
         handleCloseActions(e);
 
         try {
@@ -270,64 +250,13 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     ];
 
     const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
-
-    const renderMarkAreaButton = (
-        <Tooltip title={t('tooltips:markArea')}>
-            <IconButton onClick={handleStartDrawing} size="small" color={isMobile ? 'default' : 'secondary'}>
-                <TabUnselectedOutlined />
-            </IconButton>
-        </Tooltip>
-    );
-
-    const renderDownloadButton = (
-        <Tooltip title={t('tooltips:download')}>
-            <IconButton onClick={handleDownloadPDF} size="small" color="secondary">
-                <CloudDownloadOutlined />
-            </IconButton>
-        </Tooltip>
-    );
-
-    const renderPrintButton = (
-        <Tooltip title={t('tooltips:print')}>
-            <IconButton onClick={handlePrintPDF} size="small" color="secondary">
-                <PrintOutlined />
-            </IconButton>
-        </Tooltip>
-    );
-
-    const renderDrawModeContent = (
-        <Grid container alignItems="center">
-            <Grid item xs={isMobile ? 6 : 5} container justify="flex-start">
-                <Button
-                    onClick={handleCancelDraw}
-                    startIcon={<CancelOutlined />}
-                    color={isMobile ? 'default' : 'secondary'}
-                >
-                    {t('common:cancel')}
-                </Button>
-            </Grid>
-            {!isMobile && (
-                <Grid item xs={2}>
-                    <Typography variant="subtitle1">{t('resource:drawMode')}</Typography>
-                </Grid>
-            )}
-            <Grid item xs={isMobile ? 6 : 5} container justify="flex-end">
-                <Button
-                    onClick={handleContinueDraw}
-                    endIcon={<KeyboardArrowRightOutlined />}
-                    disabled={!screenshot}
-                    color={isMobile ? 'primary' : 'secondary'}
-                >
-                    {t('common:continue')}
-                </Button>
-            </Grid>
-        </Grid>
-    );
+    const renderDrawModeButton = <DrawModeButton onClick={handleDrawModeButtonClick} />;
+    const renderDrawModeControls = <DrawModeControls />;
 
     const renderPreviewBottomNavbarContent = (
         <Grid container>
             <Grid item xs={6} container justify="flex-start">
-                {renderMarkAreaButton}
+                {renderDrawModeButton}
             </Grid>
             <Grid item xs={6} container justify="flex-end">
                 {renderStarButton}
@@ -339,7 +268,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 
     const renderBottomNavbarLeft = (
         <StyledBottomNavigation>
-            <NavbarContainer>{drawMode ? renderDrawModeContent : renderPreviewBottomNavbarContent}</NavbarContainer>
+            <NavbarContainer>{drawMode ? renderDrawModeControls : renderPreviewBottomNavbarContent}</NavbarContainer>
         </StyledBottomNavigation>
     );
 
@@ -355,13 +284,11 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledBottomNavigation>
     );
 
-    const pdfViewerProps = {
-        file,
-        title: fullResourceTitle,
-        renderMarkAreaButton,
-        renderDrawModeContent,
-        renderDownloadButton,
-        renderPrintButton,
+    const toolbarProps = {
+        title,
+        handleDrawModeButtonClick,
+        handleDownloadButtonClick,
+        handlePrintButtonClick,
     };
 
     const discussionHeaderProps = {
@@ -381,7 +308,8 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         placeholderText: t('resource:commentsPlaceholder'),
     };
 
-    const renderPDFViewer = <PDFViewer {...pdfViewerProps} />;
+    const renderToolbar = <ResourceToolbar {...toolbarProps} />;
+    const renderPDFViewer = <PDFViewer file={file} />;
     const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
     const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
 
@@ -416,7 +344,8 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         <Grid className="desktop-content" container>
             <Grid item container md={7} lg={8}>
                 <StyledCard>
-                    <Box position="relative" flexGrow="1" display="flex">
+                    <Box flexGrow="1" display="flex" flexDirection="column" position="relative">
+                        {renderToolbar}
                         {renderPDFViewer}
                     </Box>
                 </StyledCard>
@@ -448,7 +377,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderDownloadAction = isMobile && (
-        <MenuItem onClick={handleDownloadPDF}>
+        <MenuItem onClick={handleDownloadButtonClick}>
             <ListItemText>
                 <CloudDownloadOutlined /> {t('common:download')}
             </ListItemText>
@@ -456,7 +385,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderPrintAction = isMobile && (
-        <MenuItem onClick={handlePrintPDF}>
+        <MenuItem onClick={handlePrintButtonClick}>
             <ListItemText>
                 <PrintOutlined /> {t('common:print')}
             </ListItemText>
@@ -482,7 +411,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 
     const layoutProps = {
         seoProps: {
-            title: fullResourceTitle,
+            title,
             description: t('resource:description'),
         },
         topNavbarProps: {

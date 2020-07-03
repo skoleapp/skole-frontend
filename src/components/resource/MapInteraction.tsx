@@ -1,11 +1,11 @@
-import { Box, Fab, Tooltip } from '@material-ui/core';
-import { AddOutlined, FullscreenExitOutlined, FullscreenOutlined, RemoveOutlined } from '@material-ui/icons';
-import React, { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { defaultScale, defaultTranslation, useStateRef } from 'src/utils';
+import { Box } from '@material-ui/core';
+import React, { useEffect, useRef, useState } from 'react';
+import { PDFTranslation } from 'src/types';
+import { defaultScale, defaultTranslation, maxScale, minScale } from 'src/utils';
 import styled from 'styled-components';
 
 import { useDeviceContext, usePDFViewerContext } from '../../context';
+import { MapControls } from '.';
 
 interface StartPointersInfo {
     translation: PDFTranslation;
@@ -13,26 +13,16 @@ interface StartPointersInfo {
     pointers: TouchList;
 }
 
-interface PDFTranslation {
-    x: number;
-    y: number;
-}
-
-const minScale = 0.75;
-const maxScale = 1.75;
-
 // TODO: Add a listener that updates the page number based on scroll position.
 // TODO: Find a way to improve the performance as the animations are now a bit laggy at least on mobile.
 // TODO: Improve zoom on mobile when user has scrolled down to a point.
 export const MapInteraction: React.FC = ({ children }) => {
-    const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
+    const [startPointersInfo, setStartPointersInfo] = useState<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
 
     const {
         drawMode,
-        fullscreen,
         setFullscreen,
         ctrlKey,
         setCtrlKey,
@@ -41,8 +31,6 @@ export const MapInteraction: React.FC = ({ children }) => {
         translation,
         setTranslation,
     } = usePDFViewerContext();
-
-    const disableFullscreen = (): false | void => fullscreen && setFullscreen(false);
 
     // Change cursor mode when CTRL key is pressed.
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -145,7 +133,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     const scaleFromMultiTouch = (e: TouchEvent): void => {
         // Ignore: This function is only called when the start pointers info exists.
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const { pointers: startTouches, scale: startScale, translation: startTranslation } = startPointersInfo.current!;
+        const { pointers: startTouches, scale: startScale, translation: startTranslation } = startPointersInfo!;
         const newTouches = e.touches;
 
         // Calculate new scale.
@@ -208,7 +196,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     // Update document scale based on mouse wheel events.
     const onWheel = (e: WheelEvent): void => {
         if (e.ctrlKey) {
-            disableFullscreen();
+            setFullscreen(false);
             e.preventDefault(); // Disables scroll behavior.
             const scaleChange = 2 ** (e.deltaY * 0.002);
             const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
@@ -220,8 +208,8 @@ export const MapInteraction: React.FC = ({ children }) => {
     const onTouchStart = (e: TouchEvent): void => setPointerState(e.touches);
 
     const onTouchMove = (e: TouchEvent): void => {
-        if (!!startPointersInfo.current) {
-            const isPinchAction = e.touches.length === 2 && startPointersInfo.current.pointers.length > 1;
+        if (!!startPointersInfo) {
+            const isPinchAction = e.touches.length === 2 && startPointersInfo.pointers.length > 1;
 
             if (isPinchAction) {
                 e.preventDefault(); // Prevent scrolling.
@@ -256,7 +244,7 @@ export const MapInteraction: React.FC = ({ children }) => {
             containerNode.removeEventListener('touchmove', onTouchMove as EventListener);
             containerNode.removeEventListener('touchend', onTouchEnd as EventListener);
         };
-    }, [scale, translation, drawMode]);
+    }, [startPointersInfo, translation, scale, drawMode]);
 
     // Listen for key presses in order to show different cursor when CTRL key is pressed.
     useEffect(() => {
@@ -275,66 +263,6 @@ export const MapInteraction: React.FC = ({ children }) => {
         mapInteractionNode.scrollLeft = (mapInteractionNode.scrollWidth - mapInteractionNode.clientWidth) / 2;
     }, [scale]);
 
-    const toggleFullScreen = (): void => {
-        let scale;
-
-        if (fullscreen) {
-            scale = minScale;
-        } else {
-            scale = defaultScale;
-        }
-
-        setFullscreen(!fullscreen);
-        setScale(scale);
-        setTranslation(defaultTranslation);
-    };
-
-    // Scale up by 5% if under maximum limit.
-    const scaleUp = (): void => {
-        disableFullscreen();
-        const newScale = scale < maxScale ? scale + 0.05 : scale;
-        scaleFromPoint(newScale, defaultTranslation);
-    };
-
-    // Scale down by 5% if over minimum limit.
-    const scaleDown = (): void => {
-        disableFullscreen();
-        const newScale = scale > minScale ? scale - 0.05 : scale;
-        scaleFromPoint(newScale, defaultTranslation);
-    };
-
-    const renderFullscreenButton = (
-        <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
-            <Fab size="small" color="secondary" onClick={toggleFullScreen}>
-                {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
-            </Fab>
-        </Tooltip>
-    );
-
-    const renderDownscaleButton = (
-        <Tooltip title={t('tooltips:zoomIn')}>
-            <Fab size="small" color="secondary" onClick={scaleUp}>
-                <AddOutlined />
-            </Fab>
-        </Tooltip>
-    );
-
-    const renderUpscaleButton = (
-        <Tooltip title={t('tooltips:zoomOut')}>
-            <Fab size="small" color="secondary" onClick={scaleDown}>
-                <RemoveOutlined />
-            </Fab>
-        </Tooltip>
-    );
-
-    const renderControls = !isMobile && !drawMode && (
-        <Box id="controls">
-            {renderFullscreenButton}
-            {renderDownscaleButton}
-            {renderUpscaleButton}
-        </Box>
-    );
-
     const cursor = `${drawMode ? 'pointer' : ctrlKey ? 'all-scroll' : 'default'}`; // On desktop show different cursor when CTRL key is pressed.
     const overflow = `${drawMode && isMobile ? 'hidden' : 'auto'}`; // Disable scrolling when draw mode is on on mobile.
     const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
@@ -348,6 +276,8 @@ export const MapInteraction: React.FC = ({ children }) => {
             <StyledContainer {...containerProps}>{children}</StyledContainer>
         </StyledMapInteractionCSS>
     );
+
+    const renderControls = !isMobile && !drawMode && <MapControls scaleFromPoint={scaleFromPoint} />;
 
     return (
         // Ignore: This is an issue with MUI: https://github.com/mui-org/material-ui/issues/17010#issuecomment-584223410
@@ -363,20 +293,6 @@ export const MapInteraction: React.FC = ({ children }) => {
 const StyledMapInteraction = styled(Box)`
     flex-grow: 1;
     display: flex;
-    position: relative;
-
-    #controls {
-        position: absolute;
-        bottom: 1rem;
-        right: 1rem;
-        display: flex;
-        flex-direction: column;
-        padding: 0.5rem;
-
-        .MuiFab-root {
-            margin: 0.5rem;
-        }
-    }
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -388,7 +304,6 @@ const StyledMapInteractionCSS = styled(({ cursor, overflow, ...props }) => <Box 
         },
     }),
 )`
-    position: relative;
     flex-grow: 1;
     background-color: var(--gray-light);
     display: flex;
@@ -404,7 +319,4 @@ const StyledContainer = styled(({ transform, transformOrigin, width, ...props })
             width,
         },
     }),
-)`
-    position: absolute;
-    flex-grow: 1;
-`;
+)``;
