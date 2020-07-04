@@ -14,8 +14,8 @@ interface StartPointersInfo {
 }
 
 // TODO: Add a listener that updates the page number based on scroll position.
-// TODO: Find a way to improve the performance as the animations are now a bit laggy.
-// TODO: Improve zoom on mobile when user has scrolled down to a point.
+// TODO: Find a way to improve the performance as the animations are now very slow.
+// TODO: Improve mobile zoom so that it wont cut out areas on the left of the zoom container.
 export const MapInteraction: React.FC = ({ children }) => {
     const isMobile = useDeviceContext();
     const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
@@ -75,24 +75,8 @@ export const MapInteraction: React.FC = ({ children }) => {
     // Get clamped scale if maximum scale has been exceeded.
     const getClampedScale = (min: number, value: number, max: number): number => Math.max(min, Math.min(value, max));
 
-    const getContainerNode = (): HTMLDivElement =>
-        document.querySelector('#map-interaction-container') as HTMLDivElement;
-
-    const getContainerBoundingClientRect = (): DOMRect => getContainerNode().getBoundingClientRect();
-
-    // Get clamped translation if translation bounds have been exceeded.
-    const getClampedTranslation = (desiredTranslation: PDFTranslation): PDFTranslation => {
-        const { x, y } = desiredTranslation;
-        const xMin = -Infinity;
-        const xMax = Infinity;
-        const yMin = -Infinity;
-        const yMax = Infinity;
-
-        return {
-            x: getClampedScale(xMin, x, xMax),
-            y: getClampedScale(yMin, y, yMax),
-        };
-    };
+    const getMapContainerNode = (): HTMLDivElement => document.querySelector('#map-container') as HTMLDivElement;
+    const getMapContainerBoundingClientRect = (): DOMRect => getMapContainerNode().getBoundingClientRect();
 
     // Get mid point between translation points.
     const getMidPoint = (p1: PDFTranslation, p2: PDFTranslation): PDFTranslation => ({
@@ -100,9 +84,9 @@ export const MapInteraction: React.FC = ({ children }) => {
         y: (p1.y + p2.y) / 2,
     });
 
-    // Return calculated translation from container position.
+    // Return calculated translation from page.
     const getTranslatedOrigin = (translation: PDFTranslation): PDFTranslation => {
-        const clientOffset = getContainerBoundingClientRect();
+        const clientOffset = getMapContainerBoundingClientRect();
 
         return {
             x: clientOffset.left + translation.x,
@@ -110,7 +94,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         };
     };
 
-    // From a given screen point return it as a point in the coordinate system of the given translation.
+    // From a given screen point return it as a point in the coordinate system of the map interaction component.
     const getClientPosToTranslatedPos = (
         { x, y }: PDFTranslation,
         _translation: PDFTranslation = translation,
@@ -152,13 +136,14 @@ export const MapInteraction: React.FC = ({ children }) => {
             y: newMidPoint.y - startMidpoint.y,
         };
 
-        // The point originally in the middle of the fingers on the initial zoom start
+        // The point originally in the middle of the fingers on the initial zoom start.
         const focalPoint = getClientPosToTranslatedPos(startMidpoint, startTranslation);
+        const { scrollTop } = getMapContainerNode();
 
-        // The amount that the middle point has changed from this scaling
+        // The amount that the middle point has changed from this scaling.
         const focalPtDelta = {
             x: getCoordChange(focalPoint.x, scaleRatio),
-            y: getCoordChange(focalPoint.y, scaleRatio),
+            y: getCoordChange(focalPoint.y + scrollTop, scaleRatio),
         };
 
         // Translation is the original translation, plus the amount we dragged, minus what the scaling will do to the focal point.
@@ -169,7 +154,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         };
 
         setScale(newScale);
-        setTranslation(getClampedTranslation(newTranslation));
+        setTranslation(newTranslation);
     };
 
     // TODO: Find a way to set X-axis translation so that the zooming in won't cut out areas.
@@ -188,7 +173,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         };
 
         setScale(newScale);
-        setTranslation(getClampedTranslation(newTranslation));
+        setTranslation(newTranslation);
     };
 
     // Update document scale based on mouse wheel events.
@@ -222,7 +207,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     const onTouchEnd = (e: TouchEvent): void => {
         setPointerState(e.touches);
 
-        // Bounce back to original size if pinched out.
+        // Reset original scale/translation if pinched out.
         if (scale < defaultScale) {
             setScale(defaultScale);
             setTranslation(defaultTranslation);
@@ -230,27 +215,27 @@ export const MapInteraction: React.FC = ({ children }) => {
     };
 
     useEffect(() => {
-        const containerNode = getContainerNode();
+        const mapContainerNode = getMapContainerNode();
 
         // Automatically scroll to center when zooming in on desktop.
         if (!isMobile) {
-            containerNode.scrollLeft = (containerNode.scrollWidth - containerNode.clientWidth) / 2;
+            mapContainerNode.scrollLeft = (mapContainerNode.scrollWidth - mapContainerNode.clientWidth) / 2;
         }
 
         // Only apply listeners when not in draw mode.
         // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
         if (!drawMode) {
-            containerNode.addEventListener('wheel', onWheel as EventListener);
-            containerNode.addEventListener('touchstart', onTouchStart as EventListener, { passive: true });
-            containerNode.addEventListener('touchmove', onTouchMove as EventListener);
-            containerNode.addEventListener('touchend', onTouchEnd as EventListener, { passive: true });
+            mapContainerNode.addEventListener('wheel', onWheel as EventListener);
+            mapContainerNode.addEventListener('touchstart', onTouchStart as EventListener, { passive: true });
+            mapContainerNode.addEventListener('touchmove', onTouchMove as EventListener);
+            mapContainerNode.addEventListener('touchend', onTouchEnd as EventListener, { passive: true });
         }
 
         return (): void => {
-            containerNode.removeEventListener('wheel', onWheel as EventListener);
-            containerNode.removeEventListener('touchstart', onTouchStart as EventListener);
-            containerNode.removeEventListener('touchmove', onTouchMove as EventListener);
-            containerNode.removeEventListener('touchend', onTouchEnd as EventListener);
+            mapContainerNode.removeEventListener('wheel', onWheel as EventListener);
+            mapContainerNode.removeEventListener('touchstart', onTouchStart as EventListener);
+            mapContainerNode.removeEventListener('touchmove', onTouchMove as EventListener);
+            mapContainerNode.removeEventListener('touchend', onTouchEnd as EventListener);
         };
     }, [scale, translation, drawMode]);
 
@@ -276,7 +261,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     const renderMapControls = !isMobile && !drawMode && <MapControls scaleFromPoint={scaleFromPoint} />;
 
     return (
-        <MapInteractionContainer id="map-interaction-container" {...mapInteractionContainerProps}>
+        <MapInteractionContainer id="map-container" {...mapInteractionContainerProps}>
             {renderTransformContainer}
             {renderMapControls}
         </MapInteractionContainer>
