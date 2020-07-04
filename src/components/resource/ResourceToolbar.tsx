@@ -22,7 +22,19 @@ export const ResourceToolbar: React.FC<Props> = ({
     handlePrintButtonClick,
 }) => {
     const { t } = useTranslation();
-    const { pageNumber, numPages, setPageNumber, rotate, setRotate, drawMode, documentRef } = usePDFViewerContext();
+
+    const {
+        pageNumber,
+        numPages,
+        setPageNumber,
+        rotate,
+        setRotate,
+        drawMode,
+        documentRef,
+        documentLoaded,
+    } = usePDFViewerContext();
+
+    const disabled = !documentLoaded;
     const handleRotateButtonClick = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
     // Scroll into page from given page number.
@@ -41,6 +53,7 @@ export const ResourceToolbar: React.FC<Props> = ({
             type="number"
             color="secondary"
             inputProps={{ min: 1, max: numPages }}
+            disabled={disabled}
         />
     );
 
@@ -56,30 +69,36 @@ export const ResourceToolbar: React.FC<Props> = ({
         </Box>
     );
 
-    const renderDrawModeButton = <DrawModeButton onClick={handleDrawModeButtonClick} />;
+    const renderDrawModeButton = <DrawModeButton onClick={handleDrawModeButtonClick} disabled={disabled} />;
     const renderDrawModeControls = <DrawModeControls />;
 
     const renderDownloadButton = (
         <Tooltip title={t('tooltips:download')}>
-            <IconButton onClick={handleDownloadButtonClick} size="small" color="secondary">
-                <CloudDownloadOutlined />
-            </IconButton>
+            <span>
+                <IconButton onClick={handleDownloadButtonClick} size="small" color="secondary" disabled={disabled}>
+                    <CloudDownloadOutlined />
+                </IconButton>
+            </span>
         </Tooltip>
     );
 
     const renderPrintButton = (
         <Tooltip title={t('tooltips:print')}>
-            <IconButton onClick={handlePrintButtonClick} size="small" color="secondary">
-                <PrintOutlined />
-            </IconButton>
+            <span>
+                <IconButton onClick={handlePrintButtonClick} size="small" color="secondary" disabled={disabled}>
+                    <PrintOutlined />
+                </IconButton>
+            </span>
         </Tooltip>
     );
 
     const renderRotateButton = (
         <Tooltip title={t('tooltips:rotate')}>
-            <IconButton size="small" color="inherit" onClick={handleRotateButtonClick}>
-                <RotateRightOutlined />
-            </IconButton>
+            <span>
+                <IconButton size="small" color="inherit" onClick={handleRotateButtonClick} disabled={disabled}>
+                    <RotateRightOutlined />
+                </IconButton>
+            </span>
         </Tooltip>
     );
 
@@ -124,7 +143,7 @@ const StyledToolbar = styled(Box)`
         align-items: center;
 
         .MuiTextField-root {
-            width: 2rem;
+            width: 2.5rem;
             height: 2rem;
             background-color: var(--gray-dark);
             margin: 0 0.25rem 0 0;

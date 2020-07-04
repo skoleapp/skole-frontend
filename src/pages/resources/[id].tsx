@@ -89,7 +89,16 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { renderShareButton } = useShare(resourceTitle);
     const { commentModalOpen } = useCommentModalContext();
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
-    const { setDrawMode, drawMode, setRotate, setFullscreen, setScale, setTranslation } = usePDFViewerContext();
+
+    const {
+        setDrawMode,
+        drawMode,
+        setRotate,
+        setFullscreen,
+        setScale,
+        setTranslation,
+        documentLoaded,
+    } = usePDFViewerContext();
 
     const {
         renderActionsHeader,
@@ -249,7 +258,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     ];
 
     const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
-    const renderDrawModeButton = <DrawModeButton onClick={handleDrawModeButtonClick} />;
+    const renderDrawModeButton = <DrawModeButton onClick={handleDrawModeButtonClick} disabled={!documentLoaded} />;
     const renderDrawModeControls = <DrawModeControls />;
 
     const renderPreviewBottomNavbarContent = (

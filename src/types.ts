@@ -172,6 +172,8 @@ export interface PDFViewerContext {
     setNumPages: Dispatch<SetStateAction<number>>;
     pageNumber: number;
     setPageNumber: Dispatch<SetStateAction<number>>;
+    documentLoaded: boolean;
+    setDocumentLoaded: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface DiscussionContext {

@@ -45,6 +45,8 @@ const SkolePageContext = createContext<SkoleContextType>({
     },
     pdfViewer: {
         documentRef: null,
+        documentLoaded: false,
+        setDocumentLoaded: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         drawMode: false,
         setDrawMode: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         screenshot: null,
@@ -143,24 +145,32 @@ interface Props {
 }
 
 export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, isMobileGuess }) => {
+    // Auth context.
     const [user, setUser] = useState(initialUser);
 
+    // Attachment viewer context.
     const [attachment, setAttachment] = useState<string | null>(null);
     const toggleAttachmentViewer = (payload: string | null): void => setAttachment(payload);
 
+    // Comment modal context.
     const [commentModalOpen, setCommentModalOpen] = useState(false);
     const toggleCommentModal = (payload: boolean): void => setCommentModalOpen(payload);
 
+    // Language selector context.
     const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);
     const toggleLanguageSelector = (open: boolean): void => setLanguageSelectorOpen(open);
 
+    // Notifications context.
     const [notification, setNotification] = useState<string | null>(null);
     const toggleNotification = (payload: string | null): void => setNotification(payload);
 
+    // Settings context.
     const [settingsOpen, setSettingsOpen] = useState(false);
     const toggleSettings = (open: boolean): void => setSettingsOpen(open);
 
+    // PDF viewer context.
     const documentRef = useRef<Document>(null);
+    const [documentLoaded, setDocumentLoaded] = useState(false);
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
     const [rotate, setRotate] = useState(0);
@@ -171,6 +181,7 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
 
+    // Comment thread context.
     const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]);
     const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
     const toggleTopComment = (payload: CommentObjectType | null): void => setTopComment(payload);
@@ -202,6 +213,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
         },
         pdfViewer: {
             documentRef,
+            documentLoaded,
+            setDocumentLoaded,
             drawMode,
             setDrawMode,
             screenshot,

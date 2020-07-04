@@ -7,6 +7,8 @@ import { useCommentModalContext, useDeviceContext, usePDFViewerContext } from 's
 export const DrawModeControls: React.FC = () => {
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
+    const colWidth = isMobile ? 6 : 5;
+    const color = isMobile ? 'default' : 'secondary';
     const { setDrawMode, screenshot } = usePDFViewerContext();
     const { toggleCommentModal } = useCommentModalContext();
     const handleCancelButtonClick = (): void => setDrawMode(false);
@@ -17,12 +19,8 @@ export const DrawModeControls: React.FC = () => {
     };
 
     const renderCancelButton = (
-        <Grid item xs={isMobile ? 6 : 5} container justify="flex-start">
-            <Button
-                onClick={handleCancelButtonClick}
-                startIcon={<CancelOutlined />}
-                color={isMobile ? 'default' : 'secondary'}
-            >
+        <Grid item xs={colWidth} container justify="flex-start">
+            <Button onClick={handleCancelButtonClick} startIcon={<CancelOutlined />} color={color}>
                 {t('common:cancel')}
             </Button>
         </Grid>
@@ -35,12 +33,12 @@ export const DrawModeControls: React.FC = () => {
     );
 
     const renderContinueButton = (
-        <Grid item xs={isMobile ? 6 : 5} container justify="flex-end">
+        <Grid item xs={colWidth} container justify="flex-end">
             <Button
                 onClick={handleContinueButtonClick}
                 endIcon={<KeyboardArrowRightOutlined />}
                 disabled={!screenshot}
-                color={isMobile ? 'primary' : 'secondary'}
+                color={color}
             >
                 {t('common:continue')}
             </Button>

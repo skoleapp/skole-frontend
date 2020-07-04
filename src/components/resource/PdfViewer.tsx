@@ -16,12 +16,22 @@ interface Props {
 
 export const PDFViewer: React.FC<Props> = ({ file }) => {
     const { t } = useTranslation();
-    const { documentRef, numPages, setPageNumber, setNumPages, rotate, drawMode } = usePDFViewerContext();
+
+    const {
+        documentRef,
+        numPages,
+        setPageNumber,
+        setNumPages,
+        rotate,
+        drawMode,
+        setDocumentLoaded,
+    } = usePDFViewerContext();
 
     const onDocumentLoadSuccess = (document: PDFDocumentProxy): void => {
         const { numPages } = document;
         setNumPages(numPages);
         setPageNumber(1);
+        setDocumentLoaded(true);
     };
 
     const renderPages = Array.from(new Array(numPages), (_, i) => (
