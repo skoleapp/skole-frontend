@@ -20,7 +20,7 @@ interface PageFromElement {
 const initialState = { start: null, end: null, locked: false };
 
 export const AreaSelection: React.FC = () => {
-    const { setScreenshot } = usePDFViewerContext();
+    const { setScreenshot, drawMode } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
     const { start, end } = stateRef.current;
 
@@ -218,23 +218,25 @@ export const AreaSelection: React.FC = () => {
     useEffect(() => {
         const documentNode = getDocumentNode();
 
+        // Only apply listeners when in draw mode.
         // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
-        documentNode.addEventListener('touchmove', onTouchMove as EventListener);
-        documentNode.addEventListener('touchstart', onTouchStart as EventListener);
-        documentNode.addEventListener('mousemove', onMouseMove as EventListener, { passive: true });
-        documentNode.addEventListener('mousedown', onMouseDown as EventListener, { passive: true });
+        if (drawMode) {
+            documentNode.addEventListener('touchmove', onTouchMove as EventListener);
+            documentNode.addEventListener('touchstart', onTouchStart as EventListener);
+            documentNode.addEventListener('mousemove', onMouseMove as EventListener, { passive: true });
+            documentNode.addEventListener('mousedown', onMouseDown as EventListener, { passive: true });
+        }
 
         return (): void => {
             documentNode.removeEventListener('touchmove', onTouchMove as EventListener);
             documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
             documentNode.removeEventListener('mousemove', onMouseMove as EventListener);
             documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
-
             setState(initialState); // Reset state.
         };
-    }, []);
+    }, [drawMode]);
 
-    return !!start && !!end ? <StyledAreaSelection style={getBoundingRect(start, end)} /> : null;
+    return drawMode && !!start && !!end ? <StyledAreaSelection style={getBoundingRect(start, end)} /> : null;
 };
 
 const StyledAreaSelection = styled(Box)`
