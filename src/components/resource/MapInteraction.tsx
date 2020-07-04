@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { PDFTranslation } from 'src/types';
-import { defaultScale, defaultTranslation, maxScale, minScale } from 'src/utils';
+import { defaultScale, defaultTranslation, maxScale, minScale, useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
 import { useDeviceContext, usePDFViewerContext } from '../../context';
@@ -14,12 +14,11 @@ interface StartPointersInfo {
 }
 
 // TODO: Add a listener that updates the page number based on scroll position.
-// TODO: Find a way to improve the performance as the animations are now a bit laggy at least on mobile.
+// TODO: Find a way to improve the performance as the animations are now a bit laggy.
 // TODO: Improve zoom on mobile when user has scrolled down to a point.
 export const MapInteraction: React.FC = ({ children }) => {
     const isMobile = useDeviceContext();
-    const containerRef = useRef<HTMLDivElement | null>(null);
-    const [startPointersInfo, setStartPointersInfo] = useState<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
+    const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
 
     const {
         drawMode,
@@ -76,11 +75,10 @@ export const MapInteraction: React.FC = ({ children }) => {
     // Get clamped scale if maximum scale has been exceeded.
     const getClampedScale = (min: number, value: number, max: number): number => Math.max(min, Math.min(value, max));
 
-    // Ignore: Ref is always set on container element.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const getContainerNode = (): HTMLDivElement => containerRef.current!;
+    const getContainerNode = (): HTMLDivElement =>
+        document.querySelector('#map-interaction-container') as HTMLDivElement;
+
     const getContainerBoundingClientRect = (): DOMRect => getContainerNode().getBoundingClientRect();
-    const getMapInteractionNode = (): HTMLDivElement => document.querySelector('#map-interaction') as HTMLDivElement;
 
     // Get clamped translation if translation bounds have been exceeded.
     const getClampedTranslation = (desiredTranslation: PDFTranslation): PDFTranslation => {
@@ -133,7 +131,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     const scaleFromMultiTouch = (e: TouchEvent): void => {
         // Ignore: This function is only called when the start pointers info exists.
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const { pointers: startTouches, scale: startScale, translation: startTranslation } = startPointersInfo!;
+        const { pointers: startTouches, scale: startScale, translation: startTranslation } = startPointersInfo.current!;
         const newTouches = e.touches;
 
         // Calculate new scale.
@@ -148,7 +146,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         const startMidpoint = getMidPoint(getTouchPoint(startTouches[0]), getTouchPoint(startTouches[1]));
         const newMidPoint = getMidPoint(getTouchPoint(newTouches[0]), getTouchPoint(newTouches[1]));
 
-        // The amount we need to translate by in order for the mid point to stay in the middle (before thinking about scaling factor.
+        // The amount we need to translate by in order for the mid point to stay in the middle (before thinking about scaling factor).
         const dragDelta = {
             x: newMidPoint.x - startMidpoint.x,
             y: newMidPoint.y - startMidpoint.y,
@@ -197,10 +195,13 @@ export const MapInteraction: React.FC = ({ children }) => {
     const onWheel = (e: WheelEvent): void => {
         if (e.ctrlKey) {
             setFullscreen(false);
-            e.preventDefault(); // Disables scroll behavior.
+            e.preventDefault(); // Disable scroll.
             const scaleChange = 2 ** (e.deltaY * 0.002);
             const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
-            const mousePos = getClientPosToTranslatedPos({ x: 0, y: e.clientY });
+            const { y: mousePosY } = getClientPosToTranslatedPos({ x: e.clientX, y: e.clientY });
+            // Unlike on mobile, here we explicitly set X-axis focal point to 0 since we only care about Y-axis focal point.
+            // This way we get similar scroll zoom behavior as on Google's PDF viewer.
+            const mousePos = { x: defaultTranslation.x, y: mousePosY };
             scaleFromPoint(newScale, mousePos);
         }
     };
@@ -208,8 +209,8 @@ export const MapInteraction: React.FC = ({ children }) => {
     const onTouchStart = (e: TouchEvent): void => setPointerState(e.touches);
 
     const onTouchMove = (e: TouchEvent): void => {
-        if (!!startPointersInfo) {
-            const isPinchAction = e.touches.length === 2 && startPointersInfo.pointers.length > 1;
+        if (!!startPointersInfo.current) {
+            const isPinchAction = e.touches.length === 2 && startPointersInfo.current.pointers.length > 1;
 
             if (isPinchAction) {
                 e.preventDefault(); // Prevent scrolling.
@@ -231,7 +232,14 @@ export const MapInteraction: React.FC = ({ children }) => {
     useEffect(() => {
         const containerNode = getContainerNode();
 
-        if (!!containerNode && !drawMode) {
+        // Automatically scroll to center when zooming in on desktop.
+        if (!isMobile) {
+            containerNode.scrollLeft = (containerNode.scrollWidth - containerNode.clientWidth) / 2;
+        }
+
+        // Only apply listeners when not in draw mode.
+        // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
+        if (!drawMode) {
             containerNode.addEventListener('wheel', onWheel as EventListener);
             containerNode.addEventListener('touchstart', onTouchStart as EventListener, { passive: true });
             containerNode.addEventListener('touchmove', onTouchMove as EventListener);
@@ -244,7 +252,7 @@ export const MapInteraction: React.FC = ({ children }) => {
             containerNode.removeEventListener('touchmove', onTouchMove as EventListener);
             containerNode.removeEventListener('touchend', onTouchEnd as EventListener);
         };
-    }, [startPointersInfo, translation, scale, drawMode]);
+    }, [scale, translation, drawMode]);
 
     // Listen for key presses in order to show different cursor when CTRL key is pressed.
     useEffect(() => {
@@ -257,46 +265,26 @@ export const MapInteraction: React.FC = ({ children }) => {
         };
     }, []);
 
-    // Automatically scroll to center when zooming in on desktop.
-    useEffect(() => {
-        const mapInteractionNode = getMapInteractionNode();
-        mapInteractionNode.scrollLeft = (mapInteractionNode.scrollWidth - mapInteractionNode.clientWidth) / 2;
-    }, [scale]);
-
-    const cursor = `${drawMode ? 'pointer' : ctrlKey ? 'all-scroll' : 'default'}`; // On desktop show different cursor when CTRL key is pressed.
-    const overflow = `${drawMode && isMobile ? 'hidden' : 'auto'}`; // Disable scrolling when draw mode is on on mobile.
+    const cursor = drawMode ? 'pointer' : ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
+    const overflow = drawMode && isMobile ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
     const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
     const transformOrigin = scale < 1 ? '50% 0' : '0 0'; // When in fullscreen and zooming in from that, we set the transform origin to top left. Otherwise we center the document.
     const width = `calc(100% * ${scale})`;
-    const mapInteractionProps = { cursor, overflow };
-    const containerProps = { transform, transformOrigin, width };
-
-    const renderMapInteractionCSS = (
-        <StyledMapInteractionCSS id="map-interaction" {...mapInteractionProps}>
-            <StyledContainer {...containerProps}>{children}</StyledContainer>
-        </StyledMapInteractionCSS>
-    );
-
-    const renderControls = !isMobile && !drawMode && <MapControls scaleFromPoint={scaleFromPoint} />;
+    const mapInteractionContainerProps = { cursor, overflow };
+    const transformContainerProps = { transform, transformOrigin, width };
+    const renderTransformContainer = <TransformContainer {...transformContainerProps}>{children}</TransformContainer>;
+    const renderMapControls = !isMobile && !drawMode && <MapControls scaleFromPoint={scaleFromPoint} />;
 
     return (
-        // Ignore: This is an issue with MUI: https://github.com/mui-org/material-ui/issues/17010#issuecomment-584223410
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        <StyledMapInteraction ref={containerRef}>
-            {renderMapInteractionCSS}
-            {renderControls}
-        </StyledMapInteraction>
+        <MapInteractionContainer id="map-interaction-container" {...mapInteractionContainerProps}>
+            {renderTransformContainer}
+            {renderMapControls}
+        </MapInteractionContainer>
     );
 };
 
-const StyledMapInteraction = styled(Box)`
-    flex-grow: 1;
-    display: flex;
-`;
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledMapInteractionCSS = styled(({ cursor, overflow, ...props }) => <Box {...props} />).attrs(
+const MapInteractionContainer = styled(({ cursor, overflow, ...props }) => <Box {...props} />).attrs(
     ({ cursor, overflow }) => ({
         style: {
             cursor,
@@ -311,7 +299,7 @@ const StyledMapInteractionCSS = styled(({ cursor, overflow, ...props }) => <Box 
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledContainer = styled(({ transform, transformOrigin, width, ...props }) => <Box {...props} />).attrs(
+const TransformContainer = styled(({ transform, transformOrigin, width, ...props }) => <Box {...props} />).attrs(
     ({ transform, transformOrigin, width }) => ({
         style: {
             transform,

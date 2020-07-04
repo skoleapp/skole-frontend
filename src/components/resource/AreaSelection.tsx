@@ -218,19 +218,19 @@ export const AreaSelection: React.FC = () => {
     useEffect(() => {
         const documentNode = getDocumentNode();
 
-        if (!!documentNode) {
-            documentNode.addEventListener('touchmove', onTouchMove as EventListener);
-            documentNode.addEventListener('touchstart', onTouchStart as EventListener);
-            documentNode.addEventListener('mousemove', onMouseMove as EventListener, { passive: true });
-            documentNode.addEventListener('mousedown', onMouseDown as EventListener, { passive: true });
-        }
+        // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
+        documentNode.addEventListener('touchmove', onTouchMove as EventListener);
+        documentNode.addEventListener('touchstart', onTouchStart as EventListener);
+        documentNode.addEventListener('mousemove', onMouseMove as EventListener, { passive: true });
+        documentNode.addEventListener('mousedown', onMouseDown as EventListener, { passive: true });
 
         return (): void => {
             documentNode.removeEventListener('touchmove', onTouchMove as EventListener);
             documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
             documentNode.removeEventListener('mousemove', onMouseMove as EventListener);
             documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
-            setState(initialState);
+
+            setState(initialState); // Reset state.
         };
     }, []);
 

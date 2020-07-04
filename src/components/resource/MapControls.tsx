@@ -29,19 +29,14 @@ export const MapControls: React.FC<Props> = ({ scaleFromPoint }) => {
         setTranslation(defaultTranslation);
     };
 
-    // Scale up by 5% if under maximum limit.
-    const scaleUp = (): void => {
+    const handleScale = (newScale: number): void => {
         setFullscreen(false);
-        const newScale = scale < maxScale ? scale + 0.05 : scale;
+        newScale == defaultScale && setFullscreen(true);
         scaleFromPoint(newScale, defaultTranslation);
     };
 
-    // Scale down by 5% if over minimum limit.
-    const scaleDown = (): void => {
-        setFullscreen(false);
-        const newScale = scale > minScale ? scale - 0.05 : scale;
-        scaleFromPoint(newScale, defaultTranslation);
-    };
+    const scaleUp = (): void => handleScale(scale < maxScale ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
+    const scaleDown = (): void => handleScale(scale > minScale ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
 
     const renderFullscreenButton = (
         <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
