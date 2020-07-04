@@ -20,11 +20,9 @@ interface PageFromElement {
 const initialState = { start: null, end: null, locked: false };
 
 export const AreaSelection: React.FC = () => {
-    const { drawMode, setDrawMode, setScreenshot } = usePDFViewerContext();
+    const { setScreenshot } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
-    const [drawingAllowedRef, setDrawingAllowedRef] = useStateRef(false);
     const { start, end } = stateRef.current;
-    const reset = (): void => setState(initialState);
 
     // Ignore: Document node is always defined even if the PDF fails to load.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -85,7 +83,7 @@ export const AreaSelection: React.FC = () => {
     };
 
     // Get coordinates on container element.
-    const containerPDFTranslation = (pageX: number, pageY: number): PDFTranslation => {
+    const getContainerCoords = (pageX: number, pageY: number): PDFTranslation => {
         const documentNode = getDocumentNode();
         const { left, top } = documentNode.getBoundingClientRect();
 
@@ -102,7 +100,7 @@ export const AreaSelection: React.FC = () => {
         if (!!start && !locked) {
             setState({
                 ...stateRef.current,
-                end: containerPDFTranslation(e.pageX, e.pageY),
+                end: getContainerCoords(e.pageX, e.pageY),
             });
         }
     };
@@ -120,10 +118,10 @@ export const AreaSelection: React.FC = () => {
             !!currentTarget && currentTarget.removeEventListener('mouseup', onMouseUp as EventListener);
 
             if (!!start) {
-                const end = containerPDFTranslation(e.pageX, e.pageY);
+                const end = getContainerCoords(e.pageX, e.pageY);
                 const boundingRect = getBoundingRect(start, end);
 
-                if (documentNode.contains(e.target as Node) && drawingAllowedRef.current) {
+                if (documentNode.contains(e.target as Node)) {
                     // Lock state.
                     setState({
                         ...stateRef.current,
@@ -135,26 +133,24 @@ export const AreaSelection: React.FC = () => {
                         onSelection(startTarget as HTMLElement, boundingRect);
                     }
                 } else {
-                    reset();
+                    setState(initialState);
                 }
             } else {
-                reset();
+                setState(initialState);
             }
         };
 
-        if (drawingAllowedRef.current) {
-            setState({
-                start: containerPDFTranslation(e.pageX, e.pageY),
-                end: null,
-                locked: false,
-            });
+        setState({
+            start: getContainerCoords(e.pageX, e.pageY),
+            end: null,
+            locked: false,
+        });
 
-            document.body.addEventListener('mouseup', onMouseUp as EventListener);
+        document.body.addEventListener('mouseup', onMouseUp as EventListener);
 
-            return (): void => {
-                document.body.removeEventListener('mouseup', onMouseUp as EventListener);
-            };
-        }
+        return (): void => {
+            document.body.removeEventListener('mouseup', onMouseUp as EventListener);
+        };
     };
 
     // Update mutable state when touch moves (mobile).
@@ -165,7 +161,7 @@ export const AreaSelection: React.FC = () => {
         if (!!start && !locked) {
             setState({
                 ...stateRef.current,
-                end: containerPDFTranslation(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
+                end: getContainerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
             });
         }
     };
@@ -184,10 +180,10 @@ export const AreaSelection: React.FC = () => {
             !!currentTarget && currentTarget.removeEventListener('mouseup', onTouchUp as EventListener);
 
             if (!!start) {
-                const end = containerPDFTranslation(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+                const end = getContainerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
                 const boundingRect = getBoundingRect(start, end);
 
-                if (documentNode.contains(e.target as Node) && drawingAllowedRef.current) {
+                if (documentNode.contains(e.target as Node)) {
                     // Lock state.
                     setState({
                         ...stateRef.current,
@@ -199,40 +195,30 @@ export const AreaSelection: React.FC = () => {
                         onSelection(startTarget as HTMLElement, boundingRect);
                     }
                 } else {
-                    reset();
+                    setState(initialState);
                 }
             } else {
-                reset();
+                setState(initialState);
             }
         };
 
-        if (drawingAllowedRef.current) {
-            setState({
-                start: containerPDFTranslation(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
-                end: null,
-                locked: false,
-            });
+        setState({
+            start: getContainerCoords(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
+            end: null,
+            locked: false,
+        });
 
-            document.body.addEventListener('touchend', onTouchUp as EventListener);
+        document.body.addEventListener('touchend', onTouchUp as EventListener);
 
-            return (): void => {
-                document.body.removeEventListener('touchend', onTouchUp as EventListener);
-            };
-        }
+        return (): void => {
+            document.body.removeEventListener('touchend', onTouchUp as EventListener);
+        };
     };
 
     useEffect(() => {
-        // Update mutable drawing allowed state based on context state.
-        setDrawingAllowedRef(drawMode);
-
-        // Draw mode manually toggle off.
-        if (!drawMode) {
-            reset();
-        }
-
         const documentNode = getDocumentNode();
 
-        if (!!documentNode && drawMode) {
+        if (!!documentNode) {
             documentNode.addEventListener('touchmove', onTouchMove as EventListener);
             documentNode.addEventListener('touchstart', onTouchStart as EventListener);
             documentNode.addEventListener('mousemove', onMouseMove as EventListener, { passive: true });
@@ -244,18 +230,11 @@ export const AreaSelection: React.FC = () => {
             documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
             documentNode.removeEventListener('mousemove', onMouseMove as EventListener);
             documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
-        };
-    }, [drawMode]);
-
-    useEffect(() => {
-        // Reset when demounting.
-        return (): void => {
-            reset();
-            setDrawMode(false);
+            setState(initialState);
         };
     }, []);
 
-    return drawMode && !!start && !!end ? <StyledAreaSelection style={getBoundingRect(start, end)} /> : null;
+    return !!start && !!end ? <StyledAreaSelection style={getBoundingRect(start, end)} /> : null;
 };
 
 const StyledAreaSelection = styled(Box)`

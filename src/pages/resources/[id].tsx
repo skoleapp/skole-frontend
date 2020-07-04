@@ -89,7 +89,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { renderShareButton } = useShare(resourceTitle);
     const { commentModalOpen } = useCommentModalContext();
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
-
     const { setDrawMode, drawMode, setRotate, setFullscreen, setScale, setTranslation } = usePDFViewerContext();
 
     const {

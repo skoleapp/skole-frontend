@@ -16,7 +16,7 @@ interface Props {
 
 export const PDFViewer: React.FC<Props> = ({ file }) => {
     const { t } = useTranslation();
-    const { documentRef, numPages, setPageNumber, setNumPages, rotate } = usePDFViewerContext();
+    const { documentRef, numPages, setPageNumber, setNumPages, rotate, drawMode } = usePDFViewerContext();
 
     const onDocumentLoadSuccess = (document: PDFDocumentProxy): void => {
         const { numPages } = document;
@@ -28,7 +28,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
         <Page key={`page_${i + 1}`} pageNumber={i + 1} renderTextLayer={false} />
     ));
 
-    const renderAreaSelection = <AreaSelection />;
+    const renderAreaSelection = drawMode && <AreaSelection />;
     const renderLoading = <LoadingBox text={t('resource:loadingResource')} />;
 
     const renderError = (
