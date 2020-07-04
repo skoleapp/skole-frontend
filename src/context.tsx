@@ -16,7 +16,6 @@ import {
     SettingsContext,
     SkoleContextType,
 } from './types';
-import { defaultScale, defaultTranslation } from './utils';
 
 const SkolePageContext = createContext<SkoleContextType>({
     auth: {
@@ -53,14 +52,6 @@ const SkolePageContext = createContext<SkoleContextType>({
         setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         rotate: 0,
         setRotate: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        fullscreen: true,
-        setFullscreen: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        ctrlKey: false,
-        setCtrlKey: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        scale: 1.0,
-        setScale: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        translation: { x: 0, y: 0 },
-        setTranslation: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         numPages: 1,
         setNumPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         pageNumber: 1,
@@ -174,10 +165,6 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
     const [rotate, setRotate] = useState(0);
-    const [fullscreen, setFullscreen] = useState(true);
-    const [ctrlKey, setCtrlKey] = useState(false);
-    const [scale, setScale] = useState(defaultScale);
-    const [translation, setTranslation] = useState(defaultTranslation);
     const [numPages, setNumPages] = useState(1);
     const [pageNumber, setPageNumber] = useState(1);
 
@@ -221,14 +208,6 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             setScreenshot,
             rotate,
             setRotate,
-            fullscreen,
-            setFullscreen,
-            ctrlKey,
-            setCtrlKey,
-            scale,
-            setScale,
-            translation,
-            setTranslation,
             numPages,
             setNumPages,
             pageNumber,

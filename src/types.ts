@@ -160,14 +160,6 @@ export interface PDFViewerContext {
     setScreenshot: Dispatch<SetStateAction<string | null>>;
     rotate: number;
     setRotate: Dispatch<SetStateAction<number>>;
-    fullscreen: boolean;
-    setFullscreen: Dispatch<SetStateAction<boolean>>;
-    ctrlKey: boolean;
-    setCtrlKey: Dispatch<SetStateAction<boolean>>;
-    scale: number;
-    setScale: Dispatch<SetStateAction<number>>;
-    translation: PDFTranslation;
-    setTranslation: Dispatch<SetStateAction<PDFTranslation>>;
     numPages: number;
     setNumPages: Dispatch<SetStateAction<number>>;
     pageNumber: number;

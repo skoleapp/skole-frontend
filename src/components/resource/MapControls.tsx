@@ -2,47 +2,29 @@ import { Box, Fab, Tooltip } from '@material-ui/core';
 import { AddOutlined, FullscreenExitOutlined, FullscreenOutlined, RemoveOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePDFViewerContext } from 'src/context';
-import { PDFTranslation } from 'src/types';
-import { defaultScale, defaultTranslation, maxScale, minScale } from 'src/utils';
 import styled from 'styled-components';
 
 interface Props {
-    scaleFromPoint: (newScale: number, focalPoint: PDFTranslation) => void;
+    handleFullscreenButtonClick: () => void;
+    handleScaleUpButtonClick: () => void;
+    handleScaleDownButtonClick: () => void;
+    fullscreen: boolean;
+    disabled: boolean;
 }
 
-export const MapControls: React.FC<Props> = ({ scaleFromPoint }) => {
+export const MapControls: React.FC<Props> = ({
+    handleFullscreenButtonClick,
+    handleScaleUpButtonClick,
+    handleScaleDownButtonClick,
+    fullscreen,
+    disabled,
+}) => {
     const { t } = useTranslation();
-    const { fullscreen, setFullscreen, scale, setScale, setTranslation, documentLoaded } = usePDFViewerContext();
-    const disabled = !documentLoaded;
-
-    const toggleFullScreen = (): void => {
-        let scale;
-
-        if (fullscreen) {
-            scale = minScale;
-        } else {
-            scale = defaultScale;
-        }
-
-        setFullscreen(!fullscreen);
-        setScale(scale);
-        setTranslation(defaultTranslation);
-    };
-
-    const handleScale = (newScale: number): void => {
-        setFullscreen(false);
-        newScale == defaultScale && setFullscreen(true);
-        scaleFromPoint(newScale, defaultTranslation);
-    };
-
-    const scaleUp = (): void => handleScale(scale < maxScale ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
-    const scaleDown = (): void => handleScale(scale > minScale ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
 
     const renderFullscreenButton = (
         <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
             <span>
-                <Fab size="small" color="secondary" onClick={toggleFullScreen} disabled={disabled}>
+                <Fab size="small" color="secondary" onClick={handleFullscreenButtonClick} disabled={disabled}>
                     {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                 </Fab>
             </span>
@@ -52,7 +34,7 @@ export const MapControls: React.FC<Props> = ({ scaleFromPoint }) => {
     const renderDownscaleButton = (
         <Tooltip title={t('tooltips:zoomIn')}>
             <span>
-                <Fab size="small" color="secondary" onClick={scaleUp} disabled={disabled}>
+                <Fab size="small" color="secondary" onClick={handleScaleUpButtonClick} disabled={disabled}>
                     <AddOutlined />
                 </Fab>
             </span>
@@ -62,7 +44,7 @@ export const MapControls: React.FC<Props> = ({ scaleFromPoint }) => {
     const renderUpscaleButton = (
         <Tooltip title={t('tooltips:zoomOut')}>
             <span>
-                <Fab size="small" color="secondary" onClick={scaleDown} disabled={disabled}>
+                <Fab size="small" color="secondary" onClick={handleScaleDownButtonClick} disabled={disabled}>
                     <RemoveOutlined />
                 </Fab>
             </span>

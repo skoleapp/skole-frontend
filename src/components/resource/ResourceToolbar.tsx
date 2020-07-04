@@ -10,17 +10,11 @@ import { DrawModeButton, DrawModeControls } from '.';
 
 interface Props {
     title: string;
-    handleDrawModeButtonClick: () => void;
     handleDownloadButtonClick: (e: SyntheticEvent) => Promise<void>;
     handlePrintButtonClick: (e: SyntheticEvent) => Promise<void>;
 }
 
-export const ResourceToolbar: React.FC<Props> = ({
-    title,
-    handleDrawModeButtonClick,
-    handleDownloadButtonClick,
-    handlePrintButtonClick,
-}) => {
+export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonClick, handlePrintButtonClick }) => {
     const { t } = useTranslation();
 
     const {
@@ -69,7 +63,7 @@ export const ResourceToolbar: React.FC<Props> = ({
         </Box>
     );
 
-    const renderDrawModeButton = <DrawModeButton onClick={handleDrawModeButtonClick} disabled={disabled} />;
+    const renderDrawModeButton = <DrawModeButton />;
     const renderDrawModeControls = <DrawModeControls />;
 
     const renderDownloadButton = (

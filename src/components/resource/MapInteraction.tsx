@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PDFTranslation } from 'src/types';
 import { defaultScale, defaultTranslation, maxScale, minScale, useStateRef } from 'src/utils';
 import styled from 'styled-components';
@@ -14,22 +14,15 @@ interface StartPointersInfo {
 }
 
 // TODO: Add a listener that updates the page number based on scroll position.
-// TODO: Find a way to improve the performance as the animations are now very slow.
 // TODO: Improve mobile zoom so that it wont cut out areas on the left of the zoom container.
 export const MapInteraction: React.FC = ({ children }) => {
     const isMobile = useDeviceContext();
+    const { drawMode, setRotate, documentLoaded } = usePDFViewerContext();
     const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
-
-    const {
-        drawMode,
-        setFullscreen,
-        ctrlKey,
-        setCtrlKey,
-        scale,
-        setScale,
-        translation,
-        setTranslation,
-    } = usePDFViewerContext();
+    const [scale, setScale] = useState(defaultScale);
+    const [translation, setTranslation] = useState(defaultTranslation);
+    const [ctrlKey, setCtrlKey] = useState(false);
+    const [fullscreen, setFullscreen] = useState(true);
 
     // Change cursor mode when CTRL key is pressed.
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -250,6 +243,38 @@ export const MapInteraction: React.FC = ({ children }) => {
         };
     }, []);
 
+    // When entering draw mode, reset scale/translation.
+    useEffect(() => {
+        if (drawMode) {
+            setScale(defaultScale);
+            setTranslation(defaultTranslation);
+            setRotate(0);
+            setFullscreen(true);
+        }
+    }, [drawMode]);
+
+    const handleFullscreenButtonClick = (): void => {
+        let scale;
+
+        if (fullscreen) {
+            scale = minScale;
+        } else {
+            scale = defaultScale;
+        }
+
+        setFullscreen(!fullscreen);
+        setScale(scale);
+        setTranslation(defaultTranslation);
+    };
+
+    const handleScale = (newScale: number): void => {
+        setFullscreen(false);
+        newScale == defaultScale && setFullscreen(true);
+        scaleFromPoint(newScale, defaultTranslation);
+    };
+
+    const handleScaleUpButtonClick = (): void => handleScale(scale < maxScale ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
+    const handleScaleDownButtonClick = (): void => handleScale(scale > minScale ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
     const cursor = drawMode ? 'pointer' : ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
     const overflow = drawMode && isMobile ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
     const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
@@ -257,8 +282,17 @@ export const MapInteraction: React.FC = ({ children }) => {
     const width = `calc(100% * ${scale})`;
     const mapInteractionContainerProps = { cursor, overflow };
     const transformContainerProps = { transform, transformOrigin, width };
+
+    const mapControlsProps = {
+        handleFullscreenButtonClick,
+        handleScaleUpButtonClick,
+        handleScaleDownButtonClick,
+        fullscreen,
+        disabled: !documentLoaded,
+    };
+
     const renderTransformContainer = <TransformContainer {...transformContainerProps}>{children}</TransformContainer>;
-    const renderMapControls = !isMobile && !drawMode && <MapControls scaleFromPoint={scaleFromPoint} />;
+    const renderMapControls = !isMobile && !drawMode && <MapControls {...mapControlsProps} />;
 
     return (
         <MapInteractionContainer id="map-container" {...mapInteractionContainerProps}>

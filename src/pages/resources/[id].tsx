@@ -45,16 +45,7 @@ import {
 import { includeDefaultNamespaces } from '../../i18n';
 import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps, MaxWidth } from '../../types';
-import {
-    defaultScale,
-    defaultTranslation,
-    mediaURL,
-    useActionsDrawer,
-    useInfoDrawer,
-    useShare,
-    useTabs,
-    useVotes,
-} from '../../utils';
+import { mediaURL, useActionsDrawer, useInfoDrawer, useShare, useTabs, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -89,16 +80,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { renderShareButton } = useShare(resourceTitle);
     const { commentModalOpen } = useCommentModalContext();
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
-
-    const {
-        setDrawMode,
-        drawMode,
-        setRotate,
-        setFullscreen,
-        setScale,
-        setTranslation,
-        documentLoaded,
-    } = usePDFViewerContext();
+    const { drawMode } = usePDFViewerContext();
 
     const {
         renderActionsHeader,
@@ -134,14 +116,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     useEffect(() => {
         commentModalOpen && tabValue === 0 && setTabValue(1);
     }, [commentModalOpen]);
-
-    const handleDrawModeButtonClick = (): void => {
-        setRotate(0);
-        setDrawMode(true);
-        setFullscreen(true);
-        setScale(defaultScale);
-        setTranslation(defaultTranslation);
-    };
 
     const staticBackUrl = {
         href: '/courses/[id]',
@@ -258,7 +232,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     ];
 
     const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
-    const renderDrawModeButton = <DrawModeButton onClick={handleDrawModeButtonClick} disabled={!documentLoaded} />;
+    const renderDrawModeButton = <DrawModeButton />;
     const renderDrawModeControls = <DrawModeControls />;
 
     const renderPreviewBottomNavbarContent = (
@@ -294,7 +268,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 
     const toolbarProps = {
         title,
-        handleDrawModeButtonClick,
         handleDownloadButtonClick,
         handlePrintButtonClick,
     };

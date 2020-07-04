@@ -1,18 +1,20 @@
-import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 import { TabUnselectedOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDeviceContext } from 'src/context';
+import { useDeviceContext, usePDFViewerContext } from 'src/context';
 
-export const DrawModeButton: React.FC<IconButtonProps> = props => {
+export const DrawModeButton: React.FC = () => {
     const { t } = useTranslation();
+    const { setDrawMode, documentLoaded } = usePDFViewerContext();
     const isMobile = useDeviceContext();
     const color = isMobile ? 'default' : 'secondary';
+    const handleClick = (): void => setDrawMode(true);
 
     return (
         <Tooltip title={t('tooltips:markArea')}>
             <span>
-                <IconButton {...props} size="small" color={color}>
+                <IconButton onClick={handleClick} size="small" color={color} disabled={!documentLoaded}>
                     <TabUnselectedOutlined />
                 </IconButton>
             </span>
