@@ -1,4 +1,5 @@
 import { Box } from '@material-ui/core';
+import throttle from 'lodash.throttle';
 import React, { useEffect, useState } from 'react';
 import {
     defaultScale,
@@ -152,8 +153,9 @@ export const MapInteraction: React.FC = ({ children }) => {
         return bottom >= 0 && right >= 0 && top <= mapContainerTop && left <= mapContainerWidth;
     };
 
-    // Find current page from viewport and set page number according to it.
-    // Skip this when page number input is active.
+    // Find current page from viewport and set page number according to it when page number input is not active.
+    // This listener is so expensive to use that we throttle it to execute every 100 ms only.
+    // TODO: Using intersection observers would probably lead to better performance: https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
     const pageListener = (): void => {
         if (!!pageNumberInputRef && document.activeElement !== pageNumberInputRef.current) {
             const page = Array.from(document.querySelectorAll('.react-pdf__Page')).find(elementInViewport);
@@ -212,7 +214,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         const mapContainerNode = getMapContainerNode();
 
         if (!drawMode) {
-            mapContainerNode.addEventListener('wheel', onWheel, { passive: true });
+            mapContainerNode.addEventListener('wheel', onWheel);
             mapContainerNode.addEventListener('touchstart', onTouchStart as EventListener, { passive: true });
             mapContainerNode.addEventListener('touchmove', onTouchMove as EventListener);
             mapContainerNode.addEventListener('touchend', onTouchEnd as EventListener, { passive: true });
@@ -232,8 +234,8 @@ export const MapInteraction: React.FC = ({ children }) => {
         const mapContainerNode = getMapContainerNode();
 
         if (!drawMode && !controlsDisabled) {
-            mapContainerNode.addEventListener('scroll', pageListener, { passive: true });
-            mapContainerNode.addEventListener('resize', pageListener, { passive: true });
+            mapContainerNode.addEventListener('scroll', throttle(pageListener, 100), { passive: true });
+            mapContainerNode.addEventListener('resize', throttle(pageListener, 100), { passive: true });
             document.addEventListener('keydown', onKeyDown, { passive: true });
             document.addEventListener('keyup', onKeyUp, { passive: true });
         }
