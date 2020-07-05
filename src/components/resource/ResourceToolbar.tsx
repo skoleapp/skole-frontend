@@ -36,8 +36,7 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
         const val = Number(e.target.value);
         setPageNumber(val);
         const page: HTMLDivElement | undefined = R.path(['current', 'pages', val - 1], documentRef);
-        page && page.scrollIntoView(); // TODO: Find a way to use the `smooth` behavior.
-        window.scrollTo(0, 0); // Prevent window scrolling.
+        page && page.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
     };
 
     const renderPageNumberInput = (

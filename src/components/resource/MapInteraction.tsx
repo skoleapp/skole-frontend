@@ -29,10 +29,10 @@ export const MapInteraction: React.FC = ({ children }) => {
     const isMobile = useDeviceContext();
     const { drawMode, setRotate, documentLoaded } = usePDFViewerContext();
     const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
-    const [scale, setScale] = useState(defaultScale);
+    const [scale, setScale] = useState(isMobile ? defaultScale : minScale);
     const [translation, setTranslation] = useState(defaultTranslation);
     const [ctrlKey, setCtrlKey] = useState(false);
-    const [fullscreen, setFullscreen] = useState(true);
+    const [fullscreen, setFullscreen] = useState(isMobile);
 
     // Change cursor mode when CTRL key is pressed.
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -163,6 +163,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         setPointerState(e.touches);
 
         // Reset original scale/translation if pinched out.
+        // TODO: Add some animation so that the document `bounces` back to it's original state.
         if (scale < defaultScale) {
             setScale(defaultScale);
             setTranslation(defaultTranslation);
