@@ -154,6 +154,7 @@ export interface SettingsContext {
 
 export interface PDFViewerContext {
     documentRef: MutableRefObject<Document | null> | null;
+    pageNumberInputRef: MutableRefObject<HTMLInputElement | null> | null;
     drawMode: boolean;
     setDrawMode: Dispatch<SetStateAction<boolean>>;
     screenshot: string | null;
@@ -164,8 +165,8 @@ export interface PDFViewerContext {
     setNumPages: Dispatch<SetStateAction<number>>;
     pageNumber: number;
     setPageNumber: Dispatch<SetStateAction<number>>;
-    documentLoaded: boolean;
-    setDocumentLoaded: Dispatch<SetStateAction<boolean>>;
+    controlsDisabled: boolean;
+    setControlsDisabled: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface DiscussionContext {

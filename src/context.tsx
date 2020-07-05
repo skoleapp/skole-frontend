@@ -44,8 +44,9 @@ const SkolePageContext = createContext<SkoleContextType>({
     },
     pdfViewer: {
         documentRef: null,
-        documentLoaded: false,
-        setDocumentLoaded: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        pageNumberInputRef: null,
+        controlsDisabled: false,
+        setControlsDisabled: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         drawMode: false,
         setDrawMode: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         screenshot: null,
@@ -161,7 +162,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
 
     // PDF viewer context.
     const documentRef = useRef<Document>(null);
-    const [documentLoaded, setDocumentLoaded] = useState(false);
+    const pageNumberInputRef = useRef<HTMLInputElement>(null);
+    const [controlsDisabled, setControlsDisabled] = useState(true);
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
     const [rotate, setRotate] = useState(0);
@@ -200,8 +202,9 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
         },
         pdfViewer: {
             documentRef,
-            documentLoaded,
-            setDocumentLoaded,
+            pageNumberInputRef,
+            controlsDisabled,
+            setControlsDisabled,
             drawMode,
             setDrawMode,
             screenshot,

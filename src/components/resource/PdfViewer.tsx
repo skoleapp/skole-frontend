@@ -16,17 +16,17 @@ interface Props {
 
 export const PDFViewer: React.FC<Props> = ({ file }) => {
     const { t } = useTranslation();
-    const { documentRef, numPages, setPageNumber, setNumPages, rotate, setDocumentLoaded } = usePDFViewerContext();
+    const { documentRef, numPages, setPageNumber, setNumPages, rotate, setControlsDisabled } = usePDFViewerContext();
 
-    const onDocumentLoadSuccess = (document: PDFDocumentProxy): void => {
+    const handleLoadSuccess = (document: PDFDocumentProxy): void => {
         const { numPages } = document;
         setNumPages(numPages);
         setPageNumber(1);
-        setDocumentLoaded(true);
+        setControlsDisabled(false);
     };
 
     const renderPages = Array.from(new Array(numPages), (_, i) => (
-        <Page key={`page_${i + 1}`} pageNumber={i + 1} renderTextLayer={false} />
+        <Page key={`page_${i + 1}`} pageNumber={i + 1} renderTextLayer={false} renderAnnotationLayer={false} />
     ));
 
     const renderAreaSelection = <AreaSelection />;
@@ -45,7 +45,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
             <MapInteraction>
                 <Document
                     file={file}
-                    onLoadSuccess={onDocumentLoadSuccess}
+                    onLoadSuccess={handleLoadSuccess}
                     loading={renderLoading}
                     error={renderError}
                     noData={renderError}

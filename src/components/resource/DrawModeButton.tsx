@@ -6,7 +6,7 @@ import { useDeviceContext, usePDFViewerContext } from 'src/context';
 
 export const DrawModeButton: React.FC = () => {
     const { t } = useTranslation();
-    const { setDrawMode, documentLoaded } = usePDFViewerContext();
+    const { setDrawMode, controlsDisabled } = usePDFViewerContext();
     const isMobile = useDeviceContext();
     const color = isMobile ? 'default' : 'secondary';
     const handleClick = (): void => setDrawMode(true);
@@ -14,7 +14,7 @@ export const DrawModeButton: React.FC = () => {
     return (
         <Tooltip title={t('tooltips:markArea')}>
             <span>
-                <IconButton onClick={handleClick} size="small" color={color} disabled={!documentLoaded}>
+                <IconButton onClick={handleClick} size="small" color={color} disabled={controlsDisabled}>
                     <TabUnselectedOutlined />
                 </IconButton>
             </span>

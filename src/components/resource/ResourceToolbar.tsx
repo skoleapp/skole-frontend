@@ -18,6 +18,7 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
     const { t } = useTranslation();
 
     const {
+        pageNumberInputRef,
         pageNumber,
         numPages,
         setPageNumber,
@@ -25,18 +26,17 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
         setRotate,
         drawMode,
         documentRef,
-        documentLoaded,
+        controlsDisabled,
     } = usePDFViewerContext();
 
-    const disabled = !documentLoaded;
     const handleRotateButtonClick = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
     // Scroll into page from given page number.
     const handleChangePage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const val = Number(e.target.value);
-        setPageNumber(val);
+        !!val && setPageNumber(val);
         const page: HTMLDivElement | undefined = R.path(['current', 'pages', val - 1], documentRef);
-        page && page.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        !!page && page.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
     };
 
     const renderPageNumberInput = (
@@ -45,8 +45,8 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
             onChange={handleChangePage}
             type="number"
             color="secondary"
-            inputProps={{ min: 1, max: numPages }}
-            disabled={disabled}
+            inputProps={{ min: 1, max: numPages, ref: pageNumberInputRef }}
+            disabled={controlsDisabled}
         />
     );
 
@@ -68,7 +68,12 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
     const renderDownloadButton = (
         <Tooltip title={t('tooltips:download')}>
             <span>
-                <IconButton onClick={handleDownloadButtonClick} size="small" color="secondary" disabled={disabled}>
+                <IconButton
+                    onClick={handleDownloadButtonClick}
+                    size="small"
+                    color="secondary"
+                    disabled={controlsDisabled}
+                >
                     <CloudDownloadOutlined />
                 </IconButton>
             </span>
@@ -78,7 +83,7 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
     const renderPrintButton = (
         <Tooltip title={t('tooltips:print')}>
             <span>
-                <IconButton onClick={handlePrintButtonClick} size="small" color="secondary" disabled={disabled}>
+                <IconButton onClick={handlePrintButtonClick} size="small" color="secondary" disabled={controlsDisabled}>
                     <PrintOutlined />
                 </IconButton>
             </span>
@@ -88,7 +93,7 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
     const renderRotateButton = (
         <Tooltip title={t('tooltips:rotate')}>
             <span>
-                <IconButton size="small" color="inherit" onClick={handleRotateButtonClick} disabled={disabled}>
+                <IconButton size="small" color="inherit" onClick={handleRotateButtonClick} disabled={controlsDisabled}>
                     <RotateRightOutlined />
                 </IconButton>
             </span>
@@ -143,7 +148,8 @@ const StyledToolbar = styled(Box)`
             border-radius: 0.1rem;
 
             .MuiInputBase-root {
-                color: var(--white) !important;
+                color: var(--secondary) !important;
+                padding-left: 0.25rem;
             }
         }
 

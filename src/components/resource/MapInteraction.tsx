@@ -27,12 +27,12 @@ interface StartPointersInfo {
 // TODO: Add a listener that updates the page number based on scroll position.
 export const MapInteraction: React.FC = ({ children }) => {
     const isMobile = useDeviceContext();
-    const { drawMode, setRotate, documentLoaded } = usePDFViewerContext();
+    const { drawMode, setRotate, controlsDisabled, setPageNumber, pageNumberInputRef } = usePDFViewerContext();
     const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
-    const [scale, setScale] = useState(isMobile ? defaultScale : minScale);
+    const [scale, setScale] = useState(defaultScale);
     const [translation, setTranslation] = useState(defaultTranslation);
     const [ctrlKey, setCtrlKey] = useState(false);
-    const [fullscreen, setFullscreen] = useState(isMobile);
+    const [fullscreen, setFullscreen] = useState(true);
 
     // Change cursor mode when CTRL key is pressed.
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -146,6 +146,22 @@ export const MapInteraction: React.FC = ({ children }) => {
         }
     };
 
+    const elementInViewport = (el: Element): boolean => {
+        const { bottom, right, top, left } = el.getBoundingClientRect();
+        const { width: mapContainerWidth, top: mapContainerTop } = getMapContainerBoundingClientRect();
+        return bottom >= 0 && right >= 0 && top <= mapContainerTop && left <= mapContainerWidth;
+    };
+
+    // Find current page from viewport and set page number according to it.
+    // Skip this when page number input is active.
+    const pageListener = (): void => {
+        if (!!pageNumberInputRef && document.activeElement !== pageNumberInputRef.current) {
+            const page = Array.from(document.querySelectorAll('.react-pdf__Page')).find(elementInViewport);
+            const newPageNumber = page && page.getAttribute('data-page-number');
+            setPageNumber(Number(newPageNumber));
+        }
+    };
+
     const onTouchStart = (e: TouchEvent): void => setPointerState(e.touches);
 
     const onTouchMove = (e: TouchEvent): void => {
@@ -190,13 +206,13 @@ export const MapInteraction: React.FC = ({ children }) => {
         setScale(newScale);
     };
 
+    // Listen fot mouse and touch events to perform required CSS transforms for map interaction functions.
+    // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
     useEffect(() => {
         const mapContainerNode = getMapContainerNode();
 
-        // Only apply listeners when not in draw mode.
-        // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
         if (!drawMode) {
-            mapContainerNode.addEventListener('wheel', onWheel as EventListener);
+            mapContainerNode.addEventListener('wheel', onWheel, { passive: true });
             mapContainerNode.addEventListener('touchstart', onTouchStart as EventListener, { passive: true });
             mapContainerNode.addEventListener('touchmove', onTouchMove as EventListener);
             mapContainerNode.addEventListener('touchend', onTouchEnd as EventListener, { passive: true });
@@ -211,11 +227,20 @@ export const MapInteraction: React.FC = ({ children }) => {
     }, [scale, translation, drawMode]);
 
     // Listen for key presses in order to show different cursor when CTRL key is pressed.
+    // Also listen for scroll and resize events to update the page number automatically.
     useEffect(() => {
-        document.addEventListener('keydown', onKeyDown);
-        document.addEventListener('keyup', onKeyUp);
+        const mapContainerNode = getMapContainerNode();
+
+        if (!drawMode && !controlsDisabled) {
+            mapContainerNode.addEventListener('scroll', pageListener, { passive: true });
+            mapContainerNode.addEventListener('resize', pageListener, { passive: true });
+            document.addEventListener('keydown', onKeyDown, { passive: true });
+            document.addEventListener('keyup', onKeyUp, { passive: true });
+        }
 
         return (): void => {
+            mapContainerNode.removeEventListener('scroll', pageListener as EventListener);
+            mapContainerNode.removeEventListener('resize', pageListener as EventListener);
             document.removeEventListener('keydown', onKeyDown);
             document.removeEventListener('keyup', onKeyUp);
         };
@@ -246,7 +271,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         handleScaleUpButtonClick,
         handleScaleDownButtonClick,
         fullscreen,
-        disabled: !documentLoaded,
+        controlsDisabled,
     };
 
     const renderTransformContainer = <TransformContainer {...transformContainerProps}>{children}</TransformContainer>;

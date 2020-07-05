@@ -9,7 +9,7 @@ interface Props {
     handleScaleUpButtonClick: () => void;
     handleScaleDownButtonClick: () => void;
     fullscreen: boolean;
-    disabled: boolean;
+    controlsDisabled: boolean;
 }
 
 export const MapControls: React.FC<Props> = ({
@@ -17,14 +17,14 @@ export const MapControls: React.FC<Props> = ({
     handleScaleUpButtonClick,
     handleScaleDownButtonClick,
     fullscreen,
-    disabled,
+    controlsDisabled,
 }) => {
     const { t } = useTranslation();
 
     const renderFullscreenButton = (
         <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
             <span>
-                <Fab size="small" color="secondary" onClick={handleFullscreenButtonClick} disabled={disabled}>
+                <Fab size="small" color="secondary" onClick={handleFullscreenButtonClick} disabled={controlsDisabled}>
                     {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                 </Fab>
             </span>
@@ -34,7 +34,7 @@ export const MapControls: React.FC<Props> = ({
     const renderDownscaleButton = (
         <Tooltip title={t('tooltips:zoomIn')}>
             <span>
-                <Fab size="small" color="secondary" onClick={handleScaleUpButtonClick} disabled={disabled}>
+                <Fab size="small" color="secondary" onClick={handleScaleUpButtonClick} disabled={controlsDisabled}>
                     <AddOutlined />
                 </Fab>
             </span>
@@ -44,7 +44,7 @@ export const MapControls: React.FC<Props> = ({
     const renderUpscaleButton = (
         <Tooltip title={t('tooltips:zoomOut')}>
             <span>
-                <Fab size="small" color="secondary" onClick={handleScaleDownButtonClick} disabled={disabled}>
+                <Fab size="small" color="secondary" onClick={handleScaleDownButtonClick} disabled={controlsDisabled}>
                     <RemoveOutlined />
                 </Fab>
             </span>
