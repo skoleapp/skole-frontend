@@ -1,7 +1,18 @@
 import { Box } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import {
+    defaultScale,
+    defaultTranslation,
+    getClampedScale,
+    getCoordChange,
+    getMidPoint,
+    getTouchDistance,
+    getTouchPoint,
+    maxScale,
+    minScale,
+} from 'src/lib';
 import { PDFTranslation } from 'src/types';
-import { defaultScale, defaultTranslation, maxScale, minScale, useStateRef } from 'src/utils';
+import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
 import { useDeviceContext, usePDFViewerContext } from '../../context';
@@ -14,7 +25,6 @@ interface StartPointersInfo {
 }
 
 // TODO: Add a listener that updates the page number based on scroll position.
-// TODO: Improve mobile zoom so that it wont cut out areas on the left of the zoom container.
 export const MapInteraction: React.FC = ({ children }) => {
     const isMobile = useDeviceContext();
     const { drawMode, setRotate, documentLoaded } = usePDFViewerContext();
@@ -48,34 +58,8 @@ export const MapInteraction: React.FC = ({ children }) => {
         }
     };
 
-    // Return touch point on element.
-    const getTouchPoint = (t: Touch): PDFTranslation => ({ x: t.clientX, y: t.clientY });
-
-    // Return distance between points.
-    const getDistance = (p1: PDFTranslation, p2: PDFTranslation): number => {
-        const dx = p1.x - p2.x;
-        const dy = p1.y - p2.y;
-        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-    };
-
-    // Get distance between fingers.
-    const getTouchDistance = (t0: Touch, t1: Touch): number => {
-        const p0 = getTouchPoint(t0);
-        const p1 = getTouchPoint(t1);
-        return getDistance(p0, p1);
-    };
-
-    // Get clamped scale if maximum scale has been exceeded.
-    const getClampedScale = (min: number, value: number, max: number): number => Math.max(min, Math.min(value, max));
-
     const getMapContainerNode = (): HTMLDivElement => document.querySelector('#map-container') as HTMLDivElement;
     const getMapContainerBoundingClientRect = (): DOMRect => getMapContainerNode().getBoundingClientRect();
-
-    // Get mid point between translation points.
-    const getMidPoint = (p1: PDFTranslation, p2: PDFTranslation): PDFTranslation => ({
-        x: (p1.x + p2.x) / 2,
-        y: (p1.y + p2.y) / 2,
-    });
 
     // Return calculated translation from page.
     const getTranslatedOrigin = (translation: PDFTranslation): PDFTranslation => {
@@ -100,11 +84,9 @@ export const MapInteraction: React.FC = ({ children }) => {
         };
     };
 
-    // The amount that a value of a dimension will change given a new scale.
-    const getCoordChange = (coordinate: number, scaleRatio: number): number => scaleRatio * coordinate - coordinate;
-
     // Given the start touches and new e.touches, scale and translation such that the initial midpoint remains as the new midpoint.
     // This is to achieve the effect of keeping the content that was directly in the middle of the two fingers as the focal point throughout the zoom.
+    // TODO: Improve this so that it wont cut out areas on the left of the zoom container.
     const scaleFromMultiTouch = (e: TouchEvent): void => {
         // Ignore: This function is only called when the start pointers info exists.
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -150,37 +132,17 @@ export const MapInteraction: React.FC = ({ children }) => {
         setTranslation(newTranslation);
     };
 
-    // TODO: Find a way to set X-axis translation so that the zooming in won't cut out areas.
-    // Scale the document from a given point where cursor is upon mouse wheel press.
-    const scaleFromPoint = (newScale: number, focalPoint: PDFTranslation): void => {
-        const scaleRatio = newScale / scale;
-
-        const focalPointDelta = {
-            x: getCoordChange(focalPoint.x, scaleRatio),
-            y: getCoordChange(focalPoint.y, scaleRatio),
-        };
-
-        const newTranslation = {
-            x: translation.x - focalPointDelta.x,
-            y: translation.y - focalPointDelta.y,
-        };
-
-        setScale(newScale);
-        setTranslation(newTranslation);
-    };
-
     // Update document scale based on mouse wheel events.
+    // TODO: Set Y-axis scroll position based on mouse position to we can zoom in to a point using mouse position.
     const onWheel = (e: WheelEvent): void => {
         if (e.ctrlKey) {
             setFullscreen(false);
             e.preventDefault(); // Disable scroll.
             const scaleChange = 2 ** (e.deltaY * 0.002);
             const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
-            const { y: mousePosY } = getClientPosToTranslatedPos({ x: e.clientX, y: e.clientY });
-            // Unlike on mobile, here we explicitly set X-axis focal point to 0 since we only care about Y-axis focal point.
-            // This way we get similar scroll zoom behavior as on Google's PDF viewer.
-            const mousePos = { x: defaultTranslation.x, y: mousePosY };
-            scaleFromPoint(newScale, mousePos);
+            setScale(newScale);
+            const mapContainerNode = getMapContainerNode();
+            mapContainerNode.scrollLeft = (mapContainerNode.scrollWidth - mapContainerNode.clientWidth) / 2; // Automatically scroll to center.
         }
     };
 
@@ -207,13 +169,28 @@ export const MapInteraction: React.FC = ({ children }) => {
         }
     };
 
+    const handleFullscreenButtonClick = (): void => {
+        let scale;
+
+        if (fullscreen) {
+            scale = minScale;
+        } else {
+            scale = defaultScale;
+        }
+
+        setFullscreen(!fullscreen);
+        setScale(scale);
+        setTranslation(defaultTranslation);
+    };
+
+    const handleScale = (newScale: number): void => {
+        setFullscreen(false);
+        newScale == defaultScale && setFullscreen(true);
+        setScale(newScale);
+    };
+
     useEffect(() => {
         const mapContainerNode = getMapContainerNode();
-
-        // Automatically scroll to center when zooming in on desktop.
-        if (!isMobile) {
-            mapContainerNode.scrollLeft = (mapContainerNode.scrollWidth - mapContainerNode.clientWidth) / 2;
-        }
 
         // Only apply listeners when not in draw mode.
         // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
@@ -252,26 +229,6 @@ export const MapInteraction: React.FC = ({ children }) => {
             setFullscreen(true);
         }
     }, [drawMode]);
-
-    const handleFullscreenButtonClick = (): void => {
-        let scale;
-
-        if (fullscreen) {
-            scale = minScale;
-        } else {
-            scale = defaultScale;
-        }
-
-        setFullscreen(!fullscreen);
-        setScale(scale);
-        setTranslation(defaultTranslation);
-    };
-
-    const handleScale = (newScale: number): void => {
-        setFullscreen(false);
-        newScale == defaultScale && setFullscreen(true);
-        scaleFromPoint(newScale, defaultTranslation);
-    };
 
     const handleScaleUpButtonClick = (): void => handleScale(scale < maxScale ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
     const handleScaleDownButtonClick = (): void => handleScale(scale > minScale ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.

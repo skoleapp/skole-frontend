@@ -198,13 +198,6 @@ export interface ApolloContext extends NextPageContext {
     apolloState: {};
 }
 
-export interface LTWH {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-}
-
 // Types for SSR context used with Next.js data fetching methods.
 export interface SSRContext {
     req: IncomingMessage;
@@ -213,6 +206,13 @@ export interface SSRContext {
     query: ParsedUrlQuery;
     preview?: boolean;
     previewData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+export interface LTWH {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
 }
 
 export interface PDFTranslation {

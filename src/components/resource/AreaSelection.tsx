@@ -1,5 +1,6 @@
 import { Box } from '@material-ui/core';
 import React, { useEffect } from 'react';
+import { getBoundingRect, getPageFromElement, getScreenshot } from 'src/lib';
 import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
 
@@ -12,11 +13,6 @@ interface State {
     end: PDFTranslation | null;
 }
 
-interface PageFromElement {
-    node: HTMLElement;
-    number: number;
-}
-
 const initialState = { start: null, end: null, locked: false };
 
 export const AreaSelection: React.FC = () => {
@@ -27,45 +23,6 @@ export const AreaSelection: React.FC = () => {
     // Ignore: Document node is always defined even if the PDF fails to load.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const getDocumentNode = (): Element => document.querySelector('.react-pdf__Document')!;
-
-    // Get rectangle coordinates on container element.
-    const getBoundingRect = (start: PDFTranslation, end: PDFTranslation): LTWH => ({
-        left: Math.min(end.x, start.x),
-        top: Math.min(end.y, start.y),
-        width: Math.abs(end.x - start.x),
-        height: Math.abs(end.y - start.y),
-    });
-
-    // Find closest page canvas from DOM node.
-    const getPageFromElement = (target: HTMLElement): PageFromElement | null => {
-        const node = target.closest('.react-pdf__Page');
-
-        if (!!(node instanceof HTMLElement)) {
-            const number = Number(node.dataset.pageNumber);
-            return { node, number };
-        } else {
-            return null;
-        }
-    };
-
-    // Get closest PDF page and take screenshot of selected area.
-    const getScreenshot = (target: HTMLElement, position: LTWH): string | null => {
-        const canvas = target.closest('canvas');
-        const { left, top, width, height } = position;
-        const newCanvas = document.createElement('canvas');
-        newCanvas.width = width;
-        newCanvas.height = height;
-        const newCanvasContext = newCanvas.getContext('2d');
-
-        if (!!newCanvas && !!newCanvasContext && !!canvas && !!width && !!height) {
-            // FIXME: This might cause issues on some small devices, resulting in misaligned screenshots.
-            const dpr: number = window.devicePixelRatio;
-            newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
-            return newCanvas.toDataURL('image/jpeg');
-        } else {
-            return null;
-        }
-    };
 
     const onSelection = (startTarget: HTMLElement, boundingRect: LTWH): void => {
         const page = getPageFromElement(startTarget);
@@ -82,8 +39,8 @@ export const AreaSelection: React.FC = () => {
         }
     };
 
-    // Get coordinates on container element.
-    const getContainerCoords = (pageX: number, pageY: number): PDFTranslation => {
+    // Get coordinates on document node.
+    const getDocumentCoords = (pageX: number, pageY: number): PDFTranslation => {
         const documentNode = getDocumentNode();
         const { left, top } = documentNode.getBoundingClientRect();
 
@@ -100,7 +57,7 @@ export const AreaSelection: React.FC = () => {
         if (!!start && !locked) {
             setState({
                 ...stateRef.current,
-                end: getContainerCoords(e.pageX, e.pageY),
+                end: getDocumentCoords(e.pageX, e.pageY),
             });
         }
     };
@@ -118,7 +75,7 @@ export const AreaSelection: React.FC = () => {
             !!currentTarget && currentTarget.removeEventListener('mouseup', onMouseUp as EventListener);
 
             if (!!start) {
-                const end = getContainerCoords(e.pageX, e.pageY);
+                const end = getDocumentCoords(e.pageX, e.pageY);
                 const boundingRect = getBoundingRect(start, end);
 
                 if (documentNode.contains(e.target as Node)) {
@@ -141,7 +98,7 @@ export const AreaSelection: React.FC = () => {
         };
 
         setState({
-            start: getContainerCoords(e.pageX, e.pageY),
+            start: getDocumentCoords(e.pageX, e.pageY),
             end: null,
             locked: false,
         });
@@ -161,7 +118,7 @@ export const AreaSelection: React.FC = () => {
         if (!!start && !locked) {
             setState({
                 ...stateRef.current,
-                end: getContainerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
+                end: getDocumentCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
             });
         }
     };
@@ -180,7 +137,7 @@ export const AreaSelection: React.FC = () => {
             !!currentTarget && currentTarget.removeEventListener('mouseup', onTouchUp as EventListener);
 
             if (!!start) {
-                const end = getContainerCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+                const end = getDocumentCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
                 const boundingRect = getBoundingRect(start, end);
 
                 if (documentNode.contains(e.target as Node)) {
@@ -203,7 +160,7 @@ export const AreaSelection: React.FC = () => {
         };
 
         setState({
-            start: getContainerCoords(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
+            start: getDocumentCoords(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
             end: null,
             locked: false,
         });
