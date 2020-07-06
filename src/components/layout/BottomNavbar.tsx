@@ -1,5 +1,5 @@
 import { Avatar, BottomNavigationAction } from '@material-ui/core';
-import { CloudUploadOutlined, HomeOutlined, SearchOutlined, StarBorderOutlined } from '@material-ui/icons';
+import { CloudUploadOutlined, HomeOutlined, NotificationsOutlined, SearchOutlined } from '@material-ui/icons';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
@@ -17,7 +17,7 @@ export const BottomNavbar: React.FC = () => {
     const home = '/';
     const { searchUrl } = useSearch();
     const uploadResource = '/upload-resource';
-    const starred = '/account/starred';
+    const activity = '/account/activity';
     const userDetail = '/users/[id]';
 
     const getNavbarValue = (): number | null => {
@@ -31,7 +31,7 @@ export const BottomNavbar: React.FC = () => {
             case uploadResource: {
                 return 3;
             }
-            case starred: {
+            case activity: {
                 return 4;
             }
             case userDetail: {
@@ -59,13 +59,31 @@ export const BottomNavbar: React.FC = () => {
         </Link>
     );
 
+    const renderHomeAction = (
+        <BottomNavigationAction value={1} onClick={handleRedirect(home)} icon={<HomeOutlined />} />
+    );
+
+    const renderSearchAction = (
+        <BottomNavigationAction value={2} onClick={handleRedirect(searchUrl)} icon={<SearchOutlined />} />
+    );
+
+    const renderUploadResourceAction = (
+        <BottomNavigationAction value={3} onClick={handleRedirect(uploadResource)} icon={<CloudUploadOutlined />} />
+    );
+
+    const renderActivityAction = (
+        <BottomNavigationAction value={4} onClick={handleRedirect(activity)} icon={<NotificationsOutlined />} />
+    );
+
+    const renderProfileAction = <BottomNavigationAction value={5} icon={renderAvatar} />;
+
     return (
         <StyledBottomNavigation value={value} onChange={handleChange}>
-            <BottomNavigationAction value={1} onClick={handleRedirect(home)} icon={<HomeOutlined />} />
-            <BottomNavigationAction value={2} onClick={handleRedirect(searchUrl)} icon={<SearchOutlined />} />
-            <BottomNavigationAction value={3} onClick={handleRedirect(uploadResource)} icon={<CloudUploadOutlined />} />
-            <BottomNavigationAction value={4} onClick={handleRedirect(starred)} icon={<StarBorderOutlined />} />
-            <BottomNavigationAction value={5} icon={renderAvatar} />
+            {renderHomeAction}
+            {renderSearchAction}
+            {renderUploadResourceAction}
+            {renderActivityAction}
+            {renderProfileAction}
         </StyledBottomNavigation>
     );
 };
