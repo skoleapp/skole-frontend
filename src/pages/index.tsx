@@ -141,7 +141,7 @@ const StyledIndexPage = styled(Box)`
         #top-section-background {
             z-index: 0;
             background-color: var(--primary-light);
-            position: fixed;
+            position: absolute;
             top: 3rem;
             left: 0;
             right: 0;
@@ -190,7 +190,6 @@ const StyledIndexPage = styled(Box)`
         flex-flow: row wrap;
 
         .MuiCard-root {
-            // cursor: pointer;
             margin-top: 0.5rem;
             width: 100%;
             padding-bottom: 50%;
