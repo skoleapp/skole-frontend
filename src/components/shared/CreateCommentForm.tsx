@@ -5,6 +5,7 @@ import Image from 'material-ui-image';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { dataURItoFile } from 'src/lib';
 import { CommentTarget } from 'src/types';
 import styled from 'styled-components';
 
@@ -46,21 +47,6 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const { screenshot, setScreenshot } = usePDFViewerContext();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const isMobile = useDeviceContext();
-
-    // Converts a data URI string into a File object.
-    const dataURItoFile = (dataURI: string): File => {
-        const BASE64_MARKER = ';base64,';
-        const mime = dataURI.split(BASE64_MARKER)[0].split(':')[1];
-        const filename = 'screenshot' + '.' + mime.split('/')[1];
-        const bytes = atob(dataURI.split(BASE64_MARKER)[1]);
-        const writer = new Uint8Array(new ArrayBuffer(bytes.length));
-
-        for (let i = 0; i < bytes.length; i++) {
-            writer[i] = bytes.charCodeAt(i);
-        }
-
-        return new File([writer.buffer], filename, { type: mime });
-    };
 
     // Use screenshot as attachment if area has been marked.
     useEffect(() => {
@@ -251,7 +237,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
                         headerRight={renderSubmitButton}
                         text={t('common:createComment')}
                     />
-                    <StyledAttachmentImage>
+                    <StyledAttachmentImage screenshot={screenshot}>
                         {!!attachment && <Image src={attachment as string} />}
                     </StyledAttachmentImage>
                     {renderAttachmentButtons}
@@ -289,7 +275,8 @@ const StyledCreateCommentForm = styled(Form)`
     }
 `;
 
-const StyledAttachmentImage = styled(Box)`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledAttachmentImage = styled(({ screenshot, ...props }) => <Box {...props} />)`
     margin-top: 0.5rem;
     flex-grow: 1;
 
@@ -300,6 +287,9 @@ const StyledAttachmentImage = styled(Box)`
             height: auto !important;
             position: relative !important;
             max-height: 25rem;
+
+            // If attachment is a screenshot from a document, show a screenshot border around it.
+            border: ${({ screenshot }): string => (!!screenshot ? 'var(--screenshot-border)' : 'none')};
         }
     }
 `;

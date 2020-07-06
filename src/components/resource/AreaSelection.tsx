@@ -17,6 +17,7 @@ const initialState = { start: null, end: null, locked: false };
 
 // This component allows the user to mark areas with a rectangle and take screenshots from the PDF document based on the marked area.
 // Inspired by: https://github.com/agentcooper/react-pdf-highlighter
+// TODO: Add a listener that cancels the draw mode from ESC key.
 export const AreaSelection: React.FC = () => {
     const { setScreenshot, drawMode } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
@@ -200,6 +201,6 @@ export const AreaSelection: React.FC = () => {
 
 const StyledAreaSelection = styled(Box)`
     position: absolute;
-    border: 0.05rem dashed #000000;
+    border: var(--screenshot-border);
     background-color: rgba(173, 54, 54, 0.5); // Primary color with opacity.
 `;

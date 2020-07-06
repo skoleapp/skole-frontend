@@ -34,6 +34,7 @@ export const base = css`
 
         --border-radius: 0.25rem;
         --border: 1px solid var(--border-color); // Default MUI border.
+        --screenshot-border: 0.05rem dashed var(--black);
 
         //iOS.
 

@@ -53,9 +53,9 @@ const SkolePageContext = createContext<SkoleContextType>({
         setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         rotate: 0,
         setRotate: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        numPages: 1,
+        numPages: 0,
         setNumPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
-        pageNumber: 1,
+        pageNumber: 0,
         setPageNumber: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
     isMobileGuess: null,
@@ -167,8 +167,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
     const [rotate, setRotate] = useState(0);
-    const [numPages, setNumPages] = useState(1);
-    const [pageNumber, setPageNumber] = useState(1);
+    const [numPages, setNumPages] = useState(0);
+    const [pageNumber, setPageNumber] = useState(0);
 
     // Comment thread context.
     const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]);

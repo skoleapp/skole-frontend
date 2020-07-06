@@ -32,6 +32,7 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
     const handleRotateButtonClick = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 
     // Scroll into page from given page number.
+    // FIXME: Providing a custom value in the input won't work atm.
     const handleChangePage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const val = Number(e.target.value);
         !!val && setPageNumber(val);
