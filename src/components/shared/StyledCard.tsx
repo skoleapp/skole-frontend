@@ -4,8 +4,9 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 
+// Ignore: scrollable and marginLeft must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const StyledCard = styled(({ scrollable, marginLeft, ...other }) => <Card {...other} />)`
+export const StyledCard = styled(({ scrollable, marginLeft, ...props }) => <Card {...props} />)`
     flex-grow: 1;
     overflow-y: ${({ scrollable }): string => (scrollable ? 'scroll !important' : 'inherit')};
     display: flex;

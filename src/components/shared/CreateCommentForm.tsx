@@ -275,6 +275,7 @@ const StyledCreateCommentForm = styled(Form)`
     }
 `;
 
+// Ignore: screenshot must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledAttachmentImage = styled(({ screenshot, ...props }) => <Box {...props} />)`
     margin-top: 0.5rem;

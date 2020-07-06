@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '../../styles';
 
+// Ignore: autoHeight must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const StyledModal = styled(({ autoHeight, ...other }) => (
     <Modal closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} {...other} />

@@ -84,6 +84,7 @@ export const SettingsLayout: React.FC<Props> = ({
     );
 };
 
+// Ignore: fullSize must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledSettingsLayout = styled(({ fullSize, ...other }) => <Box {...other} />)`
     flex-grow: 1;

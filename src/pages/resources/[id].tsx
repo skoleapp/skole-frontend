@@ -188,8 +188,9 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 
         try {
             await import('print-js');
+            // Ignore: TS doesn't detect the `print-js` import.
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore: TS doesn't detect the `print-js` import.
+            // @ts-ignore
             printJS(file);
         } catch {
             toggleNotification(t('notifications:printResourceError'));

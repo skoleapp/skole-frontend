@@ -166,6 +166,7 @@ export const ReplyCommentThread: React.FC = () => {
     );
 };
 
+// Ignore: topComment must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other} />)`
     position: relative;

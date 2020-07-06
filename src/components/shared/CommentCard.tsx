@@ -278,6 +278,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     );
 };
 
+// Ignore: isThread, disableBorder and attachmentOnly must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...other }) => <Box {...other} />)`
     border-bottom: ${({ disableBorder }): string => (!disableBorder ? 'var(--border)' : 'none')};

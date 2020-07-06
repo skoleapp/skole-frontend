@@ -316,6 +316,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     );
 };
 
+// Ignore: cursor and overflow must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MapInteractionContainer = styled(({ cursor, overflow, ...props }) => <Box {...props} />).attrs(
     ({ cursor, overflow }) => ({
@@ -336,6 +337,7 @@ const MapInteractionContainer = styled(({ cursor, overflow, ...props }) => <Box 
     }
 `;
 
+// Ignore: transform, transformOrigin and width must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TransformContainer = styled(({ transform, transformOrigin, width, ...props }) => <Box {...props} />).attrs(
     ({ transform, transformOrigin, width }) => ({

@@ -17,6 +17,7 @@ import {
     SkoleContextType,
 } from './types';
 
+// Ignore: All functions below are ignored as they are only mock functions for the context.
 const SkolePageContext = createContext<SkoleContextType>({
     auth: {
         user: null,

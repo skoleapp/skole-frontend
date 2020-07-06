@@ -60,7 +60,6 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
     );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledPDFViewer = styled(Box)`
     position: absolute;
     top: 0;
