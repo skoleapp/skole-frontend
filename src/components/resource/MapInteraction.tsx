@@ -63,7 +63,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     };
 
     const getMapContainerNode = (): HTMLDivElement => document.querySelector('#map-container') as HTMLDivElement;
-    const getMapContainerBoundingClientRect = (): DOMRect => getMapContainerNode().getBoundingClientRect();
+    const getMapContainerBoundingClientRect = (): DOMRect | ClientRect => getMapContainerNode().getBoundingClientRect();
 
     // Return calculated translation from page.
     const getTranslatedOrigin = (translation: PDFTranslation): PDFTranslation => {
