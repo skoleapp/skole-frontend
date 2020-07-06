@@ -25,7 +25,8 @@ interface StartPointersInfo {
     pointers: TouchList;
 }
 
-// TODO: Add a listener that updates the page number based on scroll position.
+// This component adds map interaction functionality with mouse and touch events to its children.
+// Inspired by: https://github.com/transcriptic/react-map-interaction
 export const MapInteraction: React.FC = ({ children }) => {
     const isMobile = useDeviceContext();
     const { drawMode, setRotate, controlsDisabled, setPageNumber, pageNumberInputRef } = usePDFViewerContext();

@@ -15,6 +15,8 @@ interface State {
 
 const initialState = { start: null, end: null, locked: false };
 
+// This component allows the user to mark areas with a rectangle and take screenshots from the PDF document based on the marked area.
+// Inspired by: https://github.com/agentcooper/react-pdf-highlighter
 export const AreaSelection: React.FC = () => {
     const { setScreenshot, drawMode } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
