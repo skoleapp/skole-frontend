@@ -23,7 +23,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
         ? verificationRequiredTooltip
         : starred
         ? t('tooltips:unstar')
-        : t('tooltips:tooltips') || '';
+        : t('tooltips:star') || '';
 
     const onError = (): void => {
         toggleNotification(t('notifications:starError'));

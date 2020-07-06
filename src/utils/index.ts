@@ -10,6 +10,5 @@ export * from './pagination';
 export * from './useVotes';
 export * from './drawers';
 export * from './useMoment';
-export * from './usePrevious';
 export * from './useStateRef';
 export * from './useShare';
