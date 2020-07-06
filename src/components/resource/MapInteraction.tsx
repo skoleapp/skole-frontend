@@ -50,6 +50,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         }
     };
 
+    // Set mutable ref state to keep track of pointer state.
     const setPointerState = (pointers: TouchList): void => {
         if (!!pointers.length) {
             setStartPointersInfo({
@@ -147,7 +148,6 @@ export const MapInteraction: React.FC = ({ children }) => {
             y: startTranslation.y + dragY,
         };
 
-        // setScale(scale);
         setTranslation(newTranslation);
     };
 
@@ -156,7 +156,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     const onWheel = (e: WheelEvent): void => {
         if (e.ctrlKey) {
             setFullscreen(false);
-            e.preventDefault(); // Disable scroll.
+            e.preventDefault(); // Prevent scrolling.
             const scaleChange = 2 ** (e.deltaY * 0.002);
             const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
             setScale(newScale);
@@ -281,7 +281,7 @@ export const MapInteraction: React.FC = ({ children }) => {
 
     const handleScaleUpButtonClick = (): void => handleScale(scale < maxScale ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
     const handleScaleDownButtonClick = (): void => handleScale(scale > minScale ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
-    const cursor = ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
+    const cursor = !drawMode && ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
     const overflow = drawMode && isMobile ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
     const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
     const transformOrigin = scale < 1 ? '50% 0' : '0 0'; // When in fullscreen and zooming in from that, we set the transform origin to top left. Otherwise we center the document.
