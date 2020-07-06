@@ -88,7 +88,6 @@ export const MapInteraction: React.FC = ({ children }) => {
 
     // Given the start touches and new e.touches, scale and translation such that the initial midpoint remains as the new midpoint.
     // This is to achieve the effect of keeping the content that was directly in the middle of the two fingers as the focal point throughout the zoom.
-    // TODO: Improve this so that it wont cut out areas on the left of the zoom container.
     const scaleFromMultiTouch = (e: TouchEvent): void => {
         // Ignore: This function is only called when the start pointers info exists.
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -134,6 +133,24 @@ export const MapInteraction: React.FC = ({ children }) => {
         setTranslation(newTranslation);
     };
 
+    // Change translation based on drag event.
+    const onDrag = (pointer: Touch): void => {
+        // Ignore: This function is only called when the start pointers info exists.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const { pointers: startTouches, translation: startTranslation } = startPointersInfo.current!;
+        const startPointer = startTouches[0];
+        const dragX = pointer.clientX - startPointer.clientX;
+        const dragY = pointer.clientY - startPointer.clientY;
+
+        const newTranslation = {
+            x: startTranslation.x + dragX,
+            y: startTranslation.y + dragY,
+        };
+
+        // setScale(scale);
+        setTranslation(newTranslation);
+    };
+
     // Update document scale based on mouse wheel events.
     // TODO: Set Y-axis scroll position based on mouse position to we can zoom in to a point using mouse position.
     const onWheel = (e: WheelEvent): void => {
@@ -174,6 +191,9 @@ export const MapInteraction: React.FC = ({ children }) => {
             if (isPinchAction) {
                 e.preventDefault(); // Prevent scrolling.
                 scaleFromMultiTouch(e);
+            } else if (e.touches.length === 1 && scale > defaultScale) {
+                e.preventDefault(); // Prevent scrolling.
+                onDrag(e.touches[0]);
             }
         }
     };
@@ -261,7 +281,7 @@ export const MapInteraction: React.FC = ({ children }) => {
 
     const handleScaleUpButtonClick = (): void => handleScale(scale < maxScale ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
     const handleScaleDownButtonClick = (): void => handleScale(scale > minScale ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
-    const cursor = drawMode ? 'pointer' : ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
+    const cursor = ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
     const overflow = drawMode && isMobile ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
     const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
     const transformOrigin = scale < 1 ? '50% 0' : '0 0'; // When in fullscreen and zooming in from that, we set the transform origin to top left. Otherwise we center the document.
