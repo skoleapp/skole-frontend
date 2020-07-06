@@ -35,6 +35,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     const [translation, setTranslation] = useState(defaultTranslation);
     const [ctrlKey, setCtrlKey] = useState(false);
     const [fullscreen, setFullscreen] = useState(true);
+    const [transformContainerClasses, setTransformContainerClasses] = useState('');
 
     // Change cursor mode when CTRL key is pressed.
     const onKeyDown = (e: KeyboardEvent): void => {
@@ -182,7 +183,10 @@ export const MapInteraction: React.FC = ({ children }) => {
         }
     };
 
-    const onTouchStart = (e: TouchEvent): void => setPointerState(e.touches);
+    const onTouchStart = (e: TouchEvent): void => {
+        setTransformContainerClasses('');
+        setPointerState(e.touches);
+    };
 
     const onTouchMove = (e: TouchEvent): void => {
         if (!!startPointersInfo.current) {
@@ -202,10 +206,10 @@ export const MapInteraction: React.FC = ({ children }) => {
         setPointerState(e.touches);
 
         // Reset original scale/translation if pinched out.
-        // TODO: Add some animation so that the document `bounces` back to it's original state.
         if (scale < defaultScale) {
             setScale(defaultScale);
             setTranslation(defaultTranslation);
+            setTransformContainerClasses('bounce-back');
         }
     };
 
@@ -297,7 +301,11 @@ export const MapInteraction: React.FC = ({ children }) => {
         controlsDisabled,
     };
 
-    const renderTransformContainer = <TransformContainer {...transformContainerProps}>{children}</TransformContainer>;
+    const renderTransformContainer = (
+        <TransformContainer className={transformContainerClasses} {...transformContainerProps}>
+            {children}
+        </TransformContainer>
+    );
     const renderMapControls = !isMobile && !drawMode && <MapControls {...mapControlsProps} />;
 
     return (
@@ -321,6 +329,11 @@ const MapInteractionContainer = styled(({ cursor, overflow, ...props }) => <Box 
     background-color: var(--gray-light);
     display: flex;
     justify-content: center;
+
+    .bounce-back {
+        transform: none;
+        transition: 0.5s ease-in-out;
+    }
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
