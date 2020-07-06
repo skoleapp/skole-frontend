@@ -1,5 +1,5 @@
 import { Box, Grid, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
-import { CloudUploadOutlined, DeleteOutline, SchoolOutlined } from '@material-ui/icons';
+import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -259,7 +259,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderCourseName = (
-        <Typography className="custom-header-text truncate" variant="subtitle1">
+        <Typography className="truncate" variant="subtitle1">
             {courseName}
         </Typography>
     );
@@ -268,7 +268,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         <Box className="custom-header">
             <Grid container justify="space-between">
                 <Box display="flex" justifyContent="flex-start" alignItems="center">
-                    <SchoolOutlined /> {renderCourseName}
+                    {renderCourseName}
                 </Box>
                 <Box display="flex" justifyContent="flex-end" alignItems="center">
                     {renderUploadResourceButton}

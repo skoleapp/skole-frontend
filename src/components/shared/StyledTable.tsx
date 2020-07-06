@@ -58,7 +58,7 @@ export const StyledTable = styled(Paper)`
                     min-height: 2.5rem;
 
                     &:hover {
-                        background-color: var(--hover-opacity);
+                        background-color: var(--hover-color);
                     }
 
                     .MuiTableCell-root {

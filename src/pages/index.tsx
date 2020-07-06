@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardContent, InputBase, Typography } from '@material-ui/core';
+import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typography } from '@material-ui/core';
 import {
     CloudUploadOutlined,
     LibraryAddOutlined,
@@ -87,14 +87,16 @@ const IndexPage: NextPage<I18nProps> = () => {
             {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
                 <Link href={href} key={i}>
                     <Card>
-                        <CardContent>
-                            <Avatar>
-                                <Icon />
-                            </Avatar>
-                            <Typography variant="h2" color="primary">
-                                {t(text)}
-                            </Typography>
-                        </CardContent>
+                        <CardActionArea>
+                            <CardContent>
+                                <Avatar>
+                                    <Icon />
+                                </Avatar>
+                                <Typography variant="h2" color="primary">
+                                    {t(text)}
+                                </Typography>
+                            </CardContent>
+                        </CardActionArea>
                     </Card>
                 </Link>
             ))}
@@ -188,7 +190,7 @@ const StyledIndexPage = styled(Box)`
         flex-flow: row wrap;
 
         .MuiCard-root {
-            cursor: pointer;
+            // cursor: pointer;
             margin-top: 0.5rem;
             width: 100%;
             padding-bottom: 50%;
@@ -201,30 +203,29 @@ const StyledIndexPage = styled(Box)`
                 margin: 0.5rem !important;
             }
 
-            .MuiCardContent-root {
+            .MuiCardActionArea-root {
                 position: absolute;
                 height: 100%;
                 width: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
 
-                .MuiAvatar-root {
-                    height: 5rem;
-                    width: 5rem;
-                    margin: 0.5rem;
-                    background-color: var(--primary-light);
+                .MuiCardContent-root {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
 
-                    .MuiSvgIcon-root {
-                        height: 3rem;
-                        width: 3rem;
+                    .MuiAvatar-root {
+                        height: 5rem;
+                        width: 5rem;
+                        margin: 0.5rem;
+                        background-color: var(--primary-light);
+
+                        .MuiSvgIcon-root {
+                            height: 3rem;
+                            width: 3rem;
+                        }
                     }
                 }
-            }
-
-            &:hover {
-                background-color: var(--hover-opacity);
             }
         }
     }

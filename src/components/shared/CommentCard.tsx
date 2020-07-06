@@ -289,7 +289,7 @@ const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...
         }};
 
         background-color: ${({ isThread, attachmentOnly }): string => {
-            return !isThread ? 'var(--hover-opacity)' : attachmentOnly ? 'var(--hover-opacity)' : 'inherit';
+            return !isThread ? 'var(--hover-color)' : attachmentOnly ? 'var(--hover-color)' : 'inherit';
         }};
     }
 

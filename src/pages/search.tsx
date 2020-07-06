@@ -10,13 +10,7 @@ import {
     InputBase,
     Typography,
 } from '@material-ui/core';
-import {
-    ArrowBackOutlined,
-    ClearAllOutlined,
-    FilterListOutlined,
-    PageviewOutlined,
-    SearchOutlined,
-} from '@material-ui/icons';
+import { ArrowBackOutlined, ClearAllOutlined, FilterListOutlined, SearchOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
@@ -365,24 +359,15 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         </Box>
     );
 
-    const renderFiltersHeader = (
-        <Typography className="custom-header-text" variant="subtitle1">
-            {t('common:filters')}
-        </Typography>
-    );
-
-    const renderSearchResultsHeader = (
-        <Typography className="custom-header-text" variant="subtitle1">
-            {t('common:searchResults')}
-        </Typography>
-    );
+    const renderFiltersHeader = <Typography variant="subtitle1">{t('common:filters')}</Typography>;
+    const renderSearchResultsHeader = <Typography variant="subtitle1">{t('common:searchResults')}</Typography>;
 
     const renderDesktopContent = !isMobile && (
         <Grid container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
                     <Box className="custom-header" display="flex" alignItems="center">
-                        <FilterListOutlined /> {renderFiltersHeader}
+                        {renderFiltersHeader}
                     </Box>
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
@@ -390,7 +375,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
             <Grid item container xs={7} md={8} lg={9}>
                 <StyledCard marginLeft>
                     <Box className="custom-header" display="flex" alignItems="center">
-                        <PageviewOutlined /> {renderSearchResultsHeader}
+                        {renderSearchResultsHeader}
                     </Box>
                     {renderFilterNames}
                     <StyledTable>{renderTableContent}</StyledTable>

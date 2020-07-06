@@ -102,7 +102,7 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
     );
 
     const renderResourceTitle = (
-        <Typography className="custom-header-text truncate" variant="subtitle1">
+        <Typography className="truncate" variant="subtitle1">
             {title}
         </Typography>
     );

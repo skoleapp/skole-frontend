@@ -1,5 +1,4 @@
 import { Box, Grid, Tab, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { LocationCityOutlined } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -162,17 +161,13 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         <NotFoundBox text={t('school:noCourses')} />
     );
 
-    const renderSchoolName = (
-        <Typography className="custom-header-text" variant="subtitle1">
-            {schoolName}
-        </Typography>
-    );
+    const renderSchoolName = <Typography variant="subtitle1">{schoolName}</Typography>;
 
     const renderSchoolHeader = !isMobile && (
         <Box className="custom-header">
             <Grid container justify="space-between">
                 <Box display="flex" justifyContent="flex-start" alignItems="center">
-                    <LocationCityOutlined /> {renderSchoolName}
+                    {renderSchoolName}
                 </Box>
                 <Box display="flex" justifyContent="flex-end" alignItems="center">
                     {renderShareButton}

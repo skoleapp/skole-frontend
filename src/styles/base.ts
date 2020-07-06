@@ -21,11 +21,11 @@ export const base = css`
 
         // Other Colors.
 
-        --gray: #323639;
+        --gray: #323639; // Same as MUI 'textSecondary'.
         --gray-light: #525659;
         --gray-dark: #262729;
-        --hover-opacity: rgba(0, 0, 0, 0.05);
-        --border-color: rgba(0, 0, 0, 0.12);
+        --hover-color: rgb(239, 239, 239); // Same as on MUI CardActionArea.
+        --border-color: rgba(0, 0, 0, 0.12); // Same as MUI border color.
         --opacity: rgba(0, 0, 0, 0.5);
         --opacity-light: rgba(0, 0, 0, 0.25);
         --opacity-dark: rgba(0, 0, 0, 0.75);
@@ -120,10 +120,6 @@ export const base = css`
 
             .MuiIconButton-root {
                 padding: 0.25rem;
-            }
-
-            .custom-header-text {
-                margin-left: 0.5rem;
             }
         }
     }

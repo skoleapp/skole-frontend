@@ -27,9 +27,9 @@ export const DiscussionHeader: React.FC<Props> = ({
     const renderIcon = <ChatOutlined />;
 
     const renderText = (
-        <Typography className="custom-header-text" variant="subtitle1">
-            {title}
-        </Typography>
+        <Box marginLeft="0.5rem">
+            <Typography variant="subtitle1">{title}</Typography>
+        </Box>
     );
 
     return (
