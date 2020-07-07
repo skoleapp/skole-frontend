@@ -46,7 +46,7 @@ export const MapInteraction: React.FC = ({ children }) => {
 
     // Reset cursor mode when CTRL key is released.
     const onKeyUp = (e: KeyboardEvent): void => {
-        if (e.key == 'Control') {
+        if (e.key === 'Control') {
             setCtrlKey(false);
         }
     };
