@@ -3,5 +3,5 @@
     "description": "Tämä on tilin poistamissivu.",
     "header": "Poista tili",
     "deleteAccountTitle": "Haluatko varmasti poistaa tilisi?",
-    "deleteAccountDescription": "Tätä toimenpidettä ei voida peruuttaa ja tilisi katoaa ikuisiksi ajoiksi!"
+    "deleteAccountDescription": "Tätä toimenpidettä ei voida peruuttaa ja tilisi poistetaan pysyvästi."
 }
