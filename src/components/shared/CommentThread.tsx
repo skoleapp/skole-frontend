@@ -77,7 +77,6 @@ export const ReplyCommentThread: React.FC = () => {
     const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
     const { toggleCommentModal } = useCommentModalContext();
     const target = { comment: Number(R.propOr(undefined, 'id', topComment)) };
-    const formKey = 'comment-thread';
     const openCommentModal = (): void => toggleCommentModal(true);
 
     const appendComments = (comment: CommentObjectType): void => {
@@ -107,7 +106,7 @@ export const ReplyCommentThread: React.FC = () => {
 
     const createCommentFormProps = {
         target,
-        formKey,
+        formKey: 'comment-thread',
         appendComments,
     };
 
