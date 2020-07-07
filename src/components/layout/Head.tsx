@@ -26,9 +26,9 @@ export const HeadComponent: React.FC<SEOProps> = ({ title, description }) => (
         <title>{`Skole | ${title}`}</title>
         <meta name="description" content={description} />
         <meta property="og:description" content={description} />
-        <meta property="og:title" content={`Skole | ${title}`}/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:site_name" content="Skole"/>
+        <meta property="og:title" content={`Skole | ${title}`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Skole" />
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta
