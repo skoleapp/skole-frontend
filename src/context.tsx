@@ -1,6 +1,6 @@
 import { CommentObjectType, UserObjectType } from 'generated/graphql';
 import * as R from 'ramda';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,16 +9,15 @@ import {
     AttachmentViewerContext,
     AuthContext,
     CommentModalContext,
-    CommentThreadContext,
-    DiscussionBoxContext,
+    DiscussionContext,
     LanguageSelectorContext,
     NotificationsContext,
-    PDFPage,
     PDFViewerContext,
     SettingsContext,
     SkoleContextType,
 } from './types';
 
+// Ignore: All functions below are ignored as they are only mock functions for the context.
 const SkolePageContext = createContext<SkoleContextType>({
     auth: {
         user: null,
@@ -27,10 +26,6 @@ const SkolePageContext = createContext<SkoleContextType>({
     attachmentViewer: {
         attachment: null,
         toggleAttachmentViewer: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-    },
-    commentThread: {
-        topComment: null,
-        toggleCommentThread: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     commentModal: {
         commentModalOpen: false,
@@ -49,19 +44,27 @@ const SkolePageContext = createContext<SkoleContextType>({
         toggleSettings: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     pdfViewer: {
-        pages: [],
-        currentPage: 0,
-        effect: '',
-        setCenter: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        prevPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        nextPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        setPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-        setCurrentPage: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+        documentRef: null,
+        pageNumberInputRef: null,
+        controlsDisabled: false,
+        setControlsDisabled: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        drawMode: false,
+        setDrawMode: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        screenshot: null,
+        setScreenshot: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        rotate: 0,
+        setRotate: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        numPages: 0,
+        setNumPages: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
+        pageNumber: 0,
+        setPageNumber: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
     },
     isMobileGuess: null,
-    discussionBox: {
-        comments: null,
-        setComments: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+    discussion: {
+        topLevelComments: [],
+        setTopLevelComments: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+        topComment: null,
+        toggleTopComment: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
 });
 
@@ -69,32 +72,43 @@ const useSkoleContext = (): SkoleContextType => useContext(SkolePageContext);
 
 interface UseAuthContext extends AuthContext {
     verified: boolean | null;
-    notVerifiedTooltip: string | false;
+    verificationRequiredTooltip: string | false;
 }
 
 export const useAuthContext = (): UseAuthContext => {
     const { t } = useTranslation();
     const { user, setUser } = useSkoleContext().auth;
     const verified = R.propOr(null, 'verified', user) as boolean | null;
-    const notVerifiedTooltip = verified === false && t('common:notVerifiedTooltip');
-    return { user, setUser, verified, notVerifiedTooltip };
+    const verificationRequiredTooltip = verified === false && t('tooltips:verificationRequired');
+    return { user, setUser, verified, verificationRequiredTooltip };
 };
 
 export const useAttachmentViewerContext = (): AttachmentViewerContext => useSkoleContext().attachmentViewer;
-export const useCommentThreadContext = (): CommentThreadContext => useSkoleContext().commentThread;
 export const useCommentModalContext = (): CommentModalContext => useSkoleContext().commentModal;
 export const useLanguageSelectorContext = (): LanguageSelectorContext => useSkoleContext().languageSelector;
 export const useNotificationsContext = (): NotificationsContext => useSkoleContext().notifications;
 export const useSettingsContext = (): SettingsContext => useSkoleContext().settings;
 export const usePDFViewerContext = (): PDFViewerContext => useSkoleContext().pdfViewer;
 
-interface UseDiscussionBoxContext extends Pick<DiscussionBoxContext, 'setComments'> {
-    comments: CommentObjectType[];
+interface UseDiscussionContext extends DiscussionContext {
+    commentCount: number;
 }
 
-export const useDiscussionBoxContext = (initialComments: CommentObjectType[]): UseDiscussionBoxContext => {
-    const { comments, setComments } = useSkoleContext().discussionBox;
-    return { comments: comments || initialComments, setComments };
+export const useDiscussionContext = (initialComments?: CommentObjectType[]): UseDiscussionContext => {
+    const {
+        topLevelComments: contextTopLevelComments,
+        setTopLevelComments,
+        ...discussionContext
+    } = useSkoleContext().discussion;
+
+    const topLevelComments: CommentObjectType[] = !!contextTopLevelComments.length
+        ? contextTopLevelComments
+        : initialComments || [];
+
+    const commentCount =
+        topLevelComments.length + topLevelComments.reduce((acc, cur) => acc + cur.replyComments.length, 0);
+
+    return { topLevelComments, setTopLevelComments, commentCount, ...discussionContext };
 };
 
 // Allow using custom breakpoints, use MD as default.
@@ -124,39 +138,43 @@ interface Props {
 }
 
 export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, isMobileGuess }) => {
+    // Auth context.
     const [user, setUser] = useState(initialUser);
 
+    // Attachment viewer context.
     const [attachment, setAttachment] = useState<string | null>(null);
     const toggleAttachmentViewer = (payload: string | null): void => setAttachment(payload);
 
-    const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
-    const toggleCommentThread = (payload: CommentObjectType | null): void => setTopComment(payload);
-
+    // Comment modal context.
     const [commentModalOpen, setCommentModalOpen] = useState(false);
     const toggleCommentModal = (payload: boolean): void => setCommentModalOpen(payload);
 
+    // Language selector context.
     const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);
     const toggleLanguageSelector = (open: boolean): void => setLanguageSelectorOpen(open);
 
+    // Notifications context.
     const [notification, setNotification] = useState<string | null>(null);
     const toggleNotification = (payload: string | null): void => setNotification(payload);
 
+    // Settings context.
     const [settingsOpen, setSettingsOpen] = useState(false);
     const toggleSettings = (open: boolean): void => setSettingsOpen(open);
 
-    const [pdf, setPdf] = useState<Pick<PDFViewerContext, 'pages' | 'currentPage' | 'effect'>>({
-        pages: [],
-        currentPage: 0,
-        effect: '',
-    });
+    // PDF viewer context.
+    const documentRef = useRef<Document>(null);
+    const pageNumberInputRef = useRef<HTMLInputElement>(null);
+    const [controlsDisabled, setControlsDisabled] = useState(true);
+    const [drawMode, setDrawMode] = useState(false);
+    const [screenshot, setScreenshot] = useState<string | null>(null);
+    const [rotate, setRotate] = useState(0);
+    const [numPages, setNumPages] = useState(0);
+    const [pageNumber, setPageNumber] = useState(0);
 
-    const setCenter = (): void => setPdf({ ...pdf, effect: 'SET_CENTER' + new Date().valueOf() });
-    const prevPage = (): void => setPdf({ ...pdf, effect: 'PREV_PAGE' + new Date().valueOf() });
-    const nextPage = (): void => setPdf({ ...pdf, effect: 'NEXT_PAGE' + new Date().valueOf() });
-    const setPages = (pages: PDFPage[]): void => setPdf({ ...pdf, pages });
-    const setCurrentPage = (currentPage: number): void => setPdf({ ...pdf, currentPage });
-
-    const [comments, setComments] = useState<CommentObjectType[] | null>(null);
+    // Comment thread context.
+    const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]);
+    const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
+    const toggleTopComment = (payload: CommentObjectType | null): void => setTopComment(payload);
 
     const contextValue = {
         auth: {
@@ -166,10 +184,6 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
         attachmentViewer: {
             attachment,
             toggleAttachmentViewer,
-        },
-        commentThread: {
-            topComment,
-            toggleCommentThread,
         },
         commentModal: {
             commentModalOpen,
@@ -188,17 +202,27 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
             toggleSettings,
         },
         pdfViewer: {
-            ...pdf,
-            setCenter,
-            prevPage,
-            nextPage,
-            setPages,
-            setCurrentPage,
+            documentRef,
+            pageNumberInputRef,
+            controlsDisabled,
+            setControlsDisabled,
+            drawMode,
+            setDrawMode,
+            screenshot,
+            setScreenshot,
+            rotate,
+            setRotate,
+            numPages,
+            setNumPages,
+            pageNumber,
+            setPageNumber,
         },
         isMobileGuess,
-        discussionBox: {
-            comments,
-            setComments,
+        discussion: {
+            topLevelComments,
+            setTopLevelComments,
+            topComment,
+            toggleTopComment,
         },
     };
 

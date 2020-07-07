@@ -15,15 +15,15 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => (
             <Link href="/courses/[id]" as={`/courses/${c.id}`} key={i}>
                 <TableRow>
                     <TableCell>
-                        <Typography variant="subtitle1">{R.propOr('-', 'name', c)}</Typography>
+                        <Typography variant="body2">{R.propOr('-', 'name', c)}</Typography>
                         {!!c.code && (
-                            <Typography className="cell-help-text" variant="subtitle1" color="textSecondary">
+                            <Typography variant="body2" color="textSecondary">
                                 {R.propOr('-', 'code', c)}
                             </Typography>
                         )}
                     </TableCell>
                     <TableCell align="right">
-                        <Typography variant="subtitle1">{R.propOr('-', 'score', c)}</Typography>
+                        <Typography variant="body2">{R.propOr('-', 'score', c)}</Typography>
                     </TableCell>
                 </TableRow>
             </Link>

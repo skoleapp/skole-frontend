@@ -12,7 +12,7 @@ import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated
 import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
 import { useAuthContext, useNotificationsContext } from '../context';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { clientLogin } from '../lib';
+import { setTokenCookie, withUserAgent } from '../lib';
 import { I18nProps } from '../types';
 import { useAlerts, useForm, useLanguageSelector } from '../utils';
 
@@ -50,7 +50,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                 handleMutationErrors(login.errors);
             } else if (!!login.token && !!login.user && !!login.message) {
                 const { next } = query;
-                clientLogin(login.token);
+                setTokenCookie(login.token);
                 resetForm();
                 toggleNotification(login.message);
                 setUser(login.user as UserObjectType);
@@ -72,7 +72,12 @@ const LoginPage: NextPage<I18nProps> = () => {
 
     const handleSubmit = async (values: LoginFormValues): Promise<void> => {
         const { usernameOrEmail, password } = values;
-        await loginMutation({ variables: { usernameOrEmail, password }, context: { headers: { Authorization: '' } } });
+
+        await loginMutation({
+            variables: { usernameOrEmail, password },
+            context: { headers: { Authorization: '' } },
+        });
+
         setSubmitting(false);
     };
 
@@ -137,8 +142,8 @@ const LoginPage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['login']) },
-});
+}));
 
 export default LoginPage;

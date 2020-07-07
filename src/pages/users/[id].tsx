@@ -28,9 +28,9 @@ import {
     TextLink,
 } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApolloSSR, withAuthSync } from '../../lib';
+import { useSSRApollo, withAuthSync } from '../../lib';
 import { breakpoints, breakpointsNum } from '../../styles';
-import { I18nProps, MaxWidth, SkolePageContext } from '../../types';
+import { I18nProps, MaxWidth } from '../../types';
 import { mediaURL, useFrontendPagination, useMoment, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
@@ -73,14 +73,14 @@ const UserPage: NextPage<Props> = ({ user }) => {
 
     const renderSettingsButton = isOwnProfile && (
         <Box marginLeft="0.5rem">
-            <Tooltip title={t('profile:settingsTooltip')}>
+            <Tooltip title={t('tooltips:settings')}>
                 <SettingsButton color="primary" />
             </Tooltip>
         </Box>
     );
 
     const renderTitle = !!title && (
-        <Typography variant="subtitle1" color="textSecondary">
+        <Typography variant="body2" color="textSecondary">
             {title}
         </Typography>
     );
@@ -94,8 +94,8 @@ const UserPage: NextPage<Props> = ({ user }) => {
     );
 
     const renderJoined = (
-        <Box marginTop="0.25rem">
-            <Typography className="section-help-text" variant="body2" color="textSecondary">
+        <Box marginTop="0.5rem">
+            <Typography variant="body2" color="textSecondary">
                 {t('common:joined')} {joined}
             </Typography>
         </Box>
@@ -105,64 +105,56 @@ const UserPage: NextPage<Props> = ({ user }) => {
         <CardContent>
             <Box display="flex" flexDirection="column">
                 <Avatar className="main-avatar" src={mediaURL(avatar)} />
-                {!isMobile && <Typography variant="subtitle1">{username}</Typography>}
+                {!isMobile && <Typography variant="body2">{username}</Typography>}
                 {!isMobile && renderTitle}
             </Box>
         </CardContent>
     );
 
     const renderScoreTitle = (
-        <Typography className="section-help-text" variant="body2" color="textSecondary">
+        <Typography variant="body2" color="textSecondary">
             {t('profile:score')}
         </Typography>
     );
 
     const renderCourseCountTitle = (
-        <Typography className="section-help-text" variant="body2" color="textSecondary">
+        <Typography variant="body2" color="textSecondary">
             {t('profile:courses')}
         </Typography>
     );
 
     const renderResourceCountTitle = (
-        <Typography className="section-help-text" variant="body2" color="textSecondary">
+        <Typography variant="body2" color="textSecondary">
             {t('profile:resources')}
         </Typography>
     );
 
-    const renderScoreValue = <Typography variant="body1">{score}</Typography>;
-    const renderCourseCountValue = <Typography variant="body1">{courseCount}</Typography>;
-    const renderResourceCountValue = <Typography variant="body1">{resourceCount}</Typography>;
+    const renderScoreValue = <Typography variant="body2">{score}</Typography>;
+    const renderCourseCountValue = <Typography variant="body2">{courseCount}</Typography>;
+    const renderResourceCountValue = <Typography variant="body2">{resourceCount}</Typography>;
 
     const renderRank = !!rank && (
-        <Box marginTop="0.25rem">
-            <Typography className="section-help-text" variant="body2" color="textSecondary">
-                {t('profile:rank')}
-            </Typography>
-            <Tooltip title={t('profile:rankTooltip', { rank })}>
+        <Box marginTop="0.5rem">
+            <Tooltip title={t('tooltips:rank', { rank })}>
                 <Chip size="small" label={rank} />
             </Tooltip>
         </Box>
     );
 
     const renderBadges = !!badges.length && (
-        <Box marginTop="0.25rem">
-            <Typography className="section-help-text" variant="body2" color="textSecondary">
-                {t('profile:badges')}
-            </Typography>
-            <Box display="flex" margin="0 -0.25rem -0.25rem -0.25rem">
-                {badges.map(({ name, description }, i) => (
-                    <Box key={i}>
-                        <Tooltip title={description}>
-                            <Chip className="badge" size="small" label={name} />
-                        </Tooltip>
-                    </Box>
-                ))}
-            </Box>
+        <Box display="flex" margin="0.25rem -0.25rem -0.25rem -0.25rem">
+            {badges.map(({ name, description }, i) => (
+                <Box key={i}>
+                    <Tooltip title={description}>
+                        <Chip className="badge" size="small" label={name} />
+                    </Tooltip>
+                </Box>
+            ))}
         </Box>
     );
 
     const renderVerifyAccountLink = isOwnProfile && verified === false && (
-        <Box marginTop="0.25rem">
+        <Box marginTop="0.5rem">
             <TextLink href="/account/verify-account" color="primary">
                 {t('common:verifyAccount')}
             </TextLink>
@@ -193,18 +185,18 @@ const UserPage: NextPage<Props> = ({ user }) => {
                         </Box>
                     </CardContent>
                 </Grid>
-                <Box textAlign="left">
-                    {renderTitle}
-                    {renderBio}
-                    {renderRank}
-                    {renderBadges}
-                    {renderVerifyAccountLink}
-                    {renderJoined}
-                </Box>
-                <Box marginTop="0.25rem" width="100%">
-                    {renderEditProfileButton}
-                </Box>
             </Grid>
+            <Box marginTop="0.5rem" textAlign="left">
+                {renderTitle}
+                {renderBio}
+                {renderRank}
+                {renderBadges}
+                {renderVerifyAccountLink}
+                {renderJoined}
+            </Box>
+            <Box marginTop="0.25rem" width="100%">
+                {renderEditProfileButton}
+            </Box>
         </CardContent>
     );
 
@@ -325,16 +317,14 @@ const StyledUserPage = styled(Box)`
     .MuiCardContent-root {
         padding-bottom: 0.5rem !important;
 
-        .section-help-text {
-            font-size: 0.75rem;
-        }
-
         .main-avatar {
-            margin: 0.5rem;
-
             @media only screen and (max-width: ${breakpoints.SM}) {
-                width: 4rem;
-                height: 4rem;
+                width: 5rem;
+                height: 5rem;
+            }
+
+            @media only screen and (min-width: ${breakpoints.SM}) {
+                margin: 0.5rem;
             }
         }
 
@@ -342,27 +332,27 @@ const StyledUserPage = styled(Box)`
             overflow: hidden;
             word-break: break-word;
         }
-    }
 
-    .badge {
-        margin: 0.25rem !important;
+        .badge {
+            margin: 0.25rem !important;
+        }
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { query, apolloClient } = ctx as SkolePageContext;
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 
     try {
         const { data } = await apolloClient.query({
             query: UserDetailDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
-        return { props: { ...data, ...nameSpaces } };
+        return { props: { ...data, ...nameSpaces, initialApolloState } };
     } catch {
-        return { props: { ...nameSpaces } };
+        return { props: { ...nameSpaces, initialApolloState } };
     }
-});
+};
 
 export default withAuthSync(UserPage);

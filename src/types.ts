@@ -3,18 +3,13 @@ import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
 import Maybe from 'graphql/tsutils/Maybe';
+import { IncomingMessage, ServerResponse } from 'http';
 import { NextPageContext } from 'next';
-import { Extent } from 'ol/extent';
-import { Group } from 'ol/layer';
-import { MutableRefObject, SyntheticEvent } from 'react';
+import { ParsedUrlQuery } from 'querystring';
+import { Dispatch, MutableRefObject, SetStateAction, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
 
 import { CommentObjectType, ErrorType, SchoolObjectType, UserObjectType } from '../generated/graphql';
-
-export interface SkolePageContext extends NextPageContext {
-    apolloClient: ApolloClient<NormalizedCacheObject>;
-    apolloState: NormalizedCacheObject;
-}
 
 export interface I18nProps {
     namespacesRequired: string[];
@@ -50,10 +45,8 @@ export interface CommentTarget {
     [key: string]: number;
 }
 
-export interface DiscussionBoxProps {
-    topComment?: CommentObjectType | null;
+export interface TopLevelCommentThreadProps {
     comments: CommentObjectType[];
-    isThread?: boolean;
     target: CommentTarget;
     formKey: string;
     placeholderText?: string;
@@ -65,13 +58,6 @@ export interface UseDrawer extends DrawerProps {
     handleOpen: (e: SyntheticEvent) => void;
     onClose: (e: SyntheticEvent) => void;
     renderHeader: JSX.Element;
-}
-
-export interface UseOptions {
-    renderShareOption: JSX.Element;
-    renderReportOption: JSX.Element;
-    renderOptionsHeader: JSX.Element;
-    drawerProps: Omit<UseDrawer, 'renderHeader'>;
 }
 
 export type TextVariant =
@@ -136,11 +122,6 @@ export type CustomTablePaginationProps = Pick<
     'page' | 'count' | 'rowsPerPage' | 'onChangePage' | 'onChangeRowsPerPage'
 >;
 
-export interface PDFPage {
-    layer: Group;
-    imageExtent: Extent;
-}
-
 export interface AuthContext {
     user: UserObjectType | null;
     setUser: (user: UserObjectType | null) => void;
@@ -149,11 +130,6 @@ export interface AuthContext {
 export interface AttachmentViewerContext {
     attachment: string | null;
     toggleAttachmentViewer: (payload: string | null) => void;
-}
-
-export interface CommentThreadContext {
-    topComment: CommentObjectType | null;
-    toggleCommentThread: (payload: CommentObjectType | null) => void;
 }
 
 export interface CommentModalContext {
@@ -177,32 +153,39 @@ export interface SettingsContext {
 }
 
 export interface PDFViewerContext {
-    pages: PDFPage[];
-    currentPage: number;
-    effect: string;
-    setCenter: () => void;
-    prevPage: () => void;
-    nextPage: () => void;
-    setPages: (pages: PDFPage[]) => void;
-    setCurrentPage: (currentPage: number) => void;
+    documentRef: MutableRefObject<Document | null> | null;
+    pageNumberInputRef: MutableRefObject<HTMLInputElement | null> | null;
+    drawMode: boolean;
+    setDrawMode: Dispatch<SetStateAction<boolean>>;
+    screenshot: string | null;
+    setScreenshot: Dispatch<SetStateAction<string | null>>;
+    rotate: number;
+    setRotate: Dispatch<SetStateAction<number>>;
+    numPages: number;
+    setNumPages: Dispatch<SetStateAction<number>>;
+    pageNumber: number;
+    setPageNumber: Dispatch<SetStateAction<number>>;
+    controlsDisabled: boolean;
+    setControlsDisabled: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface DiscussionBoxContext {
-    comments: CommentObjectType[] | null;
-    setComments: (comments: CommentObjectType[]) => void;
+export interface DiscussionContext {
+    topLevelComments: CommentObjectType[];
+    setTopLevelComments: (comments: CommentObjectType[]) => void;
+    topComment: CommentObjectType | null;
+    toggleTopComment: (payload: CommentObjectType | null) => void;
 }
 
 export interface SkoleContextType {
     auth: AuthContext;
     attachmentViewer: AttachmentViewerContext;
-    commentThread: CommentThreadContext;
     commentModal: CommentModalContext;
     languageSelector: LanguageSelectorContext;
     notifications: NotificationsContext;
     settings: SettingsContext;
     pdfViewer: PDFViewerContext;
     isMobileGuess: boolean | null;
-    discussionBox: DiscussionBoxContext;
+    discussion: DiscussionContext;
 }
 
 export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
@@ -214,4 +197,27 @@ interface CustomApolloClient extends ApolloClient<NormalizedCacheObject> {
 export interface ApolloContext extends NextPageContext {
     apolloClient: CustomApolloClient;
     apolloState: {};
+}
+
+// Types for SSR context used with Next.js data fetching methods.
+// Ignore: previewData is typed as any in next.js source as well.
+export interface SSRContext {
+    req: IncomingMessage;
+    res: ServerResponse;
+    params?: ParsedUrlQuery;
+    query: ParsedUrlQuery;
+    preview?: boolean;
+    previewData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+}
+
+export interface LTWH {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+}
+
+export interface PDFTranslation {
+    x: number;
+    y: number;
 }

@@ -26,7 +26,7 @@ import {
 } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withAuthSync } from '../../lib';
+import { withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -200,10 +200,12 @@ const EditProfilePage: NextPage<I18nProps> = () => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
     },
-});
+}));
 
 export default withAuthSync(EditProfilePage);

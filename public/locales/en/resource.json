@@ -1,17 +1,9 @@
 {
     "description": "This is a resource page.",
-    "deleteResource": "Delete resource",
-    "confirmDesc": "Are you sure you want to delete this resource?",
-    "infoTooltip": "View resource information.",
-    "optionsTooltip": "View resource options.",
-    "unstarredTooltip": "Star this resource.",
-    "starredTooltip": "Unstar this resource.",
-    "downvoteTooltip": "Downvote this resource.",
-    "upvoteTooltip": "Upvote this resource.",
-    "ownResourceVoteTooltip": "You cannot vote your own resource.",
-    "fullscreenTooltip": "Center to screen.",
+    "deleteResourceTitle": "Delete Resource",
+    "deleteResourceDescription": "Are you sure you want to delete this resource?",
     "loadingResource": "Loading resource...",
     "errorLoadingResource": "Error loading resource.",
     "commentsPlaceholder": "Here you can discuss generally about the resource.",
-    "infoHeader": "Resource Info"
+    "drawMode": "Draw Mode"
 }

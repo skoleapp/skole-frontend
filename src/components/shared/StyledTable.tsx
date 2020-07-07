@@ -58,7 +58,7 @@ export const StyledTable = styled(Paper)`
                     min-height: 2.5rem;
 
                     &:hover {
-                        background-color: var(--hover-opacity);
+                        background-color: var(--hover-color);
                     }
 
                     .MuiTableCell-root {
@@ -68,14 +68,6 @@ export const StyledTable = styled(Paper)`
                         justify-content: center;
                         cursor: pointer;
                         padding: 0.25rem 0.5rem;
-
-                        .MuiTypography-subtitle1 {
-                            font-size: 0.85rem;
-                        }
-
-                        .cell-help-text {
-                            font-size: 0.75rem;
-                        }
                     }
                 }
             }

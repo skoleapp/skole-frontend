@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -9,7 +10,7 @@ import { ChangePasswordMutation, useChangePasswordMutation } from '../../../gene
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withAuthSync } from '../../lib';
+import { withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -122,10 +123,12 @@ const ChangePasswordPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['change-password']),
     },
-});
+}));
 
 export default withAuthSync(ChangePasswordPage);

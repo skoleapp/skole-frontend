@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
+import { AppBar, Avatar, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
 import { ArrowBackOutlined, HowToRegOutlined, LibraryAddOutlined, StarBorderOutlined } from '@material-ui/icons';
 import * as R from 'ramda';
 import React from 'react';
@@ -60,38 +60,46 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Grid>
     );
 
+    const renderSearch = !disableSearch && !!user && <TopNavbarSearchWidget />;
+
+    const renderAvatar = !!user && (
+        <>
+            <Tooltip title={t('tooltips:starred')}>
+                <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
+            </Tooltip>
+            <Tooltip title={t('tooltips:profile')}>
+                <span>
+                    <Link href="/users/[id]" as={`/users/${user.id}`}>
+                        <IconButton color="secondary">
+                            <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
+                        </IconButton>
+                    </Link>
+                </span>
+            </Tooltip>
+        </>
+    );
+
+    const renderAuthButtons = (
+        <>
+            <ButtonLink href="/login" color="secondary" endIcon={<HowToRegOutlined />}>
+                {t('common:login')}
+            </ButtonLink>
+            <ButtonLink href="/register" color="secondary" endIcon={<LibraryAddOutlined />}>
+                {t('common:register')}
+            </ButtonLink>
+        </>
+    );
+
     const renderDesktopContent = !isMobile && (
-        <Box display="flex" flexGrow="1" justifyContent="space-between" alignItems="center">
-            <Logo />
-            <Box display="flex" alignItems="center">
-                {!disableSearch && <TopNavbarSearchWidget />}
-                {!!user ? (
-                    <>
-                        <Tooltip title={t('common:starredTooltip')}>
-                            <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
-                        </Tooltip>
-                        <Tooltip title={t('common:profileTooltip')}>
-                            <span>
-                                <Link href="/users/[id]" as={`/users/${user.id}`}>
-                                    <IconButton color="secondary">
-                                        <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
-                                    </IconButton>
-                                </Link>
-                            </span>
-                        </Tooltip>
-                    </>
-                ) : (
-                    <>
-                        <ButtonLink href="/login" color="secondary" endIcon={<HowToRegOutlined />}>
-                            {t('common:login')}
-                        </ButtonLink>
-                        <ButtonLink href="/register" color="secondary" endIcon={<LibraryAddOutlined />}>
-                            {t('common:register')}
-                        </ButtonLink>
-                    </>
-                )}
-            </Box>
-        </Box>
+        <Grid container alignItems="center">
+            <Grid item xs={7} container>
+                <Logo />
+            </Grid>
+            <Grid item xs={5} container alignItems="center" justify="flex-end">
+                {renderSearch}
+                {renderAvatar || renderAuthButtons}
+            </Grid>
+        </Grid>
     );
 
     return (

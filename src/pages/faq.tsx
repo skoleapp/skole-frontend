@@ -2,10 +2,11 @@ import { Box, Typography } from '@material-ui/core';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { I18nProps } from 'src/types';
 
 import { SettingsLayout } from '../components';
 import { includeDefaultNamespaces } from '../i18n';
+import { withUserAgent } from '../lib';
+import { I18nProps } from '../types';
 
 const faqs = [
     {
@@ -27,7 +28,7 @@ const FAQPage: NextPage<I18nProps> = () => {
 
     const renderCardContent = faqs.map(({ title, text }, i) => (
         <Box key={i} marginY="0.5rem" textAlign="left">
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h3" gutterBottom>
                 {t(title)}
             </Typography>
             <Typography variant="body2">{t(text)}</Typography>
@@ -51,10 +52,10 @@ const FAQPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['faq']),
     },
-});
+}));
 
 export default FAQPage;

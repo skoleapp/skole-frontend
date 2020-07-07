@@ -1,14 +1,60 @@
 import { createMuiTheme } from '@material-ui/core';
 
-import { colors } from './colors';
+import { breakpointsNum } from './breakpoints';
+
+export const colors = {
+    primary: '#ad3636',
+    primaryLight: '#e46660',
+    primaryDark: '#770010',
+    secondary: '#faf2de',
+    secondaryLight: '#ffffff',
+    secondaryDark: '#c7bfac',
+    error: '#f44336',
+    warning: '#ff9800',
+    info: '#2196f3',
+    success: '#03fc52',
+    white: '#ffffff',
+    black: '#000000',
+};
 
 export const theme = createMuiTheme({
+    breakpoints: {
+        values: {
+            xs: breakpointsNum.XS,
+            sm: breakpointsNum.SM,
+            md: breakpointsNum.MD,
+            lg: breakpointsNum.LG,
+            xl: breakpointsNum.XL,
+        },
+    },
     palette: {
+        common: {
+            black: colors.black,
+            white: colors.white,
+        },
         primary: {
             main: colors.primary,
+            light: colors.primaryLight,
+            dark: colors.primaryDark,
+            contrastText: colors.white,
         },
         secondary: {
             main: colors.secondary,
+            light: colors.secondaryLight,
+            dark: colors.secondaryDark,
+            contrastText: colors.black,
+        },
+        error: {
+            main: colors.error,
+        },
+        warning: {
+            main: colors.warning,
+        },
+        info: {
+            main: colors.info,
+        },
+        success: {
+            main: colors.success,
         },
     },
     typography: {

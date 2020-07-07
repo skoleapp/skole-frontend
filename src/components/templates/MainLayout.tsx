@@ -44,6 +44,7 @@ export const MainLayout: React.FC<LayoutProps> = ({
     );
 };
 
+// Ignore: disableBottomMargin and customBottomNavbar must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledMainLayout = styled(({ disableBottomMargin, customBottomNavbar, ...other }) => <Box {...other} />)`
     background-color: var(--secondary);

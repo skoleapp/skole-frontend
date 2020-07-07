@@ -1,8 +1,5 @@
 {
     "description": "Dettä är en skolasida.",
     "noSubjects": "Den här skolan har inga ämnen...",
-    "noCourses": "Den här skolan har inga kurser...",
-    "infoTooltip": "Visa skolinformation.",
-    "optionsTooltip": "Visa skolalternativ.",
-    "infoHeader": "Skolinfo"
+    "noCourses": "Den här skolan har inga kurser..."
 }

@@ -1,37 +1,49 @@
 import { css } from 'styled-components';
 
-import { colors } from './colors';
+import { colors } from './theme';
 
 export const base = css`
     :root {
-        // Colors
-        --primary: ${colors.primary};
-        --secondary: ${colors.secondary};
+        // MUI Colors.
 
+        --primary: ${colors.primary};
+        --primary-light: ${colors.primaryLight};
+        --primary-dark: ${colors.primaryDark};
+        --secondary: ${colors.secondary};
+        --secondary-light: ${colors.secondaryLight};
+        --secondary-dark: ${colors.secondaryDark};
+        --warning: ${colors.warning};
+        --info: ${colors.info};
+        --success: ${colors.success};
+        --error: ${colors.error};
         --white: ${colors.white};
         --black: ${colors.black};
-        --gray: ${colors.gray};
 
-        --success: ${colors.success};
-        --danger: ${colors.danger};
+        // Other Colors.
 
-        --hover-opacity: rgba(0, 0, 0, 0.05);
-        --border-color: rgba(0, 0, 0, 0.12);
-        --light-opacity: rgba(0, 0, 0, 0.25);
-        --dark-opacity: rgba(0, 0, 0, 0.75);
+        --gray: #323639; // Same as MUI 'textSecondary'.
+        --gray-light: #525659;
+        --gray-dark: #262729;
+        --hover-color: rgb(239, 239, 239); // Same as on MUI CardActionArea.
+        --border-color: rgba(0, 0, 0, 0.12); // Same as MUI border color.
+        --opacity: rgba(0, 0, 0, 0.5);
+        --opacity-light: rgba(0, 0, 0, 0.25);
+        --opacity-dark: rgba(0, 0, 0, 0.75);
 
-        // Misc
-        --transition: all 0.15s ease-in;
+        // Misc.
+
         --border-radius: 0.25rem;
         --border: 1px solid var(--border-color); // Default MUI border.
+        --screenshot-border: 0.05rem dashed var(--black);
 
-        //iOS
+        //iOS.
+
         --safe-area-inset-bottom: env(safe-area-inset-bottom);
     }
 
     html,
     body {
-        // MUI overrides
+        // MUI overrides.
 
         .MuiLink-root {
             cursor: pointer;
@@ -62,7 +74,7 @@ export const base = css`
             }
         }
 
-        // Custom classes
+        // Custom classes.
 
         .border-bottom {
             border-bottom: var(--border);
@@ -95,6 +107,20 @@ export const base = css`
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .desktop-content {
+            flex-grow: 1;
+        }
+
+        .custom-header {
+            height: 3rem;
+            padding: 0.5rem;
+            border-bottom: var(--border);
+
+            .MuiIconButton-root {
+                padding: 0.25rem;
+            }
         }
     }
 `;

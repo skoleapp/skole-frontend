@@ -15,8 +15,8 @@ import {
     StyledTabs,
 } from '../../components';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApolloSSR, withAuthSync } from '../../lib';
-import { I18nProps, SkolePageContext } from '../../types';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
+import { I18nProps } from '../../types';
 import { useFrontendPagination, useTabs } from '../../utils';
 
 interface Props extends I18nProps {
@@ -102,15 +102,17 @@ const StarredPage: NextPage<Props> = ({ userMe }) => {
     }
 };
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { apolloClient } = ctx as SkolePageContext;
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['starred']) };
 
     try {
         const { data } = await apolloClient.query({ query: StarredDocument });
-        return { props: { ...data, ...nameSpaces } };
+        return { props: { ...data, ...nameSpaces, initialApolloState } };
     } catch {
-        return { props: { ...nameSpaces } };
+        return { props: { ...nameSpaces, initialApolloState } };
     }
 });
 

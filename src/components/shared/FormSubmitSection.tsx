@@ -10,12 +10,11 @@ interface Props extends FormikProps<{}> {
     submitButtonText: string;
 }
 
-export const FormSubmitSection: React.FC<Props & ButtonProps> = ({
+export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | 'endIcon'>> = ({
     isSubmitting,
     submitButtonText,
     endIcon,
     variant,
-    color,
     values,
 }) => (
     <Box display="flex" flexDirection="column" alignItems="center">
@@ -36,7 +35,7 @@ export const FormSubmitSection: React.FC<Props & ButtonProps> = ({
                 disabled={isSubmitting}
                 variant={variant || 'contained'}
                 endIcon={endIcon || <Send />}
-                color={color || 'primary'}
+                color="primary"
                 fullWidth
             >
                 {submitButtonText}

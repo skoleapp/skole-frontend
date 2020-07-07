@@ -2,6 +2,6 @@
     "title": "Delete Account",
     "description": "This is a delete account page.",
     "header": "Delete Account",
-    "confirmTitle": "Are you sure you want to delete your account?",
-    "confirmDesc": "This action cannot be reverted and your account will be lost forever!"
+    "deleteAccountTitle": "Are you sure you want to delete your account?",
+    "deleteAccountDescription": "This action cannot be reverted and your account will be lost forever."
 }

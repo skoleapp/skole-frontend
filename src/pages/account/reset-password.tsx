@@ -3,6 +3,7 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import * as R from 'ramda';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNotificationsContext } from 'src/context';
@@ -17,6 +18,7 @@ import {
 } from '../../../generated/graphql';
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { includeDefaultNamespaces, Router } from '../../i18n';
+import { withSSRAuth, withUserAgent } from '../../lib';
 import { useForm } from '../../utils';
 
 const emailFormInitialValues = {
@@ -214,10 +216,12 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['reset-password']),
     },
-});
+}));
 
 export default ResetPasswordPage;

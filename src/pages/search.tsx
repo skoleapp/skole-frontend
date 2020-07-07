@@ -2,14 +2,13 @@ import {
     Box,
     Button,
     CardContent,
-    CardHeader,
     Chip,
     CircularProgress,
-    Divider,
     FormControl,
     Grid,
     IconButton,
     InputBase,
+    Typography,
 } from '@material-ui/core';
 import { ArrowBackOutlined, ClearAllOutlined, FilterListOutlined, SearchOutlined } from '@material-ui/icons';
 import { Field, Form, Formik } from 'formik';
@@ -20,7 +19,6 @@ import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDeviceContext } from 'src/context';
 import styled from 'styled-components';
 
 import {
@@ -51,9 +49,10 @@ import {
     StyledDrawer,
     StyledTable,
 } from '../components';
+import { useDeviceContext } from '../context';
 import { includeDefaultNamespaces, Router } from '../i18n';
-import { withApolloSSR, withAuthSync } from '../lib';
-import { I18nProps, SkolePageContext, UseDrawer } from '../types';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../lib';
+import { I18nProps, UseDrawer } from '../types';
 import { getPaginationQuery, getQueryWithPagination, useDrawer, useForm } from '../utils';
 
 interface FilterSearchResultsFormValues {
@@ -360,19 +359,24 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         </Box>
     );
 
+    const renderFiltersHeader = <Typography variant="subtitle1">{t('common:filters')}</Typography>;
+    const renderSearchResultsHeader = <Typography variant="subtitle1">{t('common:searchResults')}</Typography>;
+
     const renderDesktopContent = !isMobile && (
         <Grid container>
             <Grid item container xs={5} md={4} lg={3}>
                 <StyledCard>
-                    <CardHeader title={t('common:filters')} />
-                    <Divider />
+                    <Box className="custom-header" display="flex" alignItems="center">
+                        {renderFiltersHeader}
+                    </Box>
                     <CardContent>{renderCardContent}</CardContent>
                 </StyledCard>
             </Grid>
             <Grid item container xs={7} md={8} lg={9}>
                 <StyledCard marginLeft>
-                    <CardHeader title={t('common:searchResults')} />
-                    <Divider />
+                    <Box className="custom-header" display="flex" alignItems="center">
+                        {renderSearchResultsHeader}
+                    </Box>
                     {renderFilterNames}
                     <StyledTable>{renderTableContent}</StyledTable>
                 </StyledCard>
@@ -462,19 +466,21 @@ const StyledSearchPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { apolloClient, query } = ctx as SkolePageContext;
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
     try {
         const { data } = await apolloClient.query({
             query: SearchCoursesDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
-        return { props: { ...data, ...namespaces } };
+        return { props: { ...data, ...namespaces, initialApolloState } };
     } catch (err) {
-        return { props: { namespaces } };
+        return { props: { namespaces, initialApolloState } };
     }
 });
 

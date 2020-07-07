@@ -3,22 +3,23 @@ import { AttachFileOutlined, CameraAltOutlined, ClearOutlined, SendOutlined } fr
 import { Form, Formik, FormikProps } from 'formik';
 import Image from 'material-ui-image';
 import * as R from 'ramda';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { dataURItoFile } from 'src/lib';
+import { CommentTarget } from 'src/types';
 import styled from 'styled-components';
 
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from '../../../generated/graphql';
-import { useAuthContext, useCommentModalContext, useDeviceContext, useNotificationsContext } from '../../context';
-import { CommentTarget } from '../../types';
+import {
+    useAuthContext,
+    useCommentModalContext,
+    useDeviceContext,
+    useNotificationsContext,
+    usePDFViewerContext,
+} from '../../context';
 import { useForm } from '../../utils';
 import { ModalHeader } from './ModalHeader';
 import { StyledModal } from './StyledModal';
-
-interface Props {
-    target: CommentTarget;
-    appendComments: (comments: CommentObjectType) => void;
-    formKey: string;
-}
 
 interface CreateCommentFormValues {
     text: string;
@@ -30,19 +31,37 @@ interface CreateCommentFormValues {
 
 type T = FormikProps<CreateCommentFormValues>;
 
-export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, formKey }) => {
+interface CreateCommentFormProps {
+    target: CommentTarget;
+    appendComments: (comments: CommentObjectType) => void;
+    formKey: string;
+}
+
+export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target, formKey }) => {
     const { t } = useTranslation();
-    const { verified, notVerifiedTooltip } = useAuthContext();
+    const { verified, verificationRequiredTooltip } = useAuthContext();
     const disabled = verified === false;
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
-    const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const { toggleNotification } = useNotificationsContext();
     const { commentModalOpen, toggleCommentModal } = useCommentModalContext();
+    const { screenshot, setScreenshot } = usePDFViewerContext();
+    const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const isMobile = useDeviceContext();
+
+    // Use screenshot as attachment if area has been marked.
+    useEffect(() => {
+        if (!!screenshot) {
+            setAttachment(screenshot); // Already in data URL form.
+            const screenShotFile = dataURItoFile(screenshot);
+            setFieldValue('attachment', screenShotFile);
+        }
+    }, [screenshot]);
 
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);
         toggleCommentModal(false);
+        setScreenshot(null);
+        setAttachment(null);
     };
 
     const onError = (): void => toggleNotification(t('notifications:messageError'));
@@ -124,9 +143,11 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
         disabled,
     };
 
-    const submitButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('common:sendMessageTooltip');
-    const attachmentButtonTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : t('common:attachFileTooltip');
-    const inputTooltip = !!notVerifiedTooltip ? notVerifiedTooltip : '';
+    const submitButtonTooltip = !!verificationRequiredTooltip ? verificationRequiredTooltip : t('tooltips:sendMessage');
+    const attachmentButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
+        : t('tooltips:attachFile');
+    const inputTooltip = !!verificationRequiredTooltip ? verificationRequiredTooltip : '';
 
     const renderSubmitButton = (
         <Tooltip title={submitButtonTooltip}>
@@ -153,7 +174,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
                 <label htmlFor={`camera-attachment-${formKey}`}>
                     <Tooltip title={attachmentButtonTooltip}>
                         <span>
-                            <Fab disabled={disabled} component="span" size="small">
+                            <Fab disabled={disabled} size="small" color="secondary">
                                 <CameraAltOutlined />
                             </Fab>
                         </span>
@@ -162,8 +183,8 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
             </Box>
             {!!attachment && (
                 <Box marginLeft="0.5rem">
-                    <Tooltip title={t('common:clearAttachmentTooltip')}>
-                        <Fab onClick={handleClearAttachment} size="small">
+                    <Tooltip title={t('tooltips:clearAttachment')}>
+                        <Fab onClick={handleClearAttachment} size="small" color="secondary">
                             <ClearOutlined />
                         </Fab>
                     </Tooltip>
@@ -216,7 +237,7 @@ export const CreateCommentForm: React.FC<Props> = ({ appendComments, target, for
                         headerRight={renderSubmitButton}
                         text={t('common:createComment')}
                     />
-                    <StyledAttachmentImage>
+                    <StyledAttachmentImage screenshot={screenshot}>
                         {!!attachment && <Image src={attachment as string} />}
                     </StyledAttachmentImage>
                     {renderAttachmentButtons}
@@ -254,7 +275,9 @@ const StyledCreateCommentForm = styled(Form)`
     }
 `;
 
-const StyledAttachmentImage = styled(Box)`
+// Ignore: screenshot must be omitted from Box props.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledAttachmentImage = styled(({ screenshot, ...props }) => <Box {...props} />)`
     margin-top: 0.5rem;
     flex-grow: 1;
 
@@ -265,6 +288,9 @@ const StyledAttachmentImage = styled(Box)`
             height: auto !important;
             position: relative !important;
             max-height: 25rem;
+
+            // If attachment is a screenshot from a document, show a screenshot border around it.
+            border: ${({ screenshot }): string => (!!screenshot ? 'var(--screenshot-border)' : 'none')};
         }
     }
 `;

@@ -1,20 +1,11 @@
-import { Grid, IconButton, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
-import {
-    CloudDownloadOutlined,
-    DeleteOutline,
-    FullscreenOutlined,
-    KeyboardArrowDownOutlined,
-    KeyboardArrowUpOutlined,
-    NavigateBeforeOutlined,
-    NavigateNextOutlined,
-} from '@material-ui/icons';
+import { Box, Grid, ListItemText, MenuItem, Tab } from '@material-ui/core';
+import { CloudDownloadOutlined, DeleteOutline, PrintOutlined } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 import {
     CommentObjectType,
@@ -26,23 +17,35 @@ import {
     VoteObjectType,
 } from '../../../generated/graphql';
 import {
-    DiscussionBox,
+    DiscussionHeader,
+    DrawModeButton,
+    DrawModeControls,
     InfoModalContent,
+    MainLayout,
     NavbarContainer,
     NotFoundLayout,
     PDFViewer,
+    ResourceToolbar,
     StarButton,
     StyledBottomNavigation,
+    StyledCard,
+    StyledDrawer,
     StyledList,
-    TabLayout,
+    StyledTabs,
     TextLink,
+    TopLevelCommentThread,
 } from '../../components';
-import { useAuthContext, useNotificationsContext, usePDFViewerContext } from '../../context';
+import {
+    useAuthContext,
+    useCommentModalContext,
+    useDeviceContext,
+    useNotificationsContext,
+    usePDFViewerContext,
+} from '../../context';
 import { includeDefaultNamespaces } from '../../i18n';
-import { withApolloSSR, withAuthSync } from '../../lib';
-import { breakpoints } from '../../styles';
-import { I18nProps, SkolePageContext } from '../../types';
-import { mediaURL, useOptions, useVotes } from '../../utils';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
+import { I18nProps, MaxWidth } from '../../types';
+import { mediaURL, useActionsDrawer, useInfoDrawer, useShare, useTabs, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -50,10 +53,10 @@ interface Props extends I18nProps {
 
 const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { t } = useTranslation();
+    const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user, verified, notVerifiedTooltip } = useAuthContext();
-    const { pages, currentPage, prevPage, nextPage, setCenter } = usePDFViewerContext();
+    const { user, verified, verificationRequiredTooltip } = useAuthContext();
     const resourceTitle = R.propOr('', 'title', resource) as string;
     const resourceDate = R.propOr('', 'date', resource) as string;
     const resourceType = R.propOr('', 'resourceType', resource) as string;
@@ -62,7 +65,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const courseId = R.pathOr('', ['course', 'id'], resource) as string;
     const schoolId = R.pathOr('', ['school', 'id'], resource) as string;
     const creatorId = R.pathOr('', ['user', 'id'], resource) as string;
-    const fullResourceTitle = `${resourceTitle} - ${resourceDate}`;
+    const title = `${resourceTitle} - ${resourceDate}`;
     const file = mediaURL(R.propOr(undefined, 'file', resource));
     const resourceId = R.propOr('', 'id', resource) as string;
     const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
@@ -72,46 +75,52 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const isOwner = !!user && user.id === creatorId;
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
-    const { renderShareOption, renderReportOption, renderOptionsHeader, drawerProps } = useOptions(resourceTitle);
-    const { onClose: closeOptions } = drawerProps;
-    const { setPages, setCurrentPage } = usePDFViewerContext();
+    const commentCount = comments.length;
+    const { tabValue, setTabValue, handleTabChange } = useTabs();
+    const { renderShareButton } = useShare(resourceTitle);
+    const { commentModalOpen } = useCommentModalContext();
+    const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
+    const { drawMode } = usePDFViewerContext();
 
-    const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+    const {
+        renderActionsHeader,
+        handleCloseActions,
+        renderShareAction,
+        renderReportAction,
+        renderActionsButton,
+        ...actionsDrawerProps
+    } = useActionsDrawer(resourceTitle);
+
+    const upVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
+        : isOwner
+        ? t('tooltips:voteOwnResource')
+        : t('tooltips:upVote');
+
+    const downVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
+        : isOwner
+        ? t('tooltips:voteOwnResource')
+        : t('tooltips:downVote');
+
+    const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
         initialScore,
         isOwner,
+        variables: { resource: resourceId },
+        upVoteButtonTooltip,
+        downVoteButtonTooltip,
     });
 
-    const upVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
-        : isOwner
-        ? t('resource:ownResourceVoteTooltip')
-        : t('resource:upvoteTooltip');
-
-    const downVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
-        : isOwner
-        ? t('resource:ownResourceVoteTooltip')
-        : t('resource:downvoteTooltip');
-
-    const discussionBoxProps = {
-        comments,
-        target: { resource: Number(resourceId) },
-        formKey: 'resource',
-        placeholderText: t('resource:commentsPlaceholder'),
-    };
+    // If comment modal is opened in main tab, automatically switch to discussion tab.
+    useEffect(() => {
+        commentModalOpen && tabValue === 0 && setTabValue(1);
+    }, [commentModalOpen]);
 
     const staticBackUrl = {
         href: '/courses/[id]',
         as: `/courses/${courseId}`,
     };
-
-    useEffect(() => {
-        return (): void => {
-            setPages([]);
-            setCurrentPage(0);
-        };
-    }, []);
 
     const deleteResourceError = (): void => {
         toggleNotification(t('notifications:deleteResourceError'));
@@ -138,20 +147,23 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     });
 
     const handleDeleteResource = async (e: SyntheticEvent): Promise<void> => {
+        handleCloseActions(e);
+
         try {
-            await confirm({ title: t('resource:deleteResource'), description: t('resource:confirmDesc') });
+            await confirm({
+                title: t('resource:deleteResourceTitle'),
+                description: t('resource:deleteResourceDescription'),
+            });
+
             deleteResource({ variables: { id: resourceId } });
         } catch {
-        } finally {
-            closeOptions(e);
+            // User cancelled.
         }
     };
 
-    const handleVoteClick = (status: number) => (): void => {
-        handleVote({ status: status, resource: resourceId });
-    };
+    const handleDownloadButtonClick = async (e: SyntheticEvent): Promise<void> => {
+        handleCloseActions(e);
 
-    const handleDownloadResource = async (): Promise<void> => {
         try {
             const res = await fetch(file, {
                 headers: new Headers({ Origin: location.origin }),
@@ -161,13 +173,27 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             const blob = await res.blob();
             const blobUrl = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.download = fullResourceTitle;
+            a.download = title;
             a.href = blobUrl;
             document.body.appendChild(a);
             a.click();
             a.remove();
         } catch {
             toggleNotification(t('notifications:downloadResourceError'));
+        }
+    };
+
+    const handlePrintButtonClick = async (e: SyntheticEvent): Promise<void> => {
+        handleCloseActions(e);
+
+        try {
+            await import('print-js');
+            // Ignore: TS doesn't detect the `print-js` import.
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            printJS(file);
+        } catch {
+            toggleNotification(t('notifications:printResourceError'));
         }
     };
 
@@ -206,187 +232,210 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         },
     ];
 
-    const renderInfo = <InfoModalContent user={resourceUser} created={created} infoItems={infoItems} />;
+    const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
+    const renderDrawModeButton = <DrawModeButton />;
+    const renderDrawModeControls = <DrawModeControls />;
 
-    const renderOptions = (
-        <StyledList>
-            {renderShareOption}
-            {renderReportOption}
-            {isOwner && (
-                <MenuItem disabled={verified === false}>
-                    <ListItemText onClick={handleDeleteResource}>
-                        <DeleteOutline /> {t('resource:deleteResource')}
-                    </ListItemText>
-                </MenuItem>
-            )}
-            <MenuItem onClick={handleDownloadResource}>
-                <ListItemText>
-                    <CloudDownloadOutlined /> {t('common:download')}
-                </ListItemText>
-            </MenuItem>
-        </StyledList>
-    );
-
-    const renderStarButton = (
-        <StarButton
-            starred={starred}
-            resource={resourceId}
-            starredTooltip={t('resource:starredTooltip')}
-            unstarredTooltip={t('resource:unstarredTooltip')}
-        />
-    );
-
-    const renderUpVoteButton = (
-        <Tooltip title={upVoteButtonTooltip}>
-            <span>
-                <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                    <KeyboardArrowUpOutlined />
-                </IconButton>
-            </span>
-        </Tooltip>
-    );
-
-    const renderDownVoteButton = (
-        <Tooltip title={downVoteButtonTooltip}>
-            <span>
-                <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                    <KeyboardArrowDownOutlined />
-                </IconButton>
-            </span>
-        </Tooltip>
-    );
-
-    const pagesExist = pages.length > 0;
-    const totalPages = !!pagesExist ? pages.length : 1;
-
-    const renderExtraResourceActions = (
-        <StyledExtraResourceActions container alignItems="center">
-            <Grid item xs={4} container id="vote-section">
+    const renderPreviewBottomNavbarContent = (
+        <Grid container>
+            <Grid item xs={6} container justify="flex-start">
+                {renderDrawModeButton}
+            </Grid>
+            <Grid item xs={6} container justify="flex-end">
                 {renderStarButton}
                 {renderUpVoteButton}
                 {renderDownVoteButton}
             </Grid>
-            <Grid item xs={4} container alignItems="center" id="page-controls">
-                <Tooltip title={t('common:previousPageTooltip')}>
-                    <span>
-                        <IconButton disabled={!pagesExist || currentPage === 0} onClick={prevPage} size="small">
-                            <NavigateBeforeOutlined color={currentPage === 0 ? 'disabled' : 'inherit'} />
-                        </IconButton>
-                    </span>
-                </Tooltip>
-                <Typography variant="body2">{currentPage + 1 + ' / ' + totalPages}</Typography>
-                <Tooltip title={t('common:nextPageTooltip')}>
-                    <span>
-                        <IconButton
-                            disabled={!pagesExist || currentPage === pages.length - 1}
-                            onClick={nextPage}
-                            size="small"
-                        >
-                            <NavigateNextOutlined color={currentPage === pages.length - 1 ? 'disabled' : 'inherit'} />
-                        </IconButton>
-                    </span>
-                </Tooltip>
-            </Grid>
-            <Grid item xs={4} container justify="flex-end">
-                <Tooltip title={t('resource:fullscreenTooltip')}>
-                    <span>
-                        <IconButton disabled={!pagesExist} onClick={setCenter} size="small">
-                            <FullscreenOutlined />
-                        </IconButton>
-                    </span>
-                </Tooltip>
-            </Grid>
-        </StyledExtraResourceActions>
+        </Grid>
     );
 
-    const renderCustomBottomNavbar = (
+    const renderBottomNavbarLeft = (
         <StyledBottomNavigation>
-            <NavbarContainer>{renderExtraResourceActions}</NavbarContainer>
+            <NavbarContainer>{drawMode ? renderDrawModeControls : renderPreviewBottomNavbarContent}</NavbarContainer>
         </StyledBottomNavigation>
     );
 
-    const renderCustomBottomNavbarSecondary = (
+    const renderBottomNavbarRight = (
         <StyledBottomNavigation>
             <NavbarContainer>
-                <Grid container>
-                    <Grid item xs={6} container justify="flex-start">
-                        {renderStarButton}
-                    </Grid>
-                    <Grid item xs={6} container justify="flex-end">
-                        {renderUpVoteButton}
-                        {renderDownVoteButton}
-                    </Grid>
+                <Grid container justify="flex-end">
+                    {renderStarButton}
+                    {renderUpVoteButton}
+                    {renderDownVoteButton}
                 </Grid>
             </NavbarContainer>
         </StyledBottomNavigation>
     );
 
+    const toolbarProps = {
+        title,
+        handleDownloadButtonClick,
+        handlePrintButtonClick,
+    };
+
+    const discussionHeaderProps = {
+        commentCount,
+        renderStarButton,
+        renderUpVoteButton,
+        renderDownVoteButton,
+        renderShareButton,
+        renderInfoButton,
+        renderActionsButton,
+    };
+
+    const commentThreadProps = {
+        comments,
+        target: { resource: Number(resourceId) },
+        formKey: 'resource',
+        placeholderText: t('resource:commentsPlaceholder'),
+    };
+
+    const renderToolbar = <ResourceToolbar {...toolbarProps} />;
     const renderPDFViewer = <PDFViewer file={file} />;
-    const renderDiscussionBox = <DiscussionBox {...discussionBoxProps} />;
+    const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
+    const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
+
+    const renderTabs = (
+        <StyledTabs value={tabValue} onChange={handleTabChange}>
+            <Tab label={t('common:resource')} />
+            <Tab label={`${t('common:discussion')} (${commentCount})`} />
+        </StyledTabs>
+    );
+
+    const renderLeftTab = tabValue === 0 && (
+        <Box display="flex" flexGrow="1" position="relative">
+            {renderPDFViewer}
+        </Box>
+    );
+
+    const renderRightTab = tabValue === 1 && (
+        <Box display="flex" flexGrow="1">
+            {renderDiscussion}
+        </Box>
+    );
+
+    const renderMobileContent = isMobile && (
+        <StyledCard>
+            {renderTabs}
+            {renderLeftTab}
+            {renderRightTab}
+        </StyledCard>
+    );
+
+    const renderDesktopContent = !isMobile && (
+        <Grid className="desktop-content" container>
+            <Grid item container md={7} lg={8}>
+                <StyledCard>
+                    <Box flexGrow="1" display="flex" flexDirection="column" position="relative">
+                        {renderToolbar}
+                        {renderPDFViewer}
+                    </Box>
+                </StyledCard>
+            </Grid>
+            <Grid item container md={5} lg={4}>
+                <StyledCard marginLeft>
+                    {renderDiscussionHeader}
+                    {renderDiscussion}
+                </StyledCard>
+            </Grid>
+        </Grid>
+    );
+
+    const renderInfo = <InfoModalContent user={resourceUser} created={created} infoItems={infoItems} />;
+
+    const renderInfoDrawer = (
+        <StyledDrawer {...infoDrawerProps}>
+            {renderInfoHeader}
+            {renderInfo}
+        </StyledDrawer>
+    );
+
+    const renderDeleteAction = isOwner && (
+        <MenuItem disabled={verified === false}>
+            <ListItemText onClick={handleDeleteResource}>
+                <DeleteOutline /> {t('common:delete')}
+            </ListItemText>
+        </MenuItem>
+    );
+
+    const renderDownloadAction = isMobile && (
+        <MenuItem onClick={handleDownloadButtonClick}>
+            <ListItemText>
+                <CloudDownloadOutlined /> {t('common:download')}
+            </ListItemText>
+        </MenuItem>
+    );
+
+    const renderPrintAction = isMobile && (
+        <MenuItem onClick={handlePrintButtonClick}>
+            <ListItemText>
+                <PrintOutlined /> {t('common:print')}
+            </ListItemText>
+        </MenuItem>
+    );
+
+    const renderActions = (
+        <StyledList>
+            {renderShareAction}
+            {renderReportAction}
+            {renderDeleteAction}
+            {renderDownloadAction}
+            {renderPrintAction}
+        </StyledList>
+    );
+
+    const renderActionsDrawer = (
+        <StyledDrawer {...actionsDrawerProps}>
+            {renderActionsHeader}
+            {renderActions}
+        </StyledDrawer>
+    );
 
     const layoutProps = {
         seoProps: {
-            title: fullResourceTitle,
+            title,
             description: t('resource:description'),
         },
         topNavbarProps: {
             staticBackUrl: staticBackUrl,
+            headerRight: renderActionsButton,
+            headerRightSecondary: renderInfoButton,
         },
-        headerDesktop: fullResourceTitle,
-        headerSecondary: t('common:discussion'),
-        subheaderDesktop: renderCourseLink,
-        subheaderDesktopSecondary: renderSchoolLink,
-        extraDesktopActions: renderExtraResourceActions,
-        renderInfo,
-        infoHeader: t('resource:infoHeader'),
-        infoTooltip: t('resource:infoTooltip'),
-        optionProps: {
-            renderOptions,
-            renderOptionsHeader,
-            drawerProps,
-            optionsTooltip: t('resource:optionsTooltip'),
+        customBottomNavbar: tabValue === 0 ? renderBottomNavbarLeft : renderBottomNavbarRight,
+        containerProps: {
+            maxWidth: 'xl' as MaxWidth,
         },
-        tabLabelLeft: t('common:resource'),
-        tabLabelRight: `${t('common:discussion')} (${comments.length})`,
-        renderLeftContent: renderPDFViewer,
-        renderRightContent: renderDiscussionBox,
-        customBottomNavbar: renderCustomBottomNavbar,
-        customBottomNavbarSecondary: renderCustomBottomNavbarSecondary,
     };
 
     if (!!resource) {
-        return <TabLayout {...layoutProps} />;
+        return (
+            <MainLayout {...layoutProps}>
+                {renderMobileContent}
+                {renderDesktopContent}
+                {renderInfoDrawer}
+                {renderActionsDrawer}
+            </MainLayout>
+        );
     } else {
         return <NotFoundLayout />;
     }
 };
 
-const StyledExtraResourceActions = styled(Grid)`
-    #vote-section,
-    #page-controls {
-        justify-content: space-around;
+const wrappers = R.compose(withUserAgent, withSSRAuth);
 
-        @media only screen and (min-width: ${breakpoints.MD}) {
-            &#vote-section {
-                justify-content: flex-start;
-            }
-        }
-    }
-`;
-
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { query, apolloClient } = ctx as SkolePageContext;
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
     try {
         const { data } = await apolloClient.query({
             query: ResourceDetailDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
-        return { props: { ...data, ...namespaces } };
+        return { props: { ...data, ...namespaces, initialApolloState } };
     } catch {
-        return { props: { ...namespaces } };
+        return { props: { ...namespaces, initialApolloState } };
     }
 });
 

@@ -5,8 +5,6 @@ import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Resizer from 'react-image-file-resizer';
-import { useNotificationsContext } from 'src/context';
-import { withApolloSSR, withAuthSync } from 'src/lib';
 import * as Yup from 'yup';
 
 import {
@@ -21,9 +19,11 @@ import {
 } from '../../generated/graphql';
 import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
 import { env } from '../config';
+import { useNotificationsContext } from '../context';
 import { Router } from '../i18n';
 import { includeDefaultNamespaces } from '../i18n';
-import { I18nProps, SkolePageContext } from '../types';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../lib';
+import { I18nProps } from '../types';
 import { useForm } from '../utils';
 
 interface UploadResourceFormValues {
@@ -253,14 +253,16 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = withApolloSSR(async ctx => {
-    const { query, apolloClient } = ctx as SkolePageContext;
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+    const { apolloClient } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
     try {
         const { data } = await apolloClient.query({
             query: CreateResourceInitialDataDocument,
-            variables: query,
+            variables: ctx.query,
         });
 
         return { props: { ...data, ...namespaces } };

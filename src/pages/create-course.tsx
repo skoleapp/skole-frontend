@@ -4,8 +4,6 @@ import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNotificationsContext } from 'src/context';
-import { withAuthSync } from 'src/lib';
 import * as Yup from 'yup';
 
 import {
@@ -17,7 +15,9 @@ import {
     useCreateCourseMutation,
 } from '../../generated/graphql';
 import { AutoCompleteField, FormLayout, FormSubmitSection } from '../components';
+import { useNotificationsContext } from '../context';
 import { includeDefaultNamespaces, Router } from '../i18n';
+import { withAuthSync, withSSRAuth, withUserAgent } from '../lib';
 import { I18nProps } from '../types';
 import { useForm } from '../utils';
 
@@ -150,10 +150,12 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['create-course']),
     },
-});
+}));
 
 export default withAuthSync(CreateCoursePage);

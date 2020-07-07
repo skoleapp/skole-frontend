@@ -47,7 +47,7 @@ export const SettingsLayout: React.FC<Props> = ({
         headerRight: renderHeaderRight,
     };
 
-    const renderSettingsColumn = !isMobile && (
+    const renderSettings = !isMobile && (
         <Grid item xs={12} md={4} lg={3}>
             <StyledCard>
                 <CardHeader className="border-bottom" title={t('common:settings')} />
@@ -56,32 +56,40 @@ export const SettingsLayout: React.FC<Props> = ({
         </Grid>
     );
 
-    return (
-        <StyledSettingsLayout fullSize={fullSize}>
-            <MainLayout {...props} topNavbarProps={customTopNavbarProps}>
-                <Grid container>
-                    {renderSettingsColumn}
-                    <Grid item xs={12} md={8} lg={9} container>
-                        <StyledCard marginLeft>
-                            {!isMobile && <CardHeader className="border-bottom" title={desktopHeader} />}
-                            <Grid container justify="center">
-                                <Grid item container direction="column" xs={12} {...layoutProps}>
-                                    <CardContent className="container">
-                                        {renderCardContent}
-                                        {renderInfoContent}
-                                    </CardContent>
-                                </Grid>
-                            </Grid>
-                        </StyledCard>
+    const renderContent = (
+        <Grid item xs={12} md={8} lg={9} container>
+            <StyledCard marginLeft>
+                {!isMobile && <CardHeader className="border-bottom" title={desktopHeader} />}
+                <Grid container justify="center">
+                    <Grid item container direction="column" xs={12} {...layoutProps}>
+                        <CardContent className="container">
+                            {renderCardContent}
+                            {renderInfoContent}
+                        </CardContent>
                     </Grid>
                 </Grid>
-            </MainLayout>
-        </StyledSettingsLayout>
+            </StyledCard>
+        </Grid>
+    );
+
+    return (
+        <MainLayout {...props} topNavbarProps={customTopNavbarProps}>
+            <StyledSettingsLayout fullSize={fullSize}>
+                <Grid container>
+                    {renderSettings}
+                    {renderContent}
+                </Grid>
+            </StyledSettingsLayout>
+        </MainLayout>
     );
 };
 
+// Ignore: fullSize must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledSettingsLayout = styled(({ fullSize, ...other }) => <Box {...other} />)`
+    flex-grow: 1;
+    display: flex;
+
     .MuiGrid-root,
     .container {
         flex-grow: 1;

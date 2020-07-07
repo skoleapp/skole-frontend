@@ -7,7 +7,7 @@ export const breakpoints = {
 };
 
 export const breakpointsNum = {
-    xs: 0,
+    XS: 0,
     SM: 600,
     MD: 960,
     LG: 1280,

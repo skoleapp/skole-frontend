@@ -1,13 +1,14 @@
-import { Size } from '@material-ui/core';
+import { IconButton, Size, Tooltip } from '@material-ui/core';
+import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
+import React from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MuiColor } from 'src/types';
 
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from '../../generated/graphql';
 import { useAuthContext, useNotificationsContext } from '../context';
-import { MuiColor } from '../types';
 
-interface Variables {
-    status: number;
+interface VoteVariables {
     course?: string;
     resource?: string;
     comment?: string;
@@ -17,6 +18,9 @@ interface UseVotesProps {
     initialVote: VoteObjectType | null;
     initialScore: string;
     isOwner: boolean;
+    variables: VoteVariables;
+    upVoteButtonTooltip: string;
+    downVoteButtonTooltip: string;
 }
 
 interface VoteButtonProps {
@@ -26,13 +30,22 @@ interface VoteButtonProps {
 }
 
 interface UseVotes {
+    renderUpVoteButton: JSX.Element;
+    renderDownVoteButton: JSX.Element;
+    score: string;
     upVoteButtonProps: VoteButtonProps;
     downVoteButtonProps: VoteButtonProps;
-    score: string;
-    handleVote: (variables: Variables) => void;
 }
 
-export const useVotes = ({ initialVote, initialScore, isOwner }: UseVotesProps): UseVotes => {
+// A hook that allows usage of either default vote buttons (used in course/resource details) or using props for custom vote buttons.
+export const useVotes = ({
+    initialVote,
+    initialScore,
+    isOwner,
+    variables,
+    upVoteButtonTooltip,
+    downVoteButtonTooltip,
+}: UseVotesProps): UseVotes => {
     const { t } = useTranslation();
     const { verified } = useAuthContext();
     const [vote, setVote] = useState(initialVote);
@@ -56,8 +69,8 @@ export const useVotes = ({ initialVote, initialScore, isOwner }: UseVotesProps):
 
     const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
 
-    const handleVote = (variables: Variables): void => {
-        performVote({ variables });
+    const handleVote = (status: number) => (): void => {
+        performVote({ variables: { status, ...variables } });
     };
 
     const commonVoteButtonProps = {
@@ -67,13 +80,35 @@ export const useVotes = ({ initialVote, initialScore, isOwner }: UseVotesProps):
 
     const upVoteButtonProps = {
         ...commonVoteButtonProps,
+        onClick: handleVote(1),
         color: !!vote && vote.status === 1 ? 'primary' : ('default' as MuiColor),
     };
 
     const downVoteButtonProps = {
         ...commonVoteButtonProps,
+        onClick: handleVote(-1),
         color: !!vote && vote.status === -1 ? 'primary' : ('default' as MuiColor),
     };
 
-    return { upVoteButtonProps, downVoteButtonProps, score, handleVote };
+    const renderUpVoteButton = (
+        <Tooltip title={upVoteButtonTooltip}>
+            <span>
+                <IconButton {...upVoteButtonProps}>
+                    <ThumbUpOutlined />
+                </IconButton>
+            </span>
+        </Tooltip>
+    );
+
+    const renderDownVoteButton = (
+        <Tooltip title={downVoteButtonTooltip}>
+            <span>
+                <IconButton {...downVoteButtonProps}>
+                    <ThumbDownOutlined />
+                </IconButton>
+            </span>
+        </Tooltip>
+    );
+
+    return { renderUpVoteButton, renderDownVoteButton, upVoteButtonProps, downVoteButtonProps, score };
 };

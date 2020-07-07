@@ -14,7 +14,7 @@ export const StyledBottomNavigation = styled(BottomNavigation)`
 
     .MuiButtonBase-root,
     .Mui-selected {
-        padding: 0 !important;
+        padding: 0 0.25rem !important;
     }
 
     .MuiBottomNavigationAction-root {

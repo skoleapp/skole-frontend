@@ -1,17 +1,9 @@
 {
     "description": "Detta är en resurssida.",
-    "deleteResource": "Radera resurs",
-    "confirmDesc": "Är du säker på att du vill ta bort den här resursen?",
-    "infoTooltip": "Visa resursinformation.",
-    "optionsTooltip": "Visa resursalternativ.",
-    "unstarredTooltip": "Stjärnmärk denna resurs.",
-    "starredTooltip": "Ta bort stjärnmärken från denna resurs.",
-    "downvoteTooltip": "Ned röst denna resurs.",
-    "upvoteTooltip": "Upp röst denna resurs.",
-    "ownResourceVoteTooltip": "Du kan inte röstä på din egen resurs.",
-    "fullscreenTooltip": "Visa helskärm.",
+    "deleteResourceTitle": "Radera resurs",
+    "deleteResourceDescription": "Är du säker på att du vill ta bort den här resursen?",
     "loadingResource": "Laddar resurs...",
     "errorLoadingResource": "Fel vid inläsning av resurs.",
     "commentsPlaceholder": "Här kan du ha allmän diskussion om resursen.",
-    "infoHeader": "Resursinformation"
+    "drawMode": "Ritningsläge"
 }

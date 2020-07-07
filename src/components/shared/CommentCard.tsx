@@ -17,7 +17,6 @@ import {
     DeleteOutline,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
-    MoreHorizOutlined,
 } from '@material-ui/icons';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
@@ -34,10 +33,10 @@ import {
 import {
     useAttachmentViewerContext,
     useAuthContext,
-    useCommentThreadContext,
+    useDiscussionContext,
     useNotificationsContext,
 } from '../../context';
-import { mediaURL, useMoment, useOptions, useVotes } from '../../utils';
+import { mediaURL, useActionsDrawer, useMoment, useVotes } from '../../utils';
 import { StyledDrawer } from './StyledDrawer';
 import { StyledList } from './StyledList';
 import { TextLink } from './TextLink';
@@ -50,7 +49,7 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const { t } = useTranslation();
-    const { user, verified, notVerifiedTooltip } = useAuthContext();
+    const { user, verified, verificationRequiredTooltip } = useAuthContext();
     const moment = useMoment();
     const created = moment(comment.created).format('LL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
@@ -62,42 +61,45 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const isOwner = !!user && user.id === creatorId;
     const commentId = R.propOr('', 'id', comment) as string;
     const replyCount = R.propOr('', 'replyCount', comment) as string;
-
-    const {
-        renderShareOption,
-        renderReportOption,
-        renderOptionsHeader,
-        drawerProps: { handleOpen: handleOpenOptions, ...drawerProps },
-    } = useOptions();
-
-    const { onClose: handleCloseOptions } = drawerProps;
     const { toggleNotification } = useNotificationsContext();
     const { toggleAttachmentViewer } = useAttachmentViewerContext();
-    const { toggleCommentThread } = useCommentThreadContext();
+    const { toggleTopComment } = useDiscussionContext();
 
-    const { score, upVoteButtonProps, downVoteButtonProps, handleVote } = useVotes({
+    const {
+        renderActionsHeader,
+        handleCloseActions,
+        renderShareAction,
+        renderReportAction,
+        renderActionsButton,
+        ...actionsDrawerProps
+    } = useActionsDrawer();
+
+    const upVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
+        : isOwner
+        ? t('tooltips:voteOwnComment')
+        : t('tooltips:upVote');
+
+    const downVoteButtonTooltip = !!verificationRequiredTooltip
+        ? verificationRequiredTooltip
+        : isOwner
+        ? t('tooltips:voteOwnComment')
+        : t('tooltips:downVote');
+
+    const { score, upVoteButtonProps, downVoteButtonProps } = useVotes({
         initialVote,
         initialScore,
         isOwner,
+        variables: { comment: commentId },
+        upVoteButtonTooltip,
+        downVoteButtonTooltip,
     });
-
-    const upVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
-        : isOwner
-        ? t('common:ownCommentVoteTooltip')
-        : t('common:upvoteCommentTooltip');
-
-    const downVoteButtonTooltip = !!notVerifiedTooltip
-        ? notVerifiedTooltip
-        : isOwner
-        ? t('common:ownCommentVoteTooltip')
-        : t('common:downvoteCommentTooltip');
 
     const handleClick = (): void => {
         if (isThread) {
             attachmentOnly && toggleAttachmentViewer(comment.attachment);
         } else {
-            toggleCommentThread(comment);
+            toggleTopComment(comment);
         }
     };
 
@@ -123,23 +125,19 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         onError: deleteCommentError,
     });
 
-    const handleVoteClick = (status: number) => (e: SyntheticEvent): void => {
-        e.stopPropagation();
-        handleVote({ status: status, course: commentId });
-    };
-
     const handleAttachmentClick = (e: SyntheticEvent): void => {
         e.stopPropagation();
         toggleAttachmentViewer(comment.attachment);
     };
 
     const handleDeleteComment = async (e: SyntheticEvent): Promise<void> => {
+        handleCloseActions(e);
+
         try {
-            await confirm({ title: t('common:deleteCommentTitle') });
+            await confirm({ title: t('common:deleteCommentTitle'), description: t('common:deleteCommentDescription') });
             deleteComment({ variables: { id: comment.id } });
         } catch {
-        } finally {
-            handleCloseOptions(e);
+            // User cancelled.
         }
     };
 
@@ -152,14 +150,6 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         </TextLink>
     );
 
-    const renderDeleteCommentOption = isOwner && (
-        <MenuItem disabled={verified === false}>
-            <ListItemText onClick={handleDeleteComment}>
-                <DeleteOutline /> {t('common:deleteComment')}
-            </ListItemText>
-        </MenuItem>
-    );
-
     const renderCardHeader = (
         <CardHeader
             avatar={<Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />}
@@ -168,85 +158,109 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         />
     );
 
+    const renderContentSection = (
+        <Grid id="content" item container xs={11} justify="flex-start">
+            {attachmentOnly ? (
+                <Box display="flex">
+                    <CameraAltOutlined />
+                    <Box marginLeft="0.5rem">
+                        <Typography variant="body2">{t('common:clickToView')}</Typography>
+                    </Box>
+                </Box>
+            ) : (
+                <Typography variant="body2">{comment.text}</Typography>
+            )}
+        </Grid>
+    );
+
+    const renderVoteSection = (
+        <Grid item container xs={1} direction="column" justify="center" alignItems="center">
+            <Tooltip title={upVoteButtonTooltip}>
+                <span>
+                    <IconButton {...upVoteButtonProps}>
+                        <KeyboardArrowUpOutlined className="vote-button" />
+                    </IconButton>
+                </span>
+            </Tooltip>
+            <Box>
+                <Typography variant="body2">{score}</Typography>
+            </Box>
+            <Tooltip title={downVoteButtonTooltip}>
+                <span>
+                    <IconButton {...downVoteButtonProps}>
+                        <KeyboardArrowDownOutlined className="vote-button" />
+                    </IconButton>
+                </span>
+            </Tooltip>
+        </Grid>
+    );
+
+    const renderReplyCount = !isThread && (
+        <>
+            <Tooltip title={t('tooltips:commentReplies', { replyCount })}>
+                <CommentOutlined className="message-icon" />
+            </Tooltip>
+            <Box marginLeft="0.25rem">
+                <Typography variant="body2">{replyCount}</Typography>
+            </Box>
+        </>
+    );
+
+    const renderAttachment = !!comment.attachment && !attachmentOnly && (
+        <Box marginLeft="0.25rem">
+            <Tooltip title={t('tooltips:attachment')}>
+                <IconButton onClick={handleAttachmentClick}>
+                    <AttachFileOutlined />
+                </IconButton>
+            </Tooltip>
+        </Box>
+    );
+
+    const renderInfoSection = (
+        <Grid item xs={4}>
+            <Box display="flex" alignItems="center" height="100%">
+                {renderReplyCount}
+                {renderAttachment}
+            </Box>
+        </Grid>
+    );
+
     const renderCardContent = (
         <CardContent>
             <Grid container justify="space-between" alignItems="center">
-                <Grid id="content" item container xs={11} justify="flex-start">
-                    {attachmentOnly ? (
-                        <Box display="flex">
-                            <CameraAltOutlined />
-                            <Box marginLeft="0.5rem">
-                                <Typography variant="body2">{t('common:clickToView')}</Typography>
-                            </Box>
-                        </Box>
-                    ) : (
-                        <Typography variant="body2">{comment.text}</Typography>
-                    )}
-                </Grid>
-                <Grid item container xs={1} direction="column" justify="center" alignItems="center">
-                    <Tooltip title={upVoteButtonTooltip}>
-                        <span>
-                            <IconButton onClick={handleVoteClick(1)} {...upVoteButtonProps}>
-                                <KeyboardArrowUpOutlined className="vote-button" />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
-                    <Box>
-                        <Typography variant="body2">{score}</Typography>
-                    </Box>
-                    <Tooltip title={downVoteButtonTooltip}>
-                        <span>
-                            <IconButton onClick={handleVoteClick(-1)} {...downVoteButtonProps}>
-                                <KeyboardArrowDownOutlined className="vote-button" />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
-                </Grid>
+                {renderContentSection}
+                {renderVoteSection}
             </Grid>
             <Grid container>
-                <Grid item xs={4}>
-                    <Box display="flex" alignItems="center" height="100%">
-                        {!isThread && (
-                            <>
-                                <Tooltip title={t('common:commentRepliesTooltip', { replyCount })}>
-                                    <CommentOutlined className="message-icon" />
-                                </Tooltip>
-                                <Box marginLeft="0.25rem">
-                                    <Typography variant="body2">{replyCount}</Typography>
-                                </Box>
-                            </>
-                        )}
-                        {!!comment.attachment && !attachmentOnly && (
-                            <Box marginLeft="0.25rem">
-                                <Tooltip title={t('common:commentAttachmentTooltip')}>
-                                    <IconButton onClick={handleAttachmentClick}>
-                                        <AttachFileOutlined />
-                                    </IconButton>
-                                </Tooltip>
-                            </Box>
-                        )}
-                    </Box>
-                </Grid>
+                {renderInfoSection}
                 <Grid container item xs={4} justify="center">
-                    <Tooltip title={t('common:commentOptionsTooltip')}>
-                        <IconButton onClick={handleOpenOptions}>
-                            <MoreHorizOutlined />
-                        </IconButton>
-                    </Tooltip>
+                    {renderActionsButton}
                 </Grid>
                 <Grid item xs={4} />
             </Grid>
         </CardContent>
     );
 
-    const renderOptions = (
-        <StyledDrawer {...drawerProps}>
-            {renderOptionsHeader}
-            <StyledList>
-                {renderShareOption}
-                {renderReportOption}
-                {renderDeleteCommentOption}
-            </StyledList>
+    const renderDeleteAction = isOwner && (
+        <MenuItem disabled={verified === false}>
+            <ListItemText onClick={handleDeleteComment}>
+                <DeleteOutline /> {t('common:delete')}
+            </ListItemText>
+        </MenuItem>
+    );
+
+    const renderActions = (
+        <StyledList>
+            {renderShareAction}
+            {renderReportAction}
+            {renderDeleteAction}
+        </StyledList>
+    );
+
+    const renderActionsDrawer = (
+        <StyledDrawer {...actionsDrawerProps}>
+            {renderActionsHeader}
+            {renderActions}
         </StyledDrawer>
     );
 
@@ -259,11 +273,12 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         >
             {renderCardHeader}
             {renderCardContent}
-            {renderOptions}
+            {renderActionsDrawer}
         </StyledCommentCard>
     );
 };
 
+// Ignore: isThread, disableBorder and attachmentOnly must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...other }) => <Box {...other} />)`
     border-bottom: ${({ disableBorder }): string => (!disableBorder ? 'var(--border)' : 'none')};
@@ -275,7 +290,7 @@ const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...
         }};
 
         background-color: ${({ isThread, attachmentOnly }): string => {
-            return !isThread ? 'var(--hover-opacity)' : attachmentOnly ? 'var(--hover-opacity)' : 'inherit';
+            return !isThread ? 'var(--hover-color)' : attachmentOnly ? 'var(--hover-color)' : 'inherit';
         }};
     }
 
@@ -295,7 +310,6 @@ const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...
 
     .MuiCardHeader-content {
         display: flex;
-        font-size: 0.65rem;
 
         .MuiCardHeader-subheader {
             margin-left: 1rem;
@@ -309,7 +323,7 @@ const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...
     .MuiSvgIcon-root {
         height: 1.25rem;
         width: 1.25rem;
-        color: var(--dark-opacity);
+        color: var(--opacity-dark);
 
         &.vote-button {
             height: 1.5rem;

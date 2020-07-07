@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { withUserAgent } from 'src/lib';
 import { I18nProps } from 'src/types';
 
 import { SettingsLayout } from '../components';
@@ -26,8 +27,8 @@ const PrivacyPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['privacy']) },
-});
+}));
 
 export default PrivacyPage;

@@ -121,7 +121,7 @@ const StyledSkoleGDPR = styled(Box)`
     width: 100%;
     color: var(--white);
     padding: 0.5rem;
-    background-color: var(--dark-opacity);
+    background-color: var(--opacity-dark);
     text-align: left;
 
     @media only screen and (max-width: ${breakpoints.SM}) {

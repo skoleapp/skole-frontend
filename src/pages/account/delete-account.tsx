@@ -3,6 +3,7 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -11,7 +12,7 @@ import { DeleteAccountMutation, useDeleteAccountMutation } from '../../../genera
 import { FormSubmitSection, SettingsLayout } from '../../components';
 import { useAuthContext, useNotificationsContext } from '../../context';
 import { includeDefaultNamespaces, Router } from '../../i18n';
-import { clientLogout, withAuthSync } from '../../lib';
+import { removeTokenCookie, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps } from '../../types';
 import { useForm } from '../../utils';
 
@@ -42,7 +43,7 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
             } else if (!!deleteUser.message) {
                 resetForm();
                 toggleNotification(deleteUser.message);
-                clientLogout();
+                removeTokenCookie();
                 setUser(null);
                 await apolloClient.resetStore();
                 Router.push('/login');
@@ -56,16 +57,21 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
 
     const [deleteAccountMutation] = useDeleteAccountMutation({ onCompleted, onError });
 
-    const handleSubmit = (values: DeleteAccountFormValues): void => {
+    const handleSubmit = async (values: DeleteAccountFormValues): Promise<void> => {
         setSubmitting(false);
 
-        confirm({ title: t('delete-account:confirmTitle'), description: t('delete-account:confirmDesc') }).then(
-            async () => {
-                setSubmitting(true);
-                await deleteAccountMutation({ variables: { password: values.password } });
-                setSubmitting(false);
-            },
-        );
+        try {
+            await confirm({
+                title: t('delete-account:deleteAccountTitle'),
+                description: t('delete-account:deleteAccountDescription'),
+            });
+
+            setSubmitting(true);
+            await deleteAccountMutation({ variables: { password: values.password } });
+            setSubmitting(false);
+        } catch {
+            // User cancelled.
+        }
     };
 
     const validationSchema = Yup.object().shape({
@@ -109,10 +115,12 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => ({
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['delete-account']),
     },
-});
+}));
 
 export default withAuthSync(DeleteAccountPage);

@@ -15,13 +15,13 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => (
             <Link href="/resources/[id]" as={`/resources/${r.id}`} key={i}>
                 <TableRow>
                     <TableCell>
-                        <Typography variant="subtitle1">{R.propOr('-', 'title', r)}</Typography>
-                        <Typography className="cell-help-text" variant="subtitle1" color="textSecondary">
+                        <Typography variant="body2">{R.propOr('-', 'title', r)}</Typography>
+                        <Typography variant="body2" color="textSecondary">
                             {R.propOr('-', 'date', r)}
                         </Typography>
                     </TableCell>
                     <TableCell align="right">
-                        <Typography variant="subtitle1">{R.propOr('-', 'score', r)}</Typography>
+                        <Typography variant="body2">{R.propOr('-', 'score', r)}</Typography>
                     </TableCell>
                 </TableRow>
             </Link>

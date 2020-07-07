@@ -1,3 +1,7 @@
+.next
+build
+next.config.js
 generated
-ws.*
+gtag.js
+sw.*
 workbox-*

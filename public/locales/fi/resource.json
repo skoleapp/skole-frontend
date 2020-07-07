@@ -1,17 +1,9 @@
 {
     "description": "Tämä on resurssi-sivu.",
-    "deleteResource": "Poista resurssi",
-    "confirmDesc": "Oletko varma että haluat poistaa tämän resurssin?",
-    "infoTooltip": "Näytä resurssin tiedot.",
-    "optionsTooltip": "Näytä resurssin vaihtoehdot.",
-    "unstarredTooltip": "Merkitse resurssi tähdellä.",
-    "starredTooltip": "Poista tähti resurssilta.",
-    "downvoteTooltip": "Anna tälle resurssille alas-ääni.",
-    "upvoteTooltip": "Anna tälle resurssille ylös-ääni.",
-    "ownResourceVoteTooltip": "Et voi äänestää omaa resurssiasi.",
-    "fullscreenTooltip": "Keskitä ruudulle.",
+    "deleteResourceTitle": "Poista resurssi",
+    "deleteResourceDescription": "Oletko varma että haluat poistaa tämän resurssin?",
     "loadingResource": "Ladataan resurssia...",
     "errorLoadingResource": "Virhe ladattaessa resurssia.",
-    "commentsPlaceholder": "Täällä voit käydä yleistä keskustelua resurssista.",
-    "infoHeader": "Resurssin tiedot"
+    "commentsPlaceholder": "Täällä voit keskustella resurssista.",
+    "drawMode": "Piirtotila"
 }

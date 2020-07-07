@@ -9,6 +9,7 @@
     "deleteResourceError": "Oväntat fel vid radering!",
     "deleteCourseError": "Oväntat fel vid radering!",
     "downloadResourceError": "Fel vid nedladdning!",
+    "printResourceError": "Fel vid utskrift av resursen!",
     "messageError": "Fel vid skickande av meddelande!",
     "sharingError": "Fel vid delning!",
     "appUpdated": "App uppdaterad!"

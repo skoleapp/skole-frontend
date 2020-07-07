@@ -2,6 +2,6 @@
     "title": "Poista tili",
     "description": "Tämä on tilin poistamissivu.",
     "header": "Poista tili",
-    "confirmTitle": "Haluatko varmasti poistaa tilisi?",
-    "confirmDesc": "Tätä toimenpidettä ei voida peruuttaa ja tilisi katoaa ikuisiksi ajoiksi!"
+    "deleteAccountTitle": "Haluatko varmasti poistaa tilisi?",
+    "deleteAccountDescription": "Tätä toimenpidettä ei voida peruuttaa ja tilisi poistetaan pysyvästi."
 }
