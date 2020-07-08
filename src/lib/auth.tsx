@@ -68,3 +68,36 @@ export const withSSRAuth = (getServerSidePropsInner: GetServerSideProps): GetSer
 
     return getServerSideProps;
 };
+
+// Redirect unauthenticated users to landing page before rendering page if they are already authenticated.
+// Wrap `getServerSideProps` method with this for all pages that are intended for only unauthenticated users.
+export const withNoAuth = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
+    const getServerSideProps: GetServerSideProps = async ctx => {
+        const result = await getServerSidePropsInner(ctx);
+        const initState: NormalizedCacheObject | null = R.propOr(null, 'initialApolloState', ctx);
+        const apolloClient = initApolloClient(initState, ctx);
+        const initialApolloState = apolloClient.cache.extract();
+        let user = null;
+
+        try {
+            const { data } = await apolloClient.query({ query: UserMeDocument });
+            user = data.userMe;
+
+            if (!!user) {
+                ctx.res.writeHead(302, { Location: '/' });
+                ctx.res.end();
+            }
+        } catch {}
+
+        return {
+            ...result,
+            props: {
+                ...result.props,
+                initialApolloState,
+                user,
+            },
+        };
+    };
+
+    return getServerSideProps;
+};

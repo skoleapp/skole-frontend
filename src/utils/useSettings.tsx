@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StyledList } from '../components/shared/StyledList';
+import { StyledList } from '../components';
 import { useAuthContext, useNotificationsContext, useSettingsContext } from '../context';
 import { Router } from '../i18n';
 import { removeTokenCookie } from '../lib';
@@ -20,7 +20,7 @@ interface UseSettings extends SettingsContext {
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
 export const useSettings = (modal: boolean): UseSettings => {
-    const { user, setUser, verified } = useAuthContext();
+    const { user, verified } = useAuthContext();
     const authenticated = !!user;
     const { settingsOpen, toggleSettings } = useSettingsContext();
     const { toggleNotification } = useNotificationsContext();
@@ -40,11 +40,10 @@ export const useSettings = (modal: boolean): UseSettings => {
 
     const handleLogoutClick = async (): Promise<void> => {
         !!modal && handleClose();
-        await Router.push('/login');
         removeTokenCookie();
-        setUser(null);
-        await apolloClient.resetStore();
         toggleNotification(t('notifications:signedOut'));
+        await apolloClient.resetStore();
+        Router.push('/login');
     };
 
     const getSelected = (href: string): boolean => !modal && href === pathname;
