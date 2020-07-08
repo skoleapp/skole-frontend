@@ -2,13 +2,14 @@ import { List } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const StyledList = styled(List)`
+    padding: 0 !important;
+
     .MuiListItem-root {
         .MuiListItemAvatar-root {
             min-width: 2.75rem;
         }
 
         .MuiAvatar-root {
-            background-color: var(--primary);
             width: 2rem;
             height: 2rem;
 

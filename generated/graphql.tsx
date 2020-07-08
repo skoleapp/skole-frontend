@@ -116,10 +116,8 @@ export type UserObjectType = {
   verified?: Maybe<Scalars['Boolean']>;
   createdCourses: Array<CourseObjectType>;
   createdResources: Array<ResourceObjectType>;
-  votes: Array<VoteObjectType>;
+  activity?: Maybe<Array<Maybe<ActivityObjectType>>>;
   avatarThumbnail?: Maybe<Scalars['String']>;
-  courseCount?: Maybe<Scalars['Int']>;
-  resourceCount?: Maybe<Scalars['Int']>;
   school?: Maybe<SchoolObjectType>;
   subject?: Maybe<SubjectObjectType>;
   rank?: Maybe<Scalars['String']>;
@@ -144,7 +142,6 @@ export type CourseObjectType = {
   starred?: Maybe<Scalars['Boolean']>;
   score?: Maybe<Scalars['Int']>;
   vote?: Maybe<VoteObjectType>;
-  resourceCount?: Maybe<Scalars['Int']>;
 };
 
 export type SubjectObjectType = {
@@ -216,7 +213,6 @@ export type CommentObjectType = {
   replyComments: Array<CommentObjectType>;
   score?: Maybe<Scalars['Int']>;
   vote?: Maybe<VoteObjectType>;
-  replyCount?: Maybe<Scalars['Int']>;
 };
 
 export type VoteObjectType = {
@@ -227,6 +223,15 @@ export type VoteObjectType = {
   comment?: Maybe<CommentObjectType>;
   course?: Maybe<CourseObjectType>;
   resource?: Maybe<ResourceObjectType>;
+};
+
+export type ActivityObjectType = {
+   __typename?: 'ActivityObjectType';
+  targetUser?: Maybe<UserObjectType>;
+  course?: Maybe<CourseObjectType>;
+  resource?: Maybe<ResourceObjectType>;
+  comment?: Maybe<CommentObjectType>;
+  description?: Maybe<Scalars['String']>;
 };
 
 export type BadgeObjectType = {
@@ -257,45 +262,61 @@ export type Mutation = {
   performStar?: Maybe<StarredMutationPayload>;
   performVote?: Maybe<VoteMutationPayload>;
   /**
-   * Register new user. Check if there is an existing user
-   * with that email or username. Check that account is not
-   * deactivated. By default set the user a unverified.
-   * After successful registration send account verification email.
+   * Register new user.
+   * 
+   * Check if there is an existing user with that email or username. Check that account
+   * is not deactivated. By default set the user a unverified. After successful
+   * registration send account verification email.
    */
   register?: Maybe<RegisterMutationPayload>;
   /**
-   * Receive the token that was sent by email.
-   * If the token is valid, verify the user's account.
+   * Receive the token that was sent by email, if the token is valid, verify the
+   * user's account.
    */
   verifyAccount?: Maybe<VerifyAccountMutationPayload>;
   /**
-   * Sends verification email again. Return error if
-   * a user with the provided email is not found.
+   * Sends verification email again.
+   * 
+   * Return error if a user with the provided email is not found.
    */
   resendVerificationEmail?: Maybe<ResendVerificationEmailMutationPayload>;
   /**
-   * Send password reset email. For non verified users,
-   * send an verification email instead. Return error
-   * if a user with the provided email is not found.
+   * Send password reset email.
+   * 
+   * For non verified users, send an verification email instead. Return error if a user
+   * with the provided email is not found.
    */
   sendPasswordResetEmail?: Maybe<SendPasswordResetEmailMutationPayload>;
   /**
    * Change user's password without old password.
-   * Receive the token that was sent by email.
-   * Revoke refresh token and thus require the
+   * 
+   * Receive the token that was sent by email. Revoke refresh token and thus require the
    * user to log in with his new password.
    */
   resetPassword?: Maybe<ResetPasswordMutationPayload>;
   /**
    * Obtain JSON web token and user information.
+   * 
    * Not verified users can still login.
    */
   login?: Maybe<LoginMutationPayload>;
-  /** Update user model fields. User must be verified. */
+  /**
+   * Update some user model fields.
+   * 
+   * The user must be verified.
+   */
   updateUser?: Maybe<UpdateUserMutationPayload>;
-  /** Change account password when user knows the old password. User must be verified. */
+  /**
+   * Change account password when user knows the old password.
+   * 
+   * User must be verified.
+   */
   changePassword?: Maybe<ChangePasswordMutationPayload>;
-  /** Delete account permanently. User must be verified and confirm his password. */
+  /**
+   * Delete account permanently.
+   * 
+   * The user must be verified and must confirm his password.
+   */
   deleteUser?: Maybe<DeleteUserMutationPayload>;
   createResource?: Maybe<CreateResourceMutationPayload>;
   updateResource?: Maybe<UpdateResourceMutationPayload>;
@@ -444,10 +465,11 @@ export type VoteMutationInput = {
 };
 
 /**
- * Register new user. Check if there is an existing user
- * with that email or username. Check that account is not
- * deactivated. By default set the user a unverified.
- * After successful registration send account verification email.
+ * Register new user.
+ * 
+ * Check if there is an existing user with that email or username. Check that account
+ * is not deactivated. By default set the user a unverified. After successful
+ * registration send account verification email.
  */
 export type RegisterMutationPayload = {
    __typename?: 'RegisterMutationPayload';
@@ -467,8 +489,8 @@ export type RegisterMutationInput = {
 };
 
 /**
- * Receive the token that was sent by email.
- * If the token is valid, verify the user's account.
+ * Receive the token that was sent by email, if the token is valid, verify the
+ * user's account.
  */
 export type VerifyAccountMutationPayload = {
    __typename?: 'VerifyAccountMutationPayload';
@@ -484,8 +506,9 @@ export type VerifyAccountMutationInput = {
 };
 
 /**
- * Sends verification email again. Return error if
- * a user with the provided email is not found.
+ * Sends verification email again.
+ * 
+ * Return error if a user with the provided email is not found.
  */
 export type ResendVerificationEmailMutationPayload = {
    __typename?: 'ResendVerificationEmailMutationPayload';
@@ -501,9 +524,10 @@ export type ResendVerificationEmailMutationInput = {
 };
 
 /**
- * Send password reset email. For non verified users,
- * send an verification email instead. Return error
- * if a user with the provided email is not found.
+ * Send password reset email.
+ * 
+ * For non verified users, send an verification email instead. Return error if a user
+ * with the provided email is not found.
  */
 export type SendPasswordResetEmailMutationPayload = {
    __typename?: 'SendPasswordResetEmailMutationPayload';
@@ -520,8 +544,8 @@ export type SendPasswordResetEmailMutationInput = {
 
 /**
  * Change user's password without old password.
- * Receive the token that was sent by email.
- * Revoke refresh token and thus require the
+ * 
+ * Receive the token that was sent by email. Revoke refresh token and thus require the
  * user to log in with his new password.
  */
 export type ResetPasswordMutationPayload = {
@@ -541,6 +565,7 @@ export type ResetPasswordMutationInput = {
 
 /**
  * Obtain JSON web token and user information.
+ * 
  * Not verified users can still login.
  */
 export type LoginMutationPayload = {
@@ -558,7 +583,11 @@ export type LoginMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/** Update user model fields. User must be verified. */
+/**
+ * Update some user model fields.
+ * 
+ * The user must be verified.
+ */
 export type UpdateUserMutationPayload = {
    __typename?: 'UpdateUserMutationPayload';
   user?: Maybe<UserObjectType>;
@@ -578,7 +607,11 @@ export type UpdateUserMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/** Change account password when user knows the old password. User must be verified. */
+/**
+ * Change account password when user knows the old password.
+ * 
+ * User must be verified.
+ */
 export type ChangePasswordMutationPayload = {
    __typename?: 'ChangePasswordMutationPayload';
   message?: Maybe<Scalars['String']>;
@@ -592,7 +625,11 @@ export type ChangePasswordMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/** Delete account permanently. User must be verified and confirm his password. */
+/**
+ * Delete account permanently.
+ * 
+ * The user must be verified and must confirm his password.
+ */
 export type DeleteUserMutationPayload = {
    __typename?: 'DeleteUserMutationPayload';
   message?: Maybe<Scalars['String']>;
@@ -980,7 +1017,7 @@ export type CreateCommentMutation = (
     & Pick<CreateCommentMutationPayload, 'message'>
     & { comment?: Maybe<(
       { __typename?: 'CommentObjectType' }
-      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'score'>
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
       & { user?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -1129,14 +1166,30 @@ export type UserMeQuery = (
   { __typename?: 'Query' }
   & { userMe?: Maybe<(
     { __typename?: 'UserObjectType' }
-    & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created' | 'verified'>
+    & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'created' | 'verified'>
     & { school?: Maybe<(
       { __typename?: 'SchoolObjectType' }
       & Pick<SchoolObjectType, 'id' | 'name'>
     )>, subject?: Maybe<(
       { __typename?: 'SubjectObjectType' }
       & Pick<SubjectObjectType, 'id' | 'name'>
-    )> }
+    )>, activity?: Maybe<Array<Maybe<(
+      { __typename?: 'ActivityObjectType' }
+      & Pick<ActivityObjectType, 'description'>
+      & { targetUser?: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+      )>, course?: Maybe<(
+        { __typename?: 'CourseObjectType' }
+        & Pick<CourseObjectType, 'id'>
+      )>, resource?: Maybe<(
+        { __typename?: 'ResourceObjectType' }
+        & Pick<ResourceObjectType, 'id'>
+      )>, comment?: Maybe<(
+        { __typename?: 'CommentObjectType' }
+        & Pick<CommentObjectType, 'id'>
+      )> }
+    )>>> }
   )> }
 );
 
@@ -1166,7 +1219,7 @@ export type UserDetailQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'UserObjectType' }
-    & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'courseCount' | 'resourceCount' | 'created' | 'verified' | 'rank'>
+    & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'created' | 'verified' | 'rank'>
     & { badges?: Maybe<Array<Maybe<(
       { __typename?: 'BadgeObjectType' }
       & Pick<BadgeObjectType, 'id' | 'name' | 'description'>
@@ -1230,7 +1283,7 @@ export type CourseDetailQuery = (
   { __typename?: 'Query' }
   & { course?: Maybe<(
     { __typename?: 'CourseObjectType' }
-    & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'score' | 'resourceCount' | 'starred'>
+    & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'score' | 'starred'>
     & { vote?: Maybe<(
       { __typename?: 'VoteObjectType' }
       & Pick<VoteObjectType, 'id' | 'status'>
@@ -1248,7 +1301,7 @@ export type CourseDetailQuery = (
       & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
     )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
-      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'replyCount' | 'score'>
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
       & { user?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -1294,7 +1347,7 @@ export type ResourceDetailQuery = (
       & Pick<VoteObjectType, 'id' | 'status'>
     )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
-      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score' | 'replyCount'>
+      & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
       & { user?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -1918,7 +1971,6 @@ export const CreateCommentDocument = gql`
           status
         }
       }
-      replyCount
       score
       vote {
         id
@@ -2202,8 +2254,6 @@ export const UserMeDocument = gql`
     bio
     avatar
     score
-    courseCount
-    resourceCount
     created
     verified
     school {
@@ -2213,6 +2263,23 @@ export const UserMeDocument = gql`
     subject {
       id
       name
+    }
+    activity {
+      targetUser {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+      }
+      resource {
+        id
+      }
+      comment {
+        id
+      }
+      description
     }
   }
 }
@@ -2294,8 +2361,6 @@ export const UserDetailDocument = gql`
     bio
     avatar
     score
-    courseCount
-    resourceCount
     created
     verified
     rank
@@ -2426,7 +2491,6 @@ export const CourseDetailDocument = gql`
     modified
     created
     score
-    resourceCount
     starred
     vote {
       id
@@ -2478,7 +2542,6 @@ export const CourseDetailDocument = gql`
           status
         }
       }
-      replyCount
       score
       vote {
         id
@@ -2556,7 +2619,6 @@ export const ResourceDetailDocument = gql`
       modified
       created
       score
-      replyCount
       vote {
         id
         status

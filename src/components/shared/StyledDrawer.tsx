@@ -1,5 +1,6 @@
 import { Drawer } from '@material-ui/core';
 import React from 'react';
+import { breakpoints } from 'src/styles';
 import styled from 'styled-components';
 
 // Ignore: fullHeight must be omitted from Box props.
@@ -11,5 +12,15 @@ export const StyledDrawer = styled(({ fullHeight, ...props }) => <Drawer {...pro
 
     .MuiDrawer-paperAnchorBottom {
         min-height: ${({ fullHeight }): string | false => fullHeight && '100%'};
+    }
+
+    .modal-header {
+        padding-bottom: 0.5rem;
+    }
+
+    @media only screen and (min-width: ${breakpoints.MD}) {
+        .MuiList-root {
+            padding: 0.5rem 0 !important;
+        }
     }
 `;

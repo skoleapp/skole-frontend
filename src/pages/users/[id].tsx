@@ -1,5 +1,5 @@
 import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
-import { EditOutlined } from '@material-ui/icons';
+import { EditOutlined, StarBorderOutlined } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -48,13 +48,13 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const title = R.propOr('', 'title', user) as string;
     const bio = R.propOr('', 'bio', user) as string;
     const score = R.propOr('-', 'score', user) as string;
-    const courseCount = R.propOr('-', 'courseCount', user) as string;
-    const resourceCount = R.propOr('-', 'resourceCount', user) as string;
     const joined = moment(R.propOr('', 'created', user)).format('LL');
     const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', loggedInUser);
     const badges = R.propOr([], 'badges', user) as BadgeObjectType[];
     const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
     const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
+    const courseCount = createdCourses.length;
+    const resourceCount = createdResources.length;
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
     const isMobile = useDeviceContext(breakpointsNum.SM);
@@ -68,6 +68,18 @@ const UserPage: NextPage<Props> = ({ user }) => {
             fullWidth={isMobile}
         >
             {t('profile:editProfile')}
+        </ButtonLink>
+    );
+
+    const renderViewStarredButton = isOwnProfile && (
+        <ButtonLink
+            href="/account/starred"
+            color="primary"
+            variant="outlined"
+            endIcon={<StarBorderOutlined />}
+            fullWidth
+        >
+            {t('profile:viewStarred')}
         </ButtonLink>
     );
 
@@ -194,9 +206,8 @@ const UserPage: NextPage<Props> = ({ user }) => {
                 {renderVerifyAccountLink}
                 {renderJoined}
             </Box>
-            <Box marginTop="0.25rem" width="100%">
-                {renderEditProfileButton}
-            </Box>
+            <Box marginTop="0.5rem">{renderEditProfileButton}</Box>
+            <Box marginTop="0.5rem">{renderViewStarredButton}</Box>
         </CardContent>
     );
 

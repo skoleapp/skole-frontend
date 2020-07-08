@@ -45,7 +45,7 @@ import {
 import { includeDefaultNamespaces } from '../../i18n';
 import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
 import { I18nProps, MaxWidth } from '../../types';
-import { mediaURL, useActionsDrawer, useInfoDrawer, useShare, useTabs, useVotes } from '../../utils';
+import { mediaURL, useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useTabs, useVotes } from '../../utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -81,6 +81,9 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { commentModalOpen } = useCommentModalContext();
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
     const { drawMode } = usePDFViewerContext();
+
+    // Automatically open comment thread if a comment has been provided as a query parameter.
+    useCommentQuery(comments);
 
     const {
         renderActionsHeader,

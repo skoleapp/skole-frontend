@@ -71,5 +71,7 @@
     "continue": "Jatka",
     "info": "Tiedot",
     "delete": "Poista",
-    "print": "Tulosta"
+    "print": "Tulosta",
+    "activity": "Toiminta",
+    "seeAll": "Katso kaikki"
 }

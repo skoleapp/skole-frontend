@@ -41,6 +41,7 @@ import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../li
 import { I18nProps } from '../../types';
 import {
     useActionsDrawer,
+    useCommentQuery,
     useFrontendPagination,
     useInfoDrawer,
     useSearch,
@@ -64,12 +65,12 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const courseCode = R.propOr('', 'code', course) as string;
     const subjectName = R.pathOr('', ['subject', 'name'], course) as string;
     const schoolName = R.pathOr('', ['school', 'name'], course) as string;
-    const resourceCount = String(R.propOr('', 'resourceCount', course));
     const creatorId = R.pathOr('', ['user', 'id'], course) as string;
     const courseId = R.propOr('', 'id', course) as string;
     const schoolId = R.pathOr('', ['school', 'id'], course);
     const initialScore = String(R.propOr(0, 'score', course));
     const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
+    const resourceCount = String(resources.length);
     const comments = R.propOr([], 'comments', course) as CommentObjectType[];
     const { commentCount } = useDiscussionContext(comments);
     const isOwnCourse = creatorId === R.propOr('', 'id', user);
@@ -83,6 +84,9 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
     const { tabValue, handleTabChange } = useTabs();
     const { renderShareButton } = useShare(courseName);
+
+    // Automatically open comment thread if a comment has been provided as a query parameter.
+    useCommentQuery(comments);
 
     const {
         renderActionsHeader,

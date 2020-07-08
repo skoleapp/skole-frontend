@@ -156,7 +156,7 @@ export const ReplyCommentThread: React.FC = () => {
     );
 
     return (
-        <StyledDiscussionBox>
+        <StyledDiscussionBox topComment={topComment}>
             <Box className="discussion-container">
                 {renderMessageArea}
                 {renderInputArea}

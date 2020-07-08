@@ -60,7 +60,8 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const creatorId = R.propOr('', 'id', comment.user) as string;
     const isOwner = !!user && user.id === creatorId;
     const commentId = R.propOr('', 'id', comment) as string;
-    const replyCount = R.propOr('', 'replyCount', comment) as string;
+    const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', comment);
+    const replyCount = replyComments.length;
     const { toggleNotification } = useNotificationsContext();
     const { toggleAttachmentViewer } = useAttachmentViewerContext();
     const { toggleTopComment } = useDiscussionContext();

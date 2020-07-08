@@ -198,7 +198,6 @@ mutation CreateComment($text: String!, $attachment: String, $course: ID, $resour
                     status
                 }
             }
-            replyCount
             score
             vote {
                 id
