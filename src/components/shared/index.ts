@@ -30,3 +30,4 @@ export { PaginatedTable, FrontendPaginatedTable } from './PaginatedTable';
 export { InfoModalContent } from './InfoModalContent';
 export { StyledDrawer } from './StyledDrawer';
 export { DiscussionHeader } from './DiscussionHeader';
+export { ActivityList } from './ActivityList';

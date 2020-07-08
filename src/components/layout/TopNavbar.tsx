@@ -1,7 +1,25 @@
-import { AppBar, Avatar, Grid, IconButton, Toolbar, Tooltip } from '@material-ui/core';
-import { ArrowBackOutlined, HowToRegOutlined, LibraryAddOutlined, StarBorderOutlined } from '@material-ui/icons';
+import {
+    AppBar,
+    Avatar,
+    Box,
+    ClickAwayListener,
+    Fade,
+    Grid,
+    IconButton,
+    Paper,
+    Popper,
+    Toolbar,
+    Tooltip,
+} from '@material-ui/core';
+import {
+    ArrowBackOutlined,
+    HowToRegOutlined,
+    LibraryAddOutlined,
+    NotificationsOutlined,
+    StarBorderOutlined,
+} from '@material-ui/icons';
 import * as R from 'ramda';
-import React from 'react';
+import React, { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext, useDeviceContext } from 'src/context';
 import styled from 'styled-components';
@@ -11,7 +29,7 @@ import { Link } from '../../i18n';
 import { breakpoints } from '../../styles';
 import { TopNavbarProps } from '../../types';
 import { mediaURL } from '../../utils';
-import { ButtonLink, IconButtonLink, StyledHeaderText } from '../shared';
+import { ActivityList, ButtonLink, IconButtonLink, StyledHeaderText } from '../shared';
 import { Logo } from './Logo';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
@@ -26,9 +44,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 }) => {
     const { user } = useAuthContext();
     const { t } = useTranslation();
+    const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(null);
+    const [activityPopperOpen, setActivityPopperOpen] = useState(false);
     const avatarThumb = R.propOr('', 'avatar', user) as string;
     const isMobile = useDeviceContext();
     const dense = !!headerLeft || !!headerRightSecondary;
+    const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
+
+    const handleActivityButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
+        setActivityPopperAnchorEl(e.currentTarget);
+        setActivityPopperOpen(!activityPopperOpen);
+    };
 
     const renderDynamicBackButton = dynamicBackUrl && (
         <IconButton onClick={(): void => Router.back()} color="secondary">
@@ -60,10 +86,43 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Grid>
     );
 
-    const renderSearch = !disableSearch && !!user && <TopNavbarSearchWidget />;
+    const renderActivityButton = (
+        <Tooltip title={t('tooltips:activity')}>
+            <IconButton onClick={handleActivityButtonClick} color="secondary">
+                <NotificationsOutlined />
+            </IconButton>
+        </Tooltip>
+    );
 
-    const renderAvatar = !!user && (
+    const renderActivityPopper = (
+        <Popper open={activityPopperOpen} anchorEl={activityPopperAnchorEl} placement="bottom" transition>
+            {({ TransitionProps }): JSX.Element => (
+                <Fade {...TransitionProps} timeout={500}>
+                    <Box marginTop="0.5rem">
+                        <Paper>
+                            <Box padding="0.5rem">
+                                <ActivityList slice={5} />
+                                <Box marginTop="0.5rem" textAlign="center">
+                                    <ButtonLink href="/account/activity" color="primary" fullWidth>
+                                        {t('common:seeAll')}
+                                    </ButtonLink>
+                                </Box>
+                            </Box>
+                        </Paper>
+                    </Box>
+                </Fade>
+            )}
+        </Popper>
+    );
+
+    const renderAuthenticatedButtons = !!user && (
         <>
+            <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
+                <Box>
+                    {renderActivityButton}
+                    {renderActivityPopper}
+                </Box>
+            </ClickAwayListener>
             <Tooltip title={t('tooltips:starred')}>
                 <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
             </Tooltip>
@@ -79,7 +138,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </>
     );
 
-    const renderAuthButtons = (
+    const renderUnAuthenticatedButtons = (
         <>
             <ButtonLink href="/login" color="secondary" endIcon={<HowToRegOutlined />}>
                 {t('common:login')}
@@ -90,14 +149,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </>
     );
 
+    const renderSearch = !disableSearch && !!user && <TopNavbarSearchWidget />;
+    const renderButtons = !!user ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
+
     const renderDesktopContent = !isMobile && (
         <Grid container alignItems="center">
-            <Grid item xs={7} container>
+            <Grid item xs={6} container>
                 <Logo />
             </Grid>
-            <Grid item xs={5} container alignItems="center" justify="flex-end">
+            <Grid item xs={6} container alignItems="center" justify="flex-end">
                 {renderSearch}
-                {renderAvatar || renderAuthButtons}
+                {renderButtons}
             </Grid>
         </Grid>
     );
