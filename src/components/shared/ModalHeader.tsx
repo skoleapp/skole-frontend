@@ -16,7 +16,7 @@ export const ModalHeader: React.FC<Props> = ({ text, onCancel, headerRight }) =>
     const { t } = useTranslation();
 
     return (
-        <StyledModalHeader>
+        <StyledModalHeader className="modal-header">
             <Grid container alignItems="center">
                 <Grid item xs={2}>
                     <Tooltip title={t('common:close')}>
