@@ -41,4 +41,5 @@ const StyledModalHeader = styled(Box)`
     align-items: center;
     border-bottom: var(--border);
     padding: 0.5rem;
+    padding-bottom: 1rem;
 `;
