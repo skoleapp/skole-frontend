@@ -1,5 +1,5 @@
 import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
-import { EditOutlined } from '@material-ui/icons';
+import { EditOutlined, StarBorderOutlined } from '@material-ui/icons';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -68,6 +68,18 @@ const UserPage: NextPage<Props> = ({ user }) => {
             fullWidth={isMobile}
         >
             {t('profile:editProfile')}
+        </ButtonLink>
+    );
+
+    const renderViewStarredButton = isOwnProfile && (
+        <ButtonLink
+            href="/account/starred"
+            color="primary"
+            variant="outlined"
+            endIcon={<StarBorderOutlined />}
+            fullWidth
+        >
+            {t('profile:viewStarred')}
         </ButtonLink>
     );
 
@@ -194,9 +206,8 @@ const UserPage: NextPage<Props> = ({ user }) => {
                 {renderVerifyAccountLink}
                 {renderJoined}
             </Box>
-            <Box marginTop="0.25rem" width="100%">
-                {renderEditProfileButton}
-            </Box>
+            <Box marginTop="0.5rem">{renderEditProfileButton}</Box>
+            <Box marginTop="0.5rem">{renderViewStarredButton}</Box>
         </CardContent>
     );
 
