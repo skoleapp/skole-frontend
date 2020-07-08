@@ -12,3 +12,4 @@ export * from './drawers';
 export * from './useMoment';
 export * from './useStateRef';
 export * from './useShare';
+export * from './useCommentQuery';

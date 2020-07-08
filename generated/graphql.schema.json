@@ -674,24 +674,16 @@
             "deprecationReason": null
           },
           {
-            "name": "votes",
-            "description": "",
+            "name": "activity",
+            "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "VoteObjectType",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "ActivityObjectType",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -704,30 +696,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "courseCount",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "resourceCount",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1037,18 +1005,6 @@
             "type": {
               "kind": "OBJECT",
               "name": "VoteObjectType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "resourceCount",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1756,18 +1712,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "replyCount",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -1855,6 +1799,77 @@
             "type": {
               "kind": "OBJECT",
               "name": "ResourceObjectType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ActivityObjectType",
+        "description": null,
+        "fields": [
+          {
+            "name": "targetUser",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UserObjectType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "course",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CourseObjectType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "resource",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ResourceObjectType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "comment",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CommentObjectType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2104,7 +2119,7 @@
           },
           {
             "name": "register",
-            "description": "Register new user. Check if there is an existing user\nwith that email or username. Check that account is not\ndeactivated. By default set the user a unverified.\nAfter successful registration send account verification email.",
+            "description": "Register new user.\n\nCheck if there is an existing user with that email or username. Check that account\nis not deactivated. By default set the user a unverified. After successful\nregistration send account verification email.",
             "args": [
               {
                 "name": "input",
@@ -2131,7 +2146,7 @@
           },
           {
             "name": "verifyAccount",
-            "description": "Receive the token that was sent by email.\nIf the token is valid, verify the user's account.",
+            "description": "Receive the token that was sent by email, if the token is valid, verify the\nuser's account.",
             "args": [
               {
                 "name": "input",
@@ -2158,7 +2173,7 @@
           },
           {
             "name": "resendVerificationEmail",
-            "description": "Sends verification email again. Return error if\na user with the provided email is not found.",
+            "description": "Sends verification email again.\n\nReturn error if a user with the provided email is not found.",
             "args": [
               {
                 "name": "input",
@@ -2185,7 +2200,7 @@
           },
           {
             "name": "sendPasswordResetEmail",
-            "description": "Send password reset email. For non verified users,\nsend an verification email instead. Return error\nif a user with the provided email is not found.",
+            "description": "Send password reset email.\n\nFor non verified users, send an verification email instead. Return error if a user\nwith the provided email is not found.",
             "args": [
               {
                 "name": "input",
@@ -2212,7 +2227,7 @@
           },
           {
             "name": "resetPassword",
-            "description": "Change user's password without old password.\nReceive the token that was sent by email.\nRevoke refresh token and thus require the\nuser to log in with his new password.",
+            "description": "Change user's password without old password.\n\nReceive the token that was sent by email. Revoke refresh token and thus require the\nuser to log in with his new password.",
             "args": [
               {
                 "name": "input",
@@ -2239,7 +2254,7 @@
           },
           {
             "name": "login",
-            "description": "Obtain JSON web token and user information.\nNot verified users can still login.",
+            "description": "Obtain JSON web token and user information.\n\nNot verified users can still login.",
             "args": [
               {
                 "name": "input",
@@ -2266,7 +2281,7 @@
           },
           {
             "name": "updateUser",
-            "description": "Update user model fields. User must be verified.",
+            "description": "Update some user model fields.\n\nThe user must be verified.",
             "args": [
               {
                 "name": "input",
@@ -2293,7 +2308,7 @@
           },
           {
             "name": "changePassword",
-            "description": "Change account password when user knows the old password. User must be verified.",
+            "description": "Change account password when user knows the old password.\n\nUser must be verified.",
             "args": [
               {
                 "name": "input",
@@ -2320,7 +2335,7 @@
           },
           {
             "name": "deleteUser",
-            "description": "Delete account permanently. User must be verified and confirm his password.",
+            "description": "Delete account permanently.\n\nThe user must be verified and must confirm his password.",
             "args": [
               {
                 "name": "input",
@@ -2868,7 +2883,7 @@
       {
         "kind": "OBJECT",
         "name": "RegisterMutationPayload",
-        "description": "Register new user. Check if there is an existing user\nwith that email or username. Check that account is not\ndeactivated. By default set the user a unverified.\nAfter successful registration send account verification email.",
+        "description": "Register new user.\n\nCheck if there is an existing user with that email or username. Check that account\nis not deactivated. By default set the user a unverified. After successful\nregistration send account verification email.",
         "fields": [
           {
             "name": "message",
@@ -3016,7 +3031,7 @@
       {
         "kind": "OBJECT",
         "name": "VerifyAccountMutationPayload",
-        "description": "Receive the token that was sent by email.\nIf the token is valid, verify the user's account.",
+        "description": "Receive the token that was sent by email, if the token is valid, verify the\nuser's account.",
         "fields": [
           {
             "name": "token",
@@ -3110,7 +3125,7 @@
       {
         "kind": "OBJECT",
         "name": "ResendVerificationEmailMutationPayload",
-        "description": "Sends verification email again. Return error if\na user with the provided email is not found.",
+        "description": "Sends verification email again.\n\nReturn error if a user with the provided email is not found.",
         "fields": [
           {
             "name": "email",
@@ -3212,7 +3227,7 @@
       {
         "kind": "OBJECT",
         "name": "SendPasswordResetEmailMutationPayload",
-        "description": "Send password reset email. For non verified users,\nsend an verification email instead. Return error\nif a user with the provided email is not found.",
+        "description": "Send password reset email.\n\nFor non verified users, send an verification email instead. Return error if a user\nwith the provided email is not found.",
         "fields": [
           {
             "name": "email",
@@ -3314,7 +3329,7 @@
       {
         "kind": "OBJECT",
         "name": "ResetPasswordMutationPayload",
-        "description": "Change user's password without old password.\nReceive the token that was sent by email.\nRevoke refresh token and thus require the\nuser to log in with his new password.",
+        "description": "Change user's password without old password.\n\nReceive the token that was sent by email. Revoke refresh token and thus require the\nuser to log in with his new password.",
         "fields": [
           {
             "name": "token",
@@ -3438,7 +3453,7 @@
       {
         "kind": "OBJECT",
         "name": "LoginMutationPayload",
-        "description": "Obtain JSON web token and user information.\nNot verified users can still login.",
+        "description": "Obtain JSON web token and user information.\n\nNot verified users can still login.",
         "fields": [
           {
             "name": "user",
@@ -3562,7 +3577,7 @@
       {
         "kind": "OBJECT",
         "name": "UpdateUserMutationPayload",
-        "description": "Update user model fields. User must be verified.",
+        "description": "Update some user model fields.\n\nThe user must be verified.",
         "fields": [
           {
             "name": "user",
@@ -3724,7 +3739,7 @@
       {
         "kind": "OBJECT",
         "name": "ChangePasswordMutationPayload",
-        "description": "Change account password when user knows the old password. User must be verified.",
+        "description": "Change account password when user knows the old password.\n\nUser must be verified.",
         "fields": [
           {
             "name": "message",
@@ -3824,7 +3839,7 @@
       {
         "kind": "OBJECT",
         "name": "DeleteUserMutationPayload",
-        "description": "Delete account permanently. User must be verified and confirm his password.",
+        "description": "Delete account permanently.\n\nThe user must be verified and must confirm his password.",
         "fields": [
           {
             "name": "message",

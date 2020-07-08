@@ -48,13 +48,13 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const title = R.propOr('', 'title', user) as string;
     const bio = R.propOr('', 'bio', user) as string;
     const score = R.propOr('-', 'score', user) as string;
-    const courseCount = R.propOr('-', 'courseCount', user) as string;
-    const resourceCount = R.propOr('-', 'resourceCount', user) as string;
     const joined = moment(R.propOr('', 'created', user)).format('LL');
     const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', loggedInUser);
     const badges = R.propOr([], 'badges', user) as BadgeObjectType[];
     const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
     const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
+    const courseCount = createdCourses.length;
+    const resourceCount = createdResources.length;
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
     const isMobile = useDeviceContext(breakpointsNum.SM);
