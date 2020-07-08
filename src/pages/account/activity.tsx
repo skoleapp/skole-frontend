@@ -44,7 +44,7 @@ const wrappers = R.compose(withUserAgent, withSSRAuth);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['activity']),
+        namespacesRequired: includeDefaultNamespaces([]),
     },
 }));
 
