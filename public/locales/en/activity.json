@@ -2,5 +2,7 @@
     "title": "Activity",
     "description": "This is the activity page.",
     "header": "Activity",
-    "noActivity": "Your activity will show up here."
+    "noActivity": "Your activity will show up here.",
+    "markAllAsRead": "Mark All As Read",
+    "notificationSettings": "Notification Settings (coming soon)"
 }

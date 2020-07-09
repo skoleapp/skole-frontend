@@ -284,6 +284,7 @@ mutation MarkSingleActivityRead($id: ID, $read: Boolean) {
             messages
         }
         activity {
+            id
             description
             read
             targetUser {
@@ -311,6 +312,7 @@ mutation MarkAllActivitiesAsRead {
             messages
         }
         activity {
+            id
             description
             read
             targetUser {

@@ -74,6 +74,10 @@ export const base = css`
             }
         }
 
+        .MuiCardHeader-action {
+            margin: 0;
+        }
+
         // Custom classes.
 
         .border-bottom {
@@ -117,10 +121,6 @@ export const base = css`
             height: 3rem;
             padding: 0.5rem;
             border-bottom: var(--border);
-
-            .MuiIconButton-root {
-                padding: 0.25rem;
-            }
         }
     }
 `;

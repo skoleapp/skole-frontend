@@ -19,8 +19,8 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 const createApolloClient = (ctx?: SSRContext): ApolloClient<NormalizedCacheObject> => {
     const isBrowser = typeof window !== 'undefined';
     const uri = isBrowser ? env.API_URL : env.BACKEND_URL;
-    const request: IncomingMessage | undefined = R.propOr(undefined, 'req', ctx);
-    const token = getTokenCookie(request);
+    const req: IncomingMessage | undefined = R.propOr(undefined, 'req', ctx);
+    const token = getTokenCookie(req);
 
     const httpLink = createUploadLink({
         uri: uri + 'graphql/',

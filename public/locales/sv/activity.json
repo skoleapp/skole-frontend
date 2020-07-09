@@ -2,5 +2,7 @@
     "title": "Aktivitet",
     "description": "Detta är aktivitetssidan.",
     "header": "Aktivitet",
-    "noActivity": "Din aktivitet visas här."
+    "noActivity": "Din aktivitet visas här.",
+    "markAllAsRead": "Markera allt som läst",
+    "notificationSettings": "Anmälningsinställningar (kommer snart)"
 }

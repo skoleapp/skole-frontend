@@ -1,16 +1,26 @@
-import { Avatar, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
-import Link from 'next/link';
+import { Avatar, Box, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthContext } from 'src/context';
+import { useAuthContext, useNotificationsContext } from 'src/context';
+import { Router } from 'src/i18n';
 import { mediaURL } from 'src/utils';
+import styled from 'styled-components';
 import { UrlObject } from 'url';
 
-import { ActivityObjectType, UserObjectType } from '../../../generated/graphql';
+import {
+    ActivityObjectType,
+    MarkSingleActivityReadMutation,
+    useMarkSingleActivityReadMutation,
+    UserObjectType,
+} from '../../../generated/graphql';
 import { NotFoundBox, StyledList, TextLink } from '../../components';
 
-const getHref = ({ course, resource, comment }: ActivityObjectType): UrlObject => {
+const getHref = ({
+    course,
+    resource,
+    comment,
+}: Pick<ActivityObjectType, 'course' | 'resource' | 'comment'>): UrlObject => {
     let pathname = '#';
     let query = {};
 
@@ -34,7 +44,45 @@ interface Props {
 export const ActivityList: React.FC<Props> = ({ slice }) => {
     const { t } = useTranslation();
     const { user } = useAuthContext();
-    const activity: ActivityObjectType[] = R.propOr([], 'activity', user);
+    const initialActivity: ActivityObjectType[] = R.propOr([], 'activity', user);
+    const [activity, setActivity] = useState(initialActivity);
+    const { toggleNotification } = useNotificationsContext();
+    const onError = (): void => toggleNotification(t('errors:activityError'));
+
+    // Automatically update activity state when user context gets updated.
+    useEffect(() => {
+        const updatedActivity: ActivityObjectType[] = R.propOr([], 'activity', user);
+        setActivity(updatedActivity);
+    }, [user]);
+
+    const onCompleted = ({ markActivityRead }: MarkSingleActivityReadMutation): void => {
+        if (!!markActivityRead) {
+            if (!!markActivityRead.errors) {
+                onError();
+            } else if (!!markActivityRead.activity) {
+                const { activity: updatedActivityItem } = markActivityRead;
+                const newActivity = activity.map(a => (a.id === updatedActivityItem.id ? updatedActivityItem : a));
+                setActivity(newActivity as ActivityObjectType[]);
+            } else {
+                onError();
+            }
+        } else {
+            onError();
+        }
+    };
+
+    const [markSingleActivityRead] = useMarkSingleActivityReadMutation({ onCompleted, onError });
+
+    const handleClick = ({ id, ...activity }: ActivityObjectType) => async (): Promise<void> => {
+        const href = getHref(activity);
+
+        try {
+            await markSingleActivityRead({ variables: { id, read: true } });
+            // Router.push(href);
+        } catch {
+            toggleNotification(t('errors:activityError'));
+        }
+    };
 
     const renderAvatar = (targetUser?: UserObjectType | null): JSX.Element | false =>
         !!targetUser && (
@@ -52,18 +100,41 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
             ''
         );
 
-    const renderActivity = activity.slice(0, slice).map(({ targetUser, description, ...activity }, i) => (
-        <Link href={getHref(activity)} key={i}>
-            <ListItem button className="border-bottom">
-                {renderAvatar(targetUser)}
-                <ListItemText primary={renderTargetUserLink(targetUser)} secondary={description} />
-            </ListItem>
-        </Link>
+    const renderActivity = activity.slice(0, slice).map(({ targetUser, description, read, ...activity }, i) => (
+        <StyledListItem onClick={handleClick(activity)} key={i} button className="border-bottom" read={read}>
+            {renderAvatar(targetUser)}
+            <ListItemText primary={renderTargetUserLink(targetUser)} secondary={description} />
+        </StyledListItem>
     ));
 
     return !!activity.length ? (
-        <StyledList>{renderActivity}</StyledList>
+        <Box position="relative" flexGrow="1" display="flex">
+            <StyledActivityList flexGrow="1" display="flex">
+                <StyledList>{renderActivity}</StyledList>
+            </StyledActivityList>
+        </Box>
     ) : (
         <NotFoundBox text={t('activity:noActivity')} />
     );
 };
+
+const StyledActivityList = styled(Box)`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+
+    .MuiList-root {
+        flex-grow: 1;
+        overflow-y: scroll;
+    }
+`;
+
+// Ignore: topComment must be omitted from Box props.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const StyledListItem = styled(({ read, ...props }) => <ListItem {...props} />)`
+    // Show unread notifications with light shade of primary color.
+    background-color: ${({ read }): string => (read ? 'default' : 'rgba(173, 54, 54, 0.25)')} !important;
+`;

@@ -18,6 +18,7 @@ query UserMe {
             name
         }
         activity {
+            id
             description
             read
             targetUser {

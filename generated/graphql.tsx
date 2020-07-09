@@ -227,6 +227,7 @@ export type VoteObjectType = {
 
 export type ActivityObjectType = {
    __typename?: 'ActivityObjectType';
+  id: Scalars['ID'];
   targetUser?: Maybe<UserObjectType>;
   course?: Maybe<CourseObjectType>;
   resource?: Maybe<ResourceObjectType>;
@@ -1205,7 +1206,7 @@ export type MarkSingleActivityReadMutation = (
       & Pick<ErrorType, 'field' | 'messages'>
     )>>>, activity?: Maybe<(
       { __typename?: 'ActivityObjectType' }
-      & Pick<ActivityObjectType, 'description' | 'read'>
+      & Pick<ActivityObjectType, 'id' | 'description' | 'read'>
       & { targetUser?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -1235,7 +1236,7 @@ export type MarkAllActivitiesAsReadMutation = (
       & Pick<ErrorType, 'field' | 'messages'>
     )>>>, activity?: Maybe<Array<Maybe<(
       { __typename?: 'ActivityObjectType' }
-      & Pick<ActivityObjectType, 'description' | 'read'>
+      & Pick<ActivityObjectType, 'id' | 'description' | 'read'>
       & { targetUser?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -1269,7 +1270,7 @@ export type UserMeQuery = (
       & Pick<SubjectObjectType, 'id' | 'name'>
     )>, activity?: Maybe<Array<Maybe<(
       { __typename?: 'ActivityObjectType' }
-      & Pick<ActivityObjectType, 'description' | 'read'>
+      & Pick<ActivityObjectType, 'id' | 'description' | 'read'>
       & { targetUser?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -2346,6 +2347,7 @@ export const MarkSingleActivityReadDocument = gql`
       messages
     }
     activity {
+      id
       description
       read
       targetUser {
@@ -2400,6 +2402,7 @@ export const MarkAllActivitiesAsReadDocument = gql`
       messages
     }
     activity {
+      id
       description
       read
       targetUser {
@@ -2465,6 +2468,7 @@ export const UserMeDocument = gql`
       name
     }
     activity {
+      id
       description
       read
       targetUser {
