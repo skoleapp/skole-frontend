@@ -479,7 +479,7 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
         });
 
         return { props: { ...data, ...namespaces, initialApolloState } };
-    } catch (err) {
+    } catch {
         return { props: { namespaces, initialApolloState } };
     }
 });

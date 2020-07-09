@@ -3,7 +3,6 @@ import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthContext } from 'src/context';
 import { mediaURL } from 'src/utils';
 import { UrlObject } from 'url';
 
@@ -28,12 +27,12 @@ const getHref = ({ course, resource, comment }: ActivityObjectType): UrlObject =
 };
 
 interface Props {
+    user: UserObjectType;
     slice?: number;
 }
 
-export const ActivityList: React.FC<Props> = ({ slice }) => {
+export const ActivityList: React.FC<Props> = ({ user, slice }) => {
     const { t } = useTranslation();
-    const { user } = useAuthContext();
     const activity: ActivityObjectType[] = R.propOr([], 'activity', user);
 
     const renderAvatar = (targetUser?: UserObjectType | null): JSX.Element | false =>

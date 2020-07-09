@@ -45,7 +45,7 @@ const LoginPage: NextPage<I18nProps> = () => {
         password: Yup.string().required(t('validation:required')),
     });
 
-    const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
+    const onCompleted = ({ login }: LoginMutation): void => {
         if (!!login) {
             if (!!login.errors) {
                 handleMutationErrors(login.errors);

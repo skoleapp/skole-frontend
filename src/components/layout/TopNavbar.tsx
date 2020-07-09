@@ -94,14 +94,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Tooltip>
     );
 
-    const renderActivityPopper = (
+    const renderActivityPopper = !!user && (
         <Popper open={activityPopperOpen} anchorEl={activityPopperAnchorEl} placement="bottom" transition>
             {({ TransitionProps }): JSX.Element => (
                 <Fade {...TransitionProps} timeout={500}>
                     <Box marginTop="0.5rem">
                         <Paper>
                             <Box padding="0.5rem">
-                                <ActivityList slice={5} />
+                                <ActivityList user={user} slice={5} />
                                 <Box marginTop="0.5rem" textAlign="center">
                                     <ButtonLink href="/account/activity" color="primary" fullWidth>
                                         {t('common:seeAll')}

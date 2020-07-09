@@ -231,6 +231,7 @@ export type ActivityObjectType = {
   course?: Maybe<CourseObjectType>;
   resource?: Maybe<ResourceObjectType>;
   comment?: Maybe<CommentObjectType>;
+  read?: Maybe<Scalars['Boolean']>;
   description?: Maybe<Scalars['String']>;
 };
 
@@ -327,6 +328,10 @@ export type Mutation = {
   createComment?: Maybe<CreateCommentMutationPayload>;
   updateComment?: Maybe<UpdateCommentMutationPayload>;
   deleteComment?: Maybe<DeleteCommentMutationPayload>;
+  /** Mark a single activity read/unread and return the updated activity. */
+  markActivityRead?: Maybe<MarkActivityReadMutationPayload>;
+  /** Mark all activities of the given user as read. */
+  markAllActivitiesRead?: Maybe<MarkAllActivitiesReadMutation>;
 };
 
 
@@ -427,6 +432,11 @@ export type MutationUpdateCommentArgs = {
 
 export type MutationDeleteCommentArgs = {
   input: DeleteCommentMutationInput;
+};
+
+
+export type MutationMarkActivityReadArgs = {
+  input: MarkActivityReadMutationInput;
 };
 
 export type StarredMutationPayload = {
@@ -775,6 +785,27 @@ export type DeleteCommentMutationPayload = {
 export type DeleteCommentMutationInput = {
   id?: Maybe<Scalars['ID']>;
   clientMutationId?: Maybe<Scalars['String']>;
+};
+
+/** Mark a single activity read/unread and return the updated activity. */
+export type MarkActivityReadMutationPayload = {
+   __typename?: 'MarkActivityReadMutationPayload';
+  activity?: Maybe<ActivityObjectType>;
+  errors?: Maybe<Array<Maybe<ErrorType>>>;
+  clientMutationId?: Maybe<Scalars['String']>;
+};
+
+export type MarkActivityReadMutationInput = {
+  read?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars['ID']>;
+  clientMutationId?: Maybe<Scalars['String']>;
+};
+
+/** Mark all activities of the given user as read. */
+export type MarkAllActivitiesReadMutation = {
+   __typename?: 'MarkAllActivitiesReadMutation';
+  errors?: Maybe<Array<Maybe<ErrorType>>>;
+  activity?: Maybe<Array<Maybe<ActivityObjectType>>>;
 };
 
 export type RegisterMutationVariables = {
@@ -1175,7 +1206,7 @@ export type UserMeQuery = (
       & Pick<SubjectObjectType, 'id' | 'name'>
     )>, activity?: Maybe<Array<Maybe<(
       { __typename?: 'ActivityObjectType' }
-      & Pick<ActivityObjectType, 'description'>
+      & Pick<ActivityObjectType, 'description' | 'read'>
       & { targetUser?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
@@ -2265,6 +2296,8 @@ export const UserMeDocument = gql`
       name
     }
     activity {
+      description
+      read
       targetUser {
         id
         username
@@ -2279,7 +2312,6 @@ export const UserMeDocument = gql`
       comment {
         id
       }
-      description
     }
   }
 }

@@ -10,7 +10,7 @@ import { SettingsButton, StyledCard } from '../shared';
 import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps {
-    renderCardContent?: JSX.Element | JSX.Element[];
+    renderCardContent?: JSX.Element | JSX.Element[] | false;
     desktopHeader?: string;
     formLayout?: boolean;
     infoLayout?: boolean;
