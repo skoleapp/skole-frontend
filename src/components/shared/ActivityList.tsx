@@ -78,7 +78,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
 
         try {
             await markSingleActivityRead({ variables: { id, read: true } });
-            // Router.push(href);
+            Router.push(href);
         } catch {
             toggleNotification(t('errors:activityError'));
         }
