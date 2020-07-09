@@ -13,3 +13,4 @@ export * from './useMoment';
 export * from './useStateRef';
 export * from './useShare';
 export * from './useCommentQuery';
+export * from './useResponsiveIconButtonProps';

@@ -3,6 +3,7 @@ import { StarBorderOutlined } from '@material-ui/icons';
 import { useState } from 'react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useResponsiveIconButtonProps } from 'src/utils';
 
 import { PerformStarMutation, usePerformStarMutation } from '../../../generated/graphql';
 import { useAuthContext, useNotificationsContext } from '../../context';
@@ -15,8 +16,10 @@ interface Props extends IconButtonProps {
 
 export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, resource }) => {
     const { t } = useTranslation();
+    const { size } = useResponsiveIconButtonProps();
     const { verified, verificationRequiredTooltip } = useAuthContext();
     const [starred, setStarred] = useState(initialStarred);
+    const color = starred ? 'primary' : 'default';
     const { toggleNotification } = useNotificationsContext();
 
     const tooltip = !!verificationRequiredTooltip
@@ -50,9 +53,9 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
             <span>
                 <IconButton
                     onClick={handleStar}
-                    color={starred ? 'primary' : 'default'}
                     disabled={starSubmitting || verified === false}
-                    size="small"
+                    size={size}
+                    color={color}
                 >
                     <StarBorderOutlined />
                 </IconButton>

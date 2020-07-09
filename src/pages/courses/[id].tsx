@@ -44,6 +44,7 @@ import {
     useCommentQuery,
     useFrontendPagination,
     useInfoDrawer,
+    useResponsiveIconButtonProps,
     useSearch,
     useShare,
     useTabs,
@@ -81,12 +82,20 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
-    const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
     const { tabValue, handleTabChange } = useTabs();
     const { renderShareButton } = useShare(courseName);
+    const iconButtonProps = useResponsiveIconButtonProps();
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
     useCommentQuery(comments);
+
+    const {
+        renderInfoHeader,
+        renderInfoButton,
+        open: infoOpen,
+        anchor: infoAnchor,
+        onClose: handleCloseInfo,
+    } = useInfoDrawer();
 
     const {
         renderActionsHeader,
@@ -94,8 +103,12 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         renderShareAction,
         renderReportAction,
         renderActionsButton,
-        ...actionsDrawerProps
+        open: actionsOpen,
+        anchor: actionsAnchor,
     } = useActionsDrawer(courseName);
+
+    const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
+    const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
 
     const upVoteButtonTooltip = !!verificationRequiredTooltip
         ? verificationRequiredTooltip
@@ -254,9 +267,9 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             <span>
                 <IconButtonLink
                     href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}
-                    color={isMobile ? 'secondary' : 'default'}
                     icon={CloudUploadOutlined}
                     disabled={verified === false}
+                    {...iconButtonProps}
                 />
             </span>
         </Tooltip>
@@ -347,8 +360,8 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const renderActions = (
         <StyledList>
             {renderShareAction}
-            {renderReportAction}
             {renderDeleteAction}
+            {renderReportAction}
         </StyledList>
     );
 
