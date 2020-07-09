@@ -73,17 +73,21 @@ const RegisterPage: NextPage<I18nProps> = () => {
         general: '',
     };
 
-    const onCompleted = ({ register, login }: RegisterMutation): void => {
+    const onCompleted = async ({ register, login }: RegisterMutation): Promise<void> => {
         if (!!register && !!register.errors) {
             handleMutationErrors(register.errors);
         } else if (!!login && !!login.errors) {
             handleMutationErrors(login.errors);
         } else if (!!login && !!login.token && !!login.user && !!register && !!register.message) {
-            setTokenCookie(login.token);
-            resetForm();
-            toggleNotification(register.message);
-            setUser(login.user as UserObjectType);
-            Router.push('/');
+            try {
+                await setTokenCookie(login.token); // We need to wait until the asynchronous middleware for removing the cookie has been called before the response is sent to the client.
+                resetForm();
+                toggleNotification(register.message);
+                setUser(login.user as UserObjectType);
+                Router.push('/');
+            } catch {
+                unexpectedError();
+            }
         } else {
             unexpectedError();
         }

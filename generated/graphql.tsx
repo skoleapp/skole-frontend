@@ -1190,6 +1190,69 @@ export type DeleteResourceMutation = (
   )> }
 );
 
+export type MarkSingleActivityReadMutationVariables = {
+  id?: Maybe<Scalars['ID']>;
+  read?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MarkSingleActivityReadMutation = (
+  { __typename?: 'Mutation' }
+  & { markActivityRead?: Maybe<(
+    { __typename?: 'MarkActivityReadMutationPayload' }
+    & { errors?: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>>, activity?: Maybe<(
+      { __typename?: 'ActivityObjectType' }
+      & Pick<ActivityObjectType, 'description' | 'read'>
+      & { targetUser?: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+      )>, course?: Maybe<(
+        { __typename?: 'CourseObjectType' }
+        & Pick<CourseObjectType, 'id'>
+      )>, resource?: Maybe<(
+        { __typename?: 'ResourceObjectType' }
+        & Pick<ResourceObjectType, 'id'>
+      )>, comment?: Maybe<(
+        { __typename?: 'CommentObjectType' }
+        & Pick<CommentObjectType, 'id'>
+      )> }
+    )> }
+  )> }
+);
+
+export type MarkAllActivitiesAsReadMutationVariables = {};
+
+
+export type MarkAllActivitiesAsReadMutation = (
+  { __typename?: 'Mutation' }
+  & { markAllActivitiesRead?: Maybe<(
+    { __typename?: 'MarkAllActivitiesReadMutation' }
+    & { errors?: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>>, activity?: Maybe<Array<Maybe<(
+      { __typename?: 'ActivityObjectType' }
+      & Pick<ActivityObjectType, 'description' | 'read'>
+      & { targetUser?: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+      )>, course?: Maybe<(
+        { __typename?: 'CourseObjectType' }
+        & Pick<CourseObjectType, 'id'>
+      )>, resource?: Maybe<(
+        { __typename?: 'ResourceObjectType' }
+        & Pick<ResourceObjectType, 'id'>
+      )>, comment?: Maybe<(
+        { __typename?: 'CommentObjectType' }
+        & Pick<CommentObjectType, 'id'>
+      )> }
+    )>>> }
+  )> }
+);
+
 export type UserMeQueryVariables = {};
 
 
@@ -2275,6 +2338,112 @@ export function useDeleteResourceMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type DeleteResourceMutationHookResult = ReturnType<typeof useDeleteResourceMutation>;
 export type DeleteResourceMutationResult = ApolloReactCommon.MutationResult<DeleteResourceMutation>;
 export type DeleteResourceMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteResourceMutation, DeleteResourceMutationVariables>;
+export const MarkSingleActivityReadDocument = gql`
+    mutation MarkSingleActivityRead($id: ID, $read: Boolean) {
+  markActivityRead(input: {id: $id, read: $read}) {
+    errors {
+      field
+      messages
+    }
+    activity {
+      description
+      read
+      targetUser {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+      }
+      resource {
+        id
+      }
+      comment {
+        id
+      }
+    }
+  }
+}
+    `;
+export type MarkSingleActivityReadMutationFn = ApolloReactCommon.MutationFunction<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>;
+
+/**
+ * __useMarkSingleActivityReadMutation__
+ *
+ * To run a mutation, you first call `useMarkSingleActivityReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkSingleActivityReadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markSingleActivityReadMutation, { data, loading, error }] = useMarkSingleActivityReadMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      read: // value for 'read'
+ *   },
+ * });
+ */
+export function useMarkSingleActivityReadMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>) {
+        return ApolloReactHooks.useMutation<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>(MarkSingleActivityReadDocument, baseOptions);
+      }
+export type MarkSingleActivityReadMutationHookResult = ReturnType<typeof useMarkSingleActivityReadMutation>;
+export type MarkSingleActivityReadMutationResult = ApolloReactCommon.MutationResult<MarkSingleActivityReadMutation>;
+export type MarkSingleActivityReadMutationOptions = ApolloReactCommon.BaseMutationOptions<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>;
+export const MarkAllActivitiesAsReadDocument = gql`
+    mutation MarkAllActivitiesAsRead {
+  markAllActivitiesRead {
+    errors {
+      field
+      messages
+    }
+    activity {
+      description
+      read
+      targetUser {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+      }
+      resource {
+        id
+      }
+      comment {
+        id
+      }
+    }
+  }
+}
+    `;
+export type MarkAllActivitiesAsReadMutationFn = ApolloReactCommon.MutationFunction<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>;
+
+/**
+ * __useMarkAllActivitiesAsReadMutation__
+ *
+ * To run a mutation, you first call `useMarkAllActivitiesAsReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkAllActivitiesAsReadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markAllActivitiesAsReadMutation, { data, loading, error }] = useMarkAllActivitiesAsReadMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMarkAllActivitiesAsReadMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>) {
+        return ApolloReactHooks.useMutation<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>(MarkAllActivitiesAsReadDocument, baseOptions);
+      }
+export type MarkAllActivitiesAsReadMutationHookResult = ReturnType<typeof useMarkAllActivitiesAsReadMutation>;
+export type MarkAllActivitiesAsReadMutationResult = ApolloReactCommon.MutationResult<MarkAllActivitiesAsReadMutation>;
+export type MarkAllActivitiesAsReadMutationOptions = ApolloReactCommon.BaseMutationOptions<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>;
 export const UserMeDocument = gql`
     query UserMe {
   userMe {

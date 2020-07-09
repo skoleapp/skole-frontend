@@ -18,7 +18,6 @@ interface Props extends I18nProps {
 const ActivityPage: NextPage<Props> = () => {
     const { t } = useTranslation();
     const { user } = useAuthContext();
-    const renderCardContent = !!user && <ActivityList user={user} />;
 
     const layoutProps = {
         seoProps: {
@@ -29,7 +28,7 @@ const ActivityPage: NextPage<Props> = () => {
             header: t('activity:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent,
+        renderCardContent: <ActivityList />,
         desktopHeader: t('activity:header'),
         fullSize: true,
     };

@@ -276,3 +276,57 @@ mutation DeleteResource($id: ID) {
         }
     }
 }
+
+mutation MarkSingleActivityRead($id: ID, $read: Boolean) {
+    markActivityRead(input: { id: $id, read: $read }) {
+        errors {
+            field
+            messages
+        }
+        activity {
+            description
+            read
+            targetUser {
+                id
+                username
+                avatarThumbnail
+            }
+            course {
+                id
+            }
+            resource {
+                id
+            }
+            comment {
+                id
+            }
+        }
+    }
+}
+
+mutation MarkAllActivitiesAsRead {
+    markAllActivitiesRead {
+        errors {
+            field
+            messages
+        }
+        activity {
+            description
+            read
+            targetUser {
+                id
+                username
+                avatarThumbnail
+            }
+            course {
+                id
+            }
+            resource {
+                id
+            }
+            comment {
+                id
+            }
+        }
+    }
+}

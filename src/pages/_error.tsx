@@ -2,4 +2,5 @@ import React from 'react';
 
 import { ErrorLayout } from '../components';
 
-export default (): JSX.Element => <ErrorLayout />;
+const ErrorPage = (): JSX.Element => <ErrorLayout />;
+export default ErrorPage;

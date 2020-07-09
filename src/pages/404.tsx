@@ -2,4 +2,5 @@ import React from 'react';
 
 import { NotFoundLayout } from '../components';
 
-export default (): JSX.Element => <NotFoundLayout />;
+const NotFoundPage = (): JSX.Element => <NotFoundLayout />;
+export default NotFoundPage;
