@@ -12,10 +12,10 @@ interface Request extends IncomingMessage {
 export default (req: Request, res: ServerResponse): void => {
     const { token } = JSON.parse(req.body);
 
+    // Here we must not set the httpOnly option as we want the cookie to be accessible through JavaScript in the client side too.
     const cookie = serialize(TOKEN_NAME, token, {
         maxAge: MAX_AGE,
         expires: new Date(Date.now() + MAX_AGE * 1000),
-        httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         path: '/',
         sameSite: 'lax',
