@@ -4,7 +4,7 @@ import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { StyledHeaderText } from './StyledHeaderText';
+import { StyledHeaderText } from '..';
 
 interface Props {
     text?: string;

@@ -1,13 +1,13 @@
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { useAuthContext } from 'context';
 import { UserMeDocument } from 'generated/graphql';
+import { Router } from 'i18n';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import { useEffect } from 'react';
 import React from 'react';
 
-import { useAuthContext } from '../context';
-import { Router } from '../i18n';
-import { initApolloClient } from './apollo';
+import { initApolloClient } from '.';
 
 // Sync authentication between pages -> automatically redirect to login if multiple browser windows are open.
 // Wrap all pages that require authentication with this.

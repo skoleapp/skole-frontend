@@ -1,21 +1,20 @@
 import { Box, Divider } from '@material-ui/core';
 import { LibraryAddOutlined } from '@material-ui/icons';
+import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from 'components';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
+import { useAlerts, useForm, useLanguageSelector } from 'hooks';
+import { includeDefaultNamespaces, Router } from 'i18n';
+import { setTokenCookie, withNoAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { I18nProps } from 'types';
 import * as Yup from 'yup';
-
-import { LoginMutation, useLoginMutation, UserObjectType } from '../../generated/graphql';
-import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
-import { useAuthContext, useNotificationsContext } from '../context';
-import { includeDefaultNamespaces, Router } from '../i18n';
-import { setTokenCookie, withNoAuth, withUserAgent } from '../lib';
-import { I18nProps } from '../types';
-import { useAlerts, useForm, useLanguageSelector } from '../utils';
 
 const initialValues = {
     usernameOrEmail: '',

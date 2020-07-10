@@ -15,9 +15,9 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { breakpoints } from 'styles';
 
-import { breakpoints } from '../../styles';
-import { TextLink } from '../shared';
+import { TextLink } from '..';
 
 export const SkoleGDPR: React.FC = () => {
     const [consent, setConsent] = useState(true);

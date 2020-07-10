@@ -1,9 +1,9 @@
 import { CardContent, CardHeader, Grid } from '@material-ui/core';
+import { useDeviceContext } from 'context';
 import React from 'react';
+import { LayoutProps } from 'types';
 
 import { StyledCard } from '..';
-import { useDeviceContext } from '../../context';
-import { LayoutProps } from '../../types';
 import { MainLayout } from '.';
 
 interface Props extends LayoutProps {

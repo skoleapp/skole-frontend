@@ -1,28 +1,12 @@
 import { Box, Grid, ListItemText, MenuItem, Tab } from '@material-ui/core';
 import { CloudDownloadOutlined, DeleteOutline, PrintOutlined } from '@material-ui/icons';
-import { useConfirm } from 'material-ui-confirm';
-import { GetServerSideProps, NextPage } from 'next';
-import Router from 'next/router';
-import * as R from 'ramda';
-import React, { SyntheticEvent, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-
 import {
-    CommentObjectType,
-    DeleteResourceMutation,
-    ResourceDetailDocument,
-    ResourceObjectType,
-    useDeleteResourceMutation,
-    UserObjectType,
-    VoteObjectType,
-} from '../../../generated/graphql';
-import {
+    CustomBottomNavbarContainer,
     DiscussionHeader,
     DrawModeButton,
     DrawModeControls,
     InfoModalContent,
     MainLayout,
-    NavbarContainer,
     NotFoundLayout,
     PDFViewer,
     ResourceToolbar,
@@ -34,18 +18,34 @@ import {
     StyledTabs,
     TextLink,
     TopLevelCommentThread,
-} from '../../components';
+} from 'components';
 import {
     useAuthContext,
     useCommentModalContext,
     useDeviceContext,
     useNotificationsContext,
     usePDFViewerContext,
-} from '../../context';
-import { includeDefaultNamespaces } from '../../i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
-import { I18nProps, MaxWidth } from '../../types';
-import { mediaURL, useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useTabs, useVotes } from '../../utils';
+} from 'context';
+import {
+    CommentObjectType,
+    DeleteResourceMutation,
+    ResourceDetailDocument,
+    ResourceObjectType,
+    useDeleteResourceMutation,
+    UserObjectType,
+    VoteObjectType,
+} from 'generated';
+import { useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useTabs, useVotes } from 'hooks';
+import { includeDefaultNamespaces } from 'i18n';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { useConfirm } from 'material-ui-confirm';
+import { GetServerSideProps, NextPage } from 'next';
+import Router from 'next/router';
+import * as R from 'ramda';
+import React, { SyntheticEvent, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nProps, MaxWidth } from 'types';
+import { mediaURL } from 'utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -264,19 +264,21 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 
     const renderBottomNavbarLeft = (
         <StyledBottomNavigation>
-            <NavbarContainer>{drawMode ? renderDrawModeControls : renderPreviewBottomNavbarContent}</NavbarContainer>
+            <CustomBottomNavbarContainer>
+                {drawMode ? renderDrawModeControls : renderPreviewBottomNavbarContent}
+            </CustomBottomNavbarContainer>
         </StyledBottomNavigation>
     );
 
     const renderBottomNavbarRight = (
         <StyledBottomNavigation>
-            <NavbarContainer>
+            <CustomBottomNavbarContainer>
                 <Grid container justify="flex-end">
                     {renderStarButton}
                     {renderUpVoteButton}
                     {renderDownVoteButton}
                 </Grid>
-            </NavbarContainer>
+            </CustomBottomNavbarContainer>
         </StyledBottomNavigation>
     );
 

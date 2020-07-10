@@ -1,7 +1,6 @@
 import { serialize } from 'cookie';
 import { IncomingMessage, ServerResponse } from 'http';
-
-import { TOKEN_NAME } from '../../lib';
+import { TOKEN_NAME } from 'utils';
 
 // A middleware for removing token cookie in request headers.
 export default (_: IncomingMessage, res: ServerResponse): void => {

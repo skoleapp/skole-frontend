@@ -1,12 +1,10 @@
 import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
-import { useState } from 'react';
-import React from 'react';
+import { useAuthContext, useNotificationsContext } from 'context';
+import { PerformStarMutation, usePerformStarMutation } from 'generated';
+import { useResponsiveIconButtonProps } from 'hooks';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useResponsiveIconButtonProps } from 'src/utils';
-
-import { PerformStarMutation, usePerformStarMutation } from '../../../generated/graphql';
-import { useAuthContext, useNotificationsContext } from '../../context';
 
 interface Props extends IconButtonProps {
     starred: boolean;

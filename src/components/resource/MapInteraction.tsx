@@ -1,22 +1,13 @@
 import { Box } from '@material-ui/core';
+import { useDeviceContext, usePDFViewerContext } from 'context';
+import { useStateRef } from 'hooks';
+import { getClampedScale, getCoordChange, getMidPoint, getTouchDistance, getTouchPoint } from 'lib';
 import throttle from 'lodash.throttle';
 import React, { useEffect, useState } from 'react';
-import {
-    defaultScale,
-    defaultTranslation,
-    getClampedScale,
-    getCoordChange,
-    getMidPoint,
-    getTouchDistance,
-    getTouchPoint,
-    maxScale,
-    minScale,
-} from 'src/lib';
-import { PDFTranslation } from 'src/types';
-import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
+import { PDFTranslation } from 'types';
+import { DEFAULT_SCALE, DEFAULT_TRANSLATION, MAX_SCALE, MIN_SCALE } from 'utils';
 
-import { useDeviceContext, usePDFViewerContext } from '../../context';
 import { MapControls } from '.';
 
 interface StartPointersInfo {
@@ -31,8 +22,8 @@ export const MapInteraction: React.FC = ({ children }) => {
     const isMobile = useDeviceContext();
     const { drawMode, setRotate, controlsDisabled, setPageNumber, pageNumberInputRef } = usePDFViewerContext();
     const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
-    const [scale, setScale] = useState(defaultScale);
-    const [translation, setTranslation] = useState(defaultTranslation);
+    const [scale, setScale] = useState(DEFAULT_SCALE);
+    const [translation, setTranslation] = useState(DEFAULT_TRANSLATION);
     const [ctrlKey, setCtrlKey] = useState(false);
     const [fullscreen, setFullscreen] = useState(true);
     const [transformContainerClasses, setTransformContainerClasses] = useState('');
@@ -101,7 +92,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         const dist1 = getTouchDistance(newTouches[0], newTouches[1]);
         const scaleChange = dist1 / dist0;
         const targetScale = startScale + (scaleChange - 1) * startScale;
-        const newScale = getClampedScale(minScale, targetScale, maxScale);
+        const newScale = getClampedScale(targetScale);
         const scaleRatio = newScale / startScale;
 
         // Calculate mid points.
@@ -159,7 +150,7 @@ export const MapInteraction: React.FC = ({ children }) => {
             setFullscreen(false);
             e.preventDefault(); // Prevent scrolling.
             const scaleChange = 2 ** (e.deltaY * 0.002);
-            const newScale = getClampedScale(minScale, scale + (1 - scaleChange), maxScale);
+            const newScale = getClampedScale(scale + (1 - scaleChange));
             setScale(newScale);
             const mapContainerNode = getMapContainerNode();
             mapContainerNode.scrollLeft = (mapContainerNode.scrollWidth - mapContainerNode.clientWidth) / 2; // Automatically scroll to center.
@@ -195,7 +186,7 @@ export const MapInteraction: React.FC = ({ children }) => {
             if (isPinchAction) {
                 e.preventDefault(); // Prevent scrolling.
                 scaleFromMultiTouch(e);
-            } else if (e.touches.length === 1 && scale > defaultScale) {
+            } else if (e.touches.length === 1 && scale > DEFAULT_SCALE) {
                 e.preventDefault(); // Prevent scrolling.
                 onDrag(e.touches[0]);
             }
@@ -206,9 +197,9 @@ export const MapInteraction: React.FC = ({ children }) => {
         setPointerState(e.touches);
 
         // Reset original scale/translation if pinched out.
-        if (scale < defaultScale) {
-            setScale(defaultScale);
-            setTranslation(defaultTranslation);
+        if (scale < DEFAULT_SCALE) {
+            setScale(DEFAULT_SCALE);
+            setTranslation(DEFAULT_TRANSLATION);
             setTransformContainerClasses('bounce-back');
         }
     };
@@ -217,19 +208,19 @@ export const MapInteraction: React.FC = ({ children }) => {
         let scale;
 
         if (fullscreen) {
-            scale = minScale;
+            scale = MIN_SCALE;
         } else {
-            scale = defaultScale;
+            scale = DEFAULT_SCALE;
         }
 
         setFullscreen(!fullscreen);
         setScale(scale);
-        setTranslation(defaultTranslation);
+        setTranslation(DEFAULT_TRANSLATION);
     };
 
     const handleScale = (newScale: number): void => {
         setFullscreen(false);
-        newScale == defaultScale && setFullscreen(true);
+        newScale == DEFAULT_SCALE && setFullscreen(true);
         setScale(newScale);
     };
 
@@ -276,15 +267,15 @@ export const MapInteraction: React.FC = ({ children }) => {
     // When entering draw mode, reset scale/translation.
     useEffect(() => {
         if (drawMode) {
-            setScale(defaultScale);
-            setTranslation(defaultTranslation);
+            setScale(DEFAULT_SCALE);
+            setTranslation(DEFAULT_TRANSLATION);
             setRotate(0);
             setFullscreen(true);
         }
     }, [drawMode]);
 
-    const handleScaleUpButtonClick = (): void => handleScale(scale < maxScale ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
-    const handleScaleDownButtonClick = (): void => handleScale(scale > minScale ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
+    const handleScaleUpButtonClick = (): void => handleScale(scale < MAX_SCALE ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
+    const handleScaleDownButtonClick = (): void => handleScale(scale > MIN_SCALE ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
     const cursor = !drawMode && ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
     const overflow = drawMode && isMobile ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
     const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.

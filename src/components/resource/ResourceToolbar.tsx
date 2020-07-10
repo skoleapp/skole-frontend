@@ -1,9 +1,9 @@
 import { Box, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
 import { CloudDownloadOutlined, PrintOutlined, RotateRightOutlined } from '@material-ui/icons';
+import { usePDFViewerContext } from 'context';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePDFViewerContext } from 'src/context';
 import styled from 'styled-components';
 
 import { DrawModeButton, DrawModeControls } from '.';

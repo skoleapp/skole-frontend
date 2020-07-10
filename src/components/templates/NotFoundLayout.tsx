@@ -2,8 +2,8 @@ import { CardHeader } from '@material-ui/core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { StyledCard } from '../shared';
-import { MainLayout } from './MainLayout';
+import { StyledCard } from '..';
+import { MainLayout } from '.';
 
 export const NotFoundLayout: React.FC = () => {
     const { t } = useTranslation();

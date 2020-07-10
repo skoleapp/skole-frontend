@@ -1,4 +1,6 @@
 import { Box, Typography } from '@material-ui/core';
+import { FormSubmitSection, SettingsLayout } from 'components';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik } from 'formik';
 import {
     ResendVerificationEmailMutation,
@@ -6,18 +8,15 @@ import {
     useVerifyAccountMutation,
     VerifyAccountMutation,
 } from 'generated/graphql';
+import { useForm } from 'hooks';
+import { includeDefaultNamespaces } from 'i18n';
+import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { FormSubmitSection, SettingsLayout } from '../../components';
-import { useAuthContext, useNotificationsContext } from '../../context';
-import { includeDefaultNamespaces } from '../../i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
-import { I18nProps } from '../../types';
-import { useForm } from '../../utils';
+import { I18nProps } from 'types';
 
 const VerifyAccountPage: NextPage<I18nProps> = () => {
     const {

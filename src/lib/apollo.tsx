@@ -4,15 +4,15 @@ import { ApolloLink, GraphQLRequest } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpConfig } from 'apollo-link-http-common';
 import { createUploadLink } from 'apollo-upload-client';
+import { env } from 'config';
 import { IncomingMessage } from 'http';
+import { i18n } from 'i18n';
 import fetch from 'isomorphic-unfetch';
 import * as R from 'ramda';
 import { useMemo } from 'react';
-import { SSRContext } from 'src/types';
+import { SSRContext } from 'types';
 
-import { env } from '../config';
-import { i18n } from '../i18n';
-import { getTokenCookie } from './auth-cookies';
+import { getTokenCookie } from '.';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 

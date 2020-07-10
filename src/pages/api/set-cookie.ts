@@ -1,7 +1,6 @@
 import { serialize } from 'cookie';
 import { IncomingMessage, ServerResponse } from 'http';
-
-import { MAX_AGE, TOKEN_NAME } from '../../lib';
+import { MAX_AGE, TOKEN_NAME } from 'utils';
 
 interface Request extends IncomingMessage {
     body: string;

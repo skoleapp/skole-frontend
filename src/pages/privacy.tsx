@@ -1,11 +1,10 @@
+import { SettingsLayout } from 'components';
+import { includeDefaultNamespaces } from 'i18n';
+import { withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { withUserAgent } from 'src/lib';
-import { I18nProps } from 'src/types';
-
-import { SettingsLayout } from '../components';
-import { includeDefaultNamespaces } from '../i18n';
+import { I18nProps } from 'types';
 
 const PrivacyPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();

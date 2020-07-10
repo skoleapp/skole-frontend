@@ -1,13 +1,13 @@
 import { Box, Typography } from '@material-ui/core';
+import { usePDFViewerContext } from 'context';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import React, { RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
-import { breakpoints } from 'src/styles';
 import styled from 'styled-components';
+import { breakpoints } from 'styles';
 
-import { usePDFViewerContext } from '../../context';
-import { LoadingBox } from '../shared';
+import { LoadingBox } from '..';
 import { AreaSelection, MapInteraction } from '.';
 
 interface Props {

@@ -1,9 +1,9 @@
 import { Fade, Paper } from '@material-ui/core';
+import { useDiscussionContext } from 'context';
 import React from 'react';
-import { useDiscussionContext } from 'src/context';
 
 import { ModalHeader } from '..';
-import { ReplyCommentThread, StyledModal } from '../shared';
+import { ReplyCommentThread, StyledModal } from '..';
 
 export const CommentThreadModal: React.FC = () => {
     const { topComment, toggleTopComment } = useDiscussionContext();

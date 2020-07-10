@@ -1,10 +1,4 @@
 import { Box, Tab } from '@material-ui/core';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-
-import { CourseObjectType, ResourceObjectType, StarredDocument, UserObjectType } from '../../../generated/graphql';
 import {
     CourseTableBody,
     FrontendPaginatedTable,
@@ -13,11 +7,16 @@ import {
     ResourceTableBody,
     SettingsLayout,
     StyledTabs,
-} from '../../components';
-import { includeDefaultNamespaces } from '../../i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
-import { I18nProps } from '../../types';
-import { useFrontendPagination, useTabs } from '../../utils';
+} from 'components';
+import { CourseObjectType, ResourceObjectType, StarredDocument, UserObjectType } from 'generated';
+import { useFrontendPagination, useTabs } from 'hooks';
+import { includeDefaultNamespaces } from 'i18n';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nProps } from 'types';
 
 interface Props extends I18nProps {
     userMe?: UserObjectType | null;

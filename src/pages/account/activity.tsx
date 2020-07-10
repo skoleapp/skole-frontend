@@ -1,23 +1,21 @@
 import { ListItemText, MenuItem } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
-import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ActivityList, StyledDrawer, StyledList } from 'src/components';
-import { useAuthContext, useNotificationsContext } from 'src/context';
-import { useActionsDrawer } from 'src/utils';
-
+import { ActivityList, NotFoundLayout, SettingsLayout, StyledDrawer, StyledList } from 'components';
+import { useAuthContext, useNotificationsContext } from 'context';
 import {
     ActivityObjectType,
     MarkAllActivitiesAsReadMutation,
     useMarkAllActivitiesAsReadMutation,
     UserObjectType,
-} from '../../../generated/graphql';
-import { NotFoundLayout, SettingsLayout } from '../../components';
-import { includeDefaultNamespaces } from '../../i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
-import { I18nProps } from '../../types';
+} from 'generated';
+import { useActionsDrawer } from 'hooks';
+import { includeDefaultNamespaces } from 'i18n';
+import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
+import React, { SyntheticEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nProps } from 'types';
 
 interface Props extends I18nProps {
     userMe?: UserObjectType | null;

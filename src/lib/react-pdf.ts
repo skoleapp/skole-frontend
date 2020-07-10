@@ -1,11 +1,7 @@
-import { LTWH, PDFTranslation } from 'src/types';
+import { LTWH, PDFTranslation } from 'types';
+import { MAX_SCALE, MIN_SCALE } from 'utils';
 
 // Map interaction helpers.
-
-export const defaultTranslation = { x: 0, y: 0 };
-export const defaultScale = 1.0;
-export const minScale = 0.75;
-export const maxScale = 1.75;
 
 // Return touch point on element.
 export const getTouchPoint = (t: Touch): PDFTranslation => ({ x: t.clientX, y: t.clientY });
@@ -25,7 +21,7 @@ export const getTouchDistance = (t0: Touch, t1: Touch): number => {
 };
 
 // Get clamped scale if maximum scale has been exceeded.
-export const getClampedScale = (min: number, value: number, max: number): number => Math.max(min, Math.min(value, max));
+export const getClampedScale = (value: number): number => Math.max(MIN_SCALE, Math.min(value, MAX_SCALE));
 
 // Get mid point between translation points.
 export const getMidPoint = (p1: PDFTranslation, p2: PDFTranslation): PDFTranslation => ({

@@ -1,16 +1,4 @@
 import { Box, Grid, Tab, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDeviceContext } from 'src/context';
-
-import {
-    CourseObjectType,
-    SchoolDetailDocument,
-    SchoolObjectType,
-    SubjectObjectType,
-} from '../../../generated/graphql';
 import {
     CourseTableBody,
     FrontendPaginatedTable,
@@ -23,11 +11,17 @@ import {
     StyledList,
     StyledTabs,
     TextLink,
-} from '../../components';
-import { includeDefaultNamespaces, Link } from '../../i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
-import { I18nProps } from '../../types';
-import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useTabs } from '../../utils';
+} from 'components';
+import { useDeviceContext } from 'context';
+import { CourseObjectType, SchoolDetailDocument, SchoolObjectType, SubjectObjectType } from 'generated';
+import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useTabs } from 'hooks';
+import { includeDefaultNamespaces, Link } from 'i18n';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nProps } from 'types';
 
 interface Props extends I18nProps {
     school?: SchoolObjectType;

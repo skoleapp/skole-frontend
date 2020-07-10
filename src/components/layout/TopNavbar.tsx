@@ -18,20 +18,18 @@ import {
     NotificationsOutlined,
     StarBorderOutlined,
 } from '@material-ui/icons';
+import { useAuthContext, useDeviceContext } from 'context';
+import { Link, Router } from 'i18n';
 import * as R from 'ramda';
 import React, { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthContext, useDeviceContext } from 'src/context';
 import styled from 'styled-components';
+import { breakpoints } from 'styles';
+import { TopNavbarProps } from 'types';
+import { mediaURL } from 'utils';
 
-import { Router } from '../../i18n';
-import { Link } from '../../i18n';
-import { breakpoints } from '../../styles';
-import { TopNavbarProps } from '../../types';
-import { mediaURL } from '../../utils';
-import { ActivityList, ButtonLink, IconButtonLink, StyledHeaderText } from '../shared';
-import { Logo } from './Logo';
-import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
+import { ActivityList, ButtonLink, IconButtonLink, Logo, StyledHeaderText } from '..';
+import { TopNavbarSearchWidget } from '.';
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
     header,

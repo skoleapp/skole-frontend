@@ -2,14 +2,13 @@ import { ContainerProps, DrawerProps, TablePaginationProps } from '@material-ui/
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient, { ApolloError } from 'apollo-client';
 import { Formik, FormikActions } from 'formik';
+import { CommentObjectType, ErrorType, SchoolObjectType, SubjectObjectType, UserObjectType } from 'generated';
 import Maybe from 'graphql/tsutils/Maybe';
 import { IncomingMessage, ServerResponse } from 'http';
 import { NextPageContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Dispatch, MutableRefObject, SetStateAction, SyntheticEvent } from 'react';
 import { UrlObject } from 'url';
-
-import { CommentObjectType, ErrorType, SchoolObjectType, UserObjectType } from '../generated/graphql';
 
 export interface I18nProps {
     namespacesRequired: string[];
@@ -220,4 +219,25 @@ export interface LTWH {
 export interface PDFTranslation {
     x: number;
     y: number;
+}
+
+export interface CustomTableHeadProps {
+    titleLeft?: string;
+    titleLeftDesktop?: string;
+    titleRight?: string;
+}
+
+export interface CommonPaginatedTableProps {
+    tableHeadProps: CustomTableHeadProps;
+    renderTableBody: JSX.Element;
+}
+
+export interface UpdateProfileFormValues {
+    username: string;
+    email: string;
+    title: string;
+    bio: string;
+    avatar: string;
+    school: SchoolObjectType | null;
+    subject: SubjectObjectType | null;
 }

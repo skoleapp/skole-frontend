@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 
-import { breakpoints } from './breakpoints';
+import { breakpoints } from '.';
 
 export const nProgress = css`
     #nprogress {

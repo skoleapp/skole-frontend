@@ -1,8 +1,8 @@
+import { useDrawer, useSettings } from 'hooks';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useDrawer, useSettings } from '../../utils';
-import { ModalHeader, StyledDrawer } from '../shared';
+import { ModalHeader, StyledDrawer } from '..';
 
 export const SettingsModal: React.FC = () => {
     const { t } = useTranslation();

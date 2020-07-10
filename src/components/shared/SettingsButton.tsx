@@ -1,8 +1,7 @@
 import { IconButton, IconButtonProps } from '@material-ui/core';
 import { SettingsOutlined } from '@material-ui/icons';
+import { useSettingsContext } from 'context';
 import React, { forwardRef } from 'react';
-
-import { useSettingsContext } from '../../context';
 
 export const SettingsButton = forwardRef<HTMLButtonElement, IconButtonProps>((props, ref) => {
     const { toggleSettings } = useSettingsContext();

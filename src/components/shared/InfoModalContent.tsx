@@ -1,11 +1,11 @@
 import { Box, CardContent, Grid, Typography } from '@material-ui/core';
 import { UserObjectType } from 'generated/graphql';
+import { useMoment } from 'hooks';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMoment } from 'src/utils';
 
-import { TextLink } from './TextLink';
+import { TextLink } from '.';
 
 interface InfoItem {
     label: string;

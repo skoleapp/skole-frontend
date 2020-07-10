@@ -1,8 +1,8 @@
 import { Button, Grid, Typography } from '@material-ui/core';
 import { CancelOutlined, KeyboardArrowRightOutlined } from '@material-ui/icons';
+import { useCommentModalContext, useDeviceContext, usePDFViewerContext } from 'context';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCommentModalContext, useDeviceContext, usePDFViewerContext } from 'src/context';
 
 export const DrawModeControls: React.FC = () => {
     const { t } = useTranslation();

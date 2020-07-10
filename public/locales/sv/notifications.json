@@ -1,6 +1,5 @@
 {
     "signedOut": "Utloggad!",
-    "errorDownloadingResource": "Fel vid nedladdning!",
     "voteError": "Fel vid omröstning!",
     "starError": "Fel vid favorisering!",
     "deleteCommentError": "Fel vid radering av kommentar!",

@@ -12,7 +12,25 @@ import {
     StarBorderOutlined,
 } from '@material-ui/icons';
 
-export const menuItems = {
+// Token cookie.
+
+export const TOKEN_NAME = 'token';
+export const MAX_AGE = 60 * 60 * 24 * 30; // 1 month.
+
+// Analytics.
+
+export const GA_TRACKING_ID = 'UA-159917631-1';
+
+// PDF Viewer.
+
+export const DEFAULT_TRANSLATION = { x: 0, y: 0 };
+export const DEFAULT_SCALE = 1.0;
+export const MIN_SCALE = 0.75;
+export const MAX_SCALE = 1.75;
+
+// Settings.
+
+export const MENU_ITEMS = {
     account: [
         {
             icon: NotificationsOutlined,

@@ -1,6 +1,5 @@
 {
     "signedOut": "Kirjauduttu ulos!",
-    "errorDownloadingResource": "Virhe ladattaessa tiedostoa!",
     "voteError": "Virhe äänestyksessä!",
     "starError": "Virhe merkittäessä tähdellä!",
     "deleteCommentError": "Virhe poistettaessa kommenttia!",

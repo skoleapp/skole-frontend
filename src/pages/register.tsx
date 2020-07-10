@@ -1,14 +1,9 @@
 import { Box, Divider, FormControl, Typography } from '@material-ui/core';
 import { HowToRegOutlined } from '@material-ui/icons';
+import { AutoCompleteField, ButtonLink, FormLayout, FormSubmitSection, TextLink } from 'components';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import * as R from 'ramda';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import * as Yup from 'yup';
-
 import {
     RegisterMutation,
     SchoolObjectType,
@@ -17,13 +12,17 @@ import {
     SubjectsDocument,
     useRegisterMutation,
     UserObjectType,
-} from '../../generated/graphql';
-import { AutoCompleteField, ButtonLink, FormLayout, FormSubmitSection, TextLink } from '../components';
-import { useAuthContext, useNotificationsContext } from '../context';
-import { includeDefaultNamespaces, Router } from '../i18n';
-import { setTokenCookie, withNoAuth, withUserAgent } from '../lib';
-import { I18nProps } from '../types';
-import { useForm, useLanguageSelector } from '../utils';
+} from 'generated';
+import { useForm, useLanguageSelector } from 'hooks';
+import { includeDefaultNamespaces, Router } from 'i18n';
+import { setTokenCookie, withNoAuth, withUserAgent } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nProps } from 'types';
+import * as Yup from 'yup';
 
 export interface RegisterFormValues {
     username: string;

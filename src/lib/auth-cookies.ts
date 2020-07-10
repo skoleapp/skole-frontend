@@ -1,9 +1,7 @@
 import { parse } from 'cookie';
 import { IncomingMessage } from 'http';
 import * as R from 'ramda';
-
-export const TOKEN_NAME = 'token';
-export const MAX_AGE = 60 * 60 * 24 * 30; // 1 month.
+import { TOKEN_NAME } from 'utils';
 
 // Call API route to set token cookie.
 export const setTokenCookie = (token: string): Promise<Response> =>

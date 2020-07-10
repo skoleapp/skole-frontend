@@ -1,9 +1,8 @@
 import { Box, InputBase } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
+import { useSearch } from 'hooks';
 import React from 'react';
 import styled from 'styled-components';
-
-import { useSearch } from '../../utils';
 
 export const TopNavbarSearchWidget: React.FC = () => {
     const { handleSubmit, inputProps } = useSearch();
