@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 
-import { breakpoints } from '.';
+import { breakpoints } from './breakpoints';
 
 export const nProgress = css`
     #nprogress {
@@ -18,10 +18,6 @@ export const nProgress = css`
         .peg {
             box-shadow: none;
             transform: none;
-        }
-
-        .spinner-icon {
-            display: none;
         }
     }
 `;

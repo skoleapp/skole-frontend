@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 
-import { colors } from '.';
+import { colors } from './colors';
 
 export const base = css`
     :root {

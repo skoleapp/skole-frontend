@@ -15,7 +15,7 @@ import {
     StarBorderOutlined,
 } from '@material-ui/icons';
 
-import { urls } from '.';
+import { urls } from './urls';
 
 // Token cookie.
 

@@ -1,6 +1,7 @@
 import { createMuiTheme } from '@material-ui/core';
 
-import { breakpointsNum, colors } from '.';
+import { breakpointsNum } from './breakpoints';
+import { colors } from './colors';
 
 export const theme = createMuiTheme({
     breakpoints: {
