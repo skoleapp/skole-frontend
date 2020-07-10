@@ -7,7 +7,7 @@
     "author": "Skole Team",
     "scripts": {
         "dev": "nodemon src/server.ts",
-        "build": "NODE_OPTIONS=--max_old_space_size=2048 next build && rimraf build && tsc --project tsconfig.server.json",
+        "build": "NODE_OPTIONS=--max_old_space_size=8192 next build && rimraf build && tsc --project tsconfig.server.json",
         "start": "NODE_ENV=production node build/server.js",
         "type-check": "tsc",
         "gen": "graphql-codegen --config codegen.yml",
@@ -44,7 +44,7 @@
         "material-ui-image": "3.2.2",
         "moment": "2.24.0",
         "morgan": "1.10.0",
-        "next": "9.3.5",
+        "next": "^9.4.5-canary.30",
         "next-cookies": "2.0.3",
         "next-i18next": "4.4.2",
         "next-pwa": "2.3.3",

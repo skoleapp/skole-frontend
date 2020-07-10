@@ -40,7 +40,7 @@ export const useSettings = (modal: boolean): UseSettings => {
 
     const handleLogoutClick = async (): Promise<void> => {
         !!modal && handleClose();
-        removeTokenCookie();
+        await removeTokenCookie(); // We need to wait until the asynchronous middleware for removing the cookie has been called before the response is sent to the client.
         toggleNotification(t('notifications:signedOut'));
         await apolloClient.resetStore();
         Router.push('/login');

@@ -51,15 +51,20 @@ const LoginPage: NextPage<I18nProps> = () => {
                 handleMutationErrors(login.errors);
             } else if (!!login.token && !!login.user && !!login.message) {
                 const { next } = query;
-                setTokenCookie(login.token);
-                resetForm();
-                toggleNotification(login.message);
-                setUser(login.user as UserObjectType);
 
-                if (!!next) {
-                    Router.push(next as string);
-                } else {
-                    Router.push('/');
+                try {
+                    await setTokenCookie(login.token); // We need to wait until the asynchronous middleware for setting the cookie has been called before the response is sent to the client.
+                    resetForm();
+                    toggleNotification(login.message);
+                    setUser(login.user as UserObjectType);
+
+                    if (!!next) {
+                        Router.push(next as string);
+                    } else {
+                        Router.push('/');
+                    }
+                } catch {
+                    unexpectedError();
                 }
             } else {
                 unexpectedError();

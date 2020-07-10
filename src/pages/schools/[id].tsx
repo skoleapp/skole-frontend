@@ -52,11 +52,26 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
     const { tabValue, handleTabChange } = useTabs();
     const { renderShareButton } = useShare(schoolName);
-    const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
 
-    const { renderActionsHeader, renderActionsButton, renderShareAction, ...actionsDrawerProps } = useActionsDrawer(
-        schoolName,
-    );
+    const {
+        renderInfoHeader,
+        renderInfoButton,
+        open: infoOpen,
+        anchor: infoAnchor,
+        onClose: handleCloseInfo,
+    } = useInfoDrawer();
+
+    const {
+        renderActionsHeader,
+        handleCloseActions,
+        renderActionsButton,
+        renderShareAction,
+        open: actionsOpen,
+        anchor: actionsAnchor,
+    } = useActionsDrawer(schoolName);
+
+    const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
+    const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
 
     const schoolTypeLink = {
         ...searchUrl,

@@ -4,15 +4,18 @@ import { Alert, Color } from '@material-ui/lab';
 import React from 'react';
 import { useState } from 'react';
 
+import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
+
 interface UseAlerts {
     renderAlert: (severity: Color, text: string) => JSX.Element;
 }
 
 export const useAlerts = (): UseAlerts => {
+    const { size } = useResponsiveIconButtonProps();
     const [open, setOpen] = useState(true);
 
     const renderAction = (
-        <IconButton color="inherit" size="small" onClick={(): void => setOpen(false)}>
+        <IconButton color="inherit" size={size} onClick={(): void => setOpen(false)}>
             <Close />
         </IconButton>
     );

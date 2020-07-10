@@ -18,6 +18,9 @@ query UserMe {
             name
         }
         activity {
+            id
+            description
+            read
             targetUser {
                 id
                 username
@@ -32,7 +35,6 @@ query UserMe {
             comment {
                 id
             }
-            description
         }
     }
 }

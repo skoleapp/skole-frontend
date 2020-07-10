@@ -4,17 +4,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNotificationsContext } from 'src/context';
 
+import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
+
 interface ShareData {
     title?: string;
     text?: string;
     url?: string;
 }
 
-interface ShareNavigator extends Navigator {
+interface ShareNavigator extends Omit<Navigator, 'share'> {
     share?: (data?: ShareData) => Promise<void>;
 }
 
-interface ShareNavigatorWindow extends Window {
+interface ShareNavigatorWindow extends Omit<Window, 'navigator'> {
     navigator: ShareNavigator;
 }
 
@@ -25,6 +27,7 @@ interface UseShare {
 
 export const useShare = (shareText?: string): UseShare => {
     const { t } = useTranslation();
+    const iconButtonProps = useResponsiveIconButtonProps();
     const { toggleNotification } = useNotificationsContext();
 
     const handleShare = async (): Promise<void> => {
@@ -50,7 +53,7 @@ export const useShare = (shareText?: string): UseShare => {
 
     const renderShareButton = (
         <Tooltip title={t('tooltips:share')}>
-            <IconButton onClick={handleShare}>
+            <IconButton onClick={handleShare} {...iconButtonProps}>
                 <ShareOutlined />
             </IconButton>
         </Tooltip>

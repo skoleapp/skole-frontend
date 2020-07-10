@@ -26,7 +26,7 @@ import { useDeviceContext } from 'src/context';
 
 import { Router } from '../../i18n';
 import { CustomTablePaginationProps, TextColor, TextVariant } from '../../types';
-import { getQueryWithPagination } from '../../utils';
+import { getQueryWithPagination, useResponsiveIconButtonProps } from '../../utils';
 import { StyledTable } from './StyledTable';
 
 interface CustomTableHeadProps {
@@ -76,6 +76,7 @@ const CustomTablePaginationActions = ({
     onChangePage,
 }: CustomTablePaginationActionsProps): JSX.Element => {
     const { t } = useTranslation();
+    const { size } = useResponsiveIconButtonProps();
     const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, 0);
     const handleBackButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page - 1);
     const handleNextButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page + 1);
@@ -88,14 +89,14 @@ const CustomTablePaginationActions = ({
         <Box display="flex" margin="0.5rem">
             <Tooltip title={t('tooltips:firstPage')}>
                 <span>
-                    <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
+                    <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size={size}>
                         <FirstPageOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
             <Tooltip title={t('tooltips:previousPage')}>
                 <span>
-                    <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
+                    <IconButton onClick={handleBackButtonClick} disabled={page === 0} size={size}>
                         <KeyboardArrowLeftOutlined />
                     </IconButton>
                 </span>
@@ -105,7 +106,7 @@ const CustomTablePaginationActions = ({
                     <IconButton
                         onClick={handleNextButtonClick}
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        size="small"
+                        size={size}
                     >
                         <KeyboardArrowRightOutlined />
                     </IconButton>
@@ -116,7 +117,7 @@ const CustomTablePaginationActions = ({
                     <IconButton
                         onClick={handleLastPageButtonClick}
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        size="small"
+                        size={size}
                     >
                         <LastPageOutlined />
                     </IconButton>

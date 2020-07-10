@@ -72,8 +72,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         renderShareAction,
         renderReportAction,
         renderActionsButton,
-        ...actionsDrawerProps
+        open,
+        anchor,
     } = useActionsDrawer();
+
+    const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
 
     const upVoteButtonTooltip = !!verificationRequiredTooltip
         ? verificationRequiredTooltip
@@ -207,7 +210,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         </>
     );
 
-    const renderAttachment = !!comment.attachment && !attachmentOnly && (
+    const renderAttachmentButton = !!comment.attachment && !attachmentOnly && (
         <Box marginLeft="0.25rem">
             <Tooltip title={t('tooltips:attachment')}>
                 <IconButton onClick={handleAttachmentClick}>
@@ -217,15 +220,6 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         </Box>
     );
 
-    const renderInfoSection = (
-        <Grid item xs={4}>
-            <Box display="flex" alignItems="center" height="100%">
-                {renderReplyCount}
-                {renderAttachment}
-            </Box>
-        </Grid>
-    );
-
     const renderCardContent = (
         <CardContent>
             <Grid container justify="space-between" alignItems="center">
@@ -233,7 +227,12 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
                 {renderVoteSection}
             </Grid>
             <Grid container>
-                {renderInfoSection}
+                <Grid item xs={4}>
+                    <Box display="flex" alignItems="center" height="100%">
+                        {renderReplyCount}
+                        {renderAttachmentButton}
+                    </Box>
+                </Grid>
                 <Grid container item xs={4} justify="center">
                     {renderActionsButton}
                 </Grid>
@@ -253,8 +252,8 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const renderActions = (
         <StyledList>
             {renderShareAction}
-            {renderReportAction}
             {renderDeleteAction}
+            {renderReportAction}
         </StyledList>
     );
 

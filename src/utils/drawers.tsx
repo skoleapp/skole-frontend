@@ -7,6 +7,7 @@ import { ModalHeader } from '../components';
 import { useDeviceContext } from '../context';
 import { UseDrawer } from '../types';
 import { useOpen } from './useOpen';
+import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
 import { useShare } from './useShare';
 
 export const useDrawer = (header?: string): UseDrawer => {
@@ -41,7 +42,7 @@ interface UseInfoDrawer extends DrawerProps {
 
 export const useInfoDrawer = (): UseInfoDrawer => {
     const { t } = useTranslation();
-    const isMobile = useDeviceContext();
+    const iconButtonProps = useResponsiveIconButtonProps();
 
     const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(
         t('common:info'),
@@ -49,7 +50,7 @@ export const useInfoDrawer = (): UseInfoDrawer => {
 
     const renderInfoButton = (
         <Tooltip title={t('tooltips:info')}>
-            <IconButton onClick={handleOpenInfo} color={isMobile ? 'secondary' : 'default'}>
+            <IconButton onClick={handleOpenInfo} {...iconButtonProps}>
                 <InfoOutlined />
             </IconButton>
         </Tooltip>
@@ -70,6 +71,7 @@ export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const { handleShare } = useShare(shareText);
+    const iconButtonProps = useResponsiveIconButtonProps();
 
     const {
         renderHeader: renderActionsHeader,
@@ -101,7 +103,7 @@ export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
 
     const renderActionsButton = (
         <Tooltip title={t('tooltips:actions')}>
-            <IconButton onClick={handleOpenActions} color={isMobile ? 'secondary' : 'default'}>
+            <IconButton onClick={handleOpenActions} {...iconButtonProps}>
                 <MoreHorizOutlined />
             </IconButton>
         </Tooltip>

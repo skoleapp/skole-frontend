@@ -6,11 +6,12 @@ import styled from 'styled-components';
 
 import { useAttachmentViewerContext } from '../../context';
 import { breakpoints } from '../../styles';
-import { mediaURL } from '../../utils';
+import { mediaURL, useResponsiveIconButtonProps } from '../../utils';
 
 export const AttachmentViewer: React.FC = () => {
     const { attachment, toggleAttachmentViewer } = useAttachmentViewerContext();
     const attachmentName = attachment && attachment.split('/').pop();
+    const { size } = useResponsiveIconButtonProps();
     const handleClose = (): void => toggleAttachmentViewer(null);
 
     return (
@@ -19,7 +20,7 @@ export const AttachmentViewer: React.FC = () => {
                 <Typography className="truncate" variant="subtitle1" color="secondary">
                     {attachmentName}
                 </Typography>
-                <IconButton onClick={handleClose} color="secondary" size="small">
+                <IconButton onClick={handleClose} size={size} color="secondary">
                     <CloseOutlined />
                 </IconButton>
             </Box>

@@ -79,20 +79,30 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { tabValue, setTabValue, handleTabChange } = useTabs();
     const { renderShareButton } = useShare(resourceTitle);
     const { commentModalOpen } = useCommentModalContext();
-    const { renderInfoHeader, renderInfoButton, ...infoDrawerProps } = useInfoDrawer();
     const { drawMode } = usePDFViewerContext();
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
     useCommentQuery(comments);
 
     const {
+        renderInfoHeader,
+        renderInfoButton,
+        open: infoOpen,
+        anchor: infoAnchor,
+        onClose: handleCloseInfo,
+    } = useInfoDrawer();
+
+    const {
         renderActionsHeader,
         handleCloseActions,
-        renderShareAction,
         renderReportAction,
         renderActionsButton,
-        ...actionsDrawerProps
+        open: actionsOpen,
+        anchor: actionsAnchor,
     } = useActionsDrawer(resourceTitle);
+
+    const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
+    const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
 
     const upVoteButtonTooltip = !!verificationRequiredTooltip
         ? verificationRequiredTooltip
@@ -379,7 +389,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
 
     const renderActions = (
         <StyledList>
-            {renderShareAction}
             {renderReportAction}
             {renderDeleteAction}
             {renderDownloadAction}
@@ -401,6 +410,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         },
         topNavbarProps: {
             staticBackUrl: staticBackUrl,
+            headerLeft: renderShareButton,
             headerRight: renderActionsButton,
             headerRightSecondary: renderInfoButton,
         },

@@ -1,4 +1,5 @@
 import { Box, CardContent, CardHeader, Grid, Typography } from '@material-ui/core';
+import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -11,6 +12,7 @@ import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps {
     renderCardContent?: JSX.Element | JSX.Element[];
+    renderDesktopHeaderRight?: JSX.Element;
     desktopHeader?: string;
     formLayout?: boolean;
     infoLayout?: boolean;
@@ -21,11 +23,13 @@ interface Props extends LayoutProps {
 export const SettingsLayout: React.FC<Props> = ({
     topNavbarProps,
     renderCardContent,
+    renderDesktopHeaderRight,
     desktopHeader,
     formLayout,
     infoLayout,
     infoContent,
     fullSize,
+    children,
     ...props
 }) => {
     const { renderSettingsMenuList } = useSettings(false);
@@ -41,10 +45,11 @@ export const SettingsLayout: React.FC<Props> = ({
     const layoutProps = formLayout || infoLayout ? customColSpan : {};
     const renderInfoContent = infoContent && <Typography variant="body2">{infoContent}</Typography>;
     const renderHeaderRight = <SettingsButton color="secondary" />;
+    const headerRight: JSX.Element = R.propOr(renderHeaderRight, 'headerRight', topNavbarProps);
 
     const customTopNavbarProps = {
         ...topNavbarProps,
-        headerRight: renderHeaderRight,
+        headerRight,
     };
 
     const renderSettings = !isMobile && (
@@ -56,18 +61,26 @@ export const SettingsLayout: React.FC<Props> = ({
         </Grid>
     );
 
+    const renderCardHeader = !isMobile && (
+        <CardHeader className="border-bottom" title={desktopHeader} action={renderDesktopHeaderRight} />
+    );
+
+    const renderCardContentSection = (
+        <Grid container justify="center">
+            <Grid item container direction="column" xs={12} {...layoutProps}>
+                <CardContent className="container">
+                    {renderCardContent}
+                    {renderInfoContent}
+                </CardContent>
+            </Grid>
+        </Grid>
+    );
+
     const renderContent = (
         <Grid item xs={12} md={8} lg={9} container>
             <StyledCard marginLeft>
-                {!isMobile && <CardHeader className="border-bottom" title={desktopHeader} />}
-                <Grid container justify="center">
-                    <Grid item container direction="column" xs={12} {...layoutProps}>
-                        <CardContent className="container">
-                            {renderCardContent}
-                            {renderInfoContent}
-                        </CardContent>
-                    </Grid>
-                </Grid>
+                {renderCardHeader}
+                {renderCardContentSection}
             </StyledCard>
         </Grid>
     );
@@ -78,6 +91,7 @@ export const SettingsLayout: React.FC<Props> = ({
                 <Grid container>
                     {renderSettings}
                     {renderContent}
+                    {children}
                 </Grid>
             </StyledSettingsLayout>
         </MainLayout>

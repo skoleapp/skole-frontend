@@ -2,5 +2,7 @@
     "title": "Toiminta",
     "description": "Tämä on toimintasivu.",
     "header": "Toiminta",
-    "noActivity": "Toimintasi näkyy täällä."
+    "noActivity": "Toimintasi näkyy täällä.",
+    "markAllAsRead": "Merkitse kaikki luetuiksi",
+    "notificationSettings": "Ilmoitusasetukset (tulossa pian)"
 }
