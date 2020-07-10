@@ -1,14 +1,14 @@
 import { parse } from 'cookie';
 import { IncomingMessage } from 'http';
 import * as R from 'ramda';
-import { TOKEN_NAME } from 'utils';
+import { apiUrls, TOKEN_NAME } from 'utils';
 
 // Call API route to set token cookie.
 export const setTokenCookie = (token: string): Promise<Response> =>
-    fetch('/api/set-cookie', { method: 'POST', body: JSON.stringify({ token }) });
+    fetch(apiUrls.setCookie, { method: 'POST', body: JSON.stringify({ token }) });
 
 // Call API route to remove token cookie.
-export const removeTokenCookie = (): Promise<Response> => fetch('/api/remove-cookie', { method: 'POST' });
+export const removeTokenCookie = (): Promise<Response> => fetch(apiUrls.removeCookie, { method: 'POST' });
 
 const parseCookies = (req?: IncomingMessage): { [key: string]: string } => {
     const cookie = typeof window === 'undefined' ? R.pathOr('', ['headers', 'cookie'], req) : document.cookie;

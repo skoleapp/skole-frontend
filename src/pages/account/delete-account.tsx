@@ -13,6 +13,7 @@ import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -45,7 +46,7 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
                 removeTokenCookie();
                 setUser(null);
                 await apolloClient.resetStore();
-                Router.push('/login');
+                Router.push(urls.login);
             } else {
                 unexpectedError();
             }

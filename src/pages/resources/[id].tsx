@@ -45,7 +45,7 @@ import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps, MaxWidth } from 'types';
-import { mediaURL } from 'utils';
+import { mediaURL, urls } from 'utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -131,7 +131,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     }, [commentModalOpen]);
 
     const staticBackUrl = {
-        href: '/courses/[id]',
+        href: urls.course,
         as: `/courses/${courseId}`,
     };
 
@@ -144,7 +144,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             if (!!deleteResource.errors) {
                 deleteResourceError();
             } else if (deleteResource.message) {
-                Router.push('/courses/' + courseId);
+                Router.push(`/courses/${courseId}`);
                 toggleNotification(deleteResource.message);
             } else {
                 deleteResourceError();
@@ -213,7 +213,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
 
     const renderSchoolLink = !!schoolId && (
-        <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
+        <TextLink href={urls.school} as={`/schools/${schoolId}`} color="primary">
             {schoolName}
         </TextLink>
     );

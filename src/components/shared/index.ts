@@ -1,11 +1,9 @@
 export { ButtonLink } from './ButtonLink';
 export { IconButtonLink } from './IconButtonLink';
 export { TextLink } from './TextLink';
-export { Download } from './Download';
 export { SettingsButton } from './SettingsButton';
 export { ModalHeader } from './ModalHeader';
 export { StarButton } from './StarButton';
-export { CourseTableBody } from './CourseTableBody';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { LoadingBox } from './LoadingBox';
 export { NotFoundBox } from './NotFoundBox';

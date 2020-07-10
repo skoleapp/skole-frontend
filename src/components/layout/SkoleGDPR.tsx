@@ -16,6 +16,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
+import { urls } from 'utils';
 
 import { TextLink } from '..';
 
@@ -79,7 +80,8 @@ export const SkoleGDPR: React.FC = () => {
                         {t('gdpr:privacyPolicy')}
                     </Typography>
                     <DialogContentText>
-                        {t('gdpr:privacyPolicyDesc')} <TextLink href="/privacy">{t('gdpr:privacyPolicy')}</TextLink>.
+                        {t('gdpr:privacyPolicyDesc')} <TextLink href={urls.privacy}>{t('gdpr:privacyPolicy')}</TextLink>
+                        .
                     </DialogContentText>
                 </Box>
                 <Box textAlign="left">
@@ -88,7 +90,7 @@ export const SkoleGDPR: React.FC = () => {
                     </Typography>
                     <DialogContentText>
                         {t('gdpr:termsAndConditionsDesc')}{' '}
-                        <TextLink href="/terms">{t('gdpr:termsAndConditions')}</TextLink>.
+                        <TextLink href={urls.terms}>{t('gdpr:termsAndConditions')}</TextLink>.
                     </DialogContentText>
                 </Box>
                 <Box textAlign="left">

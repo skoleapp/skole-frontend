@@ -27,6 +27,7 @@ import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps, UpdateProfileFormValues } from 'types';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const EditProfilePage: NextPage<I18nProps> = () => {
@@ -158,7 +159,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
                     {verified === false && (
                         <Box marginTop="1rem" marginBottom="0.5rem">
-                            <TextLink href="/account/verify-account" color="primary">
+                            <TextLink href={urls.verifyAccount} color="primary">
                                 {t('common:verifyAccount')}
                             </TextLink>
                         </Box>

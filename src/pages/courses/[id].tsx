@@ -49,6 +49,7 @@ import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
+import { urls } from 'utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -175,7 +176,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderSchoolLink = !!schoolId && (
-        <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
+        <TextLink href={urls.school} as={`/schools/${schoolId}`} color="primary">
             {schoolName}
         </TextLink>
     );
@@ -265,7 +266,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         <Tooltip title={!!verificationRequiredTooltip ? verificationRequiredTooltip : t('tooltips:uploadResource')}>
             <span>
                 <IconButtonLink
-                    href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}
+                    href={{ pathname: urls.uploadResource, query: { school: schoolId, course: courseId } }}
                     icon={CloudUploadOutlined}
                     disabled={verified === false}
                     {...iconButtonProps}

@@ -6,6 +6,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import { useEffect } from 'react';
 import React from 'react';
+import { urls } from 'utils';
 
 import { initApolloClient } from '.';
 
@@ -17,7 +18,7 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
 
         const syncLogout = (e: StorageEvent): void => {
             if (e.key === 'logout') {
-                Router.push('/login');
+                Router.push(urls.login);
             }
         };
 
@@ -51,7 +52,7 @@ export const withSSRAuth = (getServerSidePropsInner: GetServerSideProps): GetSer
             const { data } = await apolloClient.query({ query: UserMeDocument });
             user = data.userMe;
         } catch {
-            const Location = !!url && url !== '/' ? `/login?next=${url}` : '/login';
+            const Location = !!url && url !== '/' ? `${urls.login}?next=${url}` : urls.login;
             ctx.res.writeHead(302, { Location });
             ctx.res.end();
         }

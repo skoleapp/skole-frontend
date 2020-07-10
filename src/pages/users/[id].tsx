@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { breakpoints, breakpointsNum } from 'styles';
 import { I18nProps, MaxWidth } from 'types';
-import { mediaURL } from 'utils';
+import { mediaURL, urls } from 'utils';
 
 interface Props extends I18nProps {
     user?: UserObjectType;
@@ -55,7 +55,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
 
     const renderEditProfileButton = isOwnProfile && (
         <ButtonLink
-            href="/account/edit-profile"
+            href={urls.editProfile}
             color="primary"
             variant="outlined"
             endIcon={<EditOutlined />}
@@ -66,13 +66,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     );
 
     const renderViewStarredButton = isOwnProfile && (
-        <ButtonLink
-            href="/account/starred"
-            color="primary"
-            variant="outlined"
-            endIcon={<StarBorderOutlined />}
-            fullWidth
-        >
+        <ButtonLink href={urls.starred} color="primary" variant="outlined" endIcon={<StarBorderOutlined />} fullWidth>
             {t('profile:viewStarred')}
         </ButtonLink>
     );
@@ -161,7 +155,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
 
     const renderVerifyAccountLink = isOwnProfile && verified === false && (
         <Box marginTop="0.5rem">
-            <TextLink href="/account/verify-account" color="primary">
+            <TextLink href={urls.verifyAccount} color="primary">
                 {t('common:verifyAccount')}
             </TextLink>
         </Box>

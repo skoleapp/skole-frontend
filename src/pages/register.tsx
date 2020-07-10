@@ -22,6 +22,7 @@ import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 export interface RegisterFormValues {
@@ -191,7 +192,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
                     <FormControl fullWidth>
                         <Typography variant="body2" color="textSecondary">
                             {t('register:termsHelpText')}{' '}
-                            <TextLink href="/terms" target="_blank">
+                            <TextLink href={urls.terms} target="_blank">
                                 {t('common:terms')}
                             </TextLink>
                             .
@@ -202,7 +203,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
                         <Divider />
                     </Box>
                     <ButtonLink
-                        href="/login"
+                        href={urls.login}
                         variant="outlined"
                         color="primary"
                         endIcon={<HowToRegOutlined />}

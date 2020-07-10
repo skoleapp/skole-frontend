@@ -14,6 +14,7 @@ import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -114,7 +115,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                         <Divider />
                     </Box>
                     <ButtonLink
-                        href="/register"
+                        href={urls.register}
                         variant="outlined"
                         color="primary"
                         endIcon={<LibraryAddOutlined />}
@@ -123,7 +124,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                         {t('login:createAccount')}
                     </ButtonLink>
                     <Box marginTop="1rem">
-                        <TextLink href="/account/reset-password">{t('login:forgotPassword')}</TextLink>
+                        <TextLink href={urls.resetPassword}>{t('login:forgotPassword')}</TextLink>
                     </Box>
                 </Form>
             )}

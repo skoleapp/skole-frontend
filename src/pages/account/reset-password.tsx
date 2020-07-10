@@ -18,6 +18,7 @@ import * as R from 'ramda';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const emailFormInitialValues = {
@@ -101,7 +102,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
             } else if (!!resetPassword.message) {
                 resetPasswordForm();
                 toggleNotification(resetPassword.message);
-                Router.push('/login');
+                Router.push(urls.login);
             } else {
                 passwordFormUnexpectedError();
             }

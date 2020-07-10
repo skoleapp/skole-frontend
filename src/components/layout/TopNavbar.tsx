@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
 import { TopNavbarProps } from 'types';
-import { mediaURL } from 'utils';
+import { mediaURL, urls } from 'utils';
 
 import { ActivityList, ButtonLink, IconButtonLink, Logo, StyledHeaderText } from '..';
 import { TopNavbarSearchWidget } from '.';
@@ -101,7 +101,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                             <Box padding="0.5rem">
                                 <ActivityList slice={5} />
                                 <Box marginTop="0.5rem" textAlign="center">
-                                    <ButtonLink href="/account/activity" color="primary" fullWidth>
+                                    <ButtonLink href={urls.activity} color="primary" fullWidth>
                                         {t('common:seeAll')}
                                     </ButtonLink>
                                 </Box>
@@ -122,11 +122,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 </Box>
             </ClickAwayListener>
             <Tooltip title={t('tooltips:starred')}>
-                <IconButtonLink icon={StarBorderOutlined} href="/account/starred" color="secondary" />
+                <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
             </Tooltip>
             <Tooltip title={t('tooltips:profile')}>
                 <span>
-                    <Link href="/users/[id]" as={`/users/${user.id}`}>
+                    <Link href={urls.user} as={`/users/${user.id}`}>
                         <IconButton color="secondary">
                             <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
                         </IconButton>
@@ -138,10 +138,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
     const renderUnAuthenticatedButtons = (
         <>
-            <ButtonLink href="/login" color="secondary" endIcon={<HowToRegOutlined />}>
+            <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
                 {t('common:login')}
             </ButtonLink>
-            <ButtonLink href="/register" color="secondary" endIcon={<LibraryAddOutlined />}>
+            <ButtonLink href={urls.register} color="secondary" endIcon={<LibraryAddOutlined />}>
                 {t('common:register')}
             </ButtonLink>
         </>

@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { UrlObject } from 'url';
-import { mediaURL } from 'utils';
+import { mediaURL, urls } from 'utils';
 
 import { StyledList } from '..';
 import { NotFoundBox, TextLink } from '.';
@@ -94,7 +94,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
 
     const renderTargetUserLink = (targetUser?: UserObjectType | null): JSX.Element | '' =>
         !!targetUser ? (
-            <TextLink href="/users/[id]" as={`/users/${R.propOr('', 'id', targetUser)}`}>
+            <TextLink href={urls.user} as={`/users/${R.propOr('', 'id', targetUser)}`}>
                 {R.propOr('', 'username', targetUser)}
             </TextLink>
         ) : (

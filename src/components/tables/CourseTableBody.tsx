@@ -3,6 +3,7 @@ import { CourseObjectType } from 'generated';
 import { Link } from 'i18n';
 import * as R from 'ramda';
 import React from 'react';
+import { urls } from 'utils';
 
 interface Props {
     courses: CourseObjectType[];
@@ -11,7 +12,7 @@ interface Props {
 export const CourseTableBody: React.FC<Props> = ({ courses }) => (
     <TableBody>
         {courses.map((c: CourseObjectType, i: number) => (
-            <Link href="/courses/[id]" as={`/courses/${c.id}`} key={i}>
+            <Link href={urls.course} as={`/courses/${c.id}`} key={i}>
                 <TableRow>
                     <TableCell>
                         <Typography variant="body2">{R.propOr('-', 'name', c)}</Typography>

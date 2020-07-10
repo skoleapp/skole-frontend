@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SettingsContext } from 'types';
-import { MENU_ITEMS } from 'utils';
+import { MENU_ITEMS, urls } from 'utils';
 
 import { useLanguageSelector } from '.';
 
@@ -43,7 +43,7 @@ export const useSettings = (modal: boolean): UseSettings => {
         await removeTokenCookie(); // We need to wait until the asynchronous middleware for removing the cookie has been called before the response is sent to the client.
         toggleNotification(t('notifications:signedOut'));
         await apolloClient.resetStore();
-        Router.push('/login');
+        Router.push(urls.login);
     };
 
     const getSelected = (href: string): boolean => !modal && href === pathname;
@@ -62,10 +62,7 @@ export const useSettings = (modal: boolean): UseSettings => {
     ));
 
     const renderVerifyAccountMenuItem = verified === false && (
-        <MenuItem
-            onClick={handleMenuItemClick('/account/verify-account')}
-            selected={getSelected('/account/verify-account')}
-        >
+        <MenuItem onClick={handleMenuItemClick(urls.verifyAccount)} selected={getSelected(urls.verifyAccount)}>
             <ListItemText>
                 <VerifiedUserOutlined /> {t('common:verifyAccount')}
             </ListItemText>
@@ -105,7 +102,7 @@ export const useSettings = (modal: boolean): UseSettings => {
     );
 
     const renderLoginMenuItem = (
-        <MenuItem onClick={handleMenuItemClick('/login')}>
+        <MenuItem onClick={handleMenuItemClick(urls.login)}>
             <ListItemText>
                 <HowToRegOutlined /> {t('common:login')}
             </ListItemText>

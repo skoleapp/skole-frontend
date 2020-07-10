@@ -3,6 +3,7 @@ import { ResourceObjectType } from 'generated';
 import { Link } from 'i18n';
 import * as R from 'ramda';
 import React from 'react';
+import { urls } from 'utils';
 
 interface Props {
     resources: ResourceObjectType[];
@@ -11,7 +12,7 @@ interface Props {
 export const ResourceTableBody: React.FC<Props> = ({ resources }) => (
     <TableBody>
         {resources.map((r: ResourceObjectType, i: number) => (
-            <Link href="/resources/[id]" as={`/resources/${r.id}`} key={i}>
+            <Link href={urls.resource} as={`/resources/${r.id}`} key={i}>
                 <TableRow>
                     <TableCell>
                         <Typography variant="body2">{R.propOr('-', 'title', r)}</Typography>

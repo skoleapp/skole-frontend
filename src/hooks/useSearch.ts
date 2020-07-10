@@ -6,6 +6,7 @@ import * as R from 'ramda';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UrlObject } from 'url';
+import { urls } from 'utils';
 
 interface SearchUrl extends UrlObject {
     query: ParsedUrlQueryInput;
@@ -28,7 +29,7 @@ export const useSearch = (): UseSearch => {
     const school = R.pathOr(undefined, ['school', 'id'], user);
     const subject = R.pathOr(undefined, ['subject', 'id'], user);
     const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, { school, subject });
-    const searchUrl = { pathname: '/search', query };
+    const searchUrl = { pathname: urls.search, query };
 
     const handleSubmit = (e: SyntheticEvent): void => {
         e.preventDefault();
