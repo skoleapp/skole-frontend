@@ -59,25 +59,6 @@ export const getPageFromElement = (target: HTMLElement): PageFromElement | null 
     }
 };
 
-// Get closest PDF page and take screenshot of selected area.
-export const getScreenshot = (target: HTMLElement, position: LTWH): string | null => {
-    const canvas = target.closest('canvas');
-    const { left, top, width, height } = position;
-    const newCanvas = document.createElement('canvas');
-    newCanvas.width = width;
-    newCanvas.height = height;
-    const newCanvasContext = newCanvas.getContext('2d');
-
-    if (!!newCanvas && !!newCanvasContext && !!canvas && !!width && !!height) {
-        // FIXME: This might cause issues on some small devices, resulting in misaligned screenshots.
-        const dpr: number = window.devicePixelRatio;
-        newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
-        return newCanvas.toDataURL('image/jpeg');
-    } else {
-        return null;
-    }
-};
-
 // Converts a data URI string into a File object.
 export const dataURItoFile = (dataURI: string): File => {
     const BASE64_MARKER = ';base64,';
