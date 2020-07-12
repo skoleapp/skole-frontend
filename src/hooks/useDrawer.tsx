@@ -3,7 +3,7 @@ import { useDeviceContext } from 'context';
 import React, { SyntheticEvent } from 'react';
 import { UseDrawer } from 'types';
 
-import { useOpen } from '.';
+import { useOpen } from './useOpen';
 
 export const useDrawer = (header?: string): UseDrawer => {
     const { open, handleOpen, handleClose } = useOpen();

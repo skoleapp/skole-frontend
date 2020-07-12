@@ -3,7 +3,8 @@ import React from 'react';
 import { CommonPaginatedTableProps } from 'types';
 
 import { StyledTable } from '..';
-import { CustomTableFooter, CustomTableHead } from '.';
+import { CustomTableFooter } from './CustomTableFooter';
+import { CustomTableHead } from './CustomTableHead';
 
 interface Props extends CommonPaginatedTableProps {
     paginationProps: TablePaginationProps;

@@ -10,7 +10,7 @@ import { UpdateProfileFormValues } from 'types';
 import { mediaURL } from 'utils';
 
 import { StyledDrawer, StyledList } from '..';
-import { FormErrorMessage } from '.';
+import { FormErrorMessage } from './FormErrorMessage';
 
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
     setFieldValue,

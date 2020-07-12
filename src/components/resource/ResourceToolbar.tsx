@@ -6,7 +6,8 @@ import React, { ChangeEvent, SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { DrawModeButton, DrawModeControls } from '.';
+import { DrawModeButton } from './DrawModeButton';
+import { DrawModeControls } from './DrawModeControls';
 
 interface Props {
     title: string;

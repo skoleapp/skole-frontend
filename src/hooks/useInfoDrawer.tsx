@@ -3,7 +3,8 @@ import { InfoOutlined } from '@material-ui/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useDrawer, useResponsiveIconButtonProps } from '.';
+import { useDrawer } from './useDrawer';
+import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
 
 interface UseInfoDrawer extends DrawerProps {
     renderInfoHeader: JSX.Element;

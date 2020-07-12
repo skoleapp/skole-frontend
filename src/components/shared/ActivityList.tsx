@@ -15,7 +15,8 @@ import { UrlObject } from 'url';
 import { mediaURL, urls } from 'utils';
 
 import { StyledList } from '..';
-import { NotFoundBox, TextLink } from '.';
+import { NotFoundBox } from './NotFoundBox';
+import { TextLink } from './TextLink';
 
 const getHref = ({
     course,

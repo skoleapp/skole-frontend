@@ -3,7 +3,7 @@ import { Close } from '@material-ui/icons';
 import { Alert, Color } from '@material-ui/lab';
 import React, { useState } from 'react';
 
-import { useResponsiveIconButtonProps } from '.';
+import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
 
 interface UseAlerts {
     renderAlert: (severity: Color, text: string) => JSX.Element;

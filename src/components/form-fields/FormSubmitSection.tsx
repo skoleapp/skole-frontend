@@ -4,7 +4,7 @@ import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
 
 import { LoadingBox } from '..';
-import { FormErrorMessage } from '.';
+import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends FormikProps<{}> {
     submitButtonText: string;

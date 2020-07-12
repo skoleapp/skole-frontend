@@ -4,7 +4,7 @@ import React from 'react';
 import { LayoutProps } from 'types';
 
 import { StyledCard } from '..';
-import { MainLayout } from '.';
+import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps {
     renderCardContent?: JSX.Element;

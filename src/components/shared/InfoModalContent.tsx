@@ -6,7 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { urls } from 'utils';
 
-import { TextLink } from '.';
+import { TextLink } from './TextLink';
 
 interface InfoItem {
     label: string;
