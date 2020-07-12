@@ -4,7 +4,7 @@ import { fieldToSelect } from 'formik-material-ui';
 import React from 'react';
 import styled from 'styled-components';
 
-import { FormErrorMessage } from '.';
+import { FormErrorMessage } from './FormErrorMessage';
 
 interface SelectProps extends FieldProps, Omit<MuiSelectProps, 'value'> {}
 

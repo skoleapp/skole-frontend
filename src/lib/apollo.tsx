@@ -12,7 +12,7 @@ import * as R from 'ramda';
 import { useMemo } from 'react';
 import { SSRContext } from 'types';
 
-import { getTokenCookie } from '.';
+import { getTokenCookie } from './auth-cookies';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 

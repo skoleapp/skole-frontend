@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { PDFTranslation } from 'types';
 import { DEFAULT_SCALE, DEFAULT_TRANSLATION, MAX_SCALE, MIN_SCALE } from 'utils';
 
-import { MapControls } from '.';
+import { MapControls } from './MapControls';
 
 interface StartPointersInfo {
     translation: PDFTranslation;

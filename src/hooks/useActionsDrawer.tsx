@@ -4,7 +4,9 @@ import { useDeviceContext } from 'context';
 import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useDrawer, useResponsiveIconButtonProps, useShare } from '.';
+import { useDrawer } from './useDrawer';
+import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
+import { useShare } from './useShare';
 
 interface UseActionsDrawer extends DrawerProps {
     renderActionsHeader: JSX.Element;

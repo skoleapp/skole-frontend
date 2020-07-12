@@ -29,7 +29,7 @@ import { TopNavbarProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
 import { ActivityList, ButtonLink, IconButtonLink, Logo, StyledHeaderText } from '..';
-import { TopNavbarSearchWidget } from '.';
+import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
     header,

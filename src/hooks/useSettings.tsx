@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { SettingsContext } from 'types';
 import { MENU_ITEMS, urls } from 'utils';
 
-import { useLanguageSelector } from '.';
+import { useLanguageSelector } from './useLanguageSelector';
 
 interface UseSettings extends SettingsContext {
     renderSettingsMenuList: JSX.Element;

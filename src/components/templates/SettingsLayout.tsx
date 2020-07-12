@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { LayoutProps } from 'types';
 
 import { SettingsButton, StyledCard } from '..';
-import { MainLayout } from '.';
+import { MainLayout } from './MainLayout';
 
 interface Props extends LayoutProps {
     renderCardContent?: JSX.Element | JSX.Element[];

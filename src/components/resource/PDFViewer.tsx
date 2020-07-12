@@ -8,7 +8,8 @@ import styled from 'styled-components';
 import { breakpoints } from 'styles';
 
 import { LoadingBox } from '..';
-import { AreaSelection, MapInteraction } from '.';
+import { AreaSelection } from './AreaSelection';
+import { MapInteraction } from './MapInteraction';
 
 interface Props {
     file: string;

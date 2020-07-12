@@ -6,7 +6,9 @@ import React from 'react';
 import { TopLevelCommentThreadProps } from 'types';
 
 import { NotFoundBox } from '..';
-import { CommentCard, CreateCommentForm, StyledDiscussionBox } from '.';
+import { CommentCard } from './CommentCard';
+import { CreateCommentForm } from './CreateCommentForm';
+import { StyledDiscussionBox } from './StyledDiscussionBox';
 
 export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
     comments: initialComments,

@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePaginationProps } from 'types';
 
-import { CustomTablePaginationActions } from '.';
+import { CustomTablePaginationActions } from './CustomTablePaginationActions';
 
 const commonTablePaginationProps = {
     rowsPerPageOptions: [5, 10, 25, 50, 100],

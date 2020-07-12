@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StyledCard } from '..';
-import { MainLayout } from '.';
+import { MainLayout } from './MainLayout';
 
 export const ErrorLayout: React.FC = () => {
     const { t } = useTranslation();

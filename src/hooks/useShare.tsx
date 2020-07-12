@@ -4,7 +4,7 @@ import { useNotificationsContext } from 'context';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useResponsiveIconButtonProps } from '.';
+import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
 
 interface ShareData {
     title?: string;

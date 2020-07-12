@@ -5,7 +5,9 @@ import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CommentCard, CreateCommentForm, StyledDiscussionBox } from '.';
+import { CommentCard } from './CommentCard';
+import { CreateCommentForm } from './CreateCommentForm';
+import { StyledDiscussionBox } from './StyledDiscussionBox';
 
 export const ReplyCommentThread: React.FC = () => {
     const { t } = useTranslation();

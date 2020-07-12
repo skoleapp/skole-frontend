@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { FormErrorMessage } from '.';
+import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends DropzoneAreaProps {
     form: FormikProps<{}>;

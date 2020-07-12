@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import React from 'react';
 import { urls } from 'utils';
 
-import { initApolloClient } from '.';
+import { initApolloClient } from './apollo';
 
 // Sync authentication between pages -> automatically redirect to login if multiple browser windows are open.
 // Wrap all pages that require authentication with this.
