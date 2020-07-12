@@ -143,6 +143,12 @@ export const MapInteraction: React.FC = ({ children }) => {
         setTranslation(newTranslation);
     };
 
+    // Set X-axis scroll to center when zooming in/out.
+    const centerHorizontalScroll = (): void => {
+        const mapContainerNode = getMapContainerNode();
+        mapContainerNode.scrollLeft = (mapContainerNode.scrollWidth - mapContainerNode.clientWidth) / 2;
+    };
+
     // Update document scale based on mouse wheel events.
     // TODO: Set Y-axis scroll position based on mouse position to we can zoom in to a point using mouse position.
     const onWheel = (e: WheelEvent): void => {
@@ -152,8 +158,7 @@ export const MapInteraction: React.FC = ({ children }) => {
             const scaleChange = 2 ** (e.deltaY * 0.002);
             const newScale = getClampedScale(scale + (1 - scaleChange));
             setScale(newScale);
-            const mapContainerNode = getMapContainerNode();
-            mapContainerNode.scrollLeft = (mapContainerNode.scrollWidth - mapContainerNode.clientWidth) / 2; // Automatically scroll to center.
+            centerHorizontalScroll();
         }
     };
 
@@ -218,10 +223,11 @@ export const MapInteraction: React.FC = ({ children }) => {
         setTranslation(DEFAULT_TRANSLATION);
     };
 
-    const handleScale = (newScale: number): void => {
+    const handleScale = async (newScale: number): Promise<void> => {
         setFullscreen(false);
         newScale == DEFAULT_SCALE && setFullscreen(true);
-        setScale(newScale);
+        await setScale(newScale); // Wait until new scale has been applied and center horizontal scroll only after that.
+        centerHorizontalScroll();
     };
 
     // Listen fot mouse and touch events to perform required CSS transforms for map interaction functions.
@@ -274,8 +280,8 @@ export const MapInteraction: React.FC = ({ children }) => {
         }
     }, [drawMode]);
 
-    const handleScaleUpButtonClick = (): void => handleScale(scale < MAX_SCALE ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
-    const handleScaleDownButtonClick = (): void => handleScale(scale > MIN_SCALE ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
+    const handleScaleUpButtonClick = (): Promise<void> => handleScale(scale < MAX_SCALE ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
+    const handleScaleDownButtonClick = (): Promise<void> => handleScale(scale > MIN_SCALE ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
     const cursor = !drawMode && ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
     const overflow = drawMode && isMobile ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
     const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
