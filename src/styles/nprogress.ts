@@ -19,9 +19,5 @@ export const nProgress = css`
             box-shadow: none;
             transform: none;
         }
-
-        .spinner-icon {
-            display: none;
-        }
     }
 `;

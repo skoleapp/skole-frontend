@@ -1,10 +1,10 @@
 import { Box, Container } from '@material-ui/core';
+import { useAuthContext, useDeviceContext } from 'context';
 import React from 'react';
 import styled from 'styled-components';
+import { breakpoints } from 'styles';
+import { LayoutProps } from 'types';
 
-import { useAuthContext, useDeviceContext } from '../../context';
-import { breakpoints } from '../../styles';
-import { LayoutProps } from '../../types';
 import {
     AttachmentViewer,
     BottomNavbar,
@@ -15,7 +15,7 @@ import {
     Notifications,
     SettingsModal,
     TopNavbar,
-} from '../layout';
+} from '..';
 
 export const MainLayout: React.FC<LayoutProps> = ({
     seoProps,

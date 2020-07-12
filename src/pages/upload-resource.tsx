@@ -1,12 +1,8 @@
+import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from 'components';
+import { env } from 'config';
+import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import Resizer from 'react-image-file-resizer';
-import * as Yup from 'yup';
-
 import {
     CourseObjectType,
     CoursesDocument,
@@ -16,15 +12,18 @@ import {
     SchoolObjectType,
     SchoolsDocument,
     useCreateResourceMutation,
-} from '../../generated/graphql';
-import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from '../components';
-import { env } from '../config';
-import { useNotificationsContext } from '../context';
-import { Router } from '../i18n';
-import { includeDefaultNamespaces } from '../i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../lib';
-import { I18nProps } from '../types';
-import { useForm } from '../utils';
+} from 'generated';
+import { useForm } from 'hooks';
+import { Router } from 'i18n';
+import { includeDefaultNamespaces } from 'i18n';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import Resizer from 'react-image-file-resizer';
+import { I18nProps } from 'types';
+import * as Yup from 'yup';
 
 interface UploadResourceFormValues {
     resourceTitle: string;

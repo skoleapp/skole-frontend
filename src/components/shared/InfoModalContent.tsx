@@ -1,11 +1,12 @@
 import { Box, CardContent, Grid, Typography } from '@material-ui/core';
 import { UserObjectType } from 'generated/graphql';
+import { useMoment } from 'hooks';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMoment } from 'src/utils';
+import { urls } from 'utils';
 
-import { TextLink } from './TextLink';
+import { TextLink } from '.';
 
 interface InfoItem {
     label: string;
@@ -28,7 +29,7 @@ export const InfoModalContent: React.FC<Props> = ({ user, created, infoItems }) 
             <Typography variant="body2" color="textSecondary">
                 {t('common:createdBy')}{' '}
                 {!!userId ? (
-                    <TextLink href="/users/[id]" as={`/users/${userId}`} color="primary">
+                    <TextLink href={urls.user} as={`/users/${userId}`} color="primary">
                         {R.propOr('-', 'username', user)}
                     </TextLink>
                 ) : (

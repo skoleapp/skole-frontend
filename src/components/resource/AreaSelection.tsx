@@ -1,11 +1,10 @@
 import { Box } from '@material-ui/core';
+import { usePDFViewerContext } from 'context';
+import { useStateRef } from 'hooks';
+import { getBoundingRect, getPageFromElement, getScreenshot } from 'lib';
 import React, { useEffect } from 'react';
-import { getBoundingRect, getPageFromElement, getScreenshot } from 'src/lib';
-import { useStateRef } from 'src/utils';
 import styled from 'styled-components';
-
-import { usePDFViewerContext } from '../../context';
-import { LTWH, PDFTranslation } from '../../types';
+import { LTWH, PDFTranslation } from 'types';
 
 interface State {
     locked: boolean;

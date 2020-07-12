@@ -1,11 +1,10 @@
 import { IconButton, Snackbar, SnackbarOrigin } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import { useNotificationsContext } from 'context';
 import Router from 'next/router';
 import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
-
-import { useNotificationsContext } from '../../context';
-import { breakpoints } from '../../styles';
+import { breakpoints } from 'styles';
 
 export const Notifications: React.FC = () => {
     const { notification, toggleNotification } = useNotificationsContext();

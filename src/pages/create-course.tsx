@@ -1,11 +1,7 @@
+import { AutoCompleteField, FormLayout, FormSubmitSection } from 'components';
+import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import * as Yup from 'yup';
-
 import {
     CreateCourseMutation,
     SchoolsDocument,
@@ -13,13 +9,16 @@ import {
     SubjectObjectType,
     SubjectsDocument,
     useCreateCourseMutation,
-} from '../../generated/graphql';
-import { AutoCompleteField, FormLayout, FormSubmitSection } from '../components';
-import { useNotificationsContext } from '../context';
-import { includeDefaultNamespaces, Router } from '../i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from '../lib';
-import { I18nProps } from '../types';
-import { useForm } from '../utils';
+} from 'generated';
+import { useForm } from 'hooks';
+import { includeDefaultNamespaces, Router } from 'i18n';
+import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nProps } from 'types';
+import * as Yup from 'yup';
 
 interface CreateCourseFormValues {
     courseName: string;

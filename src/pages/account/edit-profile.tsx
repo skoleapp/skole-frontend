@@ -1,12 +1,15 @@
 import { Box } from '@material-ui/core';
+import {
+    AutoCompleteField,
+    AvatarField,
+    FormSubmitSection,
+    NotFoundLayout,
+    SettingsLayout,
+    TextLink,
+} from 'components';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import * as Yup from 'yup';
-
 import {
     SchoolObjectType,
     SchoolsDocument,
@@ -15,30 +18,17 @@ import {
     UpdateUserMutation,
     UserObjectType,
     useUpdateUserMutation,
-} from '../../../generated/graphql';
-import {
-    AutoCompleteField,
-    AvatarField,
-    FormSubmitSection,
-    NotFoundLayout,
-    SettingsLayout,
-    TextLink,
-} from '../../components';
-import { useAuthContext, useNotificationsContext } from '../../context';
-import { includeDefaultNamespaces } from '../../i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
-import { I18nProps } from '../../types';
-import { useForm } from '../../utils';
-
-export interface UpdateProfileFormValues {
-    username: string;
-    email: string;
-    title: string;
-    bio: string;
-    avatar: string;
-    school: SchoolObjectType | null;
-    subject: SubjectObjectType | null;
-}
+} from 'generated';
+import { useForm } from 'hooks';
+import { includeDefaultNamespaces } from 'i18n';
+import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nProps, UpdateProfileFormValues } from 'types';
+import { urls } from 'utils';
+import * as Yup from 'yup';
 
 const EditProfilePage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
@@ -169,7 +159,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
                     {verified === false && (
                         <Box marginTop="1rem" marginBottom="0.5rem">
-                            <TextLink href="/account/verify-account" color="primary">
+                            <TextLink href={urls.verifyAccount} color="primary">
                                 {t('common:verifyAccount')}
                             </TextLink>
                         </Box>

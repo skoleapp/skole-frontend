@@ -11,16 +11,22 @@ import {
     Typography,
 } from '@material-ui/core';
 import { ArrowBackOutlined, ClearAllOutlined, FilterListOutlined, SearchOutlined } from '@material-ui/icons';
+import {
+    AutoCompleteField,
+    CourseTableBody,
+    FormSubmitSection,
+    MainLayout,
+    ModalHeader,
+    NativeSelectField,
+    NotFoundBox,
+    PaginatedTable,
+    StyledCard,
+    StyledDrawer,
+    StyledTable,
+} from 'components';
+import { useDeviceContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { ParsedUrlQueryInput } from 'querystring';
-import * as R from 'ramda';
-import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
-
 import {
     CitiesDocument,
     CityObjectType,
@@ -35,25 +41,19 @@ import {
     SearchCoursesDocument,
     SubjectObjectType,
     SubjectsDocument,
-} from '../../generated/graphql';
-import {
-    AutoCompleteField,
-    CourseTableBody,
-    FormSubmitSection,
-    MainLayout,
-    ModalHeader,
-    NativeSelectField,
-    NotFoundBox,
-    PaginatedTable,
-    StyledCard,
-    StyledDrawer,
-    StyledTable,
-} from '../components';
-import { useDeviceContext } from '../context';
-import { includeDefaultNamespaces, Router } from '../i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../lib';
-import { I18nProps, UseDrawer } from '../types';
-import { getPaginationQuery, getQueryWithPagination, useDrawer, useForm } from '../utils';
+} from 'generated';
+import { useDrawer, useForm } from 'hooks';
+import { includeDefaultNamespaces, Router } from 'i18n';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
+import * as R from 'ramda';
+import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { I18nProps, UseDrawer } from 'types';
+import { getPaginationQuery, getQueryWithPagination } from 'utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;

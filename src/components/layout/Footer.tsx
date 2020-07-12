@@ -1,10 +1,11 @@
 import { Grid, Typography } from '@material-ui/core';
+import { useLanguageSelector } from 'hooks';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { urls } from 'utils';
 
-import { useLanguageSelector } from '../../utils';
-import { TextLink } from '../shared';
+import { TextLink } from '..';
 
 export const Footer: React.FC = () => {
     const { t } = useTranslation();
@@ -17,13 +18,13 @@ export const Footer: React.FC = () => {
                     <Typography variant="subtitle1" color="secondary" gutterBottom>
                         SKOLE
                     </Typography>
-                    <TextLink href="/about" color="secondary">
+                    <TextLink href={urls.about} color="secondary">
                         {t('common:about')}
                     </TextLink>
-                    <TextLink href="/contact" color="secondary">
+                    <TextLink href={urls.contact} color="secondary">
                         {t('common:contact')}
                     </TextLink>
-                    <TextLink href="/faq" color="secondary">
+                    <TextLink href={urls.faq} color="secondary">
                         {t('common:faq')}
                     </TextLink>
                 </Grid>
@@ -37,10 +38,10 @@ export const Footer: React.FC = () => {
                     <Typography variant="subtitle1" color="secondary" gutterBottom>
                         {t('common:legal').toUpperCase()}
                     </Typography>
-                    <TextLink href="/terms" color="secondary">
+                    <TextLink href={urls.terms} color="secondary">
                         {t('common:terms')}
                     </TextLink>
-                    <TextLink href="/privacy" color="secondary">
+                    <TextLink href={urls.privacy} color="secondary">
                         {t('common:privacy')}
                     </TextLink>
                 </Grid>

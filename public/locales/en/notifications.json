@@ -1,6 +1,5 @@
 {
     "signedOut": "Signed out!",
-    "errorDownloadingResource": "Error while downloading resource!",
     "voteError": "Error while voting!",
     "starError": "Error while starring!",
     "deleteCommentError": "Error while deleting comment!",

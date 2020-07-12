@@ -1,10 +1,9 @@
-import { CommentObjectType, UserObjectType } from 'generated/graphql';
+import { CommentObjectType, UserObjectType } from 'generated';
 import * as R from 'ramda';
 import React, { createContext, useEffect, useRef, useState } from 'react';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { breakpointsNum } from './styles';
+import { breakpointsNum } from 'styles';
 import {
     AttachmentViewerContext,
     AuthContext,
@@ -15,7 +14,7 @@ import {
     PDFViewerContext,
     SettingsContext,
     SkoleContextType,
-} from './types';
+} from 'types';
 
 // Ignore: All functions below are ignored as they are only mock functions for the context.
 const SkolePageContext = createContext<SkoleContextType>({

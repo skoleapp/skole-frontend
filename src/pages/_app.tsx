@@ -5,18 +5,19 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { ContextProvider } from 'context';
 import { UserObjectType } from 'generated/graphql';
+import { appWithTranslation } from 'i18n';
+import { pageView, PWAProvider, useApollo } from 'lib';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { AppProps } from 'next/app';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { GlobalStyle, theme } from 'styles';
 
-import { ContextProvider } from '../context';
-import { appWithTranslation } from '../i18n';
-import { pageView, PWAProvider, useApollo } from '../lib';
-import { GlobalStyle, theme } from '../styles';
+NProgress.configure({ showSpinner: true });
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeError', () => NProgress.done());

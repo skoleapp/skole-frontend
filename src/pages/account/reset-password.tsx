@@ -1,25 +1,25 @@
 import { Box, Typography } from '@material-ui/core';
+import { FormSubmitSection, SettingsLayout } from 'components';
+import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { GetServerSideProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import * as R from 'ramda';
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNotificationsContext } from 'src/context';
-import { I18nProps } from 'src/types';
-import * as Yup from 'yup';
-
 import {
     ResetPasswordMutation,
     SendPasswordResetEmailMutation,
     useResetPasswordMutation,
     useSendPasswordResetEmailMutation,
-} from '../../../generated/graphql';
-import { FormSubmitSection, SettingsLayout } from '../../components';
-import { includeDefaultNamespaces, Router } from '../../i18n';
-import { withSSRAuth, withUserAgent } from '../../lib';
-import { useForm } from '../../utils';
+} from 'generated';
+import { useForm } from 'hooks';
+import { includeDefaultNamespaces, Router } from 'i18n';
+import { withSSRAuth, withUserAgent } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
+import * as R from 'ramda';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nProps } from 'types';
+import { urls } from 'utils';
+import * as Yup from 'yup';
 
 const emailFormInitialValues = {
     email: '',
@@ -102,7 +102,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
             } else if (!!resetPassword.message) {
                 resetPasswordForm();
                 toggleNotification(resetPassword.message);
-                Router.push('/login');
+                Router.push(urls.login);
             } else {
                 passwordFormUnexpectedError();
             }

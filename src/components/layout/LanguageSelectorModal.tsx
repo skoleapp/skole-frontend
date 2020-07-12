@@ -1,9 +1,9 @@
 import { MenuItem } from '@material-ui/core';
+import { useDrawer, useLanguageSelector } from 'hooks';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useDrawer, useLanguageSelector } from '../../utils';
-import { ModalHeader, StyledDrawer, StyledList } from '../shared';
+import { ModalHeader, StyledDrawer, StyledList } from '..';
 
 export const LanguageSelectorModal: React.FC = () => {
     const { t, i18n } = useTranslation();

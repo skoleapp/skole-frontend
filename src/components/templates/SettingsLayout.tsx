@@ -1,14 +1,14 @@
 import { Box, CardContent, CardHeader, Grid, Typography } from '@material-ui/core';
+import { useDeviceContext } from 'context';
+import { useSettings } from 'hooks';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { LayoutProps } from 'types';
 
-import { useDeviceContext } from '../../context';
-import { LayoutProps } from '../../types';
-import { useSettings } from '../../utils';
-import { SettingsButton, StyledCard } from '../shared';
-import { MainLayout } from './MainLayout';
+import { SettingsButton, StyledCard } from '..';
+import { MainLayout } from '.';
 
 interface Props extends LayoutProps {
     renderCardContent?: JSX.Element | JSX.Element[];

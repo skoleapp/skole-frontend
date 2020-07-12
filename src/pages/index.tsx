@@ -1,24 +1,18 @@
 import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typography } from '@material-ui/core';
-import {
-    CloudUploadOutlined,
-    LibraryAddOutlined,
-    SchoolOutlined,
-    SearchOutlined,
-    SvgIconComponent,
-} from '@material-ui/icons';
+import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
+import { MainLayout } from 'components';
+import { useSearch } from 'hooks';
+import { includeDefaultNamespaces, Link } from 'i18n';
+import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { breakpoints } from 'styles';
+import { I18nProps } from 'types';
 import { UrlObject } from 'url';
-
-import { MainLayout } from '../components';
-import { includeDefaultNamespaces, Link } from '../i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from '../lib';
-import { breakpoints } from '../styles';
-import { I18nProps } from '../types';
-import { useSearch } from '../utils';
+import { SHORTCUTS } from 'utils';
 
 interface Shortcut {
     text: string;
@@ -28,25 +22,7 @@ interface Shortcut {
 
 const IndexPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
-    const { handleSubmit, searchUrl, inputProps } = useSearch();
-
-    const shortcuts = [
-        {
-            text: 'index:browseCourses',
-            icon: SchoolOutlined,
-            href: searchUrl,
-        },
-        {
-            text: 'index:uploadResource',
-            icon: CloudUploadOutlined,
-            href: '/upload-resource',
-        },
-        {
-            text: 'index:createCourse',
-            icon: LibraryAddOutlined,
-            href: '/create-course',
-        },
-    ];
+    const { handleSubmit, inputProps } = useSearch();
 
     const renderSearch = (
         <Box id="top-section-container">
@@ -84,7 +60,7 @@ const IndexPage: NextPage<I18nProps> = () => {
 
     const renderShortcuts = (
         <Box id="shortcuts" display="flex" justifyContent="center" marginTop="1rem">
-            {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+            {SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
                 <Link href={href} key={i}>
                     <Card>
                         <CardActionArea>

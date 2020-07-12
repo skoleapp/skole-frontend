@@ -1,28 +1,12 @@
 import { Box, Grid, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
 import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
-import { useConfirm } from 'material-ui-confirm';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
-import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-
 import {
-    CommentObjectType,
-    CourseDetailDocument,
-    CourseObjectType,
-    DeleteCourseMutation,
-    ResourceObjectType,
-    useDeleteCourseMutation,
-    UserObjectType,
-    VoteObjectType,
-} from '../../../generated/graphql';
-import {
+    CustomBottomNavbarContainer,
     DiscussionHeader,
     FrontendPaginatedTable,
     IconButtonLink,
     InfoModalContent,
     MainLayout,
-    NavbarContainer,
     NotFoundBox,
     NotFoundLayout,
     ResourceTableBody,
@@ -34,11 +18,18 @@ import {
     StyledTabs,
     TextLink,
     TopLevelCommentThread,
-} from '../../components';
-import { useAuthContext, useDeviceContext, useDiscussionContext, useNotificationsContext } from '../../context';
-import { includeDefaultNamespaces, Router } from '../../i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from '../../lib';
-import { I18nProps } from '../../types';
+} from 'components';
+import { useAuthContext, useDeviceContext, useDiscussionContext, useNotificationsContext } from 'context';
+import {
+    CommentObjectType,
+    CourseDetailDocument,
+    CourseObjectType,
+    DeleteCourseMutation,
+    ResourceObjectType,
+    useDeleteCourseMutation,
+    UserObjectType,
+    VoteObjectType,
+} from 'generated';
 import {
     useActionsDrawer,
     useCommentQuery,
@@ -49,7 +40,16 @@ import {
     useShare,
     useTabs,
     useVotes,
-} from '../../utils';
+} from 'hooks';
+import { includeDefaultNamespaces, Router } from 'i18n';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { useConfirm } from 'material-ui-confirm';
+import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
+import React, { SyntheticEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { I18nProps } from 'types';
+import { urls } from 'utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -176,7 +176,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     );
 
     const renderSchoolLink = !!schoolId && (
-        <TextLink href="/schools/[id]" as={`/schools/${schoolId}`} color="primary">
+        <TextLink href={urls.school} as={`/schools/${schoolId}`} color="primary">
             {schoolName}
         </TextLink>
     );
@@ -232,7 +232,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
 
     const renderCustomBottomNavbar = (
         <StyledBottomNavigation>
-            <NavbarContainer>
+            <CustomBottomNavbarContainer>
                 <Grid container>
                     <Grid item xs={6} container justify="flex-start">
                         {renderStarButton}
@@ -242,7 +242,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
                         {renderDownVoteButton}
                     </Grid>
                 </Grid>
-            </NavbarContainer>
+            </CustomBottomNavbarContainer>
         </StyledBottomNavigation>
     );
 
@@ -266,7 +266,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         <Tooltip title={!!verificationRequiredTooltip ? verificationRequiredTooltip : t('tooltips:uploadResource')}>
             <span>
                 <IconButtonLink
-                    href={{ pathname: '/upload-resource', query: { school: schoolId, course: courseId } }}
+                    href={{ pathname: urls.uploadResource, query: { school: schoolId, course: courseId } }}
                     icon={CloudUploadOutlined}
                     disabled={verified === false}
                     {...iconButtonProps}

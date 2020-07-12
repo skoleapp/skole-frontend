@@ -1,19 +1,5 @@
 import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
 import { EditOutlined, StarBorderOutlined } from '@material-ui/icons';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useAuthContext, useDeviceContext } from 'src/context';
-import styled from 'styled-components';
-
-import {
-    BadgeObjectType,
-    CourseObjectType,
-    ResourceObjectType,
-    UserDetailDocument,
-    UserObjectType,
-} from '../../../generated/graphql';
 import {
     ButtonLink,
     CourseTableBody,
@@ -26,12 +12,20 @@ import {
     StyledCard,
     StyledTabs,
     TextLink,
-} from '../../components';
-import { includeDefaultNamespaces } from '../../i18n';
-import { useSSRApollo, withAuthSync } from '../../lib';
-import { breakpoints, breakpointsNum } from '../../styles';
-import { I18nProps, MaxWidth } from '../../types';
-import { mediaURL, useFrontendPagination, useMoment, useTabs } from '../../utils';
+} from 'components';
+import { useAuthContext, useDeviceContext } from 'context';
+import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from 'generated';
+import { useFrontendPagination, useMoment, useTabs } from 'hooks';
+import { includeDefaultNamespaces } from 'i18n';
+import { useSSRApollo, withAuthSync } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { breakpoints, breakpointsNum } from 'styles';
+import { I18nProps, MaxWidth } from 'types';
+import { mediaURL, urls } from 'utils';
 
 interface Props extends I18nProps {
     user?: UserObjectType;
@@ -61,7 +55,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
 
     const renderEditProfileButton = isOwnProfile && (
         <ButtonLink
-            href="/account/edit-profile"
+            href={urls.editProfile}
             color="primary"
             variant="outlined"
             endIcon={<EditOutlined />}
@@ -72,13 +66,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     );
 
     const renderViewStarredButton = isOwnProfile && (
-        <ButtonLink
-            href="/account/starred"
-            color="primary"
-            variant="outlined"
-            endIcon={<StarBorderOutlined />}
-            fullWidth
-        >
+        <ButtonLink href={urls.starred} color="primary" variant="outlined" endIcon={<StarBorderOutlined />} fullWidth>
             {t('profile:viewStarred')}
         </ButtonLink>
     );
@@ -167,7 +155,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
 
     const renderVerifyAccountLink = isOwnProfile && verified === false && (
         <Box marginTop="0.5rem">
-            <TextLink href="/account/verify-account" color="primary">
+            <TextLink href={urls.verifyAccount} color="primary">
                 {t('common:verifyAccount')}
             </TextLink>
         </Box>

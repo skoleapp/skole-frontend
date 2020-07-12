@@ -1,9 +1,8 @@
 import Head from 'next/head';
 import React from 'react';
-
-import { GA_TRACKING_ID } from '../../lib';
-import { colors } from '../../styles';
-import { SEOProps } from '../../types';
+import { colors } from 'styles';
+import { SEOProps } from 'types';
+import { GA_TRACKING_ID } from 'utils';
 
 const GAScript = {
     __html: `
