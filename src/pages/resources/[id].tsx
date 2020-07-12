@@ -200,11 +200,20 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         handleCloseActions(e);
 
         try {
+            const res = await fetch(file, {
+                headers: new Headers({ Origin: location.origin }),
+                mode: 'cors',
+            });
+
+            // TODO: See if this blob conversion removes the CORS error in QA and remove this if it works.
+            const blob = await res.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
             await import('print-js');
             // Ignore: TS doesn't detect the `print-js` import.
             // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
-            printJS(file);
+            printJS(blobUrl);
         } catch {
             toggleNotification(t('notifications:printResourceError'));
         }

@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
-import { usePDFViewerContext } from 'context';
+import { useDeviceContext, usePDFViewerContext } from 'context';
 import { useStateRef } from 'hooks';
-import { getBoundingRect, getPageFromElement, getScreenshot } from 'lib';
+import { getBoundingRect, getPageFromElement } from 'lib';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { LTWH, PDFTranslation } from 'types';
@@ -18,6 +18,7 @@ const initialState = { start: null, end: null, locked: false };
 // Inspired by: https://github.com/agentcooper/react-pdf-highlighter
 // TODO: Add a listener that cancels the draw mode from ESC key.
 export const AreaSelection: React.FC = () => {
+    const isMobile = useDeviceContext();
     const { setScreenshot, drawMode } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
     const { start, end } = stateRef.current;
@@ -25,6 +26,26 @@ export const AreaSelection: React.FC = () => {
     // Ignore: Document node is always defined even if the PDF fails to load.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const getDocumentNode = (): Element => document.querySelector('.react-pdf__Document')!;
+
+    // Get closest PDF page and take screenshot of selected area.
+    const getScreenshot = (target: HTMLElement, position: LTWH): string | null => {
+        const canvas = target.closest('canvas');
+        const { left, top, width, height } = position;
+        const newCanvas = document.createElement('canvas');
+        newCanvas.width = width;
+        newCanvas.height = height;
+        const newCanvasContext = newCanvas.getContext('2d');
+
+        if (!!newCanvas && !!newCanvasContext && !!canvas && !!width && !!height) {
+            // Device pixel ratio seems to be a bit of for mobile devices at least when using Chrome.
+            // Using a hard coded value of 3 for mobile devices seems to result in correctly aligned screenshots.
+            const dpr = isMobile ? 3 : window.devicePixelRatio;
+            newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
+            return newCanvas.toDataURL('image/jpeg');
+        } else {
+            return null;
+        }
+    };
 
     const onSelection = (startTarget: HTMLElement, boundingRect: LTWH): void => {
         const page = getPageFromElement(startTarget);
