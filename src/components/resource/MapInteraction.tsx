@@ -226,7 +226,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     const handleScale = async (newScale: number): Promise<void> => {
         setFullscreen(false);
         newScale == DEFAULT_SCALE && setFullscreen(true);
-        await setScale(newScale); // Wait until new scale has been applied and center horizontal scroll only after that.
+        await setScale(newScale); // Wait until new scale has been applied and center horizontal scroll only after that to avoid lagginess.
         centerHorizontalScroll();
     };
 
