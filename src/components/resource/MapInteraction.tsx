@@ -268,7 +268,7 @@ export const MapInteraction: React.FC = ({ children }) => {
             document.removeEventListener('keydown', onKeyDown);
             document.removeEventListener('keyup', onKeyUp);
         };
-    }, []);
+    }, [drawMode, controlsDisabled]);
 
     // When entering draw mode, reset scale/translation.
     useEffect(() => {
