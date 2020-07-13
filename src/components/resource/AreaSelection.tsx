@@ -212,7 +212,6 @@ export const AreaSelection: React.FC = () => {
             documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
             documentNode.removeEventListener('mousemove', onMouseMove as EventListener);
             documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
-            setState(initialState); // Reset state.
         };
     }, [drawMode]);
 
