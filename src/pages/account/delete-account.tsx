@@ -33,7 +33,7 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
     const confirm = useConfirm();
     const apolloClient = useApolloClient();
-    const { setUser } = useAuthContext();
+    const { setUserMe } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
 
     const onCompleted = async ({ deleteUser }: DeleteAccountMutation): Promise<void> => {
@@ -44,7 +44,7 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
                 resetForm();
                 toggleNotification(deleteUser.message);
                 removeTokenCookie();
-                setUser(null);
+                setUserMe(null);
                 await apolloClient.resetStore();
                 Router.push(urls.login);
             } else {

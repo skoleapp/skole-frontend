@@ -57,7 +57,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user, verified, verificationRequiredTooltip } = useAuthContext();
+    const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const resourceTitle = R.propOr('', 'title', resource) as string;
     const resourceDate = R.propOr('', 'date', resource) as string;
     const resourceType = R.propOr('', 'resourceType', resource) as string;
@@ -73,7 +73,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const initialVote = (R.propOr(null, 'vote', resource) as unknown) as VoteObjectType | null;
     const initialScore = String(R.propOr(0, 'score', resource));
     const starred = !!R.propOr(undefined, 'starred', resource);
-    const isOwner = !!user && user.id === creatorId;
+    const isOwner = !!userMe && userMe.id === creatorId;
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const commentCount = comments.length;

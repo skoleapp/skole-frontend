@@ -39,7 +39,7 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const { t } = useTranslation();
-    const { user, verified, verificationRequiredTooltip } = useAuthContext();
+    const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const moment = useMoment();
     const created = moment(comment.created).format('LL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
@@ -48,7 +48,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const initialVote = R.propOr(null, 'vote', comment) as VoteObjectType | null;
     const initialScore = String(R.propOr(0, 'score', comment));
     const creatorId = R.propOr('', 'id', comment.user) as string;
-    const isOwner = !!user && user.id === creatorId;
+    const isOwner = !!userMe && userMe.id === creatorId;
     const commentId = R.propOr('', 'id', comment) as string;
     const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', comment);
     const replyCount = replyComments.length;

@@ -39,7 +39,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
     const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
-    const { setUser } = useAuthContext();
+    const { setUserMe } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
 
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
@@ -83,7 +83,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
                 await setTokenCookie(login.token); // We need to wait until the asynchronous middleware for removing the cookie has been called before the response is sent to the client.
                 resetForm();
                 toggleNotification(register.message);
-                setUser(login.user as UserObjectType);
+                setUserMe(login.user as UserObjectType);
                 Router.push('/');
             } catch {
                 unexpectedError();

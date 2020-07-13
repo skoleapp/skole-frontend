@@ -32,7 +32,7 @@ import * as Yup from 'yup';
 
 const EditProfilePage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
-    const { user, setUser, verified } = useAuthContext();
+    const { userMe, setUserMe, verified } = useAuthContext();
     const { ref, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
 
@@ -42,7 +42,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                 handleMutationErrors(updateUser.errors);
             } else if (!!updateUser.message) {
                 toggleNotification(updateUser.message);
-                setUser(updateUser.user as UserObjectType);
+                setUserMe(updateUser.user as UserObjectType);
             } else {
                 unexpectedError();
             }
@@ -72,14 +72,14 @@ const EditProfilePage: NextPage<I18nProps> = () => {
     };
 
     const initialValues = {
-        id: R.propOr('', 'id', user) as string,
-        title: R.propOr('', 'title', user) as string,
-        username: R.propOr('', 'username', user) as string,
-        email: R.propOr('', 'email', user) as string,
-        bio: R.propOr('', 'bio', user) as string,
-        avatar: R.propOr('', 'avatar', user) as string,
-        school: R.propOr(null, 'school', user) as SchoolObjectType,
-        subject: R.propOr(null, 'subject', user) as SubjectObjectType,
+        id: R.propOr('', 'id', userMe) as string,
+        title: R.propOr('', 'title', userMe) as string,
+        username: R.propOr('', 'username', userMe) as string,
+        email: R.propOr('', 'email', userMe) as string,
+        bio: R.propOr('', 'bio', userMe) as string,
+        avatar: R.propOr('', 'avatar', userMe) as string,
+        school: R.propOr(null, 'school', userMe) as SchoolObjectType,
+        subject: R.propOr(null, 'subject', userMe) as SubjectObjectType,
         general: '',
     };
 
@@ -183,7 +183,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
         formLayout: true,
     };
 
-    if (!!user) {
+    if (!!userMe) {
         return <SettingsLayout {...layoutProps} />;
     } else {
         return <NotFoundLayout />;

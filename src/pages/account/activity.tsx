@@ -23,7 +23,7 @@ interface Props extends I18nProps {
 
 const ActivityPage: NextPage<Props> = () => {
     const { t } = useTranslation();
-    const { user, setUser } = useAuthContext();
+    const { userMe, setUserMe } = useAuthContext();
     const { renderActionsHeader, renderActionsButton, handleCloseActions, open, anchor } = useActionsDrawer();
     const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
     const { toggleNotification } = useNotificationsContext();
@@ -35,8 +35,8 @@ const ActivityPage: NextPage<Props> = () => {
                 onError();
             } else if (!!markAllActivitiesRead.activity) {
                 const activity = markAllActivitiesRead.activity as ActivityObjectType[];
-                const newUser = { ...user, activity } as UserObjectType;
-                setUser(newUser);
+                const newUserMe = { ...userMe, activity } as UserObjectType;
+                setUserMe(newUserMe);
             } else {
                 onError();
             }
@@ -94,7 +94,7 @@ const ActivityPage: NextPage<Props> = () => {
         fullSize: true,
     };
 
-    if (!!user) {
+    if (!!userMe) {
         return <SettingsLayout {...layoutProps}>{renderActionsDrawer}</SettingsLayout>;
     } else {
         return <NotFoundLayout />;

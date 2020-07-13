@@ -61,7 +61,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user, verified, verificationRequiredTooltip } = useAuthContext();
+    const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
@@ -75,10 +75,9 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const resourceCount = String(resources.length);
     const comments = R.propOr([], 'comments', course) as CommentObjectType[];
     const { commentCount } = useDiscussionContext(comments);
-    const isOwnCourse = creatorId === R.propOr('', 'id', user);
     const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
     const starred = !!R.propOr(undefined, 'starred', course);
-    const isOwner = !!user && user.id === creatorId;
+    const isOwner = !!userMe && userMe.id === creatorId;
     const subjectId = R.path(['subject', 'id'], course) as boolean[];
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
@@ -348,7 +347,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </StyledDrawer>
     );
 
-    const renderDeleteAction = isOwnCourse && (
+    const renderDeleteAction = isOwner && (
         <MenuItem disabled={verified === false}>
             <ListItemText onClick={handleDeleteCourse}>
                 <DeleteOutline /> {t('common:delete')}

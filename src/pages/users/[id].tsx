@@ -18,7 +18,7 @@ import { useAuthContext, useDeviceContext } from 'context';
 import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from 'generated';
 import { useFrontendPagination, useMoment, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces } from 'i18n';
-import { useSSRApollo, withAuthSync } from 'lib';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -33,10 +33,11 @@ interface Props extends I18nProps {
 }
 
 const UserPage: NextPage<Props> = ({ user }) => {
+    const isMobile = useDeviceContext(breakpointsNum.SM);
     const { t } = useTranslation();
     const moment = useMoment();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-    const { user: loggedInUser, verified } = useAuthContext();
+    const { userMe, verified } = useAuthContext();
     const rank = R.propOr('', 'rank', user) as string;
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
@@ -44,7 +45,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const bio = R.propOr('', 'bio', user) as string;
     const score = R.propOr('-', 'score', user) as string;
     const joined = moment(R.propOr('', 'created', user)).format('LL');
-    const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', loggedInUser);
+    const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
     const badges = R.propOr([], 'badges', user) as BadgeObjectType[];
     const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
     const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
@@ -52,7 +53,6 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const resourceCount = createdResources.length;
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
-    const isMobile = useDeviceContext(breakpointsNum.SM);
 
     const renderEditProfileButton = isOwnProfile && (
         <ButtonLink
@@ -345,7 +345,9 @@ const StyledUserPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 
@@ -359,6 +361,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     } catch {
         return { props: { ...nameSpaces, initialApolloState } };
     }
-};
+});
 
 export default withAuthSync(UserPage);

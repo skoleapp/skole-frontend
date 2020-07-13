@@ -8,7 +8,7 @@ import {
 } from 'generated';
 import { Router } from 'i18n';
 import * as R from 'ramda';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { UrlObject } from 'url';
@@ -45,17 +45,11 @@ interface Props {
 
 export const ActivityList: React.FC<Props> = ({ slice }) => {
     const { t } = useTranslation();
-    const { user } = useAuthContext();
-    const initialActivity: ActivityObjectType[] = R.propOr([], 'activity', user);
+    const { userMe } = useAuthContext();
+    const initialActivity: ActivityObjectType[] = R.propOr([], 'activity', userMe);
     const [activity, setActivity] = useState(initialActivity);
     const { toggleNotification } = useNotificationsContext();
     const onError = (): void => toggleNotification(t('errors:activityError'));
-
-    // Automatically update activity state when user context gets updated.
-    useEffect(() => {
-        const updatedActivity: ActivityObjectType[] = R.propOr([], 'activity', user);
-        setActivity(updatedActivity);
-    }, [user]);
 
     const onCompleted = ({ markActivityRead }: MarkSingleActivityReadMutation): void => {
         if (!!markActivityRead) {
