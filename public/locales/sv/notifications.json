@@ -11,5 +11,7 @@
     "printResourceError": "Fel vid utskrift av resursen!",
     "messageError": "Fel vid skickande av meddelande!",
     "sharingError": "Fel vid delning!",
-    "appUpdated": "App uppdaterad!"
+    "appUpdated": "App uppdaterad!",
+    "markSingleActivityReadError": "Denna aktivitet har troligen tagits bort. Uppdatera sidan.",
+    "markAllActivitiesReadError": "Fel vid markering av aktiviteter som läst!"
 }

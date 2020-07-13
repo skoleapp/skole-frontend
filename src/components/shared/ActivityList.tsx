@@ -23,8 +23,8 @@ const getHref = ({
     resource,
     comment,
 }: Pick<ActivityObjectType, 'course' | 'resource' | 'comment'>): UrlObject => {
-    let pathname = '#';
-    let query = {};
+    let pathname = undefined;
+    let query = undefined;
 
     if (!!course) {
         pathname = `/courses/${course.id}`;
@@ -49,7 +49,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
     const initialActivity: ActivityObjectType[] = R.propOr([], 'activity', userMe);
     const [activity, setActivity] = useState(initialActivity);
     const { toggleNotification } = useNotificationsContext();
-    const onError = (): void => toggleNotification(t('errors:activityError'));
+    const onError = (): void => toggleNotification(t('notifications:markSingleActivityReadError'));
 
     const onCompleted = ({ markActivityRead }: MarkSingleActivityReadMutation): void => {
         if (!!markActivityRead) {
@@ -70,13 +70,15 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
     const [markSingleActivityRead] = useMarkSingleActivityReadMutation({ onCompleted, onError });
 
     const handleClick = ({ id, ...activity }: ActivityObjectType) => async (): Promise<void> => {
-        const href = getHref(activity);
+        const { pathname, query } = getHref(activity);
 
         try {
             await markSingleActivityRead({ variables: { id, read: true } });
-            Router.push(href);
+            // The activities should always have a pathname but technically it's possible that the pathname is undefined.
+            // In that case we do nothing besides marking the activity as read.
+            !!pathname && Router.push({ pathname, query });
         } catch {
-            toggleNotification(t('errors:activityError'));
+            onError();
         }
     };
 

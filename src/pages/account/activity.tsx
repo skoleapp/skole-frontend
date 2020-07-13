@@ -27,7 +27,7 @@ const ActivityPage: NextPage<Props> = () => {
     const { renderActionsHeader, renderActionsButton, handleCloseActions, open, anchor } = useActionsDrawer();
     const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
     const { toggleNotification } = useNotificationsContext();
-    const onError = (): void => toggleNotification(t('errors:activityError'));
+    const onError = (): void => toggleNotification(t('notifications:markAllActivitiesReadError'));
 
     const onCompleted = ({ markAllActivitiesRead }: MarkAllActivitiesAsReadMutation): void => {
         if (!!markAllActivitiesRead) {
