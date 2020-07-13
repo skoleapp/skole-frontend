@@ -1,3 +1,4 @@
+import { Box, Button, Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
 import { includeDefaultNamespaces } from 'i18n';
 import { withUserAgent } from 'lib';
@@ -9,6 +10,24 @@ import { I18nProps } from 'types';
 const AboutPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
 
+    const renderCardContent = (
+        <Box>
+            <Box textAlign="left">
+                <Typography variant="body2">{t('about:content')}</Typography>
+            </Box>
+            <Box marginTop="2rem">
+                <Typography variant="h3" gutterBottom>
+                    {t('about:feedbackHeader')}
+                </Typography>
+                <Box marginTop="1rem">
+                    <Button color="primary" variant="contained">
+                        {t('about:feedbackText')}
+                    </Button>
+                </Box>
+            </Box>
+        </Box>
+    );
+
     const layoutProps = {
         seoProps: {
             title: t('about:title'),
@@ -19,7 +38,7 @@ const AboutPage: NextPage<I18nProps> = () => {
             dynamicBackUrl: true,
         },
         desktopHeader: t('about:header'),
-        infoContent: t('terms:content'),
+        renderCardContent,
         infoLayout: true,
     };
 

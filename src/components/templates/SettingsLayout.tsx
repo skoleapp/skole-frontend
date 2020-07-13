@@ -16,7 +16,6 @@ interface Props extends LayoutProps {
     desktopHeader?: string;
     formLayout?: boolean;
     infoLayout?: boolean;
-    infoContent?: string;
     fullSize?: boolean;
 }
 
@@ -27,7 +26,6 @@ export const SettingsLayout: React.FC<Props> = ({
     desktopHeader,
     formLayout,
     infoLayout,
-    infoContent,
     fullSize,
     children,
     ...props
@@ -43,7 +41,6 @@ export const SettingsLayout: React.FC<Props> = ({
     };
 
     const layoutProps = formLayout || infoLayout ? customColSpan : {};
-    const renderInfoContent = infoContent && <Typography variant="body2">{infoContent}</Typography>;
     const renderHeaderRight = <SettingsButton color="secondary" />;
     const headerRight: JSX.Element = R.propOr(renderHeaderRight, 'headerRight', topNavbarProps);
 
@@ -68,10 +65,7 @@ export const SettingsLayout: React.FC<Props> = ({
     const renderCardContentSection = (
         <Grid container justify="center">
             <Grid item container direction="column" xs={12} {...layoutProps}>
-                <CardContent className="container">
-                    {renderCardContent}
-                    {renderInfoContent}
-                </CardContent>
+                <CardContent className="container">{renderCardContent}</CardContent>
             </Grid>
         </Grid>
     );

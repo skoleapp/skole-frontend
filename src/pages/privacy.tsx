@@ -1,3 +1,4 @@
+import { Box, Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
 import { includeDefaultNamespaces } from 'i18n';
 import { withUserAgent } from 'lib';
@@ -9,6 +10,12 @@ import { I18nProps } from 'types';
 const PrivacyPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
 
+    const renderCardContent = (
+        <Box textAlign="left">
+            <Typography variant="body2">{t('privacy:content')}</Typography>
+        </Box>
+    );
+
     const layoutProps = {
         seoProps: {
             title: t('privacy:title'),
@@ -19,7 +26,7 @@ const PrivacyPage: NextPage<I18nProps> = () => {
             dynamicBackUrl: true,
         },
         desktopHeader: t('privacy:header'),
-        infoContent: t('privacy:content'),
+        renderCardContent,
         infoLayout: true,
     };
 
