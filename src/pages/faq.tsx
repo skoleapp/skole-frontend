@@ -1,8 +1,9 @@
 import { Box, Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
 import { includeDefaultNamespaces } from 'i18n';
-import { withUserAgent } from 'lib';
+import { withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
@@ -51,7 +52,9 @@ const FAQPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
+const wrappers = R.compose(withUserAgent, withUserMe);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['faq']),
     },
