@@ -1,4 +1,4 @@
-import { Box, CardContent, CardHeader, Grid, Typography } from '@material-ui/core';
+import { Box, CardContent, CardHeader, Grid } from '@material-ui/core';
 import { useDeviceContext } from 'context';
 import { useSettings } from 'hooks';
 import * as R from 'ramda';

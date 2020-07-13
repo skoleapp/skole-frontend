@@ -20,7 +20,7 @@ import {
 const SkolePageContext = createContext<SkoleContextType>({
     auth: {
         userMe: null,
-        setUser: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+        setUserMe: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     attachmentViewer: {
         attachment: null,

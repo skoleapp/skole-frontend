@@ -1,5 +1,5 @@
-import { Box, Button, Typography } from '@material-ui/core';
-import { SettingsLayout } from 'components';
+import { Box, Typography } from '@material-ui/core';
+import { ButtonLink, SettingsLayout } from 'components';
 import { includeDefaultNamespaces } from 'i18n';
 import { withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
@@ -7,6 +7,7 @@ import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
+import { urls } from 'utils';
 
 const AboutPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
@@ -21,9 +22,9 @@ const AboutPage: NextPage<I18nProps> = () => {
                     {t('about:feedbackHeader')}
                 </Typography>
                 <Box marginTop="1rem">
-                    <Button color="primary" variant="contained">
+                    <ButtonLink href={urls.contact} color="primary" variant="contained">
                         {t('about:feedbackText')}
-                    </Button>
+                    </ButtonLink>
                 </Box>
             </Box>
         </Box>
