@@ -18,6 +18,7 @@ import styled from 'styled-components';
 import { CommentTarget } from 'types';
 
 import { ModalHeader, StyledModal } from '..';
+import { TextEditor } from './TextEditor';
 
 interface CreateCommentFormValues {
     text: string;
@@ -193,37 +194,38 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
     const renderDesktopInputArea = ({ values }: T): false | JSX.Element =>
         !isMobile && (
-            <Box id="desktop-input-area" display="flex" alignItems="center">
-                <Box marginRight="0.5rem">
-                    <input
-                        value=""
-                        id={`attachment-desktop-${formKey}`}
-                        accept=".png, .jpg, .jpeg"
-                        type="file"
-                        onChange={handleAttachmentChange}
-                        disabled={disabled}
-                    />
-                    <label htmlFor={`attachment-desktop-${formKey}`}>
-                        <Tooltip title={attachmentButtonTooltip}>
-                            <span>
-                                <IconButton disabled={disabled} component="span" size="small">
-                                    <AttachFileOutlined />
-                                </IconButton>
-                            </span>
-                        </Tooltip>
-                    </label>
-                </Box>
-                <Tooltip title={inputTooltip}>
-                    <span id="desktop-input-container">
-                        <TextField
-                            onKeyDown={handleKeyDown}
-                            value={!values.attachment ? values.text : ''}
-                            {...textFieldProps}
-                        />
-                    </span>
-                </Tooltip>
-                <Box marginLeft="0.5rem">{renderSubmitButton}</Box>
-            </Box>
+            // <Box id="desktop-input-area" display="flex" alignItems="center">
+            //     <Box marginRight="0.5rem">
+            //         <input
+            //             value=""
+            //             id={`attachment-desktop-${formKey}`}
+            //             accept=".png, .jpg, .jpeg"
+            //             type="file"
+            //             onChange={handleAttachmentChange}
+            //             disabled={disabled}
+            //         />
+            //         <label htmlFor={`attachment-desktop-${formKey}`}>
+            //             <Tooltip title={attachmentButtonTooltip}>
+            //                 <span>
+            //                     <IconButton disabled={disabled} component="span" size="small">
+            //                         <AttachFileOutlined />
+            //                     </IconButton>
+            //                 </span>
+            //             </Tooltip>
+            //         </label>
+            //     </Box>
+            //     <Tooltip title={inputTooltip}>
+            //         <span id="desktop-input-container">
+            //             <TextField
+            //                 onKeyDown={handleKeyDown}
+            //                 value={!values.attachment ? values.text : ''}
+            //                 {...textFieldProps}
+            //             />
+            //         </span>
+            //     </Tooltip>
+            //     <Box marginLeft="0.5rem">{renderSubmitButton}</Box>
+            // </Box>
+            <TextEditor />
         );
 
     const renderCreateCommentModal = ({ values }: T): JSX.Element => (
@@ -262,15 +264,15 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 };
 
 const StyledCreateCommentForm = styled(Form)`
-    #desktop-input-area {
-        .MuiFormControl-root {
-            margin-top: 0;
-        }
+    // #desktop-input-area {
+    //     .MuiFormControl-root {
+    //         margin-top: 0;
+    //     }
 
-        #desktop-input-container {
-            flex-grow: 1;
-        }
-    }
+    //     #desktop-input-container {
+    //         flex-grow: 1;
+    //     }
+    // }
 `;
 
 // Ignore: screenshot must be omitted from Box props.
