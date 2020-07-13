@@ -3,6 +3,7 @@ import {
     Avatar,
     Box,
     ClickAwayListener,
+    Divider,
     Fade,
     Grid,
     IconButton,
@@ -99,7 +100,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                     <Box marginTop="0.5rem">
                         <Paper>
                             <Box padding="0.5rem">
-                                <ActivityList slice={5} />
+                                <Box height="20rem" width="20rem" display="flex">
+                                    <ActivityList slice={5} />
+                                </Box>
+                                <Divider />
                                 <Box marginTop="0.5rem" textAlign="center">
                                     <ButtonLink href={urls.activity} color="primary" fullWidth>
                                         {t('common:seeAll')}

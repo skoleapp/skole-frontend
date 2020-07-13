@@ -130,7 +130,7 @@ const StyledActivityList = styled(Box)`
 
     .MuiList-root {
         flex-grow: 1;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 `;
 
