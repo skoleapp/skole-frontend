@@ -17,7 +17,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GlobalStyle, theme } from 'styles';
 
-NProgress.configure({ showSpinner: true });
+NProgress.configure({ showSpinner: false });
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeError', () => NProgress.done());
