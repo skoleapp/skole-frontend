@@ -11,7 +11,7 @@ export * from './useOpen';
 export * from './useLanguageSelector';
 export * from './useForm';
 export * from './useSearch';
-export * from './useTabs';
+export * from './useSwipeableTabs';
 export * from './useAlerts';
 export * from './useSettings';
 export * from './useFrontendPagination';

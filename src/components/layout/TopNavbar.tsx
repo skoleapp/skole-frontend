@@ -3,6 +3,7 @@ import {
     Avatar,
     Box,
     ClickAwayListener,
+    Divider,
     Fade,
     Grid,
     IconButton,
@@ -40,11 +41,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     headerRightSecondary,
     headerLeft,
 }) => {
-    const { user } = useAuthContext();
+    const { userMe } = useAuthContext();
+    const userMeId = R.propOr('', 'id', userMe);
     const { t } = useTranslation();
     const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(null);
     const [activityPopperOpen, setActivityPopperOpen] = useState(false);
-    const avatarThumb = R.propOr('', 'avatar', user) as string;
+    const avatarThumb = R.propOr('', 'avatar', userMe) as string;
     const isMobile = useDeviceContext();
     const dense = !!headerLeft || !!headerRightSecondary;
     const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
@@ -99,7 +101,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                     <Box marginTop="0.5rem">
                         <Paper>
                             <Box padding="0.5rem">
-                                <ActivityList slice={5} />
+                                <Box height="20rem" width="20rem" display="flex">
+                                    <ActivityList slice={5} />
+                                </Box>
+                                <Divider />
                                 <Box marginTop="0.5rem" textAlign="center">
                                     <ButtonLink href={urls.activity} color="primary" fullWidth>
                                         {t('common:seeAll')}
@@ -113,7 +118,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Popper>
     );
 
-    const renderAuthenticatedButtons = !!user && (
+    const renderAuthenticatedButtons = !!userMe && (
         <>
             <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
                 <Box>
@@ -126,7 +131,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             </Tooltip>
             <Tooltip title={t('tooltips:profile')}>
                 <span>
-                    <Link href={urls.user} as={`/users/${user.id}`}>
+                    <Link href={urls.user} as={`/users/${userMeId}`}>
                         <IconButton color="secondary">
                             <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
                         </IconButton>
@@ -147,8 +152,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </>
     );
 
-    const renderSearch = !disableSearch && !!user && <TopNavbarSearchWidget />;
-    const renderButtons = !!user ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
+    const renderSearch = !disableSearch && !!userMe && <TopNavbarSearchWidget />;
+    const renderButtons = !!userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
 
     const renderDesktopContent = !isMobile && (
         <Grid container alignItems="center">

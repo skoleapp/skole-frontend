@@ -2,5 +2,7 @@
     "title": "Om oss",
     "description": "Det här är en sida om oss.",
     "header": "Om oss",
-    "content": "Skole är en studentutvecklad plattform som hjälper dig att lära dig mer av läromaterialet. Den här är en betaversion som används för att göra plattformen bättre för våra användare."
+    "content": "Skole är en studentutvecklad plattform som hjälper dig att lära dig mer av läromaterialet. Den här är en betaversion som används för att göra plattformen bättre för våra användare.",
+    "feedbackHeader": "Haluatko auttaa meitä parantamaan palveluamme?",
+    "feedbackText": "Anna meille palautetta"
 }

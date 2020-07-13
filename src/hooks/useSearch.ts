@@ -21,13 +21,13 @@ interface UseSearch {
 export const useSearch = (): UseSearch => {
     const [value, setValue] = useState('');
     const { t } = useTranslation();
-    const { user } = useAuthContext();
+    const { userMe } = useAuthContext();
     const placeholder = t('forms:searchCourses');
     const autoComplete = 'off';
 
     // Construct a query from user's selected school and subject.
-    const school = R.pathOr(undefined, ['school', 'id'], user);
-    const subject = R.pathOr(undefined, ['subject', 'id'], user);
+    const school = R.pathOr(undefined, ['school', 'id'], userMe);
+    const subject = R.pathOr(undefined, ['subject', 'id'], userMe);
     const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, { school, subject });
     const searchUrl = { pathname: urls.search, query };
 

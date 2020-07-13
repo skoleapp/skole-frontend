@@ -2,8 +2,8 @@ import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 export interface AuthContext {
-    user: UserObjectType | null;
-    setUser: (user: UserObjectType | null) => void;
+    userMe: UserObjectType | null;
+    setUserMe: (user: UserObjectType | null) => void;
 }
 
 export interface AttachmentViewerContext {

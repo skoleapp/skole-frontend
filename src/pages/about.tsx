@@ -1,13 +1,34 @@
-import { SettingsLayout } from 'components';
+import { Box, Typography } from '@material-ui/core';
+import { ButtonLink, SettingsLayout } from 'components';
 import { includeDefaultNamespaces } from 'i18n';
-import { withUserAgent } from 'lib';
+import { withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
+import { urls } from 'utils';
 
 const AboutPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
+
+    const renderCardContent = (
+        <Box>
+            <Box textAlign="left">
+                <Typography variant="body2">{t('about:content')}</Typography>
+            </Box>
+            <Box marginTop="2rem">
+                <Typography variant="h3" gutterBottom>
+                    {t('about:feedbackHeader')}
+                </Typography>
+                <Box marginTop="1rem">
+                    <ButtonLink href={urls.contact} color="primary" variant="contained">
+                        {t('about:feedbackText')}
+                    </ButtonLink>
+                </Box>
+            </Box>
+        </Box>
+    );
 
     const layoutProps = {
         seoProps: {
@@ -19,14 +40,16 @@ const AboutPage: NextPage<I18nProps> = () => {
             dynamicBackUrl: true,
         },
         desktopHeader: t('about:header'),
-        infoContent: t('terms:content'),
+        renderCardContent,
         infoLayout: true,
     };
 
     return <SettingsLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
+const wrappers = R.compose(withUserAgent, withUserMe);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['about']),
     },

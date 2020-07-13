@@ -11,5 +11,7 @@
     "printResourceError": "Error while printing resource!",
     "messageError": "Error while sending message!",
     "sharingError": "Error while sharing!",
-    "appUpdated": "App has been updated!"
+    "appUpdated": "App has been updated!",
+    "markSingleActivityReadError": "This activity has most likely been removed. Please refresh the page.",
+    "markAllActivitiesReadError": "Error while marking activities as read!"
 }

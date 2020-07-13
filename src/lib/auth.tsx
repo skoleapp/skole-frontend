@@ -14,7 +14,7 @@ import { initApolloClient } from './apollo';
 // Wrap all pages that require authentication with this.
 export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithAuthSync: NextPage = pageProps => {
-        const { user } = useAuthContext();
+        const { userMe } = useAuthContext();
 
         const syncLogout = (e: StorageEvent): void => {
             if (e.key === 'logout') {
@@ -29,7 +29,7 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
                 window.removeEventListener('storage', syncLogout);
                 window.localStorage.removeItem('logout');
             };
-        }, [user]);
+        }, [userMe]);
 
         return <PageComponent {...(pageProps as T)} />;
     };
@@ -46,11 +46,11 @@ export const withSSRAuth = (getServerSidePropsInner: GetServerSideProps): GetSer
         const apolloClient = initApolloClient(initState, ctx);
         const initialApolloState = apolloClient.cache.extract();
         const { url } = ctx.req;
-        let user = null;
+        let userMe = null;
 
         try {
             const { data } = await apolloClient.query({ query: UserMeDocument });
-            user = data.userMe;
+            userMe = data.userMe;
         } catch {
             const Location = !!url && url !== '/' ? `${urls.login}?next=${url}` : urls.login;
             ctx.res.writeHead(302, { Location });
@@ -62,7 +62,7 @@ export const withSSRAuth = (getServerSidePropsInner: GetServerSideProps): GetSer
             props: {
                 ...result.props,
                 initialApolloState,
-                user,
+                userMe,
             },
         };
     };
@@ -78,13 +78,13 @@ export const withNoAuth = (getServerSidePropsInner: GetServerSideProps): GetServ
         const initState: NormalizedCacheObject | null = R.propOr(null, 'initialApolloState', ctx);
         const apolloClient = initApolloClient(initState, ctx);
         const initialApolloState = apolloClient.cache.extract();
-        let user = null;
+        let userMe = null;
 
         try {
             const { data } = await apolloClient.query({ query: UserMeDocument });
-            user = data.userMe;
+            userMe = data.userMe;
 
-            if (!!user) {
+            if (!!userMe) {
                 ctx.res.writeHead(302, { Location: '/' });
                 ctx.res.end();
             }
@@ -95,7 +95,35 @@ export const withNoAuth = (getServerSidePropsInner: GetServerSideProps): GetServ
             props: {
                 ...result.props,
                 initialApolloState,
-                user,
+                userMe,
+            },
+        };
+    };
+
+    return getServerSideProps;
+};
+
+// Provide user as a prop for to wrapper component that initializes context.
+// Wrap `getServerSideProps` method with this for all pages that do not require authentication.
+export const withUserMe = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
+    const getServerSideProps: GetServerSideProps = async ctx => {
+        const result = await getServerSidePropsInner(ctx);
+        const initState: NormalizedCacheObject | null = R.propOr(null, 'initialApolloState', ctx);
+        const apolloClient = initApolloClient(initState, ctx);
+        const initialApolloState = apolloClient.cache.extract();
+        let userMe = null;
+
+        try {
+            const { data } = await apolloClient.query({ query: UserMeDocument });
+            userMe = data.userMe;
+        } catch {}
+
+        return {
+            ...result,
+            props: {
+                ...result.props,
+                initialApolloState,
+                userMe,
             },
         };
     };

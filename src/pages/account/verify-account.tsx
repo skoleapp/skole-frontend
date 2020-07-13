@@ -39,8 +39,8 @@ const VerifyAccountPage: NextPage<I18nProps> = () => {
 
     const { t } = useTranslation();
     const { query } = useRouter();
-    const { user, verified: initialVerified } = useAuthContext();
-    const email = R.propOr('', 'email', user) as string;
+    const { userMe, verified: initialVerified } = useAuthContext();
+    const email = R.propOr('', 'email', userMe) as string;
     const token = (query.token as string) || '';
     const [emailSubmitted, setEmailSubmitted] = useState(false);
     const [verified, setVerified] = useState(initialVerified);
@@ -99,7 +99,7 @@ const VerifyAccountPage: NextPage<I18nProps> = () => {
     };
 
     const initialEmailFormValues = {
-        email: R.propOr('', 'email', user) as string,
+        email: R.propOr('', 'email', userMe) as string,
         general: '',
     };
 

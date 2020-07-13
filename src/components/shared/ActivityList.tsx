@@ -8,7 +8,7 @@ import {
 } from 'generated';
 import { Router } from 'i18n';
 import * as R from 'ramda';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { UrlObject } from 'url';
@@ -23,8 +23,8 @@ const getHref = ({
     resource,
     comment,
 }: Pick<ActivityObjectType, 'course' | 'resource' | 'comment'>): UrlObject => {
-    let pathname = '#';
-    let query = {};
+    let pathname = undefined;
+    let query = undefined;
 
     if (!!course) {
         pathname = `/courses/${course.id}`;
@@ -45,17 +45,11 @@ interface Props {
 
 export const ActivityList: React.FC<Props> = ({ slice }) => {
     const { t } = useTranslation();
-    const { user } = useAuthContext();
-    const initialActivity: ActivityObjectType[] = R.propOr([], 'activity', user);
+    const { userMe } = useAuthContext();
+    const initialActivity: ActivityObjectType[] = R.propOr([], 'activity', userMe);
     const [activity, setActivity] = useState(initialActivity);
     const { toggleNotification } = useNotificationsContext();
-    const onError = (): void => toggleNotification(t('errors:activityError'));
-
-    // Automatically update activity state when user context gets updated.
-    useEffect(() => {
-        const updatedActivity: ActivityObjectType[] = R.propOr([], 'activity', user);
-        setActivity(updatedActivity);
-    }, [user]);
+    const onError = (): void => toggleNotification(t('notifications:markSingleActivityReadError'));
 
     const onCompleted = ({ markActivityRead }: MarkSingleActivityReadMutation): void => {
         if (!!markActivityRead) {
@@ -76,13 +70,15 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
     const [markSingleActivityRead] = useMarkSingleActivityReadMutation({ onCompleted, onError });
 
     const handleClick = ({ id, ...activity }: ActivityObjectType) => async (): Promise<void> => {
-        const href = getHref(activity);
+        const { pathname, query } = getHref(activity);
 
         try {
             await markSingleActivityRead({ variables: { id, read: true } });
-            Router.push(href);
+            // The activities should always have a pathname but technically it's possible that the pathname is undefined.
+            // In that case we do nothing besides marking the activity as read.
+            !!pathname && Router.push({ pathname, query });
         } catch {
-            toggleNotification(t('errors:activityError'));
+            onError();
         }
     };
 
@@ -130,7 +126,7 @@ const StyledActivityList = styled(Box)`
 
     .MuiList-root {
         flex-grow: 1;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 `;
 

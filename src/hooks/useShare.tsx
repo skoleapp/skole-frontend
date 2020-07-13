@@ -41,7 +41,7 @@ export const useShare = (shareText?: string): UseShare => {
                     url: window.location.href,
                 });
             } catch {
-                toggleNotification(t('notifications:sharingError'));
+                // User cancelled.
             }
         } else if (!!navigator && !!navigator.clipboard) {
             navigator.clipboard.writeText(window.location.href);

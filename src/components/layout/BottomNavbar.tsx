@@ -12,8 +12,9 @@ import { mediaURL, urls } from 'utils';
 import { StyledBottomNavigation } from '..';
 
 export const BottomNavbar: React.FC = () => {
-    const { user } = useAuthContext();
-    const avatarThumb = R.propOr('', 'avatar', user) as string;
+    const { userMe } = useAuthContext();
+    const userMeId = R.propOr('', 'id', userMe);
+    const avatarThumb = R.propOr('', 'avatar', userMe) as string;
     const { pathname, query } = useRouter();
     const { searchUrl } = useSearch();
 
@@ -32,7 +33,7 @@ export const BottomNavbar: React.FC = () => {
                 return 4;
             }
             case urls.user: {
-                if (user && query.id === user.id) {
+                if (!!userMe && query.id === userMe.id) {
                     return 5;
                 }
             }
@@ -51,7 +52,7 @@ export const BottomNavbar: React.FC = () => {
     const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
 
     const renderAvatar = (
-        <Link href={urls.user} as={`/users/${R.propOr('', 'id', user)}`}>
+        <Link href={urls.user} as={`/users/${userMeId}`}>
             <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
         </Link>
     );

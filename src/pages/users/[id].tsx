@@ -10,14 +10,15 @@ import {
     ResourceTableBody,
     SettingsButton,
     StyledCard,
+    StyledSwipeableViews,
     StyledTabs,
     TextLink,
 } from 'components';
 import { useAuthContext, useDeviceContext } from 'context';
 import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from 'generated';
-import { useFrontendPagination, useMoment, useTabs } from 'hooks';
+import { useFrontendPagination, useMoment, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces } from 'i18n';
-import { useSSRApollo, withAuthSync } from 'lib';
+import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -32,10 +33,11 @@ interface Props extends I18nProps {
 }
 
 const UserPage: NextPage<Props> = ({ user }) => {
+    const isMobile = useDeviceContext(breakpointsNum.SM);
     const { t } = useTranslation();
     const moment = useMoment();
-    const { tabValue, handleTabChange } = useTabs();
-    const { user: loggedInUser, verified } = useAuthContext();
+    const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
+    const { userMe, verified } = useAuthContext();
     const rank = R.propOr('', 'rank', user) as string;
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
@@ -43,7 +45,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const bio = R.propOr('', 'bio', user) as string;
     const score = R.propOr('-', 'score', user) as string;
     const joined = moment(R.propOr('', 'created', user)).format('LL');
-    const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', loggedInUser);
+    const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
     const badges = R.propOr([], 'badges', user) as BadgeObjectType[];
     const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
     const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
@@ -51,7 +53,6 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const resourceCount = createdResources.length;
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
-    const isMobile = useDeviceContext(breakpointsNum.SM);
 
     const renderEditProfileButton = isOwnProfile && (
         <ButtonLink
@@ -262,21 +263,27 @@ const UserPage: NextPage<Props> = ({ user }) => {
     );
 
     const renderTabs = (
+        <StyledTabs value={tabValue} onChange={handleTabChange}>
+            <Tab label={t('common:courses')} />
+            <Tab label={t('common:resources')} />
+        </StyledTabs>
+    );
+
+    const renderSwipeableViews = (
+        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+            <Box display="flex" flexGrow="1">
+                {renderCreatedCourses}
+            </Box>
+            <Box display="flex" flexGrow="1">
+                {renderCreatedResources}
+            </Box>
+        </StyledSwipeableViews>
+    );
+
+    const renderTabsSection = (
         <Box flexGrow="1" display="flex" flexDirection="column" className="border-top">
-            <StyledTabs value={tabValue} onChange={handleTabChange}>
-                <Tab label={t('common:courses')} />
-                <Tab label={t('common:resources')} />
-            </StyledTabs>
-            {tabValue === 0 && (
-                <Box display="flex" flexGrow="1">
-                    {renderCreatedCourses}
-                </Box>
-            )}
-            {tabValue === 1 && (
-                <Box display="flex" flexGrow="1">
-                    {renderCreatedResources}
-                </Box>
-            )}
+            {renderTabs}
+            {renderSwipeableViews}
         </Box>
     );
 
@@ -302,7 +309,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                     <StyledCard>
                         {renderMobileTopSection}
                         {renderDesktopTopSection}
-                        {renderTabs}
+                        {renderTabsSection}
                     </StyledCard>
                 </MainLayout>
             </StyledUserPage>
@@ -338,7 +345,9 @@ const StyledUserPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = async ctx => {
+const wrappers = R.compose(withUserAgent, withSSRAuth);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
 
@@ -352,6 +361,6 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     } catch {
         return { props: { ...nameSpaces, initialApolloState } };
     }
-};
+});
 
 export default withAuthSync(UserPage);

@@ -15,6 +15,7 @@ import {
     StyledCard,
     StyledDrawer,
     StyledList,
+    StyledSwipeableViews,
     StyledTabs,
     TextLink,
     TopLevelCommentThread,
@@ -38,7 +39,7 @@ import {
     useResponsiveIconButtonProps,
     useSearch,
     useShare,
-    useTabs,
+    useSwipeableTabs,
     useVotes,
 } from 'hooks';
 import { includeDefaultNamespaces, Router } from 'i18n';
@@ -60,7 +61,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { user, verified, verificationRequiredTooltip } = useAuthContext();
+    const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
@@ -74,15 +75,14 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const resourceCount = String(resources.length);
     const comments = R.propOr([], 'comments', course) as CommentObjectType[];
     const { commentCount } = useDiscussionContext(comments);
-    const isOwnCourse = creatorId === R.propOr('', 'id', user);
     const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
     const starred = !!R.propOr(undefined, 'starred', course);
-    const isOwner = !!user && user.id === creatorId;
+    const isOwner = !!userMe && userMe.id === creatorId;
     const subjectId = R.path(['subject', 'id'], course) as boolean[];
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
-    const { tabValue, handleTabChange } = useTabs();
+    const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare(courseName);
     const iconButtonProps = useResponsiveIconButtonProps();
 
@@ -301,23 +301,21 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </StyledTabs>
     );
 
-    const renderLeftTab = tabValue === 0 && (
-        <Box display="flex" flexGrow="1" position="relative">
-            {renderResources}
-        </Box>
-    );
-
-    const renderRightTab = tabValue === 1 && (
-        <Box display="flex" flexGrow="1">
-            {renderDiscussion}
-        </Box>
+    const renderSwipeableViews = (
+        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+            <Box display="flex" flexGrow="1" position="relative">
+                {renderResources}
+            </Box>
+            <Box display="flex" flexGrow="1">
+                {renderDiscussion}
+            </Box>
+        </StyledSwipeableViews>
     );
 
     const renderMobileContent = isMobile && (
         <StyledCard>
             {renderTabs}
-            {renderLeftTab}
-            {renderRightTab}
+            {renderSwipeableViews}
         </StyledCard>
     );
 
@@ -349,7 +347,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </StyledDrawer>
     );
 
-    const renderDeleteAction = isOwnCourse && (
+    const renderDeleteAction = isOwner && (
         <MenuItem disabled={verified === false}>
             <ListItemText onClick={handleDeleteCourse}>
                 <DeleteOutline /> {t('common:delete')}

@@ -19,8 +19,8 @@ import {
 // Ignore: All functions below are ignored as they are only mock functions for the context.
 const SkolePageContext = createContext<SkoleContextType>({
     auth: {
-        user: null,
-        setUser: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+        userMe: null,
+        setUserMe: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     },
     attachmentViewer: {
         attachment: null,
@@ -76,10 +76,10 @@ interface UseAuthContext extends AuthContext {
 
 export const useAuthContext = (): UseAuthContext => {
     const { t } = useTranslation();
-    const { user, setUser } = useSkoleContext().auth;
-    const verified = R.propOr(null, 'verified', user) as boolean | null;
+    const { userMe, setUserMe } = useSkoleContext().auth;
+    const verified = R.propOr(null, 'verified', userMe) as boolean | null;
     const verificationRequiredTooltip = verified === false && t('tooltips:verificationRequired');
-    return { user, setUser, verified, verificationRequiredTooltip };
+    return { userMe, setUserMe, verified, verificationRequiredTooltip };
 };
 
 export const useAttachmentViewerContext = (): AttachmentViewerContext => useSkoleContext().attachmentViewer;
@@ -132,13 +132,13 @@ export const useDeviceContext = (breakpoint: number = breakpointsNum.MD): boolea
 };
 
 interface Props {
-    user: UserObjectType | null;
+    userMe: UserObjectType | null;
     isMobileGuess: boolean | null;
 }
 
-export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, isMobileGuess }) => {
+export const ContextProvider: React.FC<Props> = ({ children, userMe: initialUserMe, isMobileGuess }) => {
     // Auth context.
-    const [user, setUser] = useState(initialUser);
+    const [userMe, setUserMe] = useState(initialUserMe);
 
     // Attachment viewer context.
     const [attachment, setAttachment] = useState<string | null>(null);
@@ -177,8 +177,8 @@ export const ContextProvider: React.FC<Props> = ({ children, user: initialUser, 
 
     const contextValue = {
         auth: {
-            user,
-            setUser,
+            userMe,
+            setUserMe,
         },
         attachmentViewer: {
             attachment,

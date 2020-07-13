@@ -26,14 +26,14 @@ export const MainLayout: React.FC<LayoutProps> = ({
     children,
 }) => {
     const isMobile = useDeviceContext();
-    const authenticated = !!useAuthContext().user;
+    const { userMe } = useAuthContext();
 
     return (
-        <StyledMainLayout disableBottomMargin={!authenticated && !customBottomNavbar}>
+        <StyledMainLayout disableBottomMargin={!userMe && !customBottomNavbar}>
             <Head {...seoProps} />
             {(isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />}
             <Container {...containerProps}>{children}</Container>
-            {customBottomNavbar || (authenticated && <BottomNavbar />)}
+            {customBottomNavbar || (!!userMe && <BottomNavbar />)}
             {!isMobile && <Footer />}
             <Notifications />
             <AttachmentViewer />

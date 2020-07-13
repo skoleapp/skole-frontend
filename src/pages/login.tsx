@@ -33,7 +33,7 @@ const LoginPage: NextPage<I18nProps> = () => {
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
     const { renderLanguageButton } = useLanguageSelector();
-    const { setUser } = useAuthContext();
+    const { setUserMe } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
 
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
@@ -56,7 +56,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                     await setTokenCookie(login.token); // We need to wait until the asynchronous middleware for setting the cookie has been called before the response is sent to the client.
                     resetForm();
                     toggleNotification(login.message);
-                    setUser(login.user as UserObjectType);
+                    setUserMe(login.user as UserObjectType);
 
                     if (!!next) {
                         Router.push(next as string);

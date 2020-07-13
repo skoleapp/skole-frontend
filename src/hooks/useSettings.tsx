@@ -20,8 +20,7 @@ interface UseSettings extends SettingsContext {
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
 export const useSettings = (modal: boolean): UseSettings => {
-    const { user, verified } = useAuthContext();
-    const authenticated = !!user;
+    const { userMe, verified } = useAuthContext();
     const { settingsOpen, toggleSettings } = useSettingsContext();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -139,7 +138,7 @@ export const useSettings = (modal: boolean): UseSettings => {
     );
 
     const renderSettingsMenuList = (
-        <Box flexGrow="1">{authenticated ? renderAuthenticatedMenuList : renderCommonMenuItems}</Box>
+        <Box flexGrow="1">{!!userMe ? renderAuthenticatedMenuList : renderCommonMenuItems}</Box>
     );
 
     return { renderSettingsMenuList, settingsOpen, toggleSettings };
