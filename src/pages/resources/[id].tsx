@@ -15,6 +15,7 @@ import {
     StyledCard,
     StyledDrawer,
     StyledList,
+    StyledSwipeableViews,
     StyledTabs,
     TextLink,
     TopLevelCommentThread,
@@ -35,7 +36,7 @@ import {
     UserObjectType,
     VoteObjectType,
 } from 'generated';
-import { useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useTabs, useVotes } from 'hooks';
+import { useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useSwipeableTabs, useVotes } from 'hooks';
 import { includeDefaultNamespaces } from 'i18n';
 import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
@@ -76,10 +77,10 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const commentCount = comments.length;
-    const { tabValue, setTabValue, handleTabChange } = useTabs();
+    const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare(resourceTitle);
     const { commentModalOpen } = useCommentModalContext();
-    const { drawMode } = usePDFViewerContext();
+    const { drawMode, setDrawMode } = usePDFViewerContext();
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
     useCommentQuery(comments);
@@ -129,6 +130,16 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     useEffect(() => {
         commentModalOpen && tabValue === 0 && setTabValue(1);
     }, [commentModalOpen]);
+
+    // If draw mode is toggled on from discussion tab, change to file preview tab.
+    useEffect(() => {
+        drawMode && tabValue === 1 && setTabValue(0);
+    }, [drawMode]);
+
+    // If draw mode is on and user changes to discussion tab, automatically toggle draw mode off.
+    useEffect(() => {
+        drawMode && tabValue === 1 && setDrawMode(false);
+    }, [tabValue]);
 
     const staticBackUrl = {
         href: urls.course,
@@ -258,7 +269,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const renderDrawModeButton = <DrawModeButton />;
     const renderDrawModeControls = <DrawModeControls />;
 
-    const renderPreviewBottomNavbarContent = (
+    const renderDefaultBottomNavbarContent = (
         <Grid container>
             <Grid item xs={6} container justify="flex-start">
                 {renderDrawModeButton}
@@ -271,22 +282,10 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </Grid>
     );
 
-    const renderBottomNavbarLeft = (
+    const renderCustomBottomNavbar = (
         <StyledBottomNavigation>
             <CustomBottomNavbarContainer>
-                {drawMode ? renderDrawModeControls : renderPreviewBottomNavbarContent}
-            </CustomBottomNavbarContainer>
-        </StyledBottomNavigation>
-    );
-
-    const renderBottomNavbarRight = (
-        <StyledBottomNavigation>
-            <CustomBottomNavbarContainer>
-                <Grid container justify="flex-end">
-                    {renderStarButton}
-                    {renderUpVoteButton}
-                    {renderDownVoteButton}
-                </Grid>
+                {drawMode ? renderDrawModeControls : renderDefaultBottomNavbarContent}
             </CustomBottomNavbarContainer>
         </StyledBottomNavigation>
     );
@@ -326,23 +325,21 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledTabs>
     );
 
-    const renderLeftTab = tabValue === 0 && (
-        <Box display="flex" flexGrow="1" position="relative">
-            {renderPDFViewer}
-        </Box>
-    );
-
-    const renderRightTab = tabValue === 1 && (
-        <Box display="flex" flexGrow="1">
-            {renderDiscussion}
-        </Box>
+    const renderSwipeableViews = (
+        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+            <Box display="flex" flexGrow="1" position="relative">
+                {renderPDFViewer}
+            </Box>
+            <Box display="flex" flexGrow="1">
+                {renderDiscussion}
+            </Box>
+        </StyledSwipeableViews>
     );
 
     const renderMobileContent = isMobile && (
         <StyledCard>
             {renderTabs}
-            {renderLeftTab}
-            {renderRightTab}
+            {renderSwipeableViews}
         </StyledCard>
     );
 
@@ -425,7 +422,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             headerRight: renderActionsButton,
             headerRightSecondary: renderInfoButton,
         },
-        customBottomNavbar: tabValue === 0 ? renderBottomNavbarLeft : renderBottomNavbarRight,
+        customBottomNavbar: renderCustomBottomNavbar,
         containerProps: {
             maxWidth: 'xl' as MaxWidth,
         },

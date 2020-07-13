@@ -5,6 +5,7 @@ import { breakpoints } from 'styles';
 export const StyledTable = styled(Paper)`
     flex-grow: 1;
     display: flex;
+    max-width: 100vw;
 
     .MuiTableContainer-root {
         flex-grow: 1;

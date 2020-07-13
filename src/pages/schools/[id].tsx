@@ -9,12 +9,13 @@ import {
     StyledCard,
     StyledDrawer,
     StyledList,
+    StyledSwipeableViews,
     StyledTabs,
     TextLink,
 } from 'components';
 import { useDeviceContext } from 'context';
 import { CourseObjectType, SchoolDetailDocument, SchoolObjectType, SubjectObjectType } from 'generated';
-import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useTabs } from 'hooks';
+import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, Link } from 'i18n';
 import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
@@ -44,7 +45,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const cityId = R.pathOr('', ['city', 'id'], school);
     const { paginatedItems: paginatedSubjects, ...subjectPaginationProps } = useFrontendPagination(subjects);
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
-    const { tabValue, handleTabChange } = useTabs();
+    const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare(schoolName);
 
     const {
@@ -194,24 +195,22 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         </StyledTabs>
     );
 
-    const renderLeftTab = tabValue === 0 && (
-        <Box display="flex" flexGrow="1" position="relative">
-            {renderSubjects}
-        </Box>
-    );
-
-    const renderRightTab = tabValue === 1 && (
-        <Box display="flex" flexGrow="1">
-            {renderCourses}
-        </Box>
+    const renderSwipeableViews = (
+        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+            <Box display="flex" flexGrow="1" position="relative">
+                {renderSubjects}
+            </Box>
+            <Box display="flex" flexGrow="1">
+                {renderCourses}
+            </Box>
+        </StyledSwipeableViews>
     );
 
     const renderContent = (
         <StyledCard>
             {renderSchoolHeader}
             {renderTabs}
-            {renderLeftTab}
-            {renderRightTab}
+            {renderSwipeableViews}
         </StyledCard>
     );
 

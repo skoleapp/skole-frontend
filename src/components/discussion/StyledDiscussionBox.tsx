@@ -44,8 +44,8 @@ export const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {..
         }
 
         #create-comment-button {
-            position: fixed;
-            bottom: calc(var(--safe-area-inset-bottom) + 3.5rem);
+            position: absolute;
+            bottom: calc(var(--safe-area-inset-bottom) + 0.5rem);
             left: 0;
             right: 0;
             margin-left: auto;

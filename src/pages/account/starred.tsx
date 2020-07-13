@@ -6,10 +6,11 @@ import {
     NotFoundLayout,
     ResourceTableBody,
     SettingsLayout,
+    StyledSwipeableViews,
     StyledTabs,
 } from 'components';
 import { CourseObjectType, ResourceObjectType, StarredDocument, UserObjectType } from 'generated';
-import { useFrontendPagination, useTabs } from 'hooks';
+import { useFrontendPagination, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces } from 'i18n';
 import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
@@ -24,7 +25,7 @@ interface Props extends I18nProps {
 
 const StarredPage: NextPage<Props> = ({ userMe }) => {
     const { t } = useTranslation();
-    const { tabValue, handleTabChange } = useTabs();
+    const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const starredCourses = R.propOr([], 'starredCourses', userMe) as CourseObjectType[];
     const starredResources = R.propOr([], 'starredResources', userMe) as ResourceObjectType[];
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
@@ -68,16 +69,14 @@ const StarredPage: NextPage<Props> = ({ userMe }) => {
                     <Tab label={t('common:courses')} />
                     <Tab label={t('common:resources')} />
                 </StyledTabs>
-                {tabValue === 0 && (
+                <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
                     <Box display="flex" flexGrow="1">
                         {renderStarredCourses}
                     </Box>
-                )}
-                {tabValue === 1 && (
                     <Box display="flex" flexGrow="1">
                         {renderStarredResources}
                     </Box>
-                )}
+                </StyledSwipeableViews>
             </Box>
         );
 

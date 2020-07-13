@@ -10,12 +10,13 @@ import {
     ResourceTableBody,
     SettingsButton,
     StyledCard,
+    StyledSwipeableViews,
     StyledTabs,
     TextLink,
 } from 'components';
 import { useAuthContext, useDeviceContext } from 'context';
 import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from 'generated';
-import { useFrontendPagination, useMoment, useTabs } from 'hooks';
+import { useFrontendPagination, useMoment, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces } from 'i18n';
 import { useSSRApollo, withAuthSync } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
@@ -34,7 +35,7 @@ interface Props extends I18nProps {
 const UserPage: NextPage<Props> = ({ user }) => {
     const { t } = useTranslation();
     const moment = useMoment();
-    const { tabValue, handleTabChange } = useTabs();
+    const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { user: loggedInUser, verified } = useAuthContext();
     const rank = R.propOr('', 'rank', user) as string;
     const username = R.propOr('-', 'username', user) as string;
@@ -262,21 +263,27 @@ const UserPage: NextPage<Props> = ({ user }) => {
     );
 
     const renderTabs = (
+        <StyledTabs value={tabValue} onChange={handleTabChange}>
+            <Tab label={t('common:courses')} />
+            <Tab label={t('common:resources')} />
+        </StyledTabs>
+    );
+
+    const renderSwipeableViews = (
+        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+            <Box display="flex" flexGrow="1">
+                {renderCreatedCourses}
+            </Box>
+            <Box display="flex" flexGrow="1">
+                {renderCreatedResources}
+            </Box>
+        </StyledSwipeableViews>
+    );
+
+    const renderTabsSection = (
         <Box flexGrow="1" display="flex" flexDirection="column" className="border-top">
-            <StyledTabs value={tabValue} onChange={handleTabChange}>
-                <Tab label={t('common:courses')} />
-                <Tab label={t('common:resources')} />
-            </StyledTabs>
-            {tabValue === 0 && (
-                <Box display="flex" flexGrow="1">
-                    {renderCreatedCourses}
-                </Box>
-            )}
-            {tabValue === 1 && (
-                <Box display="flex" flexGrow="1">
-                    {renderCreatedResources}
-                </Box>
-            )}
+            {renderTabs}
+            {renderSwipeableViews}
         </Box>
     );
 
@@ -302,7 +309,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                     <StyledCard>
                         {renderMobileTopSection}
                         {renderDesktopTopSection}
-                        {renderTabs}
+                        {renderTabsSection}
                     </StyledCard>
                 </MainLayout>
             </StyledUserPage>

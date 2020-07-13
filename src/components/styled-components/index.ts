@@ -6,3 +6,4 @@ export { StyledList } from './StyledList';
 export { StyledTabs } from './StyledTabs';
 export { StyledBottomNavigation } from './StyledBottomNavigation';
 export { StyledDrawer } from './StyledDrawer';
+export { StyledSwipeableViews } from './StyledSwipeableViews';

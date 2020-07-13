@@ -15,6 +15,7 @@ import {
     StyledCard,
     StyledDrawer,
     StyledList,
+    StyledSwipeableViews,
     StyledTabs,
     TextLink,
     TopLevelCommentThread,
@@ -38,7 +39,7 @@ import {
     useResponsiveIconButtonProps,
     useSearch,
     useShare,
-    useTabs,
+    useSwipeableTabs,
     useVotes,
 } from 'hooks';
 import { includeDefaultNamespaces, Router } from 'i18n';
@@ -82,7 +83,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
-    const { tabValue, handleTabChange } = useTabs();
+    const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare(courseName);
     const iconButtonProps = useResponsiveIconButtonProps();
 
@@ -301,23 +302,21 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </StyledTabs>
     );
 
-    const renderLeftTab = tabValue === 0 && (
-        <Box display="flex" flexGrow="1" position="relative">
-            {renderResources}
-        </Box>
-    );
-
-    const renderRightTab = tabValue === 1 && (
-        <Box display="flex" flexGrow="1">
-            {renderDiscussion}
-        </Box>
+    const renderSwipeableViews = (
+        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+            <Box display="flex" flexGrow="1" position="relative">
+                {renderResources}
+            </Box>
+            <Box display="flex" flexGrow="1">
+                {renderDiscussion}
+            </Box>
+        </StyledSwipeableViews>
     );
 
     const renderMobileContent = isMobile && (
         <StyledCard>
             {renderTabs}
-            {renderLeftTab}
-            {renderRightTab}
+            {renderSwipeableViews}
         </StyledCard>
     );
 
