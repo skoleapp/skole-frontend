@@ -33,5 +33,14 @@
     "download": "Download.",
     "print": "Print.",
     "rotate": "Rotate.",
-    "activity": "Show activity."
+    "activity": "Show activity.",
+    "bold": "Bold ({{ hotkeyBold }}).",
+    "italic": "Italic ({{ hotkeyItalic }}).",
+    "strikeThrough": "Strikethrough ({{ hotkeyStrikethrough }}).",
+    "code": "Code ({{ hotkeyCode }}).",
+    "link": "Link ({{ hotkeyLink }}).",
+    "orderedList": "Ordered list ({{ hotkeyOrderedList }}).",
+    "bulletedList": "Bulleted list ({{ hotkeyBulletedList }}).",
+    "blockQuote": "Block quote ({{ hotkeyBlockQuote }}).",
+    "codeBlock": "Code block ({{ hotkeyCodeBlock }})."
 }

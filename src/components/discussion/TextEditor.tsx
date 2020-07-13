@@ -22,9 +22,21 @@ export const TextEditor: React.FC = () => {
     const handleChange = (editorState: EditorState): void => setEditorState(editorState);
     const focusEditor = (): false | void => !!editor.current && editor.current.focus();
     const disabled = false;
+    const [isMac, setIsMac] = useState<boolean | null>(null);
+    const actionKey = isMac ? '⌘' : 'Ctrl';
+    const hotkeyBold = `${actionKey} + B`;
+    const hotkeyItalic = `${actionKey} + I`;
+    const hotkeyStrikethrough = `${actionKey} + Shift + X`;
+    const hotkeyCode = `${actionKey} + Shift + C`;
+    const hotkeyLink = `${actionKey} + Shift + U`;
+    const hotkeyOrderedList = `${actionKey} + Shift + 7`;
+    const hotkeyBulletedList = `${actionKey} + Shift + 8`;
+    const hotkeyBlockQuote = `${actionKey} + Shift + 9`;
+    const hotkeyCodeBlock = `${actionKey} + Option + Shift + C`;
 
     useEffect(() => {
         focusEditor();
+        setIsMac(navigator.userAgent.indexOf('Mac OS X') !== -1);
     }, []);
 
     const handleKeyCommand = (command: DraftEditorCommand, editorState: EditorState): DraftHandleValue => {
@@ -44,63 +56,63 @@ export const TextEditor: React.FC = () => {
 
     const renderToolbar = (
         <Box marginTop="0.25rem" display="flex">
-            <Tooltip title={t('tooltips:bold')}>
+            <Tooltip title={t('tooltips:bold', { hotkeyBold })}>
                 <span>
                     <IconButton size="small" disabled={disabled}>
                         <FormatBoldOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('tooltips:italic')}>
+            <Tooltip title={t('tooltips:italic', { hotkeyItalic })}>
                 <span>
                     <IconButton size="small" disabled={disabled}>
                         <FormatItalicOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('tooltips:strikeThrough')}>
+            <Tooltip title={t('tooltips:strikeThrough', { hotkeyStrikethrough })}>
                 <span>
                     <IconButton size="small" disabled={disabled}>
                         <StrikethroughSRounded />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('tooltips:code')}>
+            <Tooltip title={t('tooltips:code', { hotkeyCode })}>
                 <span>
                     <IconButton size="small" disabled={disabled}>
                         <CodeOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('tooltips:link')}>
+            <Tooltip title={t('tooltips:link', { hotkeyLink })}>
                 <span>
                     <IconButton size="small" disabled={disabled}>
                         <LinkOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('tooltips:orderedList')}>
+            <Tooltip title={t('tooltips:orderedList', { hotkeyOrderedList })}>
                 <span>
                     <IconButton size="small" disabled={disabled}>
                         <FormatListNumberedOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('tooltips:bulletedList')}>
+            <Tooltip title={t('tooltips:bulletedList', { hotkeyBulletedList })}>
                 <span>
                     <IconButton size="small" disabled={disabled}>
                         <FormatListBulletedOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('tooltips:blockQuote')}>
+            <Tooltip title={t('tooltips:blockQuote', { hotkeyBlockQuote })}>
                 <span>
                     <IconButton size="small" disabled={disabled}>
                         <FormatQuoteOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
-            <Tooltip title={t('tooltips:codeBlock')}>
+            <Tooltip title={t('tooltips:codeBlock', { hotkeyCodeBlock })}>
                 <span>
                     <IconButton size="small" disabled={disabled}>
                         <AssignmentOutlined />
