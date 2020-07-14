@@ -144,7 +144,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             if (!!deleteCourse.errors) {
                 deleteCourseError();
             } else if (!!deleteCourse.message) {
-                Router.push('/');
+                Router.push(urls.home);
                 toggleNotification(deleteCourse.message);
             } else {
                 deleteCourseError();

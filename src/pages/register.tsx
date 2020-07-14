@@ -84,7 +84,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
                 resetForm();
                 toggleNotification(register.message);
                 setUserMe(login.user as UserObjectType);
-                Router.push('/');
+                Router.push(urls.home);
             } catch {
                 unexpectedError();
             }

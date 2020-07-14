@@ -51,8 +51,10 @@ export const withSSRAuth = (getServerSidePropsInner: GetServerSideProps): GetSer
         try {
             const { data } = await apolloClient.query({ query: UserMeDocument });
             userMe = data.userMe;
-        } catch {
-            const Location = !!url && url !== '/' ? `${urls.login}?next=${url}` : urls.login;
+        } catch {}
+
+        if (!userMe) {
+            const Location = !!url && url !== urls.home ? `${urls.login}?next=${url}` : urls.login;
             ctx.res.writeHead(302, { Location });
             ctx.res.end();
         }
@@ -85,7 +87,7 @@ export const withNoAuth = (getServerSidePropsInner: GetServerSideProps): GetServ
             userMe = data.userMe;
 
             if (!!userMe) {
-                ctx.res.writeHead(302, { Location: '/' });
+                ctx.res.writeHead(302, { Location: urls.home });
                 ctx.res.end();
             }
         } catch {}

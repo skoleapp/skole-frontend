@@ -57,12 +57,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                     resetForm();
                     toggleNotification(login.message);
                     setUserMe(login.user as UserObjectType);
-
-                    if (!!next) {
-                        Router.push(next as string);
-                    } else {
-                        Router.push('/');
-                    }
+                    Router.push((next as string) || urls.home);
                 } catch {
                     unexpectedError();
                 }
