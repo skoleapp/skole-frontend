@@ -3,6 +3,7 @@ import { useDeviceContext, usePDFViewerContext } from 'context';
 import { useStateRef } from 'hooks';
 import { getClampedScale, getCoordChange, getMidPoint, getTouchDistance, getTouchPoint } from 'lib';
 import throttle from 'lodash.throttle';
+import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { PDFTranslation } from 'types';
@@ -20,7 +21,17 @@ interface StartPointersInfo {
 // Inspired by: https://github.com/transcriptic/react-map-interaction
 export const MapInteraction: React.FC = ({ children }) => {
     const isMobile = useDeviceContext();
-    const { drawMode, setRotate, controlsDisabled, setPageNumber, pageNumberInputRef } = usePDFViewerContext();
+
+    const {
+        drawMode,
+        setRotate,
+        controlsDisabled,
+        setPageNumber,
+        pageNumberInputRef,
+        setSwipingDisabled,
+        swipeableViewsRef,
+    } = usePDFViewerContext();
+
     const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
     const [scale, setScale] = useState(DEFAULT_SCALE);
     const [translation, setTranslation] = useState(DEFAULT_TRANSLATION);
@@ -187,8 +198,14 @@ export const MapInteraction: React.FC = ({ children }) => {
     const onTouchMove = (e: TouchEvent): void => {
         if (!!startPointersInfo.current) {
             const isPinchAction = e.touches.length === 2 && startPointersInfo.current.pointers.length > 1;
+            const isSwiping = R.path(['current', 'state', 'isDragging'], swipeableViewsRef);
 
-            if (isPinchAction) {
+            // Prevent swiping when pinching or panning as zoomed in.
+            if (isPinchAction || translation !== DEFAULT_TRANSLATION) {
+                setSwipingDisabled(true);
+            }
+
+            if (isPinchAction && !isSwiping) {
                 e.preventDefault(); // Prevent scrolling.
                 scaleFromMultiTouch(e);
             } else if (e.touches.length === 1 && scale > DEFAULT_SCALE) {
@@ -200,6 +217,7 @@ export const MapInteraction: React.FC = ({ children }) => {
 
     const onTouchEnd = (e: TouchEvent): void => {
         setPointerState(e.touches);
+        setSwipingDisabled(false);
 
         // Reset original scale/translation if pinched out.
         if (scale < DEFAULT_SCALE) {
@@ -235,7 +253,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     useEffect(() => {
         const mapContainerNode = getMapContainerNode();
 
-        if (!drawMode) {
+        if (!drawMode && !controlsDisabled) {
             mapContainerNode.addEventListener('wheel', onWheel);
             mapContainerNode.addEventListener('touchstart', onTouchStart as EventListener, { passive: true });
             mapContainerNode.addEventListener('touchmove', onTouchMove as EventListener);
@@ -248,7 +266,7 @@ export const MapInteraction: React.FC = ({ children }) => {
             mapContainerNode.removeEventListener('touchmove', onTouchMove as EventListener);
             mapContainerNode.removeEventListener('touchend', onTouchEnd as EventListener);
         };
-    }, [scale, translation, drawMode]);
+    }, [scale, translation, drawMode, controlsDisabled]);
 
     // Listen for key presses in order to show different cursor when CTRL key is pressed.
     // Also listen for scroll and resize events to update the page number automatically.

@@ -80,7 +80,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare({ text: resourceTitle });
     const { commentModalOpen } = useCommentModalContext();
-    const { drawMode, setDrawMode } = usePDFViewerContext();
+    const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
     useCommentQuery(comments);
@@ -326,7 +326,12 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderSwipeableViews = (
-        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+        <StyledSwipeableViews
+            ref={swipeableViewsRef}
+            disabled={swipingDisabled}
+            index={tabValue}
+            onChangeIndex={handleIndexChange}
+        >
             <Box display="flex" flexGrow="1" position="relative">
                 {renderPDFViewer}
             </Box>
