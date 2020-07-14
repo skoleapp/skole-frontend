@@ -83,7 +83,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const created = R.propOr(undefined, 'created', course) as string;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-    const { renderShareButton } = useShare(courseName);
+    const { renderShareButton } = useShare({ text: courseName });
     const iconButtonProps = useResponsiveIconButtonProps();
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
@@ -105,7 +105,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         renderActionsButton,
         open: actionsOpen,
         anchor: actionsAnchor,
-    } = useActionsDrawer(courseName);
+    } = useActionsDrawer({ text: courseName });
 
     const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };

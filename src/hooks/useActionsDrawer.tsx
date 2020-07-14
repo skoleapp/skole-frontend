@@ -1,8 +1,8 @@
 import { DrawerProps, IconButton, ListItemText, MenuItem, Tooltip } from '@material-ui/core';
 import { FlagOutlined, MoreHorizOutlined, ShareOutlined } from '@material-ui/icons';
-import { useDeviceContext } from 'context';
 import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ShareParams } from 'types';
 
 import { useDrawer } from './useDrawer';
 import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
@@ -16,10 +16,9 @@ interface UseActionsDrawer extends DrawerProps {
     renderActionsButton: JSX.Element;
 }
 
-export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
+export const useActionsDrawer = (shareParams: ShareParams): UseActionsDrawer => {
     const { t } = useTranslation();
-    const isMobile = useDeviceContext();
-    const { handleShare } = useShare(shareText);
+    const { handleShare } = useShare(shareParams);
     const iconButtonProps = useResponsiveIconButtonProps();
 
     const {
@@ -34,7 +33,7 @@ export const useActionsDrawer = (shareText?: string): UseActionsDrawer => {
         handleShare();
     };
 
-    const renderShareAction = isMobile && (
+    const renderShareAction = (
         <MenuItem onClick={handlePreShare}>
             <ListItemText>
                 <ShareOutlined /> {t('common:share')}

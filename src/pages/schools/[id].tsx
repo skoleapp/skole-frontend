@@ -46,7 +46,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { paginatedItems: paginatedSubjects, ...subjectPaginationProps } = useFrontendPagination(subjects);
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-    const { renderShareButton } = useShare(schoolName);
+    const { renderShareButton } = useShare({ text: schoolName });
 
     const {
         renderInfoHeader,
@@ -63,7 +63,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         renderShareAction,
         open: actionsOpen,
         anchor: actionsAnchor,
-    } = useActionsDrawer(schoolName);
+    } = useActionsDrawer({ text: schoolName });
 
     const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };

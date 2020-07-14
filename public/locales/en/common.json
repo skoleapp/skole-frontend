@@ -73,5 +73,6 @@
     "delete": "Delete",
     "print": "Print",
     "activity": "Activity",
-    "seeAll": "See All"
+    "seeAll": "See All",
+    "commentShareText": "{{ creatorUsername }} on Skole: {{ commentPreview }}"
 }

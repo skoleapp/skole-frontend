@@ -55,6 +55,10 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const { toggleNotification } = useNotificationsContext();
     const { toggleAttachmentViewer } = useAttachmentViewerContext();
     const { toggleTopComment } = useDiscussionContext();
+    const shareQuery = `?comment=${commentId}`;
+    const creatorUsername = R.propOr('unknown', 'username', comment.user) as string;
+    const commentPreview = comment.text.length > 20 ? `${comment.text.substring(0, 20)}...` : comment.text;
+    const shareText = t('common:commentShareText', { creatorUsername, commentPreview });
 
     const {
         renderActionsHeader,
@@ -64,7 +68,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         renderActionsButton,
         open,
         anchor,
-    } = useActionsDrawer();
+    } = useActionsDrawer({ query: shareQuery, text: shareText });
 
     const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
 

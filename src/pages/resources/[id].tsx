@@ -78,7 +78,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const created = R.propOr(undefined, 'created', resource) as string;
     const commentCount = comments.length;
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-    const { renderShareButton } = useShare(resourceTitle);
+    const { renderShareButton } = useShare({ text: resourceTitle });
     const { commentModalOpen } = useCommentModalContext();
     const { drawMode, setDrawMode } = usePDFViewerContext();
 
@@ -100,7 +100,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         renderActionsButton,
         open: actionsOpen,
         anchor: actionsAnchor,
-    } = useActionsDrawer(resourceTitle);
+    } = useActionsDrawer({ text: resourceTitle });
 
     const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };

@@ -73,5 +73,6 @@
     "delete": "Radera",
     "print": "Skriva ut",
     "activity": "Aktivitet",
-    "seeAll": "Visa allt"
+    "seeAll": "Visa allt",
+    "commentShareText": "{{ creatorUsername }} på Skole: {{ commentPreview }}"
 }

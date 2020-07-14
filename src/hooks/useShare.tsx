@@ -3,6 +3,7 @@ import { ShareOutlined } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { ShareParams } from 'types';
 
 import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
 
@@ -25,26 +26,23 @@ interface UseShare {
     handleShare: () => void;
 }
 
-export const useShare = (shareText?: string): UseShare => {
+export const useShare = ({ query = '', text }: ShareParams): UseShare => {
     const { t } = useTranslation();
     const iconButtonProps = useResponsiveIconButtonProps();
     const { toggleNotification } = useNotificationsContext();
 
     const handleShare = async (): Promise<void> => {
         const { navigator } = window as ShareNavigatorWindow;
+        const url = `${window.location.href + query}`;
 
         if (!!navigator && !!navigator.share) {
             try {
-                await navigator.share({
-                    title: 'Skole',
-                    text: shareText || t('common:slogan'),
-                    url: window.location.href,
-                });
+                await navigator.share({ title: 'Skole', text, url });
             } catch {
                 // User cancelled.
             }
         } else if (!!navigator && !!navigator.clipboard) {
-            navigator.clipboard.writeText(window.location.href);
+            navigator.clipboard.writeText(url);
             toggleNotification(t('notifications:linkCopied'));
         } else {
             toggleNotification(t('notifications:sharingError'));
