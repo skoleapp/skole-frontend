@@ -24,7 +24,7 @@ interface Props extends I18nProps {
 const ActivityPage: NextPage<Props> = () => {
     const { t } = useTranslation();
     const { userMe, setUserMe } = useAuthContext();
-    const { renderActionsHeader, renderActionsButton, handleCloseActions, open, anchor } = useActionsDrawer();
+    const { renderActionsHeader, renderActionsButton, handleCloseActions, open, anchor } = useActionsDrawer({});
     const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
     const { toggleNotification } = useNotificationsContext();
     const onError = (): void => toggleNotification(t('notifications:markAllActivitiesReadError'));

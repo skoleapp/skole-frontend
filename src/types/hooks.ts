@@ -20,5 +20,5 @@ export interface UseFilters<T> extends UseForm<T> {
 
 export interface ShareParams {
     query?: string;
-    text: string;
+    text?: string;
 }
