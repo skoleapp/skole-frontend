@@ -40,7 +40,7 @@ export const HeadComponent: React.FC<SEOProps> = ({ title, description }) => (
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <link rel="shortcut icon" href="/images/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="images/icons/icon-180x180.png" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color={colors.primary} />
+        <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color={colors.primary} />
         <link rel="manifest" href="/manifest.json" />
         <link
             href="images/splashscreens/iphone5_splash.png"
