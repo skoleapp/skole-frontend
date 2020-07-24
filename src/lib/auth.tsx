@@ -2,19 +2,20 @@ import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { useAuthContext } from 'context';
 import { UserMeDocument } from 'generated/graphql';
 import { Router } from 'i18n';
+import { initApolloClient } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import { useEffect } from 'react';
 import React from 'react';
 import { urls } from 'utils';
 
-import { initApolloClient } from './apollo';
-
-// Sync authentication between pages -> automatically redirect to login if multiple browser windows are open.
+// Sync authentication between pages.
 // Wrap all pages that require authentication with this.
 export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithAuthSync: NextPage = pageProps => {
         const { userMe } = useAuthContext();
+        const { pathname } = useRouter();
 
         const syncLogout = (e: StorageEvent): void => {
             if (e.key === 'logout') {
@@ -22,6 +23,14 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
             }
         };
 
+        // Automatically redirect unauthenticated users to login.
+        // We do this on client side on purpose so that all pages get indexed properly.
+        useEffect(() => {
+            const url = !!pathname && pathname !== urls.home ? `${urls.login}?next=${pathname}` : urls.login;
+            !userMe && Router.push(url);
+        }, []);
+
+        // Automatically redirect to login if multiple browser windows are open and user logs out.
         useEffect(() => {
             window.addEventListener('storage', syncLogout);
 
@@ -37,7 +46,7 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
     return WithAuthSync;
 };
 
-// Redirect unauthenticated users to login before rendering page.
+// Fetch user from API and set it in the context in a wrapper component.
 // Wrap `getServerSideProps` method with this for all pages that require authentication.
 export const withSSRAuth = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
     const getServerSideProps: GetServerSideProps = async ctx => {
@@ -45,19 +54,12 @@ export const withSSRAuth = (getServerSidePropsInner: GetServerSideProps): GetSer
         const initState: NormalizedCacheObject | null = R.propOr(null, 'initialApolloState', ctx);
         const apolloClient = initApolloClient(initState, ctx);
         const initialApolloState = apolloClient.cache.extract();
-        const { url } = ctx.req;
         let userMe = null;
 
         try {
             const { data } = await apolloClient.query({ query: UserMeDocument });
             userMe = data.userMe;
         } catch {}
-
-        if (!userMe) {
-            const Location = !!url && url !== urls.home ? `${urls.login}?next=${url}` : urls.login;
-            ctx.res.writeHead(302, { Location });
-            ctx.res.end();
-        }
 
         return {
             ...result,

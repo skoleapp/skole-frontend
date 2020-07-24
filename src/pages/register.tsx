@@ -78,9 +78,8 @@ const RegisterPage: NextPage<I18nProps> = () => {
             handleMutationErrors(register.errors);
         } else if (!!login && !!login.errors) {
             handleMutationErrors(login.errors);
-        } else if (!!login && !!login.token && !!login.user && !!register && !!register.message) {
+        } else if (!!login && !!login.user && !!register && !!register.message) {
             try {
-                await setTokenCookie(login.token); // We need to wait until the asynchronous middleware for removing the cookie has been called before the response is sent to the client.
                 resetForm();
                 toggleNotification(register.message);
                 setUserMe(login.user as UserObjectType);

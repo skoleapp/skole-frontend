@@ -5,7 +5,7 @@ export const nextI18next = new NextI18Next({
     otherLanguages: ['fi', 'sv'],
     localePath: typeof window === 'undefined' ? 'public/locales' : 'locales',
     fallbackLng: 'en',
-    strictMode: false,
+    strictMode: false, // Disable redundant warnings about withTranslation wrapper.
 });
 
 nextI18next.i18n.languages = ['en', 'fi', 'sv'];

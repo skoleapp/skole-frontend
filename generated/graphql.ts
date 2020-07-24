@@ -583,7 +583,6 @@ export type LoginMutationPayload = {
    __typename?: 'LoginMutationPayload';
   user?: Maybe<UserObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  token?: Maybe<Scalars['String']>;
   message?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -830,7 +829,6 @@ export type RegisterMutation = (
     )>>> }
   )>, login?: Maybe<(
     { __typename?: 'LoginMutationPayload' }
-    & Pick<LoginMutationPayload, 'token'>
     & { user?: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'created'>
@@ -851,7 +849,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login?: Maybe<(
     { __typename?: 'LoginMutationPayload' }
-    & Pick<LoginMutationPayload, 'message' | 'token'>
+    & Pick<LoginMutationPayload, 'message'>
     & { user?: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'created'>
@@ -1600,7 +1598,6 @@ export const RegisterDocument = gql`
     }
   }
   login(input: {usernameOrEmail: $username, password: $password}) {
-    token
     user {
       id
       created
@@ -1646,7 +1643,6 @@ export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
     message
-    token
     user {
       id
       created

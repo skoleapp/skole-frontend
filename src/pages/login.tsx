@@ -49,11 +49,10 @@ const LoginPage: NextPage<I18nProps> = () => {
         if (!!login) {
             if (!!login.errors) {
                 handleMutationErrors(login.errors);
-            } else if (!!login.token && !!login.user && !!login.message) {
+            } else if (!!login.user && !!login.message) {
                 const { next } = query;
 
                 try {
-                    await setTokenCookie(login.token); // We need to wait until the asynchronous middleware for setting the cookie has been called before the response is sent to the client.
                     resetForm();
                     toggleNotification(login.message);
                     setUserMe(login.user as UserObjectType);
