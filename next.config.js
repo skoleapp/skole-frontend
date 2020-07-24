@@ -1,7 +1,9 @@
 const withPWA = require('next-pwa');
+const { nextI18NextRewrites } = require('next-i18next/rewrites')
 const prod = process.env.NODE_ENV === 'production';
 
 const config = {
+    target: "serverless",
     pwa: {
         dest: 'public',
         register: false,
@@ -16,6 +18,19 @@ const config = {
     typescript: {
         ignoreDevErrors: true,
     },
+    experimental: {
+        async rewrites() {
+          return [
+            ...nextI18NextRewrites(
+                {
+                    en: 'en',
+                    fi: 'fi',
+                    sv: 'sv',
+                }
+            )
+          ]
+        }
+      }
 };
 
 module.exports = withPWA(config);
