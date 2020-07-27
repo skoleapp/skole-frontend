@@ -39,5 +39,7 @@
     "betaCode": "Beta Code",
     "name": "Name",
     "schoolHelpText": "By adding school we will be able to automatically show you content based on your school.",
-    "subjectHelpText": "By adding subject we will be able to automatically show you content based on your subject."
+    "subjectHelpText": "By adding subject we will be able to automatically show you content based on your subject.",
+    "marketingPermission": "Marketing Permission (coming soon)",
+    "pushNotifications": "Push Notifications (coming soon)"
 }

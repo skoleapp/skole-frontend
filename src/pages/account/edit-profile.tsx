@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, FormControl, FormHelperText } from '@material-ui/core';
 import {
     AutoCompleteField,
     AvatarField,
@@ -9,7 +9,7 @@ import {
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { Switch, TextField } from 'formik-material-ui';
 import {
     SchoolObjectType,
     SchoolsDocument,
@@ -156,6 +156,14 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                         helperText={t('forms:subjectHelpText')}
                         fullWidth
                     />
+                    <FormControl fullWidth>
+                        <FormHelperText>{t('forms:marketingPermission')}</FormHelperText>
+                        <Field name="marketingPermission" component={Switch} fullWidth disabled color="primary" />
+                    </FormControl>
+                    <FormControl fullWidth>
+                        <FormHelperText>{t('forms:pushNotifications')}</FormHelperText>
+                        <Field name="pushNotifications" component={Switch} fullWidth disabled color="primary" />
+                    </FormControl>
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
                     {verified === false && (
                         <Box marginTop="1rem" marginBottom="0.5rem">

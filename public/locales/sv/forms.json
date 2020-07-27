@@ -39,5 +39,7 @@
     "betaCode": "Betakod",
     "name": "Namn",
     "schoolHelpText": "Genom att lägga till skola kan vi automatiskt visa dig innehåll baserat på din skola.",
-    "subjectHelpText": "Genom att lägga till ämne kan vi automatiskt visa innehåll baserat på ditt ämne."
+    "subjectHelpText": "Genom att lägga till ämne kan vi automatiskt visa innehåll baserat på ditt ämne.",
+    "marketingPermission": "Marknadstillstånd (kommer snart)",
+    "pushNotifications": "Push Notifications (kommer snart)"
 }
