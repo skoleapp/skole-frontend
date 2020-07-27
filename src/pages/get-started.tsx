@@ -1,6 +1,7 @@
 import { Avatar, Box, Grid, Typography } from '@material-ui/core';
 import { AssignmentOutlined, ChatOutlined, SchoolOutlined } from '@material-ui/icons';
 import { ButtonLink, MainLayout, TextLink } from 'components';
+import { useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces } from 'i18n';
 import { withNoAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
@@ -16,6 +17,7 @@ import { urls } from 'utils';
 const GetStartedPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
+    const { renderLanguageButton } = useLanguageSelector();
     const renderTopSectionBackground = <Box id="top-section-background" />;
 
     const renderTopSectionContent = (
@@ -93,6 +95,7 @@ const GetStartedPage: NextPage<I18nProps> = () => {
         },
         topNavbarProps: {
             disableAuthButtons: true,
+            headerRight: renderLanguageButton,
         },
         disableBottomNavbar: true,
     };
