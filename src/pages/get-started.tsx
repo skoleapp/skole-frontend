@@ -4,6 +4,7 @@ import { ButtonLink, MainLayout, TextLink } from 'components';
 import { includeDefaultNamespaces } from 'i18n';
 import { withNoAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +15,7 @@ import { urls } from 'utils';
 
 const GetStartedPage: NextPage<I18nProps> = () => {
     const { t } = useTranslation();
+    const { query } = useRouter();
     const renderTopSectionBackground = <Box id="top-section-background" />;
 
     const renderTopSectionContent = (
@@ -67,11 +69,16 @@ const GetStartedPage: NextPage<I18nProps> = () => {
                 <Typography variant="subtitle1">{t('get-started:subheader')}</Typography>
             </Box>
             <Box marginTop="1rem">
-                <ButtonLink id="get-started-cta" href={urls.register} color="primary" variant="contained">
+                <ButtonLink
+                    id="get-started-cta"
+                    href={{ pathname: urls.register, query }}
+                    color="primary"
+                    variant="contained"
+                >
                     {t('get-started:cta')}
                 </ButtonLink>
                 <Box marginY="1rem">
-                    <TextLink color="primary" href={urls.login}>
+                    <TextLink color="primary" href={{ pathname: urls.login, query }}>
                         {t('common:alreadyHaveAccount')}
                     </TextLink>
                 </Box>
