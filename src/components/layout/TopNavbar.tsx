@@ -37,6 +37,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     dynamicBackUrl,
     staticBackUrl,
     disableSearch,
+    disableAuthButtons,
     headerRight,
     headerRightSecondary,
     headerLeft,
@@ -141,7 +142,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </>
     );
 
-    const renderUnAuthenticatedButtons = (
+    const renderUnAuthenticatedButtons = !disableAuthButtons && (
         <>
             <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
                 {t('common:login')}

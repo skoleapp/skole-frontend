@@ -1,15 +1,12 @@
-import { useApolloClient } from '@apollo/react-hooks';
 import { Box, ListItemText, MenuItem } from '@material-ui/core';
 import { ExitToAppOutlined, HowToRegOutlined, LanguageOutlined, VerifiedUserOutlined } from '@material-ui/icons';
 import { StyledList } from 'components';
-import { useAuthContext, useNotificationsContext, useSettingsContext } from 'context';
-import { Router } from 'i18n';
-import { removeTokenCookie } from 'lib';
+import { useAuthContext, useSettingsContext } from 'context';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SettingsContext } from 'types';
-import { MENU_ITEMS, urls } from 'utils';
+import { MENU_ITEMS, redirect, urls } from 'utils';
 
 import { useLanguageSelector } from './useLanguageSelector';
 
@@ -22,11 +19,9 @@ interface UseSettings extends SettingsContext {
 export const useSettings = (modal: boolean): UseSettings => {
     const { userMe, verified } = useAuthContext();
     const { settingsOpen, toggleSettings } = useSettingsContext();
-    const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
     const { pathname } = useRouter();
     const { openLanguageMenu } = useLanguageSelector();
-    const apolloClient = useApolloClient();
 
     const handleClose = (): void => {
         toggleSettings(false);
@@ -34,14 +29,7 @@ export const useSettings = (modal: boolean): UseSettings => {
 
     const handleMenuItemClick = (href: string) => (): void => {
         !!modal && handleClose();
-        Router.push(href);
-    };
-
-    const handleLogoutClick = async (): Promise<void> => {
-        !!modal && handleClose();
-        toggleNotification(t('notifications:signedOut'));
-        await apolloClient.resetStore();
-        Router.push(urls.login);
+        redirect(href);
     };
 
     const getSelected = (href: string): boolean => !modal && href === pathname;
@@ -108,7 +96,7 @@ export const useSettings = (modal: boolean): UseSettings => {
     );
 
     const renderLogoutMenuItem = (
-        <MenuItem onClick={handleLogoutClick}>
+        <MenuItem onClick={handleMenuItemClick(urls.logout)}>
             <ListItemText>
                 <ExitToAppOutlined /> {t('common:logout')}
             </ListItemText>

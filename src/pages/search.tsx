@@ -43,7 +43,7 @@ import {
     SubjectsDocument,
 } from 'generated';
 import { useDrawer, useForm } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
+import { includeDefaultNamespaces } from 'i18n';
 import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -53,7 +53,7 @@ import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { I18nProps, UseDrawer } from 'types';
-import { getPaginationQuery, getQueryWithPagination } from 'utils';
+import { getPaginationQuery, getQueryWithPagination, redirect } from 'utils';
 
 interface FilterSearchResultsFormValues {
     courseName: string;
@@ -99,7 +99,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     // Pick non-empty values and reload the page with new query params.
     const handleSubmitFilters = async (filteredValues: {}): Promise<void> => {
         const validQuery: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
-        await Router.push({ pathname, query: validQuery });
+        await redirect({ pathname, query: validQuery });
         setSubmitting(false);
         const fakeEvent = (new Event('Fake event!') as unknown) as SyntheticEvent;
         handleCloseFilters(fakeEvent);
@@ -108,7 +108,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     // Clear the query params and reset form.
     const handleClearFilters = async (e: SyntheticEvent): Promise<void> => {
         const paginationQuery = getPaginationQuery(query);
-        await Router.push({ pathname, query: paginationQuery });
+        await redirect({ pathname, query: paginationQuery });
         resetForm();
         setSearchValue('');
         handleCloseFilters(e);
@@ -170,14 +170,14 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     const handleClearSearchInput = async (): Promise<void> => {
         setSearchInputSubmitting(true);
         setSearchValue('');
-        await Router.push({ pathname, query: { ...paginationQuery } });
+        await redirect({ pathname, query: { ...paginationQuery } });
         setSearchInputSubmitting(false);
     };
 
     const handleSubmitSearchInput = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
         setSearchInputSubmitting(true);
-        await Router.push({ pathname, query: { ...paginationQuery, courseName: searchValue } });
+        await redirect({ pathname, query: { ...paginationQuery, courseName: searchValue } });
         setSearchInputSubmitting(false);
     };
 
@@ -209,7 +209,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         );
 
         filterName === 'courseName' && handleClearSearchInput();
-        await Router.push({ pathname, query });
+        await redirect({ pathname, query });
         resetForm();
         setSearchInputSubmitting(false);
     };

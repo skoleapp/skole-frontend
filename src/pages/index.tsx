@@ -31,9 +31,6 @@ const IndexPage: NextPage<I18nProps> = () => {
                 <Box id="slogan">
                     <Typography variant="h1">{t('common:slogan')}</Typography>
                 </Box>
-                <Box marginTop="1rem">
-                    <Typography variant="subtitle1">{t('index:marketingText')}</Typography>
-                </Box>
                 <Box id="search-widget" marginTop="1rem">
                     <form onSubmit={handleSubmit}>
                         <Box display="flex" justifyContent="center">
@@ -50,16 +47,8 @@ const IndexPage: NextPage<I18nProps> = () => {
         </Box>
     );
 
-    const renderMarketingText = (
-        <Box marginTop="1rem">
-            <Typography variant="h2" color="primary">
-                {t('index:marketingText2')}
-            </Typography>
-        </Box>
-    );
-
     const renderShortcuts = (
-        <Box id="shortcuts" display="flex" justifyContent="center" marginTop="1rem">
+        <Box id="shortcuts">
             {SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
                 <Link href={href} key={i}>
                     <Card>
@@ -68,9 +57,11 @@ const IndexPage: NextPage<I18nProps> = () => {
                                 <Avatar>
                                     <Icon />
                                 </Avatar>
-                                <Typography variant="h2" color="primary">
-                                    {t(text)}
-                                </Typography>
+                                <Box marginTop="0.5rem">
+                                    <Typography variant="h2" color="primary">
+                                        {t(text)}
+                                    </Typography>
+                                </Box>
                             </CardContent>
                         </CardActionArea>
                     </Card>
@@ -93,7 +84,6 @@ const IndexPage: NextPage<I18nProps> = () => {
         <StyledIndexPage>
             <MainLayout {...layoutProps}>
                 {renderSearch}
-                {renderMarketingText}
                 {renderShortcuts}
             </MainLayout>
         </StyledIndexPage>
@@ -108,10 +98,10 @@ const StyledIndexPage = styled(Box)`
     }
 
     #top-section-container {
-        min-height: 15rem;
+        height: 10rem;
 
         @media only screen and (min-width: ${breakpoints.MD}) {
-            min-height: 18rem;
+            height: 18rem;
         }
 
         #top-section-background {
@@ -121,10 +111,10 @@ const StyledIndexPage = styled(Box)`
             top: 3rem;
             left: 0;
             right: 0;
-            min-height: 15rem;
+            height: 10rem;
 
             @media only screen and (min-width: ${breakpoints.MD}) {
-                min-height: 18rem;
+                height: 18rem;
             }
         }
 
@@ -164,11 +154,17 @@ const StyledIndexPage = styled(Box)`
 
     #shortcuts {
         flex-flow: row wrap;
+        display: flex;
+        justify-content: center;
+
+        @media only screen and (min-width: ${breakpoints.SM}) {
+            margin-top: 1rem;
+        }
 
         .MuiCard-root {
             margin-top: 0.5rem;
             width: 100%;
-            padding-bottom: 50%;
+            padding-bottom: 55%;
             position: relative;
 
             @media only screen and (min-width: ${breakpoints.SM}) {

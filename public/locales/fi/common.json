@@ -74,5 +74,6 @@
     "print": "Tulosta",
     "activity": "Toiminta",
     "seeAll": "Katso kaikki",
-    "commentShareText": "{{ creatorUsername }} Skolessa: {{ commentPreview }}"
+    "commentShareText": "{{ creatorUsername }} Skolessa: {{ commentPreview }}",
+    "alreadyHaveAccount": "Onko sinulla jo tili?"
 }

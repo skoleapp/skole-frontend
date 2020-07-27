@@ -1,19 +1,18 @@
-import { useApolloClient } from '@apollo/react-hooks';
 import { FormSubmitSection, SettingsLayout } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { DeleteAccountMutation, useDeleteAccountMutation } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
-import { removeTokenCookie, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces } from 'i18n';
+import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
-import { urls } from 'utils';
+import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -32,8 +31,6 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
 
     const { t } = useTranslation();
     const confirm = useConfirm();
-    const apolloClient = useApolloClient();
-    const { setUserMe } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
 
     const onCompleted = async ({ deleteUser }: DeleteAccountMutation): Promise<void> => {
@@ -43,10 +40,7 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
             } else if (!!deleteUser.message) {
                 resetForm();
                 toggleNotification(deleteUser.message);
-                removeTokenCookie();
-                setUserMe(null);
-                await apolloClient.resetStore();
-                Router.push(urls.login);
+                redirect(urls.logout);
             } else {
                 unexpectedError();
             }

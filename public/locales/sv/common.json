@@ -74,5 +74,6 @@
     "print": "Skriva ut",
     "activity": "Aktivitet",
     "seeAll": "Visa allt",
-    "commentShareText": "{{ creatorUsername }} på Skole: {{ commentPreview }}"
+    "commentShareText": "{{ creatorUsername }} på Skole: {{ commentPreview }}",
+    "alreadyHaveAccount": "Har du redan ett konto?"
 }

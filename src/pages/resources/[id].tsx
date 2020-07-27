@@ -41,12 +41,11 @@ import { includeDefaultNamespaces } from 'i18n';
 import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
-import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps, MaxWidth } from 'types';
-import { mediaURL, urls } from 'utils';
+import { mediaURL, redirect, urls } from 'utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -155,8 +154,8 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             if (!!deleteResource.errors) {
                 deleteResourceError();
             } else if (deleteResource.message) {
-                Router.push(`/courses/${courseId}`);
                 toggleNotification(deleteResource.message);
+                redirect(`/courses/${courseId}`);
             } else {
                 deleteResourceError();
             }

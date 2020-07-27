@@ -35,6 +35,7 @@ export const HeadComponent: React.FC<SEOProps> = ({ title, description }) => (
             content="width=device-width, initial-scale=1.0, maximum-scale=1 user-scalable=no viewport-fit=cover"
         />
         <meta name="theme-color" content={colors.primary} />
+        <meta content="yes" name="mobile-web-app-capable" />
         <meta name="apple-mobile-web-app-title" content="Skole" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />

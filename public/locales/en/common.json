@@ -74,5 +74,6 @@
     "print": "Print",
     "activity": "Activity",
     "seeAll": "See All",
-    "commentShareText": "{{ creatorUsername }} on Skole: {{ commentPreview }}"
+    "commentShareText": "{{ creatorUsername }} on Skole: {{ commentPreview }}",
+    "alreadyHaveAccount": "Already have an account?"
 }

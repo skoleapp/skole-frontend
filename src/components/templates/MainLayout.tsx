@@ -22,24 +22,36 @@ export const MainLayout: React.FC<LayoutProps> = ({
     topNavbarProps,
     customTopNavbar,
     customBottomNavbar,
+    disableBottomNavbar,
     containerProps,
     children,
 }) => {
     const isMobile = useDeviceContext();
     const { userMe } = useAuthContext();
+    const layoutProps = { disableBottomMargin: !userMe && !customBottomNavbar };
+    const renderHead = <Head {...seoProps} />;
+    const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
+    const renderChildren = <Container {...containerProps}>{children}</Container>;
+    const renderBottomNavbar = customBottomNavbar || (!!userMe && !disableBottomNavbar && <BottomNavbar />);
+    const renderFooter = !isMobile && <Footer />;
+    const renderNotifications = <Notifications />;
+    const renderAttachmentViewer = <AttachmentViewer />;
+    const renderCommentThreadModal = <CommentThreadModal />;
+    const renderSettingsModal = <SettingsModal />;
+    const renderLanguageSelectorModal = <LanguageSelectorModal />;
 
     return (
-        <StyledMainLayout disableBottomMargin={!userMe && !customBottomNavbar}>
-            <Head {...seoProps} />
-            {(isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />}
-            <Container {...containerProps}>{children}</Container>
-            {customBottomNavbar || (!!userMe && <BottomNavbar />)}
-            {!isMobile && <Footer />}
-            <Notifications />
-            <AttachmentViewer />
-            <CommentThreadModal />
-            <SettingsModal />
-            <LanguageSelectorModal />
+        <StyledMainLayout {...layoutProps}>
+            {renderHead}
+            {renderTopNavbar}
+            {renderChildren}
+            {renderBottomNavbar}
+            {renderFooter}
+            {renderNotifications}
+            {renderAttachmentViewer}
+            {renderCommentThreadModal}
+            {renderSettingsModal}
+            {renderLanguageSelectorModal}
         </StyledMainLayout>
     );
 };

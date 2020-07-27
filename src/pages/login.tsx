@@ -6,15 +6,15 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
 import { useAlerts, useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
-import { setTokenCookie, withNoAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces } from 'i18n';
+import { withNoAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
-import { urls } from 'utils';
+import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -56,7 +56,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                     resetForm();
                     toggleNotification(login.message);
                     setUserMe(login.user as UserObjectType);
-                    Router.push((next as string) || urls.home);
+                    redirect((next as string) || urls.home);
                 } catch {
                     unexpectedError();
                 }

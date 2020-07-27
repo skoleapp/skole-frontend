@@ -10,7 +10,7 @@ import {
     useSendPasswordResetEmailMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
+import { includeDefaultNamespaces } from 'i18n';
 import { withSSRAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -18,7 +18,7 @@ import * as R from 'ramda';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
-import { urls } from 'utils';
+import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
 const emailFormInitialValues = {
@@ -102,7 +102,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
             } else if (!!resetPassword.message) {
                 resetPasswordForm();
                 toggleNotification(resetPassword.message);
-                Router.push(urls.login);
+                redirect(urls.logout);
             } else {
                 passwordFormUnexpectedError();
             }

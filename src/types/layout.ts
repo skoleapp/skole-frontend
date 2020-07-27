@@ -14,6 +14,7 @@ export interface TopNavbarProps {
         as?: string | UrlObject;
     };
     disableSearch?: boolean;
+    disableAuthButtons?: boolean;
     headerRight?: JSX.Element | boolean;
     headerRightSecondary?: JSX.Element;
     headerLeft?: JSX.Element;
@@ -25,4 +26,5 @@ export interface LayoutProps {
     containerProps?: ContainerProps;
     customTopNavbar?: JSX.Element;
     customBottomNavbar?: JSX.Element;
+    disableBottomNavbar?: boolean;
 }

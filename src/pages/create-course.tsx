@@ -11,13 +11,14 @@ import {
     useCreateCourseMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
+import { includeDefaultNamespaces } from 'i18n';
 import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
+import { redirect } from 'utils';
 import * as Yup from 'yup';
 
 interface CreateCourseFormValues {
@@ -52,7 +53,7 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
             } else if (!!createCourse.course && !!createCourse.message) {
                 resetForm();
                 toggleNotification(createCourse.message);
-                await Router.push(`/courses/${createCourse.course.id}`);
+                redirect(`/courses/${createCourse.course.id}`);
             } else {
                 unexpectedError();
             }

@@ -1,0 +1,9 @@
+{
+    "title": "Logga ut",
+    "description": "Det här är utloggningssidan.",
+    "header": "Logga ut",
+    "loggingOut": "loggar ut...",
+    "loggedOut": "Du har loggats ut!",
+    "loginButton": "Logga in igen",
+    "confirmLogout": "Logga ut för att fortsätta."
+}

@@ -42,7 +42,7 @@ import {
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
+import { includeDefaultNamespaces } from 'i18n';
 import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
@@ -50,7 +50,7 @@ import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
-import { urls } from 'utils';
+import { redirect, urls } from 'utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -144,8 +144,8 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             if (!!deleteCourse.errors) {
                 deleteCourseError();
             } else if (!!deleteCourse.message) {
-                Router.push(urls.home);
                 toggleNotification(deleteCourse.message);
+                redirect(urls.home);
             } else {
                 deleteCourseError();
             }

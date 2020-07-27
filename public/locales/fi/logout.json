@@ -1,0 +1,9 @@
+{
+    "title": "Kirjaudu ulos",
+    "description": "Tämä on uloskirjautumissivu.",
+    "header": "Kirjaudu ulos",
+    "loggingOut": "Kirjaudutaan ulos...",
+    "loggedOut": "Olet kirjautunut ulos!",
+    "loginButton": "Kirjaudu sisään uudelleen",
+    "confirmLogout": "Ole hyvä ja kirjaudu sisään jatkaaksesi."
+}
