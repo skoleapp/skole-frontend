@@ -14,8 +14,7 @@ import {
     UserObjectType,
 } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { withNoAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withNoAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -83,7 +82,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
                 resetForm();
                 toggleNotification(register.message);
                 setUserMe(login.user as UserObjectType);
-                redirect(urls.home);
+                await redirect(urls.home);
             } catch {
                 unexpectedError();
             }
@@ -231,10 +230,8 @@ const RegisterPage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withNoAuth);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
+export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['register']) },
 }));
 
-export default RegisterPage;
+export default withNoAuth(RegisterPage);

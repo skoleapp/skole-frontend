@@ -1,12 +1,12 @@
+import { OperationVariables, useApolloClient } from '@apollo/client';
 import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
-import { Autocomplete, AutocompleteProps, RenderInputParams } from '@material-ui/lab';
+import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { FieldAttributes, FormikProps, getIn } from 'formik';
 import { DocumentNode } from 'graphql';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { OperationVariables, useApolloClient } from 'react-apollo';
 
-interface Props extends AutocompleteProps {
+interface Props {
     field: FieldAttributes<{}>;
     form: FormikProps<{}>;
     labelKey: string; // Used to access the label on the object.
@@ -61,7 +61,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
         !!val ? form.setFieldValue(name, val) : form.setFieldValue(name, null);
     };
 
-    const renderInput = (params: RenderInputParams): JSX.Element => (
+    const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
         <TextField
             {...params}
             {...props}

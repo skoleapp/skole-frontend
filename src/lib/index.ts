@@ -5,3 +5,4 @@ export * from './auth-cookies';
 export * from './pwa';
 export * from './user-agent';
 export * from './react-pdf';
+export * from './i18n';

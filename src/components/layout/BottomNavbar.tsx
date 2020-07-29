@@ -2,7 +2,7 @@ import { Avatar, BottomNavigationAction } from '@material-ui/core';
 import { CloudUploadOutlined, HomeOutlined, NotificationsOutlined, SearchOutlined } from '@material-ui/icons';
 import { useAuthContext } from 'context';
 import { useSearch } from 'hooks';
-import { Link } from 'i18n';
+import { Link } from 'lib';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
@@ -49,7 +49,7 @@ export const BottomNavbar: React.FC = () => {
         setValue(newValue);
     };
 
-    const handleRedirect = (url: string | UrlObject) => (): void => redirect(url);
+    const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => redirect(url);
 
     const renderAvatar = (
         <Link href={urls.user} as={`/users/${userMeId}`}>

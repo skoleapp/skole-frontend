@@ -6,11 +6,9 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
 import { useAlerts, useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { withNoAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withNoAuth, withUserAgent } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
@@ -56,7 +54,7 @@ const LoginPage: NextPage<I18nProps> = () => {
                     resetForm();
                     toggleNotification(login.message);
                     setUserMe(login.user as UserObjectType);
-                    redirect((next as string) || urls.home);
+                    await redirect((next as string) || urls.home);
                 } catch {
                     unexpectedError();
                 }
@@ -142,10 +140,8 @@ const LoginPage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withNoAuth);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
+export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['login']) },
 }));
 
-export default LoginPage;
+export default withNoAuth(LoginPage);

@@ -1,4 +1,4 @@
-import { ApolloError } from 'apollo-client';
+import { ApolloError } from '@apollo/client';
 import { Formik } from 'formik';
 import { ErrorType, SchoolObjectType, SubjectObjectType } from 'generated';
 import Maybe from 'graphql/tsutils/Maybe';

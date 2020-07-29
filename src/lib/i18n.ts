@@ -1,6 +1,6 @@
 import NextI18Next from 'next-i18next';
 
-export const nextI18next = new NextI18Next({
+const nextI18next = new NextI18Next({
     defaultLanguage: 'en',
     otherLanguages: ['fi', 'sv'],
     localePath: typeof window === 'undefined' ? 'public/locales' : 'locales',
@@ -24,6 +24,7 @@ export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
         'gdpr',
         'tooltips',
         'activity',
+        'loading',
     ];
 
     return defaultNamespaces.concat(namespaces);

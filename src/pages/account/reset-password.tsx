@@ -10,8 +10,7 @@ import {
     useSendPasswordResetEmailMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -216,7 +215,7 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {

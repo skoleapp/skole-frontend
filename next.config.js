@@ -1,4 +1,5 @@
 const withPWA = require('next-pwa');
+const { nextI18NextRewrites } = require('next-i18next/rewrites');
 const prod = process.env.NODE_ENV === 'production';
 
 const config = {

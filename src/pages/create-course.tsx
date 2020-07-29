@@ -11,8 +11,7 @@ import {
     useCreateCourseMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -53,7 +52,7 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
             } else if (!!createCourse.course && !!createCourse.message) {
                 resetForm();
                 toggleNotification(createCourse.message);
-                redirect(`/courses/${createCourse.course.id}`);
+                await redirect(`/courses/${createCourse.course.id}`);
             } else {
                 unexpectedError();
             }
@@ -150,7 +149,7 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
@@ -158,4 +157,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     },
 }));
 
-export default withAuthSync(CreateCoursePage);
+export default withAuth(CreateCoursePage);

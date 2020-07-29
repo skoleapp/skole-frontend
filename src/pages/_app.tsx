@@ -1,13 +1,11 @@
 import 'nprogress/nprogress.css';
 import 'typeface-roboto';
 
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/client';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { ContextProvider } from 'context';
-import { appWithTranslation } from 'i18n';
-import { Router } from 'i18n';
-import { pageView, PWAProvider, useApollo } from 'lib';
+import { appWithTranslation, pageView, PWAProvider, Router, useApollo } from 'lib';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';

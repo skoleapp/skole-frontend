@@ -1,4 +1,4 @@
-import { Link } from 'i18n';
+import { Link } from 'lib';
 import React from 'react';
 import styled from 'styled-components';
 import { urls } from 'utils';

@@ -1,8 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import { ExitToAppOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout } from 'components';
-import { includeDefaultNamespaces } from 'i18n';
-import { withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -35,7 +34,7 @@ const ConfirmLogoutPage: NextPage = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {

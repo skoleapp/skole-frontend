@@ -11,8 +11,7 @@ import {
 } from 'components';
 import { CourseObjectType, ResourceObjectType, StarredDocument, UserObjectType } from 'generated';
 import { useFrontendPagination, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -100,7 +99,7 @@ const StarredPage: NextPage<Props> = ({ userMe }) => {
     }
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
@@ -114,4 +113,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     }
 });
 
-export default withAuthSync(StarredPage);
+export default withAuth(StarredPage);

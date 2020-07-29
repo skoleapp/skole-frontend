@@ -43,8 +43,7 @@ import {
     SubjectsDocument,
 } from 'generated';
 import { useDrawer, useForm } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
@@ -466,7 +465,7 @@ const StyledSearchPage = styled(Box)`
     }
 `;
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
@@ -484,4 +483,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     }
 });
 
-export default withAuthSync(SearchPage);
+export default withAuth(SearchPage);

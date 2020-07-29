@@ -14,7 +14,6 @@
             "utils": ["src/utils"],
             "config": ["src/config.ts"],
             "context": ["src/context.tsx"],
-            "i18n": ["src/i18n.ts"],
             "types": ["src/types"]
         },
         "moduleResolution": "node",

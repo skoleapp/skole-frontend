@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as ApolloReactCommon from '@apollo/client';
+import * as ApolloReactHooks from '@apollo/client';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -302,6 +302,8 @@ export type Mutation = {
    * Not verified users can still login.
    */
   login?: Maybe<LoginMutationPayload>;
+  /** Delete JSON web token cookie and logout. */
+  logout?: Maybe<LogoutMutation>;
   /**
    * Update some user model fields.
    * 
@@ -593,6 +595,12 @@ export type LoginMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
+/** Delete JSON web token cookie and logout. */
+export type LogoutMutation = {
+   __typename?: 'LogoutMutation';
+  deleted: Scalars['Boolean'];
+};
+
 /**
  * Update some user model fields.
  * 
@@ -857,6 +865,17 @@ export type LoginMutation = (
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
+  )> }
+);
+
+export type BackendLogoutMutationVariables = {};
+
+
+export type BackendLogoutMutation = (
+  { __typename?: 'Mutation' }
+  & { logout?: Maybe<(
+    { __typename?: 'LogoutMutation' }
+    & Pick<LogoutMutation, 'deleted'>
   )> }
 );
 
@@ -1680,6 +1699,37 @@ export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const BackendLogoutDocument = gql`
+    mutation BackendLogout {
+  logout {
+    deleted
+  }
+}
+    `;
+export type BackendLogoutMutationFn = ApolloReactCommon.MutationFunction<BackendLogoutMutation, BackendLogoutMutationVariables>;
+
+/**
+ * __useBackendLogoutMutation__
+ *
+ * To run a mutation, you first call `useBackendLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBackendLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [backendLogoutMutation, { data, loading, error }] = useBackendLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBackendLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<BackendLogoutMutation, BackendLogoutMutationVariables>) {
+        return ApolloReactHooks.useMutation<BackendLogoutMutation, BackendLogoutMutationVariables>(BackendLogoutDocument, baseOptions);
+      }
+export type BackendLogoutMutationHookResult = ReturnType<typeof useBackendLogoutMutation>;
+export type BackendLogoutMutationResult = ApolloReactCommon.MutationResult<BackendLogoutMutation>;
+export type BackendLogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<BackendLogoutMutation, BackendLogoutMutationVariables>;
 export const ResendVerificationEmailDocument = gql`
     mutation ResendVerificationEmail($email: String!) {
   resendVerificationEmail(input: {email: $email}) {

@@ -9,8 +9,7 @@ import {
     UserObjectType,
 } from 'generated';
 import { useActionsDrawer } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
@@ -101,7 +100,7 @@ const ActivityPage: NextPage<Props> = () => {
     }
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
@@ -109,4 +108,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     },
 }));
 
-export default withAuthSync(ActivityPage);
+export default withAuth(ActivityPage);

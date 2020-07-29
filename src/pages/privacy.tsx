@@ -1,7 +1,6 @@
 import { Box, Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
-import { includeDefaultNamespaces } from 'i18n';
-import { withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';

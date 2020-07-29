@@ -20,7 +20,7 @@ import {
     StarBorderOutlined,
 } from '@material-ui/icons';
 import { useAuthContext, useDeviceContext } from 'context';
-import { Link, Router } from 'i18n';
+import { Link, Router } from 'lib';
 import * as R from 'ramda';
 import React, { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';

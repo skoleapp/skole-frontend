@@ -1,6 +1,6 @@
 import { Link as MaterialLink } from '@material-ui/core';
 import { LinkProps as MaterialLinkProps } from '@material-ui/core/Link';
-import { Link } from 'i18n';
+import { Link } from 'lib';
 import { LinkProps } from 'next/link';
 import React from 'react';
 

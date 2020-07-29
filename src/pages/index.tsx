@@ -2,8 +2,7 @@ import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typo
 import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import { MainLayout } from 'components';
 import { useSearch } from 'hooks';
-import { includeDefaultNamespaces, Link } from 'i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, Link, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -202,10 +201,10 @@ const StyledIndexPage = styled(Box)`
     }
 `;
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['index']) },
 }));
 
-export default withAuthSync(IndexPage);
+export default withAuth(IndexPage);

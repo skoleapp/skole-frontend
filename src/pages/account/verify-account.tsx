@@ -9,8 +9,7 @@ import {
     VerifyAccountMutation,
 } from 'generated/graphql';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -174,7 +173,7 @@ const VerifyAccountPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
@@ -182,4 +181,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     },
 }));
 
-export default withAuthSync(VerifyAccountPage);
+export default withAuth(VerifyAccountPage);

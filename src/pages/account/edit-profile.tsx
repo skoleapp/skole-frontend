@@ -20,8 +20,7 @@ import {
     useUpdateUserMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -198,7 +197,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
     }
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
@@ -206,4 +205,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     },
 }));
 
-export default withAuthSync(EditProfilePage);
+export default withAuth(EditProfilePage);

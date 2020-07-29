@@ -8,10 +8,8 @@ generates:
       - 'typescript-operations'
       - 'typescript-react-apollo'
     config:
+      reactApolloVersion: 3
       skipTypename: false
       withHooks: true
       withHOC: false
       withComponent: false
-  generated/graphql.schema.json:
-    plugins:
-      - 'introspection'

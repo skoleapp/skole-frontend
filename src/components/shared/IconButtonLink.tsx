@@ -1,7 +1,7 @@
 import { IconButton } from '@material-ui/core';
 import { IconButtonProps } from '@material-ui/core/IconButton';
 import { SvgIconComponent } from '@material-ui/icons';
-import { Link } from 'i18n';
+import { Link } from 'lib';
 import { LinkProps } from 'next/link';
 import React, { forwardRef } from 'react';
 
