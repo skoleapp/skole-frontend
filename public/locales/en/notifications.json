@@ -12,5 +12,6 @@
     "sharingError": "Error while sharing!",
     "appUpdated": "App has been updated!",
     "markSingleActivityReadError": "This activity has most likely been removed. Please refresh the page.",
-    "markAllActivitiesReadError": "Error while marking activities as read!"
+    "markAllActivitiesReadError": "Error while marking activities as read!",
+    "logoutError": "Error while logging out!"
 }

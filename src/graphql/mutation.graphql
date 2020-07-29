@@ -41,6 +41,12 @@ mutation Login($usernameOrEmail: String!, $password: String!) {
     }
 }
 
+mutation BackendLogout {
+    logout {
+        deleted
+    }
+}
+
 mutation ResendVerificationEmail($email: String!) {
     resendVerificationEmail(input: { email: $email }) {
         message

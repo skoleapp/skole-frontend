@@ -12,5 +12,6 @@
     "sharingError": "Virhe jakamisessa!",
     "appUpdated": "Sovellus päivitetty!",
     "markSingleActivityReadError": "Tämä toiminta on todennäköisesti poistettu. Ole hyvä ja lataa sivu uudelleen.",
-    "markAllActivitiesReadError": "Virhe merkittäessä toiminnat luetuiksi!"
+    "markAllActivitiesReadError": "Virhe merkittäessä toiminnat luetuiksi!",
+    "logoutError": "Virhe kirjauduttaessa ulos!"
 }
