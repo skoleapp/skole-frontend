@@ -1,9 +1,10 @@
 import NextI18Next from 'next-i18next';
+import path from 'path';
 
 const nextI18next = new NextI18Next({
     defaultLanguage: 'en',
     otherLanguages: ['fi', 'sv'],
-    localePath: typeof window === 'undefined' ? 'public/locales' : 'locales',
+    localePath: path.resolve('./public/locales'),
     fallbackLng: 'en',
     strictMode: false, // Disable redundant warnings about withTranslation wrapper.
 });
