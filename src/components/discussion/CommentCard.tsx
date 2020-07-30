@@ -21,10 +21,10 @@ import {
 import { useAttachmentViewerContext, useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation, VoteObjectType } from 'generated';
 import { useActionsDrawer, useMoment, useVotes } from 'hooks';
+import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { mediaURL } from 'utils';
 
@@ -55,6 +55,10 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const { toggleNotification } = useNotificationsContext();
     const { toggleAttachmentViewer } = useAttachmentViewerContext();
     const { toggleTopComment } = useDiscussionContext();
+    const shareQuery = `?comment=${commentId}`;
+    const creatorUsername = R.propOr('unknown', 'username', comment.user) as string;
+    const commentPreview = comment.text.length > 20 ? `${comment.text.substring(0, 20)}...` : comment.text;
+    const shareText = t('common:commentShareText', { creatorUsername, commentPreview });
 
     const {
         renderActionsHeader,
@@ -64,7 +68,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         renderActionsButton,
         open,
         anchor,
-    } = useActionsDrawer();
+    } = useActionsDrawer({ query: shareQuery, text: shareText });
 
     const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
 

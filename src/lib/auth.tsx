@@ -1,27 +1,36 @@
-import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { NormalizedCacheObject } from '@apollo/client';
+import { LoadingLayout } from 'components';
 import { useAuthContext } from 'context';
 import { UserMeDocument } from 'generated/graphql';
-import { Router } from 'i18n';
+import { initApolloClient } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import { useEffect } from 'react';
-import React from 'react';
-import { urls } from 'utils';
+import React, { useEffect } from 'react';
+import { redirect, urls } from 'utils';
 
-import { initApolloClient } from './apollo';
-
-// Sync authentication between pages -> automatically redirect to login if multiple browser windows are open.
+// Sync authentication between pages.
 // Wrap all pages that require authentication with this.
-export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
-    const WithAuthSync: NextPage = pageProps => {
+export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
+    const withAuth: NextPage = pageProps => {
         const { userMe } = useAuthContext();
+        const { asPath } = useRouter();
 
         const syncLogout = (e: StorageEvent): void => {
             if (e.key === 'logout') {
-                Router.push(urls.login);
+                redirect(urls.login);
             }
         };
 
+        // Automatically redirect user to get started page if he is not authenticated.
+        useEffect(() => {
+            if (!userMe) {
+                const query = asPath !== urls.home ? { next: asPath } : undefined;
+                redirect({ pathname: urls.getStarted, query });
+            }
+        }, []);
+
+        // Automatically redirect to login if multiple browser windows are open and user logs out.
         useEffect(() => {
             window.addEventListener('storage', syncLogout);
 
@@ -31,80 +40,32 @@ export const withAuthSync = <T extends {}>(PageComponent: NextPage<T>): NextPage
             };
         }, [userMe]);
 
-        return <PageComponent {...(pageProps as T)} />;
+        return !!userMe ? <PageComponent {...(pageProps as T)} /> : <LoadingLayout />;
     };
 
-    return WithAuthSync;
+    return withAuth;
 };
 
-// Redirect unauthenticated users to login before rendering page.
-// Wrap `getServerSideProps` method with this for all pages that require authentication.
-export const withSSRAuth = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
-    const getServerSideProps: GetServerSideProps = async ctx => {
-        const result = await getServerSidePropsInner(ctx);
-        const initState: NormalizedCacheObject | null = R.propOr(null, 'initialApolloState', ctx);
-        const apolloClient = initApolloClient(initState, ctx);
-        const initialApolloState = apolloClient.cache.extract();
-        const { url } = ctx.req;
-        let userMe = null;
+// Disable access for authenticated users.
+// Wrap all pages that require access only for unauthenticated users with this for all pages.
+export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
+    const WithNoAuth: NextPage = pageProps => {
+        const { asPath } = useRouter();
+        const { userMe } = useAuthContext();
 
-        try {
-            const { data } = await apolloClient.query({ query: UserMeDocument });
-            userMe = data.userMe;
-        } catch {
-            const Location = !!url && url !== '/' ? `${urls.login}?next=${url}` : urls.login;
-            ctx.res.writeHead(302, { Location });
-            ctx.res.end();
-        }
+        // Automatically redirect user to home page if he is authenticated.
+        useEffect(() => {
+            !!userMe && redirect({ pathname: urls.confirmLogout, query: { next: asPath } });
+        }, []);
 
-        return {
-            ...result,
-            props: {
-                ...result.props,
-                initialApolloState,
-                userMe,
-            },
-        };
+        return !userMe ? <PageComponent {...(pageProps as T)} /> : <LoadingLayout />;
     };
 
-    return getServerSideProps;
-};
-
-// Redirect unauthenticated users to landing page before rendering page if they are already authenticated.
-// Wrap `getServerSideProps` method with this for all pages that are intended for only unauthenticated users.
-export const withNoAuth = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
-    const getServerSideProps: GetServerSideProps = async ctx => {
-        const result = await getServerSidePropsInner(ctx);
-        const initState: NormalizedCacheObject | null = R.propOr(null, 'initialApolloState', ctx);
-        const apolloClient = initApolloClient(initState, ctx);
-        const initialApolloState = apolloClient.cache.extract();
-        let userMe = null;
-
-        try {
-            const { data } = await apolloClient.query({ query: UserMeDocument });
-            userMe = data.userMe;
-
-            if (!!userMe) {
-                ctx.res.writeHead(302, { Location: '/' });
-                ctx.res.end();
-            }
-        } catch {}
-
-        return {
-            ...result,
-            props: {
-                ...result.props,
-                initialApolloState,
-                userMe,
-            },
-        };
-    };
-
-    return getServerSideProps;
+    return WithNoAuth;
 };
 
 // Provide user as a prop for to wrapper component that initializes context.
-// Wrap `getServerSideProps` method with this for all pages that do not require authentication.
+// Wrap `getServerSideProps` method with this for all pages.
 export const withUserMe = (getServerSidePropsInner: GetServerSideProps): GetServerSideProps => {
     const getServerSideProps: GetServerSideProps = async ctx => {
         const result = await getServerSidePropsInner(ctx);

@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@material-ui/core';
 import { useLanguageSelector } from 'hooks';
+import { useTranslation } from 'lib';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { urls } from 'utils';
 

@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Typography } from '@material-ui/core';
+import { useTranslation } from 'lib';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 interface Props {
@@ -15,7 +15,7 @@ export const LoadingBox: React.FC<Props> = ({ text }) => {
             <CircularProgress color="primary" disableShrink />
             <Box marginTop="0.5rem">
                 <Typography variant="body2" color="textSecondary">
-                    {text || t('common:loading')}
+                    {text || t('loading:loadingText')}
                 </Typography>
             </Box>
         </StyledLoadingBox>

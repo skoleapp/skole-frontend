@@ -1,6 +1,6 @@
 import { TableFooter, TablePagination, TableRow } from '@material-ui/core';
+import { useTranslation } from 'lib';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { CustomTablePaginationProps } from 'types';
 
 import { CustomTablePaginationActions } from './CustomTablePaginationActions';

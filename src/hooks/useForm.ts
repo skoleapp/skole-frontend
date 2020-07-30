@@ -1,6 +1,6 @@
-import { ApolloError } from 'apollo-client';
+import { ApolloError } from '@apollo/client';
 import { Formik } from 'formik';
-import { i18n } from 'i18n';
+import { i18n } from 'lib';
 import { useRef } from 'react';
 import { FieldValue, MutationErrors, MutationFormError, UseForm } from 'types';
 

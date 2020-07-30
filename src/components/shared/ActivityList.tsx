@@ -6,13 +6,12 @@ import {
     useMarkSingleActivityReadMutation,
     UserObjectType,
 } from 'generated';
-import { Router } from 'i18n';
+import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { UrlObject } from 'url';
-import { mediaURL, urls } from 'utils';
+import { mediaURL, redirect, urls } from 'utils';
 
 import { StyledList } from '..';
 import { NotFoundBox } from './NotFoundBox';
@@ -76,7 +75,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
             await markSingleActivityRead({ variables: { id, read: true } });
             // The activities should always have a pathname but technically it's possible that the pathname is undefined.
             // In that case we do nothing besides marking the activity as read.
-            !!pathname && Router.push({ pathname, query });
+            !!pathname && redirect({ pathname, query });
         } catch {
             onError();
         }

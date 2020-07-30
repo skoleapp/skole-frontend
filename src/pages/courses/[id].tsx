@@ -27,6 +27,7 @@ import {
     CourseObjectType,
     DeleteCourseMutation,
     ResourceObjectType,
+    SubjectObjectType,
     useDeleteCourseMutation,
     UserObjectType,
     VoteObjectType,
@@ -42,15 +43,13 @@ import {
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
-import { urls } from 'utils';
+import { redirect, urls } from 'utils';
 
 interface Props extends I18nProps {
     course?: CourseObjectType;
@@ -65,7 +64,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const { searchUrl } = useSearch();
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
-    const subjectName = R.pathOr('', ['subject', 'name'], course) as string;
+    const subjects = R.propOr([], 'subjects', course) as SubjectObjectType[];
     const schoolName = R.pathOr('', ['school', 'name'], course) as string;
     const creatorId = R.pathOr('', ['user', 'id'], course) as string;
     const courseId = R.propOr('', 'id', course) as string;
@@ -78,12 +77,11 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
     const starred = !!R.propOr(undefined, 'starred', course);
     const isOwner = !!userMe && userMe.id === creatorId;
-    const subjectId = R.path(['subject', 'id'], course) as boolean[];
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-    const { renderShareButton } = useShare(courseName);
+    const { renderShareButton } = useShare({ text: courseName });
     const iconButtonProps = useResponsiveIconButtonProps();
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
@@ -105,7 +103,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         renderActionsButton,
         open: actionsOpen,
         anchor: actionsAnchor,
-    } = useActionsDrawer(courseName);
+    } = useActionsDrawer({ text: courseName });
 
     const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
@@ -130,11 +128,6 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         downVoteButtonTooltip,
     });
 
-    const subjectLink = {
-        ...searchUrl,
-        query: { ...searchUrl.query, subject: Number(subjectId) },
-    };
-
     const deleteCourseError = (): void => {
         toggleNotification(t('notifications:deleteCourseError'));
     };
@@ -144,8 +137,8 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             if (!!deleteCourse.errors) {
                 deleteCourseError();
             } else if (!!deleteCourse.message) {
-                Router.push('/');
                 toggleNotification(deleteCourse.message);
+                redirect(urls.home);
             } else {
                 deleteCourseError();
             }
@@ -169,11 +162,19 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         }
     };
 
-    const renderSubjectLink = !!subjectId && (
-        <TextLink href={subjectLink} color="primary">
-            {subjectName}
-        </TextLink>
-    );
+    const renderSubjectLinks = subjects.map(({ id, name }, i) => (
+        <Grid key={i} item xs={12}>
+            <TextLink
+                href={{
+                    ...searchUrl,
+                    query: { ...searchUrl.query, subject: Number(id) },
+                }}
+                color="primary"
+            >
+                {name}
+            </TextLink>
+        </Grid>
+    ));
 
     const renderSchoolLink = !!schoolId && (
         <TextLink href={urls.school} as={`/schools/${schoolId}`} color="primary">
@@ -191,8 +192,8 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
             value: courseCode,
         },
         {
-            label: t('common:subject'),
-            value: renderSubjectLink,
+            label: t('common:subjects'),
+            value: renderSubjectLinks,
         },
         {
             label: t('common:school'),
@@ -370,6 +371,15 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </StyledDrawer>
     );
 
+    const renderChildren = (
+        <>
+            {renderMobileContent}
+            {renderDesktopContent}
+            {renderInfoDrawer}
+            {renderActionsDrawer}
+        </>
+    );
+
     const layoutProps = {
         seoProps: {
             title: courseName,
@@ -385,20 +395,13 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     };
 
     if (!!course) {
-        return (
-            <MainLayout {...layoutProps}>
-                {renderMobileContent}
-                {renderDesktopContent}
-                {renderInfoDrawer}
-                {renderActionsDrawer}
-            </MainLayout>
-        );
+        return <MainLayout {...layoutProps}>{renderChildren}</MainLayout>;
     } else {
         return <NotFoundLayout />;
     }
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
@@ -416,4 +419,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     }
 });
 
-export default withAuthSync(CourseDetailPage);
+export default withAuth(CourseDetailPage);

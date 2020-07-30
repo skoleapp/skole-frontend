@@ -37,16 +37,13 @@ import {
     VoteObjectType,
 } from 'generated';
 import { useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useSwipeableTabs, useVotes } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
-import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps, MaxWidth } from 'types';
-import { mediaURL, urls } from 'utils';
+import { mediaURL, redirect, urls } from 'utils';
 
 interface Props extends I18nProps {
     resource?: ResourceObjectType;
@@ -78,9 +75,9 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     const created = R.propOr(undefined, 'created', resource) as string;
     const commentCount = comments.length;
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-    const { renderShareButton } = useShare(resourceTitle);
+    const { renderShareButton } = useShare({ text: resourceTitle });
     const { commentModalOpen } = useCommentModalContext();
-    const { drawMode, setDrawMode } = usePDFViewerContext();
+    const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
     useCommentQuery(comments);
@@ -100,7 +97,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         renderActionsButton,
         open: actionsOpen,
         anchor: actionsAnchor,
-    } = useActionsDrawer(resourceTitle);
+    } = useActionsDrawer({ text: resourceTitle });
 
     const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
@@ -155,8 +152,8 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
             if (!!deleteResource.errors) {
                 deleteResourceError();
             } else if (deleteResource.message) {
-                Router.push(`/courses/${courseId}`);
                 toggleNotification(deleteResource.message);
+                redirect(`/courses/${courseId}`);
             } else {
                 deleteResourceError();
             }
@@ -326,7 +323,12 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     );
 
     const renderSwipeableViews = (
-        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+        <StyledSwipeableViews
+            ref={swipeableViewsRef}
+            disabled={swipingDisabled}
+            index={tabValue}
+            onChangeIndex={handleIndexChange}
+        >
             <Box display="flex" flexGrow="1" position="relative">
                 {renderPDFViewer}
             </Box>
@@ -411,6 +413,15 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledDrawer>
     );
 
+    const renderChildren = (
+        <>
+            {renderMobileContent}
+            {renderDesktopContent}
+            {renderInfoDrawer}
+            {renderActionsDrawer}
+        </>
+    );
+
     const layoutProps = {
         seoProps: {
             title,
@@ -429,20 +440,13 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     };
 
     if (!!resource) {
-        return (
-            <MainLayout {...layoutProps}>
-                {renderMobileContent}
-                {renderDesktopContent}
-                {renderInfoDrawer}
-                {renderActionsDrawer}
-            </MainLayout>
-        );
+        return <MainLayout {...layoutProps}>{renderChildren}</MainLayout>;
     } else {
         return <NotFoundLayout />;
     }
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
@@ -460,4 +464,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     }
 });
 
-export default withAuthSync(ResourceDetailPage);
+export default withAuth(ResourceDetailPage);

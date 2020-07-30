@@ -11,7 +11,6 @@
     "score": "Pisteet",
     "users": "Käyttäjät",
     "bio": "Kuvaus",
-    "subject": "Oppiaine",
     "school": "Koulu",
     "schoolType": "Koulutyyppi",
     "contact": "Ota yhteyttä",
@@ -60,7 +59,6 @@
     "clickToView": "Klikkaa avataksesi!",
     "starred": "Tähdellä merkityt",
     "settings": "Asetukset",
-    "loading": "Ladataan...",
     "communityUser": "Yhteisökäyttäjä",
     "date": "Päivämäärä",
     "close": "Sulje",
@@ -73,5 +71,7 @@
     "delete": "Poista",
     "print": "Tulosta",
     "activity": "Toiminta",
-    "seeAll": "Katso kaikki"
+    "seeAll": "Katso kaikki",
+    "commentShareText": "{{ creatorUsername }} Skolessa: {{ commentPreview }}",
+    "alreadyHaveAccount": "Onko sinulla jo tili?"
 }

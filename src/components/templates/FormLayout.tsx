@@ -1,12 +1,12 @@
 import { CardContent, CardHeader, Grid } from '@material-ui/core';
 import { useDeviceContext } from 'context';
 import React from 'react';
-import { LayoutProps } from 'types';
+import { MainLayoutProps } from 'types';
 
 import { StyledCard } from '..';
 import { MainLayout } from './MainLayout';
 
-interface Props extends LayoutProps {
+interface Props extends Omit<MainLayoutProps, 'children'> {
     renderCardContent?: JSX.Element;
     renderAlert?: JSX.Element;
     desktopHeader?: string;

@@ -14,15 +14,18 @@ export interface TopNavbarProps {
         as?: string | UrlObject;
     };
     disableSearch?: boolean;
+    disableAuthButtons?: boolean;
     headerRight?: JSX.Element | boolean;
     headerRightSecondary?: JSX.Element;
     headerLeft?: JSX.Element;
 }
 
-export interface LayoutProps {
+export interface MainLayoutProps {
+    children: JSX.Element;
     seoProps?: SEOProps;
     topNavbarProps?: TopNavbarProps;
-    containerProps?: ContainerProps;
+    containerProps?: Omit<ContainerProps, 'children'>;
     customTopNavbar?: JSX.Element;
     customBottomNavbar?: JSX.Element;
+    disableBottomNavbar?: boolean;
 }

@@ -1,7 +1,7 @@
 import { DrawerProps, IconButton, Tooltip } from '@material-ui/core';
 import { InfoOutlined } from '@material-ui/icons';
+import { useTranslation } from 'lib';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { useDrawer } from './useDrawer';
 import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';

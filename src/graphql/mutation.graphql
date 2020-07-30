@@ -16,7 +16,6 @@ mutation Register($username: String!, $email: String!, $school: ID, $subject: ID
         }
     }
     login(input: { usernameOrEmail: $username, password: $password }) {
-        token
         user {
             id
             created
@@ -31,7 +30,6 @@ mutation Register($username: String!, $email: String!, $school: ID, $subject: ID
 mutation Login($usernameOrEmail: String!, $password: String!) {
     login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
         message
-        token
         user {
             id
             created
@@ -40,6 +38,12 @@ mutation Login($usernameOrEmail: String!, $password: String!) {
             field
             messages
         }
+    }
+}
+
+mutation BackendLogout {
+    logout {
+        deleted
     }
 }
 
@@ -231,8 +235,8 @@ mutation Contact($subject: String!, $name: String, $email: String!, $message: St
     }
 }
 
-mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
-    createCourse(input: { name: $courseName, code: $courseCode, subject: $subject, school: $school }) {
+mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
+    createCourse(input: { name: $courseName, code: $courseCode, subjects: $subjects, school: $school }) {
         message
         course {
             id

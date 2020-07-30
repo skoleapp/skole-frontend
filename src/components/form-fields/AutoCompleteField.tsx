@@ -1,20 +1,22 @@
+import { OperationVariables, useApolloClient } from '@apollo/client';
 import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
-import { Autocomplete, AutocompleteProps, RenderInputParams } from '@material-ui/lab';
+import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { FieldAttributes, FormikProps, getIn } from 'formik';
 import { DocumentNode } from 'graphql';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { OperationVariables, useApolloClient } from 'react-apollo';
 
-interface Props extends AutocompleteProps {
+interface Props {
     field: FieldAttributes<{}>;
     form: FormikProps<{}>;
     labelKey: string; // Used to access the label on the object.
     dataKey: string; // Used to access the data after a successful query.
     document: DocumentNode; // GraphQL document the query is made with.
     variables: OperationVariables; // Custom variables for GraphQL query.
+    multiple?: boolean;
 }
 
+// A custom auto-complete form field that always fetches translated options from backend.
 export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}>({
     field,
     form,
@@ -24,7 +26,8 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     helperText,
     disabled,
     variables,
-    ...props
+    multiple,
+    ...textFieldProps
 }: Props & TextFieldProps) => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -61,10 +64,10 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
         !!val ? form.setFieldValue(name, val) : form.setFieldValue(name, null);
     };
 
-    const renderInput = (params: RenderInputParams): JSX.Element => (
+    const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
         <TextField
             {...params}
-            {...props}
+            {...textFieldProps}
             error={showError}
             helperText={showError ? fieldError : helperText}
             InputProps={{
@@ -91,6 +94,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
             onChange={handleAutoCompleteChange}
             renderInput={renderInput}
             disabled={disabled !== undefined ? disabled : isSubmitting}
+            multiple={multiple}
         />
     );
 };

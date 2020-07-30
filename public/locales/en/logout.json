@@ -1,0 +1,9 @@
+{
+    "title": "Logout",
+    "description": "This is the logout page.",
+    "header": "Logout",
+    "loggingOut": "Logging out...",
+    "loggedOut": "You have been logged out!",
+    "loginButton": "Login again",
+    "confirmLogout": "Please log out to continue."
+}

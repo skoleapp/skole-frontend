@@ -2,8 +2,8 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import { TabUnselectedOutlined } from '@material-ui/icons';
 import { useDeviceContext, usePDFViewerContext } from 'context';
 import { useResponsiveIconButtonProps } from 'hooks';
+import { useTranslation } from 'lib';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 export const DrawModeButton: React.FC = () => {
     const { t } = useTranslation();

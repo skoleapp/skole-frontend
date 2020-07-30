@@ -1,5 +1,4 @@
 {
-    "signedOut": "Kirjauduttu ulos!",
     "voteError": "Virhe äänestyksessä!",
     "starError": "Virhe merkittäessä tähdellä!",
     "deleteCommentError": "Virhe poistettaessa kommenttia!",
@@ -13,5 +12,6 @@
     "sharingError": "Virhe jakamisessa!",
     "appUpdated": "Sovellus päivitetty!",
     "markSingleActivityReadError": "Tämä toiminta on todennäköisesti poistettu. Ole hyvä ja lataa sivu uudelleen.",
-    "markAllActivitiesReadError": "Virhe merkittäessä toiminnat luetuiksi!"
+    "markAllActivitiesReadError": "Virhe merkittäessä toiminnat luetuiksi!",
+    "logoutError": "Virhe kirjauduttaessa ulos!"
 }

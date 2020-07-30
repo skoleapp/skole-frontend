@@ -1,7 +1,7 @@
 import { Box, Grid, IconButton, Tooltip } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
+import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { StyledHeaderText } from '..';

@@ -6,15 +6,13 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
 import { useAlerts, useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
-import { setTokenCookie, withNoAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withNoAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
-import { urls } from 'utils';
+import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -49,20 +47,14 @@ const LoginPage: NextPage<I18nProps> = () => {
         if (!!login) {
             if (!!login.errors) {
                 handleMutationErrors(login.errors);
-            } else if (!!login.token && !!login.user && !!login.message) {
+            } else if (!!login.user && !!login.message) {
                 const { next } = query;
 
                 try {
-                    await setTokenCookie(login.token); // We need to wait until the asynchronous middleware for setting the cookie has been called before the response is sent to the client.
                     resetForm();
                     toggleNotification(login.message);
                     setUserMe(login.user as UserObjectType);
-
-                    if (!!next) {
-                        Router.push(next as string);
-                    } else {
-                        Router.push('/');
-                    }
+                    await redirect((next as string) || urls.home);
                 } catch {
                     unexpectedError();
                 }
@@ -148,10 +140,10 @@ const LoginPage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withNoAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['login']) },
 }));
 
-export default LoginPage;
+export default withNoAuth(LoginPage);

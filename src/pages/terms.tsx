@@ -1,11 +1,9 @@
 import { Box, Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
-import { includeDefaultNamespaces } from 'i18n';
-import { withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 
 const TermsPage: NextPage<I18nProps> = () => {

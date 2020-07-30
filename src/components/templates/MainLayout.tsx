@@ -3,7 +3,7 @@ import { useAuthContext, useDeviceContext } from 'context';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
-import { LayoutProps } from 'types';
+import { MainLayoutProps } from 'types';
 
 import {
     AttachmentViewer,
@@ -17,29 +17,41 @@ import {
     TopNavbar,
 } from '..';
 
-export const MainLayout: React.FC<LayoutProps> = ({
+export const MainLayout: React.FC<MainLayoutProps> = ({
     seoProps,
     topNavbarProps,
     customTopNavbar,
     customBottomNavbar,
+    disableBottomNavbar,
     containerProps,
     children,
 }) => {
     const isMobile = useDeviceContext();
     const { userMe } = useAuthContext();
+    const layoutProps = { disableBottomMargin: !userMe && !customBottomNavbar };
+    const renderHead = <Head {...seoProps} />;
+    const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
+    const renderChildren = <Container {...containerProps}>{children}</Container>;
+    const renderBottomNavbar = customBottomNavbar || (!!userMe && !disableBottomNavbar && <BottomNavbar />);
+    const renderFooter = !isMobile && <Footer />;
+    const renderNotifications = <Notifications />;
+    const renderAttachmentViewer = <AttachmentViewer />;
+    const renderCommentThreadModal = <CommentThreadModal />;
+    const renderSettingsModal = <SettingsModal />;
+    const renderLanguageSelectorModal = <LanguageSelectorModal />;
 
     return (
-        <StyledMainLayout disableBottomMargin={!userMe && !customBottomNavbar}>
-            <Head {...seoProps} />
-            {(isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />}
-            <Container {...containerProps}>{children}</Container>
-            {customBottomNavbar || (!!userMe && <BottomNavbar />)}
-            {!isMobile && <Footer />}
-            <Notifications />
-            <AttachmentViewer />
-            <CommentThreadModal />
-            <SettingsModal />
-            <LanguageSelectorModal />
+        <StyledMainLayout {...layoutProps}>
+            {renderHead}
+            {renderTopNavbar}
+            {renderChildren}
+            {renderBottomNavbar}
+            {renderFooter}
+            {renderNotifications}
+            {renderAttachmentViewer}
+            {renderCommentThreadModal}
+            {renderSettingsModal}
+            {renderLanguageSelectorModal}
         </StyledMainLayout>
     );
 };

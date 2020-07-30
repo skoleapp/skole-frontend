@@ -11,19 +11,18 @@ import {
     useCreateCourseMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
+import { redirect } from 'utils';
 import * as Yup from 'yup';
 
 interface CreateCourseFormValues {
     courseName: string;
     courseCode: string;
-    subject: SubjectObjectType | null;
+    subjects: SubjectObjectType[];
     school: SchoolTypeObjectType | null;
     general: string;
 }
@@ -39,7 +38,7 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
     const validationSchema = Yup.object().shape({
         courseName: Yup.string().required(t('validation:required')),
         courseCode: Yup.string(),
-        subject: Yup.object().nullable(),
+        subjects: Yup.mixed(),
         school: Yup.object()
             .nullable()
             .required(t('validation:required')),
@@ -52,7 +51,7 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
             } else if (!!createCourse.course && !!createCourse.message) {
                 resetForm();
                 toggleNotification(createCourse.message);
-                await Router.push(`/courses/${createCourse.course.id}`);
+                await redirect(`/courses/${createCourse.course.id}`);
             } else {
                 unexpectedError();
             }
@@ -64,13 +63,13 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
     const [createCourseMutation] = useCreateCourseMutation({ onCompleted, onError });
 
     const handleSubmit = (values: CreateCourseFormValues): void => {
-        const { courseName, courseCode, school, subject } = values;
+        const { courseName, courseCode, school, subjects } = values;
 
         const variables = {
             courseName,
             courseCode,
             school: R.propOr('', 'id', school) as string,
-            subject: R.propOr('', 'id', subject) as string,
+            subjects: subjects.map(s => s.id),
         };
 
         createCourseMutation({ variables });
@@ -81,7 +80,7 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
         courseName: '',
         courseCode: '',
         school: null,
-        subject: null,
+        subjects: [],
         general: '',
     };
 
@@ -118,14 +117,15 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
                         fullWidth
                     />
                     <Field
-                        name="subject"
-                        label={t('forms:subject')}
-                        placeholder={t('forms:subject')}
+                        name="subjects"
+                        label={t('forms:subjects')}
+                        placeholder={t('forms:subjects')}
                         dataKey="subjects"
                         document={SubjectsDocument}
                         component={AutoCompleteField}
                         variant="outlined"
                         fullWidth
+                        multiple
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
@@ -149,7 +149,7 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
@@ -157,4 +157,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     },
 }));
 
-export default withAuthSync(CreateCoursePage);
+export default withAuth(CreateCoursePage);

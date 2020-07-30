@@ -9,12 +9,10 @@ import {
     UserObjectType,
 } from 'generated';
 import { useActionsDrawer } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 
 interface Props extends I18nProps {
@@ -24,7 +22,7 @@ interface Props extends I18nProps {
 const ActivityPage: NextPage<Props> = () => {
     const { t } = useTranslation();
     const { userMe, setUserMe } = useAuthContext();
-    const { renderActionsHeader, renderActionsButton, handleCloseActions, open, anchor } = useActionsDrawer();
+    const { renderActionsHeader, renderActionsButton, handleCloseActions, open, anchor } = useActionsDrawer({});
     const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
     const { toggleNotification } = useNotificationsContext();
     const onError = (): void => toggleNotification(t('notifications:markAllActivitiesReadError'));
@@ -101,7 +99,7 @@ const ActivityPage: NextPage<Props> = () => {
     }
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
@@ -109,4 +107,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     },
 }));
 
-export default withAuthSync(ActivityPage);
+export default withAuth(ActivityPage);

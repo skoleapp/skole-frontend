@@ -158,7 +158,7 @@ query CourseDetail($id: ID) {
             id
             status
         }
-        subject {
+        subjects {
             id
             name
         }

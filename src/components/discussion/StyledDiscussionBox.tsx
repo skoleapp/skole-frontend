@@ -1,10 +1,9 @@
-// Ignore: topComment must be omitted from Box props.
-
 import { Box } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
 
+// Ignore: topComment must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {...other} />)`
     position: relative;

@@ -16,12 +16,10 @@ import {
 import { useDeviceContext } from 'context';
 import { CourseObjectType, SchoolDetailDocument, SchoolObjectType, SubjectObjectType } from 'generated';
 import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, Link } from 'i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, Link, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 
 interface Props extends I18nProps {
@@ -46,7 +44,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     const { paginatedItems: paginatedSubjects, ...subjectPaginationProps } = useFrontendPagination(subjects);
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-    const { renderShareButton } = useShare(schoolName);
+    const { renderShareButton } = useShare({ text: schoolName });
 
     const {
         renderInfoHeader,
@@ -63,7 +61,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         renderShareAction,
         open: actionsOpen,
         anchor: actionsAnchor,
-    } = useActionsDrawer(schoolName);
+    } = useActionsDrawer({ text: schoolName });
 
     const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
@@ -245,20 +243,22 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         tabLabelRight: `${t('common:courses')} (${courseCount})`,
     };
 
+    const renderChildren = (
+        <>
+            {renderContent}
+            {renderInfoDrawer}
+            {renderActionsDrawer}
+        </>
+    );
+
     if (!!school) {
-        return (
-            <MainLayout {...layoutProps}>
-                {renderContent}
-                {renderInfoDrawer}
-                {renderActionsDrawer}
-            </MainLayout>
-        );
+        return <MainLayout {...layoutProps}>{renderChildren}</MainLayout>;
     } else {
         return <NotFoundLayout />;
     }
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
@@ -276,4 +276,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     }
 });
 
-export default withAuthSync(SchoolDetailPage);
+export default withAuth(SchoolDetailPage);

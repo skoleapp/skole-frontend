@@ -14,15 +14,13 @@ import {
     useCreateResourceMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { Router } from 'i18n';
-import { includeDefaultNamespaces } from 'i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import Resizer from 'react-image-file-resizer';
 import { I18nProps } from 'types';
+import { redirect } from 'utils';
 import * as Yup from 'yup';
 
 interface UploadResourceFormValues {
@@ -72,7 +70,7 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
             } else if (!!createResource.resource && !!createResource.resource.id && !!createResource.message) {
                 resetForm();
                 toggleNotification(createResource.message);
-                await Router.push(`/resources/${createResource.resource.id}`);
+                await redirect(`/resources/${createResource.resource.id}`);
             } else {
                 unexpectedError();
             }
@@ -252,7 +250,7 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     const { apolloClient } = useSSRApollo(ctx);
@@ -270,4 +268,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     }
 });
 
-export default withAuthSync(UploadResourcePage);
+export default withAuth(UploadResourcePage);

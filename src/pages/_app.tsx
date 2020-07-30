@@ -1,19 +1,16 @@
 import 'nprogress/nprogress.css';
 import 'typeface-roboto';
 
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/client';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { ContextProvider } from 'context';
-import { appWithTranslation } from 'i18n';
-import { pageView, PWAProvider, useApollo } from 'lib';
+import { appWithTranslation, pageView, PWAProvider, Router, useApollo, useTranslation } from 'lib';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
-import Router from 'next/router';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { GlobalStyle, theme } from 'styles';
 
 NProgress.configure({ showSpinner: false });

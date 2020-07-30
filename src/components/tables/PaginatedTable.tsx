@@ -1,10 +1,9 @@
 import { Table, TableContainer } from '@material-ui/core';
-import { Router } from 'i18n';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';
 import { CommonPaginatedTableProps } from 'types';
-import { getQueryWithPagination } from 'utils';
+import { getQueryWithPagination, redirect } from 'utils';
 
 import { StyledTable } from '..';
 import { CustomTableFooter } from './CustomTableFooter';
@@ -22,7 +21,7 @@ export const PaginatedTable: React.FC<Props> = ({ count, tableHeadProps, extraFi
 
     const handleReloadPage = (values: {}): void => {
         const query = getQueryWithPagination({ query: values, extraFilters });
-        Router.push({ pathname, query });
+        redirect({ pathname, query });
     };
 
     const handleChangePage = (_e: MouseEvent<HTMLButtonElement> | null, page: number): void => {

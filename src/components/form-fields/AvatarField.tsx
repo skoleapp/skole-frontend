@@ -2,9 +2,9 @@ import { Avatar, Box, Button, FormControl, ListItemText, MenuItem } from '@mater
 import { ClearOutlined, EditOutlined, LibraryAddOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import { useDrawer } from 'hooks';
+import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { UpdateProfileFormValues } from 'types';
 import { mediaURL } from 'utils';

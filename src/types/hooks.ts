@@ -17,3 +17,8 @@ export interface UseFilters<T> extends UseForm<T> {
     handleClearFilters: (e: SyntheticEvent) => Promise<void>;
     drawerProps: Omit<UseDrawer, 'renderHeader'>;
 }
+
+export interface ShareParams {
+    query?: string;
+    text?: string;
+}

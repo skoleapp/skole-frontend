@@ -1,4 +1,16 @@
-import { Avatar, Box, CardContent, Chip, Grid, Tab, Tooltip, Typography } from '@material-ui/core';
+import {
+    Avatar,
+    Box,
+    CardContent,
+    Chip,
+    Grid,
+    Step,
+    StepLabel,
+    Stepper,
+    Tab,
+    Tooltip,
+    Typography,
+} from '@material-ui/core';
 import { EditOutlined, StarBorderOutlined } from '@material-ui/icons';
 import {
     ButtonLink,
@@ -17,12 +29,10 @@ import {
 import { useAuthContext, useDeviceContext } from 'context';
 import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from 'generated';
 import { useFrontendPagination, useMoment, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { useSSRApollo, withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { breakpoints, breakpointsNum } from 'styles';
 import { I18nProps, MaxWidth } from 'types';
@@ -43,6 +53,8 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const avatar = R.propOr('', 'avatar', user) as string;
     const title = R.propOr('', 'title', user) as string;
     const bio = R.propOr('', 'bio', user) as string;
+    const school = R.propOr('', 'school', userMe);
+    const subject = R.propOr('', 'subject', userMe);
     const score = R.propOr('-', 'score', user) as string;
     const joined = moment(R.propOr('', 'created', user)).format('LL');
     const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
@@ -53,6 +65,70 @@ const UserPage: NextPage<Props> = ({ user }) => {
     const resourceCount = createdResources.length;
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
+
+    const profileStrengthSteps = [
+        t('profile-strength:step1'),
+        t('profile-strength:step2'),
+        t('profile-strength:step3'),
+    ];
+
+    const getProfileStrength = (): number => {
+        let profileStrength = 0;
+
+        if (!!verified) {
+            profileStrength++;
+        }
+
+        if (!!title && !!bio) {
+            profileStrength++;
+        }
+
+        if (!!school && !!subject) {
+            profileStrength++;
+        }
+
+        return profileStrength;
+    };
+
+    const getStepCompleted = (i: number): boolean => {
+        if (i === 0 && !!verified) {
+            return true;
+        }
+
+        if (i === 1 && !!title && !!bio) {
+            return true;
+        }
+
+        if (i === 2 && !!school && !!subject) {
+            return true;
+        }
+
+        return false;
+    };
+
+    const getProfileStrengthText = (): string => {
+        switch (getProfileStrength()) {
+            case 0: {
+                return t('profile-strength:poor');
+            }
+
+            case 1: {
+                return t('profile-strength:weak');
+            }
+
+            case 2: {
+                return t('profile-strength:intermediate');
+            }
+
+            case 3: {
+                return t('profile-strength:strong');
+            }
+
+            default: {
+                return '-';
+            }
+        }
+    };
 
     const renderEditProfileButton = isOwnProfile && (
         <ButtonLink
@@ -146,7 +222,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         <Box display="flex" margin="0.25rem -0.25rem -0.25rem -0.25rem">
             {badges.map(({ name, description }, i) => (
                 <Box key={i}>
-                    <Tooltip title={description}>
+                    <Tooltip title={description || ''}>
                         <Chip className="badge" size="small" label={name} />
                     </Tooltip>
                 </Box>
@@ -159,6 +235,21 @@ const UserPage: NextPage<Props> = ({ user }) => {
             <TextLink href={urls.verifyAccount} color="primary">
                 {t('common:verifyAccount')}
             </TextLink>
+        </Box>
+    );
+
+    const renderProfileStrength = isOwnProfile && (
+        <Box marginTop="0.5rem">
+            <Typography variant="body2" color="textSecondary">
+                {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
+            </Typography>
+            <Stepper alternativeLabel={isMobile}>
+                {profileStrengthSteps.map((label, i) => (
+                    <Step key={i} completed={getStepCompleted(i)} active={false}>
+                        <StepLabel>{label}</StepLabel>
+                    </Step>
+                ))}
+            </Stepper>
         </Box>
     );
 
@@ -193,6 +284,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                 {renderRank}
                 {renderBadges}
                 {renderVerifyAccountLink}
+                {renderProfileStrength}
                 {renderJoined}
             </Box>
             <Box marginTop="0.5rem">{renderEditProfileButton}</Box>
@@ -230,6 +322,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
                         {renderRank}
                         {renderBadges}
                         {renderVerifyAccountLink}
+                        {renderProfileStrength}
                         {renderJoined}
                     </Box>
                 </Grid>
@@ -342,14 +435,18 @@ const StyledUserPage = styled(Box)`
         .badge {
             margin: 0.25rem !important;
         }
+
+        .MuiStepper-root {
+            padding: 1.5rem 0 0.5rem 0;
+        }
     }
 `;
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile']) };
+    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile', 'profile-strength']) };
 
     try {
         const { data } = await apolloClient.query({
@@ -363,4 +460,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     }
 });
 
-export default withAuthSync(UserPage);
+export default withAuth(UserPage);

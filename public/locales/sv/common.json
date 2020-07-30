@@ -11,7 +11,6 @@
     "score": "Poäng",
     "users": "Användare",
     "bio": "Bio",
-    "subject": "Ämne",
     "school": "Skola",
     "schoolType": "Skoltyp",
     "contact": "Kontakta",
@@ -60,7 +59,6 @@
     "clickToView": "Klicka för att se!",
     "starred": "Stjärnmärkta",
     "settings": "Inställningar",
-    "loading": "Laddar...",
     "communityUser": "Gemenskapsanvändare",
     "date": "Datum",
     "close": "Stänga",
@@ -73,5 +71,7 @@
     "delete": "Radera",
     "print": "Skriva ut",
     "activity": "Aktivitet",
-    "seeAll": "Visa allt"
+    "seeAll": "Visa allt",
+    "commentShareText": "{{ creatorUsername }} på Skole: {{ commentPreview }}",
+    "alreadyHaveAccount": "Har du redan ett konto?"
 }

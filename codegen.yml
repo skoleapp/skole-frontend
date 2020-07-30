@@ -2,16 +2,14 @@ overwrite: true
 schema: 'http://backend:8000/graphql/'
 documents: 'src/graphql/*.graphql'
 generates:
-  generated/graphql.tsx:
+  generated/graphql.ts:
     plugins:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
     config:
+      reactApolloVersion: 3
       skipTypename: false
       withHooks: true
       withHOC: false
       withComponent: false
-  generated/graphql.schema.json:
-    plugins:
-      - 'introspection'

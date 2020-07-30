@@ -8,13 +8,12 @@
         "paths": {
             "components": ["src/components"],
             "hooks": ["src/hooks"],
-            "generated": ["generated/graphql.tsx"],
+            "generated": ["generated/graphql.ts"],
             "lib": ["src/lib"],
             "styles": ["src/styles"],
             "utils": ["src/utils"],
             "config": ["src/config.ts"],
             "context": ["src/context.tsx"],
-            "i18n": ["src/i18n.ts"],
             "types": ["src/types"]
         },
         "moduleResolution": "node",
@@ -33,6 +32,6 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true
     },
-    "exclude": ["dist", ".next", "out", "next.config.js"],
+    "exclude": ["node_modules"],
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

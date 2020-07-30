@@ -1,8 +1,8 @@
 import { useNotificationsContext } from 'context';
+import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { useEffect } from 'react';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Workbox } from 'workbox-window';
 
 interface WorkboxWindow extends Window {

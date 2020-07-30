@@ -14,15 +14,13 @@ import {
     UserObjectType,
 } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, Router } from 'i18n';
-import { setTokenCookie, withNoAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withNoAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
-import { urls } from 'utils';
+import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
 export interface RegisterFormValues {
@@ -78,13 +76,12 @@ const RegisterPage: NextPage<I18nProps> = () => {
             handleMutationErrors(register.errors);
         } else if (!!login && !!login.errors) {
             handleMutationErrors(login.errors);
-        } else if (!!login && !!login.token && !!login.user && !!register && !!register.message) {
+        } else if (!!login && !!login.user && !!register && !!register.message) {
             try {
-                await setTokenCookie(login.token); // We need to wait until the asynchronous middleware for removing the cookie has been called before the response is sent to the client.
                 resetForm();
                 toggleNotification(register.message);
                 setUserMe(login.user as UserObjectType);
-                Router.push('/');
+                await redirect(urls.home);
             } catch {
                 unexpectedError();
             }
@@ -209,7 +206,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
                         endIcon={<HowToRegOutlined />}
                         fullWidth
                     >
-                        {t('register:alreadyHaveAccount')}
+                        {t('common:alreadyHaveAccount')}
                     </ButtonLink>
                 </Form>
             )}
@@ -232,10 +229,10 @@ const RegisterPage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withNoAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['register']) },
 }));
 
-export default RegisterPage;
+export default withNoAuth(RegisterPage);

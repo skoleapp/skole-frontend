@@ -1,5 +1,5 @@
-import { NormalizedCacheObject } from 'apollo-cache-inmemory';
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from '@apollo/client';
+import { NormalizedCacheObject } from '@apollo/client/cache';
 import { NextPageContext } from 'next';
 
 interface CustomApolloClient extends ApolloClient<NormalizedCacheObject> {

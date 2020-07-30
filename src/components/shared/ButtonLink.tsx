@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core';
 import { ButtonProps } from '@material-ui/core/Button';
-import { Link } from 'i18n';
+import { Link } from 'lib';
 import { LinkProps } from 'next/link';
 import React from 'react';
 

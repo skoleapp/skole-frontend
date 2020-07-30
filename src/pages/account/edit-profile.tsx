@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, FormControl, FormHelperText } from '@material-ui/core';
 import {
     AutoCompleteField,
     AvatarField,
@@ -9,7 +9,7 @@ import {
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { Switch, TextField } from 'formik-material-ui';
 import {
     SchoolObjectType,
     SchoolsDocument,
@@ -20,12 +20,10 @@ import {
     useUpdateUserMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces } from 'i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps, UpdateProfileFormValues } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
@@ -156,6 +154,14 @@ const EditProfilePage: NextPage<I18nProps> = () => {
                         helperText={t('forms:subjectHelpText')}
                         fullWidth
                     />
+                    <FormControl fullWidth>
+                        <FormHelperText>{t('forms:marketingPermission')}</FormHelperText>
+                        <Field name="marketingPermission" component={Switch} fullWidth disabled color="primary" />
+                    </FormControl>
+                    <FormControl fullWidth>
+                        <FormHelperText>{t('forms:pushNotifications')}</FormHelperText>
+                        <Field name="pushNotifications" component={Switch} fullWidth disabled color="primary" />
+                    </FormControl>
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
                     {verified === false && (
                         <Box marginTop="1rem" marginBottom="0.5rem">
@@ -190,7 +196,7 @@ const EditProfilePage: NextPage<I18nProps> = () => {
     }
 };
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: {
@@ -198,4 +204,4 @@ export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     },
 }));
 
-export default withAuthSync(EditProfilePage);
+export default withAuth(EditProfilePage);

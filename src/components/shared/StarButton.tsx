@@ -3,8 +3,8 @@ import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { PerformStarMutation, usePerformStarMutation } from 'generated';
 import { useResponsiveIconButtonProps } from 'hooks';
+import { useTranslation } from 'lib';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 interface Props extends IconButtonProps {
     starred: boolean;

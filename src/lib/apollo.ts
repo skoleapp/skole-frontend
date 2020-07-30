@@ -1,13 +1,9 @@
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { ApolloClient } from 'apollo-client';
-import { ApolloLink, GraphQLRequest } from 'apollo-link';
-import { setContext } from 'apollo-link-context';
-import { HttpConfig } from 'apollo-link-http-common';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { NormalizedCacheObject } from '@apollo/client/cache';
 import { createUploadLink } from 'apollo-upload-client';
 import { env } from 'config';
 import { IncomingMessage } from 'http';
-import { i18n } from 'i18n';
-import fetch from 'isomorphic-unfetch';
+import { i18n } from 'lib';
 import * as R from 'ramda';
 import { useMemo } from 'react';
 import { SSRContext } from 'types';
@@ -22,23 +18,21 @@ const createApolloClient = (ctx?: SSRContext): ApolloClient<NormalizedCacheObjec
     const req: IncomingMessage | undefined = R.propOr(undefined, 'req', ctx);
     const token = getTokenCookie(req);
 
-    const httpLink = createUploadLink({
+    const link = createUploadLink({
         uri: uri + 'graphql/',
         credentials: 'include',
-        fetch,
-    });
-
-    const authLink = setContext((_req: GraphQLRequest, { headers }: HttpConfig) => ({
         headers: {
-            ...headers,
             Authorization: token ? `JWT ${token}` : '',
             'Accept-Language': i18n.language || R.path(['req', 'language'], ctx),
         },
-    }));
+    });
 
     return new ApolloClient({
         ssrMode: isBrowser,
-        link: ApolloLink.from([authLink, httpLink]),
+        // Ignore: Apollo client's types have been updated so that they do not match apollo-upload-client's types.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        link,
         cache: new InMemoryCache(),
     });
 };

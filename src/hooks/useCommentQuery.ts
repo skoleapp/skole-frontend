@@ -11,7 +11,14 @@ export const useCommentQuery = (comments: CommentObjectType[]): void => {
     useEffect(() => {
         if (query.comment) {
             const comment = comments.find(c => c.id === query.comment);
-            comment && toggleTopComment(comment);
+
+            if (!!comment) {
+                toggleTopComment(comment); // Query is  a top level comment.
+            } else {
+                // Query is a reply comment. We find it's top level comment.
+                const comment = comments.find(c => c.replyComments.some(r => r.id === query.comment));
+                !!comment && toggleTopComment(comment);
+            }
         }
     }, []);
 };

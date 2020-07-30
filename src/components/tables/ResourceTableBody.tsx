@@ -1,6 +1,6 @@
 import { TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { ResourceObjectType } from 'generated';
-import { Link } from 'i18n';
+import { Link } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
 import { urls } from 'utils';

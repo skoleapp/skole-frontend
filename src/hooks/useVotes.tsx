@@ -2,9 +2,9 @@ import { IconButton, Size, Tooltip } from '@material-ui/core';
 import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from 'generated';
+import { useTranslation } from 'lib';
 import React from 'react';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { MuiColor } from 'types';
 
 interface VoteVariables {

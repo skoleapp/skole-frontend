@@ -19,7 +19,7 @@ import { urls } from './urls';
 
 // Token cookie.
 
-export const TOKEN_NAME = 'token';
+export const TOKEN_NAME = 'JWT';
 export const MAX_AGE = 60 * 60 * 24 * 30; // 1 month.
 
 // Analytics.

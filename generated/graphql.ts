@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as ApolloReactCommon from '@apollo/client';
+import * as ApolloReactHooks from '@apollo/client';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -132,7 +132,7 @@ export type CourseObjectType = {
   id: Scalars['ID'];
   name: Scalars['String'];
   code: Scalars['String'];
-  subject?: Maybe<SubjectObjectType>;
+  subjects: Array<SubjectObjectType>;
   school: SchoolObjectType;
   user?: Maybe<UserObjectType>;
   modified: Scalars['DateTime'];
@@ -302,6 +302,13 @@ export type Mutation = {
    * Not verified users can still login.
    */
   login?: Maybe<LoginMutationPayload>;
+  /**
+   * Delete JSON web token cookie and logout.
+   * 
+   * This sets the `Set-Cookie` header so that the JWT token cookie gets automatically
+   * deleted in frontend.
+   */
+  logout?: Maybe<LogoutMutation>;
   /**
    * Update some user model fields.
    * 
@@ -583,7 +590,6 @@ export type LoginMutationPayload = {
    __typename?: 'LoginMutationPayload';
   user?: Maybe<UserObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  token?: Maybe<Scalars['String']>;
   message?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -592,6 +598,17 @@ export type LoginMutationInput = {
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
   clientMutationId?: Maybe<Scalars['String']>;
+};
+
+/**
+ * Delete JSON web token cookie and logout.
+ * 
+ * This sets the `Set-Cookie` header so that the JWT token cookie gets automatically
+ * deleted in frontend.
+ */
+export type LogoutMutation = {
+   __typename?: 'LogoutMutation';
+  deleted: Scalars['Boolean'];
 };
 
 /**
@@ -709,7 +726,7 @@ export type CreateCourseMutationPayload = {
 export type CreateCourseMutationInput = {
   name: Scalars['String'];
   code?: Maybe<Scalars['String']>;
-  subject?: Maybe<Scalars['ID']>;
+  subjects?: Maybe<Array<Maybe<Scalars['ID']>>>;
   school: Scalars['ID'];
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -830,7 +847,6 @@ export type RegisterMutation = (
     )>>> }
   )>, login?: Maybe<(
     { __typename?: 'LoginMutationPayload' }
-    & Pick<LoginMutationPayload, 'token'>
     & { user?: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'created'>
@@ -851,7 +867,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login?: Maybe<(
     { __typename?: 'LoginMutationPayload' }
-    & Pick<LoginMutationPayload, 'message' | 'token'>
+    & Pick<LoginMutationPayload, 'message'>
     & { user?: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'created'>
@@ -859,6 +875,17 @@ export type LoginMutation = (
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
+  )> }
+);
+
+export type BackendLogoutMutationVariables = {};
+
+
+export type BackendLogoutMutation = (
+  { __typename?: 'Mutation' }
+  & { logout?: Maybe<(
+    { __typename?: 'LogoutMutation' }
+    & Pick<LogoutMutation, 'deleted'>
   )> }
 );
 
@@ -1114,7 +1141,7 @@ export type ContactMutation = (
 export type CreateCourseMutationVariables = {
   courseName: Scalars['String'];
   courseCode?: Maybe<Scalars['String']>;
-  subject: Scalars['ID'];
+  subjects?: Maybe<Array<Scalars['ID']>>;
   school: Scalars['ID'];
 };
 
@@ -1382,7 +1409,7 @@ export type CourseDetailQuery = (
     & { vote?: Maybe<(
       { __typename?: 'VoteObjectType' }
       & Pick<VoteObjectType, 'id' | 'status'>
-    )>, subject?: Maybe<(
+    )>, subjects: Array<(
       { __typename?: 'SubjectObjectType' }
       & Pick<SubjectObjectType, 'id' | 'name'>
     )>, school: (
@@ -1600,7 +1627,6 @@ export const RegisterDocument = gql`
     }
   }
   login(input: {usernameOrEmail: $username, password: $password}) {
-    token
     user {
       id
       created
@@ -1646,7 +1672,6 @@ export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
     message
-    token
     user {
       id
       created
@@ -1684,6 +1709,37 @@ export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const BackendLogoutDocument = gql`
+    mutation BackendLogout {
+  logout {
+    deleted
+  }
+}
+    `;
+export type BackendLogoutMutationFn = ApolloReactCommon.MutationFunction<BackendLogoutMutation, BackendLogoutMutationVariables>;
+
+/**
+ * __useBackendLogoutMutation__
+ *
+ * To run a mutation, you first call `useBackendLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBackendLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [backendLogoutMutation, { data, loading, error }] = useBackendLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBackendLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<BackendLogoutMutation, BackendLogoutMutationVariables>) {
+        return ApolloReactHooks.useMutation<BackendLogoutMutation, BackendLogoutMutationVariables>(BackendLogoutDocument, baseOptions);
+      }
+export type BackendLogoutMutationHookResult = ReturnType<typeof useBackendLogoutMutation>;
+export type BackendLogoutMutationResult = ApolloReactCommon.MutationResult<BackendLogoutMutation>;
+export type BackendLogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<BackendLogoutMutation, BackendLogoutMutationVariables>;
 export const ResendVerificationEmailDocument = gql`
     mutation ResendVerificationEmail($email: String!) {
   resendVerificationEmail(input: {email: $email}) {
@@ -2184,8 +2240,8 @@ export type ContactMutationHookResult = ReturnType<typeof useContactMutation>;
 export type ContactMutationResult = ApolloReactCommon.MutationResult<ContactMutation>;
 export type ContactMutationOptions = ApolloReactCommon.BaseMutationOptions<ContactMutation, ContactMutationVariables>;
 export const CreateCourseDocument = gql`
-    mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
-  createCourse(input: {name: $courseName, code: $courseCode, subject: $subject, school: $school}) {
+    mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID!], $school: ID!) {
+  createCourse(input: {name: $courseName, code: $courseCode, subjects: $subjects, school: $school}) {
     message
     course {
       id
@@ -2214,7 +2270,7 @@ export type CreateCourseMutationFn = ApolloReactCommon.MutationFunction<CreateCo
  *   variables: {
  *      courseName: // value for 'courseName'
  *      courseCode: // value for 'courseCode'
- *      subject: // value for 'subject'
+ *      subjects: // value for 'subjects'
  *      school: // value for 'school'
  *   },
  * });
@@ -2701,7 +2757,7 @@ export const CourseDetailDocument = gql`
       id
       status
     }
-    subject {
+    subjects {
       id
       name
     }

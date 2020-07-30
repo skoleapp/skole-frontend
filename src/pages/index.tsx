@@ -2,12 +2,10 @@ import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typo
 import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import { MainLayout } from 'components';
 import { useSearch } from 'hooks';
-import { includeDefaultNamespaces, Link } from 'i18n';
-import { withAuthSync, withSSRAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, Link, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
 import { I18nProps } from 'types';
@@ -31,9 +29,6 @@ const IndexPage: NextPage<I18nProps> = () => {
                 <Box id="slogan">
                     <Typography variant="h1">{t('common:slogan')}</Typography>
                 </Box>
-                <Box marginTop="1rem">
-                    <Typography variant="subtitle1">{t('index:marketingText')}</Typography>
-                </Box>
                 <Box id="search-widget" marginTop="1rem">
                     <form onSubmit={handleSubmit}>
                         <Box display="flex" justifyContent="center">
@@ -50,16 +45,8 @@ const IndexPage: NextPage<I18nProps> = () => {
         </Box>
     );
 
-    const renderMarketingText = (
-        <Box marginTop="1rem">
-            <Typography variant="h2" color="primary">
-                {t('index:marketingText2')}
-            </Typography>
-        </Box>
-    );
-
     const renderShortcuts = (
-        <Box id="shortcuts" display="flex" justifyContent="center" marginTop="1rem">
+        <Box id="shortcuts">
             {SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
                 <Link href={href} key={i}>
                     <Card>
@@ -68,15 +55,24 @@ const IndexPage: NextPage<I18nProps> = () => {
                                 <Avatar>
                                     <Icon />
                                 </Avatar>
-                                <Typography variant="h2" color="primary">
-                                    {t(text)}
-                                </Typography>
+                                <Box marginTop="0.5rem">
+                                    <Typography variant="h2" color="primary">
+                                        {t(text)}
+                                    </Typography>
+                                </Box>
                             </CardContent>
                         </CardActionArea>
                     </Card>
                 </Link>
             ))}
         </Box>
+    );
+
+    const renderChildren = (
+        <>
+            {renderSearch}
+            {renderShortcuts}
+        </>
     );
 
     const layoutProps = {
@@ -91,11 +87,7 @@ const IndexPage: NextPage<I18nProps> = () => {
 
     return (
         <StyledIndexPage>
-            <MainLayout {...layoutProps}>
-                {renderSearch}
-                {renderMarketingText}
-                {renderShortcuts}
-            </MainLayout>
+            <MainLayout {...layoutProps}>{renderChildren}</MainLayout>
         </StyledIndexPage>
     );
 };
@@ -108,10 +100,10 @@ const StyledIndexPage = styled(Box)`
     }
 
     #top-section-container {
-        min-height: 15rem;
+        height: 10rem;
 
         @media only screen and (min-width: ${breakpoints.MD}) {
-            min-height: 18rem;
+            height: 18rem;
         }
 
         #top-section-background {
@@ -121,10 +113,10 @@ const StyledIndexPage = styled(Box)`
             top: 3rem;
             left: 0;
             right: 0;
-            min-height: 15rem;
+            height: 10rem;
 
             @media only screen and (min-width: ${breakpoints.MD}) {
-                min-height: 18rem;
+                height: 18rem;
             }
         }
 
@@ -164,11 +156,17 @@ const StyledIndexPage = styled(Box)`
 
     #shortcuts {
         flex-flow: row wrap;
+        display: flex;
+        justify-content: center;
+
+        @media only screen and (min-width: ${breakpoints.SM}) {
+            margin-top: 1rem;
+        }
 
         .MuiCard-root {
             margin-top: 0.5rem;
             width: 100%;
-            padding-bottom: 50%;
+            padding-bottom: 55%;
             position: relative;
 
             @media only screen and (min-width: ${breakpoints.SM}) {
@@ -206,10 +204,10 @@ const StyledIndexPage = styled(Box)`
     }
 `;
 
-const wrappers = R.compose(withUserAgent, withSSRAuth);
+const wrappers = R.compose(withUserAgent, withUserMe);
 
 export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['index']) },
 }));
 
-export default withAuthSync(IndexPage);
+export default withAuth(IndexPage);
