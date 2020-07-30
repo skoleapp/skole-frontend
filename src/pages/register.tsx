@@ -14,7 +14,7 @@ import {
     UserObjectType,
 } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, withNoAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withNoAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -230,7 +230,9 @@ const RegisterPage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
+const wrappers = R.compose(withUserAgent, withUserMe);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['register']) },
 }));
 

@@ -6,9 +6,10 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
 import { useAlerts, useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, withNoAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, withNoAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import * as R from 'ramda';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
@@ -140,7 +141,9 @@ const LoginPage: NextPage<I18nProps> = () => {
     return <FormLayout {...layoutProps} />;
 };
 
-export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
+const wrappers = R.compose(withUserAgent, withUserMe);
+
+export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
     props: { namespacesRequired: includeDefaultNamespaces(['login']) },
 }));
 

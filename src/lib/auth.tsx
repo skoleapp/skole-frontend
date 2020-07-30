@@ -1,4 +1,4 @@
-import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { NormalizedCacheObject } from '@apollo/client';
 import { LoadingLayout } from 'components';
 import { useAuthContext } from 'context';
 import { UserMeDocument } from 'generated/graphql';
@@ -25,8 +25,7 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
         // Automatically redirect user to get started page if he is not authenticated.
         useEffect(() => {
             if (!userMe) {
-                const pathname = asPath;
-                const query = pathname !== urls.home ? { next: pathname } : undefined;
+                const query = asPath !== urls.home ? { next: asPath } : undefined;
                 redirect({ pathname: urls.getStarted, query });
             }
         }, []);
@@ -51,11 +50,12 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
 // Wrap all pages that require access only for unauthenticated users with this for all pages.
 export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithNoAuth: NextPage = pageProps => {
+        const { asPath } = useRouter();
         const { userMe } = useAuthContext();
 
         // Automatically redirect user to home page if he is authenticated.
         useEffect(() => {
-            !!userMe && redirect(urls.home);
+            !!userMe && redirect({ pathname: urls.confirmLogout, query: { next: asPath } });
         }, []);
 
         return !userMe ? <PageComponent {...(pageProps as T)} /> : <LoadingLayout />;
