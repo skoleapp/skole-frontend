@@ -222,7 +222,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         <Box display="flex" margin="0.25rem -0.25rem -0.25rem -0.25rem">
             {badges.map(({ name, description }, i) => (
                 <Box key={i}>
-                    <Tooltip title={description}>
+                    <Tooltip title={description || ''}>
                         <Chip className="badge" size="small" label={name} />
                     </Tooltip>
                 </Box>

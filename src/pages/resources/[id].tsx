@@ -413,6 +413,15 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledDrawer>
     );
 
+    const renderChildren = (
+        <>
+            {renderMobileContent}
+            {renderDesktopContent}
+            {renderInfoDrawer}
+            {renderActionsDrawer}
+        </>
+    );
+
     const layoutProps = {
         seoProps: {
             title,
@@ -431,14 +440,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     };
 
     if (!!resource) {
-        return (
-            <MainLayout {...layoutProps}>
-                {renderMobileContent}
-                {renderDesktopContent}
-                {renderInfoDrawer}
-                {renderActionsDrawer}
-            </MainLayout>
-        );
+        return <MainLayout {...layoutProps}>{renderChildren}</MainLayout>;
     } else {
         return <NotFoundLayout />;
     }

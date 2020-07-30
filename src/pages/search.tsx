@@ -421,6 +421,13 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         </Box>
     );
 
+    const renderChildren = (
+        <>
+            {renderMobileContent}
+            {renderDesktopContent}
+        </>
+    );
+
     const layoutProps = {
         seoProps: {
             title: t('search:title'),
@@ -434,10 +441,7 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
 
     return (
         <StyledSearchPage>
-            <MainLayout {...layoutProps}>
-                {renderMobileContent}
-                {renderDesktopContent}
-            </MainLayout>
+            <MainLayout {...layoutProps}>{renderChildren}</MainLayout>
         </StyledSearchPage>
     );
 };

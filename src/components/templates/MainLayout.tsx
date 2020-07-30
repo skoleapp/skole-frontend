@@ -3,7 +3,7 @@ import { useAuthContext, useDeviceContext } from 'context';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
-import { LayoutProps } from 'types';
+import { MainLayoutProps } from 'types';
 
 import {
     AttachmentViewer,
@@ -17,7 +17,7 @@ import {
     TopNavbar,
 } from '..';
 
-export const MainLayout: React.FC<LayoutProps> = ({
+export const MainLayout: React.FC<MainLayoutProps> = ({
     seoProps,
     topNavbarProps,
     customTopNavbar,

@@ -68,6 +68,13 @@ const IndexPage: NextPage<I18nProps> = () => {
         </Box>
     );
 
+    const renderChildren = (
+        <>
+            {renderSearch}
+            {renderShortcuts}
+        </>
+    );
+
     const layoutProps = {
         seoProps: {
             title: t('index:title'),
@@ -80,10 +87,7 @@ const IndexPage: NextPage<I18nProps> = () => {
 
     return (
         <StyledIndexPage>
-            <MainLayout {...layoutProps}>
-                {renderSearch}
-                {renderShortcuts}
-            </MainLayout>
+            <MainLayout {...layoutProps}>{renderChildren}</MainLayout>
         </StyledIndexPage>
     );
 };

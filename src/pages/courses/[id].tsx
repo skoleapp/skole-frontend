@@ -371,6 +371,15 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </StyledDrawer>
     );
 
+    const renderChildren = (
+        <>
+            {renderMobileContent}
+            {renderDesktopContent}
+            {renderInfoDrawer}
+            {renderActionsDrawer}
+        </>
+    );
+
     const layoutProps = {
         seoProps: {
             title: courseName,
@@ -386,14 +395,7 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
     };
 
     if (!!course) {
-        return (
-            <MainLayout {...layoutProps}>
-                {renderMobileContent}
-                {renderDesktopContent}
-                {renderInfoDrawer}
-                {renderActionsDrawer}
-            </MainLayout>
-        );
+        return <MainLayout {...layoutProps}>{renderChildren}</MainLayout>;
     } else {
         return <NotFoundLayout />;
     }

@@ -5,12 +5,12 @@ import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
 import styled from 'styled-components';
-import { LayoutProps } from 'types';
+import { MainLayoutProps } from 'types';
 
 import { SettingsButton, StyledCard } from '..';
 import { MainLayout } from './MainLayout';
 
-interface Props extends LayoutProps {
+interface Props extends Omit<MainLayoutProps, 'children'> {
     renderCardContent?: JSX.Element | JSX.Element[];
     renderDesktopHeaderRight?: JSX.Element;
     desktopHeader?: string;

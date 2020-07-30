@@ -45,7 +45,7 @@ export const BottomNavbar: React.FC = () => {
 
     const [value, setValue] = useState(getNavbarValue());
 
-    const handleChange = (_e: ChangeEvent<HTMLButtonElement>, newValue: number): void => {
+    const handleChange = (_e: ChangeEvent<{}>, newValue: number): void => {
         setValue(newValue);
     };
 
