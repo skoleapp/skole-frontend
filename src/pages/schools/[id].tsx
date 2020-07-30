@@ -243,14 +243,16 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         tabLabelRight: `${t('common:courses')} (${courseCount})`,
     };
 
+    const renderChildren = (
+        <>
+            {renderContent}
+            {renderInfoDrawer}
+            {renderActionsDrawer}
+        </>
+    );
+
     if (!!school) {
-        return (
-            <MainLayout {...layoutProps}>
-                {renderContent}
-                {renderInfoDrawer}
-                {renderActionsDrawer}
-            </MainLayout>
-        );
+        return <MainLayout {...layoutProps}>{renderChildren}</MainLayout>;
     } else {
         return <NotFoundLayout />;
     }
