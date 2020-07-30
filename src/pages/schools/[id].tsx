@@ -16,11 +16,10 @@ import {
 import { useDeviceContext } from 'context';
 import { CourseObjectType, SchoolDetailDocument, SchoolObjectType, SubjectObjectType } from 'generated';
 import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, Link, useSSRApollo, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, Link, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 
 interface Props extends I18nProps {

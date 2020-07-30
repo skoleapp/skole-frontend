@@ -11,9 +11,9 @@ import {
 } from '@material-ui/core';
 import { CheckOutlined } from '@material-ui/icons';
 import cookie from 'cookie';
+import { useTranslation } from 'lib';
 import { useEffect, useState } from 'react';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
 import { urls } from 'utils';

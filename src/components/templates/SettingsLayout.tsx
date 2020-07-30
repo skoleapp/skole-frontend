@@ -1,9 +1,9 @@
 import { Box, CardContent, CardHeader, Grid } from '@material-ui/core';
 import { useDeviceContext } from 'context';
 import { useSettings } from 'hooks';
+import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { LayoutProps } from 'types';
 

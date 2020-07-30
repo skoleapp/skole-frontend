@@ -1,16 +1,16 @@
 import { Box, CardContent, Grid, Typography } from '@material-ui/core';
 import { UserObjectType } from 'generated/graphql';
 import { useMoment } from 'hooks';
+import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { urls } from 'utils';
 
 import { TextLink } from './TextLink';
 
 interface InfoItem {
     label: string;
-    value?: JSX.Element | string | number | boolean;
+    value?: JSX.Element | JSX.Element[] | string | number | boolean;
 }
 
 interface Props {

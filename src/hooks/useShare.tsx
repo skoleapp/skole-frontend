@@ -1,8 +1,8 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import { ShareOutlined } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
+import { useTranslation } from 'lib';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { ShareParams } from 'types';
 
 import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';

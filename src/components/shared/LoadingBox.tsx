@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Typography } from '@material-ui/core';
+import { useTranslation } from 'lib';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 interface Props {

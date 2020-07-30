@@ -1,5 +1,5 @@
+import { useTranslation } from 'lib';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { StyledCard } from '..';
 import { LoadingBox } from '../shared';

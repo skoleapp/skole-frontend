@@ -1,8 +1,8 @@
 import { Box, Typography } from '@material-ui/core';
 import { usePDFViewerContext } from 'context';
+import { useTranslation } from 'lib';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import React, { RefObject } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Document, Page } from 'react-pdf';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';

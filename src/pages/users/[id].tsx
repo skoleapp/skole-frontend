@@ -29,11 +29,10 @@ import {
 import { useAuthContext, useDeviceContext } from 'context';
 import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from 'generated';
 import { useFrontendPagination, useMoment, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { breakpoints, breakpointsNum } from 'styles';
 import { I18nProps, MaxWidth } from 'types';

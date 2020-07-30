@@ -1,9 +1,9 @@
 import { Box, Button, Divider, Typography } from '@material-ui/core';
 import { useCommentModalContext, useDeviceContext, useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
+import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';

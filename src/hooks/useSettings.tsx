@@ -2,9 +2,9 @@ import { Box, ListItemText, MenuItem } from '@material-ui/core';
 import { ExitToAppOutlined, HowToRegOutlined, LanguageOutlined, VerifiedUserOutlined } from '@material-ui/icons';
 import { StyledList } from 'components';
 import { useAuthContext, useSettingsContext } from 'context';
+import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { SettingsContext } from 'types';
 import { MENU_ITEMS, redirect, urls } from 'utils';
 

@@ -9,11 +9,10 @@ import {
     UserObjectType,
 } from 'generated';
 import { useActionsDrawer } from 'hooks';
-import { includeDefaultNamespaces, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 
 interface Props extends I18nProps {

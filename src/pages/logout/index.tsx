@@ -4,12 +4,11 @@ import { HowToRegOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout, LoadingBox } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { BackendLogoutMutation, useBackendLogoutMutation } from 'generated';
-import { includeDefaultNamespaces, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { urls } from 'utils';
 

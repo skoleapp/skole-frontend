@@ -14,12 +14,11 @@ import {
     UserObjectType,
 } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, withNoAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withNoAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';

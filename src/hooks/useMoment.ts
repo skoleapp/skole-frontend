@@ -1,5 +1,5 @@
+import { useTranslation } from 'lib';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
 
 // Ignore: Moment instance will get its types automatically.
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

@@ -10,11 +10,10 @@ import {
 import { Form, Formik, FormikProps } from 'formik';
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
 import { useForm } from 'hooks';
-import { dataURItoFile } from 'lib';
+import { dataURItoFile, useTranslation } from 'lib';
 import Image from 'material-ui-image';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { CommentTarget } from 'types';
 

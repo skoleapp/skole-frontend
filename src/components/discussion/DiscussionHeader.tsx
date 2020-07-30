@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import { ChatOutlined } from '@material-ui/icons';
+import { useTranslation } from 'lib';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 interface Props {
     commentCount: number;

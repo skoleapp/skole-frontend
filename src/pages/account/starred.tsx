@@ -11,11 +11,10 @@ import {
 } from 'components';
 import { CourseObjectType, ResourceObjectType, StarredDocument, UserObjectType } from 'generated';
 import { useFrontendPagination, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 
 interface Props extends I18nProps {

@@ -1,8 +1,8 @@
 import { CommentObjectType, UserObjectType } from 'generated';
+import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { createContext, useEffect, useRef, useState } from 'react';
 import { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
 import { breakpointsNum } from 'styles';
 import {
     AttachmentViewerContext,

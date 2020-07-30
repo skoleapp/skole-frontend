@@ -21,10 +21,10 @@ import {
 import { useAttachmentViewerContext, useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation, VoteObjectType } from 'generated';
 import { useActionsDrawer, useMoment, useVotes } from 'hooks';
+import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { mediaURL } from 'utils';
 

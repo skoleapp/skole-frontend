@@ -2,11 +2,10 @@ import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typo
 import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import { MainLayout } from 'components';
 import { useSearch } from 'hooks';
-import { includeDefaultNamespaces, Link, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, Link, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
 import { I18nProps } from 'types';

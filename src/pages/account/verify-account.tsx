@@ -9,12 +9,11 @@ import {
     VerifyAccountMutation,
 } from 'generated/graphql';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 
 const VerifyAccountPage: NextPage<I18nProps> = () => {

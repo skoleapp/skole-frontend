@@ -1,7 +1,7 @@
 import { DrawerProps, IconButton, ListItemText, MenuItem, Tooltip } from '@material-ui/core';
 import { FlagOutlined, MoreHorizOutlined, ShareOutlined } from '@material-ui/icons';
+import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
 import { ShareParams } from 'types';
 
 import { useDrawer } from './useDrawer';

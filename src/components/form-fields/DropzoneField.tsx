@@ -1,9 +1,9 @@
 import { FormControl, FormHelperText } from '@material-ui/core';
 import { useDeviceContext, useNotificationsContext } from 'context';
 import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
+import { useTranslation } from 'lib';
 import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
 import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { FormErrorMessage } from './FormErrorMessage';

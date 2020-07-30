@@ -1,11 +1,10 @@
 import { Box, Typography } from '@material-ui/core';
 import { ExitToAppOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout } from 'components';
-import { includeDefaultNamespaces, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { urls } from 'utils';
 
 const ConfirmLogoutPage: NextPage = () => {

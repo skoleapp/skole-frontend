@@ -43,13 +43,12 @@ import {
     SubjectsDocument,
 } from 'generated';
 import { useDrawer, useForm } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { I18nProps, UseDrawer } from 'types';
 import { getPaginationQuery, getQueryWithPagination, redirect } from 'utils';

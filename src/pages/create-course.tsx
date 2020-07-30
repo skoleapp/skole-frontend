@@ -11,11 +11,10 @@ import {
     useCreateCourseMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 import { redirect } from 'utils';
 import * as Yup from 'yup';

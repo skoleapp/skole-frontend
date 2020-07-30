@@ -43,12 +43,11 @@ import {
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { useTranslation } from 'react-i18next';
 import { I18nProps } from 'types';
 import { redirect, urls } from 'utils';
 

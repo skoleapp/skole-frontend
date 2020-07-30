@@ -1,9 +1,9 @@
 import { InputProps } from '@material-ui/core';
 import { useAuthContext } from 'context';
+import { useTranslation } from 'lib';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { UrlObject } from 'url';
 import { redirect, urls } from 'utils';
 

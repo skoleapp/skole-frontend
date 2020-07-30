@@ -6,8 +6,8 @@ import {
     LastPageOutlined,
 } from '@material-ui/icons';
 import { useResponsiveIconButtonProps } from 'hooks';
+import { useTranslation } from 'lib';
 import React, { MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
 
 interface Props {
     count: number;

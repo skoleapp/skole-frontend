@@ -20,10 +20,9 @@ import {
     StarBorderOutlined,
 } from '@material-ui/icons';
 import { useAuthContext, useDeviceContext } from 'context';
-import { Link, Router } from 'lib';
+import { Link, Router, useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { MouseEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
 import { TopNavbarProps } from 'types';
