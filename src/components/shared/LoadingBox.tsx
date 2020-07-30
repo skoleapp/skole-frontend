@@ -15,7 +15,7 @@ export const LoadingBox: React.FC<Props> = ({ text }) => {
             <CircularProgress color="primary" disableShrink />
             <Box marginTop="0.5rem">
                 <Typography variant="body2" color="textSecondary">
-                    {text || t('common:loading')}
+                    {text || t('loading:loadingText')}
                 </Typography>
             </Box>
         </StyledLoadingBox>
