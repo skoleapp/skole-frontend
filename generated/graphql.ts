@@ -132,7 +132,7 @@ export type CourseObjectType = {
   id: Scalars['ID'];
   name: Scalars['String'];
   code: Scalars['String'];
-  subject?: Maybe<SubjectObjectType>;
+  subjects: Array<SubjectObjectType>;
   school: SchoolObjectType;
   user?: Maybe<UserObjectType>;
   modified: Scalars['DateTime'];
@@ -302,7 +302,12 @@ export type Mutation = {
    * Not verified users can still login.
    */
   login?: Maybe<LoginMutationPayload>;
-  /** Delete JSON web token cookie and logout. */
+  /**
+   * Delete JSON web token cookie and logout.
+   * 
+   * This sets the `Set-Cookie` header so that the JWT token cookie gets automatically
+   * deleted in frontend.
+   */
   logout?: Maybe<LogoutMutation>;
   /**
    * Update some user model fields.
@@ -595,7 +600,12 @@ export type LoginMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/** Delete JSON web token cookie and logout. */
+/**
+ * Delete JSON web token cookie and logout.
+ * 
+ * This sets the `Set-Cookie` header so that the JWT token cookie gets automatically
+ * deleted in frontend.
+ */
 export type LogoutMutation = {
    __typename?: 'LogoutMutation';
   deleted: Scalars['Boolean'];
@@ -716,7 +726,7 @@ export type CreateCourseMutationPayload = {
 export type CreateCourseMutationInput = {
   name: Scalars['String'];
   code?: Maybe<Scalars['String']>;
-  subject?: Maybe<Scalars['ID']>;
+  subjects?: Maybe<Array<Maybe<Scalars['ID']>>>;
   school: Scalars['ID'];
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -1131,7 +1141,7 @@ export type ContactMutation = (
 export type CreateCourseMutationVariables = {
   courseName: Scalars['String'];
   courseCode?: Maybe<Scalars['String']>;
-  subject: Scalars['ID'];
+  subjects?: Maybe<Array<Scalars['ID']>>;
   school: Scalars['ID'];
 };
 
@@ -1399,7 +1409,7 @@ export type CourseDetailQuery = (
     & { vote?: Maybe<(
       { __typename?: 'VoteObjectType' }
       & Pick<VoteObjectType, 'id' | 'status'>
-    )>, subject?: Maybe<(
+    )>, subjects: Array<(
       { __typename?: 'SubjectObjectType' }
       & Pick<SubjectObjectType, 'id' | 'name'>
     )>, school: (
@@ -2230,8 +2240,8 @@ export type ContactMutationHookResult = ReturnType<typeof useContactMutation>;
 export type ContactMutationResult = ApolloReactCommon.MutationResult<ContactMutation>;
 export type ContactMutationOptions = ApolloReactCommon.BaseMutationOptions<ContactMutation, ContactMutationVariables>;
 export const CreateCourseDocument = gql`
-    mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
-  createCourse(input: {name: $courseName, code: $courseCode, subject: $subject, school: $school}) {
+    mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID!], $school: ID!) {
+  createCourse(input: {name: $courseName, code: $courseCode, subjects: $subjects, school: $school}) {
     message
     course {
       id
@@ -2260,7 +2270,7 @@ export type CreateCourseMutationFn = ApolloReactCommon.MutationFunction<CreateCo
  *   variables: {
  *      courseName: // value for 'courseName'
  *      courseCode: // value for 'courseCode'
- *      subject: // value for 'subject'
+ *      subjects: // value for 'subjects'
  *      school: // value for 'school'
  *   },
  * });
@@ -2747,7 +2757,7 @@ export const CourseDetailDocument = gql`
       id
       status
     }
-    subject {
+    subjects {
       id
       name
     }

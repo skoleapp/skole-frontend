@@ -23,7 +23,7 @@ import * as Yup from 'yup';
 interface CreateCourseFormValues {
     courseName: string;
     courseCode: string;
-    subject: SubjectObjectType | null;
+    subjects: SubjectObjectType[];
     school: SchoolTypeObjectType | null;
     general: string;
 }
@@ -39,7 +39,7 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
     const validationSchema = Yup.object().shape({
         courseName: Yup.string().required(t('validation:required')),
         courseCode: Yup.string(),
-        subject: Yup.object().nullable(),
+        subjects: Yup.mixed(),
         school: Yup.object()
             .nullable()
             .required(t('validation:required')),
@@ -64,13 +64,13 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
     const [createCourseMutation] = useCreateCourseMutation({ onCompleted, onError });
 
     const handleSubmit = (values: CreateCourseFormValues): void => {
-        const { courseName, courseCode, school, subject } = values;
+        const { courseName, courseCode, school, subjects } = values;
 
         const variables = {
             courseName,
             courseCode,
             school: R.propOr('', 'id', school) as string,
-            subject: R.propOr('', 'id', subject) as string,
+            subjects: subjects.map(s => s.id),
         };
 
         createCourseMutation({ variables });
@@ -81,7 +81,7 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
         courseName: '',
         courseCode: '',
         school: null,
-        subject: null,
+        subjects: [],
         general: '',
     };
 
@@ -118,14 +118,15 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
                         fullWidth
                     />
                     <Field
-                        name="subject"
-                        label={t('forms:subject')}
-                        placeholder={t('forms:subject')}
+                        name="subjects"
+                        label={t('forms:subjects')}
+                        placeholder={t('forms:subjects')}
                         dataKey="subjects"
                         document={SubjectsDocument}
                         component={AutoCompleteField}
                         variant="outlined"
                         fullWidth
+                        multiple
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>

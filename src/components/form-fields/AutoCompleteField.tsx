@@ -13,8 +13,10 @@ interface Props {
     dataKey: string; // Used to access the data after a successful query.
     document: DocumentNode; // GraphQL document the query is made with.
     variables: OperationVariables; // Custom variables for GraphQL query.
+    multiple?: boolean;
 }
 
+// A custom auto-complete form field that always fetches translated options from backend.
 export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}>({
     field,
     form,
@@ -24,7 +26,8 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     helperText,
     disabled,
     variables,
-    ...props
+    multiple,
+    ...textFieldProps
 }: Props & TextFieldProps) => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -64,7 +67,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
         <TextField
             {...params}
-            {...props}
+            {...textFieldProps}
             error={showError}
             helperText={showError ? fieldError : helperText}
             InputProps={{
@@ -91,6 +94,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
             onChange={handleAutoCompleteChange}
             renderInput={renderInput}
             disabled={disabled !== undefined ? disabled : isSubmitting}
+            multiple={multiple}
         />
     );
 };

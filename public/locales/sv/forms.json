@@ -16,6 +16,7 @@
     "courseCode": "Kurskod",
     "school": "Skola",
     "subject": "Ämne",
+    "subjects": "Ämnen",
     "messageSubject": "Subjekt",
     "schoolType": "Skoltyp",
     "country": "Land",

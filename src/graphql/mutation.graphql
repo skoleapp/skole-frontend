@@ -235,8 +235,8 @@ mutation Contact($subject: String!, $name: String, $email: String!, $message: St
     }
 }
 
-mutation CreateCourse($courseName: String!, $courseCode: String, $subject: ID!, $school: ID!) {
-    createCourse(input: { name: $courseName, code: $courseCode, subject: $subject, school: $school }) {
+mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
+    createCourse(input: { name: $courseName, code: $courseCode, subjects: $subjects, school: $school }) {
         message
         course {
             id
