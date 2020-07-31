@@ -1,20 +1,23 @@
-FROM node:14.0.0-alpine3.11 AS dev
+FROM node:14.7.0-alpine3.12 AS dev
 
-USER node
-RUN mkdir /home/node/app
-RUN mkdir /home/node/app/.next
-WORKDIR /home/node/app
+RUN adduser --disabled-password user
+WORKDIR /home/user/app
+RUN chown user:user /home/user/app
 
-COPY --chown=node:node package.json .
-COPY --chown=node:node yarn.lock .
+USER user
+
+COPY --chown=user:user package.json .
+COPY --chown=user:user yarn.lock .
 RUN yarn install
+
+RUN mkdir /home/user/app/.next
 
 CMD ["yarn", "dev"]
 
 
 FROM dev AS circleci
 
-COPY --chown=node:node . .
+COPY --chown=user:user . .
 
 CMD yarn lint \
     && yarn type-check
