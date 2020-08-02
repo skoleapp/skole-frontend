@@ -5,6 +5,7 @@ import { FieldAttributes, FormikProps, getIn } from 'formik';
 import { DocumentNode } from 'graphql';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     field: FieldAttributes<{}>;
@@ -37,6 +38,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     const { touched, errors, isSubmitting } = form;
     const fieldError = getIn(errors, name);
     const showError = getIn(touched, name) && !!fieldError;
+    const { i18n } = useTranslation();
 
     const fetchOptions = async (): Promise<void> => {
         setLoading(true);
@@ -46,6 +48,11 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
                 query: document,
                 variables,
                 fetchPolicy: 'no-cache', // Disable caching so we can always fetch correct translations.
+                context: {
+                    headers: {
+                        'Accept-Language': i18n.language,
+                    },
+                },
             });
 
             data[dataKey] && setOptions(data[dataKey]);
