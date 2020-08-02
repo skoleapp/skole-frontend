@@ -8,7 +8,7 @@
     "scripts": {
         "dev": "next -p 3001",
         "build": "next build",
-        "start": "next start",
+        "start": "next start -p 3001",
         "type-check": "tsc",
         "gen": "graphql-codegen --config codegen.yml",
         "format": "yarn prettier --write '**/*.{ts,tsx,js,json}'",
