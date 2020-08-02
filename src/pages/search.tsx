@@ -14,11 +14,14 @@ import { ArrowBackOutlined, ClearAllOutlined, FilterListOutlined, SearchOutlined
 import {
     AutoCompleteField,
     CourseTableBody,
+    ErrorLayout,
     FormSubmitSection,
+    LoadingLayout,
     MainLayout,
     ModalHeader,
     NativeSelectField,
     NotFoundBox,
+    OfflineLayout,
     PaginatedTable,
     StyledCard,
     StyledDrawer,
@@ -33,24 +36,23 @@ import {
     CountriesDocument,
     CountryObjectType,
     CourseObjectType,
-    PaginatedCourseObjectType,
     SchoolObjectType,
     SchoolsDocument,
     SchoolTypeObjectType,
     SchoolTypesDocument,
-    SearchCoursesDocument,
     SubjectObjectType,
     SubjectsDocument,
+    useSearchCoursesQuery,
 } from 'generated';
 import { useDrawer, useForm } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
-import { I18nProps, UseDrawer } from 'types';
+import { UseDrawer } from 'types';
 import { getPaginationQuery, getQueryWithPagination, redirect } from 'utils';
 
 interface FilterSearchResultsFormValues {
@@ -64,29 +66,26 @@ interface FilterSearchResultsFormValues {
     ordering: string;
 }
 
-interface Props extends I18nProps {
-    searchCourses?: PaginatedCourseObjectType;
-    school?: SchoolObjectType;
-    subject?: SubjectObjectType;
-    schoolType?: SchoolTypeObjectType;
-    country?: CountryObjectType;
-    city?: CityObjectType;
-}
-
 interface ValidFilter {
     name: string;
     value: string;
 }
 
-const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolType, country, city }) => {
+const SearchPage: NextPage = () => {
     const { t } = useTranslation();
     const { ref, resetForm, setSubmitting } = useForm<FilterSearchResultsFormValues>();
+    const { data, loading, error } = useSearchCoursesQuery();
     const { onClose: handleCloseFilters, handleOpen: handleOpenFilters, ...fullDrawerProps } = useDrawer();
     const drawerProps = R.omit(['renderHeader'], fullDrawerProps) as Omit<UseDrawer, 'renderHeader'>;
     const { pathname, query } = useRouter();
     const isMobile = useDeviceContext();
-    const courseObjects = R.propOr([], 'objects', searchCourses) as CourseObjectType[];
-    const count = R.propOr(0, 'count', searchCourses) as number;
+    const courseObjects: CourseObjectType[] = R.pathOr([], ['searchCourses', 'objects'], data);
+    const school: SchoolObjectType | null = R.propOr(null, 'school', data);
+    const subject: SubjectObjectType | null = R.propOr(null, 'subject', data);
+    const schoolType: SchoolTypeObjectType | null = R.propOr(null, 'schoolType', data);
+    const country: CountryObjectType | null = R.propOr(null, 'county', data);
+    const city: CityObjectType | null = R.propOr(null, 'city', data);
+    const count = R.pathOr(0, ['searchCourses', 'count'], data) as number;
     const courseName = R.propOr('', 'courseName', query) as string;
     const courseCode = R.propOr('', 'courseCode', query) as string;
     const ordering = R.propOr('', 'ordering', query) as string;
@@ -116,11 +115,11 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
     const initialValues = {
         courseName,
         courseCode,
-        school: school || null,
-        subject: subject || null,
-        schoolType: schoolType || null,
-        country: country || null,
-        city: city || null,
+        school,
+        subject,
+        schoolType,
+        country,
+        city,
         ordering,
     };
 
@@ -439,6 +438,18 @@ const SearchPage: NextPage<Props> = ({ searchCourses, school, subject, schoolTyp
         customTopNavbar,
     };
 
+    if (loading) {
+        return <LoadingLayout />;
+    }
+
+    if (!!error) {
+        if (!!error.networkError) {
+            return <OfflineLayout />;
+        }
+
+        return <ErrorLayout />;
+    }
+
     return (
         <StyledSearchPage>
             <MainLayout {...layoutProps}>{renderChildren}</MainLayout>
@@ -467,21 +478,5 @@ const StyledSearchPage = styled(Box)`
         }
     }
 `;
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
-    const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
-
-    try {
-        const { data } = await apolloClient.query({
-            query: SearchCoursesDocument,
-            variables: ctx.query,
-        });
-
-        return { props: { ...data, ...namespaces, initialApolloState } };
-    } catch {
-        return { props: { namespaces, initialApolloState } };
-    }
-};
 
 export default withAuth(SearchPage);
