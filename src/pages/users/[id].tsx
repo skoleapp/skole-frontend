@@ -29,7 +29,7 @@ import {
 import { useAuthContext, useDeviceContext } from 'context';
 import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from 'generated';
 import { useFrontendPagination, useMoment, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -442,9 +442,7 @@ const StyledUserPage = styled(Box)`
     }
 `;
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+export const getServerSideProps: GetServerSideProps = async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile', 'profile-strength']) };
 
@@ -458,6 +456,6 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     } catch {
         return { props: { ...nameSpaces, initialApolloState } };
     }
-});
+};
 
 export default withAuth(UserPage);

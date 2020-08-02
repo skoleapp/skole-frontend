@@ -43,7 +43,7 @@ import {
     SubjectsDocument,
 } from 'generated';
 import { useDrawer, useForm } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
@@ -468,7 +468,7 @@ const StyledSearchPage = styled(Box)`
     }
 `;
 
-export const getServerSideProps: GetServerSideProps = withUserAgent(async ctx => {
+export const getServerSideProps: GetServerSideProps = async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['search']) };
 
@@ -482,6 +482,6 @@ export const getServerSideProps: GetServerSideProps = withUserAgent(async ctx =>
     } catch {
         return { props: { namespaces, initialApolloState } };
     }
-});
+};
 
 export default withAuth(SearchPage);

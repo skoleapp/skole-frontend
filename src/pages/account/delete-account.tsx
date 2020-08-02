@@ -4,10 +4,9 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { DeleteAccountMutation, useDeleteAccountMutation } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
+import { useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
+import { NextPage } from 'next';
 import React from 'react';
 import { I18nProps } from 'types';
 import { redirect, urls } from 'utils';
@@ -106,13 +105,5 @@ export const DeleteAccountPage: NextPage<I18nProps> = () => {
 
     return <SettingsLayout {...layoutProps} />;
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['delete-account']),
-    },
-}));
 
 export default withAuth(DeleteAccountPage);

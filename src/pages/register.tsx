@@ -1,7 +1,7 @@
 import { Box, Divider, FormControl, Typography } from '@material-ui/core';
 import { HowToRegOutlined } from '@material-ui/icons';
 import { AutoCompleteField, ButtonLink, FormLayout, FormSubmitSection, TextLink } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import {
@@ -11,7 +11,6 @@ import {
     SubjectObjectType,
     SubjectsDocument,
     useRegisterMutation,
-    UserObjectType,
 } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
 import { useTranslation, withNoAuth } from 'lib';
@@ -37,7 +36,6 @@ const RegisterPage: NextPage<I18nProps> = () => {
     const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
-    const { setUserMe } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
 
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
@@ -76,11 +74,10 @@ const RegisterPage: NextPage<I18nProps> = () => {
             handleMutationErrors(register.errors);
         } else if (!!login && !!login.errors) {
             handleMutationErrors(login.errors);
-        } else if (!!login && !!login.user && !!register && !!register.message) {
+        } else if (!!login && !!register && !!register.message) {
             try {
                 resetForm();
                 toggleNotification(register.message);
-                setUserMe(login.user as UserObjectType);
                 await redirect(urls.home);
             } catch {
                 unexpectedError();

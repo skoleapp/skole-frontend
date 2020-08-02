@@ -10,10 +10,9 @@ import {
     useSendPasswordResetEmailMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withNoAuth } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import * as R from 'ramda';
 import React, { useState } from 'react';
 import { I18nProps } from 'types';
 import { redirect, urls } from 'utils';
@@ -214,12 +213,4 @@ const ResetPasswordPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['reset-password']),
-    },
-}));
-
-export default ResetPasswordPage;
+export default withNoAuth(ResetPasswordPage);

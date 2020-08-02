@@ -14,7 +14,7 @@ import {
     useCreateResourceMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -250,9 +250,7 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+export const getServerSideProps: GetServerSideProps = async ctx => {
     const { apolloClient } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
 
@@ -266,6 +264,6 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     } catch {
         return { props: { ...namespaces } };
     }
-});
+};
 
 export default withAuth(UploadResourcePage);

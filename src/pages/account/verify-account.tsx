@@ -9,8 +9,8 @@ import {
     VerifyAccountMutation,
 } from 'generated/graphql';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
@@ -171,13 +171,5 @@ const VerifyAccountPage: NextPage<I18nProps> = () => {
 
     return <SettingsLayout {...layoutProps} />;
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['verify-account']),
-    },
-}));
 
 export default withAuth(VerifyAccountPage);

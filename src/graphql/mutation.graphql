@@ -16,10 +16,6 @@ mutation Register($username: String!, $email: String!, $school: ID, $subject: ID
         }
     }
     login(input: { usernameOrEmail: $username, password: $password }) {
-        user {
-            id
-            created
-        }
         errors {
             field
             messages
@@ -30,10 +26,6 @@ mutation Register($username: String!, $email: String!, $school: ID, $subject: ID
 mutation Login($usernameOrEmail: String!, $password: String!) {
     login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
         message
-        user {
-            id
-            created
-        }
         errors {
             field
             messages

@@ -53,7 +53,7 @@ const LoginPage: NextPage<I18nProps> = () => {
         if (!!login) {
             if (!!login.errors) {
                 handleMutationErrors(login.errors);
-            } else if (!!login.user && !!login.message) {
+            } else if (!!login.message) {
                 const { next } = query;
 
                 try {

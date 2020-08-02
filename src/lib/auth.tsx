@@ -10,8 +10,8 @@ import { redirect, urls } from 'utils';
 // Wrap all pages that require authentication with this.
 export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const withAuth: NextPage = pageProps => {
-        const { loading, networkError } = useUserMe();
-        const { userMe } = useAuthContext();
+        const { userMe, loading, networkError } = useUserMe();
+        const { userMe: contextUserMe } = useAuthContext();
         const shouldRedirect = !(loading || networkError || userMe);
         const { asPath } = useRouter();
 
@@ -29,7 +29,6 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
                 // Only redirect new users to get started page.
                 // Redirect old users to login page.
                 if (localStorage.getItem('user')) {
-                    console.log('test');
                     redirect({ pathname: urls.login, query });
                 } else {
                     redirect({ pathname: urls.getStarted, query });
@@ -45,9 +44,9 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
                 window.removeEventListener('storage', syncLogout);
                 localStorage.removeItem('logout');
             };
-        }, [userMe]);
+        }, []);
 
-        if (loading || !userMe) {
+        if (loading || !contextUserMe) {
             return <LoadingLayout />;
         }
 

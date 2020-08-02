@@ -16,7 +16,7 @@ import {
 import { useDeviceContext } from 'context';
 import { CourseObjectType, SchoolDetailDocument, SchoolObjectType, SubjectObjectType } from 'generated';
 import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, Link, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, Link, useSSRApollo, useTranslation, withAuth } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
@@ -258,9 +258,7 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
     }
 };
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+export const getServerSideProps: GetServerSideProps = async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
 
@@ -274,6 +272,6 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     } catch {
         return { props: { ...namespaces, initialApolloState } };
     }
-});
+};
 
 export default withAuth(SchoolDetailPage);

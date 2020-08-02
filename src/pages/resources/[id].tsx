@@ -37,7 +37,7 @@ import {
     VoteObjectType,
 } from 'generated';
 import { useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useSwipeableTabs, useVotes } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetServerSideProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -446,9 +446,7 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
     }
 };
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
+export const getServerSideProps: GetServerSideProps = async ctx => {
     const { apolloClient, initialApolloState } = useSSRApollo(ctx);
     const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
 
@@ -462,6 +460,6 @@ export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
     } catch {
         return { props: { ...namespaces, initialApolloState } };
     }
-});
+};
 
 export default withAuth(ResourceDetailPage);

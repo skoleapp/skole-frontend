@@ -4,9 +4,8 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { ContactMutation, useContactMutation } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
+import { useTranslation, withUserMe } from 'lib';
+import { NextPage } from 'next';
 import React from 'react';
 import { I18nProps } from 'types';
 import * as Yup from 'yup';
@@ -138,12 +137,4 @@ const ContactPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['contact']),
-    },
-}));
-
-export default ContactPage;
+export default withUserMe(ContactPage);
