@@ -1,20 +1,20 @@
+import { CardHeader } from '@material-ui/core';
 import { useTranslation } from 'lib';
 import React from 'react';
 
 import { StyledCard } from '..';
-import { LoadingBox } from '../shared';
 import { MainLayout } from './MainLayout';
 
-export const LoadingLayout: React.FC = () => {
+export const OfflineLayout: React.FC = () => {
     const { t } = useTranslation();
 
     const layoutProps = {
         seoProps: {
-            title: t('loading:title'),
-            description: t('loading:description'),
+            title: t('offline:title'),
+            description: t('offline:description'),
         },
-        disableBottomNavbar: true,
         topNavbarProps: {
+            dynamicBackUrl: true,
             disableAuthButtons: true,
         },
     };
@@ -22,7 +22,7 @@ export const LoadingLayout: React.FC = () => {
     return (
         <MainLayout {...layoutProps}>
             <StyledCard>
-                <LoadingBox />
+                <CardHeader title={t('offline:header')} />
             </StyledCard>
         </MainLayout>
     );

@@ -15,3 +15,4 @@ export * from './useSwipeableTabs';
 export * from './useAlerts';
 export * from './useSettings';
 export * from './useFrontendPagination';
+export * from './useUserMe';

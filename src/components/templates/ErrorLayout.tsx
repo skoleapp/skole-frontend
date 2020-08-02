@@ -15,6 +15,7 @@ export const ErrorLayout: React.FC = () => {
         },
         topNavbarProps: {
             dynamicBackUrl: true,
+            disableAuthButtons: true,
         },
     };
 

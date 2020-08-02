@@ -2,8 +2,8 @@ import { Avatar, Box, Grid, Typography } from '@material-ui/core';
 import { AssignmentOutlined, ChatOutlined, SchoolOutlined } from '@material-ui/icons';
 import { ButtonLink, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withNoAuth, withUserAgent } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withNoAuth } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
@@ -160,11 +160,5 @@ const StyledGetStartedPage = styled(Box)`
         }
     }
 `;
-
-export const getServerSideProps: GetServerSideProps = withUserAgent(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['get-started']),
-    },
-}));
 
 export default withNoAuth(GetStartedPage);

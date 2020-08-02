@@ -6,7 +6,7 @@
     "license": "ISC",
     "author": "Skole Team",
     "scripts": {
-        "dev": "next -p 3001",
+        "dev": "NODE_OPTIONS=--max_old_space_size=4096 next -p 3001",
         "build": "next build",
         "start": "next start -p 3001",
         "type-check": "tsc",

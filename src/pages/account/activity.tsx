@@ -9,9 +9,8 @@ import {
     UserObjectType,
 } from 'generated';
 import { useActionsDrawer } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
+import { useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
 import { I18nProps } from 'types';
 
@@ -98,13 +97,5 @@ const ActivityPage: NextPage<Props> = () => {
         return <NotFoundLayout />;
     }
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces([]),
-    },
-}));
 
 export default withAuth(ActivityPage);

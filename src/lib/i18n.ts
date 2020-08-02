@@ -9,6 +9,7 @@ const nextI18next = new NextI18Next({
     localePath: path.resolve('./public/locales'),
     fallbackLng: 'en',
     strictMode: false, // Disable redundant warnings about withTranslation wrapper on every page.
+    shallowRender: true, // Avoid triggering getInitialProps when language is changed.
 });
 
 nextI18next.i18n.languages = ['en', 'fi', 'sv'];
@@ -28,6 +29,7 @@ export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
         'tooltips',
         'activity',
         'loading',
+        'offline',
     ];
 
     return defaultNamespaces.concat(namespaces);

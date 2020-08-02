@@ -4,7 +4,7 @@ import SwipeableViews from 'react-swipeable-views';
 
 export interface AuthContext {
     userMe: UserObjectType | null;
-    setUserMe: (user: UserObjectType | null) => void;
+    setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
 }
 
 export interface AttachmentViewerContext {
@@ -67,6 +67,5 @@ export interface SkoleContextType {
     notifications: NotificationsContext;
     settings: SettingsContext;
     pdfViewer: PDFViewerContext;
-    isMobileGuess: boolean | null;
     discussion: DiscussionContext;
 }

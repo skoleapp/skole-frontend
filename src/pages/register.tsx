@@ -14,8 +14,8 @@ import {
     UserObjectType,
 } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withNoAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withNoAuth } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -104,7 +104,6 @@ const RegisterPage: NextPage<I18nProps> = () => {
                 password,
                 code,
             },
-            context: { headers: { Authorization: '' } },
         });
 
         setSubmitting(false);
@@ -221,6 +220,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
         topNavbarProps: {
             header: t('register:header'),
             headerRight: renderLanguageButton,
+            disableAuthButtons: true,
         },
         desktopHeader: t('register:header'),
         renderCardContent,
@@ -228,11 +228,5 @@ const RegisterPage: NextPage<I18nProps> = () => {
 
     return <FormLayout {...layoutProps} />;
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: { namespacesRequired: includeDefaultNamespaces(['register']) },
-}));
 
 export default withNoAuth(RegisterPage);

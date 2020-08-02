@@ -4,10 +4,9 @@ import { HowToRegOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout, LoadingBox } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { BackendLogoutMutation, useBackendLogoutMutation } from 'generated';
-import { includeDefaultNamespaces, useTranslation, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withUserMe } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { urls } from 'utils';
@@ -25,20 +24,21 @@ const LogoutPage: NextPage = () => {
     const onCompleted = async ({ logout }: BackendLogoutMutation): Promise<void> => {
         if (!!logout && logout.deleted) {
             await apolloClient.resetStore();
+            localStorage.setItem('logout', String(Date.now()));
             setUserMe(null);
         }
     };
 
     const [logout] = useBackendLogoutMutation({ onCompleted, onError });
 
+    const handleLogout = async (): Promise<void> => {
+        setLoading(true);
+        await logout();
+        setLoading(false);
+    };
+
     useEffect(() => {
-        if (!!userMe) {
-            (async (): Promise<void> => {
-                setLoading(true);
-                logout();
-                setLoading(false);
-            })();
-        }
+        !!userMe && handleLogout();
     }, []);
 
     const renderLoggingOut = <LoadingBox text={t('logout:loggingOut')} />;
@@ -62,6 +62,9 @@ const LogoutPage: NextPage = () => {
         desktopHeader: t('logout:header'),
         renderCardContent: loading ? renderLoggingOut : renderLoggedOut,
         disableBottomNavbar: true,
+        topNavbarProps: {
+            disableAuthButtons: true,
+        },
     };
 
     return (
@@ -86,12 +89,4 @@ const StyledLogoutPage = styled(({ loading, ...props }) => <Box {...props} />)`
     }
 `;
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['logout']),
-    },
-}));
-
-export default LogoutPage;
+export default withUserMe(LogoutPage);

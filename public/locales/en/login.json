@@ -3,5 +3,7 @@
     "description": "This is a login page.",
     "header": "Log In",
     "createAccount": "Create Account",
-    "forgotPassword": "Forgot Password?"
+    "forgotPassword": "Forgot Password?",
+    "existingUserGreeting": "Welcome back, {{ username }}.",
+    "loginWithDifferentCredentials": "Log in with different credentials."
 }
