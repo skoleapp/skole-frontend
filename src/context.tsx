@@ -117,7 +117,7 @@ export const useDeviceContext = (breakpoint: number = breakpointsNum.MD): boolea
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
     useEffect(() => {
-        setIsMobile(window.innerWidth < breakpoint); // Make sure correct value is applied on client side.
+        setIsMobile(window.innerWidth < breakpoint); // Apply initial value.
 
         const resizeFunctionRef = (): void => {
             setIsMobile(window.innerWidth < breakpoint);
@@ -128,8 +128,7 @@ export const useDeviceContext = (breakpoint: number = breakpointsNum.MD): boolea
         return (): void => window.removeEventListener('resize', resizeFunctionRef);
     }, []);
 
-    // If guess value is null resolve value into mobile.
-    return isMobile === null ? true : !!isMobile;
+    return !!isMobile;
 };
 
 export const ContextProvider: React.FC = ({ children }) => {
