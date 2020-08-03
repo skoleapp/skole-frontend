@@ -5,7 +5,7 @@ import { ApolloProvider } from '@apollo/client';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { ContextProvider } from 'context';
-import { appWithTranslation, pageView, PWAProvider, Router, useApollo, useTranslation } from 'lib';
+import { appWithTranslation, pageView, Router, useApollo, useTranslation } from 'lib';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
@@ -45,11 +45,9 @@ const SkoleApp: NextPage<AppProps> = ({ Component, pageProps }) => {
             <ContextProvider>
                 <ThemeProvider theme={theme}>
                     <ConfirmProvider defaultOptions={defaultConfirmOptions}>
-                        <PWAProvider>
-                            <CssBaseline />
-                            <GlobalStyle />
-                            <Component {...pageProps} />
-                        </PWAProvider>
+                        <CssBaseline />
+                        <GlobalStyle />
+                        <Component {...pageProps} />
                     </ConfirmProvider>
                 </ThemeProvider>
             </ContextProvider>

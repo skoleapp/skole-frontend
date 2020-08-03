@@ -1,5 +1,3 @@
 {
-    "loginRequired": "You need to log in order to continue.",
-    "newVersionTitle": "A new version of the app is available.",
-    "newVersionDesc": "Please confirm to update."
+    "loginRequired": "You need to log in order to continue."
 }
