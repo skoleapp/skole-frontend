@@ -7,14 +7,13 @@ import { BackendLogoutMutation, useBackendLogoutMutation } from 'generated';
 import { useTranslation, withUserMe } from 'lib';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { urls } from 'utils';
 
 const LogoutPage: NextPage = () => {
     const apolloClient = useApolloClient();
     const { userMe, setUserMe } = useAuthContext();
-    const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
@@ -29,17 +28,11 @@ const LogoutPage: NextPage = () => {
         }
     };
 
-    const [logout] = useBackendLogoutMutation({ onCompleted, onError });
-
-    const handleLogout = async (): Promise<void> => {
-        setLoading(true);
-        await logout();
-        setLoading(false);
-    };
+    const [logout, { loading }] = useBackendLogoutMutation({ onCompleted, onError });
 
     useEffect(() => {
-        !!userMe && handleLogout();
-    }, []);
+        !!userMe && logout();
+    }, [userMe]);
 
     const renderLoggingOut = <LoadingBox text={t('logout:loggingOut')} />;
 
