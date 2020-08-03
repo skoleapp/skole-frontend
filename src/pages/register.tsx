@@ -18,7 +18,6 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { I18nProps } from 'types';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -32,7 +31,7 @@ export interface RegisterFormValues {
     code: string;
 }
 
-const RegisterPage: NextPage<I18nProps> = () => {
+const RegisterPage: NextPage = () => {
     const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();

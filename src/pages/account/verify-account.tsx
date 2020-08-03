@@ -14,9 +14,8 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import { I18nProps } from 'types';
 
-const VerifyAccountPage: NextPage<I18nProps> = () => {
+const VerifyAccountPage: NextPage = () => {
     const {
         ref: emailFormRef,
         setSubmitting: setSubmittingEmailForm,

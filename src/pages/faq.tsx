@@ -3,7 +3,6 @@ import { SettingsLayout } from 'components';
 import { useTranslation, withUserMe } from 'lib';
 import { NextPage } from 'next';
 import React from 'react';
-import { I18nProps } from 'types';
 
 const faqs = [
     {
@@ -20,7 +19,7 @@ const faqs = [
     },
 ];
 
-const FAQPage: NextPage<I18nProps> = () => {
+const FAQPage: NextPage = () => {
     const { t } = useTranslation();
 
     const renderCardContent = faqs.map(({ title, text }, i) => (

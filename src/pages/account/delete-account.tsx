@@ -8,7 +8,6 @@ import { useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { NextPage } from 'next';
 import React from 'react';
-import { I18nProps } from 'types';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -21,7 +20,7 @@ export interface DeleteAccountFormValues {
     password: string;
 }
 
-export const DeleteAccountPage: NextPage<I18nProps> = () => {
+export const DeleteAccountPage: NextPage = () => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
         DeleteAccountFormValues
     >();

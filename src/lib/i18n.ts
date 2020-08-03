@@ -14,27 +14,6 @@ const nextI18next = new NextI18Next({
 
 nextI18next.i18n.languages = ['en', 'fi', 'sv'];
 
-export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
-    const defaultNamespaces = [
-        'common',
-        '_error',
-        '404',
-        'languages',
-        'forms',
-        'validation',
-        'notifications',
-        'alerts',
-        'comments',
-        'gdpr',
-        'tooltips',
-        'activity',
-        'loading',
-        'offline',
-    ];
-
-    return defaultNamespaces.concat(namespaces);
-};
-
 interface UseTranslation extends Omit<UseTranslationResponse, 't'> {
     t: (key: string, options?: { [key: string]: ReactText }) => string;
 }

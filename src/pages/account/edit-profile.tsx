@@ -24,11 +24,11 @@ import { useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { I18nProps, UpdateProfileFormValues } from 'types';
+import { UpdateProfileFormValues } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
-const EditProfilePage: NextPage<I18nProps> = () => {
+const EditProfilePage: NextPage = () => {
     const { t } = useTranslation();
     const { userMe, setUserMe, verified } = useAuthContext();
     const { ref, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<UpdateProfileFormValues>();

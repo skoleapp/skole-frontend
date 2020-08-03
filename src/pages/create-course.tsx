@@ -15,7 +15,6 @@ import { useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { I18nProps } from 'types';
 import { redirect } from 'utils';
 import * as Yup from 'yup';
 
@@ -27,7 +26,7 @@ interface CreateCourseFormValues {
     general: string;
 }
 
-const CreateCoursePage: NextPage<I18nProps> = () => {
+const CreateCoursePage: NextPage = () => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 

@@ -15,10 +15,13 @@ import { EditOutlined, StarBorderOutlined } from '@material-ui/icons';
 import {
     ButtonLink,
     CourseTableBody,
+    ErrorLayout,
     FrontendPaginatedTable,
+    LoadingLayout,
     MainLayout,
     NotFoundBox,
     NotFoundLayout,
+    OfflineLayout,
     ResourceTableBody,
     SettingsButton,
     StyledCard,
@@ -27,27 +30,26 @@ import {
     TextLink,
 } from 'components';
 import { useAuthContext, useDeviceContext } from 'context';
-import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserDetailDocument, UserObjectType } from 'generated';
+import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserObjectType, useUserDetailQuery } from 'generated';
 import { useFrontendPagination, useMoment, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints, breakpointsNum } from 'styles';
-import { I18nProps, MaxWidth } from 'types';
 import { mediaURL, urls } from 'utils';
 
-interface Props extends I18nProps {
-    user?: UserObjectType;
-}
-
-const UserPage: NextPage<Props> = ({ user }) => {
+const UserPage: NextPage = () => {
+    const { query } = useRouter();
     const isMobile = useDeviceContext(breakpointsNum.SM);
     const { t } = useTranslation();
     const moment = useMoment();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
+    const { data, loading, error } = useUserDetailQuery({ variables: query });
+    const user: UserObjectType = R.propOr(null, 'user', data);
     const rank = R.propOr('', 'rank', user) as string;
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
@@ -390,10 +392,19 @@ const UserPage: NextPage<Props> = ({ user }) => {
             dynamicBackUrl: true,
             headerRight: isOwnProfile && <SettingsButton color="secondary" />,
         },
-        containerProps: {
-            maxWidth: 'md' as MaxWidth,
-        },
     };
+
+    if (loading) {
+        return <LoadingLayout />;
+    }
+
+    if (!!error) {
+        if (!!error.networkError) {
+            return <OfflineLayout />;
+        }
+
+        return <ErrorLayout />;
+    }
 
     if (!!user) {
         return (
@@ -441,21 +452,5 @@ const StyledUserPage = styled(Box)`
         }
     }
 `;
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
-    const nameSpaces = { namespacesRequired: includeDefaultNamespaces(['profile', 'profile-strength']) };
-
-    try {
-        const { data } = await apolloClient.query({
-            query: UserDetailDocument,
-            variables: ctx.query,
-        });
-
-        return { props: { ...data, ...nameSpaces, initialApolloState } };
-    } catch {
-        return { props: { ...nameSpaces, initialApolloState } };
-    }
-};
 
 export default withAuth(UserPage);

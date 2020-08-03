@@ -74,17 +74,17 @@ interface ValidFilter {
 const SearchPage: NextPage = () => {
     const { t } = useTranslation();
     const { ref, resetForm, setSubmitting } = useForm<FilterSearchResultsFormValues>();
-    const { data, loading, error } = useSearchCoursesQuery();
-    const { onClose: handleCloseFilters, handleOpen: handleOpenFilters, ...fullDrawerProps } = useDrawer();
-    const drawerProps = R.omit(['renderHeader'], fullDrawerProps) as Omit<UseDrawer, 'renderHeader'>;
     const { pathname, query } = useRouter();
     const isMobile = useDeviceContext();
+    const { onClose: handleCloseFilters, handleOpen: handleOpenFilters, ...fullDrawerProps } = useDrawer();
+    const drawerProps = R.omit(['renderHeader'], fullDrawerProps) as Omit<UseDrawer, 'renderHeader'>;
+    const { data, loading, error } = useSearchCoursesQuery({ variables: query });
     const courseObjects: CourseObjectType[] = R.pathOr([], ['searchCourses', 'objects'], data);
-    const school: SchoolObjectType | null = R.propOr(null, 'school', data);
-    const subject: SubjectObjectType | null = R.propOr(null, 'subject', data);
-    const schoolType: SchoolTypeObjectType | null = R.propOr(null, 'schoolType', data);
-    const country: CountryObjectType | null = R.propOr(null, 'county', data);
-    const city: CityObjectType | null = R.propOr(null, 'city', data);
+    const school: SchoolObjectType = R.propOr(null, 'school', data);
+    const subject: SubjectObjectType = R.propOr(null, 'subject', data);
+    const schoolType: SchoolTypeObjectType = R.propOr(null, 'schoolType', data);
+    const country: CountryObjectType = R.propOr(null, 'county', data);
+    const city: CityObjectType = R.propOr(null, 'city', data);
     const count = R.pathOr(0, ['searchCourses', 'count'], data) as number;
     const courseName = R.propOr('', 'courseName', query) as string;
     const courseCode = R.propOr('', 'courseCode', query) as string;
@@ -420,13 +420,6 @@ const SearchPage: NextPage = () => {
         </Box>
     );
 
-    const renderChildren = (
-        <>
-            {renderMobileContent}
-            {renderDesktopContent}
-        </>
-    );
-
     const layoutProps = {
         seoProps: {
             title: t('search:title'),
@@ -452,7 +445,10 @@ const SearchPage: NextPage = () => {
 
     return (
         <StyledSearchPage>
-            <MainLayout {...layoutProps}>{renderChildren}</MainLayout>
+            <MainLayout {...layoutProps}>
+                {renderMobileContent}
+                {renderDesktopContent}
+            </MainLayout>
         </StyledSearchPage>
     );
 };

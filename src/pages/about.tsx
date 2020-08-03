@@ -3,10 +3,9 @@ import { ButtonLink, SettingsLayout } from 'components';
 import { useTranslation, withUserMe } from 'lib';
 import { NextPage } from 'next';
 import React from 'react';
-import { I18nProps } from 'types';
 import { urls } from 'utils';
 
-const AboutPage: NextPage<I18nProps> = () => {
+const AboutPage: NextPage = () => {
     const { t } = useTranslation();
 
     const renderCardContent = (

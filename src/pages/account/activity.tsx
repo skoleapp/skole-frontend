@@ -12,13 +12,8 @@ import { useActionsDrawer } from 'hooks';
 import { useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
-import { I18nProps } from 'types';
 
-interface Props extends I18nProps {
-    userMe?: UserObjectType | null;
-}
-
-const ActivityPage: NextPage<Props> = () => {
+const ActivityPage: NextPage = () => {
     const { t } = useTranslation();
     const { userMe, setUserMe } = useAuthContext();
     const { renderActionsHeader, renderActionsButton, handleCloseActions, open, anchor } = useActionsDrawer({});

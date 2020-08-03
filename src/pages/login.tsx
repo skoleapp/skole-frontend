@@ -11,7 +11,6 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
-import { I18nProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -20,7 +19,7 @@ interface LoginFormValues {
     password: string;
 }
 
-const LoginPage: NextPage<I18nProps> = () => {
+const LoginPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderAlert } = useAlerts();

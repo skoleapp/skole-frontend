@@ -14,7 +14,6 @@ import { useTranslation, withNoAuth } from 'lib';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { I18nProps } from 'types';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -38,7 +37,7 @@ export interface PasswordFormValues {
     confirmNewPassword: string;
 }
 
-const ResetPasswordPage: NextPage<I18nProps> = () => {
+const ResetPasswordPage: NextPage = () => {
     const {
         ref: emailFormRef,
         handleMutationErrors: handleEmailFormMutationErrors,

@@ -7,7 +7,6 @@ import { useForm } from 'hooks';
 import { useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
 import React from 'react';
-import { I18nProps } from 'types';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -23,7 +22,7 @@ export interface ChangePasswordFormValues {
     confirmNewPassword: string;
 }
 
-const ChangePasswordPage: NextPage<I18nProps> = () => {
+const ChangePasswordPage: NextPage = () => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
         ChangePasswordFormValues
     >();

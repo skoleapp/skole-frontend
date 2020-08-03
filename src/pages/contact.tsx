@@ -7,7 +7,6 @@ import { useForm } from 'hooks';
 import { useTranslation, withUserMe } from 'lib';
 import { NextPage } from 'next';
 import React from 'react';
-import { I18nProps } from 'types';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -25,7 +24,7 @@ export interface ContactFormValues {
     message: string;
 }
 
-const ContactPage: NextPage<I18nProps> = () => {
+const ContactPage: NextPage = () => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
 

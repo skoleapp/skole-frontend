@@ -8,10 +8,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
-import { I18nProps } from 'types';
 import { urls } from 'utils';
 
-const GetStartedPage: NextPage<I18nProps> = () => {
+const GetStartedPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderLanguageButton } = useLanguageSelector();

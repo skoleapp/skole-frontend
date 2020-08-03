@@ -1,8 +1,7 @@
-// Types for SSR context used with Next.js data fetching methods.
-
 import { IncomingMessage, ServerResponse } from 'http';
 import { ParsedUrlQuery } from 'querystring';
 
+// Types for SSR context used with Next.js data fetching methods.
 // Ignore: previewData is typed as any in next.js source as well.
 export interface SSRContext {
     req: IncomingMessage;
@@ -11,8 +10,4 @@ export interface SSRContext {
     query: ParsedUrlQuery;
     preview?: boolean;
     previewData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
-
-export interface I18nProps {
-    namespacesRequired: string[];
 }

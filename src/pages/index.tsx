@@ -7,7 +7,6 @@ import { NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
-import { I18nProps } from 'types';
 import { UrlObject } from 'url';
 import { SHORTCUTS } from 'utils';
 
@@ -17,7 +16,7 @@ interface Shortcut {
     href: string | UrlObject;
 }
 
-const IndexPage: NextPage<I18nProps> = () => {
+const IndexPage: NextPage = () => {
     const { t } = useTranslation();
     const { handleSubmit, inputProps } = useSearch();
 
@@ -67,13 +66,6 @@ const IndexPage: NextPage<I18nProps> = () => {
         </Box>
     );
 
-    const renderChildren = (
-        <>
-            {renderSearch}
-            {renderShortcuts}
-        </>
-    );
-
     const layoutProps = {
         seoProps: {
             title: t('index:title'),
@@ -86,7 +78,10 @@ const IndexPage: NextPage<I18nProps> = () => {
 
     return (
         <StyledIndexPage>
-            <MainLayout {...layoutProps}>{renderChildren}</MainLayout>
+            <MainLayout {...layoutProps}>
+                {renderSearch}
+                {renderShortcuts}
+            </MainLayout>
         </StyledIndexPage>
     );
 };
