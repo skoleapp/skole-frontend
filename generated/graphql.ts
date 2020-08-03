@@ -847,10 +847,7 @@ export type RegisterMutation = (
     )>>> }
   )>, login?: Maybe<(
     { __typename?: 'LoginMutationPayload' }
-    & { user?: Maybe<(
-      { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'created'>
-    )>, errors?: Maybe<Array<Maybe<(
+    & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
@@ -868,10 +865,7 @@ export type LoginMutation = (
   & { login?: Maybe<(
     { __typename?: 'LoginMutationPayload' }
     & Pick<LoginMutationPayload, 'message'>
-    & { user?: Maybe<(
-      { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'id' | 'created'>
-    )>, errors?: Maybe<Array<Maybe<(
+    & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
@@ -1141,7 +1135,7 @@ export type ContactMutation = (
 export type CreateCourseMutationVariables = {
   courseName: Scalars['String'];
   courseCode?: Maybe<Scalars['String']>;
-  subjects?: Maybe<Array<Scalars['ID']>>;
+  subjects?: Maybe<Array<Maybe<Scalars['ID']>>>;
   school: Scalars['ID'];
 };
 
@@ -1627,10 +1621,6 @@ export const RegisterDocument = gql`
     }
   }
   login(input: {usernameOrEmail: $username, password: $password}) {
-    user {
-      id
-      created
-    }
     errors {
       field
       messages
@@ -1672,10 +1662,6 @@ export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
     message
-    user {
-      id
-      created
-    }
     errors {
       field
       messages
@@ -2240,7 +2226,7 @@ export type ContactMutationHookResult = ReturnType<typeof useContactMutation>;
 export type ContactMutationResult = ApolloReactCommon.MutationResult<ContactMutation>;
 export type ContactMutationOptions = ApolloReactCommon.BaseMutationOptions<ContactMutation, ContactMutationVariables>;
 export const CreateCourseDocument = gql`
-    mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID!], $school: ID!) {
+    mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
   createCourse(input: {name: $courseName, code: $courseCode, subjects: $subjects, school: $school}) {
     message
     course {

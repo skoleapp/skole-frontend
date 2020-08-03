@@ -1,0 +1,5 @@
+{
+    "title": "Network Error",
+    "description": "This is an offline page.",
+    "header": "Could not connect to the server. Please make sure you have an Internet connection and try again in a moment."
+}

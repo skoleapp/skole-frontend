@@ -1,59 +1,63 @@
-import { Box, Divider } from '@material-ui/core';
+import { Avatar, Box, Divider, Link, Typography } from '@material-ui/core';
 import { LibraryAddOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
-import { Field, Form, Formik } from 'formik';
+import { useNotificationsContext } from 'context';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
 import { useAlerts, useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withNoAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withNoAuth } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
-import { I18nProps } from 'types';
-import { redirect, urls } from 'utils';
+import React, { useEffect, useState } from 'react';
+import { mediaURL, redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
-const initialValues = {
-    usernameOrEmail: '',
-    password: '',
-    general: '',
-};
-
-export interface LoginFormValues {
+interface LoginFormValues {
     usernameOrEmail: string;
     password: string;
 }
 
-const LoginPage: NextPage<I18nProps> = () => {
+const LoginPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
     const { renderLanguageButton } = useLanguageSelector();
-    const { setUserMe } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
+    const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
+    const validExistingUser = !!R.propOr(false, 'username', existingUser) && !!R.propOr(false, 'email', existingUser);
 
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
         LoginFormValues
     >();
 
+    useEffect(() => {
+        const existingUser = JSON.parse(localStorage.getItem('user') || 'null');
+        setExistingUser(existingUser);
+    }, []);
+
     const validationSchema = Yup.object().shape({
-        usernameOrEmail: Yup.string().required(t('validation:required')),
+        usernameOrEmail: !validExistingUser ? Yup.string().required(t('validation:required')) : Yup.string(),
         password: Yup.string().required(t('validation:required')),
     });
+
+    const initialValues = {
+        usernameOrEmail: '',
+        password: '',
+        general: '',
+    };
 
     const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
         if (!!login) {
             if (!!login.errors) {
                 handleMutationErrors(login.errors);
-            } else if (!!login.user && !!login.message) {
+            } else if (!!login.message) {
                 const { next } = query;
 
                 try {
                     resetForm();
                     toggleNotification(login.message);
-                    setUserMe(login.user as UserObjectType);
                     await redirect((next as string) || urls.home);
                 } catch {
                     unexpectedError();
@@ -72,54 +76,108 @@ const LoginPage: NextPage<I18nProps> = () => {
         const { usernameOrEmail, password } = values;
 
         await loginMutation({
-            variables: { usernameOrEmail, password },
-            context: { headers: { Authorization: '' } },
+            variables: { usernameOrEmail: R.propOr(usernameOrEmail, 'email', existingUser) as string, password },
         });
 
         setSubmitting(false);
     };
 
+    const handleLoginWithDifferentCredentials = (): void => {
+        localStorage.removeItem('user');
+        setExistingUser(null);
+    };
+
+    const renderExistingUserGreeting = (
+        <Box display="flex" flexDirection="column" alignItems="center" marginTop="1rem">
+            <Avatar className="main-avatar" src={mediaURL(R.propOr('', 'avatar', existingUser))} />
+            <Box marginTop="2rem">
+                <Typography variant="h3">
+                    {t('login:existingUserGreeting', { username: R.propOr('-', 'username', existingUser) })}
+                </Typography>
+            </Box>
+        </Box>
+    );
+
+    const renderUsernameOrEmailField = (
+        <Field
+            placeholder={t('forms:usernameOrEmail')}
+            name="usernameOrEmail"
+            component={TextField}
+            label={!validExistingUser && t('forms:usernameOrEmail')}
+            variant="outlined"
+            fullWidth
+            autoComplete="off"
+            type={validExistingUser ? 'hidden' : 'text'}
+        />
+    );
+
+    const renderPasswordField = (
+        <Field
+            placeholder={t('forms:password')}
+            name="password"
+            component={TextField}
+            label={t('forms:password')}
+            variant="outlined"
+            type="password"
+            fullWidth
+            autoComplete="off"
+        />
+    );
+
+    const renderFormSubmitSection = (props: FormikProps<LoginFormValues>): JSX.Element => (
+        <FormSubmitSection submitButtonText={t('common:login')} {...props} />
+    );
+
+    const renderFormDividerSection = (
+        <Box marginY="1rem">
+            <Divider />
+        </Box>
+    );
+
+    const renderRegisterButton = (
+        <ButtonLink href={urls.register} variant="outlined" color="primary" endIcon={<LibraryAddOutlined />} fullWidth>
+            {t('login:createAccount')}
+        </ButtonLink>
+    );
+
+    const renderForgotPasswordLink = (
+        <Box marginTop="1rem">
+            <TextLink href={urls.resetPassword}>{t('login:forgotPassword')}</TextLink>
+        </Box>
+    );
+
+    const renderLoginWithDifferentCredentialsLink = (
+        <Box marginTop="1rem">
+            <Link onClick={handleLoginWithDifferentCredentials}>{t('login:loginWithDifferentCredentials')}</Link>
+        </Box>
+    );
+
+    const renderExistingUserForm = (props: FormikProps<LoginFormValues>): JSX.Element => (
+        <Form>
+            {renderExistingUserGreeting}
+            {renderUsernameOrEmailField}
+            {renderPasswordField}
+            {renderFormSubmitSection(props)}
+            {renderFormDividerSection}
+            {renderForgotPasswordLink}
+            {renderLoginWithDifferentCredentialsLink}
+        </Form>
+    );
+
+    const renderNewUserForm = (props: FormikProps<LoginFormValues>): JSX.Element => (
+        <Form>
+            {renderUsernameOrEmailField}
+            {renderPasswordField}
+            {renderFormSubmitSection(props)}
+            {renderFormDividerSection}
+            {renderRegisterButton}
+            {renderForgotPasswordLink}
+        </Form>
+    );
+
     const renderCardContent = (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
-            {(props): JSX.Element => (
-                <Form>
-                    <Field
-                        placeholder={t('forms:usernameOrEmail')}
-                        name="usernameOrEmail"
-                        component={TextField}
-                        label={t('forms:usernameOrEmail')}
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <Field
-                        placeholder={t('forms:password')}
-                        name="password"
-                        component={TextField}
-                        label={t('forms:password')}
-                        variant="outlined"
-                        type="password"
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <FormSubmitSection submitButtonText={t('common:login')} {...props} />
-                    <Box marginY="1rem">
-                        <Divider />
-                    </Box>
-                    <ButtonLink
-                        href={urls.register}
-                        variant="outlined"
-                        color="primary"
-                        endIcon={<LibraryAddOutlined />}
-                        fullWidth
-                    >
-                        {t('login:createAccount')}
-                    </ButtonLink>
-                    <Box marginTop="1rem">
-                        <TextLink href={urls.resetPassword}>{t('login:forgotPassword')}</TextLink>
-                    </Box>
-                </Form>
-            )}
+            {validExistingUser ? renderExistingUserForm : renderNewUserForm}
         </Formik>
     );
 
@@ -131,6 +189,7 @@ const LoginPage: NextPage<I18nProps> = () => {
         topNavbarProps: {
             header: t('login:header'),
             headerRight: renderLanguageButton,
+            disableAuthButtons: true,
         },
         desktopHeader: t('login:header'),
         renderAlert: (!!query.next && renderAlert('warning', t('alerts:loginRequired'))) || undefined,
@@ -139,11 +198,5 @@ const LoginPage: NextPage<I18nProps> = () => {
 
     return <FormLayout {...layoutProps} />;
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: { namespacesRequired: includeDefaultNamespaces(['login']) },
-}));
 
 export default withNoAuth(LoginPage);

@@ -2,13 +2,11 @@ import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typo
 import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import { MainLayout } from 'components';
 import { useSearch } from 'hooks';
-import { includeDefaultNamespaces, Link, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
+import { Link, useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
-import { I18nProps } from 'types';
 import { UrlObject } from 'url';
 import { SHORTCUTS } from 'utils';
 
@@ -18,7 +16,7 @@ interface Shortcut {
     href: string | UrlObject;
 }
 
-const IndexPage: NextPage<I18nProps> = () => {
+const IndexPage: NextPage = () => {
     const { t } = useTranslation();
     const { handleSubmit, inputProps } = useSearch();
 
@@ -68,13 +66,6 @@ const IndexPage: NextPage<I18nProps> = () => {
         </Box>
     );
 
-    const renderChildren = (
-        <>
-            {renderSearch}
-            {renderShortcuts}
-        </>
-    );
-
     const layoutProps = {
         seoProps: {
             title: t('index:title'),
@@ -87,7 +78,10 @@ const IndexPage: NextPage<I18nProps> = () => {
 
     return (
         <StyledIndexPage>
-            <MainLayout {...layoutProps}>{renderChildren}</MainLayout>
+            <MainLayout {...layoutProps}>
+                {renderSearch}
+                {renderShortcuts}
+            </MainLayout>
         </StyledIndexPage>
     );
 };
@@ -203,11 +197,5 @@ const StyledIndexPage = styled(Box)`
         }
     }
 `;
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: { namespacesRequired: includeDefaultNamespaces(['index']) },
-}));
 
 export default withAuth(IndexPage);

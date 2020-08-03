@@ -1,11 +1,14 @@
 import { Box, Grid, Tab, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import {
     CourseTableBody,
+    ErrorLayout,
     FrontendPaginatedTable,
     InfoModalContent,
+    LoadingLayout,
     MainLayout,
     NotFoundBox,
     NotFoundLayout,
+    OfflineLayout,
     StyledCard,
     StyledDrawer,
     StyledList,
@@ -14,22 +17,21 @@ import {
     TextLink,
 } from 'components';
 import { useDeviceContext } from 'context';
-import { CourseObjectType, SchoolDetailDocument, SchoolObjectType, SubjectObjectType } from 'generated';
+import { CourseObjectType, SchoolObjectType, SubjectObjectType, useSchoolDetailQuery } from 'generated';
 import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, Link, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { Link, useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { I18nProps } from 'types';
 
-interface Props extends I18nProps {
-    school?: SchoolObjectType;
-}
-
-const SchoolDetailPage: NextPage<Props> = ({ school }) => {
+const SchoolDetailPage: NextPage = () => {
+    const { query } = useRouter();
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const { searchUrl } = useSearch();
+    const { data, loading, error } = useSchoolDetailQuery({ variables: query });
+    const school: SchoolObjectType = R.propOr(null, 'school', data);
     const schoolName = R.propOr('', 'name', school) as string;
     const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school) as string;
     const schoolTypeId = R.pathOr('', ['schoolType', 'id'], school) as string;
@@ -243,37 +245,29 @@ const SchoolDetailPage: NextPage<Props> = ({ school }) => {
         tabLabelRight: `${t('common:courses')} (${courseCount})`,
     };
 
-    const renderChildren = (
-        <>
-            {renderContent}
-            {renderInfoDrawer}
-            {renderActionsDrawer}
-        </>
-    );
+    if (loading) {
+        return <LoadingLayout />;
+    }
+
+    if (!!error) {
+        if (!!error.networkError) {
+            return <OfflineLayout />;
+        }
+
+        return <ErrorLayout />;
+    }
 
     if (!!school) {
-        return <MainLayout {...layoutProps}>{renderChildren}</MainLayout>;
+        return (
+            <MainLayout {...layoutProps}>
+                {renderContent}
+                {renderInfoDrawer}
+                {renderActionsDrawer}
+            </MainLayout>
+        );
     } else {
         return <NotFoundLayout />;
     }
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
-    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
-    const namespaces = { namespacesRequired: includeDefaultNamespaces(['school']) };
-
-    try {
-        const { data } = await apolloClient.query({
-            query: SchoolDetailDocument,
-            variables: ctx.query,
-        });
-
-        return { props: { ...data, ...namespaces, initialApolloState } };
-    } catch {
-        return { props: { ...namespaces, initialApolloState } };
-    }
-});
 
 export default withAuth(SchoolDetailPage);

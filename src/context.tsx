@@ -61,7 +61,6 @@ const SkolePageContext = createContext<SkoleContextType>({
         setSwipingDisabled: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function,
         swipeableViewsRef: null,
     },
-    isMobileGuess: null,
     discussion: {
         topLevelComments: [],
         setTopLevelComments: (): void => {}, // eslint-disable-line @typescript-eslint/no-empty-function
@@ -115,11 +114,10 @@ export const useDiscussionContext = (initialComments?: CommentObjectType[]): Use
 
 // Allow using custom breakpoints, use MD as default.
 export const useDeviceContext = (breakpoint: number = breakpointsNum.MD): boolean => {
-    const { isMobileGuess } = useSkoleContext();
-    const [isMobile, setIsMobile] = useState(isMobileGuess);
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
     useEffect(() => {
-        setIsMobile(window.innerWidth < breakpoint); // Make sure correct value is applied on client side.
+        setIsMobile(window.innerWidth < breakpoint); // Apply initial value.
 
         const resizeFunctionRef = (): void => {
             setIsMobile(window.innerWidth < breakpoint);
@@ -130,18 +128,12 @@ export const useDeviceContext = (breakpoint: number = breakpointsNum.MD): boolea
         return (): void => window.removeEventListener('resize', resizeFunctionRef);
     }, []);
 
-    // If guess value is null resolve value into mobile.
-    return isMobile === null ? true : !!isMobile;
+    return !!isMobile;
 };
 
-interface Props {
-    userMe: UserObjectType | null;
-    isMobileGuess: boolean | null;
-}
-
-export const ContextProvider: React.FC<Props> = ({ children, userMe: initialUserMe, isMobileGuess }) => {
+export const ContextProvider: React.FC = ({ children }) => {
     // Auth context.
-    const [userMe, setUserMe] = useState(initialUserMe);
+    const [userMe, setUserMe] = useState<UserObjectType | null>(null);
 
     // Attachment viewer context.
     const [attachment, setAttachment] = useState<string | null>(null);
@@ -224,7 +216,6 @@ export const ContextProvider: React.FC<Props> = ({ children, userMe: initialUser
             setSwipingDisabled,
             swipeableViewsRef,
         },
-        isMobileGuess,
         discussion: {
             topLevelComments,
             setTopLevelComments,

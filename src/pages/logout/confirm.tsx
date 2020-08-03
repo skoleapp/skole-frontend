@@ -1,9 +1,8 @@
 import { Box, Typography } from '@material-ui/core';
 import { ExitToAppOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout } from 'components';
-import { includeDefaultNamespaces, useTranslation, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
+import { useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
 import React from 'react';
 import { urls } from 'utils';
 
@@ -28,17 +27,12 @@ const ConfirmLogoutPage: NextPage = () => {
         },
         desktopHeader: t('logout:header'),
         renderCardContent,
+        topNavbarProps: {
+            disableAuthButtons: true,
+        },
     };
 
     return <FormLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['logout']),
-    },
-}));
-
-export default ConfirmLogoutPage;
+export default withAuth(ConfirmLogoutPage);

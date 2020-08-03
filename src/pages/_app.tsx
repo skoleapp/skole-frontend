@@ -25,9 +25,7 @@ Router.events.on('routeChangeComplete', (url: string) => {
 
 const SkoleApp: NextPage<AppProps> = ({ Component, pageProps }) => {
     const { t } = useTranslation();
-    const { initialApolloState, isMobileGuess, userMe } = pageProps;
-    const initialContextProps = { userMe, isMobileGuess };
-    const apolloClient = useApollo(initialApolloState);
+    const apolloClient = useApollo(pageProps.initialApolloState);
 
     const defaultConfirmOptions = {
         confirmationText: t('common:confirm'),
@@ -44,7 +42,7 @@ const SkoleApp: NextPage<AppProps> = ({ Component, pageProps }) => {
 
     return (
         <ApolloProvider client={apolloClient}>
-            <ContextProvider {...initialContextProps}>
+            <ContextProvider>
                 <ThemeProvider theme={theme}>
                     <ConfirmProvider defaultOptions={defaultConfirmOptions}>
                         <PWAProvider>

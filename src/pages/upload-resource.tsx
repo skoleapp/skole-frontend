@@ -1,4 +1,12 @@
-import { AutoCompleteField, DropzoneField, FormLayout, FormSubmitSection } from 'components';
+import {
+    AutoCompleteField,
+    DropzoneField,
+    ErrorLayout,
+    FormLayout,
+    FormSubmitSection,
+    LoadingLayout,
+    OfflineLayout,
+} from 'components';
 import { env } from 'config';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
@@ -6,20 +14,20 @@ import { TextField } from 'formik-material-ui';
 import {
     CourseObjectType,
     CoursesDocument,
-    CreateResourceInitialDataDocument,
     CreateResourceMutation,
     ResourceTypesDocument,
     SchoolObjectType,
     SchoolsDocument,
+    useCreateResourceInitialDataQuery,
     useCreateResourceMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';
-import { I18nProps } from 'types';
 import { redirect } from 'utils';
 import * as Yup from 'yup';
 
@@ -31,14 +39,13 @@ interface UploadResourceFormValues {
     file: File | null;
 }
 
-interface Props extends I18nProps {
-    course?: CourseObjectType;
-    school?: SchoolObjectType;
-}
-
-const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
+const UploadResourcePage: NextPage = () => {
+    const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
+    const { data, loading, error } = useCreateResourceInitialDataQuery({ variables: query });
+    const school: SchoolObjectType = R.propOr(null, 'school', data);
+    const course: CourseObjectType = R.propOr(null, 'course', data);
 
     const {
         ref,
@@ -177,8 +184,8 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
     const initialValues = {
         resourceTitle: '',
         resourceType: '',
-        school: school || null,
-        course: course || null,
+        school,
+        course,
         file: null,
         general: '',
     };
@@ -247,25 +254,19 @@ const UploadResourcePage: NextPage<Props> = ({ course, school }) => {
         renderCardContent,
     };
 
+    if (loading) {
+        return <LoadingLayout />;
+    }
+
+    if (!!error) {
+        if (!!error.networkError) {
+            return <OfflineLayout />;
+        }
+
+        return <ErrorLayout />;
+    }
+
     return <FormLayout {...layoutProps} />;
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
-    const { apolloClient } = useSSRApollo(ctx);
-    const namespaces = { namespacesRequired: includeDefaultNamespaces(['upload-resource']) };
-
-    try {
-        const { data } = await apolloClient.query({
-            query: CreateResourceInitialDataDocument,
-            variables: ctx.query,
-        });
-
-        return { props: { ...data, ...namespaces } };
-    } catch {
-        return { props: { ...namespaces } };
-    }
-});
 
 export default withAuth(UploadResourcePage);

@@ -11,11 +11,10 @@ import {
     useCreateCourseMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { I18nProps } from 'types';
 import { redirect } from 'utils';
 import * as Yup from 'yup';
 
@@ -27,7 +26,7 @@ interface CreateCourseFormValues {
     general: string;
 }
 
-const CreateCoursePage: NextPage<I18nProps> = () => {
+const CreateCoursePage: NextPage = () => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
@@ -148,13 +147,5 @@ const CreateCoursePage: NextPage<I18nProps> = () => {
 
     return <FormLayout {...layoutProps} />;
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['create-course']),
-    },
-}));
 
 export default withAuth(CreateCoursePage);

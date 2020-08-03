@@ -3,12 +3,15 @@ import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
 import {
     CustomBottomNavbarContainer,
     DiscussionHeader,
+    ErrorLayout,
     FrontendPaginatedTable,
     IconButtonLink,
     InfoModalContent,
+    LoadingLayout,
     MainLayout,
     NotFoundBox,
     NotFoundLayout,
+    OfflineLayout,
     ResourceTableBody,
     StarButton,
     StyledBottomNavigation,
@@ -23,11 +26,11 @@ import {
 import { useAuthContext, useDeviceContext, useDiscussionContext, useNotificationsContext } from 'context';
 import {
     CommentObjectType,
-    CourseDetailDocument,
     CourseObjectType,
     DeleteCourseMutation,
     ResourceObjectType,
     SubjectObjectType,
+    useCourseDetailQuery,
     useDeleteCourseMutation,
     UserObjectType,
     VoteObjectType,
@@ -43,25 +46,24 @@ import {
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
+import { useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { I18nProps } from 'types';
 import { redirect, urls } from 'utils';
 
-interface Props extends I18nProps {
-    course?: CourseObjectType;
-}
-
-const CourseDetailPage: NextPage<Props> = ({ course }) => {
+const CourseDetailPage: NextPage = () => {
+    const { query } = useRouter();
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
+    const { data, loading, error } = useCourseDetailQuery({ variables: query });
+    const course: CourseObjectType = R.propOr(null, 'course', data);
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
     const subjects = R.propOr([], 'subjects', course) as SubjectObjectType[];
@@ -371,15 +373,6 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         </StyledDrawer>
     );
 
-    const renderChildren = (
-        <>
-            {renderMobileContent}
-            {renderDesktopContent}
-            {renderInfoDrawer}
-            {renderActionsDrawer}
-        </>
-    );
-
     const layoutProps = {
         seoProps: {
             title: courseName,
@@ -394,29 +387,30 @@ const CourseDetailPage: NextPage<Props> = ({ course }) => {
         customBottomNavbar: renderCustomBottomNavbar,
     };
 
+    if (loading) {
+        return <LoadingLayout />;
+    }
+
+    if (!!error) {
+        if (!!error.networkError) {
+            return <OfflineLayout />;
+        }
+
+        return <ErrorLayout />;
+    }
+
     if (!!course) {
-        return <MainLayout {...layoutProps}>{renderChildren}</MainLayout>;
+        return (
+            <MainLayout {...layoutProps}>
+                {renderMobileContent}
+                {renderDesktopContent}
+                {renderInfoDrawer}
+                {renderActionsDrawer}
+            </MainLayout>
+        );
     } else {
         return <NotFoundLayout />;
     }
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
-    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
-    const namespaces = { namespacesRequired: includeDefaultNamespaces(['course']) };
-
-    try {
-        const { data } = await apolloClient.query({
-            query: CourseDetailDocument,
-            variables: ctx.query,
-        });
-
-        return { props: { ...data, ...namespaces, initialApolloState } };
-    } catch {
-        return { props: { ...namespaces, initialApolloState } };
-    }
-});
 
 export default withAuth(CourseDetailPage);

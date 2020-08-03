@@ -20,15 +20,15 @@ import {
     useUpdateUserMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withAuth } from 'lib';
+import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { I18nProps, UpdateProfileFormValues } from 'types';
+import { UpdateProfileFormValues } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
-const EditProfilePage: NextPage<I18nProps> = () => {
+const EditProfilePage: NextPage = () => {
     const { t } = useTranslation();
     const { userMe, setUserMe, verified } = useAuthContext();
     const { ref, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<UpdateProfileFormValues>();
@@ -195,13 +195,5 @@ const EditProfilePage: NextPage<I18nProps> = () => {
         return <NotFoundLayout />;
     }
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['edit-profile', 'profile']),
-    },
-}));
 
 export default withAuth(EditProfilePage);

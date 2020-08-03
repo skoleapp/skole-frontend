@@ -1,7 +1,7 @@
 import { Box, Divider, FormControl, Typography } from '@material-ui/core';
 import { HowToRegOutlined } from '@material-ui/icons';
 import { AutoCompleteField, ButtonLink, FormLayout, FormSubmitSection, TextLink } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import {
@@ -11,15 +11,13 @@ import {
     SubjectObjectType,
     SubjectsDocument,
     useRegisterMutation,
-    UserObjectType,
 } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withNoAuth, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation, withNoAuth } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { I18nProps } from 'types';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -33,11 +31,10 @@ export interface RegisterFormValues {
     code: string;
 }
 
-const RegisterPage: NextPage<I18nProps> = () => {
+const RegisterPage: NextPage = () => {
     const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
-    const { setUserMe } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
 
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
@@ -76,11 +73,10 @@ const RegisterPage: NextPage<I18nProps> = () => {
             handleMutationErrors(register.errors);
         } else if (!!login && !!login.errors) {
             handleMutationErrors(login.errors);
-        } else if (!!login && !!login.user && !!register && !!register.message) {
+        } else if (!!login && !!register && !!register.message) {
             try {
                 resetForm();
                 toggleNotification(register.message);
-                setUserMe(login.user as UserObjectType);
                 await redirect(urls.home);
             } catch {
                 unexpectedError();
@@ -104,7 +100,6 @@ const RegisterPage: NextPage<I18nProps> = () => {
                 password,
                 code,
             },
-            context: { headers: { Authorization: '' } },
         });
 
         setSubmitting(false);
@@ -221,6 +216,7 @@ const RegisterPage: NextPage<I18nProps> = () => {
         topNavbarProps: {
             header: t('register:header'),
             headerRight: renderLanguageButton,
+            disableAuthButtons: true,
         },
         desktopHeader: t('register:header'),
         renderCardContent,
@@ -228,11 +224,5 @@ const RegisterPage: NextPage<I18nProps> = () => {
 
     return <FormLayout {...layoutProps} />;
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: { namespacesRequired: includeDefaultNamespaces(['register']) },
-}));
 
 export default withNoAuth(RegisterPage);

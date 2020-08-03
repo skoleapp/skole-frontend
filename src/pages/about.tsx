@@ -1,13 +1,11 @@
 import { Box, Typography } from '@material-ui/core';
 import { ButtonLink, SettingsLayout } from 'components';
-import { includeDefaultNamespaces, useTranslation, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
+import { useTranslation, withUserMe } from 'lib';
+import { NextPage } from 'next';
 import React from 'react';
-import { I18nProps } from 'types';
 import { urls } from 'utils';
 
-const AboutPage: NextPage<I18nProps> = () => {
+const AboutPage: NextPage = () => {
     const { t } = useTranslation();
 
     const renderCardContent = (
@@ -45,12 +43,4 @@ const AboutPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: {
-        namespacesRequired: includeDefaultNamespaces(['about']),
-    },
-}));
-
-export default AboutPage;
+export default withUserMe(AboutPage);

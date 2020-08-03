@@ -5,9 +5,12 @@ import {
     DiscussionHeader,
     DrawModeButton,
     DrawModeControls,
+    ErrorLayout,
     InfoModalContent,
+    LoadingLayout,
     MainLayout,
     NotFoundLayout,
+    OfflineLayout,
     PDFViewer,
     ResourceToolbar,
     StarButton,
@@ -30,31 +33,31 @@ import {
 import {
     CommentObjectType,
     DeleteResourceMutation,
-    ResourceDetailDocument,
     ResourceObjectType,
     useDeleteResourceMutation,
+    useResourceDetailQuery,
     UserObjectType,
     VoteObjectType,
 } from 'generated';
 import { useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useSwipeableTabs, useVotes } from 'hooks';
-import { includeDefaultNamespaces, useSSRApollo, useTranslation, withAuth, withUserAgent, withUserMe } from 'lib';
+import { useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
-import { I18nProps, MaxWidth } from 'types';
+import { MaxWidth } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 
-interface Props extends I18nProps {
-    resource?: ResourceObjectType;
-}
-
-const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
+const ResourceDetailPage: NextPage = () => {
+    const { query } = useRouter();
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
+    const { data, loading, error } = useResourceDetailQuery({ variables: query });
+    const resource: ResourceObjectType = R.propOr(null, 'resource', data);
     const resourceTitle = R.propOr('', 'title', resource) as string;
     const resourceDate = R.propOr('', 'date', resource) as string;
     const resourceType = R.propOr('', 'resourceType', resource) as string;
@@ -413,15 +416,6 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         </StyledDrawer>
     );
 
-    const renderChildren = (
-        <>
-            {renderMobileContent}
-            {renderDesktopContent}
-            {renderInfoDrawer}
-            {renderActionsDrawer}
-        </>
-    );
-
     const layoutProps = {
         seoProps: {
             title,
@@ -439,29 +433,30 @@ const ResourceDetailPage: NextPage<Props> = ({ resource }) => {
         },
     };
 
+    if (loading) {
+        return <LoadingLayout />;
+    }
+
+    if (!!error) {
+        if (!!error.networkError) {
+            return <OfflineLayout />;
+        }
+
+        return <ErrorLayout />;
+    }
+
     if (!!resource) {
-        return <MainLayout {...layoutProps}>{renderChildren}</MainLayout>;
+        return (
+            <MainLayout {...layoutProps}>
+                {renderMobileContent}
+                {renderDesktopContent}
+                {renderInfoDrawer}
+                {renderActionsDrawer}
+            </MainLayout>
+        );
     } else {
         return <NotFoundLayout />;
     }
 };
-
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async ctx => {
-    const { apolloClient, initialApolloState } = useSSRApollo(ctx);
-    const namespaces = { namespacesRequired: includeDefaultNamespaces(['resource']) };
-
-    try {
-        const { data } = await apolloClient.query({
-            query: ResourceDetailDocument,
-            variables: ctx.query,
-        });
-
-        return { props: { ...data, ...namespaces, initialApolloState } };
-    } catch {
-        return { props: { ...namespaces, initialApolloState } };
-    }
-});
 
 export default withAuth(ResourceDetailPage);

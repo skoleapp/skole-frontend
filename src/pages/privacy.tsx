@@ -1,12 +1,10 @@
 import { Box, Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
-import { includeDefaultNamespaces, useTranslation, withUserAgent, withUserMe } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
-import * as R from 'ramda';
+import { useTranslation, withUserMe } from 'lib';
+import { NextPage } from 'next';
 import React from 'react';
-import { I18nProps } from 'types';
 
-const PrivacyPage: NextPage<I18nProps> = () => {
+const PrivacyPage: NextPage = () => {
     const { t } = useTranslation();
 
     const renderCardContent = (
@@ -32,10 +30,4 @@ const PrivacyPage: NextPage<I18nProps> = () => {
     return <SettingsLayout {...layoutProps} />;
 };
 
-const wrappers = R.compose(withUserAgent, withUserMe);
-
-export const getServerSideProps: GetServerSideProps = wrappers(async () => ({
-    props: { namespacesRequired: includeDefaultNamespaces(['privacy']) },
-}));
-
-export default PrivacyPage;
+export default withUserMe(PrivacyPage);

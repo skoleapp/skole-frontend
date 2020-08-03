@@ -1,4 +1,5 @@
 import { ContainerProps } from '@material-ui/core';
+import { ReactNode } from 'react';
 import { UrlObject } from 'url';
 
 export interface SEOProps {
@@ -21,7 +22,7 @@ export interface TopNavbarProps {
 }
 
 export interface MainLayoutProps {
-    children: JSX.Element;
+    children: NonNullable<ReactNode>;
     seoProps?: SEOProps;
     topNavbarProps?: TopNavbarProps;
     containerProps?: Omit<ContainerProps, 'children'>;
