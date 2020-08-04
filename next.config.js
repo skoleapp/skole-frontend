@@ -16,6 +16,7 @@ const config = {
     typescript: {
         ignoreDevErrors: true,
     },
+    exportTrailingSlash: true,
 };
 
 module.exports = withPWA(config);

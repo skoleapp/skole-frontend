@@ -11,6 +11,9 @@ COPY --chown=user:user yarn.lock .
 RUN yarn install
 
 COPY --chown=user:user . .
+
+ARG API_URL
+
 RUN yarn build
 
 CMD ["yarn", "start"]
