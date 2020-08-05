@@ -1,7 +1,7 @@
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+const gql = Apollo.gql;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -24,7 +24,7 @@ export type Scalars = {
 };
 
 export type Query = {
-   __typename?: 'Query';
+  __typename?: 'Query';
   user?: Maybe<UserObjectType>;
   userMe?: Maybe<UserObjectType>;
   subjects?: Maybe<Array<Maybe<SubjectObjectType>>>;
@@ -104,7 +104,7 @@ export type QueryCityArgs = {
 };
 
 export type UserObjectType = {
-   __typename?: 'UserObjectType';
+  __typename?: 'UserObjectType';
   id: Scalars['ID'];
   username: Scalars['String'];
   email?: Maybe<Scalars['String']>;
@@ -128,7 +128,7 @@ export type UserObjectType = {
 
 
 export type CourseObjectType = {
-   __typename?: 'CourseObjectType';
+  __typename?: 'CourseObjectType';
   id: Scalars['ID'];
   name: Scalars['String'];
   code: Scalars['String'];
@@ -145,13 +145,13 @@ export type CourseObjectType = {
 };
 
 export type SubjectObjectType = {
-   __typename?: 'SubjectObjectType';
+  __typename?: 'SubjectObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
 };
 
 export type SchoolObjectType = {
-   __typename?: 'SchoolObjectType';
+  __typename?: 'SchoolObjectType';
   id: Scalars['ID'];
   schoolType?: Maybe<SchoolTypeObjectType>;
   city?: Maybe<CityObjectType>;
@@ -162,25 +162,25 @@ export type SchoolObjectType = {
 };
 
 export type SchoolTypeObjectType = {
-   __typename?: 'SchoolTypeObjectType';
+  __typename?: 'SchoolTypeObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
 };
 
 export type CityObjectType = {
-   __typename?: 'CityObjectType';
+  __typename?: 'CityObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
 };
 
 export type CountryObjectType = {
-   __typename?: 'CountryObjectType';
+  __typename?: 'CountryObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
 };
 
 export type ResourceObjectType = {
-   __typename?: 'ResourceObjectType';
+  __typename?: 'ResourceObjectType';
   id: Scalars['ID'];
   resourceType?: Maybe<Scalars['String']>;
   title: Scalars['String'];
@@ -200,7 +200,7 @@ export type ResourceObjectType = {
 
 
 export type CommentObjectType = {
-   __typename?: 'CommentObjectType';
+  __typename?: 'CommentObjectType';
   id: Scalars['ID'];
   user?: Maybe<UserObjectType>;
   text: Scalars['String'];
@@ -216,7 +216,7 @@ export type CommentObjectType = {
 };
 
 export type VoteObjectType = {
-   __typename?: 'VoteObjectType';
+  __typename?: 'VoteObjectType';
   id: Scalars['ID'];
   user: UserObjectType;
   status?: Maybe<Scalars['Int']>;
@@ -226,7 +226,7 @@ export type VoteObjectType = {
 };
 
 export type ActivityObjectType = {
-   __typename?: 'ActivityObjectType';
+  __typename?: 'ActivityObjectType';
   id: Scalars['ID'];
   targetUser?: Maybe<UserObjectType>;
   course?: Maybe<CourseObjectType>;
@@ -237,20 +237,20 @@ export type ActivityObjectType = {
 };
 
 export type BadgeObjectType = {
-   __typename?: 'BadgeObjectType';
+  __typename?: 'BadgeObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };
 
 export type ResourceTypeObjectType = {
-   __typename?: 'ResourceTypeObjectType';
+  __typename?: 'ResourceTypeObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
 };
 
 export type PaginatedCourseObjectType = {
-   __typename?: 'PaginatedCourseObjectType';
+  __typename?: 'PaginatedCourseObjectType';
   page?: Maybe<Scalars['Int']>;
   pages?: Maybe<Scalars['Int']>;
   hasNext?: Maybe<Scalars['Boolean']>;
@@ -260,7 +260,7 @@ export type PaginatedCourseObjectType = {
 };
 
 export type Mutation = {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
   performStar?: Maybe<StarredMutationPayload>;
   performVote?: Maybe<VoteMutationPayload>;
   /**
@@ -448,14 +448,14 @@ export type MutationMarkActivityReadArgs = {
 };
 
 export type StarredMutationPayload = {
-   __typename?: 'StarredMutationPayload';
+  __typename?: 'StarredMutationPayload';
   starred?: Maybe<Scalars['Boolean']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
 export type ErrorType = {
-   __typename?: 'ErrorType';
+  __typename?: 'ErrorType';
   field: Scalars['String'];
   messages: Array<Scalars['String']>;
 };
@@ -467,7 +467,7 @@ export type StarredMutationInput = {
 };
 
 export type VoteMutationPayload = {
-   __typename?: 'VoteMutationPayload';
+  __typename?: 'VoteMutationPayload';
   vote?: Maybe<VoteObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   targetScore?: Maybe<Scalars['Int']>;
@@ -490,8 +490,8 @@ export type VoteMutationInput = {
  * registration send account verification email.
  */
 export type RegisterMutationPayload = {
-   __typename?: 'RegisterMutationPayload';
-  message?: Maybe<Scalars['String']>;
+  __typename?: 'RegisterMutationPayload';
+  user?: Maybe<UserObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -499,8 +499,6 @@ export type RegisterMutationPayload = {
 export type RegisterMutationInput = {
   username: Scalars['String'];
   email: Scalars['String'];
-  school?: Maybe<Scalars['ID']>;
-  subject?: Maybe<Scalars['ID']>;
   password: Scalars['String'];
   code: Scalars['String'];
   clientMutationId?: Maybe<Scalars['String']>;
@@ -511,7 +509,7 @@ export type RegisterMutationInput = {
  * user's account.
  */
 export type VerifyAccountMutationPayload = {
-   __typename?: 'VerifyAccountMutationPayload';
+  __typename?: 'VerifyAccountMutationPayload';
   token?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -529,7 +527,7 @@ export type VerifyAccountMutationInput = {
  * Return error if a user with the provided email is not found.
  */
 export type ResendVerificationEmailMutationPayload = {
-   __typename?: 'ResendVerificationEmailMutationPayload';
+  __typename?: 'ResendVerificationEmailMutationPayload';
   email: Scalars['String'];
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -548,7 +546,7 @@ export type ResendVerificationEmailMutationInput = {
  * with the provided email is not found.
  */
 export type SendPasswordResetEmailMutationPayload = {
-   __typename?: 'SendPasswordResetEmailMutationPayload';
+  __typename?: 'SendPasswordResetEmailMutationPayload';
   email: Scalars['String'];
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -567,7 +565,7 @@ export type SendPasswordResetEmailMutationInput = {
  * user to log in with his new password.
  */
 export type ResetPasswordMutationPayload = {
-   __typename?: 'ResetPasswordMutationPayload';
+  __typename?: 'ResetPasswordMutationPayload';
   token?: Maybe<Scalars['String']>;
   newPassword: Scalars['String'];
   errors?: Maybe<Array<Maybe<ErrorType>>>;
@@ -587,7 +585,7 @@ export type ResetPasswordMutationInput = {
  * Not verified users can still login.
  */
 export type LoginMutationPayload = {
-   __typename?: 'LoginMutationPayload';
+  __typename?: 'LoginMutationPayload';
   user?: Maybe<UserObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -607,7 +605,7 @@ export type LoginMutationInput = {
  * deleted in frontend.
  */
 export type LogoutMutation = {
-   __typename?: 'LogoutMutation';
+  __typename?: 'LogoutMutation';
   deleted: Scalars['Boolean'];
 };
 
@@ -617,7 +615,7 @@ export type LogoutMutation = {
  * The user must be verified.
  */
 export type UpdateUserMutationPayload = {
-   __typename?: 'UpdateUserMutationPayload';
+  __typename?: 'UpdateUserMutationPayload';
   user?: Maybe<UserObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -641,7 +639,7 @@ export type UpdateUserMutationInput = {
  * User must be verified.
  */
 export type ChangePasswordMutationPayload = {
-   __typename?: 'ChangePasswordMutationPayload';
+  __typename?: 'ChangePasswordMutationPayload';
   message?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
@@ -659,7 +657,7 @@ export type ChangePasswordMutationInput = {
  * The user must be verified and must confirm his password.
  */
 export type DeleteUserMutationPayload = {
-   __typename?: 'DeleteUserMutationPayload';
+  __typename?: 'DeleteUserMutationPayload';
   message?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
@@ -671,7 +669,7 @@ export type DeleteUserMutationInput = {
 };
 
 export type CreateResourceMutationPayload = {
-   __typename?: 'CreateResourceMutationPayload';
+  __typename?: 'CreateResourceMutationPayload';
   resource?: Maybe<ResourceObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -688,7 +686,7 @@ export type CreateResourceMutationInput = {
 };
 
 export type UpdateResourceMutationPayload = {
-   __typename?: 'UpdateResourceMutationPayload';
+  __typename?: 'UpdateResourceMutationPayload';
   resource?: Maybe<ResourceObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -704,7 +702,7 @@ export type UpdateResourceMutationInput = {
 };
 
 export type DeleteResourceMutationPayload = {
-   __typename?: 'DeleteResourceMutationPayload';
+  __typename?: 'DeleteResourceMutationPayload';
   message?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
@@ -716,7 +714,7 @@ export type DeleteResourceMutationInput = {
 };
 
 export type CreateCourseMutationPayload = {
-   __typename?: 'CreateCourseMutationPayload';
+  __typename?: 'CreateCourseMutationPayload';
   course?: Maybe<CourseObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -732,7 +730,7 @@ export type CreateCourseMutationInput = {
 };
 
 export type DeleteCourseMutationPayload = {
-   __typename?: 'DeleteCourseMutationPayload';
+  __typename?: 'DeleteCourseMutationPayload';
   message?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
@@ -744,7 +742,7 @@ export type DeleteCourseMutationInput = {
 };
 
 export type ContactMutationPayload = {
-   __typename?: 'ContactMutationPayload';
+  __typename?: 'ContactMutationPayload';
   subject: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   email: Scalars['String'];
@@ -762,7 +760,7 @@ export type ContactMutationInput = {
 };
 
 export type CreateCommentMutationPayload = {
-   __typename?: 'CreateCommentMutationPayload';
+  __typename?: 'CreateCommentMutationPayload';
   comment?: Maybe<CommentObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -779,7 +777,7 @@ export type CreateCommentMutationInput = {
 };
 
 export type UpdateCommentMutationPayload = {
-   __typename?: 'UpdateCommentMutationPayload';
+  __typename?: 'UpdateCommentMutationPayload';
   comment?: Maybe<CommentObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   message?: Maybe<Scalars['String']>;
@@ -794,7 +792,7 @@ export type UpdateCommentMutationInput = {
 };
 
 export type DeleteCommentMutationPayload = {
-   __typename?: 'DeleteCommentMutationPayload';
+  __typename?: 'DeleteCommentMutationPayload';
   message?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
@@ -807,7 +805,7 @@ export type DeleteCommentMutationInput = {
 
 /** Mark a single activity read/unread and return the updated activity. */
 export type MarkActivityReadMutationPayload = {
-   __typename?: 'MarkActivityReadMutationPayload';
+  __typename?: 'MarkActivityReadMutationPayload';
   activity?: Maybe<ActivityObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
@@ -821,27 +819,27 @@ export type MarkActivityReadMutationInput = {
 
 /** Mark all activities of the given user as read. */
 export type MarkAllActivitiesReadMutation = {
-   __typename?: 'MarkAllActivitiesReadMutation';
+  __typename?: 'MarkAllActivitiesReadMutation';
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   activity?: Maybe<Array<Maybe<ActivityObjectType>>>;
 };
 
-export type RegisterMutationVariables = {
+export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
-  school?: Maybe<Scalars['ID']>;
-  subject?: Maybe<Scalars['ID']>;
   password: Scalars['String'];
   code: Scalars['String'];
-};
+}>;
 
 
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register?: Maybe<(
     { __typename?: 'RegisterMutationPayload' }
-    & Pick<RegisterMutationPayload, 'message'>
-    & { errors?: Maybe<Array<Maybe<(
+    & { user?: Maybe<(
+      { __typename?: 'UserObjectType' }
+      & Pick<UserObjectType, 'username' | 'email'>
+    )>, errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
@@ -854,10 +852,10 @@ export type RegisterMutation = (
   )> }
 );
 
-export type LoginMutationVariables = {
+export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
-};
+}>;
 
 
 export type LoginMutation = (
@@ -872,7 +870,7 @@ export type LoginMutation = (
   )> }
 );
 
-export type BackendLogoutMutationVariables = {};
+export type BackendLogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type BackendLogoutMutation = (
@@ -883,9 +881,9 @@ export type BackendLogoutMutation = (
   )> }
 );
 
-export type ResendVerificationEmailMutationVariables = {
+export type ResendVerificationEmailMutationVariables = Exact<{
   email: Scalars['String'];
-};
+}>;
 
 
 export type ResendVerificationEmailMutation = (
@@ -900,9 +898,9 @@ export type ResendVerificationEmailMutation = (
   )> }
 );
 
-export type VerifyAccountMutationVariables = {
+export type VerifyAccountMutationVariables = Exact<{
   token?: Maybe<Scalars['String']>;
-};
+}>;
 
 
 export type VerifyAccountMutation = (
@@ -917,9 +915,9 @@ export type VerifyAccountMutation = (
   )> }
 );
 
-export type SendPasswordResetEmailMutationVariables = {
+export type SendPasswordResetEmailMutationVariables = Exact<{
   email: Scalars['String'];
-};
+}>;
 
 
 export type SendPasswordResetEmailMutation = (
@@ -934,10 +932,10 @@ export type SendPasswordResetEmailMutation = (
   )> }
 );
 
-export type ResetPasswordMutationVariables = {
+export type ResetPasswordMutationVariables = Exact<{
   token?: Maybe<Scalars['String']>;
   newPassword: Scalars['String'];
-};
+}>;
 
 
 export type ResetPasswordMutation = (
@@ -952,7 +950,7 @@ export type ResetPasswordMutation = (
   )> }
 );
 
-export type UpdateUserMutationVariables = {
+export type UpdateUserMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
   title?: Maybe<Scalars['String']>;
@@ -960,7 +958,7 @@ export type UpdateUserMutationVariables = {
   avatar?: Maybe<Scalars['String']>;
   school?: Maybe<Scalars['ID']>;
   subject?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type UpdateUserMutation = (
@@ -978,10 +976,10 @@ export type UpdateUserMutation = (
   )> }
 );
 
-export type ChangePasswordMutationVariables = {
+export type ChangePasswordMutationVariables = Exact<{
   oldPassword: Scalars['String'];
   newPassword: Scalars['String'];
-};
+}>;
 
 
 export type ChangePasswordMutation = (
@@ -996,9 +994,9 @@ export type ChangePasswordMutation = (
   )> }
 );
 
-export type DeleteAccountMutationVariables = {
+export type DeleteAccountMutationVariables = Exact<{
   password: Scalars['String'];
-};
+}>;
 
 
 export type DeleteAccountMutation = (
@@ -1013,10 +1011,10 @@ export type DeleteAccountMutation = (
   )> }
 );
 
-export type PerformStarMutationVariables = {
+export type PerformStarMutationVariables = Exact<{
   course?: Maybe<Scalars['ID']>;
   resource?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type PerformStarMutation = (
@@ -1031,12 +1029,12 @@ export type PerformStarMutation = (
   )> }
 );
 
-export type PerformVoteMutationVariables = {
+export type PerformVoteMutationVariables = Exact<{
   status: Scalars['Int'];
   comment?: Maybe<Scalars['ID']>;
   course?: Maybe<Scalars['ID']>;
   resource?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type PerformVoteMutation = (
@@ -1054,13 +1052,13 @@ export type PerformVoteMutation = (
   )> }
 );
 
-export type CreateCommentMutationVariables = {
+export type CreateCommentMutationVariables = Exact<{
   text: Scalars['String'];
   attachment?: Maybe<Scalars['String']>;
   course?: Maybe<Scalars['ID']>;
   resource?: Maybe<Scalars['ID']>;
   comment?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type CreateCommentMutation = (
@@ -1095,9 +1093,9 @@ export type CreateCommentMutation = (
   )> }
 );
 
-export type DeleteCommentMutationVariables = {
+export type DeleteCommentMutationVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type DeleteCommentMutation = (
@@ -1112,12 +1110,12 @@ export type DeleteCommentMutation = (
   )> }
 );
 
-export type ContactMutationVariables = {
+export type ContactMutationVariables = Exact<{
   subject: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   message: Scalars['String'];
-};
+}>;
 
 
 export type ContactMutation = (
@@ -1132,12 +1130,12 @@ export type ContactMutation = (
   )> }
 );
 
-export type CreateCourseMutationVariables = {
+export type CreateCourseMutationVariables = Exact<{
   courseName: Scalars['String'];
   courseCode?: Maybe<Scalars['String']>;
   subjects?: Maybe<Array<Maybe<Scalars['ID']>>>;
   school: Scalars['ID'];
-};
+}>;
 
 
 export type CreateCourseMutation = (
@@ -1155,9 +1153,9 @@ export type CreateCourseMutation = (
   )> }
 );
 
-export type DeleteCourseMutationVariables = {
+export type DeleteCourseMutationVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type DeleteCourseMutation = (
@@ -1172,12 +1170,12 @@ export type DeleteCourseMutation = (
   )> }
 );
 
-export type CreateResourceMutationVariables = {
+export type CreateResourceMutationVariables = Exact<{
   resourceTitle: Scalars['String'];
   resourceType: Scalars['ID'];
   course: Scalars['ID'];
   file: Scalars['String'];
-};
+}>;
 
 
 export type CreateResourceMutation = (
@@ -1195,9 +1193,9 @@ export type CreateResourceMutation = (
   )> }
 );
 
-export type DeleteResourceMutationVariables = {
+export type DeleteResourceMutationVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type DeleteResourceMutation = (
@@ -1212,10 +1210,10 @@ export type DeleteResourceMutation = (
   )> }
 );
 
-export type MarkSingleActivityReadMutationVariables = {
+export type MarkSingleActivityReadMutationVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
   read?: Maybe<Scalars['Boolean']>;
-};
+}>;
 
 
 export type MarkSingleActivityReadMutation = (
@@ -1245,7 +1243,7 @@ export type MarkSingleActivityReadMutation = (
   )> }
 );
 
-export type MarkAllActivitiesAsReadMutationVariables = {};
+export type MarkAllActivitiesAsReadMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MarkAllActivitiesAsReadMutation = (
@@ -1275,7 +1273,7 @@ export type MarkAllActivitiesAsReadMutation = (
   )> }
 );
 
-export type UserMeQueryVariables = {};
+export type UserMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UserMeQuery = (
@@ -1309,7 +1307,7 @@ export type UserMeQuery = (
   )> }
 );
 
-export type StarredQueryVariables = {};
+export type StarredQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type StarredQuery = (
@@ -1326,9 +1324,9 @@ export type StarredQuery = (
   )> }
 );
 
-export type UserDetailQueryVariables = {
+export type UserDetailQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type UserDetailQuery = (
@@ -1349,7 +1347,7 @@ export type UserDetailQuery = (
   )> }
 );
 
-export type SearchCoursesQueryVariables = {
+export type SearchCoursesQueryVariables = Exact<{
   courseName?: Maybe<Scalars['String']>;
   courseCode?: Maybe<Scalars['String']>;
   school?: Maybe<Scalars['ID']>;
@@ -1360,7 +1358,7 @@ export type SearchCoursesQueryVariables = {
   ordering?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
   pageSize?: Maybe<Scalars['Int']>;
-};
+}>;
 
 
 export type SearchCoursesQuery = (
@@ -1390,9 +1388,9 @@ export type SearchCoursesQuery = (
   )> }
 );
 
-export type CourseDetailQueryVariables = {
+export type CourseDetailQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type CourseDetailQuery = (
@@ -1439,9 +1437,9 @@ export type CourseDetailQuery = (
   )> }
 );
 
-export type ResourceDetailQueryVariables = {
+export type ResourceDetailQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type ResourceDetailQuery = (
@@ -1485,9 +1483,9 @@ export type ResourceDetailQuery = (
   )> }
 );
 
-export type SchoolDetailQueryVariables = {
+export type SchoolDetailQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type SchoolDetailQuery = (
@@ -1514,10 +1512,10 @@ export type SchoolDetailQuery = (
   )> }
 );
 
-export type CreateResourceInitialDataQueryVariables = {
+export type CreateResourceInitialDataQueryVariables = Exact<{
   school?: Maybe<Scalars['ID']>;
   course?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type CreateResourceInitialDataQuery = (
@@ -1531,7 +1529,7 @@ export type CreateResourceInitialDataQuery = (
   )> }
 );
 
-export type SchoolsQueryVariables = {};
+export type SchoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SchoolsQuery = (
@@ -1542,7 +1540,7 @@ export type SchoolsQuery = (
   )>>> }
 );
 
-export type SchoolTypesQueryVariables = {};
+export type SchoolTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SchoolTypesQuery = (
@@ -1553,9 +1551,9 @@ export type SchoolTypesQuery = (
   )>>> }
 );
 
-export type CoursesQueryVariables = {
+export type CoursesQueryVariables = Exact<{
   school?: Maybe<Scalars['ID']>;
-};
+}>;
 
 
 export type CoursesQuery = (
@@ -1566,7 +1564,7 @@ export type CoursesQuery = (
   )>>> }
 );
 
-export type CountriesQueryVariables = {};
+export type CountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CountriesQuery = (
@@ -1577,7 +1575,7 @@ export type CountriesQuery = (
   )>>> }
 );
 
-export type CitiesQueryVariables = {};
+export type CitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CitiesQuery = (
@@ -1588,7 +1586,7 @@ export type CitiesQuery = (
   )>>> }
 );
 
-export type ResourceTypesQueryVariables = {};
+export type ResourceTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ResourceTypesQuery = (
@@ -1599,7 +1597,7 @@ export type ResourceTypesQuery = (
   )>>> }
 );
 
-export type SubjectsQueryVariables = {};
+export type SubjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SubjectsQuery = (
@@ -1612,9 +1610,12 @@ export type SubjectsQuery = (
 
 
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $email: String!, $school: ID, $subject: ID, $password: String!, $code: String!) {
-  register(input: {username: $username, email: $email, school: $school, subject: $subject, password: $password, code: $code}) {
-    message
+    mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
+  register(input: {username: $username, email: $email, password: $password, code: $code}) {
+    user {
+      username
+      email
+    }
     errors {
       field
       messages
@@ -1628,7 +1629,7 @@ export const RegisterDocument = gql`
   }
 }
     `;
-export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
+export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
  * __useRegisterMutation__
@@ -1645,19 +1646,17 @@ export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMuta
  *   variables: {
  *      username: // value for 'username'
  *      email: // value for 'email'
- *      school: // value for 'school'
- *      subject: // value for 'subject'
  *      password: // value for 'password'
  *      code: // value for 'code'
  *   },
  * });
  */
-export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
-        return ApolloReactHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
       }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
-export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
-export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
@@ -1669,7 +1668,7 @@ export const LoginDocument = gql`
   }
 }
     `;
-export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
  * __useLoginMutation__
@@ -1689,12 +1688,12 @@ export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, 
  *   },
  * });
  */
-export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
       }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
-export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const BackendLogoutDocument = gql`
     mutation BackendLogout {
   logout {
@@ -1702,7 +1701,7 @@ export const BackendLogoutDocument = gql`
   }
 }
     `;
-export type BackendLogoutMutationFn = ApolloReactCommon.MutationFunction<BackendLogoutMutation, BackendLogoutMutationVariables>;
+export type BackendLogoutMutationFn = Apollo.MutationFunction<BackendLogoutMutation, BackendLogoutMutationVariables>;
 
 /**
  * __useBackendLogoutMutation__
@@ -1720,12 +1719,12 @@ export type BackendLogoutMutationFn = ApolloReactCommon.MutationFunction<Backend
  *   },
  * });
  */
-export function useBackendLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<BackendLogoutMutation, BackendLogoutMutationVariables>) {
-        return ApolloReactHooks.useMutation<BackendLogoutMutation, BackendLogoutMutationVariables>(BackendLogoutDocument, baseOptions);
+export function useBackendLogoutMutation(baseOptions?: Apollo.MutationHookOptions<BackendLogoutMutation, BackendLogoutMutationVariables>) {
+        return Apollo.useMutation<BackendLogoutMutation, BackendLogoutMutationVariables>(BackendLogoutDocument, baseOptions);
       }
 export type BackendLogoutMutationHookResult = ReturnType<typeof useBackendLogoutMutation>;
-export type BackendLogoutMutationResult = ApolloReactCommon.MutationResult<BackendLogoutMutation>;
-export type BackendLogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<BackendLogoutMutation, BackendLogoutMutationVariables>;
+export type BackendLogoutMutationResult = Apollo.MutationResult<BackendLogoutMutation>;
+export type BackendLogoutMutationOptions = Apollo.BaseMutationOptions<BackendLogoutMutation, BackendLogoutMutationVariables>;
 export const ResendVerificationEmailDocument = gql`
     mutation ResendVerificationEmail($email: String!) {
   resendVerificationEmail(input: {email: $email}) {
@@ -1737,7 +1736,7 @@ export const ResendVerificationEmailDocument = gql`
   }
 }
     `;
-export type ResendVerificationEmailMutationFn = ApolloReactCommon.MutationFunction<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>;
+export type ResendVerificationEmailMutationFn = Apollo.MutationFunction<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>;
 
 /**
  * __useResendVerificationEmailMutation__
@@ -1756,12 +1755,12 @@ export type ResendVerificationEmailMutationFn = ApolloReactCommon.MutationFuncti
  *   },
  * });
  */
-export function useResendVerificationEmailMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>) {
-        return ApolloReactHooks.useMutation<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>(ResendVerificationEmailDocument, baseOptions);
+export function useResendVerificationEmailMutation(baseOptions?: Apollo.MutationHookOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>) {
+        return Apollo.useMutation<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>(ResendVerificationEmailDocument, baseOptions);
       }
 export type ResendVerificationEmailMutationHookResult = ReturnType<typeof useResendVerificationEmailMutation>;
-export type ResendVerificationEmailMutationResult = ApolloReactCommon.MutationResult<ResendVerificationEmailMutation>;
-export type ResendVerificationEmailMutationOptions = ApolloReactCommon.BaseMutationOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>;
+export type ResendVerificationEmailMutationResult = Apollo.MutationResult<ResendVerificationEmailMutation>;
+export type ResendVerificationEmailMutationOptions = Apollo.BaseMutationOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>;
 export const VerifyAccountDocument = gql`
     mutation VerifyAccount($token: String) {
   verifyAccount(input: {token: $token}) {
@@ -1773,7 +1772,7 @@ export const VerifyAccountDocument = gql`
   }
 }
     `;
-export type VerifyAccountMutationFn = ApolloReactCommon.MutationFunction<VerifyAccountMutation, VerifyAccountMutationVariables>;
+export type VerifyAccountMutationFn = Apollo.MutationFunction<VerifyAccountMutation, VerifyAccountMutationVariables>;
 
 /**
  * __useVerifyAccountMutation__
@@ -1792,12 +1791,12 @@ export type VerifyAccountMutationFn = ApolloReactCommon.MutationFunction<VerifyA
  *   },
  * });
  */
-export function useVerifyAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<VerifyAccountMutation, VerifyAccountMutationVariables>) {
-        return ApolloReactHooks.useMutation<VerifyAccountMutation, VerifyAccountMutationVariables>(VerifyAccountDocument, baseOptions);
+export function useVerifyAccountMutation(baseOptions?: Apollo.MutationHookOptions<VerifyAccountMutation, VerifyAccountMutationVariables>) {
+        return Apollo.useMutation<VerifyAccountMutation, VerifyAccountMutationVariables>(VerifyAccountDocument, baseOptions);
       }
 export type VerifyAccountMutationHookResult = ReturnType<typeof useVerifyAccountMutation>;
-export type VerifyAccountMutationResult = ApolloReactCommon.MutationResult<VerifyAccountMutation>;
-export type VerifyAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<VerifyAccountMutation, VerifyAccountMutationVariables>;
+export type VerifyAccountMutationResult = Apollo.MutationResult<VerifyAccountMutation>;
+export type VerifyAccountMutationOptions = Apollo.BaseMutationOptions<VerifyAccountMutation, VerifyAccountMutationVariables>;
 export const SendPasswordResetEmailDocument = gql`
     mutation SendPasswordResetEmail($email: String!) {
   sendPasswordResetEmail(input: {email: $email}) {
@@ -1809,7 +1808,7 @@ export const SendPasswordResetEmailDocument = gql`
   }
 }
     `;
-export type SendPasswordResetEmailMutationFn = ApolloReactCommon.MutationFunction<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>;
+export type SendPasswordResetEmailMutationFn = Apollo.MutationFunction<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>;
 
 /**
  * __useSendPasswordResetEmailMutation__
@@ -1828,12 +1827,12 @@ export type SendPasswordResetEmailMutationFn = ApolloReactCommon.MutationFunctio
  *   },
  * });
  */
-export function useSendPasswordResetEmailMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>) {
-        return ApolloReactHooks.useMutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>(SendPasswordResetEmailDocument, baseOptions);
+export function useSendPasswordResetEmailMutation(baseOptions?: Apollo.MutationHookOptions<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>) {
+        return Apollo.useMutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>(SendPasswordResetEmailDocument, baseOptions);
       }
 export type SendPasswordResetEmailMutationHookResult = ReturnType<typeof useSendPasswordResetEmailMutation>;
-export type SendPasswordResetEmailMutationResult = ApolloReactCommon.MutationResult<SendPasswordResetEmailMutation>;
-export type SendPasswordResetEmailMutationOptions = ApolloReactCommon.BaseMutationOptions<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>;
+export type SendPasswordResetEmailMutationResult = Apollo.MutationResult<SendPasswordResetEmailMutation>;
+export type SendPasswordResetEmailMutationOptions = Apollo.BaseMutationOptions<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>;
 export const ResetPasswordDocument = gql`
     mutation ResetPassword($token: String, $newPassword: String!) {
   resetPassword(input: {token: $token, newPassword: $newPassword}) {
@@ -1845,7 +1844,7 @@ export const ResetPasswordDocument = gql`
   }
 }
     `;
-export type ResetPasswordMutationFn = ApolloReactCommon.MutationFunction<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutation, ResetPasswordMutationVariables>;
 
 /**
  * __useResetPasswordMutation__
@@ -1865,12 +1864,12 @@ export type ResetPasswordMutationFn = ApolloReactCommon.MutationFunction<ResetPa
  *   },
  * });
  */
-export function useResetPasswordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
-        return ApolloReactHooks.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, baseOptions);
+export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
+        return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, baseOptions);
       }
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
-export type ResetPasswordMutationResult = ApolloReactCommon.MutationResult<ResetPasswordMutation>;
-export type ResetPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String, $school: ID, $subject: ID) {
   updateUser(input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar, school: $school, subject: $subject}) {
@@ -1892,7 +1891,7 @@ export const UpdateUserDocument = gql`
   }
 }
     `;
-export type UpdateUserMutationFn = ApolloReactCommon.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
  * __useUpdateUserMutation__
@@ -1917,12 +1916,12 @@ export type UpdateUserMutationFn = ApolloReactCommon.MutationFunction<UpdateUser
  *   },
  * });
  */
-export function useUpdateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
-        return ApolloReactHooks.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
       }
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
-export type UpdateUserMutationResult = ApolloReactCommon.MutationResult<UpdateUserMutation>;
-export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
   changePassword(input: {oldPassword: $oldPassword, newPassword: $newPassword}) {
@@ -1934,7 +1933,7 @@ export const ChangePasswordDocument = gql`
   }
 }
     `;
-export type ChangePasswordMutationFn = ApolloReactCommon.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
 
 /**
  * __useChangePasswordMutation__
@@ -1954,12 +1953,12 @@ export type ChangePasswordMutationFn = ApolloReactCommon.MutationFunction<Change
  *   },
  * });
  */
-export function useChangePasswordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
-        return ApolloReactHooks.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, baseOptions);
+export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, baseOptions);
       }
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
-export type ChangePasswordMutationResult = ApolloReactCommon.MutationResult<ChangePasswordMutation>;
-export type ChangePasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
+export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const DeleteAccountDocument = gql`
     mutation DeleteAccount($password: String!) {
   deleteUser(input: {password: $password}) {
@@ -1971,7 +1970,7 @@ export const DeleteAccountDocument = gql`
   }
 }
     `;
-export type DeleteAccountMutationFn = ApolloReactCommon.MutationFunction<DeleteAccountMutation, DeleteAccountMutationVariables>;
+export type DeleteAccountMutationFn = Apollo.MutationFunction<DeleteAccountMutation, DeleteAccountMutationVariables>;
 
 /**
  * __useDeleteAccountMutation__
@@ -1990,12 +1989,12 @@ export type DeleteAccountMutationFn = ApolloReactCommon.MutationFunction<DeleteA
  *   },
  * });
  */
-export function useDeleteAccountMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteAccountMutation, DeleteAccountMutationVariables>) {
-        return ApolloReactHooks.useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(DeleteAccountDocument, baseOptions);
+export function useDeleteAccountMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAccountMutation, DeleteAccountMutationVariables>) {
+        return Apollo.useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(DeleteAccountDocument, baseOptions);
       }
 export type DeleteAccountMutationHookResult = ReturnType<typeof useDeleteAccountMutation>;
-export type DeleteAccountMutationResult = ApolloReactCommon.MutationResult<DeleteAccountMutation>;
-export type DeleteAccountMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteAccountMutation, DeleteAccountMutationVariables>;
+export type DeleteAccountMutationResult = Apollo.MutationResult<DeleteAccountMutation>;
+export type DeleteAccountMutationOptions = Apollo.BaseMutationOptions<DeleteAccountMutation, DeleteAccountMutationVariables>;
 export const PerformStarDocument = gql`
     mutation PerformStar($course: ID, $resource: ID) {
   performStar(input: {course: $course, resource: $resource}) {
@@ -2007,7 +2006,7 @@ export const PerformStarDocument = gql`
   }
 }
     `;
-export type PerformStarMutationFn = ApolloReactCommon.MutationFunction<PerformStarMutation, PerformStarMutationVariables>;
+export type PerformStarMutationFn = Apollo.MutationFunction<PerformStarMutation, PerformStarMutationVariables>;
 
 /**
  * __usePerformStarMutation__
@@ -2027,12 +2026,12 @@ export type PerformStarMutationFn = ApolloReactCommon.MutationFunction<PerformSt
  *   },
  * });
  */
-export function usePerformStarMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PerformStarMutation, PerformStarMutationVariables>) {
-        return ApolloReactHooks.useMutation<PerformStarMutation, PerformStarMutationVariables>(PerformStarDocument, baseOptions);
+export function usePerformStarMutation(baseOptions?: Apollo.MutationHookOptions<PerformStarMutation, PerformStarMutationVariables>) {
+        return Apollo.useMutation<PerformStarMutation, PerformStarMutationVariables>(PerformStarDocument, baseOptions);
       }
 export type PerformStarMutationHookResult = ReturnType<typeof usePerformStarMutation>;
-export type PerformStarMutationResult = ApolloReactCommon.MutationResult<PerformStarMutation>;
-export type PerformStarMutationOptions = ApolloReactCommon.BaseMutationOptions<PerformStarMutation, PerformStarMutationVariables>;
+export type PerformStarMutationResult = Apollo.MutationResult<PerformStarMutation>;
+export type PerformStarMutationOptions = Apollo.BaseMutationOptions<PerformStarMutation, PerformStarMutationVariables>;
 export const PerformVoteDocument = gql`
     mutation PerformVote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
   performVote(input: {status: $status, comment: $comment, course: $course, resource: $resource}) {
@@ -2048,7 +2047,7 @@ export const PerformVoteDocument = gql`
   }
 }
     `;
-export type PerformVoteMutationFn = ApolloReactCommon.MutationFunction<PerformVoteMutation, PerformVoteMutationVariables>;
+export type PerformVoteMutationFn = Apollo.MutationFunction<PerformVoteMutation, PerformVoteMutationVariables>;
 
 /**
  * __usePerformVoteMutation__
@@ -2070,12 +2069,12 @@ export type PerformVoteMutationFn = ApolloReactCommon.MutationFunction<PerformVo
  *   },
  * });
  */
-export function usePerformVoteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PerformVoteMutation, PerformVoteMutationVariables>) {
-        return ApolloReactHooks.useMutation<PerformVoteMutation, PerformVoteMutationVariables>(PerformVoteDocument, baseOptions);
+export function usePerformVoteMutation(baseOptions?: Apollo.MutationHookOptions<PerformVoteMutation, PerformVoteMutationVariables>) {
+        return Apollo.useMutation<PerformVoteMutation, PerformVoteMutationVariables>(PerformVoteDocument, baseOptions);
       }
 export type PerformVoteMutationHookResult = ReturnType<typeof usePerformVoteMutation>;
-export type PerformVoteMutationResult = ApolloReactCommon.MutationResult<PerformVoteMutation>;
-export type PerformVoteMutationOptions = ApolloReactCommon.BaseMutationOptions<PerformVoteMutation, PerformVoteMutationVariables>;
+export type PerformVoteMutationResult = Apollo.MutationResult<PerformVoteMutation>;
+export type PerformVoteMutationOptions = Apollo.BaseMutationOptions<PerformVoteMutation, PerformVoteMutationVariables>;
 export const CreateCommentDocument = gql`
     mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $comment: ID) {
   createComment(input: {text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment}) {
@@ -2121,7 +2120,7 @@ export const CreateCommentDocument = gql`
   }
 }
     `;
-export type CreateCommentMutationFn = ApolloReactCommon.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
 
 /**
  * __useCreateCommentMutation__
@@ -2144,12 +2143,12 @@ export type CreateCommentMutationFn = ApolloReactCommon.MutationFunction<CreateC
  *   },
  * });
  */
-export function useCreateCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, baseOptions);
+export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, baseOptions);
       }
 export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
-export type CreateCommentMutationResult = ApolloReactCommon.MutationResult<CreateCommentMutation>;
-export type CreateCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const DeleteCommentDocument = gql`
     mutation DeleteComment($id: ID) {
   deleteComment(input: {id: $id}) {
@@ -2161,7 +2160,7 @@ export const DeleteCommentDocument = gql`
   }
 }
     `;
-export type DeleteCommentMutationFn = ApolloReactCommon.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
+export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
 
 /**
  * __useDeleteCommentMutation__
@@ -2180,12 +2179,12 @@ export type DeleteCommentMutationFn = ApolloReactCommon.MutationFunction<DeleteC
  *   },
  * });
  */
-export function useDeleteCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
-        return ApolloReactHooks.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, baseOptions);
+export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
+        return Apollo.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, baseOptions);
       }
 export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
-export type DeleteCommentMutationResult = ApolloReactCommon.MutationResult<DeleteCommentMutation>;
-export type DeleteCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
+export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
+export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
 export const ContactDocument = gql`
     mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
   createContactMessage(input: {subject: $subject, name: $name, email: $email, message: $message}) {
@@ -2197,7 +2196,7 @@ export const ContactDocument = gql`
   }
 }
     `;
-export type ContactMutationFn = ApolloReactCommon.MutationFunction<ContactMutation, ContactMutationVariables>;
+export type ContactMutationFn = Apollo.MutationFunction<ContactMutation, ContactMutationVariables>;
 
 /**
  * __useContactMutation__
@@ -2219,12 +2218,12 @@ export type ContactMutationFn = ApolloReactCommon.MutationFunction<ContactMutati
  *   },
  * });
  */
-export function useContactMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ContactMutation, ContactMutationVariables>) {
-        return ApolloReactHooks.useMutation<ContactMutation, ContactMutationVariables>(ContactDocument, baseOptions);
+export function useContactMutation(baseOptions?: Apollo.MutationHookOptions<ContactMutation, ContactMutationVariables>) {
+        return Apollo.useMutation<ContactMutation, ContactMutationVariables>(ContactDocument, baseOptions);
       }
 export type ContactMutationHookResult = ReturnType<typeof useContactMutation>;
-export type ContactMutationResult = ApolloReactCommon.MutationResult<ContactMutation>;
-export type ContactMutationOptions = ApolloReactCommon.BaseMutationOptions<ContactMutation, ContactMutationVariables>;
+export type ContactMutationResult = Apollo.MutationResult<ContactMutation>;
+export type ContactMutationOptions = Apollo.BaseMutationOptions<ContactMutation, ContactMutationVariables>;
 export const CreateCourseDocument = gql`
     mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
   createCourse(input: {name: $courseName, code: $courseCode, subjects: $subjects, school: $school}) {
@@ -2239,7 +2238,7 @@ export const CreateCourseDocument = gql`
   }
 }
     `;
-export type CreateCourseMutationFn = ApolloReactCommon.MutationFunction<CreateCourseMutation, CreateCourseMutationVariables>;
+export type CreateCourseMutationFn = Apollo.MutationFunction<CreateCourseMutation, CreateCourseMutationVariables>;
 
 /**
  * __useCreateCourseMutation__
@@ -2261,12 +2260,12 @@ export type CreateCourseMutationFn = ApolloReactCommon.MutationFunction<CreateCo
  *   },
  * });
  */
-export function useCreateCourseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCourseMutation, CreateCourseMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateCourseMutation, CreateCourseMutationVariables>(CreateCourseDocument, baseOptions);
+export function useCreateCourseMutation(baseOptions?: Apollo.MutationHookOptions<CreateCourseMutation, CreateCourseMutationVariables>) {
+        return Apollo.useMutation<CreateCourseMutation, CreateCourseMutationVariables>(CreateCourseDocument, baseOptions);
       }
 export type CreateCourseMutationHookResult = ReturnType<typeof useCreateCourseMutation>;
-export type CreateCourseMutationResult = ApolloReactCommon.MutationResult<CreateCourseMutation>;
-export type CreateCourseMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCourseMutation, CreateCourseMutationVariables>;
+export type CreateCourseMutationResult = Apollo.MutationResult<CreateCourseMutation>;
+export type CreateCourseMutationOptions = Apollo.BaseMutationOptions<CreateCourseMutation, CreateCourseMutationVariables>;
 export const DeleteCourseDocument = gql`
     mutation DeleteCourse($id: ID) {
   deleteCourse(input: {id: $id}) {
@@ -2278,7 +2277,7 @@ export const DeleteCourseDocument = gql`
   }
 }
     `;
-export type DeleteCourseMutationFn = ApolloReactCommon.MutationFunction<DeleteCourseMutation, DeleteCourseMutationVariables>;
+export type DeleteCourseMutationFn = Apollo.MutationFunction<DeleteCourseMutation, DeleteCourseMutationVariables>;
 
 /**
  * __useDeleteCourseMutation__
@@ -2297,12 +2296,12 @@ export type DeleteCourseMutationFn = ApolloReactCommon.MutationFunction<DeleteCo
  *   },
  * });
  */
-export function useDeleteCourseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCourseMutation, DeleteCourseMutationVariables>) {
-        return ApolloReactHooks.useMutation<DeleteCourseMutation, DeleteCourseMutationVariables>(DeleteCourseDocument, baseOptions);
+export function useDeleteCourseMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCourseMutation, DeleteCourseMutationVariables>) {
+        return Apollo.useMutation<DeleteCourseMutation, DeleteCourseMutationVariables>(DeleteCourseDocument, baseOptions);
       }
 export type DeleteCourseMutationHookResult = ReturnType<typeof useDeleteCourseMutation>;
-export type DeleteCourseMutationResult = ApolloReactCommon.MutationResult<DeleteCourseMutation>;
-export type DeleteCourseMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCourseMutation, DeleteCourseMutationVariables>;
+export type DeleteCourseMutationResult = Apollo.MutationResult<DeleteCourseMutation>;
+export type DeleteCourseMutationOptions = Apollo.BaseMutationOptions<DeleteCourseMutation, DeleteCourseMutationVariables>;
 export const CreateResourceDocument = gql`
     mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
   createResource(input: {title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file}) {
@@ -2317,7 +2316,7 @@ export const CreateResourceDocument = gql`
   }
 }
     `;
-export type CreateResourceMutationFn = ApolloReactCommon.MutationFunction<CreateResourceMutation, CreateResourceMutationVariables>;
+export type CreateResourceMutationFn = Apollo.MutationFunction<CreateResourceMutation, CreateResourceMutationVariables>;
 
 /**
  * __useCreateResourceMutation__
@@ -2339,12 +2338,12 @@ export type CreateResourceMutationFn = ApolloReactCommon.MutationFunction<Create
  *   },
  * });
  */
-export function useCreateResourceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateResourceMutation, CreateResourceMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateResourceMutation, CreateResourceMutationVariables>(CreateResourceDocument, baseOptions);
+export function useCreateResourceMutation(baseOptions?: Apollo.MutationHookOptions<CreateResourceMutation, CreateResourceMutationVariables>) {
+        return Apollo.useMutation<CreateResourceMutation, CreateResourceMutationVariables>(CreateResourceDocument, baseOptions);
       }
 export type CreateResourceMutationHookResult = ReturnType<typeof useCreateResourceMutation>;
-export type CreateResourceMutationResult = ApolloReactCommon.MutationResult<CreateResourceMutation>;
-export type CreateResourceMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateResourceMutation, CreateResourceMutationVariables>;
+export type CreateResourceMutationResult = Apollo.MutationResult<CreateResourceMutation>;
+export type CreateResourceMutationOptions = Apollo.BaseMutationOptions<CreateResourceMutation, CreateResourceMutationVariables>;
 export const DeleteResourceDocument = gql`
     mutation DeleteResource($id: ID) {
   deleteResource(input: {id: $id}) {
@@ -2356,7 +2355,7 @@ export const DeleteResourceDocument = gql`
   }
 }
     `;
-export type DeleteResourceMutationFn = ApolloReactCommon.MutationFunction<DeleteResourceMutation, DeleteResourceMutationVariables>;
+export type DeleteResourceMutationFn = Apollo.MutationFunction<DeleteResourceMutation, DeleteResourceMutationVariables>;
 
 /**
  * __useDeleteResourceMutation__
@@ -2375,12 +2374,12 @@ export type DeleteResourceMutationFn = ApolloReactCommon.MutationFunction<Delete
  *   },
  * });
  */
-export function useDeleteResourceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteResourceMutation, DeleteResourceMutationVariables>) {
-        return ApolloReactHooks.useMutation<DeleteResourceMutation, DeleteResourceMutationVariables>(DeleteResourceDocument, baseOptions);
+export function useDeleteResourceMutation(baseOptions?: Apollo.MutationHookOptions<DeleteResourceMutation, DeleteResourceMutationVariables>) {
+        return Apollo.useMutation<DeleteResourceMutation, DeleteResourceMutationVariables>(DeleteResourceDocument, baseOptions);
       }
 export type DeleteResourceMutationHookResult = ReturnType<typeof useDeleteResourceMutation>;
-export type DeleteResourceMutationResult = ApolloReactCommon.MutationResult<DeleteResourceMutation>;
-export type DeleteResourceMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteResourceMutation, DeleteResourceMutationVariables>;
+export type DeleteResourceMutationResult = Apollo.MutationResult<DeleteResourceMutation>;
+export type DeleteResourceMutationOptions = Apollo.BaseMutationOptions<DeleteResourceMutation, DeleteResourceMutationVariables>;
 export const MarkSingleActivityReadDocument = gql`
     mutation MarkSingleActivityRead($id: ID, $read: Boolean) {
   markActivityRead(input: {id: $id, read: $read}) {
@@ -2410,7 +2409,7 @@ export const MarkSingleActivityReadDocument = gql`
   }
 }
     `;
-export type MarkSingleActivityReadMutationFn = ApolloReactCommon.MutationFunction<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>;
+export type MarkSingleActivityReadMutationFn = Apollo.MutationFunction<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>;
 
 /**
  * __useMarkSingleActivityReadMutation__
@@ -2430,12 +2429,12 @@ export type MarkSingleActivityReadMutationFn = ApolloReactCommon.MutationFunctio
  *   },
  * });
  */
-export function useMarkSingleActivityReadMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>) {
-        return ApolloReactHooks.useMutation<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>(MarkSingleActivityReadDocument, baseOptions);
+export function useMarkSingleActivityReadMutation(baseOptions?: Apollo.MutationHookOptions<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>) {
+        return Apollo.useMutation<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>(MarkSingleActivityReadDocument, baseOptions);
       }
 export type MarkSingleActivityReadMutationHookResult = ReturnType<typeof useMarkSingleActivityReadMutation>;
-export type MarkSingleActivityReadMutationResult = ApolloReactCommon.MutationResult<MarkSingleActivityReadMutation>;
-export type MarkSingleActivityReadMutationOptions = ApolloReactCommon.BaseMutationOptions<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>;
+export type MarkSingleActivityReadMutationResult = Apollo.MutationResult<MarkSingleActivityReadMutation>;
+export type MarkSingleActivityReadMutationOptions = Apollo.BaseMutationOptions<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>;
 export const MarkAllActivitiesAsReadDocument = gql`
     mutation MarkAllActivitiesAsRead {
   markAllActivitiesRead {
@@ -2465,7 +2464,7 @@ export const MarkAllActivitiesAsReadDocument = gql`
   }
 }
     `;
-export type MarkAllActivitiesAsReadMutationFn = ApolloReactCommon.MutationFunction<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>;
+export type MarkAllActivitiesAsReadMutationFn = Apollo.MutationFunction<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>;
 
 /**
  * __useMarkAllActivitiesAsReadMutation__
@@ -2483,12 +2482,12 @@ export type MarkAllActivitiesAsReadMutationFn = ApolloReactCommon.MutationFuncti
  *   },
  * });
  */
-export function useMarkAllActivitiesAsReadMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>) {
-        return ApolloReactHooks.useMutation<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>(MarkAllActivitiesAsReadDocument, baseOptions);
+export function useMarkAllActivitiesAsReadMutation(baseOptions?: Apollo.MutationHookOptions<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>) {
+        return Apollo.useMutation<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>(MarkAllActivitiesAsReadDocument, baseOptions);
       }
 export type MarkAllActivitiesAsReadMutationHookResult = ReturnType<typeof useMarkAllActivitiesAsReadMutation>;
-export type MarkAllActivitiesAsReadMutationResult = ApolloReactCommon.MutationResult<MarkAllActivitiesAsReadMutation>;
-export type MarkAllActivitiesAsReadMutationOptions = ApolloReactCommon.BaseMutationOptions<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>;
+export type MarkAllActivitiesAsReadMutationResult = Apollo.MutationResult<MarkAllActivitiesAsReadMutation>;
+export type MarkAllActivitiesAsReadMutationOptions = Apollo.BaseMutationOptions<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>;
 export const UserMeDocument = gql`
     query UserMe {
   userMe {
@@ -2547,15 +2546,15 @@ export const UserMeDocument = gql`
  *   },
  * });
  */
-export function useUserMeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
-        return ApolloReactHooks.useQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, baseOptions);
+export function useUserMeQuery(baseOptions?: Apollo.QueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
+        return Apollo.useQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, baseOptions);
       }
-export function useUserMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, baseOptions);
+export function useUserMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
+          return Apollo.useLazyQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, baseOptions);
         }
 export type UserMeQueryHookResult = ReturnType<typeof useUserMeQuery>;
 export type UserMeLazyQueryHookResult = ReturnType<typeof useUserMeLazyQuery>;
-export type UserMeQueryResult = ApolloReactCommon.QueryResult<UserMeQuery, UserMeQueryVariables>;
+export type UserMeQueryResult = Apollo.QueryResult<UserMeQuery, UserMeQueryVariables>;
 export const StarredDocument = gql`
     query Starred {
   userMe {
@@ -2590,15 +2589,15 @@ export const StarredDocument = gql`
  *   },
  * });
  */
-export function useStarredQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<StarredQuery, StarredQueryVariables>) {
-        return ApolloReactHooks.useQuery<StarredQuery, StarredQueryVariables>(StarredDocument, baseOptions);
+export function useStarredQuery(baseOptions?: Apollo.QueryHookOptions<StarredQuery, StarredQueryVariables>) {
+        return Apollo.useQuery<StarredQuery, StarredQueryVariables>(StarredDocument, baseOptions);
       }
-export function useStarredLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<StarredQuery, StarredQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<StarredQuery, StarredQueryVariables>(StarredDocument, baseOptions);
+export function useStarredLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StarredQuery, StarredQueryVariables>) {
+          return Apollo.useLazyQuery<StarredQuery, StarredQueryVariables>(StarredDocument, baseOptions);
         }
 export type StarredQueryHookResult = ReturnType<typeof useStarredQuery>;
 export type StarredLazyQueryHookResult = ReturnType<typeof useStarredLazyQuery>;
-export type StarredQueryResult = ApolloReactCommon.QueryResult<StarredQuery, StarredQueryVariables>;
+export type StarredQueryResult = Apollo.QueryResult<StarredQuery, StarredQueryVariables>;
 export const UserDetailDocument = gql`
     query UserDetail($id: ID) {
   user(id: $id) {
@@ -2648,15 +2647,15 @@ export const UserDetailDocument = gql`
  *   },
  * });
  */
-export function useUserDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
-        return ApolloReactHooks.useQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
+export function useUserDetailQuery(baseOptions?: Apollo.QueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
+        return Apollo.useQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
       }
-export function useUserDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
+export function useUserDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
+          return Apollo.useLazyQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
         }
 export type UserDetailQueryHookResult = ReturnType<typeof useUserDetailQuery>;
 export type UserDetailLazyQueryHookResult = ReturnType<typeof useUserDetailLazyQuery>;
-export type UserDetailQueryResult = ApolloReactCommon.QueryResult<UserDetailQuery, UserDetailQueryVariables>;
+export type UserDetailQueryResult = Apollo.QueryResult<UserDetailQuery, UserDetailQueryVariables>;
 export const SearchCoursesDocument = gql`
     query SearchCourses($courseName: String, $courseCode: String, $school: ID, $subject: ID, $schoolType: ID, $country: ID, $city: ID, $ordering: String, $page: Int, $pageSize: Int) {
   searchCourses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {
@@ -2720,15 +2719,15 @@ export const SearchCoursesDocument = gql`
  *   },
  * });
  */
-export function useSearchCoursesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchCoursesQuery, SearchCoursesQueryVariables>) {
-        return ApolloReactHooks.useQuery<SearchCoursesQuery, SearchCoursesQueryVariables>(SearchCoursesDocument, baseOptions);
+export function useSearchCoursesQuery(baseOptions?: Apollo.QueryHookOptions<SearchCoursesQuery, SearchCoursesQueryVariables>) {
+        return Apollo.useQuery<SearchCoursesQuery, SearchCoursesQueryVariables>(SearchCoursesDocument, baseOptions);
       }
-export function useSearchCoursesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchCoursesQuery, SearchCoursesQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SearchCoursesQuery, SearchCoursesQueryVariables>(SearchCoursesDocument, baseOptions);
+export function useSearchCoursesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchCoursesQuery, SearchCoursesQueryVariables>) {
+          return Apollo.useLazyQuery<SearchCoursesQuery, SearchCoursesQueryVariables>(SearchCoursesDocument, baseOptions);
         }
 export type SearchCoursesQueryHookResult = ReturnType<typeof useSearchCoursesQuery>;
 export type SearchCoursesLazyQueryHookResult = ReturnType<typeof useSearchCoursesLazyQuery>;
-export type SearchCoursesQueryResult = ApolloReactCommon.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
+export type SearchCoursesQueryResult = Apollo.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
 export const CourseDetailDocument = gql`
     query CourseDetail($id: ID) {
   course(id: $id) {
@@ -2815,15 +2814,15 @@ export const CourseDetailDocument = gql`
  *   },
  * });
  */
-export function useCourseDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
-        return ApolloReactHooks.useQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
+export function useCourseDetailQuery(baseOptions?: Apollo.QueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
+        return Apollo.useQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
       }
-export function useCourseDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
+export function useCourseDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
+          return Apollo.useLazyQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
         }
 export type CourseDetailQueryHookResult = ReturnType<typeof useCourseDetailQuery>;
 export type CourseDetailLazyQueryHookResult = ReturnType<typeof useCourseDetailLazyQuery>;
-export type CourseDetailQueryResult = ApolloReactCommon.QueryResult<CourseDetailQuery, CourseDetailQueryVariables>;
+export type CourseDetailQueryResult = Apollo.QueryResult<CourseDetailQuery, CourseDetailQueryVariables>;
 export const ResourceDetailDocument = gql`
     query ResourceDetail($id: ID) {
   resource(id: $id) {
@@ -2906,15 +2905,15 @@ export const ResourceDetailDocument = gql`
  *   },
  * });
  */
-export function useResourceDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
-        return ApolloReactHooks.useQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
+export function useResourceDetailQuery(baseOptions?: Apollo.QueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
+        return Apollo.useQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
       }
-export function useResourceDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
+export function useResourceDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
+          return Apollo.useLazyQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
         }
 export type ResourceDetailQueryHookResult = ReturnType<typeof useResourceDetailQuery>;
 export type ResourceDetailLazyQueryHookResult = ReturnType<typeof useResourceDetailLazyQuery>;
-export type ResourceDetailQueryResult = ApolloReactCommon.QueryResult<ResourceDetailQuery, ResourceDetailQueryVariables>;
+export type ResourceDetailQueryResult = Apollo.QueryResult<ResourceDetailQuery, ResourceDetailQueryVariables>;
 export const SchoolDetailDocument = gql`
     query SchoolDetail($id: ID) {
   school(id: $id) {
@@ -2962,15 +2961,15 @@ export const SchoolDetailDocument = gql`
  *   },
  * });
  */
-export function useSchoolDetailQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
-        return ApolloReactHooks.useQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
+export function useSchoolDetailQuery(baseOptions?: Apollo.QueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
+        return Apollo.useQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
       }
-export function useSchoolDetailLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
+export function useSchoolDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
+          return Apollo.useLazyQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
         }
 export type SchoolDetailQueryHookResult = ReturnType<typeof useSchoolDetailQuery>;
 export type SchoolDetailLazyQueryHookResult = ReturnType<typeof useSchoolDetailLazyQuery>;
-export type SchoolDetailQueryResult = ApolloReactCommon.QueryResult<SchoolDetailQuery, SchoolDetailQueryVariables>;
+export type SchoolDetailQueryResult = Apollo.QueryResult<SchoolDetailQuery, SchoolDetailQueryVariables>;
 export const CreateResourceInitialDataDocument = gql`
     query CreateResourceInitialData($school: ID, $course: ID) {
   school(id: $school) {
@@ -3001,15 +3000,15 @@ export const CreateResourceInitialDataDocument = gql`
  *   },
  * });
  */
-export function useCreateResourceInitialDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
-        return ApolloReactHooks.useQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
+export function useCreateResourceInitialDataQuery(baseOptions?: Apollo.QueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
+        return Apollo.useQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
       }
-export function useCreateResourceInitialDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
+export function useCreateResourceInitialDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
+          return Apollo.useLazyQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
         }
 export type CreateResourceInitialDataQueryHookResult = ReturnType<typeof useCreateResourceInitialDataQuery>;
 export type CreateResourceInitialDataLazyQueryHookResult = ReturnType<typeof useCreateResourceInitialDataLazyQuery>;
-export type CreateResourceInitialDataQueryResult = ApolloReactCommon.QueryResult<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>;
+export type CreateResourceInitialDataQueryResult = Apollo.QueryResult<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>;
 export const SchoolsDocument = gql`
     query Schools {
   schools {
@@ -3034,15 +3033,15 @@ export const SchoolsDocument = gql`
  *   },
  * });
  */
-export function useSchoolsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
-        return ApolloReactHooks.useQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+export function useSchoolsQuery(baseOptions?: Apollo.QueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
+        return Apollo.useQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
       }
-export function useSchoolsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+export function useSchoolsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
+          return Apollo.useLazyQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
         }
 export type SchoolsQueryHookResult = ReturnType<typeof useSchoolsQuery>;
 export type SchoolsLazyQueryHookResult = ReturnType<typeof useSchoolsLazyQuery>;
-export type SchoolsQueryResult = ApolloReactCommon.QueryResult<SchoolsQuery, SchoolsQueryVariables>;
+export type SchoolsQueryResult = Apollo.QueryResult<SchoolsQuery, SchoolsQueryVariables>;
 export const SchoolTypesDocument = gql`
     query SchoolTypes {
   schoolTypes {
@@ -3067,15 +3066,15 @@ export const SchoolTypesDocument = gql`
  *   },
  * });
  */
-export function useSchoolTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
-        return ApolloReactHooks.useQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
+export function useSchoolTypesQuery(baseOptions?: Apollo.QueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
+        return Apollo.useQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
       }
-export function useSchoolTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
+export function useSchoolTypesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
+          return Apollo.useLazyQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
         }
 export type SchoolTypesQueryHookResult = ReturnType<typeof useSchoolTypesQuery>;
 export type SchoolTypesLazyQueryHookResult = ReturnType<typeof useSchoolTypesLazyQuery>;
-export type SchoolTypesQueryResult = ApolloReactCommon.QueryResult<SchoolTypesQuery, SchoolTypesQueryVariables>;
+export type SchoolTypesQueryResult = Apollo.QueryResult<SchoolTypesQuery, SchoolTypesQueryVariables>;
 export const CoursesDocument = gql`
     query Courses($school: ID) {
   courses(school: $school) {
@@ -3101,15 +3100,15 @@ export const CoursesDocument = gql`
  *   },
  * });
  */
-export function useCoursesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
-        return ApolloReactHooks.useQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
+export function useCoursesQuery(baseOptions?: Apollo.QueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
+        return Apollo.useQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
       }
-export function useCoursesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
+export function useCoursesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
+          return Apollo.useLazyQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
         }
 export type CoursesQueryHookResult = ReturnType<typeof useCoursesQuery>;
 export type CoursesLazyQueryHookResult = ReturnType<typeof useCoursesLazyQuery>;
-export type CoursesQueryResult = ApolloReactCommon.QueryResult<CoursesQuery, CoursesQueryVariables>;
+export type CoursesQueryResult = Apollo.QueryResult<CoursesQuery, CoursesQueryVariables>;
 export const CountriesDocument = gql`
     query Countries {
   countries {
@@ -3134,15 +3133,15 @@ export const CountriesDocument = gql`
  *   },
  * });
  */
-export function useCountriesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
-        return ApolloReactHooks.useQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
+export function useCountriesQuery(baseOptions?: Apollo.QueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
+        return Apollo.useQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
       }
-export function useCountriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
+export function useCountriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
+          return Apollo.useLazyQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
         }
 export type CountriesQueryHookResult = ReturnType<typeof useCountriesQuery>;
 export type CountriesLazyQueryHookResult = ReturnType<typeof useCountriesLazyQuery>;
-export type CountriesQueryResult = ApolloReactCommon.QueryResult<CountriesQuery, CountriesQueryVariables>;
+export type CountriesQueryResult = Apollo.QueryResult<CountriesQuery, CountriesQueryVariables>;
 export const CitiesDocument = gql`
     query Cities {
   cities {
@@ -3167,15 +3166,15 @@ export const CitiesDocument = gql`
  *   },
  * });
  */
-export function useCitiesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
-        return ApolloReactHooks.useQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
+export function useCitiesQuery(baseOptions?: Apollo.QueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
+        return Apollo.useQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
       }
-export function useCitiesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
+export function useCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
+          return Apollo.useLazyQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
         }
 export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
 export type CitiesLazyQueryHookResult = ReturnType<typeof useCitiesLazyQuery>;
-export type CitiesQueryResult = ApolloReactCommon.QueryResult<CitiesQuery, CitiesQueryVariables>;
+export type CitiesQueryResult = Apollo.QueryResult<CitiesQuery, CitiesQueryVariables>;
 export const ResourceTypesDocument = gql`
     query ResourceTypes {
   resourceTypes {
@@ -3200,15 +3199,15 @@ export const ResourceTypesDocument = gql`
  *   },
  * });
  */
-export function useResourceTypesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
-        return ApolloReactHooks.useQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+export function useResourceTypesQuery(baseOptions?: Apollo.QueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
+        return Apollo.useQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
       }
-export function useResourceTypesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+export function useResourceTypesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
+          return Apollo.useLazyQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
         }
 export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQuery>;
 export type ResourceTypesLazyQueryHookResult = ReturnType<typeof useResourceTypesLazyQuery>;
-export type ResourceTypesQueryResult = ApolloReactCommon.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
+export type ResourceTypesQueryResult = Apollo.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
 export const SubjectsDocument = gql`
     query Subjects {
   subjects {
@@ -3233,12 +3232,12 @@ export const SubjectsDocument = gql`
  *   },
  * });
  */
-export function useSubjectsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
-        return ApolloReactHooks.useQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
+export function useSubjectsQuery(baseOptions?: Apollo.QueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
+        return Apollo.useQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
       }
-export function useSubjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
+export function useSubjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
+          return Apollo.useLazyQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
         }
 export type SubjectsQueryHookResult = ReturnType<typeof useSubjectsQuery>;
 export type SubjectsLazyQueryHookResult = ReturnType<typeof useSubjectsLazyQuery>;
-export type SubjectsQueryResult = ApolloReactCommon.QueryResult<SubjectsQuery, SubjectsQueryVariables>;
+export type SubjectsQueryResult = Apollo.QueryResult<SubjectsQuery, SubjectsQueryVariables>;
