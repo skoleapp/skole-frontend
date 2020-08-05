@@ -1,5 +1,6 @@
 import { env } from 'config';
+import * as url from 'url';
 
 export const mediaURL = (filePath: string): string => {
-    return process.env.NODE_ENV === 'production' ? filePath : !!filePath ? String(env.API_URL + filePath) : '';
+    return !filePath ? '' : filePath.includes('//') ? filePath : url.resolve(env.API_URL, filePath);
 };
