@@ -19,5 +19,9 @@ FROM dev AS circleci
 
 COPY --chown=user:user . .
 
+# Needs to be defined during the build.
+ENV API_URL=
+
 CMD yarn lint \
-    && yarn type-check
+    && yarn type-check \
+    && yarn build

@@ -7,7 +7,6 @@ import {
     LoadingLayout,
     OfflineLayout,
 } from 'components';
-import { env } from 'config';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -47,16 +46,9 @@ const UploadResourcePage: NextPage = () => {
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const course: CourseObjectType = R.propOr(null, 'course', data);
 
-    const {
-        ref,
-        setSubmitting,
-        onError,
-        resetForm,
-        handleMutationErrors,
-        setFieldError,
-        setFieldValue,
-        unexpectedError,
-    } = useForm<UploadResourceFormValues>();
+    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, setFieldValue, unexpectedError } = useForm<
+        UploadResourceFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:required')),
@@ -106,44 +98,8 @@ const UploadResourcePage: NextPage = () => {
         setSubmitting(false);
     };
 
-    const handleFileGenerationError = (): void => {
-        setFieldError('file', t('upload-resource:fileGenerationError'));
-        setFieldValue('general', '');
-        setSubmitting(false);
-    };
-
-    // Use Cloudmersive API to generate PDF from any commonly used file format.
-    const generatePDFAndUpload = async ({ file, ...variables }: UploadResourceFormValues): Promise<void> => {
-        if (!!file) {
-            const body = new FormData();
-            body.append('file', file);
-            setFieldValue('general', t('upload-resource:fileGenerationLoadingText'));
-
-            try {
-                const res = await fetch('https://api.cloudmersive.com/convert/autodetect/to/pdf', {
-                    method: 'POST',
-                    body,
-                    headers: {
-                        Apikey: env.CLOUDMERSIVE_API_KEY || '',
-                    },
-                });
-
-                if (res.status === 200) {
-                    const blob = await res.blob();
-                    const pdf = new File([blob], 'resource.pdf');
-                    handleUpload({ file: pdf, ...variables });
-                } else {
-                    handleFileGenerationError();
-                }
-            } catch {
-                handleFileGenerationError();
-            }
-        }
-    };
-
     const handleSubmit = async (variables: UploadResourceFormValues): Promise<void> => {
         const { file } = variables;
-
         if (!!file) {
             const imageTypes = [
                 'image/apng',
@@ -158,7 +114,7 @@ const UploadResourcePage: NextPage = () => {
             ];
 
             if (imageTypes.includes(file.type)) {
-                // File is image.
+                // File is an image, resize it first before sending to backend.
                 Resizer.imageFileResizer(
                     file,
                     1400,
@@ -167,15 +123,12 @@ const UploadResourcePage: NextPage = () => {
                     90,
                     0,
                     (file: File) => {
-                        generatePDFAndUpload({ ...variables, file });
+                        handleUpload({ ...variables, file });
                     },
                     'blob',
                 );
-            } else if (file.type !== 'application/pdf') {
-                // File is neither image not PDF.
-                generatePDFAndUpload(variables);
             } else {
-                // File is PDF.
+                // File is not an image, can't do any processing so just send it as is.
                 handleUpload(variables);
             }
         }
