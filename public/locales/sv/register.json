@@ -5,6 +5,6 @@
     "termsHelpText": "Genom att registrera dig godkänner du våra",
     "updateUserHeader": "Nästan gjort!",
     "registerCompleteHeader": "Gjort!",
-    "registerCompleteEmailSent": "Kontrollera din e-postadress {{ email }} för en länk som du kan använda för att verifiera ditt konto.",
+    "registerCompleteEmailSent": "Kontrollera också din e-postadress {{ email }} för en länk som du kan använda för att verifiera ditt konto.",
     "registerCompleteHelpText": "Genom att ställa in din skola och ämne kan vi automatiskt visa dig innehåll baserat på dem. Du kan också lägga till dessa senare."
 }

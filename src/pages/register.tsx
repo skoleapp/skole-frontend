@@ -233,7 +233,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             helperText={t('forms:emailHelperText')}
             fullWidth
             autoComplete="off" // FIXME: This seems to have no effect.
-            type="email"
             InputProps={{
                 startAdornment: (
                     <InputAdornment position="start">
@@ -430,8 +429,8 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
                 <ButtonLink
                     href={urls.home}
                     endIcon={<ArrowForwardOutlined />}
-                    variant="contained"
                     color="primary"
+                    variant="contained"
                     fullWidth
                 >
                     {t('common:continue')}
