@@ -1,15 +1,15 @@
 mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
     register(input: { username: $username, email: $email, password: $password, code: $code }) {
-        user {
-            username
-            email
-        }
         errors {
             field
             messages
         }
     }
     login(input: { usernameOrEmail: $username, password: $password }) {
+        user {
+            username
+            email
+        }
         errors {
             field
             messages

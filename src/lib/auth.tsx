@@ -59,7 +59,7 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
 // Wrap all pages that require access only for unauthenticated users with this for all pages.
 export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithNoAuth: NextPage = pageProps => {
-        const { userMe, ...authProps } = useUserMe();
+        const { userMe, authLoading, authNetworkError } = useUserMe();
         const { asPath } = useRouter();
 
         // Automatically redirect user to logout if he is authenticated.
@@ -67,7 +67,13 @@ export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage =
             !!userMe && redirect({ pathname: urls.confirmLogout, query: { next: asPath } });
         }, [userMe]);
 
-        return <PageComponent {...(pageProps as T)} {...authProps} />;
+        return (
+            <PageComponent
+                {...(pageProps as T)}
+                authLoading={authLoading || !!userMe} // Show loading screen during redirect.
+                authNetworkError={authNetworkError}
+            />
+        );
     };
 
     return WithNoAuth;

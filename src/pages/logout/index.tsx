@@ -1,6 +1,6 @@
 import { useApolloClient } from '@apollo/client';
 import { Box, Typography } from '@material-ui/core';
-import { HowToRegOutlined } from '@material-ui/icons';
+import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, ErrorLayout, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { useNotificationsContext } from 'context';
 import { BackendLogoutMutation, useBackendLogoutMutation } from 'generated';
@@ -37,7 +37,13 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         <Box marginTop="1rem">
             <Typography variant="subtitle1">{t('logout:loggedOut')}</Typography>
             <Box marginTop="1rem">
-                <ButtonLink href={href} color="primary" variant="contained" endIcon={<HowToRegOutlined />}>
+                <ButtonLink
+                    href={href}
+                    color="primary"
+                    variant="contained"
+                    endIcon={<ArrowForwardOutlined />}
+                    fullWidth
+                >
                     {t('logout:loginButton')}
                 </ButtonLink>
             </Box>

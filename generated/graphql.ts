@@ -114,9 +114,9 @@ export type UserObjectType = {
   score?: Maybe<Scalars['Int']>;
   created: Scalars['DateTime'];
   verified?: Maybe<Scalars['Boolean']>;
+  activity?: Maybe<Array<Maybe<ActivityObjectType>>>;
   createdCourses: Array<CourseObjectType>;
   createdResources: Array<ResourceObjectType>;
-  activity?: Maybe<Array<Maybe<ActivityObjectType>>>;
   avatarThumbnail?: Maybe<Scalars['String']>;
   school?: Maybe<SchoolObjectType>;
   subject?: Maybe<SubjectObjectType>;
@@ -126,6 +126,17 @@ export type UserObjectType = {
   starredResources?: Maybe<Array<Maybe<ResourceObjectType>>>;
 };
 
+
+export type ActivityObjectType = {
+  __typename?: 'ActivityObjectType';
+  id: Scalars['ID'];
+  targetUser?: Maybe<UserObjectType>;
+  course?: Maybe<CourseObjectType>;
+  resource?: Maybe<ResourceObjectType>;
+  comment?: Maybe<CommentObjectType>;
+  read?: Maybe<Scalars['Boolean']>;
+  description?: Maybe<Scalars['String']>;
+};
 
 export type CourseObjectType = {
   __typename?: 'CourseObjectType';
@@ -223,17 +234,6 @@ export type VoteObjectType = {
   comment?: Maybe<CommentObjectType>;
   course?: Maybe<CourseObjectType>;
   resource?: Maybe<ResourceObjectType>;
-};
-
-export type ActivityObjectType = {
-  __typename?: 'ActivityObjectType';
-  id: Scalars['ID'];
-  targetUser?: Maybe<UserObjectType>;
-  course?: Maybe<CourseObjectType>;
-  resource?: Maybe<ResourceObjectType>;
-  comment?: Maybe<CommentObjectType>;
-  read?: Maybe<Scalars['Boolean']>;
-  description?: Maybe<Scalars['String']>;
 };
 
 export type BadgeObjectType = {
@@ -491,7 +491,7 @@ export type VoteMutationInput = {
  */
 export type RegisterMutationPayload = {
   __typename?: 'RegisterMutationPayload';
-  user?: Maybe<UserObjectType>;
+  message?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -836,16 +836,16 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register?: Maybe<(
     { __typename?: 'RegisterMutationPayload' }
-    & { user?: Maybe<(
-      { __typename?: 'UserObjectType' }
-      & Pick<UserObjectType, 'username' | 'email'>
-    )>, errors?: Maybe<Array<Maybe<(
+    & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
   )>, login?: Maybe<(
     { __typename?: 'LoginMutationPayload' }
-    & { errors?: Maybe<Array<Maybe<(
+    & { user?: Maybe<(
+      { __typename?: 'UserObjectType' }
+      & Pick<UserObjectType, 'username' | 'email'>
+    )>, errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
     )>>> }
@@ -1612,16 +1612,16 @@ export type SubjectsQuery = (
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
   register(input: {username: $username, email: $email, password: $password, code: $code}) {
-    user {
-      username
-      email
-    }
     errors {
       field
       messages
     }
   }
   login(input: {usernameOrEmail: $username, password: $password}) {
+    user {
+      username
+      email
+    }
     errors {
       field
       messages

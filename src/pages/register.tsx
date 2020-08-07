@@ -138,10 +138,10 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             handleRegisterMutationErrors(register.errors);
         } else if (!!login && !!login.errors) {
             handleRegisterMutationErrors(login.errors);
-        } else if (!!login && !!register && !!register.user) {
+        } else if (!!login && !!login.user && !!register) {
             try {
                 resetRegisterForm();
-                setRegisteredUser(register.user);
+                setRegisteredUser(login.user);
                 setPhase(RegisterPhases.UPDATE_USER);
             } catch {
                 unexpectedRegisterError();
@@ -172,10 +172,9 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         if (!!updateUser) {
             if (!!updateUser.errors) {
                 handleUpdateUserMutationErrors(updateUser.errors);
+            } else {
                 resetUpdateUserForm();
                 setPhase(RegisterPhases.REGISTER_COMPLETE);
-            } else {
-                updateUserUnexpectedError();
             }
         } else {
             updateUserUnexpectedError();
@@ -192,9 +191,9 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             variables: {
                 username: R.propOr('', 'username', registeredUser),
                 email: R.propOr('', 'email', registeredUser),
-                title: R.propOr('', 'title', registeredUser),
-                bio: R.propOr('', 'bio', registeredUser),
-                avatar: R.propOr('', 'avatar', registeredUser),
+                title: '',
+                bio: '',
+                avatar: "R.propOr('', 'avatar', registeredUser)",
                 school: R.propOr('', 'id', school),
                 subject: R.propOr('', 'id', subject),
             },
@@ -422,9 +421,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const renderRegisterComplete = phase === RegisterPhases.REGISTER_COMPLETE && (
         <FormControl fullWidth>
-            <Typography variant="body2">
-                {t('register:registerCompleteEmailSent', { email: R.propOr('-', 'email', registeredUser) })}
-            </Typography>
+            <Typography variant="subtitle1">{t('register:registerCompleteEmailSent')}</Typography>
             <Box marginTop="1rem">
                 <ButtonLink
                     href={urls.home}

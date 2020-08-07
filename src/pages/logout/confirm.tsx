@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
-import { ExitToAppOutlined } from '@material-ui/icons';
+import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
@@ -14,7 +14,13 @@ const ConfirmLogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         <Box marginTop="1rem">
             <Typography variant="subtitle1">{t('logout:confirmLogout')}</Typography>
             <Box marginTop="1rem">
-                <ButtonLink href={urls.logout} color="primary" variant="contained" endIcon={<ExitToAppOutlined />}>
+                <ButtonLink
+                    href={urls.logout}
+                    color="primary"
+                    variant="contained"
+                    endIcon={<ArrowForwardOutlined />}
+                    fullWidth
+                >
                     {t('common:confirm')}
                 </ButtonLink>
             </Box>
