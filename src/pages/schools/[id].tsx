@@ -24,8 +24,9 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import { AuthProps } from 'types';
 
-const SchoolDetailPage: NextPage = () => {
+const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { query } = useRouter();
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
@@ -232,11 +233,13 @@ const SchoolDetailPage: NextPage = () => {
         </StyledDrawer>
     );
 
+    const seoProps = {
+        title: schoolName,
+        description: t('school:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: schoolName,
-            description: t('school:description'),
-        },
+        seoProps,
         topNavbarProps: {
             dynamicBackUrl: true,
         },
@@ -245,16 +248,14 @@ const SchoolDetailPage: NextPage = () => {
         tabLabelRight: `${t('common:courses')} (${courseCount})`,
     };
 
-    if (loading) {
-        return <LoadingLayout />;
+    if (loading || authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if (!!error) {
-        if (!!error.networkError) {
-            return <OfflineLayout />;
-        }
-
-        return <ErrorLayout />;
+    if ((!!error && !!error.networkError) || authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    } else if (!!error) {
+        return <ErrorLayout seoProps={seoProps} />;
     }
 
     if (!!school) {

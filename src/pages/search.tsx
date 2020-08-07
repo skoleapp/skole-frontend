@@ -28,7 +28,7 @@ import {
     StyledTable,
 } from 'components';
 import { useDeviceContext } from 'context';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import {
     CitiesDocument,
@@ -52,7 +52,7 @@ import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
-import { UseDrawer } from 'types';
+import { AuthProps, UseDrawer } from 'types';
 import { getPaginationQuery, getQueryWithPagination, redirect } from 'utils';
 
 interface FilterSearchResultsFormValues {
@@ -71,7 +71,7 @@ interface ValidFilter {
     value: string;
 }
 
-const SearchPage: NextPage = () => {
+const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { ref, resetForm, setSubmitting } = useForm<FilterSearchResultsFormValues>();
     const { pathname, query } = useRouter();
@@ -219,103 +219,142 @@ const SearchPage: NextPage = () => {
         </Box>
     );
 
-    const renderCardContent = (
+    const renderCourseNameField = !isMobile && (
+        <Field
+            name="courseName"
+            label={t('forms:courseName')}
+            placeholder={t('forms:courseName')}
+            variant="outlined"
+            component={TextField}
+            fullWidth
+            autoComplete="off"
+        />
+    );
+
+    const renderCourseCodeField = (
+        <Field
+            name="courseCode"
+            label={t('forms:courseCode')}
+            placeholder={t('forms:courseCode')}
+            variant="outlined"
+            component={TextField}
+            fullWidth
+            autoComplete="off"
+        />
+    );
+
+    const renderSubjectField = (
+        <Field
+            name="subject"
+            label={t('forms:subject')}
+            placeholder={t('forms:subject')}
+            dataKey="subjects"
+            document={SubjectsDocument}
+            component={AutoCompleteField}
+            variant="outlined"
+            fullWidth
+        />
+    );
+
+    const renderSchoolField = (
+        <Field
+            name="school"
+            label={t('forms:school')}
+            placeholder={t('forms:school')}
+            dataKey="schools"
+            document={SchoolsDocument}
+            component={AutoCompleteField}
+            variant="outlined"
+            fullWidth
+        />
+    );
+
+    const renderSchoolTypeField = (
+        <Field
+            name="schoolType"
+            label={t('forms:schoolType')}
+            placeholder={t('forms:schoolType')}
+            dataKey="schoolTypes"
+            document={SchoolTypesDocument}
+            component={AutoCompleteField}
+            variant="outlined"
+            fullWidth
+        />
+    );
+
+    const renderCityField = (
+        <Field
+            name="city"
+            label={t('forms:city')}
+            placeholder={t('forms:city')}
+            dataKey="cities"
+            document={CitiesDocument}
+            component={AutoCompleteField}
+            variant="outlined"
+            fullWidth
+        />
+    );
+
+    const renderCountryField = (
+        <Field
+            name="country"
+            label={t('forms:country')}
+            placeholder={t('forms:country')}
+            dataKey="countries"
+            document={CountriesDocument}
+            component={AutoCompleteField}
+            variant="outlined"
+            fullWidth
+        />
+    );
+
+    const renderOrderingField = (
+        <Field name="ordering" label={t('forms:ordering')} component={NativeSelectField} fullWidth>
+            <option value="name">{t('forms:nameOrdering')}</option>
+            <option value="-name">{t('forms:nameOrderingReverse')}</option>
+            <option value="score">{t('forms:scoreOrdering')}</option>
+            <option value="-score">{t('forms:scoreOrderingReverse')}</option>
+        </Field>
+    );
+
+    const renderFormSubmitSection = (props: FormikProps<FilterSearchResultsFormValues>): JSX.Element => (
+        <FormSubmitSection submitButtonText={t('common:apply')} {...props} />
+    );
+
+    const renderClearButton = (props: FormikProps<FilterSearchResultsFormValues>): JSX.Element | false =>
+        !isMobile && (
+            <FormControl fullWidth>
+                <Button
+                    onClick={handleClearFilters}
+                    variant="outlined"
+                    color="primary"
+                    endIcon={<ClearAllOutlined />}
+                    disabled={props.isSubmitting}
+                    fullWidth
+                >
+                    {t('common:clear')}
+                </Button>
+            </FormControl>
+        );
+
+    const renderSearchFormContent = (props: FormikProps<FilterSearchResultsFormValues>): JSX.Element => (
+        <Form>
+            {renderCourseNameField}
+            {renderCourseCodeField}
+            {renderSubjectField}
+            {renderSchoolField}
+            {renderSchoolTypeField}
+            {renderCityField}
+            {renderCountryField}
+            {renderOrderingField}
+            {renderFormSubmitSection(props)}
+            {renderClearButton(props)}
+        </Form>
+    );
+
+    const renderFilterSearchResultsForm = (
         <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
-            {(props): JSX.Element => (
-                <Form>
-                    {!isMobile && (
-                        <Field
-                            name="courseName"
-                            label={t('forms:courseName')}
-                            placeholder={t('forms:courseName')}
-                            variant="outlined"
-                            component={TextField}
-                            fullWidth
-                            autoComplete="off"
-                        />
-                    )}
-                    <Field
-                        name="courseCode"
-                        label={t('forms:courseCode')}
-                        placeholder={t('forms:courseCode')}
-                        variant="outlined"
-                        component={TextField}
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <Field
-                        name="subject"
-                        label={t('forms:subject')}
-                        placeholder={t('forms:subject')}
-                        dataKey="subjects"
-                        document={SubjectsDocument}
-                        component={AutoCompleteField}
-                        variant="outlined"
-                        fullWidth
-                    />
-                    <Field
-                        name="school"
-                        label={t('forms:school')}
-                        placeholder={t('forms:school')}
-                        dataKey="schools"
-                        document={SchoolsDocument}
-                        component={AutoCompleteField}
-                        variant="outlined"
-                        fullWidth
-                    />
-                    <Field
-                        name="schoolType"
-                        label={t('forms:schoolType')}
-                        placeholder={t('forms:schoolType')}
-                        dataKey="schoolTypes"
-                        document={SchoolTypesDocument}
-                        component={AutoCompleteField}
-                        variant="outlined"
-                        fullWidth
-                    />
-                    <Field
-                        name="city"
-                        label={t('forms:city')}
-                        placeholder={t('forms:city')}
-                        dataKey="cities"
-                        document={CitiesDocument}
-                        component={AutoCompleteField}
-                        variant="outlined"
-                        fullWidth
-                    />
-                    <Field
-                        name="country"
-                        label={t('forms:country')}
-                        placeholder={t('forms:country')}
-                        dataKey="countries"
-                        document={CountriesDocument}
-                        component={AutoCompleteField}
-                        variant="outlined"
-                        fullWidth
-                    />
-                    <Field name="ordering" label={t('forms:ordering')} component={NativeSelectField} fullWidth>
-                        <option value="name">{t('forms:nameOrdering')}</option>
-                        <option value="-name">{t('forms:nameOrderingReverse')}</option>
-                        <option value="score">{t('forms:scoreOrdering')}</option>
-                        <option value="-score">{t('forms:scoreOrderingReverse')}</option>
-                    </Field>
-                    <FormSubmitSection submitButtonText={t('common:apply')} {...props} />
-                    {!isMobile && (
-                        <FormControl fullWidth>
-                            <Button
-                                onClick={handleClearFilters}
-                                variant="outlined"
-                                color="primary"
-                                endIcon={<ClearAllOutlined />}
-                                disabled={props.isSubmitting}
-                                fullWidth
-                            >
-                                {t('common:clear')}
-                            </Button>
-                        </FormControl>
-                    )}
-                </Form>
-            )}
+            {renderSearchFormContent}
         </Formik>
     );
 
@@ -351,7 +390,7 @@ const SearchPage: NextPage = () => {
                     text={t('common:filters')}
                     headerRight={renderMobileClearFiltersButton}
                 />
-                <CardContent>{renderCardContent}</CardContent>
+                <CardContent>{renderFilterSearchResultsForm}</CardContent>
             </StyledDrawer>
         </Box>
     );
@@ -366,7 +405,7 @@ const SearchPage: NextPage = () => {
                     <Box className="custom-header" display="flex" alignItems="center">
                         {renderFiltersHeader}
                     </Box>
-                    <CardContent>{renderCardContent}</CardContent>
+                    <CardContent>{renderFilterSearchResultsForm}</CardContent>
                 </StyledCard>
             </Grid>
             <Grid item container xs={7} md={8} lg={9}>
@@ -420,27 +459,27 @@ const SearchPage: NextPage = () => {
         </Box>
     );
 
+    const seoProps = {
+        title: t('search:title'),
+        description: t('search:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('search:title'),
-            description: t('search:description'),
-        },
+        seoProps,
         topNavbarProps: {
             disableSearch: true,
         },
         customTopNavbar,
     };
 
-    if (loading) {
-        return <LoadingLayout />;
+    if (loading || authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if (!!error) {
-        if (!!error.networkError) {
-            return <OfflineLayout />;
-        }
-
-        return <ErrorLayout />;
+    if ((!!error && !!error.networkError) || authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    } else if (!!error) {
+        return <ErrorLayout seoProps={seoProps} />;
     }
 
     return (

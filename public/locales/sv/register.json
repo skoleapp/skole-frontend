@@ -2,5 +2,9 @@
     "title": "Registrera",
     "description": "Det här är en registreringssida.",
     "header": "Registrera",
-    "termsHelpText": "Genom att registrera dig godkänner du våra villkor."
+    "termsHelpText": "Genom att registrera dig godkänner du våra",
+    "updateUserHeader": "Nästan gjort!",
+    "registerCompleteHeader": "Gjort!",
+    "registerCompleteEmailSent": "Kontrollera din e-postadress {{ email }} för en länk som du kan använda för att verifiera ditt konto.",
+    "registerCompleteHelpText": "Genom att ställa in din skola och ämne kan vi automatiskt visa dig innehåll baserat på dem. Du kan också lägga till dessa senare."
 }

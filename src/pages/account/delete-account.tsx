@@ -1,4 +1,4 @@
-import { FormSubmitSection, SettingsLayout } from 'components';
+import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -8,6 +8,7 @@ import { useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { NextPage } from 'next';
 import React from 'react';
+import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -20,7 +21,7 @@ export interface DeleteAccountFormValues {
     password: string;
 }
 
-export const DeleteAccountPage: NextPage = () => {
+export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
         DeleteAccountFormValues
     >();
@@ -88,11 +89,13 @@ export const DeleteAccountPage: NextPage = () => {
         </Formik>
     );
 
+    const seoProps = {
+        title: t('delete-account:title'),
+        description: t('delete-account:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('delete-account:title'),
-            description: t('delete-account:description'),
-        },
+        seoProps,
         topNavbarProps: {
             header: t('delete-account:header'),
             dynamicBackUrl: true,
@@ -101,6 +104,14 @@ export const DeleteAccountPage: NextPage = () => {
         desktopHeader: t('delete-account:header'),
         formLayout: true,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if (authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    }
 
     return <SettingsLayout {...layoutProps} />;
 };

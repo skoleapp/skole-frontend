@@ -1,18 +1,16 @@
 import { CardHeader } from '@material-ui/core';
 import { useTranslation } from 'lib';
 import React from 'react';
+import { MainLayoutProps } from 'types';
 
 import { StyledCard } from '..';
 import { MainLayout } from './MainLayout';
 
-export const OfflineLayout: React.FC = () => {
+export const OfflineLayout: React.FC<Pick<MainLayoutProps, 'seoProps'>> = ({ seoProps }) => {
     const { t } = useTranslation();
 
     const layoutProps = {
-        seoProps: {
-            title: t('offline:title'),
-            description: t('offline:description'),
-        },
+        seoProps,
         topNavbarProps: {
             dynamicBackUrl: true,
             disableAuthButtons: true,
@@ -22,7 +20,7 @@ export const OfflineLayout: React.FC = () => {
     return (
         <MainLayout {...layoutProps}>
             <StyledCard>
-                <CardHeader title={t('offline:header')} />
+                <CardHeader title={t('common:offline')} />
             </StyledCard>
         </MainLayout>
     );

@@ -3,16 +3,17 @@ import { UserMeQueryHookResult, UserObjectType, useUserMeQuery } from 'generated
 import * as R from 'ramda';
 import { useEffect } from 'react';
 
-interface UseUserMeQuery extends Omit<UserMeQueryHookResult, 'data' | 'error'> {
+interface UseUserMeQuery extends Omit<UserMeQueryHookResult, 'data' | 'loading' | 'error'> {
     userMe: UserObjectType | null;
-    networkError: boolean;
+    authLoading: boolean;
+    authNetworkError: boolean;
 }
 
 export const useUserMe = (): UseUserMeQuery => {
-    const { data, error: apolloError, ...result } = useUserMeQuery();
+    const { data, loading: authLoading, error: apolloError, ...result } = useUserMeQuery();
     const { setUserMe } = useAuthContext();
     const userMe = R.propOr(null, 'userMe', data) as UserObjectType | null;
-    const networkError = !!R.propOr(false, 'networkError', apolloError); // We only care about about network error.
+    const authNetworkError = !!R.propOr(false, 'networkError', apolloError); // We only care about about network error.
 
     useEffect(() => {
         if (!!userMe) {
@@ -21,5 +22,5 @@ export const useUserMe = (): UseUserMeQuery => {
         }
     }, [userMe]);
 
-    return { userMe, networkError, ...result };
+    return { userMe, authLoading, authNetworkError, ...result };
 };

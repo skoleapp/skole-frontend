@@ -1,10 +1,12 @@
 import { Box, Typography } from '@material-ui/core';
-import { SettingsLayout } from 'components';
+import { LoadingLayout, SettingsLayout } from 'components';
 import { useTranslation, withUserMe } from 'lib';
 import { NextPage } from 'next';
 import React from 'react';
+import { AuthProps } from 'types';
 
-const TermsPage: NextPage = () => {
+// This page will be available also when offline.
+const TermsPage: NextPage<AuthProps> = ({ authLoading }) => {
     const { t } = useTranslation();
 
     const renderCardContent = (
@@ -13,11 +15,13 @@ const TermsPage: NextPage = () => {
         </Box>
     );
 
+    const seoProps = {
+        title: t('terms:title'),
+        description: t('terms:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('terms:title'),
-            description: t('terms:description'),
-        },
+        seoProps,
         topNavbarProps: {
             header: t('terms:header'),
             dynamicBackUrl: true,
@@ -26,6 +30,10 @@ const TermsPage: NextPage = () => {
         renderCardContent,
         infoLayout: true,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
 
     return <SettingsLayout {...layoutProps} />;
 };

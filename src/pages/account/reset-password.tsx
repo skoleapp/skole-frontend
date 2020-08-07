@@ -1,7 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
-import { FormSubmitSection, SettingsLayout } from 'components';
+import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
 import { useNotificationsContext } from 'context';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import {
     ResetPasswordMutation,
@@ -14,6 +14,7 @@ import { useTranslation, withNoAuth } from 'lib';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -37,7 +38,7 @@ export interface PasswordFormValues {
     confirmNewPassword: string;
 }
 
-const ResetPasswordPage: NextPage = () => {
+const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const {
         ref: emailFormRef,
         handleMutationErrors: handleEmailFormMutationErrors,
@@ -61,6 +62,7 @@ const ResetPasswordPage: NextPage = () => {
     const token = (query.token as string) || '';
     const [emailSubmitted, setEmailSubmitted] = useState(false);
     const { toggleNotification } = useNotificationsContext();
+    const header = !emailSubmitted ? t('reset-password:header') : t('reset-password:emailSubmittedHeader');
 
     const emailValidationSchema = Yup.object().shape({
         email: Yup.string()
@@ -127,6 +129,22 @@ const ResetPasswordPage: NextPage = () => {
         setSubmittingPasswordForm(false);
     };
 
+    const renderEmailFormContent = (props: FormikProps<EmailFormValues>): JSX.Element => (
+        <Form>
+            <Field
+                placeholder={t('forms:email')}
+                name="email"
+                component={TextField}
+                label={t('forms:email')}
+                variant="outlined"
+                helperText={t('reset-password:helpText')}
+                fullWidth
+                autoComplete="off"
+            />
+            <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+        </Form>
+    );
+
     const renderEmailForm = (
         <Formik
             initialValues={emailFormInitialValues}
@@ -134,21 +152,7 @@ const ResetPasswordPage: NextPage = () => {
             onSubmit={handleSubmitEmail}
             ref={emailFormRef}
         >
-            {(props): JSX.Element => (
-                <Form>
-                    <Field
-                        placeholder={t('forms:email')}
-                        name="email"
-                        component={TextField}
-                        label={t('forms:email')}
-                        variant="outlined"
-                        helperText={t('reset-password:helpText')}
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-                </Form>
-            )}
+            {renderEmailFormContent}
         </Formik>
     );
 
@@ -158,6 +162,32 @@ const ResetPasswordPage: NextPage = () => {
         </Box>
     );
 
+    const renderPasswordFormContent = (props: FormikProps<PasswordFormValues>): JSX.Element => (
+        <Form>
+            <Field
+                placeholder={t('forms:newPassword')}
+                name="newPassword"
+                component={TextField}
+                label={t('forms:newPassword')}
+                variant="outlined"
+                type="password"
+                fullWidth
+                autoComplete="off"
+            />
+            <Field
+                placeholder={t('forms:confirmNewPassword')}
+                name="confirmNewPassword"
+                component={TextField}
+                label={t('forms:confirmNewPassword')}
+                variant="outlined"
+                type="password"
+                fullWidth
+                autoComplete="off"
+            />
+            <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+        </Form>
+    );
+
     const renderPasswordForm = (
         <Formik
             initialValues={passwordFormInitialValues}
@@ -165,49 +195,35 @@ const ResetPasswordPage: NextPage = () => {
             onSubmit={handleSubmitPassword}
             ref={passwordFormRef}
         >
-            {(props): JSX.Element => (
-                <Form>
-                    <Field
-                        placeholder={t('forms:newPassword')}
-                        name="newPassword"
-                        component={TextField}
-                        label={t('forms:newPassword')}
-                        variant="outlined"
-                        type="password"
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <Field
-                        placeholder={t('forms:confirmNewPassword')}
-                        name="confirmNewPassword"
-                        component={TextField}
-                        label={t('forms:confirmNewPassword')}
-                        variant="outlined"
-                        type="password"
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-                </Form>
-            )}
+            {renderPasswordFormContent}
         </Formik>
     );
 
     const renderCardContent = !!token ? renderPasswordForm : emailSubmitted ? renderEmailSubmitted : renderEmailForm;
 
+    const seoProps = {
+        title: t('reset-password:title'),
+        description: t('reset-password:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('reset-password:title'),
-            description: t('reset-password:description'),
-        },
+        seoProps,
         topNavbarProps: {
-            header: t('reset-password:header'),
+            header,
             dynamicBackUrl: true,
         },
         renderCardContent,
-        desktopHeader: t('reset-password:header'),
+        desktopHeader: header,
         formLayout: true,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if (authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    }
 
     return <SettingsLayout {...layoutProps} />;
 };

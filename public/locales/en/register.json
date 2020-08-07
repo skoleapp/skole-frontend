@@ -2,5 +2,9 @@
     "title": "Register",
     "description": "This is a registration page.",
     "header": "Register",
-    "termsHelpText": "By registering you agree to our terms."
+    "termsHelpText": "By registering you agree to our",
+    "updateUserHeader": "Almost done!",
+    "registerCompleteHeader": "Done!",
+    "registerCompleteEmailSent": "Please check your email {{ email }} for a link that you can use to verify your account.",
+    "registerCompleteHelpText": "By setting your school and subject we will be able to automatically show you content based on them. You can also add these later."
 }

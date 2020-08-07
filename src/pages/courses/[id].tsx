@@ -52,9 +52,10 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
+import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
 
-const CourseDetailPage: NextPage = () => {
+const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { query } = useRouter();
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
@@ -373,11 +374,13 @@ const CourseDetailPage: NextPage = () => {
         </StyledDrawer>
     );
 
+    const seoProps = {
+        title: courseName,
+        description: t('course:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: courseName,
-            description: t('course:description'),
-        },
+        seoProps,
         topNavbarProps: {
             staticBackUrl: { href: searchUrl },
             headerRight: renderActionsButton,
@@ -387,16 +390,14 @@ const CourseDetailPage: NextPage = () => {
         customBottomNavbar: renderCustomBottomNavbar,
     };
 
-    if (loading) {
-        return <LoadingLayout />;
+    if (loading || authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if (!!error) {
-        if (!!error.networkError) {
-            return <OfflineLayout />;
-        }
-
-        return <ErrorLayout />;
+    if ((!!error && !!error.networkError) || authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    } else if (!!error) {
+        return <ErrorLayout seoProps={seoProps} />;
     }
 
     if (!!course) {

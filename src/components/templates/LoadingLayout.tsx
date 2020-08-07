@@ -1,21 +1,17 @@
-import { useTranslation } from 'lib';
 import React from 'react';
+import { MainLayoutProps } from 'types';
 
 import { StyledCard } from '..';
 import { LoadingBox } from '../shared';
 import { MainLayout } from './MainLayout';
 
-export const LoadingLayout: React.FC = () => {
-    const { t } = useTranslation();
-
+export const LoadingLayout: React.FC<Pick<MainLayoutProps, 'seoProps'>> = ({ seoProps }) => {
     const layoutProps = {
-        seoProps: {
-            title: t('loading:title'),
-            description: t('loading:description'),
-        },
+        seoProps,
         disableBottomNavbar: true,
         topNavbarProps: {
             disableAuthButtons: true,
+            disableLogo: true,
         },
     };
 

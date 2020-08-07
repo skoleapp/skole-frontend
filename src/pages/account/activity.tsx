@@ -1,6 +1,14 @@
 import { ListItemText, MenuItem } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
-import { ActivityList, NotFoundLayout, SettingsLayout, StyledDrawer, StyledList } from 'components';
+import {
+    ActivityList,
+    LoadingLayout,
+    NotFoundLayout,
+    OfflineLayout,
+    SettingsLayout,
+    StyledDrawer,
+    StyledList,
+} from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import {
     ActivityObjectType,
@@ -12,8 +20,9 @@ import { useActionsDrawer } from 'hooks';
 import { useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
+import { AuthProps } from 'types';
 
-const ActivityPage: NextPage = () => {
+const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { userMe, setUserMe } = useAuthContext();
     const { renderActionsHeader, renderActionsButton, handleCloseActions, open, anchor } = useActionsDrawer({});
@@ -70,11 +79,13 @@ const ActivityPage: NextPage = () => {
         </StyledDrawer>
     );
 
+    const seoProps = {
+        title: t('activity:title'),
+        description: t('activity:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('activity:title'),
-            description: t('activity:description'),
-        },
+        seoProps,
         topNavbarProps: {
             header: t('activity:header'),
             dynamicBackUrl: true,
@@ -85,6 +96,14 @@ const ActivityPage: NextPage = () => {
         desktopHeader: t('activity:header'),
         fullSize: true,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if (authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    }
 
     if (!!userMe) {
         return <SettingsLayout {...layoutProps}>{renderActionsDrawer}</SettingsLayout>;

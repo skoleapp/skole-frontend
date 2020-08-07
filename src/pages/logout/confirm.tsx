@@ -1,12 +1,13 @@
 import { Box, Typography } from '@material-ui/core';
 import { ExitToAppOutlined } from '@material-ui/icons';
-import { ButtonLink, FormLayout } from 'components';
+import { ButtonLink, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
 import React from 'react';
+import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-const ConfirmLogoutPage: NextPage = () => {
+const ConfirmLogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
 
     const renderCardContent = (
@@ -20,17 +21,27 @@ const ConfirmLogoutPage: NextPage = () => {
         </Box>
     );
 
+    const seoProps = {
+        title: t('logout:title'),
+        description: t('logout:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('logout:title'),
-            description: t('logout:description'),
-        },
+        seoProps,
         desktopHeader: t('logout:header'),
         renderCardContent,
         topNavbarProps: {
             disableAuthButtons: true,
         },
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if (authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    }
 
     return <FormLayout {...layoutProps} />;
 };

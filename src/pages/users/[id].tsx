@@ -39,9 +39,10 @@ import * as R from 'ramda';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints, breakpointsNum } from 'styles';
+import { AuthProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
-const UserPage: NextPage = () => {
+const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { query } = useRouter();
     const isMobile = useDeviceContext(breakpointsNum.SM);
     const { t } = useTranslation();
@@ -382,11 +383,13 @@ const UserPage: NextPage = () => {
         </Box>
     );
 
+    const seoProps = {
+        title: username,
+        description: t('profile:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: username,
-            description: t('profile:description'),
-        },
+        seoProps,
         topNavbarProps: {
             header: username,
             dynamicBackUrl: true,
@@ -394,16 +397,14 @@ const UserPage: NextPage = () => {
         },
     };
 
-    if (loading) {
-        return <LoadingLayout />;
+    if (loading || authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if (!!error) {
-        if (!!error.networkError) {
-            return <OfflineLayout />;
-        }
-
-        return <ErrorLayout />;
+    if ((!!error && !!error.networkError) || authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    } else if (!!error) {
+        return <ErrorLayout seoProps={seoProps} />;
     }
 
     if (!!user) {
