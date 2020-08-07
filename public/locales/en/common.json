@@ -36,7 +36,6 @@
     "city": "City",
     "download": "Download",
     "resourceType": "Resource Type",
-    "description": "Description",
     "filters": "Filters",
     "searchResults": "Search Results",
     "editProfile": "Edit Profile",
@@ -75,5 +74,6 @@
     "commentShareText": "{{ creatorUsername }} on Skole: {{ commentPreview }}",
     "skip": "Skip",
     "loading": "Loading...",
-    "offline": "Could not connect to the server. Please make sure you have an Internet connection and try again in a moment."
+    "offline": "Could not connect to the server. Please make sure you have an Internet connection and try again in a moment.",
+    "description": "Courses, resources, discussion. All in one place."
 }

@@ -36,7 +36,6 @@
     "city": "Kaupunki",
     "download": "Lataa",
     "resourceType": "Resurssityyppi",
-    "description": "Description",
     "filters": "Suodattimet",
     "searchResults": "Hakutulokset",
     "editProfile": "Muokkaa profiilia",
@@ -75,5 +74,6 @@
     "commentShareText": "{{ creatorUsername }} Skolessa: {{ commentPreview }}",
     "skip": "Ohita",
     "loading": "Ladataan...",
-    "offline": "Palvelimeen ei saatu yhteyttä. Varmista Internet-yhteytesi ja yritä hetken päästä uudelleen."
+    "offline": "Palvelimeen ei saatu yhteyttä. Varmista Internet-yhteytesi ja yritä hetken päästä uudelleen.",
+    "description": "Kurssit, resurssit, keskustelu. Yhdessä paikassa."
 }

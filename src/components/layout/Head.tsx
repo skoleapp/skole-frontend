@@ -21,15 +21,17 @@ const GAScript = {
     `,
 };
 
-export const HeadComponent: React.FC<SEOProps> = ({ title, description }) => {
+export const HeadComponent: React.FC<SEOProps> = ({ title: customTitle, description: customDescription }) => {
     const { t } = useTranslation();
+    const title = `Skole | ${customTitle || t('common:slogan')}`;
+    const description = customDescription || t('common:description');
 
     return (
         <Head>
-            <title>{`Skole | ${title || t('common:slogan')}`}</title>
+            <title>{title}</title>
             <meta name="description" content={description} />
             <meta property="og:description" content={description} />
-            <meta property="og:title" content={`Skole | ${title}`} />
+            <meta property="og:title" content={title} />
             <meta property="og:type" content="website" />
             <meta property="og:site_name" content="Skole" />
             <meta charSet="utf-8" />

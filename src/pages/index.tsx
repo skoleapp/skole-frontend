@@ -68,9 +68,9 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading }) => {
         </Box>
     );
 
+    // Use default description.
     const seoProps = {
         title: t('index:title'),
-        description: t('index:description'),
     };
 
     const layoutProps = {
