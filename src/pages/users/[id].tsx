@@ -384,7 +384,7 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const seoProps = {
-        title: username,
+        title: username || '',
         description: t('profile:description'),
     };
 
