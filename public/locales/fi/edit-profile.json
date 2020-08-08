@@ -5,5 +5,6 @@
     "avatar": "Avatar",
     "addAvatar": "Lisää avatar",
     "changeAvatar": "Muokkaa avataria",
-    "clearAvatar": "Poista avatar"
+    "clearAvatar": "Poista avatar",
+    "backToProfile": "Takaisin profiiliin"
 }

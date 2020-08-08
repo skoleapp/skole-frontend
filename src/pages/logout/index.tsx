@@ -1,19 +1,19 @@
 import { useApolloClient } from '@apollo/client';
 import { Box, Typography } from '@material-ui/core';
-import { HowToRegOutlined } from '@material-ui/icons';
-import { ButtonLink, FormLayout, LoadingBox } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { ArrowForwardOutlined } from '@material-ui/icons';
+import { ButtonLink, ErrorLayout, FormLayout, LoadingLayout, OfflineLayout } from 'components';
+import { useNotificationsContext } from 'context';
 import { BackendLogoutMutation, useBackendLogoutMutation } from 'generated';
 import { useTranslation, withUserMe } from 'lib';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-const LogoutPage: NextPage = () => {
+const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const apolloClient = useApolloClient();
-    const { userMe, setUserMe } = useAuthContext();
     const { t } = useTranslation();
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
@@ -24,41 +24,56 @@ const LogoutPage: NextPage = () => {
         if (!!logout && logout.deleted) {
             await apolloClient.resetStore();
             localStorage.setItem('logout', String(Date.now()));
-            setUserMe(null);
         }
     };
 
-    const [logout, { loading }] = useBackendLogoutMutation({ onCompleted, onError });
+    const [logout, { loading, error }] = useBackendLogoutMutation({ onCompleted, onError });
 
     useEffect(() => {
-        !!userMe && logout();
-    }, [userMe]);
-
-    const renderLoggingOut = <LoadingBox text={t('logout:loggingOut')} />;
+        logout();
+    }, []);
 
     const renderLoggedOut = (
         <Box marginTop="1rem">
             <Typography variant="subtitle1">{t('logout:loggedOut')}</Typography>
             <Box marginTop="1rem">
-                <ButtonLink href={href} color="primary" variant="contained" endIcon={<HowToRegOutlined />}>
+                <ButtonLink
+                    href={href}
+                    color="primary"
+                    variant="contained"
+                    endIcon={<ArrowForwardOutlined />}
+                    fullWidth
+                >
                     {t('logout:loginButton')}
                 </ButtonLink>
             </Box>
         </Box>
     );
 
+    const seoProps = {
+        title: t('logout:title'),
+        description: t('logout:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('logout:title'),
-            description: t('logout:description'),
-        },
+        seoProps,
         desktopHeader: t('logout:header'),
-        renderCardContent: loading ? renderLoggingOut : renderLoggedOut,
+        renderCardContent: renderLoggedOut,
         disableBottomNavbar: true,
         topNavbarProps: {
             disableAuthButtons: true,
         },
     };
+
+    if (authLoading || loading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if ((!!error && !!error.networkError) || authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    } else if (!!error) {
+        return <ErrorLayout seoProps={seoProps} />;
+    }
 
     return (
         <StyledLogoutPage loading={loading}>

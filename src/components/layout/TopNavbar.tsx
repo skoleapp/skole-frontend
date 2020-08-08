@@ -37,6 +37,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     staticBackUrl,
     disableSearch,
     disableAuthButtons,
+    disableLogo,
     headerRight,
     headerRightSecondary,
     headerLeft,
@@ -70,6 +71,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Link>
     );
 
+    const renderHeader = <StyledHeaderText text={header} />;
+    const renderLogo = !disableLogo && <Logo />;
+
     const renderMobileContent = isMobile && (
         <Grid container alignItems="center">
             <Grid item xs={dense ? 4 : 2} container justify="flex-start" wrap="nowrap">
@@ -77,7 +81,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {headerLeft}
             </Grid>
             <Grid item xs={dense ? 4 : 8} container justify="center">
-                {header ? <StyledHeaderText text={header} /> : <Logo />}
+                {header ? renderHeader : renderLogo}
             </Grid>
             <Grid item xs={dense ? 4 : 2} container justify="flex-end">
                 {headerRightSecondary}
@@ -158,7 +162,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     const renderDesktopContent = !isMobile && (
         <Grid container alignItems="center">
             <Grid item xs={6} container>
-                <Logo />
+                {renderLogo}
             </Grid>
             <Grid item xs={6} container alignItems="center" justify="flex-end">
                 {renderSearch}

@@ -1,11 +1,13 @@
 import { Box, Typography } from '@material-ui/core';
-import { ButtonLink, SettingsLayout } from 'components';
+import { ButtonLink, LoadingLayout, SettingsLayout } from 'components';
 import { useTranslation, withUserMe } from 'lib';
 import { NextPage } from 'next';
 import React from 'react';
+import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-const AboutPage: NextPage = () => {
+// This page will be available also when offline.
+const AboutPage: NextPage<AuthProps> = ({ authLoading }) => {
     const { t } = useTranslation();
 
     const renderCardContent = (
@@ -26,11 +28,13 @@ const AboutPage: NextPage = () => {
         </Box>
     );
 
+    const seoProps = {
+        title: t('about:title'),
+        description: t('about:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('about:title'),
-            description: t('about:description'),
-        },
+        seoProps,
         topNavbarProps: {
             header: t('about:header'),
             dynamicBackUrl: true,
@@ -39,6 +43,10 @@ const AboutPage: NextPage = () => {
         renderCardContent,
         infoLayout: true,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
 
     return <SettingsLayout {...layoutProps} />;
 };

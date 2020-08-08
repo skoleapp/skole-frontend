@@ -4,6 +4,7 @@
     "header": "Verify Account",
     "emailHelpText": "Please click the button below and we will send you a link via email that you can use to verify your account.",
     "confirmationHelpText": "Good! Now click the button below to finish you account verification.",
-    "emailSubmitted": "Almost done! Please check your email for a link that you can use to verify your account.",
+    "emailSubmittedHeader": "Almost done!",
+    "emailSubmitted": "Please check your email for a link that you can use to verify your account.",
     "verified": "Your account is verified! You can continue using Skole."
 }

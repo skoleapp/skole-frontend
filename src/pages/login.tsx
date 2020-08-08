@@ -1,6 +1,6 @@
-import { Avatar, Box, Divider, Link, Typography } from '@material-ui/core';
-import { LibraryAddOutlined } from '@material-ui/icons';
-import { ButtonLink, FormLayout, FormSubmitSection, TextLink } from 'components';
+import { Avatar, Box, FormControl, InputAdornment, Link, Typography } from '@material-ui/core';
+import { AccountCircleOutlined, LockOutlined } from '@material-ui/icons';
+import { ButtonLink, FormLayout, FormSubmitSection, LoadingLayout, OfflineLayout, TextLink } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -11,6 +11,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
+import { AuthProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -19,7 +20,7 @@ interface LoginFormValues {
     password: string;
 }
 
-const LoginPage: NextPage = () => {
+const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderAlert } = useAlerts();
@@ -108,6 +109,13 @@ const LoginPage: NextPage = () => {
             fullWidth
             autoComplete="off"
             type={validExistingUser ? 'hidden' : 'text'}
+            InputProps={{
+                startAdornment: !validExistingUser && (
+                    <InputAdornment position="start">
+                        <AccountCircleOutlined />
+                    </InputAdornment>
+                ),
+            }}
         />
     );
 
@@ -121,6 +129,13 @@ const LoginPage: NextPage = () => {
             type="password"
             fullWidth
             autoComplete="off"
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <LockOutlined />
+                    </InputAdornment>
+                ),
+            }}
         />
     );
 
@@ -128,16 +143,12 @@ const LoginPage: NextPage = () => {
         <FormSubmitSection submitButtonText={t('common:login')} {...props} />
     );
 
-    const renderFormDividerSection = (
-        <Box marginY="1rem">
-            <Divider />
-        </Box>
-    );
-
     const renderRegisterButton = (
-        <ButtonLink href={urls.register} variant="outlined" color="primary" endIcon={<LibraryAddOutlined />} fullWidth>
-            {t('login:createAccount')}
-        </ButtonLink>
+        <FormControl fullWidth>
+            <ButtonLink href={urls.register} color="primary" fullWidth>
+                {t('common:register')}
+            </ButtonLink>
+        </FormControl>
     );
 
     const renderForgotPasswordLink = (
@@ -158,7 +169,6 @@ const LoginPage: NextPage = () => {
             {renderUsernameOrEmailField}
             {renderPasswordField}
             {renderFormSubmitSection(props)}
-            {renderFormDividerSection}
             {renderForgotPasswordLink}
             {renderLoginWithDifferentCredentialsLink}
         </Form>
@@ -169,7 +179,6 @@ const LoginPage: NextPage = () => {
             {renderUsernameOrEmailField}
             {renderPasswordField}
             {renderFormSubmitSection(props)}
-            {renderFormDividerSection}
             {renderRegisterButton}
             {renderForgotPasswordLink}
         </Form>
@@ -181,11 +190,13 @@ const LoginPage: NextPage = () => {
         </Formik>
     );
 
+    const seoProps = {
+        title: t('login:title'),
+        description: t('login:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('login:title'),
-            description: t('login:description'),
-        },
+        seoProps,
         topNavbarProps: {
             header: t('login:header'),
             headerRight: renderLanguageButton,
@@ -195,6 +206,14 @@ const LoginPage: NextPage = () => {
         renderAlert: (!!query.next && renderAlert('warning', t('alerts:loginRequired'))) || undefined,
         renderCardContent,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if (authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    }
 
     return <FormLayout {...layoutProps} />;
 };

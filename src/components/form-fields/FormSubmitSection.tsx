@@ -1,5 +1,5 @@
 import { Box, Button, ButtonProps, FormControl } from '@material-ui/core';
-import { Send } from '@material-ui/icons';
+import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
 
@@ -34,7 +34,7 @@ export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | '
                 type="submit"
                 disabled={isSubmitting}
                 variant={variant || 'contained'}
-                endIcon={endIcon || <Send />}
+                endIcon={endIcon || <ArrowForwardOutlined />}
                 color="primary"
                 fullWidth
             >

@@ -134,3 +134,20 @@ export const MENU_ITEMS = {
         },
     ],
 };
+
+// FAQ items.
+
+export const FAQ_ITEMS = [
+    {
+        title: 'faq:title-1',
+        text: 'faq:text-1',
+    },
+    {
+        title: 'faq:title-2',
+        text: 'faq:text-2',
+    },
+    {
+        title: 'faq:title-3',
+        text: 'faq:text-3',
+    },
+];

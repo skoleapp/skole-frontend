@@ -1,6 +1,6 @@
 import { Avatar, Box, Grid, Typography } from '@material-ui/core';
 import { AssignmentOutlined, ChatOutlined, SchoolOutlined } from '@material-ui/icons';
-import { ButtonLink, MainLayout, TextLink } from 'components';
+import { ButtonLink, LoadingLayout, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
 import { useTranslation, withNoAuth } from 'lib';
 import { NextPage } from 'next';
@@ -8,9 +8,11 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
+import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-const GetStartedPage: NextPage = () => {
+// This page will be available also when offline.
+const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderLanguageButton } = useLanguageSelector();
@@ -77,24 +79,30 @@ const GetStartedPage: NextPage = () => {
                 </ButtonLink>
                 <Box marginY="1rem">
                     <TextLink color="primary" href={{ pathname: urls.login, query }}>
-                        {t('common:alreadyHaveAccount')}
+                        {t('common:login')}
                     </TextLink>
                 </Box>
             </Box>
         </Box>
     );
 
+    const seoProps = {
+        title: t('get-started:title'),
+        description: t('get-started:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('get-started:title'),
-            description: t('get-started:description'),
-        },
+        seoProps,
         topNavbarProps: {
             disableAuthButtons: true,
             headerRight: renderLanguageButton,
         },
         disableBottomNavbar: true,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
 
     return (
         <MainLayout {...layoutProps}>

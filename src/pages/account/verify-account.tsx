@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
-import { FormSubmitSection, SettingsLayout } from 'components';
+import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik } from 'formik';
 import {
@@ -14,8 +14,9 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
+import { AuthProps } from 'types';
 
-const VerifyAccountPage: NextPage = () => {
+const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const {
         ref: emailFormRef,
         setSubmitting: setSubmittingEmailForm,
@@ -42,6 +43,7 @@ const VerifyAccountPage: NextPage = () => {
     const [emailSubmitted, setEmailSubmitted] = useState(false);
     const [verified, setVerified] = useState(initialVerified);
     const { toggleNotification } = useNotificationsContext();
+    const header = !emailSubmitted ? t('verify-account:header') : t('verify-account:emailSubmittedHeader');
 
     const onEmailFormCompleted = ({ resendVerificationEmail }: ResendVerificationEmailMutation): void => {
         if (!!resendVerificationEmail) {
@@ -154,19 +156,29 @@ const VerifyAccountPage: NextPage = () => {
         ? renderEmailSubmitted
         : renderEmailForm;
 
+    const seoProps = {
+        title: t('verify-account:title'),
+        description: t('verify-account:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('verify-account:title'),
-            description: t('verify-account:description'),
-        },
+        seoProps,
         topNavbarProps: {
-            header: t('verify-account:header'),
+            header,
             dynamicBackUrl: true,
         },
         renderCardContent,
-        desktopHeader: t('verify-account:header'),
+        desktopHeader: header,
         formLayout: true,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if (authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    }
 
     return <SettingsLayout {...layoutProps} />;
 };

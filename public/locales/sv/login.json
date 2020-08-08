@@ -2,8 +2,7 @@
     "title": "Logga In",
     "description": "Detta är en inloggningssida.",
     "header": "Logga In",
-    "createAccount": "Skapa Ett konto",
-    "forgotPassword": "Glömt Ditt Lösenord?",
+    "forgotPassword": "Glömt ditt lösenord?",
     "existingUserGreeting": "Välkommen tillbaka, {{ username }}.",
-    "loginWithDifferentCredentials": "Logga in med olika referenser."
+    "loginWithDifferentCredentials": "Logga in med olika referenser"
 }

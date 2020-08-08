@@ -5,5 +5,5 @@
     "loggingOut": "Logging out...",
     "loggedOut": "You have been logged out!",
     "loginButton": "Login again",
-    "confirmLogout": "Please log out to continue."
+    "confirmLogout": "You need to log out to continue."
 }

@@ -16,6 +16,7 @@ export interface TopNavbarProps {
     };
     disableSearch?: boolean;
     disableAuthButtons?: boolean;
+    disableLogo?: boolean;
     headerRight?: JSX.Element | boolean;
     headerRightSecondary?: JSX.Element;
     headerLeft?: JSX.Element;
@@ -23,7 +24,7 @@ export interface TopNavbarProps {
 
 export interface MainLayoutProps {
     children: NonNullable<ReactNode>;
-    seoProps?: SEOProps;
+    seoProps: SEOProps;
     topNavbarProps?: TopNavbarProps;
     containerProps?: Omit<ContainerProps, 'children'>;
     customTopNavbar?: JSX.Element;

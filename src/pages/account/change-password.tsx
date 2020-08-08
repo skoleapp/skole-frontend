@@ -1,4 +1,4 @@
-import { FormSubmitSection, SettingsLayout } from 'components';
+import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -7,6 +7,7 @@ import { useForm } from 'hooks';
 import { useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
 import React from 'react';
+import { AuthProps } from 'types';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -22,7 +23,7 @@ export interface ChangePasswordFormValues {
     confirmNewPassword: string;
 }
 
-const ChangePasswordPage: NextPage = () => {
+const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
         ChangePasswordFormValues
     >();
@@ -101,11 +102,13 @@ const ChangePasswordPage: NextPage = () => {
         </Formik>
     );
 
+    const seoProps = {
+        title: t('change-password:title'),
+        description: t('change-password:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('change-password:title'),
-            description: t('change-password:description'),
-        },
+        seoProps,
         topNavbarProps: {
             header: t('change-password:header'),
             dynamicBackUrl: true,
@@ -114,6 +117,14 @@ const ChangePasswordPage: NextPage = () => {
         desktopHeader: t('change-password:header'),
         formLayout: true,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if (authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    }
 
     return <SettingsLayout {...layoutProps} />;
 };

@@ -1,4 +1,4 @@
-import { AutoCompleteField, FormLayout, FormSubmitSection } from 'components';
+import { AutoCompleteField, FormLayout, FormSubmitSection, LoadingLayout, OfflineLayout } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -15,6 +15,7 @@ import { useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { AuthProps } from 'types';
 import { redirect } from 'utils';
 import * as Yup from 'yup';
 
@@ -26,7 +27,7 @@ interface CreateCourseFormValues {
     general: string;
 }
 
-const CreateCoursePage: NextPage = () => {
+const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
@@ -132,11 +133,13 @@ const CreateCoursePage: NextPage = () => {
         </Formik>
     );
 
+    const seoProps = {
+        title: t('create-course:title'),
+        description: t('create-course:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('create-course:title'),
-            description: t('create-course:description'),
-        },
+        seoProps,
         topNavbarProps: {
             header: t('create-course:header'),
             dynamicBackUrl: true,
@@ -144,6 +147,14 @@ const CreateCoursePage: NextPage = () => {
         desktopHeader: t('create-course:header'),
         renderCardContent,
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if (authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    }
 
     return <FormLayout {...layoutProps} />;
 };

@@ -46,10 +46,10 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
-import { MaxWidth } from 'types';
+import { AuthProps, MaxWidth } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 
-const ResourceDetailPage: NextPage = () => {
+const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { query } = useRouter();
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
@@ -416,11 +416,13 @@ const ResourceDetailPage: NextPage = () => {
         </StyledDrawer>
     );
 
+    const seoProps = {
+        title,
+        description: t('resource:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title,
-            description: t('resource:description'),
-        },
+        seoProps,
         topNavbarProps: {
             staticBackUrl: staticBackUrl,
             headerLeft: renderShareButton,
@@ -433,16 +435,14 @@ const ResourceDetailPage: NextPage = () => {
         },
     };
 
-    if (loading) {
-        return <LoadingLayout />;
+    if (loading || authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if (!!error) {
-        if (!!error.networkError) {
-            return <OfflineLayout />;
-        }
-
-        return <ErrorLayout />;
+    if ((!!error && !!error.networkError) || authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    } else if (!!error) {
+        return <ErrorLayout seoProps={seoProps} />;
     }
 
     if (!!resource) {

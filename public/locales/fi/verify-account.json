@@ -2,8 +2,9 @@
     "title": "Vahvista tili",
     "description": "Tämä on tilin vahvistussivu.",
     "header": "Vahvista tili",
-    "emailHelpText": "Ole hyvä ja klikkaa alla olevaa nappulaa. Lähetämme sinulle sähköpostilla linkin, jolla voit vahvistaa tilisi.",
+    "emailHelpText": "Klikkaa alla olevaa nappulaa, niin lähetämme sinulle sähköpostilla linkin, jolla voit vahvistaa tilisi.",
     "confirmationHelpText": "Hyvä! Klikkaa vielä alla olevaa nappulaa viimeistelleksäsi tilin vahvistuksen.",
-    "emailSubmitted": "Melkein valmista! Ole hyvä ja tarkista sähköpostistasi linkki, jolla voit vahvistaa tilisi.",
+    "emailSubmittedHeader": "Melkein valmista!",
+    "emailSubmitted": "Tarkista vielä sähköpostistasi linkki, jolla voit vahvistaa tilisi.",
     "verified": "Tilisi on vahvistettu! Voit jatkaa Skolen käyttöä."
 }

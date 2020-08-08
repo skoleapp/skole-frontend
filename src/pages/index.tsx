@@ -1,12 +1,13 @@
 import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typography } from '@material-ui/core';
 import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
-import { MainLayout } from 'components';
+import { LoadingLayout, MainLayout } from 'components';
 import { useSearch } from 'hooks';
 import { Link, useTranslation, withAuth } from 'lib';
 import { NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
+import { AuthProps } from 'types';
 import { UrlObject } from 'url';
 import { SHORTCUTS } from 'utils';
 
@@ -16,7 +17,8 @@ interface Shortcut {
     href: string | UrlObject;
 }
 
-const IndexPage: NextPage = () => {
+// This page will be available also when offline.
+const IndexPage: NextPage<AuthProps> = ({ authLoading }) => {
     const { t } = useTranslation();
     const { handleSubmit, inputProps } = useSearch();
 
@@ -66,15 +68,21 @@ const IndexPage: NextPage = () => {
         </Box>
     );
 
+    // Use default description.
+    const seoProps = {
+        title: t('index:title'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('index:title'),
-            description: t('index:description'),
-        },
+        seoProps,
         topNavbarProps: {
             disableSearch: true,
         },
     };
+
+    if (authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
+    }
 
     return (
         <StyledIndexPage>

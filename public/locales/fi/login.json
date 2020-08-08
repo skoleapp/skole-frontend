@@ -2,8 +2,7 @@
     "title": "Kirjaudu sisään",
     "description": "Tämä on kirjautumissivu.",
     "header": "Kirjaudu sisään",
-    "createAccount": "Luo tili",
     "forgotPassword": "Unohtuiko salasana?",
     "existingUserGreeting": "Tervetuloa takaisin, {{ username }}.",
-    "loginWithDifferentCredentials": "Kirjaudu eri tunnuksilla."
+    "loginWithDifferentCredentials": "Kirjaudu eri tunnuksilla"
 }

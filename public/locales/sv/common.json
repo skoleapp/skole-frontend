@@ -36,7 +36,6 @@
     "city": "Stad",
     "download": "Ladda ner",
     "resourceType": "Resurstyp",
-    "description": "Beskrivning",
     "filters": "Filter",
     "searchResults": "Sökresultat",
     "editProfile": "Redigera profil",
@@ -73,5 +72,8 @@
     "activity": "Aktivitet",
     "seeAll": "Visa allt",
     "commentShareText": "{{ creatorUsername }} på Skole: {{ commentPreview }}",
-    "alreadyHaveAccount": "Har du redan ett konto?"
+    "skip": "Hoppa",
+    "loading": "Laddar...",
+    "offline": "Det gick inte att ansluta till servern. Se till att du har en internetanslutning och försök igen om ett ögonblick.",
+    "description": "Kurser, resurser, diskussion. Allt på ett ställe."
 }

@@ -27,6 +27,7 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';
+import { AuthProps } from 'types';
 import { redirect } from 'utils';
 import * as Yup from 'yup';
 
@@ -38,7 +39,7 @@ interface UploadResourceFormValues {
     file: File | null;
 }
 
-const UploadResourcePage: NextPage = () => {
+const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -194,11 +195,13 @@ const UploadResourcePage: NextPage = () => {
         </Formik>
     );
 
+    const seoProps = {
+        title: t('upload-resource:title'),
+        description: t('upload-resource:description'),
+    };
+
     const layoutProps = {
-        seoProps: {
-            title: t('upload-resource:title'),
-            description: t('upload-resource:description'),
-        },
+        seoProps,
         topNavbarProps: {
             header: t('upload-resource:header'),
             dynamicBackUrl: true,
@@ -207,16 +210,14 @@ const UploadResourcePage: NextPage = () => {
         renderCardContent,
     };
 
-    if (loading) {
-        return <LoadingLayout />;
+    if (loading || authLoading) {
+        return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if (!!error) {
-        if (!!error.networkError) {
-            return <OfflineLayout />;
-        }
-
-        return <ErrorLayout />;
+    if ((!!error && !!error.networkError) || authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
+    } else if (!!error) {
+        return <ErrorLayout seoProps={seoProps} />;
     }
 
     return <FormLayout {...layoutProps} />;

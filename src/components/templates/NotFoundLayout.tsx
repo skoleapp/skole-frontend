@@ -15,6 +15,7 @@ export const NotFoundLayout: React.FC = () => {
         },
         topNavbarProps: {
             dynamicBackUrl: true,
+            disableAuthButtons: true,
         },
     };
 

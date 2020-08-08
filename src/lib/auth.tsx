@@ -1,5 +1,3 @@
-import { LoadingLayout, OfflineLayout } from 'components';
-import { useAuthContext } from 'context';
 import { useUserMe } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -10,9 +8,8 @@ import { redirect, urls } from 'utils';
 // Wrap all pages that require authentication with this.
 export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const withAuth: NextPage = pageProps => {
-        const { userMe, loading, networkError } = useUserMe();
-        const { userMe: contextUserMe } = useAuthContext();
-        const shouldRedirect = !(loading || networkError || userMe);
+        const { userMe, authLoading, authNetworkError } = useUserMe();
+        const shouldRedirect = !(authLoading || authNetworkError || !!userMe);
         const { asPath } = useRouter();
 
         const syncLogout = (e: StorageEvent): void => {
@@ -46,15 +43,13 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
             };
         }, []);
 
-        if (loading || !contextUserMe) {
-            return <LoadingLayout />;
-        }
-
-        if (networkError) {
-            return <OfflineLayout />;
-        }
-
-        return <PageComponent {...(pageProps as T)} />;
+        return (
+            <PageComponent
+                {...(pageProps as T)}
+                authLoading={authLoading || shouldRedirect} // Show loading screen during redirect.
+                authNetworkError={authNetworkError}
+            />
+        );
     };
 
     return withAuth;
@@ -64,23 +59,21 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
 // Wrap all pages that require access only for unauthenticated users with this for all pages.
 export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithNoAuth: NextPage = pageProps => {
-        const { userMe, loading, networkError } = useUserMe();
+        const { userMe, authLoading, authNetworkError } = useUserMe();
         const { asPath } = useRouter();
 
-        // Automatically redirect user to home page if he is authenticated.
+        // Automatically redirect user to logout if he is authenticated.
         useEffect(() => {
             !!userMe && redirect({ pathname: urls.confirmLogout, query: { next: asPath } });
-        }, []);
+        }, [userMe]);
 
-        if (loading) {
-            return <LoadingLayout />;
-        }
-
-        if (networkError) {
-            return <OfflineLayout />;
-        }
-
-        return <PageComponent {...(pageProps as T)} />;
+        return (
+            <PageComponent
+                {...(pageProps as T)}
+                authLoading={authLoading || !!userMe} // Show loading screen during redirect.
+                authNetworkError={authNetworkError}
+            />
+        );
     };
 
     return WithNoAuth;
@@ -90,17 +83,8 @@ export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage =
 // Wrap all pages that do not require authentication with this.
 export const withUserMe = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithUserMe: NextPage = pageProps => {
-        const { loading, networkError } = useUserMe();
-
-        if (loading) {
-            return <LoadingLayout />;
-        }
-
-        if (networkError) {
-            return <OfflineLayout />;
-        }
-
-        return <PageComponent {...(pageProps as T)} />;
+        const authProps = useUserMe();
+        return <PageComponent {...(pageProps as T)} {...authProps} />;
     };
 
     return WithUserMe;

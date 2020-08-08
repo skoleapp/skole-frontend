@@ -39,8 +39,8 @@
     "scoreOrderingReverse": "Pisteet (laskeva)",
     "betaCode": "Betakoodi",
     "name": "Nimi",
-    "schoolHelpText": "Lisäämällä koulun voimme näyttää sinulle automaattisesti sisältöä perustuen oppilaitokseesi.",
-    "subjectHelpText": "Lisäämällä oppiaineen voimme näyttää sinulle automaattisesti sisältöä perustuen oppiaineesesi.",
+    "schoolHelpText": "Lisäämällä koulun voimme näyttää sinulle automaattisesti sisältöä perustuen siihen.",
+    "subjectHelpText": "Lisäämällä oppiaineen voimme näyttää sinulle automaattisesti sisältöä perustuen siihen.",
     "marketingPermission": "Markkinointilupa (saatavilla pian)",
     "pushNotifications": "Push-notifikaatiot (saatavilla pian)"
 }
