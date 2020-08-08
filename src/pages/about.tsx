@@ -20,7 +20,7 @@ const AboutPage: NextPage<AuthProps> = ({ authLoading }) => {
                     {t('about:feedbackHeader')}
                 </Typography>
                 <Box marginTop="1rem">
-                    <ButtonLink href={urls.contact} color="primary" variant="contained">
+                    <ButtonLink href={urls.contact} color="primary" variant="contained" fullWidth>
                         {t('about:feedbackText')}
                     </ButtonLink>
                 </Box>
