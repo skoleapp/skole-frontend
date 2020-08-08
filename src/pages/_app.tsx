@@ -7,8 +7,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import { ContextProvider } from 'context';
 import { appWithTranslation, pageView, Router, useApollo, useTranslation } from 'lib';
 import { ConfirmProvider } from 'material-ui-confirm';
-import { NextPage } from 'next';
-import { AppProps } from 'next/app';
+import App, { AppContext, AppProps } from 'next/app';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
 import { GlobalStyle, theme } from 'styles';
@@ -23,7 +22,7 @@ Router.events.on('routeChangeComplete', (url: string) => {
     pageView(url);
 });
 
-const SkoleApp: NextPage<AppProps> = ({ Component, pageProps }) => {
+const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     const { t } = useTranslation();
     const apolloClient = useApollo(pageProps.initialApolloState);
 
@@ -54,5 +53,9 @@ const SkoleApp: NextPage<AppProps> = ({ Component, pageProps }) => {
         </ApolloProvider>
     );
 };
+
+SkoleApp.getInitialProps = async (appContext: AppContext): Promise<AppProps> => ({
+    ...((await App.getInitialProps(appContext)) as AppProps),
+});
 
 export default appWithTranslation(SkoleApp);
