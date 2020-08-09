@@ -1,4 +1,3 @@
-import { ContainerProps } from '@material-ui/core';
 import { ReactNode } from 'react';
 import { UrlObject } from 'url';
 
@@ -26,7 +25,6 @@ export interface MainLayoutProps {
     children: NonNullable<ReactNode>;
     seoProps: SEOProps;
     topNavbarProps?: TopNavbarProps;
-    containerProps?: Omit<ContainerProps, 'children'>;
     customTopNavbar?: JSX.Element;
     customBottomNavbar?: JSX.Element;
     disableBottomNavbar?: boolean;

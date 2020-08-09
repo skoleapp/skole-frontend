@@ -1,7 +1,6 @@
 export type MuiColor = 'inherit' | 'default' | 'primary' | 'secondary' | undefined;
 export type ButtonColor = 'inherit' | 'primary' | 'secondary' | 'default';
 export type ButtonVariant = 'text' | 'outlined' | 'contained' | undefined;
-export type MaxWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
 
 export type TextVariant =
     | 'subtitle1'

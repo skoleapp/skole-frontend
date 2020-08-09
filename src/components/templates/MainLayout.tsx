@@ -23,7 +23,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     customTopNavbar,
     customBottomNavbar,
     disableBottomNavbar,
-    containerProps,
     children,
 }) => {
     const isMobile = useDeviceContext();
@@ -31,7 +30,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     const layoutProps = { disableBottomMargin: !userMe && !customBottomNavbar };
     const renderHead = <Head {...seoProps} />;
     const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
-    const renderChildren = <Container {...containerProps}>{children}</Container>;
+    const renderChildren = <Container>{children}</Container>;
     const renderBottomNavbar = customBottomNavbar || (!!userMe && !disableBottomNavbar && <BottomNavbar />);
     const renderFooter = !isMobile && <Footer />;
     const renderNotifications = <Notifications />;

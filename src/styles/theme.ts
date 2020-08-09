@@ -4,6 +4,11 @@ import { breakpointsNum } from './breakpoints';
 import { colors } from './colors';
 
 export const theme = createMuiTheme({
+    props: {
+        MuiContainer: {
+            maxWidth: 'xl',
+        },
+    },
     breakpoints: {
         values: {
             xs: breakpointsNum.XS,
