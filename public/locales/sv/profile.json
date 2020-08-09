@@ -1,10 +1,11 @@
 {
-    "description": "Detta är en profilsida.",
+    "description": "Visa Skole-profilen för användaren {{ username }}.",
     "score": "poäng",
     "courses": "kurser",
     "resources": "resurser",
     "editProfile": "Redigera Profil",
     "noResources": "Inga uppladdade resurser...",
     "noCourses": "Inga tillagda kurser...",
-    "viewStarred": "Visa stjärnmärkt"
+    "viewStarred": "Visa stjärnmärkt",
+    "notFound": "Profilen hittades inte."
 }

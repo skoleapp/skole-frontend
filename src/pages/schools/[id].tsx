@@ -17,21 +17,31 @@ import {
     TextLink,
 } from 'components';
 import { useDeviceContext } from 'context';
-import { CourseObjectType, SchoolObjectType, SubjectObjectType, useSchoolDetailQuery } from 'generated';
+import {
+    CourseObjectType,
+    SchoolDetailDocument,
+    SchoolDetailQueryResult,
+    SchoolObjectType,
+    SubjectObjectType,
+} from 'generated';
 import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useSwipeableTabs } from 'hooks';
-import { Link, useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { initApolloClient, Link, useTranslation, withAuth } from 'lib';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { AuthProps } from 'types';
 
-const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
-    const { query } = useRouter();
+const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
+    data,
+    error,
+    authLoading,
+    authNetworkError,
+}) => {
+    const { isFallback } = useRouter();
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const { searchUrl } = useSearch();
-    const { data, loading, error } = useSchoolDetailQuery({ variables: query });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const schoolName = R.propOr('', 'name', school) as string;
     const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school) as string;
@@ -48,6 +58,9 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare({ text: schoolName });
+    const schoolNotFound = t('school:notFound');
+    const title = !!school ? schoolName : schoolNotFound;
+    const description = !!school ? t('school:description', { schoolName }) : schoolNotFound;
 
     const {
         renderInfoHeader,
@@ -234,8 +247,8 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     );
 
     const seoProps = {
-        title: schoolName,
-        description: t('school:description'),
+        title,
+        description,
     };
 
     const layoutProps = {
@@ -248,7 +261,7 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         tabLabelRight: `${t('common:courses')} (${courseCount})`,
     };
 
-    if (loading || authLoading) {
+    if (isFallback || authLoading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
@@ -269,6 +282,23 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     } else {
         return <NotFoundLayout />;
     }
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: true,
+    };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const apolloClient = initApolloClient();
+    const result = await apolloClient.query({ query: SchoolDetailDocument, variables: params });
+
+    return {
+        props: result,
+        revalidate: 1,
+    };
 };
 
 export default withAuth(SchoolDetailPage);

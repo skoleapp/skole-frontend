@@ -30,10 +30,17 @@ import {
     TextLink,
 } from 'components';
 import { useAuthContext, useDeviceContext } from 'context';
-import { BadgeObjectType, CourseObjectType, ResourceObjectType, UserObjectType, useUserDetailQuery } from 'generated';
+import {
+    BadgeObjectType,
+    CourseObjectType,
+    ResourceObjectType,
+    UserDetailDocument,
+    UserDetailQueryResult,
+    UserObjectType,
+} from 'generated';
 import { useFrontendPagination, useMoment, useSwipeableTabs } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { initApolloClient, useTranslation, withAuth } from 'lib';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -42,14 +49,13 @@ import { breakpoints, breakpointsNum } from 'styles';
 import { AuthProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
-const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
-    const { query } = useRouter();
+const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, authLoading, authNetworkError }) => {
+    const { isFallback } = useRouter();
     const isMobile = useDeviceContext(breakpointsNum.SM);
     const { t } = useTranslation();
     const moment = useMoment();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
-    const { data, loading, error } = useUserDetailQuery({ variables: query });
     const user: UserObjectType = R.propOr(null, 'user', data);
     const rank = R.propOr('', 'rank', user) as string;
     const username = R.propOr('-', 'username', user) as string;
@@ -68,6 +74,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const resourceCount = createdResources.length;
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
+    const notFound = t('profile:notFound');
+    const description = !!user ? t('profile:description', { username }) : notFound;
 
     const profileStrengthSteps = [
         t('profile-strength:step1'),
@@ -384,8 +392,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const seoProps = {
-        title: username || '',
-        description: t('profile:description'),
+        title: !!user ? username : notFound,
+        description,
     };
 
     const layoutProps = {
@@ -397,7 +405,7 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         },
     };
 
-    if (loading || authLoading) {
+    if (isFallback || authLoading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
@@ -453,5 +461,22 @@ const StyledUserPage = styled(Box)`
         }
     }
 `;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: true,
+    };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const apolloClient = initApolloClient();
+    const result = await apolloClient.query({ query: UserDetailDocument, variables: params });
+
+    return {
+        props: result,
+        revalidate: 1,
+    };
+};
 
 export default withAuth(UserPage);

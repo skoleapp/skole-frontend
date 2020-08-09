@@ -1,9 +1,10 @@
 {
-    "description": "This is a resource page.",
+    "description": "View {{ resourceTitle }} on Skole.",
     "deleteResourceTitle": "Delete Resource",
     "deleteResourceDescription": "Are you sure you want to delete this resource?",
     "loadingResource": "Loading resource...",
     "errorLoadingResource": "Error loading resource.",
     "commentsPlaceholder": "Here you can discuss generally about the resource.",
-    "drawMode": "Draw Mode"
+    "drawMode": "Draw Mode",
+    "notFound": "Resource not found."
 }
