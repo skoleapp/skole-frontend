@@ -1,6 +1,6 @@
 {
     "title": "Delete Account",
-    "description": "This is a delete account page.",
+    "description": "Delete your Skole account.",
     "header": "Delete Account",
     "deleteAccountTitle": "Are you sure you want to delete your account?",
     "deleteAccountDescription": "This action cannot be reverted and your account will be lost forever."

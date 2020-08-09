@@ -1,6 +1,6 @@
 {
     "title": "Activity",
-    "description": "This is the activity page.",
+    "description": "View your activity on Skole.",
     "header": "Activity",
     "noActivity": "Your activity will show up here.",
     "markAllAsRead": "Mark All As Read",

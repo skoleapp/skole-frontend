@@ -1,6 +1,6 @@
 {
     "title": "Starred",
-    "description": "This is a page for starred courses and resources.",
+    "description": "View your starred items on Skole.",
     "header": "Starred",
     "noResources": "Starred resources will show here.",
     "noCourses": "Starred courses will show here."

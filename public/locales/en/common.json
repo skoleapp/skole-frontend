@@ -74,6 +74,5 @@
     "commentShareText": "{{ creatorUsername }} on Skole: {{ commentPreview }}",
     "skip": "Skip",
     "loading": "Loading...",
-    "offline": "Could not connect to the server. Please make sure you have an Internet connection and try again in a moment.",
-    "description": "Courses, resources, discussion. All in one place."
+    "offline": "Could not connect to the server. Please make sure you have an Internet connection and try again in a moment."
 }
