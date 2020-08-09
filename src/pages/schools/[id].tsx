@@ -58,9 +58,9 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare({ text: schoolName });
-    const schoolNotFound = t('school:notFound');
-    const title = !!school ? schoolName : schoolNotFound;
-    const description = !!school ? t('school:description', { schoolName }) : schoolNotFound;
+    const notFound = t('school:notFound');
+    const title = !!school ? schoolName : !isFallback ? notFound : t('common:loading');
+    const description = !!school ? t('school:description', { schoolName }) : notFound;
 
     const {
         renderInfoHeader,

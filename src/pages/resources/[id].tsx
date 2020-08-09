@@ -87,7 +87,7 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const { commentModalOpen } = useDiscussionContext();
     const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
     const notFound = t('resource:notFound');
-    const seoTitle = !!resource ? title : notFound;
+    const seoTitle = !!resource ? title : !isFallback ? notFound : t('common:loading');
     const description = !!resource ? t('resource:description', { resourceTitle }) : notFound;
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
