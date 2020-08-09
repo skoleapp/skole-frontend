@@ -1,6 +1,6 @@
 import { Button, Grid, Typography } from '@material-ui/core';
 import { CancelOutlined, KeyboardArrowRightOutlined } from '@material-ui/icons';
-import { useCommentModalContext, useDeviceContext, usePDFViewerContext } from 'context';
+import { useDeviceContext, useDiscussionContext, usePDFViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
 
@@ -9,7 +9,7 @@ export const DrawModeControls: React.FC = () => {
     const isMobile = useDeviceContext();
     const colWidth = isMobile ? 6 : 5;
     const { setDrawMode, screenshot } = usePDFViewerContext();
-    const { toggleCommentModal } = useCommentModalContext();
+    const { toggleCommentModal } = useDiscussionContext();
     const handleCancelButtonClick = (): void => setDrawMode(false);
 
     const handleContinueButtonClick = (): void => {

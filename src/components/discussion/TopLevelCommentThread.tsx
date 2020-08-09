@@ -1,6 +1,6 @@
 import { Box, Fab } from '@material-ui/core';
 import { AddOutlined } from '@material-ui/icons';
-import { useCommentModalContext, useDeviceContext, useDiscussionContext } from 'context';
+import { useDeviceContext, useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
 import React from 'react';
 import { TopLevelCommentThreadProps } from 'types';
@@ -16,9 +16,8 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
     formKey,
     placeholderText,
 }) => {
-    const { topLevelComments, setTopLevelComments } = useDiscussionContext(initialComments);
+    const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext(initialComments);
     const isMobile = useDeviceContext();
-    const { toggleCommentModal } = useCommentModalContext();
     const appendComments = (comment: CommentObjectType): void => setTopLevelComments([...topLevelComments, comment]);
     const openCommentModal = (): void => toggleCommentModal(true);
     const removeComment = (id: string): void => setTopLevelComments(topLevelComments.filter(c => c.id !== id));

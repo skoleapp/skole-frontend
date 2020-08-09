@@ -1,6 +1,6 @@
 import { Backdrop, Box, IconButton, Typography } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
-import { useAttachmentViewerContext } from 'context';
+import { useDiscussionContext } from 'context';
 import { useResponsiveIconButtonProps } from 'hooks';
 import Image from 'material-ui-image';
 import React from 'react';
@@ -9,7 +9,7 @@ import { breakpoints } from 'styles';
 import { mediaURL } from 'utils';
 
 export const AttachmentViewer: React.FC = () => {
-    const { attachment, toggleAttachmentViewer } = useAttachmentViewerContext();
+    const { attachment, toggleAttachmentViewer } = useDiscussionContext();
     const attachmentName = attachment && attachment.split('/').pop();
     const { size } = useResponsiveIconButtonProps();
     const handleClose = (): void => toggleAttachmentViewer(null);

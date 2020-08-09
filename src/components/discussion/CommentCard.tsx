@@ -18,7 +18,7 @@ import {
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
 } from '@material-ui/icons';
-import { useAttachmentViewerContext, useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
+import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation, VoteObjectType } from 'generated';
 import { useActionsDrawer, useMoment, useVotes } from 'hooks';
 import { useTranslation } from 'lib';
@@ -53,8 +53,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', comment);
     const replyCount = replyComments.length;
     const { toggleNotification } = useNotificationsContext();
-    const { toggleAttachmentViewer } = useAttachmentViewerContext();
-    const { toggleTopComment } = useDiscussionContext();
+    const { toggleTopComment, toggleAttachmentViewer } = useDiscussionContext();
     const shareQuery = `?comment=${commentId}`;
     const creatorUsername = R.propOr('unknown', 'username', comment.user) as string;
     const commentPreview = comment.text.length > 20 ? `${comment.text.substring(0, 20)}...` : comment.text;

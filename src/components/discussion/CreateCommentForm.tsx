@@ -1,9 +1,9 @@
 import { Box, Fab, Fade, IconButton, OutlinedTextFieldProps, Paper, TextField, Tooltip } from '@material-ui/core';
-import { AttachFileOutlined, CameraAltOutlined, ClearOutlined, SendOutlined } from '@material-ui/icons';
+import { CameraAltOutlined, ClearOutlined, SendOutlined } from '@material-ui/icons';
 import {
     useAuthContext,
-    useCommentModalContext,
     useDeviceContext,
+    useDiscussionContext,
     useNotificationsContext,
     usePDFViewerContext,
 } from 'context';
@@ -42,7 +42,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const disabled = verified === false;
     const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const { toggleNotification } = useNotificationsContext();
-    const { commentModalOpen, toggleCommentModal } = useCommentModalContext();
+    const { commentModalOpen, toggleCommentModal } = useDiscussionContext();
     const { screenshot, setScreenshot } = usePDFViewerContext();
     const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const isMobile = useDeviceContext();
