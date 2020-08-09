@@ -1,7 +1,8 @@
 const withOffline = require('next-offline')
 
 const config = {
-    publicRuntimeConfig: {
+    target: 'serverless',
+    env: {
         API_URL: process.env.API_URL,
         BACKEND_URL: process.env.BACKEND_URL || process.env.API_URL,
     },
