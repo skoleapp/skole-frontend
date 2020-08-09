@@ -5,7 +5,7 @@ import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
-import { useAlerts, useForm, useLanguageSelector } from 'hooks';
+import { useForm, useLanguageSelector } from 'hooks';
 import { useTranslation, withNoAuth } from 'lib';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -23,7 +23,6 @@ interface LoginFormValues {
 const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { query } = useRouter();
-    const { renderAlert } = useAlerts();
     const { renderLanguageButton } = useLanguageSelector();
     const { toggleNotification } = useNotificationsContext();
     const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
@@ -203,7 +202,6 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             disableAuthButtons: true,
         },
         desktopHeader: t('login:header'),
-        renderAlert: (!!query.next && renderAlert('warning', t('alerts:loginRequired'))) || undefined,
         renderCardContent,
     };
 
