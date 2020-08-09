@@ -3,7 +3,6 @@ import { NormalizedCacheObject } from '@apollo/client/cache';
 import { HttpConfig } from '@apollo/client/link/http/selectHttpOptionsAndBody';
 import { setContext } from 'apollo-link-context';
 import { createUploadLink } from 'apollo-upload-client';
-import { env } from 'config';
 import { IncomingMessage } from 'http';
 import { i18n } from 'lib';
 import * as R from 'ramda';
@@ -16,7 +15,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
 const createApolloClient = (ctx?: SSRContext): ApolloClient<NormalizedCacheObject> => {
     const isBrowser = typeof window !== 'undefined';
-    const uri = isBrowser ? env.API_URL : env.BACKEND_URL;
+    const uri = isBrowser ? process.env.API_URL : process.env.BACKEND_URL;
     const req: IncomingMessage | undefined = R.propOr(undefined, 'req', ctx);
     const token = getTokenCookie(req);
 
