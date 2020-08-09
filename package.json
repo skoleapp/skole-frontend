@@ -7,7 +7,7 @@
     "author": "Skole Team",
     "scripts": {
         "dev": "next -p 3001",
-        "build": "NEXT_EXPORT=true next build && NEXT_EXPORT=true next export",
+        "build": "NEXT_EXPORT=true next build",
         "start": "next start -p 3001",
         "type-check": "tsc",
         "gen": "graphql-codegen --config codegen.yml",
