@@ -4,7 +4,7 @@ import { useTranslation } from 'lib';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import styled from 'styled-components';
-import { LanguageSelectorContext } from 'types';
+import { LanguageSelectorContextType } from 'types';
 
 interface Language {
     code: string;
@@ -18,7 +18,7 @@ const languages: Language[] = [
     { code: 'SE', label: 'languages:swedish', value: 'sv' },
 ];
 
-interface UseLanguageSelector extends LanguageSelectorContext {
+interface UseLanguageSelector extends LanguageSelectorContextType {
     renderCurrentFlag: string;
     languageToFlag: (isoCode: string) => string;
     languages: Language[];

@@ -1,7 +1,8 @@
 {
-    "description": "Detta är en kurssida.",
+    "description": "Visa {{ resourceTitle }} på Skole.",
     "noResources": "Inga resurser har lagts till på denna kurs ändå",
     "deleteCourseTitle": "Ta bort kurs",
     "deleteCourseDescription": "Är du säker på att du vill ta bort den här kursen?",
-    "commentsPlaceholder": "Här kan du ha allmän diskussion om kursen."
+    "commentsPlaceholder": "Här kan du ha allmän diskussion om kursen.",
+    "notFound": "Kurs hittades inte."
 }

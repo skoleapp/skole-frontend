@@ -1,13 +1,20 @@
 import 'nprogress/nprogress.css';
 import 'typeface-roboto';
+import 'draft-js/dist/Draft.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
-import { ContextProvider } from 'context';
+import {
+    AuthContextProvider,
+    DiscussionContextProvider,
+    LanguageSelectorContextProvider,
+    NotificationsContextProvider,
+    PDFViewerContextProvider,
+    SettingsContextProvider,
+} from 'context';
 import { appWithTranslation, pageView, Router, useApollo, useTranslation } from 'lib';
 import { ConfirmProvider } from 'material-ui-confirm';
-import { NextPage } from 'next';
 import { AppProps } from 'next/app';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
@@ -23,7 +30,7 @@ Router.events.on('routeChangeComplete', (url: string) => {
     pageView(url);
 });
 
-const SkoleApp: NextPage<AppProps> = ({ Component, pageProps }) => {
+const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     const { t } = useTranslation();
     const apolloClient = useApollo(pageProps.initialApolloState);
 
@@ -42,15 +49,25 @@ const SkoleApp: NextPage<AppProps> = ({ Component, pageProps }) => {
 
     return (
         <ApolloProvider client={apolloClient}>
-            <ContextProvider>
-                <ThemeProvider theme={theme}>
-                    <ConfirmProvider defaultOptions={defaultConfirmOptions}>
-                        <CssBaseline />
-                        <GlobalStyle />
-                        <Component {...pageProps} />
-                    </ConfirmProvider>
-                </ThemeProvider>
-            </ContextProvider>
+            <AuthContextProvider>
+                <LanguageSelectorContextProvider>
+                    <NotificationsContextProvider>
+                        <SettingsContextProvider>
+                            <DiscussionContextProvider>
+                                <PDFViewerContextProvider>
+                                    <ThemeProvider theme={theme}>
+                                        <ConfirmProvider defaultOptions={defaultConfirmOptions}>
+                                            <CssBaseline />
+                                            <GlobalStyle />
+                                            <Component {...pageProps} />
+                                        </ConfirmProvider>
+                                    </ThemeProvider>
+                                </PDFViewerContextProvider>
+                            </DiscussionContextProvider>
+                        </SettingsContextProvider>
+                    </NotificationsContextProvider>
+                </LanguageSelectorContextProvider>
+            </AuthContextProvider>
         </ApolloProvider>
     );
 };

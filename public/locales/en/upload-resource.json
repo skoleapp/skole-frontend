@@ -1,6 +1,6 @@
 {
     "title": "Upload Resource",
-    "description": "This is resource upload page.",
+    "description": "Upload new resource on Skole.",
     "header": "Upload Resource",
     "fileUploadingText": "Uploading file..."
 }

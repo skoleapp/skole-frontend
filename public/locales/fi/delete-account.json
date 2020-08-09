@@ -1,6 +1,6 @@
 {
     "title": "Poista tili",
-    "description": "Tämä on tilin poistamissivu.",
+    "description": "Poista Skole-tilisi.",
     "header": "Poista tili",
     "deleteAccountTitle": "Haluatko varmasti poistaa tilisi?",
     "deleteAccountDescription": "Tätä toimenpidettä ei voida peruuttaa ja tilisi poistetaan pysyvästi."

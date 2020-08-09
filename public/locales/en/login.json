@@ -1,6 +1,6 @@
 {
     "title": "Log In",
-    "description": "This is a login page.",
+    "description": "Log in to Skole.",
     "header": "Log In",
     "forgotPassword": "Forgot password?",
     "existingUserGreeting": "Welcome back, {{ username }}.",

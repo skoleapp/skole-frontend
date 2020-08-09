@@ -74,6 +74,5 @@
     "commentShareText": "{{ creatorUsername }} Skolessa: {{ commentPreview }}",
     "skip": "Ohita",
     "loading": "Ladataan...",
-    "offline": "Palvelimeen ei saatu yhteyttä. Varmista Internet-yhteytesi ja yritä hetken päästä uudelleen.",
-    "description": "Kurssit, resurssit, keskustelu. Yhdessä paikassa."
+    "offline": "Palvelimeen ei saatu yhteyttä. Varmista Internet-yhteytesi ja yritä hetken päästä uudelleen."
 }

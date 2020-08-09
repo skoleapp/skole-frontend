@@ -1,9 +1,10 @@
 {
-    "description": "Tämä on resurssi-sivu.",
+    "description": "Näytä {{ resourceTitle }} Skolessa.",
     "deleteResourceTitle": "Poista resurssi",
     "deleteResourceDescription": "Oletko varma että haluat poistaa tämän resurssin?",
     "loadingResource": "Ladataan resurssia...",
     "errorLoadingResource": "Virhe ladattaessa resurssia.",
     "commentsPlaceholder": "Täällä voit keskustella resurssista.",
-    "drawMode": "Piirtotila"
+    "drawMode": "Piirtotila",
+    "notFound": "Resurssia ei löytynyt."
 }

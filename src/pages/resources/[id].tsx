@@ -25,38 +25,43 @@ import {
 } from 'components';
 import {
     useAuthContext,
-    useCommentModalContext,
     useDeviceContext,
+    useDiscussionContext,
     useNotificationsContext,
     usePDFViewerContext,
 } from 'context';
 import {
     CommentObjectType,
     DeleteResourceMutation,
+    ResourceDetailDocument,
+    ResourceDetailQueryResult,
     ResourceObjectType,
     useDeleteResourceMutation,
-    useResourceDetailQuery,
     UserObjectType,
     VoteObjectType,
 } from 'generated';
 import { useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useSwipeableTabs, useVotes } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
+import { initApolloClient, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
-import { NextPage } from 'next';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
-import { AuthProps, MaxWidth } from 'types';
+import { AuthProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 
-const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
-    const { query } = useRouter();
+const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
+    data,
+    error,
+    authLoading,
+    authNetworkError,
+}) => {
     const { t } = useTranslation();
+    const { isFallback } = useRouter();
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
-    const { data, loading, error } = useResourceDetailQuery({ variables: query });
     const resource: ResourceObjectType = R.propOr(null, 'resource', data);
     const resourceTitle = R.propOr('', 'title', resource) as string;
     const resourceDate = R.propOr('', 'date', resource) as string;
@@ -79,8 +84,11 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const commentCount = comments.length;
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare({ text: resourceTitle });
-    const { commentModalOpen } = useCommentModalContext();
+    const { commentModalOpen } = useDiscussionContext();
     const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
+    const notFound = t('resource:notFound');
+    const seoTitle = !!resource ? title : !isFallback ? notFound : t('common:loading');
+    const description = !!resource ? t('resource:description', { resourceTitle }) : notFound;
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
     useCommentQuery(comments);
@@ -417,8 +425,8 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     );
 
     const seoProps = {
-        title,
-        description: t('resource:description'),
+        title: seoTitle,
+        description,
     };
 
     const layoutProps = {
@@ -430,12 +438,9 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
             headerRightSecondary: renderInfoButton,
         },
         customBottomNavbar: renderCustomBottomNavbar,
-        containerProps: {
-            maxWidth: 'xl' as MaxWidth,
-        },
     };
 
-    if (loading || authLoading) {
+    if (isFallback || authLoading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
@@ -457,6 +462,23 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     } else {
         return <NotFoundLayout />;
     }
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: true,
+    };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const apolloClient = initApolloClient();
+    const result = await apolloClient.query({ query: ResourceDetailDocument, variables: params });
+
+    return {
+        props: result,
+        revalidate: 1,
+    };
 };
 
 export default withAuth(ResourceDetailPage);

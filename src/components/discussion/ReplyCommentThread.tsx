@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Typography } from '@material-ui/core';
-import { useCommentModalContext, useDeviceContext, useDiscussionContext } from 'context';
+import { useDeviceContext, useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
@@ -12,9 +12,8 @@ import { StyledDiscussionBox } from './StyledDiscussionBox';
 export const ReplyCommentThread: React.FC = () => {
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
-    const { topComment, toggleTopComment } = useDiscussionContext();
+    const { topComment, toggleTopComment, toggleCommentModal } = useDiscussionContext();
     const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
-    const { toggleCommentModal } = useCommentModalContext();
     const target = { comment: Number(R.propOr(undefined, 'id', topComment)) };
     const openCommentModal = (): void => toggleCommentModal(true);
 

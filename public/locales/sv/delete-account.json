@@ -1,6 +1,6 @@
 {
     "title": "Radera konto",
-    "description": "Det här är en kontos borttagningssida.",
+    "description": "Radera ditt Skole-konto.",
     "header": "Radera konto",
     "deleteAccountTitle": "Är du säker på att du vill ta bort ditt konto?",
     "deleteAccountDescription": "Den här åtgärden kan inte återställas och ditt konto kommer att raderas permanent."

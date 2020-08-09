@@ -1,6 +1,6 @@
 {
     "title": "Kirjaudu sisään",
-    "description": "Tämä on kirjautumissivu.",
+    "description": "Kirjaudu Skoleen.",
     "header": "Kirjaudu sisään",
     "forgotPassword": "Unohtuiko salasana?",
     "existingUserGreeting": "Tervetuloa takaisin, {{ username }}.",

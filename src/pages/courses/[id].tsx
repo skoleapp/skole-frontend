@@ -26,11 +26,12 @@ import {
 import { useAuthContext, useDeviceContext, useDiscussionContext, useNotificationsContext } from 'context';
 import {
     CommentObjectType,
+    CourseDetailDocument,
+    CourseDetailQueryResult,
     CourseObjectType,
     DeleteCourseMutation,
     ResourceObjectType,
     SubjectObjectType,
-    useCourseDetailQuery,
     useDeleteCourseMutation,
     UserObjectType,
     VoteObjectType,
@@ -46,24 +47,28 @@ import {
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
+import { initApolloClient, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
-import { NextPage } from 'next';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
 
-const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
-    const { query } = useRouter();
+const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
+    data,
+    error,
+    authLoading,
+    authNetworkError,
+}) => {
+    const { isFallback } = useRouter();
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
-    const { data, loading, error } = useCourseDetailQuery({ variables: query });
     const course: CourseObjectType = R.propOr(null, 'course', data);
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
@@ -86,6 +91,9 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare({ text: courseName });
     const iconButtonProps = useResponsiveIconButtonProps();
+    const notFound = t('course:notFound');
+    const title = !!course ? courseName : !isFallback ? notFound : t('common:loading');
+    const description = !!course ? t('course:description', { courseName }) : notFound;
 
     // Automatically open comment thread if a comment has been provided as a query parameter.
     useCommentQuery(comments);
@@ -375,8 +383,8 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     );
 
     const seoProps = {
-        title: courseName,
-        description: t('course:description'),
+        title,
+        description,
     };
 
     const layoutProps = {
@@ -390,7 +398,7 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         customBottomNavbar: renderCustomBottomNavbar,
     };
 
-    if (loading || authLoading) {
+    if (isFallback || authLoading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
@@ -412,6 +420,23 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     } else {
         return <NotFoundLayout />;
     }
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: true,
+    };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const apolloClient = initApolloClient();
+    const result = await apolloClient.query({ query: CourseDetailDocument, variables: params });
+
+    return {
+        props: result,
+        revalidate: 1,
+    };
 };
 
 export default withAuth(CourseDetailPage);

@@ -1,9 +1,10 @@
 {
-    "description": "Detta är en resurssida.",
+    "description": "Visa {{ resourceTitle }} på Skole.",
     "deleteResourceTitle": "Radera resurs",
     "deleteResourceDescription": "Är du säker på att du vill ta bort den här resursen?",
     "loadingResource": "Laddar resurs...",
     "errorLoadingResource": "Fel vid inläsning av resurs.",
     "commentsPlaceholder": "Här kan du ha allmän diskussion om resursen.",
-    "drawMode": "Ritningsläge"
+    "drawMode": "Ritningsläge",
+    "notFound": "Resurs hittades inte."
 }

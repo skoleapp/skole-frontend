@@ -1,6 +1,6 @@
 {
     "title": "Verify Account",
-    "description": "This is an account verification page.",
+    "description": "Verify your account on Skole.",
     "header": "Verify Account",
     "emailHelpText": "Please click the button below and we will send you a link via email that you can use to verify your account.",
     "confirmationHelpText": "Good! Now click the button below to finish you account verification.",

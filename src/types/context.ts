@@ -2,37 +2,27 @@ import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 
-export interface AuthContext {
+export interface AuthContextType {
     userMe: UserObjectType | null;
     setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
 }
 
-export interface AttachmentViewerContext {
-    attachment: string | null;
-    toggleAttachmentViewer: (payload: string | null) => void;
-}
-
-export interface CommentModalContext {
-    commentModalOpen: boolean;
-    toggleCommentModal: (payload: boolean) => void;
-}
-
-export interface LanguageSelectorContext {
+export interface LanguageSelectorContextType {
     languageSelectorOpen: boolean;
     toggleLanguageSelector: (payload: boolean) => void;
 }
 
-export interface NotificationsContext {
+export interface NotificationsContextType {
     notification: string | null;
     toggleNotification: (payload: string | null) => void;
 }
 
-export interface SettingsContext {
+export interface SettingsContextType {
     settingsOpen: boolean;
     toggleSettings: (payload: boolean) => void;
 }
 
-export interface PDFViewerContext {
+export interface PDFViewerContextType {
     documentRef: MutableRefObject<Document | null> | null;
     pageNumberInputRef: MutableRefObject<HTMLInputElement | null> | null;
     drawMode: boolean;
@@ -52,20 +42,13 @@ export interface PDFViewerContext {
     swipeableViewsRef: MutableRefObject<SwipeableViews | null> | null;
 }
 
-export interface DiscussionContext {
+export interface DiscussionContextType {
+    commentModalOpen: boolean;
+    toggleCommentModal: (payload: boolean) => void;
     topLevelComments: CommentObjectType[];
     setTopLevelComments: (comments: CommentObjectType[]) => void;
     topComment: CommentObjectType | null;
     toggleTopComment: (payload: CommentObjectType | null) => void;
-}
-
-export interface SkoleContextType {
-    auth: AuthContext;
-    attachmentViewer: AttachmentViewerContext;
-    commentModal: CommentModalContext;
-    languageSelector: LanguageSelectorContext;
-    notifications: NotificationsContext;
-    settings: SettingsContext;
-    pdfViewer: PDFViewerContext;
-    discussion: DiscussionContext;
+    attachment: string | null;
+    toggleAttachmentViewer: (payload: string | null) => void;
 }

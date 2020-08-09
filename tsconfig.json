@@ -12,8 +12,7 @@
             "lib": ["src/lib"],
             "styles": ["src/styles"],
             "utils": ["src/utils"],
-            "config": ["src/config.ts"],
-            "context": ["src/context.tsx"],
+            "context": ["src/context"],
             "types": ["src/types"]
         },
         "moduleResolution": "node",
