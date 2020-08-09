@@ -1,14 +1,14 @@
 import { Box, IconButton, Tooltip } from '@material-ui/core';
 import {
     AssignmentOutlined,
-    // CodeOutlined,
+    CodeOutlined,
     FormatBoldOutlined,
     FormatItalicOutlined,
     FormatListBulletedOutlined,
     FormatListNumberedOutlined,
     FormatQuoteOutlined,
-    // LinkOutlined,
-    // StrikethroughSRounded,
+    LinkOutlined,
+    StrikethroughSRounded,
 } from '@material-ui/icons';
 import { DraftEditorCommand, DraftHandleValue, Editor, EditorState, RichUtils } from 'draft-js';
 import { useTranslation } from 'lib';
@@ -27,9 +27,9 @@ export const TextEditor: React.FC = () => {
     const actionKey = isMac ? '⌘' : 'Ctrl';
     const hotkeyBold = `${actionKey} + B`;
     const hotkeyItalic = `${actionKey} + I`;
-    // const hotkeyStrikethrough = `${actionKey} + Shift + X`;
-    // const hotkeyCode = `${actionKey} + Shift + C`;
-    // const hotkeyLink = `${actionKey} + Shift + U`;
+    const hotkeyStrikethrough = `${actionKey} + Shift + X`;
+    const hotkeyCode = `${actionKey} + Shift + C`;
+    const hotkeyLink = `${actionKey} + Shift + U`;
     const hotkeyOrderedList = `${actionKey} + Shift + 7`;
     const hotkeyBulletedList = `${actionKey} + Shift + 8`;
     const hotkeyBlockQuote = `${actionKey} + Shift + 9`;
@@ -46,21 +46,21 @@ export const TextEditor: React.FC = () => {
             icon: FormatItalicOutlined,
             style: 'ITALIC',
         },
-        // {
-        //     tooltip: t('tooltips:strikeThrough', { hotkeyStrikethrough }),
-        //     icon: StrikethroughSRounded,
-        //     style: '',
-        // },
-        // {
-        //     tooltip: t('tooltips:code', { hotkeyCode }),
-        //     icon: CodeOutlined,
-        //     style: '',
-        // },
-        // {
-        //     tooltip: t('tooltips:link', { hotkeyLink }),
-        //     icon: LinkOutlined,
-        //     style: '',
-        // },
+        {
+            tooltip: t('tooltips:strikeThrough', { hotkeyStrikethrough }),
+            icon: StrikethroughSRounded,
+            style: '',
+        },
+        {
+            tooltip: t('tooltips:code', { hotkeyCode }),
+            icon: CodeOutlined,
+            style: '',
+        },
+        {
+            tooltip: t('tooltips:link', { hotkeyLink }),
+            icon: LinkOutlined,
+            style: '',
+        },
         {
             tooltip: t('tooltips:orderedList', { hotkeyOrderedList }),
             icon: FormatListNumberedOutlined,

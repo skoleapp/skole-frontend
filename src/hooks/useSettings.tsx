@@ -5,12 +5,12 @@ import { useAuthContext, useSettingsContext } from 'context';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { SettingsContext } from 'types';
+import { SettingsContextType } from 'types';
 import { MENU_ITEMS, redirect, urls } from 'utils';
 
 import { useLanguageSelector } from './useLanguageSelector';
 
-interface UseSettings extends SettingsContext {
+interface UseSettings extends SettingsContextType {
     renderSettingsMenuList: JSX.Element;
 }
 
