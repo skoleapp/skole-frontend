@@ -1,20 +1,21 @@
 import { Box, IconButton, Tooltip } from '@material-ui/core';
 import {
     AssignmentOutlined,
-    CodeOutlined,
+    // CodeOutlined,
     FormatBoldOutlined,
     FormatItalicOutlined,
     FormatListBulletedOutlined,
     FormatListNumberedOutlined,
     FormatQuoteOutlined,
-    LinkOutlined,
-    StrikethroughSRounded,
+    // LinkOutlined,
+    // StrikethroughSRounded,
 } from '@material-ui/icons';
 import { DraftEditorCommand, DraftHandleValue, Editor, EditorState, RichUtils } from 'draft-js';
+import { useTranslation } from 'lib';
 import React, { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+// TODO: Finish this and use this instead of the current text field as the form input field.
 export const TextEditor: React.FC = () => {
     const { t } = useTranslation();
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
@@ -26,13 +27,61 @@ export const TextEditor: React.FC = () => {
     const actionKey = isMac ? '⌘' : 'Ctrl';
     const hotkeyBold = `${actionKey} + B`;
     const hotkeyItalic = `${actionKey} + I`;
-    const hotkeyStrikethrough = `${actionKey} + Shift + X`;
-    const hotkeyCode = `${actionKey} + Shift + C`;
-    const hotkeyLink = `${actionKey} + Shift + U`;
+    // const hotkeyStrikethrough = `${actionKey} + Shift + X`;
+    // const hotkeyCode = `${actionKey} + Shift + C`;
+    // const hotkeyLink = `${actionKey} + Shift + U`;
     const hotkeyOrderedList = `${actionKey} + Shift + 7`;
     const hotkeyBulletedList = `${actionKey} + Shift + 8`;
     const hotkeyBlockQuote = `${actionKey} + Shift + 9`;
     const hotkeyCodeBlock = `${actionKey} + Option + Shift + C`;
+
+    const inlineStyles = [
+        {
+            tooltip: t('tooltips:bold', { hotkeyBold }),
+            icon: FormatBoldOutlined,
+            style: 'BOLD',
+        },
+        {
+            tooltip: t('tooltips:italic', { hotkeyItalic }),
+            icon: FormatItalicOutlined,
+            style: 'ITALIC',
+        },
+        // {
+        //     tooltip: t('tooltips:strikeThrough', { hotkeyStrikethrough }),
+        //     icon: StrikethroughSRounded,
+        //     style: '',
+        // },
+        // {
+        //     tooltip: t('tooltips:code', { hotkeyCode }),
+        //     icon: CodeOutlined,
+        //     style: '',
+        // },
+        // {
+        //     tooltip: t('tooltips:link', { hotkeyLink }),
+        //     icon: LinkOutlined,
+        //     style: '',
+        // },
+        {
+            tooltip: t('tooltips:orderedList', { hotkeyOrderedList }),
+            icon: FormatListNumberedOutlined,
+            style: 'ordered-list-item',
+        },
+        {
+            tooltip: t('tooltips:bulletedList', { hotkeyBulletedList }),
+            icon: FormatListBulletedOutlined,
+            style: 'unordered-list-item',
+        },
+        {
+            tooltip: t('tooltips:blockQuote', { hotkeyBlockQuote }),
+            icon: FormatQuoteOutlined,
+            style: 'blockquote',
+        },
+        {
+            tooltip: t('tooltips:codeBlock', { hotkeyCodeBlock }),
+            icon: AssignmentOutlined,
+            style: 'CODE',
+        },
+    ];
 
     useEffect(() => {
         focusEditor();
@@ -50,75 +99,29 @@ export const TextEditor: React.FC = () => {
         return 'not-handled';
     };
 
+    const toggleInlineStyle = (style: string) => (): void =>
+        handleChange(RichUtils.toggleInlineStyle(editorState, style));
+
     const renderTextField = (
         <Editor ref={editor} editorState={editorState} onChange={handleChange} handleKeyCommand={handleKeyCommand} />
     );
 
     const renderToolbar = (
         <Box marginTop="0.25rem" display="flex">
-            <Tooltip title={t('tooltips:bold', { hotkeyBold })}>
-                <span>
-                    <IconButton size="small" disabled={disabled}>
-                        <FormatBoldOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
-            <Tooltip title={t('tooltips:italic', { hotkeyItalic })}>
-                <span>
-                    <IconButton size="small" disabled={disabled}>
-                        <FormatItalicOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
-            <Tooltip title={t('tooltips:strikeThrough', { hotkeyStrikethrough })}>
-                <span>
-                    <IconButton size="small" disabled={disabled}>
-                        <StrikethroughSRounded />
-                    </IconButton>
-                </span>
-            </Tooltip>
-            <Tooltip title={t('tooltips:code', { hotkeyCode })}>
-                <span>
-                    <IconButton size="small" disabled={disabled}>
-                        <CodeOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
-            <Tooltip title={t('tooltips:link', { hotkeyLink })}>
-                <span>
-                    <IconButton size="small" disabled={disabled}>
-                        <LinkOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
-            <Tooltip title={t('tooltips:orderedList', { hotkeyOrderedList })}>
-                <span>
-                    <IconButton size="small" disabled={disabled}>
-                        <FormatListNumberedOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
-            <Tooltip title={t('tooltips:bulletedList', { hotkeyBulletedList })}>
-                <span>
-                    <IconButton size="small" disabled={disabled}>
-                        <FormatListBulletedOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
-            <Tooltip title={t('tooltips:blockQuote', { hotkeyBlockQuote })}>
-                <span>
-                    <IconButton size="small" disabled={disabled}>
-                        <FormatQuoteOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
-            <Tooltip title={t('tooltips:codeBlock', { hotkeyCodeBlock })}>
-                <span>
-                    <IconButton size="small" disabled={disabled}>
-                        <AssignmentOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
+            {inlineStyles.map(({ tooltip, icon: Icon, style }, i) => (
+                <Tooltip key={i} title={tooltip}>
+                    <span>
+                        <IconButton
+                            onClick={toggleInlineStyle(style)}
+                            size="small"
+                            disabled={disabled}
+                            color={editorState.getCurrentInlineStyle().has(style) ? 'primary' : 'default'}
+                        >
+                            <Icon />
+                        </IconButton>
+                    </span>
+                </Tooltip>
+            ))}
         </Box>
     );
 
