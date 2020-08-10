@@ -98,18 +98,17 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Box>
     );
 
-    const renderUsernameOrEmailField = (
+    const renderUsernameOrEmailField = !validExistingUser && (
         <Field
             placeholder={t('forms:usernameOrEmail')}
             name="usernameOrEmail"
             component={TextField}
-            label={!validExistingUser && t('forms:usernameOrEmail')}
+            label={t('forms:usernameOrEmail')}
             variant="outlined"
             fullWidth
             autoComplete="off"
-            type={validExistingUser ? 'hidden' : 'text'}
             InputProps={{
-                startAdornment: !validExistingUser && (
+                startAdornment: (
                     <InputAdornment position="start">
                         <AccountCircleOutlined />
                     </InputAdornment>
