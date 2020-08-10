@@ -14,14 +14,15 @@ interface UseAuthContext extends AuthContextType {
 
 export const useAuthContext = (): UseAuthContext => {
     const { t } = useTranslation();
-    const { userMe, setUserMe } = useContext(AuthContext as Context<AuthContextType>);
+    const { userMe, setUserMe, ...authContext } = useContext(AuthContext as Context<AuthContextType>);
     const verified = R.propOr(null, 'verified', userMe) as boolean | null;
     const verificationRequiredTooltip = verified === false && t('tooltips:verificationRequired');
-    return { userMe, setUserMe, verified, verificationRequiredTooltip };
+    return { userMe, setUserMe, verified, verificationRequiredTooltip, ...authContext };
 };
 
 export const AuthContextProvider: React.FC = ({ children }) => {
     const [userMe, setUserMe] = useState<UserObjectType | null>(null);
-    const value = { userMe, setUserMe };
+    const [authNetworkError, setAuthNetworkError] = useState(false);
+    const value = { userMe, setUserMe, authNetworkError, setAuthNetworkError };
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

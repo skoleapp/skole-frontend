@@ -42,7 +42,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     headerRightSecondary,
     headerLeft,
 }) => {
-    const { userMe } = useAuthContext();
+    const { userMe, authNetworkError } = useAuthContext();
     const userMeId = R.propOr('', 'id', userMe);
     const { t } = useTranslation();
     const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -145,7 +145,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </>
     );
 
-    const renderUnAuthenticatedButtons = !disableAuthButtons && (
+    // Allow disabling auth buttons manually.
+    // Also disable them automatically in case of a network error when authenticating.
+    const renderUnAuthenticatedButtons = !disableAuthButtons && !authNetworkError && (
         <>
             <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
                 {t('common:login')}
