@@ -10,17 +10,19 @@ interface UseUserMeQuery extends Omit<UserMeQueryHookResult, 'data' | 'loading' 
 }
 
 export const useUserMe = (): UseUserMeQuery => {
-    const { data, loading: authLoading, error: apolloError, ...result } = useUserMeQuery();
-    const { setUserMe } = useAuthContext();
+    const { data, loading: authLoading, error, ...result } = useUserMeQuery();
+    const { setUserMe, setAuthNetworkError } = useAuthContext();
     const userMe = R.propOr(null, 'userMe', data) as UserObjectType | null;
-    const authNetworkError = !!R.propOr(false, 'networkError', apolloError); // We only care about about network error.
+    const authNetworkError = !!R.propOr(false, 'networkError', error); // We only care about about network error.
 
     useEffect(() => {
         if (!!userMe) {
             setUserMe(userMe);
             localStorage.setItem('user', JSON.stringify(userMe));
+        } else if (authNetworkError) {
+            setAuthNetworkError(true);
         }
-    }, [userMe]);
+    }, [userMe, error]);
 
     return { userMe, authLoading, authNetworkError, ...result };
 };

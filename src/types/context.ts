@@ -5,6 +5,8 @@ import SwipeableViews from 'react-swipeable-views';
 export interface AuthContextType {
     userMe: UserObjectType | null;
     setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
+    authNetworkError: boolean;
+    setAuthNetworkError: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface LanguageSelectorContextType {
