@@ -310,10 +310,10 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const renderOrderingField = (
         <Field name="ordering" label={t('forms:ordering')} component={NativeSelectField} fullWidth>
+            <option value="best">{t('forms:bestOrdering')}</option>
+            <option value="score">{t('forms:scoreOrdering')}</option>
             <option value="name">{t('forms:nameOrdering')}</option>
             <option value="-name">{t('forms:nameOrderingReverse')}</option>
-            <option value="score">{t('forms:scoreOrdering')}</option>
-            <option value="-score">{t('forms:scoreOrderingReverse')}</option>
         </Field>
     );
 
