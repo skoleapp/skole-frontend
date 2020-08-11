@@ -130,7 +130,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
         initialVote,
         initialScore,
         isOwner,
-        variables: { resource: courseId },
+        variables: { course: courseId },
         upVoteButtonTooltip,
         downVoteButtonTooltip,
     });
