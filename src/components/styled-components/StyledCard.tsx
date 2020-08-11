@@ -5,7 +5,7 @@ import { breakpoints } from 'styles';
 
 // Ignore: scrollable and marginLeft must be omitted from Box props.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const StyledCard = styled(({ scrollable, marginLeft, ...props }) => <Card {...props} />)`
+export const StyledCard = styled(({ scrollable, marginLeft, onlyHeader, ...props }) => <Card {...props} />)`
     flex-grow: 1;
     overflow-y: ${({ scrollable }): string => (scrollable ? 'scroll !important' : 'inherit')};
     display: flex;
@@ -21,6 +21,6 @@ export const StyledCard = styled(({ scrollable, marginLeft, ...props }) => <Card
     }
 
     .MuiCardHeader-root {
-        height: 3rem;
+        height: ${({ onlyHeader }): string | false => !onlyHeader && '3rem'};
     }
 `;

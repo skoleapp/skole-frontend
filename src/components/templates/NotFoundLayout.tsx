@@ -21,7 +21,7 @@ export const NotFoundLayout: React.FC = () => {
 
     return (
         <MainLayout {...layoutProps}>
-            <StyledCard>
+            <StyledCard onlyHeader>
                 <CardHeader title={t('404:header')} />
             </StyledCard>
         </MainLayout>

@@ -19,7 +19,7 @@ export const OfflineLayout: React.FC<Pick<MainLayoutProps, 'seoProps'>> = ({ seo
 
     return (
         <MainLayout {...layoutProps}>
-            <StyledCard>
+            <StyledCard onlyHeader>
                 <CardHeader title={t('common:offline')} />
             </StyledCard>
         </MainLayout>

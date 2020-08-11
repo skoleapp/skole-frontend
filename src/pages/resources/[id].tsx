@@ -40,7 +40,7 @@ import {
     UserObjectType,
     VoteObjectType,
 } from 'generated';
-import { useActionsDrawer, useCommentQuery, useInfoDrawer, useShare, useSwipeableTabs, useVotes } from 'hooks';
+import { useActionsDrawer, useInfoDrawer, useShare, useSwipeableTabs, useVotes } from 'hooks';
 import { initApolloClient, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
@@ -82,16 +82,13 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
     const created = R.propOr(undefined, 'created', resource) as string;
     const commentCount = comments.length;
-    const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
+    const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: resourceTitle });
     const { commentModalOpen } = useDiscussionContext();
     const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
     const notFound = t('resource:notFound');
     const seoTitle = !!resource ? title : !isFallback ? notFound : t('common:loading');
     const description = !!resource ? t('resource:description', { resourceTitle }) : notFound;
-
-    // Automatically open comment thread if a comment has been provided as a query parameter.
-    useCommentQuery(comments);
 
     const {
         renderInfoHeader,

@@ -38,7 +38,6 @@ import {
 } from 'generated';
 import {
     useActionsDrawer,
-    useCommentQuery,
     useFrontendPagination,
     useInfoDrawer,
     useResponsiveIconButtonProps,
@@ -88,15 +87,12 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
-    const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
+    const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: courseName });
     const iconButtonProps = useResponsiveIconButtonProps();
     const notFound = t('course:notFound');
     const title = !!course ? courseName : !isFallback ? notFound : t('common:loading');
     const description = !!course ? t('course:description', { courseName }) : notFound;
-
-    // Automatically open comment thread if a comment has been provided as a query parameter.
-    useCommentQuery(comments);
 
     const {
         renderInfoHeader,
