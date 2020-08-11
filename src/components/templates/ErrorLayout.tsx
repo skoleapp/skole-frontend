@@ -28,7 +28,7 @@ export const ErrorLayout: React.FC<Props> = ({ seoProps }) => {
 
     return (
         <MainLayout {...layoutProps}>
-            <StyledCard>
+            <StyledCard onlyHeader>
                 <CardHeader title={t('_error:header')} />
             </StyledCard>
         </MainLayout>
