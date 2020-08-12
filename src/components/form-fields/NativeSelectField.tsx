@@ -18,7 +18,6 @@ export const NativeSelectField: React.FC<Props & SelectProps> = ({ children, lab
     <StyledNativeSelectField variant="outlined" fullWidth>
         <InputLabel>{label}</InputLabel>
         <Select {...fieldToSelect(props)} native>
-            <option value="">---</option>
             {children}
         </Select>
         <ErrorMessage name={props.field.name} component={FormErrorMessage} />
