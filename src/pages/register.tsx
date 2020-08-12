@@ -29,8 +29,8 @@ import {
     useUpdateUserMutation,
 } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
-import { useTranslation, withNoAuth } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
@@ -470,5 +470,11 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     return <FormLayout {...layoutProps} />;
 };
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['register']),
+    },
+});
 
 export default withNoAuth(RegisterPage);

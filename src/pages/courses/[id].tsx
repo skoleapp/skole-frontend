@@ -46,7 +46,7 @@ import {
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { initApolloClient, useTranslation, withAuth } from 'lib';
+import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -430,7 +430,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const result = await apolloClient.query({ query: CourseDetailDocument, variables: params });
 
     return {
-        props: result,
+        props: {
+            ...result,
+            namespacesRequired: includeDefaultNamespaces(['course']),
+        },
         revalidate: 1,
     };
 };

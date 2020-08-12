@@ -4,8 +4,8 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
 import { useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { AuthProps } from 'types';
 import * as Yup from 'yup';
@@ -128,5 +128,11 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
     return <SettingsLayout {...layoutProps} />;
 };
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['change-password']),
+    },
+});
 
 export default withAuth(ChangePasswordPage);

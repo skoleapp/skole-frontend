@@ -3,8 +3,7 @@ import 'typeface-roboto';
 import 'draft-js/dist/Draft.css';
 
 import { ApolloProvider } from '@apollo/client';
-import { CssBaseline } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/styles';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import {
     AuthContextProvider,
     DiscussionContextProvider,

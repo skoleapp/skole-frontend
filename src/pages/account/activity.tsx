@@ -17,8 +17,8 @@ import {
     UserObjectType,
 } from 'generated';
 import { useActionsDrawer } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
 import { AuthProps } from 'types';
 
@@ -111,5 +111,11 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         return <NotFoundLayout />;
     }
 };
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces([]),
+    },
+});
 
 export default withAuth(ActivityPage);

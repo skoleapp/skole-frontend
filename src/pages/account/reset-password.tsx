@@ -10,8 +10,8 @@ import {
     useSendPasswordResetEmailMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { useTranslation, withNoAuth } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { AuthProps } from 'types';
@@ -227,5 +227,11 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     return <SettingsLayout {...layoutProps} />;
 };
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['reset-password']),
+    },
+});
 
 export default withNoAuth(ResetPasswordPage);

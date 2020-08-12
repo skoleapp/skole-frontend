@@ -4,8 +4,8 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { ContactMutation, useContactMutation } from 'generated';
 import { useForm } from 'hooks';
-import { useTranslation, withUserMe } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { AuthProps } from 'types';
 import * as Yup from 'yup';
@@ -146,5 +146,11 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
 
     return <SettingsLayout {...layoutProps} />;
 };
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['contact']),
+    },
+});
 
 export default withUserMe(ContactPage);

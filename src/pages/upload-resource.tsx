@@ -21,8 +21,8 @@ import {
     useCreateResourceMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -222,5 +222,11 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
     return <FormLayout {...layoutProps} />;
 };
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['upload-resource']),
+    },
+});
 
 export default withAuth(UploadResourcePage);

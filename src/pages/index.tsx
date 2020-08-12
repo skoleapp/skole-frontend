@@ -2,8 +2,8 @@ import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typo
 import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import { LoadingLayout, MainLayout } from 'components';
 import { useSearch } from 'hooks';
-import { Link, useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, Link, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 import { breakpoints } from 'styles';
@@ -205,5 +205,11 @@ const StyledIndexPage = styled(Box)`
         }
     }
 `;
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['index']),
+    },
+});
 
 export default withAuth(IndexPage);
