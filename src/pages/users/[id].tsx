@@ -39,7 +39,7 @@ import {
     UserObjectType,
 } from 'generated';
 import { useFrontendPagination, useMoment, useSwipeableTabs } from 'hooks';
-import { initApolloClient, useTranslation, withAuth } from 'lib';
+import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -475,7 +475,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const result = await apolloClient.query({ query: UserDetailDocument, variables: params });
 
     return {
-        props: result,
+        props: {
+            ...result,
+            namespacesRequired: includeDefaultNamespaces(['profile']),
+        },
         revalidate: 1,
     };
 };

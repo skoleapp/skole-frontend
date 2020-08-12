@@ -4,8 +4,8 @@ import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, ErrorLayout, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { useNotificationsContext } from 'context';
 import { BackendLogoutMutation, useBackendLogoutMutation } from 'generated';
-import { useTranslation, withUserMe } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
@@ -96,5 +96,11 @@ const StyledLogoutPage = styled(({ loading, ...props }) => <Box {...props} />)`
         }
     }
 `;
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['logout']),
+    },
+});
 
 export default withUserMe(LogoutPage);

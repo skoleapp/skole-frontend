@@ -45,8 +45,8 @@ import {
     useSearchCoursesQuery,
 } from 'generated';
 import { useDrawer, useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
@@ -513,5 +513,11 @@ const StyledSearchPage = styled(Box)`
         }
     }
 `;
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['search']),
+    },
+});
 
 export default withAuth(SearchPage);

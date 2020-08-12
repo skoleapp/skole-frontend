@@ -11,8 +11,8 @@ import {
     useCreateCourseMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { AuthProps } from 'types';
@@ -158,5 +158,11 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
 
     return <FormLayout {...layoutProps} />;
 };
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['create-course']),
+    },
+});
 
 export default withAuth(CreateCoursePage);

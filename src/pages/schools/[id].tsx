@@ -25,7 +25,7 @@ import {
     SubjectObjectType,
 } from 'generated';
 import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useSwipeableTabs } from 'hooks';
-import { initApolloClient, Link, useTranslation, withAuth } from 'lib';
+import { includeDefaultNamespaces, initApolloClient, Link, useTranslation, withAuth } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -296,7 +296,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const result = await apolloClient.query({ query: SchoolDetailDocument, variables: params });
 
     return {
-        props: result,
+        props: {
+            ...result,
+            namespacesRequired: includeDefaultNamespaces(['school']),
+        },
         revalidate: 1,
     };
 };

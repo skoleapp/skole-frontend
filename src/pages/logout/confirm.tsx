@@ -1,8 +1,8 @@
 import { Box, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout, LoadingLayout, OfflineLayout } from 'components';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { AuthProps } from 'types';
 import { urls } from 'utils';
@@ -51,5 +51,11 @@ const ConfirmLogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     return <FormLayout {...layoutProps} />;
 };
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['logout']),
+    },
+});
 
 export default withAuth(ConfirmLogoutPage);

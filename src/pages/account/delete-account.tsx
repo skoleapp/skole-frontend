@@ -4,9 +4,9 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { DeleteAccountMutation, useDeleteAccountMutation } from 'generated';
 import { useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
-import { NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
@@ -115,5 +115,11 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
 
     return <SettingsLayout {...layoutProps} />;
 };
+
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['delete-account']),
+    },
+});
 
 export default withAuth(DeleteAccountPage);
