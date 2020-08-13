@@ -9,7 +9,6 @@ const config = {
     typescript: {
         ignoreDevErrors: true,
     },
-    exportTrailingSlash: true,
     workboxOpts: {
         swDest: 'static/service-worker.js',
         runtimeCaching: [
