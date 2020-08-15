@@ -23,6 +23,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     customTopNavbar,
     customBottomNavbar,
     disableBottomNavbar,
+    disableFooter,
     children,
 }) => {
     const isMobile = useDeviceContext();
@@ -32,7 +33,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
     const renderChildren = <Container>{children}</Container>;
     const renderBottomNavbar = customBottomNavbar || (!!userMe && !disableBottomNavbar && <BottomNavbar />);
-    const renderFooter = !isMobile && <Footer />;
+    const renderFooter = !isMobile && !disableFooter && <Footer />;
     const renderNotifications = <Notifications />;
     const renderAttachmentViewer = <AttachmentViewer />;
     const renderCommentThreadModal = <CommentThreadModal />;

@@ -122,7 +122,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Popper>
     );
 
-    const renderAuthenticatedButtons = !!userMe && (
+    const renderAuthenticatedButtons = !!userMe && !disableAuthButtons && (
         <>
             <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
                 <Box>
