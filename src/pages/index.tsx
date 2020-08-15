@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typography } from '@material-ui/core';
 import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
-import { LoadingLayout, MainLayout } from 'components';
+import { LoadingLayout, MainLayout, OfflineLayout } from 'components';
 import { useSearch } from 'hooks';
 import { includeDefaultNamespaces, Link, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -17,8 +17,7 @@ interface Shortcut {
     href: string | UrlObject;
 }
 
-// This page will be available also when offline.
-const IndexPage: NextPage<AuthProps> = ({ authLoading }) => {
+const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { handleSubmit, inputProps } = useSearch();
 
@@ -82,6 +81,10 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading }) => {
 
     if (authLoading) {
         return <LoadingLayout seoProps={seoProps} />;
+    }
+
+    if (authNetworkError) {
+        return <OfflineLayout seoProps={seoProps} />;
     }
 
     return (
