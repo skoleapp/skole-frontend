@@ -91,7 +91,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const { renderShareButton } = useShare({ text: courseName });
     const iconButtonProps = useResponsiveIconButtonProps();
     const notFound = t('course:notFound');
-    const title = !!course ? courseName : !isFallback ? notFound : t('common:loading');
+    const title = !!course ? courseName : notFound;
     const description = !!course ? t('course:description', { courseName }) : notFound;
 
     const {

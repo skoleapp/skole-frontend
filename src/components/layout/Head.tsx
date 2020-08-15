@@ -4,7 +4,7 @@ import { colors } from 'styles';
 import { SEOProps } from 'types';
 
 export const HeadComponent: React.FC<SEOProps> = ({ title: customTitle, description }) => {
-    const title = customTitle ? `Skole | ${customTitle}` : '';
+    const title = customTitle ? `Skole | ${customTitle}` : 'Skole';
 
     return (
         <Head>

@@ -59,7 +59,7 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare({ text: schoolName });
     const notFound = t('school:notFound');
-    const title = !!school ? schoolName : !isFallback ? notFound : t('common:loading');
+    const title = !!school ? schoolName : notFound;
     const description = !!school ? t('school:description', { schoolName }) : notFound;
 
     const {

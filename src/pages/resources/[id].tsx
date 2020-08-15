@@ -87,7 +87,7 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const { commentModalOpen } = useDiscussionContext();
     const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
     const notFound = t('resource:notFound');
-    const seoTitle = !!resource ? title : !isFallback ? notFound : t('common:loading');
+    const seoTitle = !!resource ? title : notFound;
     const description = !!resource ? t('resource:description', { resourceTitle }) : notFound;
 
     const {
