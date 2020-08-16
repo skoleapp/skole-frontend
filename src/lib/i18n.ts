@@ -1,6 +1,5 @@
 import NextI18Next from 'next-i18next';
 import path from 'path';
-import { ReactText } from 'react';
 import { useTranslation as _useTranslation, UseTranslationResponse } from 'react-i18next';
 
 const nextI18next = new NextI18Next({
