@@ -1,7 +1,7 @@
 import { Box, Fade, Paper } from '@material-ui/core';
 import { useDeviceContext, useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
-import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation, UserObjectType } from 'generated';
+import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
 import { useForm } from 'hooks';
 import { dataURItoFile, useTranslation } from 'lib';
 import Image from 'material-ui-image';
@@ -17,7 +17,6 @@ type T = FormikProps<CreateCommentFormValues>;
 interface CreateCommentFormProps {
     target: CommentTarget;
     appendComments: (comments: CommentObjectType) => void;
-    users: UserObjectType[];
 }
 
 export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target }) => {

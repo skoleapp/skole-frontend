@@ -1,7 +1,7 @@
 import { Box, Fab } from '@material-ui/core';
 import { AddOutlined } from '@material-ui/icons';
-import { useAuthContext, useDeviceContext, useDiscussionContext } from 'context';
-import { CommentObjectType, UserObjectType } from 'generated';
+import { useDeviceContext, useDiscussionContext } from 'context';
+import { CommentObjectType } from 'generated';
 import React from 'react';
 import { TopLevelCommentThreadProps } from 'types';
 
@@ -17,14 +17,6 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
 }) => {
     const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext(initialComments);
     const isMobile = useDeviceContext();
-    const { userMe } = useAuthContext();
-
-    // Unique users from comment replies excluding own user.
-    const topLevelCommentUsers = topLevelComments
-        .map(c => c.user)
-        .filter(u => !!u && !!userMe && u.id !== userMe.id) as UserObjectType[];
-
-    const users = [...new Set(topLevelCommentUsers)];
     const appendComments = (comment: CommentObjectType): void => setTopLevelComments([...topLevelComments, comment]);
     const openCommentModal = (): void => toggleCommentModal(true);
     const removeComment = (id: string): void => setTopLevelComments(topLevelComments.filter(c => c.id !== id));
@@ -37,7 +29,6 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
     const createCommentFormProps = {
         target,
         appendComments,
-        users,
     };
 
     const renderTopLevelComments = !!topLevelComments.length
