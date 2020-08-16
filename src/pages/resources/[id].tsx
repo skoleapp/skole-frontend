@@ -87,7 +87,7 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const { commentModalOpen } = useDiscussionContext();
     const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
     const notFound = t('resource:notFound');
-    const seoTitle = !!resource ? title : notFound;
+    const seoTitle = !!resource ? title : !isFallback ? notFound : '';
     const description = !!resource ? t('resource:description', { resourceTitle }) : notFound;
 
     const {
@@ -110,17 +110,11 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
 
-    const upVoteButtonTooltip = !!verificationRequiredTooltip
-        ? verificationRequiredTooltip
-        : isOwner
-        ? t('tooltips:voteOwnResource')
-        : t('tooltips:upVote');
+    const upVoteButtonTooltip =
+        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnResource') : t('tooltips:upVote');
 
-    const downVoteButtonTooltip = !!verificationRequiredTooltip
-        ? verificationRequiredTooltip
-        : isOwner
-        ? t('tooltips:voteOwnResource')
-        : t('tooltips:downVote');
+    const downVoteButtonTooltip =
+        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnResource') : t('tooltips:downVote');
 
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
@@ -314,7 +308,6 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const commentThreadProps = {
         comments,
         target: { resource: Number(resourceId) },
-        formKey: 'resource',
         placeholderText: t('resource:commentsPlaceholder'),
     };
 
