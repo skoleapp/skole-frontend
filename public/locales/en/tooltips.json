@@ -5,7 +5,7 @@
     "voteOwnCourse": "You cannot vote on your own course.",
     "voteOwnResource": "You cannot vote on your own resource.",
     "attachment": "View attachment.",
-    "attachFile": "Attach picture.",
+    "attachFile": "Attach file.",
     "clearAttachment": "Clear attachment.",
     "commentReplies": "{{ replyCount }} replies.",
     "sendMessage": "Send message.",

@@ -5,7 +5,7 @@
     "voteOwnCourse": "Du kan inte rösta på din egen kurs.",
     "voteOwnResource": "Du kan inte rösta på din egen resurs.",
     "attachment": "Visa bildbilaga.",
-    "attachFile": "Bifoga bild.",
+    "attachFile": "Bifoga fil.",
     "clearAttachment": "Ta bort bilagan.",
     "commentReplies": "Den här kommentaren har {{ replyCount }} svar.",
     "sendMessage": "Skicka meddelande.",
