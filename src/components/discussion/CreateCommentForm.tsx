@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { CommentTarget, CreateCommentFormValues } from 'types';
 
 import { ModalHeader, StyledModal } from '..';
-import { TextEditor } from './TextEditor';
+import { RichTextEditor } from './RichTextEditor';
 
 type T = FormikProps<CreateCommentFormValues>;
 
@@ -86,7 +86,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     };
 
     const renderDesktopInputArea = (formikProps: T): false | JSX.Element =>
-        !isMobile && <TextEditor {...formikProps} />;
+        !isMobile && <RichTextEditor {...formikProps} />;
 
     const renderCreateCommentModal = (formikProps: T): JSX.Element => (
         <StyledModal open={commentModalOpen} onClose={handleCloseCreateCommentModal} autoHeight>
@@ -96,7 +96,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
                     <StyledAttachmentImage screenshot={screenshot}>
                         {!!commentAttachment && <Image src={commentAttachment as string} />}
                     </StyledAttachmentImage>
-                    <TextEditor {...formikProps} />
+                    <RichTextEditor {...formikProps} />
                 </Paper>
             </Fade>
         </StyledModal>

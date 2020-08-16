@@ -49,7 +49,7 @@ import { RICH_STYLES } from 'utils';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
-export const TextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({ setFieldValue, submitForm }) => {
+export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({ setFieldValue, submitForm }) => {
     const decorator = new CompositeDecorator([
         {
             strategy: linkStrategy,
@@ -493,21 +493,27 @@ export const TextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({ set
         </FormHelperText>
     );
 
+    const renderTopToolbarButtons = (
+        <Grid item xs={12} md={3} container justify="flex-start">
+            {renderMentionButton}
+            {renderEmojiButton}
+            {renderAttachmentButton}
+            {renderClearAttachmentButton}
+        </Grid>
+    );
+
+    const renderHelpTexts = !isMobile && (
+        <Grid item md={9} container justify="flex-end">
+            {renderSendHelpText}
+            {renderNewLineHelpText}
+        </Grid>
+    );
+
     const renderTopToolbar = (
         <Box marginBottom="0.5rem">
             <Grid container>
-                <Grid item xs={12} md={3} container justify="flex-start">
-                    {renderMentionButton}
-                    {renderEmojiButton}
-                    {renderAttachmentButton}
-                    {renderClearAttachmentButton}
-                </Grid>
-                {!isMobile && (
-                    <Grid item md={9} container justify="flex-end">
-                        {renderSendHelpText}
-                        {renderNewLineHelpText}
-                    </Grid>
-                )}
+                {renderTopToolbarButtons}
+                {renderHelpTexts}
             </Grid>
         </Box>
     );
