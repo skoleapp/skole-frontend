@@ -44,7 +44,6 @@ export const ReplyCommentThread: React.FC = () => {
 
     const createCommentFormProps = {
         target,
-        formKey: 'comment-thread',
         appendComments,
     };
 

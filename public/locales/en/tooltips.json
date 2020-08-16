@@ -5,7 +5,7 @@
     "voteOwnCourse": "You cannot vote on your own course.",
     "voteOwnResource": "You cannot vote on your own resource.",
     "attachment": "View attachment.",
-    "attachFile": "Attach picture.",
+    "attachFile": "Attach file.",
     "clearAttachment": "Clear attachment.",
     "commentReplies": "{{ replyCount }} replies.",
     "sendMessage": "Send message.",
@@ -14,7 +14,7 @@
     "previousPage": "Go to the previous page.",
     "firstPage": "Go to the first page.",
     "language": "Change language.",
-    "verificationRequired": "This action is only allowed for users who have verified their accounts.",
+    "verificationRequired": "Please verify your account to enable this feature.",
     "info": "Show information.",
     "actions": "View actions.",
     "star": "Star.",
@@ -37,10 +37,11 @@
     "bold": "Bold ({{ hotkeyBold }}).",
     "italic": "Italic ({{ hotkeyItalic }}).",
     "strikeThrough": "Strikethrough ({{ hotkeyStrikethrough }}).",
-    "code": "Code ({{ hotkeyCode }}).",
     "link": "Link ({{ hotkeyLink }}).",
     "orderedList": "Ordered list ({{ hotkeyOrderedList }}).",
     "bulletedList": "Bulleted list ({{ hotkeyBulletedList }}).",
     "blockQuote": "Block quote ({{ hotkeyBlockQuote }}).",
-    "codeBlock": "Code block ({{ hotkeyCodeBlock }})."
+    "codeBlock": "Code block ({{ hotkeyCodeBlock }}).",
+    "mention": "Mention user (coming soon).",
+    "emoji": "Add emoji (coming soon)."
 }

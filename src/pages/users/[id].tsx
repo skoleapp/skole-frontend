@@ -75,7 +75,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
     const notFound = t('profile:notFound');
-    const seoTitle = !!user ? username : !isFallback ? notFound : t('common:loading');
+    const seoTitle = !!user ? username : !isFallback ? notFound : '';
     const description = !!user ? t('profile:description', { username }) : notFound;
 
     const profileStrengthSteps = [

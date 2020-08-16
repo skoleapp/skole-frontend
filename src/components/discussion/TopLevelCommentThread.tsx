@@ -13,7 +13,6 @@ import { StyledDiscussionBox } from './StyledDiscussionBox';
 export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
     comments: initialComments,
     target,
-    formKey,
     placeholderText,
 }) => {
     const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext(initialComments);
@@ -30,7 +29,6 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
     const createCommentFormProps = {
         target,
         appendComments,
-        formKey,
     };
 
     const renderTopLevelComments = !!topLevelComments.length

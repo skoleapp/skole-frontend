@@ -36,6 +36,9 @@ export const StyledDiscussionBox = styled(({ topComment, ...other }) => <Box {..
         }
 
         .input-area {
+            max-height: 10rem;
+            display: flex;
+
             @media only screen and (min-width: ${breakpoints.MD}) {
                 border-top: var(--border);
                 padding: ${({ topComment }): string | false => (!!topComment ? '0.5rem 0 0 0' : '0.5rem')};

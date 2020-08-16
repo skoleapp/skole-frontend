@@ -27,11 +27,11 @@ export const useDiscussionContext = (initialComments: CommentObjectType[] = []):
 export const DiscussionContextProvider: React.FC = ({ children }) => {
     const [commentModalOpen, setCommentModalOpen] = useState(false);
     const toggleCommentModal = (payload: boolean): void => setCommentModalOpen(payload);
-    const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]);
-    const [topComment, setTopComment] = useState<CommentObjectType | null>(null);
+    const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]); // List of top-level comments on a course/resource.
+    const [topComment, setTopComment] = useState<CommentObjectType | null>(null); // Top comment that starts a thread of reply comments.
     const toggleTopComment = (payload: CommentObjectType | null): void => setTopComment(payload);
-    const [attachment, setAttachment] = useState<string | null>(null);
-    const toggleAttachmentViewer = (payload: string | null): void => setAttachment(payload);
+    const [attachmentViewerValue, setAttachmentViewerValue] = useState<string | null>(null); // Attachment of an existing comment.
+    const [commentAttachment, setCommentAttachment] = useState<string | ArrayBuffer | null>(null); // Attachment for comment creation form.
 
     const value = {
         commentModalOpen,
@@ -40,8 +40,10 @@ export const DiscussionContextProvider: React.FC = ({ children }) => {
         setTopLevelComments,
         topComment,
         toggleTopComment,
-        attachment,
-        toggleAttachmentViewer,
+        attachmentViewerValue,
+        setAttachmentViewerValue,
+        commentAttachment,
+        setCommentAttachment,
     };
 
     return <DiscussionContext.Provider value={value}>{children}</DiscussionContext.Provider>;

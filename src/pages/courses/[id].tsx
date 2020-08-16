@@ -91,7 +91,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const { renderShareButton } = useShare({ text: courseName });
     const iconButtonProps = useResponsiveIconButtonProps();
     const notFound = t('course:notFound');
-    const title = !!course ? courseName : !isFallback ? notFound : t('common:loading');
+    const title = !!course ? courseName : !isFallback ? notFound : '';
     const description = !!course ? t('course:description', { courseName }) : notFound;
 
     const {
@@ -115,16 +115,13 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
 
-    const upVoteButtonTooltip = !!verificationRequiredTooltip
-        ? verificationRequiredTooltip
-        : isOwner
-        ? t('tooltips:voteOwnCourse')
-        : t('tooltips:upVote');
-    const downVoteButtonTooltip = !!verificationRequiredTooltip
-        ? verificationRequiredTooltip
-        : isOwner
-        ? t('tooltips:voteOwnCourse')
-        : t('tooltips:downVote');
+    const upVoteButtonTooltip =
+        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:upVote');
+
+    const downVoteButtonTooltip =
+        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:downVote');
+
+    const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
 
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
@@ -231,7 +228,6 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const commentThreadProps = {
         comments,
         target: { course: Number(courseId) },
-        formKey: 'course',
         placeholderText: t('course:commentsPlaceholder'),
     };
 
@@ -271,7 +267,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     );
 
     const renderUploadResourceButton = (
-        <Tooltip title={!!verificationRequiredTooltip ? verificationRequiredTooltip : t('tooltips:uploadResource')}>
+        <Tooltip title={uploadResourceButtonTooltip}>
             <span>
                 <IconButtonLink
                     href={{ pathname: urls.uploadResource, query: { school: schoolId, course: courseId } }}

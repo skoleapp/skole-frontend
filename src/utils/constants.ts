@@ -151,3 +151,16 @@ export const FAQ_ITEMS = [
         text: 'faq:text-3',
     },
 ];
+
+// Rich text editor.
+
+export const RICH_STYLES = {
+    bold: 'BOLD',
+    italic: 'ITALIC',
+    strikeThrough: 'STRIKETHROUGH',
+    link: 'link-entity',
+    orderedList: 'ordered-list-item',
+    unorderedList: 'unordered-list-item',
+    blockQuote: 'blockquote',
+    codeBlock: 'code-block',
+};

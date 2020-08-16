@@ -28,4 +28,5 @@ export interface MainLayoutProps {
     customTopNavbar?: JSX.Element;
     customBottomNavbar?: JSX.Element;
     disableBottomNavbar?: boolean;
+    disableFooter?: boolean;
 }
