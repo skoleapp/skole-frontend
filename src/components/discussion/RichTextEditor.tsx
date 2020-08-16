@@ -422,7 +422,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     const renderBottomToolbar = (
-        <Box marginTop="0.25rem" display="flex">
+        <Box marginTop="0.25rem" display="flex" onClick={focusEditor}>
             {renderInlineStyles}
             {renderLinkButton}
             {renderBlockStyles}
@@ -510,7 +510,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     const renderTopToolbar = (
-        <Box marginBottom="0.5rem">
+        <Box marginBottom="0.5rem" onClick={focusEditor}>
             <Grid container>
                 {renderTopToolbarButtons}
                 {renderHelpTexts}
