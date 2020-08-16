@@ -5,13 +5,18 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    FormHelperText,
+    Grid,
     IconButton,
     Size,
     TextField,
     Tooltip,
 } from '@material-ui/core';
 import {
+    AlternateEmailOutlined,
     AttachFileOutlined,
+    CameraAltOutlined,
+    ClearOutlined,
     CodeOutlined,
     FormatBoldOutlined,
     FormatItalicOutlined,
@@ -20,30 +25,31 @@ import {
     FormatQuoteOutlined,
     LinkOutlined,
     SendOutlined,
+    SentimentSatisfiedOutlined,
     StrikethroughSRounded,
 } from '@material-ui/icons';
-import { useAuthContext } from 'context';
+import { useAuthContext, useDeviceContext, useDiscussionContext } from 'context';
 import {
     CompositeDecorator,
     ContentBlock,
-    DraftEditorCommand,
     DraftHandleValue,
     Editor,
     EditorState,
+    getDefaultKeyBinding,
+    KeyBindingUtil,
     RichUtils,
 } from 'draft-js';
 import { FormikProps } from 'formik';
 import { DraftLink, linkStrategy, useTranslation } from 'lib';
-import React, { ChangeEvent, SyntheticEvent, useEffect, useRef, useState } from 'react';
+import * as R from 'ramda';
+import React, { ChangeEvent, KeyboardEvent, SyntheticEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { CreateCommentFormValues } from 'types';
+import { RICH_STYLES } from 'utils';
 
-interface Props extends FormikProps<CreateCommentFormValues> {
-    handleAttachmentChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    attachment: string | ArrayBuffer | null;
-}
+const { hasCommandModifier } = KeyBindingUtil;
 
-export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleAttachmentChange, attachment }) => {
+export const TextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({ setFieldValue, submitForm }) => {
     const decorator = new CompositeDecorator([
         {
             strategy: linkStrategy,
@@ -53,9 +59,11 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
 
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty(decorator));
     const ref = useRef<Editor | null>(null);
-    const focusEditor = (): false | void => !!ref && !!ref.current && ref.current.focus();
+    const isMobile = useDeviceContext();
     const { t } = useTranslation();
+    const { commentAttachment, setCommentAttachment, toggleCommentModal } = useDiscussionContext();
     const { verified, verificationRequiredTooltip } = useAuthContext();
+    const placeholder = verificationRequiredTooltip || t('forms:createComment') + '...';
     const contentState = editorState.getCurrentContent();
     const disabled = !verified;
     const selection = editorState.getSelection();
@@ -65,15 +73,24 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
     const handleUploadAttachment = (): false | void =>
         !!attachmentInputRef.current && attachmentInputRef.current.click();
 
-    // const inputTooltip = !!verificationRequiredTooltip ? verificationRequiredTooltip : '';
-    const submitButtonTooltip = !!verificationRequiredTooltip ? verificationRequiredTooltip : t('tooltips:sendMessage');
-    const attachmentButtonTooltip = !!verificationRequiredTooltip
-        ? verificationRequiredTooltip
-        : t('tooltips:attachFile');
-
     const [focused, setFocused] = useState(false);
     const onFocus = (): void => setFocused(true);
     const onBlur = (): void => setFocused(false);
+    const focusEditor = (): false | void => !!ref && !!ref.current && ref.current.focus();
+    const [URLInputOpen, setURLInputOpen] = useState(false);
+    const [URL, setURL] = useState('');
+
+    const blurEditor = (): false | void => {
+        !!ref && !!ref.current && ref.current.blur();
+        onBlur();
+    };
+
+    const handleCloseURLInput = (): void => {
+        setURLInputOpen(false);
+        focusEditor();
+    };
+
+    const handleLinkInputChange = (e: ChangeEvent<HTMLInputElement>): void => setURL(e.target.value);
 
     // If the user changes block type before entering any text, we hide the placeholder.
     // Placeholder is also hidden whenever editor is focused.
@@ -106,21 +123,23 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
     const hotkeyBlockQuote = `${actionKey} + Shift + 9`;
     const hotkeyCodeBlock = `${actionKey} + Option + Shift + C`;
 
+    const { bold, italic, strikeThrough, link, orderedList, unorderedList, blockQuote, codeBlock } = RICH_STYLES;
+
     const inlineStyles = [
         {
             tooltip: t('tooltips:bold', { hotkeyBold }),
             icon: FormatBoldOutlined,
-            style: 'BOLD',
+            style: bold,
         },
         {
             tooltip: t('tooltips:italic', { hotkeyItalic }),
             icon: FormatItalicOutlined,
-            style: 'ITALIC',
+            style: italic,
         },
         {
             tooltip: t('tooltips:strikeThrough', { hotkeyStrikethrough }),
             icon: StrikethroughSRounded,
-            style: 'STRIKETHROUGH',
+            style: strikeThrough,
         },
     ];
 
@@ -128,22 +147,22 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
         {
             tooltip: t('tooltips:orderedList', { hotkeyOrderedList }),
             icon: FormatListNumberedOutlined,
-            style: 'ordered-list-item',
+            style: orderedList,
         },
         {
             tooltip: t('tooltips:bulletedList', { hotkeyBulletedList }),
             icon: FormatListBulletedOutlined,
-            style: 'unordered-list-item',
+            style: unorderedList,
         },
         {
             tooltip: t('tooltips:blockQuote', { hotkeyBlockQuote }),
             icon: FormatQuoteOutlined,
-            style: 'blockquote',
+            style: blockQuote,
         },
         {
             tooltip: t('tooltips:codeBlock', { hotkeyCodeBlock }),
             icon: CodeOutlined,
-            style: 'code-block',
+            style: codeBlock,
         },
     ];
 
@@ -156,52 +175,7 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
         setIsMac(navigator.userAgent.indexOf('Mac OS X') !== -1);
     }, []);
 
-    const handleKeyCommand = (command: DraftEditorCommand, editorState: EditorState): DraftHandleValue => {
-        const newState = RichUtils.handleKeyCommand(editorState, command);
-
-        if (newState) {
-            setEditorState(newState);
-            return 'handled';
-        }
-
-        return 'not-handled';
-    };
-
-    const toggleInlineStyle = (style: string) => (e: SyntheticEvent): void => {
-        e.preventDefault();
-        setEditorState(RichUtils.toggleInlineStyle(editorState, style));
-    };
-
-    const toggleBlockStyle = (blockType: string) => (e: SyntheticEvent): void => {
-        e.preventDefault();
-        setEditorState(RichUtils.toggleBlockType(editorState, blockType));
-    };
-
-    const getBlockStyle = (block: ContentBlock): string => {
-        switch (block.getType()) {
-            case 'blockquote': {
-                return 'RichEditor-blockquote';
-            }
-
-            default: {
-                return '';
-            }
-        }
-    };
-
-    const [URLInputOpen, setURLInputOpen] = useState(false);
-    const [URL, setURL] = useState('');
-
-    const handleCloseURLInput = (): void => {
-        setURLInputOpen(false);
-        focusEditor();
-    };
-
-    const handleLinkInputChange = (e: ChangeEvent<HTMLInputElement>): void => setURL(e.target.value);
-
-    const handleLinkPrompt = (e: SyntheticEvent): void => {
-        e.preventDefault();
-
+    const handleLinkPrompt = (): void => {
         if (!selectionCollapsed) {
             const startKey = selection.getStartKey();
             const startOffset = selection.getStartOffset();
@@ -230,6 +204,125 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
         setTimeout(() => focusEditor(), 0);
     };
 
+    const toggleInlineStyle = (style: string) => (e: SyntheticEvent): void => {
+        e.preventDefault();
+        setEditorState(RichUtils.toggleInlineStyle(editorState, style));
+    };
+
+    const toggleBlockStyle = (blockType: string) => (e: SyntheticEvent): void => {
+        e.preventDefault();
+        setEditorState(RichUtils.toggleBlockType(editorState, blockType));
+    };
+
+    const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
+        const newState = RichUtils.handleKeyCommand(editorState, command);
+
+        if (newState) {
+            setEditorState(newState);
+            return 'handled';
+        }
+
+        if (command === RICH_STYLES.strikeThrough) {
+            setEditorState(RichUtils.toggleInlineStyle(editorState, command));
+            return 'handled';
+        }
+
+        if (command === RICH_STYLES.link) {
+            handleLinkPrompt();
+            return 'handled';
+        }
+
+        if ([orderedList, unorderedList, blockQuote, codeBlock].includes(command)) {
+            setEditorState(RichUtils.toggleBlockType(editorState, command));
+            return 'handled';
+        }
+
+        return 'not-handled';
+    };
+
+    const getBlockStyle = (block: ContentBlock): string => {
+        switch (block.getType()) {
+            case 'blockquote': {
+                return 'RichEditor-blockquote';
+            }
+
+            default: {
+                return '';
+            }
+        }
+    };
+
+    const handleSubmit = (): void => {
+        submitForm();
+        setEditorState(EditorState.createEmpty()); // Reset editor.
+        setTimeout(() => blurEditor(), 0);
+    };
+
+    const getKeyBinding = (e: KeyboardEvent<{}>): string | null => {
+        switch (e.keyCode) {
+            // CMD + Shift + X
+            case 88: {
+                return hasCommandModifier(e) && !!e.shiftKey ? strikeThrough : null;
+            }
+
+            // CMD + Shift + U
+            case 85: {
+                return hasCommandModifier(e) && !!e.shiftKey ? link : null;
+            }
+
+            // CMD + Shift + 7
+            case 55: {
+                return hasCommandModifier(e) && !!e.shiftKey ? orderedList : null;
+            }
+
+            // CMD + Shift + 8
+            case 56: {
+                return hasCommandModifier(e) && !!e.shiftKey ? unorderedList : null;
+            }
+
+            // CMD + Shift + 9
+            case 57: {
+                return hasCommandModifier(e) && !!e.shiftKey ? blockQuote : null;
+            }
+
+            // CMD + Shift + C
+            case 67: {
+                return hasCommandModifier(e) && !!e.shiftKey ? codeBlock : null;
+            }
+
+            default: {
+                return getDefaultKeyBinding(e);
+            }
+        }
+    };
+
+    const handleReturn = (e: KeyboardEvent<{}>, editorState: EditorState): DraftHandleValue => {
+        if (e.shiftKey) {
+            setEditorState(RichUtils.insertSoftNewline(editorState));
+            return 'handled';
+        } else {
+            handleSubmit();
+            return 'handled';
+        }
+    };
+
+    const handleAttachmentChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        const reader = new FileReader();
+        const attachment = R.path(['currentTarget', 'files', '0'], e) as File;
+        reader.readAsDataURL(attachment);
+
+        reader.onloadend = (): void => {
+            setFieldValue('attachment', attachment);
+            setCommentAttachment(reader.result);
+            toggleCommentModal(true);
+        };
+    };
+
+    const handleClearAttachment = (): void => {
+        setFieldValue('attachment', null);
+        setCommentAttachment(null);
+    };
+
     const renderTextField = (
         <Editor
             ref={ref}
@@ -237,9 +330,12 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
             onChange={handleChange}
             handleKeyCommand={handleKeyCommand}
             blockStyleFn={getBlockStyle}
-            placeholder={t('common:createComment') + '...'}
+            placeholder={placeholder}
             onFocus={onFocus}
             onBlur={onBlur}
+            keyBindingFn={getKeyBinding}
+            handleReturn={handleReturn}
+            readOnly={disabled}
         />
     );
 
@@ -278,7 +374,8 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
                 <TextField
                     value={URL}
                     onChange={handleLinkInputChange}
-                    label={t('forms:link')}
+                    label={t('forms:url')}
+                    placeholder={t('forms:urlPlaceholder')}
                     variant="outlined"
                     autoFocus
                     fullWidth
@@ -307,35 +404,15 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
         </Tooltip>
     ));
 
-    const renderAttachmentButton = (
-        <>
-            <input
-                ref={attachmentInputRef}
-                value=""
-                accept=".png, .jpg, .jpeg"
-                type="file"
-                onChange={handleAttachmentChange}
-                disabled={disabled}
-            />
-            <Tooltip title={attachmentButtonTooltip}>
-                <span>
-                    <IconButton onClick={handleUploadAttachment} {...commonToolbarButtonProps}>
-                        <AttachFileOutlined />
-                    </IconButton>
-                </span>
-            </Tooltip>
-        </>
-    );
-
     const renderSendButton = (
         <Box marginLeft="auto">
-            <Tooltip title={submitButtonTooltip}>
+            <Tooltip title={t('tooltips:sendMessage')}>
                 <span>
                     <IconButton
                         {...commonToolbarButtonProps}
-                        onClick={submitForm}
-                        color={!disabled && (!!textContent || !!attachment) ? 'primary' : 'default'}
-                        disabled={disabled || (!textContent && !attachment)} // Require either text content or an attachment.
+                        onClick={handleSubmit}
+                        color={!disabled && (!!textContent || !!commentAttachment) ? 'primary' : 'default'}
+                        disabled={disabled || (!textContent && !commentAttachment)} // Require either text content or an attachment.
                     >
                         <SendOutlined />
                     </IconButton>
@@ -344,20 +421,102 @@ export const TextEditor: React.FC<Props> = ({ setFieldValue, submitForm, handleA
         </Box>
     );
 
-    const renderToolbar = (
+    const renderBottomToolbar = (
         <Box marginTop="0.25rem" display="flex">
             {renderInlineStyles}
             {renderLinkButton}
             {renderBlockStyles}
-            {renderAttachmentButton}
             {renderSendButton}
+        </Box>
+    );
+
+    const renderMentionButton = (
+        <Tooltip title={t('tooltips:mention')}>
+            <span>
+                <IconButton {...commonToolbarButtonProps} disabled>
+                    <AlternateEmailOutlined />
+                </IconButton>
+            </span>
+        </Tooltip>
+    );
+
+    const renderEmojiButton = (
+        <Tooltip title={t('tooltips:emoji')}>
+            <span>
+                <IconButton {...commonToolbarButtonProps} disabled>
+                    <SentimentSatisfiedOutlined />
+                </IconButton>
+            </span>
+        </Tooltip>
+    );
+
+    const renderAttachmentButton = (
+        <>
+            <input
+                ref={attachmentInputRef}
+                value=""
+                accept=".png, .jpg, .jpeg"
+                type="file"
+                capture={isMobile && 'camera'}
+                onChange={handleAttachmentChange}
+                disabled={disabled}
+            />
+            <Tooltip title={t('tooltips:attachFile')}>
+                <span>
+                    <IconButton onClick={handleUploadAttachment} {...commonToolbarButtonProps}>
+                        {isMobile ? <CameraAltOutlined /> : <AttachFileOutlined />}
+                    </IconButton>
+                </span>
+            </Tooltip>
+        </>
+    );
+
+    const renderClearAttachmentButton = !!commentAttachment && (
+        <Tooltip title={t('tooltips:clearAttachment')}>
+            <span>
+                <IconButton onClick={handleClearAttachment} {...commonToolbarButtonProps}>
+                    <ClearOutlined />
+                </IconButton>
+            </span>
+        </Tooltip>
+    );
+
+    const renderSendHelpText = (
+        <FormHelperText>
+            <b>Return</b> {t('forms:sendHelpText')}
+        </FormHelperText>
+    );
+
+    const renderNewLineHelpText = (
+        <FormHelperText id="new-line-help-text">
+            <b>Shift + Return</b> {t('forms:newLineHelpText')}
+        </FormHelperText>
+    );
+
+    const renderTopToolbar = (
+        <Box marginBottom="0.5rem">
+            <Grid container>
+                <Grid item xs={12} md={3} container justify="flex-start">
+                    {renderMentionButton}
+                    {renderEmojiButton}
+                    {renderAttachmentButton}
+                    {renderClearAttachmentButton}
+                </Grid>
+                {!isMobile && (
+                    <Grid item md={9} container justify="flex-end">
+                        {renderSendHelpText}
+                        {renderNewLineHelpText}
+                    </Grid>
+                )}
+            </Grid>
         </Box>
     );
 
     return (
         <StyledTextEditor hidePlaceholder={hidePlaceholder}>
+            {renderTopToolbar}
             {renderTextField}
-            {renderToolbar}
+            {renderBottomToolbar}
             {renderURLInput}
         </StyledTextEditor>
     );
@@ -377,7 +536,8 @@ const StyledTextEditor = styled(({ hidePlaceholder, ...props }) => <Box {...prop
         .RichEditor-blockquote {
             border-left: 0.5rem solid #eee;
             color: #666;
-            padding: 0.25rem;
+            padding: 0.5rem;
+            margin: 0;
         }
 
         .public-DraftStyleDefault-pre {
@@ -389,5 +549,14 @@ const StyledTextEditor = styled(({ hidePlaceholder, ...props }) => <Box {...prop
 
     .public-DraftEditorPlaceholder-root {
         display: ${({ hidePlaceholder }): false | string => hidePlaceholder && 'none'};
+    }
+
+    #new-line-help-text {
+        margin-left: 1rem;
+    }
+
+    .MuiSvgIcon-root {
+        width: 1.35rem;
+        height: 1.35rem;
     }
 `;

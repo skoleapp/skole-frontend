@@ -42,5 +42,11 @@
     "schoolHelpText": "By adding school we will be able to automatically show you content based on it.",
     "subjectHelpText": "By adding subject we will be able to automatically show you content based on it.",
     "marketingPermission": "Marketing Permission (coming soon)",
-    "pushNotifications": "Push Notifications (coming soon)"
+    "pushNotifications": "Push Notifications (coming soon)",
+    "createComment": "Create Comment",
+    "sendHelpText": "to send",
+    "newLineHelpText": "to add a new line",
+    "addLink": "Add Link",
+    "url": "URL",
+    "urlPlaceholder": "https://example.com"
 }

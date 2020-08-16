@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Typography } from '@material-ui/core';
-import { useDeviceContext, useDiscussionContext } from 'context';
-import { CommentObjectType } from 'generated';
+import { useAuthContext, useDeviceContext, useDiscussionContext } from 'context';
+import { CommentObjectType, UserObjectType } from 'generated';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
@@ -10,12 +10,20 @@ import { CreateCommentForm } from './CreateCommentForm';
 import { StyledDiscussionBox } from './StyledDiscussionBox';
 
 export const ReplyCommentThread: React.FC = () => {
+    const { userMe } = useAuthContext();
     const { t } = useTranslation();
     const isMobile = useDeviceContext();
     const { topComment, toggleTopComment, toggleCommentModal } = useDiscussionContext();
     const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
     const target = { comment: Number(R.propOr(undefined, 'id', topComment)) };
+    const topCommentUser: UserObjectType = R.propOr(null, 'user', topComment);
+    const replyCommentUsers = replyComments.map(c => c.user);
     const openCommentModal = (): void => toggleCommentModal(true);
+
+    // Unique users from comment replies excluding own user.
+    const users = [...new Set([topCommentUser, ...replyCommentUsers])].filter(
+        u => !!u && !!userMe && u.id !== userMe.id,
+    ) as UserObjectType[];
 
     const appendComments = (comment: CommentObjectType): void => {
         if (!!topComment) {
@@ -44,8 +52,8 @@ export const ReplyCommentThread: React.FC = () => {
 
     const createCommentFormProps = {
         target,
-        formKey: 'comment-thread',
         appendComments,
+        users,
     };
 
     const renderTopComment = !!topComment && (

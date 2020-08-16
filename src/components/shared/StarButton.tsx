@@ -19,16 +19,8 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
     const [starred, setStarred] = useState(initialStarred);
     const color = starred ? 'primary' : 'default';
     const { toggleNotification } = useNotificationsContext();
-
-    const tooltip = !!verificationRequiredTooltip
-        ? verificationRequiredTooltip
-        : starred
-        ? t('tooltips:unstar')
-        : t('tooltips:star') || '';
-
-    const onError = (): void => {
-        toggleNotification(t('notifications:starError'));
-    };
+    const tooltip = verificationRequiredTooltip || starred ? t('tooltips:unstar') : t('tooltips:star') || '';
+    const onError = (): void => toggleNotification(t('notifications:starError'));
 
     const onCompleted = ({ performStar }: PerformStarMutation): void => {
         if (!!performStar) {

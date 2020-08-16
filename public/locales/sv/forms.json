@@ -42,5 +42,11 @@
     "schoolHelpText": "Genom att lägga till skola kan vi automatiskt visa dig innehåll baserat på det.",
     "subjectHelpText": "Genom att lägga till ämne kan vi automatiskt visa innehåll baserat på det.",
     "marketingPermission": "Marknadstillstånd (kommer snart)",
-    "pushNotifications": "Push Notifications (kommer snart)"
+    "pushNotifications": "Push Notifications (kommer snart)",
+    "createComment": "Skapa kommentar",
+    "sendHelpText": "för att skicka",
+    "newLineHelpText": "för att lägga till en ny rad",
+    "addLink": "Lägg till länk",
+    "url": "URL",
+    "urlPlaceholder": "https://example.com"
 }

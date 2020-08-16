@@ -9,13 +9,13 @@ import { breakpoints } from 'styles';
 import { mediaURL } from 'utils';
 
 export const AttachmentViewer: React.FC = () => {
-    const { attachment, toggleAttachmentViewer } = useDiscussionContext();
-    const attachmentName = attachment && attachment.split('/').pop();
+    const { attachmentViewerValue, setAttachmentViewerValue } = useDiscussionContext();
+    const attachmentName = attachmentViewerValue && attachmentViewerValue.split('/').pop();
     const { size } = useResponsiveIconButtonProps();
-    const handleClose = (): void => toggleAttachmentViewer(null);
+    const handleClose = (): void => setAttachmentViewerValue(null);
 
     return (
-        <StyledAttachmentViewer open={!!attachment} onClick={handleClose}>
+        <StyledAttachmentViewer open={!!attachmentViewerValue} onClick={handleClose}>
             <Box id="toolbar">
                 <Typography className="truncate" variant="subtitle1" color="secondary">
                     {attachmentName}
@@ -25,7 +25,7 @@ export const AttachmentViewer: React.FC = () => {
                 </IconButton>
             </Box>
             <Box id="image-container">
-                <Image src={mediaURL(attachment as string)} />
+                <Image src={mediaURL(attachmentViewerValue as string)} />
             </Box>
         </StyledAttachmentViewer>
     );

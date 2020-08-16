@@ -42,5 +42,11 @@
     "schoolHelpText": "Lisäämällä koulun voimme näyttää sinulle automaattisesti sisältöä perustuen siihen.",
     "subjectHelpText": "Lisäämällä oppiaineen voimme näyttää sinulle automaattisesti sisältöä perustuen siihen.",
     "marketingPermission": "Markkinointilupa (saatavilla pian)",
-    "pushNotifications": "Push-notifikaatiot (saatavilla pian)"
+    "pushNotifications": "Push-notifikaatiot (saatavilla pian)",
+    "createComment": "Luo kommentti",
+    "sendHelpText": "lähettääksesi",
+    "newLineHelpText": "lisätäksesi uuden rivin",
+    "addLink": "Lisää linkki",
+    "url": "URL",
+    "urlPlaceholder": "https://example.com"
 }

@@ -34,7 +34,7 @@ export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
 };
 
 interface UseTranslation extends Omit<UseTranslationResponse, 't'> {
-    t: (key: string, options?: { [key: string]: ReactText }) => string;
+    t: (key: string, options?: { [key: string]: JSX.Element | string | number }) => string;
 }
 
 // A custom hook that we use instead of the original ´react-i18next´ hook.

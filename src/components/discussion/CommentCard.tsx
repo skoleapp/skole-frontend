@@ -53,7 +53,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', comment);
     const replyCount = replyComments.length;
     const { toggleNotification } = useNotificationsContext();
-    const { toggleTopComment, toggleAttachmentViewer } = useDiscussionContext();
+    const { toggleTopComment, setAttachmentViewerValue } = useDiscussionContext();
     const shareQuery = `?comment=${commentId}`;
     const creatorUsername = R.propOr('unknown', 'username', comment.user) as string;
     const commentPreview = comment.text.length > 20 ? `${comment.text.substring(0, 20)}...` : comment.text;
@@ -71,17 +71,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
 
-    const upVoteButtonTooltip = !!verificationRequiredTooltip
-        ? verificationRequiredTooltip
-        : isOwner
-        ? t('tooltips:voteOwnComment')
-        : t('tooltips:upVote');
+    const upVoteButtonTooltip =
+        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnComment') : t('tooltips:upVote');
 
-    const downVoteButtonTooltip = !!verificationRequiredTooltip
-        ? verificationRequiredTooltip
-        : isOwner
-        ? t('tooltips:voteOwnComment')
-        : t('tooltips:downVote');
+    const downVoteButtonTooltip =
+        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnComment') : t('tooltips:downVote');
 
     const { score, upVoteButtonProps, downVoteButtonProps } = useVotes({
         initialVote,
@@ -94,7 +88,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const handleClick = (): void => {
         if (isThread) {
-            attachmentOnly && toggleAttachmentViewer(comment.attachment);
+            attachmentOnly && setAttachmentViewerValue(comment.attachment);
         } else {
             toggleTopComment(comment);
         }
@@ -124,7 +118,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const handleAttachmentClick = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        toggleAttachmentViewer(comment.attachment);
+        setAttachmentViewerValue(comment.attachment);
     };
 
     const handleDeleteComment = async (e: SyntheticEvent): Promise<void> => {

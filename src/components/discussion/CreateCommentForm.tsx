@@ -1,55 +1,37 @@
-import { Box, Fab, Fade, IconButton, OutlinedTextFieldProps, Paper, TextField, Tooltip } from '@material-ui/core';
-import { AttachFileOutlined, CameraAltOutlined, ClearOutlined, SendOutlined } from '@material-ui/icons';
-import {
-    useAuthContext,
-    useDeviceContext,
-    useDiscussionContext,
-    useNotificationsContext,
-    usePDFViewerContext,
-} from 'context';
+import { Box, Fade, Paper } from '@material-ui/core';
+import { useDeviceContext, useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
-import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
+import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation, UserObjectType } from 'generated';
 import { useForm } from 'hooks';
 import { dataURItoFile, useTranslation } from 'lib';
 import Image from 'material-ui-image';
-import * as R from 'ramda';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { CommentTarget } from 'types';
+import { CommentTarget, CreateCommentFormValues } from 'types';
 
 import { ModalHeader, StyledModal } from '..';
-
-interface CreateCommentFormValues {
-    text: string;
-    attachment: File | null;
-    course?: string;
-    resource?: string;
-    comment?: string;
-}
+import { TextEditor } from './TextEditor';
 
 type T = FormikProps<CreateCommentFormValues>;
 
 interface CreateCommentFormProps {
     target: CommentTarget;
     appendComments: (comments: CommentObjectType) => void;
-    formKey: string;
+    users: UserObjectType[];
 }
 
-export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target, formKey }) => {
+export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target }) => {
     const { t } = useTranslation();
-    const { verified, verificationRequiredTooltip } = useAuthContext();
-    const disabled = verified === false;
-    const { ref, setSubmitting, resetForm, submitForm, setFieldValue } = useForm<CreateCommentFormValues>();
+    const { ref, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const { toggleNotification } = useNotificationsContext();
-    const { commentModalOpen, toggleCommentModal } = useDiscussionContext();
+    const { commentModalOpen, toggleCommentModal, commentAttachment, setCommentAttachment } = useDiscussionContext();
     const { screenshot, setScreenshot } = usePDFViewerContext();
-    const [attachment, setAttachment] = useState<string | ArrayBuffer | null>(null);
     const isMobile = useDeviceContext();
 
     // Use screenshot as attachment if area has been marked.
     useEffect(() => {
         if (!!screenshot) {
-            setAttachment(screenshot); // Already in data URL form.
+            setCommentAttachment(screenshot); // Already in data URL form.
             const screenShotFile = dataURItoFile(screenshot);
             setFieldValue('attachment', screenShotFile);
         }
@@ -59,7 +41,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         setFieldValue('attachment', null);
         toggleCommentModal(false);
         setScreenshot(null);
-        setAttachment(null);
+        setCommentAttachment(null);
     };
 
     const onError = (): void => toggleNotification(t('notifications:messageError'));
@@ -82,7 +64,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const [createCommentMutation] = useCreateCommentMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
-        if (!attachment && !values.text) {
+        if (!commentAttachment && !values.text) {
             toggleNotification(t('notifications:messageEmpty'));
         } else {
             await createCommentMutation({
@@ -94,34 +76,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         }
 
         setSubmitting(false);
-        setAttachment(null);
-    };
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
-        setFieldValue('text', e.target.value);
-    };
-
-    const handleAttachmentChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const reader = new FileReader();
-        const attachment = R.path(['currentTarget', 'files', '0'], e) as File;
-        reader.readAsDataURL(attachment);
-
-        reader.onloadend = (): void => {
-            setFieldValue('attachment', attachment);
-            setAttachment(reader.result);
-            toggleCommentModal(true);
-        };
-    };
-
-    const handleClearAttachment = (): void => {
-        setFieldValue('attachment', null);
-        setAttachment(null);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-        if (!e.shiftKey && e.key === 'Enter' && !isMobile) {
-            submitForm();
-        }
+        setCommentAttachment(null);
     };
 
     const initialValues = {
@@ -130,120 +85,18 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         ...target,
     };
 
-    const textFieldProps: OutlinedTextFieldProps = {
-        placeholder: t('forms:message'),
-        variant: 'outlined',
-        onChange: handleChange,
-        rowsMax: '5',
-        multiline: true,
-        autoComplete: 'off',
-        fullWidth: true,
-        disabled,
-    };
+    const renderDesktopInputArea = (formikProps: T): false | JSX.Element =>
+        !isMobile && <TextEditor {...formikProps} />;
 
-    const submitButtonTooltip = !!verificationRequiredTooltip ? verificationRequiredTooltip : t('tooltips:sendMessage');
-    const attachmentButtonTooltip = !!verificationRequiredTooltip
-        ? verificationRequiredTooltip
-        : t('tooltips:attachFile');
-    const inputTooltip = !!verificationRequiredTooltip ? verificationRequiredTooltip : '';
-
-    const renderSubmitButton = (
-        <Tooltip title={submitButtonTooltip}>
-            <span>
-                <IconButton onClick={submitForm} disabled={disabled} color="primary" size="small">
-                    <SendOutlined />
-                </IconButton>
-            </span>
-        </Tooltip>
-    );
-
-    const renderAttachmentButtons = isMobile && (
-        <Box display="flex">
-            <Box>
-                <input
-                    value=""
-                    id={`camera-attachment-${formKey}`}
-                    accept=".png, .jpg, .jpeg"
-                    type="file"
-                    capture="camera"
-                    onChange={handleAttachmentChange}
-                    disabled={disabled}
-                />
-                <label htmlFor={`camera-attachment-${formKey}`}>
-                    <Tooltip title={attachmentButtonTooltip}>
-                        <span>
-                            <Fab disabled={disabled} size="small" color="secondary">
-                                <CameraAltOutlined />
-                            </Fab>
-                        </span>
-                    </Tooltip>
-                </label>
-            </Box>
-            {!!attachment && (
-                <Box marginLeft="0.5rem">
-                    <Tooltip title={t('tooltips:clearAttachment')}>
-                        <Fab onClick={handleClearAttachment} size="small" color="secondary">
-                            <ClearOutlined />
-                        </Fab>
-                    </Tooltip>
-                </Box>
-            )}
-        </Box>
-    );
-
-    const renderDesktopInputArea = ({ values }: T): false | JSX.Element =>
-        !isMobile && (
-            <Box id="desktop-input-area" display="flex" alignItems="center">
-                <Box marginRight="0.5rem">
-                    <input
-                        value=""
-                        id={`attachment-desktop-${formKey}`}
-                        accept=".png, .jpg, .jpeg"
-                        type="file"
-                        onChange={handleAttachmentChange}
-                        disabled={disabled}
-                    />
-                    <label htmlFor={`attachment-desktop-${formKey}`}>
-                        <Tooltip title={attachmentButtonTooltip}>
-                            <span>
-                                <IconButton disabled={disabled} component="span" size="small">
-                                    <AttachFileOutlined />
-                                </IconButton>
-                            </span>
-                        </Tooltip>
-                    </label>
-                </Box>
-                <Tooltip title={inputTooltip}>
-                    <span id="desktop-input-container">
-                        <TextField
-                            onKeyDown={handleKeyDown}
-                            value={!values.attachment ? values.text : ''}
-                            {...textFieldProps}
-                        />
-                    </span>
-                </Tooltip>
-                <Box marginLeft="0.5rem">{renderSubmitButton}</Box>
-            </Box>
-        );
-
-    const renderCreateCommentModal = ({ values }: T): JSX.Element => (
+    const renderCreateCommentModal = (formikProps: T): JSX.Element => (
         <StyledModal open={commentModalOpen} onClose={handleCloseCreateCommentModal} autoHeight>
             <Fade in={commentModalOpen}>
                 <Paper>
-                    <ModalHeader
-                        onCancel={handleCloseCreateCommentModal}
-                        headerRight={renderSubmitButton}
-                        text={t('common:createComment')}
-                    />
+                    <ModalHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
                     <StyledAttachmentImage screenshot={screenshot}>
-                        {!!attachment && <Image src={attachment as string} />}
+                        {!!commentAttachment && <Image src={commentAttachment as string} />}
                     </StyledAttachmentImage>
-                    {renderAttachmentButtons}
-                    <Tooltip title={inputTooltip}>
-                        <span>
-                            <TextField onKeyDown={handleKeyDown} value={values.text} {...textFieldProps} />
-                        </span>
-                    </Tooltip>
+                    <TextEditor {...formikProps} />
                 </Paper>
             </Fade>
         </StyledModal>
@@ -262,15 +115,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 };
 
 const StyledCreateCommentForm = styled(Form)`
-    #desktop-input-area {
-        .MuiFormControl-root {
-            margin-top: 0;
-        }
-
-        #desktop-input-container {
-            flex-grow: 1;
-        }
-    }
+    flex-grow: 1;
+    display: flex;
 `;
 
 // Ignore: screenshot must be omitted from Box props.

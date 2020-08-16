@@ -51,6 +51,8 @@ export interface DiscussionContextType {
     setTopLevelComments: (comments: CommentObjectType[]) => void;
     topComment: CommentObjectType | null;
     toggleTopComment: (payload: CommentObjectType | null) => void;
-    attachment: string | null;
-    toggleAttachmentViewer: (payload: string | null) => void;
+    attachmentViewerValue: string | null;
+    setAttachmentViewerValue: Dispatch<SetStateAction<string | null>>;
+    commentAttachment: string | ArrayBuffer | null;
+    setCommentAttachment: Dispatch<SetStateAction<string | ArrayBuffer | null>>;
 }
