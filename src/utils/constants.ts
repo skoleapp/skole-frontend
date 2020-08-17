@@ -164,3 +164,7 @@ export const RICH_STYLES = {
     blockQuote: 'blockquote',
     codeBlock: 'code-block',
 };
+
+// Dropzone.
+
+export const DROPZONE_ACCEPTED_FILES = ['image/*', 'text/*', 'application/*'];

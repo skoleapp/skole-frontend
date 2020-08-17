@@ -1,10 +1,12 @@
-import { FormControl, FormHelperText } from '@material-ui/core';
+import { Button, FormControl, FormHelperText } from '@material-ui/core';
 import { useDeviceContext, useNotificationsContext } from 'context';
 import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
 import { useTranslation } from 'lib';
 import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
-import React, { useEffect } from 'react';
+import * as R from 'ramda';
+import React, { ChangeEvent, useRef } from 'react';
 import styled from 'styled-components';
+import { DROPZONE_ACCEPTED_FILES as acceptedFiles, truncate } from 'utils';
 
 import { FormErrorMessage } from './FormErrorMessage';
 
@@ -13,47 +15,85 @@ interface Props extends DropzoneAreaProps {
     field: FieldAttributes<{}>;
 }
 
-const acceptedFiles = ['image/*', 'text/*', 'application/*'];
-
 export const DropzoneField: React.FC<Props> = ({ form, field }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const maxFileSize = 5000000;
     const isMobile = useDeviceContext();
+    const fileName: string = R.propOr('', 'name', field.value);
+
+    const handleMobileFileInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        const file = R.path(['currentTarget', 'files', '0'], e) as File;
+
+        if (file.size > maxFileSize) {
+            toggleNotification(t('validation:fileSizeError'));
+        } else {
+            form.setFieldValue(field.name, file);
+        }
+    };
 
     const handleFileChange = (files: File[]): void => {
         form.setFieldValue(field.name, files[0]);
     };
 
-    // TODO: Use form error here, now using notification temporarily as the form error does not work for some reason.
     const handleDropRejected = (files: File[]): void => {
         if (files[0].size > maxFileSize) {
             toggleNotification(t('validation:fileSizeError'));
         }
     };
 
-    // Allow uploading files using camera.
-    useEffect(() => {
-        const dropzone = document.querySelectorAll('[type="file"]');
-        dropzone[0].setAttribute('capture', 'camera');
-    }, []);
+    const mobileFileInputRef = useRef<HTMLInputElement | null>(null);
+    const onClickMobileFileInput = (): false | void =>
+        !!mobileFileInputRef.current && mobileFileInputRef.current.click();
+
+    const renderMobileFileInput = isMobile && (
+        <>
+            <Button onClick={onClickMobileFileInput} color="primary" variant="outlined" fullWidth>
+                {t('upload-resource:dropzoneTextMobile')}
+            </Button>
+            <input
+                ref={mobileFileInputRef}
+                value=""
+                id="mobile-file-input"
+                type="file"
+                accept={acceptedFiles.toString + ';capture=camera'}
+                onChange={handleMobileFileInputChange}
+            />
+        </>
+    );
+
+    const renderDesktopFileInput = !isMobile && (
+        <DropzoneArea
+            onChange={handleFileChange}
+            acceptedFiles={acceptedFiles}
+            filesLimit={1}
+            useChipsForPreview
+            showAlerts={false}
+            dropzoneText={t('upload-resource:dropzoneTextDesktop')}
+            maxFileSize={maxFileSize}
+            onDropRejected={handleDropRejected}
+        />
+    );
+
+    const renderFormHelperText = !fileName && (
+        <FormHelperText>
+            {t('upload-resource:maxFileSize')}: {maxFileSize / 1000000} MB
+        </FormHelperText>
+    );
+
+    const renderFileSelectedText = !!fileName && (
+        <FormHelperText>{t('upload-resource:fileSelected', { fileName: truncate(fileName, 20) })}</FormHelperText>
+    );
+
+    const renderErrorMessage = <ErrorMessage name={field.name} component={FormErrorMessage} />;
 
     return (
         <StyledDropzoneField fullWidth>
-            <DropzoneArea
-                onChange={handleFileChange}
-                acceptedFiles={acceptedFiles}
-                filesLimit={1}
-                useChipsForPreview
-                showAlerts={false}
-                dropzoneText={isMobile ? t('common:dropzoneTextMobile') : t('common:dropzoneTextDesktop')}
-                maxFileSize={maxFileSize}
-                onDropRejected={handleDropRejected}
-            />
-            <FormHelperText>
-                {t('common:maxFileSize')}: {maxFileSize / 1000000} MB
-            </FormHelperText>
-            <ErrorMessage name={field.name} component={FormErrorMessage} />
+            {renderMobileFileInput}
+            {renderDesktopFileInput}
+            {renderFormHelperText}
+            {renderFileSelectedText}
+            {renderErrorMessage}
         </StyledDropzoneField>
     );
 };

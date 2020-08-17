@@ -455,9 +455,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
             <input
                 ref={attachmentInputRef}
                 value=""
-                accept=".png, .jpg, .jpeg"
                 type="file"
-                capture={isMobile && 'camera'}
+                accept=".png, .jpg, .jpeg;capture=camera"
                 onChange={handleAttachmentChange}
                 disabled={disabled}
             />

@@ -2,5 +2,9 @@
     "title": "Lisää resurssi",
     "description": "Lataa uusi resurssi Skoleen.",
     "header": "Lisää resurssi",
-    "fileUploadingText": "Lähetetään tiedostoa..."
+    "fileUploadingText": "Lähetetään tiedostoa...",
+    "maxFileSize": "Maksimi tiedostokoko",
+    "fileSelected": "{{ fileName }} valittu.",
+    "dropzoneTextMobile": "Liitä tiedosto tästä",
+    "dropzoneTextDesktop": "Raahaa tiedosto tai klikkaa tästä"
 }

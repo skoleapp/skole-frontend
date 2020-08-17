@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, FormControl, ListItemText, MenuItem } from '@material-ui/core';
 import { ClearOutlined, EditOutlined, LibraryAddOutlined } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
-import { ErrorMessage, FormikProps } from 'formik';
+import { FormikProps } from 'formik';
 import { useDrawer } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
