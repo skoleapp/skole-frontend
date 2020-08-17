@@ -131,6 +131,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         }
     };
 
+    // Prevent opening comment thread.
+    const onClickActionsDrawer = (e: SyntheticEvent): void => e.stopPropagation();
+
     const renderTitle = (
         <TextLink
             href={`/users/${R.propOr('', 'id', comment.user)}`}
@@ -244,7 +247,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     );
 
     const renderActionsDrawer = (
-        <StyledDrawer {...actionsDrawerProps}>
+        <StyledDrawer {...actionsDrawerProps} onClick={onClickActionsDrawer}>
             {renderActionsHeader}
             {renderActions}
         </StyledDrawer>

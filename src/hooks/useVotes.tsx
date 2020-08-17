@@ -3,7 +3,7 @@ import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from 'generated';
 import { useTranslation } from 'lib';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { MuiColor } from 'types';
 
@@ -68,7 +68,8 @@ export const useVotes = ({
 
     const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
 
-    const handleVote = (status: number) => (): void => {
+    const handleVote = (status: number) => (e: SyntheticEvent): void => {
+        e.stopPropagation(); // Prevent opening comment thread for top-level comments.
         performVote({ variables: { status, ...variables } });
     };
 
