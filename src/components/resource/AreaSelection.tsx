@@ -205,6 +205,8 @@ export const AreaSelection: React.FC = () => {
             documentNode.addEventListener('touchstart', onTouchStart as EventListener);
             documentNode.addEventListener('mousemove', onMouseMove as EventListener, { passive: true });
             documentNode.addEventListener('mousedown', onMouseDown as EventListener, { passive: true });
+        } else {
+            setState(initialState); // Reset area selection when draw mode is toggled off.
         }
 
         return (): void => {
