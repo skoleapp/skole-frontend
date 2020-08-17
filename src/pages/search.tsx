@@ -123,7 +123,10 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         ordering,
     };
 
+    // Query that holds pagination plus all search params.
     const queryWithPagination = getQueryWithPagination({ query, extraFilters: initialValues });
+
+    // Query that holds only pagination.
     const paginationQuery = getPaginationQuery(query);
 
     const filtersArr = [
