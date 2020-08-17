@@ -63,7 +63,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     const { t } = useTranslation();
     const { commentAttachment, setCommentAttachment, toggleCommentModal } = useDiscussionContext();
     const { verified, verificationRequiredTooltip } = useAuthContext();
-    const placeholder = verificationRequiredTooltip || t('forms:createComment') + '...';
+    const placeholder = (verificationRequiredTooltip || t('forms:createComment')) + '...';
     const contentState = editorState.getCurrentContent();
     const disabled = !verified;
     const selection = editorState.getSelection();
@@ -455,9 +455,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
             <input
                 ref={attachmentInputRef}
                 value=""
-                accept=".png, .jpg, .jpeg"
                 type="file"
-                capture={isMobile && 'camera'}
+                accept=".png, .jpg, .jpeg;capture=camera"
                 onChange={handleAttachmentChange}
                 disabled={disabled}
             />

@@ -2,5 +2,9 @@
     "title": "Ladda Upp Resurs",
     "description": "Ladda upp ny resurs på Skole.",
     "header": "Ladda Upp Resurs",
-    "fileUploadingText": "Laddar upp fil..."
+    "fileUploadingText": "Laddar upp fil...",
+    "maxFileSize": "Maximal filstorlek",
+    "fileSelected": "{{ fileName }} vald.",
+    "dropzoneTextMobile": "Ladda upp fil",
+    "dropzoneTextDesktop": "Klicka här för att ladda upp filen"
 }

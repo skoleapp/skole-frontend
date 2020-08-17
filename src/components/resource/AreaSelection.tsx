@@ -19,7 +19,7 @@ const initialState = { start: null, end: null, locked: false };
 // TODO: Add a listener that cancels the draw mode from ESC key.
 export const AreaSelection: React.FC = () => {
     const isMobile = useDeviceContext();
-    const { setScreenshot, drawMode } = usePDFViewerContext();
+    const { setScreenshot, drawMode, setSwipingDisabled } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
     const { start, end } = stateRef.current;
 
@@ -201,10 +201,13 @@ export const AreaSelection: React.FC = () => {
         // Only apply listeners when in draw mode.
         // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
         if (drawMode) {
+            setSwipingDisabled(true); // Disable swipeable views during draw mode.
             documentNode.addEventListener('touchmove', onTouchMove as EventListener);
             documentNode.addEventListener('touchstart', onTouchStart as EventListener);
             documentNode.addEventListener('mousemove', onMouseMove as EventListener, { passive: true });
             documentNode.addEventListener('mousedown', onMouseDown as EventListener, { passive: true });
+        } else {
+            setState(initialState); // Reset area selection when draw mode is toggled off.
         }
 
         return (): void => {

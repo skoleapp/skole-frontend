@@ -111,10 +111,10 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
 
     const upVoteButtonTooltip =
-        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnResource') : t('tooltips:upVote');
+        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnResource') : t('tooltips:upVote'));
 
     const downVoteButtonTooltip =
-        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnResource') : t('tooltips:downVote');
+        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnResource') : t('tooltips:downVote'));
 
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,

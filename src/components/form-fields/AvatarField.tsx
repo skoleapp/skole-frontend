@@ -1,24 +1,20 @@
 import { Avatar, Box, Button, FormControl, ListItemText, MenuItem } from '@material-ui/core';
 import { ClearOutlined, EditOutlined, LibraryAddOutlined } from '@material-ui/icons';
-import { ErrorMessage, FormikProps } from 'formik';
+import { useNotificationsContext } from 'context';
+import { FormikProps } from 'formik';
 import { useDrawer } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
 import { UpdateProfileFormValues } from 'types';
-import { mediaURL } from 'utils';
 
 import { StyledDrawer, StyledList } from '..';
-import { FormErrorMessage } from './FormErrorMessage';
 
-export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
-    setFieldValue,
-    setFieldError,
-    values,
-}) => {
+export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ setFieldValue, values }) => {
     const { t } = useTranslation();
-    const [preview, setPreview] = useState(mediaURL(values.avatar));
+    const [preview, setPreview] = useState(values.avatar);
+    const { toggleNotification } = useNotificationsContext();
     const { renderHeader, handleOpen, ...drawerProps } = useDrawer(t('edit-profile:avatar'));
     const { onClose: handleCloseDrawer } = drawerProps;
 
@@ -27,7 +23,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
         const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
 
         if (avatar.size > 2000000) {
-            setFieldError('avatar', t('validation:fileSizeError'));
+            toggleNotification(t('validation:fileSizeError'));
         } else {
             reader.readAsDataURL(avatar);
             reader.onloadend = (): void => {
@@ -80,9 +76,8 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
                     <input
                         value=""
                         id="avatar-input"
-                        accept=".png, .jpg, .jpeg"
                         type="file"
-                        capture="camera"
+                        accept=".png, .jpg, .jpeg;capture=camera"
                         onChange={handleAvatarChange}
                     />
                     <Button
@@ -95,7 +90,6 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
                         {t('edit-profile:changeAvatar')}
                     </Button>
                 </Box>
-                <ErrorMessage name="avatar" component={FormErrorMessage} />
             </Box>
             <StyledDrawer {...drawerProps}>
                 {renderHeader}

@@ -1,5 +1,5 @@
-import { Button, Grid, Typography } from '@material-ui/core';
-import { CancelOutlined, KeyboardArrowRightOutlined } from '@material-ui/icons';
+import { Button, Grid, IconButton, Typography } from '@material-ui/core';
+import { ArrowForwardOutlined, ClearOutlined } from '@material-ui/icons';
 import { useDeviceContext, useDiscussionContext, usePDFViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -10,22 +10,18 @@ export const DrawModeControls: React.FC = () => {
     const colWidth = isMobile ? 6 : 5;
     const { setDrawMode, screenshot } = usePDFViewerContext();
     const { toggleCommentModal } = useDiscussionContext();
-    const handleCancelButtonClick = (): void => setDrawMode(false);
+    const handleExitButtonClick = (): void => setDrawMode(false);
 
     const handleContinueButtonClick = (): void => {
         setDrawMode(false);
         toggleCommentModal(true);
     };
 
-    const renderCancelButton = (
+    const renderExitButton = (
         <Grid item xs={colWidth} container justify="flex-start">
-            <Button
-                onClick={handleCancelButtonClick}
-                startIcon={<CancelOutlined />}
-                color={isMobile ? 'default' : 'secondary'}
-            >
-                {t('common:cancel')}
-            </Button>
+            <IconButton onClick={handleExitButtonClick} size="small" color={isMobile ? 'default' : 'secondary'}>
+                <ClearOutlined />
+            </IconButton>
         </Grid>
     );
 
@@ -39,7 +35,7 @@ export const DrawModeControls: React.FC = () => {
         <Grid item xs={colWidth} container justify="flex-end">
             <Button
                 onClick={handleContinueButtonClick}
-                endIcon={<KeyboardArrowRightOutlined />}
+                endIcon={<ArrowForwardOutlined />}
                 disabled={!screenshot}
                 color={isMobile ? 'primary' : 'secondary'}
             >
@@ -50,7 +46,7 @@ export const DrawModeControls: React.FC = () => {
 
     return (
         <Grid container alignItems="center">
-            {renderCancelButton}
+            {renderExitButton}
             {renderHeader}
             {renderContinueButton}
         </Grid>

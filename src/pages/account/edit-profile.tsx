@@ -28,7 +28,7 @@ import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { AuthProps, UpdateProfileFormValues } from 'types';
-import { urls } from 'utils';
+import { mediaURL, urls } from 'utils';
 import * as Yup from 'yup';
 
 const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
@@ -78,7 +78,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
         username: R.propOr('', 'username', userMe) as string,
         email: R.propOr('', 'email', userMe) as string,
         bio: R.propOr('', 'bio', userMe) as string,
-        avatar: R.propOr('', 'avatar', userMe) as string,
+        avatar: mediaURL(R.propOr('', 'avatar', userMe) as string),
         school: R.propOr(null, 'school', userMe) as SchoolObjectType,
         subject: R.propOr(null, 'subject', userMe) as SubjectObjectType,
         general: '',

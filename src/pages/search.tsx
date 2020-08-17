@@ -123,7 +123,10 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         ordering,
     };
 
+    // Query that holds pagination plus all search params.
     const queryWithPagination = getQueryWithPagination({ query, extraFilters: initialValues });
+
+    // Query that holds only pagination.
     const paginationQuery = getPaginationQuery(query);
 
     const filtersArr = [
@@ -174,7 +177,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const handleSubmitSearchInput = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
         setSearchInputSubmitting(true);
-        await redirect({ pathname, query: { ...paginationQuery, courseName: searchValue } });
+        await redirect({ pathname, query: { ...queryWithPagination, courseName: searchValue } });
         setSearchInputSubmitting(false);
     };
 

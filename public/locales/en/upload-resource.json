@@ -2,5 +2,9 @@
     "title": "Upload Resource",
     "description": "Upload new resource on Skole.",
     "header": "Upload Resource",
-    "fileUploadingText": "Uploading file..."
+    "fileUploadingText": "Uploading file...",
+    "maxFileSize": "Maximum file size",
+    "fileSelected": "{{ fileName }} selected.",
+    "dropzoneTextMobile": "Upload a file",
+    "dropzoneTextDesktop": "Drop files here or click to upload."
 }
