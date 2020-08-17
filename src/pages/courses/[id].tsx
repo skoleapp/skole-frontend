@@ -116,10 +116,10 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
 
     const upVoteButtonTooltip =
-        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:upVote');
+        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:upVote'));
 
     const downVoteButtonTooltip =
-        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:downVote');
+        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:downVote'));
 
     const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
 

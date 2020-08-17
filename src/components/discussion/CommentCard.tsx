@@ -26,7 +26,7 @@ import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import styled from 'styled-components';
-import { mediaURL } from 'utils';
+import { mediaURL, truncate } from 'utils';
 
 import { StyledDrawer, StyledList, TextLink } from '..';
 
@@ -56,8 +56,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const { toggleTopComment, setAttachmentViewerValue } = useDiscussionContext();
     const shareQuery = `?comment=${commentId}`;
     const creatorUsername = R.propOr('unknown', 'username', comment.user) as string;
-    const commentPreview = comment.text.length > 20 ? `${comment.text.substring(0, 20)}...` : comment.text;
-    const shareText = t('common:commentShareText', { creatorUsername, commentPreview });
+    const shareText = t('common:commentShareText', { creatorUsername, commentPreview: truncate(comment.text, 20) });
 
     const {
         renderActionsHeader,
@@ -72,10 +71,10 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
 
     const upVoteButtonTooltip =
-        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnComment') : t('tooltips:upVote');
+        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnComment') : t('tooltips:upVote'));
 
     const downVoteButtonTooltip =
-        verificationRequiredTooltip || isOwner ? t('tooltips:voteOwnComment') : t('tooltips:downVote');
+        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnComment') : t('tooltips:downVote'));
 
     const { score, upVoteButtonProps, downVoteButtonProps } = useVotes({
         initialVote,
