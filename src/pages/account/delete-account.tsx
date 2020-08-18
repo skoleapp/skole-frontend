@@ -37,6 +37,7 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
             } else if (!!deleteUser.message) {
                 resetForm();
                 toggleNotification(deleteUser.message);
+                localStorage.removeItem('user');
                 redirect(urls.logout);
             } else {
                 unexpectedError();
