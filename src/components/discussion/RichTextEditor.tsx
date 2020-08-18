@@ -253,9 +253,11 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     };
 
     const handleSubmit = (): void => {
-        submitForm();
-        setEditorState(EditorState.createEmpty()); // Reset editor.
-        setTimeout(() => blurEditor(), 0);
+        setTimeout(() => {
+            submitForm();
+            setEditorState(EditorState.createEmpty()); // Reset editor.
+            blurEditor();
+        }, 0);
     };
 
     const getKeyBinding = (e: KeyboardEvent<{}>): string | null => {
