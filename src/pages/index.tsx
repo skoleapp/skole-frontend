@@ -1,15 +1,85 @@
-import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typography } from '@material-ui/core';
+import {
+    Avatar,
+    Box,
+    Button,
+    Card,
+    CardActionArea,
+    CardContent,
+    Grid,
+    InputBase,
+    makeStyles,
+    Typography,
+} from '@material-ui/core';
 import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import { LoadingLayout, MainLayout, OfflineLayout } from 'components';
 import { useSearch } from 'hooks';
 import { includeDefaultNamespaces, Link, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import styled from 'styled-components';
-import { breakpoints } from 'styles';
 import { AuthProps } from 'types';
 import { UrlObject } from 'url';
-import { SHORTCUTS } from 'utils';
+import { SHORTCUTS as shortcuts } from 'utils';
+
+const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
+    searchContainer: {
+        textAlign: 'center',
+        padding: `${spacing(8)} ${spacing(4)}`,
+    },
+    searchFieldContainer: {
+        marginTop: spacing(4),
+    },
+    searchField: {
+        display: 'flex',
+        width: '100%',
+        maxWidth: '20rem',
+        backgroundColor: palette.common.white,
+        border: `0.05rem solid ${palette.primary.main}`,
+        borderRadius: '0.75rem 0 0 0.75rem',
+    },
+    searchInput: {
+        padding: spacing(3),
+    },
+    searchButton: {
+        borderRadius: '0 0.75rem 0.75rem 0',
+    },
+    shortcutsContainer: {
+        flexGrow: 1,
+        padding: spacing(2),
+    },
+    card: {
+        marginTop: spacing(2),
+        width: '100%',
+        height: '14rem',
+        position: 'relative',
+        borderRadius: '0.75rem',
+        [breakpoints.up('md')]: {
+            width: '14rem',
+            paddingBottom: 0,
+            margin: spacing(2),
+        },
+    },
+    cardActionArea: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+    },
+    cardContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    avatar: {
+        height: '5rem',
+        width: '5rem',
+        margin: spacing(2),
+        backgroundColor: palette.primary.light,
+    },
+    avatarIcon: {
+        height: '3rem',
+        width: '3rem',
+    },
+}));
 
 interface Shortcut {
     text: string;
@@ -18,53 +88,51 @@ interface Shortcut {
 }
 
 const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
     const { handleSubmit, inputProps } = useSearch();
 
     const renderSearch = (
-        <Box id="top-section-container">
-            <Box id="top-section-background" />
-            <Box id="top-section-content">
-                <Box id="slogan">
-                    <Typography variant="h1">{t('common:slogan')}</Typography>
+        <Box className={classes.searchContainer}>
+            <Typography variant="h1" gutterBottom>
+                {t('common:slogan')}
+            </Typography>
+            <form onSubmit={handleSubmit}>
+                <Box className={classes.searchFieldContainer} display="flex" justifyContent="center">
+                    <Box className={classes.searchField}>
+                        <InputBase className={classes.searchInput} {...inputProps} />
+                    </Box>
+                    <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
+                        <SearchOutlined />
+                    </Button>
                 </Box>
-                <Box id="search-widget" marginTop="1rem">
-                    <form onSubmit={handleSubmit}>
-                        <Box display="flex" justifyContent="center">
-                            <Box id="search-widget-input">
-                                <InputBase {...inputProps} />
-                            </Box>
-                            <Button type="submit" color="primary" variant="contained">
-                                <SearchOutlined />
-                            </Button>
-                        </Box>
-                    </form>
-                </Box>
-            </Box>
+            </form>
         </Box>
     );
 
     const renderShortcuts = (
-        <Box id="shortcuts">
-            {SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
-                <Link href={href} key={i}>
-                    <Card>
-                        <CardActionArea>
-                            <CardContent>
-                                <Avatar>
-                                    <Icon />
-                                </Avatar>
-                                <Box marginTop="0.5rem">
-                                    <Typography variant="h2" color="primary">
-                                        {t(text)}
-                                    </Typography>
-                                </Box>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </Link>
-            ))}
-        </Box>
+        <Grid container justify="center">
+            <Grid item xs={12} md={8} container justify="center" className={classes.shortcutsContainer}>
+                {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+                    <Grid item xs={12} md={4} container justify="center" key={i}>
+                        <Link href={href}>
+                            <Card className={classes.card}>
+                                <CardActionArea className={classes.cardActionArea}>
+                                    <CardContent className={classes.cardContent}>
+                                        <Avatar className={classes.avatar}>
+                                            <Icon className={classes.avatarIcon} />
+                                        </Avatar>
+                                        <Typography variant="h5" color="primary">
+                                            {t(text)}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </Link>
+                    </Grid>
+                ))}
+            </Grid>
+        </Grid>
     );
 
     const seoProps = {
@@ -77,6 +145,9 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         topNavbarProps: {
             disableSearch: true,
         },
+        containerProps: {
+            disableGutters: true,
+        },
     };
 
     if (authLoading) {
@@ -88,126 +159,12 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     }
 
     return (
-        <StyledIndexPage>
-            <MainLayout {...layoutProps}>
-                {renderSearch}
-                {renderShortcuts}
-            </MainLayout>
-        </StyledIndexPage>
+        <MainLayout {...layoutProps}>
+            {renderSearch}
+            {renderShortcuts}
+        </MainLayout>
     );
 };
-
-const StyledIndexPage = styled(Box)`
-    .MuiContainer-root {
-        @media only screen and (max-width: ${breakpoints.MD}) {
-            padding: 0.5rem !important;
-        }
-    }
-
-    #top-section-container {
-        height: 10rem;
-
-        @media only screen and (min-width: ${breakpoints.MD}) {
-            height: 18rem;
-        }
-
-        #top-section-background {
-            z-index: 0;
-            background-color: var(--primary-light);
-            position: absolute;
-            top: 3rem;
-            left: 0;
-            right: 0;
-            height: 10rem;
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                height: 18rem;
-            }
-        }
-
-        #top-section-content {
-            color: var(--white);
-            z-index: 2;
-            padding-bottom: 1rem;
-            position: relative;
-
-            #slogan {
-                margin-top: 1rem;
-
-                @media only screen and (min-width: ${breakpoints.MD}) {
-                    margin-top: 4rem;
-                }
-            }
-
-            #search-widget {
-                #search-widget-input {
-                    border-radius: var(--border-radius) 0 0 var(--border-radius);
-                    background-color: var(--white);
-                    display: flex;
-                    width: 100%;
-                    max-width: 20rem;
-
-                    input {
-                        padding: 0.75rem;
-                    }
-                }
-
-                .MuiButton-root {
-                    border-radius: 0 var(--border-radius) var(--border-radius) 0;
-                }
-            }
-        }
-    }
-
-    #shortcuts {
-        flex-flow: row wrap;
-        display: flex;
-        justify-content: center;
-
-        @media only screen and (min-width: ${breakpoints.SM}) {
-            margin-top: 1rem;
-        }
-
-        .MuiCard-root {
-            margin-top: 0.5rem;
-            width: 100%;
-            padding-bottom: 55%;
-            position: relative;
-
-            @media only screen and (min-width: ${breakpoints.SM}) {
-                width: 14rem;
-                height: 14rem;
-                padding-bottom: 0;
-                margin: 0.5rem !important;
-            }
-
-            .MuiCardActionArea-root {
-                position: absolute;
-                height: 100%;
-                width: 100%;
-
-                .MuiCardContent-root {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-
-                    .MuiAvatar-root {
-                        height: 5rem;
-                        width: 5rem;
-                        margin: 0.5rem;
-                        background-color: var(--primary-light);
-
-                        .MuiSvgIcon-root {
-                            height: 3rem;
-                            width: 3rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
-`;
 
 export const getStaticProps: GetStaticProps = async () => ({
     props: {
