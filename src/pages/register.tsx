@@ -1,5 +1,5 @@
-import { Box, Button, FormControl, InputAdornment, Typography } from '@material-ui/core';
-import { AccountCircleOutlined, ArrowForwardOutlined, EmailOutlined, LockOutlined } from '@material-ui/icons';
+import { Box, Button, FormControl, FormHelperText, Typography } from '@material-ui/core';
+import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
     AutoCompleteField,
     ButtonLink,
@@ -7,6 +7,7 @@ import {
     FormSubmitSection,
     LoadingLayout,
     OfflineLayout,
+    PasswordField,
     TextLink,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -196,17 +197,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             label={t('forms:username')}
             name="username"
             component={TextField}
-            variant="outlined"
             helperText={t('forms:usernameHelperText')}
-            fullWidth
-            autoComplete="off"
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <AccountCircleOutlined />
-                    </InputAdornment>
-                ),
-            }}
         />
     );
 
@@ -216,39 +207,11 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             label={t('forms:email')}
             name="email"
             component={TextField}
-            variant="outlined"
             helperText={t('forms:emailHelperText')}
-            fullWidth
-            autoComplete="off" // FIXME: This seems to have no effect.
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <EmailOutlined />
-                    </InputAdornment>
-                ),
-            }}
         />
     );
 
-    const renderPasswordField = (
-        <Field
-            placeholder={t('forms:password')}
-            label={t('forms:password')}
-            name="password"
-            component={TextField}
-            variant="outlined"
-            type="password"
-            fullWidth
-            autoComplete="off"
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <LockOutlined />
-                    </InputAdornment>
-                ),
-            }}
-        />
-    );
+    const renderPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => <PasswordField {...props} />;
 
     const renderConfirmPasswordField = (
         <Field
@@ -257,28 +220,18 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             name="confirmPassword"
             type="password"
             component={TextField}
-            variant="outlined"
-            fullWidth
-            autoComplete="off"
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <LockOutlined />
-                    </InputAdornment>
-                ),
-            }}
         />
     );
 
     const renderTermsLink = (
-        <FormControl fullWidth>
-            <Typography variant="body2" color="textSecondary">
+        <FormControl>
+            <FormHelperText>
                 {t('register:termsHelpText')}{' '}
                 <TextLink href={urls.terms} target="_blank">
                     {t('common:terms')}
                 </TextLink>
                 .
-            </Typography>
+            </FormHelperText>
         </FormControl>
     );
 
@@ -287,7 +240,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     );
 
     const renderLoginButton = (
-        <FormControl fullWidth>
+        <FormControl>
             <ButtonLink href={urls.login} color="primary" fullWidth>
                 {t('common:login')}
             </ButtonLink>
@@ -298,7 +251,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <Form>
             {renderUsernameField}
             {renderEmailField}
-            {renderPasswordField}
+            {renderPasswordField(props)}
             {renderConfirmPasswordField}
             {renderTermsLink}
             {renderRegisterFormSubmitSection(props)}
@@ -318,7 +271,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     );
 
     const renderRegisterCompleteHelpText = (
-        <FormControl fullWidth>
+        <FormControl>
             <Box textAlign="left">
                 <Typography variant="body2" color="textSecondary">
                     {t('register:registerCompleteHelpText')}
@@ -335,8 +288,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             dataKey="schools"
             document={SchoolsDocument}
             component={AutoCompleteField}
-            variant="outlined"
-            fullWidth
         />
     );
 
@@ -348,8 +299,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             dataKey="subjects"
             document={SubjectsDocument}
             component={AutoCompleteField}
-            variant="outlined"
-            fullWidth
         />
     );
 
@@ -358,7 +307,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     );
 
     const renderSkipButton = (
-        <FormControl fullWidth>
+        <FormControl>
             <Button onClick={handleSkipUpdateProfile} color="primary" fullWidth>
                 {t('common:skip')}
             </Button>
@@ -387,8 +336,10 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     );
 
     const renderRegisterComplete = phase === RegisterPhases.REGISTER_COMPLETE && (
-        <FormControl fullWidth>
-            <Typography variant="subtitle1">{t('register:registerCompleteEmailSent')}</Typography>
+        <FormControl>
+            <Typography variant="body2" align="center">
+                {t('register:registerCompleteEmailSent')}
+            </Typography>
             <Box marginTop="1rem">
                 <ButtonLink
                     href={urls.home}
@@ -401,14 +352,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
                 </ButtonLink>
             </Box>
         </FormControl>
-    );
-
-    const renderCardContent = (
-        <>
-            {renderRegisterForm}
-            {renderUpdateUserForm}
-            {renderRegisterComplete}
-        </>
     );
 
     const seoProps = {
@@ -424,7 +367,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             disableAuthButtons: true,
         },
         desktopHeader: getHeader(),
-        renderCardContent,
     };
 
     if (authLoading) {
@@ -435,7 +377,13 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <FormLayout {...layoutProps} />;
+    return (
+        <FormLayout {...layoutProps}>
+            {renderRegisterForm}
+            {renderUpdateUserForm}
+            {renderRegisterComplete}
+        </FormLayout>
+    );
 };
 
 export const getStaticProps: GetStaticProps = async () => ({
