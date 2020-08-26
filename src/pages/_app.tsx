@@ -1,4 +1,3 @@
-import 'nprogress/nprogress.css';
 import 'typeface-roboto';
 import 'draft-js/dist/Draft.css';
 
@@ -12,22 +11,11 @@ import {
     PDFViewerContextProvider,
     SettingsContextProvider,
 } from 'context';
-import { appWithTranslation, pageView, Router, useApollo, useTranslation } from 'lib';
+import { appWithTranslation, useApollo, useTranslation } from 'lib';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { AppProps } from 'next/app';
-import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
-import { GlobalStyle, theme } from 'styles';
-
-NProgress.configure({ showSpinner: false });
-
-Router.events.on('routeChangeStart', () => NProgress.start());
-Router.events.on('routeChangeError', () => NProgress.done());
-
-Router.events.on('routeChangeComplete', (url: string) => {
-    NProgress.done();
-    pageView(url);
-});
+import { theme } from 'styles';
 
 const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     const { t } = useTranslation();
@@ -57,7 +45,6 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
                                     <ThemeProvider theme={theme}>
                                         <ConfirmProvider defaultOptions={defaultConfirmOptions}>
                                             <CssBaseline />
-                                            <GlobalStyle />
                                             <Component {...pageProps} />
                                         </ConfirmProvider>
                                     </ThemeProvider>
