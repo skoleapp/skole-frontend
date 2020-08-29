@@ -1,44 +1,71 @@
-import { Avatar, Box, Grid, makeStyles, Typography } from '@material-ui/core';
+import {
+    Avatar,
+    Card,
+    CardContent,
+    CardHeader,
+    CardMedia,
+    Grid,
+    makeStyles,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@material-ui/core';
 import { ButtonLink, LoadingLayout, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { BORDER, BORDER_RADIUS } from 'styles';
 import { AuthProps } from 'types';
 import { GET_STARTED_ITEMS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
-    root: {
-        textAlign: 'center',
-        padding: `${spacing(8)} ${spacing(4)}`,
+    topSectionContainer: {
+        backgroundColor: palette.grey[300],
+        padding: spacing(8),
+        minHeight: '20rem',
     },
-    itemContainer: {
-        marginTop: spacing(4),
+    bottomSectionContainer: {
+        padding: spacing(8),
+        backgroundColor: palette.common.white,
+        minHeight: '20rem',
+        flexGrow: 1,
+    },
+    image: {
+        maxWidth: '100%',
+        maxHeight: '25rem',
+        borderRadius: BORDER_RADIUS,
+    },
+    card: {
+        boxShadow: 'none',
+        border: BORDER,
+        height: '100%',
     },
     getStartedItem: {
         marginTop: spacing(4),
     },
     avatar: {
-        backgroundColor: palette.primary.main,
+        backgroundColor: palette.primary.light,
         color: palette.secondary.main,
-        height: '7rem',
-        width: '7rem',
-        marginBottom: spacing(2),
+        height: '3rem',
+        width: '3rem',
     },
     icon: {
-        height: '5rem',
-        width: '5rem',
+        height: '2rem',
+        width: '2rem',
     },
-    subHeader: {
-        marginTop: spacing(8),
+    media: {
+        width: '100%',
     },
     ctaContainer: {
-        marginTop: spacing(4),
+        marginTop: '5rem',
+        textAlign: 'center',
     },
     ctaButton: {
-        borderRadius: '1.5rem',
         minWidth: '10rem',
+        padding: spacing(3),
+        marginTop: spacing(8),
     },
     loginLink: {
         marginTop: spacing(4),
@@ -48,6 +75,8 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 // This page will be available also when offline.
 const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
     const classes = useStyles();
+    const { breakpoints } = useTheme();
+    const isMobileOrTablet = useMediaQuery(breakpoints.down('md'));
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderLanguageButton } = useLanguageSelector();
@@ -63,6 +92,13 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
             disableAuthButtons: true,
             headerRight: renderLanguageButton,
         },
+        containerProps: {
+            style: {
+                margin: 0,
+                padding: 0,
+                maxWidth: '100%',
+            },
+        },
         disableBottomNavbar: true,
     };
 
@@ -72,34 +108,63 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
 
     return (
         <MainLayout {...layoutProps}>
-            <Box className={classes.root}>
-                <Typography variant="h1" gutterBottom>
-                    {t('common:slogan')}
-                </Typography>
-                <Typography variant="subtitle1">{t('get-started:header')}</Typography>
-                <Grid className={classes.itemContainer} container justify="center">
-                    {GET_STARTED_ITEMS.map(({ text, icon: Icon }, i) => (
-                        <Grid
-                            className={classes.getStartedItem}
-                            key={i}
-                            item
-                            xs={12}
-                            sm={4}
-                            container
-                            direction="column"
-                            alignItems="center"
-                        >
-                            <Avatar className={classes.avatar}>
-                                <Icon className={classes.icon} />
-                            </Avatar>
-                            <Typography variant="h5">{t(text)}</Typography>
+            <Grid container justify="center" className={classes.topSectionContainer}>
+                <Grid item lg={6} container alignItems="center" spacing={5}>
+                    <Grid item xs={12} md={6}>
+                        <Typography variant="h1" gutterBottom>
+                            {t('common:slogan')}
+                        </Typography>
+                        <Typography variant="h5" color="textSecondary" gutterBottom>
+                            {t('get-started:header')}
+                        </Typography>
+                        <Typography variant="h6">{t('get-started:header2')}</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6} container justify={isMobileOrTablet ? 'flex-start' : 'flex-end'}>
+                        <img
+                            className={classes.image}
+                            src="images/landing-page/header-img.jpg"
+                            alt="School supplies."
+                        />
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid className={classes.bottomSectionContainer} container justify="center" alignItems="center">
+                <Grid item lg={6} container spacing={5}>
+                    {GET_STARTED_ITEMS.map(({ title, image, description, icon: Icon }, i) => (
+                        <Grid className={classes.getStartedItem} key={i} item xs={12} sm={4}>
+                            <Card className={classes.card}>
+                                <CardHeader
+                                    avatar={
+                                        <Avatar className={classes.avatar}>
+                                            <Icon className={classes.icon} />
+                                        </Avatar>
+                                    }
+                                    title={
+                                        <Typography variant="h5" color="primary" gutterBottom>
+                                            {t(title)}
+                                        </Typography>
+                                    }
+                                />
+                                <CardMedia component="img" image={image} alt={title} height="160" />
+                                <CardContent>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {t(description)}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
                         </Grid>
                     ))}
                 </Grid>
-                <Typography className={classes.subHeader} variant="subtitle1">
-                    {t('get-started:subheader')}
-                </Typography>
-                <Grid className={classes.ctaContainer} container direction="column" alignItems="center">
+                <Grid
+                    className={classes.ctaContainer}
+                    container
+                    direction="column"
+                    alignItems="center"
+                    justify="center"
+                >
+                    <Typography variant="h5" color="textSecondary">
+                        {t('get-started:subheader')}
+                    </Typography>
                     <ButtonLink
                         className={classes.ctaButton}
                         href={{ pathname: urls.register, query }}
@@ -112,60 +177,10 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
                         {t('common:login')}
                     </TextLink>
                 </Grid>
-            </Box>
+            </Grid>
         </MainLayout>
     );
 };
-
-// const StyledGetStartedPage = styled(Box)`
-//     min-height: 100vh;
-//     width: 100%;
-//     display: flex;
-//     text-align: center;
-
-//     #top-section-background {
-//         position: absolute;
-//         background-color: var(--primary-light);
-//         top: 3rem;
-//         left: 0;
-//         right: 0;
-//         height: 45.5rem;
-//         z-index: 0;
-
-//         @media only screen and (min-width: ${breakpoints.SM}) {
-//             height: 24rem;
-//         }
-//     }
-
-//     #top-section {
-//         color: var(--white);
-//         z-index: 1;
-
-//         .get-started-icon {
-//             background-color: var(--secondary);
-//             color: var(--primary);
-//             margin-left: auto;
-//             margin-right: auto;
-//             height: 7rem;
-//             width: 7rem;
-
-//             .MuiSvgIcon-root {
-
-//             }
-//         }
-//     }
-
-//     #bottom-section {
-//         background-color: var(--secondary);
-//         flex-grow: 1;
-
-//         #get-started-cta {
-//             border-radius: 1.5rem;
-//             padding: 0.75rem;
-//             min-width: 10rem;
-//         }
-//     }
-// `;
 
 export const getStaticProps: GetStaticProps = async () => ({
     props: {
