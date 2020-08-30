@@ -1,17 +1,23 @@
 import {
     Avatar,
     Box,
+    Card,
     CardContent,
     Chip,
     Grid,
+    makeStyles,
     Step,
     StepLabel,
     Stepper,
     Tab,
+    Tabs,
     Tooltip,
     Typography,
+    useMediaQuery,
+    useTheme,
 } from '@material-ui/core';
 import { EditOutlined, StarBorderOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import {
     ButtonLink,
     CourseTableBody,
@@ -24,12 +30,9 @@ import {
     OfflineLayout,
     ResourceTableBody,
     SettingsButton,
-    StyledCard,
-    StyledSwipeableViews,
-    StyledTabs,
     TextLink,
 } from 'components';
-import { useAuthContext, useDeviceContext } from 'context';
+import { useAuthContext } from 'context';
 import {
     BadgeObjectType,
     CourseObjectType,
@@ -45,14 +48,53 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import styled from 'styled-components';
-import { breakpoints, breakpointsNum } from 'styles';
+import SwipeableViews from 'react-swipeable-views';
 import { AuthProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+    card: {
+        width: '100%',
+        [breakpoints.down('md')]: {
+            borderRadius: 0,
+        },
+    },
+    contentCard: {
+        flexGrow: 1,
+        marginTop: spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    avatar: {
+        margin: 0,
+        marginBottom: spacing(4),
+    },
+    statsContainer: {
+        marginTop: spacing(4),
+        marginBottom: spacing(2),
+        textAlign: 'center',
+    },
+    statValue: {
+        marginRight: spacing(1),
+    },
+    stepper: {
+        padding: `${spacing(6)} 0`,
+    },
+    bio: {
+        overflow: 'hidden',
+        wordBreak: 'break-word',
+    },
+    badge: {
+        margin: spacing(1),
+    },
+}));
+
 const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, authLoading, authNetworkError }) => {
+    const { spacing } = useTheme();
+    const classes = useStyles();
     const { isFallback } = useRouter();
-    const isMobile = useDeviceContext(breakpointsNum.SM);
+    const { breakpoints } = useTheme();
+    const isMobile = useMediaQuery(breakpoints.down('sm'));
     const { t } = useTranslation();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
@@ -145,31 +187,8 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
         }
     };
 
-    const renderEditProfileButton = isOwnProfile && (
-        <ButtonLink
-            href={urls.editProfile}
-            color="primary"
-            variant="outlined"
-            endIcon={<EditOutlined />}
-            fullWidth={isMobile}
-        >
-            {t('profile:editProfile')}
-        </ButtonLink>
-    );
-
-    const renderViewStarredButton = isOwnProfile && (
-        <ButtonLink href={urls.starred} color="primary" variant="outlined" endIcon={<StarBorderOutlined />} fullWidth>
-            {t('profile:viewStarred')}
-        </ButtonLink>
-    );
-
-    const renderSettingsButton = isOwnProfile && (
-        <Box marginLeft="0.5rem">
-            <Tooltip title={t('tooltips:settings')}>
-                <SettingsButton color="primary" />
-            </Tooltip>
-        </Box>
-    );
+    const renderAvatar = <Avatar className={clsx('main-avatar', classes.avatar)} src={mediaURL(avatar)} />;
+    const renderUsername = <Typography variant="body2">{username}</Typography>;
 
     const renderTitle = !!title && (
         <Typography variant="body2" color="textSecondary">
@@ -177,30 +196,40 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
         </Typography>
     );
 
-    const renderBio = !!bio && (
-        <Box marginTop="0.25rem">
-            <Typography id="bio" variant="body2">
-                {bio}
-            </Typography>
+    const renderEditProfileButton = isOwnProfile && (
+        <Box display="flex" marginTop={isMobile ? spacing(2) : 0}>
+            <ButtonLink
+                href={urls.editProfile}
+                color="primary"
+                variant="outlined"
+                endIcon={<EditOutlined />}
+                fullWidth={isMobile}
+            >
+                {t('profile:editProfile')}
+            </ButtonLink>
         </Box>
     );
 
-    const renderJoined = (
-        <Box marginTop="0.5rem">
-            <Typography variant="body2" color="textSecondary">
-                {t('common:joined')} {joined}
-            </Typography>
+    const renderViewStarredButton = isOwnProfile && (
+        <Box marginTop={isMobile ? spacing(2) : 0}>
+            <ButtonLink
+                href={urls.starred}
+                color="primary"
+                variant="outlined"
+                endIcon={<StarBorderOutlined />}
+                fullWidth
+            >
+                {t('profile:viewStarred')}
+            </ButtonLink>
         </Box>
     );
 
-    const renderAvatarCardContent = (
-        <CardContent>
-            <Box display="flex" flexDirection="column">
-                <Avatar className="main-avatar" src={mediaURL(avatar)} />
-                {!isMobile && <Typography variant="body2">{username}</Typography>}
-                {!isMobile && renderTitle}
-            </Box>
-        </CardContent>
+    const renderSettingsButton = isOwnProfile && (
+        <Box marginLeft={spacing(2)}>
+            <Tooltip title={t('tooltips:settings')}>
+                <SettingsButton color="primary" />
+            </Tooltip>
+        </Box>
     );
 
     const renderScoreTitle = (
@@ -221,12 +250,42 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
         </Typography>
     );
 
-    const renderScoreValue = <Typography variant="body2">{score}</Typography>;
-    const renderCourseCountValue = <Typography variant="body2">{courseCount}</Typography>;
-    const renderResourceCountValue = <Typography variant="body2">{resourceCount}</Typography>;
+    const renderScoreValue = (
+        <Typography variant="subtitle2" className={classes.statValue}>
+            {score}
+        </Typography>
+    );
+
+    const renderCourseCountValue = (
+        <Typography variant="subtitle2" className={classes.statValue}>
+            {courseCount}
+        </Typography>
+    );
+
+    const renderResourceCountValue = (
+        <Typography variant="subtitle2" className={classes.statValue}>
+            {resourceCount}
+        </Typography>
+    );
+
+    const renderBio = !!bio && (
+        <Box marginTop={spacing(1)}>
+            <Typography className={classes.bio} variant="body2">
+                {bio}
+            </Typography>
+        </Box>
+    );
+
+    const renderJoined = (
+        <Box marginTop={spacing(2)}>
+            <Typography variant="body2" color="textSecondary">
+                {t('common:joined')} {joined}
+            </Typography>
+        </Box>
+    );
 
     const renderRank = !!rank && (
-        <Box marginTop="0.5rem">
+        <Box marginTop={spacing(2)}>
             <Tooltip title={t('tooltips:rank', { rank })}>
                 <Chip size="small" label={rank} />
             </Tooltip>
@@ -234,11 +293,11 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     );
 
     const renderBadges = !!badges.length && (
-        <Box display="flex" margin="0.25rem -0.25rem -0.25rem -0.25rem">
+        <Box display="flex" margin={`${spacing(1)} -${spacing(1)} -${spacing(1)} -${spacing(1)}`}>
             {badges.map(({ name, description }, i) => (
                 <Box key={i}>
                     <Tooltip title={description || ''}>
-                        <Chip className="badge" size="small" label={name} />
+                        <Chip className={classes.badge} size="small" label={name} />
                     </Tooltip>
                 </Box>
             ))}
@@ -246,7 +305,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     );
 
     const renderVerifyAccountLink = isOwnProfile && verified === false && (
-        <Box marginTop="0.5rem">
+        <Box marginTop={spacing(2)}>
             <TextLink href={urls.verifyAccount} color="primary">
                 {t('common:verifyAccount')}
             </TextLink>
@@ -254,11 +313,11 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     );
 
     const renderProfileStrength = isOwnProfile && (
-        <Box marginTop="0.5rem">
-            <Typography variant="body2" color="textSecondary">
+        <Box marginTop={spacing(2)}>
+            <Typography variant="body2" color="textSecondary" gutterBottom>
                 {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
             </Typography>
-            <Stepper alternativeLabel={isMobile}>
+            <Stepper className={classes.stepper} alternativeLabel={isMobile}>
                 {profileStrengthSteps.map((label, i) => (
                     <Step key={i} completed={getStepCompleted(i)} active={false}>
                         <StepLabel>{label}</StepLabel>
@@ -268,81 +327,90 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
         </Box>
     );
 
-    const renderMobileTopSection = isMobile && (
-        <CardContent>
-            <Grid container alignItems="center">
-                <Grid item container xs={4}>
-                    {renderAvatarCardContent}
-                </Grid>
-                <Grid item container xs={8} direction="column">
-                    <CardContent>
-                        <Box display="flex" justifyContent="space-around">
-                            <Box>
-                                {renderScoreValue}
-                                {renderScoreTitle}
-                            </Box>
-                            <Box margin="0 1rem">
-                                {renderCourseCountValue}
-                                {renderCourseCountTitle}
-                            </Box>
-                            <Box>
-                                {renderResourceCountValue}
-                                {renderResourceCountTitle}
-                            </Box>
-                        </Box>
-                    </CardContent>
-                </Grid>
-            </Grid>
-            <Box marginTop="0.5rem" textAlign="left">
-                {renderTitle}
-                {renderBio}
-                {renderRank}
-                {renderBadges}
-                {renderVerifyAccountLink}
-                {renderProfileStrength}
-                {renderJoined}
-            </Box>
-            <Box marginTop="0.5rem">{renderEditProfileButton}</Box>
-            <Box marginTop="0.5rem">{renderViewStarredButton}</Box>
-        </CardContent>
+    const renderActions = !isMobile && (
+        <Grid item container>
+            {renderEditProfileButton}
+            {renderSettingsButton}
+        </Grid>
     );
 
-    const renderDesktopTopSection = !isMobile && (
-        <CardContent>
-            <Grid container alignItems="center">
-                <Grid item container justify="center" xs={5}>
-                    {renderAvatarCardContent}
-                </Grid>
-                <Grid item container xs={7} direction="column" alignItems="flex-start">
-                    <Box display="flex" alignItems="center">
-                        {renderEditProfileButton}
-                        {renderSettingsButton}
-                    </Box>
-                    <Box display="flex" marginTop="0.25rem">
-                        <Box display="flex" alignItems="center">
-                            {renderScoreValue}
-                            <Box marginLeft="0.25rem">{renderScoreTitle}</Box>
-                        </Box>
-                        <Box margin="0 1rem" display="flex" alignItems="center">
-                            {renderCourseCountValue}
-                            <Box marginLeft="0.25rem">{renderCourseCountTitle}</Box>
-                        </Box>
-                        <Box display="flex" alignItems="center">
-                            {renderResourceCountValue}
-                            <Box marginLeft="0.25rem">{renderResourceCountTitle}</Box>
-                        </Box>
-                    </Box>
-                    <Box textAlign="left" marginTop="0.25rem">
-                        {renderBio}
-                        {renderRank}
-                        {renderBadges}
-                        {renderVerifyAccountLink}
-                        {renderProfileStrength}
-                        {renderJoined}
-                    </Box>
-                </Grid>
+    const renderStats = (
+        <Grid container xs={12} sm={8} md={4} spacing={2} className={classes.statsContainer}>
+            <Grid item xs={4} container direction={isMobile ? 'column' : 'row'}>
+                {renderScoreValue}
+                {renderScoreTitle}
             </Grid>
-        </CardContent>
+            <Grid item xs={4} container direction={isMobile ? 'column' : 'row'}>
+                {renderCourseCountValue}
+                {renderCourseCountTitle}
+            </Grid>
+            <Grid item xs={4} container direction={isMobile ? 'column' : 'row'}>
+                {renderResourceCountValue}
+                {renderResourceCountTitle}
+            </Grid>
+        </Grid>
+    );
+
+    const renderDesktopInfo = !isMobile && (
+        <Grid item container direction="column">
+            {renderBio}
+            {renderRank}
+            {renderBadges}
+            {renderVerifyAccountLink}
+            {renderProfileStrength}
+            {renderJoined}
+        </Grid>
+    );
+
+    const renderResponsiveInfo = (
+        <Grid container>
+            <Grid
+                item
+                xs={4}
+                container
+                direction="column"
+                justify="center"
+                alignItems={isMobile ? 'flex-start' : 'center'}
+            >
+                {renderAvatar}
+                {renderUsername}
+                {renderTitle}
+            </Grid>
+            <Grid item xs={8}>
+                {renderActions}
+                {renderStats}
+                {renderDesktopInfo}
+            </Grid>
+        </Grid>
+    );
+
+    const renderMobileInfo = isMobile && (
+        <Grid container direction="column">
+            {renderBio}
+            {renderRank}
+            {renderBadges}
+            {renderVerifyAccountLink}
+            {renderJoined}
+        </Grid>
+    );
+
+    const renderResponsiveContent = (
+        <Card className={classes.card}>
+            <CardContent>
+                {renderResponsiveInfo}
+                {renderMobileInfo}
+            </CardContent>
+        </Card>
+    );
+
+    const renderMobileActionsCard = isMobile && (
+        <Card className={clsx(classes.card, classes.contentCard)}>
+            <CardContent>
+                {renderProfileStrength}
+                {renderEditProfileButton}
+                {renderViewStarredButton}
+            </CardContent>
+        </Card>
     );
 
     const commonTableHeadProps = {
@@ -371,28 +439,26 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     );
 
     const renderTabs = (
-        <StyledTabs value={tabValue} onChange={handleTabChange}>
+        <Tabs value={tabValue} onChange={handleTabChange}>
             <Tab label={t('common:courses')} />
             <Tab label={t('common:resources')} />
-        </StyledTabs>
+        </Tabs>
     );
 
     const renderSwipeableViews = (
-        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-            <Box display="flex" flexGrow="1">
+        <Box flexGrow="1" position="relative" minHeight="30rem">
+            <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
                 {renderCreatedCourses}
-            </Box>
-            <Box display="flex" flexGrow="1">
                 {renderCreatedResources}
-            </Box>
-        </StyledSwipeableViews>
+            </SwipeableViews>
+        </Box>
     );
 
-    const renderTabsSection = (
-        <Box flexGrow="1" display="flex" flexDirection="column" className="border-top">
+    const renderCreatedContent = (
+        <Card className={clsx(classes.card, classes.contentCard)}>
             {renderTabs}
             {renderSwipeableViews}
-        </Box>
+        </Card>
     );
 
     const seoProps = {
@@ -421,50 +487,16 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
 
     if (!!user) {
         return (
-            <StyledUserPage>
-                <MainLayout {...layoutProps}>
-                    <StyledCard>
-                        {renderMobileTopSection}
-                        {renderDesktopTopSection}
-                        {renderTabsSection}
-                    </StyledCard>
-                </MainLayout>
-            </StyledUserPage>
+            <MainLayout {...layoutProps}>
+                {renderResponsiveContent}
+                {renderMobileActionsCard}
+                {renderCreatedContent}
+            </MainLayout>
         );
     } else {
         return <NotFoundLayout />;
     }
 };
-
-const StyledUserPage = styled(Box)`
-    .MuiCardContent-root {
-        padding-bottom: 0.5rem !important;
-
-        .main-avatar {
-            @media only screen and (max-width: ${breakpoints.SM}) {
-                width: 5rem;
-                height: 5rem;
-            }
-
-            @media only screen and (min-width: ${breakpoints.SM}) {
-                margin: 0.5rem;
-            }
-        }
-
-        #bio {
-            overflow: hidden;
-            word-break: break-word;
-        }
-
-        .badge {
-            margin: 0.25rem !important;
-        }
-
-        .MuiStepper-root {
-            padding: 1.5rem 0 0.5rem 0;
-        }
-    }
-`;
 
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
