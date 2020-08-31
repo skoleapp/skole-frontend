@@ -70,5 +70,12 @@
     "commentShareText": "{{ creatorUsername }} på Skole: {{ commentPreview }}",
     "skip": "Hoppa",
     "loading": "Laddar...",
-    "offline": "Det gick inte att ansluta till servern. Se till att du har en internetanslutning och försök igen om ett ögonblick."
+    "offline": "Det gick inte att ansluta till servern. Se till att du har en internetanslutning och försök igen om ett ögonblick.",
+    "home": "Hem",
+    "search": "Sök",
+    "upload": "Upladda",
+    "profile": "Profil",
+    "resourcesDescription": "Studiematerial som delas av andra Skole-användare är gratis och tillgängligt för alla utan begränsningar.",
+    "coursesDescription": "Skole är full av kurser från universitet över hela Finland.",
+    "discussionDescription": "Skole låt dig diskutera och dela din kunskap med andra användare sömlöst."
 }
