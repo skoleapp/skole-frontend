@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { LoadingLayout, SettingsLayout } from 'components';
 import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -9,12 +9,6 @@ import { AuthProps } from 'types';
 const TermsPage: NextPage<AuthProps> = ({ authLoading }) => {
     const { t } = useTranslation();
 
-    const renderCardContent = (
-        <Box textAlign="left">
-            <Typography variant="body2">{t('terms:content')}</Typography>
-        </Box>
-    );
-
     const seoProps = {
         title: t('terms:title'),
         description: t('terms:description'),
@@ -22,20 +16,22 @@ const TermsPage: NextPage<AuthProps> = ({ authLoading }) => {
 
     const layoutProps = {
         seoProps,
+        header: t('terms:header'),
+        dense: true,
         topNavbarProps: {
-            header: t('terms:header'),
             dynamicBackUrl: true,
         },
-        desktopHeader: t('terms:header'),
-        renderCardContent,
-        infoLayout: true,
     };
 
     if (authLoading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    return <SettingsLayout {...layoutProps} />;
+    return (
+        <SettingsLayout {...layoutProps}>
+            <Typography variant="body2">{t('terms:content')}</Typography>
+        </SettingsLayout>
+    );
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

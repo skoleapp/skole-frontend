@@ -1,14 +1,6 @@
-import { ListItemText, MenuItem } from '@material-ui/core';
+import { Drawer, List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
-import {
-    ActivityList,
-    LoadingLayout,
-    NotFoundLayout,
-    OfflineLayout,
-    SettingsLayout,
-    StyledDrawer,
-    StyledList,
-} from 'components';
+import { ActivityList, LoadingLayout, NotFoundLayout, OfflineLayout, SettingsLayout } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import {
     ActivityObjectType,
@@ -58,25 +50,20 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     };
 
     const renderActions = (
-        <StyledList>
+        <List>
             <MenuItem onClick={handleClickMarkAllActivitiesAsReadBUtton}>
-                <ListItemText>
-                    <DoneOutlineOutlined /> {t('activity:markAllAsRead')}
-                </ListItemText>
+                <ListItemIcon>
+                    <DoneOutlineOutlined />
+                </ListItemIcon>
+                <ListItemText>{t('activity:markAllAsRead')}</ListItemText>
             </MenuItem>
             <MenuItem disabled>
-                <ListItemText>
-                    <SettingsOutlined /> {t('activity:notificationSettings')}
-                </ListItemText>
+                <ListItemIcon>
+                    <SettingsOutlined />
+                </ListItemIcon>
+                <ListItemText>{t('activity:notificationSettings')}</ListItemText>
             </MenuItem>
-        </StyledList>
-    );
-
-    const renderActionsDrawer = (
-        <StyledDrawer {...actionsDrawerProps}>
-            {renderActionsHeader}
-            {renderActions}
-        </StyledDrawer>
+        </List>
     );
 
     const seoProps = {
@@ -86,15 +73,12 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const layoutProps = {
         seoProps,
+        header: t('activity:header'),
+        headerRight: renderActionsButton,
+        disablePadding: true,
         topNavbarProps: {
-            header: t('activity:header'),
             dynamicBackUrl: true,
-            headerRight: renderActionsButton,
         },
-        renderCardContent: <ActivityList />,
-        renderDesktopHeaderRight: renderActionsButton,
-        desktopHeader: t('activity:header'),
-        fullSize: true,
     };
 
     if (authLoading) {
@@ -106,7 +90,15 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     }
 
     if (!!userMe) {
-        return <SettingsLayout {...layoutProps}>{renderActionsDrawer}</SettingsLayout>;
+        return (
+            <SettingsLayout {...layoutProps}>
+                <ActivityList />
+                <Drawer {...actionsDrawerProps}>
+                    {renderActionsHeader}
+                    {renderActions}
+                </Drawer>
+            </SettingsLayout>
+        );
     } else {
         return <NotFoundLayout />;
     }

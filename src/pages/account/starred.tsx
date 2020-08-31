@@ -1,4 +1,4 @@
-import { Box, Tab } from '@material-ui/core';
+import { Box, Tab, Tabs } from '@material-ui/core';
 import {
     CourseTableBody,
     ErrorLayout,
@@ -9,8 +9,6 @@ import {
     OfflineLayout,
     ResourceTableBody,
     SettingsLayout,
-    StyledSwipeableViews,
-    StyledTabs,
 } from 'components';
 import {
     CourseObjectType,
@@ -25,6 +23,7 @@ import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import SwipeableViews from 'react-swipeable-views';
 import { AuthProps } from 'types';
 
 const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
@@ -72,20 +71,19 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         <NotFoundBox text={t('starred:noResources')} />
     );
 
-    const renderCardContent = (
-        <Box flexGrow="1" display="flex" flexDirection="column">
-            <StyledTabs value={tabValue} onChange={handleTabChange}>
-                <Tab label={t('common:courses')} />
-                <Tab label={t('common:resources')} />
-            </StyledTabs>
-            <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-                <Box display="flex" flexGrow="1">
-                    {renderStarredCourses}
-                </Box>
-                <Box display="flex" flexGrow="1">
-                    {renderStarredResources}
-                </Box>
-            </StyledSwipeableViews>
+    const renderTabs = (
+        <Tabs value={tabValue} onChange={handleTabChange}>
+            <Tab label={t('common:courses')} />
+            <Tab label={t('common:resources')} />
+        </Tabs>
+    );
+
+    const renderSwipeableViews = (
+        <Box flexGrow="1" position="relative" minHeight="30rem">
+            <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+                {renderStarredCourses}
+                {renderStarredResources}
+            </SwipeableViews>
         </Box>
     );
 
@@ -96,13 +94,11 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
 
     const layoutProps = {
         seoProps,
+        header: t('starred:header'),
+        disablePadding: true,
         topNavbarProps: {
-            header: t('starred:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent,
-        desktopHeader: t('starred:header'),
-        fullSize: true,
     };
 
     if (loading || authLoading || loadingResourceType) {
@@ -120,7 +116,12 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
     }
 
     if (!!userMe) {
-        return <SettingsLayout {...layoutProps} />;
+        return (
+            <SettingsLayout {...layoutProps}>
+                {renderTabs}
+                {renderSwipeableViews}
+            </SettingsLayout>
+        );
     } else {
         return <NotFoundLayout />;
     }

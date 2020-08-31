@@ -73,7 +73,7 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         setSubmitting(false);
     };
 
-    const renderCardContent = (
+    const renderForm = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
@@ -82,36 +82,15 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
                         component={TextField}
                         label={t('forms:messageSubject')}
                         placeholder={t('forms:messageSubject')}
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
                     />
-                    <Field
-                        name="name"
-                        component={TextField}
-                        label={t('forms:name')}
-                        placeholder={t('forms:name')}
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <Field
-                        name="email"
-                        component={TextField}
-                        label={t('forms:email')}
-                        placeholder={t('forms:email')}
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
-                    />
+                    <Field name="name" component={TextField} label={t('forms:name')} placeholder={t('forms:name')} />
+                    <Field name="email" component={TextField} label={t('forms:email')} placeholder={t('forms:email')} />
                     <Field
                         name="message"
                         component={TextField}
                         placeholder={t('forms:message')}
                         label={t('forms:message')}
-                        variant="outlined"
                         rows="4"
-                        fullWidth
                         multiline
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
@@ -127,13 +106,11 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
 
     const layoutProps = {
         seoProps,
+        header: t('contact:header'),
+        dense: true,
         topNavbarProps: {
-            header: t('contact:header'),
             dynamicBackUrl: true,
         },
-        desktopHeader: t('contact:header'),
-        renderCardContent,
-        formLayout: true,
     };
 
     if (authLoading) {
@@ -144,7 +121,7 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <SettingsLayout {...layoutProps} />;
+    return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

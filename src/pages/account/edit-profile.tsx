@@ -96,39 +96,15 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     const renderAvatarField = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => <AvatarField {...props} />;
 
     const renderTitleField = (
-        <Field
-            placeholder={t('forms:title')}
-            name="title"
-            component={TextField}
-            label={t('forms:title')}
-            variant="outlined"
-            fullWidth
-            autoComplete="off"
-        />
+        <Field placeholder={t('forms:title')} name="title" component={TextField} label={t('forms:title')} />
     );
 
     const renderUsernameField = (
-        <Field
-            placeholder={t('forms:username')}
-            name="username"
-            component={TextField}
-            label={t('forms:username')}
-            variant="outlined"
-            fullWidth
-            autoComplete="off"
-        />
+        <Field placeholder={t('forms:username')} name="username" component={TextField} label={t('forms:username')} />
     );
 
     const renderEmailField = (
-        <Field
-            placeholder={t('forms:email')}
-            name="email"
-            component={TextField}
-            label={t('forms:email')}
-            variant="outlined"
-            fullWidth
-            autoComplete="off" // FIXE: This seems to have no effect.
-        />
+        <Field placeholder={t('forms:email')} name="email" component={TextField} label={t('forms:email')} />
     );
 
     const renderBioField = (
@@ -137,10 +113,8 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
             name="bio"
             component={TextField}
             label={t('forms:bio')}
-            variant="outlined"
             rows="4"
             multiline
-            fullWidth
         />
     );
 
@@ -152,9 +126,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
             dataKey="schools"
             document={SchoolsDocument}
             component={AutoCompleteField}
-            variant="outlined"
             helperText={t('forms:schoolHelpText')}
-            fullWidth
         />
     );
 
@@ -166,21 +138,19 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
             dataKey="subjects"
             document={SubjectsDocument}
             component={AutoCompleteField}
-            variant="outlined"
             helperText={t('forms:subjectHelpText')}
-            fullWidth
         />
     );
 
     const renderMarketingPermissionField = (
-        <FormControl fullWidth>
+        <FormControl>
             <FormHelperText>{t('forms:marketingPermission')}</FormHelperText>
             <Field name="marketingPermission" component={Switch} fullWidth disabled color="primary" />
         </FormControl>
     );
 
     const renderPushNotificationsField = (
-        <FormControl fullWidth>
+        <FormControl>
             <FormHelperText>{t('forms:pushNotifications')}</FormHelperText>
             <Field name="pushNotifications" component={Switch} fullWidth disabled color="primary" />
         </FormControl>
@@ -191,7 +161,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     );
 
     const renderBackToProfileButton = (
-        <FormControl fullWidth>
+        <FormControl>
             <ButtonLink href={urls.user} as={`/users/${R.propOr('', 'id', userMe)}`} color="primary" fullWidth>
                 {t('edit-profile:backToProfile')}
             </ButtonLink>
@@ -236,13 +206,11 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
 
     const layoutProps = {
         seoProps,
+        header: t('edit-profile:header'),
+        dense: true,
         topNavbarProps: {
-            header: t('edit-profile:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent: renderEditProfileForm,
-        desktopHeader: t('edit-profile:header'),
-        formLayout: true,
     };
 
     if (authLoading) {
@@ -254,7 +222,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     }
 
     if (!!userMe) {
-        return <SettingsLayout {...layoutProps} />;
+        return <SettingsLayout {...layoutProps}>{renderEditProfileForm}</SettingsLayout>;
     } else {
         return <NotFoundLayout />;
     }

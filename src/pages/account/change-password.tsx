@@ -62,7 +62,7 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         setSubmitting(false);
     };
 
-    const renderCardContent = (
+    const renderForm = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
@@ -71,30 +71,21 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                         name="oldPassword"
                         component={TextField}
                         label={t('forms:oldPassword')}
-                        variant="outlined"
                         type="password"
-                        fullWidth
-                        autoComplete="off"
                     />
                     <Field
                         placeholder={t('forms:newPassword')}
                         name="newPassword"
                         component={TextField}
                         label={t('forms:newPassword')}
-                        variant="outlined"
                         type="password"
-                        fullWidth
-                        autoComplete="off"
                     />
                     <Field
                         placeholder={t('forms:confirmNewPassword')}
                         name="confirmNewPassword"
                         component={TextField}
                         label={t('forms:confirmNewPassword')}
-                        variant="outlined"
                         type="password"
-                        fullWidth
-                        autoComplete="off"
                     />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
                 </Form>
@@ -109,13 +100,11 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
     const layoutProps = {
         seoProps,
+        header: t('change-password:header'),
+        dense: true,
         topNavbarProps: {
-            header: t('change-password:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent,
-        desktopHeader: t('change-password:header'),
-        formLayout: true,
     };
 
     if (authLoading) {
@@ -126,7 +115,7 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <SettingsLayout {...layoutProps} />;
+    return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

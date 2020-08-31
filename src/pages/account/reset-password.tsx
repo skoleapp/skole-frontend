@@ -136,10 +136,7 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
                 name="email"
                 component={TextField}
                 label={t('forms:email')}
-                variant="outlined"
                 helperText={t('reset-password:helpText')}
-                fullWidth
-                autoComplete="off"
             />
             <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </Form>
@@ -169,20 +166,14 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
                 name="newPassword"
                 component={TextField}
                 label={t('forms:newPassword')}
-                variant="outlined"
                 type="password"
-                fullWidth
-                autoComplete="off"
             />
             <Field
                 placeholder={t('forms:confirmNewPassword')}
                 name="confirmNewPassword"
                 component={TextField}
                 label={t('forms:confirmNewPassword')}
-                variant="outlined"
                 type="password"
-                fullWidth
-                autoComplete="off"
             />
             <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </Form>

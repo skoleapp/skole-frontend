@@ -70,7 +70,7 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
         password: Yup.string().required(t('validation:required')),
     });
 
-    const renderCardContent = (
+    const renderForm = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
@@ -78,11 +78,8 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
                         name="password"
                         label={t('forms:password')}
                         placeholder={t('forms:password')}
-                        variant="outlined"
                         component={TextField}
-                        fullWidth
                         type="password"
-                        autoComplete="off"
                     />
                     <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
                 </Form>
@@ -97,13 +94,11 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
 
     const layoutProps = {
         seoProps,
+        header: t('delete-account:header'),
+        dense: true,
         topNavbarProps: {
-            header: t('delete-account:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent,
-        desktopHeader: t('delete-account:header'),
-        formLayout: true,
     };
 
     if (authLoading) {
@@ -114,7 +109,7 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <SettingsLayout {...layoutProps} />;
+    return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => ({
