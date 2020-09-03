@@ -1,7 +1,9 @@
 {
     "title": "Hemsida",
     "description": "Kurser, resurser, diskussion. Allt på ett ställe.",
-    "browseCourses": "Bläddra kurser",
-    "uploadResource": "Ladda upp resurs",
-    "createCourse": "Skapa en kurs"
+    "resources": "Resurser",
+    "upload": "Upload",
+    "addCourses": "Lägg till kurser",
+    "inviteHeader": "Bjud in dina vänner och tjäna poäng!",
+    "inviteText": "Bjud in"
 }
