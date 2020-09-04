@@ -1,11 +1,10 @@
 import {
     Avatar,
     Box,
-    Card,
-    CardContent,
     Chip,
     Grid,
     makeStyles,
+    Paper,
     Step,
     StepLabel,
     Stepper,
@@ -13,7 +12,6 @@ import {
     Tabs,
     Tooltip,
     Typography,
-    useMediaQuery,
     useTheme,
 } from '@material-ui/core';
 import { EditOutlined, StarBorderOutlined } from '@material-ui/icons';
@@ -37,12 +35,11 @@ import {
     BadgeObjectType,
     CourseObjectType,
     ResourceObjectType,
-    ResourceTypeObjectType,
     UserDetailDocument,
     UserDetailQueryResult,
     UserObjectType,
 } from 'generated';
-import { useDayjs, useFrontendPagination, useSwipeableTabs } from 'hooks';
+import { useFrontendPagination, useMediaQueries, useMoment, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -52,12 +49,9 @@ import SwipeableViews from 'react-swipeable-views';
 import { AuthProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
-    card: {
-        width: '100%',
-        [breakpoints.down('md')]: {
-            borderRadius: 0,
-        },
+const useStyles = makeStyles(({ spacing }) => ({
+    paper: {
+        padding: spacing(4),
     },
     contentCard: {
         flexGrow: 1,
@@ -93,9 +87,9 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const { spacing } = useTheme();
     const classes = useStyles();
     const { isFallback } = useRouter();
-    const { breakpoints } = useTheme();
-    const isMobile = useMediaQuery(breakpoints.down('sm'));
+    const { isMobile, isDesktop } = useMediaQueries();
     const { t } = useTranslation();
+    const moment = useMoment();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
     const user: UserObjectType = R.propOr(null, 'user', data);
@@ -107,64 +101,43 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const school = R.propOr('', 'school', userMe);
     const subject = R.propOr('', 'subject', userMe);
     const score = R.propOr('-', 'score', user) as string;
-    const joined = useDayjs(R.propOr('', 'created', user)).format('LL');
+    const joined = moment(R.propOr('', 'created', user)).format('LL');
     const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
     const badges = R.propOr([], 'badges', user) as BadgeObjectType[];
     const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
     const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
     const courseCount = createdCourses.length;
     const resourceCount = createdResources.length;
-
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
-    const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
-
     const notFound = t('profile:notFound');
     const seoTitle = !!user ? username : !isFallback ? notFound : '';
     const description = !!user ? t('profile:description', { username }) : notFound;
 
+    // Order steps so that the completed ones are first.
     const profileStrengthSteps = [
-        t('profile-strength:step1'),
-        t('profile-strength:step2'),
-        t('profile-strength:step3'),
-    ];
+        {
+            label: t('profile-strength:step1'),
+            completed: !!verified,
+        },
+        {
+            label: t('profile-strength:step2'),
+            completed: !!title && !!bio,
+        },
+        {
+            label: t('profile-strength:step3'),
+            completed: !!school && !!subject,
+        },
+    ].sort(prev => (prev.completed ? -1 : 1));
 
-    const getProfileStrength = (): number => {
-        let profileStrength = 0;
+    // Calculate score for profile strength
+    const profileStrengthScore = profileStrengthSteps
+        .map(s => s.completed)
+        .reduce((total, completed) => (completed ? total + 1 : total), 0);
 
-        if (!!verified) {
-            profileStrength++;
-        }
-
-        if (!!title && !!bio) {
-            profileStrength++;
-        }
-
-        if (!!school && !!subject) {
-            profileStrength++;
-        }
-
-        return profileStrength;
-    };
-
-    const getStepCompleted = (i: number): boolean => {
-        if (i === 0 && !!verified) {
-            return true;
-        }
-
-        if (i === 1 && !!title && !!bio) {
-            return true;
-        }
-
-        if (i === 2 && !!school && !!subject) {
-            return true;
-        }
-
-        return false;
-    };
-
+    // Get label for profile strength score.
     const getProfileStrengthText = (): string => {
-        switch (getProfileStrength()) {
+        switch (profileStrengthScore) {
             case 0: {
                 return t('profile-strength:poor');
             }
@@ -188,10 +161,10 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     };
 
     const renderAvatar = <Avatar className={clsx('main-avatar', classes.avatar)} src={mediaURL(avatar)} />;
-    const renderUsername = <Typography variant="body2">{username}</Typography>;
+    const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
 
     const renderTitle = !!title && (
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="subtitle2" color="textSecondary">
             {title}
         </Typography>
     );
@@ -318,8 +291,8 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
                 {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
             </Typography>
             <Stepper className={classes.stepper} alternativeLabel={isMobile}>
-                {profileStrengthSteps.map((label, i) => (
-                    <Step key={i} completed={getStepCompleted(i)} active={false}>
+                {profileStrengthSteps.map(({ label }, i) => (
+                    <Step key={i} completed={profileStrengthSteps[i].completed} active={false}>
                         <StepLabel>{label}</StepLabel>
                     </Step>
                 ))}
@@ -327,7 +300,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
         </Box>
     );
 
-    const renderActions = !isMobile && (
+    const renderActions = isDesktop && (
         <Grid item container>
             {renderEditProfileButton}
             {renderSettingsButton}
@@ -351,7 +324,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
         </Grid>
     );
 
-    const renderDesktopInfo = !isMobile && (
+    const renderDesktopInfo = isDesktop && (
         <Grid item container direction="column">
             {renderBio}
             {renderRank}
@@ -395,22 +368,18 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     );
 
     const renderResponsiveContent = (
-        <Card className={classes.card}>
-            <CardContent>
-                {renderResponsiveInfo}
-                {renderMobileInfo}
-            </CardContent>
-        </Card>
+        <Paper className={clsx('paper-container', classes.paper)}>
+            {renderResponsiveInfo}
+            {renderMobileInfo}
+        </Paper>
     );
 
-    const renderMobileActionsCard = isMobile && (
-        <Card className={clsx(classes.card, classes.contentCard)}>
-            <CardContent>
-                {renderProfileStrength}
-                {renderEditProfileButton}
-                {renderViewStarredButton}
-            </CardContent>
-        </Card>
+    const renderMobileActionsCard = isMobile && isOwnProfile && (
+        <Paper className={clsx('paper-container', classes.paper, classes.contentCard)}>
+            {renderProfileStrength}
+            {renderEditProfileButton}
+            {renderViewStarredButton}
+        </Paper>
     );
 
     const commonTableHeadProps = {
@@ -431,7 +400,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const renderCreatedResources = !!createdResources.length ? (
         <FrontendPaginatedTable
             tableHeadProps={commonTableHeadProps}
-            renderTableBody={<ResourceTableBody resourceTypes={resourceTypes} resources={paginatedResources} />}
+            renderTableBody={<ResourceTableBody resources={paginatedResources} />}
             paginationProps={resourcePaginationProps}
         />
     ) : (
@@ -446,7 +415,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     );
 
     const renderSwipeableViews = (
-        <Box flexGrow="1" position="relative" minHeight="30rem">
+        <Box flexGrow="1" position="relative" minHeight="30rem" overflow="hidden">
             <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
                 {renderCreatedCourses}
                 {renderCreatedResources}
@@ -455,10 +424,10 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     );
 
     const renderCreatedContent = (
-        <Card className={clsx(classes.card, classes.contentCard)}>
+        <Paper className={clsx('paper-container', classes.contentCard)}>
             {renderTabs}
             {renderSwipeableViews}
-        </Card>
+        </Paper>
     );
 
     const seoProps = {
@@ -471,7 +440,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
         topNavbarProps: {
             header: username,
             dynamicBackUrl: true,
-            headerRight: isOwnProfile && <SettingsButton color="secondary" />,
+            headerRight: isOwnProfile ? <SettingsButton color="secondary" /> : undefined,
         },
     };
 
