@@ -1,8 +1,22 @@
-import { Box, Grid, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
+import {
+    BottomNavigation,
+    CardHeader,
+    Drawer,
+    Grid,
+    List,
+    ListItemIcon,
+    ListItemText,
+    makeStyles,
+    MenuItem,
+    Paper,
+    Tab,
+    Tabs,
+    Tooltip,
+} from '@material-ui/core';
 import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
+import clsx from 'clsx';
 import {
     CustomBottomNavbarContainer,
-    DiscussionHeader,
     ErrorLayout,
     FrontendPaginatedTable,
     IconButtonLink,
@@ -14,16 +28,10 @@ import {
     OfflineLayout,
     ResourceTableBody,
     StarButton,
-    StyledBottomNavigation,
-    StyledCard,
-    StyledDrawer,
-    StyledList,
-    StyledSwipeableViews,
-    StyledTabs,
     TextLink,
     TopLevelCommentThread,
 } from 'components';
-import { useAuthContext, useDeviceContext, useDiscussionContext, useNotificationsContext } from 'context';
+import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import {
     CommentObjectType,
     CourseDetailDocument,
@@ -41,7 +49,7 @@ import {
     useActionsDrawer,
     useFrontendPagination,
     useInfoDrawer,
-    useResponsiveIconButtonProps,
+    useMediaQueries,
     useSearch,
     useShare,
     useSwipeableTabs,
@@ -53,8 +61,27 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
+import SwipeableViews from 'react-swipeable-views';
+import { BOTTOM_NAVBAR_HEIGHT } from 'styles';
 import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
+
+const useStyles = makeStyles({
+    mobileContainer: {
+        position: 'absolute',
+        width: '100%',
+        bottom: BOTTOM_NAVBAR_HEIGHT,
+        top: '3rem',
+    },
+    desktopContainer: {
+        flexGrow: 1,
+    },
+    paperContainer: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+});
 
 const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     data,
@@ -62,9 +89,10 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     authLoading,
     authNetworkError,
 }) => {
+    const classes = useStyles();
     const { isFallback } = useRouter();
     const { t } = useTranslation();
-    const isMobile = useDeviceContext();
+    const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
@@ -91,7 +119,6 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: courseName });
-    const iconButtonProps = useResponsiveIconButtonProps();
     const notFound = t('course:notFound');
     const title = !!course ? courseName : !isFallback ? notFound : '';
     const description = !!course ? t('course:description', { courseName }) : notFound;
@@ -217,27 +244,33 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
 
     const renderStarButton = <StarButton starred={starred} course={courseId} />;
 
-    const discussionHeaderProps = {
-        commentCount,
-        renderStarButton,
-        renderUpVoteButton,
-        renderDownVoteButton,
-        renderShareButton,
-        renderInfoButton,
-        renderActionsButton,
-    };
-
     const commentThreadProps = {
         comments,
         target: { course: Number(courseId) },
-        placeholderText: t('course:commentsPlaceholder'),
+        placeholderText: t('course:noComments'),
     };
 
-    const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
+    const renderDiscussionHeader = (
+        <CardHeader
+            className="text-left"
+            subheader={`${t('common:discussion')} (${commentCount})`}
+            action={
+                <Grid container>
+                    {renderStarButton}
+                    {renderUpVoteButton}
+                    {renderDownVoteButton}
+                    {renderShareButton}
+                    {renderInfoButton}
+                    {renderActionsButton}
+                </Grid>
+            }
+        />
+    );
+
     const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
     const renderCustomBottomNavbar = (
-        <StyledBottomNavigation>
+        <BottomNavigation>
             <CustomBottomNavbarContainer>
                 <Grid container>
                     <Grid item xs={6} container justify="flex-start">
@@ -249,7 +282,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
                     </Grid>
                 </Grid>
             </CustomBottomNavbarContainer>
-        </StyledBottomNavigation>
+        </BottomNavigation>
     );
 
     const resourceTableHeadProps = {
@@ -275,71 +308,41 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
                     href={{ pathname: urls.uploadResource, query: { school: schoolId, course: courseId } }}
                     icon={CloudUploadOutlined}
                     disabled={verified === false}
-                    {...iconButtonProps}
+                    color={isMobileOrTablet ? 'secondary' : 'default'}
+                    size="small"
                 />
             </span>
         </Tooltip>
     );
 
-    const renderCourseName = (
-        <Typography className="truncate" variant="subtitle1">
-            {courseName}
-        </Typography>
-    );
+    const renderResourcesHeader = <CardHeader title={courseName} action={renderUploadResourceButton} />;
 
-    const renderResourcesHeader = (
-        <Box className="custom-header">
-            <Grid container justify="space-between">
-                <Box display="flex" justifyContent="flex-start" alignItems="center">
-                    {renderCourseName}
-                </Box>
-                <Box display="flex" justifyContent="flex-end" alignItems="center">
-                    {renderUploadResourceButton}
-                </Box>
-            </Grid>
-        </Box>
-    );
-
-    const renderTabs = (
-        <StyledTabs value={tabValue} onChange={handleTabChange}>
-            <Tab label={`${t('common:resources')} (${resourceCount})`} />
-            <Tab label={`${t('common:discussion')} (${commentCount})`} />
-        </StyledTabs>
-    );
-
-    const renderSwipeableViews = (
-        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-            <Box display="flex" flexGrow="1" position="relative">
+    const renderMobileContent = isMobileOrTablet && (
+        <Paper className={clsx('paper-container', classes.mobileContainer)}>
+            <Tabs value={tabValue} onChange={handleTabChange}>
+                <Tab label={`${t('common:resources')} (${resourceCount})`} />
+                <Tab label={`${t('common:discussion')} (${commentCount})`} />
+            </Tabs>
+            <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
                 {renderResources}
-            </Box>
-            <Box display="flex" flexGrow="1">
                 {renderDiscussion}
-            </Box>
-        </StyledSwipeableViews>
+            </SwipeableViews>
+        </Paper>
     );
 
-    const renderMobileContent = isMobile && (
-        <StyledCard>
-            {renderTabs}
-            {renderSwipeableViews}
-        </StyledCard>
-    );
-
-    const renderDesktopContent = !isMobile && (
-        <Grid className="desktop-content" container>
-            <Grid item container md={7} lg={8}>
-                <StyledCard>
+    const renderDesktopContent = !isMobileOrTablet && (
+        <Grid container spacing={2} className={classes.desktopContainer}>
+            <Grid item container xs={12} md={7} lg={8}>
+                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
                     {renderResourcesHeader}
-                    <Box position="relative" flexGrow="1" display="flex">
-                        {renderResources}
-                    </Box>
-                </StyledCard>
+                    {renderResources}
+                </Paper>
             </Grid>
-            <Grid item container md={5} lg={4}>
-                <StyledCard marginLeft>
+            <Grid item container xs={12} md={5} lg={4}>
+                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
                     {renderDiscussionHeader}
                     {renderDiscussion}
-                </StyledCard>
+                </Paper>
             </Grid>
         </Grid>
     );
@@ -347,33 +350,34 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const renderInfo = <InfoModalContent user={courseUser} created={created} infoItems={infoItems} />;
 
     const renderInfoDrawer = (
-        <StyledDrawer {...infoDrawerProps}>
+        <Drawer {...infoDrawerProps}>
             {renderInfoHeader}
             {renderInfo}
-        </StyledDrawer>
+        </Drawer>
     );
 
     const renderDeleteAction = isOwner && (
         <MenuItem disabled={verified === false}>
-            <ListItemText onClick={handleDeleteCourse}>
-                <DeleteOutline /> {t('common:delete')}
-            </ListItemText>
+            <ListItemIcon>
+                <DeleteOutline />
+            </ListItemIcon>
+            <ListItemText onClick={handleDeleteCourse}>{t('common:delete')}</ListItemText>
         </MenuItem>
     );
 
     const renderActions = (
-        <StyledList>
+        <List>
             {renderShareAction}
             {renderDeleteAction}
             {renderReportAction}
-        </StyledList>
+        </List>
     );
 
     const renderActionsDrawer = (
-        <StyledDrawer {...actionsDrawerProps}>
+        <Drawer {...actionsDrawerProps}>
             {renderActionsHeader}
             {renderActions}
-        </StyledDrawer>
+        </Drawer>
     );
 
     const seoProps = {

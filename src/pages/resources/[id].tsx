@@ -1,5 +1,18 @@
-import { Box, Grid, ListItemText, MenuItem, Tab } from '@material-ui/core';
+import {
+    BottomNavigation,
+    Drawer,
+    Grid,
+    List,
+    ListItemIcon,
+    ListItemText,
+    makeStyles,
+    MenuItem,
+    Paper,
+    Tab,
+    Tabs,
+} from '@material-ui/core';
 import { CloudDownloadOutlined, DeleteOutline, PrintOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import {
     CustomBottomNavbarContainer,
     DiscussionHeader,
@@ -14,22 +27,10 @@ import {
     PDFViewer,
     ResourceToolbar,
     StarButton,
-    StyledBottomNavigation,
-    StyledCard,
-    StyledDrawer,
-    StyledList,
-    StyledSwipeableViews,
-    StyledTabs,
     TextLink,
     TopLevelCommentThread,
 } from 'components';
-import {
-    useAuthContext,
-    useDeviceContext,
-    useDiscussionContext,
-    useNotificationsContext,
-    usePDFViewerContext,
-} from 'context';
+import { useAuthContext, useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
 import {
     CommentObjectType,
     DeleteResourceMutation,
@@ -40,15 +41,38 @@ import {
     UserObjectType,
     VoteObjectType,
 } from 'generated';
-import { useActionsDrawer, useInfoDrawer, useShare, useSwipeableTabs, useVotes } from 'hooks';
+import { useActionsDrawer, useInfoDrawer, useMediaQueries, useShare, useSwipeableTabs, useVotes } from 'hooks';
 import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
+import SwipeableViews from 'react-swipeable-views';
+import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT } from 'styles';
 import { AuthProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
+
+const useStyles = makeStyles({
+    mobileContainer: {
+        position: 'absolute',
+        width: '100%',
+        bottom: BOTTOM_NAVBAR_HEIGHT,
+        top: '3rem',
+    },
+    desktopContainer: {
+        flexGrow: 1,
+        flexWrap: 'nowrap',
+    },
+    paperContainer: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    resourceContainer: {
+        borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0.5rem ${BORDER_RADIUS}`, // Disable round border for bottom right corner to better fit with the scroll bar.
+    },
+});
 
 const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     data,
@@ -56,9 +80,10 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     authLoading,
     authNetworkError,
 }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
     const { isFallback } = useRouter();
-    const isMobile = useDeviceContext();
+    const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
@@ -85,7 +110,7 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: resourceTitle });
     const { commentModalOpen } = useDiscussionContext();
-    const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
+    const { drawMode, setDrawMode, swipingDisabled } = usePDFViewerContext();
     const notFound = t('resource:notFound');
     const seoTitle = !!resource ? title : !isFallback ? notFound : '';
     const description = !!resource ? t('resource:description', { resourceTitle }) : notFound;
@@ -282,11 +307,11 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     );
 
     const renderCustomBottomNavbar = (
-        <StyledBottomNavigation>
+        <BottomNavigation>
             <CustomBottomNavbarContainer>
                 {drawMode ? renderDrawModeControls : renderDefaultBottomNavbarContent}
             </CustomBottomNavbarContainer>
-        </StyledBottomNavigation>
+        </BottomNavigation>
     );
 
     const toolbarProps = {
@@ -316,51 +341,32 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
     const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
 
-    const renderTabs = (
-        <StyledTabs value={tabValue} onChange={handleTabChange}>
-            <Tab label={t('common:resource')} />
-            <Tab label={`${t('common:discussion')} (${commentCount})`} />
-        </StyledTabs>
-    );
-
-    const renderSwipeableViews = (
-        <StyledSwipeableViews
-            ref={swipeableViewsRef}
-            disabled={swipingDisabled}
-            index={tabValue}
-            onChangeIndex={handleIndexChange}
-        >
-            <Box display="flex" flexGrow="1" position="relative">
+    const renderMobileContent = isMobileOrTablet && (
+        <Paper className={clsx('paper-container', classes.mobileContainer)}>
+            <Tabs value={tabValue} onChange={handleTabChange}>
+                <Tab label={t('common:resource')} />
+                <Tab label={`${t('common:discussion')} (${commentCount})`} />
+            </Tabs>
+            <SwipeableViews disabled={swipingDisabled} index={tabValue} onChangeIndex={handleIndexChange}>
                 {renderPDFViewer}
-            </Box>
-            <Box display="flex" flexGrow="1">
                 {renderDiscussion}
-            </Box>
-        </StyledSwipeableViews>
+            </SwipeableViews>
+        </Paper>
     );
 
-    const renderMobileContent = isMobile && (
-        <StyledCard>
-            {renderTabs}
-            {renderSwipeableViews}
-        </StyledCard>
-    );
-
-    const renderDesktopContent = !isMobile && (
-        <Grid className="desktop-content" container>
-            <Grid item container md={7} lg={8}>
-                <StyledCard>
-                    <Box flexGrow="1" display="flex" flexDirection="column" position="relative">
-                        {renderToolbar}
-                        {renderPDFViewer}
-                    </Box>
-                </StyledCard>
+    const renderDesktopContent = !isMobileOrTablet && (
+        <Grid container spacing={2} className={classes.desktopContainer}>
+            <Grid item container xs={12} md={7} lg={8}>
+                <Paper className={clsx(classes.paperContainer, classes.resourceContainer, 'paper-container')}>
+                    {renderToolbar}
+                    {renderPDFViewer}
+                </Paper>
             </Grid>
-            <Grid item container md={5} lg={4}>
-                <StyledCard marginLeft>
+            <Grid item container xs={12} md={5} lg={4}>
+                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
                     {renderDiscussionHeader}
                     {renderDiscussion}
-                </StyledCard>
+                </Paper>
             </Grid>
         </Grid>
     );
@@ -368,50 +374,53 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const renderInfo = <InfoModalContent user={resourceUser} created={created} infoItems={infoItems} />;
 
     const renderInfoDrawer = (
-        <StyledDrawer {...infoDrawerProps}>
+        <Drawer {...infoDrawerProps}>
             {renderInfoHeader}
             {renderInfo}
-        </StyledDrawer>
+        </Drawer>
     );
 
     const renderDeleteAction = isOwner && (
         <MenuItem disabled={verified === false}>
-            <ListItemText onClick={handleDeleteResource}>
-                <DeleteOutline /> {t('common:delete')}
-            </ListItemText>
+            <ListItemIcon>
+                <DeleteOutline />
+            </ListItemIcon>
+            <ListItemText onClick={handleDeleteResource}>{t('common:delete')}</ListItemText>
         </MenuItem>
     );
 
-    const renderDownloadAction = isMobile && (
+    const renderDownloadAction = isMobileOrTablet && (
         <MenuItem onClick={handleDownloadButtonClick}>
-            <ListItemText>
-                <CloudDownloadOutlined /> {t('common:download')}
-            </ListItemText>
+            <ListItemIcon>
+                <CloudDownloadOutlined />
+            </ListItemIcon>
+            <ListItemText>{t('common:download')}</ListItemText>
         </MenuItem>
     );
 
-    const renderPrintAction = isMobile && (
+    const renderPrintAction = isMobileOrTablet && (
         <MenuItem onClick={handlePrintButtonClick}>
-            <ListItemText>
-                <PrintOutlined /> {t('common:print')}
-            </ListItemText>
+            <ListItemIcon>
+                <PrintOutlined />
+            </ListItemIcon>
+            <ListItemText>{t('common:print')}</ListItemText>
         </MenuItem>
     );
 
     const renderActions = (
-        <StyledList>
+        <List>
             {renderReportAction}
             {renderDeleteAction}
             {renderDownloadAction}
             {renderPrintAction}
-        </StyledList>
+        </List>
     );
 
     const renderActionsDrawer = (
-        <StyledDrawer {...actionsDrawerProps}>
+        <Drawer {...actionsDrawerProps}>
             {renderActionsHeader}
             {renderActions}
-        </StyledDrawer>
+        </Drawer>
     );
 
     const seoProps = {
