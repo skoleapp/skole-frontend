@@ -113,6 +113,10 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const notFound = t('profile:notFound');
     const seoTitle = !!user ? username : !isFallback ? notFound : '';
     const description = !!user ? t('profile:description', { username }) : notFound;
+    const coursesTabLabel = isOwnProfile ? t('profile:ownProfileCourses') : t('common:courses');
+    const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
+    const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
+    const noResources = isOwnProfile ? t('profile:ownProfileNoResources') : t('profile:noResources');
 
     // Order steps so that the completed ones are first.
     const profileStrengthSteps = [
@@ -394,7 +398,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
             paginationProps={coursePaginationProps}
         />
     ) : (
-        <NotFoundBox text={t('profile:noCourses')} />
+        <NotFoundBox text={noCourses} />
     );
 
     const renderCreatedResources = !!createdResources.length ? (
@@ -404,18 +408,18 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
             paginationProps={resourcePaginationProps}
         />
     ) : (
-        <NotFoundBox text={t('profile:noResources')} />
+        <NotFoundBox text={noResources} />
     );
 
     const renderTabs = (
         <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label={t('common:courses')} />
-            <Tab label={t('common:resources')} />
+            <Tab label={coursesTabLabel} />
+            <Tab label={resourcesTabLabel} />
         </Tabs>
     );
 
     const renderSwipeableViews = (
-        <Box flexGrow="1" position="relative" minHeight="30rem" overflow="hidden">
+        <Box flexGrow="1" position="relative" minHeight="30rem">
             <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
                 {renderCreatedCourses}
                 {renderCreatedResources}
