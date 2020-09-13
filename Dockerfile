@@ -1,4 +1,4 @@
-FROM node:14.7.0-alpine3.12 AS dev
+FROM node:14.10.1-alpine3.12 AS dev
 
 RUN adduser --disabled-password user
 WORKDIR /home/user/app
