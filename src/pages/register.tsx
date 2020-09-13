@@ -1,11 +1,5 @@
 import { Box, Button, FormControl, InputAdornment, Typography } from '@material-ui/core';
-import {
-    AccountCircleOutlined,
-    ArrowForwardOutlined,
-    EmailOutlined,
-    LockOutlined,
-    VpnKeyOutlined,
-} from '@material-ui/icons';
+import { AccountCircleOutlined, ArrowForwardOutlined, EmailOutlined, LockOutlined } from '@material-ui/icons';
 import {
     AutoCompleteField,
     ButtonLink,
@@ -108,8 +102,12 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const registerValidationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
-        password: Yup.string().min(8, t('validation:passwordTooShort')).required(t('validation:required')),
-        email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
+        password: Yup.string()
+            .min(8, t('validation:passwordTooShort'))
+            .required(t('validation:required')),
+        email: Yup.string()
+            .email(t('validation:invalidEmail'))
+            .required(t('validation:required')),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
             .required(t('validation:required')),
