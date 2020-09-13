@@ -43,7 +43,6 @@ interface RegisterFormValues {
     email: string;
     password: string;
     confirmPassword: string;
-    code: string;
 }
 
 interface UpdateUserFormValues {
@@ -104,22 +103,16 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         email: '',
         password: '',
         confirmPassword: '',
-        code: R.propOr('', 'code', query) as string,
         general: '',
     };
 
     const registerValidationSchema = Yup.object().shape({
         username: Yup.string().required(t('validation:required')),
-        password: Yup.string()
-            .min(8, t('validation:passwordTooShort'))
-            .required(t('validation:required')),
-        email: Yup.string()
-            .email(t('validation:invalidEmail'))
-            .required(t('validation:required')),
+        password: Yup.string().min(8, t('validation:passwordTooShort')).required(t('validation:required')),
+        email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
             .required(t('validation:required')),
-        code: Yup.string().required(t('validation:required')),
     });
 
     const updateUserInitialValues = {
@@ -154,14 +147,13 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const [registerMutation] = useRegisterMutation({ onCompleted: onRegisterCompleted, onError: onRegisterError });
 
     const handleRegisterSubmit = async (values: RegisterFormValues): Promise<void> => {
-        const { username, email, password, code } = values;
+        const { username, email, password } = values;
 
         await registerMutation({
             variables: {
                 username,
                 email,
                 password,
-                code,
             },
         });
 
@@ -282,26 +274,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         />
     );
 
-    const renderBetaCodeField = (
-        <Field
-            placeholder={t('forms:betaCode')}
-            label={t('forms:betaCode')}
-            name="code"
-            component={TextField}
-            variant="outlined"
-            fullWidth
-            disabled={!!query.code}
-            autoComplete="off"
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <VpnKeyOutlined />
-                    </InputAdornment>
-                ),
-            }}
-        />
-    );
-
     const renderTermsLink = (
         <FormControl fullWidth>
             <Typography variant="body2" color="textSecondary">
@@ -332,7 +304,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             {renderEmailField}
             {renderPasswordField}
             {renderConfirmPasswordField}
-            {renderBetaCodeField}
             {renderTermsLink}
             {renderRegisterFormSubmitSection(props)}
             {renderLoginButton}
