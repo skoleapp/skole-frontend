@@ -55,7 +55,7 @@ import { AuthProps } from 'types';
 import { urls } from 'utils';
 
 const useStyles = makeStyles({
-    container: {
+    root: {
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -261,7 +261,7 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
     );
 
     const renderContent = (
-        <Paper className={clsx('paper-container', classes.container)}>
+        <Paper className={clsx('paper-container', classes.root)}>
             {renderSchoolHeader}
             {renderTabs}
             {renderSwipeableViews}

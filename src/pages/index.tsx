@@ -10,23 +10,35 @@ import {
     makeStyles,
     Typography,
 } from '@material-ui/core';
-import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
+import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
+import clsx from 'clsx';
 import { LoadingLayout, MainLayout, OfflineLayout } from 'components';
-import { useSearch } from 'hooks';
+import { useLanguageSelector, useSearch, useShare } from 'hooks';
 import { includeDefaultNamespaces, Link, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
+import { BORDER_RADIUS } from 'styles';
 import { AuthProps } from 'types';
 import { UrlObject } from 'url';
-import { SHORTCUTS as shortcuts } from 'utils';
+import { HOME_PAGE_SHORTCUTS } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
+    slogan: {
+        position: 'relative',
+        paddingTop: spacing(8),
+        color: palette.common.white,
+    },
     searchContainer: {
         textAlign: 'center',
-        padding: `${spacing(8)} ${spacing(4)}`,
+        paddingBottom: spacing(16),
+        position: 'relative',
+    },
+    form: {
+        position: 'relative',
     },
     searchFieldContainer: {
         marginTop: spacing(4),
+        padding: `0 ${spacing(2)}`,
     },
     searchField: {
         display: 'flex',
@@ -34,28 +46,26 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         maxWidth: '20rem',
         backgroundColor: palette.common.white,
         border: `0.05rem solid ${palette.primary.main}`,
-        borderRadius: '0.75rem 0 0 0.75rem',
-    },
-    searchInput: {
-        padding: spacing(3),
+        borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
     },
     searchButton: {
-        borderRadius: '0 0.75rem 0.75rem 0',
+        borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
     },
     shortcutsContainer: {
+        padding: `${spacing(8)} 0`,
+    },
+    inviteContainer: {
         flexGrow: 1,
-        padding: spacing(2),
+        position: 'relative',
+        padding: spacing(8),
     },
     card: {
-        marginTop: spacing(2),
         width: '100%',
-        height: '14rem',
+        minHeight: '12rem',
         position: 'relative',
-        borderRadius: '0.75rem',
-        [breakpoints.up('md')]: {
-            width: '14rem',
-            paddingBottom: 0,
-            margin: spacing(2),
+        [breakpoints.up('sm')]: {
+            width: '12rem',
+            height: '12rem',
         },
     },
     cardActionArea: {
@@ -73,6 +83,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         height: '5rem',
         width: '5rem',
         margin: spacing(2),
+        marginBottom: spacing(4),
         backgroundColor: palette.primary.light,
     },
     avatarIcon: {
@@ -91,16 +102,18 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
     const { t } = useTranslation();
     const { handleSubmit, inputProps } = useSearch();
+    const { renderLanguageButton } = useLanguageSelector();
 
     const renderSearch = (
         <Box className={classes.searchContainer}>
-            <Typography variant="h1" gutterBottom>
+            <Box className="main-background" />
+            <Typography className={classes.slogan} variant="h1" gutterBottom>
                 {t('common:slogan')}
             </Typography>
-            <form onSubmit={handleSubmit}>
+            <form className={classes.form} onSubmit={handleSubmit}>
                 <Box className={classes.searchFieldContainer} display="flex" justifyContent="center">
                     <Box className={classes.searchField}>
-                        <InputBase className={classes.searchInput} {...inputProps} />
+                        <InputBase {...inputProps} />
                     </Box>
                     <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
                         <SearchOutlined />
@@ -111,18 +124,18 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderShortcuts = (
-        <Grid container justify="center">
-            <Grid item xs={12} md={8} container justify="center" className={classes.shortcutsContainer}>
-                {shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
-                    <Grid item xs={12} md={4} container justify="center" key={i}>
+        <Grid container justify="center" className={classes.shortcutsContainer}>
+            <Grid item xs={12} md={8} lg={6} xl={4} container spacing={2}>
+                {HOME_PAGE_SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+                    <Grid item xs={12} sm={4} container justify="center" key={i}>
                         <Link href={href}>
-                            <Card className={classes.card}>
+                            <Card className={clsx(classes.card)}>
                                 <CardActionArea className={classes.cardActionArea}>
                                     <CardContent className={classes.cardContent}>
-                                        <Avatar className={classes.avatar}>
+                                        <Avatar className={clsx(classes.avatar)}>
                                             <Icon className={classes.avatarIcon} />
                                         </Avatar>
-                                        <Typography variant="h5" color="primary">
+                                        <Typography variant="h5" color="primary" align="center">
                                             {t(text)}
                                         </Typography>
                                     </CardContent>
@@ -131,6 +144,28 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
                         </Link>
                     </Grid>
                 ))}
+            </Grid>
+        </Grid>
+    );
+
+    const { handleShare } = useShare({});
+
+    const renderInvite = (
+        <Grid container direction="column" alignItems="center" className={classes.inviteContainer}>
+            <Typography variant="h6" color="primary" gutterBottom>
+                {t('index:inviteHeader')}
+            </Typography>
+            <Typography component="br" />
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} container>
+                <Button
+                    onClick={handleShare}
+                    color="primary"
+                    variant="outlined"
+                    endIcon={<ArrowForwardOutlined />}
+                    fullWidth
+                >
+                    {t('index:inviteText')}
+                </Button>
             </Grid>
         </Grid>
     );
@@ -144,9 +179,14 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         seoProps,
         topNavbarProps: {
             disableSearch: true,
+            headerRight: renderLanguageButton,
         },
         containerProps: {
-            disableGutters: true,
+            style: {
+                margin: 0,
+                padding: 0,
+                maxWidth: '100%',
+            },
         },
     };
 
@@ -162,6 +202,7 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         <MainLayout {...layoutProps}>
             {renderSearch}
             {renderShortcuts}
+            {renderInvite}
         </MainLayout>
     );
 };
