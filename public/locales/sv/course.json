@@ -3,6 +3,6 @@
     "noResources": "Inga resurser har lagts till på denna kurs ändå",
     "deleteCourseTitle": "Ta bort kurs",
     "deleteCourseDescription": "Är du säker på att du vill ta bort den här kursen?",
-    "commentsPlaceholder": "Här kan du ha allmän diskussion om kursen.",
+    "noComments": "Denna kurs har inga kommentarer.",
     "notFound": "Kurs hittades inte."
 }

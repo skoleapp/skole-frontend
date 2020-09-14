@@ -3,6 +3,15 @@
     "description": "Aloita selataksesi lempiopiskelumateriaaliasi, keskutellaksesi yhteisön kanssa ja paljon muuta!",
     "header": "Löydä ja jaa lempiopiskelumateriaaliasi.",
     "header2": "Tuhansia kursseja ja resursseja, kaikki suomen korkeakoulut.",
+    "resourcesDescription": "Toisten käyttäjien jakama opiskelumateriaali on vapaasti käyttävissä kenelle tahansa ilman rajoituksia.",
+    "coursesDescription": "Skole on täynnä kursseja eli korkeakouluista ympäri Suomen.",
+    "discussionDescription": "Skolessa voit keskustella ja jakaa tietoa muiden käyttäjien kanssa helposti.",
+    "resourceChip1": "Automaattinen PDF-konversio",
+    "resourceChip2": "Edistyksellinen tiedoston tarkastelu",
+    "courseChip1": "Satoja oppiaineita",
+    "courseChip2": "Luo uusia kursseja, seuraa suosikkejasi.",
+    "discussionChip1": "Jodelin kaltaiset langat",
+    "discussionChip2": "Tagaa käyttäjiä & saa ilmoituksia (tulossa pian)",
     "subheader": "Kurssit, resurssit, keskustelu. Yhdessä paikassa.",
     "cta": "Aloita!"
 }

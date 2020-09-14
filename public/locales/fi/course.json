@@ -3,6 +3,6 @@
     "noResources": "Tälle kurssille ei ole lisätty vielä yhtään resurssia.",
     "deleteCourseTitle": "Poista kurssi",
     "deleteCourseDescription": "Oletko varma että haluat poistaa tämän kurssin?",
-    "commentsPlaceholder": "Täällä voit käydä yleistä keskustelua kurssista.",
+    "noComments": "Tällä kurssilla ei ole kommentteja.",
     "notFound": "Kurssia ei löytynyt."
 }

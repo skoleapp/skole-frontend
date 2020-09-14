@@ -7,5 +7,9 @@
     "noResources": "Inga uppladdade resurser...",
     "noCourses": "Inga tillagda kurser...",
     "viewStarred": "Visa stjärnmärkt",
-    "notFound": "Profilen hittades inte."
+    "notFound": "Profilen hittades inte.",
+    "ownProfileCourses": "Dina kurser",
+    "ownProfileResources": "Dina resurser",
+    "ownProfileNoCourses": "Du har inga kurser...",
+    "ownProfileNoResources": "Du har inga resurser..."
 }
