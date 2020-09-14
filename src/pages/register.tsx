@@ -25,7 +25,6 @@ import {
 import { useForm, useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { AuthProps } from 'types';
@@ -51,7 +50,6 @@ enum RegisterPhases {
 }
 
 const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
-    const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
     const [registeredUser, setRegisteredUser] = useState<Pick<UserObjectType, 'username' | 'email'> | null>(null);
