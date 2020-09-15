@@ -1,11 +1,12 @@
 import {
     AutoCompleteField,
-    DropzoneField,
     ErrorLayout,
+    FileField,
     FormLayout,
     FormSubmitSection,
     LoadingLayout,
     OfflineLayout,
+    TextLink,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
@@ -28,7 +29,7 @@ import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';
 import { AuthProps } from 'types';
-import { redirect } from 'utils';
+import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
 interface UploadResourceFormValues {
@@ -144,51 +145,46 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         general: '',
     };
 
-    const renderCardContent = (
+    const renderForm = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field
-                        name="resourceTitle"
-                        label={t('forms:resourceTitle')}
-                        placeholder={t('forms:resourceTitle')}
-                        variant="outlined"
-                        component={TextField}
-                        fullWidth
-                        autoComplete="off"
-                    />
+                    <Field name="resourceTitle" label={t('forms:resourceTitle')} component={TextField} />
                     <Field
                         name="resourceType"
                         label={t('forms:resourceType')}
-                        placeholder={t('forms:resourceType')}
                         dataKey="resourceTypes"
                         document={ResourceTypesDocument}
-                        variant="outlined"
                         component={AutoCompleteField}
-                        fullWidth
                     />
                     <Field
                         name="school"
-                        label={t('forms:school')}
-                        placeholder={t('forms:school')}
+                        label={t('forms:schoolOptional')}
                         dataKey="schools"
                         document={SchoolsDocument}
-                        variant="outlined"
                         component={AutoCompleteField}
-                        fullWidth
+                        helperText={
+                            <>
+                                {t('upload-resource:schoolHelperText')}{' '}
+                                <TextLink href={urls.createCourse}>{t('upload-resource:schoolHelperLink')}</TextLink>
+                            </>
+                        }
                     />
                     <Field
                         name="course"
                         label={t('forms:course')}
-                        placeholder={t('forms:course')}
                         dataKey="courses"
                         document={CoursesDocument}
-                        variant="outlined"
                         component={AutoCompleteField}
                         variables={{ school: R.pathOr(undefined, ['values', 'school', 'id'], props) }} // Filter courses based on selected school.
-                        fullWidth
+                        helperText={
+                            <>
+                                {t('upload-resource:courseHelperText')}{' '}
+                                <TextLink href={urls.createCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
+                            </>
+                        }
                     />
-                    <Field name="file" component={DropzoneField} />
+                    <Field name="file" component={FileField} />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}
@@ -202,12 +198,10 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
     const layoutProps = {
         seoProps,
+        header: t('upload-resource:header'),
         topNavbarProps: {
-            header: t('upload-resource:header'),
             dynamicBackUrl: true,
         },
-        desktopHeader: t('upload-resource:header'),
-        renderCardContent,
     };
 
     if (loading || authLoading) {
@@ -220,7 +214,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         return <ErrorLayout seoProps={seoProps} />;
     }
 
-    return <FormLayout {...layoutProps} />;
+    return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

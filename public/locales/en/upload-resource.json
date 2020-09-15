@@ -5,6 +5,9 @@
     "fileUploadingText": "Uploading file...",
     "maxFileSize": "Maximum file size",
     "fileSelected": "{{ fileName }} selected.",
-    "dropzoneTextMobile": "Upload a file",
-    "dropzoneTextDesktop": "Drop files here or click to upload."
+    "uploadFileButtonText": "Upload a file",
+    "schoolHelperText": "Can't find your school?",
+    "schoolHelperLink": "Contact us and we'll add it!",
+    "courseHelperText": "Can't find your course?",
+    "courseHelperLink": "Try adding it!"
 }

@@ -5,6 +5,9 @@
     "fileUploadingText": "Laddar upp fil...",
     "maxFileSize": "Maximal filstorlek",
     "fileSelected": "{{ fileName }} vald.",
-    "dropzoneTextMobile": "Ladda upp fil",
-    "dropzoneTextDesktop": "Klicka här för att ladda upp filen"
+    "uploadFileButtonText": "Ladda upp fil",
+    "schoolHelperText": "Hittar du inte din skola?",
+    "schoolHelperLink": "Kontakta oss så lägger vi till det!",
+    "courseHelperText": "Hittar du inte din kurs?",
+    "courseHelperLink": "Försök att lägga till det!"
 }
