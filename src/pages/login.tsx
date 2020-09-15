@@ -85,6 +85,7 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const handleLoginWithDifferentCredentials = (): void => {
         localStorage.removeItem('user');
         setExistingUser(null);
+        resetForm();
     };
 
     const renderExistingUserGreeting = (
