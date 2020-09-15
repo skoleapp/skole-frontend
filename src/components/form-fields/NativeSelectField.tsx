@@ -2,7 +2,6 @@ import { FormControl, InputLabel, Select, SelectProps as MuiSelectProps } from '
 import { ErrorMessage, FieldAttributes, FieldProps, FormikProps } from 'formik';
 import { fieldToSelect } from 'formik-material-ui';
 import React from 'react';
-import styled from 'styled-components';
 
 import { FormErrorMessage } from './FormErrorMessage';
 
@@ -14,20 +13,13 @@ interface Props {
     label: string;
 }
 
+// We must use duplicate labels; One for telling the outlined field to leave space for the label and the other once for actually showing the label.
 export const NativeSelectField: React.FC<Props & SelectProps> = ({ children, label, ...props }) => (
-    <StyledNativeSelectField variant="outlined" fullWidth>
+    <FormControl>
         <InputLabel>{label}</InputLabel>
-        <Select {...fieldToSelect(props)} native>
+        <Select {...fieldToSelect(props)} label={label} native>
             {children}
         </Select>
         <ErrorMessage name={props.field.name} component={FormErrorMessage} />
-    </StyledNativeSelectField>
+    </FormControl>
 );
-
-const StyledNativeSelectField = styled(FormControl)`
-    .MuiFormLabel-root {
-        background-color: var(--white);
-        border-radius: 0.1rem;
-        padding: 0.05rem;
-    }
-`;

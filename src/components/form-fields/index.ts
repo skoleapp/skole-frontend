@@ -1,6 +1,7 @@
 export { AutoCompleteField } from './AutoCompleteField';
 export { AvatarField } from './AvatarField';
-export { DropzoneField } from './DropzoneField';
+export { FileField } from './FileField';
 export { NativeSelectField } from './NativeSelectField';
 export { FormErrorMessage } from './FormErrorMessage';
 export { FormSubmitSection } from './FormSubmitSection';
+export { PasswordField } from './PasswordField';

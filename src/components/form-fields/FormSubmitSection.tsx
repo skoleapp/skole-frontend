@@ -1,4 +1,4 @@
-import { Box, Button, ButtonProps, FormControl } from '@material-ui/core';
+import { Box, Button, ButtonProps, FormControl, Grid } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';
@@ -16,30 +16,34 @@ export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | '
     endIcon,
     variant,
     values,
-}) => (
-    <Box display="flex" flexDirection="column" alignItems="center">
-        {isSubmitting ? (
-            <FormControl fullWidth>
-                <LoadingBox text={(values as { general: string }).general} />
+}) => {
+    const renderTextContent = isSubmitting ? (
+        <LoadingBox text={(values as { general: string }).general} />
+    ) : (
+        <ErrorMessage name="general" component={FormErrorMessage} />
+    );
+
+    const renderSubmitButton = (
+        <Button
+            type="submit"
+            disabled={isSubmitting}
+            variant={variant || 'contained'}
+            endIcon={endIcon || <ArrowForwardOutlined />}
+            color="primary"
+            fullWidth
+        >
+            {submitButtonText}
+        </Button>
+    );
+
+    return (
+        <Grid container direction="column" alignItems="center">
+            <FormControl>
+                <Grid container justify="center">
+                    {renderTextContent}
+                </Grid>
             </FormControl>
-        ) : (
-            <FormControl fullWidth>
-                <Box display="flex" justifyContent="center">
-                    <ErrorMessage name="general" component={FormErrorMessage} />
-                </Box>
-            </FormControl>
-        )}
-        <FormControl fullWidth>
-            <Button
-                type="submit"
-                disabled={isSubmitting}
-                variant={variant || 'contained'}
-                endIcon={endIcon || <ArrowForwardOutlined />}
-                color="primary"
-                fullWidth
-            >
-                {submitButtonText}
-            </Button>
-        </FormControl>
-    </Box>
-);
+            <FormControl>{renderSubmitButton}</FormControl>
+        </Grid>
+    );
+};
