@@ -22,8 +22,13 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const onCompleted = async ({ logout }: BackendLogoutMutation): Promise<void> => {
         if (!!logout && logout.deleted) {
-            await apolloClient.resetStore();
-            localStorage.setItem('logout', String(Date.now()));
+            try {
+                await apolloClient.clearStore();
+            } catch (err) {
+                console.log(err);
+            } finally {
+                localStorage.setItem('logout', String(Date.now()));
+            }
         }
     };
 
