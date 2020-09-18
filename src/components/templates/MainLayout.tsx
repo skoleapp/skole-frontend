@@ -1,8 +1,9 @@
-import { Box, Container } from '@material-ui/core';
-import { useAuthContext, useDeviceContext } from 'context';
-import React from 'react';
-import styled from 'styled-components';
-import { breakpoints } from 'styles';
+import { Container, Grid, makeStyles } from '@material-ui/core';
+import { useAuthContext } from 'context';
+import { useMediaQueries } from 'hooks';
+import * as R from 'ramda';
+import React, { StyleHTMLAttributes } from 'react';
+import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { MainLayoutProps } from 'types';
 
 import {
@@ -17,23 +18,59 @@ import {
     TopNavbar,
 } from '..';
 
+const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
+    root: {
+        minHeight: '100vh',
+        backgroundColor: palette.secondary.main,
+    },
+    container: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '0 auto',
+        padding: 0,
+        [breakpoints.up('lg')]: {
+            padding: spacing(4),
+        },
+        [breakpoints.down('md')]: {
+            // marginBottom: BOTTOM_NAVBAR_HEIGHT,
+        },
+    },
+}));
+
 export const MainLayout: React.FC<MainLayoutProps> = ({
     seoProps,
     topNavbarProps,
+    containerProps,
     customTopNavbar,
     customBottomNavbar,
     disableBottomNavbar,
     disableFooter,
     children,
+    ...props
 }) => {
-    const isMobile = useDeviceContext();
+    const classes = useStyles();
+    const { isMobileOrTablet } = useMediaQueries();
     const { userMe } = useAuthContext();
-    const layoutProps = { disableBottomMargin: !userMe && !customBottomNavbar };
     const renderHead = <Head {...seoProps} />;
-    const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
-    const renderChildren = <Container>{children}</Container>;
-    const renderBottomNavbar = customBottomNavbar || (!!userMe && !disableBottomNavbar && <BottomNavbar />);
-    const renderFooter = !isMobile && !disableFooter && <Footer />;
+    const renderTopNavbar = (isMobileOrTablet && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
+    const containerPropsStyle: StyleHTMLAttributes<HTMLStyleElement> = R.propOr({}, 'style', containerProps);
+
+    const containerStyle = {
+        ...containerPropsStyle,
+        marginBottom: disableBottomNavbar || !isMobileOrTablet ? 0 : BOTTOM_NAVBAR_HEIGHT,
+    };
+
+    const renderChildren = (
+        <Container className={classes.container} {...containerProps} style={containerStyle}>
+            {children}
+        </Container>
+    );
+
+    const renderBottomNavbar =
+        isMobileOrTablet && (customBottomNavbar || (!!userMe && !disableBottomNavbar && <BottomNavbar />));
+
+    const renderFooter = !isMobileOrTablet && !disableFooter && <Footer />;
     const renderNotifications = <Notifications />;
     const renderAttachmentViewer = <AttachmentViewer />;
     const renderCommentThreadModal = <CommentThreadModal />;
@@ -41,7 +78,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     const renderLanguageSelectorModal = <LanguageSelectorModal />;
 
     return (
-        <StyledMainLayout {...layoutProps}>
+        <Grid container direction="column" className={classes.root} {...props}>
             {renderHead}
             {renderTopNavbar}
             {renderChildren}
@@ -52,33 +89,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
             {renderCommentThreadModal}
             {renderSettingsModal}
             {renderLanguageSelectorModal}
-        </StyledMainLayout>
+        </Grid>
     );
 };
-
-// Ignore: disableBottomMargin and customBottomNavbar must be omitted from Box props.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledMainLayout = styled(({ disableBottomMargin, customBottomNavbar, ...other }) => <Box {...other} />)`
-    background-color: var(--secondary);
-    text-align: center;
-    min-height: 100vh;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-
-    .MuiContainer-root {
-        padding: 0;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-
-        @media only screen and (min-width: ${breakpoints.MD}) {
-            padding: 1rem;
-        }
-
-        @media only screen and (max-width: ${breakpoints.MD}) {
-            margin-bottom: ${({ disableBottomMargin }): string =>
-                !disableBottomMargin ? 'calc(var(--safe-area-inset-bottom) + 3rem)' : 'initial'};
-        }
-    }
-`;

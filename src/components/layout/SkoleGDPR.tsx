@@ -7,23 +7,50 @@ import {
     DialogContentText,
     DialogTitle,
     Grid,
+    makeStyles,
     Typography,
 } from '@material-ui/core';
 import { CheckOutlined } from '@material-ui/icons';
 import cookie from 'cookie';
+import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import { useEffect, useState } from 'react';
 import React from 'react';
-import styled from 'styled-components';
-import { breakpoints } from 'styles';
+import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { urls } from 'utils';
 
 import { TextLink } from '..';
+import { Transition } from '../shared';
 
+const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
+    root: {
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
+        color: palette.common.white,
+        padding: spacing(2),
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        textAlign: 'left',
+        [breakpoints.up('md')]: {
+            bottom: BOTTOM_NAVBAR_HEIGHT,
+        },
+    },
+    button: {
+        whiteSpace: 'nowrap',
+        margin: spacing(1),
+        [breakpoints.up('sm')]: {
+            width: 'auto',
+        },
+    },
+}));
+
+// TODO: Revise this before use, currently this component is not used.
 export const SkoleGDPR: React.FC = () => {
+    const classes = useStyles();
     const [consent, setConsent] = useState(true);
     const [privacyPreferencesOpen, setPrivacyPreferencesOpen] = useState(false);
     const { t } = useTranslation();
+    const { isMobileOrTablet, isDesktop } = useMediaQueries();
 
     useEffect(() => {
         const skoleGDPRConsent = cookie.parse(document.cookie).skole_gdpr_consent;
@@ -55,10 +82,16 @@ export const SkoleGDPR: React.FC = () => {
                 {t('gdpr:warningDesc')}
             </Grid>
             <Grid item container xs={12} md={4} justify="space-evenly" alignItems="center">
-                <Button onClick={openPrivacyPreferences} color="secondary" fullWidth>
+                <Button className={classes.button} onClick={openPrivacyPreferences} color="secondary" fullWidth>
                     {t('gdpr:privacyPreferences')}
                 </Button>
-                <Button onClick={handleConsent} endIcon={<CheckOutlined />} variant="contained" fullWidth>
+                <Button
+                    className={classes.button}
+                    onClick={handleConsent}
+                    endIcon={<CheckOutlined />}
+                    variant="contained"
+                    fullWidth
+                >
                     {t('common:confirm')}
                 </Button>
             </Grid>
@@ -66,7 +99,13 @@ export const SkoleGDPR: React.FC = () => {
     );
 
     const renderPrivacyPreferences = (
-        <Dialog open={privacyPreferencesOpen} onClose={closePrivacyPreferences}>
+        <Dialog
+            open={privacyPreferencesOpen}
+            onClose={closePrivacyPreferences}
+            fullScreen={isMobileOrTablet}
+            fullWidth={isDesktop}
+            TransitionComponent={Transition}
+        >
             <DialogTitle>Privacy Preferences</DialogTitle>
             <DialogContent>
                 <Box textAlign="left">
@@ -110,32 +149,9 @@ export const SkoleGDPR: React.FC = () => {
     );
 
     return !consent ? (
-        <StyledSkoleGDPR>
+        <Box className={classes.root}>
             {renderWarning}
             {renderPrivacyPreferences}
-        </StyledSkoleGDPR>
+        </Box>
     ) : null;
 };
-
-const StyledSkoleGDPR = styled(Box)`
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    color: var(--white);
-    padding: 0.5rem;
-    background-color: var(--opacity-dark);
-    text-align: left;
-
-    @media only screen and (max-width: ${breakpoints.SM}) {
-        bottom: 3rem;
-    }
-
-    .MuiButton-root {
-        white-space: nowrap;
-        margin: 0.25rem;
-
-        @media only screen and (min-width: ${breakpoints.SM}) {
-            width: auto;
-        }
-    }
-`;

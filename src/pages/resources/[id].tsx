@@ -1,5 +1,6 @@
 import {
     BottomNavigation,
+    Box,
     Drawer,
     Grid,
     List,
@@ -49,16 +50,15 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT } from 'styles';
+import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 
 const useStyles = makeStyles({
     mobileContainer: {
-        position: 'absolute',
-        width: '100%',
-        bottom: BOTTOM_NAVBAR_HEIGHT,
-        top: '3rem',
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
     },
     desktopContainer: {
         flexGrow: 1,
@@ -347,10 +347,12 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
                 <Tab label={t('common:resource')} />
                 <Tab label={`${t('common:discussion')} (${commentCount})`} />
             </Tabs>
-            <SwipeableViews disabled={swipingDisabled} index={tabValue} onChangeIndex={handleIndexChange}>
-                {renderPDFViewer}
-                {renderDiscussion}
-            </SwipeableViews>
+            <Box flexGrow="1" position="relative">
+                <SwipeableViews disabled={swipingDisabled} index={tabValue} onChangeIndex={handleIndexChange}>
+                    {renderPDFViewer}
+                    {renderDiscussion}
+                </SwipeableViews>
+            </Box>
         </Paper>
     );
 
@@ -409,10 +411,10 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
 
     const renderActions = (
         <List>
-            {renderReportAction}
             {renderDeleteAction}
             {renderDownloadAction}
             {renderPrintAction}
+            {renderReportAction}
         </List>
     );
 

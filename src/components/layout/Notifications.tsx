@@ -1,12 +1,20 @@
-import { IconButton, Snackbar, SnackbarOrigin } from '@material-ui/core';
+import { IconButton, makeStyles, Snackbar, SnackbarOrigin } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
 import Router from 'next/router';
 import React, { SyntheticEvent } from 'react';
-import styled from 'styled-components';
-import { breakpoints } from 'styles';
+import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
+
+const useStyles = makeStyles(({ breakpoints }) => ({
+    root: {
+        [breakpoints.down('sm')]: {
+            marginBottom: BOTTOM_NAVBAR_HEIGHT, // Prevent showing notifications on top of bottom navbar.
+        },
+    },
+}));
 
 export const Notifications: React.FC = () => {
+    const classes = useStyles();
     const { notification, toggleNotification } = useNotificationsContext();
     Router.events.on('routeChangeComplete', () => toggleNotification(null));
 
@@ -34,7 +42,8 @@ export const Notifications: React.FC = () => {
     ];
 
     return (
-        <StyledNotification
+        <Snackbar
+            className={classes.root}
             anchorOrigin={anchorOrigin}
             open={!!notification}
             autoHideDuration={2000}
@@ -45,9 +54,3 @@ export const Notifications: React.FC = () => {
         />
     );
 };
-
-const StyledNotification = styled(Snackbar)`
-    @media only screen and (max-width: ${breakpoints.SM}) {
-        margin-bottom: 3rem;
-    }
-`;

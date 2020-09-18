@@ -17,7 +17,7 @@ import { useLanguageSelector, useSearch, useShare } from 'hooks';
 import { includeDefaultNamespaces, Link, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import { BORDER_RADIUS } from 'styles';
+import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
 import { UrlObject } from 'url';
 import { HOME_PAGE_SHORTCUTS } from 'utils';

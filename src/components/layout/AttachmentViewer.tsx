@@ -2,7 +2,7 @@ import { Backdrop, Grid, IconButton, makeStyles, Typography } from '@material-ui
 import { CloseOutlined } from '@material-ui/icons';
 import { useDiscussionContext } from 'context';
 import React from 'react';
-import { TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
+import { TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { mediaURL } from 'utils';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
