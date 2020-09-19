@@ -2595,6 +2595,10 @@ export type StarredLazyQueryHookResult = ReturnType<typeof useStarredLazyQuery>;
 export type StarredQueryResult = Apollo.QueryResult<StarredQuery, StarredQueryVariables>;
 export const UserDetailDocument = gql`
     query UserDetail($id: ID) {
+        resourceTypes {
+            id
+            name
+        }
         user(id: $id) {
             id
             username
