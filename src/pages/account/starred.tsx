@@ -109,15 +109,13 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
+    if (
+        (!!error && !!error.networkError) ||
+        (!!resourceTypeError && !!resourceTypeError.networkError) ||
+        authNetworkError
+    ) {
         return <OfflineLayout seoProps={seoProps} />;
-    } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
-    }
-
-    if ((!!resourceTypeError && !!resourceTypeError.networkError) || authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    } else if (!!resourceTypeError) {
+    } else if (!!error || !!resourceTypeError) {
         return <ErrorLayout seoProps={seoProps} />;
     }
 
