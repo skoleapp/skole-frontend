@@ -134,7 +134,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
 
     const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
         if (!!deleteComment) {
-            if (!!deleteComment.errors) {
+            if (!!deleteComment.errors && !!deleteComment.errors.length) {
                 deleteCommentError();
             } else if (!!deleteComment.message) {
                 removeComment(comment.id);

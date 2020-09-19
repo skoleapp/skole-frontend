@@ -47,7 +47,7 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const onEmailFormCompleted = ({ resendVerificationEmail }: ResendVerificationEmailMutation): void => {
         if (!!resendVerificationEmail) {
-            if (!!resendVerificationEmail.errors) {
+            if (!!resendVerificationEmail.errors && !!resendVerificationEmail.errors.length) {
                 handleEmailFormMutationErrors(resendVerificationEmail.errors);
             } else if (!!resendVerificationEmail.message) {
                 resetEmailForm();
@@ -63,7 +63,7 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
         if (!!verifyAccount) {
-            if (!!verifyAccount.errors) {
+            if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
                 handleConfirmationFormMutationErrors(verifyAccount.errors);
             } else if (!!verifyAccount.message) {
                 resetConfirmationForm();

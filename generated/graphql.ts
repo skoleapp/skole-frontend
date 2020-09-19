@@ -148,8 +148,8 @@ export type CourseObjectType = {
   user?: Maybe<UserObjectType>;
   modified: Scalars['DateTime'];
   created: Scalars['DateTime'];
-  resources: Array<ResourceObjectType>;
   comments: Array<CommentObjectType>;
+  resources: Array<ResourceObjectType>;
   starred?: Maybe<Scalars['Boolean']>;
   score?: Maybe<Scalars['Int']>;
   vote?: Maybe<VoteObjectType>;
@@ -190,6 +190,22 @@ export type CountryObjectType = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type CommentObjectType = {
+  __typename?: 'CommentObjectType';
+  id: Scalars['ID'];
+  user?: Maybe<UserObjectType>;
+  text: Scalars['String'];
+  attachment: Scalars['String'];
+  course?: Maybe<CourseObjectType>;
+  resource?: Maybe<ResourceObjectType>;
+  comment?: Maybe<CommentObjectType>;
+  modified: Scalars['DateTime'];
+  created: Scalars['DateTime'];
+  replyComments: Array<CommentObjectType>;
+  score?: Maybe<Scalars['Int']>;
+  vote?: Maybe<VoteObjectType>;
+};
+
 export type ResourceObjectType = {
   __typename?: 'ResourceObjectType';
   id: Scalars['ID'];
@@ -209,22 +225,6 @@ export type ResourceObjectType = {
   school?: Maybe<SchoolObjectType>;
 };
 
-
-export type CommentObjectType = {
-  __typename?: 'CommentObjectType';
-  id: Scalars['ID'];
-  user?: Maybe<UserObjectType>;
-  text: Scalars['String'];
-  attachment: Scalars['String'];
-  course?: Maybe<CourseObjectType>;
-  resource?: Maybe<ResourceObjectType>;
-  comment?: Maybe<CommentObjectType>;
-  modified: Scalars['DateTime'];
-  created: Scalars['DateTime'];
-  replyComments: Array<CommentObjectType>;
-  score?: Maybe<Scalars['Int']>;
-  vote?: Maybe<VoteObjectType>;
-};
 
 export type VoteObjectType = {
   __typename?: 'VoteObjectType';
@@ -496,7 +496,6 @@ export type RegisterMutationInput = {
   username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
-  code: Scalars['String'];
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -670,7 +669,7 @@ export type CreateResourceMutationPayload = {
 
 export type CreateResourceMutationInput = {
   title: Scalars['String'];
-  file?: Maybe<Scalars['String']>;
+  file: Scalars['String'];
   resourceType: Scalars['ID'];
   course: Scalars['ID'];
   date?: Maybe<Scalars['Date']>;
@@ -813,14 +812,13 @@ export type MarkActivityReadMutationInput = {
 export type MarkAllActivitiesReadMutation = {
   __typename?: 'MarkAllActivitiesReadMutation';
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  activity?: Maybe<Array<Maybe<ActivityObjectType>>>;
+  activities?: Maybe<Array<Maybe<ActivityObjectType>>>;
 };
 
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
-  code: Scalars['String'];
 }>;
 
 
@@ -1245,7 +1243,7 @@ export type MarkAllActivitiesAsReadMutation = (
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
-    )>>>, activity?: Maybe<Array<Maybe<(
+    )>>>, activities?: Maybe<Array<Maybe<(
       { __typename?: 'ActivityObjectType' }
       & Pick<ActivityObjectType, 'id' | 'description' | 'read'>
       & { targetUser?: Maybe<(
@@ -1615,8 +1613,8 @@ export type SubjectsQuery = (
 
 
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $email: String!, $password: String!, $code: String!) {
-  register(input: {username: $username, email: $email, password: $password, code: $code}) {
+    mutation Register($username: String!, $email: String!, $password: String!) {
+  register(input: {username: $username, email: $email, password: $password}) {
     errors {
       field
       messages
@@ -1652,7 +1650,6 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  *      username: // value for 'username'
  *      email: // value for 'email'
  *      password: // value for 'password'
- *      code: // value for 'code'
  *   },
  * });
  */
@@ -2447,7 +2444,7 @@ export const MarkAllActivitiesAsReadDocument = gql`
       field
       messages
     }
-    activity {
+    activities {
       id
       description
       read

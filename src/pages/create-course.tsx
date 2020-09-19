@@ -58,7 +58,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
 
     const onCompleted = async ({ createCourse }: CreateCourseMutation): Promise<void> => {
         if (!!createCourse) {
-            if (!!createCourse.errors) {
+            if (!!createCourse.errors && !!createCourse.errors.length) {
                 handleMutationErrors(createCourse.errors);
             } else if (!!createCourse.course && !!createCourse.message) {
                 resetForm();

@@ -136,9 +136,9 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     });
 
     const onRegisterCompleted = async ({ register, login }: RegisterMutation): Promise<void> => {
-        if (!!register && !!register.errors) {
+        if (!!register && !!register.errors && !!register.errors.length) {
             handleRegisterMutationErrors(register.errors);
-        } else if (!!login && !!login.errors) {
+        } else if (!!login && !!login.errors && !!login.errors.length) {
             handleRegisterMutationErrors(login.errors);
         } else if (!!login && !!login.user && !!register) {
             try {

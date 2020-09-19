@@ -32,7 +32,7 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
 
     const onCompleted = async ({ deleteUser }: DeleteAccountMutation): Promise<void> => {
         if (!!deleteUser) {
-            if (!!deleteUser.errors) {
+            if (!!deleteUser.errors && !!deleteUser.errors.length) {
                 handleMutationErrors(deleteUser.errors);
             } else if (!!deleteUser.message) {
                 resetForm();

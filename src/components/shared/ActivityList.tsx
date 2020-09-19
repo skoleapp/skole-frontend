@@ -61,7 +61,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
 
     const onCompleted = ({ markActivityRead }: MarkSingleActivityReadMutation): void => {
         if (!!markActivityRead) {
-            if (!!markActivityRead.errors) {
+            if (!!markActivityRead.errors && !!markActivityRead.errors.length) {
                 onError();
             } else if (!!markActivityRead.activity) {
                 const { activity: updatedActivityItem } = markActivityRead;

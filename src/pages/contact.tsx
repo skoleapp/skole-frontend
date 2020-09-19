@@ -44,7 +44,7 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
 
     const onCompleted = ({ createContactMessage }: ContactMutation): void => {
         if (!!createContactMessage) {
-            if (!!createContactMessage.errors) {
+            if (!!createContactMessage.errors && !!createContactMessage.errors.length) {
                 handleMutationErrors(createContactMessage.errors);
             } else if (!!createContactMessage.message) {
                 resetForm();

@@ -66,7 +66,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
     const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {
         if (!!createResource) {
-            if (!!createResource.errors) {
+            if (!!createResource.errors && !!createResource.errors.length) {
                 handleMutationErrors(createResource.errors);
             } else if (!!createResource.resource && !!createResource.resource.id && !!createResource.message) {
                 resetForm();

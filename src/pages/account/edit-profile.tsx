@@ -39,7 +39,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
 
     const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
         if (!!updateUser) {
-            if (!!updateUser.errors) {
+            if (!!updateUser.errors && !!updateUser.errors.length) {
                 handleMutationErrors(updateUser.errors);
             } else if (!!updateUser.message) {
                 toggleNotification(updateUser.message);

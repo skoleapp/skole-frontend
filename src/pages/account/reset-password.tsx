@@ -81,7 +81,7 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const onEmailFormCompleted = ({ sendPasswordResetEmail }: SendPasswordResetEmailMutation): void => {
         if (!!sendPasswordResetEmail) {
-            if (sendPasswordResetEmail.errors) {
+            if (sendPasswordResetEmail.errors && !!sendPasswordResetEmail.errors.length) {
                 handleEmailFormMutationErrors(sendPasswordResetEmail.errors);
             } else if (sendPasswordResetEmail.message) {
                 resetEmailForm();
@@ -95,7 +95,7 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const onPasswordFormCompleted = ({ resetPassword }: ResetPasswordMutation): void => {
         if (!!resetPassword) {
-            if (!!resetPassword.errors) {
+            if (!!resetPassword.errors && !!resetPassword.errors.length) {
                 handlePasswordFormMutationErrors(resetPassword.errors);
             } else if (!!resetPassword.message) {
                 resetPasswordForm();

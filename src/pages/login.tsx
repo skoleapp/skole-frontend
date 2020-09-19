@@ -59,7 +59,7 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
         if (!!login) {
-            if (!!login.errors) {
+            if (!!login.errors && !!login.errors.length) {
                 handleMutationErrors(login.errors);
             } else if (!!login.message) {
                 const { next } = query;

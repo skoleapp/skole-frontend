@@ -43,7 +43,7 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
     const onCompleted = async ({ changePassword }: ChangePasswordMutation): Promise<void> => {
         if (!!changePassword) {
-            if (!!changePassword.errors) {
+            if (!!changePassword.errors && !!changePassword.errors.length) {
                 handleMutationErrors(changePassword.errors);
             } else if (!!changePassword.message) {
                 resetForm();
