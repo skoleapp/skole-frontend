@@ -40,7 +40,9 @@ interface Props {
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const { t } = useTranslation();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
-    const created = useDayjs(comment.created).format('LLL');
+    const created = useDayjs(comment.created)
+        .startOf('m')
+        .fromNow();
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const confirm = useConfirm();
     const attachmentOnly = comment.text == '' && comment.attachment !== '';
