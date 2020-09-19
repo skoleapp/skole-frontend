@@ -40,10 +40,11 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const layoutProps = {
         seoProps,
         header: t('logout:header'),
+        disableBottomNavbar: true,
         topNavbarProps: {
             disableAuthButtons: true,
+            disableSearch: true,
         },
-        disableBottomNavbar: true,
     };
 
     if (authLoading || loading) {

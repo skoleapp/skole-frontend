@@ -20,6 +20,7 @@ const ConfirmLogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         header: t('logout:header'),
         topNavbarProps: {
             disableAuthButtons: true,
+            disableSearch: true,
         },
     };
 

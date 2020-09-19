@@ -156,14 +156,13 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const [registerMutation] = useRegisterMutation({ onCompleted: onRegisterCompleted, onError: onRegisterError });
 
     const handleRegisterSubmit = async (values: RegisterFormValues): Promise<void> => {
-        const { username, email, password, code } = values;
+        const { username, email, password } = values;
 
         await registerMutation({
             variables: {
                 username,
                 email,
                 password,
-                code,
             },
         });
 
@@ -223,10 +222,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <PasswordField label={t('forms:confirmPassword')} name="confirmPassword" {...props} />
     );
 
-    const renderBetaCodeField = (
-        <Field label={t('forms:betaCode')} name="code" component={TextField} disabled={!!query.code} />
-    );
-
     const renderTermsLink = (
         <FormControl>
             <FormHelperText>
@@ -256,7 +251,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             {renderPasswordField(props)}
             {renderConfirmPasswordField(props)}
             {renderConfirmPasswordField}
-            {renderBetaCodeField}
             {renderTermsLink}
             {renderRegisterFormSubmitSection(props)}
             {renderLoginLink}
@@ -359,11 +353,12 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const layoutProps = {
         seoProps,
         header: getHeader(),
+        disableBottomNavbar: true,
         topNavbarProps: {
             headerRight: renderLanguageButton,
             disableAuthButtons: true,
+            disableSearch: true,
         },
-        disableBottomNavbar: true,
     };
 
     if (authLoading) {

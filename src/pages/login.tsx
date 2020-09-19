@@ -171,11 +171,12 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const layoutProps = {
         seoProps,
         header: t('login:header'),
+        disableBottomNavbar: true,
         topNavbarProps: {
             headerRight: renderLanguageButton,
             disableAuthButtons: true,
+            disableSearch: true,
         },
-        disableBottomNavbar: true,
     };
 
     if (authLoading) {
