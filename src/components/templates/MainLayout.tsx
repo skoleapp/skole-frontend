@@ -46,7 +46,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
         paddingRight: 0,
         paddingBottom: 0,
         paddingTop: TOP_NAVBAR_HEIGHT_MOBILE,
-        [breakpoints.up('md')]: {
+        [breakpoints.up('lg')]: {
             paddingTop: TOP_NAVBAR_HEIGHT_DESKTOP,
         },
     },

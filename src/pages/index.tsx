@@ -32,6 +32,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         textAlign: 'center',
         paddingBottom: spacing(16),
         position: 'relative',
+        [breakpoints.up('md')]: {
+            minHeight: '20rem',
+        },
     },
     form: {
         position: 'relative',
@@ -106,7 +109,7 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { renderLanguageButton } = useLanguageSelector();
 
     const renderSearch = (
-        <Box className={classes.searchContainer}>
+        <Grid container direction="column" justify="center" className={classes.searchContainer}>
             <Box className="main-background" />
             <Typography className={classes.slogan} variant="h1" gutterBottom>
                 {t('common:slogan')}
@@ -121,7 +124,7 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
                     </Button>
                 </Box>
             </form>
-        </Box>
+        </Grid>
     );
 
     const renderShortcuts = (
