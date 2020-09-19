@@ -162,7 +162,6 @@ query CourseDetail($id: ID) {
         created
         score
         starred
-        resourceType
         vote {
             id
             status
@@ -184,6 +183,7 @@ query CourseDetail($id: ID) {
             title
             score
             date
+            resourceType
         }
         comments {
             id
