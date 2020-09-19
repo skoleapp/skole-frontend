@@ -23,6 +23,7 @@ export const useSearch = (): UseSearch => {
     const { userMe } = useAuthContext();
     const placeholder = t('forms:searchCourses');
     const autoComplete = 'off';
+    const fullWidth = true;
 
     // Construct a query from user's selected school and subject.
     const school = R.pathOr(undefined, ['school', 'id'], userMe);
@@ -38,5 +39,5 @@ export const useSearch = (): UseSearch => {
 
     const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
 
-    return { handleSubmit, searchUrl, inputProps: { value, onChange, placeholder, autoComplete } };
+    return { handleSubmit, searchUrl, inputProps: { value, onChange, placeholder, autoComplete, fullWidth } };
 };

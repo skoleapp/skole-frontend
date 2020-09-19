@@ -1,115 +1,116 @@
-import { Box, CardContent, CardHeader, Grid } from '@material-ui/core';
-import { useDeviceContext } from 'context';
-import { useSettings } from 'hooks';
+import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
+import clsx from 'clsx';
+import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
-import * as R from 'ramda';
 import React from 'react';
-import styled from 'styled-components';
-import { MainLayoutProps } from 'types';
+import { MainLayoutProps, TopNavbarProps } from 'types';
 
-import { SettingsButton, StyledCard } from '..';
+import { SettingsButton } from '..';
 import { MainLayout } from './MainLayout';
 
-interface Props extends Omit<MainLayoutProps, 'children'> {
-    renderCardContent?: JSX.Element | JSX.Element[];
-    renderDesktopHeaderRight?: JSX.Element;
-    desktopHeader?: string;
-    formLayout?: boolean;
-    infoLayout?: boolean;
-    fullSize?: boolean;
+const useStyles = makeStyles(({ breakpoints }) => ({
+    root: {
+        flexGrow: 1,
+        display: 'flex',
+        width: '100%',
+        [breakpoints.down('lg')]: {
+            margin: 0,
+        },
+    },
+    container: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    disablePadding: {
+        padding: '0 !important',
+    },
+}));
+
+interface Props extends Omit<MainLayoutProps, 'topNavbarProps'> {
+    topNavbarProps: Omit<TopNavbarProps, 'header' | 'headerRight'>;
+    header: string;
+    headerRight?: JSX.Element;
+    dense?: boolean; // Show tighter content on the right card, e.g. forms.
+    disablePadding?: boolean; // Disable padding on the card content.
 }
 
 export const SettingsLayout: React.FC<Props> = ({
     topNavbarProps,
-    renderCardContent,
-    renderDesktopHeaderRight,
-    desktopHeader,
-    formLayout,
-    infoLayout,
-    fullSize,
+    header,
+    headerRight,
+    dense,
+    disablePadding,
     children,
     ...props
 }) => {
+    const classes = useStyles();
     const { renderSettingsMenuList } = useSettings(false);
     const { t } = useTranslation();
-    const isMobile = useDeviceContext();
+    const { isMobileOrTablet } = useMediaQueries();
 
-    const customColSpan = {
+    const denseColSpan = {
+        xs: 12,
         sm: 8,
         md: 6,
-        lg: 5,
+        lg: 4,
     };
 
-    const layoutProps = formLayout || infoLayout ? customColSpan : {};
-    const renderHeaderRight = <SettingsButton color="secondary" />;
-    const headerRight: JSX.Element = R.propOr(renderHeaderRight, 'headerRight', topNavbarProps);
+    const colSpan = dense ? denseColSpan : {};
+
+    const renderSettingsButton = isMobileOrTablet ? <SettingsButton color="secondary" /> : undefined;
+    const renderHeaderRight = headerRight || renderSettingsButton;
 
     const customTopNavbarProps = {
         ...topNavbarProps,
-        headerRight,
+        header,
+        headerRight: renderHeaderRight,
     };
 
-    const renderSettings = !isMobile && (
-        <Grid item xs={12} md={4} lg={3}>
-            <StyledCard>
-                <CardHeader className="border-bottom" title={t('common:settings')} />
-                <CardContent>{renderSettingsMenuList}</CardContent>
-            </StyledCard>
+    const renderSettingsHeader = <CardHeader title={t('common:settings')} />;
+
+    const renderSettingsCard = !isMobileOrTablet && (
+        <Grid item xs={12} lg={3} className={classes.container}>
+            <Paper className={clsx('paper-container', classes.container)}>
+                {renderSettingsHeader}
+                {renderSettingsMenuList}
+            </Paper>
         </Grid>
     );
 
-    const renderCardHeader = !isMobile && (
-        <CardHeader className="border-bottom" title={desktopHeader} action={renderDesktopHeaderRight} />
-    );
-
-    const renderCardContentSection = (
-        <Grid container justify="center">
-            <Grid item container direction="column" xs={12} {...layoutProps}>
-                <CardContent className="container">{renderCardContent}</CardContent>
-            </Grid>
-        </Grid>
-    );
+    const renderHeader = !isMobileOrTablet && <CardHeader title={header} action={renderHeaderRight} />;
 
     const renderContent = (
-        <Grid item xs={12} md={8} lg={9} container>
-            <StyledCard marginLeft>
-                {renderCardHeader}
-                {renderCardContentSection}
-            </StyledCard>
+        <CardContent className={clsx(classes.container, disablePadding && classes.disablePadding)}>
+            <Grid container alignItems="center" className={classes.container}>
+                <Grid item container direction="column" xs={12} {...colSpan}>
+                    {children}
+                </Grid>
+            </Grid>
+        </CardContent>
+    );
+
+    const renderContentCard = (
+        <Grid
+            item
+            xs={12}
+            lg={9}
+            container
+            className={clsx(classes.container, isMobileOrTablet && classes.disablePadding)}
+        >
+            <Paper className={clsx('paper-container', classes.container)}>
+                {renderHeader}
+                {renderContent}
+            </Paper>
         </Grid>
     );
 
     return (
         <MainLayout {...props} topNavbarProps={customTopNavbarProps}>
-            <StyledSettingsLayout fullSize={fullSize}>
-                <Grid container>
-                    {renderSettings}
-                    {renderContent}
-                    {children}
-                </Grid>
-            </StyledSettingsLayout>
+            <Grid container spacing={2} className={classes.root}>
+                {renderSettingsCard}
+                {renderContentCard}
+            </Grid>
         </MainLayout>
     );
 };
-
-// Ignore: fullSize must be omitted from Box props.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledSettingsLayout = styled(({ fullSize, ...other }) => <Box {...other} />)`
-    flex-grow: 1;
-    display: flex;
-
-    .MuiGrid-root,
-    .container {
-        flex-grow: 1;
-        display: flex;
-        padding: ${({ fullSize }): string => fullSize && '0 !important'};
-
-        form {
-            width: 100%;
-        }
-    }
-
-    .container {
-        flex-direction: column;
-    }
-`;

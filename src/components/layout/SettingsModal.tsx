@@ -1,20 +1,28 @@
-import { useDrawer, useSettings } from 'hooks';
+import { Dialog } from '@material-ui/core';
+import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-import { ModalHeader, StyledDrawer } from '..';
+import { ModalHeader } from '..';
+import { Transition } from '../shared';
 
 export const SettingsModal: React.FC = () => {
     const { t } = useTranslation();
+    const { isMobileOrTablet, isDesktop } = useMediaQueries();
     const { renderSettingsMenuList, settingsOpen, toggleSettings } = useSettings(true);
-    const { anchor } = useDrawer(t('common:settings'));
     const handleClose = (): void => toggleSettings(false);
     const renderModalHeader = <ModalHeader onCancel={handleClose} text={t('common:settings')} />;
 
     return (
-        <StyledDrawer fullHeight open={settingsOpen} anchor={anchor} onClose={handleClose}>
+        <Dialog
+            fullScreen={isMobileOrTablet}
+            fullWidth={isDesktop}
+            open={settingsOpen}
+            onClose={handleClose}
+            TransitionComponent={Transition}
+        >
             {renderModalHeader}
             {renderSettingsMenuList}
-        </StyledDrawer>
+        </Dialog>
     );
 };

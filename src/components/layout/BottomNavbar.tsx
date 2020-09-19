@@ -1,17 +1,16 @@
-import { Avatar, BottomNavigationAction } from '@material-ui/core';
+import { Avatar, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { CloudUploadOutlined, HomeOutlined, NotificationsOutlined, SearchOutlined } from '@material-ui/icons';
 import { useAuthContext } from 'context';
 import { useSearch } from 'hooks';
-import { Link } from 'lib';
+import { Link, useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { UrlObject } from 'url';
 import { mediaURL, redirect, urls } from 'utils';
 
-import { StyledBottomNavigation } from '..';
-
 export const BottomNavbar: React.FC = () => {
+    const { t } = useTranslation();
     const { userMe } = useAuthContext();
     const userMeId = R.propOr('', 'id', userMe);
     const avatarThumb = R.propOr('', 'avatar', userMe) as string;
@@ -58,34 +57,56 @@ export const BottomNavbar: React.FC = () => {
     );
 
     const renderHomeAction = (
-        <BottomNavigationAction value={1} onClick={handleRedirect(urls.home)} icon={<HomeOutlined />} />
+        <BottomNavigationAction
+            value={1}
+            label={t('common:home')}
+            showLabel
+            onClick={handleRedirect(urls.home)}
+            icon={<HomeOutlined />}
+        />
     );
 
     const renderSearchAction = (
-        <BottomNavigationAction value={2} onClick={handleRedirect(searchUrl)} icon={<SearchOutlined />} />
+        <BottomNavigationAction
+            value={2}
+            label={t('common:search')}
+            showLabel
+            onClick={handleRedirect(searchUrl)}
+            icon={<SearchOutlined />}
+        />
     );
 
     const renderUploadResourceAction = (
         <BottomNavigationAction
             value={3}
+            label={t('common:upload')}
+            showLabel
             onClick={handleRedirect(urls.uploadResource)}
             icon={<CloudUploadOutlined />}
         />
     );
 
     const renderActivityAction = (
-        <BottomNavigationAction value={4} onClick={handleRedirect(urls.activity)} icon={<NotificationsOutlined />} />
+        <BottomNavigationAction
+            value={4}
+            label={t('common:activity')}
+            showLabel
+            onClick={handleRedirect(urls.activity)}
+            icon={<NotificationsOutlined />}
+        />
     );
 
-    const renderProfileAction = <BottomNavigationAction value={5} icon={renderAvatar} />;
+    const renderProfileAction = (
+        <BottomNavigationAction value={5} label={t('common:profile')} showLabel icon={renderAvatar} />
+    );
 
     return (
-        <StyledBottomNavigation value={value} onChange={handleChange}>
+        <BottomNavigation value={value} onChange={handleChange}>
             {renderHomeAction}
             {renderSearchAction}
             {renderUploadResourceAction}
             {renderActivityAction}
             {renderProfileAction}
-        </StyledBottomNavigation>
+        </BottomNavigation>
     );
 };

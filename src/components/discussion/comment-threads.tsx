@@ -1,13 +1,12 @@
 import { Box, Button, Fab, Grid, makeStyles, Typography, useTheme } from '@material-ui/core';
 import { AddOutlined } from '@material-ui/icons';
-import clsx from 'clsx';
 import { useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
-import { BOTTOM_NAVBAR_HEIGHT } from 'styles';
+import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { TopLevelCommentThreadProps } from 'types';
 
 import { NotFoundBox } from '..';
@@ -20,30 +19,24 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
         top: 0,
         left: 0,
         right: 0,
-        bottom: `calc(env(safe-area-inset-bottom) + ${BOTTOM_NAVBAR_HEIGHT})`,
+        bottom: 0,
         flexWrap: 'nowrap',
-        [breakpoints.up('lg')]: {
-            bottom: 0,
-        },
-    },
-    replyRoot: {
-        bottom: `calc(env(safe-area-inset-bottom))`,
     },
     messageArea: {
         flexGrow: 1,
         overflowY: 'auto',
         flexWrap: 'nowrap',
     },
-    inputArea: {
-        // maxHeight: '10rem',
+    inputAreaContainer: {
         display: 'flex',
         [breakpoints.up('md')]: {
             padding: spacing(2),
         },
+        minHeight: '8rem',
     },
     createCommentButton: {
         position: 'absolute',
-        bottom: `calc(env(safe-area-inset-bottom) + ${spacing(4)})`,
+        bottom: `calc(${BOTTOM_NAVBAR_HEIGHT} + ${spacing(5)})`,
         left: 0,
         right: 0,
         marginLeft: 'auto',
@@ -55,7 +48,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
     comments: initialComments,
     target,
-    placeholderText,
+    noComments,
 }) => {
     const classes = useStyles();
     const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext(initialComments);
@@ -78,9 +71,7 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
         !!topLevelComments.length &&
         topLevelComments.map((c, i) => <CommentCard {...commentCardProps} key={i} comment={c} />);
 
-    const renderCommentsNotFound = !topLevelComments.length && !!placeholderText && (
-        <NotFoundBox text={placeholderText} />
-    );
+    const renderCommentsNotFound = !topLevelComments.length && !!noComments && <NotFoundBox text={noComments} />;
 
     const renderMessageArea = (
         <Grid container direction="column" className={classes.messageArea}>
@@ -89,8 +80,10 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
         </Grid>
     );
 
-    const renderInputArea = (
-        <Box className={classes.inputArea}>
+    const renderInputArea = isMobileOrTablet ? (
+        <CreateCommentForm {...createCommentFormProps} />
+    ) : (
+        <Box className={classes.inputAreaContainer}>
             <CreateCommentForm {...createCommentFormProps} />
         </Box>
     );
@@ -183,14 +176,16 @@ export const ReplyCommentThread: React.FC = () => {
         </Grid>
     );
 
-    const renderInputArea = (
-        <Box className={classes.inputArea}>
-            <CreateCommentForm {...createCommentFormProps} />
-        </Box>
+    const renderCreateCommentForm = <CreateCommentForm {...createCommentFormProps} />;
+
+    const renderInputArea = isMobileOrTablet ? (
+        renderCreateCommentForm
+    ) : (
+        <Box padding={spacing(2)}>{renderCreateCommentForm}</Box>
     );
 
     return (
-        <Grid container direction="column" className={clsx(classes.root, classes.replyRoot)}>
+        <Grid container direction="column" className={classes.root}>
             {renderMessageArea}
             {renderInputArea}
         </Grid>

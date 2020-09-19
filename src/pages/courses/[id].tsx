@@ -1,5 +1,6 @@
 import {
     BottomNavigation,
+    Box,
     CardHeader,
     Drawer,
     Grid,
@@ -62,16 +63,14 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { BOTTOM_NAVBAR_HEIGHT } from 'styles';
 import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
 
 const useStyles = makeStyles({
     mobileContainer: {
-        position: 'absolute',
-        width: '100%',
-        bottom: BOTTOM_NAVBAR_HEIGHT,
-        top: '3rem',
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
     },
     desktopContainer: {
         flexGrow: 1,
@@ -247,7 +246,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const commentThreadProps = {
         comments,
         target: { course: Number(courseId) },
-        placeholderText: t('course:noComments'),
+        noComments: t('course:noComments'),
     };
 
     const renderDiscussionHeader = (
@@ -291,6 +290,11 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
         titleRight: t('common:score'),
     };
 
+    const notFoundLinkProps = {
+        href: urls.createCourse,
+        text: t('course:noResourcesLink'),
+    };
+
     const renderResources = !!resources.length ? (
         <FrontendPaginatedTable
             tableHeadProps={resourceTableHeadProps}
@@ -298,7 +302,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
             paginationProps={resourcePaginationProps}
         />
     ) : (
-        <NotFoundBox text={t('course:noResources')} />
+        <NotFoundBox text={t('course:noResources')} linkProps={notFoundLinkProps} />
     );
 
     const renderUploadResourceButton = (
@@ -323,10 +327,12 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
                 <Tab label={`${t('common:resources')} (${resourceCount})`} />
                 <Tab label={`${t('common:discussion')} (${commentCount})`} />
             </Tabs>
-            <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-                {renderResources}
-                {renderDiscussion}
-            </SwipeableViews>
+            <Box flexGrow="1" position="relative">
+                <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+                    {renderResources}
+                    {renderDiscussion}
+                </SwipeableViews>
+            </Box>
         </Paper>
     );
 

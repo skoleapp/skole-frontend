@@ -132,7 +132,6 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
     const renderEmailFormContent = (props: FormikProps<EmailFormValues>): JSX.Element => (
         <Form>
             <Field
-                placeholder={t('forms:email')}
                 name="email"
                 component={TextField}
                 label={t('forms:email')}
@@ -161,15 +160,8 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const renderPasswordFormContent = (props: FormikProps<PasswordFormValues>): JSX.Element => (
         <Form>
+            <Field name="newPassword" component={TextField} label={t('forms:newPassword')} type="password" />
             <Field
-                placeholder={t('forms:newPassword')}
-                name="newPassword"
-                component={TextField}
-                label={t('forms:newPassword')}
-                type="password"
-            />
-            <Field
-                placeholder={t('forms:confirmNewPassword')}
                 name="confirmNewPassword"
                 component={TextField}
                 label={t('forms:confirmNewPassword')}

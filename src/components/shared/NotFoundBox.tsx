@@ -1,21 +1,51 @@
-import { Box, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { BlockOutlined } from '@material-ui/icons';
 import React from 'react';
+
+import { TextLink } from './TextLink';
+
+const useStyles = makeStyles(({ palette, spacing }) => ({
+    root: {
+        flexGrow: 1,
+        backgroundColor: palette.common.white,
+        padding: spacing(2),
+        textAlign: 'center',
+    },
+    icon: {
+        width: '3.5rem',
+        height: '3.5rem',
+        marginBottom: spacing(2),
+    },
+}));
 
 interface Props {
     text: string;
+    linkProps?: {
+        href: string;
+        text: string;
+    };
 }
 
-export const NotFoundBox: React.FC<Props> = ({ text }) => (
-    <Box
-        flexGrow="1"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        padding="0.5rem"
-    >
+export const NotFoundBox: React.FC<Props> = ({ text, linkProps }) => {
+    const classes = useStyles();
+
+    const renderIcon = <BlockOutlined className={classes.icon} color="disabled" />;
+
+    const renderText = (
         <Typography variant="body2" color="textSecondary">
             {text}
         </Typography>
-    </Box>
-);
+    );
+
+    const renderSpace = <Typography component="br" />;
+    const renderLink = !!linkProps && <TextLink href={linkProps.href}>{linkProps.text}</TextLink>;
+
+    return (
+        <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
+            {renderIcon}
+            {renderText}
+            {/* {renderSpace} */}
+            {renderLink}
+        </Grid>
+    );
+};

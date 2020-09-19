@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
@@ -10,23 +10,6 @@ import { urls } from 'utils';
 const ConfirmLogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
 
-    const renderCardContent = (
-        <Box marginTop="1rem">
-            <Typography variant="subtitle1">{t('logout:confirmLogout')}</Typography>
-            <Box marginTop="1rem">
-                <ButtonLink
-                    href={urls.logout}
-                    color="primary"
-                    variant="contained"
-                    endIcon={<ArrowForwardOutlined />}
-                    fullWidth
-                >
-                    {t('common:confirm')}
-                </ButtonLink>
-            </Box>
-        </Box>
-    );
-
     const seoProps = {
         title: t('logout:title'),
         description: t('logout:description'),
@@ -34,8 +17,7 @@ const ConfirmLogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const layoutProps = {
         seoProps,
-        desktopHeader: t('logout:header'),
-        renderCardContent,
+        header: t('logout:header'),
         topNavbarProps: {
             disableAuthButtons: true,
         },
@@ -49,7 +31,23 @@ const ConfirmLogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <FormLayout {...layoutProps} />;
+    return (
+        <FormLayout {...layoutProps}>
+            <Typography variant="subtitle1" align="center">
+                {t('logout:confirmLogout')}
+            </Typography>
+            <Typography component="br" />
+            <ButtonLink
+                href={urls.logout}
+                color="primary"
+                variant="contained"
+                endIcon={<ArrowForwardOutlined />}
+                fullWidth
+            >
+                {t('common:confirm')}
+            </ButtonLink>
+        </FormLayout>
+    );
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

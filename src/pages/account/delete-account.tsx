@@ -74,13 +74,7 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field
-                        name="password"
-                        label={t('forms:password')}
-                        placeholder={t('forms:password')}
-                        component={TextField}
-                        type="password"
-                    />
+                    <Field name="password" label={t('forms:password')} component={TextField} type="password" />
                     <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
                 </Form>
             )}

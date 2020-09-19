@@ -1,11 +1,17 @@
 import {
     Avatar,
     Box,
+    Card,
+    CardActionArea,
     CardContent,
     CardHeader,
+    Drawer,
     Grid,
     IconButton,
+    List,
+    ListItemIcon,
     ListItemText,
+    makeStyles,
     MenuItem,
     Tooltip,
     Typography,
@@ -25,19 +31,49 @@ import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import styled from 'styled-components';
 import { mediaURL, truncate } from 'utils';
 
-import { StyledDrawer, StyledList, TextLink } from '..';
+import { TextLink } from '..';
+
+const useStyles = makeStyles(({ spacing }) => ({
+    root: {
+        borderRadius: 0,
+        overflow: 'visible',
+        boxShadow: 'none',
+    },
+    cardHeader: {
+        padding: `${spacing(2)} ${spacing(3)}`,
+        textAlign: 'left',
+    },
+    cardTitle: {
+        fontSize: '1rem',
+    },
+    cardSubHeader: {
+        fontSize: '0.75rem',
+    },
+    cardContent: {
+        padding: spacing(3),
+    },
+    text: {
+        overflow: 'hidden',
+        wordBreak: 'break-word',
+    },
+    toolbarButton: {
+        marginLeft: spacing(1),
+    },
+    icon: {
+        marginRight: spacing(1),
+    },
+}));
 
 interface Props {
     comment: CommentObjectType;
     isThread?: boolean;
-    removeComment: (id: string) => void;
-    disableBorder?: boolean;
+    removeComment: (id: string) => void; // Callback function for removing the comment.
 }
 
-export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
+export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const created = useDayjs(comment.created)
@@ -64,7 +100,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
         handleCloseActions,
         renderShareAction,
         renderReportAction,
-        renderActionsButton,
+        renderDefaultActionsButton,
         open,
         anchor,
     } = useActionsDrawer({ query: shareQuery, text: shareText });
@@ -146,6 +182,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const renderCardHeader = (
         <CardHeader
+            classes={{ root: classes.cardHeader, title: classes.cardTitle, subheader: classes.cardSubHeader }}
             avatar={<Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />}
             title={renderTitle}
             subheader={created}
@@ -153,14 +190,14 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     );
 
     const renderContentSection = (
-        <Grid id="content" item container xs={11} justify="flex-start">
+        <Grid item container xs={11} justify="flex-start">
             {attachmentOnly ? (
-                <Box display="flex">
-                    <CameraAltOutlined />
-                    <Box marginLeft="0.5rem">
-                        <Typography variant="body2">{t('common:clickToView')}</Typography>
-                    </Box>
-                </Box>
+                <Grid container>
+                    <CameraAltOutlined className={classes.icon} color="disabled" />
+                    <Typography className={classes.text} variant="body2">
+                        {t('common:clickToView')}
+                    </Typography>
+                </Grid>
             ) : (
                 <Typography variant="body2">{comment.text}</Typography>
             )}
@@ -192,39 +229,35 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
     const renderReplyCount = !isThread && (
         <>
             <Tooltip title={t('tooltips:commentReplies', { replyCount })}>
-                <CommentOutlined className="message-icon" />
+                <CommentOutlined className={classes.icon} color="disabled" />
             </Tooltip>
-            <Box marginLeft="0.25rem">
-                <Typography variant="body2">{replyCount}</Typography>
-            </Box>
+            <Typography className={classes.toolbarButton} variant="body2" color="textSecondary">
+                {replyCount}
+            </Typography>
         </>
     );
 
     const renderAttachmentButton = !!comment.attachment && !attachmentOnly && (
-        <Box marginLeft="0.25rem">
-            <Tooltip title={t('tooltips:attachment')}>
-                <IconButton onClick={handleAttachmentClick}>
-                    <AttachFileOutlined />
-                </IconButton>
-            </Tooltip>
-        </Box>
+        <Tooltip title={t('tooltips:attachment')}>
+            <IconButton className={classes.toolbarButton} size="small" onClick={handleAttachmentClick}>
+                <AttachFileOutlined />
+            </IconButton>
+        </Tooltip>
     );
 
     const renderCardContent = (
-        <CardContent>
+        <CardContent className={classes.cardContent}>
             <Grid container justify="space-between" alignItems="center">
                 {renderContentSection}
                 {renderVoteSection}
             </Grid>
-            <Grid container>
-                <Grid item xs={4}>
-                    <Box display="flex" alignItems="center" height="100%">
-                        {renderReplyCount}
-                        {renderAttachmentButton}
-                    </Box>
+            <Grid container alignItems="center">
+                <Grid item xs={4} container alignItems="center">
+                    {renderReplyCount}
+                    {renderAttachmentButton}
                 </Grid>
                 <Grid container item xs={4} justify="center">
-                    {renderActionsButton}
+                    {renderDefaultActionsButton}
                 </Grid>
                 <Grid item xs={4} />
             </Grid>
@@ -233,92 +266,35 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment,
 
     const renderDeleteAction = isOwner && (
         <MenuItem disabled={verified === false}>
-            <ListItemText onClick={handleDeleteComment}>
-                <DeleteOutline /> {t('common:delete')}
-            </ListItemText>
+            <ListItemIcon>
+                <DeleteOutline />
+            </ListItemIcon>
+            <ListItemText onClick={handleDeleteComment}>{t('common:delete')}</ListItemText>
         </MenuItem>
     );
 
     const renderActions = (
-        <StyledList>
+        <List>
             {renderShareAction}
             {renderDeleteAction}
             {renderReportAction}
-        </StyledList>
+        </List>
     );
 
     const renderActionsDrawer = (
-        <StyledDrawer {...actionsDrawerProps} onClick={onClickActionsDrawer}>
+        <Drawer {...actionsDrawerProps} onClick={onClickActionsDrawer}>
             {renderActionsHeader}
             {renderActions}
-        </StyledDrawer>
+        </Drawer>
     );
 
     return (
-        <StyledCommentCard
-            isThread={isThread}
-            onClick={handleClick}
-            disableBorder={disableBorder}
-            attachmentOnly={attachmentOnly}
-        >
-            {renderCardHeader}
-            {renderCardContent}
-            {renderActionsDrawer}
-        </StyledCommentCard>
+        <Card className={classes.root}>
+            <CardActionArea onClick={handleClick}>
+                {renderCardHeader}
+                {renderCardContent}
+                {renderActionsDrawer}
+            </CardActionArea>
+        </Card>
     );
 };
-
-// Ignore: isThread, disableBorder and attachmentOnly must be omitted from Box props.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledCommentCard = styled(({ isThread, disableBorder, attachmentOnly, ...other }) => <Box {...other} />)`
-    border-bottom: ${({ disableBorder }): string => (!disableBorder ? 'var(--border)' : 'none')};
-
-    // Disable hover background color and cursor mode when on message thread.
-    &:hover {
-        cursor: ${({ isThread, attachmentOnly }): string => {
-            return attachmentOnly ? 'pointer' : !isThread ? 'pointer' : 'inherit';
-        }};
-
-        background-color: ${({ isThread, attachmentOnly }): string => {
-            return !isThread ? 'var(--hover-color)' : attachmentOnly ? 'var(--hover-color)' : 'inherit';
-        }};
-    }
-
-    .MuiCardContent-root {
-        padding: 0.5rem !important;
-
-        #content {
-            padding: 0.5rem;
-
-            .MuiTypography-root {
-                overflow: hidden;
-                word-break: break-word;
-                text-align: left;
-            }
-        }
-    }
-
-    .MuiCardHeader-content {
-        display: flex;
-
-        .MuiCardHeader-subheader {
-            margin-left: 1rem;
-        }
-    }
-
-    .MuiIconButton-root {
-        padding: 0.25rem;
-    }
-
-    .MuiSvgIcon-root {
-        height: 1.25rem;
-        width: 1.25rem;
-        color: var(--opacity-dark);
-
-        &.vote-button {
-            height: 1.5rem;
-            width: 1.5rem;
-            color: inherit;
-        }
-    }
-`;

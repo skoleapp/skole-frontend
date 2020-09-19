@@ -1,49 +1,42 @@
-import {
-    Avatar,
-    Card,
-    CardContent,
-    CardHeader,
-    CardMedia,
-    Grid,
-    makeStyles,
-    Typography,
-    useMediaQuery,
-    useTheme,
-} from '@material-ui/core';
+import { Avatar, Box, Card, CardContent, CardHeader, CardMedia, Grid, makeStyles, Typography } from '@material-ui/core';
+import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, LoadingLayout, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'styles';
 import { AuthProps } from 'types';
 import { GET_STARTED_ITEMS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
     topSectionContainer: {
-        backgroundColor: palette.grey[300],
+        minHeight: '25rem',
+        position: 'relative',
+    },
+    topSectionContent: {
         padding: spacing(8),
-        minHeight: '20rem',
+        color: palette.common.white,
+        position: 'relative',
     },
     bottomSectionContainer: {
-        padding: spacing(8),
-        backgroundColor: palette.common.white,
-        minHeight: '20rem',
         flexGrow: 1,
     },
-    image: {
-        maxWidth: '100%',
-        maxHeight: '25rem',
-        borderRadius: BORDER_RADIUS,
-    },
     card: {
-        boxShadow: 'none',
-        border: BORDER,
         height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
     },
     getStartedItem: {
         marginTop: spacing(4),
+    },
+    cardHeader: {
+        display: 'flex',
+        padding: spacing(3),
+    },
+    cardHeaderContent: {
+        display: 'flex',
+        alignItems: 'center',
     },
     avatar: {
         backgroundColor: palette.primary.light,
@@ -55,11 +48,8 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
         height: '2rem',
         width: '2rem',
     },
-    media: {
-        width: '100%',
-    },
     ctaContainer: {
-        marginTop: '5rem',
+        padding: spacing(8),
         textAlign: 'center',
     },
     ctaButton: {
@@ -68,15 +58,23 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
         marginTop: spacing(8),
     },
     loginLink: {
-        marginTop: spacing(4),
+        marginTop: spacing(8),
+    },
+    cardTextContainer: {
+        flexGrow: 1,
+    },
+    chip: {
+        marginTop: spacing(2),
+    },
+    chipIcon: {
+        marginLeft: spacing(2),
+        height: '1rem',
     },
 }));
 
 // This page will be available also when offline.
 const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
     const classes = useStyles();
-    const { breakpoints } = useTheme();
-    const isMobileOrTablet = useMediaQuery(breakpoints.down('md'));
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderLanguageButton } = useLanguageSelector();
@@ -88,18 +86,15 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
 
     const layoutProps = {
         seoProps,
+        disableBottomNavbar: true,
         topNavbarProps: {
             disableAuthButtons: true,
             headerRight: renderLanguageButton,
         },
         containerProps: {
-            style: {
-                margin: 0,
-                padding: 0,
-                maxWidth: '100%',
-            },
+            fullWidth: true,
+            dense: true,
         },
-        disableBottomNavbar: true,
     };
 
     if (authLoading) {
@@ -108,45 +103,38 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
 
     return (
         <MainLayout {...layoutProps}>
-            <Grid container justify="center" className={classes.topSectionContainer}>
-                <Grid item lg={6} container alignItems="center" spacing={5}>
-                    <Grid item xs={12} md={6}>
-                        <Typography variant="h1" gutterBottom>
-                            {t('common:slogan')}
-                        </Typography>
-                        <Typography variant="h5" color="textSecondary" gutterBottom>
-                            {t('get-started:header')}
-                        </Typography>
-                        <Typography variant="h6">{t('get-started:header2')}</Typography>
-                    </Grid>
-                    <Grid item xs={12} md={6} container justify={isMobileOrTablet ? 'flex-start' : 'flex-end'}>
-                        <img
-                            className={classes.image}
-                            src="images/landing-page/header-img.jpg"
-                            alt="School supplies."
-                        />
-                    </Grid>
+            <Grid container justify="center" alignItems="center" className={classes.topSectionContainer}>
+                <Box className="main-background" />
+                <Grid item xs={12} lg={10} xl={8} className={classes.topSectionContent}>
+                    <Typography variant="h1" gutterBottom>
+                        {t('common:slogan')}
+                    </Typography>
+                    <Typography variant="h5" gutterBottom>
+                        {t('get-started:header')}
+                    </Typography>
+                    <Typography variant="h6">{t('get-started:header2')}</Typography>
                 </Grid>
             </Grid>
             <Grid className={classes.bottomSectionContainer} container justify="center" alignItems="center">
-                <Grid item lg={6} container spacing={5}>
+                <Grid item xs={12} lg={10} xl={8} container spacing={4}>
                     {GET_STARTED_ITEMS.map(({ title, image, description, icon: Icon }, i) => (
                         <Grid className={classes.getStartedItem} key={i} item xs={12} sm={4}>
                             <Card className={classes.card}>
                                 <CardHeader
+                                    classes={{ root: classes.cardHeader, content: classes.cardHeaderContent }}
                                     avatar={
                                         <Avatar className={classes.avatar}>
                                             <Icon className={classes.icon} />
                                         </Avatar>
                                     }
                                     title={
-                                        <Typography variant="h5" color="primary" gutterBottom>
+                                        <Typography variant="h5" color="primary">
                                             {t(title)}
                                         </Typography>
                                     }
                                 />
                                 <CardMedia component="img" image={image} alt={title} height="160" />
-                                <CardContent>
+                                <CardContent className={classes.cardTextContainer}>
                                     <Typography variant="body2" color="textSecondary">
                                         {t(description)}
                                     </Typography>
@@ -155,21 +143,19 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
                         </Grid>
                     ))}
                 </Grid>
-                <Grid
-                    className={classes.ctaContainer}
-                    container
-                    direction="column"
-                    alignItems="center"
-                    justify="center"
-                >
-                    <Typography variant="h5" color="textSecondary">
-                        {t('get-started:subheader')}
-                    </Typography>
+            </Grid>
+            <Grid className={classes.ctaContainer} container direction="column" alignItems="center">
+                <Typography variant="h5" color="primary">
+                    {t('get-started:subheader')}
+                </Typography>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2} container direction="column" alignItems="center">
                     <ButtonLink
                         className={classes.ctaButton}
                         href={{ pathname: urls.register, query }}
                         color="primary"
                         variant="contained"
+                        endIcon={<ArrowForwardOutlined />}
+                        fullWidth
                     >
                         {t('get-started:cta')}
                     </ButtonLink>

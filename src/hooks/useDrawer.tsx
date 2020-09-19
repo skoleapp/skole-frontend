@@ -1,13 +1,13 @@
 import { ModalHeader } from 'components';
-import { useDeviceContext } from 'context';
 import React, { SyntheticEvent } from 'react';
 import { UseDrawer } from 'types';
 
+import { useMediaQueries } from './useMediaQueries';
 import { useOpen } from './useOpen';
 
 export const useDrawer = (header?: string): UseDrawer => {
+    const { isMobileOrTablet } = useMediaQueries();
     const { open, handleOpen, handleClose } = useOpen();
-    const isMobile = useDeviceContext();
 
     const handleOpenDrawer = (e: SyntheticEvent): void => {
         e.stopPropagation();
@@ -25,7 +25,7 @@ export const useDrawer = (header?: string): UseDrawer => {
         open,
         handleOpen: handleOpenDrawer,
         onClose: handleCloseDrawer,
-        anchor: isMobile ? 'bottom' : 'left',
+        anchor: isMobileOrTablet ? 'bottom' : 'left',
         renderHeader,
     };
 };

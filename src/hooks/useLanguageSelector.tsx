@@ -1,10 +1,16 @@
-import { Button, Tooltip } from '@material-ui/core';
+import { Button, makeStyles, Tooltip } from '@material-ui/core';
 import { useLanguageSelectorContext } from 'context';
 import { useTranslation } from 'lib';
 import { useEffect, useState } from 'react';
 import React from 'react';
-import styled from 'styled-components';
 import { LanguageSelectorContextType } from 'types';
+
+const useStyles = makeStyles({
+    root: {
+        padding: 0,
+        fontSize: '1.5rem',
+    },
+});
 
 interface Language {
     code: string;
@@ -27,6 +33,7 @@ interface UseLanguageSelector extends LanguageSelectorContextType {
 }
 
 export const useLanguageSelector = (): UseLanguageSelector => {
+    const classes = useStyles();
     const { t, i18n } = useTranslation();
     const [value, setValue] = useState(i18n.language);
     const { toggleLanguageSelector, languageSelectorOpen } = useLanguageSelectorContext();
@@ -47,7 +54,9 @@ export const useLanguageSelector = (): UseLanguageSelector => {
 
     const renderLanguageButton = (
         <Tooltip title={t('tooltips:language')}>
-            <StyledLanguageSelector onClick={openLanguageMenu}>{renderCurrentFlag}</StyledLanguageSelector>
+            <Button className={classes.root} onClick={openLanguageMenu}>
+                {renderCurrentFlag}
+            </Button>
         </Tooltip>
     );
 
@@ -61,11 +70,3 @@ export const useLanguageSelector = (): UseLanguageSelector => {
         toggleLanguageSelector,
     };
 };
-
-const StyledLanguageSelector = styled(Button)`
-    padding: 0 !important;
-
-    .MuiButton-label {
-        font-size: 1.5rem;
-    }
-`;

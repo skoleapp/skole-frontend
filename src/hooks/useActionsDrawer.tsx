@@ -1,11 +1,11 @@
-import { DrawerProps, IconButton, ListItemText, MenuItem, Tooltip } from '@material-ui/core';
+import { DrawerProps, IconButton, ListItemIcon, ListItemText, MenuItem, Size, Tooltip } from '@material-ui/core';
 import { FlagOutlined, MoreHorizOutlined, ShareOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { ShareParams } from 'types';
 
 import { useDrawer } from './useDrawer';
-import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
+import { useMediaQueries } from './useMediaQueries';
 import { useShare } from './useShare';
 
 interface UseActionsDrawer extends DrawerProps {
@@ -14,12 +14,14 @@ interface UseActionsDrawer extends DrawerProps {
     renderShareAction: false | JSX.Element;
     renderReportAction: JSX.Element;
     renderActionsButton: JSX.Element;
+    renderDefaultActionsButton: JSX.Element;
 }
 
 export const useActionsDrawer = (shareParams: ShareParams): UseActionsDrawer => {
     const { t } = useTranslation();
     const { handleShare } = useShare(shareParams);
-    const iconButtonProps = useResponsiveIconButtonProps();
+    const { isMobileOrTablet } = useMediaQueries();
+    const tooltip = t('tooltips:actions');
 
     const {
         renderHeader: renderActionsHeader,
@@ -35,23 +37,38 @@ export const useActionsDrawer = (shareParams: ShareParams): UseActionsDrawer => 
 
     const renderShareAction = (
         <MenuItem onClick={handlePreShare}>
-            <ListItemText>
-                <ShareOutlined /> {t('common:share')}
-            </ListItemText>
+            <ListItemIcon>
+                <ShareOutlined />
+            </ListItemIcon>
+            <ListItemText>{t('common:share')}</ListItemText>
         </MenuItem>
     );
 
     const renderReportAction = (
         <MenuItem disabled>
-            <ListItemText>
-                <FlagOutlined /> {t('common:reportAbuse')}
-            </ListItemText>
+            <ListItemIcon>
+                <FlagOutlined />
+            </ListItemIcon>
+            <ListItemText>{t('common:reportAbuse')}</ListItemText>
         </MenuItem>
     );
 
+    const commonActionsButtonProps = {
+        onClick: handleOpenActions,
+        size: 'small' as Size,
+    };
+
     const renderActionsButton = (
-        <Tooltip title={t('tooltips:actions')}>
-            <IconButton onClick={handleOpenActions} {...iconButtonProps}>
+        <Tooltip title={tooltip}>
+            <IconButton {...commonActionsButtonProps} color={isMobileOrTablet ? 'secondary' : 'default'}>
+                <MoreHorizOutlined />
+            </IconButton>
+        </Tooltip>
+    );
+
+    const renderDefaultActionsButton = (
+        <Tooltip title={tooltip}>
+            <IconButton {...commonActionsButtonProps} color="default">
                 <MoreHorizOutlined />
             </IconButton>
         </Tooltip>
@@ -63,6 +80,7 @@ export const useActionsDrawer = (shareParams: ShareParams): UseActionsDrawer => 
         renderShareAction,
         renderReportAction,
         renderActionsButton,
+        renderDefaultActionsButton,
         ...actionsDrawerProps,
     };
 };

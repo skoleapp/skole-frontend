@@ -33,6 +33,7 @@ let theme = createMuiTheme({
         MuiSelect: {
             fullWidth: true,
             variant: 'outlined',
+            margin: 'none',
         },
         MuiTabs: {
             textColor: 'primary',
@@ -98,6 +99,7 @@ let theme = createMuiTheme({
             },
             paperAnchorBottom: {
                 borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0 0`,
+                paddingBottom: 'env(safe-area-inset-bottom)',
             },
         },
         MuiBottomNavigation: {
@@ -108,8 +110,7 @@ let theme = createMuiTheme({
                 borderTop: BORDER,
                 height: `calc(env(safe-area-inset-bottom) + ${BOTTOM_NAVBAR_HEIGHT})`,
                 display: 'flex',
-                //     z-index: 1000;
-                //     padding-bottom: var(--safe-area-inset-bottom);
+                paddingBottom: 'env(safe-area-inset-bottom)',
             },
         },
         MuiBottomNavigationAction: {
@@ -143,16 +144,6 @@ let theme = createMuiTheme({
             root: {
                 display: 'flex',
                 flexDirection: 'column',
-            },
-        },
-        MuiTableHead: {
-            root: {
-                display: 'flex',
-            },
-        },
-        MuiTableBody: {
-            root: {
-                // flexGrow: 1,
             },
         },
         MuiTableRow: {
@@ -223,6 +214,7 @@ theme.overrides = {
     ...theme.overrides,
     MuiDialog: {
         paper: {
+            overflow: 'hidden',
             [theme.breakpoints.up('lg')]: {
                 borderRadius: BORDER_RADIUS,
             },
@@ -230,6 +222,9 @@ theme.overrides = {
     },
     MuiCssBaseline: {
         '@global': {
+            body: {
+                backgroundColor: theme.palette.secondary.main,
+            },
             '.main-avatar': {
                 height: '6rem',
                 width: '6rem',

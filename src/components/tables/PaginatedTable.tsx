@@ -5,7 +5,6 @@ import React, { ChangeEvent, MouseEvent } from 'react';
 import { CommonPaginatedTableProps } from 'types';
 import { getQueryWithPagination, redirect } from 'utils';
 
-import { StyledTable } from '..';
 import { CustomTableFooter } from './CustomTableFooter';
 import { CustomTableHead } from './CustomTableHead';
 
@@ -46,14 +45,12 @@ export const PaginatedTable: React.FC<Props> = ({ count, tableHeadProps, extraFi
     );
 
     return (
-        <StyledTable>
+        <Table>
             <TableContainer>
-                <Table>
-                    {renderTableHead}
-                    {renderTableBody}
-                    {renderTableFooter}
-                </Table>
+                {renderTableHead}
+                {renderTableBody}
+                {renderTableFooter}
             </TableContainer>
-        </StyledTable>
+        </Table>
     );
 };

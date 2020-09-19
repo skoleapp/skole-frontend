@@ -1,4 +1,5 @@
-import { Avatar, Box, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
+import clsx from 'clsx';
 import { useAuthContext, useNotificationsContext } from 'context';
 import {
     ActivityObjectType,
@@ -9,13 +10,20 @@ import {
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { UrlObject } from 'url';
 import { mediaURL, redirect, urls } from 'utils';
 
-import { StyledList } from '..';
 import { NotFoundBox } from './NotFoundBox';
 import { TextLink } from './TextLink';
+
+const useStyles = makeStyles({
+    list: {
+        width: '100%',
+    },
+    unread: {
+        backgroundColor: 'rgba(173, 54, 54, 0.25)',
+    },
+});
 
 const getHref = ({
     course,
@@ -43,6 +51,7 @@ interface Props {
 }
 
 export const ActivityList: React.FC<Props> = ({ slice }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
     const { userMe } = useAuthContext();
     const initialActivity: ActivityObjectType[] = R.propOr([], 'activity', userMe);
@@ -98,40 +107,20 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
         );
 
     const renderActivity = activity.slice(0, slice).map(({ targetUser, description, read, ...activity }, i) => (
-        <StyledListItem onClick={handleClick(activity)} key={i} button className="border-bottom" read={read}>
+        <ListItem
+            onClick={handleClick(activity)}
+            key={i}
+            button
+            className={clsx('border-bottom', !!read && classes.unread)}
+        >
             {renderAvatar(targetUser)}
             <ListItemText primary={renderTargetUserLink(targetUser)} secondary={description} />
-        </StyledListItem>
+        </ListItem>
     ));
 
     return !!activity.length ? (
-        <Box position="relative" flexGrow="1" display="flex">
-            <StyledActivityList flexGrow="1" display="flex">
-                <StyledList>{renderActivity}</StyledList>
-            </StyledActivityList>
-        </Box>
+        <List className={classes.list}>{renderActivity}</List>
     ) : (
         <NotFoundBox text={t('activity:noActivity')} />
     );
 };
-
-const StyledActivityList = styled(Box)`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-
-    .MuiList-root {
-        flex-grow: 1;
-        overflow-y: auto;
-    }
-`;
-
-// Ignore: topComment must be omitted from Box props.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledListItem = styled(({ read, ...props }) => <ListItem {...props} />)`
-    // Show unread notifications with light shade of primary color.
-    background-color: ${({ read }): string => (read ? 'default' : 'rgba(173, 54, 54, 0.25)')} !important;
-`;

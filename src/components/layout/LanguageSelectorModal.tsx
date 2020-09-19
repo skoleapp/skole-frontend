@@ -1,9 +1,9 @@
-import { MenuItem } from '@material-ui/core';
+import { Drawer, List, MenuItem } from '@material-ui/core';
 import { useDrawer, useLanguageSelector } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-import { ModalHeader, StyledDrawer, StyledList } from '..';
+import { ModalHeader } from '..';
 
 export const LanguageSelectorModal: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -19,20 +19,22 @@ export const LanguageSelectorModal: React.FC = () => {
         toggleLanguageSelector(false);
     };
 
+    const renderModalHeader = <ModalHeader text={t('common:language')} onCancel={handleClose} />;
+
     const renderLanguageList = (
-        <StyledList>
+        <List>
             {languages.map((l, i) => (
                 <MenuItem key={i} onClick={handleLanguageChange(l.value)}>
                     {t(l.label)} {languageToFlag(l.code)}
                 </MenuItem>
             ))}
-        </StyledList>
+        </List>
     );
 
     return (
-        <StyledDrawer open={languageSelectorOpen} anchor={anchor} onClose={handleClose}>
-            <ModalHeader text={t('common:language')} onCancel={handleClose} />
+        <Drawer open={languageSelectorOpen} anchor={anchor} onClose={handleClose}>
+            {renderModalHeader}
             {renderLanguageList}
-        </StyledDrawer>
+        </Drawer>
     );
 };

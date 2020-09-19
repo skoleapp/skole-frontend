@@ -1,13 +1,22 @@
-import { Paper } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 import React from 'react';
-import styled from 'styled-components';
-import { breakpoints } from 'styles';
 import { MainLayoutProps } from 'types';
 
-import { LoadingBox } from '../shared';
+import { LoadingBox } from '..';
 import { MainLayout } from './MainLayout';
 
+const useStyles = makeStyles(({ palette }) => ({
+    root: {
+        flexGrow: 1,
+        backgroundColor: palette.common.white,
+        display: 'flex',
+        alignItems: 'center',
+    },
+}));
+
 export const LoadingLayout: React.FC<Pick<MainLayoutProps, 'seoProps'>> = ({ seoProps }) => {
+    const classes = useStyles();
+
     const layoutProps = {
         seoProps,
         disableBottomNavbar: true,
@@ -17,26 +26,17 @@ export const LoadingLayout: React.FC<Pick<MainLayoutProps, 'seoProps'>> = ({ seo
             disableLogo: true,
             disableSearch: true,
         },
+        containerProps: {
+            fullWidth: true,
+            dense: true,
+        },
     };
 
     return (
         <MainLayout {...layoutProps}>
-            <StyledLoadingLayout>
+            <Box className={classes.root}>
                 <LoadingBox />
-            </StyledLoadingLayout>
+            </Box>
         </MainLayout>
     );
 };
-
-const StyledLoadingLayout = styled(Paper)`
-    position: absolute;
-    top: 3rem;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-
-    @media only screen and (min-width: ${breakpoints.MD}) {
-        top: 4rem;
-    }
-`;

@@ -1,10 +1,10 @@
 import { TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
-import { useDeviceContext } from 'context';
+import { useMediaQueries } from 'hooks';
 import React from 'react';
 import { CustomTableHeadProps, TextColor, TextVariant } from 'types';
 
 const titleProps = {
-    variant: 'body2' as TextVariant,
+    variant: 'subtitle2' as TextVariant,
     color: 'textSecondary' as TextColor,
 };
 
@@ -13,8 +13,8 @@ export const CustomTableHead: React.FC<CustomTableHeadProps> = ({
     titleLeftDesktop = titleLeft,
     titleRight,
 }) => {
-    const isMobile = useDeviceContext();
-    const renderTitleLeft = isMobile ? titleLeft : titleLeftDesktop;
+    const { isMobileOrTablet } = useMediaQueries();
+    const renderTitleLeft = isMobileOrTablet ? titleLeft : titleLeftDesktop;
 
     return (
         <TableHead>

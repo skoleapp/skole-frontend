@@ -47,6 +47,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         backgroundColor: palette.common.white,
         border: `0.05rem solid ${palette.primary.main}`,
         borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
+        padding: spacing(3),
     },
     searchButton: {
         borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
@@ -182,11 +183,8 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             headerRight: renderLanguageButton,
         },
         containerProps: {
-            style: {
-                margin: 0,
-                padding: 0,
-                maxWidth: '100%',
-            },
+            fullWidth: true,
+            dense: true,
         },
     };
 

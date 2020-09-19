@@ -1,9 +1,15 @@
-import { CardHeader } from '@material-ui/core';
+import { CardHeader, makeStyles, Paper } from '@material-ui/core';
+import clsx from 'clsx';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { SEOProps } from 'types';
 
-import { StyledCard } from '..';
+const useStyles = makeStyles({
+    root: {
+        flexGrow: 1,
+    },
+});
+
 import { MainLayout } from './MainLayout';
 
 interface Props {
@@ -11,6 +17,7 @@ interface Props {
 }
 
 export const ErrorLayout: React.FC<Props> = ({ seoProps }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
 
     const defaultSeoProps = {
@@ -28,9 +35,9 @@ export const ErrorLayout: React.FC<Props> = ({ seoProps }) => {
 
     return (
         <MainLayout {...layoutProps}>
-            <StyledCard onlyHeader>
+            <Paper className={clsx('paper-container', classes.root)}>
                 <CardHeader title={t('_error:header')} />
-            </StyledCard>
+            </Paper>
         </MainLayout>
     );
 };

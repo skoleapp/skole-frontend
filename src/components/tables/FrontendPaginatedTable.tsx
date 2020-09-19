@@ -2,7 +2,6 @@ import { Table, TableContainer, TablePaginationProps } from '@material-ui/core';
 import React from 'react';
 import { CommonPaginatedTableProps } from 'types';
 
-import { StyledTable } from '..';
 import { CustomTableFooter } from './CustomTableFooter';
 import { CustomTableHead } from './CustomTableHead';
 
@@ -15,14 +14,12 @@ export const FrontendPaginatedTable: React.FC<Props> = ({ tableHeadProps, render
     const renderTableFooter = <CustomTableFooter {...paginationProps} />;
 
     return (
-        <StyledTable>
+        <Table>
             <TableContainer>
-                <Table>
-                    {renderTableHead}
-                    {renderTableBody}
-                    {renderTableFooter}
-                </Table>
+                {renderTableHead}
+                {renderTableBody}
+                {renderTableFooter}
             </TableContainer>
-        </StyledTable>
+        </Table>
     );
 };

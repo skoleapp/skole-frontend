@@ -4,7 +4,7 @@ import { useTranslation } from 'lib';
 import React from 'react';
 
 import { useDrawer } from './useDrawer';
-import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
+import { useMediaQueries } from './useMediaQueries';
 
 interface UseInfoDrawer extends DrawerProps {
     renderInfoHeader: JSX.Element;
@@ -13,15 +13,15 @@ interface UseInfoDrawer extends DrawerProps {
 
 export const useInfoDrawer = (): UseInfoDrawer => {
     const { t } = useTranslation();
-    const iconButtonProps = useResponsiveIconButtonProps();
-
+    const { isMobileOrTablet } = useMediaQueries();
+    const color = isMobileOrTablet ? 'secondary' : 'default';
     const { renderHeader: renderInfoHeader, handleOpen: handleOpenInfo, ...infoDrawerProps } = useDrawer(
         t('common:info'),
     );
 
     const renderInfoButton = (
         <Tooltip title={t('tooltips:info')}>
-            <IconButton onClick={handleOpenInfo} {...iconButtonProps}>
+            <IconButton onClick={handleOpenInfo} size="small" color={color}>
                 <InfoOutlined />
             </IconButton>
         </Tooltip>

@@ -1,10 +1,13 @@
-import { Box, Grid, IconButton, Tooltip } from '@material-ui/core';
+import { Grid, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
-import styled from 'styled-components';
 
-import { StyledHeaderText } from '..';
+const useStyles = makeStyles(({ spacing }) => ({
+    root: {
+        padding: spacing(2),
+    },
+}));
 
 interface Props {
     text?: string;
@@ -13,33 +16,34 @@ interface Props {
 }
 
 export const ModalHeader: React.FC<Props> = ({ text, onCancel, headerRight }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
 
+    const renderCloseButton = (
+        <Tooltip title={t('common:close')}>
+            <IconButton onClick={onCancel} size="small">
+                <CloseOutlined />
+            </IconButton>
+        </Tooltip>
+    );
+
+    const renderHeaderText = (
+        <Typography className="MuiCardHeader-title" variant="h5">
+            {text}
+        </Typography>
+    );
+
     return (
-        <StyledModalHeader className="modal-header">
-            <Grid container alignItems="center">
-                <Grid item xs={2}>
-                    <Tooltip title={t('common:close')}>
-                        <IconButton onClick={onCancel} size="small">
-                            <CloseOutlined />
-                        </IconButton>
-                    </Tooltip>
-                </Grid>
-                <Grid item container xs={8} justify="center">
-                    <StyledHeaderText text={text} />
-                </Grid>
-                <Grid item container xs={2} justify="flex-end">
-                    {headerRight}
-                </Grid>
+        <Grid container alignItems="center" className={classes.root}>
+            <Grid item xs={2} container justify="flex-start">
+                {renderCloseButton}
             </Grid>
-        </StyledModalHeader>
+            <Grid item container xs={8} justify="center">
+                {renderHeaderText}
+            </Grid>
+            <Grid item container xs={2} justify="flex-end">
+                {headerRight}
+            </Grid>
+        </Grid>
     );
 };
-
-const StyledModalHeader = styled(Box)`
-    display: flex;
-    align-items: center;
-    border-bottom: var(--border);
-    padding: 0.5rem;
-    padding-bottom: 1rem;
-`;

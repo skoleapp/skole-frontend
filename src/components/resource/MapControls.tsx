@@ -1,8 +1,22 @@
-import { Box, Fab, Tooltip } from '@material-ui/core';
+import { Box, Fab, makeStyles, Size, Tooltip } from '@material-ui/core';
 import { AddOutlined, FullscreenExitOutlined, FullscreenOutlined, RemoveOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React from 'react';
-import styled from 'styled-components';
+import { MuiColor } from 'types';
+
+const useStyles = makeStyles(({ spacing }) => ({
+    root: {
+        position: 'absolute',
+        bottom: spacing(4),
+        right: spacing(4),
+        display: 'flex',
+        flexDirection: 'column',
+        padding: spacing(2),
+    },
+    button: {
+        margin: spacing(2),
+    },
+}));
 
 interface Props {
     handleFullscreenButtonClick: () => void;
@@ -19,12 +33,20 @@ export const MapControls: React.FC<Props> = ({
     fullscreen,
     controlsDisabled,
 }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
+
+    const commonButtonProps = {
+        className: classes.button,
+        size: 'small' as Size,
+        color: 'secondary' as MuiColor,
+        disabled: controlsDisabled,
+    };
 
     const renderFullscreenButton = (
         <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
             <span>
-                <Fab size="small" color="secondary" onClick={handleFullscreenButtonClick} disabled={controlsDisabled}>
+                <Fab {...commonButtonProps} onClick={handleFullscreenButtonClick}>
                     {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                 </Fab>
             </span>
@@ -34,7 +56,7 @@ export const MapControls: React.FC<Props> = ({
     const renderDownscaleButton = (
         <Tooltip title={t('tooltips:zoomIn')}>
             <span>
-                <Fab size="small" color="secondary" onClick={handleScaleUpButtonClick} disabled={controlsDisabled}>
+                <Fab {...commonButtonProps} onClick={handleScaleUpButtonClick}>
                     <AddOutlined />
                 </Fab>
             </span>
@@ -44,7 +66,7 @@ export const MapControls: React.FC<Props> = ({
     const renderUpscaleButton = (
         <Tooltip title={t('tooltips:zoomOut')}>
             <span>
-                <Fab size="small" color="secondary" onClick={handleScaleDownButtonClick} disabled={controlsDisabled}>
+                <Fab {...commonButtonProps} onClick={handleScaleDownButtonClick}>
                     <RemoveOutlined />
                 </Fab>
             </span>
@@ -52,23 +74,10 @@ export const MapControls: React.FC<Props> = ({
     );
 
     return (
-        <StyledControls>
+        <Box className={classes.root}>
             {renderFullscreenButton}
             {renderDownscaleButton}
             {renderUpscaleButton}
-        </StyledControls>
+        </Box>
     );
 };
-
-const StyledControls = styled(Box)`
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    display: flex;
-    flex-direction: column;
-    padding: 0.5rem;
-
-    .MuiFab-root {
-        margin: 0.5rem;
-    }
-`;

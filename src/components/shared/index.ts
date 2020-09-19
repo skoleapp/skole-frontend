@@ -9,3 +9,4 @@ export { LoadingBox } from './LoadingBox';
 export { NotFoundBox } from './NotFoundBox';
 export { InfoModalContent } from './InfoModalContent';
 export { ActivityList } from './ActivityList';
+export { Transition } from './Transition';

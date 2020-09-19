@@ -2,7 +2,7 @@ import 'typeface-roboto';
 import 'draft-js/dist/Draft.css';
 
 import { ApolloProvider } from '@apollo/client';
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import { CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import {
     AuthContextProvider,
     DiscussionContextProvider,
@@ -12,18 +12,39 @@ import {
     SettingsContextProvider,
 } from 'context';
 import { appWithTranslation, useApollo, useTranslation } from 'lib';
-import { ConfirmProvider } from 'material-ui-confirm';
+import { ConfirmOptions, ConfirmProvider } from 'material-ui-confirm';
 import { AppProps } from 'next/app';
 import React, { useEffect } from 'react';
-import { theme } from 'styles';
+import { BORDER_RADIUS, theme } from 'theme';
+
+const useStyles = makeStyles(({ spacing }) => ({
+    confirmDialogPaper: {
+        borderRadius: BORDER_RADIUS,
+        padding: spacing(2),
+    },
+}));
 
 const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     const { t } = useTranslation();
     const apolloClient = useApollo(pageProps.initialApolloState);
+    const classes = useStyles();
 
     const defaultConfirmOptions = {
         confirmationText: t('common:confirm'),
         cancellationText: t('common:cancel'),
+        dialogProps: {
+            fullScreen: false,
+            fullWidth: true,
+            classes: {
+                paper: classes.confirmDialogPaper,
+            },
+        },
+        confirmationButtonProps: {
+            fullWidth: true,
+        },
+        cancellationButtonProps: {
+            fullWidth: true,
+        },
     };
 
     useEffect(() => {
@@ -43,7 +64,7 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
                             <DiscussionContextProvider>
                                 <PDFViewerContextProvider>
                                     <ThemeProvider theme={theme}>
-                                        <ConfirmProvider defaultOptions={defaultConfirmOptions}>
+                                        <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
                                             <CssBaseline />
                                             <Component {...pageProps} />
                                         </ConfirmProvider>

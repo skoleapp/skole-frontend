@@ -77,22 +77,10 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field
-                        name="subject"
-                        component={TextField}
-                        label={t('forms:messageSubject')}
-                        placeholder={t('forms:messageSubject')}
-                    />
-                    <Field name="name" component={TextField} label={t('forms:name')} placeholder={t('forms:name')} />
-                    <Field name="email" component={TextField} label={t('forms:email')} placeholder={t('forms:email')} />
-                    <Field
-                        name="message"
-                        component={TextField}
-                        placeholder={t('forms:message')}
-                        label={t('forms:message')}
-                        rows="4"
-                        multiline
-                    />
+                    <Field name="subject" component={TextField} label={t('forms:messageSubject')} />
+                    <Field name="name" component={TextField} label={t('forms:name')} />
+                    <Field name="email" component={TextField} label={t('forms:email')} />
+                    <Field name="message" component={TextField} label={t('forms:message')} rows="4" multiline />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}

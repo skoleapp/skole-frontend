@@ -333,7 +333,7 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const commentThreadProps = {
         comments,
         target: { resource: Number(resourceId) },
-        placeholderText: t('resource:commentsPlaceholder'),
+        noComments: t('resource:noComments'),
     };
 
     const renderToolbar = <ResourceToolbar {...toolbarProps} />;

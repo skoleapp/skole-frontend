@@ -66,22 +66,9 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
+                    <Field name="oldPassword" component={TextField} label={t('forms:oldPassword')} type="password" />
+                    <Field name="newPassword" component={TextField} label={t('forms:newPassword')} type="password" />
                     <Field
-                        placeholder={t('forms:oldPassword')}
-                        name="oldPassword"
-                        component={TextField}
-                        label={t('forms:oldPassword')}
-                        type="password"
-                    />
-                    <Field
-                        placeholder={t('forms:newPassword')}
-                        name="newPassword"
-                        component={TextField}
-                        label={t('forms:newPassword')}
-                        type="password"
-                    />
-                    <Field
-                        placeholder={t('forms:confirmNewPassword')}
                         name="confirmNewPassword"
                         component={TextField}
                         label={t('forms:confirmNewPassword')}

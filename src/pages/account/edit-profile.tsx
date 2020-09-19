@@ -1,4 +1,4 @@
-import { Box, FormControl, FormHelperText } from '@material-ui/core';
+import { FormControl, FormHelperText } from '@material-ui/core';
 import {
     AutoCompleteField,
     AvatarField,
@@ -94,35 +94,16 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     });
 
     const renderAvatarField = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => <AvatarField {...props} />;
+    const renderTitleField = <Field name="title" component={TextField} label={t('forms:title')} />;
+    const renderUsernameField = <Field name="username" component={TextField} label={t('forms:username')} />;
+    const renderEmailField = <Field name="email" component={TextField} label={t('forms:email')} />;
 
-    const renderTitleField = (
-        <Field placeholder={t('forms:title')} name="title" component={TextField} label={t('forms:title')} />
-    );
-
-    const renderUsernameField = (
-        <Field placeholder={t('forms:username')} name="username" component={TextField} label={t('forms:username')} />
-    );
-
-    const renderEmailField = (
-        <Field placeholder={t('forms:email')} name="email" component={TextField} label={t('forms:email')} />
-    );
-
-    const renderBioField = (
-        <Field
-            placeholder={t('forms:bio')}
-            name="bio"
-            component={TextField}
-            label={t('forms:bio')}
-            rows="4"
-            multiline
-        />
-    );
+    const renderBioField = <Field name="bio" component={TextField} label={t('forms:bio')} rows="4" multiline />;
 
     const renderSchoolField = (
         <Field
             name="school"
-            label={t('forms:school')}
-            placeholder={t('forms:school')}
+            label={t('forms:schoolOptional')}
             dataKey="schools"
             document={SchoolsDocument}
             component={AutoCompleteField}
@@ -133,8 +114,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     const renderSubjectField = (
         <Field
             name="subject"
-            label={t('forms:subject')}
-            placeholder={t('forms:subject')}
+            label={t('forms:subjectOptional')}
             dataKey="subjects"
             document={SubjectsDocument}
             component={AutoCompleteField}
@@ -169,11 +149,11 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     );
 
     const renderVerifyAccountLink = verified === false && (
-        <Box marginTop="1rem" marginBottom="0.5rem">
+        <FormControl className="text-center">
             <TextLink href={urls.verifyAccount} color="primary">
                 {t('common:verifyAccount')}
             </TextLink>
-        </Box>
+        </FormControl>
     );
 
     const renderEditProfileFormContent = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (

@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client';
-import { Box, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, ErrorLayout, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { useNotificationsContext } from 'context';
@@ -8,7 +8,6 @@ import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import { AuthProps } from 'types';
 import { urls } from 'utils';
 
@@ -33,23 +32,6 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         logout();
     }, []);
 
-    const renderLoggedOut = (
-        <Box marginTop="1rem">
-            <Typography variant="subtitle1">{t('logout:loggedOut')}</Typography>
-            <Box marginTop="1rem">
-                <ButtonLink
-                    href={href}
-                    color="primary"
-                    variant="contained"
-                    endIcon={<ArrowForwardOutlined />}
-                    fullWidth
-                >
-                    {t('logout:loginButton')}
-                </ButtonLink>
-            </Box>
-        </Box>
-    );
-
     const seoProps = {
         title: t('logout:title'),
         description: t('logout:description'),
@@ -57,12 +39,11 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const layoutProps = {
         seoProps,
-        desktopHeader: t('logout:header'),
-        renderCardContent: renderLoggedOut,
-        disableBottomNavbar: true,
+        header: t('logout:header'),
         topNavbarProps: {
             disableAuthButtons: true,
         },
+        disableBottomNavbar: true,
     };
 
     if (authLoading || loading) {
@@ -76,26 +57,17 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     }
 
     return (
-        <StyledLogoutPage loading={loading}>
-            <FormLayout {...layoutProps} />
-        </StyledLogoutPage>
+        <FormLayout {...layoutProps}>
+            <Typography variant="subtitle1" align="center">
+                {t('logout:loggedOut')}
+            </Typography>
+            <Typography component="br" />
+            <ButtonLink href={href} color="primary" variant="contained" endIcon={<ArrowForwardOutlined />} fullWidth>
+                {t('logout:loginButton')}
+            </ButtonLink>
+        </FormLayout>
     );
 };
-
-// Ignore: loading must be omitted from Box props.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledLogoutPage = styled(({ loading, ...props }) => <Box {...props} />)`
-    .MuiCard-root {
-        display: flex;
-
-        .MuiGrid-root {
-            flex-grow: 1;
-
-            // We only want to center the loading screen;
-            align-items: ${({ loading }): string => (loading ? 'center' : 'inherit')};
-        }
-    }
-`;
 
 export const getStaticProps: GetStaticProps = async () => ({
     props: {

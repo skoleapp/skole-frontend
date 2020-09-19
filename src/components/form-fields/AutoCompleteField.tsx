@@ -7,9 +7,6 @@ import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 const useStyles = makeStyles(({ spacing }) => ({
-    input: {
-        padding: spacing(2),
-    },
     endAdornment: {
         marginRight: spacing(3),
     },
@@ -82,7 +79,6 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
             helperText={showError ? fieldError : helperText}
             InputProps={{
                 ...params.InputProps,
-                className: classes.input,
                 endAdornment: (
                     <>
                         {loading && <CircularProgress color="primary" size={20} />}

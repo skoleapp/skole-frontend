@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, Typography } from '@material-ui/core';
+import { Button, FormControl, FormHelperText, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
     AutoCompleteField,
@@ -26,17 +26,25 @@ import {
 import { useForm, useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { AuthProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
+const useStyles = makeStyles({
+    link: {
+        textAlign: 'center',
+    },
+});
+
 interface RegisterFormValues {
     username: string;
     email: string;
     password: string;
     confirmPassword: string;
+    code: string;
 }
 
 interface UpdateUserFormValues {
@@ -51,6 +59,8 @@ enum RegisterPhases {
 }
 
 const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+    const classes = useStyles();
+    const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
     const [registeredUser, setRegisteredUser] = useState<Pick<UserObjectType, 'username' | 'email'> | null>(null);
@@ -96,6 +106,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         email: '',
         password: '',
         confirmPassword: '',
+        code: R.propOr('', 'code', query) as string,
         general: '',
     };
 
@@ -110,6 +121,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
             .required(t('validation:required')),
+        code: Yup.string().required(t('validation:required')),
     });
 
     const updateUserInitialValues = {
@@ -144,13 +156,14 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const [registerMutation] = useRegisterMutation({ onCompleted: onRegisterCompleted, onError: onRegisterError });
 
     const handleRegisterSubmit = async (values: RegisterFormValues): Promise<void> => {
-        const { username, email, password } = values;
+        const { username, email, password, code } = values;
 
         await registerMutation({
             variables: {
                 username,
                 email,
                 password,
+                code,
             },
         });
 
@@ -193,7 +206,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const renderUsernameField = (
         <Field
-            placeholder={t('forms:username')}
             label={t('forms:username')}
             name="username"
             component={TextField}
@@ -202,25 +214,17 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     );
 
     const renderEmailField = (
-        <Field
-            placeholder={t('forms:email')}
-            label={t('forms:email')}
-            name="email"
-            component={TextField}
-            helperText={t('forms:emailHelperText')}
-        />
+        <Field label={t('forms:email')} name="email" component={TextField} helperText={t('forms:emailHelperText')} />
     );
 
     const renderPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => <PasswordField {...props} />;
 
-    const renderConfirmPasswordField = (
-        <Field
-            placeholder={t('forms:confirmPassword')}
-            label={t('forms:confirmPassword')}
-            name="confirmPassword"
-            type="password"
-            component={TextField}
-        />
+    const renderConfirmPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => (
+        <PasswordField label={t('forms:confirmPassword')} name="confirmPassword" {...props} />
+    );
+
+    const renderBetaCodeField = (
+        <Field label={t('forms:betaCode')} name="code" component={TextField} disabled={!!query.code} />
     );
 
     const renderTermsLink = (
@@ -239,11 +243,9 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <FormSubmitSection submitButtonText={t('common:register')} {...props} />
     );
 
-    const renderLoginButton = (
-        <FormControl>
-            <ButtonLink href={urls.login} color="primary" fullWidth>
-                {t('common:login')}
-            </ButtonLink>
+    const renderLoginLink = (
+        <FormControl className={classes.link}>
+            <TextLink href={urls.login}>{t('common:login')}</TextLink>
         </FormControl>
     );
 
@@ -252,10 +254,12 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             {renderUsernameField}
             {renderEmailField}
             {renderPasswordField(props)}
+            {renderConfirmPasswordField(props)}
             {renderConfirmPasswordField}
+            {renderBetaCodeField}
             {renderTermsLink}
             {renderRegisterFormSubmitSection(props)}
-            {renderLoginButton}
+            {renderLoginLink}
         </Form>
     );
 
@@ -272,19 +276,14 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const renderRegisterCompleteHelpText = (
         <FormControl>
-            <Box textAlign="left">
-                <Typography variant="body2" color="textSecondary">
-                    {t('register:registerCompleteHelpText')}
-                </Typography>
-            </Box>
+            <FormHelperText>{t('register:registerCompleteHelpText')}</FormHelperText>
         </FormControl>
     );
 
     const renderSchoolField = (
         <Field
             name="school"
-            label={t('forms:school')}
-            placeholder={t('forms:school')}
+            label={t('forms:schoolOptional')}
             dataKey="schools"
             document={SchoolsDocument}
             component={AutoCompleteField}
@@ -294,8 +293,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const renderSubjectField = (
         <Field
             name="subject"
-            label={t('forms:subject')}
-            placeholder={t('forms:subject')}
+            label={t('forms:subjectOptional')}
             dataKey="subjects"
             document={SubjectsDocument}
             component={AutoCompleteField}
@@ -337,20 +335,19 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const renderRegisterComplete = phase === RegisterPhases.REGISTER_COMPLETE && (
         <FormControl>
-            <Typography variant="body2" align="center">
+            <Typography variant="subtitle1" align="center">
                 {t('register:registerCompleteEmailSent')}
             </Typography>
-            <Box marginTop="1rem">
-                <ButtonLink
-                    href={urls.home}
-                    endIcon={<ArrowForwardOutlined />}
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                >
-                    {t('common:continue')}
-                </ButtonLink>
-            </Box>
+            <Typography component="br" />
+            <ButtonLink
+                href={urls.home}
+                endIcon={<ArrowForwardOutlined />}
+                color="primary"
+                variant="contained"
+                fullWidth
+            >
+                {t('common:continue')}
+            </ButtonLink>
         </FormControl>
     );
 
@@ -361,12 +358,12 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const layoutProps = {
         seoProps,
+        header: getHeader(),
         topNavbarProps: {
-            header: getHeader(),
             headerRight: renderLanguageButton,
             disableAuthButtons: true,
         },
-        desktopHeader: getHeader(),
+        disableBottomNavbar: true,
     };
 
     if (authLoading) {
