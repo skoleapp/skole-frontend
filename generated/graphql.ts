@@ -2753,6 +2753,10 @@ export type SearchCoursesLazyQueryHookResult = ReturnType<typeof useSearchCourse
 export type SearchCoursesQueryResult = Apollo.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
 export const CourseDetailDocument = gql`
     query CourseDetail($id: ID) {
+        resourceTypes {
+            id
+            name
+        }
         course(id: $id) {
             id
             name
@@ -2782,6 +2786,7 @@ export const CourseDetailDocument = gql`
                 title
                 score
                 date
+                resourceType
             }
             comments {
                 id

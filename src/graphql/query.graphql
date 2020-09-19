@@ -146,6 +146,10 @@ query SearchCourses(
 }
 
 query CourseDetail($id: ID) {
+    resourceTypes {
+        id
+        name
+    }
     course(id: $id) {
         id
         name
@@ -154,6 +158,7 @@ query CourseDetail($id: ID) {
         created
         score
         starred
+        resourceType
         vote {
             id
             status
