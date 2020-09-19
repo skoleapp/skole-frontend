@@ -6,6 +6,7 @@
     "maxFileSize": "Maximal filstorlek",
     "fileSelected": "{{ fileName }} vald.",
     "uploadFileButtonText": "Ladda upp fil",
+    "dropZoneText": "Dra och släpp en fil här eller klicka för att välja en fil.",
     "schoolHelperText": "Hittar du inte din skola?",
     "schoolHelperLink": "Kontakta oss så lägger vi till det!",
     "courseHelperText": "Hittar du inte din kurs?",
