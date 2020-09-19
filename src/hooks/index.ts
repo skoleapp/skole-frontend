@@ -2,7 +2,7 @@ export * from './useDrawer';
 export * from './useInfoDrawer';
 export * from './useActionsDrawer';
 export * from './useVotes';
-export * from './useMoment';
+export * from './useDayjs';
 export * from './useStateRef';
 export * from './useShare';
 export * from './useResponsiveIconButtonProps';

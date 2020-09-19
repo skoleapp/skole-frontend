@@ -1,6 +1,6 @@
 import { Box, CardContent, Grid, Typography } from '@material-ui/core';
 import { UserObjectType } from 'generated/graphql';
-import { useMoment } from 'hooks';
+import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
@@ -21,7 +21,6 @@ interface Props {
 
 export const InfoModalContent: React.FC<Props> = ({ user, created, infoItems }) => {
     const { t } = useTranslation();
-    const moment = useMoment();
     const userId = R.propOr(undefined, 'id', user);
 
     const renderInfoItems = infoItems.map(({ label, value }, i) => (
@@ -50,7 +49,7 @@ export const InfoModalContent: React.FC<Props> = ({ user, created, infoItems }) 
                 ) : (
                     t('common:communityUser')
                 )}{' '}
-                {moment(created)
+                {useDayjs(created)
                     .startOf('day')
                     .fromNow()}
             </Typography>

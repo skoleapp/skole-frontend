@@ -20,7 +20,7 @@ import {
 } from '@material-ui/icons';
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation, VoteObjectType } from 'generated';
-import { useActionsDrawer, useMoment, useVotes } from 'hooks';
+import { useActionsDrawer, useDayjs, useVotes } from 'hooks';
 import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
@@ -40,8 +40,7 @@ interface Props {
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment, disableBorder }) => {
     const { t } = useTranslation();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
-    const moment = useMoment();
-    const created = moment(comment.created).format('LL');
+    const created = useDayjs(comment.created).format('LLL');
     const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
     const confirm = useConfirm();
     const attachmentOnly = comment.text == '' && comment.attachment !== '';
