@@ -1,10 +1,10 @@
-import { TableBody, TableCell, TableRow, Typography, Box } from '@material-ui/core';
+import { Box, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { ResourceObjectType, ResourceTypeObjectType } from 'generated';
 import { Link } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
+import { TextColor, TextVariant } from 'types';
 import { urls } from 'utils';
-import { TextVariant, TextColor } from 'types';
 
 interface Props {
     resources: ResourceObjectType[];

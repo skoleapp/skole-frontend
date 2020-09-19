@@ -31,6 +31,7 @@ import {
     CourseObjectType,
     DeleteCourseMutation,
     ResourceObjectType,
+    ResourceTypeObjectType,
     SubjectObjectType,
     useDeleteCourseMutation,
     UserObjectType,
@@ -69,7 +70,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const course: CourseObjectType = R.propOr(null, 'course', data);
-    const resourceTypes: any = R.propOr(null, 'resourceTypes', data);
+    const resourceTypes: ResourceTypeObjectType[] = R.propOr(null, 'resourceTypes', data);
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
     const subjects = R.propOr([], 'subjects', course) as SubjectObjectType[];

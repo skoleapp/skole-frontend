@@ -38,7 +38,7 @@ import {
     UserDetailQueryResult,
     UserObjectType,
 } from 'generated';
-import { useFrontendPagination, useDayjs, useSwipeableTabs } from 'hooks';
+import { useDayjs, useFrontendPagination, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
