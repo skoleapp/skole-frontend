@@ -11,7 +11,7 @@ dayjs.extend(localizableFormat);
 dayjs.extend(relativeTime);
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const useDayjs = (date: string | null) => {
+export const useDayjs = (date: string | undefined = undefined) => {
     const { i18n } = useTranslation();
 
     if (!!date) {
