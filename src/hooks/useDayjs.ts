@@ -1,11 +1,11 @@
-import { useTranslation } from 'lib';
-
 import 'dayjs/locale/fi';
 import 'dayjs/locale/sv';
 import 'dayjs/locale/en';
+
 import dayjs from 'dayjs';
 import localizableFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useTranslation } from 'lib';
 
 dayjs.extend(localizableFormat);
 dayjs.extend(relativeTime);

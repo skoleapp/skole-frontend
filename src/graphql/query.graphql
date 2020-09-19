@@ -57,6 +57,10 @@ query Starred {
 }
 
 query UserDetail($id: ID) {
+    resourceTypes {
+        id
+        name
+    }
     user(id: $id) {
         id
         username
@@ -146,6 +150,10 @@ query SearchCourses(
 }
 
 query CourseDetail($id: ID) {
+    resourceTypes {
+        id
+        name
+    }
     course(id: $id) {
         id
         name
@@ -175,6 +183,7 @@ query CourseDetail($id: ID) {
             title
             score
             date
+            resourceType
         }
         comments {
             id

@@ -12,7 +12,14 @@ import {
     StyledSwipeableViews,
     StyledTabs,
 } from 'components';
-import { CourseObjectType, ResourceObjectType, UserObjectType, useStarredQuery } from 'generated';
+import {
+    CourseObjectType,
+    ResourceObjectType,
+    ResourceTypeObjectType,
+    useResourceTypesQuery,
+    UserObjectType,
+    useStarredQuery,
+} from 'generated';
 import { useFrontendPagination, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -24,9 +31,13 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
     const { t } = useTranslation();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { data, loading, error } = useStarredQuery();
+    const { data: resourceTypeData, loading: loadingResourceType, error: resourceTypeError } = useResourceTypesQuery();
+
     const userMe: UserObjectType = R.propOr(null, 'userMe', data);
     const starredCourses: CourseObjectType[] = R.propOr([], 'starredCourses', data);
     const starredResources: ResourceObjectType[] = R.propOr([], 'starredResources', data);
+    const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', resourceTypeData);
+
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(starredResources);
     const commonTableHeadProps = { titleRight: t('common:score') };
@@ -55,7 +66,7 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         <FrontendPaginatedTable
             tableHeadProps={resourceTableHeadProps}
             paginationProps={resourcePaginationProps}
-            renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+            renderTableBody={<ResourceTableBody resourceTypes={resourceTypes} resources={paginatedResources} />}
         />
     ) : (
         <NotFoundBox text={t('starred:noResources')} />
@@ -94,13 +105,17 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         fullSize: true,
     };
 
-    if (loading || authLoading) {
+    if (loading || authLoading || loadingResourceType) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
+    if (
+        (!!error && !!error.networkError) ||
+        (!!resourceTypeError && !!resourceTypeError.networkError) ||
+        authNetworkError
+    ) {
         return <OfflineLayout seoProps={seoProps} />;
-    } else if (!!error) {
+    } else if (!!error || !!resourceTypeError) {
         return <ErrorLayout seoProps={seoProps} />;
     }
 

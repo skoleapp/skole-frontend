@@ -34,11 +34,12 @@ import {
     BadgeObjectType,
     CourseObjectType,
     ResourceObjectType,
+    ResourceTypeObjectType,
     UserDetailDocument,
     UserDetailQueryResult,
     UserObjectType,
 } from 'generated';
-import { useFrontendPagination, useDayjs, useSwipeableTabs } from 'hooks';
+import { useDayjs, useFrontendPagination, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -71,8 +72,11 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
     const courseCount = createdCourses.length;
     const resourceCount = createdResources.length;
+
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
+    const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
+
     const notFound = t('profile:notFound');
     const seoTitle = !!user ? username : !isFallback ? notFound : '';
     const description = !!user ? t('profile:description', { username }) : notFound;
@@ -359,7 +363,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const renderCreatedResources = !!createdResources.length ? (
         <FrontendPaginatedTable
             tableHeadProps={commonTableHeadProps}
-            renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+            renderTableBody={<ResourceTableBody resourceTypes={resourceTypes} resources={paginatedResources} />}
             paginationProps={resourcePaginationProps}
         />
     ) : (

@@ -301,7 +301,7 @@ mutation MarkAllActivitiesAsRead {
             field
             messages
         }
-        activity {
+        activities {
             id
             description
             read
