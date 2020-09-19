@@ -34,8 +34,8 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         if (!!markAllActivitiesRead) {
             if (!!markAllActivitiesRead.errors) {
                 onError();
-            } else if (!!markAllActivitiesRead.activity) {
-                const activity = markAllActivitiesRead.activity as ActivityObjectType[];
+            } else if (!!markAllActivitiesRead.activities) {
+                const activity = markAllActivitiesRead.activities as ActivityObjectType[];
                 const newUserMe = { ...userMe, activity } as UserObjectType;
                 setUserMe(newUserMe);
             } else {
