@@ -2,5 +2,6 @@
     "title": "Kurssit",
     "description": "Hae kursseja Skolessa.",
     "coursesSubHeader": "Kurssit",
-    "noCourses": "Ei kursseja..."
+    "noCourses": "Hakuehdoilla ei löynyt kursseja. Voit luoda kurssin, mikäli sitä ei vielä ole.",
+    "noCoursesLink": "Luo kurssi täältä!"
 }

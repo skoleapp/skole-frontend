@@ -4,12 +4,12 @@
     "courses": "kurssia",
     "resources": "resurssia",
     "editProfile": "Muokkaa profiilia",
-    "noResources": "Tällä käyttäjällä ei ole resursseja...",
-    "noCourses": "Tällä käyttäjällä ei ole kursseja...",
+    "noResources": "Tällä käyttäjällä ei ole resursseja.",
+    "noCourses": "Tällä käyttäjällä ei ole kursseja.",
     "viewStarred": "Näytä tähdellä merkityt",
     "notFound": "Profiilia ei löytynyt.",
     "ownProfileCourses": "Sinun kurssisi",
     "ownProfileResources": "Sinun resurssit",
-    "ownProfileNoCourses": "Sinulla ei ole kursseja...",
-    "ownProfileNoResources": "Sinulla ei ole resursseja..."
+    "ownProfileNoCourses": "Sinulla ei ole kursseja. Kaikki luomasi kurssit ilmestyvät tänne.",
+    "ownProfileNoResources": "Sinulla ei ole resursseja. Kaikki luomasi resurssit ilmestyvät tänne."
 }

@@ -2,6 +2,6 @@
     "title": "Tähdellä merkityt",
     "description": "Näytä tähdellä merkityt Skolessa.",
     "header": "Tähdellä merkityt",
-    "noResources": "Tähdellä merkityt resurssit näkyvät täällä.",
-    "noCourses": "Tähdellä merkityt kurssit näkyvät täällä."
+    "noResources": "Sinulla ei ole tähdellä merkittyjä resursseja.",
+    "noCourses": "Sinulla ei ole tähdellä merkittyjä kursseja."
 }
