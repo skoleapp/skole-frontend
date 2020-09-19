@@ -34,10 +34,10 @@ import {
     BadgeObjectType,
     CourseObjectType,
     ResourceObjectType,
+    ResourceTypeObjectType,
     UserDetailDocument,
     UserDetailQueryResult,
     UserObjectType,
-    ResourceTypeObjectType,
 } from 'generated';
 import { useDayjs, useFrontendPagination, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';

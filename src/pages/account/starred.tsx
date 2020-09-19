@@ -15,10 +15,10 @@ import {
 import {
     CourseObjectType,
     ResourceObjectType,
+    ResourceTypeObjectType,
+    useResourceTypesQuery,
     UserObjectType,
     useStarredQuery,
-    useResourceTypesQuery,
-    ResourceTypeObjectType,
 } from 'generated';
 import { useFrontendPagination, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
