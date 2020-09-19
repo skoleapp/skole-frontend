@@ -39,7 +39,7 @@ import {
     UserDetailQueryResult,
     UserObjectType,
 } from 'generated';
-import { useFrontendPagination, useMediaQueries, useMoment, useSwipeableTabs } from 'hooks';
+import { useDayjs, useFrontendPagination, useMediaQueries, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -89,7 +89,6 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const { isFallback } = useRouter();
     const { isMobile, isDesktop } = useMediaQueries();
     const { t } = useTranslation();
-    const moment = useMoment();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
     const user: UserObjectType = R.propOr(null, 'user', data);
@@ -101,7 +100,6 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const school = R.propOr('', 'school', userMe);
     const subject = R.propOr('', 'subject', userMe);
     const score = R.propOr('-', 'score', user) as string;
-    const joined = moment(R.propOr('', 'created', user)).format('LL');
     const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
     const badges = R.propOr([], 'badges', user) as BadgeObjectType[];
     const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
@@ -117,6 +115,10 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
     const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
     const noResources = isOwnProfile ? t('profile:ownProfileNoResources') : t('profile:noResources');
+
+    const joined = useDayjs(R.propOr('', 'created', user))
+        .startOf('m')
+        .fromNow();
 
     // Order steps so that the completed ones are first.
     const profileStrengthSteps = [
