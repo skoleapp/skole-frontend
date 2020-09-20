@@ -446,7 +446,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
         topNavbarProps: {
             header: username,
             dynamicBackUrl: true,
-            headerRight: isOwnProfile ? <SettingsButton color="secondary" /> : undefined,
+            headerRight: isOwnProfile ? <SettingsButton color="secondary" size="small" /> : undefined,
         },
     };
 

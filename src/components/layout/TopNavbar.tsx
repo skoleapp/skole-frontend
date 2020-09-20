@@ -16,9 +16,9 @@ import {
     useTheme,
 } from '@material-ui/core';
 import {
+    AddCircleOutlineOutlined,
     ArrowBackOutlined,
     HowToRegOutlined,
-    LibraryAddOutlined,
     NotificationsOutlined,
     StarBorderOutlined,
 } from '@material-ui/icons';
@@ -179,7 +179,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
                 {t('common:login')}
             </ButtonLink>
-            <ButtonLink href={urls.register} color="secondary" endIcon={<LibraryAddOutlined />}>
+            <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
                 {t('common:register')}
             </ButtonLink>
         </>

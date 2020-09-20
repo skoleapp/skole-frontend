@@ -13,7 +13,7 @@ import {
     CommentThreadModal,
     Footer,
     Head,
-    LanguageSelectorModal,
+    LanguageSelectorDialog,
     Notifications,
     SettingsModal,
     TopNavbar,
@@ -95,7 +95,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     const renderAttachmentViewer = <AttachmentViewer />;
     const renderCommentThreadModal = <CommentThreadModal />;
     const renderSettingsModal = <SettingsModal />;
-    const renderLanguageSelectorModal = <LanguageSelectorModal />;
+    const renderLanguageSelectorModal = <LanguageSelectorDialog />;
 
     return (
         <Grid container direction="column" className={classes.root} {...props}>

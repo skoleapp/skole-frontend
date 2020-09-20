@@ -19,7 +19,7 @@ interface Props {
     infoItems: InfoItem[];
 }
 
-export const InfoModalContent: React.FC<Props> = ({ user, created, infoItems }) => {
+export const InfoDialogContent: React.FC<Props> = ({ user, created, infoItems }) => {
     const { t } = useTranslation();
     const userId = R.propOr(undefined, 'id', user);
 

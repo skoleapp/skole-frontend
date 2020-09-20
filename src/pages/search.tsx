@@ -24,7 +24,7 @@ import {
     FormSubmitSection,
     LoadingLayout,
     MainLayout,
-    ModalHeader,
+    DialogHeader,
     NativeSelectField,
     NotFoundBox,
     OfflineLayout,
@@ -400,8 +400,8 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </IconButton>
     );
 
-    const renderModalHeader = (
-        <ModalHeader onCancel={handleCloseFilters} text={t('common:filters')} headerRight={renderClearFiltersButton} />
+    const renderDialogHeader = (
+        <DialogHeader onCancel={handleCloseFilters} text={t('common:filters')} headerRight={renderClearFiltersButton} />
     );
 
     const renderFilterResultsDrawer = (
@@ -412,7 +412,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             fullWidth={isDesktop}
             TransitionComponent={Transition}
         >
-            {renderModalHeader}
+            {renderDialogHeader}
             {renderFilterResultsForm}
         </Dialog>
     );

@@ -1,7 +1,6 @@
 import {
     BottomNavigation,
     Box,
-    Drawer,
     Grid,
     List,
     ListItemIcon,
@@ -20,13 +19,14 @@ import {
     DrawModeButton,
     DrawModeControls,
     ErrorLayout,
-    InfoModalContent,
+    InfoDialogContent,
     LoadingLayout,
     MainLayout,
     NotFoundLayout,
     OfflineLayout,
     PDFViewer,
     ResourceToolbar,
+    ResponsiveDialog,
     StarButton,
     TextLink,
     TopLevelCommentThread,
@@ -42,13 +42,13 @@ import {
     UserObjectType,
     VoteObjectType,
 } from 'generated';
-import { useActionsDrawer, useInfoDrawer, useMediaQueries, useShare, useSwipeableTabs, useVotes } from 'hooks';
+import { useActionsDialog, useInfoDialog, useMediaQueries, useShare, useSwipeableTabs, useVotes } from 'hooks';
 import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
@@ -114,26 +114,15 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const notFound = t('resource:notFound');
     const seoTitle = !!resource ? title : !isFallback ? notFound : '';
     const description = !!resource ? t('resource:description', { resourceTitle }) : notFound;
+    const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     const {
-        renderInfoHeader,
-        renderInfoButton,
-        open: infoOpen,
-        anchor: infoAnchor,
-        onClose: handleCloseInfo,
-    } = useInfoDrawer();
-
-    const {
-        renderActionsHeader,
-        handleCloseActions,
+        actionsDialogOpen,
+        actionsDialogHeaderProps,
+        handleCloseActionsDialog,
         renderReportAction,
         renderActionsButton,
-        open: actionsOpen,
-        anchor: actionsAnchor,
-    } = useActionsDrawer({ text: resourceTitle });
-
-    const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
-    const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
+    } = useActionsDialog({ text: resourceTitle });
 
     const upVoteButtonTooltip =
         verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnResource') : t('tooltips:upVote'));
@@ -194,8 +183,8 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         onError: deleteResourceError,
     });
 
-    const handleDeleteResource = async (e: SyntheticEvent): Promise<void> => {
-        handleCloseActions(e);
+    const handleDeleteResource = async (): Promise<void> => {
+        handleCloseActionsDialog();
 
         try {
             await confirm({
@@ -209,8 +198,8 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         }
     };
 
-    const handleDownloadButtonClick = async (e: SyntheticEvent): Promise<void> => {
-        handleCloseActions(e);
+    const handleDownloadButtonClick = async (): Promise<void> => {
+        handleCloseActionsDialog();
 
         try {
             const res = await fetch(file, {
@@ -231,8 +220,8 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         }
     };
 
-    const handlePrintButtonClick = async (e: SyntheticEvent): Promise<void> => {
-        handleCloseActions(e);
+    const handlePrintButtonClick = async (): Promise<void> => {
+        handleCloseActionsDialog();
 
         try {
             const res = await fetch(file, {
@@ -373,13 +362,16 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         </Grid>
     );
 
-    const renderInfo = <InfoModalContent user={resourceUser} created={created} infoItems={infoItems} />;
+    const renderInfoDialogContent = <InfoDialogContent user={resourceUser} created={created} infoItems={infoItems} />;
 
-    const renderInfoDrawer = (
-        <Drawer {...infoDrawerProps}>
-            {renderInfoHeader}
-            {renderInfo}
-        </Drawer>
+    const renderInfoDialog = (
+        <ResponsiveDialog
+            open={infoDialogOpen}
+            onClose={handleCloseInfoDialog}
+            dialogHeaderProps={infoDialogHeaderProps}
+        >
+            {renderInfoDialogContent}
+        </ResponsiveDialog>
     );
 
     const renderDeleteAction = isOwner && (
@@ -409,7 +401,7 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         </MenuItem>
     );
 
-    const renderActions = (
+    const renderActionsDialogContent = (
         <List>
             {renderDeleteAction}
             {renderDownloadAction}
@@ -418,11 +410,14 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         </List>
     );
 
-    const renderActionsDrawer = (
-        <Drawer {...actionsDrawerProps}>
-            {renderActionsHeader}
-            {renderActions}
-        </Drawer>
+    const renderActionsDialog = (
+        <ResponsiveDialog
+            open={actionsDialogOpen}
+            onClose={handleCloseActionsDialog}
+            dialogHeaderProps={actionsDialogHeaderProps}
+        >
+            {renderActionsDialogContent}
+        </ResponsiveDialog>
     );
 
     const seoProps = {
@@ -432,13 +427,13 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
 
     const layoutProps = {
         seoProps,
+        customBottomNavbar: renderCustomBottomNavbar,
         topNavbarProps: {
             staticBackUrl: staticBackUrl,
             headerLeft: renderShareButton,
             headerRight: renderActionsButton,
             headerRightSecondary: renderInfoButton,
         },
-        customBottomNavbar: renderCustomBottomNavbar,
     };
 
     if (isFallback || authLoading) {
@@ -456,8 +451,8 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
             <MainLayout {...layoutProps}>
                 {renderMobileContent}
                 {renderDesktopContent}
-                {renderInfoDrawer}
-                {renderActionsDrawer}
+                {renderInfoDialog}
+                {renderActionsDialog}
             </MainLayout>
         );
     } else {

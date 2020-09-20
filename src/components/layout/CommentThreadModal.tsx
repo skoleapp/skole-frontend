@@ -3,7 +3,7 @@ import { useDiscussionContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import React from 'react';
 
-import { ModalHeader } from '..';
+import { DialogHeader } from '..';
 import { ReplyCommentThread } from '..';
 import { Transition } from '../shared';
 
@@ -28,7 +28,7 @@ export const CommentThreadModal: React.FC = () => {
             classes={{ paper: classes.paper }}
             TransitionComponent={Transition}
         >
-            <ModalHeader onCancel={handleClose} />
+            <DialogHeader onCancel={handleClose} />
             <Box position="relative" flexGrow="1">
                 <ReplyCommentThread />
             </Box>

@@ -1,5 +1,6 @@
 export * from './apollo';
 export * from './context';
+export * from './dialogs';
 export * from './discussion';
 export * from './forms';
 export * from './hooks';

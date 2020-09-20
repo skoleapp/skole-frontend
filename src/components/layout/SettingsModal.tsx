@@ -3,7 +3,7 @@ import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-import { ModalHeader } from '..';
+import { DialogHeader } from '..';
 import { Transition } from '../shared';
 
 export const SettingsModal: React.FC = () => {
@@ -11,7 +11,7 @@ export const SettingsModal: React.FC = () => {
     const { isMobileOrTablet, isDesktop } = useMediaQueries();
     const { renderSettingsMenuList, settingsOpen, toggleSettings } = useSettings(true);
     const handleClose = (): void => toggleSettings(false);
-    const renderModalHeader = <ModalHeader onCancel={handleClose} text={t('common:settings')} />;
+    const renderDialogHeader = <DialogHeader onCancel={handleClose} text={t('common:settings')} />;
 
     return (
         <Dialog
@@ -21,7 +21,7 @@ export const SettingsModal: React.FC = () => {
             onClose={handleClose}
             TransitionComponent={Transition}
         >
-            {renderModalHeader}
+            {renderDialogHeader}
             {renderSettingsMenuList}
         </Dialog>
     );

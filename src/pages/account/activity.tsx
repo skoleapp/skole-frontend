@@ -1,6 +1,13 @@
-import { Drawer, List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
+import { List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
-import { ActivityList, LoadingLayout, NotFoundLayout, OfflineLayout, SettingsLayout } from 'components';
+import {
+    ActivityList,
+    LoadingLayout,
+    NotFoundLayout,
+    OfflineLayout,
+    ResponsiveDialog,
+    SettingsLayout,
+} from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import {
     ActivityObjectType,
@@ -8,7 +15,7 @@ import {
     useMarkAllActivitiesAsReadMutation,
     UserObjectType,
 } from 'generated';
-import { useActionsDrawer } from 'hooks';
+import { useActionsDialog } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
@@ -17,10 +24,15 @@ import { AuthProps } from 'types';
 const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { userMe, setUserMe } = useAuthContext();
-    const { renderActionsHeader, renderActionsButton, handleCloseActions, open, anchor } = useActionsDrawer({});
-    const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
     const { toggleNotification } = useNotificationsContext();
     const onError = (): void => toggleNotification(t('notifications:markAllActivitiesReadError'));
+
+    const {
+        actionsDialogOpen,
+        actionsDialogHeaderProps,
+        renderActionsButton,
+        handleCloseActionsDialog,
+    } = useActionsDialog({});
 
     const onCompleted = ({ markAllActivitiesRead }: MarkAllActivitiesAsReadMutation): void => {
         if (!!markAllActivitiesRead) {
@@ -46,10 +58,10 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const handleClickMarkAllActivitiesAsReadBUtton = async (e: SyntheticEvent): Promise<void> => {
         e.persist();
         await markAllActivitiesAsRead();
-        handleCloseActions(e);
+        handleCloseActionsDialog();
     };
 
-    const renderActions = (
+    const renderActionsDialogContent = (
         <List>
             <MenuItem onClick={handleClickMarkAllActivitiesAsReadBUtton}>
                 <ListItemIcon>
@@ -64,6 +76,16 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
                 <ListItemText>{t('activity:notificationSettings')}</ListItemText>
             </MenuItem>
         </List>
+    );
+
+    const renderActionsDialog = (
+        <ResponsiveDialog
+            open={actionsDialogOpen}
+            onClose={handleCloseActionsDialog}
+            dialogHeaderProps={actionsDialogHeaderProps}
+        >
+            {renderActionsDialogContent}
+        </ResponsiveDialog>
     );
 
     const seoProps = {
@@ -93,10 +115,7 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         return (
             <SettingsLayout {...layoutProps}>
                 <ActivityList />
-                <Drawer {...actionsDrawerProps}>
-                    {renderActionsHeader}
-                    {renderActions}
-                </Drawer>
+                {renderActionsDialog}
             </SettingsLayout>
         );
     } else {

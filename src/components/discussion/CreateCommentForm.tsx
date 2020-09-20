@@ -8,7 +8,7 @@ import { dataURItoFile, useTranslation } from 'lib';
 import React, { useEffect } from 'react';
 import { CommentTarget, CreateCommentFormValues } from 'types';
 
-import { ModalHeader } from '..';
+import { DialogHeader } from '..';
 import { Transition } from '../shared';
 import { RichTextEditor } from './RichTextEditor';
 
@@ -121,7 +121,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
             onClose={handleCloseCreateCommentModal}
             TransitionComponent={Transition}
         >
-            <ModalHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
+            <DialogHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
             <DialogContent className={classes.dialogContent}>
                 <Grid className={classes.container} container direction="column">
                     {renderAttachment}

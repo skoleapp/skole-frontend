@@ -5,7 +5,6 @@ import {
     CardActionArea,
     CardContent,
     CardHeader,
-    Drawer,
     Grid,
     IconButton,
     List,
@@ -26,14 +25,14 @@ import {
 } from '@material-ui/icons';
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation, VoteObjectType } from 'generated';
-import { useActionsDrawer, useDayjs, useVotes } from 'hooks';
+import { useActionsDialog, useDayjs, useVotes } from 'hooks';
 import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { mediaURL, truncate } from 'utils';
 
-import { TextLink } from '..';
+import { ResponsiveDialog, TextLink } from '..';
 
 const useStyles = makeStyles(({ spacing }) => ({
     root: {
@@ -96,16 +95,13 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const shareText = t('common:commentShareText', { creatorUsername, commentPreview: truncate(comment.text, 20) });
 
     const {
-        renderActionsHeader,
-        handleCloseActions,
+        actionsDialogOpen,
+        actionsDialogHeaderProps,
+        handleCloseActionsDialog,
         renderShareAction,
         renderReportAction,
         renderDefaultActionsButton,
-        open,
-        anchor,
-    } = useActionsDrawer({ query: shareQuery, text: shareText });
-
-    const actionsDrawerProps = { open, anchor, onClose: handleCloseActions };
+    } = useActionsDialog({ query: shareQuery, text: shareText });
 
     const upVoteButtonTooltip =
         verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnComment') : t('tooltips:upVote'));
@@ -157,8 +153,8 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         setAttachmentViewerValue(comment.attachment);
     };
 
-    const handleDeleteComment = async (e: SyntheticEvent): Promise<void> => {
-        handleCloseActions(e);
+    const handleDeleteComment = async (): Promise<void> => {
+        handleCloseActionsDialog();
 
         try {
             await confirm({ title: t('common:deleteCommentTitle'), description: t('common:deleteCommentDescription') });
@@ -168,8 +164,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         }
     };
 
+    // TODO: Find out if this is still needed.
     // Prevent opening comment thread.
-    const onClickActionsDrawer = (e: SyntheticEvent): void => e.stopPropagation();
+    // const onClickActionsDrawer = (e: SyntheticEvent): void => e.stopPropagation();
 
     const renderTitle = (
         <TextLink
@@ -273,7 +270,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         </MenuItem>
     );
 
-    const renderActions = (
+    const renderActionsDialogContent = (
         <List>
             {renderShareAction}
             {renderDeleteAction}
@@ -282,10 +279,13 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     );
 
     const renderActionsDrawer = (
-        <Drawer {...actionsDrawerProps} onClick={onClickActionsDrawer}>
-            {renderActionsHeader}
-            {renderActions}
-        </Drawer>
+        <ResponsiveDialog
+            open={actionsDialogOpen}
+            onClose={handleCloseActionsDialog}
+            dialogHeaderProps={actionsDialogHeaderProps}
+        >
+            {renderActionsDialogContent}
+        </ResponsiveDialog>
     );
 
     return (

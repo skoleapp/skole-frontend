@@ -1,7 +1,8 @@
 import { Grid, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
+import { DialogHeaderProps } from 'types';
 
 const useStyles = makeStyles(({ spacing }) => ({
     root: {
@@ -9,13 +10,7 @@ const useStyles = makeStyles(({ spacing }) => ({
     },
 }));
 
-interface Props {
-    text?: string;
-    onCancel: (e: SyntheticEvent) => void;
-    headerRight?: JSX.Element;
-}
-
-export const ModalHeader: React.FC<Props> = ({ text, onCancel, headerRight }) => {
+export const DialogHeader: React.FC<DialogHeaderProps> = ({ text, onCancel, headerRight }) => {
     const classes = useStyles();
     const { t } = useTranslation();
 

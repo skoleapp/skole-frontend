@@ -2,7 +2,6 @@ import {
     Avatar,
     Box,
     Button,
-    Drawer,
     FormControl,
     List,
     ListItemIcon,
@@ -10,15 +9,17 @@ import {
     makeStyles,
     MenuItem,
 } from '@material-ui/core';
-import { ClearOutlined, EditOutlined, LibraryAddOutlined } from '@material-ui/icons';
+import { AddCircleOutlineOutlined, ClearOutlined, EditOutlined } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
 import { FormikProps } from 'formik';
-import { useDrawer } from 'hooks';
+import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { UpdateProfileFormValues } from 'types';
 import { AVATAR_MAX_FILE_SIZE as maxFileSize } from 'utils';
+
+import { ResponsiveDialog } from '..';
 
 const useStyles = makeStyles(({ spacing }) => ({
     button: {
@@ -31,12 +32,12 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ se
     const { t } = useTranslation();
     const [preview, setPreview] = useState(values.avatar);
     const { toggleNotification } = useNotificationsContext();
+    const { open: dialogOpen, handleOpen: handleOpenDialog, handleClose: handleCloseDialog } = useOpen();
 
-    const { renderHeader: renderDrawerHeader, handleOpen: handleOpenDrawer, ...drawerProps } = useDrawer(
-        t('edit-profile:avatar'),
-    );
-
-    const { onClose: handleCloseDrawer } = drawerProps;
+    const dialogHeaderProps = {
+        text: t('edit-profile:avatar'),
+        onCancel: handleCloseDialog,
+    };
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();
@@ -49,31 +50,20 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ se
             reader.onloadend = (): void => {
                 setFieldValue('avatar', avatar);
                 setPreview(reader.result as string);
-                handleCloseDrawer(e);
+                handleCloseDialog();
             };
         }
     };
 
-    const handleRemoveAvatar = (e: SyntheticEvent): void => {
+    const handleRemoveAvatar = (): void => {
         setFieldValue('avatar', null);
         setPreview('');
-        handleCloseDrawer(e);
+        handleCloseDialog();
     };
 
-    const renderAddAvatar = !preview && (
+    const renderChangeAvatar = (
         <label htmlFor="avatar-input">
-            <MenuItem>
-                <ListItemIcon>
-                    <LibraryAddOutlined />
-                </ListItemIcon>
-                <ListItemText>{t('edit-profile:addAvatar')}</ListItemText>
-            </MenuItem>
-        </label>
-    );
-
-    const renderChangeAvatar = !!preview && (
-        <label htmlFor="avatar-input">
-            <MenuItem>
+            <MenuItem disabled={!preview}>
                 <ListItemIcon>
                     <EditOutlined />
                 </ListItemIcon>
@@ -82,13 +72,24 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ se
         </label>
     );
 
-    const renderRemoveAvatar = !!preview && (
-        <MenuItem onClick={handleRemoveAvatar}>
+    const renderRemoveAvatar = (
+        <MenuItem onClick={handleRemoveAvatar} disabled={!preview}>
             <ListItemIcon>
                 <ClearOutlined />
             </ListItemIcon>
             <ListItemText>{t('edit-profile:clearAvatar')}</ListItemText>
         </MenuItem>
+    );
+
+    const renderAddAvatar = (
+        <label htmlFor="avatar-input">
+            <MenuItem disabled={!!preview}>
+                <ListItemIcon>
+                    <AddCircleOutlineOutlined />
+                </ListItemIcon>
+                <ListItemText>{t('edit-profile:addAvatar')}</ListItemText>
+            </MenuItem>
+        </label>
     );
 
     const renderPreview = (
@@ -103,7 +104,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ se
             />
             <Button
                 className={classes.button}
-                onClick={handleOpenDrawer}
+                onClick={handleOpenDialog}
                 variant="text"
                 color="primary"
                 component="span"
@@ -113,25 +114,20 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ se
         </Box>
     );
 
-    const renderDrawerList = (
-        <List>
-            {renderAddAvatar}
-            {renderChangeAvatar}
-            {renderRemoveAvatar}
-        </List>
-    );
-
-    const renderDrawer = (
-        <Drawer {...drawerProps}>
-            {renderDrawerHeader}
-            {renderDrawerList}
-        </Drawer>
+    const renderDialog = (
+        <ResponsiveDialog open={dialogOpen} onClose={handleCloseDialog} dialogHeaderProps={dialogHeaderProps}>
+            <List>
+                {renderChangeAvatar}
+                {renderRemoveAvatar}
+                {renderAddAvatar}
+            </List>
+        </ResponsiveDialog>
     );
 
     return (
         <FormControl>
             {renderPreview}
-            {renderDrawer}
+            {renderDialog}
         </FormControl>
     );
 };

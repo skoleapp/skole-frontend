@@ -1,7 +1,6 @@
 import {
     Box,
     CardHeader,
-    Drawer,
     List,
     makeStyles,
     Paper,
@@ -20,12 +19,13 @@ import {
     ErrorLayout,
     FrontendPaginatedTable,
     IconButtonLink,
-    InfoModalContent,
+    InfoDialogContent,
     LoadingLayout,
     MainLayout,
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
+    ResponsiveDialog,
     TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
@@ -37,9 +37,9 @@ import {
     SubjectObjectType,
 } from 'generated';
 import {
-    useActionsDrawer,
+    useActionsDialog,
     useFrontendPagination,
-    useInfoDrawer,
+    useInfoDialog,
     useMediaQueries,
     useSearch,
     useShare,
@@ -95,26 +95,15 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
     const title = !!school ? schoolName : !isFallback ? notFound : '';
     const description = !!school ? t('school:description', { schoolName }) : notFound;
     const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
+    const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     const {
-        renderInfoHeader,
-        renderInfoButton,
-        open: infoOpen,
-        anchor: infoAnchor,
-        onClose: handleCloseInfo,
-    } = useInfoDrawer();
-
-    const {
-        renderActionsHeader,
-        handleCloseActions,
+        actionsDialogOpen,
+        actionsDialogHeaderProps,
+        handleCloseActionsDialog,
         renderActionsButton,
         renderShareAction,
-        open: actionsOpen,
-        anchor: actionsAnchor,
-    } = useActionsDrawer({ text: schoolName });
-
-    const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
-    const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
+    } = useActionsDialog({ text: schoolName });
 
     const schoolTypeLink = {
         ...searchUrl,
@@ -268,22 +257,28 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
         </Paper>
     );
 
-    const renderInfo = <InfoModalContent infoItems={infoItems} />;
+    const renderInfoDialogContent = <InfoDialogContent infoItems={infoItems} />;
 
-    const renderInfoDrawer = (
-        <Drawer {...infoDrawerProps}>
-            {renderInfoHeader}
-            {renderInfo}
-        </Drawer>
+    const renderInfoDialog = (
+        <ResponsiveDialog
+            open={infoDialogOpen}
+            onClose={handleCloseInfoDialog}
+            dialogHeaderProps={infoDialogHeaderProps}
+        >
+            {renderInfoDialogContent}
+        </ResponsiveDialog>
     );
 
-    const renderActions = <List>{renderShareAction}</List>;
+    const renderActionsDialogContent = <List>{renderShareAction}</List>;
 
     const renderActionsDrawer = (
-        <Drawer {...actionsDrawerProps}>
-            {renderActionsHeader}
-            {renderActions}
-        </Drawer>
+        <ResponsiveDialog
+            open={actionsDialogOpen}
+            onClose={handleCloseActionsDialog}
+            dialogHeaderProps={actionsDialogHeaderProps}
+        >
+            {renderActionsDialogContent}
+        </ResponsiveDialog>
     );
 
     const seoProps = {
@@ -293,14 +288,14 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
 
     const layoutProps = {
         seoProps,
+        tabLabelLeft: `${t('common:subjects')} (${subjectCount})`,
+        tabLabelRight: `${t('common:courses')} (${courseCount})`,
         topNavbarProps: {
             dynamicBackUrl: true,
             headerLeft: renderAddCourseButton,
             headerRight: renderActionsButton,
             headerRightSecondary: renderInfoButton,
         },
-        tabLabelLeft: `${t('common:subjects')} (${subjectCount})`,
-        tabLabelRight: `${t('common:courses')} (${courseCount})`,
     };
 
     if (isFallback || authLoading) {
@@ -317,7 +312,7 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
         return (
             <MainLayout {...layoutProps}>
                 {renderContent}
-                {renderInfoDrawer}
+                {renderInfoDialog}
                 {renderActionsDrawer}
             </MainLayout>
         );

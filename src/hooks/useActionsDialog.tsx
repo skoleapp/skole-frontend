@@ -1,38 +1,38 @@
-import { DrawerProps, IconButton, ListItemIcon, ListItemText, MenuItem, Size, Tooltip } from '@material-ui/core';
+import { IconButton, ListItemIcon, ListItemText, MenuItem, Size, Tooltip } from '@material-ui/core';
 import { FlagOutlined, MoreHorizOutlined, ShareOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
-import React, { SyntheticEvent } from 'react';
-import { ShareParams } from 'types';
+import React from 'react';
+import { DialogHeaderProps, ShareParams } from 'types';
 
-import { useDrawer } from './useDrawer';
 import { useMediaQueries } from './useMediaQueries';
+import { useOpen } from './useOpen';
 import { useShare } from './useShare';
 
-interface UseActionsDrawer extends DrawerProps {
-    renderActionsHeader: JSX.Element;
-    handleCloseActions: (e: SyntheticEvent) => void;
+interface UseActionsDialog {
+    actionsDialogOpen: boolean;
+    actionsDialogHeaderProps: DialogHeaderProps;
+    handleCloseActionsDialog: () => void;
     renderShareAction: false | JSX.Element;
     renderReportAction: JSX.Element;
     renderActionsButton: JSX.Element;
     renderDefaultActionsButton: JSX.Element;
 }
 
-export const useActionsDrawer = (shareParams: ShareParams): UseActionsDrawer => {
+export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => {
     const { t } = useTranslation();
     const { handleShare } = useShare(shareParams);
     const { isMobileOrTablet } = useMediaQueries();
+    const { open: actionsDialogOpen, handleOpen: handleOpenActions, handleClose: handleCloseActionsDialog } = useOpen();
     const tooltip = t('tooltips:actions');
 
-    const {
-        renderHeader: renderActionsHeader,
-        handleOpen: handleOpenActions,
-        onClose: handleCloseActions,
-        ...actionsDrawerProps
-    } = useDrawer(t('common:actions'));
-
-    const handlePreShare = (e: SyntheticEvent): void => {
-        handleCloseActions(e);
+    const handlePreShare = (): void => {
+        handleCloseActionsDialog();
         handleShare();
+    };
+
+    const actionsDialogHeaderProps = {
+        text: t('common:actions'),
+        onCancel: handleCloseActionsDialog,
     };
 
     const renderShareAction = (
@@ -75,12 +75,12 @@ export const useActionsDrawer = (shareParams: ShareParams): UseActionsDrawer => 
     );
 
     return {
-        renderActionsHeader,
-        handleCloseActions,
+        actionsDialogOpen,
+        actionsDialogHeaderProps,
+        handleCloseActionsDialog,
         renderShareAction,
         renderReportAction,
         renderActionsButton,
         renderDefaultActionsButton,
-        ...actionsDrawerProps,
     };
 };

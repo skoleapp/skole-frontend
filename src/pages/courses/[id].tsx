@@ -2,7 +2,6 @@ import {
     BottomNavigation,
     Box,
     CardHeader,
-    Drawer,
     Grid,
     List,
     ListItemIcon,
@@ -21,13 +20,14 @@ import {
     ErrorLayout,
     FrontendPaginatedTable,
     IconButtonLink,
-    InfoModalContent,
+    InfoDialogContent,
     LoadingLayout,
     MainLayout,
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
     ResourceTableBody,
+    ResponsiveDialog,
     StarButton,
     TextLink,
     TopLevelCommentThread,
@@ -47,9 +47,9 @@ import {
     VoteObjectType,
 } from 'generated';
 import {
-    useActionsDrawer,
+    useActionsDialog,
     useFrontendPagination,
-    useInfoDrawer,
+    useInfoDialog,
     useMediaQueries,
     useSearch,
     useShare,
@@ -61,7 +61,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
@@ -121,27 +121,16 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const notFound = t('course:notFound');
     const title = !!course ? courseName : !isFallback ? notFound : '';
     const description = !!course ? t('course:description', { courseName }) : notFound;
+    const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     const {
-        renderInfoHeader,
-        renderInfoButton,
-        open: infoOpen,
-        anchor: infoAnchor,
-        onClose: handleCloseInfo,
-    } = useInfoDrawer();
-
-    const {
-        renderActionsHeader,
-        handleCloseActions,
+        actionsDialogOpen,
+        actionsDialogHeaderProps,
+        handleCloseActionsDialog,
         renderShareAction,
         renderReportAction,
         renderActionsButton,
-        open: actionsOpen,
-        anchor: actionsAnchor,
-    } = useActionsDrawer({ text: courseName });
-
-    const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
-    const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
+    } = useActionsDialog({ text: courseName });
 
     const upVoteButtonTooltip =
         verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:upVote'));
@@ -184,13 +173,13 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
         onError: deleteCourseError,
     });
 
-    const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
+    const handleDeleteCourse = async (): Promise<void> => {
         try {
             await confirm({ title: t('course:deleteCourseTitle'), description: t('course:deleteCourseDescription') });
             deleteCourse({ variables: { id: courseId } });
         } catch {
         } finally {
-            handleCloseActions(e);
+            handleCloseActionsDialog();
         }
     };
 
@@ -353,13 +342,16 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
         </Grid>
     );
 
-    const renderInfo = <InfoModalContent user={courseUser} created={created} infoItems={infoItems} />;
+    const renderInfoDialogContent = <InfoDialogContent user={courseUser} created={created} infoItems={infoItems} />;
 
-    const renderInfoDrawer = (
-        <Drawer {...infoDrawerProps}>
-            {renderInfoHeader}
-            {renderInfo}
-        </Drawer>
+    const renderInfoDialog = (
+        <ResponsiveDialog
+            open={infoDialogOpen}
+            onClose={handleCloseInfoDialog}
+            dialogHeaderProps={infoDialogHeaderProps}
+        >
+            {renderInfoDialogContent}
+        </ResponsiveDialog>
     );
 
     const renderDeleteAction = isOwner && (
@@ -371,7 +363,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
         </MenuItem>
     );
 
-    const renderActions = (
+    const renderActionsDialogContent = (
         <List>
             {renderShareAction}
             {renderDeleteAction}
@@ -379,11 +371,14 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
         </List>
     );
 
-    const renderActionsDrawer = (
-        <Drawer {...actionsDrawerProps}>
-            {renderActionsHeader}
-            {renderActions}
-        </Drawer>
+    const renderActionsDialog = (
+        <ResponsiveDialog
+            open={actionsDialogOpen}
+            onClose={handleCloseActionsDialog}
+            dialogHeaderProps={actionsDialogHeaderProps}
+        >
+            {renderActionsDialogContent}
+        </ResponsiveDialog>
     );
 
     const seoProps = {
@@ -417,8 +412,8 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
             <MainLayout {...layoutProps}>
                 {renderMobileContent}
                 {renderDesktopContent}
-                {renderInfoDrawer}
-                {renderActionsDrawer}
+                {renderInfoDialog}
+                {renderActionsDialog}
             </MainLayout>
         );
     } else {
