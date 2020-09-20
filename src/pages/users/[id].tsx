@@ -35,6 +35,7 @@ import {
     BadgeObjectType,
     CourseObjectType,
     ResourceObjectType,
+    ResourceTypeObjectType,
     UserDetailDocument,
     UserDetailQueryResult,
     UserObjectType,
@@ -92,6 +93,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
     const user: UserObjectType = R.propOr(null, 'user', data);
+    const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const rank = R.propOr('', 'rank', user) as string;
     const username = R.propOr('-', 'username', user) as string;
     const avatar = R.propOr('', 'avatar', user) as string;
@@ -406,7 +408,7 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const renderCreatedResources = !!createdResources.length ? (
         <FrontendPaginatedTable
             tableHeadProps={commonTableHeadProps}
-            renderTableBody={<ResourceTableBody resources={paginatedResources} />}
+            renderTableBody={<ResourceTableBody resourceTypes={resourceTypes} resources={paginatedResources} />}
             paginationProps={resourcePaginationProps}
         />
     ) : (

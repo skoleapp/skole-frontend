@@ -209,7 +209,7 @@ export type CommentObjectType = {
 export type ResourceObjectType = {
   __typename?: 'ResourceObjectType';
   id: Scalars['ID'];
-  resourceType?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<ResourceTypeObjectType>;
   title: Scalars['String'];
   file: Scalars['String'];
   date: Scalars['Date'];
@@ -223,6 +223,12 @@ export type ResourceObjectType = {
   score?: Maybe<Scalars['Int']>;
   vote?: Maybe<VoteObjectType>;
   school?: Maybe<SchoolObjectType>;
+};
+
+export type ResourceTypeObjectType = {
+  __typename?: 'ResourceTypeObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
 };
 
 
@@ -241,12 +247,6 @@ export type BadgeObjectType = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-};
-
-export type ResourceTypeObjectType = {
-  __typename?: 'ResourceTypeObjectType';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
 };
 
 export type PaginatedCourseObjectType = {
@@ -1311,7 +1311,10 @@ export type StarredQuery = (
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
     )>>> }
-  )> }
+  )>, resourceTypes?: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+  )>>> }
 );
 
 export type UserDetailQueryVariables = Exact<{
@@ -1388,10 +1391,7 @@ export type CourseDetailQueryVariables = Exact<{
 
 export type CourseDetailQuery = (
   { __typename?: 'Query' }
-  & { resourceTypes?: Maybe<Array<Maybe<(
-    { __typename?: 'ResourceTypeObjectType' }
-    & Pick<ResourceTypeObjectType, 'id' | 'name'>
-  )>>>, course?: Maybe<(
+  & { course?: Maybe<(
     { __typename?: 'CourseObjectType' }
     & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'score' | 'starred'>
     & { vote?: Maybe<(
@@ -1408,7 +1408,11 @@ export type CourseDetailQuery = (
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'resourceType'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
+      & { resourceType?: Maybe<(
+        { __typename?: 'ResourceTypeObjectType' }
+        & Pick<ResourceTypeObjectType, 'id' | 'name'>
+      )> }
     )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
@@ -1430,7 +1434,10 @@ export type CourseDetailQuery = (
         & Pick<VoteObjectType, 'id' | 'status'>
       )> }
     )> }
-  )> }
+  )>, resourceTypes?: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+  )>>> }
 );
 
 export type ResourceDetailQueryVariables = Exact<{
@@ -1442,8 +1449,11 @@ export type ResourceDetailQuery = (
   { __typename?: 'Query' }
   & { resource?: Maybe<(
     { __typename?: 'ResourceObjectType' }
-    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'file' | 'date' | 'modified' | 'created' | 'score' | 'starred'>
-    & { school?: Maybe<(
+    & Pick<ResourceObjectType, 'id' | 'title' | 'file' | 'date' | 'modified' | 'created' | 'score' | 'starred'>
+    & { resourceType?: Maybe<(
+      { __typename?: 'ResourceTypeObjectType' }
+      & Pick<ResourceTypeObjectType, 'id' | 'name'>
+    )>, school?: Maybe<(
       { __typename?: 'SchoolObjectType' }
       & Pick<SchoolObjectType, 'id' | 'name'>
     )>, course: (
@@ -2579,6 +2589,10 @@ export const StarredDocument = gql`
       date
     }
   }
+  resourceTypes {
+    id
+    name
+  }
 }
     `;
 
@@ -2742,10 +2756,6 @@ export type SearchCoursesLazyQueryHookResult = ReturnType<typeof useSearchCourse
 export type SearchCoursesQueryResult = Apollo.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
 export const CourseDetailDocument = gql`
     query CourseDetail($id: ID) {
-  resourceTypes {
-    id
-    name
-  }
   course(id: $id) {
     id
     name
@@ -2775,7 +2785,10 @@ export const CourseDetailDocument = gql`
       title
       score
       date
-      resourceType
+      resourceType {
+        id
+        name
+      }
     }
     comments {
       id
@@ -2812,6 +2825,10 @@ export const CourseDetailDocument = gql`
       }
     }
   }
+  resourceTypes {
+    id
+    name
+  }
 }
     `;
 
@@ -2845,13 +2862,16 @@ export const ResourceDetailDocument = gql`
   resource(id: $id) {
     id
     title
-    resourceType
     file
     date
     modified
     created
     score
     starred
+    resourceType {
+      id
+      name
+    }
     school {
       id
       name
@@ -2869,11 +2889,6 @@ export const ResourceDetailDocument = gql`
       status
     }
     comments {
-      user {
-        id
-        username
-        avatarThumbnail
-      }
       id
       text
       attachment
@@ -2882,6 +2897,11 @@ export const ResourceDetailDocument = gql`
       modified
       created
       score
+      user {
+        id
+        username
+        avatarThumbnail
+      }
       vote {
         id
         status
