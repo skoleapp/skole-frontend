@@ -36,7 +36,7 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const onCompleted = ({ markAllActivitiesRead }: MarkAllActivitiesAsReadMutation): void => {
         if (!!markAllActivitiesRead) {
-            if (!!markAllActivitiesRead.errors) {
+            if (!!markAllActivitiesRead.errors && !!markAllActivitiesRead.errors.length) {
                 onError();
             } else if (!!markAllActivitiesRead.activities) {
                 const activity = markAllActivitiesRead.activities as ActivityObjectType[];

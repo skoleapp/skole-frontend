@@ -171,7 +171,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const onUpdateUserCompleted = ({ updateUser }: UpdateUserMutation): void => {
         if (!!updateUser) {
-            if (!!updateUser.errors) {
+            if (!!updateUser.errors && !!updateUser.errors.length) {
                 handleUpdateUserMutationErrors(updateUser.errors);
             } else {
                 resetUpdateUserForm();

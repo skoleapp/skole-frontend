@@ -97,7 +97,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const course: CourseObjectType = R.propOr(null, 'course', data);
-    const resourceTypes: ResourceTypeObjectType[] = R.propOr(null, 'resourceTypes', data);
+    const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
     const subjects = R.propOr([], 'subjects', course) as SubjectObjectType[];
@@ -155,7 +155,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
 
     const deleteCourseCompleted = ({ deleteCourse }: DeleteCourseMutation): void => {
         if (!!deleteCourse) {
-            if (!!deleteCourse.errors) {
+            if (!!deleteCourse.errors && !!deleteCourse.errors.length) {
                 deleteCourseError();
             } else if (!!deleteCourse.message) {
                 toggleNotification(deleteCourse.message);

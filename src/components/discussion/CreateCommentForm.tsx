@@ -63,7 +63,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
     const onCompleted = ({ createComment }: CreateCommentMutation): void => {
         if (!!createComment) {
-            if (!!createComment.errors) {
+            if (!!createComment.errors && !!createComment.errors.length) {
                 onError();
             } else if (!!createComment.comment && !!createComment.message) {
                 toggleNotification(createComment.message);

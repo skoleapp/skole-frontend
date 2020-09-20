@@ -165,7 +165,7 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
 
     const deleteResourceCompleted = ({ deleteResource }: DeleteResourceMutation): void => {
         if (!!deleteResource) {
-            if (!!deleteResource.errors) {
+            if (!!deleteResource.errors && !!deleteResource.errors.length) {
                 deleteResourceError();
             } else if (deleteResource.message) {
                 toggleNotification(deleteResource.message);

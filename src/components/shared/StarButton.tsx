@@ -22,7 +22,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
 
     const onCompleted = ({ performStar }: PerformStarMutation): void => {
         if (!!performStar) {
-            if (!!performStar.errors) {
+            if (!!performStar.errors && !!performStar.errors.length) {
                 onError();
             } else {
                 setStarred(performStar.starred as boolean);

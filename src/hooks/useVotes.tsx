@@ -57,7 +57,7 @@ export const useVotes = ({
 
     const onCompleted = ({ performVote }: PerformVoteMutation): void => {
         if (!!performVote) {
-            if (!!performVote.errors) {
+            if (!!performVote.errors && !!performVote.errors.length) {
                 onError();
             } else {
                 setVote(performVote.vote as VoteObjectType);
