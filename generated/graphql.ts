@@ -1321,7 +1321,10 @@ export type UserDetailQueryVariables = Exact<{
 
 export type UserDetailQuery = (
   { __typename?: 'Query' }
-  & { user?: Maybe<(
+  & { resourceTypes?: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+  )>>>, user?: Maybe<(
     { __typename?: 'UserObjectType' }
     & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'created' | 'verified' | 'rank'>
     & { badges?: Maybe<Array<Maybe<(
@@ -1385,7 +1388,10 @@ export type CourseDetailQueryVariables = Exact<{
 
 export type CourseDetailQuery = (
   { __typename?: 'Query' }
-  & { course?: Maybe<(
+  & { resourceTypes?: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+  )>>>, course?: Maybe<(
     { __typename?: 'CourseObjectType' }
     & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'score' | 'starred'>
     & { vote?: Maybe<(
@@ -1402,7 +1408,7 @@ export type CourseDetailQuery = (
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'resourceType'>
     )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
@@ -2602,6 +2608,10 @@ export type StarredLazyQueryHookResult = ReturnType<typeof useStarredLazyQuery>;
 export type StarredQueryResult = Apollo.QueryResult<StarredQuery, StarredQueryVariables>;
 export const UserDetailDocument = gql`
     query UserDetail($id: ID) {
+  resourceTypes {
+    id
+    name
+  }
   user(id: $id) {
     id
     username
@@ -2732,6 +2742,10 @@ export type SearchCoursesLazyQueryHookResult = ReturnType<typeof useSearchCourse
 export type SearchCoursesQueryResult = Apollo.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
 export const CourseDetailDocument = gql`
     query CourseDetail($id: ID) {
+  resourceTypes {
+    id
+    name
+  }
   course(id: $id) {
     id
     name
@@ -2761,6 +2775,7 @@ export const CourseDetailDocument = gql`
       title
       score
       date
+      resourceType
     }
     comments {
       id
