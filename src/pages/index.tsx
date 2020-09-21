@@ -76,6 +76,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         position: 'absolute',
         height: '100%',
         width: '100%',
+        borderRadius: BORDER_RADIUS,
     },
     cardContent: {
         display: 'flex',
