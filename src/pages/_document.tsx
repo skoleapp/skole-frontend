@@ -7,7 +7,7 @@ import React from 'react';
 export default class SkoleDocument extends NextDocument {
     render(): JSX.Element {
         return (
-            <Html lang="en">
+            <Html lang={this.props.__NEXT_DATA__.props.initialLanguage}>
                 <Head />
                 <body>
                     <Main />
