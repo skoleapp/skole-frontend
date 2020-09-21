@@ -1,5 +1,6 @@
 import {
     Box,
+    CardActionArea,
     CardHeader,
     List,
     makeStyles,
@@ -183,11 +184,13 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
         <TableBody>
             {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
                 <Link href={{ ...searchUrl, query: { ...searchUrl.query, subject: s.id } }} key={i}>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="subtitle1">{R.propOr('-', 'name', s)}</Typography>
-                        </TableCell>
-                    </TableRow>
+                    <CardActionArea>
+                        <TableRow>
+                            <TableCell>
+                                <Typography variant="body2">{R.propOr('-', 'name', s)}</Typography>
+                            </TableCell>
+                        </TableRow>
+                    </CardActionArea>
                 </Link>
             ))}
         </TableBody>
