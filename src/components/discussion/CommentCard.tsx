@@ -153,8 +153,8 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         setAttachmentViewerValue(comment.attachment);
     };
 
-    const handleDeleteComment = async (): Promise<void> => {
-        handleCloseActionsDialog();
+    const handleDeleteComment = async (e: SyntheticEvent): Promise<void> => {
+        handleCloseActionsDialog(e);
 
         try {
             await confirm({ title: t('common:deleteCommentTitle'), description: t('common:deleteCommentDescription') });
@@ -163,10 +163,6 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
             // User cancelled.
         }
     };
-
-    // TODO: Find out if this is still needed.
-    // Prevent opening comment thread.
-    // const onClickActionsDrawer = (e: SyntheticEvent): void => e.stopPropagation();
 
     const renderTitle = (
         <TextLink

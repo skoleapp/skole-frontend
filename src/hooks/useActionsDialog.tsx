@@ -1,7 +1,7 @@
 import { IconButton, ListItemIcon, ListItemText, MenuItem, Size, Tooltip } from '@material-ui/core';
 import { FlagOutlined, MoreHorizOutlined, ShareOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps, ShareParams } from 'types';
 
 import { useMediaQueries } from './useMediaQueries';
@@ -11,7 +11,7 @@ import { useShare } from './useShare';
 interface UseActionsDialog {
     actionsDialogOpen: boolean;
     actionsDialogHeaderProps: DialogHeaderProps;
-    handleCloseActionsDialog: () => void;
+    handleCloseActionsDialog: (e: SyntheticEvent) => void;
     renderShareAction: false | JSX.Element;
     renderReportAction: JSX.Element;
     renderActionsButton: JSX.Element;
@@ -20,14 +20,29 @@ interface UseActionsDialog {
 
 export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => {
     const { t } = useTranslation();
-    const { handleShare } = useShare(shareParams);
+    const { handleShare: _handleShare } = useShare(shareParams);
     const { isMobileOrTablet } = useMediaQueries();
-    const { open: actionsDialogOpen, handleOpen: handleOpenActions, handleClose: handleCloseActionsDialog } = useOpen();
     const tooltip = t('tooltips:actions');
 
-    const handlePreShare = (): void => {
-        handleCloseActionsDialog();
-        handleShare();
+    const {
+        open: actionsDialogOpen,
+        handleOpen: _handleOpenActionsDialog,
+        handleClose: _handleCloseActionsDialog,
+    } = useOpen();
+
+    const handleOpenActionsDialog = (e: SyntheticEvent): void => {
+        e.stopPropagation();
+        _handleOpenActionsDialog();
+    };
+
+    const handleCloseActionsDialog = (e: SyntheticEvent): void => {
+        e.stopPropagation();
+        _handleCloseActionsDialog();
+    };
+
+    const handleShare = (e: SyntheticEvent): void => {
+        handleCloseActionsDialog(e);
+        _handleShare();
     };
 
     const actionsDialogHeaderProps = {
@@ -36,7 +51,7 @@ export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => 
     };
 
     const renderShareAction = (
-        <MenuItem onClick={handlePreShare}>
+        <MenuItem onClick={handleShare}>
             <ListItemIcon>
                 <ShareOutlined />
             </ListItemIcon>
@@ -54,7 +69,7 @@ export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => 
     );
 
     const commonActionsButtonProps = {
-        onClick: handleOpenActions,
+        onClick: handleOpenActionsDialog,
         size: 'small' as Size,
     };
 

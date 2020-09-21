@@ -1,5 +1,7 @@
+import { SyntheticEvent } from 'react';
+
 export interface DialogHeaderProps {
     text?: string;
-    onCancel: () => void;
+    onCancel: (e: SyntheticEvent) => void;
     headerRight?: JSX.Element;
 }

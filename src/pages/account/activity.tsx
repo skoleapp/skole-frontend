@@ -56,9 +56,8 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     });
 
     const handleClickMarkAllActivitiesAsReadBUtton = async (e: SyntheticEvent): Promise<void> => {
-        e.persist();
         await markAllActivitiesAsRead();
-        handleCloseActionsDialog();
+        handleCloseActionsDialog(e);
     };
 
     const renderActionsDialogContent = (

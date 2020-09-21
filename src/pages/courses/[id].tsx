@@ -61,7 +61,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
@@ -173,13 +173,13 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
         onError: deleteCourseError,
     });
 
-    const handleDeleteCourse = async (): Promise<void> => {
+    const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
         try {
             await confirm({ title: t('course:deleteCourseTitle'), description: t('course:deleteCourseDescription') });
             deleteCourse({ variables: { id: courseId } });
         } catch {
         } finally {
-            handleCloseActionsDialog();
+            handleCloseActionsDialog(e);
         }
     };
 

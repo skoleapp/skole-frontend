@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, Drawer } from '@material-ui/core';
 import { useMediaQueries } from 'hooks';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
 
 import { DialogHeader } from './DialogHeader';
@@ -8,7 +8,7 @@ import { Transition } from './Transition';
 
 interface Props {
     open: boolean;
-    onClose: () => void;
+    onClose: (e: SyntheticEvent) => void;
     dialogHeaderProps: DialogHeaderProps;
 }
 

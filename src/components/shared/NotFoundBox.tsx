@@ -37,14 +37,12 @@ export const NotFoundBox: React.FC<Props> = ({ text, linkProps }) => {
         </Typography>
     );
 
-    const renderSpace = <Typography component="br" />;
     const renderLink = !!linkProps && <TextLink href={linkProps.href}>{linkProps.text}</TextLink>;
 
     return (
         <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
             {renderIcon}
             {renderText}
-            {/* {renderSpace} */}
             {renderLink}
         </Grid>
     );

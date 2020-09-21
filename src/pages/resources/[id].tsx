@@ -48,7 +48,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { useEffect } from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
@@ -183,8 +183,8 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         onError: deleteResourceError,
     });
 
-    const handleDeleteResource = async (): Promise<void> => {
-        handleCloseActionsDialog();
+    const handleDeleteResource = async (e: SyntheticEvent): Promise<void> => {
+        handleCloseActionsDialog(e);
 
         try {
             await confirm({
@@ -198,8 +198,8 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         }
     };
 
-    const handleDownloadButtonClick = async (): Promise<void> => {
-        handleCloseActionsDialog();
+    const handleDownloadButtonClick = async (e: SyntheticEvent): Promise<void> => {
+        handleCloseActionsDialog(e);
 
         try {
             const res = await fetch(file, {
@@ -220,8 +220,8 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         }
     };
 
-    const handlePrintButtonClick = async (): Promise<void> => {
-        handleCloseActionsDialog();
+    const handlePrintButtonClick = async (e: SyntheticEvent): Promise<void> => {
+        handleCloseActionsDialog(e);
 
         try {
             const res = await fetch(file, {

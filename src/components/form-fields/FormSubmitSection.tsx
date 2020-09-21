@@ -1,4 +1,4 @@
-import { Box, Button, ButtonProps, FormControl, Grid } from '@material-ui/core';
+import { Button, ButtonProps, FormControl, Grid } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
 import React from 'react';

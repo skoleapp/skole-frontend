@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, FormControl, Typography } from '@material-ui/core';
 import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik } from 'formik';
@@ -106,13 +106,7 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         general: '',
     };
 
-    const renderVerified = (
-        <Box flexGrow="1" textAlign="center">
-            <Typography variant="body2">{t('verify-account:verified')}</Typography>
-        </Box>
-    );
-
-    const renderEmailForm = (
+    const renderEmailForm = !verified && !token && !emailSubmitted && (
         <Formik initialValues={initialEmailFormValues} onSubmit={handleSubmitEmail} ref={emailFormRef}>
             {(props): JSX.Element => (
                 <Form>
@@ -125,13 +119,15 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         </Formik>
     );
 
-    const renderEmailSubmitted = (
-        <Box textAlign="center">
-            <Typography variant="body2">{t('verify-account:emailSubmitted')}</Typography>
-        </Box>
+    const renderEmailSubmitted = !verified && !token && emailSubmitted && (
+        <FormControl>
+            <Typography variant="subtitle1" align="center">
+                {t('verify-account:emailSubmitted')}
+            </Typography>
+        </FormControl>
     );
 
-    const renderConfirmationForm = (
+    const renderConfirmationForm = !verified && !!token && (
         <Formik
             initialValues={initialConfirmationFormValues}
             onSubmit={handleSubmitConfirmation}
@@ -148,13 +144,13 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         </Formik>
     );
 
-    const renderCardContent = verified
-        ? renderVerified
-        : !!token
-        ? renderConfirmationForm
-        : emailSubmitted
-        ? renderEmailSubmitted
-        : renderEmailForm;
+    const renderVerified = verified && (
+        <FormControl>
+            <Typography variant="subtitle1" align="center">
+                {t('verify-account:verified')}
+            </Typography>
+        </FormControl>
+    );
 
     const seoProps = {
         title: t('verify-account:title'),
@@ -163,13 +159,11 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const layoutProps = {
         seoProps,
+        header,
+        dense: true,
         topNavbarProps: {
-            header,
             dynamicBackUrl: true,
         },
-        renderCardContent,
-        desktopHeader: header,
-        formLayout: true,
     };
 
     if (authLoading) {
@@ -180,7 +174,14 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <SettingsLayout {...layoutProps} />;
+    return (
+        <SettingsLayout {...layoutProps}>
+            {renderEmailForm}
+            {renderEmailSubmitted}
+            {renderConfirmationForm}
+            {renderVerified}
+        </SettingsLayout>
+    );
 };
 
 export const getStaticProps: GetStaticProps = async () => ({
