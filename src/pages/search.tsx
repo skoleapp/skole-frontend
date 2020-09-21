@@ -20,19 +20,19 @@ import clsx from 'clsx';
 import {
     AutoCompleteField,
     CourseTableBody,
+    DialogHeader,
     ErrorLayout,
     FormSubmitSection,
     LoadingLayout,
     MainLayout,
-    DialogHeader,
     NativeSelectField,
     NotFoundBox,
     OfflineLayout,
     PaginatedTable,
+    TextFormField,
     Transition,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { TextField } from 'formik-material-ui';
 import {
     CitiesDocument,
     CityObjectType,
@@ -261,10 +261,10 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderCourseNameField = !isMobileOrTablet && (
-        <Field name="courseName" label={t('forms:courseName')} component={TextField} />
+        <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
     );
 
-    const renderCourseCodeField = <Field name="courseCode" label={t('forms:courseCode')} component={TextField} />;
+    const renderCourseCodeField = <Field name="courseCode" label={t('forms:courseCode')} component={TextFormField} />;
 
     const renderSubjectField = (
         <Field

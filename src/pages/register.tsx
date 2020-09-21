@@ -8,10 +8,10 @@ import {
     LoadingLayout,
     OfflineLayout,
     PasswordField,
+    TextFormField,
     TextLink,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { TextField } from 'formik-material-ui';
 import {
     RegisterMutation,
     SchoolObjectType,
@@ -207,13 +207,18 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <Field
             label={t('forms:username')}
             name="username"
-            component={TextField}
+            component={TextFormField}
             helperText={t('forms:usernameHelperText')}
         />
     );
 
     const renderEmailField = (
-        <Field label={t('forms:email')} name="email" component={TextField} helperText={t('forms:emailHelperText')} />
+        <Field
+            label={t('forms:email')}
+            name="email"
+            component={TextFormField}
+            helperText={t('forms:emailHelperText')}
+        />
     );
 
     const renderPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => <PasswordField {...props} />;

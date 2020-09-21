@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText } from '@material-ui/core';
+import { FormControl, FormHelperText, Switch } from '@material-ui/core';
 import {
     AutoCompleteField,
     AvatarField,
@@ -8,11 +8,11 @@ import {
     NotFoundLayout,
     OfflineLayout,
     SettingsLayout,
+    TextFormField,
     TextLink,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { Switch, TextField } from 'formik-material-ui';
 import {
     SchoolObjectType,
     SchoolsDocument,
@@ -94,11 +94,11 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     });
 
     const renderAvatarField = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => <AvatarField {...props} />;
-    const renderTitleField = <Field name="title" component={TextField} label={t('forms:title')} />;
-    const renderUsernameField = <Field name="username" component={TextField} label={t('forms:username')} />;
-    const renderEmailField = <Field name="email" component={TextField} label={t('forms:email')} />;
+    const renderTitleField = <Field name="title" component={TextFormField} label={t('forms:title')} />;
+    const renderUsernameField = <Field name="username" component={TextFormField} label={t('forms:username')} />;
+    const renderEmailField = <Field name="email" component={TextFormField} label={t('forms:email')} />;
 
-    const renderBioField = <Field name="bio" component={TextField} label={t('forms:bio')} rows="4" multiline />;
+    const renderBioField = <Field name="bio" component={TextFormField} label={t('forms:bio')} rows="4" multiline />;
 
     const renderSchoolField = (
         <Field

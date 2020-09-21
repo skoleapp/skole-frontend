@@ -1,10 +1,11 @@
 import { IconButton, InputAdornment, TextFieldProps } from '@material-ui/core';
 import { VisibilityOffOutlined, VisibilityOutlined } from '@material-ui/icons';
 import { Field, FormikProps } from 'formik';
-import { TextField } from 'formik-material-ui';
 import { useTranslation } from 'lib';
 import { useState } from 'react';
 import React from 'react';
+
+import { TextFormField } from './TextFormField';
 
 export const PasswordField: React.FC<FormikProps<{}> & TextFieldProps> = props => {
     const { t } = useTranslation();
@@ -26,7 +27,7 @@ export const PasswordField: React.FC<FormikProps<{}> & TextFieldProps> = props =
             name="password"
             label={t('forms:password')}
             type={showPassword ? 'text' : 'password'}
-            component={TextField}
+            component={TextFormField}
             InputProps={inputProps}
             {...props}
         />

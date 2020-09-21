@@ -1,7 +1,6 @@
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
+import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
 import { useForm } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
@@ -66,11 +65,21 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field name="oldPassword" component={TextField} label={t('forms:oldPassword')} type="password" />
-                    <Field name="newPassword" component={TextField} label={t('forms:newPassword')} type="password" />
+                    <Field
+                        name="oldPassword"
+                        component={TextFormField}
+                        label={t('forms:oldPassword')}
+                        type="password"
+                    />
+                    <Field
+                        name="newPassword"
+                        component={TextFormField}
+                        label={t('forms:newPassword')}
+                        type="password"
+                    />
                     <Field
                         name="confirmNewPassword"
-                        component={TextField}
+                        component={TextFormField}
                         label={t('forms:confirmNewPassword')}
                         type="password"
                     />

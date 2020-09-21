@@ -5,10 +5,10 @@ import {
     FormSubmitSection,
     LoadingLayout,
     OfflineLayout,
+    TextFormField,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
 import {
     CreateCourseMutation,
     SchoolObjectType,
@@ -100,8 +100,8 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field name="courseName" label={t('forms:courseName')} component={TextField} />
-                    <Field name="courseCode" label={t('forms:courseCode')} component={TextField} />
+                    <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
+                    <Field name="courseCode" label={t('forms:courseCode')} component={TextFormField} />
                     <Field
                         name="school"
                         label={t('forms:school')}

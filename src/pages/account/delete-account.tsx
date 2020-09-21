@@ -1,7 +1,6 @@
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
+import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
 import { DeleteAccountMutation, useDeleteAccountMutation } from 'generated';
 import { useForm } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
@@ -74,7 +73,7 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field name="password" label={t('forms:password')} component={TextField} type="password" />
+                    <Field name="password" label={t('forms:password')} component={TextFormField} type="password" />
                     <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
                 </Form>
             )}

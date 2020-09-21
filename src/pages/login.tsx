@@ -1,8 +1,15 @@
 import { Avatar, Box, FormControl, Grid, Link as MuiLink, makeStyles, Typography } from '@material-ui/core';
-import { FormLayout, FormSubmitSection, LoadingLayout, OfflineLayout, PasswordField, TextLink } from 'components';
+import {
+    FormLayout,
+    FormSubmitSection,
+    LoadingLayout,
+    OfflineLayout,
+    PasswordField,
+    TextFormField,
+    TextLink,
+} from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { TextField } from 'formik-material-ui';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
@@ -109,7 +116,7 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderUsernameOrEmailField = !validExistingUser && (
-        <Field name="usernameOrEmail" component={TextField} label={t('forms:usernameOrEmail')} />
+        <Field name="usernameOrEmail" component={TextFormField} label={t('forms:usernameOrEmail')} />
     );
 
     const renderPasswordField = (props: FormikProps<LoginFormValues>): JSX.Element => <PasswordField {...props} />;

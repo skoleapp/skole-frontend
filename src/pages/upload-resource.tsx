@@ -6,11 +6,11 @@ import {
     FormSubmitSection,
     LoadingLayout,
     OfflineLayout,
+    TextFormField,
     TextLink,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
 import {
     CourseObjectType,
     CoursesDocument,
@@ -149,7 +149,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field name="resourceTitle" label={t('forms:resourceTitle')} component={TextField} />
+                    <Field name="resourceTitle" label={t('forms:resourceTitle')} component={TextFormField} />
                     <Field
                         name="resourceType"
                         label={t('forms:resourceType')}
