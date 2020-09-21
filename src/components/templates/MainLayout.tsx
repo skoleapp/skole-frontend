@@ -82,7 +82,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     );
 
     const renderChildren = (
-        <Container {...containerProps} className={containerClasses}>
+        <Container {...R.omit(['fullWidth', 'dense'], containerProps)} className={containerClasses}>
             {children}
         </Container>
     );
