@@ -4,10 +4,9 @@ import React from 'react';
 
 import { TextLink } from './TextLink';
 
-const useStyles = makeStyles(({ palette, spacing }) => ({
+const useStyles = makeStyles(({ spacing }) => ({
     root: {
         flexGrow: 1,
-        backgroundColor: palette.common.white,
         padding: spacing(2),
         textAlign: 'center',
     },

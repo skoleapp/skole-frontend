@@ -3,11 +3,14 @@ import clsx from 'clsx';
 import { useTranslation } from 'lib';
 import React from 'react';
 
+import { NotFoundBox } from '../shared';
 import { MainLayout } from './MainLayout';
 
 const useStyles = makeStyles({
     root: {
         flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
     },
 });
 
@@ -30,6 +33,7 @@ export const NotFoundLayout: React.FC = () => {
         <MainLayout {...layoutProps}>
             <Paper className={clsx('paper-container', classes.root)}>
                 <CardHeader title={t('404:header')} />
+                <NotFoundBox text={t('404:text')} />
             </Paper>
         </MainLayout>
     );

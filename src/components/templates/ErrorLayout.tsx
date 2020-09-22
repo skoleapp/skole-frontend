@@ -4,9 +4,13 @@ import { useTranslation } from 'lib';
 import React from 'react';
 import { SEOProps } from 'types';
 
+import { NotFoundBox } from '../shared';
+
 const useStyles = makeStyles({
     root: {
         flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
     },
 });
 
@@ -37,6 +41,7 @@ export const ErrorLayout: React.FC<Props> = ({ seoProps }) => {
         <MainLayout {...layoutProps}>
             <Paper className={clsx('paper-container', classes.root)}>
                 <CardHeader title={t('_error:header')} />
+                <NotFoundBox text={t('_error:text')} />
             </Paper>
         </MainLayout>
     );
