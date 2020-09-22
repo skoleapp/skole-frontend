@@ -80,8 +80,11 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
         </Grid>
     );
 
+    // For mobile devices, we only want to show a hidden element since the actual logic happens in the modal.
     const renderInputArea = isMobileOrTablet ? (
-        <CreateCommentForm {...createCommentFormProps} />
+        <Box display="none">
+            <CreateCommentForm {...createCommentFormProps} />
+        </Box>
     ) : (
         <Box className={classes.inputAreaContainer}>
             <CreateCommentForm {...createCommentFormProps} />
