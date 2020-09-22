@@ -1,5 +1,5 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core';
-import { BlockOutlined } from '@material-ui/icons';
+import { MoodBadOutlined } from '@material-ui/icons';
 import React from 'react';
 
 import { TextLink } from './TextLink';
@@ -28,7 +28,7 @@ interface Props {
 
 export const NotFoundBox: React.FC<Props> = ({ text, linkProps }) => {
     const classes = useStyles();
-    const renderIcon = <BlockOutlined className={classes.icon} color="disabled" />;
+    const renderIcon = <MoodBadOutlined className={classes.icon} color="disabled" />;
     const renderLink = !!linkProps && <TextLink href={linkProps.href}>{linkProps.text}</TextLink>;
 
     const renderText = (
