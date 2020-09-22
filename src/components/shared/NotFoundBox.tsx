@@ -1,21 +1,46 @@
-import { Box, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { MoodBadOutlined } from '@material-ui/icons';
 import React from 'react';
+
+import { TextLink } from './TextLink';
+
+const useStyles = makeStyles(({ spacing }) => ({
+    root: {
+        flexGrow: 1,
+        padding: spacing(2),
+        textAlign: 'center',
+    },
+    icon: {
+        width: '3.5rem',
+        height: '3.5rem',
+        marginBottom: spacing(2),
+    },
+}));
 
 interface Props {
     text: string;
+    linkProps?: {
+        href: string;
+        text: string;
+    };
 }
 
-export const NotFoundBox: React.FC<Props> = ({ text }) => (
-    <Box
-        flexGrow="1"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        padding="0.5rem"
-    >
+export const NotFoundBox: React.FC<Props> = ({ text, linkProps }) => {
+    const classes = useStyles();
+    const renderIcon = <MoodBadOutlined className={classes.icon} color="disabled" />;
+    const renderLink = !!linkProps && <TextLink href={linkProps.href}>{linkProps.text}</TextLink>;
+
+    const renderText = (
         <Typography variant="body2" color="textSecondary">
             {text}
         </Typography>
-    </Box>
-);
+    );
+
+    return (
+        <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
+            {renderIcon}
+            {renderText}
+            {renderLink}
+        </Grid>
+    );
+};

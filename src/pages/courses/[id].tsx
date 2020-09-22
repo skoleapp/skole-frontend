@@ -1,29 +1,38 @@
-import { Box, Grid, ListItemText, MenuItem, Tab, Tooltip, Typography } from '@material-ui/core';
+import {
+    BottomNavigation,
+    Box,
+    CardHeader,
+    Grid,
+    List,
+    ListItemIcon,
+    ListItemText,
+    makeStyles,
+    MenuItem,
+    Paper,
+    Tab,
+    Tabs,
+    Tooltip,
+} from '@material-ui/core';
 import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
+import clsx from 'clsx';
 import {
     CustomBottomNavbarContainer,
-    DiscussionHeader,
     ErrorLayout,
     FrontendPaginatedTable,
     IconButtonLink,
-    InfoModalContent,
+    InfoDialogContent,
     LoadingLayout,
     MainLayout,
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
     ResourceTableBody,
+    ResponsiveDialog,
     StarButton,
-    StyledBottomNavigation,
-    StyledCard,
-    StyledDrawer,
-    StyledList,
-    StyledSwipeableViews,
-    StyledTabs,
     TextLink,
     TopLevelCommentThread,
 } from 'components';
-import { useAuthContext, useDeviceContext, useDiscussionContext, useNotificationsContext } from 'context';
+import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import {
     CommentObjectType,
     CourseDetailDocument,
@@ -38,10 +47,10 @@ import {
     VoteObjectType,
 } from 'generated';
 import {
-    useActionsDrawer,
+    useActionsDialog,
     useFrontendPagination,
-    useInfoDrawer,
-    useResponsiveIconButtonProps,
+    useInfoDialog,
+    useMediaQueries,
     useSearch,
     useShare,
     useSwipeableTabs,
@@ -53,8 +62,25 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
+import SwipeableViews from 'react-swipeable-views';
 import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
+
+const useStyles = makeStyles({
+    mobileContainer: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    desktopContainer: {
+        flexGrow: 1,
+    },
+    paperContainer: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+});
 
 const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     data,
@@ -62,15 +88,16 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     authLoading,
     authNetworkError,
 }) => {
+    const classes = useStyles();
     const { isFallback } = useRouter();
     const { t } = useTranslation();
-    const isMobile = useDeviceContext();
+    const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const course: CourseObjectType = R.propOr(null, 'course', data);
-    const resourceTypes: ResourceTypeObjectType[] = R.propOr(null, 'resourceTypes', data);
+    const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const courseName = R.propOr('', 'name', course) as string;
     const courseCode = R.propOr('', 'code', course) as string;
     const subjects = R.propOr([], 'subjects', course) as SubjectObjectType[];
@@ -91,31 +118,19 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: courseName });
-    const iconButtonProps = useResponsiveIconButtonProps();
     const notFound = t('course:notFound');
     const title = !!course ? courseName : !isFallback ? notFound : '';
-    const description = !!course ? t('course:description', { courseName }) : notFound;
+    const description = !!course ? t('course:description', { courseName }) : !isFallback ? notFound : '';
+    const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     const {
-        renderInfoHeader,
-        renderInfoButton,
-        open: infoOpen,
-        anchor: infoAnchor,
-        onClose: handleCloseInfo,
-    } = useInfoDrawer();
-
-    const {
-        renderActionsHeader,
-        handleCloseActions,
+        actionsDialogOpen,
+        actionsDialogHeaderProps,
+        handleCloseActionsDialog,
         renderShareAction,
         renderReportAction,
         renderActionsButton,
-        open: actionsOpen,
-        anchor: actionsAnchor,
-    } = useActionsDrawer({ text: courseName });
-
-    const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
-    const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
+    } = useActionsDialog({ text: courseName });
 
     const upVoteButtonTooltip =
         verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:upVote'));
@@ -140,7 +155,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
 
     const deleteCourseCompleted = ({ deleteCourse }: DeleteCourseMutation): void => {
         if (!!deleteCourse) {
-            if (!!deleteCourse.errors) {
+            if (!!deleteCourse.errors && !!deleteCourse.errors.length) {
                 deleteCourseError();
             } else if (!!deleteCourse.message) {
                 toggleNotification(deleteCourse.message);
@@ -164,7 +179,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
             deleteCourse({ variables: { id: courseId } });
         } catch {
         } finally {
-            handleCloseActions(e);
+            handleCloseActionsDialog(e);
         }
     };
 
@@ -217,27 +232,33 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
 
     const renderStarButton = <StarButton starred={starred} course={courseId} />;
 
-    const discussionHeaderProps = {
-        commentCount,
-        renderStarButton,
-        renderUpVoteButton,
-        renderDownVoteButton,
-        renderShareButton,
-        renderInfoButton,
-        renderActionsButton,
-    };
-
     const commentThreadProps = {
         comments,
         target: { course: Number(courseId) },
-        placeholderText: t('course:commentsPlaceholder'),
+        noComments: t('course:noComments'),
     };
 
-    const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
+    const renderDiscussionHeader = (
+        <CardHeader
+            className="text-left"
+            subheader={`${t('common:discussion')} (${commentCount})`}
+            action={
+                <Grid container>
+                    {renderStarButton}
+                    {renderUpVoteButton}
+                    {renderDownVoteButton}
+                    {renderShareButton}
+                    {renderInfoButton}
+                    {renderActionsButton}
+                </Grid>
+            }
+        />
+    );
+
     const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
     const renderCustomBottomNavbar = (
-        <StyledBottomNavigation>
+        <BottomNavigation>
             <CustomBottomNavbarContainer>
                 <Grid container>
                     <Grid item xs={6} container justify="flex-start">
@@ -249,13 +270,18 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
                     </Grid>
                 </Grid>
             </CustomBottomNavbarContainer>
-        </StyledBottomNavigation>
+        </BottomNavigation>
     );
 
     const resourceTableHeadProps = {
         titleLeft: t('common:title'),
         titleLeftDesktop: t('common:resources'),
         titleRight: t('common:score'),
+    };
+
+    const notFoundLinkProps = {
+        href: urls.createCourse,
+        text: t('course:noResourcesLink'),
     };
 
     const renderResources = !!resources.length ? (
@@ -265,7 +291,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
             paginationProps={resourcePaginationProps}
         />
     ) : (
-        <NotFoundBox text={t('course:noResources')} />
+        <NotFoundBox text={t('course:noResources')} linkProps={notFoundLinkProps} />
     );
 
     const renderUploadResourceButton = (
@@ -275,105 +301,84 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
                     href={{ pathname: urls.uploadResource, query: { school: schoolId, course: courseId } }}
                     icon={CloudUploadOutlined}
                     disabled={verified === false}
-                    {...iconButtonProps}
+                    color={isMobileOrTablet ? 'secondary' : 'default'}
+                    size="small"
                 />
             </span>
         </Tooltip>
     );
 
-    const renderCourseName = (
-        <Typography className="truncate" variant="subtitle1">
-            {courseName}
-        </Typography>
-    );
+    const renderResourcesHeader = <CardHeader title={courseName} action={renderUploadResourceButton} />;
 
-    const renderResourcesHeader = (
-        <Box className="custom-header">
-            <Grid container justify="space-between">
-                <Box display="flex" justifyContent="flex-start" alignItems="center">
-                    {renderCourseName}
-                </Box>
-                <Box display="flex" justifyContent="flex-end" alignItems="center">
-                    {renderUploadResourceButton}
-                </Box>
-            </Grid>
-        </Box>
-    );
-
-    const renderTabs = (
-        <StyledTabs value={tabValue} onChange={handleTabChange}>
-            <Tab label={`${t('common:resources')} (${resourceCount})`} />
-            <Tab label={`${t('common:discussion')} (${commentCount})`} />
-        </StyledTabs>
-    );
-
-    const renderSwipeableViews = (
-        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-            <Box display="flex" flexGrow="1" position="relative">
-                {renderResources}
+    const renderMobileContent = isMobileOrTablet && (
+        <Paper className={clsx('paper-container', classes.mobileContainer)}>
+            <Tabs value={tabValue} onChange={handleTabChange}>
+                <Tab label={`${t('common:resources')} (${resourceCount})`} />
+                <Tab label={`${t('common:discussion')} (${commentCount})`} />
+            </Tabs>
+            <Box flexGrow="1" position="relative">
+                <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+                    {renderResources}
+                    {renderDiscussion}
+                </SwipeableViews>
             </Box>
-            <Box display="flex" flexGrow="1">
-                {renderDiscussion}
-            </Box>
-        </StyledSwipeableViews>
+        </Paper>
     );
 
-    const renderMobileContent = isMobile && (
-        <StyledCard>
-            {renderTabs}
-            {renderSwipeableViews}
-        </StyledCard>
-    );
-
-    const renderDesktopContent = !isMobile && (
-        <Grid className="desktop-content" container>
-            <Grid item container md={7} lg={8}>
-                <StyledCard>
+    const renderDesktopContent = !isMobileOrTablet && (
+        <Grid container spacing={2} className={classes.desktopContainer}>
+            <Grid item container xs={12} md={7} lg={8}>
+                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
                     {renderResourcesHeader}
-                    <Box position="relative" flexGrow="1" display="flex">
-                        {renderResources}
-                    </Box>
-                </StyledCard>
+                    {renderResources}
+                </Paper>
             </Grid>
-            <Grid item container md={5} lg={4}>
-                <StyledCard marginLeft>
+            <Grid item container xs={12} md={5} lg={4}>
+                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
                     {renderDiscussionHeader}
                     {renderDiscussion}
-                </StyledCard>
+                </Paper>
             </Grid>
         </Grid>
     );
 
-    const renderInfo = <InfoModalContent user={courseUser} created={created} infoItems={infoItems} />;
+    const renderInfoDialogContent = <InfoDialogContent user={courseUser} created={created} infoItems={infoItems} />;
 
-    const renderInfoDrawer = (
-        <StyledDrawer {...infoDrawerProps}>
-            {renderInfoHeader}
-            {renderInfo}
-        </StyledDrawer>
+    const renderInfoDialog = (
+        <ResponsiveDialog
+            open={infoDialogOpen}
+            onClose={handleCloseInfoDialog}
+            dialogHeaderProps={infoDialogHeaderProps}
+        >
+            {renderInfoDialogContent}
+        </ResponsiveDialog>
     );
 
     const renderDeleteAction = isOwner && (
         <MenuItem disabled={verified === false}>
-            <ListItemText onClick={handleDeleteCourse}>
-                <DeleteOutline /> {t('common:delete')}
-            </ListItemText>
+            <ListItemIcon>
+                <DeleteOutline />
+            </ListItemIcon>
+            <ListItemText onClick={handleDeleteCourse}>{t('common:delete')}</ListItemText>
         </MenuItem>
     );
 
-    const renderActions = (
-        <StyledList>
+    const renderActionsDialogContent = (
+        <List>
             {renderShareAction}
             {renderDeleteAction}
             {renderReportAction}
-        </StyledList>
+        </List>
     );
 
-    const renderActionsDrawer = (
-        <StyledDrawer {...actionsDrawerProps}>
-            {renderActionsHeader}
-            {renderActions}
-        </StyledDrawer>
+    const renderActionsDialog = (
+        <ResponsiveDialog
+            open={actionsDialogOpen}
+            onClose={handleCloseActionsDialog}
+            dialogHeaderProps={actionsDialogHeaderProps}
+        >
+            {renderActionsDialogContent}
+        </ResponsiveDialog>
     );
 
     const seoProps = {
@@ -407,8 +412,8 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
             <MainLayout {...layoutProps}>
                 {renderMobileContent}
                 {renderDesktopContent}
-                {renderInfoDrawer}
-                {renderActionsDrawer}
+                {renderInfoDialog}
+                {renderActionsDialog}
             </MainLayout>
         );
     } else {

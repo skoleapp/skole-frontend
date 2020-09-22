@@ -54,13 +54,13 @@ query Starred {
             date
         }
     }
-}
-
-query UserDetail($id: ID) {
     resourceTypes {
         id
         name
     }
+}
+
+query UserDetail($id: ID) {
     user(id: $id) {
         id
         username
@@ -88,6 +88,10 @@ query UserDetail($id: ID) {
             score
             date
         }
+    }
+    resourceTypes {
+        id
+        name
     }
 }
 
@@ -150,10 +154,6 @@ query SearchCourses(
 }
 
 query CourseDetail($id: ID) {
-    resourceTypes {
-        id
-        name
-    }
     course(id: $id) {
         id
         name
@@ -183,7 +183,10 @@ query CourseDetail($id: ID) {
             title
             score
             date
-            resourceType
+            resourceType {
+                id
+                name
+            }
         }
         comments {
             id
@@ -220,19 +223,26 @@ query CourseDetail($id: ID) {
             }
         }
     }
+    resourceTypes {
+        id
+        name
+    }
 }
 
 query ResourceDetail($id: ID) {
     resource(id: $id) {
         id
         title
-        resourceType
         file
         date
         modified
         created
         score
         starred
+        resourceType {
+            id
+            name
+        }
         school {
             id
             name
@@ -250,11 +260,6 @@ query ResourceDetail($id: ID) {
             status
         }
         comments {
-            user {
-                id
-                username
-                avatarThumbnail
-            }
             id
             text
             attachment
@@ -263,6 +268,11 @@ query ResourceDetail($id: ID) {
             modified
             created
             score
+            user {
+                id
+                username
+                avatarThumbnail
+            }
             vote {
                 id
                 status
@@ -321,6 +331,13 @@ query CreateResourceInitialData($school: ID, $course: ID) {
         name
     }
     course(id: $course) {
+        id
+        name
+    }
+}
+
+query CreateCourseInitialData($school: ID) {
+    school(id: $school) {
         id
         name
     }

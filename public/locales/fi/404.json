@@ -1,5 +1,6 @@
 {
     "title": "Sivua ei löytynyt",
-    "description": "Etsimääsi sivua ei löytynyt...",
-    "header": "Etsimääsi sivua ei löytynyt..."
+    "description": "Tämä sivu on poistettu tai sitä ei ole olemassa.",
+    "header": "Sivua ei löynyt",
+    "text": "Tämä sivu on poistettu tai sitä ei ole olemassa."
 }

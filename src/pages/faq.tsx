@@ -10,12 +10,13 @@ import { FAQ_ITEMS } from 'utils';
 const FAQPage: NextPage<AuthProps> = ({ authLoading }) => {
     const { t } = useTranslation();
 
-    const renderCardContent = FAQ_ITEMS.map(({ title, text }, i) => (
-        <Box key={i} marginY="0.5rem" textAlign="left">
-            <Typography variant="h3" gutterBottom>
+    const renderContent = FAQ_ITEMS.map(({ title, text }, i) => (
+        <Box key={i}>
+            <Typography variant="subtitle2" gutterBottom>
                 {t(title)}
             </Typography>
             <Typography variant="body2">{t(text)}</Typography>
+            <Typography component="br" />
         </Box>
     ));
 
@@ -26,20 +27,18 @@ const FAQPage: NextPage<AuthProps> = ({ authLoading }) => {
 
     const layoutProps = {
         seoProps,
+        header: t('faq:header'),
+        dense: true,
         topNavbarProps: {
-            header: t('faq:header'),
             dynamicBackUrl: true,
         },
-        desktopHeader: t('faq:header'),
-        renderCardContent,
-        infoLayout: true,
     };
 
     if (authLoading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    return <SettingsLayout {...layoutProps} />;
+    return <SettingsLayout {...layoutProps}>{renderContent}</SettingsLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

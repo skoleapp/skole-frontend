@@ -1,7 +1,7 @@
-import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+const gql = Apollo.gql;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -209,7 +209,7 @@ export type CommentObjectType = {
 export type ResourceObjectType = {
   __typename?: 'ResourceObjectType';
   id: Scalars['ID'];
-  resourceType?: Maybe<Scalars['String']>;
+  resourceType?: Maybe<ResourceTypeObjectType>;
   title: Scalars['String'];
   file: Scalars['String'];
   date: Scalars['Date'];
@@ -223,6 +223,12 @@ export type ResourceObjectType = {
   score?: Maybe<Scalars['Int']>;
   vote?: Maybe<VoteObjectType>;
   school?: Maybe<SchoolObjectType>;
+};
+
+export type ResourceTypeObjectType = {
+  __typename?: 'ResourceTypeObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
 };
 
 
@@ -241,12 +247,6 @@ export type BadgeObjectType = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-};
-
-export type ResourceTypeObjectType = {
-  __typename?: 'ResourceTypeObjectType';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
 };
 
 export type PaginatedCourseObjectType = {
@@ -811,8 +811,8 @@ export type MarkActivityReadMutationInput = {
 /** Mark all activities of the given user as read. */
 export type MarkAllActivitiesReadMutation = {
   __typename?: 'MarkAllActivitiesReadMutation';
-  activities?: Maybe<Array<Maybe<ActivityObjectType>>>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
+  activities?: Maybe<Array<Maybe<ActivityObjectType>>>;
 };
 
 export type RegisterMutationVariables = Exact<{
@@ -1311,7 +1311,10 @@ export type StarredQuery = (
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
     )>>> }
-  )> }
+  )>, resourceTypes?: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+  )>>> }
 );
 
 export type UserDetailQueryVariables = Exact<{
@@ -1388,10 +1391,7 @@ export type CourseDetailQueryVariables = Exact<{
 
 export type CourseDetailQuery = (
   { __typename?: 'Query' }
-  & { resourceTypes?: Maybe<Array<Maybe<(
-    { __typename?: 'ResourceTypeObjectType' }
-    & Pick<ResourceTypeObjectType, 'id' | 'name'>
-  )>>>, course?: Maybe<(
+  & { course?: Maybe<(
     { __typename?: 'CourseObjectType' }
     & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'modified' | 'created' | 'score' | 'starred'>
     & { vote?: Maybe<(
@@ -1408,7 +1408,11 @@ export type CourseDetailQuery = (
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'resourceType'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
+      & { resourceType?: Maybe<(
+        { __typename?: 'ResourceTypeObjectType' }
+        & Pick<ResourceTypeObjectType, 'id' | 'name'>
+      )> }
     )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
@@ -1430,7 +1434,10 @@ export type CourseDetailQuery = (
         & Pick<VoteObjectType, 'id' | 'status'>
       )> }
     )> }
-  )> }
+  )>, resourceTypes?: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+  )>>> }
 );
 
 export type ResourceDetailQueryVariables = Exact<{
@@ -1442,8 +1449,11 @@ export type ResourceDetailQuery = (
   { __typename?: 'Query' }
   & { resource?: Maybe<(
     { __typename?: 'ResourceObjectType' }
-    & Pick<ResourceObjectType, 'id' | 'title' | 'resourceType' | 'file' | 'date' | 'modified' | 'created' | 'score' | 'starred'>
-    & { school?: Maybe<(
+    & Pick<ResourceObjectType, 'id' | 'title' | 'file' | 'date' | 'modified' | 'created' | 'score' | 'starred'>
+    & { resourceType?: Maybe<(
+      { __typename?: 'ResourceTypeObjectType' }
+      & Pick<ResourceTypeObjectType, 'id' | 'name'>
+    )>, school?: Maybe<(
       { __typename?: 'SchoolObjectType' }
       & Pick<SchoolObjectType, 'id' | 'name'>
     )>, course: (
@@ -1522,6 +1532,19 @@ export type CreateResourceInitialDataQuery = (
   )>, course?: Maybe<(
     { __typename?: 'CourseObjectType' }
     & Pick<CourseObjectType, 'id' | 'name'>
+  )> }
+);
+
+export type CreateCourseInitialDataQueryVariables = Exact<{
+  school?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type CreateCourseInitialDataQuery = (
+  { __typename?: 'Query' }
+  & { school?: Maybe<(
+    { __typename?: 'SchoolObjectType' }
+    & Pick<SchoolObjectType, 'id' | 'name'>
   )> }
 );
 
@@ -2566,6 +2589,10 @@ export const StarredDocument = gql`
       date
     }
   }
+  resourceTypes {
+    id
+    name
+  }
 }
     `;
 
@@ -2729,10 +2756,6 @@ export type SearchCoursesLazyQueryHookResult = ReturnType<typeof useSearchCourse
 export type SearchCoursesQueryResult = Apollo.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
 export const CourseDetailDocument = gql`
     query CourseDetail($id: ID) {
-  resourceTypes {
-    id
-    name
-  }
   course(id: $id) {
     id
     name
@@ -2762,7 +2785,10 @@ export const CourseDetailDocument = gql`
       title
       score
       date
-      resourceType
+      resourceType {
+        id
+        name
+      }
     }
     comments {
       id
@@ -2799,6 +2825,10 @@ export const CourseDetailDocument = gql`
       }
     }
   }
+  resourceTypes {
+    id
+    name
+  }
 }
     `;
 
@@ -2832,13 +2862,16 @@ export const ResourceDetailDocument = gql`
   resource(id: $id) {
     id
     title
-    resourceType
     file
     date
     modified
     created
     score
     starred
+    resourceType {
+      id
+      name
+    }
     school {
       id
       name
@@ -2856,11 +2889,6 @@ export const ResourceDetailDocument = gql`
       status
     }
     comments {
-      user {
-        id
-        username
-        avatarThumbnail
-      }
       id
       text
       attachment
@@ -2869,6 +2897,11 @@ export const ResourceDetailDocument = gql`
       modified
       created
       score
+      user {
+        id
+        username
+        avatarThumbnail
+      }
       vote {
         id
         status
@@ -3013,6 +3046,40 @@ export function useCreateResourceInitialDataLazyQuery(baseOptions?: Apollo.LazyQ
 export type CreateResourceInitialDataQueryHookResult = ReturnType<typeof useCreateResourceInitialDataQuery>;
 export type CreateResourceInitialDataLazyQueryHookResult = ReturnType<typeof useCreateResourceInitialDataLazyQuery>;
 export type CreateResourceInitialDataQueryResult = Apollo.QueryResult<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>;
+export const CreateCourseInitialDataDocument = gql`
+    query CreateCourseInitialData($school: ID) {
+  school(id: $school) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useCreateCourseInitialDataQuery__
+ *
+ * To run a query within a React component, call `useCreateCourseInitialDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreateCourseInitialDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreateCourseInitialDataQuery({
+ *   variables: {
+ *      school: // value for 'school'
+ *   },
+ * });
+ */
+export function useCreateCourseInitialDataQuery(baseOptions?: Apollo.QueryHookOptions<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>) {
+        return Apollo.useQuery<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>(CreateCourseInitialDataDocument, baseOptions);
+      }
+export function useCreateCourseInitialDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>) {
+          return Apollo.useLazyQuery<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>(CreateCourseInitialDataDocument, baseOptions);
+        }
+export type CreateCourseInitialDataQueryHookResult = ReturnType<typeof useCreateCourseInitialDataQuery>;
+export type CreateCourseInitialDataLazyQueryHookResult = ReturnType<typeof useCreateCourseInitialDataLazyQuery>;
+export type CreateCourseInitialDataQueryResult = Apollo.QueryResult<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>;
 export const SchoolsDocument = gql`
     query Schools {
   schools {

@@ -1,8 +1,9 @@
 {
     "description": "Visa {{ resourceTitle }} på Skole.",
-    "noResources": "Inga resurser har lagts till på denna kurs ändå",
+    "noResources": "Denna kurs har inga resurser.",
+    "noResourcesLink": "Lägg till en resurs här!",
     "deleteCourseTitle": "Ta bort kurs",
     "deleteCourseDescription": "Är du säker på att du vill ta bort den här kursen?",
-    "commentsPlaceholder": "Här kan du ha allmän diskussion om kursen.",
+    "noComments": "Denna kurs har inga kommentarer. Lägg till en kommentar nedan!",
     "notFound": "Kurs hittades inte."
 }

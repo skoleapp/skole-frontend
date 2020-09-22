@@ -1,18 +1,27 @@
-import { AutoCompleteField, FormLayout, FormSubmitSection, LoadingLayout, OfflineLayout } from 'components';
+import {
+    AutoCompleteField,
+    ErrorLayout,
+    FormLayout,
+    FormSubmitSection,
+    LoadingLayout,
+    OfflineLayout,
+    TextFormField,
+} from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
 import {
     CreateCourseMutation,
+    SchoolObjectType,
     SchoolsDocument,
-    SchoolTypeObjectType,
     SubjectObjectType,
     SubjectsDocument,
+    useCreateCourseInitialDataQuery,
     useCreateCourseMutation,
 } from 'generated';
 import { useForm } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { AuthProps } from 'types';
@@ -23,13 +32,16 @@ interface CreateCourseFormValues {
     courseName: string;
     courseCode: string;
     subjects: SubjectObjectType[];
-    school: SchoolTypeObjectType | null;
+    school: SchoolObjectType | null;
     general: string;
 }
 
 const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
+    const { query } = useRouter();
+    const { data, loading, error } = useCreateCourseInitialDataQuery({ variables: query });
+    const school: SchoolObjectType = R.propOr(null, 'school', data);
 
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
         CreateCourseFormValues
@@ -46,7 +58,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
 
     const onCompleted = async ({ createCourse }: CreateCourseMutation): Promise<void> => {
         if (!!createCourse) {
-            if (!!createCourse.errors) {
+            if (!!createCourse.errors && !!createCourse.errors.length) {
                 handleMutationErrors(createCourse.errors);
             } else if (!!createCourse.course && !!createCourse.message) {
                 resetForm();
@@ -79,52 +91,30 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const initialValues = {
         courseName: '',
         courseCode: '',
-        school: null,
+        school,
         subjects: [],
         general: '',
     };
 
-    const renderCardContent = (
+    const renderForm = (
         <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field
-                        name="courseName"
-                        label={t('forms:courseName')}
-                        placeholder={t('forms:courseName')}
-                        component={TextField}
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <Field
-                        name="courseCode"
-                        label={t('forms:courseCode')}
-                        placeholder={t('forms:courseCode')}
-                        component={TextField}
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
-                    />
+                    <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
+                    <Field name="courseCode" label={t('forms:courseCode')} component={TextFormField} />
                     <Field
                         name="school"
                         label={t('forms:school')}
-                        placeholder={t('forms:school')}
                         dataKey="schools"
                         document={SchoolsDocument}
                         component={AutoCompleteField}
-                        variant="outlined"
-                        fullWidth
                     />
                     <Field
                         name="subjects"
                         label={t('forms:subjects')}
-                        placeholder={t('forms:subjects')}
                         dataKey="subjects"
                         document={SubjectsDocument}
                         component={AutoCompleteField}
-                        variant="outlined"
-                        fullWidth
                         multiple
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
@@ -140,23 +130,23 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
 
     const layoutProps = {
         seoProps,
+        header: t('create-course:header'),
         topNavbarProps: {
-            header: t('create-course:header'),
             dynamicBackUrl: true,
         },
-        desktopHeader: t('create-course:header'),
-        renderCardContent,
     };
 
-    if (authLoading) {
+    if (loading || authLoading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if (authNetworkError) {
+    if ((!!error && !!error.networkError) || authNetworkError) {
         return <OfflineLayout seoProps={seoProps} />;
+    } else if (!!error) {
+        return <ErrorLayout seoProps={seoProps} />;
     }
 
-    return <FormLayout {...layoutProps} />;
+    return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

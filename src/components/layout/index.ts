@@ -9,4 +9,4 @@ export { Notifications } from './Notifications';
 export { AttachmentViewer } from './AttachmentViewer';
 export { CommentThreadModal } from './CommentThreadModal';
 export { SettingsModal } from './SettingsModal';
-export { LanguageSelectorModal } from './LanguageSelectorModal';
+export { LanguageSelectorDialog } from './LanguageSelectorDialog';

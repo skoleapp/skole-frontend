@@ -1,51 +1,39 @@
-import { Box, InputBase } from '@material-ui/core';
+import { InputAdornment, InputBase, makeStyles } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 import { useSearch } from 'hooks';
 import React from 'react';
-import styled from 'styled-components';
+import { BORDER_RADIUS } from 'theme';
+
+const useStyles = makeStyles(({ palette, spacing }) => ({
+    inputBase: {
+        width: '20rem',
+        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+        borderRadius: BORDER_RADIUS,
+        color: palette.common.white,
+        padding: `${spacing(1)} ${spacing(3)}`,
+        marginRight: spacing(2),
+        '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.25)',
+        },
+    },
+}));
 
 export const TopNavbarSearchWidget: React.FC = () => {
+    const classes = useStyles();
     const { handleSubmit, inputProps } = useSearch();
 
-    const handleSearchIconClick = (): void => {
-        const input = document.getElementById('top-navbar-input-base');
-        !!input && input.focus();
-    };
-
     return (
-        <StyledSearchWidget onSubmit={handleSubmit}>
-            <Box id="top-navbar-search-input">
-                <SearchOutlined onClick={handleSearchIconClick} />
-                <InputBase id="top-navbar-input-base" {...inputProps} />
-                <input type="submit" value="Submit" />
-            </Box>
-        </StyledSearchWidget>
+        <form onSubmit={handleSubmit}>
+            <InputBase
+                {...inputProps}
+                className={classes.inputBase}
+                endAdornment={
+                    <InputAdornment position="end">
+                        <SearchOutlined />
+                    </InputAdornment>
+                }
+            />
+            <input type="submit" value="Submit" />
+        </form>
     );
 };
-
-const StyledSearchWidget = styled.form`
-    #top-navbar-search-input {
-        border-radius: var(--border-radius);
-        background-color: rgba(255, 255, 255, 0.15);
-        margin: 0 0.5rem;
-        display: flex;
-        align-items: center;
-
-        &:hover {
-            background-color: rgba(255, 255, 255, 0.25);
-        }
-
-        svg {
-            margin: 0.25rem;
-            align-self: center;
-            color: var(--secondary);
-            cursor: pointer;
-        }
-
-        input {
-            padding: 0.5rem;
-            color: var(--white);
-            width: 15rem;
-        }
-    }
-`;

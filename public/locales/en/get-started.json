@@ -1,7 +1,11 @@
 {
     "title": "Get Started",
-    "description": "Get started to browse study material, discuss and much more!",
-    "header": "Find the material you're looking for from thousands of courses and resources.",
+    "description": "Get started to find and share your favorite study material, discuss with the community and much more!",
+    "header": "Find and share your favorite study material.",
+    "header2": "Thousands of courses and resources, all of Finland's universities.",
+    "resourcesDescription": "Study material shared by other Skole users is free and accessible to anyone with no restrictions.",
+    "coursesDescription": "Skole is full of courses from universities all over Finland.",
+    "discussionDescription": "Skole allows you to discuss and share your knowledge with other users seamlessly.",
     "subheader": "Courses, resources, discussion. All in one place.",
     "cta": "Get Started!"
 }

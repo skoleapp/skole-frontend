@@ -1,7 +1,5 @@
 export { CommentCard } from './CommentCard';
 export { CreateCommentForm } from './CreateCommentForm';
-export { ReplyCommentThread } from './ReplyCommentThread';
-export { TopLevelCommentThread } from './TopLevelCommentThread';
-export { StyledDiscussionBox } from './StyledDiscussionBox';
+export { TopLevelCommentThread, ReplyCommentThread } from './comment-threads';
 export { DiscussionHeader } from './DiscussionHeader';
 export { RichTextEditor } from './RichTextEditor';

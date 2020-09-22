@@ -1,5 +1,6 @@
 {
     "title": "Page Not Found",
-    "description": "The page you were looking for was not found...",
-    "header": "The page you were looking for was not found..."
+    "description": "This page has been removed or it does not exist.",
+    "header": "Page Not Found",
+    "text": "This page has been removed or it does not exist."
 }

@@ -1,7 +1,6 @@
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
+import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
 import { ContactMutation, useContactMutation } from 'generated';
 import { useForm } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
@@ -44,7 +43,7 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
 
     const onCompleted = ({ createContactMessage }: ContactMutation): void => {
         if (!!createContactMessage) {
-            if (!!createContactMessage.errors) {
+            if (!!createContactMessage.errors && !!createContactMessage.errors.length) {
                 handleMutationErrors(createContactMessage.errors);
             } else if (!!createContactMessage.message) {
                 resetForm();
@@ -73,47 +72,14 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         setSubmitting(false);
     };
 
-    const renderCardContent = (
+    const renderForm = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field
-                        name="subject"
-                        component={TextField}
-                        label={t('forms:messageSubject')}
-                        placeholder={t('forms:messageSubject')}
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <Field
-                        name="name"
-                        component={TextField}
-                        label={t('forms:name')}
-                        placeholder={t('forms:name')}
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <Field
-                        name="email"
-                        component={TextField}
-                        label={t('forms:email')}
-                        placeholder={t('forms:email')}
-                        variant="outlined"
-                        fullWidth
-                        autoComplete="off"
-                    />
-                    <Field
-                        name="message"
-                        component={TextField}
-                        placeholder={t('forms:message')}
-                        label={t('forms:message')}
-                        variant="outlined"
-                        rows="4"
-                        fullWidth
-                        multiline
-                    />
+                    <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />
+                    <Field name="name" component={TextFormField} label={t('forms:name')} />
+                    <Field name="email" component={TextFormField} label={t('forms:email')} />
+                    <Field name="message" component={TextFormField} label={t('forms:message')} rows="4" multiline />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
                 </Form>
             )}
@@ -127,13 +93,11 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
 
     const layoutProps = {
         seoProps,
+        header: t('contact:header'),
+        dense: true,
         topNavbarProps: {
-            header: t('contact:header'),
             dynamicBackUrl: true,
         },
-        desktopHeader: t('contact:header'),
-        renderCardContent,
-        formLayout: true,
     };
 
     if (authLoading) {
@@ -144,7 +108,7 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <SettingsLayout {...layoutProps} />;
+    return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

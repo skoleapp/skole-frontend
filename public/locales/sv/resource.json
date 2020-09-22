@@ -4,7 +4,7 @@
     "deleteResourceDescription": "Är du säker på att du vill ta bort den här resursen?",
     "loadingResource": "Laddar resurs...",
     "errorLoadingResource": "Fel vid inläsning av resurs.",
-    "commentsPlaceholder": "Här kan du ha allmän diskussion om resursen.",
+    "noComments": "Den här resursen har inga kommentarer. Var den första att lägga till en kommentar nedan!",
     "drawMode": "Ritningsläge",
     "notFound": "Resurs hittades inte."
 }

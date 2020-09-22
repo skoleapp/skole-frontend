@@ -1,75 +1,76 @@
-import { Backdrop, Box, IconButton, Typography } from '@material-ui/core';
+import { Backdrop, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
 import { useDiscussionContext } from 'context';
-import { useResponsiveIconButtonProps } from 'hooks';
-import Image from 'material-ui-image';
 import React from 'react';
-import styled from 'styled-components';
-import { breakpoints } from 'styles';
+import { TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { mediaURL } from 'utils';
 
+const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
+    root: {
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        zIndex: 9999,
+    },
+    container: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        flexWrap: 'nowrap',
+    },
+    toolbar: {
+        height: TOP_NAVBAR_HEIGHT_MOBILE,
+        width: '100%',
+        padding: spacing(2),
+        backgroundColor: palette.common.black,
+        flexBasis: 'auto',
+        [breakpoints.up('md')]: {
+            height: TOP_NAVBAR_HEIGHT_DESKTOP,
+        },
+    },
+    imageContainer: {
+        flexGrow: 1,
+        display: 'flex',
+        paddingTop: spacing(4),
+        paddingBottom: `calc(${spacing(4)} + ${TOP_NAVBAR_HEIGHT_MOBILE})`,
+        [breakpoints.up('md')]: {
+            paddingBottom: `calc(${spacing(4)} + ${TOP_NAVBAR_HEIGHT_DESKTOP})`,
+        },
+    },
+    image: {
+        width: '100%',
+        maxWidth: '40rem',
+        height: 'auto',
+        margin: '0 auto',
+    },
+    iconButton: {
+        padding: spacing(1),
+    },
+}));
+
 export const AttachmentViewer: React.FC = () => {
+    const classes = useStyles();
     const { attachmentViewerValue, setAttachmentViewerValue } = useDiscussionContext();
     const attachmentName = attachmentViewerValue && attachmentViewerValue.split('/').pop();
-    const { size } = useResponsiveIconButtonProps();
     const handleClose = (): void => setAttachmentViewerValue(null);
 
     return (
-        <StyledAttachmentViewer open={!!attachmentViewerValue} onClick={handleClose}>
-            <Box id="toolbar">
-                <Typography className="truncate" variant="subtitle1" color="secondary">
-                    {attachmentName}
-                </Typography>
-                <IconButton onClick={handleClose} size={size} color="secondary">
-                    <CloseOutlined />
-                </IconButton>
-            </Box>
-            <Box id="image-container">
-                <Image src={mediaURL(attachmentViewerValue as string)} />
-            </Box>
-        </StyledAttachmentViewer>
+        <Backdrop className={classes.root} open={!!attachmentViewerValue} onClick={handleClose}>
+            <Grid container direction="column" className={classes.container}>
+                <Grid item xs={12} container className={classes.toolbar} alignItems="center" justify="space-between">
+                    <Typography className="truncate-text" variant="subtitle1" color="secondary">
+                        {attachmentName}
+                    </Typography>
+                    <IconButton className={classes.iconButton} onClick={handleClose} color="secondary">
+                        <CloseOutlined />
+                    </IconButton>
+                </Grid>
+                <Grid item xs={12} container alignItems="center" justify="center" className={classes.imageContainer}>
+                    <img
+                        className={classes.image}
+                        src={mediaURL(attachmentViewerValue as string)}
+                        alt={attachmentName as string}
+                    />
+                </Grid>
+            </Grid>
+        </Backdrop>
     );
 };
-
-const StyledAttachmentViewer = styled(Backdrop)`
-    background-color: var(--opacity-dark) !important;
-    z-index: 9999 !important;
-    display: flex;
-    flex-direction: column;
-
-    #toolbar {
-        height: 3rem;
-        width: 100%;
-        padding: 0.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: var(--black); // Applied on top of backdrop background.
-    }
-
-    #image-container {
-        flex-grow: 1;
-        display: flex;
-
-        > div {
-            padding: 0 !important;
-            flex-grow: 1;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            background-color: transparent !important;
-
-            img {
-                width: auto !important;
-                height: auto !important;
-                max-height: 75% !important;
-                max-width: 100% !important;
-                position: relative !important;
-            }
-        }
-
-        @media only screen and (min-width: ${breakpoints.MD}) {
-            padding: 10rem;
-        }
-    }
-`;

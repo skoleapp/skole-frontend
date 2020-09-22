@@ -7,7 +7,7 @@ export interface CommentTarget {
 export interface TopLevelCommentThreadProps {
     comments: CommentObjectType[];
     target: CommentTarget;
-    placeholderText?: string;
+    noComments?: string;
 }
 
 export interface CreateCommentFormValues {

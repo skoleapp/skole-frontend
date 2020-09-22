@@ -2,6 +2,6 @@
     "title": "Stjärnmärkt",
     "description": "Visa dina stjärnmärkta objekt på Skole.",
     "header": "Stjärnmärkt",
-    "noResources": "Stjärnmärkta resurser kommer att visas här.",
-    "noCourses": "Stjärnmärkta kurser kurser kommer att visas här."
+    "noResources": "Du har inga stjärnmärkta resurser.",
+    "noCourses": "Du har inga stjärnmärkta kurser."
 }

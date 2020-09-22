@@ -2,7 +2,7 @@ import 'dayjs/locale/fi';
 import 'dayjs/locale/sv';
 import 'dayjs/locale/en';
 
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import localizableFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useTranslation } from 'lib';
@@ -10,12 +10,8 @@ import { useTranslation } from 'lib';
 dayjs.extend(localizableFormat);
 dayjs.extend(relativeTime);
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const useDayjs = (date: string | undefined = undefined) => {
+// Custom hook for setting dayjs locale to selected language.
+export const useDayjs = (date?: string): Dayjs => {
     const { i18n } = useTranslation();
-
-    if (!!date) {
-        return dayjs(date).locale(i18n.language);
-    }
-    return dayjs().locale(i18n.language);
+    return !!date ? dayjs(date).locale(i18n.language) : dayjs().locale(i18n.language);
 };

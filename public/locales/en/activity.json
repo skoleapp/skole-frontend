@@ -3,6 +3,6 @@
     "description": "View your activity on Skole.",
     "header": "Activity",
     "noActivity": "Your activity will show up here.",
-    "markAllAsRead": "Mark All As Read",
+    "markAllAsRead": "Mark all as Read",
     "notificationSettings": "Notification Settings (coming soon)"
 }

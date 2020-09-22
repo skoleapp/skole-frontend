@@ -43,5 +43,5 @@
     "blockQuote": "Lainauslohko ({{ hotkeyBlockQuote }}).",
     "codeBlock": "Koodilohko ({{ hotkeyCodeBlock }}).",
     "mention": "Mainitse käyttäjä (tulossa pian).",
-    "emoji": "Lisää emoji (tulossa pian)."
+    "addCourse": "Lisää kurssi tälle koululle."
 }

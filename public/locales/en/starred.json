@@ -2,6 +2,6 @@
     "title": "Starred",
     "description": "View your starred items on Skole.",
     "header": "Starred",
-    "noResources": "Starred resources will show here.",
-    "noCourses": "Starred courses will show here."
+    "noResources": "You have no starred resources.",
+    "noCourses": "You have no starred courses."
 }

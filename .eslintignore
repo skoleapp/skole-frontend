@@ -3,6 +3,3 @@ build
 next.config.js
 generated
 gtag.js
-out
-sw.*
-workbox-*

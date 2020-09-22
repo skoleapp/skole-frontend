@@ -1,5 +1,6 @@
 {
     "title": "Error",
-    "description": "Something went wrong...",
-    "header": "Something went wrong..."
+    "description": "Something went wrong.",
+    "header": "Something went wrong",
+    "text": "Please try again in a moment."
 }

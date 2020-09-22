@@ -1,10 +1,17 @@
-import { Box } from '@material-ui/core';
-import { useDeviceContext, usePDFViewerContext } from 'context';
-import { useStateRef } from 'hooks';
+import { Box, makeStyles } from '@material-ui/core';
+import clsx from 'clsx';
+import { usePDFViewerContext } from 'context';
+import { useMediaQueries, useStateRef } from 'hooks';
 import { getBoundingRect, getPageFromElement } from 'lib';
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import { LTWH, PDFTranslation } from 'types';
+
+const useStyles = makeStyles({
+    root: {
+        position: 'absolute',
+        backgroundColor: 'rgba(173, 54, 54, 0.5)', // Primary color with opacity.
+    },
+});
 
 interface State {
     locked: boolean;
@@ -18,7 +25,8 @@ const initialState = { start: null, end: null, locked: false };
 // Inspired by: https://github.com/agentcooper/react-pdf-highlighter
 // TODO: Add a listener that cancels the draw mode from ESC key.
 export const AreaSelection: React.FC = () => {
-    const isMobile = useDeviceContext();
+    const classes = useStyles();
+    const { isMobileOrTablet } = useMediaQueries();
     const { setScreenshot, drawMode, setSwipingDisabled } = usePDFViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
     const { start, end } = stateRef.current;
@@ -37,9 +45,9 @@ export const AreaSelection: React.FC = () => {
         const newCanvasContext = newCanvas.getContext('2d');
 
         if (!!newCanvas && !!newCanvasContext && !!canvas && !!width && !!height) {
-            // Device pixel ratio seems to be a bit of for mobile devices at least when using Chrome.
+            // Device pixel ratio seems to be a bit off for mobile devices at least when using Chrome.
             // Using a hard coded value of 3 for mobile devices seems to result in correctly aligned screenshots.
-            const dpr = isMobile ? 3 : window.devicePixelRatio;
+            const dpr = isMobileOrTablet ? 3 : window.devicePixelRatio;
             newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
             return newCanvas.toDataURL('image/jpeg');
         } else {
@@ -218,11 +226,7 @@ export const AreaSelection: React.FC = () => {
         };
     }, [drawMode]);
 
-    return drawMode && !!start && !!end ? <StyledAreaSelection style={getBoundingRect(start, end)} /> : null;
+    return drawMode && !!start && !!end ? (
+        <Box className={clsx('screenshot-border', classes.root)} style={getBoundingRect(start, end)} />
+    ) : null;
 };
-
-const StyledAreaSelection = styled(Box)`
-    position: absolute;
-    border: var(--screenshot-border);
-    background-color: rgba(173, 54, 54, 0.5); // Primary color with opacity.
-`;

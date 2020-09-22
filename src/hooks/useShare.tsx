@@ -5,7 +5,7 @@ import { useTranslation } from 'lib';
 import React from 'react';
 import { ShareParams } from 'types';
 
-import { useResponsiveIconButtonProps } from './useResponsiveIconButtonProps';
+import { useMediaQueries } from './useMediaQueries';
 
 interface ShareData {
     title?: string;
@@ -28,8 +28,9 @@ interface UseShare {
 
 export const useShare = ({ query = '', text }: ShareParams): UseShare => {
     const { t } = useTranslation();
-    const iconButtonProps = useResponsiveIconButtonProps();
     const { toggleNotification } = useNotificationsContext();
+    const { isMobileOrTablet } = useMediaQueries();
+    const color = isMobileOrTablet ? 'secondary' : 'default';
 
     const handleShare = async (): Promise<void> => {
         const { navigator } = window as ShareNavigatorWindow;
@@ -51,7 +52,7 @@ export const useShare = ({ query = '', text }: ShareParams): UseShare => {
 
     const renderShareButton = (
         <Tooltip title={t('tooltips:share')}>
-            <IconButton onClick={handleShare} {...iconButtonProps}>
+            <IconButton onClick={handleShare} size="small" color={color}>
                 <ShareOutlined />
             </IconButton>
         </Tooltip>

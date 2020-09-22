@@ -1,22 +1,35 @@
-import { Box, Grid, Tab, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import {
+    Box,
+    CardActionArea,
+    CardHeader,
+    List,
+    makeStyles,
+    Paper,
+    Tab,
+    TableBody,
+    TableCell,
+    TableRow,
+    Tabs,
+    Tooltip,
+    Typography,
+} from '@material-ui/core';
+import { AddCircleOutlineOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import {
     CourseTableBody,
     ErrorLayout,
     FrontendPaginatedTable,
-    InfoModalContent,
+    IconButtonLink,
+    InfoDialogContent,
     LoadingLayout,
     MainLayout,
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
-    StyledCard,
-    StyledDrawer,
-    StyledList,
-    StyledSwipeableViews,
-    StyledTabs,
+    ResponsiveDialog,
     TextLink,
 } from 'components';
-import { useDeviceContext } from 'context';
+import { useAuthContext } from 'context';
 import {
     CourseObjectType,
     SchoolDetailDocument,
@@ -24,13 +37,31 @@ import {
     SchoolObjectType,
     SubjectObjectType,
 } from 'generated';
-import { useActionsDrawer, useFrontendPagination, useInfoDrawer, useSearch, useShare, useSwipeableTabs } from 'hooks';
+import {
+    useActionsDialog,
+    useFrontendPagination,
+    useInfoDialog,
+    useMediaQueries,
+    useSearch,
+    useShare,
+    useSwipeableTabs,
+} from 'hooks';
 import { includeDefaultNamespaces, initApolloClient, Link, useTranslation, withAuth } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import SwipeableViews from 'react-swipeable-views';
 import { AuthProps } from 'types';
+import { urls } from 'utils';
+
+const useStyles = makeStyles({
+    root: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+});
 
 const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
     data,
@@ -38,11 +69,14 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
     authLoading,
     authNetworkError,
 }) => {
+    const classes = useStyles();
+    const { verified, verificationRequiredTooltip } = useAuthContext();
     const { isFallback } = useRouter();
     const { t } = useTranslation();
-    const isMobile = useDeviceContext();
+    const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { searchUrl } = useSearch();
     const school: SchoolObjectType = R.propOr(null, 'school', data);
+    const schoolId = R.propOr('', 'id', school) as string;
     const schoolName = R.propOr('', 'name', school) as string;
     const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school) as string;
     const schoolTypeId = R.pathOr('', ['schoolType', 'id'], school) as string;
@@ -60,27 +94,17 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
     const { renderShareButton } = useShare({ text: schoolName });
     const notFound = t('school:notFound');
     const title = !!school ? schoolName : !isFallback ? notFound : '';
-    const description = !!school ? t('school:description', { schoolName }) : notFound;
+    const description = !!school ? t('school:description', { schoolName }) : !isFallback ? notFound : '';
+    const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
+    const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     const {
-        renderInfoHeader,
-        renderInfoButton,
-        open: infoOpen,
-        anchor: infoAnchor,
-        onClose: handleCloseInfo,
-    } = useInfoDrawer();
-
-    const {
-        renderActionsHeader,
-        handleCloseActions,
+        actionsDialogOpen,
+        actionsDialogHeaderProps,
+        handleCloseActionsDialog,
         renderActionsButton,
         renderShareAction,
-        open: actionsOpen,
-        anchor: actionsAnchor,
-    } = useActionsDrawer({ text: schoolName });
-
-    const infoDrawerProps = { open: infoOpen, anchor: infoAnchor, onClose: handleCloseInfo };
-    const actionsDrawerProps = { open: actionsOpen, anchor: actionsAnchor, onClose: handleCloseActions };
+    } = useActionsDialog({ text: schoolName });
 
     const schoolTypeLink = {
         ...searchUrl,
@@ -142,15 +166,31 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
         },
     ];
 
+    const renderAddCourseButton = (
+        <Tooltip title={addCourseTooltip}>
+            <span>
+                <IconButtonLink
+                    href={{ pathname: urls.createCourse, query: { school: schoolId } }}
+                    icon={AddCircleOutlineOutlined}
+                    disabled={verified === false}
+                    color={isMobileOrTablet ? 'secondary' : 'default'}
+                    size="small"
+                />
+            </span>
+        </Tooltip>
+    );
+
     const renderSubjectsTableBody = (
         <TableBody>
             {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
                 <Link href={{ ...searchUrl, query: { ...searchUrl.query, subject: s.id } }} key={i}>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="subtitle1">{R.propOr('-', 'name', s)}</Typography>
-                        </TableCell>
-                    </TableRow>
+                    <CardActionArea>
+                        <TableRow>
+                            <TableCell>
+                                <Typography variant="body2">{R.propOr('-', 'name', s)}</Typography>
+                            </TableCell>
+                        </TableRow>
+                    </CardActionArea>
                 </Link>
             ))}
         </TableBody>
@@ -185,65 +225,63 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
         <NotFoundBox text={t('school:noCourses')} />
     );
 
-    const renderSchoolName = <Typography variant="subtitle1">{schoolName}</Typography>;
-
-    const renderSchoolHeader = !isMobile && (
-        <Box className="custom-header">
-            <Grid container justify="space-between">
-                <Box display="flex" justifyContent="flex-start" alignItems="center">
-                    {renderSchoolName}
-                </Box>
-                <Box display="flex" justifyContent="flex-end" alignItems="center">
-                    {renderShareButton}
-                    {renderInfoButton}
-                    {renderActionsButton}
-                </Box>
-            </Grid>
-        </Box>
+    const renderAction = (
+        <>
+            {renderAddCourseButton}
+            {renderShareButton}
+            {renderInfoButton}
+            {renderActionsButton}
+        </>
     );
 
+    const renderSchoolHeader = isDesktop && <CardHeader title={schoolName} action={renderAction} />;
+
     const renderTabs = (
-        <StyledTabs value={tabValue} onChange={handleTabChange}>
+        <Tabs value={tabValue} onChange={handleTabChange}>
             <Tab label={`${t('common:subjects')} (${subjectCount})`} />
             <Tab label={`${t('common:courses')} (${courseCount})`} />
-        </StyledTabs>
+        </Tabs>
     );
 
     const renderSwipeableViews = (
-        <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-            <Box display="flex" flexGrow="1" position="relative">
+        <Box flexGrow="1" position="relative">
+            <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
                 {renderSubjects}
-            </Box>
-            <Box display="flex" flexGrow="1">
                 {renderCourses}
-            </Box>
-        </StyledSwipeableViews>
+            </SwipeableViews>
+        </Box>
     );
 
     const renderContent = (
-        <StyledCard>
+        <Paper className={clsx('paper-container', classes.root)}>
             {renderSchoolHeader}
             {renderTabs}
             {renderSwipeableViews}
-        </StyledCard>
+        </Paper>
     );
 
-    const renderInfo = <InfoModalContent infoItems={infoItems} />;
+    const renderInfoDialogContent = <InfoDialogContent infoItems={infoItems} />;
 
-    const renderInfoDrawer = (
-        <StyledDrawer {...infoDrawerProps}>
-            {renderInfoHeader}
-            {renderInfo}
-        </StyledDrawer>
+    const renderInfoDialog = (
+        <ResponsiveDialog
+            open={infoDialogOpen}
+            onClose={handleCloseInfoDialog}
+            dialogHeaderProps={infoDialogHeaderProps}
+        >
+            {renderInfoDialogContent}
+        </ResponsiveDialog>
     );
 
-    const renderActions = <StyledList>{renderShareAction}</StyledList>;
+    const renderActionsDialogContent = <List>{renderShareAction}</List>;
 
     const renderActionsDrawer = (
-        <StyledDrawer {...actionsDrawerProps}>
-            {renderActionsHeader}
-            {renderActions}
-        </StyledDrawer>
+        <ResponsiveDialog
+            open={actionsDialogOpen}
+            onClose={handleCloseActionsDialog}
+            dialogHeaderProps={actionsDialogHeaderProps}
+        >
+            {renderActionsDialogContent}
+        </ResponsiveDialog>
     );
 
     const seoProps = {
@@ -253,12 +291,14 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
 
     const layoutProps = {
         seoProps,
-        topNavbarProps: {
-            dynamicBackUrl: true,
-        },
-        headerDesktop: schoolName,
         tabLabelLeft: `${t('common:subjects')} (${subjectCount})`,
         tabLabelRight: `${t('common:courses')} (${courseCount})`,
+        topNavbarProps: {
+            dynamicBackUrl: true,
+            headerLeft: renderAddCourseButton,
+            headerRight: renderActionsButton,
+            headerRightSecondary: renderInfoButton,
+        },
     };
 
     if (isFallback || authLoading) {
@@ -275,7 +315,7 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
         return (
             <MainLayout {...layoutProps}>
                 {renderContent}
-                {renderInfoDrawer}
+                {renderInfoDialog}
                 {renderActionsDrawer}
             </MainLayout>
         );

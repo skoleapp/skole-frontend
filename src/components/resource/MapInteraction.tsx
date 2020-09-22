@@ -1,15 +1,27 @@
-import { Box } from '@material-ui/core';
-import { useDeviceContext, usePDFViewerContext } from 'context';
-import { useStateRef } from 'hooks';
+import { Box, makeStyles } from '@material-ui/core';
+import { usePDFViewerContext } from 'context';
+import { useMediaQueries, useStateRef } from 'hooks';
 import { getClampedScale, getCoordChange, getMidPoint, getTouchDistance, getTouchPoint } from 'lib';
 import throttle from 'lodash.throttle';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { PDFTranslation } from 'types';
 import { DEFAULT_SCALE, DEFAULT_TRANSLATION, MAX_SCALE, MIN_SCALE } from 'utils';
 
 import { MapControls } from './MapControls';
+
+const useStyles = makeStyles(({ palette }) => ({
+    mapContainer: {
+        flexGrow: 1,
+        backgroundColor: palette.grey[600],
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    bounceBack: {
+        transform: 'none',
+        transition: '0.5s ease-in-out',
+    },
+}));
 
 interface StartPointersInfo {
     translation: PDFTranslation;
@@ -20,7 +32,8 @@ interface StartPointersInfo {
 // This component adds map interaction functionality with mouse and touch events to its children.
 // Inspired by: https://github.com/transcriptic/react-map-interaction
 export const MapInteraction: React.FC = ({ children }) => {
-    const isMobile = useDeviceContext();
+    const classes = useStyles();
+    const { isMobileOrTablet } = useMediaQueries();
 
     const {
         drawMode,
@@ -223,7 +236,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         if (scale < DEFAULT_SCALE) {
             setScale(DEFAULT_SCALE);
             setTranslation(DEFAULT_TRANSLATION);
-            setTransformContainerClasses('bounce-back');
+            setTransformContainerClasses(classes.bounceBack);
         }
     };
 
@@ -301,12 +314,12 @@ export const MapInteraction: React.FC = ({ children }) => {
     const handleScaleUpButtonClick = (): Promise<void> => handleScale(scale < MAX_SCALE ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
     const handleScaleDownButtonClick = (): Promise<void> => handleScale(scale > MIN_SCALE ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
     const cursor = !drawMode && ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
-    const overflow = drawMode && isMobile ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
+    const overflow = drawMode && isMobileOrTablet ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
     const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
     const transformOrigin = scale < 1 ? '50% 0' : '0 0'; // When in fullscreen and zooming in from that, we set the transform origin to top left. Otherwise we center the document.
     const width = `calc(100% * ${scale})`;
-    const mapInteractionContainerProps = { cursor, overflow };
-    const transformContainerProps = { transform, transformOrigin, width };
+    const mapContainerStyle = { cursor, overflow };
+    const transformContainerStyle = { transform, transformOrigin, width };
 
     const mapControlsProps = {
         handleFullscreenButtonClick,
@@ -317,49 +330,16 @@ export const MapInteraction: React.FC = ({ children }) => {
     };
 
     const renderTransformContainer = (
-        <TransformContainer className={transformContainerClasses} {...transformContainerProps}>
+        <Box className={transformContainerClasses} style={transformContainerStyle}>
             {children}
-        </TransformContainer>
+        </Box>
     );
-    const renderMapControls = !isMobile && !drawMode && <MapControls {...mapControlsProps} />;
+    const renderMapControls = !isMobileOrTablet && !drawMode && <MapControls {...mapControlsProps} />;
 
     return (
-        <MapInteractionContainer id="map-container" {...mapInteractionContainerProps}>
+        <Box id="map-container" className={classes.mapContainer} style={mapContainerStyle}>
             {renderTransformContainer}
             {renderMapControls}
-        </MapInteractionContainer>
+        </Box>
     );
 };
-
-// Ignore: cursor and overflow must be omitted from Box props.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const MapInteractionContainer = styled(({ cursor, overflow, ...props }) => <Box {...props} />).attrs(
-    ({ cursor, overflow }) => ({
-        style: {
-            cursor,
-            overflow,
-        },
-    }),
-)`
-    flex-grow: 1;
-    background-color: var(--gray-light);
-    display: flex;
-    justify-content: center;
-
-    .bounce-back {
-        transform: none;
-        transition: 0.5s ease-in-out;
-    }
-`;
-
-// Ignore: transform, transformOrigin and width must be omitted from Box props.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const TransformContainer = styled(({ transform, transformOrigin, width, ...props }) => <Box {...props} />).attrs(
-    ({ transform, transformOrigin, width }) => ({
-        style: {
-            transform,
-            transformOrigin,
-            width,
-        },
-    }),
-)``;

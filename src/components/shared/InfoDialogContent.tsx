@@ -19,7 +19,7 @@ interface Props {
     infoItems: InfoItem[];
 }
 
-export const InfoModalContent: React.FC<Props> = ({ user, created, infoItems }) => {
+export const InfoDialogContent: React.FC<Props> = ({ user, created, infoItems }) => {
     const { t } = useTranslation();
     const userId = R.propOr(undefined, 'id', user);
 
@@ -31,7 +31,7 @@ export const InfoModalContent: React.FC<Props> = ({ user, created, infoItems }) 
                 </Typography>
             </Grid>
             <Grid item xs={7}>
-                <Typography className="truncate" variant="body2">
+                <Typography className="truncate-text" variant="body2">
                     {value || '-'}
                 </Typography>
             </Grid>

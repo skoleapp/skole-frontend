@@ -1,8 +1,9 @@
 {
     "description": "View {{ courseName }} on Skole.",
-    "noResources": "No resources have been added to this course yet.",
+    "noResources": "This course has no resources.",
+    "noResourcesLink": "Add a resource here!",
     "deleteCourseTitle": "Delete Course",
     "deleteCourseDescription": "Are you sure you want to delete this course?",
-    "commentsPlaceholder": "General discussion about the course happens here.",
+    "noComments": "This course has no comments. Add a comment below!",
     "notFound": "Course not found."
 }

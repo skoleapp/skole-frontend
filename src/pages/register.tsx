@@ -1,5 +1,5 @@
-import { Box, Button, FormControl, InputAdornment, Typography } from '@material-ui/core';
-import { AccountCircleOutlined, ArrowForwardOutlined, EmailOutlined, LockOutlined } from '@material-ui/icons';
+import { Button, FormControl, FormHelperText, makeStyles, Typography } from '@material-ui/core';
+import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
     AutoCompleteField,
     ButtonLink,
@@ -7,10 +7,11 @@ import {
     FormSubmitSection,
     LoadingLayout,
     OfflineLayout,
+    PasswordField,
+    TextFormField,
     TextLink,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { TextField } from 'formik-material-ui';
 import {
     RegisterMutation,
     SchoolObjectType,
@@ -25,17 +26,25 @@ import {
 import { useForm, useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { AuthProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
+const useStyles = makeStyles({
+    link: {
+        textAlign: 'center',
+    },
+});
+
 interface RegisterFormValues {
     username: string;
     email: string;
     password: string;
     confirmPassword: string;
+    code: string;
 }
 
 interface UpdateUserFormValues {
@@ -50,6 +59,8 @@ enum RegisterPhases {
 }
 
 const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+    const classes = useStyles();
+    const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
     const [registeredUser, setRegisteredUser] = useState<Pick<UserObjectType, 'username' | 'email'> | null>(null);
@@ -95,6 +106,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         email: '',
         password: '',
         confirmPassword: '',
+        code: R.propOr('', 'code', query) as string,
         general: '',
     };
 
@@ -109,6 +121,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
             .required(t('validation:required')),
+        code: Yup.string().required(t('validation:required')),
     });
 
     const updateUserInitialValues = {
@@ -123,9 +136,9 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     });
 
     const onRegisterCompleted = async ({ register, login }: RegisterMutation): Promise<void> => {
-        if (!!register && !!register.errors) {
+        if (!!register && !!register.errors && !!register.errors.length) {
             handleRegisterMutationErrors(register.errors);
-        } else if (!!login && !!login.errors) {
+        } else if (!!login && !!login.errors && !!login.errors.length) {
             handleRegisterMutationErrors(login.errors);
         } else if (!!login && !!login.user && !!register) {
             try {
@@ -158,7 +171,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const onUpdateUserCompleted = ({ updateUser }: UpdateUserMutation): void => {
         if (!!updateUser) {
-            if (!!updateUser.errors) {
+            if (!!updateUser.errors && !!updateUser.errors.length) {
                 handleUpdateUserMutationErrors(updateUser.errors);
             } else {
                 resetUpdateUserForm();
@@ -192,93 +205,37 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const renderUsernameField = (
         <Field
-            placeholder={t('forms:username')}
             label={t('forms:username')}
             name="username"
-            component={TextField}
-            variant="outlined"
+            component={TextFormField}
             helperText={t('forms:usernameHelperText')}
-            fullWidth
-            autoComplete="off"
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <AccountCircleOutlined />
-                    </InputAdornment>
-                ),
-            }}
         />
     );
 
     const renderEmailField = (
         <Field
-            placeholder={t('forms:email')}
             label={t('forms:email')}
             name="email"
-            component={TextField}
-            variant="outlined"
+            component={TextFormField}
             helperText={t('forms:emailHelperText')}
-            fullWidth
-            autoComplete="off" // FIXME: This seems to have no effect.
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <EmailOutlined />
-                    </InputAdornment>
-                ),
-            }}
         />
     );
 
-    const renderPasswordField = (
-        <Field
-            placeholder={t('forms:password')}
-            label={t('forms:password')}
-            name="password"
-            component={TextField}
-            variant="outlined"
-            type="password"
-            fullWidth
-            autoComplete="off"
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <LockOutlined />
-                    </InputAdornment>
-                ),
-            }}
-        />
-    );
+    const renderPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => <PasswordField {...props} />;
 
-    const renderConfirmPasswordField = (
-        <Field
-            placeholder={t('forms:confirmPassword')}
-            label={t('forms:confirmPassword')}
-            name="confirmPassword"
-            type="password"
-            component={TextField}
-            variant="outlined"
-            fullWidth
-            autoComplete="off"
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <LockOutlined />
-                    </InputAdornment>
-                ),
-            }}
-        />
+    const renderConfirmPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => (
+        <PasswordField label={t('forms:confirmPassword')} name="confirmPassword" {...props} />
     );
 
     const renderTermsLink = (
-        <FormControl fullWidth>
-            <Typography variant="body2" color="textSecondary">
+        <FormControl>
+            <FormHelperText>
                 {t('register:termsHelpText')}{' '}
                 <TextLink href={urls.terms} target="_blank">
                     {t('common:terms')}
                 </TextLink>
                 .
-            </Typography>
+            </FormHelperText>
         </FormControl>
     );
 
@@ -286,11 +243,9 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <FormSubmitSection submitButtonText={t('common:register')} {...props} />
     );
 
-    const renderLoginButton = (
-        <FormControl fullWidth>
-            <ButtonLink href={urls.login} color="primary" fullWidth>
-                {t('common:login')}
-            </ButtonLink>
+    const renderLoginLink = (
+        <FormControl className={classes.link}>
+            <TextLink href={urls.login}>{t('common:login')}</TextLink>
         </FormControl>
     );
 
@@ -298,11 +253,12 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <Form>
             {renderUsernameField}
             {renderEmailField}
-            {renderPasswordField}
+            {renderPasswordField(props)}
+            {renderConfirmPasswordField(props)}
             {renderConfirmPasswordField}
             {renderTermsLink}
             {renderRegisterFormSubmitSection(props)}
-            {renderLoginButton}
+            {renderLoginLink}
         </Form>
     );
 
@@ -318,38 +274,28 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     );
 
     const renderRegisterCompleteHelpText = (
-        <FormControl fullWidth>
-            <Box textAlign="left">
-                <Typography variant="body2" color="textSecondary">
-                    {t('register:registerCompleteHelpText')}
-                </Typography>
-            </Box>
+        <FormControl>
+            <FormHelperText>{t('register:registerCompleteHelpText')}</FormHelperText>
         </FormControl>
     );
 
     const renderSchoolField = (
         <Field
             name="school"
-            label={t('forms:school')}
-            placeholder={t('forms:school')}
+            label={t('forms:schoolOptional')}
             dataKey="schools"
             document={SchoolsDocument}
             component={AutoCompleteField}
-            variant="outlined"
-            fullWidth
         />
     );
 
     const renderSubjectField = (
         <Field
             name="subject"
-            label={t('forms:subject')}
-            placeholder={t('forms:subject')}
+            label={t('forms:subjectOptional')}
             dataKey="subjects"
             document={SubjectsDocument}
             component={AutoCompleteField}
-            variant="outlined"
-            fullWidth
         />
     );
 
@@ -358,7 +304,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     );
 
     const renderSkipButton = (
-        <FormControl fullWidth>
+        <FormControl>
             <Button onClick={handleSkipUpdateProfile} color="primary" fullWidth>
                 {t('common:skip')}
             </Button>
@@ -387,28 +333,21 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     );
 
     const renderRegisterComplete = phase === RegisterPhases.REGISTER_COMPLETE && (
-        <FormControl fullWidth>
-            <Typography variant="subtitle1">{t('register:registerCompleteEmailSent')}</Typography>
-            <Box marginTop="1rem">
-                <ButtonLink
-                    href={urls.home}
-                    endIcon={<ArrowForwardOutlined />}
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                >
-                    {t('common:continue')}
-                </ButtonLink>
-            </Box>
+        <FormControl>
+            <Typography variant="subtitle1" align="center">
+                {t('register:registerCompleteEmailSent')}
+            </Typography>
+            <Typography component="br" />
+            <ButtonLink
+                href={urls.home}
+                endIcon={<ArrowForwardOutlined />}
+                color="primary"
+                variant="contained"
+                fullWidth
+            >
+                {t('common:continue')}
+            </ButtonLink>
         </FormControl>
-    );
-
-    const renderCardContent = (
-        <>
-            {renderRegisterForm}
-            {renderUpdateUserForm}
-            {renderRegisterComplete}
-        </>
     );
 
     const seoProps = {
@@ -418,13 +357,13 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
 
     const layoutProps = {
         seoProps,
+        header: getHeader(),
+        disableBottomNavbar: true,
         topNavbarProps: {
-            header: getHeader(),
             headerRight: renderLanguageButton,
             disableAuthButtons: true,
+            disableSearch: true,
         },
-        desktopHeader: getHeader(),
-        renderCardContent,
     };
 
     if (authLoading) {
@@ -435,7 +374,13 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <FormLayout {...layoutProps} />;
+    return (
+        <FormLayout {...layoutProps}>
+            {renderRegisterForm}
+            {renderUpdateUserForm}
+            {renderRegisterComplete}
+        </FormLayout>
+    );
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

@@ -1,4 +1,4 @@
-import { Box, Tab } from '@material-ui/core';
+import { Box, Tab, Tabs } from '@material-ui/core';
 import {
     CourseTableBody,
     ErrorLayout,
@@ -9,14 +9,11 @@ import {
     OfflineLayout,
     ResourceTableBody,
     SettingsLayout,
-    StyledSwipeableViews,
-    StyledTabs,
 } from 'components';
 import {
     CourseObjectType,
     ResourceObjectType,
     ResourceTypeObjectType,
-    useResourceTypesQuery,
     UserObjectType,
     useStarredQuery,
 } from 'generated';
@@ -25,19 +22,17 @@ import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import SwipeableViews from 'react-swipeable-views';
 import { AuthProps } from 'types';
 
 const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { data, loading, error } = useStarredQuery();
-    const { data: resourceTypeData, loading: loadingResourceType, error: resourceTypeError } = useResourceTypesQuery();
-
     const userMe: UserObjectType = R.propOr(null, 'userMe', data);
     const starredCourses: CourseObjectType[] = R.propOr([], 'starredCourses', data);
     const starredResources: ResourceObjectType[] = R.propOr([], 'starredResources', data);
-    const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', resourceTypeData);
-
+    const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(starredResources);
     const commonTableHeadProps = { titleRight: t('common:score') };
@@ -72,20 +67,19 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         <NotFoundBox text={t('starred:noResources')} />
     );
 
-    const renderCardContent = (
-        <Box flexGrow="1" display="flex" flexDirection="column">
-            <StyledTabs value={tabValue} onChange={handleTabChange}>
-                <Tab label={t('common:courses')} />
-                <Tab label={t('common:resources')} />
-            </StyledTabs>
-            <StyledSwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-                <Box display="flex" flexGrow="1">
-                    {renderStarredCourses}
-                </Box>
-                <Box display="flex" flexGrow="1">
-                    {renderStarredResources}
-                </Box>
-            </StyledSwipeableViews>
+    const renderTabs = (
+        <Tabs value={tabValue} onChange={handleTabChange}>
+            <Tab label={t('common:courses')} />
+            <Tab label={t('common:resources')} />
+        </Tabs>
+    );
+
+    const renderSwipeableViews = (
+        <Box flexGrow="1" position="relative" minHeight="30rem">
+            <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
+                {renderStarredCourses}
+                {renderStarredResources}
+            </SwipeableViews>
         </Box>
     );
 
@@ -96,31 +90,30 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
 
     const layoutProps = {
         seoProps,
+        header: t('starred:header'),
+        disablePadding: true,
         topNavbarProps: {
-            header: t('starred:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent,
-        desktopHeader: t('starred:header'),
-        fullSize: true,
     };
 
-    if (loading || authLoading || loadingResourceType) {
+    if (loading || authLoading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if (
-        (!!error && !!error.networkError) ||
-        (!!resourceTypeError && !!resourceTypeError.networkError) ||
-        authNetworkError
-    ) {
+    if ((!!error && !!error.networkError) || authNetworkError) {
         return <OfflineLayout seoProps={seoProps} />;
-    } else if (!!error || !!resourceTypeError) {
+    } else if (!!error) {
         return <ErrorLayout seoProps={seoProps} />;
     }
 
     if (!!userMe) {
-        return <SettingsLayout {...layoutProps} />;
+        return (
+            <SettingsLayout {...layoutProps}>
+                {renderTabs}
+                {renderSwipeableViews}
+            </SettingsLayout>
+        );
     } else {
         return <NotFoundLayout />;
     }

@@ -1,11 +1,11 @@
 import {
     AssignmentOutlined,
+    ChatOutlined,
     CloudUploadOutlined,
     ContactSupportOutlined,
     DeleteForeverOutlined,
     EditOutlined,
     HelpOutlineOutlined,
-    LibraryAddOutlined,
     LockOutlined,
     NotificationsOutlined,
     QuestionAnswerOutlined,
@@ -22,10 +22,6 @@ import { urls } from './urls';
 export const TOKEN_NAME = 'JWT';
 export const MAX_AGE = 60 * 60 * 24 * 30; // 1 month.
 
-// Analytics.
-
-export const GA_TRACKING_ID = 'UA-159917631-1';
-
 // PDF Viewer.
 
 export const DEFAULT_TRANSLATION = { x: 0, y: 0 };
@@ -33,22 +29,45 @@ export const DEFAULT_SCALE = 1.0;
 export const MIN_SCALE = 0.75;
 export const MAX_SCALE = 1.75;
 
-// Landing page shortcuts.
+// Get started page.
 
-export const SHORTCUTS = [
+export const GET_STARTED_ITEMS = [
     {
-        text: 'index:browseCourses',
+        title: 'common:resources',
+        image: 'images/landing-page/resources.jpg',
+        description: 'get-started:resourcesDescription',
+        icon: AssignmentOutlined,
+    },
+    {
+        title: 'common:courses',
+        image: 'images/landing-page/courses.jpg',
+        description: 'get-started:coursesDescription',
         icon: SchoolOutlined,
+    },
+    {
+        title: 'common:discussion',
+        image: 'images/landing-page/discussion.jpg',
+        description: 'get-started:discussionDescription',
+        icon: ChatOutlined,
+    },
+];
+
+// Home page.
+
+export const HOME_PAGE_SHORTCUTS = [
+    {
+        text: 'index:resources',
+        icon: AssignmentOutlined,
         href: urls.search,
     },
     {
-        text: 'index:uploadResource',
+        text: 'index:upload',
         icon: CloudUploadOutlined,
         href: urls.uploadResource,
     },
     {
-        text: 'index:createCourse',
-        icon: LibraryAddOutlined,
+        text: 'index:addCourses',
+        icon: SchoolOutlined,
         href: urls.createCourse,
     },
 ];
@@ -165,6 +184,11 @@ export const RICH_STYLES = {
     codeBlock: 'code-block',
 };
 
-// Dropzone.
+// Resource uploads.
 
-export const DROPZONE_ACCEPTED_FILES = ['image/*', 'text/*', 'application/*'];
+export const ACCEPTED_FILES = ['image/*', 'text/*', 'application/*'];
+export const MAX_FILE_SIZE = 5000000;
+
+// Avatar field.
+
+export const AVATAR_MAX_FILE_SIZE = 2000000;

@@ -1,16 +1,31 @@
-import { Box, Fade, Paper } from '@material-ui/core';
-import { useDeviceContext, useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
+import { Dialog, DialogContent, Grid, makeStyles } from '@material-ui/core';
+import clsx from 'clsx';
+import { useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
-import { useForm } from 'hooks';
+import { useForm, useMediaQueries } from 'hooks';
 import { dataURItoFile, useTranslation } from 'lib';
-import Image from 'material-ui-image';
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import { CommentTarget, CreateCommentFormValues } from 'types';
 
-import { ModalHeader, StyledModal } from '..';
+import { DialogHeader } from '..';
+import { Transition } from '../shared';
 import { RichTextEditor } from './RichTextEditor';
+
+const useStyles = makeStyles(({ spacing }) => ({
+    attachment: {
+        width: '100%',
+        height: 'auto',
+        maxHeight: '25rem',
+        margin: `${spacing(2)} 0`,
+    },
+    container: {
+        flexGrow: 1,
+    },
+    dialogContent: {
+        display: 'flex',
+    },
+}));
 
 type T = FormikProps<CreateCommentFormValues>;
 
@@ -20,12 +35,13 @@ interface CreateCommentFormProps {
 }
 
 export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
+    const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { ref, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { commentModalOpen, toggleCommentModal, commentAttachment, setCommentAttachment } = useDiscussionContext();
     const { screenshot, setScreenshot } = usePDFViewerContext();
-    const isMobile = useDeviceContext();
 
     // Use screenshot as attachment if area has been marked.
     useEffect(() => {
@@ -47,7 +63,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
     const onCompleted = ({ createComment }: CreateCommentMutation): void => {
         if (!!createComment) {
-            if (!!createComment.errors) {
+            if (!!createComment.errors && !!createComment.errors.length) {
                 onError();
             } else if (!!createComment.comment && !!createComment.message) {
                 toggleNotification(createComment.message);
@@ -85,55 +101,44 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     };
 
     const renderDesktopInputArea = (formikProps: T): false | JSX.Element =>
-        !isMobile && <RichTextEditor {...formikProps} />;
+        isDesktop && <RichTextEditor {...formikProps} />;
+
+    const renderAttachment = !!commentAttachment && (
+        <img
+            className={clsx(classes.attachment, !!screenshot && 'screenshot-border')}
+            src={commentAttachment as string}
+            alt={commentAttachment as string}
+        />
+    );
+
+    const renderRichTextEditor = (formikProps: T): JSX.Element => <RichTextEditor {...formikProps} />;
 
     const renderCreateCommentModal = (formikProps: T): JSX.Element => (
-        <StyledModal open={commentModalOpen} onClose={handleCloseCreateCommentModal} autoHeight>
-            <Fade in={commentModalOpen}>
-                <Paper>
-                    <ModalHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
-                    <StyledAttachmentImage screenshot={screenshot}>
-                        {!!commentAttachment && <Image src={commentAttachment as string} />}
-                    </StyledAttachmentImage>
-                    <RichTextEditor {...formikProps} />
-                </Paper>
-            </Fade>
-        </StyledModal>
+        <Dialog
+            fullScreen={isMobileOrTablet}
+            fullWidth={isDesktop}
+            open={commentModalOpen}
+            onClose={handleCloseCreateCommentModal}
+            TransitionComponent={Transition}
+        >
+            <DialogHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
+            <DialogContent className={classes.dialogContent}>
+                <Grid className={classes.container} container direction="column">
+                    {renderAttachment}
+                    {renderRichTextEditor(formikProps)}
+                </Grid>
+            </DialogContent>
+        </Dialog>
     );
 
     return (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
             {(props): JSX.Element => (
-                <StyledCreateCommentForm>
+                <Form className={classes.container}>
                     {renderDesktopInputArea(props)}
                     {renderCreateCommentModal(props)}
-                </StyledCreateCommentForm>
+                </Form>
             )}
         </Formik>
     );
 };
-
-const StyledCreateCommentForm = styled(Form)`
-    flex-grow: 1;
-    display: flex;
-`;
-
-// Ignore: screenshot must be omitted from Box props.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledAttachmentImage = styled(({ screenshot, ...props }) => <Box {...props} />)`
-    margin-top: 0.5rem;
-    flex-grow: 1;
-
-    > div {
-        padding-top: 0 !important;
-
-        img {
-            height: auto !important;
-            position: relative !important;
-            max-height: 25rem;
-
-            // If attachment is a screenshot from a document, show a screenshot border around it.
-            border: ${({ screenshot }): string => (!!screenshot ? 'var(--screenshot-border)' : 'none')};
-        }
-    }
-`;

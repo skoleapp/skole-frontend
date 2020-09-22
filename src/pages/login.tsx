@@ -1,9 +1,15 @@
-import { Avatar, Box, FormControl, InputAdornment, Link, Typography } from '@material-ui/core';
-import { AccountCircleOutlined, LockOutlined } from '@material-ui/icons';
-import { ButtonLink, FormLayout, FormSubmitSection, LoadingLayout, OfflineLayout, TextLink } from 'components';
+import { Avatar, Box, FormControl, Grid, Link as MuiLink, makeStyles, Typography } from '@material-ui/core';
+import {
+    FormLayout,
+    FormSubmitSection,
+    LoadingLayout,
+    OfflineLayout,
+    PasswordField,
+    TextFormField,
+    TextLink,
+} from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { TextField } from 'formik-material-ui';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
@@ -15,12 +21,22 @@ import { AuthProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
+const useStyles = makeStyles(({ spacing }) => ({
+    avatarContainer: {
+        padding: spacing(4),
+    },
+    link: {
+        textAlign: 'center',
+    },
+}));
+
 interface LoginFormValues {
     usernameOrEmail: string;
     password: string;
 }
 
 const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderLanguageButton } = useLanguageSelector();
@@ -50,7 +66,7 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
         if (!!login) {
-            if (!!login.errors) {
+            if (!!login.errors && !!login.errors.length) {
                 handleMutationErrors(login.errors);
             } else if (!!login.message) {
                 const { next } = query;
@@ -89,84 +105,49 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     };
 
     const renderExistingUserGreeting = (
-        <Box display="flex" flexDirection="column" alignItems="center" marginTop="1rem">
-            <Avatar className="main-avatar" src={mediaURL(R.propOr('', 'avatar', existingUser))} />
-            <Box marginTop="2rem">
-                <Typography variant="h3">
-                    {t('login:existingUserGreeting', { username: R.propOr('-', 'username', existingUser) })}
-                </Typography>
+        <Grid container alignItems="center" direction="column">
+            <Box className={classes.avatarContainer}>
+                <Avatar className="main-avatar" src={mediaURL(R.propOr('', 'avatar', existingUser))} />
             </Box>
-        </Box>
+            <Typography variant="subtitle1" gutterBottom>
+                {t('login:existingUserGreeting', { username: R.propOr('-', 'username', existingUser) })}
+            </Typography>
+        </Grid>
     );
 
     const renderUsernameOrEmailField = !validExistingUser && (
-        <Field
-            placeholder={t('forms:usernameOrEmail')}
-            name="usernameOrEmail"
-            component={TextField}
-            label={t('forms:usernameOrEmail')}
-            variant="outlined"
-            fullWidth
-            autoComplete="off"
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <AccountCircleOutlined />
-                    </InputAdornment>
-                ),
-            }}
-        />
+        <Field name="usernameOrEmail" component={TextFormField} label={t('forms:usernameOrEmail')} />
     );
 
-    const renderPasswordField = (
-        <Field
-            placeholder={t('forms:password')}
-            name="password"
-            component={TextField}
-            label={t('forms:password')}
-            variant="outlined"
-            type="password"
-            fullWidth
-            autoComplete="off"
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        <LockOutlined />
-                    </InputAdornment>
-                ),
-            }}
-        />
-    );
+    const renderPasswordField = (props: FormikProps<LoginFormValues>): JSX.Element => <PasswordField {...props} />;
 
     const renderFormSubmitSection = (props: FormikProps<LoginFormValues>): JSX.Element => (
         <FormSubmitSection submitButtonText={t('common:login')} {...props} />
     );
 
-    const renderRegisterButton = (
-        <FormControl fullWidth>
-            <ButtonLink href={urls.register} color="primary" fullWidth>
-                {t('common:register')}
-            </ButtonLink>
+    const renderRegisterLink = (
+        <FormControl className={classes.link}>
+            <TextLink href={urls.register}>{t('common:register')}</TextLink>
         </FormControl>
     );
 
     const renderForgotPasswordLink = (
-        <Box marginTop="1rem">
+        <FormControl className={classes.link}>
             <TextLink href={urls.resetPassword}>{t('login:forgotPassword')}</TextLink>
-        </Box>
+        </FormControl>
     );
 
     const renderLoginWithDifferentCredentialsLink = (
-        <Box marginTop="1rem">
-            <Link onClick={handleLoginWithDifferentCredentials}>{t('login:loginWithDifferentCredentials')}</Link>
-        </Box>
+        <FormControl className={classes.link}>
+            <MuiLink onClick={handleLoginWithDifferentCredentials}>{t('login:loginWithDifferentCredentials')}</MuiLink>
+        </FormControl>
     );
 
     const renderExistingUserForm = (props: FormikProps<LoginFormValues>): JSX.Element => (
         <Form>
             {renderExistingUserGreeting}
             {renderUsernameOrEmailField}
-            {renderPasswordField}
+            {renderPasswordField(props)}
             {renderFormSubmitSection(props)}
             {renderForgotPasswordLink}
             {renderLoginWithDifferentCredentialsLink}
@@ -176,14 +157,14 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const renderNewUserForm = (props: FormikProps<LoginFormValues>): JSX.Element => (
         <Form>
             {renderUsernameOrEmailField}
-            {renderPasswordField}
+            {renderPasswordField(props)}
             {renderFormSubmitSection(props)}
-            {renderRegisterButton}
+            {renderRegisterLink}
             {renderForgotPasswordLink}
         </Form>
     );
 
-    const renderCardContent = (
+    const renderForm = (
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
             {validExistingUser ? renderExistingUserForm : renderNewUserForm}
         </Formik>
@@ -196,13 +177,13 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const layoutProps = {
         seoProps,
+        header: t('login:header'),
+        disableBottomNavbar: true,
         topNavbarProps: {
-            header: t('login:header'),
             headerRight: renderLanguageButton,
             disableAuthButtons: true,
+            disableSearch: true,
         },
-        desktopHeader: t('login:header'),
-        renderCardContent,
     };
 
     if (authLoading) {
@@ -213,7 +194,7 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <FormLayout {...layoutProps} />;
+    return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

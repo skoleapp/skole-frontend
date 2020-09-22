@@ -1,13 +1,21 @@
-import { Button, Grid, IconButton, Typography } from '@material-ui/core';
+import { Button, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined, ClearOutlined } from '@material-ui/icons';
-import { useDeviceContext, useDiscussionContext, usePDFViewerContext } from 'context';
+import { useDiscussionContext, usePDFViewerContext } from 'context';
+import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
+const useStyles = makeStyles(({ spacing }) => ({
+    button: {
+        padding: spacing(1),
+    },
+}));
+
 export const DrawModeControls: React.FC = () => {
+    const classes = useStyles();
     const { t } = useTranslation();
-    const isMobile = useDeviceContext();
-    const colWidth = isMobile ? 6 : 5;
+    const { isMobileOrTablet } = useMediaQueries();
+    const colWidth = isMobileOrTablet ? 6 : 5;
     const { setDrawMode, screenshot } = usePDFViewerContext();
     const { toggleCommentModal } = useDiscussionContext();
     const handleExitButtonClick = (): void => setDrawMode(false);
@@ -19,13 +27,13 @@ export const DrawModeControls: React.FC = () => {
 
     const renderExitButton = (
         <Grid item xs={colWidth} container justify="flex-start">
-            <IconButton onClick={handleExitButtonClick} size="small" color={isMobile ? 'default' : 'secondary'}>
+            <IconButton onClick={handleExitButtonClick} size="small" color={isMobileOrTablet ? 'default' : 'secondary'}>
                 <ClearOutlined />
             </IconButton>
         </Grid>
     );
 
-    const renderHeader = !isMobile && (
+    const renderHeader = !isMobileOrTablet && (
         <Grid item xs={2}>
             <Typography variant="subtitle1">{t('resource:drawMode')}</Typography>
         </Grid>
@@ -34,10 +42,11 @@ export const DrawModeControls: React.FC = () => {
     const renderContinueButton = (
         <Grid item xs={colWidth} container justify="flex-end">
             <Button
+                className={classes.button}
                 onClick={handleContinueButtonClick}
                 endIcon={<ArrowForwardOutlined />}
                 disabled={!screenshot}
-                color={isMobile ? 'primary' : 'secondary'}
+                color={isMobileOrTablet ? 'primary' : 'secondary'}
             >
                 {t('common:continue')}
             </Button>

@@ -1,90 +1,83 @@
-import { Avatar, Box, Grid, Typography } from '@material-ui/core';
-import { AssignmentOutlined, ChatOutlined, SchoolOutlined } from '@material-ui/icons';
+import { Avatar, Box, Card, CardContent, CardHeader, CardMedia, Grid, makeStyles, Typography } from '@material-ui/core';
+import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, LoadingLayout, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
-import styled from 'styled-components';
-import { breakpoints } from 'styles';
 import { AuthProps } from 'types';
-import { urls } from 'utils';
+import { GET_STARTED_ITEMS, urls } from 'utils';
+
+const useStyles = makeStyles(({ spacing, palette }) => ({
+    topSectionContainer: {
+        minHeight: '25rem',
+        position: 'relative',
+    },
+    topSectionContent: {
+        padding: spacing(8),
+        color: palette.common.white,
+        position: 'relative',
+    },
+    bottomSectionContainer: {
+        flexGrow: 1,
+    },
+    card: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    getStartedItem: {
+        marginTop: spacing(4),
+    },
+    cardHeader: {
+        display: 'flex',
+        padding: spacing(3),
+    },
+    cardHeaderContent: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    avatar: {
+        backgroundColor: palette.primary.light,
+        color: palette.secondary.main,
+        height: '3rem',
+        width: '3rem',
+    },
+    icon: {
+        height: '2rem',
+        width: '2rem',
+    },
+    ctaContainer: {
+        padding: spacing(8),
+        textAlign: 'center',
+    },
+    ctaButton: {
+        minWidth: '10rem',
+        padding: spacing(3),
+        marginTop: spacing(8),
+    },
+    loginLink: {
+        marginTop: spacing(8),
+    },
+    cardTextContainer: {
+        flexGrow: 1,
+    },
+    chip: {
+        marginTop: spacing(2),
+    },
+    chipIcon: {
+        marginLeft: spacing(2),
+        height: '1rem',
+    },
+}));
 
 // This page will be available also when offline.
 const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderLanguageButton } = useLanguageSelector();
-    const renderTopSectionBackground = <Box id="top-section-background" />;
-
-    const renderTopSectionContent = (
-        <Box id="top-section" padding="0.5rem">
-            <Box marginTop="0.5rem">
-                <Typography variant="h1">{t('common:slogan')}</Typography>
-            </Box>
-            <Box marginTop="2rem">
-                <Typography variant="subtitle1">{t('get-started:header')}</Typography>
-            </Box>
-            <Box marginY="2rem">
-                <Grid container justify="center">
-                    <Grid item xs={12} sm={3}>
-                        <Box margin="1rem">
-                            <Avatar className="get-started-icon">
-                                <AssignmentOutlined />
-                            </Avatar>
-                            <Box marginTop="0.5rem">
-                                <Typography variant="h2">{t('common:resources')}</Typography>
-                            </Box>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                        <Box margin="1rem">
-                            <Avatar className="get-started-icon">
-                                <SchoolOutlined />
-                            </Avatar>
-                            <Box marginTop="0.5rem">
-                                <Typography variant="h2">{t('common:courses')}</Typography>
-                            </Box>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                        <Box margin="1rem">
-                            <Avatar className="get-started-icon">
-                                <ChatOutlined />
-                            </Avatar>
-                            <Box marginTop="0.5rem">
-                                <Typography variant="h2">{t('common:discussion')}</Typography>
-                            </Box>
-                        </Box>
-                    </Grid>
-                </Grid>
-            </Box>
-        </Box>
-    );
-
-    const renderBottomSection = (
-        <Box id="bottom-section" padding="0.5rem">
-            <Box marginTop="1rem">
-                <Typography variant="subtitle1">{t('get-started:subheader')}</Typography>
-            </Box>
-            <Box marginTop="1rem">
-                <ButtonLink
-                    id="get-started-cta"
-                    href={{ pathname: urls.register, query }}
-                    color="primary"
-                    variant="contained"
-                >
-                    {t('get-started:cta')}
-                </ButtonLink>
-                <Box marginY="1rem">
-                    <TextLink color="primary" href={{ pathname: urls.login, query }}>
-                        {t('common:login')}
-                    </TextLink>
-                </Box>
-            </Box>
-        </Box>
-    );
 
     const seoProps = {
         title: t('get-started:title'),
@@ -93,11 +86,15 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
 
     const layoutProps = {
         seoProps,
+        disableBottomNavbar: true,
         topNavbarProps: {
             disableAuthButtons: true,
             headerRight: renderLanguageButton,
         },
-        disableBottomNavbar: true,
+        containerProps: {
+            fullWidth: true,
+            dense: true,
+        },
     };
 
     if (authLoading) {
@@ -106,67 +103,70 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
 
     return (
         <MainLayout {...layoutProps}>
-            <StyledGetStartedPage>
-                <Box flexGrow="1" display="flex" flexDirection="column">
-                    {renderTopSectionBackground}
-                    {renderTopSectionContent}
-                    {renderBottomSection}
-                </Box>
-            </StyledGetStartedPage>
+            <Grid container justify="center" alignItems="center" className={classes.topSectionContainer}>
+                <Box className="main-background" />
+                <Grid item xs={12} lg={10} xl={8} className={classes.topSectionContent}>
+                    <Typography variant="h1" gutterBottom>
+                        {t('common:slogan')}
+                    </Typography>
+                    <Typography variant="h5" gutterBottom>
+                        {t('get-started:header')}
+                    </Typography>
+                    <Typography variant="h6">{t('get-started:header2')}</Typography>
+                </Grid>
+            </Grid>
+            <Grid className={classes.bottomSectionContainer} container justify="center" alignItems="center">
+                <Grid item xs={12} lg={10} xl={8} container spacing={4}>
+                    {GET_STARTED_ITEMS.map(({ title, image, description, icon: Icon }, i) => (
+                        <Grid className={classes.getStartedItem} key={i} item xs={12} sm={4}>
+                            <Card className={classes.card}>
+                                <CardHeader
+                                    classes={{ root: classes.cardHeader, content: classes.cardHeaderContent }}
+                                    avatar={
+                                        <Avatar className={classes.avatar}>
+                                            <Icon className={classes.icon} />
+                                        </Avatar>
+                                    }
+                                    title={
+                                        <Typography variant="h5" color="primary">
+                                            {t(title)}
+                                        </Typography>
+                                    }
+                                />
+                                <CardMedia component="img" image={image} alt={title} height="160" />
+                                <CardContent className={classes.cardTextContainer}>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {t(description)}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Grid>
+            <Grid className={classes.ctaContainer} container direction="column" alignItems="center">
+                <Typography variant="h5" color="primary">
+                    {t('get-started:subheader')}
+                </Typography>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2} container direction="column" alignItems="center">
+                    <ButtonLink
+                        className={classes.ctaButton}
+                        href={{ pathname: urls.register, query }}
+                        color="primary"
+                        variant="contained"
+                        endIcon={<ArrowForwardOutlined />}
+                        fullWidth
+                    >
+                        {t('get-started:cta')}
+                    </ButtonLink>
+                    <TextLink className={classes.loginLink} color="primary" href={{ pathname: urls.login, query }}>
+                        {t('common:login')}
+                    </TextLink>
+                </Grid>
+            </Grid>
         </MainLayout>
     );
 };
-
-const StyledGetStartedPage = styled(Box)`
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    text-align: center;
-
-    #top-section-background {
-        position: absolute;
-        background-color: var(--primary-light);
-        top: 3rem;
-        left: 0;
-        right: 0;
-        height: 45.5rem;
-        z-index: 0;
-
-        @media only screen and (min-width: ${breakpoints.SM}) {
-            height: 24rem;
-        }
-    }
-
-    #top-section {
-        color: var(--white);
-        z-index: 1;
-
-        .get-started-icon {
-            background-color: var(--secondary);
-            color: var(--primary);
-            margin-left: auto;
-            margin-right: auto;
-            height: 7rem;
-            width: 7rem;
-
-            .MuiSvgIcon-root {
-                height: 5rem;
-                width: 5rem;
-            }
-        }
-    }
-
-    #bottom-section {
-        background-color: var(--secondary);
-        flex-grow: 1;
-
-        #get-started-cta {
-            border-radius: 1.5rem;
-            padding: 0.75rem;
-            min-width: 10rem;
-        }
-    }
-`;
 
 export const getStaticProps: GetStaticProps = async () => ({
     props: {

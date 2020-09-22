@@ -1,4 +1,4 @@
-import { Box, FormControl, FormHelperText } from '@material-ui/core';
+import { FormControl, FormHelperText, Switch } from '@material-ui/core';
 import {
     AutoCompleteField,
     AvatarField,
@@ -8,11 +8,11 @@ import {
     NotFoundLayout,
     OfflineLayout,
     SettingsLayout,
+    TextFormField,
     TextLink,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { Switch, TextField } from 'formik-material-ui';
 import {
     SchoolObjectType,
     SchoolsDocument,
@@ -39,7 +39,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
 
     const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
         if (!!updateUser) {
-            if (!!updateUser.errors) {
+            if (!!updateUser.errors && !!updateUser.errors.length) {
                 handleMutationErrors(updateUser.errors);
             } else if (!!updateUser.message) {
                 toggleNotification(updateUser.message);
@@ -94,93 +94,43 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     });
 
     const renderAvatarField = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => <AvatarField {...props} />;
+    const renderTitleField = <Field name="title" component={TextFormField} label={t('forms:title')} />;
+    const renderUsernameField = <Field name="username" component={TextFormField} label={t('forms:username')} />;
+    const renderEmailField = <Field name="email" component={TextFormField} label={t('forms:email')} />;
 
-    const renderTitleField = (
-        <Field
-            placeholder={t('forms:title')}
-            name="title"
-            component={TextField}
-            label={t('forms:title')}
-            variant="outlined"
-            fullWidth
-            autoComplete="off"
-        />
-    );
-
-    const renderUsernameField = (
-        <Field
-            placeholder={t('forms:username')}
-            name="username"
-            component={TextField}
-            label={t('forms:username')}
-            variant="outlined"
-            fullWidth
-            autoComplete="off"
-        />
-    );
-
-    const renderEmailField = (
-        <Field
-            placeholder={t('forms:email')}
-            name="email"
-            component={TextField}
-            label={t('forms:email')}
-            variant="outlined"
-            fullWidth
-            autoComplete="off" // FIXE: This seems to have no effect.
-        />
-    );
-
-    const renderBioField = (
-        <Field
-            placeholder={t('forms:bio')}
-            name="bio"
-            component={TextField}
-            label={t('forms:bio')}
-            variant="outlined"
-            rows="4"
-            multiline
-            fullWidth
-        />
-    );
+    const renderBioField = <Field name="bio" component={TextFormField} label={t('forms:bio')} rows="4" multiline />;
 
     const renderSchoolField = (
         <Field
             name="school"
-            label={t('forms:school')}
-            placeholder={t('forms:school')}
+            label={t('forms:schoolOptional')}
             dataKey="schools"
             document={SchoolsDocument}
             component={AutoCompleteField}
-            variant="outlined"
             helperText={t('forms:schoolHelpText')}
-            fullWidth
         />
     );
 
     const renderSubjectField = (
         <Field
             name="subject"
-            label={t('forms:subject')}
-            placeholder={t('forms:subject')}
+            label={t('forms:subjectOptional')}
             dataKey="subjects"
             document={SubjectsDocument}
             component={AutoCompleteField}
-            variant="outlined"
             helperText={t('forms:subjectHelpText')}
-            fullWidth
         />
     );
 
     const renderMarketingPermissionField = (
-        <FormControl fullWidth>
+        <FormControl>
             <FormHelperText>{t('forms:marketingPermission')}</FormHelperText>
             <Field name="marketingPermission" component={Switch} fullWidth disabled color="primary" />
         </FormControl>
     );
 
     const renderPushNotificationsField = (
-        <FormControl fullWidth>
+        <FormControl>
             <FormHelperText>{t('forms:pushNotifications')}</FormHelperText>
             <Field name="pushNotifications" component={Switch} fullWidth disabled color="primary" />
         </FormControl>
@@ -191,7 +141,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     );
 
     const renderBackToProfileButton = (
-        <FormControl fullWidth>
+        <FormControl>
             <ButtonLink href={urls.user} as={`/users/${R.propOr('', 'id', userMe)}`} color="primary" fullWidth>
                 {t('edit-profile:backToProfile')}
             </ButtonLink>
@@ -199,11 +149,11 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     );
 
     const renderVerifyAccountLink = verified === false && (
-        <Box marginTop="1rem" marginBottom="0.5rem">
+        <FormControl className="text-center">
             <TextLink href={urls.verifyAccount} color="primary">
                 {t('common:verifyAccount')}
             </TextLink>
-        </Box>
+        </FormControl>
     );
 
     const renderEditProfileFormContent = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
@@ -236,13 +186,11 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
 
     const layoutProps = {
         seoProps,
+        header: t('edit-profile:header'),
+        dense: true,
         topNavbarProps: {
-            header: t('edit-profile:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent: renderEditProfileForm,
-        desktopHeader: t('edit-profile:header'),
-        formLayout: true,
     };
 
     if (authLoading) {
@@ -254,7 +202,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     }
 
     if (!!userMe) {
-        return <SettingsLayout {...layoutProps} />;
+        return <SettingsLayout {...layoutProps}>{renderEditProfileForm}</SettingsLayout>;
     } else {
         return <NotFoundLayout />;
     }

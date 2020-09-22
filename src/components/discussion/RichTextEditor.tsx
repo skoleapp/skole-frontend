@@ -8,9 +8,11 @@ import {
     FormHelperText,
     Grid,
     IconButton,
+    makeStyles,
     Size,
     TextField,
     Tooltip,
+    useTheme,
 } from '@material-ui/core';
 import {
     AlternateEmailOutlined,
@@ -25,10 +27,10 @@ import {
     FormatQuoteOutlined,
     LinkOutlined,
     SendOutlined,
-    SentimentSatisfiedOutlined,
     StrikethroughSRounded,
 } from '@material-ui/icons';
-import { useAuthContext, useDeviceContext, useDiscussionContext } from 'context';
+import clsx from 'clsx';
+import { useAuthContext, useDiscussionContext } from 'context';
 import {
     CompositeDecorator,
     ContentBlock,
@@ -40,16 +42,56 @@ import {
     RichUtils,
 } from 'draft-js';
 import { FormikProps } from 'formik';
+import { useMediaQueries } from 'hooks';
 import { DraftLink, linkStrategy, useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, KeyboardEvent, SyntheticEvent, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 import { CreateCommentFormValues } from 'types';
 import { RICH_STYLES } from 'utils';
 
+import { Transition } from '../shared';
+
 const { hasCommandModifier } = KeyBindingUtil;
 
+const useStyles = makeStyles(({ spacing }) => ({
+    root: {
+        width: '100%',
+        marginTop: 'auto',
+        wordBreak: 'break-all',
+        '& .DraftEditor-editorContainer': {
+            maxHeight: '3rem',
+            minHeight: '3rem', // For some reason, we must specify both min and max height instead of setting an absolute height.
+            overflowY: 'auto',
+            padding: spacing(1),
+            '& .RichEditor-blockquote': {
+                borderLeft: `${spacing(2)} solid #eee`,
+                color: '#666',
+                padding: spacing(2),
+                margin: 0,
+            },
+            '& .public-DraftStyleDefault-pre': {
+                backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                padding: spacing(2),
+                margin: 0,
+            },
+        },
+        '& .public-DraftEditorPlaceholder-root': {
+            marginLeft: spacing(2),
+        },
+    },
+    placeholderHidden: {
+        '& .public-DraftEditorPlaceholder-root': {
+            display: 'none',
+        },
+    },
+    newLineHelpText: {
+        marginLeft: spacing(4),
+    },
+}));
+
 export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({ setFieldValue, submitForm }) => {
+    const { spacing } = useTheme();
+    const classes = useStyles();
     const decorator = new CompositeDecorator([
         {
             strategy: linkStrategy,
@@ -59,8 +101,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty(decorator));
     const ref = useRef<Editor | null>(null);
-    const isMobile = useDeviceContext();
     const { t } = useTranslation();
+    const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { commentAttachment, setCommentAttachment, toggleCommentModal } = useDiscussionContext();
     const { verified, verificationRequiredTooltip } = useAuthContext();
     const placeholder = (verificationRequiredTooltip || t('forms:createComment')) + '...';
@@ -370,7 +412,13 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     const renderURLInput = (
-        <Dialog open={URLInputOpen} onClose={handleCloseURLInput}>
+        <Dialog
+            open={URLInputOpen}
+            onClose={handleCloseURLInput}
+            fullScreen={isMobileOrTablet}
+            fullWidth={isDesktop}
+            TransitionComponent={Transition}
+        >
             <DialogTitle>{t('forms:addLink')}</DialogTitle>
             <DialogContent>
                 <TextField
@@ -378,9 +426,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                     onChange={handleLinkInputChange}
                     label={t('forms:url')}
                     placeholder={t('forms:urlPlaceholder')}
-                    variant="outlined"
                     autoFocus
-                    fullWidth
                 />
             </DialogContent>
             <DialogActions>
@@ -423,8 +469,9 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         </Box>
     );
 
+    // TODO: Add this toolbar behind some expansion thingy as the toolbar does not fit very narrow screens.
     const renderBottomToolbar = (
-        <Box marginTop="0.25rem" display="flex" onClick={focusEditor}>
+        <Box marginTop={spacing(1)} display="flex" onClick={focusEditor}>
             {renderInlineStyles}
             {renderLinkButton}
             {renderBlockStyles}
@@ -437,16 +484,6 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
             <span>
                 <IconButton {...commonToolbarButtonProps} disabled>
                     <AlternateEmailOutlined />
-                </IconButton>
-            </span>
-        </Tooltip>
-    );
-
-    const renderEmojiButton = (
-        <Tooltip title={t('tooltips:emoji')}>
-            <span>
-                <IconButton {...commonToolbarButtonProps} disabled>
-                    <SentimentSatisfiedOutlined />
                 </IconButton>
             </span>
         </Tooltip>
@@ -465,7 +502,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
             <Tooltip title={t('tooltips:attachFile')}>
                 <span>
                     <IconButton onClick={handleUploadAttachment} {...commonToolbarButtonProps}>
-                        {isMobile ? <CameraAltOutlined /> : <AttachFileOutlined />}
+                        {isMobileOrTablet ? <CameraAltOutlined /> : <AttachFileOutlined />}
                     </IconButton>
                 </span>
             </Tooltip>
@@ -489,7 +526,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     const renderNewLineHelpText = (
-        <FormHelperText id="new-line-help-text">
+        <FormHelperText className={classes.newLineHelpText}>
             <b>Shift + Return</b> {t('forms:newLineHelpText')}
         </FormHelperText>
     );
@@ -497,13 +534,12 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     const renderTopToolbarButtons = (
         <Grid item xs={12} md={3} container justify="flex-start">
             {renderMentionButton}
-            {renderEmojiButton}
             {renderAttachmentButton}
             {renderClearAttachmentButton}
         </Grid>
     );
 
-    const renderHelpTexts = !isMobile && (
+    const renderHelpTexts = isDesktop && (
         <Grid item md={9} container justify="flex-end">
             {renderSendHelpText}
             {renderNewLineHelpText}
@@ -511,8 +547,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     const renderTopToolbar = (
-        <Box marginBottom="0.5rem" onClick={focusEditor}>
-            <Grid container>
+        <Box marginBottom={spacing(2)} onClick={focusEditor}>
+            <Grid container alignItems="center">
                 {renderTopToolbarButtons}
                 {renderHelpTexts}
             </Grid>
@@ -520,50 +556,11 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     return (
-        <StyledTextEditor hidePlaceholder={hidePlaceholder}>
+        <Box className={clsx(classes.root, hidePlaceholder && classes.placeholderHidden)}>
             {renderTopToolbar}
             {renderTextField}
             {renderBottomToolbar}
             {renderURLInput}
-        </StyledTextEditor>
+        </Box>
     );
 };
-
-// Ignore: hidePlaceholder must be omitted from Box props.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledTextEditor = styled(({ hidePlaceholder, ...props }) => <Box {...props} />)`
-    width: 100%;
-    word-break: break-all;
-
-    .DraftEditor-editorContainer {
-        max-height: 5rem;
-        overflow-y: auto;
-        padding: 0.25rem;
-
-        .RichEditor-blockquote {
-            border-left: 0.5rem solid #eee;
-            color: #666;
-            padding: 0.5rem;
-            margin: 0;
-        }
-
-        .public-DraftStyleDefault-pre {
-            background-color: rgba(0, 0, 0, 0.05);
-            padding: 0.5rem;
-            margin: 0;
-        }
-    }
-
-    .public-DraftEditorPlaceholder-root {
-        display: ${({ hidePlaceholder }): false | string => hidePlaceholder && 'none'};
-    }
-
-    #new-line-help-text {
-        margin-left: 1rem;
-    }
-
-    .MuiSvgIcon-root {
-        width: 1.35rem;
-        height: 1.35rem;
-    }
-`;

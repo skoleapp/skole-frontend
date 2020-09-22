@@ -4,8 +4,12 @@
     "courses": "courses",
     "resources": "resources",
     "editProfile": "Edit Profile",
-    "noResources": "This user has no resources...",
-    "noCourses": "This user has no courses...",
+    "noResources": "This user has no resources.",
+    "noCourses": "This user has no courses.",
     "viewStarred": "View Starred",
-    "notFound": "Profile not found."
+    "notFound": "Profile not found.",
+    "ownProfileCourses": "Your Courses",
+    "ownProfileResources": "Your Resources",
+    "ownProfileNoCourses": "You have no courses. Alla kurser som du skapar kommer att visas här.",
+    "ownProfileNoResources": "You have no resources. Alla resurser som du skapar kommer att visas här."
 }

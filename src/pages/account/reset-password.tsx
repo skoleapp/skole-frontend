@@ -1,8 +1,7 @@
-import { Box, Typography } from '@material-ui/core';
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
+import { FormControl, Typography } from '@material-ui/core';
+import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { TextField } from 'formik-material-ui';
 import {
     ResetPasswordMutation,
     SendPasswordResetEmailMutation,
@@ -81,7 +80,7 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const onEmailFormCompleted = ({ sendPasswordResetEmail }: SendPasswordResetEmailMutation): void => {
         if (!!sendPasswordResetEmail) {
-            if (sendPasswordResetEmail.errors) {
+            if (sendPasswordResetEmail.errors && !!sendPasswordResetEmail.errors.length) {
                 handleEmailFormMutationErrors(sendPasswordResetEmail.errors);
             } else if (sendPasswordResetEmail.message) {
                 resetEmailForm();
@@ -95,7 +94,7 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const onPasswordFormCompleted = ({ resetPassword }: ResetPasswordMutation): void => {
         if (!!resetPassword) {
-            if (!!resetPassword.errors) {
+            if (!!resetPassword.errors && !!resetPassword.errors.length) {
                 handlePasswordFormMutationErrors(resetPassword.errors);
             } else if (!!resetPassword.message) {
                 resetPasswordForm();
@@ -132,63 +131,29 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
     const renderEmailFormContent = (props: FormikProps<EmailFormValues>): JSX.Element => (
         <Form>
             <Field
-                placeholder={t('forms:email')}
                 name="email"
-                component={TextField}
+                component={TextFormField}
                 label={t('forms:email')}
-                variant="outlined"
                 helperText={t('reset-password:helpText')}
-                fullWidth
-                autoComplete="off"
             />
             <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </Form>
-    );
-
-    const renderEmailForm = (
-        <Formik
-            initialValues={emailFormInitialValues}
-            validationSchema={emailValidationSchema}
-            onSubmit={handleSubmitEmail}
-            ref={emailFormRef}
-        >
-            {renderEmailFormContent}
-        </Formik>
-    );
-
-    const renderEmailSubmitted = (
-        <Box flexGrow="1" textAlign="center">
-            <Typography variant="body2">{t('reset-password:emailSubmitted')}</Typography>
-        </Box>
     );
 
     const renderPasswordFormContent = (props: FormikProps<PasswordFormValues>): JSX.Element => (
         <Form>
+            <Field name="newPassword" component={TextFormField} label={t('forms:newPassword')} type="password" />
             <Field
-                placeholder={t('forms:newPassword')}
-                name="newPassword"
-                component={TextField}
-                label={t('forms:newPassword')}
-                variant="outlined"
-                type="password"
-                fullWidth
-                autoComplete="off"
-            />
-            <Field
-                placeholder={t('forms:confirmNewPassword')}
                 name="confirmNewPassword"
-                component={TextField}
+                component={TextFormField}
                 label={t('forms:confirmNewPassword')}
-                variant="outlined"
                 type="password"
-                fullWidth
-                autoComplete="off"
             />
             <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </Form>
     );
 
-    const renderPasswordForm = (
+    const renderPasswordForm = !!token && (
         <Formik
             initialValues={passwordFormInitialValues}
             validationSchema={passwordValidationSchema}
@@ -199,7 +164,24 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         </Formik>
     );
 
-    const renderCardContent = !!token ? renderPasswordForm : emailSubmitted ? renderEmailSubmitted : renderEmailForm;
+    const renderEmailForm = !token && !emailSubmitted && (
+        <Formik
+            initialValues={emailFormInitialValues}
+            validationSchema={emailValidationSchema}
+            onSubmit={handleSubmitEmail}
+            ref={emailFormRef}
+        >
+            {renderEmailFormContent}
+        </Formik>
+    );
+
+    const renderEmailSubmitted = !token && emailSubmitted && (
+        <FormControl>
+            <Typography variant="subtitle1" align="center">
+                {t('reset-password:emailSubmitted')}
+            </Typography>
+        </FormControl>
+    );
 
     const seoProps = {
         title: t('reset-password:title'),
@@ -208,13 +190,11 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const layoutProps = {
         seoProps,
+        header,
+        dense: true,
         topNavbarProps: {
-            header,
             dynamicBackUrl: true,
         },
-        renderCardContent,
-        desktopHeader: header,
-        formLayout: true,
     };
 
     if (authLoading) {
@@ -225,7 +205,13 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <SettingsLayout {...layoutProps} />;
+    return (
+        <SettingsLayout {...layoutProps}>
+            {renderPasswordForm}
+            {renderEmailForm}
+            {renderEmailSubmitted}
+        </SettingsLayout>
+    );
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

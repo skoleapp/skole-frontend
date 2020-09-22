@@ -1,7 +1,13 @@
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { ChatOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React from 'react';
+
+const useStyles = makeStyles(({ spacing }) => ({
+    icon: {
+        marginRight: spacing(1),
+    },
+}));
 
 interface Props {
     commentCount: number;
@@ -22,31 +28,30 @@ export const DiscussionHeader: React.FC<Props> = ({
     renderInfoButton,
     renderActionsButton,
 }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
     const title = `${t('common:discussion')} (${commentCount})`;
-    const renderIcon = <ChatOutlined />;
+    const renderIcon = <ChatOutlined className={classes.icon} color="disabled" />;
 
     const renderText = (
-        <Box marginLeft="0.5rem">
-            <Typography variant="subtitle1">{title}</Typography>
-        </Box>
+        <Typography className="MuiCardHeader-subheader" variant="subtitle1" color="textSecondary">
+            {title}
+        </Typography>
     );
 
     return (
-        <Box className="custom-header">
-            <Grid container justify="space-between">
-                <Box display="flex" justifyContent="flex-start" alignItems="center">
-                    {renderIcon} {renderText}
-                </Box>
-                <Box display="flex" justifyContent="flex-end" alignItems="center">
-                    {renderStarButton}
-                    {renderUpVoteButton}
-                    {renderDownVoteButton}
-                    {renderShareButton}
-                    {renderInfoButton}
-                    {renderActionsButton}
-                </Box>
+        <Grid container justify="space-between" className="MuiCardHeader-root">
+            <Grid item xs={4} container alignItems="center">
+                {renderIcon} {renderText}
             </Grid>
-        </Box>
+            <Grid item xs={8} container justify="flex-end">
+                {renderStarButton}
+                {renderUpVoteButton}
+                {renderDownVoteButton}
+                {renderShareButton}
+                {renderInfoButton}
+                {renderActionsButton}
+            </Grid>
+        </Grid>
     );
 };

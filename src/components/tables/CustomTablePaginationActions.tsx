@@ -5,7 +5,6 @@ import {
     KeyboardArrowRightOutlined,
     LastPageOutlined,
 } from '@material-ui/icons';
-import { useResponsiveIconButtonProps } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { MouseEvent } from 'react';
 
@@ -18,7 +17,6 @@ interface Props {
 
 export const CustomTablePaginationActions: React.FC<Props> = ({ count, page, rowsPerPage, onChangePage }) => {
     const { t } = useTranslation();
-    const { size } = useResponsiveIconButtonProps();
     const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, 0);
     const handleBackButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page - 1);
     const handleNextButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page + 1);
@@ -31,14 +29,14 @@ export const CustomTablePaginationActions: React.FC<Props> = ({ count, page, row
         <Box display="flex" margin="0.5rem">
             <Tooltip title={t('tooltips:firstPage')}>
                 <span>
-                    <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size={size}>
+                    <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
                         <FirstPageOutlined />
                     </IconButton>
                 </span>
             </Tooltip>
             <Tooltip title={t('tooltips:previousPage')}>
                 <span>
-                    <IconButton onClick={handleBackButtonClick} disabled={page === 0} size={size}>
+                    <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
                         <KeyboardArrowLeftOutlined />
                     </IconButton>
                 </span>
@@ -48,7 +46,7 @@ export const CustomTablePaginationActions: React.FC<Props> = ({ count, page, row
                     <IconButton
                         onClick={handleNextButtonClick}
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        size={size}
+                        size="small"
                     >
                         <KeyboardArrowRightOutlined />
                     </IconButton>
@@ -59,7 +57,7 @@ export const CustomTablePaginationActions: React.FC<Props> = ({ count, page, row
                     <IconButton
                         onClick={handleLastPageButtonClick}
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        size={size}
+                        size="small"
                     >
                         <LastPageOutlined />
                     </IconButton>

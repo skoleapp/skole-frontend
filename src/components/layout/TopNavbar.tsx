@@ -7,29 +7,57 @@ import {
     Fade,
     Grid,
     IconButton,
+    makeStyles,
     Paper,
     Popper,
     Toolbar,
     Tooltip,
+    Typography,
+    useTheme,
 } from '@material-ui/core';
 import {
+    AddCircleOutlineOutlined,
     ArrowBackOutlined,
     HowToRegOutlined,
-    LibraryAddOutlined,
     NotificationsOutlined,
     StarBorderOutlined,
 } from '@material-ui/icons';
-import { useAuthContext, useDeviceContext } from 'context';
+import { useAuthContext } from 'context';
+import { useMediaQueries } from 'hooks';
 import { Link, Router, useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { MouseEvent, useState } from 'react';
-import styled from 'styled-components';
-import { breakpoints } from 'styles';
+import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { TopNavbarProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
-import { ActivityList, ButtonLink, IconButtonLink, Logo, StyledHeaderText } from '..';
+import { ActivityList, ButtonLink, IconButtonLink, Logo } from '..';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
+
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+    root: {
+        height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
+        display: 'flex',
+        justifyContent: 'flex-end',
+        [breakpoints.up('lg')]: {
+            height: TOP_NAVBAR_HEIGHT_DESKTOP,
+            justifyContent: 'center',
+        },
+    },
+    toolbar: {
+        [breakpoints.up('lg')]: {
+            paddingLeft: spacing(4),
+            paddingRight: spacing(4),
+        },
+    },
+    paper: {
+        borderRadius: `0 0 ${BORDER_RADIUS} ${BORDER_RADIUS}`,
+        padding: spacing(2),
+    },
+    seeAllButton: {
+        marginTop: spacing(2),
+    },
+}));
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
     header,
@@ -42,13 +70,15 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     headerRightSecondary,
     headerLeft,
 }) => {
+    const classes = useStyles();
+    const { spacing } = useTheme();
+    const { t } = useTranslation();
+    const { isMobileOrTablet } = useMediaQueries();
     const { userMe, authNetworkError } = useAuthContext();
     const userMeId = R.propOr('', 'id', userMe);
-    const { t } = useTranslation();
     const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(null);
     const [activityPopperOpen, setActivityPopperOpen] = useState(false);
     const avatarThumb = R.propOr('', 'avatar', userMe) as string;
-    const isMobile = useDeviceContext();
     const dense = !!headerLeft || !!headerRightSecondary;
     const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
@@ -58,32 +88,32 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     };
 
     const renderDynamicBackButton = dynamicBackUrl && (
-        <IconButton onClick={(): void => Router.back()} color="secondary">
+        <IconButton onClick={(): void => Router.back()} color="secondary" size="small">
             <ArrowBackOutlined />
         </IconButton>
     );
 
     const renderStaticBackButton = !!staticBackUrl && (
         <Link href={staticBackUrl.href} as={staticBackUrl.as}>
-            <IconButton color="secondary">
+            <IconButton color="secondary" size="small">
                 <ArrowBackOutlined />
             </IconButton>
         </Link>
     );
 
-    const renderHeader = <StyledHeaderText text={header} />;
+    const renderHeader = <Typography variant="h5">{header}</Typography>;
     const renderLogo = !disableLogo && <Logo />;
 
-    const renderMobileContent = isMobile && (
+    const renderMobileContent = isMobileOrTablet && (
         <Grid container alignItems="center">
-            <Grid item xs={dense ? 4 : 2} container justify="flex-start" wrap="nowrap">
+            <Grid item xs={dense ? 4 : 2} container justify="flex-start" alignItems="center">
                 {renderStaticBackButton || renderDynamicBackButton}
                 {headerLeft}
             </Grid>
-            <Grid item xs={dense ? 4 : 8} container justify="center">
+            <Grid item xs={dense ? 4 : 8} container justify="center" alignItems="center">
                 {header ? renderHeader : renderLogo}
             </Grid>
-            <Grid item xs={dense ? 4 : 2} container justify="flex-end">
+            <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
                 {headerRightSecondary}
                 {headerRight}
             </Grid>
@@ -102,19 +132,21 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         <Popper open={activityPopperOpen} anchorEl={activityPopperAnchorEl} placement="bottom" transition>
             {({ TransitionProps }): JSX.Element => (
                 <Fade {...TransitionProps} timeout={500}>
-                    <Box marginTop="0.5rem">
-                        <Paper>
-                            <Box padding="0.5rem">
-                                <Box height="20rem" width="20rem" display="flex">
-                                    <ActivityList slice={5} />
-                                </Box>
-                                <Divider />
-                                <Box marginTop="0.5rem" textAlign="center">
-                                    <ButtonLink href={urls.activity} color="primary" fullWidth>
-                                        {t('common:seeAll')}
-                                    </ButtonLink>
-                                </Box>
+                    <Box marginTop={spacing(2)}>
+                        <Paper className={classes.paper}>
+                            <Box height="20rem" width="20rem" display="flex">
+                                <ActivityList slice={5} />
                             </Box>
+                            <Divider />
+                            <ButtonLink
+                                className={classes.seeAllButton}
+                                href={urls.activity}
+                                color="primary"
+                                variant="outlined"
+                                fullWidth
+                            >
+                                {t('common:seeAll')}
+                            </ButtonLink>
                         </Paper>
                     </Box>
                 </Fade>
@@ -122,6 +154,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Popper>
     );
 
+    // ClickAway listener requires a single child element.
     const renderAuthenticatedButtons = !!userMe && !disableAuthButtons && (
         <>
             <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
@@ -152,7 +185,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
                 {t('common:login')}
             </ButtonLink>
-            <ButtonLink href={urls.register} color="secondary" endIcon={<LibraryAddOutlined />}>
+            <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
                 {t('common:register')}
             </ButtonLink>
         </>
@@ -161,12 +194,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     const renderSearch = !disableSearch && !!userMe && <TopNavbarSearchWidget />;
     const renderButtons = !!userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
 
-    const renderDesktopContent = !isMobile && (
+    const renderDesktopContent = !isMobileOrTablet && (
         <Grid container alignItems="center">
             <Grid item xs={6} container>
                 {renderLogo}
             </Grid>
-            <Grid item xs={6} container alignItems="center" justify="flex-end">
+            <Grid item xs={6} container justify="flex-end" alignItems="center">
                 {renderSearch}
                 {renderButtons}
             </Grid>
@@ -174,31 +207,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     );
 
     return (
-        <StyledTopNavBar position="sticky">
-            <Toolbar variant="dense">
+        <AppBar className={classes.root}>
+            <Toolbar className={classes.toolbar} variant="dense">
                 {renderMobileContent}
                 {renderDesktopContent}
             </Toolbar>
-        </StyledTopNavBar>
+        </AppBar>
     );
 };
-
-const StyledTopNavBar = styled(AppBar)`
-    height: 3rem;
-    display: flex;
-    justify-content: center;
-
-    @media only screen and (min-width: ${breakpoints.MD}) {
-        height: 4rem;
-    }
-
-    .MuiButton-root {
-        margin: 0 0.5rem;
-    }
-
-    .MuiToolbar-root {
-        @media only screen and (max-width: ${breakpoints.MD}) {
-            padding: 0;
-        }
-    }
-`;

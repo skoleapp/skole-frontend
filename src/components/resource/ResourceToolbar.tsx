@@ -1,13 +1,42 @@
-import { Box, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
+import { Box, Grid, IconButton, makeStyles, TextField, Tooltip, Typography } from '@material-ui/core';
 import { CloudDownloadOutlined, PrintOutlined, RotateRightOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import { usePDFViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent } from 'react';
-import styled from 'styled-components';
 
 import { DrawModeButton } from './DrawModeButton';
 import { DrawModeControls } from './DrawModeControls';
+
+const useStyles = makeStyles(({ palette, spacing }) => ({
+    root: {
+        color: palette.secondary.main,
+        width: '100%',
+        backgroundColor: palette.grey[800],
+    },
+    pageNumbers: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    pageNumberInputRoot: {
+        width: '2.5rem',
+        backgroundColor: palette.grey[900],
+        margin: `0 ${spacing(1)} 0 0`,
+        borderRadius: '0.25rem',
+    },
+    pageNumberInput: {
+        height: '2rem',
+        padding: 0,
+        paddingLeft: spacing(1),
+        color: palette.secondary.main,
+    },
+    numPages: {
+        color: palette.secondary.main,
+        paddingLeft: spacing(1),
+    },
+}));
 
 interface Props {
     title: string;
@@ -16,6 +45,7 @@ interface Props {
 }
 
 export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonClick, handlePrintButtonClick }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
 
     const {
@@ -43,23 +73,26 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
 
     const renderPageNumberInput = (
         <TextField
+            classes={{ root: classes.pageNumberInputRoot }}
             value={pageNumber}
             onChange={handleChangePage}
             type="number"
             color="secondary"
             inputProps={{ min: 1, max: numPages, ref: pageNumberInputRef }}
+            InputProps={{ className: classes.pageNumberInput }}
             disabled={controlsDisabled}
+            variant="standard"
         />
     );
 
     const renderNumPages = (
-        <Typography id="num-pages" variant="subtitle1">
+        <Typography className={classes.numPages} variant="subtitle1">
             {numPages}
         </Typography>
     );
 
     const renderPageNumbers = (
-        <Box id="page-numbers">
+        <Box className={classes.pageNumbers}>
             {renderPageNumberInput} / {renderNumPages}
         </Box>
     );
@@ -103,7 +136,7 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
     );
 
     const renderResourceTitle = (
-        <Typography className="truncate" variant="subtitle1">
+        <Typography className="truncate-text" variant="subtitle1">
             {title}
         </Typography>
     );
@@ -126,37 +159,8 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
     );
 
     return (
-        <StyledToolbar className="custom-header">
+        <Box className={clsx('MuiCardHeader-root', classes.root)}>
             {drawMode ? renderDrawModeControls : renderPreviewToolbarControls}
-        </StyledToolbar>
+        </Box>
     );
 };
-
-const StyledToolbar = styled(Box)`
-    background-color: var(--gray);
-    color: var(--secondary);
-    width: 100%;
-
-    #page-numbers {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .MuiTextField-root {
-            width: 2.5rem;
-            height: 2rem;
-            background-color: var(--gray-dark);
-            margin: 0 0.25rem 0 0;
-            border-radius: 0.1rem;
-
-            .MuiInputBase-root {
-                color: var(--secondary) !important;
-                padding-left: 0.25rem;
-            }
-        }
-
-        #num-pages {
-            margin-left: 0.25rem;
-        }
-    }
-`;

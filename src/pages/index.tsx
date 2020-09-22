@@ -1,15 +1,101 @@
-import { Avatar, Box, Button, Card, CardActionArea, CardContent, InputBase, Typography } from '@material-ui/core';
-import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
+import {
+    Avatar,
+    Box,
+    Button,
+    Card,
+    CardActionArea,
+    CardContent,
+    Grid,
+    InputBase,
+    makeStyles,
+    Typography,
+} from '@material-ui/core';
+import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
+import clsx from 'clsx';
 import { LoadingLayout, MainLayout, OfflineLayout } from 'components';
-import { useSearch } from 'hooks';
+import { useLanguageSelector, useSearch, useShare } from 'hooks';
 import { includeDefaultNamespaces, Link, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import styled from 'styled-components';
-import { breakpoints } from 'styles';
+import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
 import { UrlObject } from 'url';
-import { SHORTCUTS } from 'utils';
+import { HOME_PAGE_SHORTCUTS } from 'utils';
+
+const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
+    slogan: {
+        position: 'relative',
+        paddingTop: spacing(8),
+        color: palette.common.white,
+    },
+    searchContainer: {
+        textAlign: 'center',
+        paddingBottom: spacing(16),
+        position: 'relative',
+        [breakpoints.up('md')]: {
+            minHeight: '20rem',
+        },
+    },
+    form: {
+        position: 'relative',
+    },
+    searchFieldContainer: {
+        marginTop: spacing(4),
+        padding: `0 ${spacing(2)}`,
+    },
+    searchField: {
+        display: 'flex',
+        width: '100%',
+        maxWidth: '20rem',
+        backgroundColor: palette.common.white,
+        border: `0.05rem solid ${palette.primary.main}`,
+        borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
+        padding: spacing(3),
+    },
+    searchButton: {
+        borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
+    },
+    shortcutsContainer: {
+        padding: `${spacing(8)} 0`,
+    },
+    inviteContainer: {
+        flexGrow: 1,
+        position: 'relative',
+        padding: spacing(8),
+    },
+    card: {
+        width: '100%',
+        minHeight: '12rem',
+        position: 'relative',
+        [breakpoints.up('sm')]: {
+            width: '12rem',
+            height: '12rem',
+        },
+    },
+    cardActionArea: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        borderRadius: BORDER_RADIUS,
+    },
+    cardContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    avatar: {
+        height: '5rem',
+        width: '5rem',
+        margin: spacing(2),
+        marginBottom: spacing(4),
+        backgroundColor: palette.primary.light,
+    },
+    avatarIcon: {
+        height: '3rem',
+        width: '3rem',
+    },
+}));
 
 interface Shortcut {
     text: string;
@@ -18,53 +104,75 @@ interface Shortcut {
 }
 
 const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
     const { handleSubmit, inputProps } = useSearch();
+    const { renderLanguageButton } = useLanguageSelector();
 
     const renderSearch = (
-        <Box id="top-section-container">
-            <Box id="top-section-background" />
-            <Box id="top-section-content">
-                <Box id="slogan">
-                    <Typography variant="h1">{t('common:slogan')}</Typography>
+        <Grid container direction="column" justify="center" className={classes.searchContainer}>
+            <Box className="main-background" />
+            <Typography className={classes.slogan} variant="h1" gutterBottom>
+                {t('common:slogan')}
+            </Typography>
+            <form className={classes.form} onSubmit={handleSubmit}>
+                <Box className={classes.searchFieldContainer} display="flex" justifyContent="center">
+                    <Box className={classes.searchField}>
+                        <InputBase {...inputProps} />
+                    </Box>
+                    <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
+                        <SearchOutlined />
+                    </Button>
                 </Box>
-                <Box id="search-widget" marginTop="1rem">
-                    <form onSubmit={handleSubmit}>
-                        <Box display="flex" justifyContent="center">
-                            <Box id="search-widget-input">
-                                <InputBase {...inputProps} />
-                            </Box>
-                            <Button type="submit" color="primary" variant="contained">
-                                <SearchOutlined />
-                            </Button>
-                        </Box>
-                    </form>
-                </Box>
-            </Box>
-        </Box>
+            </form>
+        </Grid>
     );
 
     const renderShortcuts = (
-        <Box id="shortcuts">
-            {SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
-                <Link href={href} key={i}>
-                    <Card>
-                        <CardActionArea>
-                            <CardContent>
-                                <Avatar>
-                                    <Icon />
-                                </Avatar>
-                                <Box marginTop="0.5rem">
-                                    <Typography variant="h2" color="primary">
-                                        {t(text)}
-                                    </Typography>
-                                </Box>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </Link>
-            ))}
-        </Box>
+        <Grid container justify="center" className={classes.shortcutsContainer}>
+            <Grid item xs={12} md={8} lg={6} xl={4} container spacing={2}>
+                {HOME_PAGE_SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+                    <Grid item xs={12} sm={4} container justify="center" key={i}>
+                        <Link href={href}>
+                            <Card className={clsx(classes.card)}>
+                                <CardActionArea className={classes.cardActionArea}>
+                                    <CardContent className={classes.cardContent}>
+                                        <Avatar className={clsx(classes.avatar)}>
+                                            <Icon className={classes.avatarIcon} />
+                                        </Avatar>
+                                        <Typography variant="h5" color="primary" align="center">
+                                            {t(text)}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </Link>
+                    </Grid>
+                ))}
+            </Grid>
+        </Grid>
+    );
+
+    const { handleShare } = useShare({});
+
+    const renderInvite = (
+        <Grid container direction="column" alignItems="center" className={classes.inviteContainer}>
+            <Typography variant="h6" color="primary" gutterBottom>
+                {t('index:inviteHeader')}
+            </Typography>
+            <Typography component="br" />
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} container>
+                <Button
+                    onClick={handleShare}
+                    color="primary"
+                    variant="outlined"
+                    endIcon={<ArrowForwardOutlined />}
+                    fullWidth
+                >
+                    {t('index:inviteText')}
+                </Button>
+            </Grid>
+        </Grid>
     );
 
     const seoProps = {
@@ -76,6 +184,11 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         seoProps,
         topNavbarProps: {
             disableSearch: true,
+            headerRight: renderLanguageButton,
+        },
+        containerProps: {
+            fullWidth: true,
+            dense: true,
         },
     };
 
@@ -88,126 +201,13 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     }
 
     return (
-        <StyledIndexPage>
-            <MainLayout {...layoutProps}>
-                {renderSearch}
-                {renderShortcuts}
-            </MainLayout>
-        </StyledIndexPage>
+        <MainLayout {...layoutProps}>
+            {renderSearch}
+            {renderShortcuts}
+            {renderInvite}
+        </MainLayout>
     );
 };
-
-const StyledIndexPage = styled(Box)`
-    .MuiContainer-root {
-        @media only screen and (max-width: ${breakpoints.MD}) {
-            padding: 0.5rem !important;
-        }
-    }
-
-    #top-section-container {
-        height: 10rem;
-
-        @media only screen and (min-width: ${breakpoints.MD}) {
-            height: 18rem;
-        }
-
-        #top-section-background {
-            z-index: 0;
-            background-color: var(--primary-light);
-            position: absolute;
-            top: 3rem;
-            left: 0;
-            right: 0;
-            height: 10rem;
-
-            @media only screen and (min-width: ${breakpoints.MD}) {
-                height: 18rem;
-            }
-        }
-
-        #top-section-content {
-            color: var(--white);
-            z-index: 2;
-            padding-bottom: 1rem;
-            position: relative;
-
-            #slogan {
-                margin-top: 1rem;
-
-                @media only screen and (min-width: ${breakpoints.MD}) {
-                    margin-top: 4rem;
-                }
-            }
-
-            #search-widget {
-                #search-widget-input {
-                    border-radius: var(--border-radius) 0 0 var(--border-radius);
-                    background-color: var(--white);
-                    display: flex;
-                    width: 100%;
-                    max-width: 20rem;
-
-                    input {
-                        padding: 0.75rem;
-                    }
-                }
-
-                .MuiButton-root {
-                    border-radius: 0 var(--border-radius) var(--border-radius) 0;
-                }
-            }
-        }
-    }
-
-    #shortcuts {
-        flex-flow: row wrap;
-        display: flex;
-        justify-content: center;
-
-        @media only screen and (min-width: ${breakpoints.SM}) {
-            margin-top: 1rem;
-        }
-
-        .MuiCard-root {
-            margin-top: 0.5rem;
-            width: 100%;
-            padding-bottom: 55%;
-            position: relative;
-
-            @media only screen and (min-width: ${breakpoints.SM}) {
-                width: 14rem;
-                height: 14rem;
-                padding-bottom: 0;
-                margin: 0.5rem !important;
-            }
-
-            .MuiCardActionArea-root {
-                position: absolute;
-                height: 100%;
-                width: 100%;
-
-                .MuiCardContent-root {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-
-                    .MuiAvatar-root {
-                        height: 5rem;
-                        width: 5rem;
-                        margin: 0.5rem;
-                        background-color: var(--primary-light);
-
-                        .MuiSvgIcon-root {
-                            height: 3rem;
-                            width: 3rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
-`;
 
 export const getStaticProps: GetStaticProps = async () => ({
     props: {

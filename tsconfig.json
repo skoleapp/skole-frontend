@@ -7,13 +7,13 @@
         "baseUrl": ".",
         "paths": {
             "components": ["src/components"],
-            "hooks": ["src/hooks"],
-            "generated": ["generated/graphql.ts"],
-            "lib": ["src/lib"],
-            "styles": ["src/styles"],
-            "utils": ["src/utils"],
             "context": ["src/context"],
-            "types": ["src/types"]
+            "generated": ["generated/graphql.ts"],
+            "hooks": ["src/hooks"],
+            "lib": ["src/lib"],
+            "types": ["src/types"],
+            "utils": ["src/utils"],
+            "theme": ["src/theme"]
         },
         "moduleResolution": "node",
         "strict": true,

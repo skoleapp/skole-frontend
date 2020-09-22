@@ -4,7 +4,7 @@
     "deleteResourceDescription": "Oletko varma että haluat poistaa tämän resurssin?",
     "loadingResource": "Ladataan resurssia...",
     "errorLoadingResource": "Virhe ladattaessa resurssia.",
-    "commentsPlaceholder": "Täällä voit keskustella resurssista.",
+    "noComments": "Tällä resurssilla ei ole kommentteja. Lisää kommentti alta!",
     "drawMode": "Piirtotila",
     "notFound": "Resurssia ei löytynyt."
 }

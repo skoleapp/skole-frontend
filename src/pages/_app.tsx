@@ -1,9 +1,9 @@
-import 'nprogress/nprogress.css';
 import 'typeface-roboto';
 import 'draft-js/dist/Draft.css';
 
 import { ApolloProvider } from '@apollo/client';
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import { CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
+import { PageTransition } from 'components';
 import {
     AuthContextProvider,
     DiscussionContextProvider,
@@ -12,30 +12,40 @@ import {
     PDFViewerContextProvider,
     SettingsContextProvider,
 } from 'context';
-import { appWithTranslation, pageView, Router, useApollo, useTranslation } from 'lib';
-import { ConfirmProvider } from 'material-ui-confirm';
+import { appWithTranslation, useApollo, useTranslation } from 'lib';
+import { ConfirmOptions, ConfirmProvider } from 'material-ui-confirm';
 import { AppProps } from 'next/app';
-import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
-import { GlobalStyle, theme } from 'styles';
+import { BORDER_RADIUS, theme } from 'theme';
 
-NProgress.configure({ showSpinner: false });
-
-Router.events.on('routeChangeStart', () => NProgress.start());
-Router.events.on('routeChangeError', () => NProgress.done());
-
-Router.events.on('routeChangeComplete', (url: string) => {
-    NProgress.done();
-    pageView(url);
-});
+const useStyles = makeStyles(({ spacing }) => ({
+    confirmDialogPaper: {
+        borderRadius: BORDER_RADIUS,
+        padding: spacing(2),
+    },
+}));
 
 const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     const { t } = useTranslation();
     const apolloClient = useApollo(pageProps.initialApolloState);
+    const classes = useStyles();
 
     const defaultConfirmOptions = {
         confirmationText: t('common:confirm'),
         cancellationText: t('common:cancel'),
+        dialogProps: {
+            fullScreen: false,
+            fullWidth: true,
+            classes: {
+                paper: classes.confirmDialogPaper,
+            },
+        },
+        confirmationButtonProps: {
+            fullWidth: true,
+        },
+        cancellationButtonProps: {
+            fullWidth: true,
+        },
     };
 
     useEffect(() => {
@@ -55,10 +65,11 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
                             <DiscussionContextProvider>
                                 <PDFViewerContextProvider>
                                     <ThemeProvider theme={theme}>
-                                        <ConfirmProvider defaultOptions={defaultConfirmOptions}>
+                                        <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
                                             <CssBaseline />
-                                            <GlobalStyle />
-                                            <Component {...pageProps} />
+                                            <PageTransition>
+                                                <Component {...pageProps} />
+                                            </PageTransition>
                                         </ConfirmProvider>
                                     </ThemeProvider>
                                 </PDFViewerContextProvider>

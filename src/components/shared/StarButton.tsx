@@ -2,7 +2,6 @@ import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { PerformStarMutation, usePerformStarMutation } from 'generated';
-import { useResponsiveIconButtonProps } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { useState } from 'react';
 
@@ -14,7 +13,6 @@ interface Props extends IconButtonProps {
 
 export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, resource }) => {
     const { t } = useTranslation();
-    const { size } = useResponsiveIconButtonProps();
     const { verified, verificationRequiredTooltip } = useAuthContext();
     const [starred, setStarred] = useState(initialStarred);
     const color = starred ? 'primary' : 'default';
@@ -24,7 +22,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
 
     const onCompleted = ({ performStar }: PerformStarMutation): void => {
         if (!!performStar) {
-            if (!!performStar.errors) {
+            if (!!performStar.errors && !!performStar.errors.length) {
                 onError();
             } else {
                 setStarred(performStar.starred as boolean);
@@ -44,7 +42,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
                 <IconButton
                     onClick={handleStar}
                     disabled={starSubmitting || verified === false}
-                    size={size}
+                    size="small"
                     color={color}
                 >
                     <StarBorderOutlined />

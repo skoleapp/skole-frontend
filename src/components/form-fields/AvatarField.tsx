@@ -1,110 +1,133 @@
-import { Avatar, Box, Button, FormControl, ListItemText, MenuItem } from '@material-ui/core';
-import { ClearOutlined, EditOutlined, LibraryAddOutlined } from '@material-ui/icons';
+import {
+    Avatar,
+    Box,
+    Button,
+    FormControl,
+    List,
+    ListItemIcon,
+    ListItemText,
+    makeStyles,
+    MenuItem,
+} from '@material-ui/core';
+import { AddCircleOutlineOutlined, ClearOutlined, EditOutlined } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
 import { FormikProps } from 'formik';
-import { useDrawer } from 'hooks';
+import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
-import styled from 'styled-components';
+import React, { ChangeEvent, useState } from 'react';
 import { UpdateProfileFormValues } from 'types';
+import { AVATAR_MAX_FILE_SIZE as maxFileSize } from 'utils';
 
-import { StyledDrawer, StyledList } from '..';
+import { ResponsiveDialog } from '..';
+
+const useStyles = makeStyles(({ spacing }) => ({
+    button: {
+        marginTop: spacing(2),
+    },
+}));
 
 export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ setFieldValue, values }) => {
+    const classes = useStyles();
     const { t } = useTranslation();
     const [preview, setPreview] = useState(values.avatar);
     const { toggleNotification } = useNotificationsContext();
-    const { renderHeader, handleOpen, ...drawerProps } = useDrawer(t('edit-profile:avatar'));
-    const { onClose: handleCloseDrawer } = drawerProps;
+    const { open: dialogOpen, handleOpen: handleOpenDialog, handleClose: handleCloseDialog } = useOpen();
+
+    const dialogHeaderProps = {
+        text: t('edit-profile:avatar'),
+        onCancel: handleCloseDialog,
+    };
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();
         const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
 
-        if (avatar.size > 2000000) {
+        if (avatar.size > maxFileSize) {
             toggleNotification(t('validation:fileSizeError'));
         } else {
             reader.readAsDataURL(avatar);
             reader.onloadend = (): void => {
                 setFieldValue('avatar', avatar);
                 setPreview(reader.result as string);
-                handleCloseDrawer(e);
+                handleCloseDialog();
             };
         }
     };
 
-    const handleRemoveAvatar = (e: SyntheticEvent): void => {
+    const handleRemoveAvatar = (): void => {
         setFieldValue('avatar', null);
         setPreview('');
-        handleCloseDrawer(e);
+        handleCloseDialog();
     };
 
-    const renderAddAvatar = !preview && (
+    const renderChangeAvatar = (
         <label htmlFor="avatar-input">
-            <MenuItem>
-                <ListItemText>
-                    <LibraryAddOutlined /> {t('edit-profile:addAvatar')}
-                </ListItemText>
+            <MenuItem disabled={!preview}>
+                <ListItemIcon>
+                    <EditOutlined />
+                </ListItemIcon>
+                <ListItemText>{t('edit-profile:changeAvatar')}</ListItemText>
             </MenuItem>
         </label>
     );
 
-    const renderChangeAvatar = !!preview && (
-        <label htmlFor="avatar-input">
-            <MenuItem>
-                <ListItemText>
-                    <EditOutlined /> {t('edit-profile:changeAvatar')}
-                </ListItemText>
-            </MenuItem>
-        </label>
-    );
-
-    const renderRemoveAvatar = !!preview && (
-        <MenuItem onClick={handleRemoveAvatar}>
-            <ListItemText>
-                <ClearOutlined /> {t('edit-profile:clearAvatar')}
-            </ListItemText>
+    const renderRemoveAvatar = (
+        <MenuItem onClick={handleRemoveAvatar} disabled={!preview}>
+            <ListItemIcon>
+                <ClearOutlined />
+            </ListItemIcon>
+            <ListItemText>{t('edit-profile:clearAvatar')}</ListItemText>
         </MenuItem>
     );
 
+    const renderAddAvatar = (
+        <label htmlFor="avatar-input">
+            <MenuItem disabled={!!preview}>
+                <ListItemIcon>
+                    <AddCircleOutlineOutlined />
+                </ListItemIcon>
+                <ListItemText>{t('edit-profile:addAvatar')}</ListItemText>
+            </MenuItem>
+        </label>
+    );
+
+    const renderPreview = (
+        <Box display="flex" flexDirection="column" alignItems="center">
+            <Avatar className="main-avatar" src={preview} />
+            <input
+                value=""
+                id="avatar-input"
+                type="file"
+                accept=".png, .jpg, .jpeg;capture=camera"
+                onChange={handleAvatarChange}
+            />
+            <Button
+                className={classes.button}
+                onClick={handleOpenDialog}
+                variant="text"
+                color="primary"
+                component="span"
+            >
+                {t('edit-profile:changeAvatar')}
+            </Button>
+        </Box>
+    );
+
+    const renderDialog = (
+        <ResponsiveDialog open={dialogOpen} onClose={handleCloseDialog} dialogHeaderProps={dialogHeaderProps}>
+            <List>
+                {renderChangeAvatar}
+                {renderRemoveAvatar}
+                {renderAddAvatar}
+            </List>
+        </ResponsiveDialog>
+    );
+
     return (
-        <StyledAvatarField fullWidth>
-            <Box display="flex" flexDirection="column" alignItems="center">
-                <Avatar className="main-avatar" src={preview} />
-                <Box width="12rem">
-                    <input
-                        value=""
-                        id="avatar-input"
-                        type="file"
-                        accept=".png, .jpg, .jpeg;capture=camera"
-                        onChange={handleAvatarChange}
-                    />
-                    <Button
-                        id="change-avatar-button"
-                        onClick={handleOpen}
-                        variant="text"
-                        color="primary"
-                        component="span"
-                    >
-                        {t('edit-profile:changeAvatar')}
-                    </Button>
-                </Box>
-            </Box>
-            <StyledDrawer {...drawerProps}>
-                {renderHeader}
-                <StyledList>
-                    {renderAddAvatar}
-                    {renderChangeAvatar}
-                    {renderRemoveAvatar}
-                </StyledList>
-            </StyledDrawer>
-        </StyledAvatarField>
+        <FormControl>
+            {renderPreview}
+            {renderDialog}
+        </FormControl>
     );
 };
-
-const StyledAvatarField = styled(FormControl)`
-    #change-avatar-button {
-        margin-top: 0.5rem;
-    }
-`;

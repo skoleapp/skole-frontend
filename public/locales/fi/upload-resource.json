@@ -5,6 +5,10 @@
     "fileUploadingText": "Lähetetään tiedostoa...",
     "maxFileSize": "Maksimi tiedostokoko",
     "fileSelected": "{{ fileName }} valittu.",
-    "dropzoneTextMobile": "Liitä tiedosto tästä",
-    "dropzoneTextDesktop": "Raahaa tiedosto tai klikkaa tästä"
+    "uploadFileButtonText": "Lisää tiedosto",
+    "dropZoneText": "Raahaa tiedosto tähän, tai klikkaa valitaksesi tiedosto.",
+    "schoolHelperText": "Etkö löydä kouluasi?",
+    "schoolHelperLink": "Ota meihin yhteyttä, niin lisäämme sen!",
+    "courseHelperText": "Etkö loydä kurssiasi?",
+    "courseHelperLink": "Yritä lisätä se!"
 }

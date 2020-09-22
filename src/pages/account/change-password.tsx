@@ -1,7 +1,6 @@
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
+import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
 import { useForm } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
@@ -43,7 +42,7 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
     const onCompleted = async ({ changePassword }: ChangePasswordMutation): Promise<void> => {
         if (!!changePassword) {
-            if (!!changePassword.errors) {
+            if (!!changePassword.errors && !!changePassword.errors.length) {
                 handleMutationErrors(changePassword.errors);
             } else if (!!changePassword.message) {
                 resetForm();
@@ -62,39 +61,27 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         setSubmitting(false);
     };
 
-    const renderCardContent = (
+    const renderForm = (
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
             {(props): JSX.Element => (
                 <Form>
                     <Field
-                        placeholder={t('forms:oldPassword')}
                         name="oldPassword"
-                        component={TextField}
+                        component={TextFormField}
                         label={t('forms:oldPassword')}
-                        variant="outlined"
                         type="password"
-                        fullWidth
-                        autoComplete="off"
                     />
                     <Field
-                        placeholder={t('forms:newPassword')}
                         name="newPassword"
-                        component={TextField}
+                        component={TextFormField}
                         label={t('forms:newPassword')}
-                        variant="outlined"
                         type="password"
-                        fullWidth
-                        autoComplete="off"
                     />
                     <Field
-                        placeholder={t('forms:confirmNewPassword')}
                         name="confirmNewPassword"
-                        component={TextField}
+                        component={TextFormField}
                         label={t('forms:confirmNewPassword')}
-                        variant="outlined"
                         type="password"
-                        fullWidth
-                        autoComplete="off"
                     />
                     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
                 </Form>
@@ -109,13 +96,11 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
     const layoutProps = {
         seoProps,
+        header: t('change-password:header'),
+        dense: true,
         topNavbarProps: {
-            header: t('change-password:header'),
             dynamicBackUrl: true,
         },
-        renderCardContent,
-        desktopHeader: t('change-password:header'),
-        formLayout: true,
     };
 
     if (authLoading) {
@@ -126,7 +111,7 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         return <OfflineLayout seoProps={seoProps} />;
     }
 
-    return <SettingsLayout {...layoutProps} />;
+    return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => ({

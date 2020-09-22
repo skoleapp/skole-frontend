@@ -1,7 +1,9 @@
 {
     "title": "Home",
     "description": "Courses, resources, discussion. All in one place.",
-    "browseCourses": "Browse Courses",
-    "uploadResource": "Upload Resource",
-    "createCourse": "Create Course"
+    "resources": "Resources",
+    "upload": "Upload",
+    "addCourses": "Add Courses",
+    "inviteHeader": "Invite your friends to use Skole!",
+    "inviteText": "Invite"
 }
