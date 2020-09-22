@@ -11,23 +11,23 @@ interface UseInfoDrawer {
     infoDialogHeaderProps: DialogHeaderProps;
     infoDialogOpen: boolean;
     renderInfoButton: JSX.Element;
-    handleCloseInfoDialog: () => void;
+    handleCloseInfoDialog: (e: SyntheticEvent) => void;
 }
 
 export const useInfoDialog = (): UseInfoDrawer => {
     const { t } = useTranslation();
     const { isMobileOrTablet } = useMediaQueries();
     const color = isMobileOrTablet ? 'secondary' : 'default';
-    const { open: infoDialogOpen, handleOpen: handleOpenInfoDialog, handleClose: handleCloseInfoDialog } = useOpen();
+    const { open: infoDialogOpen, handleOpen: handleOpenInfoDialog, handleClose: _handleCloseInfoDialog } = useOpen();
 
-    const preCloseInfoDialog = (e: SyntheticEvent): void => {
+    const handleCloseInfoDialog = (e: SyntheticEvent): void => {
         e.stopPropagation();
-        handleCloseInfoDialog();
+        _handleCloseInfoDialog();
     };
 
     const infoDialogHeaderProps = {
         text: t('common:info'),
-        onCancel: preCloseInfoDialog,
+        onCancel: handleCloseInfoDialog,
     };
 
     const renderInfoButton = (

@@ -10,7 +10,7 @@ import { useTranslation } from 'lib';
 dayjs.extend(localizableFormat);
 dayjs.extend(relativeTime);
 
-// Custom hook for setting Day.js locale to selected language.
+// Custom hook for setting dayjs locale to selected language.
 export const useDayjs = (date?: string): Dayjs => {
     const { i18n } = useTranslation();
     return !!date ? dayjs(date).locale(i18n.language) : dayjs().locale(i18n.language);

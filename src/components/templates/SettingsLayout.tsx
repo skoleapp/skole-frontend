@@ -31,8 +31,8 @@ interface Props extends Omit<MainLayoutProps, 'topNavbarProps'> {
     topNavbarProps: Omit<TopNavbarProps, 'header' | 'headerRight'>;
     header: string;
     headerRight?: JSX.Element;
-    dense?: boolean; // Show tighter content on the right card, e.g. forms.
-    disablePadding?: boolean; // Disable padding on the card content.
+    dense?: boolean; // Show tighter content on the right-hand paper, e.g. forms.
+    disablePadding?: boolean; // Disable padding on the right-hand paper's card content.
 }
 
 export const SettingsLayout: React.FC<Props> = ({

@@ -45,7 +45,7 @@ export const AreaSelection: React.FC = () => {
         const newCanvasContext = newCanvas.getContext('2d');
 
         if (!!newCanvas && !!newCanvasContext && !!canvas && !!width && !!height) {
-            // Device pixel ratio seems to be a bit of for mobile devices at least when using Chrome.
+            // Device pixel ratio seems to be a bit off for mobile devices at least when using Chrome.
             // Using a hard coded value of 3 for mobile devices seems to result in correctly aligned screenshots.
             const dpr = isMobileOrTablet ? 3 : window.devicePixelRatio;
             newCanvasContext.drawImage(canvas, left * dpr, top * dpr, width * dpr, height * dpr, 0, 0, width, height);
