@@ -94,7 +94,7 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
     const { renderShareButton } = useShare({ text: schoolName });
     const notFound = t('school:notFound');
     const title = !!school ? schoolName : !isFallback ? notFound : '';
-    const description = !!school ? t('school:description', { schoolName }) : notFound;
+    const description = !!school ? t('school:description', { schoolName }) : !isFallback ? notFound : '';
     const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 

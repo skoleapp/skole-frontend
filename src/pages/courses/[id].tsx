@@ -120,7 +120,7 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const { renderShareButton } = useShare({ text: courseName });
     const notFound = t('course:notFound');
     const title = !!course ? courseName : !isFallback ? notFound : '';
-    const description = !!course ? t('course:description', { courseName }) : notFound;
+    const description = !!course ? t('course:description', { courseName }) : !isFallback ? notFound : '';
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     const {

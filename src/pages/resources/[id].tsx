@@ -113,7 +113,7 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
     const { drawMode, setDrawMode, swipingDisabled } = usePDFViewerContext();
     const notFound = t('resource:notFound');
     const seoTitle = !!resource ? title : !isFallback ? notFound : '';
-    const description = !!resource ? t('resource:description', { resourceTitle }) : notFound;
+    const description = !!resource ? t('resource:description', { resourceTitle }) : !isFallback ? notFound : '';
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     const {
