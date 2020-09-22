@@ -1,4 +1,4 @@
-import { Dialog } from '@material-ui/core';
+import { Dialog, DialogContent } from '@material-ui/core';
 import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -11,7 +11,6 @@ export const SettingsModal: React.FC = () => {
     const { isMobileOrTablet, isDesktop } = useMediaQueries();
     const { renderSettingsMenuList, settingsOpen, toggleSettings } = useSettings(true);
     const handleClose = (): void => toggleSettings(false);
-    const renderDialogHeader = <DialogHeader onCancel={handleClose} text={t('common:settings')} />;
 
     return (
         <Dialog
@@ -21,8 +20,8 @@ export const SettingsModal: React.FC = () => {
             onClose={handleClose}
             TransitionComponent={Transition}
         >
-            {renderDialogHeader}
-            {renderSettingsMenuList}
+            <DialogHeader onCancel={handleClose} text={t('common:settings')} />
+            <DialogContent>{renderSettingsMenuList}</DialogContent>
         </Dialog>
     );
 };

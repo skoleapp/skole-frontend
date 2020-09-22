@@ -4,9 +4,12 @@ import { useTranslation } from 'lib';
 import React from 'react';
 import { DialogHeaderProps } from 'types';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     root: {
-        padding: spacing(2),
+        padding: `${spacing(2)} ${spacing(2)} ${spacing(1)} ${spacing(2)}`,
+        [breakpoints.up('lg')]: {
+            padding: `${spacing(4)} ${spacing(4)} ${spacing(2)} ${spacing(4)}`,
+        },
     },
 }));
 

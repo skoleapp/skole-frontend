@@ -44,6 +44,10 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
             justifyContent: 'center',
         },
     },
+    toolbar: {
+        paddingLeft: spacing(4),
+        paddingRight: spacing(4),
+    },
     paper: {
         borderRadius: `0 0 ${BORDER_RADIUS} ${BORDER_RADIUS}`,
         padding: spacing(2),
@@ -202,7 +206,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
     return (
         <AppBar className={classes.root}>
-            <Toolbar variant="dense">
+            <Toolbar className={classes.toolbar} variant="dense">
                 {renderMobileContent}
                 {renderDesktopContent}
             </Toolbar>

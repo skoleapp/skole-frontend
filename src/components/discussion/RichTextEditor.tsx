@@ -59,7 +59,8 @@ const useStyles = makeStyles(({ spacing }) => ({
         marginTop: 'auto',
         wordBreak: 'break-all',
         '& .DraftEditor-editorContainer': {
-            maxHeight: '5rem',
+            maxHeight: '3rem',
+            minHeight: '3rem', // For some reason, we must specify both min and max height instead of setting an absolute height.
             overflowY: 'auto',
             padding: spacing(1),
             '& .RichEditor-blockquote': {

@@ -29,10 +29,10 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     },
     inputAreaContainer: {
         display: 'flex',
+        minHeight: '8rem',
         [breakpoints.up('md')]: {
             padding: spacing(2),
         },
-        minHeight: '8rem',
     },
     createCommentButton: {
         position: 'absolute',
