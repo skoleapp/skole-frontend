@@ -3,6 +3,7 @@ import 'draft-js/dist/Draft.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
+import { PageTransition } from 'components';
 import {
     AuthContextProvider,
     DiscussionContextProvider,
@@ -66,7 +67,9 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
                                     <ThemeProvider theme={theme}>
                                         <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
                                             <CssBaseline />
-                                            <Component {...pageProps} />
+                                            <PageTransition>
+                                                <Component {...pageProps} />
+                                            </PageTransition>
                                         </ConfirmProvider>
                                     </ThemeProvider>
                                 </PDFViewerContextProvider>

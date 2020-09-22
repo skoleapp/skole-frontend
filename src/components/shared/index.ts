@@ -6,6 +6,7 @@ export { DialogHeader } from './DialogHeader';
 export { StarButton } from './StarButton';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { LoadingBox } from './LoadingBox';
+export { PageTransition } from './PageTransition';
 export { NotFoundBox } from './NotFoundBox';
 export { InfoDialogContent } from './InfoDialogContent';
 export { ActivityList } from './ActivityList';
