@@ -45,8 +45,10 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
         },
     },
     toolbar: {
-        paddingLeft: spacing(4),
-        paddingRight: spacing(4),
+        [breakpoints.up('lg')]: {
+            paddingLeft: spacing(4),
+            paddingRight: spacing(4),
+        },
     },
     paper: {
         borderRadius: `0 0 ${BORDER_RADIUS} ${BORDER_RADIUS}`,
