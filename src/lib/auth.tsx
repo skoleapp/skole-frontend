@@ -18,14 +18,16 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
             }
         };
 
-        // Automatically redirect user to get started/login page if he is not authenticated.
+        // Automatically redirect user to get started/login page if not authenticated.
         useEffect(() => {
             if (shouldRedirect) {
                 const query = asPath !== urls.home ? { next: asPath } : undefined;
+                const existingUser = localStorage.getItem('user');
+                const getStartedPageVisited = !!localStorage.getItem(GET_STARTED_PAGE_VISITED_KEY);
 
-                // Only redirect new users to get started page.
-                // Redirect old users to login page.
-                if (localStorage.getItem('user')) {
+                // Only redirect new users to get started page (users who have already logged in at some point).
+                // Redirect old users and users who have visited get started page to login page.
+                if (!!existingUser || getStartedPageVisited) {
                     redirect({ pathname: urls.login, query });
                 } else {
                     redirect({ pathname: urls.getStarted, query });
