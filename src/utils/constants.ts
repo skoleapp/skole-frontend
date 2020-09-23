@@ -52,6 +52,8 @@ export const GET_STARTED_ITEMS = [
     },
 ];
 
+export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
+
 // Home page.
 
 export const HOME_PAGE_SHORTCUTS = [

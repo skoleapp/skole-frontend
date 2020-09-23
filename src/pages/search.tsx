@@ -48,7 +48,7 @@ import {
     useSearchCoursesQuery,
 } from 'generated';
 import { useForm, useMediaQueries, useOpen } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
@@ -523,4 +523,4 @@ export const getStaticProps: GetStaticProps = async () => ({
     },
 });
 
-export default withAuth(SearchPage);
+export default withUserMe(SearchPage);

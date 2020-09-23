@@ -43,7 +43,7 @@ import {
     VoteObjectType,
 } from 'generated';
 import { useActionsDialog, useInfoDialog, useMediaQueries, useShare, useSwipeableTabs, useVotes } from 'hooks';
-import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
+import { includeDefaultNamespaces, initApolloClient, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -480,4 +480,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
 };
 
-export default withAuth(ResourceDetailPage);
+export default withUserMe(ResourceDetailPage);

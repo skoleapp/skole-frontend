@@ -41,7 +41,7 @@ import {
     UserObjectType,
 } from 'generated';
 import { useDayjs, useFrontendPagination, useMediaQueries, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, initApolloClient, useTranslation, withAuth } from 'lib';
+import { includeDefaultNamespaces, initApolloClient, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -495,4 +495,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
 };
 
-export default withAuth(UserPage);
+export default withUserMe(UserPage);
