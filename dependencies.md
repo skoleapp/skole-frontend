@@ -34,8 +34,6 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [typeface-roboto](https://www.npmjs.com/package/typeface-roboto)                   | Font.                                                                                         |
 | [yup](https://www.npmjs.com/package/yup)                                           | Object schema validation (used together with [Formik](https://www.npmjs.com/package/formik)). |
 
-<br />
-
 ### Dev requirements
 
 | Dependency                                                                                                         | Reason                                                                                              |
