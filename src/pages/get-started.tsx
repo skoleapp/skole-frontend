@@ -5,9 +5,9 @@ import { useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AuthProps } from 'types';
-import { GET_STARTED_ITEMS, urls } from 'utils';
+import { GET_STARTED_ITEMS, GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
     topSectionContainer: {
@@ -57,7 +57,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
         padding: spacing(3),
         marginTop: spacing(8),
     },
-    loginLink: {
+    authLink: {
         marginTop: spacing(8),
     },
     cardTextContainer: {
@@ -78,6 +78,10 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderLanguageButton } = useLanguageSelector();
+
+    useEffect(() => {
+        localStorage.setItem(GET_STARTED_PAGE_VISITED_KEY, new Date().toString());
+    }, []);
 
     const seoProps = {
         title: t('get-started:title'),
@@ -159,8 +163,12 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
                     >
                         {t('get-started:cta')}
                     </ButtonLink>
-                    <TextLink className={classes.loginLink} color="primary" href={{ pathname: urls.login, query }}>
-                        {t('common:login')}
+                    <TextLink
+                        className={classes.authLink}
+                        color="primary"
+                        href={{ pathname: (query.next as string) || urls.home, query }}
+                    >
+                        {t('get-started:skipLogin')}
                     </TextLink>
                 </Grid>
             </Grid>

@@ -9,6 +9,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 interface UseAuthContext extends AuthContextType {
     verified: boolean | null;
+    loginRequiredTooltip: string | false;
     verificationRequiredTooltip: string | false;
 }
 
@@ -16,8 +17,9 @@ export const useAuthContext = (): UseAuthContext => {
     const { t } = useTranslation();
     const { userMe, setUserMe, ...authContext } = useContext(AuthContext as Context<AuthContextType>);
     const verified = R.propOr(null, 'verified', userMe) as boolean | null;
+    const loginRequiredTooltip = !userMe && t('tooltips:loginRequired');
     const verificationRequiredTooltip = verified === false && t('tooltips:verificationRequired');
-    return { userMe, setUserMe, verified, verificationRequiredTooltip, ...authContext };
+    return { userMe, setUserMe, verified, verificationRequiredTooltip, loginRequiredTooltip, ...authContext };
 };
 
 export const AuthContextProvider: React.FC = ({ children }) => {

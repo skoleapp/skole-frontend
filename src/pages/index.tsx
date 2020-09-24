@@ -14,7 +14,7 @@ import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@materia
 import clsx from 'clsx';
 import { LoadingLayout, MainLayout, OfflineLayout } from 'components';
 import { useLanguageSelector, useSearch, useShare } from 'hooks';
-import { includeDefaultNamespaces, Link, useTranslation, withAuth } from 'lib';
+import { includeDefaultNamespaces, Link, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
@@ -215,4 +215,4 @@ export const getStaticProps: GetStaticProps = async () => ({
     },
 });
 
-export default withAuth(IndexPage);
+export default withUserMe(IndexPage);

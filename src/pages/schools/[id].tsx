@@ -46,7 +46,7 @@ import {
     useShare,
     useSwipeableTabs,
 } from 'hooks';
-import { includeDefaultNamespaces, initApolloClient, Link, useTranslation, withAuth } from 'lib';
+import { includeDefaultNamespaces, initApolloClient, Link, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -344,4 +344,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
 };
 
-export default withAuth(SchoolDetailPage);
+export default withUserMe(SchoolDetailPage);

@@ -59,8 +59,6 @@ const useStyles = makeStyles(({ spacing }) => ({
         marginTop: 'auto',
         wordBreak: 'break-all',
         '& .DraftEditor-editorContainer': {
-            maxHeight: '3rem',
-            minHeight: '3rem', // For some reason, we must specify both min and max height instead of setting an absolute height.
             overflowY: 'auto',
             padding: spacing(1),
             '& .RichEditor-blockquote': {
@@ -104,14 +102,14 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { commentAttachment, setCommentAttachment, toggleCommentModal } = useDiscussionContext();
-    const { verified, verificationRequiredTooltip } = useAuthContext();
-    const placeholder = (verificationRequiredTooltip || t('forms:createComment')) + '...';
+    const { verified, userMe, loginRequiredTooltip } = useAuthContext();
+    const placeholder = t('forms:createComment') + '...';
     const contentState = editorState.getCurrentContent();
-    const disabled = !verified;
     const selection = editorState.getSelection();
     const selectionCollapsed = selection.isCollapsed();
     const textContent = editorState.getCurrentContent().getPlainText('\u0001');
     const attachmentInputRef = useRef<HTMLInputElement | null>(null);
+    const attachmentTooltip = loginRequiredTooltip || t('tooltips:attachFile');
     const handleUploadAttachment = (): false | void =>
         !!attachmentInputRef.current && attachmentInputRef.current.click();
 
@@ -210,7 +208,6 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     const commonToolbarButtonProps = {
         size: 'small' as Size,
-        disabled: disabled,
     };
 
     useEffect(() => {
@@ -379,7 +376,6 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
             onBlur={onBlur}
             keyBindingFn={getKeyBinding}
             handleReturn={handleReturn}
-            readOnly={disabled}
         />
     );
 
@@ -400,11 +396,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     const renderLinkButton = (
         <Tooltip title={t('tooltips:link', { hotkeyLink })}>
             <span>
-                <IconButton
-                    {...commonToolbarButtonProps}
-                    disabled={disabled || selectionCollapsed}
-                    onMouseDown={handleLinkPrompt}
-                >
+                <IconButton {...commonToolbarButtonProps} disabled={selectionCollapsed} onMouseDown={handleLinkPrompt}>
                     <LinkOutlined />
                 </IconButton>
             </span>
@@ -459,8 +451,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                     <IconButton
                         {...commonToolbarButtonProps}
                         onClick={handleSubmit}
-                        color={!disabled && (!!textContent || !!commentAttachment) ? 'primary' : 'default'}
-                        disabled={disabled || (!textContent && !commentAttachment)} // Require either text content or an attachment.
+                        color={!!textContent || !!commentAttachment ? 'primary' : 'default'}
+                        disabled={!textContent && !commentAttachment} // Require either text content or an attachment.
                     >
                         <SendOutlined />
                     </IconButton>
@@ -497,11 +489,11 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                 type="file"
                 accept=".png, .jpg, .jpeg;capture=camera"
                 onChange={handleAttachmentChange}
-                disabled={disabled}
+                disabled={!userMe}
             />
-            <Tooltip title={t('tooltips:attachFile')}>
+            <Tooltip title={attachmentTooltip}>
                 <span>
-                    <IconButton onClick={handleUploadAttachment} {...commonToolbarButtonProps}>
+                    <IconButton onClick={handleUploadAttachment} {...commonToolbarButtonProps} disabled={!verified}>
                         {isMobileOrTablet ? <CameraAltOutlined /> : <AttachFileOutlined />}
                     </IconButton>
                 </span>
