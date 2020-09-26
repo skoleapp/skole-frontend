@@ -1,52 +1,33 @@
-import { ApolloClient, GraphQLRequest, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { NormalizedCacheObject } from '@apollo/client/cache';
-import { HttpConfig } from '@apollo/client/link/http/selectHttpOptionsAndBody';
-import { setContext } from 'apollo-link-context';
 import { createUploadLink } from 'apollo-upload-client';
-import { IncomingMessage } from 'http';
-import { i18n } from 'lib';
-import * as R from 'ramda';
 import { useMemo } from 'react';
-import { SSRContext } from 'types';
-
-import { getTokenCookie } from './auth-cookies';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
-const createApolloClient = (ctx?: SSRContext): ApolloClient<NormalizedCacheObject> => {
+const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
     const isBrowser = typeof window !== 'undefined';
     const uri = isBrowser ? process.env.API_URL : process.env.BACKEND_URL;
-    const req: IncomingMessage | undefined = R.propOr(undefined, 'req', ctx);
-    const token = getTokenCookie(req);
 
     const httpLink = createUploadLink({
         uri: uri + 'graphql/',
         credentials: 'include',
     });
 
-    const authLink = setContext((_req: GraphQLRequest, { headers }: HttpConfig) => ({
-        headers: {
-            ...headers,
-            Authorization: token ? `JWT ${token}` : '',
-            'Accept-Language': i18n.language || R.path(['req', 'language'], ctx),
-        },
-    }));
-
     return new ApolloClient({
         ssrMode: isBrowser,
         // Ignore: Apollo client's types have been updated so that they do not match apollo-upload-client's types.
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
-        link: authLink.concat(httpLink),
+        link: httpLink,
         cache: new InMemoryCache(),
     });
 };
 
 export const initApolloClient = (
     initialState: NormalizedCacheObject | null = null,
-    ctx?: SSRContext,
 ): ApolloClient<NormalizedCacheObject> => {
-    const _apolloClient = apolloClient || createApolloClient(ctx);
+    const _apolloClient = apolloClient || createApolloClient();
 
     // If your page has Next.js data fetching methods that use Apollo Client, the initial state gets hydrated here.
     if (initialState) {
