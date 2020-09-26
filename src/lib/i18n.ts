@@ -1,17 +1,18 @@
 import NextI18Next from 'next-i18next';
+import config from 'next/config';
 import path from 'path';
 import { useTranslation as _useTranslation, UseTranslationResponse } from 'react-i18next';
+
+const { localeSubpaths } = config().publicRuntimeConfig;
 
 const nextI18next = new NextI18Next({
     defaultLanguage: 'en',
     otherLanguages: ['fi', 'sv'],
     localePath: path.resolve('./public/locales'),
     fallbackLng: 'en',
-    strictMode: false, // Disable redundant warnings about withTranslation wrapper on every page.
-    shallowRender: true, // Avoid triggering getInitialProps when language is changed.
+    localeSubpaths,
+    strictMode: false, // Disable warnings about withTranslation wrapper.
 });
-
-nextI18next.i18n.languages = ['en', 'fi', 'sv'];
 
 export const includeDefaultNamespaces = (namespaces: string[]): string[] => {
     const defaultNamespaces = [
