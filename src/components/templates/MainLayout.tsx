@@ -1,6 +1,5 @@
 import { Container, Grid, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
-import { useAuthContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import * as R from 'ramda';
 import React from 'react';
@@ -68,7 +67,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
 }) => {
     const classes = useStyles();
     const { isMobileOrTablet, isDesktop } = useMediaQueries();
-    const { userMe } = useAuthContext();
     const renderHead = <Head {...seoProps} />;
     const renderTopNavbar = (isMobileOrTablet && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
     const containerFullWidth = R.propOr(false, 'fullWidth', containerProps);
@@ -87,9 +85,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
         </Container>
     );
 
-    const renderBottomNavbar =
-        isMobileOrTablet && (customBottomNavbar || (!!userMe && !disableBottomNavbar && <BottomNavbar />));
-
+    const renderBottomNavbar = isMobileOrTablet && (customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />));
     const renderFooter = isDesktop && !disableFooter && <Footer />;
     const renderNotifications = <Notifications />;
     const renderAttachmentViewer = <AttachmentViewer />;

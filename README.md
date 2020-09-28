@@ -30,6 +30,7 @@ See detailed description for all top-level dependencies in `dependencies.md` fil
 -   Document everything that is hard to understand from the code. Use single line comment syntax for everything, even for multi-line comments.
 -   Avoid writing event handlers/functions directly in JSX to keep it more readable.
 -   Use `React.FC` syntax for all components.
+-   Use [Material Icons](https://material.io/resources/icons/) for all icons. Make sure to use the outlined variants of the icons.
 -   Use ES6 syntax everywhere:
     -   Avoid using the `function` keyword.
     -   Use `async`/`await` syntax.

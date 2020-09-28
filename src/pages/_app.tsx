@@ -14,7 +14,7 @@ import {
 } from 'context';
 import { appWithTranslation, useApollo, useTranslation } from 'lib';
 import { ConfirmOptions, ConfirmProvider } from 'material-ui-confirm';
-import { AppProps } from 'next/app';
+import App, { AppContext, AppProps } from 'next/app';
 import React, { useEffect } from 'react';
 import { BORDER_RADIUS, theme } from 'theme';
 
@@ -81,5 +81,9 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
         </ApolloProvider>
     );
 };
+
+SkoleApp.getInitialProps = async (appContext: AppContext): Promise<{}> => ({
+    ...(await App.getInitialProps(appContext)),
+});
 
 export default appWithTranslation(SkoleApp);

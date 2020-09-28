@@ -35,13 +35,12 @@ import {
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import {
     CommentObjectType,
-    CourseDetailDocument,
-    CourseDetailQueryResult,
     CourseObjectType,
     DeleteCourseMutation,
     ResourceObjectType,
     ResourceTypeObjectType,
     SubjectObjectType,
+    useCourseDetailQuery,
     useDeleteCourseMutation,
     UserObjectType,
     VoteObjectType,
@@ -51,12 +50,13 @@ import {
     useFrontendPagination,
     useInfoDialog,
     useMediaQueries,
+    useQueryOptions,
     useSearch,
     useShare,
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { includeDefaultNamespaces, initApolloClient, useTranslation, withUserMe } from 'lib';
+import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -82,15 +82,14 @@ const useStyles = makeStyles({
     },
 });
 
-const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
-    data,
-    error,
-    authLoading,
-    authNetworkError,
-}) => {
+const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
     const { isFallback } = useRouter();
     const { t } = useTranslation();
+    const queryOptions = useQueryOptions();
+    const { data, loading: courseDataLoading, error } = useCourseDetailQuery(queryOptions);
+    const loading = authLoading || isFallback || courseDataLoading;
+    const networkError = (!!error && !!error.networkError) || !!authNetworkError;
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
@@ -119,8 +118,8 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: courseName });
     const notFound = t('course:notFound');
-    const title = !!course ? courseName : !isFallback ? notFound : '';
-    const description = !!course ? t('course:description', { courseName }) : !isFallback ? notFound : '';
+    const title = !!course ? courseName : !loading ? notFound : '';
+    const description = !!course ? t('course:description', { courseName }) : !loading ? notFound : '';
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     const {
@@ -397,11 +396,11 @@ const CourseDetailPage: NextPage<CourseDetailQueryResult & AuthProps> = ({
         customBottomNavbar: renderCustomBottomNavbar,
     };
 
-    if (isFallback || authLoading) {
+    if (loading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
+    if (networkError) {
         return <OfflineLayout seoProps={seoProps} />;
     } else if (!!error) {
         return <ErrorLayout seoProps={seoProps} />;
@@ -428,17 +427,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const apolloClient = initApolloClient();
-    const result = await apolloClient.query({ query: CourseDetailDocument, variables: params });
-
-    return {
-        props: {
-            ...result,
-            namespacesRequired: includeDefaultNamespaces(['course']),
-        },
-        revalidate: 1,
-    };
-};
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['course']),
+    },
+    revalidate: 1,
+});
 
 export default withUserMe(CourseDetailPage);

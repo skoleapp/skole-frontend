@@ -30,23 +30,18 @@ import {
     TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import {
-    CourseObjectType,
-    SchoolDetailDocument,
-    SchoolDetailQueryResult,
-    SchoolObjectType,
-    SubjectObjectType,
-} from 'generated';
+import { CourseObjectType, SchoolObjectType, SubjectObjectType, useSchoolDetailQuery } from 'generated';
 import {
     useActionsDialog,
     useFrontendPagination,
     useInfoDialog,
     useMediaQueries,
+    useQueryOptions,
     useSearch,
     useShare,
     useSwipeableTabs,
 } from 'hooks';
-import { includeDefaultNamespaces, initApolloClient, Link, useTranslation, withUserMe } from 'lib';
+import { includeDefaultNamespaces, Link, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -63,15 +58,14 @@ const useStyles = makeStyles({
     },
 });
 
-const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
-    data,
-    error,
-    authLoading,
-    authNetworkError,
-}) => {
+const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
-    const { verified, verificationRequiredTooltip } = useAuthContext();
     const { isFallback } = useRouter();
+    const queryOptions = useQueryOptions();
+    const { data, loading: courseDataLoading, error } = useSchoolDetailQuery(queryOptions);
+    const loading = authLoading || isFallback || courseDataLoading;
+    const networkError = (!!error && !!error.networkError) || !!authNetworkError;
+    const { verified, verificationRequiredTooltip } = useAuthContext();
     const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { searchUrl } = useSearch();
@@ -301,11 +295,11 @@ const SchoolDetailPage: NextPage<SchoolDetailQueryResult & AuthProps> = ({
         },
     };
 
-    if (isFallback || authLoading) {
+    if (loading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
+    if (networkError) {
         return <OfflineLayout seoProps={seoProps} />;
     } else if (!!error) {
         return <ErrorLayout seoProps={seoProps} />;
@@ -331,17 +325,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const apolloClient = initApolloClient();
-    const result = await apolloClient.query({ query: SchoolDetailDocument, variables: params });
-
-    return {
-        props: {
-            ...result,
-            namespacesRequired: includeDefaultNamespaces(['school']),
-        },
-        revalidate: 1,
-    };
-};
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['school']),
+    },
+    revalidate: 1,
+});
 
 export default withUserMe(SchoolDetailPage);

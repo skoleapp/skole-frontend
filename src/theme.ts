@@ -1,21 +1,63 @@
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
+import createBreakpoints from '@material-ui/core/styles/createBreakpoints';
+import createPalette from '@material-ui/core/styles/createPalette';
+import createTypography from '@material-ui/core/styles/createTypography';
 
-const colors = {
-    primary: '#ad3636',
-    secondary: '#faf2de',
-    white: '#ffffff',
-    black: '#000000',
-};
-
-const spacing = (factor: number): string => `${0.25 * factor}rem`;
+// Global constants, feel free to use these where ever.
 export const BORDER_RADIUS = '1.75rem';
 export const BORDER = `0.05rem solid ${grey[300]}`;
 export const BOTTOM_NAVBAR_HEIGHT = '3rem';
 export const TOP_NAVBAR_HEIGHT_MOBILE = '3rem';
 export const TOP_NAVBAR_HEIGHT_DESKTOP = '4rem';
 
+const COLORS = {
+    primary: '#ad3636',
+    secondary: '#faf2de',
+    white: '#ffffff',
+    black: '#000000',
+};
+
+const breakpointOptions = {
+    values: {
+        xs: 0,
+        sm: 600,
+        md: 960,
+        lg: 1280,
+        xl: 1920,
+    },
+};
+
+const paletteOptions = {
+    primary: {
+        main: COLORS.primary,
+    },
+    secondary: {
+        main: COLORS.secondary,
+    },
+    common: {
+        white: COLORS.white,
+        black: COLORS.black,
+    },
+};
+
+const typographyOptions = {
+    fontFamily: ['Roboto', 'sans-serif'].join(','),
+    h1: {
+        fontSize: 50,
+    },
+};
+
+const palette = createPalette(paletteOptions);
+const typography = createTypography(palette, typographyOptions);
+const spacing = (factor: number): string => `${0.25 * factor}rem`;
+const breakpoints = createBreakpoints(breakpointOptions);
+
 let theme = createMuiTheme({
+    palette,
+    typography,
+    spacing,
+    breakpoints,
     props: {
         MuiContainer: {
             maxWidth: 'xl',
@@ -136,7 +178,7 @@ let theme = createMuiTheme({
         MuiTable: {
             root: {
                 display: 'flex',
-                backgroundColor: colors.white,
+                backgroundColor: COLORS.white,
                 flexGrow: 1,
             },
         },
@@ -187,108 +229,84 @@ let theme = createMuiTheme({
                 padding: spacing(2),
             },
         },
-    },
-    palette: {
-        primary: {
-            main: colors.primary,
-        },
-        secondary: {
-            main: colors.secondary,
-        },
-        common: {
-            white: colors.white,
-            black: colors.black,
-        },
-    },
-    typography: {
-        fontFamily: ['Roboto', 'sans-serif'].join(','),
-        h1: {
-            fontSize: 50,
-        },
-    },
-    spacing,
-});
-
-// Globals and overrides that require media queries.
-theme.overrides = {
-    ...theme.overrides,
-    MuiDialog: {
-        paper: {
-            overflow: 'hidden',
-            [theme.breakpoints.up('lg')]: {
-                borderRadius: BORDER_RADIUS,
-            },
-        },
-    },
-    MuiCssBaseline: {
-        '@global': {
-            body: {
-                backgroundColor: theme.palette.secondary.main,
-            },
-            '.main-avatar': {
-                height: '6rem',
-                width: '6rem',
-                margin: spacing(2),
-            },
-            '.avatar-thumbnail': {
-                height: '1.35rem',
-                width: '1.35rem',
-                padding: spacing(0.25),
-                margin: spacing(0.25),
-            },
-            '.truncate-text': {
+        MuiDialog: {
+            paper: {
                 overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-            },
-            '.border-bottom': {
-                borderBottom: BORDER,
-            },
-            "input[type='file']": {
-                display: 'none',
-            },
-            "input[type='submit']": {
-                display: 'none',
-            },
-            '.react-swipeable-view-container': {
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                '& > div': {
-                    display: 'flex',
-                },
-            },
-            '.table-action-area': {
-                display: 'flex',
-            },
-            '.main-background': {
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                background:
-                    'linear-gradient(rgba(255, 42, 0, 0.55), rgba(255, 42, 0, 0.55)), url(images/background.jpg)',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-            },
-            '.text-center': {
-                textAlign: 'center',
-            },
-            '.text-left': {
-                textAlign: 'left',
-            },
-            '.paper-container': {
-                overflow: 'hidden',
-                [theme.breakpoints.up('lg')]: {
+                [breakpoints.up('lg')]: {
                     borderRadius: BORDER_RADIUS,
                 },
             },
-            '.screenshot-border': {
-                border: `0.05rem dashed ${colors.black}`,
+        },
+        MuiCssBaseline: {
+            '@global': {
+                body: {
+                    backgroundColor: COLORS.secondary,
+                },
+                '.main-avatar': {
+                    height: '6rem',
+                    width: '6rem',
+                    margin: spacing(2),
+                },
+                '.avatar-thumbnail': {
+                    height: '1.35rem',
+                    width: '1.35rem',
+                    padding: spacing(0.25),
+                    margin: spacing(0.25),
+                },
+                '.truncate-text': {
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                },
+                '.border-bottom': {
+                    borderBottom: BORDER,
+                },
+                "input[type='file']": {
+                    display: 'none',
+                },
+                "input[type='submit']": {
+                    display: 'none',
+                },
+                '.react-swipeable-view-container': {
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    '& > div': {
+                        display: 'flex',
+                    },
+                },
+                '.table-action-area': {
+                    display: 'flex',
+                },
+                '.main-background': {
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    background:
+                        'linear-gradient(rgba(255, 42, 0, 0.55), rgba(255, 42, 0, 0.55)), url(images/background.jpg)',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                },
+                '.text-center': {
+                    textAlign: 'center',
+                },
+                '.text-left': {
+                    textAlign: 'left',
+                },
+                '.paper-container': {
+                    overflow: 'hidden',
+                    [breakpoints.up('lg')]: {
+                        borderRadius: BORDER_RADIUS,
+                    },
+                },
+                '.screenshot-border': {
+                    border: `0.05rem dashed ${COLORS.black}`,
+                },
             },
         },
     },
-};
+});
 
 theme = responsiveFontSizes(theme);
 
