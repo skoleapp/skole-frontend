@@ -35,15 +35,22 @@ import { useAuthContext, useDiscussionContext, useNotificationsContext, usePDFVi
 import {
     CommentObjectType,
     DeleteResourceMutation,
-    ResourceDetailDocument,
-    ResourceDetailQueryResult,
     ResourceObjectType,
     useDeleteResourceMutation,
+    useResourceDetailQuery,
     UserObjectType,
     VoteObjectType,
 } from 'generated';
-import { useActionsDialog, useInfoDialog, useMediaQueries, useShare, useSwipeableTabs, useVotes } from 'hooks';
-import { includeDefaultNamespaces, initApolloClient, useTranslation, withUserMe } from 'lib';
+import {
+    useActionsDialog,
+    useInfoDialog,
+    useMediaQueries,
+    useQueryOptions,
+    useShare,
+    useSwipeableTabs,
+    useVotes,
+} from 'hooks';
+import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -74,15 +81,14 @@ const useStyles = makeStyles({
     },
 });
 
-const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
-    data,
-    error,
-    authLoading,
-    authNetworkError,
-}) => {
+const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
-    const { t } = useTranslation();
     const { isFallback } = useRouter();
+    const { t } = useTranslation();
+    const queryOptions = useQueryOptions();
+    const { data, loading: courseDataLoading, error } = useResourceDetailQuery(queryOptions);
+    const loading = authLoading || isFallback || courseDataLoading;
+    const networkError = (!!error && !!error.networkError) || !!authNetworkError;
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
@@ -436,11 +442,11 @@ const ResourceDetailPage: NextPage<ResourceDetailQueryResult & AuthProps> = ({
         },
     };
 
-    if (isFallback || authLoading) {
+    if (loading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
+    if (networkError) {
         return <OfflineLayout seoProps={seoProps} />;
     } else if (!!error) {
         return <ErrorLayout seoProps={seoProps} />;
@@ -467,17 +473,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const apolloClient = initApolloClient();
-    const result = await apolloClient.query({ query: ResourceDetailDocument, variables: params });
-
-    return {
-        props: {
-            ...result,
-            namespacesRequired: includeDefaultNamespaces(['resource']),
-        },
-        revalidate: 1,
-    };
-};
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['resource']),
+    },
+    revalidate: 1,
+});
 
 export default withUserMe(ResourceDetailPage);

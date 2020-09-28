@@ -5,6 +5,7 @@ export * from './useDayjs';
 export * from './useStateRef';
 export * from './useShare';
 export * from './useOpen';
+export * from './useQueryOptions';
 export * from './useLanguageSelector';
 export * from './useMediaQueries';
 export * from './useForm';
