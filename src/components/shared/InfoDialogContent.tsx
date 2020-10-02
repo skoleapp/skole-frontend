@@ -38,7 +38,7 @@ export const InfoDialogContent: React.FC<Props> = ({ user, created, infoItems })
         </Grid>
     ));
 
-    const renderCreated = !!user && !!created && (
+    const renderCreated = !!created && (
         <Box marginTop="1rem">
             <Typography variant="body2" color="textSecondary">
                 {t('common:createdBy')}{' '}
