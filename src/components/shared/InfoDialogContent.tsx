@@ -38,13 +38,13 @@ export const InfoDialogContent: React.FC<Props> = ({ user, created, infoItems })
         </Grid>
     ));
 
-    const renderCreated = !!user && !!created && (
+    const renderCreated = !!created && (
         <Box marginTop="1rem">
             <Typography variant="body2" color="textSecondary">
                 {t('common:createdBy')}{' '}
-                {!!userId ? (
+                {!!user ? (
                     <TextLink href={urls.user} as={`/users/${userId}`} color="primary">
-                        {R.propOr('-', 'username', user)}
+                        {user.username}
                     </TextLink>
                 ) : (
                     t('common:communityUser')

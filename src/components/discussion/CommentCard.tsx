@@ -91,7 +91,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const { toggleNotification } = useNotificationsContext();
     const { toggleTopComment, setAttachmentViewerValue } = useDiscussionContext();
     const shareQuery = `?comment=${commentId}`;
-    const creatorUsername = R.propOr('unknown', 'username', comment.user) as string;
+    const creatorUsername = R.propOr(t('common:communityUser'), 'username', comment.user) as string;
     const shareText = t('common:commentShareText', { creatorUsername, commentPreview: truncate(comment.text, 20) });
 
     const {
@@ -164,13 +164,15 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         }
     };
 
-    const renderTitle = (
+    const renderTitle = !!comment.user ? (
         <TextLink
             href={`/users/${R.propOr('', 'id', comment.user)}`}
             onClick={(e: SyntheticEvent): void => e.stopPropagation()}
         >
-            {R.propOr('-', 'username', comment.user)}
+            {comment.user.username}
         </TextLink>
+    ) : (
+        t('common:communityUser')
     );
 
     const renderCardHeader = (
