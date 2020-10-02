@@ -37,7 +37,7 @@ A quick look at the top-level files and directories excluding `node_modules` and
     ├── next-env.d.ts
     ├── next.config.js
     ├── package.json
-    ├── README.json
+    ├── README.md
     ├── tsconfig.json
     ├── types.d.ts
     └── yarn.lock
@@ -80,17 +80,15 @@ A quick look at the top-level files and directories excluding `node_modules` and
 
 19. **`next.config.js`**: Next.js configuration.
 
-20. **`next.config.js`**: Next.js configuration.
+20. **`package.json`**: Manifest file for [Node.js](https://nodejs.org/en/).
 
-21. **`package.json`**: Manifest file for [Node.js](https://nodejs.org/en/).
+21. **`README.md`**: Text file containing useful reference information about this project.
 
-22. **`README.md`**: Text file containing useful reference information about this project.
+22. **`tsconfig.json`**: TypeScript configuration.
 
-23. **`tsconfig.json`**: TypeScript configuration.
+23. **`types.d.ts`**: Module declarations for dependencies that do not have TypeScript typings.
 
-24. **`types.d.ts`**: Module declarations for dependencies that do not have TypeScript typings.
-
-25. **`yarn.lock`**: Auto-generated file for locking version numbers of all dependencies listed in `package.json`.
+24. **`yarn.lock`**: Auto-generated file for locking version numbers of all dependencies listed in `package.json`.
 
 ## Development Tips 🚀
 
