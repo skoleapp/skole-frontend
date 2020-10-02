@@ -32,7 +32,7 @@ export const getPaginationQuery = (query: ParsedUrlQueryInput): ParsedUrlQueryIn
 // Using this utility prevents us to mistakenly import the wrong Router object.
 export const redirect = (location: string | UrlObject): Promise<boolean> => Router.push(location);
 
-// A utility that we use to truncate strings from a given length.
+// A utility that we use to truncate strings to a given length.
 export const truncate = (str: string, num: number): string => {
     if (str.length > num) {
         return str.slice(0, num) + '...';

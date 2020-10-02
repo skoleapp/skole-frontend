@@ -3,7 +3,7 @@
     "starError": "Error while starring!",
     "deleteCommentError": "Error while deleting comment!",
     "messageEmpty": "Message cannot be empty!",
-    "linkCopied": "Link copied to clip board!",
+    "linkCopied": "Link copied to clipboard!",
     "deleteResourceError": "Unexpected error while deleting resource!",
     "deleteCourseError": "Unexpected error while deleting course!",
     "downloadResourceError": "Error while downloading resource!",

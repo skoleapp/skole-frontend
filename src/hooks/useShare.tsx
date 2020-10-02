@@ -43,7 +43,7 @@ export const useShare = ({ query = '', text }: ShareParams): UseShare => {
                 // User cancelled.
             }
         } else if (!!navigator && !!navigator.clipboard) {
-            navigator.clipboard.writeText(url);
+            await navigator.clipboard.writeText(url);
             toggleNotification(t('notifications:linkCopied'));
         } else {
             toggleNotification(t('notifications:sharingError'));
