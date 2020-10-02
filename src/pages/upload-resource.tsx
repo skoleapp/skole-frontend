@@ -156,11 +156,13 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                         dataKey="resourceTypes"
                         document={ResourceTypesDocument}
                         component={AutoCompleteField}
+                        disableSearch
                     />
                     <Field
                         name="school"
                         label={t('forms:schoolOptional')}
                         dataKey="schools"
+                        searchKey="name"
                         document={SchoolsDocument}
                         component={AutoCompleteField}
                         helperText={
@@ -174,6 +176,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                         name="course"
                         label={t('forms:course')}
                         dataKey="courses"
+                        searchKey="name"
                         document={CoursesDocument}
                         component={AutoCompleteField}
                         variables={{ school: R.pathOr(undefined, ['values', 'school', 'id'], props) }} // Filter courses based on selected school.

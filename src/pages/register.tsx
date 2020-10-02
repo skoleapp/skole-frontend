@@ -284,6 +284,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             name="school"
             label={t('forms:schoolOptional')}
             dataKey="schools"
+            searchKey="name"
             document={SchoolsDocument}
             component={AutoCompleteField}
         />
@@ -294,6 +295,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             name="subject"
             label={t('forms:subjectOptional')}
             dataKey="subjects"
+            searchKey="name"
             document={SubjectsDocument}
             component={AutoCompleteField}
         />

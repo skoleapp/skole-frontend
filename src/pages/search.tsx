@@ -271,6 +271,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             name="subject"
             label={t('forms:subject')}
             dataKey="subjects"
+            searchKey="name"
             document={SubjectsDocument}
             component={AutoCompleteField}
         />
@@ -281,6 +282,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             name="school"
             label={t('forms:school')}
             dataKey="schools"
+            searchKey="name"
             document={SchoolsDocument}
             component={AutoCompleteField}
         />

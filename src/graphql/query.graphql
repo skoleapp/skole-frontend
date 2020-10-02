@@ -107,7 +107,7 @@ query SearchCourses(
     $page: Int
     $pageSize: Int
 ) {
-    searchCourses(
+    paginatedCourses(
         courseName: $courseName
         courseCode: $courseCode
         school: $school
@@ -343,8 +343,8 @@ query CreateCourseInitialData($school: ID) {
     }
 }
 
-query Schools {
-    schools {
+query Schools($name: String) {
+    schools(name: $name) {
         id
         name
     }
@@ -357,8 +357,8 @@ query SchoolTypes {
     }
 }
 
-query Courses($school: ID) {
-    courses(school: $school) {
+query Courses($school: ID, $name: String) {
+    courses(school: $school, name: $name) {
         id
         name
     }

@@ -97,7 +97,6 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     const renderTitleField = <Field name="title" component={TextFormField} label={t('forms:title')} />;
     const renderUsernameField = <Field name="username" component={TextFormField} label={t('forms:username')} />;
     const renderEmailField = <Field name="email" component={TextFormField} label={t('forms:email')} />;
-
     const renderBioField = <Field name="bio" component={TextFormField} label={t('forms:bio')} rows="4" multiline />;
 
     const renderSchoolField = (
@@ -105,6 +104,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
             name="school"
             label={t('forms:schoolOptional')}
             dataKey="schools"
+            searchKey="name"
             document={SchoolsDocument}
             component={AutoCompleteField}
             helperText={t('forms:schoolHelpText')}
@@ -116,6 +116,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
             name="subject"
             label={t('forms:subjectOptional')}
             dataKey="subjects"
+            searchKey="name"
             document={SubjectsDocument}
             component={AutoCompleteField}
             helperText={t('forms:subjectHelpText')}

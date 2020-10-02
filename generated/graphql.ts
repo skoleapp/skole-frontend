@@ -1,7 +1,7 @@
+import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-const gql = Apollo.gql;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -35,8 +35,8 @@ export type Query = {
   school?: Maybe<SchoolObjectType>;
   resourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>;
   resource?: Maybe<ResourceObjectType>;
-  searchCourses?: Maybe<PaginatedCourseObjectType>;
   courses?: Maybe<Array<Maybe<CourseObjectType>>>;
+  paginatedCourses?: Maybe<PaginatedCourseObjectType>;
   course?: Maybe<CourseObjectType>;
   countries?: Maybe<Array<Maybe<CountryObjectType>>>;
   country?: Maybe<CountryObjectType>;
@@ -50,6 +50,11 @@ export type QueryUserArgs = {
 };
 
 
+export type QuerySubjectsArgs = {
+  name?: Maybe<Scalars['String']>;
+};
+
+
 export type QuerySubjectArgs = {
   id?: Maybe<Scalars['ID']>;
 };
@@ -57,6 +62,11 @@ export type QuerySubjectArgs = {
 
 export type QuerySchoolTypeArgs = {
   id?: Maybe<Scalars['ID']>;
+};
+
+
+export type QuerySchoolsArgs = {
+  name?: Maybe<Scalars['String']>;
 };
 
 
@@ -70,7 +80,13 @@ export type QueryResourceArgs = {
 };
 
 
-export type QuerySearchCoursesArgs = {
+export type QueryCoursesArgs = {
+  school?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryPaginatedCoursesArgs = {
   courseName?: Maybe<Scalars['String']>;
   courseCode?: Maybe<Scalars['String']>;
   subject?: Maybe<Scalars['ID']>;
@@ -81,11 +97,6 @@ export type QuerySearchCoursesArgs = {
   page?: Maybe<Scalars['Int']>;
   pageSize?: Maybe<Scalars['Int']>;
   ordering?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryCoursesArgs = {
-  school?: Maybe<Scalars['ID']>;
 };
 
 
@@ -1324,10 +1335,7 @@ export type UserDetailQueryVariables = Exact<{
 
 export type UserDetailQuery = (
   { __typename?: 'Query' }
-  & { resourceTypes?: Maybe<Array<Maybe<(
-    { __typename?: 'ResourceTypeObjectType' }
-    & Pick<ResourceTypeObjectType, 'id' | 'name'>
-  )>>>, user?: Maybe<(
+  & { user?: Maybe<(
     { __typename?: 'UserObjectType' }
     & Pick<UserObjectType, 'id' | 'username' | 'title' | 'bio' | 'avatar' | 'score' | 'created' | 'verified' | 'rank'>
     & { badges?: Maybe<Array<Maybe<(
@@ -1340,7 +1348,10 @@ export type UserDetailQuery = (
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
     )> }
-  )> }
+  )>, resourceTypes?: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+  )>>> }
 );
 
 export type SearchCoursesQueryVariables = Exact<{
@@ -1359,7 +1370,7 @@ export type SearchCoursesQueryVariables = Exact<{
 
 export type SearchCoursesQuery = (
   { __typename?: 'Query' }
-  & { searchCourses?: Maybe<(
+  & { paginatedCourses?: Maybe<(
     { __typename?: 'PaginatedCourseObjectType' }
     & Pick<PaginatedCourseObjectType, 'page' | 'pages' | 'hasPrev' | 'hasNext' | 'count'>
     & { objects?: Maybe<Array<Maybe<(
@@ -1548,7 +1559,9 @@ export type CreateCourseInitialDataQuery = (
   )> }
 );
 
-export type SchoolsQueryVariables = Exact<{ [key: string]: never; }>;
+export type SchoolsQueryVariables = Exact<{
+  name?: Maybe<Scalars['String']>;
+}>;
 
 
 export type SchoolsQuery = (
@@ -1572,6 +1585,7 @@ export type SchoolTypesQuery = (
 
 export type CoursesQueryVariables = Exact<{
   school?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -2622,10 +2636,6 @@ export type StarredLazyQueryHookResult = ReturnType<typeof useStarredLazyQuery>;
 export type StarredQueryResult = Apollo.QueryResult<StarredQuery, StarredQueryVariables>;
 export const UserDetailDocument = gql`
     query UserDetail($id: ID) {
-  resourceTypes {
-    id
-    name
-  }
   user(id: $id) {
     id
     username
@@ -2653,6 +2663,10 @@ export const UserDetailDocument = gql`
       score
       date
     }
+  }
+  resourceTypes {
+    id
+    name
   }
 }
     `;
@@ -2684,7 +2698,7 @@ export type UserDetailLazyQueryHookResult = ReturnType<typeof useUserDetailLazyQ
 export type UserDetailQueryResult = Apollo.QueryResult<UserDetailQuery, UserDetailQueryVariables>;
 export const SearchCoursesDocument = gql`
     query SearchCourses($courseName: String, $courseCode: String, $school: ID, $subject: ID, $schoolType: ID, $country: ID, $city: ID, $ordering: String, $page: Int, $pageSize: Int) {
-  searchCourses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {
+  paginatedCourses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {
     page
     pages
     hasPrev
@@ -3081,8 +3095,8 @@ export type CreateCourseInitialDataQueryHookResult = ReturnType<typeof useCreate
 export type CreateCourseInitialDataLazyQueryHookResult = ReturnType<typeof useCreateCourseInitialDataLazyQuery>;
 export type CreateCourseInitialDataQueryResult = Apollo.QueryResult<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>;
 export const SchoolsDocument = gql`
-    query Schools {
-  schools {
+    query Schools($name: String) {
+  schools(name: $name) {
     id
     name
   }
@@ -3101,6 +3115,7 @@ export const SchoolsDocument = gql`
  * @example
  * const { data, loading, error } = useSchoolsQuery({
  *   variables: {
+ *      name: // value for 'name'
  *   },
  * });
  */
@@ -3147,8 +3162,8 @@ export type SchoolTypesQueryHookResult = ReturnType<typeof useSchoolTypesQuery>;
 export type SchoolTypesLazyQueryHookResult = ReturnType<typeof useSchoolTypesLazyQuery>;
 export type SchoolTypesQueryResult = Apollo.QueryResult<SchoolTypesQuery, SchoolTypesQueryVariables>;
 export const CoursesDocument = gql`
-    query Courses($school: ID) {
-  courses(school: $school) {
+    query Courses($school: ID, $name: String) {
+  courses(school: $school, name: $name) {
     id
     name
   }
@@ -3168,6 +3183,7 @@ export const CoursesDocument = gql`
  * const { data, loading, error } = useCoursesQuery({
  *   variables: {
  *      school: // value for 'school'
+ *      name: // value for 'name'
  *   },
  * });
  */

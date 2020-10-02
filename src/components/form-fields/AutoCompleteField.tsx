@@ -17,6 +17,7 @@ interface Props {
     field: FieldAttributes<{}>;
     form: FormikProps<{}>;
     labelKey: string; // Used to access the label on the object.
+    searchKey: string; // Name of the variable that we use as the search key.
     dataKey: string; // Used to access the data after a successful query.
     document: DocumentNode; // GraphQL document the query is made with.
     variables: OperationVariables; // Custom variables for GraphQL query.
@@ -28,19 +29,25 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     field,
     form,
     labelKey = 'name',
+    searchKey,
     dataKey,
     document,
     helperText,
     disabled,
-    variables,
+    variables: queryVariables,
     multiple,
     ...textFieldProps
 }: Props & TextFieldProps) => {
     const classes = useStyles();
     const queryOptions = useQueryOptions();
     const [open, setOpen] = useState(false);
+    const handleOpen = (): void => setOpen(true);
+    const handleClose = (): void => setOpen(false);
+    const getOptionLabel = (option: T): string => R.propOr('', labelKey, option);
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState([]);
+    const [inputValue, setInputValue] = useState('');
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => setInputValue(e.target.value);
     const apolloClient = useApolloClient();
     const { name, value } = field;
     const { touched, errors, isSubmitting } = form;
@@ -49,6 +56,15 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
 
     const fetchOptions = async (): Promise<void> => {
         setLoading(true);
+
+        // Add search params to existing query variables.
+        const searchVariables = {
+            ...queryVariables,
+            [searchKey]: inputValue,
+        };
+
+        // Use only existing query variables if no search key is provided.
+        const variables = !!searchKey ? searchVariables : queryVariables;
 
         try {
             const { data } = await apolloClient.query({
@@ -65,11 +81,20 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
         }
     };
 
+    // When closing the input results, reset the options.
+    // When input has empty content, fetch default content with no params.
+    // Otherwise require the user to type at least three characters.
+    // After the user has typed at least three characters, fetch content from backend on each new character.
     useEffect(() => {
-        open ? fetchOptions() : setOptions([]);
-    }, [open]);
+        if (!open) {
+            setOptions([]);
+        } else if (inputValue === '' || inputValue.length > 2) {
+            fetchOptions();
+        }
+    }, [open, inputValue]);
 
-    const handleAutoCompleteChange = (_e: ChangeEvent<{}>, val: T): void => {
+    const handleAutoCompleteChange = (_e: ChangeEvent<{}>, val: T | T[] | null): void => {
+        console.log('test');
         !!val ? form.setFieldValue(name, val) : form.setFieldValue(name, null);
     };
 
@@ -79,6 +104,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
             {...textFieldProps}
             error={showError}
             helperText={showError ? fieldError : helperText}
+            onChange={handleInputChange}
             InputProps={{
                 ...params.InputProps,
                 endAdornment: (
@@ -95,9 +121,9 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
         <Autocomplete
             classes={{ endAdornment: classes.endAdornment }}
             open={open}
-            onOpen={(): void => setOpen(true)}
-            onClose={(): void => setOpen(false)}
-            getOptionLabel={(option): string => R.propOr('', labelKey, option)}
+            onOpen={handleOpen}
+            onClose={handleClose}
+            getOptionLabel={getOptionLabel}
             options={options}
             loading={loading}
             value={value}

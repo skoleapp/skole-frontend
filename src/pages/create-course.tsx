@@ -106,12 +106,14 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                         name="school"
                         label={t('forms:school')}
                         dataKey="schools"
+                        searchKey="name"
                         document={SchoolsDocument}
                         component={AutoCompleteField}
                     />
                     <Field
                         name="subjects"
                         label={t('forms:subjects')}
+                        searchKey="name"
                         dataKey="subjects"
                         document={SubjectsDocument}
                         component={AutoCompleteField}
