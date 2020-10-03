@@ -22,7 +22,7 @@ export const useSearch = (): UseSearch => {
     const { t } = useTranslation();
     const { userMe } = useAuthContext();
     const placeholder = t('forms:searchCourses');
-    const autoComplete = 'off';
+    const autocomplete = 'off';
     const fullWidth = true;
 
     // Construct a query from user's selected school and subject.
@@ -39,5 +39,5 @@ export const useSearch = (): UseSearch => {
 
     const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
 
-    return { handleSubmit, searchUrl, inputProps: { value, onChange, placeholder, autoComplete, fullWidth } };
+    return { handleSubmit, searchUrl, inputProps: { value, onChange, placeholder, autocomplete, fullWidth } };
 };

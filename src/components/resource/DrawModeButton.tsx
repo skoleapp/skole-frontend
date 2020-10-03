@@ -14,11 +14,11 @@ export const DrawModeButton: React.FC = () => {
 
     return (
         <Tooltip title={t('tooltips:markArea')}>
-            <span>
+            <Typography component="span">
                 <IconButton onClick={handleClick} disabled={controlsDisabled} size="small" color={color}>
                     <TabUnselectedOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 };

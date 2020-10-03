@@ -25,7 +25,7 @@ interface Props {
 }
 
 // A custom auto-complete form field that always fetches translated options from backend.
-export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}>({
+export const AutocompleteField: React.FC<Props & TextFieldProps> = <T extends {}>({
     field,
     form,
     labelKey = 'name',
@@ -100,7 +100,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
         }
     }, [inputValue]);
 
-    const handleAutoCompleteChange = (_e: ChangeEvent<{}>, val: T | T[] | null): void => {
+    const handleAutocompleteChange = (_e: ChangeEvent<{}>, val: T | T[] | null): void => {
         console.log('test');
         !!val ? form.setFieldValue(name, val) : form.setFieldValue(name, null);
     };
@@ -134,7 +134,7 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
             options={options}
             loading={loading}
             value={value}
-            onChange={handleAutoCompleteChange}
+            onChange={handleAutocompleteChange}
             renderInput={renderInput}
             disabled={disabled !== undefined ? disabled : isSubmitting}
             multiple={multiple}

@@ -295,7 +295,7 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
 
     const renderUploadResourceButton = (
         <Tooltip title={uploadResourceButtonTooltip}>
-            <span>
+            <Typography component="span">
                 <IconButtonLink
                     href={{ pathname: urls.uploadResource, query: { school: schoolId, course: courseId } }}
                     icon={CloudUploadOutlined}
@@ -303,7 +303,7 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                     color={isMobileOrTablet ? 'secondary' : 'default'}
                     size="small"
                 />
-            </span>
+            </Typography>
         </Tooltip>
     );
 

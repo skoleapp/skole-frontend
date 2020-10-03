@@ -162,7 +162,7 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
 
     const renderAddCourseButton = (
         <Tooltip title={addCourseTooltip}>
-            <span>
+            <Typography component="span">
                 <IconButtonLink
                     href={{ pathname: urls.createCourse, query: { school: schoolId } }}
                     icon={AddCircleOutlineOutlined}
@@ -170,7 +170,7 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                     color={isMobileOrTablet ? 'secondary' : 'default'}
                     size="small"
                 />
-            </span>
+            </Typography>
         </Tooltip>
     );
 

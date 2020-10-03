@@ -92,21 +92,21 @@ export const useVotes = ({
 
     const renderUpVoteButton = (
         <Tooltip title={upVoteButtonTooltip}>
-            <span>
+            <Typography component="span">
                 <IconButton {...upVoteButtonProps}>
                     <ThumbUpOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
     const renderDownVoteButton = (
         <Tooltip title={downVoteButtonTooltip}>
-            <span>
+            <Typography component="span">
                 <IconButton {...downVoteButtonProps}>
                     <ThumbDownOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 

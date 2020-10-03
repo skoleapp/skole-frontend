@@ -28,21 +28,21 @@ export const CustomTablePaginationActions: React.FC<Props> = ({ count, page, row
     return (
         <Box display="flex" margin="0.5rem">
             <Tooltip title={t('tooltips:firstPage')}>
-                <span>
+                <Typography component="span">
                     <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
                         <FirstPageOutlined />
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
             <Tooltip title={t('tooltips:previousPage')}>
-                <span>
+                <Typography component="span">
                     <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
                         <KeyboardArrowLeftOutlined />
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
             <Tooltip title={t('tooltips:nextPage')}>
-                <span>
+                <Typography component="span">
                     <IconButton
                         onClick={handleNextButtonClick}
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
@@ -50,10 +50,10 @@ export const CustomTablePaginationActions: React.FC<Props> = ({ count, page, row
                     >
                         <KeyboardArrowRightOutlined />
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
             <Tooltip title={t('tooltips:lastPage')}>
-                <span>
+                <Typography component="span">
                     <IconButton
                         onClick={handleLastPageButtonClick}
                         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
@@ -61,7 +61,7 @@ export const CustomTablePaginationActions: React.FC<Props> = ({ count, page, row
                     >
                         <LastPageOutlined />
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
         </Box>
     );

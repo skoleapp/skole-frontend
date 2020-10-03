@@ -1,5 +1,5 @@
 import {
-    AutoCompleteField,
+    AutocompleteField,
     ErrorLayout,
     FormLayout,
     FormSubmitSection,
@@ -10,12 +10,11 @@ import {
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import {
+    AutocompleteSchoolsDocument,
     CreateCourseMutation,
     SchoolObjectType,
-    SchoolsDocument,
     SubjectObjectType,
-    SubjectsDocument,
-    useCreateCourseInitialDataQuery,
+    useCreateCourseAutocompleteDataQuery,
     useCreateCourseMutation,
 } from 'generated';
 import { useForm } from 'hooks';
@@ -40,7 +39,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
     const { query } = useRouter();
-    const { data, loading, error } = useCreateCourseInitialDataQuery({ variables: query });
+    const { data, loading, error } = useCreateCourseAutocompleteDataQuery({ variables: query });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
 
     const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
@@ -107,16 +106,16 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                         label={t('forms:school')}
                         dataKey="schools"
                         searchKey="name"
-                        document={SchoolsDocument}
-                        component={AutoCompleteField}
+                        document={AutocompleteSchoolsDocument}
+                        component={AutocompleteField}
                     />
                     <Field
                         name="subjects"
                         label={t('forms:subjects')}
                         searchKey="name"
                         dataKey="subjects"
-                        document={SubjectsDocument}
-                        component={AutoCompleteField}
+                        document={AutocompleteSchoolsDocument}
+                        component={AutocompleteField}
                         multiple
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />

@@ -18,7 +18,7 @@ import {
 import { ArrowBackOutlined, ClearAllOutlined, FilterListOutlined, SearchOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import {
-    AutoCompleteField,
+    AutocompleteField,
     CourseTableBody,
     DialogHeader,
     ErrorLayout,
@@ -34,17 +34,17 @@ import {
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
-    CitiesDocument,
+    AutocompleteCitiesDocument,
+    AutocompleteCountriesDocument,
+    AutocompleteSchoolsDocument,
+    AutocompleteSchoolTypesDocument,
+    AutocompleteSubjectsDocument,
     CityObjectType,
-    CountriesDocument,
     CountryObjectType,
     CourseObjectType,
     SchoolObjectType,
-    SchoolsDocument,
     SchoolTypeObjectType,
-    SchoolTypesDocument,
     SubjectObjectType,
-    SubjectsDocument,
     useSearchCoursesQuery,
 } from 'generated';
 import { useForm, useMediaQueries, useOpen } from 'hooks';
@@ -272,8 +272,8 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             label={t('forms:subject')}
             dataKey="subjects"
             searchKey="name"
-            document={SubjectsDocument}
-            component={AutoCompleteField}
+            document={AutocompleteSubjectsDocument}
+            component={AutocompleteField}
         />
     );
 
@@ -283,8 +283,8 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             label={t('forms:school')}
             dataKey="schools"
             searchKey="name"
-            document={SchoolsDocument}
-            component={AutoCompleteField}
+            document={AutocompleteSchoolsDocument}
+            component={AutocompleteField}
         />
     );
 
@@ -293,8 +293,8 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             name="schoolType"
             label={t('forms:schoolType')}
             dataKey="schoolTypes"
-            document={SchoolTypesDocument}
-            component={AutoCompleteField}
+            document={AutocompleteSchoolTypesDocument}
+            component={AutocompleteField}
         />
     );
 
@@ -303,8 +303,8 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             name="city"
             label={t('forms:city')}
             dataKey="cities"
-            document={CitiesDocument}
-            component={AutoCompleteField}
+            document={AutocompleteCitiesDocument}
+            component={AutocompleteField}
         />
     );
 
@@ -313,8 +313,8 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             name="country"
             label={t('forms:country')}
             dataKey="countries"
-            document={CountriesDocument}
-            component={AutoCompleteField}
+            document={AutocompleteCountriesDocument}
+            component={AutocompleteField}
         />
     );
 

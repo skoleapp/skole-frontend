@@ -381,7 +381,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     const renderInlineStyles = inlineStyles.map(({ tooltip, icon: Icon, style }, i) => (
         <Tooltip key={i} title={tooltip}>
-            <span>
+            <Typography component="span">
                 <IconButton
                     {...commonToolbarButtonProps}
                     onMouseDown={toggleInlineStyle(style)}
@@ -389,17 +389,17 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                 >
                     <Icon />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     ));
 
     const renderLinkButton = (
         <Tooltip title={t('tooltips:link', { hotkeyLink })}>
-            <span>
+            <Typography component="span">
                 <IconButton {...commonToolbarButtonProps} disabled={selectionCollapsed} onMouseDown={handleLinkPrompt}>
                     <LinkOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
@@ -432,7 +432,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     const renderBlockStyles = blockTypes.map(({ tooltip, icon: Icon, style }, i) => (
         <Tooltip key={i} title={tooltip}>
-            <span>
+            <Typography component="span">
                 <IconButton
                     {...commonToolbarButtonProps}
                     onMouseDown={toggleBlockStyle(style)}
@@ -440,14 +440,14 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                 >
                     <Icon />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     ));
 
     const renderSendButton = (
         <Box marginLeft="auto">
             <Tooltip title={t('tooltips:sendMessage')}>
-                <span>
+                <Typography component="span">
                     <IconButton
                         {...commonToolbarButtonProps}
                         onClick={handleSubmit}
@@ -456,7 +456,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                     >
                         <SendOutlined />
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
         </Box>
     );
@@ -473,11 +473,11 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     const renderMentionButton = (
         <Tooltip title={t('tooltips:mention')}>
-            <span>
+            <Typography component="span">
                 <IconButton {...commonToolbarButtonProps} disabled>
                     <AlternateEmailOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
@@ -492,22 +492,22 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                 disabled={!userMe}
             />
             <Tooltip title={attachmentTooltip}>
-                <span>
+                <Typography component="span">
                     <IconButton onClick={handleUploadAttachment} {...commonToolbarButtonProps} disabled={!verified}>
                         {isMobileOrTablet ? <CameraAltOutlined /> : <AttachFileOutlined />}
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
         </>
     );
 
     const renderClearAttachmentButton = !!commentAttachment && (
         <Tooltip title={t('tooltips:clearAttachment')}>
-            <span>
+            <Typography component="span">
                 <IconButton onClick={handleClearAttachment} {...commonToolbarButtonProps}>
                     <ClearOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 

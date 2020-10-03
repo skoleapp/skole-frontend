@@ -38,7 +38,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
 
     return (
         <Tooltip title={tooltip}>
-            <span>
+            <Typography component="span">
                 <IconButton
                     onClick={handleStar}
                     disabled={starSubmitting || verified === false}
@@ -47,7 +47,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
                 >
                     <StarBorderOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 };

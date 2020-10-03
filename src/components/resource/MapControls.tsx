@@ -45,31 +45,31 @@ export const MapControls: React.FC<Props> = ({
 
     const renderFullscreenButton = (
         <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
-            <span>
+            <Typography component="span">
                 <Fab {...commonButtonProps} onClick={handleFullscreenButtonClick}>
                     {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                 </Fab>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
     const renderDownscaleButton = (
         <Tooltip title={t('tooltips:zoomIn')}>
-            <span>
+            <Typography component="span">
                 <Fab {...commonButtonProps} onClick={handleScaleUpButtonClick}>
                     <AddOutlined />
                 </Fab>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
     const renderUpscaleButton = (
         <Tooltip title={t('tooltips:zoomOut')}>
-            <span>
+            <Typography component="span">
                 <Fab {...commonButtonProps} onClick={handleScaleDownButtonClick}>
                     <RemoveOutlined />
                 </Fab>
-            </span>
+            </Typography>
         </Tooltip>
     );
 

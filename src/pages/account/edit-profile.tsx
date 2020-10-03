@@ -1,6 +1,6 @@
 import { FormControl, FormHelperText, Switch } from '@material-ui/core';
 import {
-    AutoCompleteField,
+    AutocompleteField,
     AvatarField,
     ButtonLink,
     FormSubmitSection,
@@ -14,10 +14,10 @@ import {
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
+    AutocompleteSchoolsDocument,
+    AutocompleteSubjectsDocument,
     SchoolObjectType,
-    SchoolsDocument,
     SubjectObjectType,
-    SubjectsDocument,
     UpdateUserMutation,
     UserObjectType,
     useUpdateUserMutation,
@@ -105,8 +105,8 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
             label={t('forms:schoolOptional')}
             dataKey="schools"
             searchKey="name"
-            document={SchoolsDocument}
-            component={AutoCompleteField}
+            document={AutocompleteSchoolsDocument}
+            component={AutocompleteField}
             helperText={t('forms:schoolHelpText')}
         />
     );
@@ -117,8 +117,8 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
             label={t('forms:subjectOptional')}
             dataKey="subjects"
             searchKey="name"
-            document={SubjectsDocument}
-            component={AutoCompleteField}
+            document={AutocompleteSubjectsDocument}
+            component={AutocompleteField}
             helperText={t('forms:subjectHelpText')}
         />
     );

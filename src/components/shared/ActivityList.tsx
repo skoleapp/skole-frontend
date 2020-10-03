@@ -1,12 +1,7 @@
 import { Avatar, List, ListItem, ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import { useAuthContext, useNotificationsContext } from 'context';
-import {
-    ActivityObjectType,
-    MarkSingleActivityReadMutation,
-    useMarkSingleActivityReadMutation,
-    UserObjectType,
-} from 'generated';
+import { ActivityObjectType, MarkActivityReadMutation, useMarkActivityReadMutation, UserObjectType } from 'generated';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { useState } from 'react';
@@ -59,7 +54,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
     const { toggleNotification } = useNotificationsContext();
     const onError = (): void => toggleNotification(t('notifications:markSingleActivityReadError'));
 
-    const onCompleted = ({ markActivityRead }: MarkSingleActivityReadMutation): void => {
+    const onCompleted = ({ markActivityRead }: MarkActivityReadMutation): void => {
         if (!!markActivityRead) {
             if (!!markActivityRead.errors && !!markActivityRead.errors.length) {
                 onError();
@@ -75,7 +70,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
         }
     };
 
-    const [markSingleActivityRead] = useMarkSingleActivityReadMutation({ onCompleted, onError });
+    const [markSingleActivityRead] = useMarkActivityReadMutation({ onCompleted, onError });
 
     const handleClick = ({ id, ...activity }: ActivityObjectType) => async (): Promise<void> => {
         const { pathname, query } = getHref(activity);
@@ -111,7 +106,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
             onClick={handleClick(activity)}
             key={i}
             button
-            className={clsx('border-bottom', !!read && classes.unread)}
+            className={clsx('border-bottom', !read && classes.unread)}
         >
             {renderAvatar(targetUser)}
             <ListItemText primary={renderTargetUserLink(targetUser)} secondary={description} />

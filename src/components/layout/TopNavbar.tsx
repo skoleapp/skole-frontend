@@ -167,13 +167,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
             </Tooltip>
             <Tooltip title={t('tooltips:profile')}>
-                <span>
+                <Typography component="span">
                     <Link href={urls.user} as={`/users/${userMeId}`}>
                         <IconButton color="secondary">
                             <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
                         </IconButton>
                     </Link>
-                </span>
+                </Typography>
             </Tooltip>
         </>
     );

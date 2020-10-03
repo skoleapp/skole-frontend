@@ -1,5 +1,5 @@
 import {
-    AutoCompleteField,
+    AutocompleteField,
     ErrorLayout,
     FileField,
     FormLayout,
@@ -12,13 +12,13 @@ import {
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import {
+    AutocompleteCoursesDocument,
+    AutocompleteResourceTypesDocument,
+    AutocompleteSchoolTypesDocument,
     CourseObjectType,
-    CoursesDocument,
     CreateResourceMutation,
-    ResourceTypesDocument,
     SchoolObjectType,
-    SchoolsDocument,
-    useCreateResourceInitialDataQuery,
+    useCreateResourceAutocompleteDataQuery,
     useCreateResourceMutation,
 } from 'generated';
 import { useForm } from 'hooks';
@@ -44,7 +44,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
-    const { data, loading, error } = useCreateResourceInitialDataQuery({ variables: query });
+    const { data, loading, error } = useCreateResourceAutocompleteDataQuery({ variables: query });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const course: CourseObjectType = R.propOr(null, 'course', data);
 
@@ -154,8 +154,8 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                         name="resourceType"
                         label={t('forms:resourceType')}
                         dataKey="resourceTypes"
-                        document={ResourceTypesDocument}
-                        component={AutoCompleteField}
+                        document={AutocompleteResourceTypesDocument}
+                        component={AutocompleteField}
                         disableSearch
                     />
                     <Field
@@ -163,8 +163,8 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                         label={t('forms:schoolOptional')}
                         dataKey="schools"
                         searchKey="name"
-                        document={SchoolsDocument}
-                        component={AutoCompleteField}
+                        document={AutocompleteSchoolTypesDocument}
+                        component={AutocompleteField}
                         helperText={
                             <>
                                 {t('upload-resource:schoolHelperText')}{' '}
@@ -177,8 +177,8 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                         label={t('forms:course')}
                         dataKey="courses"
                         searchKey="name"
-                        document={CoursesDocument}
-                        component={AutoCompleteField}
+                        document={AutocompleteCoursesDocument}
+                        component={AutocompleteField}
                         variables={{ school: R.pathOr(undefined, ['values', 'school', 'id'], props) }} // Filter courses based on selected school.
                         helperText={
                             <>

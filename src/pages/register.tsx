@@ -1,7 +1,7 @@
 import { Button, FormControl, FormHelperText, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
-    AutoCompleteField,
+    AutocompleteField,
     ButtonLink,
     FormLayout,
     FormSubmitSection,
@@ -13,11 +13,11 @@ import {
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
+    AutocompleteSchoolsDocument,
+    AutocompleteSubjectsDocument,
     RegisterMutation,
     SchoolObjectType,
-    SchoolsDocument,
     SubjectObjectType,
-    SubjectsDocument,
     UpdateUserMutation,
     useRegisterMutation,
     UserObjectType,
@@ -285,8 +285,8 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             label={t('forms:schoolOptional')}
             dataKey="schools"
             searchKey="name"
-            document={SchoolsDocument}
-            component={AutoCompleteField}
+            document={AutocompleteSchoolsDocument}
+            component={AutocompleteField}
         />
     );
 
@@ -296,8 +296,8 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
             label={t('forms:subjectOptional')}
             dataKey="subjects"
             searchKey="name"
-            document={SubjectsDocument}
-            component={AutoCompleteField}
+            document={AutocompleteSubjectsDocument}
+            component={AutocompleteField}
         />
     );
 
