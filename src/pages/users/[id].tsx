@@ -36,12 +36,11 @@ import {
     CourseObjectType,
     ResourceObjectType,
     ResourceTypeObjectType,
-    UserDetailDocument,
-    UserDetailQueryResult,
     UserObjectType,
+    useUserQuery,
 } from 'generated';
-import { useDayjs, useFrontendPagination, useMediaQueries, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, initApolloClient, useTranslation, withUserMe } from 'lib';
+import { useDayjs, useFrontendPagination, useMediaQueries, useQueryOptions, useSwipeableTabs } from 'hooks';
+import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -84,14 +83,18 @@ const useStyles = makeStyles(({ spacing }) => ({
     },
 }));
 
-const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, authLoading, authNetworkError }) => {
+const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { spacing } = useTheme();
     const classes = useStyles();
-    const { isFallback } = useRouter();
     const { isMobile, isDesktop } = useMediaQueries();
     const { t } = useTranslation();
+    const { isFallback } = useRouter();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
+    const queryOptions = useQueryOptions();
+    const { data, loading: userDataLoading, error } = useUserQuery(queryOptions);
+    const loading = authLoading || isFallback || userDataLoading;
+    const networkError = (!!error && !!error.networkError) || !!authNetworkError;
     const user: UserObjectType = R.propOr(null, 'user', data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const rank = R.propOr('', 'rank', user) as string;
@@ -111,8 +114,8 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
     const notFound = t('profile:notFound');
-    const seoTitle = !!user ? username : !isFallback ? notFound : '';
-    const description = !!user ? t('profile:description', { username }) : !isFallback ? notFound : '';
+    const seoTitle = !!user ? username : !loading ? notFound : '';
+    const description = !!user ? t('profile:description', { username }) : !loading ? notFound : '';
     const coursesTabLabel = isOwnProfile ? t('profile:ownProfileCourses') : t('common:courses');
     const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
     const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
@@ -452,11 +455,11 @@ const UserPage: NextPage<UserDetailQueryResult & AuthProps> = ({ data, error, au
         },
     };
 
-    if (isFallback || authLoading) {
+    if (loading) {
         return <LoadingLayout seoProps={seoProps} />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
+    if (networkError) {
         return <OfflineLayout seoProps={seoProps} />;
     } else if (!!error) {
         return <ErrorLayout seoProps={seoProps} />;
@@ -482,17 +485,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const apolloClient = initApolloClient();
-    const result = await apolloClient.query({ query: UserDetailDocument, variables: params });
-
-    return {
-        props: {
-            ...result,
-            namespacesRequired: includeDefaultNamespaces(['profile']),
-        },
-        revalidate: 1,
-    };
-};
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        namespacesRequired: includeDefaultNamespaces(['profile']),
+    },
+    revalidate: 1,
+});
 
 export default withUserMe(UserPage);
