@@ -27,20 +27,21 @@ export type Query = {
   __typename?: 'Query';
   user?: Maybe<UserObjectType>;
   userMe?: Maybe<UserObjectType>;
-  subjects?: Maybe<Array<Maybe<SubjectObjectType>>>;
+  autocompleteSubjects?: Maybe<Array<Maybe<SubjectObjectType>>>;
   subject?: Maybe<SubjectObjectType>;
-  schoolTypes?: Maybe<Array<Maybe<SchoolTypeObjectType>>>;
+  autocompleteSchoolTypes?: Maybe<Array<Maybe<SchoolTypeObjectType>>>;
   schoolType?: Maybe<SchoolTypeObjectType>;
-  schools?: Maybe<Array<Maybe<SchoolObjectType>>>;
+  autocompleteSchools?: Maybe<Array<Maybe<SchoolObjectType>>>;
   school?: Maybe<SchoolObjectType>;
   resourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>;
+  autocompleteResourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>;
   resource?: Maybe<ResourceObjectType>;
-  courses?: Maybe<Array<Maybe<CourseObjectType>>>;
-  paginatedCourses?: Maybe<PaginatedCourseObjectType>;
+  searchCourses?: Maybe<PaginatedCourseObjectType>;
+  autocompleteCourses?: Maybe<Array<Maybe<CourseObjectType>>>;
   course?: Maybe<CourseObjectType>;
-  countries?: Maybe<Array<Maybe<CountryObjectType>>>;
+  autocompleteCountries?: Maybe<Array<Maybe<CountryObjectType>>>;
   country?: Maybe<CountryObjectType>;
-  cities?: Maybe<Array<Maybe<CityObjectType>>>;
+  autocompleteCities?: Maybe<Array<Maybe<CityObjectType>>>;
   city?: Maybe<CityObjectType>;
 };
 
@@ -50,7 +51,7 @@ export type QueryUserArgs = {
 };
 
 
-export type QuerySubjectsArgs = {
+export type QueryAutocompleteSubjectsArgs = {
   name?: Maybe<Scalars['String']>;
 };
 
@@ -65,7 +66,7 @@ export type QuerySchoolTypeArgs = {
 };
 
 
-export type QuerySchoolsArgs = {
+export type QueryAutocompleteSchoolsArgs = {
   name?: Maybe<Scalars['String']>;
 };
 
@@ -80,13 +81,7 @@ export type QueryResourceArgs = {
 };
 
 
-export type QueryCoursesArgs = {
-  school?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryPaginatedCoursesArgs = {
+export type QuerySearchCoursesArgs = {
   courseName?: Maybe<Scalars['String']>;
   courseCode?: Maybe<Scalars['String']>;
   subject?: Maybe<Scalars['ID']>;
@@ -97,6 +92,12 @@ export type QueryPaginatedCoursesArgs = {
   page?: Maybe<Scalars['Int']>;
   pageSize?: Maybe<Scalars['Int']>;
   ordering?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryAutocompleteCoursesArgs = {
+  school?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 
@@ -995,12 +996,12 @@ export type ChangePasswordMutation = (
   )> }
 );
 
-export type DeleteAccountMutationVariables = Exact<{
+export type DeleteUserMutationVariables = Exact<{
   password: Scalars['String'];
 }>;
 
 
-export type DeleteAccountMutation = (
+export type DeleteUserMutation = (
   { __typename?: 'Mutation' }
   & { deleteUser?: Maybe<(
     { __typename?: 'DeleteUserMutationPayload' }
@@ -1111,7 +1112,7 @@ export type DeleteCommentMutation = (
   )> }
 );
 
-export type ContactMutationVariables = Exact<{
+export type CreateContactMessageMutationVariables = Exact<{
   subject: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   email: Scalars['String'];
@@ -1119,7 +1120,7 @@ export type ContactMutationVariables = Exact<{
 }>;
 
 
-export type ContactMutation = (
+export type CreateContactMessageMutation = (
   { __typename?: 'Mutation' }
   & { createContactMessage?: Maybe<(
     { __typename?: 'ContactMutationPayload' }
@@ -1211,13 +1212,13 @@ export type DeleteResourceMutation = (
   )> }
 );
 
-export type MarkSingleActivityReadMutationVariables = Exact<{
+export type MarkActivityReadMutationVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
   read?: Maybe<Scalars['Boolean']>;
 }>;
 
 
-export type MarkSingleActivityReadMutation = (
+export type MarkActivityReadMutation = (
   { __typename?: 'Mutation' }
   & { markActivityRead?: Maybe<(
     { __typename?: 'MarkActivityReadMutationPayload' }
@@ -1370,7 +1371,7 @@ export type SearchCoursesQueryVariables = Exact<{
 
 export type SearchCoursesQuery = (
   { __typename?: 'Query' }
-  & { paginatedCourses?: Maybe<(
+  & { searchCourses?: Maybe<(
     { __typename?: 'PaginatedCourseObjectType' }
     & Pick<PaginatedCourseObjectType, 'page' | 'pages' | 'hasPrev' | 'hasNext' | 'count'>
     & { objects?: Maybe<Array<Maybe<(
@@ -1395,12 +1396,12 @@ export type SearchCoursesQuery = (
   )> }
 );
 
-export type CourseDetailQueryVariables = Exact<{
+export type CourseQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
 }>;
 
 
-export type CourseDetailQuery = (
+export type CourseQuery = (
   { __typename?: 'Query' }
   & { course?: Maybe<(
     { __typename?: 'CourseObjectType' }
@@ -1451,12 +1452,12 @@ export type CourseDetailQuery = (
   )>>> }
 );
 
-export type ResourceDetailQueryVariables = Exact<{
+export type ResourceQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
 }>;
 
 
-export type ResourceDetailQuery = (
+export type ResourceQuery = (
   { __typename?: 'Query' }
   & { resource?: Maybe<(
     { __typename?: 'ResourceObjectType' }
@@ -1500,12 +1501,12 @@ export type ResourceDetailQuery = (
   )> }
 );
 
-export type SchoolDetailQueryVariables = Exact<{
+export type SchoolQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
 }>;
 
 
-export type SchoolDetailQuery = (
+export type SchoolQuery = (
   { __typename?: 'Query' }
   & { school?: Maybe<(
     { __typename?: 'SchoolObjectType' }
@@ -1529,13 +1530,13 @@ export type SchoolDetailQuery = (
   )> }
 );
 
-export type CreateResourceInitialDataQueryVariables = Exact<{
+export type CreateResourceAutocompleteDataQueryVariables = Exact<{
   school?: Maybe<Scalars['ID']>;
   course?: Maybe<Scalars['ID']>;
 }>;
 
 
-export type CreateResourceInitialDataQuery = (
+export type CreateResourceAutocompleteDataQuery = (
   { __typename?: 'Query' }
   & { school?: Maybe<(
     { __typename?: 'SchoolObjectType' }
@@ -1546,12 +1547,12 @@ export type CreateResourceInitialDataQuery = (
   )> }
 );
 
-export type CreateCourseInitialDataQueryVariables = Exact<{
+export type CreateCourseAutocompleteDataQueryVariables = Exact<{
   school?: Maybe<Scalars['ID']>;
 }>;
 
 
-export type CreateCourseInitialDataQuery = (
+export type CreateCourseAutocompleteDataQuery = (
   { __typename?: 'Query' }
   & { school?: Maybe<(
     { __typename?: 'SchoolObjectType' }
@@ -1559,83 +1560,83 @@ export type CreateCourseInitialDataQuery = (
   )> }
 );
 
-export type SchoolsQueryVariables = Exact<{
+export type AutocompleteSchoolsQueryVariables = Exact<{
   name?: Maybe<Scalars['String']>;
 }>;
 
 
-export type SchoolsQuery = (
+export type AutocompleteSchoolsQuery = (
   { __typename?: 'Query' }
-  & { schools?: Maybe<Array<Maybe<(
+  & { autocompleteSchools?: Maybe<Array<Maybe<(
     { __typename?: 'SchoolObjectType' }
     & Pick<SchoolObjectType, 'id' | 'name'>
   )>>> }
 );
 
-export type SchoolTypesQueryVariables = Exact<{ [key: string]: never; }>;
+export type AutocompleteSchoolTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SchoolTypesQuery = (
+export type AutocompleteSchoolTypesQuery = (
   { __typename?: 'Query' }
-  & { schoolTypes?: Maybe<Array<Maybe<(
+  & { autocompleteSchoolTypes?: Maybe<Array<Maybe<(
     { __typename?: 'SchoolTypeObjectType' }
     & Pick<SchoolTypeObjectType, 'id' | 'name'>
   )>>> }
 );
 
-export type CoursesQueryVariables = Exact<{
+export type AutocompleteCoursesQueryVariables = Exact<{
   school?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
 }>;
 
 
-export type CoursesQuery = (
+export type AutocompleteCoursesQuery = (
   { __typename?: 'Query' }
-  & { courses?: Maybe<Array<Maybe<(
+  & { autocompleteCourses?: Maybe<Array<Maybe<(
     { __typename?: 'CourseObjectType' }
     & Pick<CourseObjectType, 'id' | 'name'>
   )>>> }
 );
 
-export type CountriesQueryVariables = Exact<{ [key: string]: never; }>;
+export type AutocompleteCountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CountriesQuery = (
+export type AutocompleteCountriesQuery = (
   { __typename?: 'Query' }
-  & { countries?: Maybe<Array<Maybe<(
+  & { autocompleteCountries?: Maybe<Array<Maybe<(
     { __typename?: 'CountryObjectType' }
     & Pick<CountryObjectType, 'id' | 'name'>
   )>>> }
 );
 
-export type CitiesQueryVariables = Exact<{ [key: string]: never; }>;
+export type AutocompleteCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CitiesQuery = (
+export type AutocompleteCitiesQuery = (
   { __typename?: 'Query' }
-  & { cities?: Maybe<Array<Maybe<(
+  & { autocompleteCities?: Maybe<Array<Maybe<(
     { __typename?: 'CityObjectType' }
     & Pick<CityObjectType, 'id' | 'name'>
   )>>> }
 );
 
-export type ResourceTypesQueryVariables = Exact<{ [key: string]: never; }>;
+export type AutocompleteResourceTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ResourceTypesQuery = (
+export type AutocompleteResourceTypesQuery = (
   { __typename?: 'Query' }
-  & { resourceTypes?: Maybe<Array<Maybe<(
+  & { autocompleteResourceTypes?: Maybe<Array<Maybe<(
     { __typename?: 'ResourceTypeObjectType' }
     & Pick<ResourceTypeObjectType, 'id' | 'name'>
   )>>> }
 );
 
-export type SubjectsQueryVariables = Exact<{ [key: string]: never; }>;
+export type AutocompleteSubjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubjectsQuery = (
+export type AutocompleteSubjectsQuery = (
   { __typename?: 'Query' }
-  & { subjects?: Maybe<Array<Maybe<(
+  & { autocompleteSubjects?: Maybe<Array<Maybe<(
     { __typename?: 'SubjectObjectType' }
     & Pick<SubjectObjectType, 'id' | 'name'>
   )>>> }
@@ -1991,8 +1992,8 @@ export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
-export const DeleteAccountDocument = gql`
-    mutation DeleteAccount($password: String!) {
+export const DeleteUserDocument = gql`
+    mutation DeleteUser($password: String!) {
   deleteUser(input: {password: $password}) {
     message
     errors {
@@ -2002,31 +2003,31 @@ export const DeleteAccountDocument = gql`
   }
 }
     `;
-export type DeleteAccountMutationFn = Apollo.MutationFunction<DeleteAccountMutation, DeleteAccountMutationVariables>;
+export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, DeleteUserMutationVariables>;
 
 /**
- * __useDeleteAccountMutation__
+ * __useDeleteUserMutation__
  *
- * To run a mutation, you first call `useDeleteAccountMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteAccountMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteAccountMutation, { data, loading, error }] = useDeleteAccountMutation({
+ * const [deleteUserMutation, { data, loading, error }] = useDeleteUserMutation({
  *   variables: {
  *      password: // value for 'password'
  *   },
  * });
  */
-export function useDeleteAccountMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAccountMutation, DeleteAccountMutationVariables>) {
-        return Apollo.useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(DeleteAccountDocument, baseOptions);
+export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>) {
+        return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument, baseOptions);
       }
-export type DeleteAccountMutationHookResult = ReturnType<typeof useDeleteAccountMutation>;
-export type DeleteAccountMutationResult = Apollo.MutationResult<DeleteAccountMutation>;
-export type DeleteAccountMutationOptions = Apollo.BaseMutationOptions<DeleteAccountMutation, DeleteAccountMutationVariables>;
+export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
+export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
+export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
 export const PerformStarDocument = gql`
     mutation PerformStar($course: ID, $resource: ID) {
   performStar(input: {course: $course, resource: $resource}) {
@@ -2217,8 +2218,8 @@ export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
 export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
 export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
-export const ContactDocument = gql`
-    mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
+export const CreateContactMessageDocument = gql`
+    mutation CreateContactMessage($subject: String!, $name: String, $email: String!, $message: String!) {
   createContactMessage(input: {subject: $subject, name: $name, email: $email, message: $message}) {
     message
     errors {
@@ -2228,20 +2229,20 @@ export const ContactDocument = gql`
   }
 }
     `;
-export type ContactMutationFn = Apollo.MutationFunction<ContactMutation, ContactMutationVariables>;
+export type CreateContactMessageMutationFn = Apollo.MutationFunction<CreateContactMessageMutation, CreateContactMessageMutationVariables>;
 
 /**
- * __useContactMutation__
+ * __useCreateContactMessageMutation__
  *
- * To run a mutation, you first call `useContactMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useContactMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateContactMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateContactMessageMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [contactMutation, { data, loading, error }] = useContactMutation({
+ * const [createContactMessageMutation, { data, loading, error }] = useCreateContactMessageMutation({
  *   variables: {
  *      subject: // value for 'subject'
  *      name: // value for 'name'
@@ -2250,12 +2251,12 @@ export type ContactMutationFn = Apollo.MutationFunction<ContactMutation, Contact
  *   },
  * });
  */
-export function useContactMutation(baseOptions?: Apollo.MutationHookOptions<ContactMutation, ContactMutationVariables>) {
-        return Apollo.useMutation<ContactMutation, ContactMutationVariables>(ContactDocument, baseOptions);
+export function useCreateContactMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateContactMessageMutation, CreateContactMessageMutationVariables>) {
+        return Apollo.useMutation<CreateContactMessageMutation, CreateContactMessageMutationVariables>(CreateContactMessageDocument, baseOptions);
       }
-export type ContactMutationHookResult = ReturnType<typeof useContactMutation>;
-export type ContactMutationResult = Apollo.MutationResult<ContactMutation>;
-export type ContactMutationOptions = Apollo.BaseMutationOptions<ContactMutation, ContactMutationVariables>;
+export type CreateContactMessageMutationHookResult = ReturnType<typeof useCreateContactMessageMutation>;
+export type CreateContactMessageMutationResult = Apollo.MutationResult<CreateContactMessageMutation>;
+export type CreateContactMessageMutationOptions = Apollo.BaseMutationOptions<CreateContactMessageMutation, CreateContactMessageMutationVariables>;
 export const CreateCourseDocument = gql`
     mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
   createCourse(input: {name: $courseName, code: $courseCode, subjects: $subjects, school: $school}) {
@@ -2412,8 +2413,8 @@ export function useDeleteResourceMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteResourceMutationHookResult = ReturnType<typeof useDeleteResourceMutation>;
 export type DeleteResourceMutationResult = Apollo.MutationResult<DeleteResourceMutation>;
 export type DeleteResourceMutationOptions = Apollo.BaseMutationOptions<DeleteResourceMutation, DeleteResourceMutationVariables>;
-export const MarkSingleActivityReadDocument = gql`
-    mutation MarkSingleActivityRead($id: ID, $read: Boolean) {
+export const MarkActivityReadDocument = gql`
+    mutation MarkActivityRead($id: ID, $read: Boolean) {
   markActivityRead(input: {id: $id, read: $read}) {
     errors {
       field
@@ -2441,32 +2442,32 @@ export const MarkSingleActivityReadDocument = gql`
   }
 }
     `;
-export type MarkSingleActivityReadMutationFn = Apollo.MutationFunction<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>;
+export type MarkActivityReadMutationFn = Apollo.MutationFunction<MarkActivityReadMutation, MarkActivityReadMutationVariables>;
 
 /**
- * __useMarkSingleActivityReadMutation__
+ * __useMarkActivityReadMutation__
  *
- * To run a mutation, you first call `useMarkSingleActivityReadMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMarkSingleActivityReadMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useMarkActivityReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkActivityReadMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [markSingleActivityReadMutation, { data, loading, error }] = useMarkSingleActivityReadMutation({
+ * const [markActivityReadMutation, { data, loading, error }] = useMarkActivityReadMutation({
  *   variables: {
  *      id: // value for 'id'
  *      read: // value for 'read'
  *   },
  * });
  */
-export function useMarkSingleActivityReadMutation(baseOptions?: Apollo.MutationHookOptions<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>) {
-        return Apollo.useMutation<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>(MarkSingleActivityReadDocument, baseOptions);
+export function useMarkActivityReadMutation(baseOptions?: Apollo.MutationHookOptions<MarkActivityReadMutation, MarkActivityReadMutationVariables>) {
+        return Apollo.useMutation<MarkActivityReadMutation, MarkActivityReadMutationVariables>(MarkActivityReadDocument, baseOptions);
       }
-export type MarkSingleActivityReadMutationHookResult = ReturnType<typeof useMarkSingleActivityReadMutation>;
-export type MarkSingleActivityReadMutationResult = Apollo.MutationResult<MarkSingleActivityReadMutation>;
-export type MarkSingleActivityReadMutationOptions = Apollo.BaseMutationOptions<MarkSingleActivityReadMutation, MarkSingleActivityReadMutationVariables>;
+export type MarkActivityReadMutationHookResult = ReturnType<typeof useMarkActivityReadMutation>;
+export type MarkActivityReadMutationResult = Apollo.MutationResult<MarkActivityReadMutation>;
+export type MarkActivityReadMutationOptions = Apollo.BaseMutationOptions<MarkActivityReadMutation, MarkActivityReadMutationVariables>;
 export const MarkAllActivitiesAsReadDocument = gql`
     mutation MarkAllActivitiesAsRead {
   markAllActivitiesRead {
@@ -2698,7 +2699,7 @@ export type UserDetailLazyQueryHookResult = ReturnType<typeof useUserDetailLazyQ
 export type UserDetailQueryResult = Apollo.QueryResult<UserDetailQuery, UserDetailQueryVariables>;
 export const SearchCoursesDocument = gql`
     query SearchCourses($courseName: String, $courseCode: String, $school: ID, $subject: ID, $schoolType: ID, $country: ID, $city: ID, $ordering: String, $page: Int, $pageSize: Int) {
-  paginatedCourses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {
+  searchCourses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {
     page
     pages
     hasPrev
@@ -2768,8 +2769,8 @@ export function useSearchCoursesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type SearchCoursesQueryHookResult = ReturnType<typeof useSearchCoursesQuery>;
 export type SearchCoursesLazyQueryHookResult = ReturnType<typeof useSearchCoursesLazyQuery>;
 export type SearchCoursesQueryResult = Apollo.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
-export const CourseDetailDocument = gql`
-    query CourseDetail($id: ID) {
+export const CourseDocument = gql`
+    query Course($id: ID) {
   course(id: $id) {
     id
     name
@@ -2847,32 +2848,32 @@ export const CourseDetailDocument = gql`
     `;
 
 /**
- * __useCourseDetailQuery__
+ * __useCourseQuery__
  *
- * To run a query within a React component, call `useCourseDetailQuery` and pass it any options that fit your needs.
- * When your component renders, `useCourseDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCourseQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCourseQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCourseDetailQuery({
+ * const { data, loading, error } = useCourseQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useCourseDetailQuery(baseOptions?: Apollo.QueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
-        return Apollo.useQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
+export function useCourseQuery(baseOptions?: Apollo.QueryHookOptions<CourseQuery, CourseQueryVariables>) {
+        return Apollo.useQuery<CourseQuery, CourseQueryVariables>(CourseDocument, baseOptions);
       }
-export function useCourseDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CourseDetailQuery, CourseDetailQueryVariables>) {
-          return Apollo.useLazyQuery<CourseDetailQuery, CourseDetailQueryVariables>(CourseDetailDocument, baseOptions);
+export function useCourseLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CourseQuery, CourseQueryVariables>) {
+          return Apollo.useLazyQuery<CourseQuery, CourseQueryVariables>(CourseDocument, baseOptions);
         }
-export type CourseDetailQueryHookResult = ReturnType<typeof useCourseDetailQuery>;
-export type CourseDetailLazyQueryHookResult = ReturnType<typeof useCourseDetailLazyQuery>;
-export type CourseDetailQueryResult = Apollo.QueryResult<CourseDetailQuery, CourseDetailQueryVariables>;
-export const ResourceDetailDocument = gql`
-    query ResourceDetail($id: ID) {
+export type CourseQueryHookResult = ReturnType<typeof useCourseQuery>;
+export type CourseLazyQueryHookResult = ReturnType<typeof useCourseLazyQuery>;
+export type CourseQueryResult = Apollo.QueryResult<CourseQuery, CourseQueryVariables>;
+export const ResourceDocument = gql`
+    query Resource($id: ID) {
   resource(id: $id) {
     id
     title
@@ -2941,32 +2942,32 @@ export const ResourceDetailDocument = gql`
     `;
 
 /**
- * __useResourceDetailQuery__
+ * __useResourceQuery__
  *
- * To run a query within a React component, call `useResourceDetailQuery` and pass it any options that fit your needs.
- * When your component renders, `useResourceDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useResourceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useResourceQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useResourceDetailQuery({
+ * const { data, loading, error } = useResourceQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useResourceDetailQuery(baseOptions?: Apollo.QueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
-        return Apollo.useQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
+export function useResourceQuery(baseOptions?: Apollo.QueryHookOptions<ResourceQuery, ResourceQueryVariables>) {
+        return Apollo.useQuery<ResourceQuery, ResourceQueryVariables>(ResourceDocument, baseOptions);
       }
-export function useResourceDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResourceDetailQuery, ResourceDetailQueryVariables>) {
-          return Apollo.useLazyQuery<ResourceDetailQuery, ResourceDetailQueryVariables>(ResourceDetailDocument, baseOptions);
+export function useResourceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResourceQuery, ResourceQueryVariables>) {
+          return Apollo.useLazyQuery<ResourceQuery, ResourceQueryVariables>(ResourceDocument, baseOptions);
         }
-export type ResourceDetailQueryHookResult = ReturnType<typeof useResourceDetailQuery>;
-export type ResourceDetailLazyQueryHookResult = ReturnType<typeof useResourceDetailLazyQuery>;
-export type ResourceDetailQueryResult = Apollo.QueryResult<ResourceDetailQuery, ResourceDetailQueryVariables>;
-export const SchoolDetailDocument = gql`
-    query SchoolDetail($id: ID) {
+export type ResourceQueryHookResult = ReturnType<typeof useResourceQuery>;
+export type ResourceLazyQueryHookResult = ReturnType<typeof useResourceLazyQuery>;
+export type ResourceQueryResult = Apollo.QueryResult<ResourceQuery, ResourceQueryVariables>;
+export const SchoolDocument = gql`
+    query School($id: ID) {
   school(id: $id) {
     id
     name
@@ -2997,32 +2998,32 @@ export const SchoolDetailDocument = gql`
     `;
 
 /**
- * __useSchoolDetailQuery__
+ * __useSchoolQuery__
  *
- * To run a query within a React component, call `useSchoolDetailQuery` and pass it any options that fit your needs.
- * When your component renders, `useSchoolDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSchoolQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchoolQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSchoolDetailQuery({
+ * const { data, loading, error } = useSchoolQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useSchoolDetailQuery(baseOptions?: Apollo.QueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
-        return Apollo.useQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
+export function useSchoolQuery(baseOptions?: Apollo.QueryHookOptions<SchoolQuery, SchoolQueryVariables>) {
+        return Apollo.useQuery<SchoolQuery, SchoolQueryVariables>(SchoolDocument, baseOptions);
       }
-export function useSchoolDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchoolDetailQuery, SchoolDetailQueryVariables>) {
-          return Apollo.useLazyQuery<SchoolDetailQuery, SchoolDetailQueryVariables>(SchoolDetailDocument, baseOptions);
+export function useSchoolLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchoolQuery, SchoolQueryVariables>) {
+          return Apollo.useLazyQuery<SchoolQuery, SchoolQueryVariables>(SchoolDocument, baseOptions);
         }
-export type SchoolDetailQueryHookResult = ReturnType<typeof useSchoolDetailQuery>;
-export type SchoolDetailLazyQueryHookResult = ReturnType<typeof useSchoolDetailLazyQuery>;
-export type SchoolDetailQueryResult = Apollo.QueryResult<SchoolDetailQuery, SchoolDetailQueryVariables>;
-export const CreateResourceInitialDataDocument = gql`
-    query CreateResourceInitialData($school: ID, $course: ID) {
+export type SchoolQueryHookResult = ReturnType<typeof useSchoolQuery>;
+export type SchoolLazyQueryHookResult = ReturnType<typeof useSchoolLazyQuery>;
+export type SchoolQueryResult = Apollo.QueryResult<SchoolQuery, SchoolQueryVariables>;
+export const CreateResourceAutocompleteDataDocument = gql`
+    query CreateResourceAutocompleteData($school: ID, $course: ID) {
   school(id: $school) {
     id
     name
@@ -3035,33 +3036,33 @@ export const CreateResourceInitialDataDocument = gql`
     `;
 
 /**
- * __useCreateResourceInitialDataQuery__
+ * __useCreateResourceAutocompleteDataQuery__
  *
- * To run a query within a React component, call `useCreateResourceInitialDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useCreateResourceInitialDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCreateResourceAutocompleteDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreateResourceAutocompleteDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCreateResourceInitialDataQuery({
+ * const { data, loading, error } = useCreateResourceAutocompleteDataQuery({
  *   variables: {
  *      school: // value for 'school'
  *      course: // value for 'course'
  *   },
  * });
  */
-export function useCreateResourceInitialDataQuery(baseOptions?: Apollo.QueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
-        return Apollo.useQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
+export function useCreateResourceAutocompleteDataQuery(baseOptions?: Apollo.QueryHookOptions<CreateResourceAutocompleteDataQuery, CreateResourceAutocompleteDataQueryVariables>) {
+        return Apollo.useQuery<CreateResourceAutocompleteDataQuery, CreateResourceAutocompleteDataQueryVariables>(CreateResourceAutocompleteDataDocument, baseOptions);
       }
-export function useCreateResourceInitialDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>) {
-          return Apollo.useLazyQuery<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>(CreateResourceInitialDataDocument, baseOptions);
+export function useCreateResourceAutocompleteDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateResourceAutocompleteDataQuery, CreateResourceAutocompleteDataQueryVariables>) {
+          return Apollo.useLazyQuery<CreateResourceAutocompleteDataQuery, CreateResourceAutocompleteDataQueryVariables>(CreateResourceAutocompleteDataDocument, baseOptions);
         }
-export type CreateResourceInitialDataQueryHookResult = ReturnType<typeof useCreateResourceInitialDataQuery>;
-export type CreateResourceInitialDataLazyQueryHookResult = ReturnType<typeof useCreateResourceInitialDataLazyQuery>;
-export type CreateResourceInitialDataQueryResult = Apollo.QueryResult<CreateResourceInitialDataQuery, CreateResourceInitialDataQueryVariables>;
-export const CreateCourseInitialDataDocument = gql`
-    query CreateCourseInitialData($school: ID) {
+export type CreateResourceAutocompleteDataQueryHookResult = ReturnType<typeof useCreateResourceAutocompleteDataQuery>;
+export type CreateResourceAutocompleteDataLazyQueryHookResult = ReturnType<typeof useCreateResourceAutocompleteDataLazyQuery>;
+export type CreateResourceAutocompleteDataQueryResult = Apollo.QueryResult<CreateResourceAutocompleteDataQuery, CreateResourceAutocompleteDataQueryVariables>;
+export const CreateCourseAutocompleteDataDocument = gql`
+    query CreateCourseAutocompleteData($school: ID) {
   school(id: $school) {
     id
     name
@@ -3070,33 +3071,33 @@ export const CreateCourseInitialDataDocument = gql`
     `;
 
 /**
- * __useCreateCourseInitialDataQuery__
+ * __useCreateCourseAutocompleteDataQuery__
  *
- * To run a query within a React component, call `useCreateCourseInitialDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useCreateCourseInitialDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCreateCourseAutocompleteDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreateCourseAutocompleteDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCreateCourseInitialDataQuery({
+ * const { data, loading, error } = useCreateCourseAutocompleteDataQuery({
  *   variables: {
  *      school: // value for 'school'
  *   },
  * });
  */
-export function useCreateCourseInitialDataQuery(baseOptions?: Apollo.QueryHookOptions<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>) {
-        return Apollo.useQuery<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>(CreateCourseInitialDataDocument, baseOptions);
+export function useCreateCourseAutocompleteDataQuery(baseOptions?: Apollo.QueryHookOptions<CreateCourseAutocompleteDataQuery, CreateCourseAutocompleteDataQueryVariables>) {
+        return Apollo.useQuery<CreateCourseAutocompleteDataQuery, CreateCourseAutocompleteDataQueryVariables>(CreateCourseAutocompleteDataDocument, baseOptions);
       }
-export function useCreateCourseInitialDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>) {
-          return Apollo.useLazyQuery<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>(CreateCourseInitialDataDocument, baseOptions);
+export function useCreateCourseAutocompleteDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateCourseAutocompleteDataQuery, CreateCourseAutocompleteDataQueryVariables>) {
+          return Apollo.useLazyQuery<CreateCourseAutocompleteDataQuery, CreateCourseAutocompleteDataQueryVariables>(CreateCourseAutocompleteDataDocument, baseOptions);
         }
-export type CreateCourseInitialDataQueryHookResult = ReturnType<typeof useCreateCourseInitialDataQuery>;
-export type CreateCourseInitialDataLazyQueryHookResult = ReturnType<typeof useCreateCourseInitialDataLazyQuery>;
-export type CreateCourseInitialDataQueryResult = Apollo.QueryResult<CreateCourseInitialDataQuery, CreateCourseInitialDataQueryVariables>;
-export const SchoolsDocument = gql`
-    query Schools($name: String) {
-  schools(name: $name) {
+export type CreateCourseAutocompleteDataQueryHookResult = ReturnType<typeof useCreateCourseAutocompleteDataQuery>;
+export type CreateCourseAutocompleteDataLazyQueryHookResult = ReturnType<typeof useCreateCourseAutocompleteDataLazyQuery>;
+export type CreateCourseAutocompleteDataQueryResult = Apollo.QueryResult<CreateCourseAutocompleteDataQuery, CreateCourseAutocompleteDataQueryVariables>;
+export const AutocompleteSchoolsDocument = gql`
+    query AutocompleteSchools($name: String) {
+  autocompleteSchools(name: $name) {
     id
     name
   }
@@ -3104,33 +3105,33 @@ export const SchoolsDocument = gql`
     `;
 
 /**
- * __useSchoolsQuery__
+ * __useAutocompleteSchoolsQuery__
  *
- * To run a query within a React component, call `useSchoolsQuery` and pass it any options that fit your needs.
- * When your component renders, `useSchoolsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAutocompleteSchoolsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAutocompleteSchoolsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSchoolsQuery({
+ * const { data, loading, error } = useAutocompleteSchoolsQuery({
  *   variables: {
  *      name: // value for 'name'
  *   },
  * });
  */
-export function useSchoolsQuery(baseOptions?: Apollo.QueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
-        return Apollo.useQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+export function useAutocompleteSchoolsQuery(baseOptions?: Apollo.QueryHookOptions<AutocompleteSchoolsQuery, AutocompleteSchoolsQueryVariables>) {
+        return Apollo.useQuery<AutocompleteSchoolsQuery, AutocompleteSchoolsQueryVariables>(AutocompleteSchoolsDocument, baseOptions);
       }
-export function useSchoolsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchoolsQuery, SchoolsQueryVariables>) {
-          return Apollo.useLazyQuery<SchoolsQuery, SchoolsQueryVariables>(SchoolsDocument, baseOptions);
+export function useAutocompleteSchoolsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteSchoolsQuery, AutocompleteSchoolsQueryVariables>) {
+          return Apollo.useLazyQuery<AutocompleteSchoolsQuery, AutocompleteSchoolsQueryVariables>(AutocompleteSchoolsDocument, baseOptions);
         }
-export type SchoolsQueryHookResult = ReturnType<typeof useSchoolsQuery>;
-export type SchoolsLazyQueryHookResult = ReturnType<typeof useSchoolsLazyQuery>;
-export type SchoolsQueryResult = Apollo.QueryResult<SchoolsQuery, SchoolsQueryVariables>;
-export const SchoolTypesDocument = gql`
-    query SchoolTypes {
-  schoolTypes {
+export type AutocompleteSchoolsQueryHookResult = ReturnType<typeof useAutocompleteSchoolsQuery>;
+export type AutocompleteSchoolsLazyQueryHookResult = ReturnType<typeof useAutocompleteSchoolsLazyQuery>;
+export type AutocompleteSchoolsQueryResult = Apollo.QueryResult<AutocompleteSchoolsQuery, AutocompleteSchoolsQueryVariables>;
+export const AutocompleteSchoolTypesDocument = gql`
+    query AutocompleteSchoolTypes {
+  autocompleteSchoolTypes {
     id
     name
   }
@@ -3138,32 +3139,32 @@ export const SchoolTypesDocument = gql`
     `;
 
 /**
- * __useSchoolTypesQuery__
+ * __useAutocompleteSchoolTypesQuery__
  *
- * To run a query within a React component, call `useSchoolTypesQuery` and pass it any options that fit your needs.
- * When your component renders, `useSchoolTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAutocompleteSchoolTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAutocompleteSchoolTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSchoolTypesQuery({
+ * const { data, loading, error } = useAutocompleteSchoolTypesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useSchoolTypesQuery(baseOptions?: Apollo.QueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
-        return Apollo.useQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
+export function useAutocompleteSchoolTypesQuery(baseOptions?: Apollo.QueryHookOptions<AutocompleteSchoolTypesQuery, AutocompleteSchoolTypesQueryVariables>) {
+        return Apollo.useQuery<AutocompleteSchoolTypesQuery, AutocompleteSchoolTypesQueryVariables>(AutocompleteSchoolTypesDocument, baseOptions);
       }
-export function useSchoolTypesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchoolTypesQuery, SchoolTypesQueryVariables>) {
-          return Apollo.useLazyQuery<SchoolTypesQuery, SchoolTypesQueryVariables>(SchoolTypesDocument, baseOptions);
+export function useAutocompleteSchoolTypesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteSchoolTypesQuery, AutocompleteSchoolTypesQueryVariables>) {
+          return Apollo.useLazyQuery<AutocompleteSchoolTypesQuery, AutocompleteSchoolTypesQueryVariables>(AutocompleteSchoolTypesDocument, baseOptions);
         }
-export type SchoolTypesQueryHookResult = ReturnType<typeof useSchoolTypesQuery>;
-export type SchoolTypesLazyQueryHookResult = ReturnType<typeof useSchoolTypesLazyQuery>;
-export type SchoolTypesQueryResult = Apollo.QueryResult<SchoolTypesQuery, SchoolTypesQueryVariables>;
-export const CoursesDocument = gql`
-    query Courses($school: ID, $name: String) {
-  courses(school: $school, name: $name) {
+export type AutocompleteSchoolTypesQueryHookResult = ReturnType<typeof useAutocompleteSchoolTypesQuery>;
+export type AutocompleteSchoolTypesLazyQueryHookResult = ReturnType<typeof useAutocompleteSchoolTypesLazyQuery>;
+export type AutocompleteSchoolTypesQueryResult = Apollo.QueryResult<AutocompleteSchoolTypesQuery, AutocompleteSchoolTypesQueryVariables>;
+export const AutocompleteCoursesDocument = gql`
+    query AutocompleteCourses($school: ID, $name: String) {
+  autocompleteCourses(school: $school, name: $name) {
     id
     name
   }
@@ -3171,34 +3172,34 @@ export const CoursesDocument = gql`
     `;
 
 /**
- * __useCoursesQuery__
+ * __useAutocompleteCoursesQuery__
  *
- * To run a query within a React component, call `useCoursesQuery` and pass it any options that fit your needs.
- * When your component renders, `useCoursesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAutocompleteCoursesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAutocompleteCoursesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCoursesQuery({
+ * const { data, loading, error } = useAutocompleteCoursesQuery({
  *   variables: {
  *      school: // value for 'school'
  *      name: // value for 'name'
  *   },
  * });
  */
-export function useCoursesQuery(baseOptions?: Apollo.QueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
-        return Apollo.useQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
+export function useAutocompleteCoursesQuery(baseOptions?: Apollo.QueryHookOptions<AutocompleteCoursesQuery, AutocompleteCoursesQueryVariables>) {
+        return Apollo.useQuery<AutocompleteCoursesQuery, AutocompleteCoursesQueryVariables>(AutocompleteCoursesDocument, baseOptions);
       }
-export function useCoursesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CoursesQuery, CoursesQueryVariables>) {
-          return Apollo.useLazyQuery<CoursesQuery, CoursesQueryVariables>(CoursesDocument, baseOptions);
+export function useAutocompleteCoursesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteCoursesQuery, AutocompleteCoursesQueryVariables>) {
+          return Apollo.useLazyQuery<AutocompleteCoursesQuery, AutocompleteCoursesQueryVariables>(AutocompleteCoursesDocument, baseOptions);
         }
-export type CoursesQueryHookResult = ReturnType<typeof useCoursesQuery>;
-export type CoursesLazyQueryHookResult = ReturnType<typeof useCoursesLazyQuery>;
-export type CoursesQueryResult = Apollo.QueryResult<CoursesQuery, CoursesQueryVariables>;
-export const CountriesDocument = gql`
-    query Countries {
-  countries {
+export type AutocompleteCoursesQueryHookResult = ReturnType<typeof useAutocompleteCoursesQuery>;
+export type AutocompleteCoursesLazyQueryHookResult = ReturnType<typeof useAutocompleteCoursesLazyQuery>;
+export type AutocompleteCoursesQueryResult = Apollo.QueryResult<AutocompleteCoursesQuery, AutocompleteCoursesQueryVariables>;
+export const AutocompleteCountriesDocument = gql`
+    query AutocompleteCountries {
+  autocompleteCountries {
     id
     name
   }
@@ -3206,32 +3207,32 @@ export const CountriesDocument = gql`
     `;
 
 /**
- * __useCountriesQuery__
+ * __useAutocompleteCountriesQuery__
  *
- * To run a query within a React component, call `useCountriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useCountriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAutocompleteCountriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAutocompleteCountriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCountriesQuery({
+ * const { data, loading, error } = useAutocompleteCountriesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCountriesQuery(baseOptions?: Apollo.QueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
-        return Apollo.useQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
+export function useAutocompleteCountriesQuery(baseOptions?: Apollo.QueryHookOptions<AutocompleteCountriesQuery, AutocompleteCountriesQueryVariables>) {
+        return Apollo.useQuery<AutocompleteCountriesQuery, AutocompleteCountriesQueryVariables>(AutocompleteCountriesDocument, baseOptions);
       }
-export function useCountriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountriesQuery, CountriesQueryVariables>) {
-          return Apollo.useLazyQuery<CountriesQuery, CountriesQueryVariables>(CountriesDocument, baseOptions);
+export function useAutocompleteCountriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteCountriesQuery, AutocompleteCountriesQueryVariables>) {
+          return Apollo.useLazyQuery<AutocompleteCountriesQuery, AutocompleteCountriesQueryVariables>(AutocompleteCountriesDocument, baseOptions);
         }
-export type CountriesQueryHookResult = ReturnType<typeof useCountriesQuery>;
-export type CountriesLazyQueryHookResult = ReturnType<typeof useCountriesLazyQuery>;
-export type CountriesQueryResult = Apollo.QueryResult<CountriesQuery, CountriesQueryVariables>;
-export const CitiesDocument = gql`
-    query Cities {
-  cities {
+export type AutocompleteCountriesQueryHookResult = ReturnType<typeof useAutocompleteCountriesQuery>;
+export type AutocompleteCountriesLazyQueryHookResult = ReturnType<typeof useAutocompleteCountriesLazyQuery>;
+export type AutocompleteCountriesQueryResult = Apollo.QueryResult<AutocompleteCountriesQuery, AutocompleteCountriesQueryVariables>;
+export const AutocompleteCitiesDocument = gql`
+    query AutocompleteCities {
+  autocompleteCities {
     id
     name
   }
@@ -3239,32 +3240,32 @@ export const CitiesDocument = gql`
     `;
 
 /**
- * __useCitiesQuery__
+ * __useAutocompleteCitiesQuery__
  *
- * To run a query within a React component, call `useCitiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAutocompleteCitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAutocompleteCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCitiesQuery({
+ * const { data, loading, error } = useAutocompleteCitiesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCitiesQuery(baseOptions?: Apollo.QueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
-        return Apollo.useQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
+export function useAutocompleteCitiesQuery(baseOptions?: Apollo.QueryHookOptions<AutocompleteCitiesQuery, AutocompleteCitiesQueryVariables>) {
+        return Apollo.useQuery<AutocompleteCitiesQuery, AutocompleteCitiesQueryVariables>(AutocompleteCitiesDocument, baseOptions);
       }
-export function useCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CitiesQuery, CitiesQueryVariables>) {
-          return Apollo.useLazyQuery<CitiesQuery, CitiesQueryVariables>(CitiesDocument, baseOptions);
+export function useAutocompleteCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteCitiesQuery, AutocompleteCitiesQueryVariables>) {
+          return Apollo.useLazyQuery<AutocompleteCitiesQuery, AutocompleteCitiesQueryVariables>(AutocompleteCitiesDocument, baseOptions);
         }
-export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
-export type CitiesLazyQueryHookResult = ReturnType<typeof useCitiesLazyQuery>;
-export type CitiesQueryResult = Apollo.QueryResult<CitiesQuery, CitiesQueryVariables>;
-export const ResourceTypesDocument = gql`
-    query ResourceTypes {
-  resourceTypes {
+export type AutocompleteCitiesQueryHookResult = ReturnType<typeof useAutocompleteCitiesQuery>;
+export type AutocompleteCitiesLazyQueryHookResult = ReturnType<typeof useAutocompleteCitiesLazyQuery>;
+export type AutocompleteCitiesQueryResult = Apollo.QueryResult<AutocompleteCitiesQuery, AutocompleteCitiesQueryVariables>;
+export const AutocompleteResourceTypesDocument = gql`
+    query AutocompleteResourceTypes {
+  autocompleteResourceTypes {
     id
     name
   }
@@ -3272,32 +3273,32 @@ export const ResourceTypesDocument = gql`
     `;
 
 /**
- * __useResourceTypesQuery__
+ * __useAutocompleteResourceTypesQuery__
  *
- * To run a query within a React component, call `useResourceTypesQuery` and pass it any options that fit your needs.
- * When your component renders, `useResourceTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAutocompleteResourceTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAutocompleteResourceTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useResourceTypesQuery({
+ * const { data, loading, error } = useAutocompleteResourceTypesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useResourceTypesQuery(baseOptions?: Apollo.QueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
-        return Apollo.useQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+export function useAutocompleteResourceTypesQuery(baseOptions?: Apollo.QueryHookOptions<AutocompleteResourceTypesQuery, AutocompleteResourceTypesQueryVariables>) {
+        return Apollo.useQuery<AutocompleteResourceTypesQuery, AutocompleteResourceTypesQueryVariables>(AutocompleteResourceTypesDocument, baseOptions);
       }
-export function useResourceTypesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResourceTypesQuery, ResourceTypesQueryVariables>) {
-          return Apollo.useLazyQuery<ResourceTypesQuery, ResourceTypesQueryVariables>(ResourceTypesDocument, baseOptions);
+export function useAutocompleteResourceTypesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteResourceTypesQuery, AutocompleteResourceTypesQueryVariables>) {
+          return Apollo.useLazyQuery<AutocompleteResourceTypesQuery, AutocompleteResourceTypesQueryVariables>(AutocompleteResourceTypesDocument, baseOptions);
         }
-export type ResourceTypesQueryHookResult = ReturnType<typeof useResourceTypesQuery>;
-export type ResourceTypesLazyQueryHookResult = ReturnType<typeof useResourceTypesLazyQuery>;
-export type ResourceTypesQueryResult = Apollo.QueryResult<ResourceTypesQuery, ResourceTypesQueryVariables>;
-export const SubjectsDocument = gql`
-    query Subjects {
-  subjects {
+export type AutocompleteResourceTypesQueryHookResult = ReturnType<typeof useAutocompleteResourceTypesQuery>;
+export type AutocompleteResourceTypesLazyQueryHookResult = ReturnType<typeof useAutocompleteResourceTypesLazyQuery>;
+export type AutocompleteResourceTypesQueryResult = Apollo.QueryResult<AutocompleteResourceTypesQuery, AutocompleteResourceTypesQueryVariables>;
+export const AutocompleteSubjectsDocument = gql`
+    query AutocompleteSubjects {
+  autocompleteSubjects {
     id
     name
   }
@@ -3305,26 +3306,26 @@ export const SubjectsDocument = gql`
     `;
 
 /**
- * __useSubjectsQuery__
+ * __useAutocompleteSubjectsQuery__
  *
- * To run a query within a React component, call `useSubjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useSubjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAutocompleteSubjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAutocompleteSubjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSubjectsQuery({
+ * const { data, loading, error } = useAutocompleteSubjectsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useSubjectsQuery(baseOptions?: Apollo.QueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
-        return Apollo.useQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
+export function useAutocompleteSubjectsQuery(baseOptions?: Apollo.QueryHookOptions<AutocompleteSubjectsQuery, AutocompleteSubjectsQueryVariables>) {
+        return Apollo.useQuery<AutocompleteSubjectsQuery, AutocompleteSubjectsQueryVariables>(AutocompleteSubjectsDocument, baseOptions);
       }
-export function useSubjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
-          return Apollo.useLazyQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, baseOptions);
+export function useAutocompleteSubjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteSubjectsQuery, AutocompleteSubjectsQueryVariables>) {
+          return Apollo.useLazyQuery<AutocompleteSubjectsQuery, AutocompleteSubjectsQueryVariables>(AutocompleteSubjectsDocument, baseOptions);
         }
-export type SubjectsQueryHookResult = ReturnType<typeof useSubjectsQuery>;
-export type SubjectsLazyQueryHookResult = ReturnType<typeof useSubjectsLazyQuery>;
-export type SubjectsQueryResult = Apollo.QueryResult<SubjectsQuery, SubjectsQueryVariables>;
+export type AutocompleteSubjectsQueryHookResult = ReturnType<typeof useAutocompleteSubjectsQuery>;
+export type AutocompleteSubjectsLazyQueryHookResult = ReturnType<typeof useAutocompleteSubjectsLazyQuery>;
+export type AutocompleteSubjectsQueryResult = Apollo.QueryResult<AutocompleteSubjectsQuery, AutocompleteSubjectsQueryVariables>;

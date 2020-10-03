@@ -107,7 +107,7 @@ query SearchCourses(
     $page: Int
     $pageSize: Int
 ) {
-    paginatedCourses(
+    searchCourses(
         courseName: $courseName
         courseCode: $courseCode
         school: $school
@@ -153,7 +153,7 @@ query SearchCourses(
     }
 }
 
-query CourseDetail($id: ID) {
+query Course($id: ID) {
     course(id: $id) {
         id
         name
@@ -229,7 +229,7 @@ query CourseDetail($id: ID) {
     }
 }
 
-query ResourceDetail($id: ID) {
+query Resource($id: ID) {
     resource(id: $id) {
         id
         title
@@ -296,7 +296,7 @@ query ResourceDetail($id: ID) {
     }
 }
 
-query SchoolDetail($id: ID) {
+query School($id: ID) {
     school(id: $id) {
         id
         name
@@ -325,7 +325,7 @@ query SchoolDetail($id: ID) {
     }
 }
 
-query CreateResourceInitialData($school: ID, $course: ID) {
+query CreateResourceAutocompleteData($school: ID, $course: ID) {
     school(id: $school) {
         id
         name
@@ -336,57 +336,57 @@ query CreateResourceInitialData($school: ID, $course: ID) {
     }
 }
 
-query CreateCourseInitialData($school: ID) {
+query CreateCourseAutocompleteData($school: ID) {
     school(id: $school) {
         id
         name
     }
 }
 
-query Schools($name: String) {
-    schools(name: $name) {
+query AutocompleteSchools($name: String) {
+    autocompleteSchools(name: $name) {
         id
         name
     }
 }
 
-query SchoolTypes {
-    schoolTypes {
+query AutocompleteSchoolTypes {
+    autocompleteSchoolTypes {
         id
         name
     }
 }
 
-query Courses($school: ID, $name: String) {
-    courses(school: $school, name: $name) {
+query AutocompleteCourses($school: ID, $name: String) {
+    autocompleteCourses(school: $school, name: $name) {
         id
         name
     }
 }
 
-query Countries {
-    countries {
+query AutocompleteCountries {
+    autocompleteCountries {
         id
         name
     }
 }
 
-query Cities {
-    cities {
+query AutocompleteCities {
+    autocompleteCities {
         id
         name
     }
 }
 
-query ResourceTypes {
-    resourceTypes {
+query AutocompleteResourceTypes {
+    autocompleteResourceTypes {
         id
         name
     }
 }
 
-query Subjects {
-    subjects {
+query AutocompleteSubjects {
+    autocompleteSubjects {
         id
         name
     }
