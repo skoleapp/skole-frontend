@@ -37,7 +37,7 @@ import {
     DeleteResourceMutation,
     ResourceObjectType,
     useDeleteResourceMutation,
-    useResourceDetailQuery,
+    useResourceQuery,
     UserObjectType,
     VoteObjectType,
 } from 'generated';
@@ -86,7 +86,7 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const { isFallback } = useRouter();
     const { t } = useTranslation();
     const queryOptions = useQueryOptions();
-    const { data, loading: courseDataLoading, error } = useResourceDetailQuery(queryOptions);
+    const { data, loading: courseDataLoading, error } = useResourceQuery(queryOptions);
     const loading = authLoading || isFallback || courseDataLoading;
     const networkError = (!!error && !!error.networkError) || !!authNetworkError;
     const { isMobileOrTablet } = useMediaQueries();
@@ -241,7 +241,6 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
             await import('print-js');
             // Ignore: TS doesn't detect the `print-js` import.
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
             printJS(blobUrl);
         } catch {

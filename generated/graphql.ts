@@ -1329,12 +1329,12 @@ export type StarredQuery = (
   )>>> }
 );
 
-export type UserDetailQueryVariables = Exact<{
+export type UserQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
 }>;
 
 
-export type UserDetailQuery = (
+export type UserQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'UserObjectType' }
@@ -2635,8 +2635,8 @@ export function useStarredLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<St
 export type StarredQueryHookResult = ReturnType<typeof useStarredQuery>;
 export type StarredLazyQueryHookResult = ReturnType<typeof useStarredLazyQuery>;
 export type StarredQueryResult = Apollo.QueryResult<StarredQuery, StarredQueryVariables>;
-export const UserDetailDocument = gql`
-    query UserDetail($id: ID) {
+export const UserDocument = gql`
+    query User($id: ID) {
   user(id: $id) {
     id
     username
@@ -2673,30 +2673,30 @@ export const UserDetailDocument = gql`
     `;
 
 /**
- * __useUserDetailQuery__
+ * __useUserQuery__
  *
- * To run a query within a React component, call `useUserDetailQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserDetailQuery({
+ * const { data, loading, error } = useUserQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useUserDetailQuery(baseOptions?: Apollo.QueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
-        return Apollo.useQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
+export function useUserQuery(baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
       }
-export function useUserDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserDetailQuery, UserDetailQueryVariables>) {
-          return Apollo.useLazyQuery<UserDetailQuery, UserDetailQueryVariables>(UserDetailDocument, baseOptions);
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
         }
-export type UserDetailQueryHookResult = ReturnType<typeof useUserDetailQuery>;
-export type UserDetailLazyQueryHookResult = ReturnType<typeof useUserDetailLazyQuery>;
-export type UserDetailQueryResult = Apollo.QueryResult<UserDetailQuery, UserDetailQueryVariables>;
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const SearchCoursesDocument = gql`
     query SearchCourses($courseName: String, $courseCode: String, $school: ID, $subject: ID, $schoolType: ID, $country: ID, $city: ID, $ordering: String, $page: Int, $pageSize: Int) {
   searchCourses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {

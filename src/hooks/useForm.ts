@@ -18,13 +18,10 @@ interface FormErrors {
 }
 
 export const useForm = <T>(): UseForm<T> => {
-    const ref = useRef<Formik<T>>(null);
+    const ref = useRef<Formik<T>>(null!);
 
-    const setFormErrors = (formErrors: FormErrors): void => {
-        Object.keys(formErrors).forEach(
-            key => ref && ref.current && ref.current.setFieldError(key, (formErrors as FormErrors)[key]),
-        );
-    };
+    const setFormErrors = (formErrors: FormErrors): void =>
+        Object.keys(formErrors).forEach(key => ref.current.setFieldError(key, (formErrors as FormErrors)[key]));
 
     // A general error e.g. in the form.
     const handleMutationErrors = (err: MutationErrors): void => {
@@ -61,17 +58,11 @@ export const useForm = <T>(): UseForm<T> => {
     };
 
     const unexpectedError = (): void => setFormErrors({ general: i18n.t('validation:unexpectedError') });
-    const setSubmitting = (val: boolean): void | null => ref && ref.current && ref.current.setSubmitting(val);
-    const resetForm = (): void | null => ref && ref.current && ref.current.resetForm();
-    const submitForm = (): Promise<void> | null => ref && ref.current && ref.current.submitForm();
-
-    const setFieldValue = (fieldName: string, val: FieldValue): void => {
-        ref && ref.current && ref.current.setFieldValue(fieldName, val);
-    };
-
-    const setFieldError = (fieldName: string, val: string): void => {
-        ref && ref.current && ref.current.setFieldError(fieldName, val);
-    };
+    const setSubmitting = (val: boolean): void | null => ref.current.setSubmitting(val);
+    const resetForm = (): void | null => ref.current.resetForm();
+    const submitForm = (): Promise<void> | null => ref.current.submitForm();
+    const setFieldValue = (fieldName: string, val: FieldValue): void => ref.current.setFieldValue(fieldName, val);
+    const setFieldError = (fieldName: string, val: string): void => ref.current.setFieldError(fieldName, val);
 
     return {
         ref,

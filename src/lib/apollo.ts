@@ -17,7 +17,6 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
     return new ApolloClient({
         ssrMode: isBrowser,
         // Ignore: Apollo client's types have been updated so that they do not match apollo-upload-client's types.
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         link: httpLink,
         cache: new InMemoryCache(),

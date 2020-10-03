@@ -3,7 +3,6 @@ import { usePDFViewerContext } from 'context';
 import { useMediaQueries, useStateRef } from 'hooks';
 import { getClampedScale, getCoordChange, getMidPoint, getTouchDistance, getTouchPoint } from 'lib';
 import throttle from 'lodash.throttle';
-import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
 import { PDFTranslation } from 'types';
 import { DEFAULT_SCALE, DEFAULT_TRANSLATION, MAX_SCALE, MIN_SCALE } from 'utils';
@@ -196,7 +195,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     // This listener is so expensive to use that we throttle it to execute every 100 ms only.
     // TODO: Using intersection observers would probably lead to better performance: https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
     const pageListener = (): void => {
-        if (!!pageNumberInputRef && document.activeElement !== pageNumberInputRef.current) {
+        if (document.activeElement !== pageNumberInputRef.current) {
             const page = Array.from(document.querySelectorAll('.react-pdf__Page')).find(elementInViewport);
             const newPageNumber = page && page.getAttribute('data-page-number');
             setPageNumber(Number(newPageNumber));
@@ -211,7 +210,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     const onTouchMove = (e: TouchEvent): void => {
         if (!!startPointersInfo.current) {
             const isPinchAction = e.touches.length === 2 && startPointersInfo.current.pointers.length > 1;
-            const isSwiping = R.path(['current', 'state', 'isDragging'], swipeableViewsRef);
+            const isSwiping = swipeableViewsRef.current.state.isDragging;
 
             // Prevent swiping when pinching or panning as zoomed in.
             if (isPinchAction || translation !== DEFAULT_TRANSLATION) {

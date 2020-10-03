@@ -98,7 +98,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     ]);
 
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty(decorator));
-    const ref = useRef<Editor | null>(null);
+    const ref = useRef<Editor>(null!);
     const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { commentAttachment, setCommentAttachment, toggleCommentModal } = useDiscussionContext();
@@ -108,20 +108,18 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     const selection = editorState.getSelection();
     const selectionCollapsed = selection.isCollapsed();
     const textContent = editorState.getCurrentContent().getPlainText('\u0001');
-    const attachmentInputRef = useRef<HTMLInputElement | null>(null);
+    const attachmentInputRef = useRef<HTMLInputElement>(null!);
     const attachmentTooltip = loginRequiredTooltip || t('tooltips:attachFile');
-    const handleUploadAttachment = (): false | void =>
-        !!attachmentInputRef.current && attachmentInputRef.current.click();
-
+    const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
     const [focused, setFocused] = useState(false);
     const onFocus = (): void => setFocused(true);
     const onBlur = (): void => setFocused(false);
-    const focusEditor = (): false | void => !!ref && !!ref.current && ref.current.focus();
+    const focusEditor = (): false | void => ref.current.focus();
     const [URLInputOpen, setURLInputOpen] = useState(false);
     const [URL, setURL] = useState('');
 
     const blurEditor = (): false | void => {
-        !!ref && !!ref.current && ref.current.blur();
+        ref.current.blur();
         onBlur();
     };
 

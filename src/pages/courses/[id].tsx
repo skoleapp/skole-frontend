@@ -12,6 +12,7 @@ import {
     Tab,
     Tabs,
     Tooltip,
+    Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
 import clsx from 'clsx';
@@ -40,7 +41,7 @@ import {
     ResourceObjectType,
     ResourceTypeObjectType,
     SubjectObjectType,
-    useCourseDetailQuery,
+    useCourseQuery,
     useDeleteCourseMutation,
     UserObjectType,
     VoteObjectType,
@@ -87,7 +88,7 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const { isFallback } = useRouter();
     const { t } = useTranslation();
     const queryOptions = useQueryOptions();
-    const { data, loading: courseDataLoading, error } = useCourseDetailQuery(queryOptions);
+    const { data, loading: courseDataLoading, error } = useCourseQuery(queryOptions);
     const loading = authLoading || isFallback || courseDataLoading;
     const networkError = (!!error && !!error.networkError) || !!authNetworkError;
     const { isMobileOrTablet } = useMediaQueries();

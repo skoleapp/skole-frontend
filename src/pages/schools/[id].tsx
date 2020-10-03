@@ -30,7 +30,7 @@ import {
     TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import { CourseObjectType, SchoolObjectType, SubjectObjectType, useSchoolDetailQuery } from 'generated';
+import { CourseObjectType, SchoolObjectType, SubjectObjectType, useSchoolQuery } from 'generated';
 import {
     useActionsDialog,
     useFrontendPagination,
@@ -62,7 +62,7 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const classes = useStyles();
     const { isFallback } = useRouter();
     const queryOptions = useQueryOptions();
-    const { data, loading: courseDataLoading, error } = useSchoolDetailQuery(queryOptions);
+    const { data, loading: courseDataLoading, error } = useSchoolQuery(queryOptions);
     const loading = authLoading || isFallback || courseDataLoading;
     const networkError = (!!error && !!error.networkError) || !!authNetworkError;
     const { verified, verificationRequiredTooltip } = useAuthContext();

@@ -34,8 +34,8 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const fileName: string = R.propOr('', 'name', field.value);
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const handleFileInputClick = (): false | void => !!fileInputRef.current && fileInputRef.current.click();
+    const fileInputRef = useRef<HTMLInputElement>(null!);
+    const handleFileInputClick = (): false | void => fileInputRef.current.click();
     const preventDefaultDragBehavior = (e: DragEvent<HTMLElement>): void => e.preventDefault();
 
     const validateAndSetFile = (file: File): void => {

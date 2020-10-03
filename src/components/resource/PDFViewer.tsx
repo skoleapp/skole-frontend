@@ -2,7 +2,7 @@ import { Box, makeStyles, Typography } from '@material-ui/core';
 import { usePDFViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import { PDFDocumentProxy } from 'pdfjs-dist';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Document, Page } from 'react-pdf';
 
 import { LoadingBox } from '..';
@@ -83,7 +83,7 @@ export const PDFViewer: React.FC<Props> = ({ file }) => {
                         error={renderError}
                         noData={renderError}
                         rotate={rotate}
-                        ref={documentRef as RefObject<Document>}
+                        ref={documentRef}
                     >
                         {renderPages}
                         {renderAreaSelection}
