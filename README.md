@@ -116,6 +116,8 @@ A quick look at the top-level files and directories excluding `node_modules` and
 -   Avoid writing event handlers/functions directly in JSX to keep it more readable.
 -   Use `React.FC` syntax for all components.
 -   Use [Material Icons](https://material.io/resources/icons/) for all icons. Make sure to use the outlined variants of the icons.
+-   Use `<></>` vs. `React.Fragment` for fragments.
+-   If you split up JSX to multiple variables, name them so that they start with the word "render", e.g `const renderFoo = ...`.
 -   Use ES6 syntax everywhere:
     -   Avoid using the `function` keyword.
     -   Use `async`/`await` syntax.
