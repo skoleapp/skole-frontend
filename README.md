@@ -42,7 +42,7 @@ A quick look at the top-level files and directories excluding `node_modules` and
     ├── types.d.ts
     └── yarn.lock
 
-1.  **`/.circleci`**: CI/CD configuration for [CircleCI](https://circleci.com/).
+1.  **`/.circleci`**: Configuration for [CircleCI](https://circleci.com/).
 
 2.  **`/.idea`**: [Jetbrains](https://www.jetbrains.com/) editor configuration.
 

@@ -81,17 +81,24 @@ export const AutoCompleteField: React.FC<Props & TextFieldProps> = <T extends {}
         }
     };
 
+    // For all auto complete fields, fetch the data when opening the input.
     // When closing the input results, reset the options.
-    // When input has empty content, fetch default content with no params.
-    // Otherwise require the user to type at least three characters.
-    // After the user has typed at least three characters, fetch content from backend on each new character.
     useEffect(() => {
         if (!open) {
             setOptions([]);
-        } else if (inputValue === '' || inputValue.length > 2) {
+        } else {
             fetchOptions();
         }
-    }, [open, inputValue]);
+    }, [open]);
+
+    // For fields that perform filtering in the backend with the search variables, perform the data fetching also in the following cases:
+    // 1. Input field contains at least two characters and a new character is typed.
+    // 2. Input field is cleared to default value (empty string).
+    useEffect(() => {
+        if (!!searchKey && (inputValue === '' || inputValue.length > 2)) {
+            fetchOptions();
+        }
+    }, [inputValue]);
 
     const handleAutoCompleteChange = (_e: ChangeEvent<{}>, val: T | T[] | null): void => {
         console.log('test');
