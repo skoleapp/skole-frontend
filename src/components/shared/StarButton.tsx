@@ -1,4 +1,4 @@
-import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
+import { IconButton, IconButtonProps, Tooltip, Typography } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { PerformStarMutation, usePerformStarMutation } from 'generated';

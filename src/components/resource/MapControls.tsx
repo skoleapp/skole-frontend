@@ -1,4 +1,4 @@
-import { Box, Fab, makeStyles, Size, Tooltip } from '@material-ui/core';
+import { Box, Fab, makeStyles, Size, Tooltip, Typography } from '@material-ui/core';
 import { AddOutlined, FullscreenExitOutlined, FullscreenOutlined, RemoveOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React from 'react';

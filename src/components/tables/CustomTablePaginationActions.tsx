@@ -1,4 +1,4 @@
-import { Box, IconButton, Tooltip } from '@material-ui/core';
+import { Box, IconButton, Tooltip, Typography } from '@material-ui/core';
 import {
     FirstPageOutlined,
     KeyboardArrowLeftOutlined,

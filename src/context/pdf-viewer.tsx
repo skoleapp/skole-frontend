@@ -1,5 +1,6 @@
 import React, { Context, createContext, useRef, useState } from 'react';
 import { useContext } from 'react';
+import { Document } from 'react-pdf';
 import { PDFViewerContextType } from 'types';
 
 const PDFViewerContext = createContext<PDFViewerContextType | null>(null);

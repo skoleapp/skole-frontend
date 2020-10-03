@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip, Typography } from '@material-ui/core';
 import { TabUnselectedOutlined } from '@material-ui/icons';
 import { usePDFViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';

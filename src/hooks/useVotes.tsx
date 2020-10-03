@@ -1,4 +1,4 @@
-import { IconButton, Size, Tooltip } from '@material-ui/core';
+import { IconButton, Size, Tooltip, Typography } from '@material-ui/core';
 import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from 'generated';
