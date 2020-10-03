@@ -51,7 +51,7 @@ interface PageFromElement {
 export const getPageFromElement = (target: HTMLElement): PageFromElement | null => {
     const node = target.closest('.react-pdf__Page');
 
-    if (!!(node instanceof HTMLElement)) {
+    if (node instanceof HTMLElement) {
         const number = Number(node.dataset.pageNumber);
         return { node, number };
     } else {

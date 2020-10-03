@@ -301,32 +301,32 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         switch (e.keyCode) {
             // CMD + Shift + X
             case 88: {
-                return hasCommandModifier(e) && !!e.shiftKey ? strikeThrough : null;
+                return hasCommandModifier(e) && e.shiftKey ? strikeThrough : null;
             }
 
             // CMD + Shift + U
             case 85: {
-                return hasCommandModifier(e) && !!e.shiftKey ? link : null;
+                return hasCommandModifier(e) && e.shiftKey ? link : null;
             }
 
             // CMD + Shift + 7
             case 55: {
-                return hasCommandModifier(e) && !!e.shiftKey ? orderedList : null;
+                return hasCommandModifier(e) && e.shiftKey ? orderedList : null;
             }
 
             // CMD + Shift + 8
             case 56: {
-                return hasCommandModifier(e) && !!e.shiftKey ? unorderedList : null;
+                return hasCommandModifier(e) && e.shiftKey ? unorderedList : null;
             }
 
             // CMD + Shift + 9
             case 57: {
-                return hasCommandModifier(e) && !!e.shiftKey ? blockQuote : null;
+                return hasCommandModifier(e) && e.shiftKey ? blockQuote : null;
             }
 
             // CMD + Shift + C
             case 67: {
-                return hasCommandModifier(e) && !!e.shiftKey ? codeBlock : null;
+                return hasCommandModifier(e) && e.shiftKey ? codeBlock : null;
             }
 
             default: {

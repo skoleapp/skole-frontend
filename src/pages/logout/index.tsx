@@ -19,9 +19,9 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const href = { pathname: urls.login, query };
     const onError = (): void => toggleNotification(t('notifications:logoutError'));
 
-    const onCompleted = ({ logout }: BackendLogoutMutation): void => {
+    const onCompleted = async ({ logout }: BackendLogoutMutation): Promise<void> => {
         if (!!logout && logout.deleted) {
-            apolloClient.clearStore();
+            await apolloClient.clearStore();
             localStorage.setItem('logout', String(Date.now()));
         }
     };

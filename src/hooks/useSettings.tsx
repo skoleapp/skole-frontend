@@ -26,9 +26,9 @@ export const useSettings = (modal: boolean): UseSettings => {
         toggleSettings(false);
     };
 
-    const handleMenuItemClick = (href: string) => (): void => {
-        !!modal && handleClose();
-        redirect(href);
+    const handleMenuItemClick = (href: string) => async (): Promise<void> => {
+        modal && handleClose();
+        await redirect(href);
     };
 
     const getSelected = (href: string): boolean => !modal && href === pathname;

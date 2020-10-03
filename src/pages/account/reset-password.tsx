@@ -90,14 +90,14 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         }
     };
 
-    const onPasswordFormCompleted = ({ resetPassword }: ResetPasswordMutation): void => {
+    const onPasswordFormCompleted = async ({ resetPassword }: ResetPasswordMutation): Promise<void> => {
         if (!!resetPassword) {
             if (!!resetPassword.errors && !!resetPassword.errors.length) {
                 handlePasswordFormMutationErrors(resetPassword.errors);
             } else if (!!resetPassword.message) {
                 resetPasswordForm();
                 toggleNotification(resetPassword.message);
-                redirect(urls.logout);
+                await redirect(urls.logout);
             } else {
                 passwordFormUnexpectedError();
             }

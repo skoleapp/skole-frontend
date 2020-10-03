@@ -79,7 +79,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
             await markSingleActivityRead({ variables: { id, read: true } });
             // The activities should always have a pathname but technically it's possible that the pathname is undefined.
             // In that case we do nothing besides marking the activity as read.
-            !!pathname && redirect({ pathname, query });
+            !!pathname && (await redirect({ pathname, query }));
         } catch {
             onError();
         }

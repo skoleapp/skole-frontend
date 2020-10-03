@@ -213,7 +213,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         await redirect({ pathname, query: { ...queryWithPagination, courseName: searchValue } });
     };
 
-    const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T): void => {
+    const handlePreSubmit = async <T extends FilterSearchResultsFormValues>(values: T): Promise<void> => {
         const { courseName, courseCode, school, subject, schoolType, country, city, ordering } = values;
 
         const filteredValues: FilterSearchResultsFormValues = {
@@ -228,7 +228,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             ordering,
         };
 
-        handleSubmitFilters(filteredValues);
+        await handleSubmitFilters(filteredValues);
     };
 
     const handleDeleteFilter = (filterName: string) => async (): Promise<void> => {
@@ -237,7 +237,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             queryWithPagination,
         );
 
-        filterName === 'courseName' && handleClearSearchInput();
+        filterName === 'courseName' && (await handleClearSearchInput());
         await redirect({ pathname, query });
     };
 
