@@ -5,7 +5,6 @@ import {
     CardHeader,
     Chip,
     CircularProgress,
-    Dialog,
     DialogContent,
     FormControl,
     Grid,
@@ -29,8 +28,8 @@ import {
     NotFoundBox,
     OfflineLayout,
     PaginatedTable,
+    SkoleDialog,
     TextFormField,
-    Transition,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -111,7 +110,7 @@ interface ValidFilter {
 
 const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
-    const { isMobileOrTablet, isDesktop } = useMediaQueries();
+    const { isMobileOrTablet } = useMediaQueries();
     const { spacing } = useTheme();
     const { t } = useTranslation();
     const { ref, resetForm, setSubmitting } = useForm<FilterSearchResultsFormValues>();
@@ -407,16 +406,10 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderFilterResultsDrawer = (
-        <Dialog
-            open={filtersOpen}
-            onClose={handleCloseFilters}
-            fullScreen={isMobileOrTablet}
-            fullWidth={isDesktop}
-            TransitionComponent={Transition}
-        >
+        <SkoleDialog open={filtersOpen} onClose={handleCloseFilters}>
             {renderDialogHeader}
             {renderFilterResultsForm}
-        </Dialog>
+        </SkoleDialog>
     );
 
     const renderMobileContent = isMobileOrTablet && (

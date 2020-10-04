@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
@@ -50,7 +49,7 @@ import React, { ChangeEvent, KeyboardEvent, SyntheticEvent, useEffect, useRef, u
 import { CreateCommentFormValues } from 'types';
 import { RICH_STYLES } from 'utils';
 
-import { Transition } from '../shared';
+import { SkoleDialog } from '../shared';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
@@ -403,13 +402,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     const renderURLInput = (
-        <Dialog
-            open={URLInputOpen}
-            onClose={handleCloseURLInput}
-            fullScreen={isMobileOrTablet}
-            fullWidth={isDesktop}
-            TransitionComponent={Transition}
-        >
+        <SkoleDialog open={URLInputOpen} onClose={handleCloseURLInput}>
             <DialogTitle>{t('forms:addLink')}</DialogTitle>
             <DialogContent>
                 <TextField
@@ -426,7 +419,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                     {t('common:confirm')}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </SkoleDialog>
     );
 
     const renderBlockStyles = blockTypes.map(({ tooltip, icon: Icon, style }, i) => (

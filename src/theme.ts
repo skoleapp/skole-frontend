@@ -232,9 +232,6 @@ let theme = createMuiTheme({
         MuiDialog: {
             paper: {
                 overflow: 'hidden',
-                [breakpoints.up('lg')]: {
-                    borderRadius: BORDER_RADIUS,
-                },
             },
         },
         MuiCssBaseline: {
