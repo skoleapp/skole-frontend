@@ -42,7 +42,6 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         formRef: emailFormRef,
         handleMutationErrors: handleEmailFormMutationErrors,
         onError: onEmailFormError,
-        setSubmitting: setSubmittingEmailForm,
         resetForm: resetEmailForm,
         unexpectedError: emailFormUnexpectedError,
     } = useForm<EmailFormValues>();
@@ -51,7 +50,6 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         formRef: passwordFormRef,
         handleMutationErrors: handlePasswordFormMutationErrors,
         onError: onPasswordFormError,
-        setSubmitting: setSubmittingPasswordForm,
         resetForm: resetPasswordForm,
         unexpectedError: passwordFormUnexpectedError,
     } = useForm<PasswordFormValues>();
@@ -119,13 +117,11 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
     const handleSubmitEmail = async (values: EmailFormValues): Promise<void> => {
         const { email } = values;
         await sendPasswordResetEmail({ variables: { email } });
-        setSubmittingEmailForm(false);
     };
 
     const handleSubmitPassword = async (values: PasswordFormValues): Promise<void> => {
         const { newPassword } = values;
         await resetPassword({ variables: { newPassword, token } });
-        setSubmittingPasswordForm(false);
     };
 
     const renderEmailFormContent = (props: FormikProps<EmailFormValues>): JSX.Element => (

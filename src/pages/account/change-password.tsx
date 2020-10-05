@@ -23,10 +23,7 @@ export interface ChangePasswordFormValues {
 }
 
 const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
-    const { formRef, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
-        ChangePasswordFormValues
-    >();
-
+    const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<ChangePasswordFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
@@ -58,7 +55,6 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const handleSubmit = async (values: ChangePasswordFormValues): Promise<void> => {
         const { oldPassword, newPassword } = values;
         await changePasswordMutation({ variables: { oldPassword, newPassword } });
-        setSubmitting(false);
     };
 
     const renderForm = (

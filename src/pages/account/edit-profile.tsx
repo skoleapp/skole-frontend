@@ -34,9 +34,7 @@ import * as Yup from 'yup';
 const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { userMe, setUserMe, verified } = useAuthContext();
-    const { formRef, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<
-        UpdateProfileFormValues
-    >();
+    const { formRef, handleMutationErrors, onError, resetForm, unexpectedError } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
 
     const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
@@ -44,6 +42,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
             if (!!updateUser.errors && !!updateUser.errors.length) {
                 handleMutationErrors(updateUser.errors);
             } else if (!!updateUser.message) {
+                resetForm();
                 toggleNotification(updateUser.message);
                 setUserMe(updateUser.user as UserObjectType);
             } else {
@@ -70,8 +69,6 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
                 subject: R.propOr('', 'id', subject),
             },
         });
-
-        setSubmitting(false);
     };
 
     const initialValues = {

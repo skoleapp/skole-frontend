@@ -70,7 +70,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const {
         formRef: registerFormRef,
         resetForm: resetRegisterForm,
-        setSubmitting: setRegisterFormSubmitting,
         handleMutationErrors: handleRegisterMutationErrors,
         onError: onRegisterError,
         unexpectedError: unexpectedRegisterError,
@@ -79,7 +78,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const {
         formRef: updateUserFormRef,
         resetForm: resetUpdateUserForm,
-        setSubmitting: setUpdateUserFormSubmitting,
         handleMutationErrors: handleUpdateUserMutationErrors,
         onError: onUpdateUserError,
         unexpectedError: updateUserUnexpectedError,
@@ -165,8 +163,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
                 password,
             },
         });
-
-        setRegisterFormSubmitting(false);
     };
 
     const onUpdateUserCompleted = ({ updateUser }: UpdateUserMutation): void => {
@@ -199,8 +195,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
                 subject: R.propOr('', 'id', subject),
             },
         });
-
-        setUpdateUserFormSubmitting(false);
     };
 
     const renderUsernameField = (

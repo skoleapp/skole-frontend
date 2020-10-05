@@ -27,10 +27,7 @@ interface ContactFormValues {
 const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
-
-    const { formRef, setSubmitting, onError, resetForm, handleMutationErrors, unexpectedError } = useForm<
-        ContactFormValues
-    >();
+    const { formRef, onError, resetForm, handleMutationErrors, unexpectedError } = useForm<ContactFormValues>();
 
     const validationSchema = Yup.object().shape({
         subject: Yup.string().required(t('validation:required')),
@@ -69,7 +66,6 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         };
 
         await createContactMessage({ variables });
-        setSubmitting(false);
     };
 
     const renderForm = (

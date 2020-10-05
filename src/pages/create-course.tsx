@@ -41,10 +41,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const { query } = useRouter();
     const { data, loading, error } = useCreateCourseAutocompleteDataQuery({ variables: query });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
-
-    const { formRef, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
-        CreateCourseFormValues
-    >();
+    const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<CreateCourseFormValues>();
 
     const validationSchema = Yup.object().shape({
         courseName: Yup.string().required(t('validation:required')),
@@ -84,7 +81,6 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         };
 
         createCourseMutation({ variables });
-        setSubmitting(false);
     };
 
     const initialValues = {
@@ -96,12 +92,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     };
 
     const renderForm = (
-        <Formik
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-            formRef={formRef}
-        >
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
                     <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />

@@ -4,7 +4,6 @@ import {
     Button,
     CardHeader,
     Chip,
-    CircularProgress,
     DialogContent,
     FormControl,
     Grid,
@@ -12,7 +11,6 @@ import {
     InputBase,
     makeStyles,
     Paper,
-    useTheme,
 } from '@material-ui/core';
 import { ArrowBackOutlined, ClearAllOutlined, FilterListOutlined, SearchOutlined } from '@material-ui/icons';
 import {
@@ -114,12 +112,11 @@ interface ValidFilter {
 const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
     const { isMobileOrTablet, isDesktop } = useMediaQueries();
-    const { spacing } = useTheme();
     const { t } = useTranslation();
     const { pathname, query } = useRouter();
     const { open: filtersOpen, handleOpen: handleOpenFilters, handleClose: handleCloseFilters } = useOpen();
     const { data, loading, error } = useSearchCoursesQuery({ variables: query });
-    const { formRef, resetForm, setSubmitting } = useForm<FilterSearchResultsFormValues>();
+    const { formRef, resetForm } = useForm<FilterSearchResultsFormValues>();
     const courseObjects: CourseObjectType[] = R.pathOr([], ['searchCourses', 'objects'], data);
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const subject: SubjectObjectType = R.propOr(null, 'subject', data);
@@ -131,13 +128,12 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const courseCode = R.propOr('', 'courseCode', query) as string;
     const ordering = R.propOr('', 'ordering', query) as string;
     const [searchValue, setSearchValue] = useState(courseName);
-    const [searchInputSubmitting, setSearchInputSubmitting] = useState(false);
     const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
 
     // Pick non-empty values and reload the page with new query params.
     const handleSubmitFilters = async (filteredValues: {}): Promise<void> => {
         const validQuery: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
-        setSubmitting(false);
+        resetForm();
         handleCloseFilters();
         await redirect({ pathname, query: validQuery });
     };
@@ -236,17 +232,12 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     };
 
     const handleDeleteFilter = (filterName: string) => async (): Promise<void> => {
-        formRef.current.setSubmitting(true);
-        setSearchInputSubmitting(true);
-
         const query: ParsedUrlQueryInput = R.pickBy(
             (_: string, key: string) => key !== filterName,
             queryWithPagination,
         );
 
         filterName === 'courseName' && handleClearSearchInput();
-        formRef.current.resetForm();
-        setSearchInputSubmitting(false);
         await redirect({ pathname, query });
     };
 
@@ -441,21 +432,16 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderSearchNavbarStartAdornment = !!searchValue ? (
-        <IconButton onClick={handleClearSearchInput} color="primary" size="small" disabled={searchInputSubmitting}>
+        <IconButton onClick={handleClearSearchInput} color="primary" size="small">
             <ArrowBackOutlined />
         </IconButton>
     ) : (
-        <IconButton onClick={handleSearchIconClick} color="primary" size="small" disabled={searchInputSubmitting}>
+        <IconButton onClick={handleSearchIconClick} color="primary" size="small">
             <SearchOutlined />
         </IconButton>
     );
 
-    // Loading spinner container has exact same padding as the icon button.
-    const renderSearchNavbarEndAdornment = searchInputSubmitting ? (
-        <Box padding={spacing(2)}>
-            <CircularProgress color="primary" size={20} />
-        </Box>
-    ) : (
+    const renderSearchNavbarEndAdornment = (
         <IconButton onClick={handleOpenFilters} size="small" color="primary">
             <FilterListOutlined />
         </IconButton>
@@ -472,7 +458,6 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
                         onChange={onSearchChange}
                         startAdornment={renderSearchNavbarStartAdornment}
                         endAdornment={renderSearchNavbarEndAdornment}
-                        disabled={searchInputSubmitting}
                         fullWidth
                     />
                 </form>

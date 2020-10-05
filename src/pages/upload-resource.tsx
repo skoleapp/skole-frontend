@@ -48,15 +48,9 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const course: CourseObjectType = R.propOr(null, 'course', data);
 
-    const {
-        formRef,
-        setSubmitting,
-        onError,
-        resetForm,
-        handleMutationErrors,
-        setFieldValue,
-        unexpectedError,
-    } = useForm<UploadResourceFormValues>();
+    const { formRef, onError, resetForm, handleMutationErrors, setFieldValue, unexpectedError } = useForm<
+        UploadResourceFormValues
+    >();
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:required')),
@@ -103,7 +97,6 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
         setFieldValue('general', t('upload-resource:fileUploadingText'));
         await createResourceMutation({ variables });
-        setSubmitting(false);
     };
 
     const handleSubmit = async (variables: UploadResourceFormValues): Promise<void> => {

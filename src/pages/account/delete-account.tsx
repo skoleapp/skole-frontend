@@ -59,7 +59,6 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
 
             setSubmitting(true);
             await deleteUserMutation({ variables: { password: values.password } });
-            setSubmitting(false);
         } catch {
             // User cancelled.
         }
@@ -70,12 +69,7 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
     });
 
     const renderForm = (
-        <Formik
-            onSubmit={handleSubmit}
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            formRef={formRef}
-        >
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
                     <Field name="password" label={t('forms:password')} component={TextFormField} type="password" />
