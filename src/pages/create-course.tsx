@@ -42,7 +42,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const { data, loading, error } = useCreateCourseAutocompleteDataQuery({ variables: query });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
 
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
+    const { formRef, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
         CreateCourseFormValues
     >();
 
@@ -96,7 +96,12 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     };
 
     const renderForm = (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
+        <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+            formRef={formRef}
+        >
             {(props): JSX.Element => (
                 <Form>
                     <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
@@ -104,7 +109,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                     <Field
                         name="school"
                         label={t('forms:school')}
-                        dataKey="schools"
+                        dataKey="autocompleteSchools"
                         searchKey="name"
                         document={AutocompleteSchoolsDocument}
                         component={AutocompleteField}
@@ -113,7 +118,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                         name="subjects"
                         label={t('forms:subjects')}
                         searchKey="name"
-                        dataKey="subjects"
+                        dataKey="autocompleteSubjects"
                         document={AutocompleteSchoolsDocument}
                         component={AutocompleteField}
                         multiple

@@ -1,16 +1,19 @@
 import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
-import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
 import React from 'react';
+import { BORDER_RADIUS } from 'theme';
 import { MainLayoutProps, TopNavbarProps } from 'types';
 
 import { MainLayout } from './MainLayout';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ breakpoints }) => ({
     root: {
         flexGrow: 1,
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
-});
+}));
 
 interface Props extends Omit<MainLayoutProps, 'topNavbarProps'> {
     topNavbarProps: Omit<TopNavbarProps, 'header'>;
@@ -43,7 +46,7 @@ export const FormLayout: React.FC<Props> = ({ children, header, ...props }) => {
 
     return (
         <MainLayout {...layoutProps}>
-            <Paper className={clsx('paper-container', classes.root)}>
+            <Paper className={classes.root}>
                 {renderCardHeader}
                 {renderCardContent}
             </Paper>

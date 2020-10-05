@@ -44,7 +44,7 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
     const validExistingUser = !!R.propOr(false, 'username', existingUser) && !!R.propOr(false, 'email', existingUser);
 
-    const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
+    const { formRef, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
         LoginFormValues
     >();
 
@@ -165,7 +165,7 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderForm = (
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={formRef}>
             {validExistingUser ? renderExistingUserForm : renderNewUserForm}
         </Formik>
     );

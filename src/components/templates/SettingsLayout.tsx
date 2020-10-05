@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
+import { BORDER_RADIUS } from 'theme';
 import { MainLayoutProps, TopNavbarProps } from 'types';
 
 import { SettingsButton } from '..';
@@ -21,6 +22,9 @@ const useStyles = makeStyles(({ breakpoints }) => ({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
     disablePadding: {
         padding: '0 !important',
@@ -71,7 +75,7 @@ export const SettingsLayout: React.FC<Props> = ({
 
     const renderSettingsCard = !isMobileOrTablet && (
         <Grid item xs={12} lg={3} className={classes.container}>
-            <Paper className={clsx('paper-container', classes.container)}>
+            <Paper className={classes.container}>
                 {renderSettingsHeader}
                 {renderSettingsMenuList}
             </Paper>
@@ -98,7 +102,7 @@ export const SettingsLayout: React.FC<Props> = ({
             container
             className={clsx(classes.container, isMobileOrTablet && classes.disablePadding)}
         >
-            <Paper className={clsx('paper-container', classes.container)}>
+            <Paper className={classes.container}>
                 {renderHeader}
                 {renderContent}
             </Paper>

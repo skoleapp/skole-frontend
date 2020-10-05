@@ -28,7 +28,7 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
 
-    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, unexpectedError } = useForm<
+    const { formRef, setSubmitting, onError, resetForm, handleMutationErrors, unexpectedError } = useForm<
         ContactFormValues
     >();
 
@@ -73,7 +73,7 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
     };
 
     const renderForm = (
-        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
                     <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />

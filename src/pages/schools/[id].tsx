@@ -14,7 +14,6 @@ import {
     Typography,
 } from '@material-ui/core';
 import { AddCircleOutlineOutlined } from '@material-ui/icons';
-import clsx from 'clsx';
 import {
     CourseTableBody,
     ErrorLayout,
@@ -47,16 +46,20 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ breakpoints }) => ({
     root: {
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
-});
+}));
 
 const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
@@ -247,7 +250,7 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     );
 
     const renderContent = (
-        <Paper className={clsx('paper-container', classes.root)}>
+        <Paper className={classes.root}>
             {renderSchoolHeader}
             {renderTabs}
             {renderSwipeableViews}

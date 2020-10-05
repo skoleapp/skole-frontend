@@ -34,7 +34,9 @@ import * as Yup from 'yup';
 const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { userMe, setUserMe, verified } = useAuthContext();
-    const { ref, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<UpdateProfileFormValues>();
+    const { formRef, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<
+        UpdateProfileFormValues
+    >();
     const { toggleNotification } = useNotificationsContext();
 
     const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
@@ -103,7 +105,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
         <Field
             name="school"
             label={t('forms:schoolOptional')}
-            dataKey="schools"
+            dataKey="autocompleteSchools"
             searchKey="name"
             document={AutocompleteSchoolsDocument}
             component={AutocompleteField}
@@ -115,7 +117,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
         <Field
             name="subject"
             label={t('forms:subjectOptional')}
-            dataKey="subjects"
+            dataKey="autocompleteSubjects"
             searchKey="name"
             document={AutocompleteSubjectsDocument}
             component={AutocompleteField}
@@ -175,7 +177,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     );
 
     const renderEditProfileForm = (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={formRef}>
             {renderEditProfileFormContent}
         </Formik>
     );

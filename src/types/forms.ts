@@ -11,7 +11,7 @@ export type MutationErrors = Maybe<{ __typename?: 'ErrorType' | undefined } & Mu
 export type FieldValue = string | File | File[] | SchoolObjectType | null;
 
 export interface UseForm<T> {
-    ref: MutableRefObject<Formik<T> | null>;
+    formRef: MutableRefObject<Formik<T>>;
     handleMutationErrors: (err: MutationErrors) => void;
     onError: (err: ApolloError) => void;
     setSubmitting: (val: boolean) => void;

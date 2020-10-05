@@ -39,7 +39,7 @@ export interface PasswordFormValues {
 
 const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const {
-        ref: emailFormRef,
+        formRef: emailFormRef,
         handleMutationErrors: handleEmailFormMutationErrors,
         onError: onEmailFormError,
         setSubmitting: setSubmittingEmailForm,
@@ -48,7 +48,7 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
     } = useForm<EmailFormValues>();
 
     const {
-        ref: passwordFormRef,
+        formRef: passwordFormRef,
         handleMutationErrors: handlePasswordFormMutationErrors,
         onError: onPasswordFormError,
         setSubmitting: setSubmittingPasswordForm,

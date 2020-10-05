@@ -2,6 +2,7 @@ export * from './useInfoDialog';
 export * from './useActionsDialog';
 export * from './useVotes';
 export * from './useDayjs';
+export * from './useForceUpdate';
 export * from './useStateRef';
 export * from './useShare';
 export * from './useOpen';

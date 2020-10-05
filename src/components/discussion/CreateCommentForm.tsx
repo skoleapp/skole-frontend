@@ -38,7 +38,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const classes = useStyles();
     const { t } = useTranslation();
     const { isDesktop } = useMediaQueries();
-    const { ref, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
+    const { formRef, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { commentModalOpen, toggleCommentModal, commentAttachment, setCommentAttachment } = useDiscussionContext();
     const { screenshot, setScreenshot } = usePDFViewerContext();
@@ -126,7 +126,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     );
 
     return (
-        <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={formRef}>
             {(props): JSX.Element => (
                 <Form className={classes.container}>
                     {renderDesktopInputArea(props)}

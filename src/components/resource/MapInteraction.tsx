@@ -15,6 +15,8 @@ const useStyles = makeStyles(({ palette }) => ({
         backgroundColor: palette.grey[600],
         display: 'flex',
         justifyContent: 'center',
+        overflow: 'hidden',
+        borderRadius: '0 0 0.25rem 0.25rem',
     },
     bounceBack: {
         transform: 'none',

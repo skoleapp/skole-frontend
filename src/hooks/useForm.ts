@@ -4,7 +4,7 @@ import { i18n } from 'lib';
 import { useRef } from 'react';
 import { FieldValue, MutationErrors, MutationFormError, UseForm } from 'types';
 
-const snakeToCamel = (str: string): string => {
+const snakeCaseToCamelCase = (str: string): string => {
     return str.replace(/([-_][a-z])/g, group =>
         group
             .toUpperCase()
@@ -17,13 +17,14 @@ interface FormErrors {
     [key: string]: string;
 }
 
+// A custom hook that provides useful helpers for integrating Formik with GraphQL mutations.
 export const useForm = <T>(): UseForm<T> => {
-    const ref = useRef<Formik<T>>(null!);
+    const formRef = useRef<Formik<T>>(null!);
 
     const setFormErrors = (formErrors: FormErrors): void =>
-        Object.keys(formErrors).forEach(key => ref.current.setFieldError(key, (formErrors as FormErrors)[key]));
+        Object.keys(formErrors).forEach(key => formRef.current.setFieldError(key, (formErrors as FormErrors)[key]));
 
-    // A general error e.g. in the form.
+    // A general error in the form not related to any specific field.
     const handleMutationErrors = (err: MutationErrors): void => {
         const formErrors = { general: '' };
 
@@ -32,7 +33,7 @@ export const useForm = <T>(): UseForm<T> => {
                 if (e.field === '__all__') {
                     formErrors.general = i18n.t(`errors:${e.messages.join()}`);
                 } else if (e.field) {
-                    (formErrors as FormErrors)[snakeToCamel(e.field)] = i18n.t(`errors:${e.messages.join()}`);
+                    (formErrors as FormErrors)[snakeCaseToCamelCase(e.field)] = i18n.t(`errors:${e.messages.join()}`);
                 } else {
                     formErrors.general = i18n.t(`errors:${e.messages.join()}`);
                 }
@@ -44,7 +45,7 @@ export const useForm = <T>(): UseForm<T> => {
         setFormErrors(formErrors);
     };
 
-    // Apollo error e.g. a network error.
+    // Apollo error, e.g. a network error.
     const onError = (err: ApolloError): void => {
         const formErrors = { general: '' };
 
@@ -58,14 +59,14 @@ export const useForm = <T>(): UseForm<T> => {
     };
 
     const unexpectedError = (): void => setFormErrors({ general: i18n.t('validation:unexpectedError') });
-    const setSubmitting = (val: boolean): void | null => ref.current.setSubmitting(val);
-    const resetForm = (): void | null => ref.current.resetForm();
-    const submitForm = (): Promise<void> | null => ref.current.submitForm();
-    const setFieldValue = (fieldName: string, val: FieldValue): void => ref.current.setFieldValue(fieldName, val);
-    const setFieldError = (fieldName: string, val: string): void => ref.current.setFieldError(fieldName, val);
+    const setSubmitting = (val: boolean): void | null => formRef.current.setSubmitting(val);
+    const resetForm = (): void | null => formRef.current.resetForm();
+    const submitForm = (): Promise<void> | null => formRef.current.submitForm();
+    const setFieldValue = (fieldName: string, val: FieldValue): void => formRef.current.setFieldValue(fieldName, val);
+    const setFieldError = (fieldName: string, val: string): void => formRef.current.setFieldError(fieldName, val);
 
     return {
-        ref,
+        formRef,
         handleMutationErrors,
         onError,
         setSubmitting,

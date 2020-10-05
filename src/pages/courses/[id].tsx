@@ -64,10 +64,11 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ breakpoints }) => ({
     mobileContainer: {
         flexGrow: 1,
         display: 'flex',
@@ -80,8 +81,12 @@ const useStyles = makeStyles({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
-});
+}));
 
 const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
@@ -311,7 +316,7 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const renderResourcesHeader = <CardHeader title={courseName} action={renderUploadResourceButton} />;
 
     const renderMobileContent = isMobileOrTablet && (
-        <Paper className={clsx('paper-container', classes.mobileContainer)}>
+        <Paper className={classes.mobileContainer}>
             <Tabs value={tabValue} onChange={handleTabChange}>
                 <Tab label={`${t('common:resources')} (${resourceCount})`} />
                 <Tab label={`${t('common:discussion')} (${commentCount})`} />
@@ -328,13 +333,13 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const renderDesktopContent = !isMobileOrTablet && (
         <Grid container spacing={2} className={classes.desktopContainer}>
             <Grid item container xs={12} md={7} lg={8}>
-                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
+                <Paper className={clsx(classes.paperContainer)}>
                     {renderResourcesHeader}
                     {renderResources}
                 </Paper>
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
-                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
+                <Paper className={clsx(classes.paperContainer)}>
                     {renderDiscussionHeader}
                     {renderDiscussion}
                 </Paper>

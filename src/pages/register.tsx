@@ -68,7 +68,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
 
     const {
-        ref: registerFormRef,
+        formRef: registerFormRef,
         resetForm: resetRegisterForm,
         setSubmitting: setRegisterFormSubmitting,
         handleMutationErrors: handleRegisterMutationErrors,
@@ -77,7 +77,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     } = useForm<RegisterFormValues>();
 
     const {
-        ref: updateUserFormRef,
+        formRef: updateUserFormRef,
         resetForm: resetUpdateUserForm,
         setSubmitting: setUpdateUserFormSubmitting,
         handleMutationErrors: handleUpdateUserMutationErrors,
@@ -283,7 +283,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <Field
             name="school"
             label={t('forms:schoolOptional')}
-            dataKey="schools"
+            dataKey="autocompleteSchools"
             searchKey="name"
             document={AutocompleteSchoolsDocument}
             component={AutocompleteField}
@@ -294,7 +294,7 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <Field
             name="subject"
             label={t('forms:subjectOptional')}
-            dataKey="subjects"
+            dataKey="autocompleteSubjects"
             searchKey="name"
             document={AutocompleteSubjectsDocument}
             component={AutocompleteField}

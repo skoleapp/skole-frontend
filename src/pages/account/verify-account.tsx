@@ -18,7 +18,7 @@ import { AuthProps } from 'types';
 
 const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const {
-        ref: emailFormRef,
+        formRef: emailFormRef,
         setSubmitting: setSubmittingEmailForm,
         handleMutationErrors: handleEmailFormMutationErrors,
         onError: onEmailFormError,
@@ -27,7 +27,7 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
     } = useForm<{}>();
 
     const {
-        ref: confirmationFormRef,
+        formRef: confirmationFormRef,
         setSubmitting: setSubmittingConfirmationForm,
         handleMutationErrors: handleConfirmationFormMutationErrors,
         onError: onConfirmationFormError,

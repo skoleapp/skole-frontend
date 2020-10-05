@@ -23,7 +23,7 @@ export interface ChangePasswordFormValues {
 }
 
 const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
+    const { formRef, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
         ChangePasswordFormValues
     >();
 
@@ -62,7 +62,7 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     };
 
     const renderForm = (
-        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
                     <Field

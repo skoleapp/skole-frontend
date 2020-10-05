@@ -18,7 +18,8 @@ const useStyles = makeStyles(({ palette }) => ({
         right: 0,
         flexGrow: 1,
         display: 'flex',
-
+        overflow: 'hidden',
+        borderRadius: '0 0 0.25rem 0.25rem',
         '& .react-pdf__Document': {
             display: 'flex',
             flexDirection: 'column',
@@ -28,7 +29,6 @@ const useStyles = makeStyles(({ palette }) => ({
                 height: 'auto !important',
                 width: '100% !important',
             },
-
             '& .react-pdf__message--loading, .react-pdf__message--no-data, .react-pdf__message--error': {
                 position: 'absolute',
                 width: '100%',
@@ -36,6 +36,7 @@ const useStyles = makeStyles(({ palette }) => ({
                 backgroundColor: palette.common.white,
                 display: 'flex',
                 alignItems: 'center',
+                borderRadius: '0 0 0.25rem 0.25rem',
             },
         },
     },

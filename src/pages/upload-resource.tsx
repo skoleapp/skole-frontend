@@ -48,9 +48,15 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const course: CourseObjectType = R.propOr(null, 'course', data);
 
-    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, setFieldValue, unexpectedError } = useForm<
-        UploadResourceFormValues
-    >();
+    const {
+        formRef,
+        setSubmitting,
+        onError,
+        resetForm,
+        handleMutationErrors,
+        setFieldValue,
+        unexpectedError,
+    } = useForm<UploadResourceFormValues>();
 
     const validationSchema = Yup.object().shape({
         resourceTitle: Yup.string().required(t('validation:required')),
@@ -124,9 +130,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                     'JPEG',
                     90,
                     0,
-                    (file: File) => {
-                        handleUpload({ ...variables, file });
-                    },
+                    (file: File) => handleUpload({ ...variables, file }),
                     'blob',
                 );
             } else {
@@ -146,14 +150,14 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     };
 
     const renderForm = (
-        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
                     <Field name="resourceTitle" label={t('forms:resourceTitle')} component={TextFormField} />
                     <Field
                         name="resourceType"
                         label={t('forms:resourceType')}
-                        dataKey="resourceTypes"
+                        dataKey="autocompleteResourceTypes"
                         document={AutocompleteResourceTypesDocument}
                         component={AutocompleteField}
                         disableSearch
@@ -161,7 +165,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                     <Field
                         name="school"
                         label={t('forms:schoolOptional')}
-                        dataKey="schools"
+                        dataKey="autocompleteSchools"
                         searchKey="name"
                         document={AutocompleteSchoolTypesDocument}
                         component={AutocompleteField}
@@ -175,7 +179,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                     <Field
                         name="course"
                         label={t('forms:course')}
-                        dataKey="courses"
+                        dataKey="autocompleteCourses"
                         searchKey="name"
                         document={AutocompleteCoursesDocument}
                         component={AutocompleteField}

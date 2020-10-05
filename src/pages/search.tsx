@@ -15,7 +15,6 @@ import {
     useTheme,
 } from '@material-ui/core';
 import { ArrowBackOutlined, ClearAllOutlined, FilterListOutlined, SearchOutlined } from '@material-ui/icons';
-import clsx from 'clsx';
 import {
     AutocompleteField,
     CourseTableBody,
@@ -53,11 +52,11 @@ import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
+import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { AuthProps } from 'types';
 import { getPaginationQuery, getQueryWithPagination, redirect, urls } from 'utils';
 
-const useStyles = makeStyles(({ palette, spacing }) => ({
+const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     rootContainer: {
         flexGrow: 1,
     },
@@ -65,6 +64,10 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
     topNavbar: {
         height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
@@ -110,13 +113,13 @@ interface ValidFilter {
 
 const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
-    const { isMobileOrTablet } = useMediaQueries();
+    const { isMobileOrTablet, isDesktop } = useMediaQueries();
     const { spacing } = useTheme();
     const { t } = useTranslation();
-    const { ref, resetForm, setSubmitting } = useForm<FilterSearchResultsFormValues>();
     const { pathname, query } = useRouter();
     const { open: filtersOpen, handleOpen: handleOpenFilters, handleClose: handleCloseFilters } = useOpen();
     const { data, loading, error } = useSearchCoursesQuery({ variables: query });
+    const { formRef, resetForm, setSubmitting } = useForm<FilterSearchResultsFormValues>();
     const courseObjects: CourseObjectType[] = R.pathOr([], ['searchCourses', 'objects'], data);
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const subject: SubjectObjectType = R.propOr(null, 'subject', data);
@@ -134,18 +137,18 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     // Pick non-empty values and reload the page with new query params.
     const handleSubmitFilters = async (filteredValues: {}): Promise<void> => {
         const validQuery: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
-        await redirect({ pathname, query: validQuery });
         setSubmitting(false);
         handleCloseFilters();
+        await redirect({ pathname, query: validQuery });
     };
 
     // Clear the query params and reset form.
     const handleClearFilters = async (): Promise<void> => {
         const paginationQuery = getPaginationQuery(query);
-        await redirect({ pathname, query: paginationQuery });
         resetForm();
         setSearchValue('');
         handleCloseFilters();
+        await redirect({ pathname, query: paginationQuery });
     };
 
     // Pre-load query params to the form.
@@ -205,17 +208,13 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     };
 
     const handleClearSearchInput = async (): Promise<void> => {
-        setSearchInputSubmitting(true);
         setSearchValue('');
         await redirect({ pathname, query: { ...paginationQuery } });
-        setSearchInputSubmitting(false);
     };
 
     const handleSubmitSearchInput = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
-        setSearchInputSubmitting(true);
         await redirect({ pathname, query: { ...queryWithPagination, courseName: searchValue } });
-        setSearchInputSubmitting(false);
     };
 
     const handlePreSubmit = <T extends FilterSearchResultsFormValues>(values: T): void => {
@@ -237,7 +236,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     };
 
     const handleDeleteFilter = (filterName: string) => async (): Promise<void> => {
-        setSubmitting(true);
+        formRef.current.setSubmitting(true);
         setSearchInputSubmitting(true);
 
         const query: ParsedUrlQueryInput = R.pickBy(
@@ -246,9 +245,9 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         );
 
         filterName === 'courseName' && handleClearSearchInput();
-        await redirect({ pathname, query });
-        resetForm();
+        formRef.current.resetForm();
         setSearchInputSubmitting(false);
+        await redirect({ pathname, query });
     };
 
     const renderFilterNames = !!validFilters.length && (
@@ -269,7 +268,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         <Field
             name="subject"
             label={t('forms:subject')}
-            dataKey="subjects"
+            dataKey="autocompleteSubjects"
             searchKey="name"
             document={AutocompleteSubjectsDocument}
             component={AutocompleteField}
@@ -280,7 +279,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         <Field
             name="school"
             label={t('forms:school')}
-            dataKey="schools"
+            dataKey="autocompleteSchools"
             searchKey="name"
             document={AutocompleteSchoolsDocument}
             component={AutocompleteField}
@@ -291,7 +290,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         <Field
             name="schoolType"
             label={t('forms:schoolType')}
-            dataKey="schoolTypes"
+            dataKey="autocompleteSchoolTypes"
             document={AutocompleteSchoolTypesDocument}
             component={AutocompleteField}
         />
@@ -301,7 +300,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         <Field
             name="city"
             label={t('forms:city')}
-            dataKey="cities"
+            dataKey="autocompleteCities"
             document={AutocompleteCitiesDocument}
             component={AutocompleteField}
         />
@@ -311,7 +310,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         <Field
             name="country"
             label={t('forms:country')}
-            dataKey="countries"
+            dataKey="autocompleteCountries"
             document={AutocompleteCountriesDocument}
             component={AutocompleteField}
         />
@@ -368,7 +367,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const renderFilterResultsForm = (
         <DialogContent>
-            <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={ref}>
+            <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={formRef}>
                 {renderSearchFormContent}
             </Formik>
         </DialogContent>
@@ -396,7 +395,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderClearFiltersButton = (
-        <IconButton onClick={handleClearFilters}>
+        <IconButton onClick={handleClearFilters} size="small">
             <ClearAllOutlined />
         </IconButton>
     );
@@ -423,16 +422,16 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const renderFilterResultsHeader = <CardHeader title={t('common:filters')} />;
     const renderResultsHeader = <CardHeader title={t('common:searchResults')} />;
 
-    const renderDesktopContent = !isMobileOrTablet && (
+    const renderDesktopContent = isDesktop && (
         <Grid container spacing={2} className={classes.rootContainer}>
             <Grid item container xs={5} md={4} lg={3}>
-                <Paper className={clsx('paper-container', classes.container)}>
+                <Paper className={classes.container}>
                     {renderFilterResultsHeader}
                     {renderFilterResultsForm}
                 </Paper>
             </Grid>
             <Grid item container xs={7} md={8} lg={9}>
-                <Paper className={clsx('paper-container', classes.container)}>
+                <Paper className={classes.container}>
                     {renderResultsHeader}
                     {renderFilterNames}
                     {renderResults}

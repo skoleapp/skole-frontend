@@ -46,18 +46,26 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     paper: {
         padding: spacing(4),
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
     contentCard: {
         flexGrow: 1,
         marginTop: spacing(2),
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
     avatar: {
         margin: 0,
@@ -379,14 +387,14 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderResponsiveContent = (
-        <Paper className={clsx('paper-container', classes.paper)}>
+        <Paper className={classes.paper}>
             {renderResponsiveInfo}
             {renderMobileInfo}
         </Paper>
     );
 
     const renderMobileActionsCard = isMobile && isOwnProfile && (
-        <Paper className={clsx('paper-container', classes.paper, classes.contentCard)}>
+        <Paper className={clsx(classes.paper, classes.contentCard)}>
             {renderProfileStrength}
             {renderEditProfileButton}
             {renderViewStarredButton}
@@ -435,7 +443,7 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderCreatedContent = (
-        <Paper className={clsx('paper-container', classes.contentCard)}>
+        <Paper className={classes.contentCard}>
             {renderTabs}
             {renderSwipeableViews}
         </Paper>

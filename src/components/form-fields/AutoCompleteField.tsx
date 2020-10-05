@@ -1,17 +1,11 @@
 import { OperationVariables, useApolloClient } from '@apollo/client';
-import { CircularProgress, makeStyles, TextField, TextFieldProps } from '@material-ui/core';
+import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { FieldAttributes, FormikProps, getIn } from 'formik';
 import { DocumentNode } from 'graphql';
 import { useQueryOptions } from 'hooks';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-
-const useStyles = makeStyles(({ spacing }) => ({
-    endAdornment: {
-        marginRight: spacing(3),
-    },
-}));
 
 interface Props {
     field: FieldAttributes<{}>;
@@ -38,7 +32,6 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     multiple,
     ...textFieldProps
 }: Props & TextFieldProps) => {
-    const classes = useStyles();
     const queryOptions = useQueryOptions();
     const [open, setOpen] = useState(false);
     const handleOpen = (): void => setOpen(true);
@@ -101,7 +94,6 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     }, [inputValue]);
 
     const handleAutocompleteChange = (_e: ChangeEvent<{}>, val: T | T[] | null): void => {
-        console.log('test');
         !!val ? form.setFieldValue(name, val) : form.setFieldValue(name, null);
     };
 
@@ -126,7 +118,6 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <T extends {}
 
     return (
         <Autocomplete
-            classes={{ endAdornment: classes.endAdornment }}
             open={open}
             onOpen={handleOpen}
             onClose={handleClose}
