@@ -18,8 +18,7 @@ import { AuthProps } from 'types';
 
 const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const {
-        ref: emailFormRef,
-        setSubmitting: setSubmittingEmailForm,
+        formRef: emailFormRef,
         handleMutationErrors: handleEmailFormMutationErrors,
         onError: onEmailFormError,
         resetForm: resetEmailForm,
@@ -27,8 +26,7 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
     } = useForm<{}>();
 
     const {
-        ref: confirmationFormRef,
-        setSubmitting: setSubmittingConfirmationForm,
+        formRef: confirmationFormRef,
         handleMutationErrors: handleConfirmationFormMutationErrors,
         onError: onConfirmationFormError,
         resetForm: resetConfirmationForm,
@@ -89,12 +87,10 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
 
     const handleSubmitEmail = async (): Promise<void> => {
         await resendVerificationEmail({ variables: { email } });
-        setSubmittingEmailForm(false);
     };
 
     const handleSubmitConfirmation = async (): Promise<void> => {
         await verifyAccount({ variables: { token } });
-        setSubmittingConfirmationForm(false);
     };
 
     const initialEmailFormValues = {

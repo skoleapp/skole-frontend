@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
@@ -12,7 +11,6 @@ import {
 } from '@material-ui/core';
 import { CheckOutlined } from '@material-ui/icons';
 import cookie from 'cookie';
-import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import { useEffect, useState } from 'react';
 import React from 'react';
@@ -20,7 +18,7 @@ import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { urls } from 'utils';
 
 import { TextLink } from '..';
-import { Transition } from '../shared';
+import { SkoleDialog } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     root: {
@@ -50,7 +48,6 @@ export const SkoleGDPR: React.FC = () => {
     const [consent, setConsent] = useState(true);
     const [privacyPreferencesOpen, setPrivacyPreferencesOpen] = useState(false);
     const { t } = useTranslation();
-    const { isMobileOrTablet, isDesktop } = useMediaQueries();
 
     useEffect(() => {
         const skoleGDPRConsent = cookie.parse(document.cookie).skole_gdpr_consent;
@@ -99,13 +96,7 @@ export const SkoleGDPR: React.FC = () => {
     );
 
     const renderPrivacyPreferences = (
-        <Dialog
-            open={privacyPreferencesOpen}
-            onClose={closePrivacyPreferences}
-            fullScreen={isMobileOrTablet}
-            fullWidth={isDesktop}
-            TransitionComponent={Transition}
-        >
+        <SkoleDialog open={privacyPreferencesOpen} onClose={closePrivacyPreferences}>
             <DialogTitle>Privacy Preferences</DialogTitle>
             <DialogContent>
                 <Box textAlign="left">
@@ -145,7 +136,7 @@ export const SkoleGDPR: React.FC = () => {
                     {t('common:save')}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </SkoleDialog>
     );
 
     return !consent ? (

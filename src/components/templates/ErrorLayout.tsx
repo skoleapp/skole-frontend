@@ -1,18 +1,21 @@
 import { CardHeader, makeStyles, Paper } from '@material-ui/core';
-import clsx from 'clsx';
 import { useTranslation } from 'lib';
 import React from 'react';
+import { BORDER_RADIUS } from 'theme';
 import { SEOProps } from 'types';
 
 import { NotFoundBox } from '../shared';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ breakpoints }) => ({
     root: {
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
-});
+}));
 
 import { MainLayout } from './MainLayout';
 
@@ -39,7 +42,7 @@ export const ErrorLayout: React.FC<Props> = ({ seoProps }) => {
 
     return (
         <MainLayout {...layoutProps}>
-            <Paper className={clsx('paper-container', classes.root)}>
+            <Paper className={classes.root}>
                 <CardHeader title={t('_error:header')} />
                 <NotFoundBox text={t('_error:text')} />
             </Paper>

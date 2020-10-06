@@ -1,6 +1,6 @@
 import { FormControl, FormHelperText, Switch } from '@material-ui/core';
 import {
-    AutoCompleteField,
+    AutocompleteField,
     AvatarField,
     ButtonLink,
     FormSubmitSection,
@@ -14,10 +14,10 @@ import {
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
+    AutocompleteSchoolsDocument,
+    AutocompleteSubjectsDocument,
     SchoolObjectType,
-    SchoolsDocument,
     SubjectObjectType,
-    SubjectsDocument,
     UpdateUserMutation,
     UserObjectType,
     useUpdateUserMutation,
@@ -34,7 +34,7 @@ import * as Yup from 'yup';
 const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { userMe, setUserMe, verified } = useAuthContext();
-    const { ref, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<UpdateProfileFormValues>();
+    const { formRef, handleMutationErrors, onError, resetForm, unexpectedError } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
 
     const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
@@ -42,6 +42,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
             if (!!updateUser.errors && !!updateUser.errors.length) {
                 handleMutationErrors(updateUser.errors);
             } else if (!!updateUser.message) {
+                resetForm();
                 toggleNotification(updateUser.message);
                 setUserMe(updateUser.user as UserObjectType);
             } else {
@@ -68,8 +69,6 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
                 subject: R.propOr('', 'id', subject),
             },
         });
-
-        setSubmitting(false);
     };
 
     const initialValues = {
@@ -97,16 +96,16 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     const renderTitleField = <Field name="title" component={TextFormField} label={t('forms:title')} />;
     const renderUsernameField = <Field name="username" component={TextFormField} label={t('forms:username')} />;
     const renderEmailField = <Field name="email" component={TextFormField} label={t('forms:email')} />;
-
     const renderBioField = <Field name="bio" component={TextFormField} label={t('forms:bio')} rows="4" multiline />;
 
     const renderSchoolField = (
         <Field
             name="school"
             label={t('forms:schoolOptional')}
-            dataKey="schools"
-            document={SchoolsDocument}
-            component={AutoCompleteField}
+            dataKey="autocompleteSchools"
+            searchKey="name"
+            document={AutocompleteSchoolsDocument}
+            component={AutocompleteField}
             helperText={t('forms:schoolHelpText')}
         />
     );
@@ -115,9 +114,10 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
         <Field
             name="subject"
             label={t('forms:subjectOptional')}
-            dataKey="subjects"
-            document={SubjectsDocument}
-            component={AutoCompleteField}
+            dataKey="autocompleteSubjects"
+            searchKey="name"
+            document={AutocompleteSubjectsDocument}
+            component={AutocompleteField}
             helperText={t('forms:subjectHelpText')}
         />
     );
@@ -174,7 +174,7 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
     );
 
     const renderEditProfileForm = (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={formRef}>
             {renderEditProfileFormContent}
         </Formik>
     );

@@ -1,4 +1,4 @@
-import { IconButton, IconButtonProps, Tooltip } from '@material-ui/core';
+import { IconButton, IconButtonProps, Tooltip, Typography } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { PerformStarMutation, usePerformStarMutation } from 'generated';
@@ -38,7 +38,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
 
     return (
         <Tooltip title={tooltip}>
-            <span>
+            <Typography component="span">
                 <IconButton
                     onClick={handleStar}
                     disabled={starSubmitting || verified === false}
@@ -47,7 +47,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
                 >
                     <StarBorderOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 };

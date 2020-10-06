@@ -1,5 +1,6 @@
 import React, { Context, createContext, useRef, useState } from 'react';
 import { useContext } from 'react';
+import { Document } from 'react-pdf';
 import { PDFViewerContextType } from 'types';
 
 const PDFViewerContext = createContext<PDFViewerContextType | null>(null);
@@ -8,8 +9,8 @@ export const usePDFViewerContext = (): PDFViewerContextType =>
     useContext(PDFViewerContext as Context<PDFViewerContextType>);
 
 export const PDFViewerContextProvider: React.FC = ({ children }) => {
-    const documentRef = useRef<Document>(null);
-    const pageNumberInputRef = useRef<HTMLInputElement>(null);
+    const documentRef = useRef<Document>(null!);
+    const pageNumberInputRef = useRef<HTMLInputElement>(null!);
     const [controlsDisabled, setControlsDisabled] = useState(true);
     const [drawMode, setDrawMode] = useState(false);
     const [screenshot, setScreenshot] = useState<string | null>(null);
@@ -17,7 +18,7 @@ export const PDFViewerContextProvider: React.FC = ({ children }) => {
     const [numPages, setNumPages] = useState(0);
     const [pageNumber, setPageNumber] = useState(0);
     const [swipingDisabled, setSwipingDisabled] = useState(false);
-    const swipeableViewsRef = useRef(null);
+    const swipeableViewsRef = useRef(null!);
 
     const value = {
         documentRef,

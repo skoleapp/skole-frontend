@@ -1,4 +1,4 @@
-export { AutoCompleteField } from './AutoCompleteField';
+export { AutocompleteField } from './AutocompleteField';
 export { AvatarField } from './AvatarField';
 export { FileField } from './FileField';
 export { NativeSelectField } from './NativeSelectField';

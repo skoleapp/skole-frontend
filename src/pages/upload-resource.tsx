@@ -1,5 +1,5 @@
 import {
-    AutoCompleteField,
+    AutocompleteField,
     ErrorLayout,
     FileField,
     FormLayout,
@@ -12,13 +12,13 @@ import {
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import {
+    AutocompleteCoursesDocument,
+    AutocompleteResourceTypesDocument,
+    AutocompleteSchoolsDocument,
     CourseObjectType,
-    CoursesDocument,
     CreateResourceMutation,
-    ResourceTypesDocument,
     SchoolObjectType,
-    SchoolsDocument,
-    useCreateResourceInitialDataQuery,
+    useCreateResourceAutocompleteDataQuery,
     useCreateResourceMutation,
 } from 'generated';
 import { useForm } from 'hooks';
@@ -44,11 +44,11 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
-    const { data, loading, error } = useCreateResourceInitialDataQuery({ variables: query });
+    const { data, loading, error } = useCreateResourceAutocompleteDataQuery({ variables: query });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const course: CourseObjectType = R.propOr(null, 'course', data);
 
-    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, setFieldValue, unexpectedError } = useForm<
+    const { formRef, onError, resetForm, handleMutationErrors, setFieldValue, unexpectedError } = useForm<
         UploadResourceFormValues
     >();
 
@@ -97,7 +97,6 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
         setFieldValue('general', t('upload-resource:fileUploadingText'));
         await createResourceMutation({ variables });
-        setSubmitting(false);
     };
 
     const handleSubmit = async (variables: UploadResourceFormValues): Promise<void> => {
@@ -124,9 +123,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                     'JPEG',
                     90,
                     0,
-                    (file: File) => {
-                        handleUpload({ ...variables, file });
-                    },
+                    (file: File) => handleUpload({ ...variables, file }),
                     'blob',
                 );
             } else {
@@ -146,23 +143,25 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     };
 
     const renderForm = (
-        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
                     <Field name="resourceTitle" label={t('forms:resourceTitle')} component={TextFormField} />
                     <Field
                         name="resourceType"
                         label={t('forms:resourceType')}
-                        dataKey="resourceTypes"
-                        document={ResourceTypesDocument}
-                        component={AutoCompleteField}
+                        dataKey="autocompleteResourceTypes"
+                        document={AutocompleteResourceTypesDocument}
+                        component={AutocompleteField}
+                        disableSearch
                     />
                     <Field
                         name="school"
                         label={t('forms:schoolOptional')}
-                        dataKey="schools"
-                        document={SchoolsDocument}
-                        component={AutoCompleteField}
+                        dataKey="autocompleteSchools"
+                        searchKey="name"
+                        document={AutocompleteSchoolsDocument}
+                        component={AutocompleteField}
                         helperText={
                             <>
                                 {t('upload-resource:schoolHelperText')}{' '}
@@ -173,9 +172,10 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                     <Field
                         name="course"
                         label={t('forms:course')}
-                        dataKey="courses"
-                        document={CoursesDocument}
-                        component={AutoCompleteField}
+                        dataKey="autocompleteCourses"
+                        searchKey="name"
+                        document={AutocompleteCoursesDocument}
+                        component={AutocompleteField}
                         variables={{ school: R.pathOr(undefined, ['values', 'school', 'id'], props) }} // Filter courses based on selected school.
                         helperText={
                             <>

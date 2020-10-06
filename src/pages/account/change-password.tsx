@@ -23,10 +23,7 @@ export interface ChangePasswordFormValues {
 }
 
 const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
-        ChangePasswordFormValues
-    >();
-
+    const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<ChangePasswordFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
 
@@ -58,11 +55,10 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const handleSubmit = async (values: ChangePasswordFormValues): Promise<void> => {
         const { oldPassword, newPassword } = values;
         await changePasswordMutation({ variables: { oldPassword, newPassword } });
-        setSubmitting(false);
     };
 
     const renderForm = (
-        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
                     <Field

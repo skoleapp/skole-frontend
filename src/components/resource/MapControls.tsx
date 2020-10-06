@@ -1,4 +1,4 @@
-import { Box, Fab, makeStyles, Size, Tooltip } from '@material-ui/core';
+import { Box, Fab, makeStyles, Size, Tooltip, Typography } from '@material-ui/core';
 import { AddOutlined, FullscreenExitOutlined, FullscreenOutlined, RemoveOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -45,31 +45,31 @@ export const MapControls: React.FC<Props> = ({
 
     const renderFullscreenButton = (
         <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
-            <span>
+            <Typography component="span">
                 <Fab {...commonButtonProps} onClick={handleFullscreenButtonClick}>
                     {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                 </Fab>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
     const renderDownscaleButton = (
         <Tooltip title={t('tooltips:zoomIn')}>
-            <span>
+            <Typography component="span">
                 <Fab {...commonButtonProps} onClick={handleScaleUpButtonClick}>
                     <AddOutlined />
                 </Fab>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
     const renderUpscaleButton = (
         <Tooltip title={t('tooltips:zoomOut')}>
-            <span>
+            <Typography component="span">
                 <Fab {...commonButtonProps} onClick={handleScaleDownButtonClick}>
                     <RemoveOutlined />
                 </Fab>
-            </span>
+            </Typography>
         </Tooltip>
     );
 

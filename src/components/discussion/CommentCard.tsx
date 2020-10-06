@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Box,
     Card,
     CardActionArea,
     CardContent,
@@ -202,21 +201,19 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const renderVoteSection = (
         <Grid item container xs={1} direction="column" justify="center" alignItems="center">
             <Tooltip title={upVoteButtonTooltip}>
-                <span>
+                <Typography component="span">
                     <IconButton {...upVoteButtonProps}>
                         <KeyboardArrowUpOutlined className="vote-button" />
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
-            <Box>
-                <Typography variant="body2">{score}</Typography>
-            </Box>
+            <Typography variant="body2">{score}</Typography>
             <Tooltip title={downVoteButtonTooltip}>
-                <span>
+                <Typography component="span">
                     <IconButton {...downVoteButtonProps}>
                         <KeyboardArrowDownOutlined className="vote-button" />
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
         </Grid>
     );

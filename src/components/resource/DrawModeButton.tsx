@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip, Typography } from '@material-ui/core';
 import { TabUnselectedOutlined } from '@material-ui/icons';
 import { usePDFViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';
@@ -14,11 +14,11 @@ export const DrawModeButton: React.FC = () => {
 
     return (
         <Tooltip title={t('tooltips:markArea')}>
-            <span>
+            <Typography component="span">
                 <IconButton onClick={handleClick} disabled={controlsDisabled} size="small" color={color}>
                     <TabUnselectedOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 };

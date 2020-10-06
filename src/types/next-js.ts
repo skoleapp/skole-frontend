@@ -9,5 +9,5 @@ export interface SSRContext {
     params?: ParsedUrlQuery;
     query: ParsedUrlQuery;
     preview?: boolean;
-    previewData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+    previewData?: unknown;
 }

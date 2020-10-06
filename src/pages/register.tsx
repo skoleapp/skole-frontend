@@ -1,7 +1,7 @@
 import { Button, FormControl, FormHelperText, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
-    AutoCompleteField,
+    AutocompleteField,
     ButtonLink,
     FormLayout,
     FormSubmitSection,
@@ -13,11 +13,11 @@ import {
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
+    AutocompleteSchoolsDocument,
+    AutocompleteSubjectsDocument,
     RegisterMutation,
     SchoolObjectType,
-    SchoolsDocument,
     SubjectObjectType,
-    SubjectsDocument,
     UpdateUserMutation,
     useRegisterMutation,
     UserObjectType,
@@ -68,18 +68,16 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
     const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
 
     const {
-        ref: registerFormRef,
+        formRef: registerFormRef,
         resetForm: resetRegisterForm,
-        setSubmitting: setRegisterFormSubmitting,
         handleMutationErrors: handleRegisterMutationErrors,
         onError: onRegisterError,
         unexpectedError: unexpectedRegisterError,
     } = useForm<RegisterFormValues>();
 
     const {
-        ref: updateUserFormRef,
+        formRef: updateUserFormRef,
         resetForm: resetUpdateUserForm,
-        setSubmitting: setUpdateUserFormSubmitting,
         handleMutationErrors: handleUpdateUserMutationErrors,
         onError: onUpdateUserError,
         unexpectedError: updateUserUnexpectedError,
@@ -165,8 +163,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
                 password,
             },
         });
-
-        setRegisterFormSubmitting(false);
     };
 
     const onUpdateUserCompleted = ({ updateUser }: UpdateUserMutation): void => {
@@ -199,8 +195,6 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
                 subject: R.propOr('', 'id', subject),
             },
         });
-
-        setUpdateUserFormSubmitting(false);
     };
 
     const renderUsernameField = (
@@ -283,9 +277,10 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <Field
             name="school"
             label={t('forms:schoolOptional')}
-            dataKey="schools"
-            document={SchoolsDocument}
-            component={AutoCompleteField}
+            dataKey="autocompleteSchools"
+            searchKey="name"
+            document={AutocompleteSchoolsDocument}
+            component={AutocompleteField}
         />
     );
 
@@ -293,9 +288,10 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         <Field
             name="subject"
             label={t('forms:subjectOptional')}
-            dataKey="subjects"
-            document={SubjectsDocument}
-            component={AutoCompleteField}
+            dataKey="autocompleteSubjects"
+            searchKey="name"
+            document={AutocompleteSubjectsDocument}
+            component={AutocompleteField}
         />
     );
 

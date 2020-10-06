@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, Grid, makeStyles } from '@material-ui/core';
+import { DialogContent, Grid, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import { useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
@@ -9,7 +9,7 @@ import React, { useEffect } from 'react';
 import { CommentTarget, CreateCommentFormValues } from 'types';
 
 import { DialogHeader } from '..';
-import { Transition } from '../shared';
+import { SkoleDialog } from '../shared/SkoleDialog';
 import { RichTextEditor } from './RichTextEditor';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -37,8 +37,8 @@ interface CreateCommentFormProps {
 export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target }) => {
     const classes = useStyles();
     const { t } = useTranslation();
-    const { isDesktop, isMobileOrTablet } = useMediaQueries();
-    const { ref, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
+    const { isDesktop } = useMediaQueries();
+    const { formRef, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { commentModalOpen, toggleCommentModal, commentAttachment, setCommentAttachment } = useDiscussionContext();
     const { screenshot, setScreenshot } = usePDFViewerContext();
@@ -114,13 +114,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const renderRichTextEditor = (formikProps: T): JSX.Element => <RichTextEditor {...formikProps} />;
 
     const renderCreateCommentModal = (formikProps: T): JSX.Element => (
-        <Dialog
-            fullScreen={isMobileOrTablet}
-            fullWidth={isDesktop}
-            open={commentModalOpen}
-            onClose={handleCloseCreateCommentModal}
-            TransitionComponent={Transition}
-        >
+        <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
             <DialogHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
             <DialogContent className={classes.dialogContent}>
                 <Grid className={classes.container} container direction="column">
@@ -128,11 +122,11 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
                     {renderRichTextEditor(formikProps)}
                 </Grid>
             </DialogContent>
-        </Dialog>
+        </SkoleDialog>
     );
 
     return (
-        <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={ref}>
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={formRef}>
             {(props): JSX.Element => (
                 <Form className={classes.container}>
                     {renderDesktopInputArea(props)}

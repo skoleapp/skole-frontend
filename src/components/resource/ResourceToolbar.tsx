@@ -102,7 +102,7 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
 
     const renderDownloadButton = (
         <Tooltip title={t('tooltips:download')}>
-            <span>
+            <Typography component="span">
                 <IconButton
                     onClick={handleDownloadButtonClick}
                     size="small"
@@ -111,27 +111,27 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
                 >
                     <CloudDownloadOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
     const renderPrintButton = (
         <Tooltip title={t('tooltips:print')}>
-            <span>
+            <Typography component="span">
                 <IconButton onClick={handlePrintButtonClick} size="small" color="secondary" disabled={controlsDisabled}>
                     <PrintOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
     const renderRotateButton = (
         <Tooltip title={t('tooltips:rotate')}>
-            <span>
+            <Typography component="span">
                 <IconButton size="small" color="inherit" onClick={handleRotateButtonClick} disabled={controlsDisabled}>
                     <RotateRightOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 

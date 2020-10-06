@@ -1,10 +1,10 @@
-import { Dialog, DialogContent, Drawer } from '@material-ui/core';
+import { DialogContent, Drawer } from '@material-ui/core';
 import { useMediaQueries } from 'hooks';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
 
 import { DialogHeader } from './DialogHeader';
-import { Transition } from './Transition';
+import { SkoleDialog } from './SkoleDialog';
 
 interface Props {
     open: boolean;
@@ -25,10 +25,10 @@ export const ResponsiveDialog: React.FC<Props> = ({ children, dialogHeaderProps,
     );
 
     const renderDialog = (
-        <Dialog fullWidth TransitionComponent={Transition} {...dialogProps}>
+        <SkoleDialog {...dialogProps}>
             {renderDialogHeader}
             <DialogContent>{children}</DialogContent>
-        </Dialog>
+        </SkoleDialog>
     );
 
     return isMobileOrTablet ? renderDrawer : renderDialog;

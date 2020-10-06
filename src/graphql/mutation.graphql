@@ -121,7 +121,7 @@ mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
     }
 }
 
-mutation DeleteAccount($password: String!) {
+mutation DeleteUser($password: String!) {
     deleteUser(input: { password: $password }) {
         message
         errors {
@@ -211,7 +211,7 @@ mutation DeleteComment($id: ID) {
     }
 }
 
-mutation Contact($subject: String!, $name: String, $email: String!, $message: String!) {
+mutation CreateContactMessage($subject: String!, $name: String, $email: String!, $message: String!) {
     createContactMessage(input: { subject: $subject, name: $name, email: $email, message: $message }) {
         message
         errors {
@@ -267,7 +267,7 @@ mutation DeleteResource($id: ID) {
     }
 }
 
-mutation MarkSingleActivityRead($id: ID, $read: Boolean) {
+mutation MarkActivityRead($id: ID, $read: Boolean) {
     markActivityRead(input: { id: $id, read: $read }) {
         errors {
             field

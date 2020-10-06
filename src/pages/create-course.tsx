@@ -1,5 +1,5 @@
 import {
-    AutoCompleteField,
+    AutocompleteField,
     ErrorLayout,
     FormLayout,
     FormSubmitSection,
@@ -10,12 +10,12 @@ import {
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import {
+    AutocompleteSchoolsDocument,
+    AutocompleteSubjectsDocument,
     CreateCourseMutation,
     SchoolObjectType,
-    SchoolsDocument,
     SubjectObjectType,
-    SubjectsDocument,
-    useCreateCourseInitialDataQuery,
+    useCreateCourseAutocompleteDataQuery,
     useCreateCourseMutation,
 } from 'generated';
 import { useForm } from 'hooks';
@@ -40,12 +40,9 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
     const { query } = useRouter();
-    const { data, loading, error } = useCreateCourseInitialDataQuery({ variables: query });
+    const { data, loading, error } = useCreateCourseAutocompleteDataQuery({ variables: query });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
-
-    const { ref, resetForm, setSubmitting, handleMutationErrors, onError, unexpectedError } = useForm<
-        CreateCourseFormValues
-    >();
+    const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<CreateCourseFormValues>();
 
     const validationSchema = Yup.object().shape({
         courseName: Yup.string().required(t('validation:required')),
@@ -85,7 +82,6 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         };
 
         createCourseMutation({ variables });
-        setSubmitting(false);
     };
 
     const initialValues = {
@@ -97,7 +93,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     };
 
     const renderForm = (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={ref}>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
                     <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
@@ -105,16 +101,18 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                     <Field
                         name="school"
                         label={t('forms:school')}
-                        dataKey="schools"
-                        document={SchoolsDocument}
-                        component={AutoCompleteField}
+                        dataKey="autocompleteSchools"
+                        searchKey="name"
+                        document={AutocompleteSchoolsDocument}
+                        component={AutocompleteField}
                     />
                     <Field
                         name="subjects"
                         label={t('forms:subjects')}
-                        dataKey="subjects"
-                        document={SubjectsDocument}
-                        component={AutoCompleteField}
+                        searchKey="name"
+                        dataKey="autocompleteSubjects"
+                        document={AutocompleteSubjectsDocument}
+                        component={AutocompleteField}
                         multiple
                     />
                     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />

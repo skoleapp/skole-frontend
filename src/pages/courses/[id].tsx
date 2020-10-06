@@ -12,6 +12,7 @@ import {
     Tab,
     Tabs,
     Tooltip,
+    Typography,
 } from '@material-ui/core';
 import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
 import clsx from 'clsx';
@@ -40,7 +41,7 @@ import {
     ResourceObjectType,
     ResourceTypeObjectType,
     SubjectObjectType,
-    useCourseDetailQuery,
+    useCourseQuery,
     useDeleteCourseMutation,
     UserObjectType,
     VoteObjectType,
@@ -63,10 +64,11 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ breakpoints }) => ({
     mobileContainer: {
         flexGrow: 1,
         display: 'flex',
@@ -79,15 +81,19 @@ const useStyles = makeStyles({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
-});
+}));
 
 const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
     const { isFallback } = useRouter();
     const { t } = useTranslation();
     const queryOptions = useQueryOptions();
-    const { data, loading: courseDataLoading, error } = useCourseDetailQuery(queryOptions);
+    const { data, loading: courseDataLoading, error } = useCourseQuery(queryOptions);
     const loading = authLoading || isFallback || courseDataLoading;
     const networkError = (!!error && !!error.networkError) || !!authNetworkError;
     const { isMobileOrTablet } = useMediaQueries();
@@ -295,7 +301,7 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
 
     const renderUploadResourceButton = (
         <Tooltip title={uploadResourceButtonTooltip}>
-            <span>
+            <Typography component="span">
                 <IconButtonLink
                     href={{ pathname: urls.uploadResource, query: { school: schoolId, course: courseId } }}
                     icon={CloudUploadOutlined}
@@ -303,14 +309,14 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                     color={isMobileOrTablet ? 'secondary' : 'default'}
                     size="small"
                 />
-            </span>
+            </Typography>
         </Tooltip>
     );
 
     const renderResourcesHeader = <CardHeader title={courseName} action={renderUploadResourceButton} />;
 
     const renderMobileContent = isMobileOrTablet && (
-        <Paper className={clsx('paper-container', classes.mobileContainer)}>
+        <Paper className={classes.mobileContainer}>
             <Tabs value={tabValue} onChange={handleTabChange}>
                 <Tab label={`${t('common:resources')} (${resourceCount})`} />
                 <Tab label={`${t('common:discussion')} (${commentCount})`} />
@@ -327,13 +333,13 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const renderDesktopContent = !isMobileOrTablet && (
         <Grid container spacing={2} className={classes.desktopContainer}>
             <Grid item container xs={12} md={7} lg={8}>
-                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
+                <Paper className={clsx(classes.paperContainer)}>
                     {renderResourcesHeader}
                     {renderResources}
                 </Paper>
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
-                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
+                <Paper className={clsx(classes.paperContainer)}>
                     {renderDiscussionHeader}
                     {renderDiscussion}
                 </Paper>

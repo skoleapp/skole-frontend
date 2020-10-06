@@ -212,7 +212,7 @@ let theme = createMuiTheme({
                 textAlign: 'center',
             },
             title: {
-                fontSize: '1.25rem',
+                fontSize: '1.5rem',
             },
             action: {
                 marginTop: 0,
@@ -232,9 +232,6 @@ let theme = createMuiTheme({
         MuiDialog: {
             paper: {
                 overflow: 'hidden',
-                [breakpoints.up('lg')]: {
-                    borderRadius: BORDER_RADIUS,
-                },
             },
         },
         MuiCssBaseline: {
@@ -293,12 +290,6 @@ let theme = createMuiTheme({
                 },
                 '.text-left': {
                     textAlign: 'left',
-                },
-                '.paper-container': {
-                    overflow: 'hidden',
-                    [breakpoints.up('lg')]: {
-                        borderRadius: BORDER_RADIUS,
-                    },
                 },
                 '.screenshot-border': {
                     border: `0.05rem dashed ${COLORS.black}`,

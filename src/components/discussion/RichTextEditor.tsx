@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
@@ -12,6 +11,7 @@ import {
     Size,
     TextField,
     Tooltip,
+    Typography,
     useTheme,
 } from '@material-ui/core';
 import {
@@ -49,7 +49,7 @@ import React, { ChangeEvent, KeyboardEvent, SyntheticEvent, useEffect, useRef, u
 import { CreateCommentFormValues } from 'types';
 import { RICH_STYLES } from 'utils';
 
-import { Transition } from '../shared';
+import { SkoleDialog } from '../shared';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
@@ -98,7 +98,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     ]);
 
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty(decorator));
-    const ref = useRef<Editor | null>(null);
+    const ref = useRef<Editor>(null!);
     const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { commentAttachment, setCommentAttachment, toggleCommentModal } = useDiscussionContext();
@@ -108,20 +108,18 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     const selection = editorState.getSelection();
     const selectionCollapsed = selection.isCollapsed();
     const textContent = editorState.getCurrentContent().getPlainText('\u0001');
-    const attachmentInputRef = useRef<HTMLInputElement | null>(null);
+    const attachmentInputRef = useRef<HTMLInputElement>(null!);
     const attachmentTooltip = loginRequiredTooltip || t('tooltips:attachFile');
-    const handleUploadAttachment = (): false | void =>
-        !!attachmentInputRef.current && attachmentInputRef.current.click();
-
+    const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
     const [focused, setFocused] = useState(false);
     const onFocus = (): void => setFocused(true);
     const onBlur = (): void => setFocused(false);
-    const focusEditor = (): false | void => !!ref && !!ref.current && ref.current.focus();
+    const focusEditor = (): false | void => ref.current.focus();
     const [URLInputOpen, setURLInputOpen] = useState(false);
     const [URL, setURL] = useState('');
 
     const blurEditor = (): false | void => {
-        !!ref && !!ref.current && ref.current.blur();
+        ref.current.blur();
         onBlur();
     };
 
@@ -381,7 +379,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     const renderInlineStyles = inlineStyles.map(({ tooltip, icon: Icon, style }, i) => (
         <Tooltip key={i} title={tooltip}>
-            <span>
+            <Typography component="span">
                 <IconButton
                     {...commonToolbarButtonProps}
                     onMouseDown={toggleInlineStyle(style)}
@@ -389,28 +387,22 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                 >
                     <Icon />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     ));
 
     const renderLinkButton = (
         <Tooltip title={t('tooltips:link', { hotkeyLink })}>
-            <span>
+            <Typography component="span">
                 <IconButton {...commonToolbarButtonProps} disabled={selectionCollapsed} onMouseDown={handleLinkPrompt}>
                     <LinkOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
     const renderURLInput = (
-        <Dialog
-            open={URLInputOpen}
-            onClose={handleCloseURLInput}
-            fullScreen={isMobileOrTablet}
-            fullWidth={isDesktop}
-            TransitionComponent={Transition}
-        >
+        <SkoleDialog open={URLInputOpen} onClose={handleCloseURLInput}>
             <DialogTitle>{t('forms:addLink')}</DialogTitle>
             <DialogContent>
                 <TextField
@@ -427,12 +419,12 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                     {t('common:confirm')}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </SkoleDialog>
     );
 
     const renderBlockStyles = blockTypes.map(({ tooltip, icon: Icon, style }, i) => (
         <Tooltip key={i} title={tooltip}>
-            <span>
+            <Typography component="span">
                 <IconButton
                     {...commonToolbarButtonProps}
                     onMouseDown={toggleBlockStyle(style)}
@@ -440,14 +432,14 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                 >
                     <Icon />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     ));
 
     const renderSendButton = (
         <Box marginLeft="auto">
             <Tooltip title={t('tooltips:sendMessage')}>
-                <span>
+                <Typography component="span">
                     <IconButton
                         {...commonToolbarButtonProps}
                         onClick={handleSubmit}
@@ -456,7 +448,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                     >
                         <SendOutlined />
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
         </Box>
     );
@@ -473,11 +465,11 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     const renderMentionButton = (
         <Tooltip title={t('tooltips:mention')}>
-            <span>
+            <Typography component="span">
                 <IconButton {...commonToolbarButtonProps} disabled>
                     <AlternateEmailOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 
@@ -492,22 +484,22 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
                 disabled={!userMe}
             />
             <Tooltip title={attachmentTooltip}>
-                <span>
+                <Typography component="span">
                     <IconButton onClick={handleUploadAttachment} {...commonToolbarButtonProps} disabled={!verified}>
                         {isMobileOrTablet ? <CameraAltOutlined /> : <AttachFileOutlined />}
                     </IconButton>
-                </span>
+                </Typography>
             </Tooltip>
         </>
     );
 
     const renderClearAttachmentButton = !!commentAttachment && (
         <Tooltip title={t('tooltips:clearAttachment')}>
-            <span>
+            <Typography component="span">
                 <IconButton onClick={handleClearAttachment} {...commonToolbarButtonProps}>
                     <ClearOutlined />
                 </IconButton>
-            </span>
+            </Typography>
         </Tooltip>
     );
 

@@ -14,7 +14,6 @@ import {
     Typography,
 } from '@material-ui/core';
 import { AddCircleOutlineOutlined } from '@material-ui/icons';
-import clsx from 'clsx';
 import {
     CourseTableBody,
     ErrorLayout,
@@ -30,7 +29,7 @@ import {
     TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import { CourseObjectType, SchoolObjectType, SubjectObjectType, useSchoolDetailQuery } from 'generated';
+import { CourseObjectType, SchoolObjectType, SubjectObjectType, useSchoolQuery } from 'generated';
 import {
     useActionsDialog,
     useFrontendPagination,
@@ -47,22 +46,26 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ breakpoints }) => ({
     root: {
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
-});
+}));
 
 const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
     const { isFallback } = useRouter();
     const queryOptions = useQueryOptions();
-    const { data, loading: courseDataLoading, error } = useSchoolDetailQuery(queryOptions);
+    const { data, loading: courseDataLoading, error } = useSchoolQuery(queryOptions);
     const loading = authLoading || isFallback || courseDataLoading;
     const networkError = (!!error && !!error.networkError) || !!authNetworkError;
     const { verified, verificationRequiredTooltip } = useAuthContext();
@@ -162,7 +165,7 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
 
     const renderAddCourseButton = (
         <Tooltip title={addCourseTooltip}>
-            <span>
+            <Typography component="span">
                 <IconButtonLink
                     href={{ pathname: urls.createCourse, query: { school: schoolId } }}
                     icon={AddCircleOutlineOutlined}
@@ -170,7 +173,7 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                     color={isMobileOrTablet ? 'secondary' : 'default'}
                     size="small"
                 />
-            </span>
+            </Typography>
         </Tooltip>
     );
 
@@ -247,7 +250,7 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     );
 
     const renderContent = (
-        <Paper className={clsx('paper-container', classes.root)}>
+        <Paper className={classes.root}>
             {renderSchoolHeader}
             {renderTabs}
             {renderSwipeableViews}

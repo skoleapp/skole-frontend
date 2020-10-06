@@ -1,4 +1,4 @@
-import { IconButton, makeStyles, Snackbar, SnackbarOrigin } from '@material-ui/core';
+import { IconButton, makeStyles, Snackbar, SnackbarOrigin, Typography } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
 import Router from 'next/router';
@@ -33,7 +33,7 @@ export const Notifications: React.FC = () => {
         'aria-describedby': 'message-id',
     };
 
-    const renderMessage = <span id="message-id">{notification}</span>;
+    const renderMessage = <Typography component="span">{notification}</Typography>;
 
     const renderAction = [
         <IconButton key="close" color="inherit" onClick={handleClose}>

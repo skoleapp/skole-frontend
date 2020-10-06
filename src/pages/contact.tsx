@@ -1,7 +1,7 @@
 import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import { ContactMutation, useContactMutation } from 'generated';
+import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { useForm } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -27,10 +27,7 @@ interface ContactFormValues {
 const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
-
-    const { ref, setSubmitting, onError, resetForm, handleMutationErrors, unexpectedError } = useForm<
-        ContactFormValues
-    >();
+    const { formRef, onError, resetForm, handleMutationErrors, unexpectedError } = useForm<ContactFormValues>();
 
     const validationSchema = Yup.object().shape({
         subject: Yup.string().required(t('validation:required')),
@@ -41,7 +38,7 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         message: Yup.string().required(t('validation:required')),
     });
 
-    const onCompleted = ({ createContactMessage }: ContactMutation): void => {
+    const onCompleted = ({ createContactMessage }: CreateContactMessageMutation): void => {
         if (!!createContactMessage) {
             if (!!createContactMessage.errors && !!createContactMessage.errors.length) {
                 handleMutationErrors(createContactMessage.errors);
@@ -56,7 +53,7 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         }
     };
 
-    const [contactMutation] = useContactMutation({ onCompleted, onError });
+    const [createContactMessage] = useCreateContactMessageMutation({ onCompleted, onError });
 
     const handleSubmit = async (values: ContactFormValues): Promise<void> => {
         const { subject, name, email, message } = values;
@@ -68,12 +65,11 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
             message,
         };
 
-        await contactMutation({ variables });
-        setSubmitting(false);
+        await createContactMessage({ variables });
     };
 
     const renderForm = (
-        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={ref}>
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
                     <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />

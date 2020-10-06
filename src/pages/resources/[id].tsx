@@ -37,7 +37,7 @@ import {
     DeleteResourceMutation,
     ResourceObjectType,
     useDeleteResourceMutation,
-    useResourceDetailQuery,
+    useResourceQuery,
     UserObjectType,
     VoteObjectType,
 } from 'generated';
@@ -61,7 +61,7 @@ import { BORDER_RADIUS } from 'theme';
 import { AuthProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ breakpoints }) => ({
     mobileContainer: {
         flexGrow: 1,
         display: 'flex',
@@ -75,18 +75,21 @@ const useStyles = makeStyles({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        [breakpoints.up('lg')]: {
+            borderRadius: BORDER_RADIUS,
+        },
     },
     resourceContainer: {
-        borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0.5rem ${BORDER_RADIUS}`, // Disable round border for bottom right corner to better fit with the scroll bar.
+        borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0.25rem 0.25rem`, // Disable round border for bottom right corner to better fit with the scroll bar.
     },
-});
+}));
 
 const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const classes = useStyles();
     const { isFallback } = useRouter();
     const { t } = useTranslation();
     const queryOptions = useQueryOptions();
-    const { data, loading: courseDataLoading, error } = useResourceDetailQuery(queryOptions);
+    const { data, loading: courseDataLoading, error } = useResourceQuery(queryOptions);
     const loading = authLoading || isFallback || courseDataLoading;
     const networkError = (!!error && !!error.networkError) || !!authNetworkError;
     const { isMobileOrTablet } = useMediaQueries();
@@ -241,7 +244,6 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
 
             await import('print-js');
             // Ignore: TS doesn't detect the `print-js` import.
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
             printJS(blobUrl);
         } catch {
@@ -337,7 +339,7 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
 
     const renderMobileContent = isMobileOrTablet && (
-        <Paper className={clsx('paper-container', classes.mobileContainer)}>
+        <Paper className={classes.mobileContainer}>
             <Tabs value={tabValue} onChange={handleTabChange}>
                 <Tab label={t('common:resource')} />
                 <Tab label={`${t('common:discussion')} (${commentCount})`} />
@@ -354,13 +356,13 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const renderDesktopContent = !isMobileOrTablet && (
         <Grid container spacing={2} className={classes.desktopContainer}>
             <Grid item container xs={12} md={7} lg={8}>
-                <Paper className={clsx(classes.paperContainer, classes.resourceContainer, 'paper-container')}>
+                <Paper className={clsx(classes.paperContainer, classes.resourceContainer)}>
                     {renderToolbar}
                     {renderPDFViewer}
                 </Paper>
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
-                <Paper className={clsx(classes.paperContainer, 'paper-container')}>
+                <Paper className={clsx(classes.paperContainer)}>
                     {renderDiscussionHeader}
                     {renderDiscussion}
                 </Paper>

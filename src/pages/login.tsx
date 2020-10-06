@@ -43,10 +43,7 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const { toggleNotification } = useNotificationsContext();
     const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
     const validExistingUser = !!R.propOr(false, 'username', existingUser) && !!R.propOr(false, 'email', existingUser);
-
-    const { ref, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
-        LoginFormValues
-    >();
+    const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<LoginFormValues>();
 
     useEffect(() => {
         const existingUser = JSON.parse(localStorage.getItem('user') || 'null');
@@ -94,8 +91,6 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         await loginMutation({
             variables: { usernameOrEmail: R.propOr(usernameOrEmail, 'email', existingUser) as string, password },
         });
-
-        setSubmitting(false);
     };
 
     const handleLoginWithDifferentCredentials = (): void => {
@@ -165,7 +160,7 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const renderForm = (
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={ref}>
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} ref={formRef}>
             {validExistingUser ? renderExistingUserForm : renderNewUserForm}
         </Formik>
     );
