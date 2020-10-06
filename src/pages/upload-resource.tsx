@@ -14,7 +14,7 @@ import { Field, Form, Formik } from 'formik';
 import {
     AutocompleteCoursesDocument,
     AutocompleteResourceTypesDocument,
-    AutocompleteSchoolTypesDocument,
+    AutocompleteSchoolsDocument,
     CourseObjectType,
     CreateResourceMutation,
     SchoolObjectType,
@@ -160,7 +160,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                         label={t('forms:schoolOptional')}
                         dataKey="autocompleteSchools"
                         searchKey="name"
-                        document={AutocompleteSchoolTypesDocument}
+                        document={AutocompleteSchoolsDocument}
                         component={AutocompleteField}
                         helperText={
                             <>

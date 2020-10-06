@@ -11,6 +11,7 @@ import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import {
     AutocompleteSchoolsDocument,
+    AutocompleteSubjectsDocument,
     CreateCourseMutation,
     SchoolObjectType,
     SubjectObjectType,
@@ -110,7 +111,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
                         label={t('forms:subjects')}
                         searchKey="name"
                         dataKey="autocompleteSubjects"
-                        document={AutocompleteSchoolsDocument}
+                        document={AutocompleteSubjectsDocument}
                         component={AutocompleteField}
                         multiple
                     />
