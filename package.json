@@ -27,7 +27,7 @@
         "graphql": "^15.0.0",
         "lodash.throttle": "^4.1.1",
         "material-ui-confirm": "^2.0.4",
-        "next": "^9.5.2",
+        "next": "^9.5.4",
         "next-i18next": "^5.1.0",
         "next-offline": "^5.0.2",
         "print-js": "^1.0.63",
