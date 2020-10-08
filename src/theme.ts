@@ -245,8 +245,8 @@ let theme = createMuiTheme({
                     margin: spacing(2),
                 },
                 '.avatar-thumbnail': {
-                    height: '1.35rem',
-                    width: '1.35rem',
+                    height: '1.35rem !important',
+                    width: '1.35rem !important',
                     padding: spacing(0.25),
                     margin: spacing(0.25),
                 },
