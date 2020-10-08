@@ -2,7 +2,7 @@
     "title": "Toiminta",
     "description": "Näytä toimintasi Skolessa.",
     "header": "Toiminta",
-    "noActivity": "Toimintasi näkyy täällä.",
+    "noActivity": "Sinulla ei ole toimintaa.",
     "markAllAsRead": "Merkitse kaikki luetuiksi",
     "notificationSettings": "Ilmoitusasetukset (tulossa pian)"
 }

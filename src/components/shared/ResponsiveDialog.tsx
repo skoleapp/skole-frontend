@@ -16,6 +16,7 @@ interface Props {
 export const ResponsiveDialog: React.FC<Props> = ({ children, dialogHeaderProps, ...dialogProps }) => {
     const { isMobileOrTablet } = useMediaQueries();
     const renderDialogHeader = <DialogHeader {...dialogHeaderProps} />;
+    const renderDialogContent = <DialogContent>{children}</DialogContent>;
 
     const renderDrawer = (
         <Drawer anchor="bottom" {...dialogProps}>
@@ -27,7 +28,7 @@ export const ResponsiveDialog: React.FC<Props> = ({ children, dialogHeaderProps,
     const renderDialog = (
         <SkoleDialog {...dialogProps}>
             {renderDialogHeader}
-            <DialogContent>{children}</DialogContent>
+            {renderDialogContent}
         </SkoleDialog>
     );
 

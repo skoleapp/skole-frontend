@@ -2,7 +2,7 @@
     "title": "Aktivitet",
     "description": "Visa din aktivitet på Skole.",
     "header": "Aktivitet",
-    "noActivity": "Din aktivitet visas här.",
+    "noActivity": "Du har inga aktiviteter.",
     "markAllAsRead": "Markera allt som läst",
     "notificationSettings": "Anmälningsinställningar (kommer snart)"
 }
