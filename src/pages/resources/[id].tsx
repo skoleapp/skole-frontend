@@ -75,6 +75,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
         [breakpoints.up('lg')]: {
             borderRadius: BORDER_RADIUS,
         },
