@@ -365,7 +365,7 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     );
 
     const tableHeadProps = {
-        titleLeft: t('common:name'),
+        titleLeft: t('common:course'),
         titleRight: t('common:score'),
     };
 

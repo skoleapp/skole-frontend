@@ -129,6 +129,12 @@ query SearchCourses(
             name
             code
             score
+            commentCount
+            resourceCount
+            user {
+                id
+                username
+            }
         }
     }
     school(id: $school) {
