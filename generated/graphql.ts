@@ -1320,10 +1320,18 @@ export type StarredQuery = (
     { __typename?: 'UserObjectType' }
     & { starredCourses?: Maybe<Array<Maybe<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'commentCount' | 'resourceCount'>
+      & { user?: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username'>
+      )> }
     )>>>, starredResources?: Maybe<Array<Maybe<(
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
+      & { resourceType?: Maybe<(
+        { __typename?: 'ResourceTypeObjectType' }
+        & Pick<ResourceTypeObjectType, 'id'>
+      )> }
     )>>> }
   )>, resourceTypes?: Maybe<Array<Maybe<(
     { __typename?: 'ResourceTypeObjectType' }
@@ -1346,7 +1354,11 @@ export type UserQuery = (
       & Pick<BadgeObjectType, 'id' | 'name' | 'description'>
     )>>>, createdCourses: Array<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'commentCount' | 'resourceCount'>
+      & { user?: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username'>
+      )> }
     )>, createdResources: Array<(
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
@@ -1531,7 +1543,11 @@ export type SchoolQuery = (
       & Pick<SubjectObjectType, 'id' | 'name'>
     )>>>, courses: Array<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'commentCount' | 'resourceCount'>
+      & { user?: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username'>
+      )> }
     )> }
   )> }
 );
@@ -2602,12 +2618,21 @@ export const StarredDocument = gql`
       name
       code
       score
+      commentCount
+      resourceCount
+      user {
+        id
+        username
+      }
     }
     starredResources {
       id
       title
       score
       date
+      resourceType {
+        id
+      }
     }
   }
   resourceTypes {
@@ -2663,6 +2688,12 @@ export const UserDocument = gql`
       name
       code
       score
+      commentCount
+      resourceCount
+      user {
+        id
+        username
+      }
     }
     createdResources {
       id
@@ -3004,6 +3035,12 @@ export const SchoolDocument = gql`
       name
       code
       score
+      commentCount
+      resourceCount
+      user {
+        id
+        username
+      }
     }
   }
 }

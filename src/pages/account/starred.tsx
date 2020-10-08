@@ -30,8 +30,8 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { data, loading, error } = useStarredQuery();
     const userMe: UserObjectType = R.propOr(null, 'userMe', data);
-    const starredCourses: CourseObjectType[] = R.propOr([], 'starredCourses', data);
-    const starredResources: ResourceObjectType[] = R.propOr([], 'starredResources', data);
+    const starredCourses: CourseObjectType[] = R.propOr([], 'starredCourses', userMe);
+    const starredResources: ResourceObjectType[] = R.propOr([], 'starredResources', userMe);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(starredResources);
