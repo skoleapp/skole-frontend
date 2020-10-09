@@ -153,6 +153,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     };
 
     const handleDeleteComment = async (e: SyntheticEvent): Promise<void> => {
+        e.stopPropagation();
         handleCloseActionsDialog(e);
 
         try {
