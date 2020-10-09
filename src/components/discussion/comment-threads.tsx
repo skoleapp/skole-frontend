@@ -26,10 +26,11 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
         flexGrow: 1,
         overflowY: 'auto',
         flexWrap: 'nowrap',
+        height: '100%',
     },
     inputAreaContainer: {
         display: 'flex',
-        minHeight: '8rem',
+        minHeight: '9rem',
         [breakpoints.up('md')]: {
             padding: spacing(2),
         },
