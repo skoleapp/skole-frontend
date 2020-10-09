@@ -128,7 +128,7 @@ const UploadResourcePage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                 );
             } else {
                 // File is not an image, can't do any processing so just send it as is.
-                handleUpload(variables);
+                await handleUpload(variables);
             }
         }
     };

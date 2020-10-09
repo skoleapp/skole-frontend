@@ -18,18 +18,18 @@ export const PaginatedTable: React.FC<Props> = ({ count, tableHeadProps, extraFi
     const page = Number(R.propOr(1, 'page', query));
     const rowsPerPage = Number(R.propOr(10, 'pageSize', query));
 
-    const handleReloadPage = (values: {}): void => {
+    const handleReloadPage = async (values: {}): Promise<void> => {
         const query = getQueryWithPagination({ query: values, extraFilters });
-        redirect({ pathname, query });
+        await redirect({ pathname, query });
     };
 
-    const handleChangePage = (_e: MouseEvent<HTMLButtonElement> | null, page: number): void => {
-        handleReloadPage({ ...query, page: page + 1 }); // Backend indexing starts from 1.
+    const handleChangePage = async (_e: MouseEvent<HTMLButtonElement> | null, page: number): Promise<void> => {
+        await handleReloadPage({ ...query, page: page + 1 }); // Backend indexing starts from 1.
     };
 
-    const handleChangeRowsPerPage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+    const handleChangeRowsPerPage = async (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
         const pageSize = parseInt(e.target.value, 10);
-        handleReloadPage({ ...query, pageSize });
+        await handleReloadPage({ ...query, pageSize });
     };
 
     const renderTableHead = <CustomTableHead {...tableHeadProps} />;

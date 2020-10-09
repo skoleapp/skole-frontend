@@ -55,14 +55,14 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         onError,
     });
 
-    const handleClickMarkAllActivitiesAsReadBUtton = async (e: SyntheticEvent): Promise<void> => {
+    const handleClickMarkAllActivitiesAsReadButton = async (e: SyntheticEvent): Promise<void> => {
         await markAllActivitiesAsRead();
         handleCloseActionsDialog(e);
     };
 
     const renderActionsDialogContent = (
         <List>
-            <MenuItem onClick={handleClickMarkAllActivitiesAsReadBUtton}>
+            <MenuItem onClick={handleClickMarkAllActivitiesAsReadButton}>
                 <ListItemIcon>
                     <DoneOutlineOutlined />
                 </ListItemIcon>

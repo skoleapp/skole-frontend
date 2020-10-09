@@ -71,7 +71,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
 
     const [createCourseMutation] = useCreateCourseMutation({ onCompleted, onError });
 
-    const handleSubmit = (values: CreateCourseFormValues): void => {
+    const handleSubmit = async (values: CreateCourseFormValues): Promise<void> => {
         const { courseName, courseCode, school, subjects } = values;
 
         const variables = {
@@ -81,7 +81,7 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
             subjects: subjects.map(s => s.id),
         };
 
-        createCourseMutation({ variables });
+        await createCourseMutation({ variables });
     };
 
     const initialValues = {

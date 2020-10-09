@@ -92,7 +92,7 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const queryOptions = useQueryOptions();
     const { data, loading: courseDataLoading, error } = useResourceQuery(queryOptions);
     const loading = authLoading || isFallback || courseDataLoading;
-    const networkError = (!!error && !!error.networkError) || !!authNetworkError;
+    const networkError = (!!error && !!error.networkError) || authNetworkError;
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
@@ -173,13 +173,13 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         toggleNotification(t('notifications:deleteResourceError'));
     };
 
-    const deleteResourceCompleted = ({ deleteResource }: DeleteResourceMutation): void => {
+    const deleteResourceCompleted = async ({ deleteResource }: DeleteResourceMutation): Promise<void> => {
         if (!!deleteResource) {
             if (!!deleteResource.errors && !!deleteResource.errors.length) {
                 deleteResourceError();
             } else if (deleteResource.message) {
                 toggleNotification(deleteResource.message);
-                redirect(`/courses/${courseId}`);
+                await redirect(`/courses/${courseId}`);
             } else {
                 deleteResourceError();
             }
@@ -202,7 +202,7 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                 description: t('resource:deleteResourceDescription'),
             });
 
-            deleteResource({ variables: { id: resourceId } });
+            await deleteResource({ variables: { id: resourceId } });
         } catch {
             // User cancelled.
         }

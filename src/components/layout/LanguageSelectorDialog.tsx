@@ -9,8 +9,8 @@ export const LanguageSelectorDialog: React.FC = () => {
     const { t, i18n } = useTranslation();
     const { languageSelectorOpen, toggleLanguageSelector, languages, languageToFlag } = useLanguageSelector();
 
-    const handleLanguageChange = (val: string) => (): void => {
-        i18n.changeLanguage(val);
+    const handleLanguageChange = (val: string) => async (): Promise<void> => {
+        await i18n.changeLanguage(val);
         toggleLanguageSelector(false);
     };
 

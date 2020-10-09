@@ -95,7 +95,7 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const queryOptions = useQueryOptions();
     const { data, loading: courseDataLoading, error } = useCourseQuery(queryOptions);
     const loading = authLoading || isFallback || courseDataLoading;
-    const networkError = (!!error && !!error.networkError) || !!authNetworkError;
+    const networkError = (!!error && !!error.networkError) || authNetworkError;
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
@@ -158,13 +158,13 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         toggleNotification(t('notifications:deleteCourseError'));
     };
 
-    const deleteCourseCompleted = ({ deleteCourse }: DeleteCourseMutation): void => {
+    const deleteCourseCompleted = async ({ deleteCourse }: DeleteCourseMutation): Promise<void> => {
         if (!!deleteCourse) {
             if (!!deleteCourse.errors && !!deleteCourse.errors.length) {
                 deleteCourseError();
             } else if (!!deleteCourse.message) {
                 toggleNotification(deleteCourse.message);
-                redirect(urls.home);
+                await redirect(urls.home);
             } else {
                 deleteCourseError();
             }
@@ -181,7 +181,7 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
         try {
             await confirm({ title: t('course:deleteCourseTitle'), description: t('course:deleteCourseDescription') });
-            deleteCourse({ variables: { id: courseId } });
+            await deleteCourse({ variables: { id: courseId } });
         } catch {
         } finally {
             handleCloseActionsDialog(e);

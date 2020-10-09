@@ -68,9 +68,9 @@ export const useVotes = ({
 
     const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
 
-    const handleVote = (status: number) => (e: SyntheticEvent): void => {
+    const handleVote = (status: number) => async (e: SyntheticEvent): Promise<void> => {
         e.stopPropagation(); // Prevent opening comment thread for top-level comments.
-        performVote({ variables: { status, ...variables } });
+        await performVote({ variables: { status, ...variables } });
     };
 
     const commonVoteButtonProps = {

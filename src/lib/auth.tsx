@@ -12,9 +12,9 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
         const shouldRedirect = !(authLoading || authNetworkError || !!userMe);
         const { asPath } = useRouter();
 
-        const syncLogout = (e: StorageEvent): void => {
+        const syncLogout = async (e: StorageEvent): Promise<void> => {
             if (e.key === 'logout') {
-                redirect(urls.login);
+                await redirect(urls.login);
             }
         };
 

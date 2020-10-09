@@ -157,7 +157,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
 
         try {
             await confirm({ title: t('common:deleteCommentTitle'), description: t('common:deleteCommentDescription') });
-            deleteComment({ variables: { id: comment.id } });
+            await deleteComment({ variables: { id: comment.id } });
         } catch {
             // User cancelled.
         }

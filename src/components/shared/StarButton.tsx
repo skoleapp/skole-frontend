@@ -32,8 +32,8 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
 
     const [performStar, { loading: starSubmitting }] = usePerformStarMutation({ onCompleted, onError });
 
-    const handleStar = (): void => {
-        performStar({ variables: { course, resource } });
+    const handleStar = async (): Promise<void> => {
+        await performStar({ variables: { course, resource } });
     };
 
     return (

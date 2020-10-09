@@ -31,10 +31,10 @@ export const useSearch = (): UseSearch => {
     const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, { school, subject });
     const searchUrl = { pathname: urls.search, query };
 
-    const handleSubmit = (e: SyntheticEvent): void => {
+    const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
         setValue('');
-        redirect({ ...searchUrl, query: { ...searchUrl.query, courseName: value } });
+        await redirect({ ...searchUrl, query: { ...searchUrl.query, courseName: value } });
     };
 
     const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);

@@ -46,12 +46,21 @@ query Starred {
             name
             code
             score
+            commentCount
+            resourceCount
+            user {
+                id
+                username
+            }
         }
         starredResources {
             id
             title
             score
             date
+            resourceType {
+                id
+            }
         }
     }
     resourceTypes {
@@ -81,6 +90,12 @@ query User($id: ID) {
             name
             code
             score
+            commentCount
+            resourceCount
+            user {
+                id
+                username
+            }
         }
         createdResources {
             id
@@ -129,6 +144,12 @@ query SearchCourses(
             name
             code
             score
+            commentCount
+            resourceCount
+            user {
+                id
+                username
+            }
         }
     }
     school(id: $school) {
@@ -321,6 +342,12 @@ query School($id: ID) {
             name
             code
             score
+            commentCount
+            resourceCount
+            user {
+                id
+                username
+            }
         }
     }
 }
