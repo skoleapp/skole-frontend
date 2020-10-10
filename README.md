@@ -1,5 +1,8 @@
 # Skole Frontend 🎓
 
+[![CircleCI build status](https://circleci.com/gh/ruohola/skole-frontend.svg?style=shield&circle-token=e15c5fba3e4d8011364889043a709e2eaafccb2d)](https://circleci.com/gh/ruohola/skole-frontend)
+[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
+
 This is the frontend for the Skole app.
 
 Also check out the [README from `skole` repo](https://github.com/ruohola/skole/blob/develop/README.md).
@@ -17,12 +20,12 @@ Other useful documentation:
 A quick look at the top-level files and directories excluding `node_modules` and other built locations.
 
     .
-    ├── .circleci
-    ├── .idea
-    ├── .vscode
-    ├── generated
-    ├── public
-    ├── src
+    ├── .circleci/
+    ├── .idea/
+    ├── .vscode/
+    ├── generated/
+    ├── public/
+    ├── src/
     ├── .dockerignore
     ├── .eslintignore
     ├── .eslintrc.js
@@ -42,52 +45,29 @@ A quick look at the top-level files and directories excluding `node_modules` and
     ├── types.d.ts
     └── yarn.lock
 
-1.  **`/.circleci`**: Configuration for [CircleCI](https://circleci.com/).
-
-2.  **`/.idea`**: [Jetbrains](https://www.jetbrains.com/) editor configuration.
-
-3.  **`/.vscode`**: [VSCode](https://code.visualstudio.com/) configuration.
-
-4.  **`/generated`**: Generated code by [GraphQL Code Generator](https://www.npmjs.com/package/@graphql-codegen).
-
-5.  **`/public`**: Static assets exposed in the browser.
-
-6.  **`/src`**: Source code.
-
+1.  **`.circleci/`**: Configuration for [CircleCI](https://circleci.com/).
+2.  **`.idea/`**: [Jetbrains](https://www.jetbrains.com/) editor configuration.
+3.  **`.vscode/`**: [VSCode](https://code.visualstudio.com/) configuration.
+4.  **`generated/`**: Generated code by [GraphQL Code Generator](https://www.npmjs.com/package/@graphql-codegen).
+5.  **`public/`**: Static assets exposed in the browser.
+6.  **`src/`**: Source code.
 7.  **`.dockerignore`**: List of files ignored by [Docker](https://www.docker.com/).
-
 8.  **`.eslintignore`**: List of files ignored by [ESLint](https://www.npmjs.com/package/eslint).
-
 9.  **`.eslintrc.js`**: ESLint configuration.
-
 10. **`.gitignore`**: List of files ignored by [Git](https://git-scm.com/).
-
 11. **`.graphqlconfig`**: GraphQL configuration file, used by e.g. Jetbrains editors.
-
 12. **`.prettierignore`**: List of files ignored by [Prettier](https://prettier.io/).
-
 13. **`.prettierrc.js`**: Prettier configuration.
-
 14. **`codegen.yml`**: GraphQL Code Generator configuration.
-
 15. **`dependencies`**: Documentation for top-level dependencies.
-
 16. **`Dockerfile`**: Docker configuration for development.
-
 17. **`Dockerfile.prod`**: Docker configuration for production.
-
 18. **`next-env.d.ts`**: [Next.js](https://nextjs.org/) typings for [TypeScript](https://www.typescriptlang.org/) compiler.
-
 19. **`next.config.js`**: Next.js configuration.
-
 20. **`package.json`**: Manifest file for [Node.js](https://nodejs.org/en/).
-
 21. **`README.md`**: Text file containing useful reference information about this project.
-
 22. **`tsconfig.json`**: TypeScript configuration.
-
 23. **`types.d.ts`**: Module declarations for dependencies that do not have TypeScript typings.
-
 24. **`yarn.lock`**: Auto-generated file for locking version numbers of all dependencies listed in `package.json`.
 
 ## Development Tips 🚀
@@ -116,7 +96,7 @@ A quick look at the top-level files and directories excluding `node_modules` and
 -   Avoid writing event handlers/functions directly in JSX to keep it more readable.
 -   Use `React.FC` syntax for all components.
 -   Use [Material Icons](https://material.io/resources/icons/) for all icons. Make sure to use the outlined variants of the icons.
--   Use `<></>` vs. `React.Fragment` for fragments.
+-   Use `<></>` instead of `React.Fragment` for fragments.
 -   If you split up JSX to multiple variables, name them so that they start with the word "render", e.g `const renderFoo = ...`.
 -   TS doesn't play nice with React refs. Use non-null-assertions for refs, e.g. `const myRef = useRef(null!)`.
 -   Use ES6 syntax everywhere:
