@@ -28,7 +28,7 @@
     "exitFullscreen": "Avsluta helskärm.",
     "zoomIn": "Zooma in.",
     "zoomOut": "Zooma ut.",
-    "markArea": "Markera området (kommer snart).",
+    "markArea": "Markera området (på kommande).",
     "download": "Ladda ner.",
     "print": "Skriva ut.",
     "rotate": "Rotera.",
@@ -41,6 +41,6 @@
     "bulletedList": "Lista över punkter ({{ hotkeyBulletedList }}).",
     "blockQuote": "Citatblock ({{ hotkeyBlockQuote }}).",
     "codeBlock": "Kodblock ({{ hotkeyCodeBlock }}).",
-    "mention": "Nämn användare (kommer snart).",
+    "mention": "Nämn användare (på kommande).",
     "addCourse": "Lägg till en kurs för den här skolan."
 }
