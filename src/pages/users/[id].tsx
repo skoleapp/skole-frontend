@@ -315,6 +315,7 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Typography>
     );
 
+    // Hide stepper is all steps have been completed.
     const renderProfileStrengthStepper = !allStepsCompleted && (
         <Stepper className={classes.stepper} alternativeLabel={isMobile}>
             {profileStrengthSteps.map(({ label }, i) => (
