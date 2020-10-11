@@ -107,14 +107,14 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { commentAttachment, setCommentAttachment, toggleCommentModal } = useDiscussionContext();
-    const { verified, userMe, loginRequiredTooltip } = useAuthContext();
+    const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
     const placeholder = t('forms:createComment') + '...';
     const contentState = editorState.getCurrentContent();
     const selection = editorState.getSelection();
     const selectionCollapsed = selection.isCollapsed();
     const textContent = editorState.getCurrentContent().getPlainText('\u0001');
     const attachmentInputRef = useRef<HTMLInputElement>(null!);
-    const attachmentTooltip = loginRequiredTooltip || t('tooltips:attachFile');
+    const attachmentTooltip = loginRequiredTooltip || !!verificationRequiredTooltip || t('tooltips:attachFile');
     const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
     const [focused, setFocused] = useState(false);
     const onFocus = (): void => setFocused(true);
@@ -478,7 +478,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         </Tooltip>
     );
 
-    const renderAttachmentButton = (
+    // For anonymous users and user without verification that are on mobile, hide the entire button.
+    const renderAttachmentButton = ((isMobileOrTablet && !!userMe && !!verified) || isDesktop) && (
         <>
             <input
                 ref={attachmentInputRef}
@@ -490,7 +491,11 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
             />
             <Tooltip title={attachmentTooltip}>
                 <Typography component="span">
-                    <IconButton onClick={handleUploadAttachment} {...commonToolbarButtonProps} disabled={!verified}>
+                    <IconButton
+                        onClick={handleUploadAttachment}
+                        {...commonToolbarButtonProps}
+                        disabled={verified === false || !userMe}
+                    >
                         {isMobileOrTablet ? <CameraAltOutlined /> : <AttachFileOutlined />}
                     </IconButton>
                 </Typography>
