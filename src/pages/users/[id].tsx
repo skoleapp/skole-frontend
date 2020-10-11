@@ -154,6 +154,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         .map(s => s.completed)
         .reduce((total, completed) => (completed ? total + 1 : total), 0);
 
+    const allStepsCompleted = !profileStrengthSteps.some(s => !s.completed);
+
     // Get label for profile strength score.
     const getProfileStrengthText = (): string => {
         switch (profileStrengthScore) {
@@ -304,18 +306,26 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Box>
     );
 
+    const renderProfileStrengthHeader = (
+        <Typography variant="body2" color="textSecondary" gutterBottom>
+            {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
+        </Typography>
+    );
+
+    const renderProfileStrengthStepper = !allStepsCompleted && (
+        <Stepper className={classes.stepper} alternativeLabel={isMobile}>
+            {profileStrengthSteps.map(({ label }, i) => (
+                <Step key={i} completed={profileStrengthSteps[i].completed} active={false}>
+                    <StepLabel>{label}</StepLabel>
+                </Step>
+            ))}
+        </Stepper>
+    );
+
     const renderProfileStrength = isOwnProfile && (
         <Box marginTop={spacing(2)}>
-            <Typography variant="body2" color="textSecondary" gutterBottom>
-                {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
-            </Typography>
-            <Stepper className={classes.stepper} alternativeLabel={isMobile}>
-                {profileStrengthSteps.map(({ label }, i) => (
-                    <Step key={i} completed={profileStrengthSteps[i].completed} active={false}>
-                        <StepLabel>{label}</StepLabel>
-                    </Step>
-                ))}
-            </Stepper>
+            {renderProfileStrengthHeader}
+            {renderProfileStrengthStepper}
         </Box>
     );
 
