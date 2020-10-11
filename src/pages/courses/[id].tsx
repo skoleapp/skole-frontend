@@ -137,12 +137,6 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         renderActionsButton,
     } = useActionsDialog({ text: courseName });
 
-    const upVoteButtonTooltip =
-        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:upVote'));
-
-    const downVoteButtonTooltip =
-        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnCourse') : t('tooltips:downVote'));
-
     const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
 
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
@@ -150,8 +144,6 @@ const CourseDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         initialScore,
         isOwner,
         variables: { course: courseId },
-        upVoteButtonTooltip,
-        downVoteButtonTooltip,
     });
 
     const deleteCourseError = (): void => {

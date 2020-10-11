@@ -1,9 +1,7 @@
 {
     "starred": "Visa stjärnmärkta.",
     "profile": "Visa din profil.",
-    "voteOwnComment": "Du kan inte röstä på din egen kommentar.",
-    "voteOwnCourse": "Du kan inte rösta på din egen kurs.",
-    "voteOwnResource": "Du kan inte rösta på din egen resurs.",
+    "voteOwnContent": "Du kan inte rösta på ditt eget innehåll.",
     "attachment": "Visa bildbilaga.",
     "attachFile": "Bifoga fil.",
     "clearAttachment": "Ta bort bilagan.",

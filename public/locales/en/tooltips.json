@@ -1,9 +1,7 @@
 {
     "starred": "View starred.",
     "profile": "View profile.",
-    "voteOwnComment": "You cannot vote on your own comment.",
-    "voteOwnCourse": "You cannot vote on your own course.",
-    "voteOwnResource": "You cannot vote on your own resource.",
+    "voteOwnContent": "You cannot vote on your own content.",
     "attachment": "View attachment.",
     "attachFile": "Attach file.",
     "clearAttachment": "Clear attachment.",

@@ -136,19 +136,11 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         renderActionsButton,
     } = useActionsDialog({ text: resourceTitle });
 
-    const upVoteButtonTooltip =
-        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnResource') : t('tooltips:upVote'));
-
-    const downVoteButtonTooltip =
-        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnResource') : t('tooltips:downVote'));
-
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
         initialScore,
         isOwner,
         variables: { resource: resourceId },
-        upVoteButtonTooltip,
-        downVoteButtonTooltip,
     });
 
     // If comment modal is opened in main tab, automatically switch to discussion tab.
