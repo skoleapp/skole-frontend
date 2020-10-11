@@ -101,7 +101,7 @@ let theme = createMuiTheme({
                 padding: spacing(4),
             },
             sizeSmall: {
-                padding: spacing(2),
+                padding: spacing(2.25),
             },
         },
         MuiLink: {
@@ -126,8 +126,8 @@ let theme = createMuiTheme({
         },
         MuiSvgIcon: {
             root: {
-                width: '1.25rem',
-                height: '1.25rem',
+                width: '1.35rem',
+                height: '1.35rem',
             },
         },
         MuiCard: {
