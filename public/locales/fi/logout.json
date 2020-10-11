@@ -1,9 +1,13 @@
 {
-    "title": "Kirjaudu ulos",
-    "description": "Kirjaudu ulos Skolesta.",
-    "header": "Kirjaudu ulos",
+    "titleLogout": "Kirjaudu ulos",
+    "descriptionLogout": "Kirjaudu ulos Skolesta.",
+    "titleLoggedOut": "Kirjauduttu ulos",
+    "descriptionLoggedOut": "Kirjauduttu ulos Skolesta.",
+    "headerLogout": "Kirjaudu ulos",
+    "headerLoggedOut": "Kirjauduttu ulos",
     "loggingOut": "Kirjaudutaan ulos...",
     "loggedOut": "Olet kirjautunut ulos!",
     "loginButton": "Kirjaudu sisään uudelleen",
-    "confirmLogout": "Sinun tulee kirjautua ulos jatkaaksesi."
+    "confirmLogout": "Sinun tulee kirjautua ulos jatkaaksesi.",
+    "backToHome": "Takaisin kotiin"
 }

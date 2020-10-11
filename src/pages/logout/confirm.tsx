@@ -11,10 +11,10 @@ const ConfirmLogoutPage: NextPage = () => {
 
     const layoutProps = {
         seoProps: {
-            title: t('logout:title'),
-            description: t('logout:description'),
+            title: t('logout:titleLogout'),
+            description: t('logout:descriptionLogout'),
         },
-        header: t('logout:header'),
+        header: t('logout:headerLogout'),
         topNavbarProps: {
             disableAuthButtons: true,
             disableSearch: true,

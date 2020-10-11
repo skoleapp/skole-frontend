@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client';
-import { Typography } from '@material-ui/core';
+import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, ErrorLayout, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { useNotificationsContext } from 'context';
@@ -15,7 +15,6 @@ const LogoutPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
-    const href = { pathname: urls.login, query };
     const onError = (): void => toggleNotification(t('notifications:logoutError'));
 
     const onCompleted = async ({ logout }: BackendLogoutMutation): Promise<void> => {
@@ -33,10 +32,10 @@ const LogoutPage: NextPage = () => {
 
     const layoutProps = {
         seoProps: {
-            title: t('logout:title'),
-            description: t('logout:description'),
+            title: t('logout:titleLoggedOut'),
+            description: t('logout:descriptionLoggedOut'),
         },
-        header: t('logout:header'),
+        header: t('logout:headerLoggedOut'),
         disableBottomNavbar: true,
         topNavbarProps: {
             disableAuthButtons: true,
@@ -60,9 +59,20 @@ const LogoutPage: NextPage = () => {
                 {t('logout:loggedOut')}
             </Typography>
             <Typography component="br" />
-            <ButtonLink href={href} color="primary" variant="contained" endIcon={<ArrowForwardOutlined />} fullWidth>
+            <ButtonLink
+                href={{ pathname: urls.login, query }}
+                color="primary"
+                variant="contained"
+                endIcon={<ArrowForwardOutlined />}
+                fullWidth
+            >
                 {t('logout:loginButton')}
             </ButtonLink>
+            <FormControl>
+                <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
+                    {t('logout:backToHome')}
+                </ButtonLink>
+            </FormControl>
         </FormLayout>
     );
 };
