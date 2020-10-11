@@ -190,6 +190,9 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Typography>
     );
 
+    const renderDesktopUsername = !isMobile && renderUsername;
+    const renderDesktopTitle = !isMobile && renderTitle;
+
     const renderEditProfileButton = isOwnProfile && (
         <Box display="flex" marginTop={isMobile ? spacing(2) : 0}>
             <ButtonLink
@@ -375,8 +378,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
                 alignItems={isMobile ? 'flex-start' : 'center'}
             >
                 {renderAvatar}
-                {renderUsername}
-                {renderTitle}
+                {renderDesktopUsername}
+                {renderDesktopTitle}
             </Grid>
             <Grid item xs={8}>
                 {renderActions}
@@ -388,6 +391,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const renderMobileInfo = isMobile && (
         <Grid container direction="column">
+            {renderUsername}
+            {renderTitle}
             {renderBio}
             {renderRank}
             {renderBadges}
