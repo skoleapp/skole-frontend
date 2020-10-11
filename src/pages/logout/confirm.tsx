@@ -1,36 +1,25 @@
 import { Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, FormLayout, LoadingLayout, OfflineLayout } from 'components';
+import { ButtonLink, FormLayout } from 'components';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-const ConfirmLogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const ConfirmLogoutPage: NextPage = () => {
     const { t } = useTranslation();
 
-    const seoProps = {
-        title: t('logout:title'),
-        description: t('logout:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('logout:title'),
+            description: t('logout:description'),
+        },
         header: t('logout:header'),
         topNavbarProps: {
             disableAuthButtons: true,
             disableSearch: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     return (
         <FormLayout {...layoutProps}>

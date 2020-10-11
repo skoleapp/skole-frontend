@@ -4,9 +4,7 @@ import {
     AvatarField,
     ButtonLink,
     FormSubmitSection,
-    LoadingLayout,
     NotFoundLayout,
-    OfflineLayout,
     SettingsLayout,
     TextFormField,
     TextLink,
@@ -27,11 +25,11 @@ import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { AuthProps, UpdateProfileFormValues } from 'types';
+import { UpdateProfileFormValues } from 'types';
 import { mediaURL, urls } from 'utils';
 import * as Yup from 'yup';
 
-const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const EditProfilePage: NextPage = () => {
     const { t } = useTranslation();
     const { userMe, setUserMe, verified } = useAuthContext();
     const { formRef, handleMutationErrors, onError, resetForm, unexpectedError } = useForm<UpdateProfileFormValues>();
@@ -179,27 +177,17 @@ const EditProfilePage: NextPage<AuthProps> = ({ authLoading, authNetworkError })
         </Formik>
     );
 
-    const seoProps = {
-        title: t('edit-profile:title'),
-        description: t('edit-profile:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('edit-profile:title'),
+            description: t('edit-profile:description'),
+        },
         header: t('edit-profile:header'),
         dense: true,
         topNavbarProps: {
             dynamicBackUrl: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     if (!!userMe) {
         return <SettingsLayout {...layoutProps}>{renderEditProfileForm}</SettingsLayout>;

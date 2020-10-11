@@ -24,7 +24,6 @@ import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { AuthProps } from 'types';
 import { redirect } from 'utils';
 import * as Yup from 'yup';
 
@@ -36,7 +35,7 @@ interface CreateCourseFormValues {
     general: string;
 }
 
-const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const CreateCoursePage: NextPage = () => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
     const { query } = useRouter();
@@ -121,27 +120,25 @@ const CreateCoursePage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         </Formik>
     );
 
-    const seoProps = {
-        title: t('create-course:title'),
-        description: t('create-course:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('create-course:title'),
+            description: t('create-course:description'),
+        },
         header: t('create-course:header'),
         topNavbarProps: {
             dynamicBackUrl: true,
         },
     };
 
-    if (loading || authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
+    if (loading) {
+        return <LoadingLayout />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
     } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
+        return <ErrorLayout />;
     }
 
     return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;

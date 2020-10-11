@@ -9,4 +9,3 @@ export * from './mui';
 export * from './next-js';
 export * from './pdf-js';
 export * from './tables';
-export * from './auth';

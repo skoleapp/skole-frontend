@@ -8,10 +8,9 @@ import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const LogoutPage: NextPage = () => {
     const apolloClient = useApolloClient();
     const { t } = useTranslation();
     const { query } = useRouter();
@@ -32,13 +31,11 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         logout();
     }, []);
 
-    const seoProps = {
-        title: t('logout:title'),
-        description: t('logout:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('logout:title'),
+            description: t('logout:description'),
+        },
         header: t('logout:header'),
         disableBottomNavbar: true,
         topNavbarProps: {
@@ -47,14 +44,14 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         },
     };
 
-    if (authLoading || loading) {
-        return <LoadingLayout seoProps={seoProps} />;
+    if (loading) {
+        return <LoadingLayout />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
     } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
+        return <ErrorLayout />;
     }
 
     return (

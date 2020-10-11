@@ -1,13 +1,5 @@
 import { Avatar, Box, FormControl, Grid, Link as MuiLink, makeStyles, Typography } from '@material-ui/core';
-import {
-    FormLayout,
-    FormSubmitSection,
-    LoadingLayout,
-    OfflineLayout,
-    PasswordField,
-    TextFormField,
-    TextLink,
-} from 'components';
+import { FormLayout, FormSubmitSection, PasswordField, TextFormField, TextLink } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
@@ -17,7 +9,6 @@ import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
-import { AuthProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -35,7 +26,7 @@ interface LoginFormValues {
     password: string;
 }
 
-const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const LoginPage: NextPage = () => {
     const classes = useStyles();
     const { t } = useTranslation();
     const { query } = useRouter();
@@ -165,13 +156,11 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Formik>
     );
 
-    const seoProps = {
-        title: t('login:title'),
-        description: t('login:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('login:title'),
+            description: t('login:description'),
+        },
         header: t('login:header'),
         disableBottomNavbar: true,
         topNavbarProps: {
@@ -180,14 +169,6 @@ const LoginPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             disableSearch: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
 };

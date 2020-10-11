@@ -1,5 +1,5 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout } from 'components';
+import { FormSubmitSection, SettingsLayout } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik } from 'formik';
 import {
@@ -14,9 +14,8 @@ import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import { AuthProps } from 'types';
 
-const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const VerifyAccountPage: NextPage = () => {
     const {
         formRef: emailFormRef,
         handleMutationErrors: handleEmailFormMutationErrors,
@@ -148,27 +147,17 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         </FormControl>
     );
 
-    const seoProps = {
-        title: t('verify-account:title'),
-        description: t('verify-account:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('verify-account:title'),
+            description: t('verify-account:description'),
+        },
         header,
         dense: true,
         topNavbarProps: {
             dynamicBackUrl: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     return (
         <SettingsLayout {...layoutProps}>

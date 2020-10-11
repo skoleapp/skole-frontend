@@ -1,6 +1,5 @@
 {
     "description": "Visa {{ schoolName }} på Skole.",
     "noSubjects": "Den här skolan har inga ämnen.",
-    "noCourses": "Den här skolan har inga kurser.",
-    "notFound": "Skolan hittades inte."
+    "noCourses": "Den här skolan har inga kurser."
 }

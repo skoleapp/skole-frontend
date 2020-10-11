@@ -1,13 +1,6 @@
 import { List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
-import {
-    ActivityList,
-    LoadingLayout,
-    NotFoundLayout,
-    OfflineLayout,
-    ResponsiveDialog,
-    SettingsLayout,
-} from 'components';
+import { ActivityList, NotFoundLayout, ResponsiveDialog, SettingsLayout } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import {
     ActivityObjectType,
@@ -19,9 +12,8 @@ import { useActionsDialog } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
-import { AuthProps } from 'types';
 
-const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const ActivityPage: NextPage = () => {
     const { t } = useTranslation();
     const { userMe, setUserMe } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
@@ -77,6 +69,8 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         </List>
     );
 
+    const renderActivityList = <ActivityList />;
+
     const renderActionsDialog = (
         <ResponsiveDialog
             open={actionsDialogOpen}
@@ -87,13 +81,11 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         </ResponsiveDialog>
     );
 
-    const seoProps = {
-        title: t('activity:title'),
-        description: t('activity:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('activity:title'),
+            description: t('activity:description'),
+        },
         header: t('activity:header'),
         headerRight: renderActionsButton,
         disablePadding: true,
@@ -102,18 +94,10 @@ const ActivityPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         },
     };
 
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
-
     if (!!userMe) {
         return (
             <SettingsLayout {...layoutProps}>
-                <ActivityList />
+                {renderActivityList}
                 {renderActionsDialog}
             </SettingsLayout>
         );

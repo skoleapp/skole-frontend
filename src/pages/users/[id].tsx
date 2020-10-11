@@ -42,12 +42,10 @@ import {
 import { useDayjs, useFrontendPagination, useMediaQueries, useQueryOptions, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { AuthProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -91,18 +89,15 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     },
 }));
 
-const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const UserPage: NextPage = () => {
     const { spacing } = useTheme();
     const classes = useStyles();
     const { isMobile, isDesktop } = useMediaQueries();
     const { t } = useTranslation();
-    const { isFallback } = useRouter();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
     const queryOptions = useQueryOptions();
-    const { data, loading: userDataLoading, error } = useUserQuery(queryOptions);
-    const loading = authLoading || isFallback || userDataLoading;
-    const networkError = (!!error && !!error.networkError) || !!authNetworkError;
+    const { data, loading, error } = useUserQuery(queryOptions);
     const user: UserObjectType = R.propOr(null, 'user', data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const rank = R.propOr('', 'rank', user) as string;
@@ -121,9 +116,6 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const resourceCount = createdResources.length;
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
-    const notFound = t('profile:notFound');
-    const seoTitle = !!user ? username : !loading ? notFound : '';
-    const description = !!user ? t('profile:description', { username }) : !loading ? notFound : '';
     const coursesTabLabel = isOwnProfile ? t('profile:ownProfileCourses') : t('common:courses');
     const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
     const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
@@ -465,13 +457,11 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Paper>
     );
 
-    const seoProps = {
-        title: seoTitle,
-        description,
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: username,
+            description: t('profile:description', { username }),
+        },
         topNavbarProps: {
             header: username,
             dynamicBackUrl: true,
@@ -480,13 +470,13 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     };
 
     if (loading) {
-        return <LoadingLayout seoProps={seoProps} />;
+        return <LoadingLayout />;
     }
 
-    if (networkError) {
-        return <OfflineLayout seoProps={seoProps} />;
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
     } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
+        return <ErrorLayout />;
     }
 
     if (!!user) {
@@ -513,7 +503,6 @@ export const getStaticProps: GetStaticProps = async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['profile']),
     },
-    revalidate: 1,
 });
 
 export default withUserMe(UserPage);

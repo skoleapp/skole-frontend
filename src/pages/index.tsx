@@ -12,13 +12,12 @@ import {
 } from '@material-ui/core';
 import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import clsx from 'clsx';
-import { LoadingLayout, MainLayout, OfflineLayout } from 'components';
+import { MainLayout } from 'components';
 import { useLanguageSelector, useSearch, useShare } from 'hooks';
 import { includeDefaultNamespaces, Link, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
-import { AuthProps } from 'types';
 import { UrlObject } from 'url';
 import { HOME_PAGE_SHORTCUTS } from 'utils';
 
@@ -103,11 +102,12 @@ interface Shortcut {
     href: string | UrlObject;
 }
 
-const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const IndexPage: NextPage = () => {
     const classes = useStyles();
     const { t } = useTranslation();
     const { handleSubmit, inputProps } = useSearch();
     const { renderLanguageButton } = useLanguageSelector();
+    const { handleShare } = useShare({});
 
     const renderSearch = (
         <Grid container direction="column" justify="center" className={classes.searchContainer}>
@@ -153,8 +153,6 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Grid>
     );
 
-    const { handleShare } = useShare({});
-
     const renderInvite = (
         <Grid container direction="column" alignItems="center" className={classes.inviteContainer}>
             <Typography variant="h6" color="primary" gutterBottom>
@@ -175,13 +173,11 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Grid>
     );
 
-    const seoProps = {
-        title: t('index:title'),
-        description: t('index:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('index:title'),
+            description: t('index:description'),
+        },
         topNavbarProps: {
             disableSearch: true,
             headerRight: renderLanguageButton,
@@ -191,14 +187,6 @@ const IndexPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             dense: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     return (
         <MainLayout {...layoutProps}>

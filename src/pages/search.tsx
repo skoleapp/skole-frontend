@@ -51,7 +51,6 @@ import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
-import { AuthProps } from 'types';
 import { getPaginationQuery, getQueryWithPagination, redirect, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
@@ -109,7 +108,7 @@ interface ValidFilter {
     value: string;
 }
 
-const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const SearchPage: NextPage = () => {
     const classes = useStyles();
     const { isMobileOrTablet, isDesktop } = useMediaQueries();
     const { t } = useTranslation();
@@ -465,27 +464,25 @@ const SearchPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </AppBar>
     );
 
-    const seoProps = {
-        title: t('search:title'),
-        description: t('search:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('search:title'),
+            description: t('search:description'),
+        },
         customTopNavbar,
         topNavbarProps: {
             disableSearch: true,
         },
     };
 
-    if (loading || authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
+    if (loading) {
+        return <LoadingLayout />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
     } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
+        return <ErrorLayout />;
     }
 
     return (

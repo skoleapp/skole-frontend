@@ -1,5 +1,5 @@
 import { FormControl, Typography } from '@material-ui/core';
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
+import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -13,7 +13,6 @@ import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -37,7 +36,7 @@ export interface PasswordFormValues {
     confirmNewPassword: string;
 }
 
-const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const ResetPasswordPage: NextPage = () => {
     const {
         formRef: emailFormRef,
         handleMutationErrors: handleEmailFormMutationErrors,
@@ -179,27 +178,17 @@ const ResetPasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         </FormControl>
     );
 
-    const seoProps = {
-        title: t('reset-password:title'),
-        description: t('reset-password:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('reset-password:title'),
+            description: t('reset-password:description'),
+        },
         header,
         dense: true,
         topNavbarProps: {
             dynamicBackUrl: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     return (
         <SettingsLayout {...layoutProps}>

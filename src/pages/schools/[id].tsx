@@ -42,12 +42,10 @@ import {
 } from 'hooks';
 import { includeDefaultNamespaces, Link, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { AuthProps } from 'types';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -62,13 +60,10 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     },
 }));
 
-const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const SchoolDetailPage: NextPage = () => {
     const classes = useStyles();
-    const { isFallback } = useRouter();
     const queryOptions = useQueryOptions();
-    const { data, loading: courseDataLoading, error } = useSchoolQuery(queryOptions);
-    const loading = authLoading || isFallback || courseDataLoading;
-    const networkError = (!!error && !!error.networkError) || authNetworkError;
+    const { data, loading, error } = useSchoolQuery(queryOptions);
     const { verified, verificationRequiredTooltip } = useAuthContext();
     const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
@@ -90,9 +85,6 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare({ text: schoolName });
-    const notFound = t('school:notFound');
-    const title = !!school ? schoolName : !isFallback ? notFound : '';
-    const description = !!school ? t('school:description', { schoolName }) : !isFallback ? notFound : '';
     const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
@@ -282,15 +274,11 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
         </ResponsiveDialog>
     );
 
-    const seoProps = {
-        title,
-        description,
-    };
-
     const layoutProps = {
-        seoProps,
-        tabLabelLeft: `${t('common:subjects')} (${subjectCount})`,
-        tabLabelRight: `${t('common:courses')} (${courseCount})`,
+        seoProps: {
+            title: schoolName,
+            description: t('school:description', { schoolName }),
+        },
         topNavbarProps: {
             dynamicBackUrl: true,
             headerLeft: renderAddCourseButton,
@@ -300,13 +288,13 @@ const SchoolDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }
     };
 
     if (loading) {
-        return <LoadingLayout seoProps={seoProps} />;
+        return <LoadingLayout />;
     }
 
-    if (networkError) {
-        return <OfflineLayout seoProps={seoProps} />;
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
     } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
+        return <ErrorLayout />;
     }
 
     if (!!school) {
@@ -333,7 +321,6 @@ export const getStaticProps: GetStaticProps = async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['school']),
     },
-    revalidate: 1,
 });
 
 export default withUserMe(SchoolDetailPage);

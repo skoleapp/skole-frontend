@@ -1,12 +1,11 @@
 import { Avatar, Box, Card, CardContent, CardHeader, CardMedia, Grid, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, LoadingLayout, MainLayout, TextLink } from 'components';
+import { ButtonLink, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { AuthProps } from 'types';
 import { GET_STARTED_ITEMS, GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
@@ -72,8 +71,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     },
 }));
 
-// This page will be available also when offline.
-const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
+const GetStartedPage: NextPage = () => {
     const classes = useStyles();
     const { t } = useTranslation();
     const { query } = useRouter();
@@ -83,13 +81,11 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
         localStorage.setItem(GET_STARTED_PAGE_VISITED_KEY, new Date().toString());
     }, []);
 
-    const seoProps = {
-        title: t('get-started:title'),
-        description: t('get-started:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('get-started:title'),
+            description: t('get-started:description'),
+        },
         disableBottomNavbar: true,
         topNavbarProps: {
             disableAuthButtons: true,
@@ -100,10 +96,6 @@ const GetStartedPage: NextPage<AuthProps> = ({ authLoading }) => {
             dense: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
 
     return (
         <MainLayout {...layoutProps}>

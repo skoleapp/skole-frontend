@@ -5,6 +5,5 @@
     "loadingResource": "Loading resource...",
     "errorLoadingResource": "Error loading resource.",
     "noComments": "This resource has no comments. Add a comment below!",
-    "drawMode": "Draw Mode",
-    "notFound": "Resource not found."
+    "drawMode": "Draw Mode"
 }

@@ -23,9 +23,8 @@ import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { AuthProps } from 'types';
 
-const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const StarredPage: NextPage = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { data, loading, error } = useStarredQuery();
@@ -83,13 +82,11 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         </Box>
     );
 
-    const seoProps = {
-        title: t('starred:title'),
-        description: t('starred:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('starred:title'),
+            description: t('starred:description'),
+        },
         header: t('starred:header'),
         disablePadding: true,
         topNavbarProps: {
@@ -97,14 +94,14 @@ const StarredPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         },
     };
 
-    if (loading || authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
+    if (loading) {
+        return <LoadingLayout />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
     } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
+        return <ErrorLayout />;
     }
 
     if (!!userMe) {

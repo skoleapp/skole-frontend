@@ -1,3 +1,4 @@
+import { LoadingLayout, OfflineLayout } from 'components';
 import { useUserMe } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -45,13 +46,15 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
             };
         }, []);
 
-        return (
-            <PageComponent
-                {...(pageProps as T)}
-                authLoading={authLoading || shouldRedirect} // Show loading screen during redirect.
-                authNetworkError={authNetworkError}
-            />
-        );
+        if (authLoading) {
+            return <LoadingLayout />;
+        }
+
+        if (authNetworkError) {
+            return <OfflineLayout />;
+        }
+
+        return <PageComponent {...(pageProps as T)} />;
     };
 
     return withAuth;
@@ -69,13 +72,15 @@ export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage =
             !!userMe && redirect({ pathname: urls.confirmLogout, query: { next: asPath } });
         }, [userMe]);
 
-        return (
-            <PageComponent
-                {...(pageProps as T)}
-                authLoading={authLoading || !!userMe} // Show loading screen during redirect.
-                authNetworkError={authNetworkError}
-            />
-        );
+        if (authLoading) {
+            return <LoadingLayout />;
+        }
+
+        if (authNetworkError) {
+            return <OfflineLayout />;
+        }
+
+        return <PageComponent {...(pageProps as T)} />;
     };
 
     return WithNoAuth;
@@ -86,7 +91,7 @@ export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage =
 // Wrap all pages that do not require authentication with this.
 export const withUserMe = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithUserMe: NextPage = pageProps => {
-        const authProps = useUserMe();
+        const { authLoading, authNetworkError } = useUserMe();
         const { asPath } = useRouter();
 
         useEffect(() => {
@@ -94,7 +99,15 @@ export const withUserMe = <T extends {}>(PageComponent: NextPage<T>): NextPage =
             !getStartedPageVisited && redirect({ pathname: urls.getStarted, query: { next: asPath } });
         }, []);
 
-        return <PageComponent {...(pageProps as T)} {...authProps} />;
+        if (authLoading) {
+            return <LoadingLayout />;
+        }
+
+        if (authNetworkError) {
+            return <OfflineLayout />;
+        }
+
+        return <PageComponent {...(pageProps as T)} />;
     };
 
     return WithUserMe;

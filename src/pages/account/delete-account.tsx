@@ -1,4 +1,4 @@
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
+import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
@@ -7,7 +7,6 @@ import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import { AuthProps } from 'types';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -20,7 +19,7 @@ export interface DeleteAccountFormValues {
     password: string;
 }
 
-export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+export const DeleteAccountPage: NextPage = () => {
     const { formRef, setSubmitting, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<
         DeleteAccountFormValues
     >();
@@ -79,27 +78,17 @@ export const DeleteAccountPage: NextPage<AuthProps> = ({ authLoading, authNetwor
         </Formik>
     );
 
-    const seoProps = {
-        title: t('delete-account:title'),
-        description: t('delete-account:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('delete-account:title'),
+            description: t('delete-account:description'),
+        },
         header: t('delete-account:header'),
         dense: true,
         topNavbarProps: {
             dynamicBackUrl: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
