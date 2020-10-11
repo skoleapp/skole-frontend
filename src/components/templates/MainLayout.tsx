@@ -23,6 +23,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
         minHeight: '100vh',
         backgroundColor: palette.secondary.main,
         marginTop: 'env(safe-area-inset-top)', // Push content under iOS status bar.
+        overflow: 'hidden',
     },
     container: {
         flexGrow: 1,
