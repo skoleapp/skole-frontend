@@ -1,13 +1,14 @@
 # Skole Frontend 🎓
 
-[![CircleCI build status](https://circleci.com/gh/ruohola/skole-frontend.svg?style=shield&circle-token=e15c5fba3e4d8011364889043a709e2eaafccb2d)](https://circleci.com/gh/ruohola/skole-frontend)
-[![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
+[![circleci status](https://circleci.com/gh/ruohola/skole-frontend.svg?style=shield&circle-token=e15c5fba3e4d8011364889043a709e2eaafccb2d)](https://circleci.com/gh/ruohola/skole-frontend)
+[![typescript](https://badgen.net/badge/icon/typescript?icon=typescript&label&color=007acc)](https://www.typescriptlang.org)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 This is the frontend for the Skole app.
 
 Also check out the [README from `skole` repo](https://github.com/ruohola/skole/blob/develop/README.md).
 
-See detailed description for all top-level dependencies in `dependencies.md` file.
+See detailed description for all top-level dependencies in [`dependencies.md`](dependencies.md) file.
 
 Other useful documentation:
 
