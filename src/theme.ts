@@ -268,6 +268,7 @@ let theme = createMuiTheme({
                     position: 'absolute',
                     width: '100%',
                     height: '100%',
+                    willChange: 'auto !important', // Fix overflow issues with border radiuses.
                     '& > div': {
                         display: 'flex',
                     },
