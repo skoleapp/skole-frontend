@@ -42,7 +42,7 @@ export interface PDFViewerContextType {
     setControlsDisabled: Dispatch<SetStateAction<boolean>>;
     swipingDisabled: boolean;
     setSwipingDisabled: Dispatch<SetStateAction<boolean>>;
-    swipeableViewsRef: MutableRefObject<SwipeableViews>;
+    swipeableViewsRef: string & MutableRefObject<SwipeableViews>;
 }
 
 export interface DiscussionContextType {

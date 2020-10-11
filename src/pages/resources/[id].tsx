@@ -81,7 +81,9 @@ const useStyles = makeStyles(({ breakpoints }) => ({
         },
     },
     resourceContainer: {
-        borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0.25rem 0.25rem`, // Disable round border for bottom right corner to better fit with the scroll bar.
+        [breakpoints.up('lg')]: {
+            borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0.25rem 0.25rem`, // Disable round border for bottom right corner to better fit with the scroll bar.
+        },
     },
 }));
 
@@ -120,7 +122,7 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: resourceTitle });
     const { commentModalOpen } = useDiscussionContext();
-    const { drawMode, setDrawMode, swipingDisabled } = usePDFViewerContext();
+    const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
     const notFound = t('resource:notFound');
     const seoTitle = !!resource ? title : !isFallback ? notFound : '';
     const description = !!resource ? t('resource:description', { resourceTitle }) : !isFallback ? notFound : '';
@@ -346,7 +348,12 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                 <Tab label={`${t('common:discussion')} (${commentCount})`} />
             </Tabs>
             <Box flexGrow="1" position="relative">
-                <SwipeableViews disabled={swipingDisabled} index={tabValue} onChangeIndex={handleIndexChange}>
+                <SwipeableViews
+                    disabled={swipingDisabled}
+                    index={tabValue}
+                    onChangeIndex={handleIndexChange}
+                    ref={swipeableViewsRef}
+                >
                     {renderPDFViewer}
                     {renderDiscussion}
                 </SwipeableViews>
