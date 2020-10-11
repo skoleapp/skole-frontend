@@ -444,8 +444,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const renderTabs = (
         <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label={coursesTabLabel} />
-            <Tab label={resourcesTabLabel} />
+            <Tab label={`${coursesTabLabel} (${courseCount})`} />
+            <Tab label={`${resourcesTabLabel} (${resourceCount})`} />
         </Tabs>
     );
 
