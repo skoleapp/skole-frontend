@@ -68,7 +68,7 @@ export const HOME_PAGE_SHORTCUTS = [
         href: urls.uploadResource,
     },
     {
-        text: 'index:addCourses',
+        text: 'index:addCourse',
         icon: SchoolOutlined,
         href: urls.createCourse,
     },

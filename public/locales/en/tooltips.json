@@ -42,5 +42,5 @@
     "blockQuote": "Block quote ({{ hotkeyBlockQuote }}).",
     "codeBlock": "Code block ({{ hotkeyCodeBlock }}).",
     "mention": "Mention user (coming soon).",
-    "addCourse": "Add course for this school."
+    "addCourse": "Add a course for this school."
 }

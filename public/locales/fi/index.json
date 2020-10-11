@@ -3,7 +3,7 @@
     "description": "Kurssit, resurssit, keskustelu. Yhdessä paikassa.",
     "resources": "Resurssit",
     "upload": "Lataa",
-    "addCourses": "Lisää kursseja",
+    "addCourse": "Lisää kurssi",
     "inviteHeader": "Kutsu kaverisi käyttämään Skolea!",
     "inviteText": "Kutsu"
 }
