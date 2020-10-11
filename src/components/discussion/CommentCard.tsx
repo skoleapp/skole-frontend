@@ -172,7 +172,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
             {comment.user.username}
         </TextLink>
     ) : (
-        t('common:communityUser')
+        <Typography variant="body2" color="textSecondary">
+            {t('common:communityUser')}
+        </Typography>
     );
 
     const renderCardHeader = (
