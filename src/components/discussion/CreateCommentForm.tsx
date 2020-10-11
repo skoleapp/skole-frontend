@@ -68,7 +68,6 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
             if (!!createComment.errors && !!createComment.errors.length) {
                 onError();
             } else if (!!createComment.comment && !!createComment.message) {
-                toggleNotification(createComment.message);
                 appendComments(createComment.comment as CommentObjectType);
             } else {
                 onError();
