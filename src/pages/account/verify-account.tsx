@@ -102,7 +102,7 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         general: '',
     };
 
-    const renderEmailForm = !verified && !token && !emailSubmitted && (
+    const renderEmailForm = verified === false && !token && !emailSubmitted && (
         <Formik initialValues={initialEmailFormValues} onSubmit={handleSubmitEmail} ref={emailFormRef}>
             {(props): JSX.Element => (
                 <Form>
@@ -115,7 +115,7 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         </Formik>
     );
 
-    const renderEmailSubmitted = !verified && !token && emailSubmitted && (
+    const renderEmailSubmitted = verified === false && !token && emailSubmitted && (
         <FormControl>
             <Typography variant="subtitle1" align="center">
                 {t('verify-account:emailSubmitted')}
@@ -123,7 +123,7 @@ const VerifyAccountPage: NextPage<AuthProps> = ({ authLoading, authNetworkError 
         </FormControl>
     );
 
-    const renderConfirmationForm = !verified && !!token && (
+    const renderConfirmationForm = verified === false && !!token && (
         <Formik
             initialValues={initialConfirmationFormValues}
             onSubmit={handleSubmitConfirmation}
