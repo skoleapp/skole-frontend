@@ -62,10 +62,10 @@ const useStyles = makeStyles(({ spacing }) => ({
             flexGrow: 1,
             display: 'flex',
             alignItems: 'center',
-            height: '2.5rem',
+            height: '2rem',
             overflowY: 'auto',
             overflowX: 'hidden',
-            margin: `0 ${spacing(1)}`,
+            padding: `0 ${spacing(2)}`,
             '& .DraftEditor-editorContainer': {
                 flexGrow: 1,
                 '& .RichEditor-blockquote': {
@@ -79,9 +79,6 @@ const useStyles = makeStyles(({ spacing }) => ({
                     padding: spacing(2),
                     margin: 0,
                 },
-            },
-            '& .public-DraftEditorPlaceholder-root': {
-                marginLeft: spacing(2),
             },
         },
     },
