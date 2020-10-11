@@ -189,7 +189,7 @@ export const RICH_STYLES = {
 // Resource uploads.
 
 export const ACCEPTED_FILES = ['image/*', 'text/*', 'application/*'];
-export const MAX_FILE_SIZE = 5000000;
+export const MAX_FILE_SIZE = 10000000;
 
 // Avatar field.
 
