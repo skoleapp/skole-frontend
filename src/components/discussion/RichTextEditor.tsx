@@ -49,32 +49,41 @@ import React, { ChangeEvent, KeyboardEvent, SyntheticEvent, useEffect, useRef, u
 import { CreateCommentFormValues } from 'types';
 import { RICH_STYLES } from 'utils';
 
-import { SkoleDialog } from '../shared';
+import { DialogHeader, SkoleDialog } from '../shared';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
 const useStyles = makeStyles(({ spacing }) => ({
     root: {
         width: '100%',
-        marginTop: 'auto',
         wordBreak: 'break-all',
-        '& .DraftEditor-editorContainer': {
+        display: 'flex',
+        flexDirection: 'column',
+        '& .DraftEditor-root': {
+            flexGrow: 1,
+            display: 'flex',
+            alignItems: 'center',
+            height: '2.5rem',
             overflowY: 'auto',
-            padding: spacing(1),
-            '& .RichEditor-blockquote': {
-                borderLeft: `${spacing(2)} solid #eee`,
-                color: '#666',
-                padding: spacing(2),
-                margin: 0,
+            overflowX: 'hidden',
+            margin: `0 ${spacing(1)}`,
+            '& .DraftEditor-editorContainer': {
+                flexGrow: 1,
+                '& .RichEditor-blockquote': {
+                    borderLeft: `${spacing(2)} solid #eee`,
+                    color: '#666',
+                    padding: spacing(2),
+                    margin: 0,
+                },
+                '& .public-DraftStyleDefault-pre': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                    padding: spacing(2),
+                    margin: 0,
+                },
             },
-            '& .public-DraftStyleDefault-pre': {
-                backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                padding: spacing(2),
-                margin: 0,
+            '& .public-DraftEditorPlaceholder-root': {
+                marginLeft: spacing(2),
             },
-        },
-        '& .public-DraftEditorPlaceholder-root': {
-            marginLeft: spacing(2),
         },
     },
     placeholderHidden: {
@@ -403,7 +412,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     const renderURLInput = (
         <SkoleDialog open={URLInputOpen} onClose={handleCloseURLInput}>
-            <DialogTitle>{t('forms:addLink')}</DialogTitle>
+            <DialogHeader onCancel={handleCloseURLInput} text={t('forms:addLink')} />
             <DialogContent>
                 <TextField
                     value={URL}
@@ -455,7 +464,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     // TODO: Add this toolbar behind some expansion thingy as the toolbar does not fit very narrow screens.
     const renderBottomToolbar = (
-        <Box marginTop={spacing(1)} display="flex" onClick={focusEditor}>
+        <Box marginTop={spacing(1)} display="flex">
             {renderInlineStyles}
             {renderLinkButton}
             {renderBlockStyles}
@@ -463,7 +472,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         </Box>
     );
 
-    const renderMentionButton = (
+    const renderMentionButton = isDesktop && (
         <Tooltip title={t('tooltips:mention')}>
             <Typography component="span">
                 <IconButton {...commonToolbarButtonProps} disabled>
@@ -531,7 +540,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     const renderTopToolbar = (
-        <Box marginBottom={spacing(2)} onClick={focusEditor}>
+        <Box marginBottom={spacing(2)}>
             <Grid container alignItems="center">
                 {renderTopToolbarButtons}
                 {renderHelpTexts}
