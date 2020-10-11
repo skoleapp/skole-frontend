@@ -17,6 +17,7 @@ export const urls = {
     getStarted: '/get-started',
     home: '/',
     login: '/login',
+    confirmLogin: '/login/confirm',
     logout: '/logout',
     confirmLogout: '/logout/confirm',
     privacy: '/privacy',

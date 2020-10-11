@@ -15,7 +15,7 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
 
         const syncLogout = async (e: StorageEvent): Promise<void> => {
             if (e.key === 'logout') {
-                await redirect(urls.login);
+                await redirect(urls.logout);
             }
         };
 
@@ -29,7 +29,7 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
                 // Only redirect new users to get started page (users who have already logged in at some point).
                 // Redirect old users and users who have visited get started page to login page.
                 if (!!existingUser || getStartedPageVisited) {
-                    redirect({ pathname: urls.login, query });
+                    redirect({ pathname: urls.confirmLogin, query });
                 } else {
                     redirect({ pathname: urls.getStarted, query });
                 }

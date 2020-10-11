@@ -32,10 +32,10 @@ const LogoutPage: NextPage = () => {
 
     const layoutProps = {
         seoProps: {
-            title: t('logout:titleLoggedOut'),
-            description: t('logout:descriptionLoggedOut'),
+            title: t('logout:title'),
+            description: t('logout:description'),
         },
-        header: t('logout:headerLoggedOut'),
+        header: t('logout:header'),
         disableBottomNavbar: true,
         topNavbarProps: {
             disableAuthButtons: true,
@@ -66,7 +66,7 @@ const LogoutPage: NextPage = () => {
                 endIcon={<ArrowForwardOutlined />}
                 fullWidth
             >
-                {t('logout:loginButton')}
+                {t('logout:logInAgain')}
             </ButtonLink>
             <FormControl>
                 <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>

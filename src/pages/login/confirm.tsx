@@ -1,23 +1,27 @@
-import { Typography } from '@material-ui/core';
+import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout } from 'components';
-import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { useLanguageSelector } from 'hooks';
+import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { urls } from 'utils';
 
-const ConfirmLogoutPage: NextPage = () => {
+const ConfirmLoginPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
+    const { renderLanguageButton } = useLanguageSelector();
 
     const layoutProps = {
         seoProps: {
-            title: t('confirm-logout:title'),
-            description: t('confirm-logout:description'),
+            title: t('confirm-login:title'),
+            description: t('confirm-login:description'),
         },
-        header: t('confirm-logout:header'),
+        header: t('confirm-login:header'),
+        disableBottomNavbar: true,
         topNavbarProps: {
+            headerRight: renderLanguageButton,
             disableAuthButtons: true,
             disableSearch: true,
         },
@@ -26,26 +30,31 @@ const ConfirmLogoutPage: NextPage = () => {
     return (
         <FormLayout {...layoutProps}>
             <Typography variant="subtitle1" align="center">
-                {t('confirm-logout:confirmLogout')}
+                {t('confirm-login:confirmLogin')}
             </Typography>
             <Typography component="br" />
             <ButtonLink
-                href={{ pathname: urls.logout, query }}
+                href={{ pathname: urls.login, query }}
                 color="primary"
                 variant="contained"
                 endIcon={<ArrowForwardOutlined />}
                 fullWidth
             >
-                {t('common:confirm')}
+                {t('confirm:continue')}
             </ButtonLink>
+            <FormControl>
+                <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
+                    {t('confirm-login:backToHome')}
+                </ButtonLink>
+            </FormControl>
         </FormLayout>
     );
 };
 
 export const getStaticProps: GetStaticProps = async () => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['confirm-logout']),
+        namespacesRequired: includeDefaultNamespaces(['confirm-login']),
     },
 });
 
-export default withAuth(ConfirmLogoutPage);
+export default withNoAuth(ConfirmLoginPage);

@@ -164,6 +164,7 @@ const LoginPage: NextPage = () => {
         header: t('login:header'),
         disableBottomNavbar: true,
         topNavbarProps: {
+            dynamicBackUrl: true,
             headerRight: renderLanguageButton,
             disableAuthButtons: true,
             disableSearch: true,

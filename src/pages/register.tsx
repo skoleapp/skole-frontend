@@ -351,6 +351,7 @@ const RegisterPage: NextPage = () => {
         header: getHeader(),
         disableBottomNavbar: true,
         topNavbarProps: {
+            dynamicBackUrl: true,
             headerRight: renderLanguageButton,
             disableAuthButtons: true,
             disableSearch: true,
