@@ -1,4 +1,4 @@
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
+import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
@@ -6,7 +6,6 @@ import { useForm } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import { AuthProps } from 'types';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -24,7 +23,7 @@ interface ContactFormValues {
     message: string;
 }
 
-const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const ContactPage: NextPage = () => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const { formRef, onError, resetForm, handleMutationErrors, unexpectedError } = useForm<ContactFormValues>();
@@ -82,27 +81,17 @@ const ContactPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => 
         </Formik>
     );
 
-    const seoProps = {
-        title: t('contact:title'),
-        description: t('contact:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('contact:title'),
+            description: t('contact:description'),
+        },
         header: t('contact:header'),
         dense: true,
         topNavbarProps: {
             dynamicBackUrl: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };

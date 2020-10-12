@@ -1,6 +1,5 @@
 import { Box, makeStyles } from '@material-ui/core';
 import React from 'react';
-import { MainLayoutProps } from 'types';
 
 import { LoadingBox } from '..';
 import { MainLayout } from './MainLayout';
@@ -14,11 +13,14 @@ const useStyles = makeStyles(({ palette }) => ({
     },
 }));
 
-export const LoadingLayout: React.FC<Pick<MainLayoutProps, 'seoProps'>> = ({ seoProps }) => {
+export const LoadingLayout: React.FC = () => {
     const classes = useStyles();
 
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: '',
+            description: '',
+        },
         disableBottomNavbar: true,
         disableFooter: true,
         topNavbarProps: {

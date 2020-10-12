@@ -1,9 +1,7 @@
 {
     "starred": "Visa stjärnmärkta.",
     "profile": "Visa din profil.",
-    "voteOwnComment": "Du kan inte röstä på din egen kommentar.",
-    "voteOwnCourse": "Du kan inte rösta på din egen kurs.",
-    "voteOwnResource": "Du kan inte rösta på din egen resurs.",
+    "voteOwnContent": "Du kan inte rösta på ditt eget innehåll.",
     "attachment": "Visa bildbilaga.",
     "attachFile": "Bifoga fil.",
     "clearAttachment": "Ta bort bilagan.",
@@ -30,7 +28,7 @@
     "exitFullscreen": "Avsluta helskärm.",
     "zoomIn": "Zooma in.",
     "zoomOut": "Zooma ut.",
-    "markArea": "Markera området.",
+    "markArea": "Markera området (på kommande).",
     "download": "Ladda ner.",
     "print": "Skriva ut.",
     "rotate": "Rotera.",
@@ -43,6 +41,6 @@
     "bulletedList": "Lista över punkter ({{ hotkeyBulletedList }}).",
     "blockQuote": "Citatblock ({{ hotkeyBlockQuote }}).",
     "codeBlock": "Kodblock ({{ hotkeyCodeBlock }}).",
-    "mention": "Nämn användare (kommer snart).",
-    "addCourse": "Lägg till kurs för den här skolan."
+    "mention": "Nämn användare (på kommande).",
+    "addCourse": "Lägg till en kurs för den här skolan."
 }

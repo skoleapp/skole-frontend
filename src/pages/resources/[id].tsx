@@ -53,12 +53,10 @@ import {
 import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { AuthProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -81,22 +79,21 @@ const useStyles = makeStyles(({ breakpoints }) => ({
         },
     },
     resourceContainer: {
-        borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0.25rem 0.25rem`, // Disable round border for bottom right corner to better fit with the scroll bar.
+        [breakpoints.up('lg')]: {
+            borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0.25rem 0.25rem`, // Disable round border for bottom right corner to better fit with the scroll bar.
+        },
     },
 }));
 
-const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const ResourceDetailPage: NextPage = () => {
     const classes = useStyles();
-    const { isFallback } = useRouter();
     const { t } = useTranslation();
     const queryOptions = useQueryOptions();
-    const { data, loading: courseDataLoading, error } = useResourceQuery(queryOptions);
-    const loading = authLoading || isFallback || courseDataLoading;
-    const networkError = (!!error && !!error.networkError) || authNetworkError;
+    const { data, loading, error } = useResourceQuery(queryOptions);
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
+    const { userMe, verified } = useAuthContext();
     const resource: ResourceObjectType = R.propOr(null, 'resource', data);
     const resourceTitle = R.propOr('', 'title', resource) as string;
     const resourceDate = R.propOr('', 'date', resource) as string;
@@ -120,10 +117,7 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: resourceTitle });
     const { commentModalOpen } = useDiscussionContext();
-    const { drawMode, setDrawMode, swipingDisabled } = usePDFViewerContext();
-    const notFound = t('resource:notFound');
-    const seoTitle = !!resource ? title : !isFallback ? notFound : '';
-    const description = !!resource ? t('resource:description', { resourceTitle }) : !isFallback ? notFound : '';
+    const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     const {
@@ -134,19 +128,11 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         renderActionsButton,
     } = useActionsDialog({ text: resourceTitle });
 
-    const upVoteButtonTooltip =
-        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnResource') : t('tooltips:upVote'));
-
-    const downVoteButtonTooltip =
-        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnResource') : t('tooltips:downVote'));
-
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
         initialScore,
         isOwner,
         variables: { resource: resourceId },
-        upVoteButtonTooltip,
-        downVoteButtonTooltip,
     });
 
     // If comment modal is opened in main tab, automatically switch to discussion tab.
@@ -346,7 +332,12 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
                 <Tab label={`${t('common:discussion')} (${commentCount})`} />
             </Tabs>
             <Box flexGrow="1" position="relative">
-                <SwipeableViews disabled={swipingDisabled} index={tabValue} onChangeIndex={handleIndexChange}>
+                <SwipeableViews
+                    disabled={swipingDisabled}
+                    index={tabValue}
+                    onChangeIndex={handleIndexChange}
+                    ref={swipeableViewsRef}
+                >
                     {renderPDFViewer}
                     {renderDiscussion}
                 </SwipeableViews>
@@ -429,13 +420,11 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         </ResponsiveDialog>
     );
 
-    const seoProps = {
-        title: seoTitle,
-        description,
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title,
+            description: t('resource:description', { resourceTitle }),
+        },
         customBottomNavbar: renderCustomBottomNavbar,
         topNavbarProps: {
             staticBackUrl: staticBackUrl,
@@ -446,13 +435,13 @@ const ResourceDetailPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
     };
 
     if (loading) {
-        return <LoadingLayout seoProps={seoProps} />;
+        return <LoadingLayout />;
     }
 
-    if (networkError) {
-        return <OfflineLayout seoProps={seoProps} />;
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
     } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
+        return <ErrorLayout />;
     }
 
     if (!!resource) {
@@ -480,7 +469,6 @@ export const getStaticProps: GetStaticProps = async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['resource']),
     },
-    revalidate: 1,
 });
 
 export default withUserMe(ResourceDetailPage);

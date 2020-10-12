@@ -22,6 +22,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
         [breakpoints.up('lg')]: {
             borderRadius: BORDER_RADIUS,
         },
@@ -87,7 +88,7 @@ export const SettingsLayout: React.FC<Props> = ({
     const renderContent = (
         <CardContent className={clsx(classes.container, disablePadding && classes.disablePadding)}>
             <Grid container alignItems="center" className={classes.container}>
-                <Grid item container direction="column" xs={12} {...colSpan}>
+                <Grid item container direction="column" xs={12} className={classes.container} {...colSpan}>
                     {children}
                 </Grid>
             </Grid>

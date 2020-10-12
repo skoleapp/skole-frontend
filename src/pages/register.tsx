@@ -5,8 +5,6 @@ import {
     ButtonLink,
     FormLayout,
     FormSubmitSection,
-    LoadingLayout,
-    OfflineLayout,
     PasswordField,
     TextFormField,
     TextLink,
@@ -29,7 +27,6 @@ import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import { AuthProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -58,7 +55,7 @@ enum RegisterPhases {
     REGISTER_COMPLETE = 'register-complete',
 }
 
-const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const RegisterPage: NextPage = () => {
     const classes = useStyles();
     const { query } = useRouter();
     const { t } = useTranslation();
@@ -346,29 +343,20 @@ const RegisterPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) =>
         </FormControl>
     );
 
-    const seoProps = {
-        title: t('register:title'),
-        description: t('register:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('register:title'),
+            description: t('register:description'),
+        },
         header: getHeader(),
         disableBottomNavbar: true,
         topNavbarProps: {
+            dynamicBackUrl: true,
             headerRight: renderLanguageButton,
             disableAuthButtons: true,
             disableSearch: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     return (
         <FormLayout {...layoutProps}>

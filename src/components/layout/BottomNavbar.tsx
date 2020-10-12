@@ -43,17 +43,18 @@ export const BottomNavbar: React.FC = () => {
     };
 
     const [value, setValue] = useState(getNavbarValue());
-
-    const handleChange = (_e: ChangeEvent<{}>, newValue: number): void => {
-        setValue(newValue);
-    };
-
+    const handleChange = (_e: ChangeEvent<{}>, newValue: number): void => setValue(newValue);
     const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => redirect(url);
 
-    const renderAvatar = (
+    const renderProfileLabel = !!userMe ? t('common:profile') : t('common:login');
+    const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />;
+
+    const renderAvatar = !!userMe ? (
         <Link href={urls.user} as={`/users/${userMeId}`}>
-            <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
+            {renderAvatarThumbnail}
         </Link>
+    ) : (
+        <Link href={urls.login}>{renderAvatarThumbnail}</Link>
     );
 
     const renderHomeAction = (
@@ -97,7 +98,7 @@ export const BottomNavbar: React.FC = () => {
     );
 
     const renderProfileAction = (
-        <BottomNavigationAction value={5} label={t('common:profile')} showLabel icon={renderAvatar} />
+        <BottomNavigationAction value={5} label={renderProfileLabel} showLabel icon={renderAvatar} />
     );
 
     return (

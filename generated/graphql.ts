@@ -1362,6 +1362,10 @@ export type UserQuery = (
     )>, createdResources: Array<(
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
+      & { resourceType?: Maybe<(
+        { __typename?: 'ResourceTypeObjectType' }
+        & Pick<ResourceTypeObjectType, 'id'>
+      )> }
     )> }
   )>, resourceTypes?: Maybe<Array<Maybe<(
     { __typename?: 'ResourceTypeObjectType' }
@@ -2698,6 +2702,9 @@ export const UserDocument = gql`
     createdResources {
       id
       title
+      resourceType {
+        id
+      }
       score
       date
     }

@@ -71,8 +71,6 @@
     "commentShareText": "{{ creatorUsername }} Skolessa: {{ commentPreview }}",
     "skip": "Ohita",
     "loading": "Ladataan...",
-    "offlineHeader": "Palvelimeen ei saatu yhteyttä",
-    "offlineText": "Varmista Internet-yhteytesi ja yritä hetken päästä uudelleen.",
     "home": "Koti",
     "search": "Haku",
     "upload": "Lataa",

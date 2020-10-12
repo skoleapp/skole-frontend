@@ -1,4 +1,4 @@
-import { CardActionArea, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
+import { CardActionArea, Grid, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import { AssignmentOutlined, ChatOutlined } from '@material-ui/icons';
 import { CourseObjectType } from 'generated';
@@ -9,15 +9,14 @@ import { urls } from 'utils';
 
 import { TextLink } from '../shared';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ spacing }) => ({
     icon: {
+        marginLeft: spacing(1.5),
+        marginRight: spacing(0.5),
         width: '1rem',
         height: '1rem',
-        position: 'relative',
-        top: '0.2rem',
-        marginLeft: '0.3rem',
     },
-});
+}));
 
 interface Props {
     courses: CourseObjectType[];
@@ -38,19 +37,27 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
         </>
     );
 
+    const renderCourseCreator = (course: CourseObjectType): JSX.Element | string =>
+        !!course.user ? (
+            <TextLink href={urls.user} as={`/users/${course.user.id}`} color="primary">
+                {course.user.username}
+            </TextLink>
+        ) : (
+            t('common:communityUser')
+        );
+
+    const renderResourceIcon = <AssignmentOutlined className={classes.icon} />;
+    const renderDiscussionIcon = <ChatOutlined className={classes.icon} />;
+
     const renderCourseInfo = (course: CourseObjectType): JSX.Element => (
         <Typography variant="body2" color="textSecondary">
-            {!!course.user ? (
-                <TextLink href={urls.user} as={`/users/${course.user.id}`} color="primary">
-                    {course.user.username}
-                </TextLink>
-            ) : (
-                t('common:communityUser')
-            )}
-            <AssignmentOutlined className={classes.icon} />
-            {course.resourceCount}
-            <ChatOutlined className={classes.icon} />
-            {course.commentCount}
+            <Grid container alignItems="center">
+                {renderCourseCreator(course)}
+                {renderResourceIcon}
+                {course.resourceCount}
+                {renderDiscussionIcon}
+                {course.commentCount}
+            </Grid>
         </Typography>
     );
 

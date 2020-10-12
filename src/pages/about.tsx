@@ -1,33 +1,25 @@
 import { Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, LoadingLayout, SettingsLayout } from 'components';
+import { ButtonLink, SettingsLayout } from 'components';
 import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-// This page will be available also when offline.
-const AboutPage: NextPage<AuthProps> = ({ authLoading }) => {
+const AboutPage: NextPage = () => {
     const { t } = useTranslation();
 
-    const seoProps = {
-        title: t('about:title'),
-        description: t('about:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('about:title'),
+            description: t('about:description'),
+        },
         header: t('about:header'),
         dense: true,
         topNavbarProps: {
             dynamicBackUrl: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
 
     return (
         <SettingsLayout {...layoutProps}>

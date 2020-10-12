@@ -1,9 +1,8 @@
 {
-    "title": "Logga ut",
-    "description": "Logga ut från Skole.",
-    "header": "Logga ut",
-    "loggingOut": "loggar ut...",
-    "loggedOut": "Du har loggats ut!",
-    "loginButton": "Logga in igen",
-    "confirmLogout": "Du måste logga ut för att fortsätta."
+    "title": "Loggad ut",
+    "description": "Loggad ut från Skole.",
+    "header": "Utloggad",
+    "loggedOut": "Du har loggat ut!",
+    "logInAgain": "Logga in igen",
+    "backToHome": "Tillbaka till hem"
 }

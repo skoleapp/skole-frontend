@@ -1,31 +1,23 @@
 import { Typography } from '@material-ui/core';
-import { LoadingLayout, SettingsLayout } from 'components';
+import { SettingsLayout } from 'components';
 import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import { AuthProps } from 'types';
 
-// This page will be available also when offline.
-const TermsPage: NextPage<AuthProps> = ({ authLoading }) => {
+const TermsPage: NextPage = () => {
     const { t } = useTranslation();
 
-    const seoProps = {
-        title: t('terms:title'),
-        description: t('terms:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('terms:title'),
+            description: t('terms:description'),
+        },
         header: t('terms:header'),
         dense: true,
         topNavbarProps: {
             dynamicBackUrl: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
 
     return (
         <SettingsLayout {...layoutProps}>

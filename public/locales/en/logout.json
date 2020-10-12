@@ -1,9 +1,8 @@
 {
-    "title": "Log Out",
-    "description": "Log out from Skole.",
-    "header": "Log Out",
-    "loggingOut": "Logging out...",
+    "title": "Logged Out",
+    "description": "Logged out from Skole.",
+    "header": "Logged Out",
     "loggedOut": "You have been logged out!",
-    "loginButton": "Log in again",
-    "confirmLogout": "You need to log out to continue."
+    "logInAgain": "Log in again",
+    "backToHome": "Back to Home"
 }

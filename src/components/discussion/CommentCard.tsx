@@ -73,7 +73,7 @@ interface Props {
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment }) => {
     const classes = useStyles();
     const { t } = useTranslation();
-    const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
+    const { userMe, verified } = useAuthContext();
     const created = useDayjs(comment.created)
         .startOf('m')
         .fromNow();
@@ -102,19 +102,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         renderDefaultActionsButton,
     } = useActionsDialog({ query: shareQuery, text: shareText });
 
-    const upVoteButtonTooltip =
-        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnComment') : t('tooltips:upVote'));
-
-    const downVoteButtonTooltip =
-        verificationRequiredTooltip || (isOwner ? t('tooltips:voteOwnComment') : t('tooltips:downVote'));
-
-    const { score, upVoteButtonProps, downVoteButtonProps } = useVotes({
+    const { score, upVoteButtonProps, downVoteButtonProps, upVoteButtonTooltip, downVoteButtonTooltip } = useVotes({
         initialVote,
         initialScore,
         isOwner,
         variables: { comment: commentId },
-        upVoteButtonTooltip,
-        downVoteButtonTooltip,
     });
 
     const handleClick = (): void => {
@@ -153,6 +145,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     };
 
     const handleDeleteComment = async (e: SyntheticEvent): Promise<void> => {
+        e.stopPropagation();
         handleCloseActionsDialog(e);
 
         try {
@@ -171,7 +164,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
             {comment.user.username}
         </TextLink>
     ) : (
-        t('common:communityUser')
+        <Typography variant="body2" color="textSecondary">
+            {t('common:communityUser')}
+        </Typography>
     );
 
     const renderCardHeader = (

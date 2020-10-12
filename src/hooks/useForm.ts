@@ -49,6 +49,7 @@ export const useForm = <T>(): UseForm<T> => {
             formErrors.general = i18n.t('validation:unexpectedError');
         }
 
+        setSubmitting(false);
         setFormErrors(formErrors);
     };
 

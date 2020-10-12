@@ -1,4 +1,4 @@
-import { FormSubmitSection, LoadingLayout, OfflineLayout, SettingsLayout, TextFormField } from 'components';
+import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
@@ -6,7 +6,6 @@ import { useForm } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import { AuthProps } from 'types';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -16,13 +15,13 @@ const initialValues = {
     general: '',
 };
 
-export interface ChangePasswordFormValues {
+interface ChangePasswordFormValues {
     oldPassword: string;
     newPassword: string;
     confirmNewPassword: string;
 }
 
-const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const ChangePasswordPage: NextPage = () => {
     const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<ChangePasswordFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
@@ -85,27 +84,17 @@ const ChangePasswordPage: NextPage<AuthProps> = ({ authLoading, authNetworkError
         </Formik>
     );
 
-    const seoProps = {
-        title: t('change-password:title'),
-        description: t('change-password:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('change-password:title'),
+            description: t('change-password:description'),
+        },
         header: t('change-password:header'),
         dense: true,
         topNavbarProps: {
             dynamicBackUrl: true,
         },
     };
-
-    if (authLoading) {
-        return <LoadingLayout seoProps={seoProps} />;
-    }
-
-    if (authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
-    }
 
     return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };

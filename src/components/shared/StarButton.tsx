@@ -13,11 +13,16 @@ interface Props extends IconButtonProps {
 
 export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, resource }) => {
     const { t } = useTranslation();
-    const { verified, verificationRequiredTooltip } = useAuthContext();
+    const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
     const [starred, setStarred] = useState(initialStarred);
     const color = starred ? 'primary' : 'default';
     const { toggleNotification } = useNotificationsContext();
-    const tooltip = verificationRequiredTooltip || (starred ? t('tooltips:unstar') : t('tooltips:star') || '');
+
+    const tooltip =
+        loginRequiredTooltip ||
+        verificationRequiredTooltip ||
+        (starred ? t('tooltips:unstar') : t('tooltips:star') || '');
+
     const onError = (): void => toggleNotification(t('notifications:starError'));
 
     const onCompleted = ({ performStar }: PerformStarMutation): void => {
@@ -41,7 +46,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
             <Typography component="span">
                 <IconButton
                     onClick={handleStar}
-                    disabled={starSubmitting || verified === false}
+                    disabled={starSubmitting || !userMe || verified === false}
                     size="small"
                     color={color}
                 >

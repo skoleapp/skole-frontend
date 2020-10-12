@@ -18,9 +18,11 @@ const useStyles = makeStyles(({ spacing }) => ({
         height: 'auto',
         maxHeight: '25rem',
         margin: `${spacing(2)} 0`,
+        marginBottom: 'auto',
     },
     container: {
         flexGrow: 1,
+        display: 'flex',
     },
     dialogContent: {
         display: 'flex',
@@ -66,7 +68,6 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
             if (!!createComment.errors && !!createComment.errors.length) {
                 onError();
             } else if (!!createComment.comment && !!createComment.message) {
-                toggleNotification(createComment.message);
                 appendComments(createComment.comment as CommentObjectType);
             } else {
                 onError();
@@ -117,7 +118,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
             <DialogHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
             <DialogContent className={classes.dialogContent}>
-                <Grid className={classes.container} container direction="column">
+                <Grid className={classes.container} container direction="column" justify="flex-end">
                     {renderAttachment}
                     {renderRichTextEditor(formikProps)}
                 </Grid>

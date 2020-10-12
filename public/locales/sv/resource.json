@@ -5,6 +5,5 @@
     "loadingResource": "Laddar resurs...",
     "errorLoadingResource": "Fel vid inläsning av resurs.",
     "noComments": "Den här resursen har inga kommentarer. Var den första att lägga till en kommentar nedan!",
-    "drawMode": "Ritningsläge",
-    "notFound": "Resurs hittades inte."
+    "drawMode": "Ritningsläge"
 }

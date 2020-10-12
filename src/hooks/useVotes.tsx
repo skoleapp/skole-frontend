@@ -18,8 +18,6 @@ interface UseVotesProps {
     initialScore: string;
     isOwner: boolean;
     variables: VoteVariables;
-    upVoteButtonTooltip: string;
-    downVoteButtonTooltip: string;
 }
 
 interface VoteButtonProps {
@@ -34,22 +32,24 @@ interface UseVotes {
     score: string;
     upVoteButtonProps: VoteButtonProps;
     downVoteButtonProps: VoteButtonProps;
+    upVoteButtonTooltip: string;
+    downVoteButtonTooltip: string;
 }
 
 // A hook that allows usage of either default vote buttons (used in course/resource details) or using props for custom vote buttons.
-export const useVotes = ({
-    initialVote,
-    initialScore,
-    isOwner,
-    variables,
-    upVoteButtonTooltip,
-    downVoteButtonTooltip,
-}: UseVotesProps): UseVotes => {
+export const useVotes = ({ initialVote, initialScore, isOwner, variables }: UseVotesProps): UseVotes => {
     const { t } = useTranslation();
-    const { verified } = useAuthContext();
+    const { userMe, verified, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
     const [vote, setVote] = useState(initialVote);
     const [score, setScore] = useState(initialScore);
     const { toggleNotification } = useNotificationsContext();
+    const ownContentTooltip = t('tooltips:voteOwnContent');
+
+    const upVoteButtonTooltip =
+        loginRequiredTooltip || verificationRequiredTooltip || (isOwner ? ownContentTooltip : t('tooltips:upVote'));
+
+    const downVoteButtonTooltip =
+        loginRequiredTooltip || verificationRequiredTooltip || (isOwner ? ownContentTooltip : t('tooltips:downVote'));
 
     const onError = (): void => {
         toggleNotification(t('notifications:voteError'));
@@ -75,7 +75,7 @@ export const useVotes = ({
 
     const commonVoteButtonProps = {
         size: 'small' as Size,
-        disabled: voteSubmitting || isOwner || verified === false,
+        disabled: voteSubmitting || !userMe || isOwner || verified === false,
     };
 
     const upVoteButtonProps = {
@@ -110,5 +110,13 @@ export const useVotes = ({
         </Tooltip>
     );
 
-    return { renderUpVoteButton, renderDownVoteButton, upVoteButtonProps, downVoteButtonProps, score };
+    return {
+        renderUpVoteButton,
+        renderDownVoteButton,
+        upVoteButtonProps,
+        downVoteButtonProps,
+        score,
+        upVoteButtonTooltip,
+        downVoteButtonTooltip,
+    };
 };

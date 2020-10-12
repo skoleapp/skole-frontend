@@ -42,12 +42,10 @@ import {
 import { useDayjs, useFrontendPagination, useMediaQueries, useQueryOptions, useSwipeableTabs } from 'hooks';
 import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { AuthProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -91,18 +89,15 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     },
 }));
 
-const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const UserPage: NextPage = () => {
     const { spacing } = useTheme();
     const classes = useStyles();
     const { isMobile, isDesktop } = useMediaQueries();
     const { t } = useTranslation();
-    const { isFallback } = useRouter();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
     const queryOptions = useQueryOptions();
-    const { data, loading: userDataLoading, error } = useUserQuery(queryOptions);
-    const loading = authLoading || isFallback || userDataLoading;
-    const networkError = (!!error && !!error.networkError) || !!authNetworkError;
+    const { data, loading, error } = useUserQuery(queryOptions);
     const user: UserObjectType = R.propOr(null, 'user', data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const rank = R.propOr('', 'rank', user) as string;
@@ -121,9 +116,6 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const resourceCount = createdResources.length;
     const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
     const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
-    const notFound = t('profile:notFound');
-    const seoTitle = !!user ? username : !loading ? notFound : '';
-    const description = !!user ? t('profile:description', { username }) : !loading ? notFound : '';
     const coursesTabLabel = isOwnProfile ? t('profile:ownProfileCourses') : t('common:courses');
     const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
     const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
@@ -153,6 +145,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     const profileStrengthScore = profileStrengthSteps
         .map(s => s.completed)
         .reduce((total, completed) => (completed ? total + 1 : total), 0);
+
+    const allStepsCompleted = !profileStrengthSteps.some(s => !s.completed);
 
     // Get label for profile strength score.
     const getProfileStrengthText = (): string => {
@@ -187,6 +181,9 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
             {title}
         </Typography>
     );
+
+    const renderDesktopUsername = !isMobile && renderUsername;
+    const renderDesktopTitle = !isMobile && renderTitle;
 
     const renderEditProfileButton = isOwnProfile && (
         <Box display="flex" marginTop={isMobile ? spacing(2) : 0}>
@@ -304,18 +301,27 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Box>
     );
 
+    const renderProfileStrengthHeader = (
+        <Typography variant="body2" color="textSecondary" gutterBottom>
+            {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
+        </Typography>
+    );
+
+    // Hide stepper is all steps have been completed.
+    const renderProfileStrengthStepper = !allStepsCompleted && (
+        <Stepper className={classes.stepper} alternativeLabel={isMobile}>
+            {profileStrengthSteps.map(({ label }, i) => (
+                <Step key={i} completed={profileStrengthSteps[i].completed} active={false}>
+                    <StepLabel>{label}</StepLabel>
+                </Step>
+            ))}
+        </Stepper>
+    );
+
     const renderProfileStrength = isOwnProfile && (
         <Box marginTop={spacing(2)}>
-            <Typography variant="body2" color="textSecondary" gutterBottom>
-                {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
-            </Typography>
-            <Stepper className={classes.stepper} alternativeLabel={isMobile}>
-                {profileStrengthSteps.map(({ label }, i) => (
-                    <Step key={i} completed={profileStrengthSteps[i].completed} active={false}>
-                        <StepLabel>{label}</StepLabel>
-                    </Step>
-                ))}
-            </Stepper>
+            {renderProfileStrengthHeader}
+            {renderProfileStrengthStepper}
         </Box>
     );
 
@@ -365,8 +371,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
                 alignItems={isMobile ? 'flex-start' : 'center'}
             >
                 {renderAvatar}
-                {renderUsername}
-                {renderTitle}
+                {renderDesktopUsername}
+                {renderDesktopTitle}
             </Grid>
             <Grid item xs={8}>
                 {renderActions}
@@ -378,6 +384,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const renderMobileInfo = isMobile && (
         <Grid container direction="column">
+            {renderUsername}
+            {renderTitle}
             {renderBio}
             {renderRank}
             {renderBadges}
@@ -428,8 +436,8 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
 
     const renderTabs = (
         <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label={coursesTabLabel} />
-            <Tab label={resourcesTabLabel} />
+            <Tab label={`${coursesTabLabel} (${courseCount})`} />
+            <Tab label={`${resourcesTabLabel} (${resourceCount})`} />
         </Tabs>
     );
 
@@ -449,13 +457,11 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         </Paper>
     );
 
-    const seoProps = {
-        title: seoTitle,
-        description,
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: username,
+            description: t('profile:description', { username }),
+        },
         topNavbarProps: {
             header: username,
             dynamicBackUrl: true,
@@ -464,13 +470,13 @@ const UserPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
     };
 
     if (loading) {
-        return <LoadingLayout seoProps={seoProps} />;
+        return <LoadingLayout />;
     }
 
-    if (networkError) {
-        return <OfflineLayout seoProps={seoProps} />;
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
     } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
+        return <ErrorLayout />;
     }
 
     if (!!user) {
@@ -497,7 +503,6 @@ export const getStaticProps: GetStaticProps = async () => ({
     props: {
         namespacesRequired: includeDefaultNamespaces(['profile']),
     },
-    revalidate: 1,
 });
 
 export default withUserMe(UserPage);

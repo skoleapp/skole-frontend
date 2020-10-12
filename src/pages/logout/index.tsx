@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client';
-import { Typography } from '@material-ui/core';
+import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, ErrorLayout, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { useNotificationsContext } from 'context';
@@ -8,15 +8,13 @@ import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { AuthProps } from 'types';
 import { urls } from 'utils';
 
-const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
+const LogoutPage: NextPage = () => {
     const apolloClient = useApolloClient();
     const { t } = useTranslation();
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
-    const href = { pathname: urls.login, query };
     const onError = (): void => toggleNotification(t('notifications:logoutError'));
 
     const onCompleted = async ({ logout }: BackendLogoutMutation): Promise<void> => {
@@ -32,13 +30,11 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         logout();
     }, []);
 
-    const seoProps = {
-        title: t('logout:title'),
-        description: t('logout:description'),
-    };
-
     const layoutProps = {
-        seoProps,
+        seoProps: {
+            title: t('logout:title'),
+            description: t('logout:description'),
+        },
         header: t('logout:header'),
         disableBottomNavbar: true,
         topNavbarProps: {
@@ -47,14 +43,14 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
         },
     };
 
-    if (authLoading || loading) {
-        return <LoadingLayout seoProps={seoProps} />;
+    if (loading) {
+        return <LoadingLayout />;
     }
 
-    if ((!!error && !!error.networkError) || authNetworkError) {
-        return <OfflineLayout seoProps={seoProps} />;
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
     } else if (!!error) {
-        return <ErrorLayout seoProps={seoProps} />;
+        return <ErrorLayout />;
     }
 
     return (
@@ -63,9 +59,20 @@ const LogoutPage: NextPage<AuthProps> = ({ authLoading, authNetworkError }) => {
                 {t('logout:loggedOut')}
             </Typography>
             <Typography component="br" />
-            <ButtonLink href={href} color="primary" variant="contained" endIcon={<ArrowForwardOutlined />} fullWidth>
-                {t('logout:loginButton')}
+            <ButtonLink
+                href={{ pathname: urls.login, query }}
+                color="primary"
+                variant="contained"
+                endIcon={<ArrowForwardOutlined />}
+                fullWidth
+            >
+                {t('logout:logInAgain')}
             </ButtonLink>
+            <FormControl>
+                <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
+                    {t('logout:backToHome')}
+                </ButtonLink>
+            </FormControl>
         </FormLayout>
     );
 };

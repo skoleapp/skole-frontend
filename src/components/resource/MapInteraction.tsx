@@ -16,7 +16,6 @@ const useStyles = makeStyles(({ palette }) => ({
         display: 'flex',
         justifyContent: 'center',
         overflow: 'hidden',
-        borderRadius: '0 0 0.25rem 0.25rem',
     },
     bounceBack: {
         transform: 'none',

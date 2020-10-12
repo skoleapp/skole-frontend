@@ -9,7 +9,7 @@ import { LoadingBox } from '..';
 import { AreaSelection } from './AreaSelection';
 import { MapInteraction } from './MapInteraction';
 
-const useStyles = makeStyles(({ palette }) => ({
+const useStyles = makeStyles(({ palette, breakpoints }) => ({
     root: {
         position: 'absolute',
         top: 0,
@@ -19,7 +19,9 @@ const useStyles = makeStyles(({ palette }) => ({
         flexGrow: 1,
         display: 'flex',
         overflow: 'hidden',
-        borderRadius: '0 0 0.25rem 0.25rem',
+        [breakpoints.up('lg')]: {
+            borderRadius: '0 0 0.25rem 0.25rem',
+        },
         '& .react-pdf__Document': {
             display: 'flex',
             flexDirection: 'column',
@@ -36,7 +38,9 @@ const useStyles = makeStyles(({ palette }) => ({
                 backgroundColor: palette.common.white,
                 display: 'flex',
                 alignItems: 'center',
-                borderRadius: '0 0 0.25rem 0.25rem',
+                [breakpoints.up('lg')]: {
+                    borderRadius: '0 0 0.25rem 0.25rem',
+                },
             },
         },
     },
