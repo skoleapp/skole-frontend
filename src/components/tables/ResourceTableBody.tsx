@@ -2,7 +2,7 @@ import { CardActionArea, makeStyles, TableBody, TableCell, TableRow, Typography 
 import { ResourceObjectType, ResourceTypeObjectType } from 'generated';
 import { Link } from 'lib';
 import * as R from 'ramda';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -58,11 +58,11 @@ export const ResourceTableBody: React.FC<Props> = ({ resourceTypes, resources })
         <TableBody>
             {resourceTypes
                 .filter(({ id }) => resources.find(({ resourceType }) => R.propOr('', 'id', resourceType) === id))
-                .map(({ id, name }) => (
-                    <>
+                .map(({ id, name }, i) => (
+                    <Fragment key={i}>
                         {renderResourceTypeHeader(name)}
                         {renderResources(id)}
-                    </>
+                    </Fragment>
                 ))}
         </TableBody>
     );
