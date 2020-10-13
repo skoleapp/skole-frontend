@@ -18,14 +18,16 @@ const useStyles = makeStyles(({ breakpoints }) => ({
             margin: 0,
         },
     },
-    container: {
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
+    paperContainer: {
         overflow: 'hidden',
         [breakpoints.up('lg')]: {
             borderRadius: BORDER_RADIUS,
         },
+    },
+    container: {
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
     },
     disablePadding: {
         padding: '0 !important',
@@ -75,7 +77,7 @@ export const SettingsLayout: React.FC<Props> = ({
     const renderSettingsHeader = <CardHeader title={t('common:settings')} />;
 
     const renderSettingsCard = !isMobileOrTablet && (
-        <Grid item xs={12} lg={3} className={classes.container}>
+        <Grid item xs={12} lg={3} className={clsx(classes.container, classes.paperContainer)}>
             <Paper className={classes.container}>
                 {renderSettingsHeader}
                 {renderSettingsMenuList}
@@ -101,7 +103,7 @@ export const SettingsLayout: React.FC<Props> = ({
             xs={12}
             lg={9}
             container
-            className={clsx(classes.container, isMobileOrTablet && classes.disablePadding)}
+            className={clsx(classes.container, classes.paperContainer, isMobileOrTablet && classes.disablePadding)}
         >
             <Paper className={classes.container}>
                 {renderHeader}
