@@ -16,18 +16,13 @@ export const urls = {
     faq: '/faq',
     getStarted: '/get-started',
     home: '/',
-    login: '/login',
     confirmLogin: '/login/confirm',
-    logout: '/logout',
+    login: '/login',
     confirmLogout: '/logout/confirm',
+    logout: '/logout',
     privacy: '/privacy',
     register: '/register',
     search: '/search',
     terms: '/terms',
     uploadResource: '/upload-resource',
-};
-
-export const apiUrls = {
-    removeCookie: '/api/remove-cookie',
-    setCookie: '/api/set-cookie',
 };
