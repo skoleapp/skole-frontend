@@ -237,6 +237,7 @@ export type ResourceObjectType = {
   score?: Maybe<Scalars['Int']>;
   vote?: Maybe<VoteObjectType>;
   school?: Maybe<SchoolObjectType>;
+  commentCount?: Maybe<Scalars['Int']>;
 };
 
 export type ResourceTypeObjectType = {
@@ -1327,7 +1328,7 @@ export type StarredQuery = (
       )> }
     )>>>, starredResources?: Maybe<Array<Maybe<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'commentCount'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id'>
@@ -1361,7 +1362,7 @@ export type UserQuery = (
       )> }
     )>, createdResources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'commentCount'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id'>
@@ -1442,7 +1443,7 @@ export type CourseQuery = (
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'commentCount'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id' | 'name'>
@@ -2634,6 +2635,7 @@ export const StarredDocument = gql`
       title
       score
       date
+      commentCount
       resourceType {
         id
       }
@@ -2702,11 +2704,12 @@ export const UserDocument = gql`
     createdResources {
       id
       title
+      score
+      date
+      commentCount
       resourceType {
         id
       }
-      score
-      date
     }
   }
   resourceTypes {
@@ -2850,6 +2853,7 @@ export const CourseDocument = gql`
       title
       score
       date
+      commentCount
       resourceType {
         id
         name

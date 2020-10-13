@@ -58,6 +58,7 @@ query Starred {
             title
             score
             date
+            commentCount
             resourceType {
                 id
             }
@@ -100,11 +101,12 @@ query User($id: ID) {
         createdResources {
             id
             title
+            score
+            date
+            commentCount
             resourceType {
                 id
             }
-            score
-            date
         }
     }
     resourceTypes {
@@ -207,6 +209,7 @@ query Course($id: ID) {
             title
             score
             date
+            commentCount
             resourceType {
                 id
                 name

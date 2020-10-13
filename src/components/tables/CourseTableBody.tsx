@@ -26,15 +26,14 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
     const classes = useStyles();
     const { t } = useTranslation();
 
-    const renderCourseNameAndCode = (course: CourseObjectType): JSX.Element => (
-        <>
-            <Typography variant="body2">{R.propOr('-', 'name', course)}</Typography>
-            {!!course.code && (
-                <Typography variant="body2" color="textSecondary">
-                    {R.propOr('-', 'code', course)}
-                </Typography>
-            )}
-        </>
+    const renderCourseName = (c: CourseObjectType): JSX.Element => (
+        <Typography variant="body2">{R.propOr('-', 'name', c)}</Typography>
+    );
+
+    const renderCourseCode = (r: CourseObjectType): JSX.Element => (
+        <Typography variant="body2" color="textSecondary">
+            {R.propOr('', 'code', r)}
+        </Typography>
     );
 
     const renderCourseCreator = (course: CourseObjectType): JSX.Element | string =>
@@ -49,14 +48,14 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
     const renderResourceIcon = <AssignmentOutlined className={classes.icon} />;
     const renderDiscussionIcon = <ChatOutlined className={classes.icon} />;
 
-    const renderCourseInfo = (course: CourseObjectType): JSX.Element => (
+    const renderCourseInfo = (c: CourseObjectType): JSX.Element => (
         <Typography variant="body2" color="textSecondary">
             <Grid container alignItems="center">
-                {renderCourseCreator(course)}
+                {renderCourseCreator(c)}
                 {renderResourceIcon}
-                {course.resourceCount}
+                {c.resourceCount}
                 {renderDiscussionIcon}
-                {course.commentCount}
+                {c.commentCount}
             </Grid>
         </Typography>
     );
@@ -67,15 +66,16 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
 
     return (
         <TableBody>
-            {courses.map((course, i) => (
-                <Link href={urls.course} as={`/courses/${course.id}`} key={i}>
+            {courses.map((c, i) => (
+                <Link href={urls.course} as={`/courses/${c.id}`} key={i}>
                     <CardActionArea>
                         <TableRow>
                             <TableCell>
-                                {renderCourseNameAndCode(course)}
-                                {renderCourseInfo(course)}
+                                {renderCourseName(c)}
+                                {renderCourseCode(c)}
+                                {renderCourseInfo(c)}
                             </TableCell>
-                            <TableCell align="right">{renderCourseScore(course)}</TableCell>
+                            <TableCell align="right">{renderCourseScore(c)}</TableCell>
                         </TableRow>
                     </CardActionArea>
                 </Link>
