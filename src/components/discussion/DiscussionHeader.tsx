@@ -1,9 +1,13 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { CardHeader, makeStyles, Typography } from '@material-ui/core';
 import { ChatOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React from 'react';
 
 const useStyles = makeStyles(({ spacing }) => ({
+    subheader: {
+        display: 'flex',
+        alignItems: 'center',
+    },
     icon: {
         marginRight: spacing(1),
     },
@@ -33,25 +37,22 @@ export const DiscussionHeader: React.FC<Props> = ({
     const title = `${t('common:discussion')} (${commentCount})`;
     const renderIcon = <ChatOutlined className={classes.icon} color="disabled" />;
 
-    const renderText = (
-        <Typography className="MuiCardHeader-subheader" variant="subtitle1" color="textSecondary">
-            {title}
+    const renderSubheader = (
+        <Typography className={classes.subheader} variant="subtitle1" color="textSecondary" align="left">
+            {renderIcon} {title}
         </Typography>
     );
 
-    return (
-        <Grid container justify="space-between" className="MuiCardHeader-root">
-            <Grid item xs={4} container alignItems="center">
-                {renderIcon} {renderText}
-            </Grid>
-            <Grid item xs={8} container justify="flex-end">
-                {renderStarButton}
-                {renderUpVoteButton}
-                {renderDownVoteButton}
-                {renderShareButton}
-                {renderInfoButton}
-                {renderActionsButton}
-            </Grid>
-        </Grid>
+    const renderAction = (
+        <>
+            {renderStarButton}
+            {renderUpVoteButton}
+            {renderDownVoteButton}
+            {renderShareButton}
+            {renderInfoButton}
+            {renderActionsButton}
+        </>
     );
+
+    return <CardHeader subheader={renderSubheader} action={renderAction} />;
 };
