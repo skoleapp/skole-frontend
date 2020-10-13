@@ -342,6 +342,7 @@ query School($id: ID) {
         subjects {
             id
             name
+            courseCount
         }
         courses {
             id

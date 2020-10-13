@@ -173,6 +173,7 @@ export type SubjectObjectType = {
   __typename?: 'SubjectObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
+  courseCount?: Maybe<Scalars['Int']>;
 };
 
 export type SchoolObjectType = {
@@ -1545,7 +1546,7 @@ export type SchoolQuery = (
       & Pick<SchoolTypeObjectType, 'id' | 'name'>
     )>, subjects?: Maybe<Array<Maybe<(
       { __typename?: 'SubjectObjectType' }
-      & Pick<SubjectObjectType, 'id' | 'name'>
+      & Pick<SubjectObjectType, 'id' | 'name' | 'courseCount'>
     )>>>, courses: Array<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'commentCount' | 'resourceCount'>
@@ -3040,6 +3041,7 @@ export const SchoolDocument = gql`
     subjects {
       id
       name
+      courseCount
     }
     courses {
       id

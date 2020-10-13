@@ -2,6 +2,7 @@ import {
     Box,
     CardActionArea,
     CardHeader,
+    Grid,
     List,
     makeStyles,
     Paper,
@@ -13,7 +14,7 @@ import {
     Tooltip,
     Typography,
 } from '@material-ui/core';
-import { AddCircleOutlineOutlined } from '@material-ui/icons';
+import { AddCircleOutlineOutlined, SchoolOutlined } from '@material-ui/icons';
 import {
     CourseTableBody,
     ErrorLayout,
@@ -48,7 +49,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     root: {
         flexGrow: 1,
         display: 'flex',
@@ -57,6 +58,11 @@ const useStyles = makeStyles(({ breakpoints }) => ({
         [breakpoints.up('lg')]: {
             borderRadius: BORDER_RADIUS,
         },
+    },
+    courseIcon: {
+        marginRight: spacing(0.5),
+        width: '1rem',
+        height: '1rem',
     },
 }));
 
@@ -170,6 +176,8 @@ const SchoolDetailPage: NextPage = () => {
         </Tooltip>
     );
 
+    const renderCourseIcon = <SchoolOutlined className={classes.courseIcon} />;
+
     const renderSubjectsTableBody = (
         <TableBody>
             {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
@@ -178,6 +186,12 @@ const SchoolDetailPage: NextPage = () => {
                         <TableRow>
                             <TableCell>
                                 <Typography variant="body2">{R.propOr('-', 'name', s)}</Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                    <Grid container alignItems="center">
+                                        {renderCourseIcon}
+                                        {s.courseCount}
+                                    </Grid>
+                                </Typography>
                             </TableCell>
                         </TableRow>
                     </CardActionArea>
