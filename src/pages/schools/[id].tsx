@@ -4,7 +4,10 @@ import {
     CardHeader,
     Grid,
     List,
+    ListItemIcon,
+    ListItemText,
     makeStyles,
+    MenuItem,
     Paper,
     Tab,
     TableBody,
@@ -14,7 +17,8 @@ import {
     Tooltip,
     Typography,
 } from '@material-ui/core';
-import { AddCircleOutlineOutlined, SchoolOutlined } from '@material-ui/icons';
+import { AddCircleOutlineOutlined, AssignmentOutlined, ChatOutlined, SchoolOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import {
     CourseTableBody,
     ErrorLayout,
@@ -59,10 +63,14 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
             borderRadius: BORDER_RADIUS,
         },
     },
-    courseIcon: {
+    icon: {
         marginRight: spacing(0.5),
+        marginLeft: spacing(1.5),
         width: '1rem',
         height: '1rem',
+    },
+    courseIcon: {
+        marginLeft: 0,
     },
 }));
 
@@ -93,6 +101,7 @@ const SchoolDetailPage: NextPage = () => {
     const { renderShareButton } = useShare({ text: schoolName });
     const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
+    const addCourseHref = { pathname: urls.createCourse, query: { school: schoolId } };
 
     const {
         actionsDialogOpen,
@@ -166,7 +175,7 @@ const SchoolDetailPage: NextPage = () => {
         <Tooltip title={addCourseTooltip}>
             <Typography component="span">
                 <IconButtonLink
-                    href={{ pathname: urls.createCourse, query: { school: schoolId } }}
+                    href={addCourseHref}
                     icon={AddCircleOutlineOutlined}
                     disabled={verified === false}
                     color={isMobileOrTablet ? 'secondary' : 'default'}
@@ -176,7 +185,8 @@ const SchoolDetailPage: NextPage = () => {
         </Tooltip>
     );
 
-    const renderCourseIcon = <SchoolOutlined className={classes.courseIcon} />;
+    const renderCourseIcon = <SchoolOutlined className={clsx(classes.icon, classes.courseIcon)} />;
+    const renderResourceIcon = <AssignmentOutlined className={classes.icon} />;
 
     const renderSubjectsTableBody = (
         <TableBody>
@@ -190,6 +200,8 @@ const SchoolDetailPage: NextPage = () => {
                                     <Grid container alignItems="center">
                                         {renderCourseIcon}
                                         {s.courseCount}
+                                        {renderResourceIcon}
+                                        {s.resourceCount}
                                     </Grid>
                                 </Typography>
                             </TableCell>
@@ -276,7 +288,23 @@ const SchoolDetailPage: NextPage = () => {
         </ResponsiveDialog>
     );
 
-    const renderActionsDialogContent = <List>{renderShareAction}</List>;
+    const renderAddCourseAction = (
+        <Link href={addCourseHref}>
+            <MenuItem>
+                <ListItemIcon>
+                    <AddCircleOutlineOutlined />
+                </ListItemIcon>
+                <ListItemText>{t('school:addCourse')}</ListItemText>
+            </MenuItem>
+        </Link>
+    );
+
+    const renderActionsDialogContent = (
+        <List>
+            {renderShareAction}
+            {renderAddCourseAction}
+        </List>
+    );
 
     const renderActionsDrawer = (
         <ResponsiveDialog

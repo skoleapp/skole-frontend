@@ -46,8 +46,9 @@ query Starred {
             name
             code
             score
-            commentCount
+            starCount
             resourceCount
+            commentCount
             user {
                 id
                 username
@@ -58,6 +59,7 @@ query Starred {
             title
             score
             date
+            starCount
             commentCount
             resourceType {
                 id
@@ -91,8 +93,9 @@ query User($id: ID) {
             name
             code
             score
-            commentCount
+            starCount
             resourceCount
+            commentCount
             user {
                 id
                 username
@@ -103,6 +106,7 @@ query User($id: ID) {
             title
             score
             date
+            starCount
             commentCount
             resourceType {
                 id
@@ -149,8 +153,9 @@ query SearchCourses(
             name
             code
             score
-            commentCount
+            starCount
             resourceCount
+            commentCount
             user {
                 id
                 username
@@ -209,6 +214,7 @@ query Course($id: ID) {
             title
             score
             date
+            starCount
             commentCount
             resourceType {
                 id
@@ -343,14 +349,16 @@ query School($id: ID) {
             id
             name
             courseCount
+            resourceCount
         }
         courses {
             id
             name
             code
             score
-            commentCount
+            starCount
             resourceCount
+            commentCount
             user {
                 id
                 username

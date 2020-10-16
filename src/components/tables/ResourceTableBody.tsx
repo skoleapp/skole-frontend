@@ -1,5 +1,6 @@
 import { CardActionArea, Grid, makeStyles, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { ChatOutlined } from '@material-ui/icons';
+import { AccountCircleOutlined, ChatOutlined, StarBorderOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import { ResourceObjectType, ResourceTypeObjectType } from 'generated';
 import { Link, useTranslation } from 'lib';
 import * as R from 'ramda';
@@ -20,6 +21,9 @@ const useStyles = makeStyles(({ spacing }) => ({
         marginRight: spacing(0.5),
         width: '1rem',
         height: '1rem',
+    },
+    userIcon: {
+        marginLeft: 0,
     },
 }));
 
@@ -61,12 +65,17 @@ export const ResourceTableBody: React.FC<Props> = ({ resourceTypes, resources })
             t('common:communityUser')
         );
 
+    const renderUserIcon = <AccountCircleOutlined className={clsx(classes.icon, classes.userIcon)} />;
+    const renderStarIcon = <StarBorderOutlined className={classes.icon} />;
     const renderDiscussionIcon = <ChatOutlined className={classes.icon} />;
 
     const renderResourceInfo = (r: ResourceObjectType): JSX.Element => (
         <Typography variant="body2" color="textSecondary">
             <Grid container alignItems="center">
+                {renderUserIcon}
                 {renderResourceCreator(r)}
+                {renderStarIcon}
+                {r.starCount}
                 {renderDiscussionIcon}
                 {r.commentCount}
             </Grid>

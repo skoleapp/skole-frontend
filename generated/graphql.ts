@@ -165,8 +165,9 @@ export type CourseObjectType = {
   starred?: Maybe<Scalars['Boolean']>;
   score?: Maybe<Scalars['Int']>;
   vote?: Maybe<VoteObjectType>;
-  commentCount?: Maybe<Scalars['Int']>;
+  starCount?: Maybe<Scalars['Int']>;
   resourceCount?: Maybe<Scalars['Int']>;
+  commentCount?: Maybe<Scalars['Int']>;
 };
 
 export type SubjectObjectType = {
@@ -174,6 +175,7 @@ export type SubjectObjectType = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   courseCount?: Maybe<Scalars['Int']>;
+  resourceCount?: Maybe<Scalars['Int']>;
 };
 
 export type SchoolObjectType = {
@@ -238,6 +240,7 @@ export type ResourceObjectType = {
   score?: Maybe<Scalars['Int']>;
   vote?: Maybe<VoteObjectType>;
   school?: Maybe<SchoolObjectType>;
+  starCount?: Maybe<Scalars['Int']>;
   commentCount?: Maybe<Scalars['Int']>;
 };
 
@@ -1322,14 +1325,14 @@ export type StarredQuery = (
     { __typename?: 'UserObjectType' }
     & { starredCourses?: Maybe<Array<Maybe<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'commentCount' | 'resourceCount'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'starCount' | 'resourceCount' | 'commentCount'>
       & { user?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username'>
       )> }
     )>>>, starredResources?: Maybe<Array<Maybe<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'commentCount'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id'>
@@ -1356,14 +1359,14 @@ export type UserQuery = (
       & Pick<BadgeObjectType, 'id' | 'name' | 'description'>
     )>>>, createdCourses: Array<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'commentCount' | 'resourceCount'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'starCount' | 'resourceCount' | 'commentCount'>
       & { user?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username'>
       )> }
     )>, createdResources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'commentCount'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id'>
@@ -1396,7 +1399,7 @@ export type SearchCoursesQuery = (
     & Pick<PaginatedCourseObjectType, 'page' | 'pages' | 'hasPrev' | 'hasNext' | 'count'>
     & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'commentCount' | 'resourceCount'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'starCount' | 'resourceCount' | 'commentCount'>
       & { user?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username'>
@@ -1444,7 +1447,7 @@ export type CourseQuery = (
       & Pick<UserObjectType, 'id' | 'username'>
     )>, resources: Array<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'commentCount'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id' | 'name'>
@@ -1546,10 +1549,10 @@ export type SchoolQuery = (
       & Pick<SchoolTypeObjectType, 'id' | 'name'>
     )>, subjects?: Maybe<Array<Maybe<(
       { __typename?: 'SubjectObjectType' }
-      & Pick<SubjectObjectType, 'id' | 'name' | 'courseCount'>
+      & Pick<SubjectObjectType, 'id' | 'name' | 'courseCount' | 'resourceCount'>
     )>>>, courses: Array<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'commentCount' | 'resourceCount'>
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'starCount' | 'resourceCount' | 'commentCount'>
       & { user?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username'>
@@ -2624,8 +2627,9 @@ export const StarredDocument = gql`
       name
       code
       score
-      commentCount
+      starCount
       resourceCount
+      commentCount
       user {
         id
         username
@@ -2636,6 +2640,7 @@ export const StarredDocument = gql`
       title
       score
       date
+      starCount
       commentCount
       resourceType {
         id
@@ -2695,8 +2700,9 @@ export const UserDocument = gql`
       name
       code
       score
-      commentCount
+      starCount
       resourceCount
+      commentCount
       user {
         id
         username
@@ -2707,6 +2713,7 @@ export const UserDocument = gql`
       title
       score
       date
+      starCount
       commentCount
       resourceType {
         id
@@ -2758,8 +2765,9 @@ export const SearchCoursesDocument = gql`
       name
       code
       score
-      commentCount
+      starCount
       resourceCount
+      commentCount
       user {
         id
         username
@@ -2854,6 +2862,7 @@ export const CourseDocument = gql`
       title
       score
       date
+      starCount
       commentCount
       resourceType {
         id
@@ -3042,14 +3051,16 @@ export const SchoolDocument = gql`
       id
       name
       courseCount
+      resourceCount
     }
     courses {
       id
       name
       code
       score
-      commentCount
+      starCount
       resourceCount
+      commentCount
       user {
         id
         username
