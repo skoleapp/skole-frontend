@@ -47,6 +47,15 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
         height: '2rem',
         width: '2rem',
     },
+    badgeContainer: {
+        marginTop: spacing(16),
+    },
+    badge: {
+        width: '15rem',
+        height: '6rem',
+        margin: spacing(2),
+        opacity: 0.5, // Remove opacity when links are enabled.
+    },
     ctaContainer: {
         padding: spacing(8),
         textAlign: 'center',
@@ -88,7 +97,6 @@ const GetStartedPage: NextPage = () => {
         },
         disableBottomNavbar: true,
         topNavbarProps: {
-            disableAuthButtons: true,
             headerRight: renderLanguageButton,
         },
         containerProps: {
@@ -140,6 +148,15 @@ const GetStartedPage: NextPage = () => {
                     ))}
                 </Grid>
             </Grid>
+            <Grid className={classes.badgeContainer} container direction="column" alignItems="center">
+                <Typography variant="subtitle1" color="primary">
+                    {t('get-started:appStoreCta')}
+                </Typography>
+                <Grid container justify="center">
+                    <img className={classes.badge} src="images/app-store-badges/apple-app-store-badge.svg" />
+                    <img className={classes.badge} src="images/app-store-badges/google-play-badge.svg" />
+                </Grid>
+            </Grid>
             <Grid className={classes.ctaContainer} container direction="column" alignItems="center">
                 <Typography variant="h5" color="primary">
                     {t('get-started:subheader')}
@@ -151,7 +168,6 @@ const GetStartedPage: NextPage = () => {
                         color="primary"
                         variant="contained"
                         endIcon={<ArrowForwardOutlined />}
-                        fullWidth
                     >
                         {t('get-started:cta')}
                     </ButtonLink>
