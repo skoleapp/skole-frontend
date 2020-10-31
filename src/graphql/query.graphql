@@ -17,7 +17,57 @@ query UserMe {
             id
             name
         }
-        activity {
+    }
+}
+
+query Starred($page: Int, $pageSize: Int) {
+    starredCourses(page: $page, pageSize: $pageSize) {
+        page
+        pages
+        hasNext
+        hasPrev
+        count
+        objects {
+            id
+            name
+            code
+            score
+            starCount
+            resourceCount
+            commentCount
+            user {
+                id
+                username
+            }
+        }
+    }
+    starredResources {
+        page
+        pages
+        hasNext
+        hasPrev
+        count
+        objects {
+            id
+            title
+            score
+            date
+            starCount
+            commentCount
+            resourceType {
+                id
+            }
+        }
+    }
+    resourceTypes {
+        id
+        name
+    }
+}
+
+query Activities($page: Int, $pageSize: Int) {
+    activities(page: $page, pageSize: $pageSize) {
+        objects {
             id
             description
             read
@@ -39,40 +89,29 @@ query UserMe {
     }
 }
 
-query Starred {
-    userMe {
-        starredCourses {
-            id
-            name
-            code
-            score
-            starCount
-            resourceCount
-            commentCount
-            user {
-                id
-                username
-            }
-        }
-        starredResources {
-            id
-            title
-            score
-            date
-            starCount
-            commentCount
-            resourceType {
-                id
-            }
-        }
-    }
-    resourceTypes {
+query ActivityPreview {
+    activityPreview {
         id
-        name
+        description
+        read
+        targetUser {
+            id
+            username
+            avatarThumbnail
+        }
+        course {
+            id
+        }
+        resource {
+            id
+        }
+        comment {
+            id
+        }
     }
 }
 
-query User($id: ID) {
+query User($id: ID, $page: Int, $pageSize: Int) {
     user(id: $id) {
         id
         username
@@ -88,7 +127,14 @@ query User($id: ID) {
             name
             description
         }
-        createdCourses {
+    }
+    courses(user: $id, page: $pageSize, pageSize: $pageSize) {
+        page
+        pages
+        hasNext
+        hasPrev
+        count
+        objects {
             id
             name
             code
@@ -101,7 +147,14 @@ query User($id: ID) {
                 username
             }
         }
-        createdResources {
+    }
+    resources(user: $id, page: $pageSize, pageSize: $pageSize) {
+        page
+        pages
+        hasNext
+        hasPrev
+        count
+        objects {
             id
             title
             score
@@ -131,7 +184,7 @@ query SearchCourses(
     $page: Int
     $pageSize: Int
 ) {
-    searchCourses(
+    courses(
         courseName: $courseName
         courseCode: $courseCode
         school: $school
@@ -209,18 +262,6 @@ query Course($id: ID) {
             id
             username
         }
-        resources {
-            id
-            title
-            score
-            date
-            starCount
-            commentCount
-            resourceType {
-                id
-                name
-            }
-        }
         comments {
             id
             user {
@@ -253,6 +294,24 @@ query Course($id: ID) {
             vote {
                 id
                 status
+            }
+        }
+    }
+    resources(course: $id) {
+        page
+        pages
+        hasNext
+        hasPrev
+        count
+        objects {
+            id
+            title
+            score
+            date
+            starCount
+            commentCount
+            resourceType {
+                id
             }
         }
     }
@@ -329,7 +388,7 @@ query Resource($id: ID) {
     }
 }
 
-query School($id: ID) {
+query School($id: ID, $page: Int, $pageSize: Int) {
     school(id: $id) {
         id
         name
@@ -345,13 +404,27 @@ query School($id: ID) {
             id
             name
         }
-        subjects {
+    }
+    subjects(school: $id, page: $page, pageSize: $pageSize) {
+        page
+        pages
+        hasNext
+        hasPrev
+        count
+        objects {
             id
             name
             courseCount
             resourceCount
         }
-        courses {
+    }
+    courses(school: $id, page: $page, pageSize: $pageSize) {
+        page
+        pages
+        hasNext
+        hasPrev
+        count
+        objects {
             id
             name
             code
