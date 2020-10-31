@@ -27,7 +27,7 @@ mutation Login($usernameOrEmail: String!, $password: String!) {
     }
 }
 
-mutation Logout {
+mutation _Logout {
     logout {
         deleted
     }

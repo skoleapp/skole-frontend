@@ -34,13 +34,13 @@ interface UseLanguageSelector extends LanguageSelectorContextType {
 
 export const useLanguageSelector = (): UseLanguageSelector => {
     const classes = useStyles();
-    const { t, i18n } = useTranslation();
-    const [value, setValue] = useState(i18n.language);
+    const { t, lang } = useTranslation();
+    const [value, setValue] = useState(lang);
     const { toggleLanguageSelector, languageSelectorOpen } = useLanguageSelectorContext();
 
     useEffect(() => {
-        setValue(i18n.language);
-    }, [i18n.language]);
+        setValue(lang);
+    }, [lang]);
 
     const languageToFlag = (isoCode: string): string => {
         return typeof String.fromCodePoint !== 'undefined'

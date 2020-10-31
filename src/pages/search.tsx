@@ -40,19 +40,18 @@ import {
     CourseObjectType,
     SchoolObjectType,
     SchoolTypeObjectType,
-    SearchCoursesDocument,
-    SearchCoursesQueryResult,
+    SearchCoursesQueryVariables,
     SubjectObjectType,
+    useSearchCoursesQuery,
 } from 'generated';
-import { useForm, useMediaQueries, useOpen } from 'hooks';
-import { initApolloClient, useTranslation, withUserMe } from 'lib';
-import { NextPage } from 'next';
+import { useForm, useMediaQueries, useOpen, useQueryOptions } from 'hooks';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
-import { GetStaticI18nProps } from 'types';
 import { getPaginationQuery, getQueryWithPagination, redirect, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
@@ -110,14 +109,33 @@ interface ValidFilter {
     value: string;
 }
 
-const SearchPage: NextPage<SearchCoursesQueryResult> = ({ data, error }) => {
+const SearchPage: NextPage = () => {
     const classes = useStyles();
     const { isMobileOrTablet, isDesktop } = useMediaQueries();
     const { t } = useTranslation();
-    const { pathname, query, isFallback } = useRouter();
+    const { pathname, query } = useRouter();
+
+    const variables: SearchCoursesQueryVariables = R.pickAll(
+        [
+            'courseName',
+            'courseCode',
+            'school',
+            'subject',
+            'schoolType',
+            'country',
+            'city',
+            'ordering',
+            'page',
+            'pageSize',
+        ],
+        query,
+    );
+
+    const queryOptions = useQueryOptions();
+    const { data, loading, error } = useSearchCoursesQuery({ ...queryOptions, variables });
     const { open: filtersOpen, handleOpen: handleOpenFilters, handleClose: handleCloseFilters } = useOpen();
     const { formRef, resetForm } = useForm<FilterSearchResultsFormValues>();
-    const courseObjects: CourseObjectType[] = R.pathOr([], ['searchCourses', 'objects'], data);
+    const courses: CourseObjectType[] = R.pathOr([], ['courses', 'objects'], data);
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const subject: SubjectObjectType = R.propOr(null, 'subject', data);
     const schoolType: SchoolTypeObjectType = R.propOr(null, 'schoolType', data);
@@ -374,11 +392,13 @@ const SearchPage: NextPage<SearchCoursesQueryResult> = ({ data, error }) => {
         text: t('search:noCoursesLink'),
     };
 
-    const renderResults = !!courseObjects.length ? (
+    const renderCourses = <CourseTableBody courses={courses} />;
+
+    const renderResults = !!courses.length ? (
         <PaginatedTable
             count={count}
             tableHeadProps={tableHeadProps}
-            renderTableBody={<CourseTableBody courses={courseObjects} />}
+            renderTableBody={renderCourses}
             extraFilters={initialValues}
         />
     ) : (
@@ -476,7 +496,7 @@ const SearchPage: NextPage<SearchCoursesQueryResult> = ({ data, error }) => {
         },
     };
 
-    if (isFallback) {
+    if (loading) {
         return <LoadingLayout />;
     }
 
@@ -494,40 +514,10 @@ const SearchPage: NextPage<SearchCoursesQueryResult> = ({ data, error }) => {
     );
 };
 
-export const getStaticProps: GetStaticI18nProps = async ({ params, lang }) => {
-    const apolloClient = initApolloClient();
-    const variables = R.pickAll(
-        [
-            'courseName',
-            'courseCode',
-            'school',
-            'subject',
-            'schoolType',
-            'country',
-            'city',
-            'ordering',
-            'page',
-            'pageSize',
-        ],
-        params,
-    );
-
-    const result = await apolloClient.query({
-        query: SearchCoursesDocument,
-        variables,
-        context: {
-            headers: {
-                'Accept-Language': lang,
-            },
-        },
-    });
-
-    return {
-        props: {
-            ...result,
-        },
-        revalidate: 1,
-    };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['search'], locale),
+    },
+});
 
 export default withUserMe(SearchPage);

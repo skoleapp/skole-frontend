@@ -22,8 +22,8 @@ import {
     useUpdateUserMutation,
 } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
-import { useTranslation, withNoAuth } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
@@ -366,5 +366,11 @@ const RegisterPage: NextPage = () => {
         </FormLayout>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['register'], locale),
+    },
+});
 
 export default withNoAuth(RegisterPage);

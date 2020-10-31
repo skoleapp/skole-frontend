@@ -1,7 +1,7 @@
 import { IconButton, Size, Tooltip, Typography } from '@material-ui/core';
 import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { PerformVoteMutation, usePerformVoteMutation, VoteObjectType } from 'generated';
+import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { useState } from 'react';
@@ -40,7 +40,7 @@ interface UseVotes {
 export const useVotes = ({ initialVote, initialScore, isOwner, variables }: UseVotesProps): UseVotes => {
     const { t } = useTranslation();
     const { userMe, verified, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
-    const [vote, setVote] = useState(initialVote);
+    const [currentVote, setCurrentVote] = useState(initialVote);
     const [score, setScore] = useState(initialScore);
     const { toggleNotification } = useNotificationsContext();
     const ownContentTooltip = t('tooltips:voteOwnContent');
@@ -55,22 +55,22 @@ export const useVotes = ({ initialVote, initialScore, isOwner, variables }: UseV
         toggleNotification(t('notifications:voteError'));
     };
 
-    const onCompleted = ({ performVote }: PerformVoteMutation): void => {
-        if (!!performVote) {
-            if (!!performVote.errors && !!performVote.errors.length) {
+    const onCompleted = ({ vote }: VoteMutation): void => {
+        if (!!vote) {
+            if (!!vote.errors && !!vote.errors.length) {
                 onError();
             } else {
-                setVote(performVote.vote as VoteObjectType);
-                setScore(String(performVote.targetScore));
+                setCurrentVote(vote.vote as VoteObjectType);
+                setScore(String(vote.targetScore));
             }
         }
     };
 
-    const [performVote, { loading: voteSubmitting }] = usePerformVoteMutation({ onCompleted, onError });
+    const [vote, { loading: voteSubmitting }] = useVoteMutation({ onCompleted, onError });
 
     const handleVote = (status: number) => async (e: SyntheticEvent): Promise<void> => {
         e.stopPropagation(); // Prevent opening comment thread for top-level comments.
-        await performVote({ variables: { status, ...variables } });
+        await vote({ variables: { status, ...variables } });
     };
 
     const commonVoteButtonProps = {
@@ -81,13 +81,13 @@ export const useVotes = ({ initialVote, initialScore, isOwner, variables }: UseV
     const upVoteButtonProps = {
         ...commonVoteButtonProps,
         onClick: handleVote(1),
-        color: !!vote && vote.status === 1 ? 'primary' : ('default' as MuiColor),
+        color: !!currentVote && currentVote.status === 1 ? 'primary' : ('default' as MuiColor),
     };
 
     const downVoteButtonProps = {
         ...commonVoteButtonProps,
         onClick: handleVote(-1),
-        color: !!vote && vote.status === -1 ? 'primary' : ('default' as MuiColor),
+        color: !!currentVote && currentVote.status === -1 ? 'primary' : ('default' as MuiColor),
     };
 
     const renderUpVoteButton = (

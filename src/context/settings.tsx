@@ -1,10 +1,8 @@
-import React, { Context, createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { SettingsContextType } from 'types';
 
-const SettingsContext = createContext<SettingsContextType | null>(null);
-
-export const useSettingsContext = (): SettingsContextType =>
-    useContext(SettingsContext as Context<SettingsContextType>);
+const SettingsContext = createContext<SettingsContextType>({});
+export const useSettingsContext = (): SettingsContextType => useContext(SettingsContext);
 
 export const SettingsContextProvider: React.FC = ({ children }) => {
     const [settingsOpen, setSettingsOpen] = useState(false);

@@ -19,7 +19,6 @@ import clsx from 'clsx';
 import {
     CustomBottomNavbarContainer,
     ErrorLayout,
-    FrontendPaginatedTable,
     IconButtonLink,
     InfoDialogContent,
     LoadingLayout,
@@ -27,6 +26,7 @@ import {
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
+    PaginatedTable,
     ResourceTableBody,
     ResponsiveDialog,
     StarButton,
@@ -36,36 +36,35 @@ import {
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import {
     CommentObjectType,
-    CourseDocument,
     CourseObjectType,
-    CourseQueryResult,
+    CourseQueryVariables,
     DeleteCourseMutation,
     ResourceObjectType,
     ResourceTypeObjectType,
     SubjectObjectType,
+    useCourseQuery,
     useDeleteCourseMutation,
     UserObjectType,
     VoteObjectType,
 } from 'generated';
 import {
     useActionsDialog,
-    useFrontendPagination,
     useInfoDialog,
     useMediaQueries,
+    useQueryOptions,
     useSearch,
     useShare,
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { initApolloClient, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
-import { GetStaticPaths, NextPage } from 'next';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { GetStaticI18nProps } from 'types';
 import { redirect, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -88,35 +87,37 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     },
 }));
 
-const CourseDetailPage: NextPage<CourseQueryResult> = ({ data, error }) => {
+const CourseDetailPage: NextPage = () => {
     const classes = useStyles();
-    const { isFallback } = useRouter();
+    const { query } = useRouter();
     const { t } = useTranslation();
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
+    const variables: CourseQueryVariables = R.pickAll(['id', 'page', 'pageSize'], query);
+    const queryOptions = useQueryOptions();
+    const { data, loading, error } = useCourseQuery({ ...queryOptions, variables });
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const course: CourseObjectType = R.propOr(null, 'course', data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
-    const courseName = R.propOr('', 'name', course) as string;
-    const courseCode = R.propOr('', 'code', course) as string;
-    const subjects = R.propOr([], 'subjects', course) as SubjectObjectType[];
-    const schoolName = R.pathOr('', ['school', 'name'], course) as string;
-    const creatorId = R.pathOr('', ['user', 'id'], course) as string;
-    const courseId = R.propOr('', 'id', course) as string;
+    const courseName: string = R.propOr('', 'name', course);
+    const courseCode: string = R.propOr('', 'code', course);
+    const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course) as SubjectObjectType[];
+    const schoolName: string = R.pathOr('', ['school', 'name'], course);
+    const creatorId: string = R.pathOr('', ['user', 'id'], course);
+    const courseId: string = R.propOr('', 'id', course);
     const schoolId = R.pathOr('', ['school', 'id'], course);
     const initialScore = String(R.propOr(0, 'score', course));
-    const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
-    const resourceCount = String(resources.length);
+    const resources: ResourceObjectType[] = R.pathOr([], ['resources', 'objects'], data);
+    const resourceCount = R.pathOr(0, ['resources', 'count'], data);
     const comments = R.propOr([], 'comments', course) as CommentObjectType[];
     const { commentCount } = useDiscussionContext(comments);
-    const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
+    const initialVote: VoteObjectType = R.propOr(null, 'vote', course);
     const starred = !!R.propOr(undefined, 'starred', course);
     const isOwner = !!userMe && userMe.id === creatorId;
     const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
     const created = R.propOr(undefined, 'created', course) as string;
-    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: courseName });
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
@@ -188,7 +189,7 @@ const CourseDetailPage: NextPage<CourseQueryResult> = ({ data, error }) => {
     ));
 
     const renderSchoolLink = !!schoolId && (
-        <TextLink href={urls.school} as={urls.schoolAs(schoolId)} color="primary">
+        <TextLink href={urls.school(schoolId)} color="primary">
             {schoolName}
         </TextLink>
     );
@@ -274,11 +275,13 @@ const CourseDetailPage: NextPage<CourseQueryResult> = ({ data, error }) => {
         text: t('course:noResourcesLink'),
     };
 
+    const renderResourceTableBody = <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />;
+
     const renderResources = !!resources.length ? (
-        <FrontendPaginatedTable
+        <PaginatedTable
             tableHeadProps={resourceTableHeadProps}
-            renderTableBody={<ResourceTableBody resourceTypes={resourceTypes} resources={paginatedResources} />}
-            paginationProps={resourcePaginationProps}
+            renderTableBody={renderResourceTableBody}
+            count={resourceCount}
         />
     ) : (
         <NotFoundBox text={t('course:noResources')} linkProps={notFoundLinkProps} />
@@ -390,7 +393,7 @@ const CourseDetailPage: NextPage<CourseQueryResult> = ({ data, error }) => {
         customBottomNavbar: renderCustomBottomNavbar,
     };
 
-    if (isFallback) {
+    if (loading) {
         return <LoadingLayout />;
     }
 
@@ -421,26 +424,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticI18nProps = async ({ params, lang }) => {
-    const apolloClient = initApolloClient();
-    const id = R.propOr(undefined, 'id', params);
-
-    const result = await apolloClient.query({
-        query: CourseDocument,
-        variables: { id },
-        context: {
-            headers: {
-                'Accept-Language': lang,
-            },
-        },
-    });
-
-    return {
-        props: {
-            ...result,
-        },
-        revalidate: 1,
-    };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['course'], locale),
+    },
+});
 
 export default withUserMe(CourseDetailPage);

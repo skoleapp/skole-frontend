@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
 
     const renderCopyRight = (
         <Typography variant="subtitle1" color="secondary">
-            © {new Date().getFullYear()} {t('common:skoleTeam')}
+            © {new Date().getFullYear()} Skole
         </Typography>
     );
 

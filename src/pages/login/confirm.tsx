@@ -2,8 +2,8 @@ import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout } from 'components';
 import { useLanguageSelector } from 'hooks';
-import { useTranslation, withNoAuth } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { urls } from 'utils';
@@ -50,5 +50,11 @@ const ConfirmLoginPage: NextPage = () => {
         </FormLayout>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['confirm-login'], locale),
+    },
+});
 
 export default withNoAuth(ConfirmLoginPage);

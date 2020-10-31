@@ -3,8 +3,8 @@ import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
 import { useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -98,5 +98,11 @@ const ChangePasswordPage: NextPage = () => {
 
     return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['change-password'], locale),
+    },
+});
 
 export default withAuth(ChangePasswordPage);

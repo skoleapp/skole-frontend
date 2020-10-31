@@ -20,12 +20,12 @@ import {
     ButtonLink,
     CourseTableBody,
     ErrorLayout,
-    FrontendPaginatedTable,
     LoadingLayout,
     MainLayout,
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
+    PaginatedTable,
     ResourceTableBody,
     SettingsButton,
     TextLink,
@@ -36,18 +36,18 @@ import {
     CourseObjectType,
     ResourceObjectType,
     ResourceTypeObjectType,
-    UserDocument,
     UserObjectType,
+    UserQueryVariables,
     useUserQuery,
 } from 'generated';
-import { useDayjs, useFrontendPagination, useMediaQueries, useQueryOptions, useSwipeableTabs } from 'hooks';
-import { initApolloClient, useTranslation, withUserMe } from 'lib';
-import { GetStaticPaths, NextPage } from 'next';
+import { useDayjs, useMediaQueries, useQueryOptions, useSwipeableTabs } from 'hooks';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { GetStaticI18nProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -98,26 +98,26 @@ const UserPage: NextPage = () => {
     const { t } = useTranslation();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
+    const { query } = useRouter();
     const queryOptions = useQueryOptions();
-    const { data, loading, error } = useUserQuery(queryOptions);
+    const variables: UserQueryVariables = R.pickAll(['id', 'page', 'pageSize'], query);
+    const { data, loading, error } = useUserQuery({ ...queryOptions, variables });
     const user: UserObjectType = R.propOr(null, 'user', data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
-    const rank = R.propOr('', 'rank', user) as string;
-    const username = R.propOr('-', 'username', user) as string;
-    const avatar = R.propOr('', 'avatar', user) as string;
-    const title = R.propOr('', 'title', user) as string;
-    const bio = R.propOr('', 'bio', user) as string;
+    const rank: string = R.propOr('', 'rank', user);
+    const username: string = R.propOr('-', 'username', user);
+    const avatar: string = R.propOr('', 'avatar', user);
+    const title: string = R.propOr('', 'title', user);
+    const bio: string = R.propOr('', 'bio', user);
     const school = R.propOr('', 'school', userMe);
     const subject = R.propOr('', 'subject', userMe);
-    const score = R.propOr('-', 'score', user) as string;
+    const score: string = R.propOr('-', 'score', user);
     const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
-    const badges = R.propOr([], 'badges', user) as BadgeObjectType[];
-    const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
-    const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
-    const courseCount = createdCourses.length;
-    const resourceCount = createdResources.length;
-    const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
-    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
+    const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
+    const courses: CourseObjectType[] = R.pathOr([], ['courses', 'objects'], data);
+    const resources: ResourceObjectType[] = R.pathOr([], ['resources', 'objects'], data);
+    const courseCount = R.pathOr(0, ['courses', 'count'], data);
+    const resourceCount = R.pathOr(0, ['resources', 'count'], data);
     const coursesTabLabel = isOwnProfile ? t('profile:ownProfileCourses') : t('common:courses');
     const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
     const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
@@ -416,21 +416,24 @@ const UserPage: NextPage = () => {
         titleRight: t('common:score'),
     };
 
-    const renderCreatedCourses = !!createdCourses.length ? (
-        <FrontendPaginatedTable
+    const renderCourseTableBody = <CourseTableBody courses={courses} />;
+    const renderResourceTableBody = <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />;
+
+    const renderCreatedCourses = !!courses.length ? (
+        <PaginatedTable
             tableHeadProps={commonTableHeadProps}
-            renderTableBody={<CourseTableBody courses={paginatedCourses} />}
-            paginationProps={coursePaginationProps}
+            renderTableBody={renderCourseTableBody}
+            count={courseCount}
         />
     ) : (
         <NotFoundBox text={noCourses} />
     );
 
-    const renderCreatedResources = !!createdResources.length ? (
-        <FrontendPaginatedTable
+    const renderCreatedResources = !!resources.length ? (
+        <PaginatedTable
             tableHeadProps={commonTableHeadProps}
-            renderTableBody={<ResourceTableBody resourceTypes={resourceTypes} resources={paginatedResources} />}
-            paginationProps={resourcePaginationProps}
+            renderTableBody={renderResourceTableBody}
+            count={resourceCount}
         />
     ) : (
         <NotFoundBox text={noResources} />
@@ -501,26 +504,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticI18nProps = async ({ params, lang }) => {
-    const apolloClient = initApolloClient();
-    const id = R.propOr(undefined, 'id', params);
-
-    const result = await apolloClient.query({
-        query: UserDocument,
-        variables: { id },
-        context: {
-            headers: {
-                'Accept-Language': lang,
-            },
-        },
-    });
-
-    return {
-        props: {
-            ...result,
-        },
-        revalidate: 1,
-    };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['course'], locale),
+    },
+});
 
 export default withUserMe(UserPage);

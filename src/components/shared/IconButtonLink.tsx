@@ -1,8 +1,7 @@
 import { IconButton } from '@material-ui/core';
 import { IconButtonProps } from '@material-ui/core/IconButton';
 import { SvgIconComponent } from '@material-ui/icons';
-import { Link } from 'lib';
-import { LinkProps } from 'next/link';
+import Link, { LinkProps } from 'next/link';
 import React, { forwardRef } from 'react';
 
 interface Props extends IconButtonProps, LinkProps {
@@ -10,7 +9,7 @@ interface Props extends IconButtonProps, LinkProps {
 }
 
 export const IconButtonLink = forwardRef<HTMLButtonElement, Props>(({ href, as, icon: Icon, ...props }, ref) => (
-    <Link href={href} as={as}>
+    <Link href={href}>
         <IconButton {...props} ref={ref}>
             <Icon />
         </IconButton>

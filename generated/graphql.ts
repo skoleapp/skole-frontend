@@ -1533,6 +1533,8 @@ export type SearchCoursesQuery = (
 
 export type CourseQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -3072,7 +3074,7 @@ export type SearchCoursesQueryHookResult = ReturnType<typeof useSearchCoursesQue
 export type SearchCoursesLazyQueryHookResult = ReturnType<typeof useSearchCoursesLazyQuery>;
 export type SearchCoursesQueryResult = Apollo.QueryResult<SearchCoursesQuery, SearchCoursesQueryVariables>;
 export const CourseDocument = gql`
-    query Course($id: ID) {
+    query Course($id: ID, $page: Int, $pageSize: Int) {
   course(id: $id) {
     id
     name
@@ -3132,7 +3134,7 @@ export const CourseDocument = gql`
       }
     }
   }
-  resources(course: $id) {
+  resources(course: $id, page: $page, pageSize: $pageSize) {
     page
     pages
     hasNext
@@ -3170,6 +3172,8 @@ export const CourseDocument = gql`
  * const { data, loading, error } = useCourseQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
  *   },
  * });
  */

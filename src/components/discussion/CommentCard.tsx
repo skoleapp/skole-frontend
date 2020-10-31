@@ -29,7 +29,7 @@ import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { mediaURL, truncate } from 'utils';
+import { mediaURL, truncate, urls } from 'utils';
 
 import { ResponsiveDialog, TextLink } from '..';
 
@@ -74,10 +74,8 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const classes = useStyles();
     const { t } = useTranslation();
     const { userMe, verified } = useAuthContext();
-    const created = useDayjs(comment.created)
-        .startOf('m')
-        .fromNow();
-    const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
+    const userId: string = R.propOr('', 'id', comment.user);
+    const avatarThumb: string = R.propOr('', 'avatarThumbnail', comment.user);
     const confirm = useConfirm();
     const attachmentOnly = comment.text == '' && comment.attachment !== '';
     const initialVote = R.propOr(null, 'vote', comment) as VoteObjectType | null;
@@ -90,8 +88,12 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const { toggleNotification } = useNotificationsContext();
     const { toggleTopComment, setAttachmentViewerValue } = useDiscussionContext();
     const shareQuery = `?comment=${commentId}`;
-    const creatorUsername = R.propOr(t('common:communityUser'), 'username', comment.user) as string;
+    const creatorUsername: string = R.propOr(t('common:communityUser'), 'username', comment.user);
     const shareText = t('common:commentShareText', { creatorUsername, commentPreview: truncate(comment.text, 20) });
+
+    const created = useDayjs(comment.created)
+        .startOf('m')
+        .fromNow();
 
     const {
         actionsDialogOpen,
@@ -157,10 +159,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     };
 
     const renderTitle = !!comment.user ? (
-        <TextLink
-            href={`/users/${R.propOr('', 'id', comment.user)}`}
-            onClick={(e: SyntheticEvent): void => e.stopPropagation()}
-        >
+        <TextLink href={urls.user(userId)} onClick={(e: SyntheticEvent): void => e.stopPropagation()}>
             {comment.user.username}
         </TextLink>
     ) : (

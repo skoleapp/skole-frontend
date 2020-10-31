@@ -3,9 +3,9 @@ import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
 import { useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
-import { NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
@@ -92,5 +92,11 @@ export const DeleteAccountPage: NextPage = () => {
 
     return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['delete-account'], locale),
+    },
+});
 
 export default withAuth(DeleteAccountPage);

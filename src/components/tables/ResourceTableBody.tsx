@@ -2,7 +2,8 @@ import { CardActionArea, Grid, makeStyles, TableBody, TableCell, TableRow, Typog
 import { AccountCircleOutlined, ChatOutlined, StarBorderOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import { ResourceObjectType, ResourceTypeObjectType } from 'generated';
-import { Link, useTranslation } from 'lib';
+import { useTranslation } from 'lib';
+import Link from 'next/link';
 import * as R from 'ramda';
 import React, { Fragment } from 'react';
 import { urls } from 'utils';
@@ -58,7 +59,7 @@ export const ResourceTableBody: React.FC<Props> = ({ resourceTypes, resources })
 
     const renderResourceCreator = (resource: ResourceObjectType): JSX.Element | string =>
         !!resource.user ? (
-            <TextLink href={urls.user} as={`/users/${resource.user.id}`} color="primary">
+            <TextLink href={urls.user(resource.user.id)} color="primary">
                 {resource.user.username}
             </TextLink>
         ) : (
@@ -86,7 +87,7 @@ export const ResourceTableBody: React.FC<Props> = ({ resourceTypes, resources })
         resources
             .filter(({ resourceType }) => R.propOr('', 'id', resourceType) === id)
             .map((r, i) => (
-                <Link href={urls.resource} as={`/resources/${r.id}`} key={i}>
+                <Link href={urls.resource(r.id)} key={i}>
                     <CardActionArea>
                         <TableRow className={classes.resource}>
                             <TableCell>

@@ -3,7 +3,8 @@ import { makeStyles } from '@material-ui/core';
 import { AccountCircleOutlined, AssignmentOutlined, ChatOutlined, StarBorderOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import { CourseObjectType } from 'generated';
-import { Link, useTranslation } from 'lib';
+import { useTranslation } from 'lib';
+import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { urls } from 'utils';
@@ -42,7 +43,7 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
 
     const renderCourseCreator = (course: CourseObjectType): JSX.Element | string =>
         !!course.user ? (
-            <TextLink href={urls.user} as={`/users/${course.user.id}`} color="primary">
+            <TextLink href={urls.user(course.user.id)} color="primary">
                 {course.user.username}
             </TextLink>
         ) : (
@@ -76,7 +77,7 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
     return (
         <TableBody>
             {courses.map((c, i) => (
-                <Link href={urls.course} as={`/courses/${c.id}`} key={i}>
+                <Link href={urls.course(c.id)} key={i}>
                     <CardActionArea>
                         <TableRow>
                             <TableCell>

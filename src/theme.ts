@@ -281,7 +281,7 @@ let theme = createMuiTheme({
                     width: '100%',
                     height: '100%',
                     background:
-                        'linear-gradient(rgba(255, 42, 0, 0.55), rgba(255, 42, 0, 0.55)), url(images/background.jpg)',
+                        'linear-gradient(rgba(255, 42, 0, 0.55), rgba(255, 42, 0, 0.55)), url(/images/background.jpg)',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',

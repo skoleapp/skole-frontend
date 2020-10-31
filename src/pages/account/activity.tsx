@@ -2,22 +2,17 @@ import { List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import { ActivityList, NotFoundLayout, ResponsiveDialog, SettingsLayout } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
-import {
-    ActivityObjectType,
-    MarkAllActivitiesAsReadMutation,
-    useMarkAllActivitiesAsReadMutation,
-    UserObjectType,
-} from 'generated';
+import { _MarkAllActivitiesAsReadMutation, use_MarkAllActivitiesAsReadMutation } from 'generated';
 import { useActionsDialog } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
 
 const ActivityPage: NextPage = () => {
     const { t } = useTranslation();
-    const { userMe, setUserMe } = useAuthContext();
+    const { activities, setActivities } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
-    const onError = (): void => toggleNotification(t('notifications:markAllActivitiesReadError'));
+    const onError = (): void => toggleNotification(t('notifications:markAllActivitiesAsReadError'));
 
     const {
         actionsDialogOpen,
@@ -26,14 +21,12 @@ const ActivityPage: NextPage = () => {
         handleCloseActionsDialog,
     } = useActionsDialog({});
 
-    const onCompleted = ({ markAllActivitiesRead }: MarkAllActivitiesAsReadMutation): void => {
-        if (!!markAllActivitiesRead) {
-            if (!!markAllActivitiesRead.errors && !!markAllActivitiesRead.errors.length) {
+    const onCompleted = ({ markAllActivitiesAsRead }: _MarkAllActivitiesAsReadMutation): void => {
+        if (!!markAllActivitiesAsRead) {
+            if (!!markAllActivitiesAsRead.errors && !!markAllActivitiesAsRead.errors.length) {
                 onError();
-            } else if (!!markAllActivitiesRead.activities) {
-                const activity = markAllActivitiesRead.activities as ActivityObjectType[];
-                const newUserMe = { ...userMe, activity } as UserObjectType;
-                setUserMe(newUserMe);
+            } else if (!!markAllActivitiesAsRead.activities) {
+                setActivities(markAllActivitiesAsRead.activities);
             } else {
                 onError();
             }
@@ -42,7 +35,7 @@ const ActivityPage: NextPage = () => {
         }
     };
 
-    const [markAllActivitiesAsRead] = useMarkAllActivitiesAsReadMutation({
+    const [markAllActivitiesAsRead] = use_MarkAllActivitiesAsReadMutation({
         onCompleted,
         onError,
     });
@@ -94,7 +87,7 @@ const ActivityPage: NextPage = () => {
         },
     };
 
-    if (!!userMe) {
+    if (!!activities) {
         return (
             <SettingsLayout {...layoutProps}>
                 {renderActivityList}
@@ -105,5 +98,11 @@ const ActivityPage: NextPage = () => {
         return <NotFoundLayout />;
     }
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces([], locale),
+    },
+});
 
 export default withAuth(ActivityPage);

@@ -2,8 +2,8 @@ import { Avatar, Box, Card, CardContent, CardHeader, CardMedia, Grid, makeStyles
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
-import { useTranslation, withNoAuth } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { GET_STARTED_ITEMS, GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
@@ -183,5 +183,11 @@ const GetStartedPage: NextPage = () => {
         </MainLayout>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['get-started'], locale),
+    },
+});
 
 export default withNoAuth(GetStartedPage);

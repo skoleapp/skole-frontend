@@ -128,7 +128,7 @@ query User($id: ID, $page: Int, $pageSize: Int) {
             description
         }
     }
-    courses(user: $id, page: $pageSize, pageSize: $pageSize) {
+    courses(user: $id, page: $page, pageSize: $pageSize) {
         page
         pages
         hasNext
@@ -148,7 +148,7 @@ query User($id: ID, $page: Int, $pageSize: Int) {
             }
         }
     }
-    resources(user: $id, page: $pageSize, pageSize: $pageSize) {
+    resources(user: $id, page: $page, pageSize: $pageSize) {
         page
         pages
         hasNext
@@ -237,7 +237,7 @@ query SearchCourses(
     }
 }
 
-query Course($id: ID) {
+query Course($id: ID, $page: Int, $pageSize: Int) {
     course(id: $id) {
         id
         name
@@ -297,7 +297,7 @@ query Course($id: ID) {
             }
         }
     }
-    resources(course: $id) {
+    resources(course: $id, page: $page, pageSize: $pageSize) {
         page
         pages
         hasNext

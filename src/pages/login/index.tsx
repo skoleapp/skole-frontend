@@ -4,8 +4,8 @@ import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
 import { useForm, useLanguageSelector } from 'hooks';
-import { useTranslation, withNoAuth } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
@@ -173,5 +173,11 @@ const LoginPage: NextPage = () => {
 
     return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['login'], locale),
+    },
+});
 
 export default withNoAuth(LoginPage);

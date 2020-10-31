@@ -1,7 +1,12 @@
 import { Avatar, List, ListItem, ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { ActivityObjectType, MarkActivityReadMutation, useMarkActivityReadMutation, UserObjectType } from 'generated';
+import {
+    ActivityObjectType,
+    MarkActivityAsReadMutation,
+    useMarkActivityAsReadMutation,
+    UserObjectType,
+} from 'generated';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { useState } from 'react';
@@ -54,12 +59,12 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
     const { toggleNotification } = useNotificationsContext();
     const onError = (): void => toggleNotification(t('notifications:markSingleActivityReadError'));
 
-    const onCompleted = ({ markActivityRead }: MarkActivityReadMutation): void => {
-        if (!!markActivityRead) {
-            if (!!markActivityRead.errors && !!markActivityRead.errors.length) {
+    const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
+        if (!!markActivityAsRead) {
+            if (!!markActivityAsRead.errors && !!markActivityAsRead.errors.length) {
                 onError();
-            } else if (!!markActivityRead.activity) {
-                const { activity: updatedActivityItem } = markActivityRead;
+            } else if (!!markActivityAsRead.activity) {
+                const { activity: updatedActivityItem } = markActivityAsRead;
                 const newActivity = activity.map(a => (a.id === updatedActivityItem.id ? updatedActivityItem : a));
                 setActivity(newActivity as ActivityObjectType[]);
             } else {
@@ -70,7 +75,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
         }
     };
 
-    const [markSingleActivityRead] = useMarkActivityReadMutation({ onCompleted, onError });
+    const [markSingleActivityRead] = useMarkActivityAsReadMutation({ onCompleted, onError });
 
     const handleClick = ({ id, ...activity }: ActivityObjectType) => async (): Promise<void> => {
         const { pathname, query } = getHref(activity);
@@ -94,9 +99,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
 
     const renderTargetUserLink = (targetUser?: UserObjectType | null): JSX.Element | '' =>
         !!targetUser ? (
-            <TextLink href={urls.user} as={`/users/${R.propOr('', 'id', targetUser)}`}>
-                {R.propOr('', 'username', targetUser)}
-            </TextLink>
+            <TextLink href={urls.user(R.propOr('', 'id', targetUser))}>{R.propOr('', 'username', targetUser)}</TextLink>
         ) : (
             ''
         );

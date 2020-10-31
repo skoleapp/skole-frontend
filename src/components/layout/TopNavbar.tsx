@@ -24,7 +24,9 @@ import {
 } from '@material-ui/icons';
 import { useAuthContext } from 'context';
 import { useMediaQueries } from 'hooks';
-import { Link, Router, useTranslation } from 'lib';
+import { useTranslation } from 'lib';
+import Link from 'next/link';
+import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { MouseEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
@@ -73,12 +75,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     const classes = useStyles();
     const { spacing } = useTheme();
     const { t } = useTranslation();
+    const { locale } = useRouter();
     const { isMobileOrTablet } = useMediaQueries();
     const { userMe, authNetworkError } = useAuthContext();
-    const userMeId = R.propOr('', 'id', userMe);
+    const userMeId: string = R.propOr('', 'id', userMe);
     const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(null);
     const [activityPopperOpen, setActivityPopperOpen] = useState(false);
-    const avatarThumb = R.propOr('', 'avatar', userMe) as string;
+    const avatarThumb: string = R.propOr('', 'avatar', userMe);
     const dense = !!headerLeft || !!headerRightSecondary;
     const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
@@ -94,7 +97,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     );
 
     const renderStaticBackButton = !!staticBackUrl && (
-        <Link href={staticBackUrl.href} as={staticBackUrl.as}>
+        <Link href={staticBackUrl.href}>
             <IconButton color="secondary" size="small">
                 <ArrowBackOutlined />
             </IconButton>
@@ -140,7 +143,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                             <Divider />
                             <ButtonLink
                                 className={classes.seeAllButton}
-                                href={urls.activity}
+                                href={(urls.activity, locale)}
                                 color="primary"
                                 variant="outlined"
                                 fullWidth
@@ -168,7 +171,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             </Tooltip>
             <Tooltip title={t('tooltips:profile')}>
                 <Typography component="span">
-                    <Link href={urls.user} as={`/users/${userMeId}`}>
+                    <Link href={urls.user(userMeId)}>
                         <IconButton color="secondary">
                             <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
                         </IconButton>
@@ -179,7 +182,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     );
 
     // Allow disabling auth buttons manually.
-    // Also disable them automatically in case of a network error when authenticating.
+    // Also disable them automatically in case of a network error when authenticating/fetching user.
     const renderUnAuthenticatedButtons = !disableAuthButtons && !authNetworkError && (
         <>
             <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>

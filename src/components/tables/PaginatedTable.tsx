@@ -2,15 +2,17 @@ import { Table, TableContainer } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';
-import { CommonPaginatedTableProps } from 'types';
+import { CustomTableHeadProps } from 'types';
 import { getQueryWithPagination, redirect } from 'utils';
 
 import { CustomTableFooter } from './CustomTableFooter';
 import { CustomTableHead } from './CustomTableHead';
 
-interface Props extends CommonPaginatedTableProps {
+interface Props {
+    tableHeadProps: CustomTableHeadProps;
     count: number;
-    extraFilters?: {};
+    extraFilters?: {}; // Additional query parameters to the pagination params.
+    renderTableBody: JSX.Element;
 }
 
 export const PaginatedTable: React.FC<Props> = ({ count, tableHeadProps, extraFilters = {}, renderTableBody }) => {

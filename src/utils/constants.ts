@@ -34,19 +34,19 @@ export const MAX_SCALE = 1.75;
 export const GET_STARTED_ITEMS = [
     {
         title: 'common:resources',
-        image: 'images/landing-page/resources.jpg',
+        image: '/images/landing-page/resources.jpg',
         description: 'get-started:resourcesDescription',
         icon: AssignmentOutlined,
     },
     {
         title: 'common:courses',
-        image: 'images/landing-page/courses.jpg',
+        image: '/images/landing-page/courses.jpg',
         description: 'get-started:coursesDescription',
         icon: SchoolOutlined,
     },
     {
         title: 'common:discussion',
-        image: 'images/landing-page/discussion.jpg',
+        image: '/images/landing-page/discussion.jpg',
         description: 'get-started:discussionDescription',
         icon: ChatOutlined,
     },
@@ -194,3 +194,7 @@ export const MAX_FILE_SIZE = 10000000;
 // Avatar field.
 
 export const AVATAR_MAX_FILE_SIZE = 2000000;
+
+// Paginated table.
+
+export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];

@@ -19,7 +19,7 @@ interface UseSearch {
 
 export const useSearch = (): UseSearch => {
     const [value, setValue] = useState('');
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const { userMe } = useAuthContext();
     const placeholder = t('forms:searchCourses');
     const autoComplete = 'off';
@@ -29,15 +29,14 @@ export const useSearch = (): UseSearch => {
     const school = R.pathOr(undefined, ['school', 'id'], userMe);
     const subject = R.pathOr(undefined, ['subject', 'id'], userMe);
     const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, { school, subject });
-    const searchUrl = { pathname: urls.search, query };
+    const searchUrl = { pathname: (urls.search, lang), query };
+    const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
 
     const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
         setValue('');
         await redirect({ ...searchUrl, query: { ...searchUrl.query, courseName: value } });
     };
-
-    const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
 
     return { handleSubmit, searchUrl, inputProps: { value, onChange, placeholder, autoComplete, fullWidth } };
 };

@@ -1,4 +1,4 @@
-import { Router } from 'lib';
+import Router from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import * as url from 'url';

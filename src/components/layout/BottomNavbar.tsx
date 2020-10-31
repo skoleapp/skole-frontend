@@ -2,7 +2,8 @@ import { Avatar, BottomNavigation, BottomNavigationAction } from '@material-ui/c
 import { CloudUploadOutlined, HomeOutlined, NotificationsOutlined, SearchOutlined } from '@material-ui/icons';
 import { useAuthContext } from 'context';
 import { useSearch } from 'hooks';
-import { Link, useTranslation } from 'lib';
+import { useTranslation } from 'lib';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
@@ -12,7 +13,7 @@ import { mediaURL, redirect, urls } from 'utils';
 export const BottomNavbar: React.FC = () => {
     const { t } = useTranslation();
     const { userMe } = useAuthContext();
-    const userMeId = R.propOr('', 'id', userMe);
+    const userMeId: string = R.propOr('', 'id', userMe);
     const avatarThumb = R.propOr('', 'avatar', userMe) as string;
     const { pathname, query } = useRouter();
     const { searchUrl } = useSearch();
@@ -31,7 +32,7 @@ export const BottomNavbar: React.FC = () => {
             case urls.activity: {
                 return 4;
             }
-            case urls.user: {
+            case '/user/[id]': {
                 if (!!userMe && query.id === userMe.id) {
                     return 5;
                 }
@@ -50,9 +51,7 @@ export const BottomNavbar: React.FC = () => {
     const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />;
 
     const renderAvatar = !!userMe ? (
-        <Link href={urls.user} as={`/users/${userMeId}`}>
-            {renderAvatarThumbnail}
-        </Link>
+        <Link href={urls.user(userMeId)}>{renderAvatarThumbnail}</Link>
     ) : (
         <Link href={urls.login}>{renderAvatarThumbnail}</Link>
     );

@@ -1,6 +1,6 @@
 import { ApolloError } from '@apollo/client';
 import { Formik } from 'formik';
-import { i18n } from 'lib';
+import { useTranslation } from 'lib';
 import { useRef } from 'react';
 import { FieldValue, MutationErrors, MutationFormError, UseForm } from 'types';
 
@@ -19,12 +19,13 @@ interface FormErrors {
 
 // A custom hook that provides useful helpers for integrating Formik with GraphQL mutations.
 export const useForm = <T>(): UseForm<T> => {
+    const { t } = useTranslation();
     const formRef = useRef<Formik<T>>(null!);
 
     const setFormErrors = (formErrors: FormErrors): void =>
         Object.keys(formErrors).forEach(key => formRef.current.setFieldError(key, (formErrors as FormErrors)[key]));
 
-    const unexpectedError = (): void => setFormErrors({ general: i18n.t('validation:unexpectedError') });
+    const unexpectedError = (): void => setFormErrors({ general: t('validation:unexpectedError') });
     const setSubmitting = (val: boolean): void | null => formRef.current.setSubmitting(val);
     const resetForm = (): void | null => formRef.current.resetForm();
     const submitForm = (): Promise<void> | null => formRef.current.submitForm();
@@ -38,15 +39,15 @@ export const useForm = <T>(): UseForm<T> => {
         if (err.length) {
             (err as MutationFormError[]).map((e: MutationFormError) => {
                 if (e.field === '__all__') {
-                    formErrors.general = i18n.t(`errors:${e.messages.join()}`);
+                    formErrors.general = t(`errors:${e.messages.join()}`);
                 } else if (e.field) {
-                    (formErrors as FormErrors)[snakeCaseToCamelCase(e.field)] = i18n.t(`errors:${e.messages.join()}`);
+                    (formErrors as FormErrors)[snakeCaseToCamelCase(e.field)] = t(`errors:${e.messages.join()}`);
                 } else {
-                    formErrors.general = i18n.t(`errors:${e.messages.join()}`);
+                    formErrors.general = t(`errors:${e.messages.join()}`);
                 }
             });
         } else {
-            formErrors.general = i18n.t('validation:unexpectedError');
+            formErrors.general = t('validation:unexpectedError');
         }
 
         setSubmitting(false);
@@ -58,9 +59,9 @@ export const useForm = <T>(): UseForm<T> => {
         const formErrors = { general: '' };
 
         if (err.networkError) {
-            formErrors.general = i18n.t('validation:networkError');
+            formErrors.general = t('validation:networkError');
         } else {
-            formErrors.general = i18n.t('validation:unexpectedError');
+            formErrors.general = t('validation:unexpectedError');
         }
 
         setSubmitting(false);

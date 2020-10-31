@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import { Link } from 'lib';
+import Link from 'next/link';
 import React from 'react';
 import { urls } from 'utils';
 

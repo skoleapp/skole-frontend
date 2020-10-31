@@ -21,8 +21,8 @@ import {
     useUpdateUserMutation,
 } from 'generated';
 import { useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { UpdateProfileFormValues } from 'types';
@@ -195,5 +195,11 @@ const EditProfilePage: NextPage = () => {
         return <NotFoundLayout />;
     }
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['edit-profile'], locale),
+    },
+});
 
 export default withAuth(EditProfilePage);

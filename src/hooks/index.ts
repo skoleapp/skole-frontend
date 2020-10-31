@@ -12,5 +12,4 @@ export * from './useForm';
 export * from './useSearch';
 export * from './useSwipeableTabs';
 export * from './useSettings';
-export * from './useFrontendPagination';
 export * from './useUserMe';
