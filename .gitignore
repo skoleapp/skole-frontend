@@ -15,3 +15,4 @@ yarn-error.log*
 .idea/workspace.xml
 
 schema.graphql
+pages

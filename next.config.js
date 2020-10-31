@@ -1,4 +1,5 @@
 const withOffline = require('next-offline');
+const { locales, defaultLocale } = require('./i18n.json');
 
 const config = {
     target: 'serverless',
@@ -30,6 +31,10 @@ const config = {
             destination: '/_next/static/service-worker.js',
         },
     ],
+    i18n: {
+        locales,
+        defaultLocale,
+    },
 };
 
 module.exports = withOffline(config);

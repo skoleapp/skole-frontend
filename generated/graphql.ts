@@ -25,29 +25,61 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  user?: Maybe<UserObjectType>;
-  userMe?: Maybe<UserObjectType>;
+  /** Filter results based on the school ID. Results are sorted by amount of courses. */
+  subjects?: Maybe<PaginatedSubjectObjectType>;
+  /** Return limited amount of results for autocomplete fields. Results are sorted by amount of courses. */
   autocompleteSubjects?: Maybe<Array<Maybe<SubjectObjectType>>>;
+  /** Return a single object based on the ID. If an object is not found or it has been soft deleted, return `null` instead. */
   subject?: Maybe<SubjectObjectType>;
+  /** Return limited amount of results for autocomplete fields. Results are sorted by creation time. */
   autocompleteSchoolTypes?: Maybe<Array<Maybe<SchoolTypeObjectType>>>;
+  /** Return a single object based on the ID. If an object is not found or it has been soft deleted, return `null` instead. */
   schoolType?: Maybe<SchoolTypeObjectType>;
+  /** Return limited amount of results for autocomplete fields. Results are sorted by creation time. */
   autocompleteSchools?: Maybe<Array<Maybe<SchoolObjectType>>>;
+  /** Return a single object based on the ID. If an object is not found or it has been soft deleted, return `null` instead. */
   school?: Maybe<SchoolObjectType>;
+  /** Return unlimited amount of resource types. Results are sorted by creation time. */
   resourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>;
+  /** Return limited amount of results for autocomplete fields. Results are sorted alphabetically. */
   autocompleteResourceTypes?: Maybe<Array<Maybe<ResourceTypeObjectType>>>;
+  /** Return resources filtered by query params. Results are paginated. Results are sorted by creation time. */
+  resources?: Maybe<PaginatedResourceObjectType>;
+  /** Return starred resources of the user making the query. Results are paginated. Results are sorted by creation time. Return an empty list for unauthenticated users. */
+  starredResources?: Maybe<PaginatedResourceObjectType>;
+  /** Return a single resource based on the resource ID. */
   resource?: Maybe<ResourceObjectType>;
-  searchCourses?: Maybe<PaginatedCourseObjectType>;
+  /** Return courses filtered by query params. Results are sorted either manually based on query params or by secret Skole AI-powered algorithms. Results are paginated. */
+  courses?: Maybe<PaginatedCourseObjectType>;
+  /** Return limited amount of results for autocomplete fields. Results are sorted by secret Skole AI-powered algorithms. */
   autocompleteCourses?: Maybe<Array<Maybe<CourseObjectType>>>;
+  /** Return starred courses of the user making the query. Results are paginated. Results are sorted by creation time. Return an empty list for unauthenticated users. */
+  starredCourses?: Maybe<PaginatedCourseObjectType>;
+  /** Return a single object based on the ID. If an object is not found or it has been soft deleted, return `null` instead. */
   course?: Maybe<CourseObjectType>;
+  /** Return limited amount of results for autocomplete fields. */
   autocompleteCountries?: Maybe<Array<Maybe<CountryObjectType>>>;
+  /** Return a single object based on the ID. If an object is not found or it has been soft deleted, return `null` instead. */
   country?: Maybe<CountryObjectType>;
+  /** Return limited amount of results for autocomplete fields. Results are sorted alphabetically. */
   autocompleteCities?: Maybe<Array<Maybe<CityObjectType>>>;
+  /** Return a single object based on the ID. If an object is not found or it has been soft deleted, return `null` instead. */
   city?: Maybe<CityObjectType>;
+  /** Return all activity of to the user making the query. Results are paginated. Results are sorted by creation time. Only allowed for authenticated users. */
+  activities?: Maybe<PaginatedActivityObjectType>;
+  /** Return limited amount of activity of the user making the query for a preview. */
+  activityPreview?: Maybe<Array<Maybe<ActivityObjectType>>>;
+  /** Return user profile of the user making the query. Only allowed for authenticated users. */
+  userMe?: Maybe<UserObjectType>;
+  /** Return a single object based on the ID. If an object is not found or it has been soft deleted, return `null` instead. Superusers cannot be queried. */
+  user?: Maybe<UserObjectType>;
 };
 
 
-export type QueryUserArgs = {
-  id?: Maybe<Scalars['ID']>;
+export type QuerySubjectsArgs = {
+  school?: Maybe<Scalars['ID']>;
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
 };
 
 
@@ -76,12 +108,27 @@ export type QuerySchoolArgs = {
 };
 
 
+export type QueryResourcesArgs = {
+  user?: Maybe<Scalars['ID']>;
+  course?: Maybe<Scalars['ID']>;
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
+  ordering?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryStarredResourcesArgs = {
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
+};
+
+
 export type QueryResourceArgs = {
   id?: Maybe<Scalars['ID']>;
 };
 
 
-export type QuerySearchCoursesArgs = {
+export type QueryCoursesArgs = {
   courseName?: Maybe<Scalars['String']>;
   courseCode?: Maybe<Scalars['String']>;
   subject?: Maybe<Scalars['ID']>;
@@ -89,6 +136,7 @@ export type QuerySearchCoursesArgs = {
   schoolType?: Maybe<Scalars['ID']>;
   country?: Maybe<Scalars['ID']>;
   city?: Maybe<Scalars['ID']>;
+  user?: Maybe<Scalars['ID']>;
   page?: Maybe<Scalars['Int']>;
   pageSize?: Maybe<Scalars['Int']>;
   ordering?: Maybe<Scalars['String']>;
@@ -98,6 +146,12 @@ export type QuerySearchCoursesArgs = {
 export type QueryAutocompleteCoursesArgs = {
   school?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryStarredCoursesArgs = {
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
 };
 
 
@@ -115,41 +169,64 @@ export type QueryCityArgs = {
   id?: Maybe<Scalars['ID']>;
 };
 
-export type UserObjectType = {
-  __typename?: 'UserObjectType';
-  id: Scalars['ID'];
-  username: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
-  bio: Scalars['String'];
-  avatar?: Maybe<Scalars['String']>;
-  score?: Maybe<Scalars['Int']>;
-  created: Scalars['DateTime'];
-  verified?: Maybe<Scalars['Boolean']>;
-  activity?: Maybe<Array<Maybe<ActivityObjectType>>>;
-  createdCourses: Array<CourseObjectType>;
-  createdResources: Array<ResourceObjectType>;
-  avatarThumbnail?: Maybe<Scalars['String']>;
-  school?: Maybe<SchoolObjectType>;
-  subject?: Maybe<SubjectObjectType>;
-  rank?: Maybe<Scalars['String']>;
-  badges?: Maybe<Array<Maybe<BadgeObjectType>>>;
-  starredCourses?: Maybe<Array<Maybe<CourseObjectType>>>;
-  starredResources?: Maybe<Array<Maybe<ResourceObjectType>>>;
+
+export type QueryActivitiesArgs = {
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
 };
 
 
-export type ActivityObjectType = {
-  __typename?: 'ActivityObjectType';
-  id: Scalars['ID'];
-  targetUser?: Maybe<UserObjectType>;
-  course?: Maybe<CourseObjectType>;
-  resource?: Maybe<ResourceObjectType>;
-  comment?: Maybe<CommentObjectType>;
-  read?: Maybe<Scalars['Boolean']>;
-  description?: Maybe<Scalars['String']>;
+export type QueryUserArgs = {
+  id?: Maybe<Scalars['ID']>;
 };
 
+/** Models one studyable subject, e.g. Computer Engineering. Results are paginated. */
+export type PaginatedSubjectObjectType = {
+  __typename?: 'PaginatedSubjectObjectType';
+  page?: Maybe<Scalars['Int']>;
+  pages?: Maybe<Scalars['Int']>;
+  hasNext?: Maybe<Scalars['Boolean']>;
+  hasPrev?: Maybe<Scalars['Boolean']>;
+  count?: Maybe<Scalars['Int']>;
+  objects?: Maybe<Array<Maybe<SubjectObjectType>>>;
+};
+
+/** Models one studyable subject, e.g. Computer Engineering. */
+export type SubjectObjectType = {
+  __typename?: 'SubjectObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  courseCount?: Maybe<Scalars['Int']>;
+  resourceCount?: Maybe<Scalars['Int']>;
+};
+
+/** Models one type of school, e.g. University of High School. */
+export type SchoolTypeObjectType = {
+  __typename?: 'SchoolTypeObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+};
+
+/** Models one school on the platform. */
+export type SchoolObjectType = {
+  __typename?: 'SchoolObjectType';
+  id: Scalars['ID'];
+  schoolType?: Maybe<SchoolTypeObjectType>;
+  city?: Maybe<CityObjectType>;
+  courses: Array<CourseObjectType>;
+  name?: Maybe<Scalars['String']>;
+  country?: Maybe<CountryObjectType>;
+  subjects?: Maybe<Array<Maybe<SubjectObjectType>>>;
+};
+
+/** Models one city, e.g. Turku or Helsinki. */
+export type CityObjectType = {
+  __typename?: 'CityObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+};
+
+/** Models one course. */
 export type CourseObjectType = {
   __typename?: 'CourseObjectType';
   id: Scalars['ID'];
@@ -170,43 +247,36 @@ export type CourseObjectType = {
   commentCount?: Maybe<Scalars['Int']>;
 };
 
-export type SubjectObjectType = {
-  __typename?: 'SubjectObjectType';
+/** Models one user on the platform. The following fields are private, meaning they are returned only if the user is querying one's own profile: `email`, `verified`, `school`, `subject`. For instances that are not the user's own user profile, these fields will return a `null` value. */
+export type UserObjectType = {
+  __typename?: 'UserObjectType';
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  courseCount?: Maybe<Scalars['Int']>;
-  resourceCount?: Maybe<Scalars['Int']>;
+  username: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  bio: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['Int']>;
+  created: Scalars['DateTime'];
+  verified?: Maybe<Scalars['Boolean']>;
+  avatarThumbnail?: Maybe<Scalars['String']>;
+  school?: Maybe<SchoolObjectType>;
+  subject?: Maybe<SubjectObjectType>;
+  rank?: Maybe<Scalars['String']>;
+  badges?: Maybe<Array<Maybe<BadgeObjectType>>>;
+  unreadActivityCount?: Maybe<Scalars['Int']>;
 };
 
-export type SchoolObjectType = {
-  __typename?: 'SchoolObjectType';
-  id: Scalars['ID'];
-  schoolType?: Maybe<SchoolTypeObjectType>;
-  city?: Maybe<CityObjectType>;
-  courses: Array<CourseObjectType>;
-  name?: Maybe<Scalars['String']>;
-  country?: Maybe<CountryObjectType>;
-  subjects?: Maybe<Array<Maybe<SubjectObjectType>>>;
-};
 
-export type SchoolTypeObjectType = {
-  __typename?: 'SchoolTypeObjectType';
+/** <module 'skole.utils.api_descriptions' from '/home/user/app/skole/utils/api_descriptions.py'> */
+export type BadgeObjectType = {
+  __typename?: 'BadgeObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
 };
 
-export type CityObjectType = {
-  __typename?: 'CityObjectType';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-};
-
-export type CountryObjectType = {
-  __typename?: 'CountryObjectType';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-};
-
+/** Models one comment posted on a comment thread. */
 export type CommentObjectType = {
   __typename?: 'CommentObjectType';
   id: Scalars['ID'];
@@ -223,6 +293,7 @@ export type CommentObjectType = {
   vote?: Maybe<VoteObjectType>;
 };
 
+/** Models one user-uploaded resource. */
 export type ResourceObjectType = {
   __typename?: 'ResourceObjectType';
   id: Scalars['ID'];
@@ -244,6 +315,7 @@ export type ResourceObjectType = {
   commentCount?: Maybe<Scalars['Int']>;
 };
 
+/** Models one type of resource, e.g. an exam or a note. */
 export type ResourceTypeObjectType = {
   __typename?: 'ResourceTypeObjectType';
   id: Scalars['ID'];
@@ -251,6 +323,7 @@ export type ResourceTypeObjectType = {
 };
 
 
+/** Models one vote on either comment, course or resource. */
 export type VoteObjectType = {
   __typename?: 'VoteObjectType';
   id: Scalars['ID'];
@@ -261,13 +334,24 @@ export type VoteObjectType = {
   resource?: Maybe<ResourceObjectType>;
 };
 
-export type BadgeObjectType = {
-  __typename?: 'BadgeObjectType';
+/** Models one country, e.g. Finland or Sweden. */
+export type CountryObjectType = {
+  __typename?: 'CountryObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
 };
 
+export type PaginatedResourceObjectType = {
+  __typename?: 'PaginatedResourceObjectType';
+  page?: Maybe<Scalars['Int']>;
+  pages?: Maybe<Scalars['Int']>;
+  hasNext?: Maybe<Scalars['Boolean']>;
+  hasPrev?: Maybe<Scalars['Boolean']>;
+  count?: Maybe<Scalars['Int']>;
+  objects?: Maybe<Array<Maybe<ResourceObjectType>>>;
+};
+
+/** Models one course. Results are paginated. */
 export type PaginatedCourseObjectType = {
   __typename?: 'PaginatedCourseObjectType';
   page?: Maybe<Scalars['Int']>;
@@ -278,92 +362,97 @@ export type PaginatedCourseObjectType = {
   objects?: Maybe<Array<Maybe<CourseObjectType>>>;
 };
 
+/** Models a single activity of a users activity feed. Results are paginated. */
+export type PaginatedActivityObjectType = {
+  __typename?: 'PaginatedActivityObjectType';
+  page?: Maybe<Scalars['Int']>;
+  pages?: Maybe<Scalars['Int']>;
+  hasNext?: Maybe<Scalars['Boolean']>;
+  hasPrev?: Maybe<Scalars['Boolean']>;
+  count?: Maybe<Scalars['Int']>;
+  objects?: Maybe<Array<Maybe<ActivityObjectType>>>;
+};
+
+/** Models a single activity of a users activity feed. */
+export type ActivityObjectType = {
+  __typename?: 'ActivityObjectType';
+  id: Scalars['ID'];
+  targetUser?: Maybe<UserObjectType>;
+  course?: Maybe<CourseObjectType>;
+  resource?: Maybe<ResourceObjectType>;
+  comment?: Maybe<CommentObjectType>;
+  read?: Maybe<Scalars['Boolean']>;
+  description?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  performStar?: Maybe<StarredMutationPayload>;
-  performVote?: Maybe<VoteMutationPayload>;
-  /**
-   * Register new user.
-   * 
-   * Check if there is an existing user with that email or username. Check that account
-   * is not deactivated. By default set the user a unverified. After successful
-   * registration send account verification email.
-   */
+  /** Mark a course or a resource with a star or remove the star if it already exists. Only allowed for authenticated users that have verified their accounts. */
+  star?: Maybe<StarMutationPayload>;
+  /** Upvote, downvote or remove a vote from a course, resource or a comment. Only allowed for authenticated users that have verified their accounts. */
+  vote?: Maybe<VoteMutationPayload>;
+  /** Register a new user. Check if there is an existing user with that email or username. Check that account is not deactivated. By default, set the user's account as unverified. After successful registration, send account verification email. */
   register?: Maybe<RegisterMutationPayload>;
-  /**
-   * Receive the token that was sent by email, if the token is valid, verify the
-   * user's account.
-   */
+  /** Receive the token that was sent by email. If the token is valid, verify the user's account. */
   verifyAccount?: Maybe<VerifyAccountMutationPayload>;
   /**
-   * Sends verification email again.
-   * 
-   * Return error if a user with the provided email is not found.
+   * Send verification email again.
+   * Return an error if in the following cases:
+   * - A user account with the provided email address was not found.
+   * - An unknown error while sending the email occurred.
+   * - The user has already verified one's account.
    */
   resendVerificationEmail?: Maybe<ResendVerificationEmailMutationPayload>;
   /**
-   * Send password reset email.
-   * 
-   * For non verified users, send an verification email instead. Return error if a user
-   * with the provided email is not found.
+   * Send password reset email. For non-verified users, send a verification email instead and return an according error message.
+   * Return an error if in the following cases:
+   * - A user account with the provided email address was not found.
+   * - An unknown error while sending the email occurred.
    */
   sendPasswordResetEmail?: Maybe<SendPasswordResetEmailMutationPayload>;
-  /**
-   * Change user's password without old password.
-   * 
-   * Receive the token that was sent by email. Revoke refresh token and thus require the
-   * user to log in with his new password.
-   */
+  /** Change user's password without knowing the old password. Receive the token that was sent by email. Revoke refresh token and require the user to log in again with one's new password. */
   resetPassword?: Maybe<ResetPasswordMutationPayload>;
-  /**
-   * Obtain JSON web token and user information.
-   * 
-   * Not verified users can still login.
-   */
+  /** Obtain JSON web token and user information. Non-verified users can still login. */
   login?: Maybe<LoginMutationPayload>;
-  /**
-   * Delete JSON web token cookie and logout.
-   * 
-   * This sets the `Set-Cookie` header so that the JWT token cookie gets automatically
-   * deleted in frontend.
-   */
+  /** Delete JSON web token cookie and logout. Only allowed for authenticated users. */
   logout?: Maybe<LogoutMutation>;
-  /** Update some user model fields. */
-  updateUser?: Maybe<UpdateUserMutationPayload>;
-  /**
-   * Change account password when user knows the old password.
-   * 
-   * User must be verified.
-   */
+  /** Change password with a requirement of knowing the old password. Only allowed for authenticated users that have verified their accounts. */
   changePassword?: Maybe<ChangePasswordMutationPayload>;
-  /**
-   * Delete account permanently.
-   * 
-   * The user must confirm his password.
-   */
+  /** Update some user model fields. Only allowed for authenticated users. */
+  updateUser?: Maybe<UpdateUserMutationPayload>;
+  /** Soft delete account. The user must confirm his password. Only allowed for authenticated users. */
   deleteUser?: Maybe<DeleteUserMutationPayload>;
+  /** Create a new resource. Only allowed for authenticated users that have verified their accounts. */
   createResource?: Maybe<CreateResourceMutationPayload>;
+  /** Update a resource. Only allowed for authenticated users that have verified their accounts and are the creators of the object. */
   updateResource?: Maybe<UpdateResourceMutationPayload>;
+  /** Delete a resource. Only allowed for authenticated users that have verified their accounts and are the creators of the object. Results are sorted by creation time. */
   deleteResource?: Maybe<DeleteResourceMutationPayload>;
+  /** Create a new course. Only allowed for authenticated users that have verified their accounts. */
   createCourse?: Maybe<CreateCourseMutationPayload>;
+  /** Delete a course. Only allowed for authenticated users that are the creators of the object. */
   deleteCourse?: Maybe<DeleteCourseMutationPayload>;
+  /** Submit a message via the contact form. */
   createContactMessage?: Maybe<ContactMutationPayload>;
+  /** Create a new comment. Attachments are popped of for unauthenticated users. */
   createComment?: Maybe<CreateCommentMutationPayload>;
+  /** Update an existing comment. Only allowed for authenticated users that are the creators of the object. */
   updateComment?: Maybe<UpdateCommentMutationPayload>;
+  /** Delete a comment. Only allowed for authenticated users that are the creators of the object. */
   deleteComment?: Maybe<DeleteCommentMutationPayload>;
-  /** Mark a single activity read/unread and return the updated activity. */
-  markActivityRead?: Maybe<MarkActivityReadMutationPayload>;
-  /** Mark all activities of the given user as read. */
-  markAllActivitiesRead?: Maybe<MarkAllActivitiesReadMutation>;
+  /** Mark a single activity read/unread. Only allowed for authenticated users. */
+  markActivityAsRead?: Maybe<MarkActivityAsReadMutationPayload>;
+  /** Mark all activities of the given user as read. Only allowed for authenticated users. */
+  markAllActivitiesAsRead?: Maybe<MarkAllActivitiesAsReadMutation>;
 };
 
 
-export type MutationPerformStarArgs = {
-  input: StarredMutationInput;
+export type MutationStarArgs = {
+  input: StarMutationInput;
 };
 
 
-export type MutationPerformVoteArgs = {
+export type MutationVoteArgs = {
   input: VoteMutationInput;
 };
 
@@ -398,13 +487,13 @@ export type MutationLoginArgs = {
 };
 
 
-export type MutationUpdateUserArgs = {
-  input: UpdateUserMutationInput;
+export type MutationChangePasswordArgs = {
+  input: ChangePasswordMutationInput;
 };
 
 
-export type MutationChangePasswordArgs = {
-  input: ChangePasswordMutationInput;
+export type MutationUpdateUserArgs = {
+  input: UpdateUserMutationInput;
 };
 
 
@@ -458,15 +547,26 @@ export type MutationDeleteCommentArgs = {
 };
 
 
-export type MutationMarkActivityReadArgs = {
-  input: MarkActivityReadMutationInput;
+export type MutationMarkActivityAsReadArgs = {
+  input: MarkActivityAsReadMutationInput;
 };
 
-export type StarredMutationPayload = {
-  __typename?: 'StarredMutationPayload';
-  starred?: Maybe<Scalars['Boolean']>;
+export type StarMutationPayload = {
+  __typename?: 'StarMutationPayload';
+  star?: Maybe<StarObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
+  starred?: Maybe<Scalars['Boolean']>;
   clientMutationId?: Maybe<Scalars['String']>;
+};
+
+/** Models a star that the user has placed on a course or a resource. */
+export type StarObjectType = {
+  __typename?: 'StarObjectType';
+  id: Scalars['ID'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  user: UserObjectType;
+  course?: Maybe<CourseObjectType>;
+  resource?: Maybe<ResourceObjectType>;
 };
 
 export type ErrorType = {
@@ -475,7 +575,7 @@ export type ErrorType = {
   messages: Array<Scalars['String']>;
 };
 
-export type StarredMutationInput = {
+export type StarMutationInput = {
   course?: Maybe<Scalars['ID']>;
   resource?: Maybe<Scalars['ID']>;
   clientMutationId?: Maybe<Scalars['String']>;
@@ -497,13 +597,6 @@ export type VoteMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/**
- * Register new user.
- * 
- * Check if there is an existing user with that email or username. Check that account
- * is not deactivated. By default set the user a unverified. After successful
- * registration send account verification email.
- */
 export type RegisterMutationPayload = {
   __typename?: 'RegisterMutationPayload';
   message?: Maybe<Scalars['String']>;
@@ -518,10 +611,6 @@ export type RegisterMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/**
- * Receive the token that was sent by email, if the token is valid, verify the
- * user's account.
- */
 export type VerifyAccountMutationPayload = {
   __typename?: 'VerifyAccountMutationPayload';
   token?: Maybe<Scalars['String']>;
@@ -535,11 +624,6 @@ export type VerifyAccountMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/**
- * Sends verification email again.
- * 
- * Return error if a user with the provided email is not found.
- */
 export type ResendVerificationEmailMutationPayload = {
   __typename?: 'ResendVerificationEmailMutationPayload';
   email: Scalars['String'];
@@ -553,12 +637,6 @@ export type ResendVerificationEmailMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/**
- * Send password reset email.
- * 
- * For non verified users, send an verification email instead. Return error if a user
- * with the provided email is not found.
- */
 export type SendPasswordResetEmailMutationPayload = {
   __typename?: 'SendPasswordResetEmailMutationPayload';
   email: Scalars['String'];
@@ -572,12 +650,6 @@ export type SendPasswordResetEmailMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/**
- * Change user's password without old password.
- * 
- * Receive the token that was sent by email. Revoke refresh token and thus require the
- * user to log in with his new password.
- */
 export type ResetPasswordMutationPayload = {
   __typename?: 'ResetPasswordMutationPayload';
   token?: Maybe<Scalars['String']>;
@@ -593,11 +665,6 @@ export type ResetPasswordMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/**
- * Obtain JSON web token and user information.
- * 
- * Not verified users can still login.
- */
 export type LoginMutationPayload = {
   __typename?: 'LoginMutationPayload';
   user?: Maybe<UserObjectType>;
@@ -612,18 +679,24 @@ export type LoginMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/**
- * Delete JSON web token cookie and logout.
- * 
- * This sets the `Set-Cookie` header so that the JWT token cookie gets automatically
- * deleted in frontend.
- */
 export type LogoutMutation = {
   __typename?: 'LogoutMutation';
   deleted: Scalars['Boolean'];
 };
 
-/** Update some user model fields. */
+export type ChangePasswordMutationPayload = {
+  __typename?: 'ChangePasswordMutationPayload';
+  message?: Maybe<Scalars['String']>;
+  errors?: Maybe<Array<Maybe<ErrorType>>>;
+  clientMutationId?: Maybe<Scalars['String']>;
+};
+
+export type ChangePasswordMutationInput = {
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+  clientMutationId?: Maybe<Scalars['String']>;
+};
+
 export type UpdateUserMutationPayload = {
   __typename?: 'UpdateUserMutationPayload';
   user?: Maybe<UserObjectType>;
@@ -643,29 +716,6 @@ export type UpdateUserMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/**
- * Change account password when user knows the old password.
- * 
- * User must be verified.
- */
-export type ChangePasswordMutationPayload = {
-  __typename?: 'ChangePasswordMutationPayload';
-  message?: Maybe<Scalars['String']>;
-  errors?: Maybe<Array<Maybe<ErrorType>>>;
-  clientMutationId?: Maybe<Scalars['String']>;
-};
-
-export type ChangePasswordMutationInput = {
-  oldPassword: Scalars['String'];
-  newPassword: Scalars['String'];
-  clientMutationId?: Maybe<Scalars['String']>;
-};
-
-/**
- * Delete account permanently.
- * 
- * The user must confirm his password.
- */
 export type DeleteUserMutationPayload = {
   __typename?: 'DeleteUserMutationPayload';
   message?: Maybe<Scalars['String']>;
@@ -813,25 +863,23 @@ export type DeleteCommentMutationInput = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/** Mark a single activity read/unread and return the updated activity. */
-export type MarkActivityReadMutationPayload = {
-  __typename?: 'MarkActivityReadMutationPayload';
+export type MarkActivityAsReadMutationPayload = {
+  __typename?: 'MarkActivityAsReadMutationPayload';
   activity?: Maybe<ActivityObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-export type MarkActivityReadMutationInput = {
+export type MarkActivityAsReadMutationInput = {
   read?: Maybe<Scalars['Boolean']>;
   id?: Maybe<Scalars['ID']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
-/** Mark all activities of the given user as read. */
-export type MarkAllActivitiesReadMutation = {
-  __typename?: 'MarkAllActivitiesReadMutation';
+export type MarkAllActivitiesAsReadMutation = {
+  __typename?: 'MarkAllActivitiesAsReadMutation';
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  activities?: Maybe<Array<Maybe<ActivityObjectType>>>;
+  activities?: Maybe<PaginatedActivityObjectType>;
 };
 
 export type RegisterMutationVariables = Exact<{
@@ -879,10 +927,10 @@ export type LoginMutation = (
   )> }
 );
 
-export type BackendLogoutMutationVariables = Exact<{ [key: string]: never; }>;
+export type _LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BackendLogoutMutation = (
+export type _LogoutMutation = (
   { __typename?: 'Mutation' }
   & { logout?: Maybe<(
     { __typename?: 'LogoutMutation' }
@@ -1020,17 +1068,17 @@ export type DeleteUserMutation = (
   )> }
 );
 
-export type PerformStarMutationVariables = Exact<{
+export type StarMutationVariables = Exact<{
   course?: Maybe<Scalars['ID']>;
   resource?: Maybe<Scalars['ID']>;
 }>;
 
 
-export type PerformStarMutation = (
+export type StarMutation = (
   { __typename?: 'Mutation' }
-  & { performStar?: Maybe<(
-    { __typename?: 'StarredMutationPayload' }
-    & Pick<StarredMutationPayload, 'starred'>
+  & { star?: Maybe<(
+    { __typename?: 'StarMutationPayload' }
+    & Pick<StarMutationPayload, 'starred'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1038,7 +1086,7 @@ export type PerformStarMutation = (
   )> }
 );
 
-export type PerformVoteMutationVariables = Exact<{
+export type VoteMutationVariables = Exact<{
   status: Scalars['Int'];
   comment?: Maybe<Scalars['ID']>;
   course?: Maybe<Scalars['ID']>;
@@ -1046,9 +1094,9 @@ export type PerformVoteMutationVariables = Exact<{
 }>;
 
 
-export type PerformVoteMutation = (
+export type VoteMutation = (
   { __typename?: 'Mutation' }
-  & { performVote?: Maybe<(
+  & { vote?: Maybe<(
     { __typename?: 'VoteMutationPayload' }
     & Pick<VoteMutationPayload, 'targetScore'>
     & { vote?: Maybe<(
@@ -1219,16 +1267,16 @@ export type DeleteResourceMutation = (
   )> }
 );
 
-export type MarkActivityReadMutationVariables = Exact<{
+export type MarkActivityAsReadMutationVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
   read?: Maybe<Scalars['Boolean']>;
 }>;
 
 
-export type MarkActivityReadMutation = (
+export type MarkActivityAsReadMutation = (
   { __typename?: 'Mutation' }
-  & { markActivityRead?: Maybe<(
-    { __typename?: 'MarkActivityReadMutationPayload' }
+  & { markActivityAsRead?: Maybe<(
+    { __typename?: 'MarkActivityAsReadMutationPayload' }
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1252,33 +1300,37 @@ export type MarkActivityReadMutation = (
   )> }
 );
 
-export type MarkAllActivitiesAsReadMutationVariables = Exact<{ [key: string]: never; }>;
+export type _MarkAllActivitiesAsReadMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MarkAllActivitiesAsReadMutation = (
+export type _MarkAllActivitiesAsReadMutation = (
   { __typename?: 'Mutation' }
-  & { markAllActivitiesRead?: Maybe<(
-    { __typename?: 'MarkAllActivitiesReadMutation' }
+  & { markAllActivitiesAsRead?: Maybe<(
+    { __typename?: 'MarkAllActivitiesAsReadMutation' }
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
-    )>>>, activities?: Maybe<Array<Maybe<(
-      { __typename?: 'ActivityObjectType' }
-      & Pick<ActivityObjectType, 'id' | 'description' | 'read'>
-      & { targetUser?: Maybe<(
-        { __typename?: 'UserObjectType' }
-        & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
-      )>, course?: Maybe<(
-        { __typename?: 'CourseObjectType' }
-        & Pick<CourseObjectType, 'id'>
-      )>, resource?: Maybe<(
-        { __typename?: 'ResourceObjectType' }
-        & Pick<ResourceObjectType, 'id'>
-      )>, comment?: Maybe<(
-        { __typename?: 'CommentObjectType' }
-        & Pick<CommentObjectType, 'id'>
-      )> }
-    )>>> }
+    )>>>, activities?: Maybe<(
+      { __typename?: 'PaginatedActivityObjectType' }
+      & Pick<PaginatedActivityObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
+      & { objects?: Maybe<Array<Maybe<(
+        { __typename?: 'ActivityObjectType' }
+        & Pick<ActivityObjectType, 'id' | 'description' | 'read'>
+        & { targetUser?: Maybe<(
+          { __typename?: 'UserObjectType' }
+          & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+        )>, course?: Maybe<(
+          { __typename?: 'CourseObjectType' }
+          & Pick<CourseObjectType, 'id'>
+        )>, resource?: Maybe<(
+          { __typename?: 'ResourceObjectType' }
+          & Pick<ResourceObjectType, 'id'>
+        )>, comment?: Maybe<(
+          { __typename?: 'CommentObjectType' }
+          & Pick<CommentObjectType, 'id'>
+        )> }
+      )>>> }
+    )> }
   )> }
 );
 
@@ -1296,7 +1348,57 @@ export type UserMeQuery = (
     )>, subject?: Maybe<(
       { __typename?: 'SubjectObjectType' }
       & Pick<SubjectObjectType, 'id' | 'name'>
-    )>, activity?: Maybe<Array<Maybe<(
+    )> }
+  )> }
+);
+
+export type StarredQueryVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type StarredQuery = (
+  { __typename?: 'Query' }
+  & { starredCourses?: Maybe<(
+    { __typename?: 'PaginatedCourseObjectType' }
+    & Pick<PaginatedCourseObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
+    & { objects?: Maybe<Array<Maybe<(
+      { __typename?: 'CourseObjectType' }
+      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'starCount' | 'resourceCount' | 'commentCount'>
+      & { user?: Maybe<(
+        { __typename?: 'UserObjectType' }
+        & Pick<UserObjectType, 'id' | 'username'>
+      )> }
+    )>>> }
+  )>, starredResources?: Maybe<(
+    { __typename?: 'PaginatedResourceObjectType' }
+    & Pick<PaginatedResourceObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
+    & { objects?: Maybe<Array<Maybe<(
+      { __typename?: 'ResourceObjectType' }
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
+      & { resourceType?: Maybe<(
+        { __typename?: 'ResourceTypeObjectType' }
+        & Pick<ResourceTypeObjectType, 'id'>
+      )> }
+    )>>> }
+  )>, resourceTypes?: Maybe<Array<Maybe<(
+    { __typename?: 'ResourceTypeObjectType' }
+    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+  )>>> }
+);
+
+export type ActivitiesQueryVariables = Exact<{
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type ActivitiesQuery = (
+  { __typename?: 'Query' }
+  & { activities?: Maybe<(
+    { __typename?: 'PaginatedActivityObjectType' }
+    & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'ActivityObjectType' }
       & Pick<ActivityObjectType, 'id' | 'description' | 'read'>
       & { targetUser?: Maybe<(
@@ -1316,36 +1418,34 @@ export type UserMeQuery = (
   )> }
 );
 
-export type StarredQueryVariables = Exact<{ [key: string]: never; }>;
+export type ActivityPreviewQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StarredQuery = (
+export type ActivityPreviewQuery = (
   { __typename?: 'Query' }
-  & { userMe?: Maybe<(
-    { __typename?: 'UserObjectType' }
-    & { starredCourses?: Maybe<Array<Maybe<(
+  & { activityPreview?: Maybe<Array<Maybe<(
+    { __typename?: 'ActivityObjectType' }
+    & Pick<ActivityObjectType, 'id' | 'description' | 'read'>
+    & { targetUser?: Maybe<(
+      { __typename?: 'UserObjectType' }
+      & Pick<UserObjectType, 'id' | 'username' | 'avatarThumbnail'>
+    )>, course?: Maybe<(
       { __typename?: 'CourseObjectType' }
-      & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'starCount' | 'resourceCount' | 'commentCount'>
-      & { user?: Maybe<(
-        { __typename?: 'UserObjectType' }
-        & Pick<UserObjectType, 'id' | 'username'>
-      )> }
-    )>>>, starredResources?: Maybe<Array<Maybe<(
+      & Pick<CourseObjectType, 'id'>
+    )>, resource?: Maybe<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
-      & { resourceType?: Maybe<(
-        { __typename?: 'ResourceTypeObjectType' }
-        & Pick<ResourceTypeObjectType, 'id'>
-      )> }
-    )>>> }
-  )>, resourceTypes?: Maybe<Array<Maybe<(
-    { __typename?: 'ResourceTypeObjectType' }
-    & Pick<ResourceTypeObjectType, 'id' | 'name'>
+      & Pick<ResourceObjectType, 'id'>
+    )>, comment?: Maybe<(
+      { __typename?: 'CommentObjectType' }
+      & Pick<CommentObjectType, 'id'>
+    )> }
   )>>> }
 );
 
 export type UserQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -1357,21 +1457,29 @@ export type UserQuery = (
     & { badges?: Maybe<Array<Maybe<(
       { __typename?: 'BadgeObjectType' }
       & Pick<BadgeObjectType, 'id' | 'name' | 'description'>
-    )>>>, createdCourses: Array<(
+    )>>> }
+  )>, courses?: Maybe<(
+    { __typename?: 'PaginatedCourseObjectType' }
+    & Pick<PaginatedCourseObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
+    & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'starCount' | 'resourceCount' | 'commentCount'>
       & { user?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username'>
       )> }
-    )>, createdResources: Array<(
+    )>>> }
+  )>, resources?: Maybe<(
+    { __typename?: 'PaginatedResourceObjectType' }
+    & Pick<PaginatedResourceObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
+    & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id'>
       )> }
-    )> }
+    )>>> }
   )>, resourceTypes?: Maybe<Array<Maybe<(
     { __typename?: 'ResourceTypeObjectType' }
     & Pick<ResourceTypeObjectType, 'id' | 'name'>
@@ -1394,7 +1502,7 @@ export type SearchCoursesQueryVariables = Exact<{
 
 export type SearchCoursesQuery = (
   { __typename?: 'Query' }
-  & { searchCourses?: Maybe<(
+  & { courses?: Maybe<(
     { __typename?: 'PaginatedCourseObjectType' }
     & Pick<PaginatedCourseObjectType, 'page' | 'pages' | 'hasPrev' | 'hasNext' | 'count'>
     & { objects?: Maybe<Array<Maybe<(
@@ -1445,13 +1553,6 @@ export type CourseQuery = (
     ), user?: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'username'>
-    )>, resources: Array<(
-      { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
-      & { resourceType?: Maybe<(
-        { __typename?: 'ResourceTypeObjectType' }
-        & Pick<ResourceTypeObjectType, 'id' | 'name'>
-      )> }
     )>, comments: Array<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
@@ -1473,6 +1574,17 @@ export type CourseQuery = (
         & Pick<VoteObjectType, 'id' | 'status'>
       )> }
     )> }
+  )>, resources?: Maybe<(
+    { __typename?: 'PaginatedResourceObjectType' }
+    & Pick<PaginatedResourceObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
+    & { objects?: Maybe<Array<Maybe<(
+      { __typename?: 'ResourceObjectType' }
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
+      & { resourceType?: Maybe<(
+        { __typename?: 'ResourceTypeObjectType' }
+        & Pick<ResourceTypeObjectType, 'id'>
+      )> }
+    )>>> }
   )>, resourceTypes?: Maybe<Array<Maybe<(
     { __typename?: 'ResourceTypeObjectType' }
     & Pick<ResourceTypeObjectType, 'id' | 'name'>
@@ -1530,6 +1642,8 @@ export type ResourceQuery = (
 
 export type SchoolQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
+  page?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -1547,17 +1661,25 @@ export type SchoolQuery = (
     )>, schoolType?: Maybe<(
       { __typename?: 'SchoolTypeObjectType' }
       & Pick<SchoolTypeObjectType, 'id' | 'name'>
-    )>, subjects?: Maybe<Array<Maybe<(
+    )> }
+  )>, subjects?: Maybe<(
+    { __typename?: 'PaginatedSubjectObjectType' }
+    & Pick<PaginatedSubjectObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
+    & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'SubjectObjectType' }
       & Pick<SubjectObjectType, 'id' | 'name' | 'courseCount' | 'resourceCount'>
-    )>>>, courses: Array<(
+    )>>> }
+  )>, courses?: Maybe<(
+    { __typename?: 'PaginatedCourseObjectType' }
+    & Pick<PaginatedCourseObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
+    & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id' | 'name' | 'code' | 'score' | 'starCount' | 'resourceCount' | 'commentCount'>
       & { user?: Maybe<(
         { __typename?: 'UserObjectType' }
         & Pick<UserObjectType, 'id' | 'username'>
       )> }
-    )> }
+    )>>> }
   )> }
 );
 
@@ -1758,37 +1880,37 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
-export const BackendLogoutDocument = gql`
-    mutation BackendLogout {
+export const _LogoutDocument = gql`
+    mutation _Logout {
   logout {
     deleted
   }
 }
     `;
-export type BackendLogoutMutationFn = Apollo.MutationFunction<BackendLogoutMutation, BackendLogoutMutationVariables>;
+export type _LogoutMutationFn = Apollo.MutationFunction<_LogoutMutation, _LogoutMutationVariables>;
 
 /**
- * __useBackendLogoutMutation__
+ * __use_LogoutMutation__
  *
- * To run a mutation, you first call `useBackendLogoutMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useBackendLogoutMutation` returns a tuple that includes:
+ * To run a mutation, you first call `use_LogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `use_LogoutMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [backendLogoutMutation, { data, loading, error }] = useBackendLogoutMutation({
+ * const [logoutMutation, { data, loading, error }] = use_LogoutMutation({
  *   variables: {
  *   },
  * });
  */
-export function useBackendLogoutMutation(baseOptions?: Apollo.MutationHookOptions<BackendLogoutMutation, BackendLogoutMutationVariables>) {
-        return Apollo.useMutation<BackendLogoutMutation, BackendLogoutMutationVariables>(BackendLogoutDocument, baseOptions);
+export function use_LogoutMutation(baseOptions?: Apollo.MutationHookOptions<_LogoutMutation, _LogoutMutationVariables>) {
+        return Apollo.useMutation<_LogoutMutation, _LogoutMutationVariables>(_LogoutDocument, baseOptions);
       }
-export type BackendLogoutMutationHookResult = ReturnType<typeof useBackendLogoutMutation>;
-export type BackendLogoutMutationResult = Apollo.MutationResult<BackendLogoutMutation>;
-export type BackendLogoutMutationOptions = Apollo.BaseMutationOptions<BackendLogoutMutation, BackendLogoutMutationVariables>;
+export type _LogoutMutationHookResult = ReturnType<typeof use_LogoutMutation>;
+export type _LogoutMutationResult = Apollo.MutationResult<_LogoutMutation>;
+export type _LogoutMutationOptions = Apollo.BaseMutationOptions<_LogoutMutation, _LogoutMutationVariables>;
 export const ResendVerificationEmailDocument = gql`
     mutation ResendVerificationEmail($email: String!) {
   resendVerificationEmail(input: {email: $email}) {
@@ -2059,9 +2181,9 @@ export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
 export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
 export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
-export const PerformStarDocument = gql`
-    mutation PerformStar($course: ID, $resource: ID) {
-  performStar(input: {course: $course, resource: $resource}) {
+export const StarDocument = gql`
+    mutation Star($course: ID, $resource: ID) {
+  star(input: {course: $course, resource: $resource}) {
     starred
     errors {
       field
@@ -2070,35 +2192,35 @@ export const PerformStarDocument = gql`
   }
 }
     `;
-export type PerformStarMutationFn = Apollo.MutationFunction<PerformStarMutation, PerformStarMutationVariables>;
+export type StarMutationFn = Apollo.MutationFunction<StarMutation, StarMutationVariables>;
 
 /**
- * __usePerformStarMutation__
+ * __useStarMutation__
  *
- * To run a mutation, you first call `usePerformStarMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePerformStarMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useStarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStarMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [performStarMutation, { data, loading, error }] = usePerformStarMutation({
+ * const [starMutation, { data, loading, error }] = useStarMutation({
  *   variables: {
  *      course: // value for 'course'
  *      resource: // value for 'resource'
  *   },
  * });
  */
-export function usePerformStarMutation(baseOptions?: Apollo.MutationHookOptions<PerformStarMutation, PerformStarMutationVariables>) {
-        return Apollo.useMutation<PerformStarMutation, PerformStarMutationVariables>(PerformStarDocument, baseOptions);
+export function useStarMutation(baseOptions?: Apollo.MutationHookOptions<StarMutation, StarMutationVariables>) {
+        return Apollo.useMutation<StarMutation, StarMutationVariables>(StarDocument, baseOptions);
       }
-export type PerformStarMutationHookResult = ReturnType<typeof usePerformStarMutation>;
-export type PerformStarMutationResult = Apollo.MutationResult<PerformStarMutation>;
-export type PerformStarMutationOptions = Apollo.BaseMutationOptions<PerformStarMutation, PerformStarMutationVariables>;
-export const PerformVoteDocument = gql`
-    mutation PerformVote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
-  performVote(input: {status: $status, comment: $comment, course: $course, resource: $resource}) {
+export type StarMutationHookResult = ReturnType<typeof useStarMutation>;
+export type StarMutationResult = Apollo.MutationResult<StarMutation>;
+export type StarMutationOptions = Apollo.BaseMutationOptions<StarMutation, StarMutationVariables>;
+export const VoteDocument = gql`
+    mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
+  vote(input: {status: $status, comment: $comment, course: $course, resource: $resource}) {
     vote {
       id
       status
@@ -2111,20 +2233,20 @@ export const PerformVoteDocument = gql`
   }
 }
     `;
-export type PerformVoteMutationFn = Apollo.MutationFunction<PerformVoteMutation, PerformVoteMutationVariables>;
+export type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationVariables>;
 
 /**
- * __usePerformVoteMutation__
+ * __useVoteMutation__
  *
- * To run a mutation, you first call `usePerformVoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePerformVoteMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVoteMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [performVoteMutation, { data, loading, error }] = usePerformVoteMutation({
+ * const [voteMutation, { data, loading, error }] = useVoteMutation({
  *   variables: {
  *      status: // value for 'status'
  *      comment: // value for 'comment'
@@ -2133,12 +2255,12 @@ export type PerformVoteMutationFn = Apollo.MutationFunction<PerformVoteMutation,
  *   },
  * });
  */
-export function usePerformVoteMutation(baseOptions?: Apollo.MutationHookOptions<PerformVoteMutation, PerformVoteMutationVariables>) {
-        return Apollo.useMutation<PerformVoteMutation, PerformVoteMutationVariables>(PerformVoteDocument, baseOptions);
+export function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMutation, VoteMutationVariables>) {
+        return Apollo.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument, baseOptions);
       }
-export type PerformVoteMutationHookResult = ReturnType<typeof usePerformVoteMutation>;
-export type PerformVoteMutationResult = Apollo.MutationResult<PerformVoteMutation>;
-export type PerformVoteMutationOptions = Apollo.BaseMutationOptions<PerformVoteMutation, PerformVoteMutationVariables>;
+export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
+export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
+export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
 export const CreateCommentDocument = gql`
     mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $comment: ID) {
   createComment(input: {text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment}) {
@@ -2444,9 +2566,9 @@ export function useDeleteResourceMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteResourceMutationHookResult = ReturnType<typeof useDeleteResourceMutation>;
 export type DeleteResourceMutationResult = Apollo.MutationResult<DeleteResourceMutation>;
 export type DeleteResourceMutationOptions = Apollo.BaseMutationOptions<DeleteResourceMutation, DeleteResourceMutationVariables>;
-export const MarkActivityReadDocument = gql`
-    mutation MarkActivityRead($id: ID, $read: Boolean) {
-  markActivityRead(input: {id: $id, read: $read}) {
+export const MarkActivityAsReadDocument = gql`
+    mutation MarkActivityAsRead($id: ID, $read: Boolean) {
+  markActivityAsRead(input: {id: $id, read: $read}) {
     errors {
       field
       messages
@@ -2473,85 +2595,92 @@ export const MarkActivityReadDocument = gql`
   }
 }
     `;
-export type MarkActivityReadMutationFn = Apollo.MutationFunction<MarkActivityReadMutation, MarkActivityReadMutationVariables>;
+export type MarkActivityAsReadMutationFn = Apollo.MutationFunction<MarkActivityAsReadMutation, MarkActivityAsReadMutationVariables>;
 
 /**
- * __useMarkActivityReadMutation__
+ * __useMarkActivityAsReadMutation__
  *
- * To run a mutation, you first call `useMarkActivityReadMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMarkActivityReadMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useMarkActivityAsReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkActivityAsReadMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [markActivityReadMutation, { data, loading, error }] = useMarkActivityReadMutation({
+ * const [markActivityAsReadMutation, { data, loading, error }] = useMarkActivityAsReadMutation({
  *   variables: {
  *      id: // value for 'id'
  *      read: // value for 'read'
  *   },
  * });
  */
-export function useMarkActivityReadMutation(baseOptions?: Apollo.MutationHookOptions<MarkActivityReadMutation, MarkActivityReadMutationVariables>) {
-        return Apollo.useMutation<MarkActivityReadMutation, MarkActivityReadMutationVariables>(MarkActivityReadDocument, baseOptions);
+export function useMarkActivityAsReadMutation(baseOptions?: Apollo.MutationHookOptions<MarkActivityAsReadMutation, MarkActivityAsReadMutationVariables>) {
+        return Apollo.useMutation<MarkActivityAsReadMutation, MarkActivityAsReadMutationVariables>(MarkActivityAsReadDocument, baseOptions);
       }
-export type MarkActivityReadMutationHookResult = ReturnType<typeof useMarkActivityReadMutation>;
-export type MarkActivityReadMutationResult = Apollo.MutationResult<MarkActivityReadMutation>;
-export type MarkActivityReadMutationOptions = Apollo.BaseMutationOptions<MarkActivityReadMutation, MarkActivityReadMutationVariables>;
-export const MarkAllActivitiesAsReadDocument = gql`
-    mutation MarkAllActivitiesAsRead {
-  markAllActivitiesRead {
+export type MarkActivityAsReadMutationHookResult = ReturnType<typeof useMarkActivityAsReadMutation>;
+export type MarkActivityAsReadMutationResult = Apollo.MutationResult<MarkActivityAsReadMutation>;
+export type MarkActivityAsReadMutationOptions = Apollo.BaseMutationOptions<MarkActivityAsReadMutation, MarkActivityAsReadMutationVariables>;
+export const _MarkAllActivitiesAsReadDocument = gql`
+    mutation _MarkAllActivitiesAsRead {
+  markAllActivitiesAsRead {
     errors {
       field
       messages
     }
     activities {
-      id
-      description
-      read
-      targetUser {
+      page
+      pages
+      hasNext
+      hasPrev
+      count
+      objects {
         id
-        username
-        avatarThumbnail
-      }
-      course {
-        id
-      }
-      resource {
-        id
-      }
-      comment {
-        id
+        description
+        read
+        targetUser {
+          id
+          username
+          avatarThumbnail
+        }
+        course {
+          id
+        }
+        resource {
+          id
+        }
+        comment {
+          id
+        }
       }
     }
   }
 }
     `;
-export type MarkAllActivitiesAsReadMutationFn = Apollo.MutationFunction<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>;
+export type _MarkAllActivitiesAsReadMutationFn = Apollo.MutationFunction<_MarkAllActivitiesAsReadMutation, _MarkAllActivitiesAsReadMutationVariables>;
 
 /**
- * __useMarkAllActivitiesAsReadMutation__
+ * __use_MarkAllActivitiesAsReadMutation__
  *
- * To run a mutation, you first call `useMarkAllActivitiesAsReadMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMarkAllActivitiesAsReadMutation` returns a tuple that includes:
+ * To run a mutation, you first call `use_MarkAllActivitiesAsReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `use_MarkAllActivitiesAsReadMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [markAllActivitiesAsReadMutation, { data, loading, error }] = useMarkAllActivitiesAsReadMutation({
+ * const [markAllActivitiesAsReadMutation, { data, loading, error }] = use_MarkAllActivitiesAsReadMutation({
  *   variables: {
  *   },
  * });
  */
-export function useMarkAllActivitiesAsReadMutation(baseOptions?: Apollo.MutationHookOptions<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>) {
-        return Apollo.useMutation<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>(MarkAllActivitiesAsReadDocument, baseOptions);
+export function use_MarkAllActivitiesAsReadMutation(baseOptions?: Apollo.MutationHookOptions<_MarkAllActivitiesAsReadMutation, _MarkAllActivitiesAsReadMutationVariables>) {
+        return Apollo.useMutation<_MarkAllActivitiesAsReadMutation, _MarkAllActivitiesAsReadMutationVariables>(_MarkAllActivitiesAsReadDocument, baseOptions);
       }
-export type MarkAllActivitiesAsReadMutationHookResult = ReturnType<typeof useMarkAllActivitiesAsReadMutation>;
-export type MarkAllActivitiesAsReadMutationResult = Apollo.MutationResult<MarkAllActivitiesAsReadMutation>;
-export type MarkAllActivitiesAsReadMutationOptions = Apollo.BaseMutationOptions<MarkAllActivitiesAsReadMutation, MarkAllActivitiesAsReadMutationVariables>;
+export type _MarkAllActivitiesAsReadMutationHookResult = ReturnType<typeof use_MarkAllActivitiesAsReadMutation>;
+export type _MarkAllActivitiesAsReadMutationResult = Apollo.MutationResult<_MarkAllActivitiesAsReadMutation>;
+export type _MarkAllActivitiesAsReadMutationOptions = Apollo.BaseMutationOptions<_MarkAllActivitiesAsReadMutation, _MarkAllActivitiesAsReadMutationVariables>;
 export const UserMeDocument = gql`
     query UserMe {
   userMe {
@@ -2571,25 +2700,6 @@ export const UserMeDocument = gql`
     subject {
       id
       name
-    }
-    activity {
-      id
-      description
-      read
-      targetUser {
-        id
-        username
-        avatarThumbnail
-      }
-      course {
-        id
-      }
-      resource {
-        id
-      }
-      comment {
-        id
-      }
     }
   }
 }
@@ -2620,9 +2730,14 @@ export type UserMeQueryHookResult = ReturnType<typeof useUserMeQuery>;
 export type UserMeLazyQueryHookResult = ReturnType<typeof useUserMeLazyQuery>;
 export type UserMeQueryResult = Apollo.QueryResult<UserMeQuery, UserMeQueryVariables>;
 export const StarredDocument = gql`
-    query Starred {
-  userMe {
-    starredCourses {
+    query Starred($page: Int, $pageSize: Int) {
+  starredCourses(page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
       id
       name
       code
@@ -2635,7 +2750,14 @@ export const StarredDocument = gql`
         username
       }
     }
-    starredResources {
+  }
+  starredResources {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
       id
       title
       score
@@ -2666,6 +2788,8 @@ export const StarredDocument = gql`
  * @example
  * const { data, loading, error } = useStarredQuery({
  *   variables: {
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
  *   },
  * });
  */
@@ -2678,8 +2802,108 @@ export function useStarredLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<St
 export type StarredQueryHookResult = ReturnType<typeof useStarredQuery>;
 export type StarredLazyQueryHookResult = ReturnType<typeof useStarredLazyQuery>;
 export type StarredQueryResult = Apollo.QueryResult<StarredQuery, StarredQueryVariables>;
+export const ActivitiesDocument = gql`
+    query Activities($page: Int, $pageSize: Int) {
+  activities(page: $page, pageSize: $pageSize) {
+    objects {
+      id
+      description
+      read
+      targetUser {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+      }
+      resource {
+        id
+      }
+      comment {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useActivitiesQuery__
+ *
+ * To run a query within a React component, call `useActivitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActivitiesQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
+ *   },
+ * });
+ */
+export function useActivitiesQuery(baseOptions?: Apollo.QueryHookOptions<ActivitiesQuery, ActivitiesQueryVariables>) {
+        return Apollo.useQuery<ActivitiesQuery, ActivitiesQueryVariables>(ActivitiesDocument, baseOptions);
+      }
+export function useActivitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActivitiesQuery, ActivitiesQueryVariables>) {
+          return Apollo.useLazyQuery<ActivitiesQuery, ActivitiesQueryVariables>(ActivitiesDocument, baseOptions);
+        }
+export type ActivitiesQueryHookResult = ReturnType<typeof useActivitiesQuery>;
+export type ActivitiesLazyQueryHookResult = ReturnType<typeof useActivitiesLazyQuery>;
+export type ActivitiesQueryResult = Apollo.QueryResult<ActivitiesQuery, ActivitiesQueryVariables>;
+export const ActivityPreviewDocument = gql`
+    query ActivityPreview {
+  activityPreview {
+    id
+    description
+    read
+    targetUser {
+      id
+      username
+      avatarThumbnail
+    }
+    course {
+      id
+    }
+    resource {
+      id
+    }
+    comment {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useActivityPreviewQuery__
+ *
+ * To run a query within a React component, call `useActivityPreviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActivityPreviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActivityPreviewQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useActivityPreviewQuery(baseOptions?: Apollo.QueryHookOptions<ActivityPreviewQuery, ActivityPreviewQueryVariables>) {
+        return Apollo.useQuery<ActivityPreviewQuery, ActivityPreviewQueryVariables>(ActivityPreviewDocument, baseOptions);
+      }
+export function useActivityPreviewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActivityPreviewQuery, ActivityPreviewQueryVariables>) {
+          return Apollo.useLazyQuery<ActivityPreviewQuery, ActivityPreviewQueryVariables>(ActivityPreviewDocument, baseOptions);
+        }
+export type ActivityPreviewQueryHookResult = ReturnType<typeof useActivityPreviewQuery>;
+export type ActivityPreviewLazyQueryHookResult = ReturnType<typeof useActivityPreviewLazyQuery>;
+export type ActivityPreviewQueryResult = Apollo.QueryResult<ActivityPreviewQuery, ActivityPreviewQueryVariables>;
 export const UserDocument = gql`
-    query User($id: ID) {
+    query User($id: ID, $page: Int, $pageSize: Int) {
   user(id: $id) {
     id
     username
@@ -2695,7 +2919,14 @@ export const UserDocument = gql`
       name
       description
     }
-    createdCourses {
+  }
+  courses(user: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
       id
       name
       code
@@ -2708,7 +2939,14 @@ export const UserDocument = gql`
         username
       }
     }
-    createdResources {
+  }
+  resources(user: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
       id
       title
       score
@@ -2740,6 +2978,8 @@ export const UserDocument = gql`
  * const { data, loading, error } = useUserQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
  *   },
  * });
  */
@@ -2754,7 +2994,7 @@ export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const SearchCoursesDocument = gql`
     query SearchCourses($courseName: String, $courseCode: String, $school: ID, $subject: ID, $schoolType: ID, $country: ID, $city: ID, $ordering: String, $page: Int, $pageSize: Int) {
-  searchCourses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {
+  courses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {
     page
     pages
     hasPrev
@@ -2857,18 +3097,6 @@ export const CourseDocument = gql`
       id
       username
     }
-    resources {
-      id
-      title
-      score
-      date
-      starCount
-      commentCount
-      resourceType {
-        id
-        name
-      }
-    }
     comments {
       id
       user {
@@ -2901,6 +3129,24 @@ export const CourseDocument = gql`
       vote {
         id
         status
+      }
+    }
+  }
+  resources(course: $id) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      title
+      score
+      date
+      starCount
+      commentCount
+      resourceType {
+        id
       }
     }
   }
@@ -3031,7 +3277,7 @@ export type ResourceQueryHookResult = ReturnType<typeof useResourceQuery>;
 export type ResourceLazyQueryHookResult = ReturnType<typeof useResourceLazyQuery>;
 export type ResourceQueryResult = Apollo.QueryResult<ResourceQuery, ResourceQueryVariables>;
 export const SchoolDocument = gql`
-    query School($id: ID) {
+    query School($id: ID, $page: Int, $pageSize: Int) {
   school(id: $id) {
     id
     name
@@ -3047,13 +3293,27 @@ export const SchoolDocument = gql`
       id
       name
     }
-    subjects {
+  }
+  subjects(school: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
       id
       name
       courseCount
       resourceCount
     }
-    courses {
+  }
+  courses(school: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
       id
       name
       code
@@ -3083,6 +3343,8 @@ export const SchoolDocument = gql`
  * const { data, loading, error } = useSchoolQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
  *   },
  * });
  */
