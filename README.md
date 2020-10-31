@@ -92,7 +92,6 @@ A quick look at the top-level files and directories excluding `node_modules` and
 -   If an interface/type is used in more than one place, put it in the `types` folder in a suitable file. If the interface/type is only used in one place, you may define it in that file.
 -   If you have only one component per file, name the component prop interface/type as `Props`. Otherwise, if you have two components in a file, e.g. `Foo` and `Bar`, name the prop interfaces/types as `FooProps` and `BarProps`.
 -   Avoid using inline styles. In this project, we have used [CSS in JS](https://v1.material-ui.com/customization/css-in-js/) nearly everywhere with a few exceptions.
--   Use the `useTranslation` hook whenever you need component-level translations. We avoid using the `withTranslation` HOC for clearer namespace definition.
 -   Document everything that is hard to understand from the code. Use single line comment syntax for everything, even for multi-line comments.
 -   Avoid writing event handlers/functions directly in JSX to keep it more readable.
 -   Use `React.FC` syntax for all components.
