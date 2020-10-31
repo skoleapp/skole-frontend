@@ -8,12 +8,15 @@ docker-compose*
 .idea/
 .vscode/
 
-.circleci/config.yml
+.circleci/
+.github/
 
 .graphqlconfig
 
 .next/
 build/
 node_modules/
+
+schema.graphql
 
 *.md

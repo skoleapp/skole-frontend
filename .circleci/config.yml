@@ -11,5 +11,8 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "Check commits of the PR branch"
+          command: ./.circleci/check_commits.sh
+      - run:
           name: "Run linters, type-check, and build"
           command: docker build --target circleci --tag frontend . && docker run frontend
