@@ -17,18 +17,16 @@ CMD ["yarn", "dev"]
 
 FROM dev AS circleci
 
-# Needs to be during `yarn build`. Will be an empty string in circleci
-# and gets an actual value when building prod image.
-ARG API_URL
-
 COPY --chown=user:user . .
 
 CMD yarn lint \
     && yarn type-check \
-    && yarn build
+    && API_URL= yarn build
 
 
 FROM circleci as prod
+
+ARG API_URL
 
 RUN yarn build
 
