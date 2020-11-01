@@ -2,7 +2,7 @@ import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
-import { useForm } from 'hooks';
+import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
@@ -24,6 +24,7 @@ interface ChangePasswordFormValues {
 const ChangePasswordPage: NextPage = () => {
     const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<ChangePasswordFormValues>();
     const { toggleNotification } = useNotificationsContext();
+    const context = useLanguageHeaderContext();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
@@ -49,11 +50,11 @@ const ChangePasswordPage: NextPage = () => {
         }
     };
 
-    const [changePasswordMutation] = useChangePasswordMutation({ onCompleted, onError });
+    const [changePassword] = useChangePasswordMutation({ onCompleted, onError, context });
 
     const handleSubmit = async (values: ChangePasswordFormValues): Promise<void> => {
         const { oldPassword, newPassword } = values;
-        await changePasswordMutation({ variables: { oldPassword, newPassword } });
+        await changePassword({ variables: { oldPassword, newPassword } });
     };
 
     const renderForm = (

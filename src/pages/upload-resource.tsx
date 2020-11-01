@@ -16,14 +16,15 @@ import {
     AutocompleteResourceTypesDocument,
     AutocompleteSchoolsDocument,
     CourseObjectType,
+    CreateResourceAutocompleteDataQueryVariables,
     CreateResourceMutation,
     SchoolObjectType,
     useCreateResourceAutocompleteDataQuery,
     useCreateResourceMutation,
 } from 'generated';
-import { useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { useForm, useLanguageHeaderContext } from 'hooks';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -43,7 +44,9 @@ const UploadResourcePage: NextPage = () => {
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
-    const { data, loading, error } = useCreateResourceAutocompleteDataQuery({ variables: query });
+    const variables: CreateResourceAutocompleteDataQueryVariables = R.pick(['school', 'course'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useCreateResourceAutocompleteDataQuery({ variables, context });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const course: CourseObjectType = R.propOr(null, 'course', data);
 
@@ -79,7 +82,7 @@ const UploadResourcePage: NextPage = () => {
         }
     };
 
-    const [createResourceMutation] = useCreateResourceMutation({ onCompleted, onError });
+    const [createResource] = useCreateResourceMutation({ onCompleted, onError, context });
 
     const handleUpload = async ({
         resourceTitle,
@@ -95,7 +98,7 @@ const UploadResourcePage: NextPage = () => {
         };
 
         setFieldValue('general', t('upload-resource:fileUploadingText'));
-        await createResourceMutation({ variables });
+        await createResource({ variables });
     };
 
     const handleSubmit = async (variables: UploadResourceFormValues): Promise<void> => {
@@ -213,5 +216,11 @@ const UploadResourcePage: NextPage = () => {
 
     return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['upload-resource'], locale),
+    },
+});
 
 export default withAuth(UploadResourcePage);

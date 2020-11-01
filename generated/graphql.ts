@@ -927,10 +927,10 @@ export type LoginMutation = (
   )> }
 );
 
-export type _LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+export type GraphQlLogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type _LogoutMutation = (
+export type GraphQlLogoutMutation = (
   { __typename?: 'Mutation' }
   & { logout?: Maybe<(
     { __typename?: 'LogoutMutation' }
@@ -1300,10 +1300,10 @@ export type MarkActivityAsReadMutation = (
   )> }
 );
 
-export type _MarkAllActivitiesAsReadMutationVariables = Exact<{ [key: string]: never; }>;
+export type GraphQlMarkAllActivitiesAsReadMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type _MarkAllActivitiesAsReadMutation = (
+export type GraphQlMarkAllActivitiesAsReadMutation = (
   { __typename?: 'Mutation' }
   & { markAllActivitiesAsRead?: Maybe<(
     { __typename?: 'MarkAllActivitiesAsReadMutation' }
@@ -1882,37 +1882,37 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
-export const _LogoutDocument = gql`
-    mutation _Logout {
+export const GraphQlLogoutDocument = gql`
+    mutation GraphQLLogout {
   logout {
     deleted
   }
 }
     `;
-export type _LogoutMutationFn = Apollo.MutationFunction<_LogoutMutation, _LogoutMutationVariables>;
+export type GraphQlLogoutMutationFn = Apollo.MutationFunction<GraphQlLogoutMutation, GraphQlLogoutMutationVariables>;
 
 /**
- * __use_LogoutMutation__
+ * __useGraphQlLogoutMutation__
  *
- * To run a mutation, you first call `use_LogoutMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `use_LogoutMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useGraphQlLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGraphQlLogoutMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [logoutMutation, { data, loading, error }] = use_LogoutMutation({
+ * const [graphQlLogoutMutation, { data, loading, error }] = useGraphQlLogoutMutation({
  *   variables: {
  *   },
  * });
  */
-export function use_LogoutMutation(baseOptions?: Apollo.MutationHookOptions<_LogoutMutation, _LogoutMutationVariables>) {
-        return Apollo.useMutation<_LogoutMutation, _LogoutMutationVariables>(_LogoutDocument, baseOptions);
+export function useGraphQlLogoutMutation(baseOptions?: Apollo.MutationHookOptions<GraphQlLogoutMutation, GraphQlLogoutMutationVariables>) {
+        return Apollo.useMutation<GraphQlLogoutMutation, GraphQlLogoutMutationVariables>(GraphQlLogoutDocument, baseOptions);
       }
-export type _LogoutMutationHookResult = ReturnType<typeof use_LogoutMutation>;
-export type _LogoutMutationResult = Apollo.MutationResult<_LogoutMutation>;
-export type _LogoutMutationOptions = Apollo.BaseMutationOptions<_LogoutMutation, _LogoutMutationVariables>;
+export type GraphQlLogoutMutationHookResult = ReturnType<typeof useGraphQlLogoutMutation>;
+export type GraphQlLogoutMutationResult = Apollo.MutationResult<GraphQlLogoutMutation>;
+export type GraphQlLogoutMutationOptions = Apollo.BaseMutationOptions<GraphQlLogoutMutation, GraphQlLogoutMutationVariables>;
 export const ResendVerificationEmailDocument = gql`
     mutation ResendVerificationEmail($email: String!) {
   resendVerificationEmail(input: {email: $email}) {
@@ -2623,8 +2623,8 @@ export function useMarkActivityAsReadMutation(baseOptions?: Apollo.MutationHookO
 export type MarkActivityAsReadMutationHookResult = ReturnType<typeof useMarkActivityAsReadMutation>;
 export type MarkActivityAsReadMutationResult = Apollo.MutationResult<MarkActivityAsReadMutation>;
 export type MarkActivityAsReadMutationOptions = Apollo.BaseMutationOptions<MarkActivityAsReadMutation, MarkActivityAsReadMutationVariables>;
-export const _MarkAllActivitiesAsReadDocument = gql`
-    mutation _MarkAllActivitiesAsRead {
+export const GraphQlMarkAllActivitiesAsReadDocument = gql`
+    mutation GraphQLMarkAllActivitiesAsRead {
   markAllActivitiesAsRead {
     errors {
       field
@@ -2659,30 +2659,30 @@ export const _MarkAllActivitiesAsReadDocument = gql`
   }
 }
     `;
-export type _MarkAllActivitiesAsReadMutationFn = Apollo.MutationFunction<_MarkAllActivitiesAsReadMutation, _MarkAllActivitiesAsReadMutationVariables>;
+export type GraphQlMarkAllActivitiesAsReadMutationFn = Apollo.MutationFunction<GraphQlMarkAllActivitiesAsReadMutation, GraphQlMarkAllActivitiesAsReadMutationVariables>;
 
 /**
- * __use_MarkAllActivitiesAsReadMutation__
+ * __useGraphQlMarkAllActivitiesAsReadMutation__
  *
- * To run a mutation, you first call `use_MarkAllActivitiesAsReadMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `use_MarkAllActivitiesAsReadMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useGraphQlMarkAllActivitiesAsReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGraphQlMarkAllActivitiesAsReadMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [markAllActivitiesAsReadMutation, { data, loading, error }] = use_MarkAllActivitiesAsReadMutation({
+ * const [graphQlMarkAllActivitiesAsReadMutation, { data, loading, error }] = useGraphQlMarkAllActivitiesAsReadMutation({
  *   variables: {
  *   },
  * });
  */
-export function use_MarkAllActivitiesAsReadMutation(baseOptions?: Apollo.MutationHookOptions<_MarkAllActivitiesAsReadMutation, _MarkAllActivitiesAsReadMutationVariables>) {
-        return Apollo.useMutation<_MarkAllActivitiesAsReadMutation, _MarkAllActivitiesAsReadMutationVariables>(_MarkAllActivitiesAsReadDocument, baseOptions);
+export function useGraphQlMarkAllActivitiesAsReadMutation(baseOptions?: Apollo.MutationHookOptions<GraphQlMarkAllActivitiesAsReadMutation, GraphQlMarkAllActivitiesAsReadMutationVariables>) {
+        return Apollo.useMutation<GraphQlMarkAllActivitiesAsReadMutation, GraphQlMarkAllActivitiesAsReadMutationVariables>(GraphQlMarkAllActivitiesAsReadDocument, baseOptions);
       }
-export type _MarkAllActivitiesAsReadMutationHookResult = ReturnType<typeof use_MarkAllActivitiesAsReadMutation>;
-export type _MarkAllActivitiesAsReadMutationResult = Apollo.MutationResult<_MarkAllActivitiesAsReadMutation>;
-export type _MarkAllActivitiesAsReadMutationOptions = Apollo.BaseMutationOptions<_MarkAllActivitiesAsReadMutation, _MarkAllActivitiesAsReadMutationVariables>;
+export type GraphQlMarkAllActivitiesAsReadMutationHookResult = ReturnType<typeof useGraphQlMarkAllActivitiesAsReadMutation>;
+export type GraphQlMarkAllActivitiesAsReadMutationResult = Apollo.MutationResult<GraphQlMarkAllActivitiesAsReadMutation>;
+export type GraphQlMarkAllActivitiesAsReadMutationOptions = Apollo.BaseMutationOptions<GraphQlMarkAllActivitiesAsReadMutation, GraphQlMarkAllActivitiesAsReadMutationVariables>;
 export const UserMeDocument = gql`
     query UserMe {
   userMe {

@@ -4,6 +4,8 @@ import { Document } from 'react-pdf';
 import SwipeableViews from 'react-swipeable-views';
 import { PDFViewerContextType } from 'types';
 
+// Ignore: Initialize context with empty object rather than populating it with placeholder values.
+// @ts-ignore
 const PDFViewerContext = createContext<PDFViewerContextType>({});
 export const usePDFViewerContext = (): PDFViewerContextType => useContext(PDFViewerContext);
 

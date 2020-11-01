@@ -35,23 +35,30 @@ import { useAuthContext, useDiscussionContext, useNotificationsContext, usePDFVi
 import {
     CommentObjectType,
     DeleteResourceMutation,
-    ResourceDocument,
     ResourceObjectType,
-    ResourceQueryResult,
+    ResourceQueryVariables,
     useDeleteResourceMutation,
+    useResourceQuery,
     UserObjectType,
     VoteObjectType,
 } from 'generated';
-import { useActionsDialog, useInfoDialog, useMediaQueries, useShare, useSwipeableTabs, useVotes } from 'hooks';
-import { initApolloClient, useTranslation, withUserMe } from 'lib';
+import {
+    useActionsDialog,
+    useInfoDialog,
+    useLanguageHeaderContext,
+    useMediaQueries,
+    useShare,
+    useSwipeableTabs,
+    useVotes,
+} from 'hooks';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
-import { GetStaticPaths, NextPage } from 'next';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { GetStaticI18nProps } from 'types';
 import { mediaURL, redirect, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -80,13 +87,16 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     },
 }));
 
-const ResourceDetailPage: NextPage<ResourceQueryResult> = ({ data, error }) => {
+const ResourceDetailPage: NextPage = () => {
     const classes = useStyles();
     const { t } = useTranslation();
-    const { isFallback } = useRouter();
+    const { query } = useRouter();
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
+    const variables: ResourceQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useResourceQuery({ variables, context });
     const { userMe, verified } = useAuthContext();
     const resource: ResourceObjectType = R.propOr(null, 'resource', data);
     const resourceTitle: string = R.propOr('', 'title', resource);
@@ -145,8 +155,7 @@ const ResourceDetailPage: NextPage<ResourceQueryResult> = ({ data, error }) => {
     }, [tabValue]);
 
     const staticBackUrl = {
-        href: urls.course,
-        as: urls.courseAs(courseId),
+        href: urls.course(courseId),
     };
 
     const deleteResourceError = (): void => {
@@ -159,7 +168,7 @@ const ResourceDetailPage: NextPage<ResourceQueryResult> = ({ data, error }) => {
                 deleteResourceError();
             } else if (deleteResource.message) {
                 toggleNotification(deleteResource.message);
-                await redirect(urls.courseAs(courseId));
+                await redirect(urls.course(courseId));
             } else {
                 deleteResourceError();
             }
@@ -171,6 +180,7 @@ const ResourceDetailPage: NextPage<ResourceQueryResult> = ({ data, error }) => {
     const [deleteResource] = useDeleteResourceMutation({
         onCompleted: deleteResourceCompleted,
         onError: deleteResourceError,
+        context,
     });
 
     const handleDeleteResource = async (e: SyntheticEvent): Promise<void> => {
@@ -235,7 +245,7 @@ const ResourceDetailPage: NextPage<ResourceQueryResult> = ({ data, error }) => {
     const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
 
     const renderSchoolLink = !!schoolId && (
-        <TextLink href={urls.school} as={schoolId} color="primary">
+        <TextLink href={urls.school(schoolId)} as={schoolId} color="primary">
             {schoolName}
         </TextLink>
     );
@@ -428,7 +438,7 @@ const ResourceDetailPage: NextPage<ResourceQueryResult> = ({ data, error }) => {
         },
     };
 
-    if (isFallback) {
+    if (loading) {
         return <LoadingLayout />;
     }
 
@@ -459,26 +469,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticI18nProps = async ({ params, lang }) => {
-    const apolloClient = initApolloClient();
-    const id = R.propOr(undefined, 'id', params);
-
-    const result = await apolloClient.query({
-        query: ResourceDocument,
-        variables: { id },
-        context: {
-            headers: {
-                'Accept-Language': lang,
-            },
-        },
-    });
-
-    return {
-        props: {
-            ...result,
-        },
-        revalidate: 1,
-    };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['resource'], locale),
+    },
+});
 
 export default withUserMe(ResourceDetailPage);

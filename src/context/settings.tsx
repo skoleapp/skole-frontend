@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import { SettingsContextType } from 'types';
 
+// Ignore: Initialize context with empty object rather than populating it with placeholder values.
+// @ts-ignore
 const SettingsContext = createContext<SettingsContextType>({});
 export const useSettingsContext = (): SettingsContextType => useContext(SettingsContext);
 

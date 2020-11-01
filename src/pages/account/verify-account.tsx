@@ -8,7 +8,7 @@ import {
     useVerifyAccountMutation,
     VerifyAccountMutation,
 } from 'generated/graphql';
-import { useForm } from 'hooks';
+import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -41,6 +41,7 @@ const VerifyAccountPage: NextPage = () => {
     const [verified, setVerified] = useState(initialVerified);
     const { toggleNotification } = useNotificationsContext();
     const header = !emailSubmitted ? t('verify-account:header') : t('verify-account:emailSubmittedHeader');
+    const context = useLanguageHeaderContext();
 
     const onEmailFormCompleted = ({ resendVerificationEmail }: ResendVerificationEmailMutation): void => {
         if (!!resendVerificationEmail) {
@@ -77,11 +78,13 @@ const VerifyAccountPage: NextPage = () => {
     const [resendVerificationEmail] = useResendVerificationEmailMutation({
         onCompleted: onEmailFormCompleted,
         onError: onEmailFormError,
+        context,
     });
 
     const [verifyAccount] = useVerifyAccountMutation({
         onCompleted: onConfirmationFormCompleted,
         onError: onConfirmationFormError,
+        context,
     });
 
     const handleSubmitEmail = async (): Promise<void> => {

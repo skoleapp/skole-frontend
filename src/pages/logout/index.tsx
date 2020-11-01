@@ -3,9 +3,10 @@ import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, ErrorLayout, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { useNotificationsContext } from 'context';
-import { BackendLogoutMutation, useBackendLogoutMutation } from 'generated';
-import { useTranslation, withUserMe } from 'lib';
-import { NextPage } from 'next';
+import { GraphQlLogoutMutation, useGraphQlLogoutMutation } from 'generated';
+import { useLanguageHeaderContext } from 'hooks';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { urls } from 'utils';
@@ -15,16 +16,17 @@ const LogoutPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
+    const context = useLanguageHeaderContext();
     const onError = (): void => toggleNotification(t('notifications:logoutError'));
 
-    const onCompleted = async ({ logout }: BackendLogoutMutation): Promise<void> => {
+    const onCompleted = async ({ logout }: GraphQlLogoutMutation): Promise<void> => {
         if (!!logout && logout.deleted) {
             await apolloClient.clearStore();
             localStorage.setItem('logout', String(Date.now()));
         }
     };
 
-    const [logout, { loading, error }] = useBackendLogoutMutation({ onCompleted, onError });
+    const [logout, { loading, error }] = useGraphQlLogoutMutation({ onCompleted, onError, context });
 
     useEffect(() => {
         logout();
@@ -76,5 +78,11 @@ const LogoutPage: NextPage = () => {
         </FormLayout>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['logout'], locale),
+    },
+});
 
 export default withUserMe(LogoutPage);

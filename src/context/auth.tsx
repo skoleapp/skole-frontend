@@ -5,6 +5,8 @@ import React, { createContext, useState } from 'react';
 import { useContext } from 'react';
 import { AuthContextType } from 'types';
 
+// Ignore: Initialize context with empty object rather than populating it with placeholder values.
+// @ts-ignore
 const AuthContext = createContext<AuthContextType>({});
 
 interface UseAuthContext extends AuthContextType {

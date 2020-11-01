@@ -2,9 +2,9 @@ import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
-import { useForm } from 'hooks';
-import { useTranslation, withUserMe } from 'lib';
-import { NextPage } from 'next';
+import { useForm, useLanguageHeaderContext } from 'hooks';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -27,6 +27,7 @@ const ContactPage: NextPage = () => {
     const { t } = useTranslation();
     const { toggleNotification } = useNotificationsContext();
     const { formRef, onError, resetForm, handleMutationErrors, unexpectedError } = useForm<ContactFormValues>();
+    const context = useLanguageHeaderContext();
 
     const validationSchema = Yup.object().shape({
         subject: Yup.string().required(t('validation:required')),
@@ -52,7 +53,7 @@ const ContactPage: NextPage = () => {
         }
     };
 
-    const [createContactMessage] = useCreateContactMessageMutation({ onCompleted, onError });
+    const [createContactMessage] = useCreateContactMessageMutation({ onCompleted, onError, context });
 
     const handleSubmit = async (values: ContactFormValues): Promise<void> => {
         const { subject, name, email, message } = values;
@@ -95,5 +96,11 @@ const ContactPage: NextPage = () => {
 
     return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['contact'], locale),
+    },
+});
 
 export default withUserMe(ContactPage);

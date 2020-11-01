@@ -12,9 +12,10 @@ import {
     PDFViewerContextProvider,
     SettingsContextProvider,
 } from 'context';
-import { Trans, useApollo } from 'lib';
+import { I18nProvider, Trans, useApollo } from 'lib';
 import { ConfirmOptions, ConfirmProvider } from 'material-ui-confirm';
 import App, { AppContext, AppProps } from 'next/app';
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { BORDER_RADIUS, theme } from 'theme';
 
@@ -27,6 +28,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     const apolloClient = useApollo(pageProps.initialApolloState);
+    const { locale } = useRouter();
     const classes = useStyles();
 
     const defaultConfirmOptions = {
@@ -56,28 +58,30 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     }, []);
 
     return (
-        <ApolloProvider client={apolloClient}>
-            <AuthContextProvider>
-                <LanguageSelectorContextProvider>
-                    <NotificationsContextProvider>
-                        <SettingsContextProvider>
-                            <DiscussionContextProvider>
-                                <PDFViewerContextProvider>
-                                    <ThemeProvider theme={theme}>
-                                        <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
-                                            <CssBaseline />
-                                            <PageTransition>
-                                                <Component {...pageProps} />
-                                            </PageTransition>
-                                        </ConfirmProvider>
-                                    </ThemeProvider>
-                                </PDFViewerContextProvider>
-                            </DiscussionContextProvider>
-                        </SettingsContextProvider>
-                    </NotificationsContextProvider>
-                </LanguageSelectorContextProvider>
-            </AuthContextProvider>
-        </ApolloProvider>
+        <I18nProvider lang={locale} namespaces={pageProps._ns}>
+            <ApolloProvider client={apolloClient}>
+                <AuthContextProvider>
+                    <LanguageSelectorContextProvider>
+                        <NotificationsContextProvider>
+                            <SettingsContextProvider>
+                                <DiscussionContextProvider>
+                                    <PDFViewerContextProvider>
+                                        <ThemeProvider theme={theme}>
+                                            <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
+                                                <CssBaseline />
+                                                <PageTransition>
+                                                    <Component {...pageProps} />
+                                                </PageTransition>
+                                            </ConfirmProvider>
+                                        </ThemeProvider>
+                                    </PDFViewerContextProvider>
+                                </DiscussionContextProvider>
+                            </SettingsContextProvider>
+                        </NotificationsContextProvider>
+                    </LanguageSelectorContextProvider>
+                </AuthContextProvider>
+            </ApolloProvider>
+        </I18nProvider>
     );
 };
 

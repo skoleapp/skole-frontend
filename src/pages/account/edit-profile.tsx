@@ -20,7 +20,7 @@ import {
     UserObjectType,
     useUpdateUserMutation,
 } from 'generated';
-import { useForm } from 'hooks';
+import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -31,6 +31,7 @@ import * as Yup from 'yup';
 
 const EditProfilePage: NextPage = () => {
     const { t } = useTranslation();
+    const context = useLanguageHeaderContext();
     const { userMe, setUserMe, verified } = useAuthContext();
     const { formRef, handleMutationErrors, onError, resetForm, unexpectedError } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
@@ -51,7 +52,7 @@ const EditProfilePage: NextPage = () => {
         }
     };
 
-    const [updateUserMutation] = useUpdateUserMutation({ onCompleted, onError });
+    const [updateUserMutation] = useUpdateUserMutation({ onCompleted, onError, context });
 
     const handleSubmit = async (values: UpdateProfileFormValues): Promise<void> => {
         const { username, email, title, bio, avatar, school, subject } = values;

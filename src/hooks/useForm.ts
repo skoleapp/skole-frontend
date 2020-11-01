@@ -34,16 +34,16 @@ export const useForm = <T>(): UseForm<T> => {
 
     // A general error in the form not related to any specific field.
     const handleMutationErrors = (err: MutationErrors): void => {
-        const formErrors = { general: '' };
+        const formErrors: FormErrors = { general: '' };
 
         if (err.length) {
             (err as MutationFormError[]).map((e: MutationFormError) => {
                 if (e.field === '__all__') {
-                    formErrors.general = t(`errors:${e.messages.join()}`);
+                    formErrors.general = e.messages.join();
                 } else if (e.field) {
-                    (formErrors as FormErrors)[snakeCaseToCamelCase(e.field)] = t(`errors:${e.messages.join()}`);
+                    formErrors[snakeCaseToCamelCase(e.field)] = e.messages.join();
                 } else {
-                    formErrors.general = t(`errors:${e.messages.join()}`);
+                    formErrors.general = e.messages.join();
                 }
             });
         } else {

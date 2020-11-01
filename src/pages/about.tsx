@@ -1,8 +1,8 @@
 import { Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, SettingsLayout } from 'components';
-import { useTranslation, withUserMe } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { urls } from 'utils';
 
@@ -39,5 +39,11 @@ const AboutPage: NextPage = () => {
         </SettingsLayout>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['about'], locale),
+    },
+});
 
 export default withUserMe(AboutPage);

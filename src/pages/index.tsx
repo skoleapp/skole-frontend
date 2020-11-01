@@ -14,8 +14,9 @@ import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@materia
 import clsx from 'clsx';
 import { MainLayout } from 'components';
 import { useLanguageSelector, useSearch, useShare } from 'hooks';
-import { Link, useTranslation, withUserMe } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
+import Link from 'next/link';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
 import { UrlObject } from 'url';
@@ -200,5 +201,11 @@ const IndexPage: NextPage = () => {
         </MainLayout>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['index'], locale),
+    },
+});
 
 export default withUserMe(IndexPage);

@@ -27,7 +27,8 @@ mutation Login($usernameOrEmail: String!, $password: String!) {
     }
 }
 
-mutation _Logout {
+# Need to come up with some other name as `Logout` since the GraphQL code generator creates duplicate identifiers if we use that one.
+mutation GraphQLLogout {
     logout {
         deleted
     }
@@ -295,7 +296,8 @@ mutation MarkActivityAsRead($id: ID, $read: Boolean) {
     }
 }
 
-mutation _MarkAllActivitiesAsRead {
+# Need to come up with some other name as `MarkAllActivitiesAsRead` since the GraphQL code generator creates duplicate identifiers if we use that one.
+mutation GraphQLMarkAllActivitiesAsRead {
     markAllActivitiesAsRead {
         errors {
             field

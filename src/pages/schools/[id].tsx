@@ -22,7 +22,6 @@ import clsx from 'clsx';
 import {
     CourseTableBody,
     ErrorLayout,
-    FrontendPaginatedTable,
     IconButtonLink,
     InfoDialogContent,
     LoadingLayout,
@@ -30,27 +29,29 @@ import {
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
+    PaginatedTable,
     ResponsiveDialog,
     TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import { CourseObjectType, SchoolDocument, SchoolObjectType, SchoolQueryResult, SubjectObjectType } from 'generated';
+import { query } from 'express';
+import { CourseObjectType, SchoolObjectType, SchoolQueryVariables, SubjectObjectType, useSchoolQuery } from 'generated';
 import {
     useActionsDialog,
-    useFrontendPagination,
     useInfoDialog,
+    useLanguageHeaderContext,
     useMediaQueries,
     useSearch,
     useShare,
     useSwipeableTabs,
 } from 'hooks';
-import { initApolloClient, Link, useTranslation, withUserMe } from 'lib';
-import { GetStaticPaths, NextPage } from 'next';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { GetStaticI18nProps } from 'types';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -74,12 +75,15 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     },
 }));
 
-const SchoolDetailPage: NextPage<SchoolQueryResult> = ({ data, error }) => {
+const SchoolDetailPage: NextPage = () => {
     const classes = useStyles();
     const { verified, verificationRequiredTooltip } = useAuthContext();
-    const { t, isFallback } = useTranslation();
+    const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { searchUrl } = useSearch();
+    const variables: SchoolQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useSchoolQuery({ variables, context });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const schoolId: string = R.propOr('', 'id', school);
     const schoolName: string = R.propOr('', 'name', school);
@@ -87,14 +91,12 @@ const SchoolDetailPage: NextPage<SchoolQueryResult> = ({ data, error }) => {
     const schoolTypeId: string = R.pathOr('', ['schoolType', 'id'], school);
     const country: string = R.pathOr('', ['country', 'name'], school);
     const city: string = R.pathOr('', ['city', 'name'], school);
-    const subjects: SubjectObjectType[] = R.propOr([], 'subjects', school);
-    const courses: CourseObjectType[] = R.propOr([], 'courses', school);
-    const subjectCount = subjects.length;
-    const courseCount = courses.length;
+    const subjects: SubjectObjectType[] = R.pathOr([], ['subjects', 'objects'], school);
+    const courses: CourseObjectType[] = R.pathOr([], ['courses', 'objects'], school);
+    const subjectCount = R.pathOr(0, ['subjects', 'count'], data);
+    const courseCount = R.pathOr(0, ['courses', 'count'], data);
     const countryId: string = R.pathOr('', ['country', 'id'], school);
     const cityId: string = R.pathOr('', ['city', 'id'], school);
-    const { paginatedItems: paginatedSubjects, ...subjectPaginationProps } = useFrontendPagination(subjects);
-    const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare({ text: schoolName });
     const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
@@ -188,7 +190,7 @@ const SchoolDetailPage: NextPage<SchoolQueryResult> = ({ data, error }) => {
 
     const renderSubjectsTableBody = (
         <TableBody>
-            {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
+            {subjects.map((s: SubjectObjectType, i: number) => (
                 <Link href={{ ...searchUrl, query: { ...searchUrl.query, subject: s.id } }} key={i}>
                     <CardActionArea>
                         <TableRow>
@@ -210,30 +212,32 @@ const SchoolDetailPage: NextPage<SchoolQueryResult> = ({ data, error }) => {
         </TableBody>
     );
 
+    const renderCourseTableBody = <CourseTableBody courses={courses} />;
+
     const commonTableHeadProps = {
         titleLeft: t('common:name'),
     };
-
-    const renderSubjects = !!subjects.length ? (
-        <FrontendPaginatedTable
-            tableHeadProps={commonTableHeadProps}
-            renderTableBody={renderSubjectsTableBody}
-            paginationProps={subjectPaginationProps}
-        />
-    ) : (
-        <NotFoundBox text={t('school:noSubjects')} />
-    );
 
     const courseTableHeadProps = {
         ...commonTableHeadProps,
         titleRight: t('common:score'),
     };
 
+    const renderSubjects = !!subjects.length ? (
+        <PaginatedTable
+            tableHeadProps={commonTableHeadProps}
+            renderTableBody={renderSubjectsTableBody}
+            count={subjectCount}
+        />
+    ) : (
+        <NotFoundBox text={t('school:noSubjects')} />
+    );
+
     const renderCourses = !!courses.length ? (
-        <FrontendPaginatedTable
+        <PaginatedTable
             tableHeadProps={courseTableHeadProps}
-            renderTableBody={<CourseTableBody courses={paginatedCourses} />}
-            paginationProps={coursePaginationProps}
+            renderTableBody={renderCourseTableBody}
+            count={courseCount}
         />
     ) : (
         <NotFoundBox text={t('school:noCourses')} />
@@ -327,7 +331,7 @@ const SchoolDetailPage: NextPage<SchoolQueryResult> = ({ data, error }) => {
         },
     };
 
-    if (isFallback) {
+    if (loading) {
         return <LoadingLayout />;
     }
 
@@ -357,26 +361,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticI18nProps = async ({ params, lang }) => {
-    const apolloClient = initApolloClient();
-    const id = R.propOr(undefined, 'id', params);
-
-    const result = await apolloClient.query({
-        query: SchoolDocument,
-        variables: { id },
-        context: {
-            headers: {
-                'Accept-Language': lang,
-            },
-        },
-    });
-
-    return {
-        props: {
-            ...result,
-        },
-        revalidate: 1,
-    };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['school'], locale),
+    },
+});
 
 export default withUserMe(SchoolDetailPage);

@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import { LanguageSelectorContextType } from 'types';
 
+// Ignore: Initialize context with empty object rather than populating it with placeholder values.
+// @ts-ignore
 const LanguageSelectorContext = createContext<LanguageSelectorContextType>({});
 export const useLanguageSelectorContext = (): LanguageSelectorContextType => useContext(LanguageSelectorContext);
 

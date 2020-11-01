@@ -2,6 +2,7 @@ import { IconButton, IconButtonProps, Tooltip, Typography } from '@material-ui/c
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { StarMutation, useStarMutation } from 'generated';
+import { useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { useState } from 'react';
 
@@ -17,6 +18,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
     const [starred, setStarred] = useState(initialStarred);
     const color = starred ? 'primary' : 'default';
     const { toggleNotification } = useNotificationsContext();
+    const context = useLanguageHeaderContext();
 
     const tooltip =
         loginRequiredTooltip ||
@@ -35,7 +37,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
         }
     };
 
-    const [star, { loading: starSubmitting }] = useStarMutation({ onCompleted, onError });
+    const [star, { loading: starSubmitting }] = useStarMutation({ onCompleted, onError, context });
 
     const handleStar = async (): Promise<void> => {
         await star({ variables: { course, resource } });

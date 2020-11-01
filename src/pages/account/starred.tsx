@@ -18,7 +18,7 @@ import {
     UserObjectType,
     useStarredQuery,
 } from 'generated';
-import { useQueryOptions, useSwipeableTabs } from 'hooks';
+import { useLanguageHeaderContext, useSwipeableTabs } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -30,8 +30,9 @@ const StarredPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-    const variables: StarredQueryVariables = R.pickAll(['page', 'pageSize'], query);
-    const { data, loading, error } = useStarredQuery({ ...useQueryOptions, variables });
+    const variables: StarredQueryVariables = R.pick(['page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useStarredQuery({ variables, context });
     const userMe: UserObjectType = R.propOr(null, 'userMe', data);
     const courses: CourseObjectType[] = R.pathOr([], ['courses', 'objects'], data);
     const resources: ResourceObjectType[] = R.pathOr([], ['resources', 'objects'], data);

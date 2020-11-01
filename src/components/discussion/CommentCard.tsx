@@ -24,7 +24,7 @@ import {
 } from '@material-ui/icons';
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation, VoteObjectType } from 'generated';
-import { useActionsDialog, useDayjs, useVotes } from 'hooks';
+import { useActionsDialog, useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
 import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
@@ -90,6 +90,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const shareQuery = `?comment=${commentId}`;
     const creatorUsername: string = R.propOr(t('common:communityUser'), 'username', comment.user);
     const shareText = t('common:commentShareText', { creatorUsername, commentPreview: truncate(comment.text, 20) });
+    const context = useLanguageHeaderContext();
 
     const created = useDayjs(comment.created)
         .startOf('m')
@@ -139,6 +140,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const [deleteComment] = useDeleteCommentMutation({
         onCompleted: deleteCommentCompleted,
         onError: deleteCommentError,
+        context,
     });
 
     const handleAttachmentClick = (e: SyntheticEvent): void => {

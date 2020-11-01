@@ -2,7 +2,7 @@ import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
-import { useForm } from 'hooks';
+import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticProps, NextPage } from 'next';
@@ -26,6 +26,7 @@ export const DeleteAccountPage: NextPage = () => {
 
     const { t } = useTranslation();
     const confirm = useConfirm();
+    const context = useLanguageHeaderContext();
     const { toggleNotification } = useNotificationsContext();
 
     const onCompleted = async ({ deleteUser }: DeleteUserMutation): Promise<void> => {
@@ -45,7 +46,7 @@ export const DeleteAccountPage: NextPage = () => {
         }
     };
 
-    const [deleteUserMutation] = useDeleteUserMutation({ onCompleted, onError });
+    const [deleteUser] = useDeleteUserMutation({ onCompleted, onError, context });
 
     const handleSubmit = async (values: DeleteAccountFormValues): Promise<void> => {
         setSubmitting(false);
@@ -57,7 +58,7 @@ export const DeleteAccountPage: NextPage = () => {
             });
 
             setSubmitting(true);
-            await deleteUserMutation({ variables: { password: values.password } });
+            await deleteUser({ variables: { password: values.password } });
         } catch {
             // User cancelled.
         }

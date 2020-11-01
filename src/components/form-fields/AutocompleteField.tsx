@@ -3,7 +3,7 @@ import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { FieldAttributes, FormikProps, getIn } from 'formik';
 import { DocumentNode } from 'graphql';
-import { useQueryOptions } from 'hooks';
+import { useLanguageHeaderContext } from 'hooks';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
@@ -32,7 +32,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <T extends {}
     multiple,
     ...textFieldProps
 }: Props & TextFieldProps) => {
-    const queryOptions = useQueryOptions();
+    const context = useLanguageHeaderContext();
     const [open, setOpen] = useState(false);
     const handleOpen = (): void => setOpen(true);
     const handleClose = (): void => setOpen(false);
@@ -61,9 +61,9 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <T extends {}
 
         try {
             const { data } = await apolloClient.query({
-                ...queryOptions,
                 query: document,
                 variables,
+                context,
             });
 
             data[dataKey] && setOptions(data[dataKey]);

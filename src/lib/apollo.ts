@@ -12,6 +12,9 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
     const httpLink = createUploadLink({
         uri: uri + 'graphql/',
         credentials: 'include',
+        fetchOptions: {
+            fetchPolicy: 'no-cache', // Disable caching to make sure we always get the correct translations and content.
+        },
     });
 
     return new ApolloClient({
@@ -34,9 +37,14 @@ export const initApolloClient = (
     }
 
     // For SSG and SSR always create a new Apollo Client.
-    if (typeof window === 'undefined') return _apolloClient;
+    if (typeof window === 'undefined') {
+        return _apolloClient;
+    }
+
     // Create the Apollo Client once in the client.
-    if (!apolloClient) apolloClient = _apolloClient;
+    if (!apolloClient) {
+        apolloClient = _apolloClient;
+    }
 
     return _apolloClient;
 };

@@ -1,6 +1,14 @@
 import { ErrorLayout } from 'components';
-import { withDynamicNamespaces } from 'lib';
+import { loadNamespaces } from 'lib';
+import { GetStaticProps } from 'next';
 import React from 'react';
 
 const ErrorPage = (): JSX.Element => <ErrorLayout />;
-export default withDynamicNamespaces(ErrorPage);
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces([], locale),
+    },
+});
+
+export default ErrorPage;

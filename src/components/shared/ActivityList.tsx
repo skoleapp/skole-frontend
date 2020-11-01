@@ -57,6 +57,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
     const initialActivity: ActivityObjectType[] = R.propOr([], 'activity', userMe);
     const [activity, setActivity] = useState(initialActivity);
     const { toggleNotification } = useNotificationsContext();
+    const context = useLanguageHeaderContext();
     const onError = (): void => toggleNotification(t('notifications:markSingleActivityReadError'));
 
     const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
@@ -75,7 +76,7 @@ export const ActivityList: React.FC<Props> = ({ slice }) => {
         }
     };
 
-    const [markSingleActivityRead] = useMarkActivityAsReadMutation({ onCompleted, onError });
+    const [markSingleActivityRead] = useMarkActivityAsReadMutation({ onCompleted, onError, context });
 
     const handleClick = ({ id, ...activity }: ActivityObjectType) => async (): Promise<void> => {
         const { pathname, query } = getHref(activity);

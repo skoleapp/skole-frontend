@@ -8,9 +8,9 @@ import {
     useResetPasswordMutation,
     useSendPasswordResetEmailMutation,
 } from 'generated';
-import { useForm } from 'hooks';
-import { useTranslation, withNoAuth } from 'lib';
-import { NextPage } from 'next';
+import { useForm, useLanguageHeaderContext } from 'hooks';
+import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { redirect, urls } from 'utils';
@@ -59,6 +59,7 @@ const ResetPasswordPage: NextPage = () => {
     const [emailSubmitted, setEmailSubmitted] = useState(false);
     const { toggleNotification } = useNotificationsContext();
     const header = !emailSubmitted ? t('reset-password:header') : t('reset-password:emailSubmittedHeader');
+    const context = useLanguageHeaderContext();
 
     const emailValidationSchema = Yup.object().shape({
         email: Yup.string()
@@ -106,11 +107,13 @@ const ResetPasswordPage: NextPage = () => {
     const [sendPasswordResetEmail] = useSendPasswordResetEmailMutation({
         onCompleted: onEmailFormCompleted,
         onError: onEmailFormError,
+        context,
     });
 
     const [resetPassword] = useResetPasswordMutation({
         onCompleted: onPasswordFormCompleted,
         onError: onPasswordFormError,
+        context,
     });
 
     const handleSubmitEmail = async (values: EmailFormValues): Promise<void> => {
@@ -198,5 +201,11 @@ const ResetPasswordPage: NextPage = () => {
         </SettingsLayout>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['reset-password'], locale),
+    },
+});
 
 export default withNoAuth(ResetPasswordPage);

@@ -44,7 +44,7 @@ import {
     SubjectObjectType,
     useSearchCoursesQuery,
 } from 'generated';
-import { useForm, useMediaQueries, useOpen, useQueryOptions } from 'hooks';
+import { useForm, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
 import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -115,7 +115,7 @@ const SearchPage: NextPage = () => {
     const { t } = useTranslation();
     const { pathname, query } = useRouter();
 
-    const variables: SearchCoursesQueryVariables = R.pickAll(
+    const variables: SearchCoursesQueryVariables = R.pick(
         [
             'courseName',
             'courseCode',
@@ -131,8 +131,8 @@ const SearchPage: NextPage = () => {
         query,
     );
 
-    const queryOptions = useQueryOptions();
-    const { data, loading, error } = useSearchCoursesQuery({ ...queryOptions, variables });
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useSearchCoursesQuery({ variables, context });
     const { open: filtersOpen, handleOpen: handleOpenFilters, handleClose: handleCloseFilters } = useOpen();
     const { formRef, resetForm } = useForm<FilterSearchResultsFormValues>();
     const courses: CourseObjectType[] = R.pathOr([], ['courses', 'objects'], data);

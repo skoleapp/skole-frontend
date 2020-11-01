@@ -12,19 +12,20 @@ import { Field, Form, Formik } from 'formik';
 import {
     AutocompleteSchoolsDocument,
     AutocompleteSubjectsDocument,
+    CreateCourseAutocompleteDataQueryVariables,
     CreateCourseMutation,
     SchoolObjectType,
     SubjectObjectType,
     useCreateCourseAutocompleteDataQuery,
     useCreateCourseMutation,
 } from 'generated';
-import { useForm } from 'hooks';
-import { useTranslation, withAuth } from 'lib';
-import { NextPage } from 'next';
+import { useForm, useLanguageHeaderContext } from 'hooks';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { redirect } from 'utils';
+import { redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
 interface CreateCourseFormValues {
@@ -39,7 +40,9 @@ const CreateCoursePage: NextPage = () => {
     const { toggleNotification } = useNotificationsContext();
     const { t } = useTranslation();
     const { query } = useRouter();
-    const { data, loading, error } = useCreateCourseAutocompleteDataQuery({ variables: query });
+    const variables: CreateCourseAutocompleteDataQueryVariables = R.pick(['school'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useCreateCourseAutocompleteDataQuery({ variables, context });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<CreateCourseFormValues>();
 
@@ -59,7 +62,7 @@ const CreateCoursePage: NextPage = () => {
             } else if (!!createCourse.course && !!createCourse.message) {
                 resetForm();
                 toggleNotification(createCourse.message);
-                await redirect(`/courses/${createCourse.course.id}`);
+                await redirect(urls.course(createCourse.course.id));
             } else {
                 unexpectedError();
             }
@@ -68,7 +71,7 @@ const CreateCoursePage: NextPage = () => {
         }
     };
 
-    const [createCourseMutation] = useCreateCourseMutation({ onCompleted, onError });
+    const [createCourse] = useCreateCourseMutation({ onCompleted, onError, context });
 
     const handleSubmit = async (values: CreateCourseFormValues): Promise<void> => {
         const { courseName, courseCode, school, subjects } = values;
@@ -80,7 +83,7 @@ const CreateCoursePage: NextPage = () => {
             subjects: subjects.map(s => s.id),
         };
 
-        await createCourseMutation({ variables });
+        await createCourse({ variables });
     };
 
     const initialValues = {
@@ -143,5 +146,11 @@ const CreateCoursePage: NextPage = () => {
 
     return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['create-course'], locale),
+    },
+});
 
 export default withAuth(CreateCoursePage);

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
-import { useForm, useMediaQueries } from 'hooks';
+import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataURItoFile, useTranslation } from 'lib';
 import React, { useEffect } from 'react';
 import { CommentTarget, CreateCommentFormValues } from 'types';
@@ -44,6 +44,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const { toggleNotification } = useNotificationsContext();
     const { commentModalOpen, toggleCommentModal, commentAttachment, setCommentAttachment } = useDiscussionContext();
     const { screenshot, setScreenshot } = usePDFViewerContext();
+    const context = useLanguageHeaderContext();
 
     // Use screenshot as attachment if area has been marked.
     useEffect(() => {
@@ -85,6 +86,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         } else {
             await createCommentMutation({
                 variables: { ...values, attachment: (values.attachment as unknown) as string },
+                context,
             });
 
             resetForm();

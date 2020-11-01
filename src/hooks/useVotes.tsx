@@ -2,6 +2,7 @@ import { IconButton, Size, Tooltip, Typography } from '@material-ui/core';
 import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
+import { useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { useState } from 'react';
@@ -44,6 +45,7 @@ export const useVotes = ({ initialVote, initialScore, isOwner, variables }: UseV
     const [score, setScore] = useState(initialScore);
     const { toggleNotification } = useNotificationsContext();
     const ownContentTooltip = t('tooltips:voteOwnContent');
+    const context = useLanguageHeaderContext();
 
     const upVoteButtonTooltip =
         loginRequiredTooltip || verificationRequiredTooltip || (isOwner ? ownContentTooltip : t('tooltips:upVote'));
@@ -66,7 +68,7 @@ export const useVotes = ({ initialVote, initialScore, isOwner, variables }: UseV
         }
     };
 
-    const [vote, { loading: voteSubmitting }] = useVoteMutation({ onCompleted, onError });
+    const [vote, { loading: voteSubmitting }] = useVoteMutation({ onCompleted, onError, context });
 
     const handleVote = (status: number) => async (e: SyntheticEvent): Promise<void> => {
         e.stopPropagation(); // Prevent opening comment thread for top-level comments.

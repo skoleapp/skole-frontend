@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import { NotificationsContextType } from 'types';
 
+// Ignore: Initialize context with empty object rather than populating it with placeholder values.
+// @ts-ignore
 const NotificationsContext = createContext<NotificationsContextType>({});
 export const useNotificationsContext = (): NotificationsContextType => useContext(NotificationsContext);
 

@@ -3,6 +3,8 @@ import React, { createContext, useState } from 'react';
 import { useContext } from 'react';
 import { DiscussionContextType } from 'types';
 
+// Ignore: Initialize context with empty object rather than populating it with placeholder values.
+// @ts-ignore
 const DiscussionContext = createContext<DiscussionContextType>({});
 
 interface UseDiscussionContext extends DiscussionContextType {

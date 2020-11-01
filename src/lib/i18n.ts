@@ -1,4 +1,5 @@
 import DynamicNamespaces from 'next-translate/DynamicNamespaces';
+import I18nProvider from 'next-translate/I18nProvider';
 import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -30,4 +31,4 @@ export const loadNamespaces = async (namespaces: string[], lang?: string): Promi
 };
 
 // Re-export only modules that we need with named exports so we can import all translation related modules from one place.
-export { useTranslation, Trans, DynamicNamespaces };
+export { useTranslation, Trans, DynamicNamespaces, I18nProvider };

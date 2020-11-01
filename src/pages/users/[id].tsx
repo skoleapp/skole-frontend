@@ -40,7 +40,7 @@ import {
     UserQueryVariables,
     useUserQuery,
 } from 'generated';
-import { useDayjs, useMediaQueries, useQueryOptions, useSwipeableTabs } from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useMediaQueries, useSwipeableTabs } from 'hooks';
 import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -99,9 +99,9 @@ const UserPage: NextPage = () => {
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
     const { query } = useRouter();
-    const queryOptions = useQueryOptions();
-    const variables: UserQueryVariables = R.pickAll(['id', 'page', 'pageSize'], query);
-    const { data, loading, error } = useUserQuery({ ...queryOptions, variables });
+    const variables: UserQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useUserQuery({ variables, context });
     const user: UserObjectType = R.propOr(null, 'user', data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const rank: string = R.propOr('', 'rank', user);

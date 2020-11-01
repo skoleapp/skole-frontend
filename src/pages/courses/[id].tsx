@@ -50,8 +50,8 @@ import {
 import {
     useActionsDialog,
     useInfoDialog,
+    useLanguageHeaderContext,
     useMediaQueries,
-    useQueryOptions,
     useSearch,
     useShare,
     useSwipeableTabs,
@@ -94,9 +94,9 @@ const CourseDetailPage: NextPage = () => {
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
-    const variables: CourseQueryVariables = R.pickAll(['id', 'page', 'pageSize'], query);
-    const queryOptions = useQueryOptions();
-    const { data, loading, error } = useCourseQuery({ ...queryOptions, variables });
+    const variables: CourseQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useCourseQuery({ variables, context });
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const course: CourseObjectType = R.propOr(null, 'course', data);
@@ -121,6 +121,7 @@ const CourseDetailPage: NextPage = () => {
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: courseName });
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
+    const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
 
     const {
         actionsDialogOpen,
@@ -130,8 +131,6 @@ const CourseDetailPage: NextPage = () => {
         renderReportAction,
         renderActionsButton,
     } = useActionsDialog({ text: courseName });
-
-    const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
 
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
@@ -162,6 +161,7 @@ const CourseDetailPage: NextPage = () => {
     const [deleteCourse] = useDeleteCourseMutation({
         onCompleted: deleteCourseCompleted,
         onError: deleteCourseError,
+        context,
     });
 
     const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {

@@ -2,8 +2,8 @@ import { List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import { ActivityList, NotFoundLayout, ResponsiveDialog, SettingsLayout } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { _MarkAllActivitiesAsReadMutation, use_MarkAllActivitiesAsReadMutation } from 'generated';
-import { useActionsDialog } from 'hooks';
+import { GraphQlMarkAllActivitiesAsReadMutation, useGraphQlMarkAllActivitiesAsReadMutation } from 'generated';
+import { useActionsDialog, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React, { SyntheticEvent } from 'react';
@@ -12,6 +12,7 @@ const ActivityPage: NextPage = () => {
     const { t } = useTranslation();
     const { activities, setActivities } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
+    const context = useLanguageHeaderContext();
     const onError = (): void => toggleNotification(t('notifications:markAllActivitiesAsReadError'));
 
     const {
@@ -21,7 +22,7 @@ const ActivityPage: NextPage = () => {
         handleCloseActionsDialog,
     } = useActionsDialog({});
 
-    const onCompleted = ({ markAllActivitiesAsRead }: _MarkAllActivitiesAsReadMutation): void => {
+    const onCompleted = ({ markAllActivitiesAsRead }: GraphQlMarkAllActivitiesAsReadMutation): void => {
         if (!!markAllActivitiesAsRead) {
             if (!!markAllActivitiesAsRead.errors && !!markAllActivitiesAsRead.errors.length) {
                 onError();
@@ -35,9 +36,10 @@ const ActivityPage: NextPage = () => {
         }
     };
 
-    const [markAllActivitiesAsRead] = use_MarkAllActivitiesAsReadMutation({
+    const [markAllActivitiesAsRead] = useGraphQlMarkAllActivitiesAsReadMutation({
         onCompleted,
         onError,
+        context,
     });
 
     const handleClickMarkAllActivitiesAsReadButton = async (e: SyntheticEvent): Promise<void> => {

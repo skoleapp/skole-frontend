@@ -3,7 +3,7 @@ import { FormLayout, FormSubmitSection, PasswordField, TextFormField, TextLink }
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
-import { useForm, useLanguageSelector } from 'hooks';
+import { useForm, useLanguageHeaderContext, useLanguageSelector } from 'hooks';
 import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -34,6 +34,7 @@ const LoginPage: NextPage = () => {
     const { toggleNotification } = useNotificationsContext();
     const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
     const validExistingUser = !!R.propOr(false, 'username', existingUser) && !!R.propOr(false, 'email', existingUser);
+    const context = useLanguageHeaderContext();
     const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<LoginFormValues>();
 
     useEffect(() => {
@@ -74,7 +75,7 @@ const LoginPage: NextPage = () => {
         }
     };
 
-    const [loginMutation] = useLoginMutation({ onCompleted, onError });
+    const [loginMutation] = useLoginMutation({ onCompleted, onError, context });
 
     const handleSubmit = async (values: LoginFormValues): Promise<void> => {
         const { usernameOrEmail, password } = values;

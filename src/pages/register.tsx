@@ -21,27 +21,26 @@ import {
     UserObjectType,
     useUpdateUserMutation,
 } from 'generated';
-import { useForm, useLanguageSelector } from 'hooks';
+import { useForm, useLanguageHeaderContext, useLanguageSelector } from 'hooks';
 import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ spacing }) => ({
     link: {
         textAlign: 'center',
+        marginTop: spacing(2),
     },
-});
+}));
 
 interface RegisterFormValues {
     username: string;
     email: string;
     password: string;
     confirmPassword: string;
-    code: string;
 }
 
 interface UpdateUserFormValues {
@@ -57,12 +56,12 @@ enum RegisterPhases {
 
 const RegisterPage: NextPage = () => {
     const classes = useStyles();
-    const { query } = useRouter();
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
     const [registeredUser, setRegisteredUser] = useState<Pick<UserObjectType, 'username' | 'email'> | null>(null);
     const [phase, setPhase] = useState(RegisterPhases.REGISTER);
     const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
+    const context = useLanguageHeaderContext();
 
     const {
         formRef: registerFormRef,
@@ -101,7 +100,6 @@ const RegisterPage: NextPage = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        code: R.propOr('', 'code', query) as string,
         general: '',
     };
 
@@ -116,7 +114,6 @@ const RegisterPage: NextPage = () => {
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
             .required(t('validation:required')),
-        code: Yup.string().required(t('validation:required')),
     });
 
     const updateUserInitialValues = {
@@ -132,6 +129,7 @@ const RegisterPage: NextPage = () => {
 
     const onRegisterCompleted = async ({ register, login }: RegisterMutation): Promise<void> => {
         if (!!register && !!register.errors && !!register.errors.length) {
+            console.log(register.errors);
             handleRegisterMutationErrors(register.errors);
         } else if (!!login && !!login.errors && !!login.errors.length) {
             handleRegisterMutationErrors(login.errors);
@@ -148,7 +146,11 @@ const RegisterPage: NextPage = () => {
         }
     };
 
-    const [registerMutation] = useRegisterMutation({ onCompleted: onRegisterCompleted, onError: onRegisterError });
+    const [registerMutation] = useRegisterMutation({
+        onCompleted: onRegisterCompleted,
+        onError: onRegisterError,
+        context,
+    });
 
     const handleRegisterSubmit = async (values: RegisterFormValues): Promise<void> => {
         const { username, email, password } = values;
@@ -178,6 +180,7 @@ const RegisterPage: NextPage = () => {
     const [updateUserMutation] = useUpdateUserMutation({
         onCompleted: onUpdateUserCompleted,
         onError: onUpdateUserError,
+        context,
     });
 
     const handleRegisterCompleteSubmit = async ({ school, subject }: UpdateUserFormValues): Promise<void> => {
@@ -234,6 +237,8 @@ const RegisterPage: NextPage = () => {
         <FormSubmitSection submitButtonText={t('common:register')} {...props} />
     );
 
+    const renderLineBreak = <Typography component="br" />;
+
     const renderLoginLink = (
         <FormControl className={classes.link}>
             <TextLink href={urls.login}>{t('common:login')}</TextLink>
@@ -249,6 +254,7 @@ const RegisterPage: NextPage = () => {
             {renderConfirmPasswordField}
             {renderTermsLink}
             {renderRegisterFormSubmitSection(props)}
+            {renderLineBreak}
             {renderLoginLink}
         </Form>
     );

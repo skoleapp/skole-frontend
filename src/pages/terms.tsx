@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
-import { useTranslation, withUserMe } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 
 const TermsPage: NextPage = () => {
@@ -25,5 +25,11 @@ const TermsPage: NextPage = () => {
         </SettingsLayout>
     );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        _ns: await loadNamespaces(['terms'], locale),
+    },
+});
 
 export default withUserMe(TermsPage);

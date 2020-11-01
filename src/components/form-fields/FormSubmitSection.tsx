@@ -30,7 +30,6 @@ export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | '
             variant={variant || 'contained'}
             endIcon={endIcon || <ArrowForwardOutlined />}
             color="primary"
-            fullWidth
         >
             {submitButtonText}
         </Button>
@@ -43,7 +42,7 @@ export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | '
                     {renderTextContent}
                 </Grid>
             </FormControl>
-            <FormControl>{renderSubmitButton}</FormControl>
+            <FormControl fullWidth>{renderSubmitButton}</FormControl>
         </Grid>
     );
 };
