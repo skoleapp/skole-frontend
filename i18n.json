@@ -1,46 +1,5 @@
 {
     "locales": ["en", "fi", "sv"],
     "defaultLocale": "en",
-    "currentPagesDir": "src/pages_",
-    "finalPagesDir": "src/pages",
-    "pages": {
-        "*": [
-            "common",
-            "_error",
-            "404",
-            "languages",
-            "forms",
-            "validation",
-            "notifications",
-            "tooltips",
-            "activity",
-            "offline"
-        ],
-        "/account/activity": [],
-        "/account/change-password": ["change-password"],
-        "/account/delete-account": ["delete-account"],
-        "/account/edit-profile": ["edit-profile"],
-        "/account/reset-password": ["reset-password"],
-        "/account/starred": ["starred"],
-        "/account/verify-account": ["verify-account"],
-        "/courses/[id]": ["course"],
-        "/login/confirm": ["confirm-login"],
-        "/login": ["login"],
-        "/logout/confirm": ["confirm-logout"],
-        "/logout": ["logout"],
-        "/resources/[id]": ["resource"],
-        "/schools/[id]": ["school"],
-        "/users/[id]": ["profile", "profile-strength"],
-        "/about": ["about"],
-        "/contact": ["contact"],
-        "/create-course": ["create-course"],
-        "/faq": ["faq"],
-        "/get-started": ["get-started"],
-        "/": ["index"],
-        "/privacy": ["privacy"],
-        "/register": ["register"],
-        "/search": ["search"],
-        "/terms": ["terms"],
-        "/upload-resource": ["upload-resource"]
-    }
+    "localesPath": "public/locales"
 }
