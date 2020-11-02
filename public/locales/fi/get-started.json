@@ -2,12 +2,8 @@
     "title": "Aloita",
     "description": "Aloita selataksesi lempiopiskelumateriaaliasi, keskutellaksesi yhteisön kanssa ja paljon muuta!",
     "header": "Löydä ja jaa lempiopiskelumateriaaliasi.",
-    "header2": "Tuhansia kursseja ja resursseja, kaikki suomen korkeakoulut.",
-    "resourcesDescription": "Toisten käyttäjien jakama opiskelumateriaali on vapaasti käyttävissä kenelle tahansa ilman rajoituksia.",
-    "coursesDescription": "Skole on täynnä kursseja eli korkeakouluista ympäri Suomen.",
-    "discussionDescription": "Skolessa voit keskustella ja jakaa tietoa muiden käyttäjien kanssa helposti.",
     "appStoreCta": "Lataa sovelluskaupoista! (saatavilla pian)",
-    "subheader": "Kurssit, resurssit, keskustelu. Yhdessä paikassa.",
     "cta": "Aloita!",
+    "or": "TAI",
     "skipLogin": "Jatka kirjautumatta"
 }
