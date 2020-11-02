@@ -1,4 +1,3 @@
-export { ActivityList } from './ActivityList';
 export { ButtonLink } from './ButtonLink';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { DialogHeader } from './DialogHeader';

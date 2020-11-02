@@ -67,6 +67,11 @@ query Starred($page: Int, $pageSize: Int) {
 
 query Activities($page: Int, $pageSize: Int) {
     activities(page: $page, pageSize: $pageSize) {
+        page
+        pages
+        hasNext
+        hasPrev
+        count
         objects {
             id
             description

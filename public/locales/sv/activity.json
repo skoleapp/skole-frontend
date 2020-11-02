@@ -4,5 +4,6 @@
     "header": "Aktivitet",
     "noActivity": "Du har inga aktiviteter.",
     "markAllAsRead": "Markera allt som läst",
-    "notificationSettings": "Anmälningsinställningar (på kommande)"
+    "notificationSettings": "Anmälningsinställningar (på kommande)",
+    "error": "Fel vid inläsning av aktivitet."
 }

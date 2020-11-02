@@ -77,8 +77,8 @@ export const SettingsLayout: React.FC<Props> = ({
     const renderSettingsHeader = <CardHeader title={t('common:settings')} />;
 
     const renderSettingsCard = !isMobileOrTablet && (
-        <Grid item xs={12} lg={3} className={clsx(classes.container, classes.paperContainer)}>
-            <Paper className={classes.container}>
+        <Grid item xs={12} lg={3} className={classes.container}>
+            <Paper className={clsx(classes.container, classes.paperContainer)}>
                 {renderSettingsHeader}
                 {renderSettingsMenuList}
             </Paper>
@@ -103,9 +103,9 @@ export const SettingsLayout: React.FC<Props> = ({
             xs={12}
             lg={9}
             container
-            className={clsx(classes.container, classes.paperContainer, isMobileOrTablet && classes.disablePadding)}
+            className={clsx(classes.container, isMobileOrTablet && classes.disablePadding)}
         >
-            <Paper className={classes.container}>
+            <Paper className={clsx(classes.container, classes.paperContainer)}>
                 {renderHeader}
                 {renderContent}
             </Paper>

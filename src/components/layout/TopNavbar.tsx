@@ -26,14 +26,15 @@ import { useAuthContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React, { MouseEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { TopNavbarProps } from 'types';
 import { mediaURL, urls } from 'utils';
 
-import { ActivityList, ButtonLink, IconButtonLink, Logo } from '..';
+import { ButtonLink, IconButtonLink, Logo } from '..';
+import { ActivityPreview } from '../activity';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -75,7 +76,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     const classes = useStyles();
     const { spacing } = useTheme();
     const { t } = useTranslation();
-    const { locale } = useRouter();
     const { isMobileOrTablet } = useMediaQueries();
     const { userMe, authNetworkError } = useAuthContext();
     const userMeId: string = R.propOr('', 'id', userMe);
@@ -138,12 +138,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                     <Box marginTop={spacing(2)}>
                         <Paper className={classes.paper}>
                             <Box height="20rem" width="20rem" display="flex">
-                                <ActivityList slice={5} />
+                                <ActivityPreview />
                             </Box>
                             <Divider />
                             <ButtonLink
                                 className={classes.seeAllButton}
-                                href={(urls.activity, locale)}
+                                href={urls.activity}
                                 color="primary"
                                 variant="outlined"
                                 fullWidth

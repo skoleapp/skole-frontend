@@ -9,7 +9,7 @@ import { CustomTableFooter } from './CustomTableFooter';
 import { CustomTableHead } from './CustomTableHead';
 
 interface Props {
-    tableHeadProps: CustomTableHeadProps;
+    tableHeadProps?: CustomTableHeadProps;
     count: number;
     extraFilters?: {}; // Additional query parameters to the pagination params.
     renderTableBody: JSX.Element;

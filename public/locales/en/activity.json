@@ -4,5 +4,6 @@
     "header": "Activity",
     "noActivity": "You have no activity.",
     "markAllAsRead": "Mark all as Read",
-    "notificationSettings": "Notification Settings (coming soon)"
+    "notificationSettings": "Notification Settings (coming soon)",
+    "error": "Error loading activity."
 }

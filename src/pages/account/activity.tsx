@@ -1,19 +1,45 @@
-import { List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
+import { List, ListItemIcon, ListItemText, MenuItem, TableBody } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
-import { ActivityList, NotFoundLayout, ResponsiveDialog, SettingsLayout } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
-import { GraphQlMarkAllActivitiesAsReadMutation, useGraphQlMarkAllActivitiesAsReadMutation } from 'generated';
+import {
+    ActivityListItem,
+    ErrorLayout,
+    LoadingLayout,
+    NotFoundBox,
+    OfflineLayout,
+    PaginatedTable,
+    ResponsiveDialog,
+    SettingsLayout,
+} from 'components';
+import { useNotificationsContext } from 'context';
+import {
+    ActivitiesQueryVariables,
+    GraphQlMarkAllActivitiesAsReadMutation,
+    useActivitiesQuery,
+    useGraphQlMarkAllActivitiesAsReadMutation,
+} from 'generated';
 import { useActionsDialog, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import React, { SyntheticEvent } from 'react';
+import { useRouter } from 'next/router';
+import * as R from 'ramda';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 
 const ActivityPage: NextPage = () => {
     const { t } = useTranslation();
-    const { activities, setActivities } = useAuthContext();
     const { toggleNotification } = useNotificationsContext();
+    const { query } = useRouter();
+    const variables: ActivitiesQueryVariables = R.pick(['page', 'pageSize'], query);
     const context = useLanguageHeaderContext();
+    const { data, loading, error } = useActivitiesQuery({ variables, context });
+    const activityCount = R.pathOr(0, ['activities', 'count'], data);
+    const [activities, setActivities] = useState([]);
     const onError = (): void => toggleNotification(t('notifications:markAllActivitiesAsReadError'));
+
+    // Update state whenever we finish fetching.
+    useEffect(() => {
+        const initialActivities = R.pathOr([], ['activities', 'objects'], data);
+        setActivities(initialActivities);
+    }, [data]);
 
     const {
         actionsDialogOpen,
@@ -26,8 +52,9 @@ const ActivityPage: NextPage = () => {
         if (!!markAllActivitiesAsRead) {
             if (!!markAllActivitiesAsRead.errors && !!markAllActivitiesAsRead.errors.length) {
                 onError();
-            } else if (!!markAllActivitiesAsRead.activities) {
-                setActivities(markAllActivitiesAsRead.activities);
+            } else if (!!markAllActivitiesAsRead.activities && !!markAllActivitiesAsRead.activities.objects) {
+                const newActivities = R.pathOr([], ['activities', 'objects'], markAllActivitiesAsRead);
+                setActivities(newActivities);
             } else {
                 onError();
             }
@@ -64,7 +91,19 @@ const ActivityPage: NextPage = () => {
         </List>
     );
 
-    const renderActivityList = <ActivityList />;
+    const renderActivityTableBody = (
+        <TableBody>
+            {activities.map((a, i) => (
+                <ActivityListItem key={i} activity={a} />
+            ))}
+        </TableBody>
+    );
+
+    const renderActivities = !!activities.length ? (
+        <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
+    ) : (
+        <NotFoundBox text={t('activity:noActivity')} />
+    );
 
     const renderActionsDialog = (
         <ResponsiveDialog
@@ -89,16 +128,22 @@ const ActivityPage: NextPage = () => {
         },
     };
 
-    if (!!activities) {
-        return (
-            <SettingsLayout {...layoutProps}>
-                {renderActivityList}
-                {renderActionsDialog}
-            </SettingsLayout>
-        );
-    } else {
-        return <NotFoundLayout />;
+    if (loading) {
+        return <LoadingLayout />;
     }
+
+    if (!!error && !!error.networkError) {
+        return <OfflineLayout />;
+    } else if (!!error) {
+        return <ErrorLayout />;
+    }
+
+    return (
+        <SettingsLayout {...layoutProps}>
+            {renderActivities}
+            {renderActionsDialog}
+        </SettingsLayout>
+    );
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

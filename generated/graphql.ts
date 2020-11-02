@@ -1398,6 +1398,7 @@ export type ActivitiesQuery = (
   { __typename?: 'Query' }
   & { activities?: Maybe<(
     { __typename?: 'PaginatedActivityObjectType' }
+    & Pick<PaginatedActivityObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
     & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'ActivityObjectType' }
       & Pick<ActivityObjectType, 'id' | 'description' | 'read'>
@@ -2807,6 +2808,11 @@ export type StarredQueryResult = Apollo.QueryResult<StarredQuery, StarredQueryVa
 export const ActivitiesDocument = gql`
     query Activities($page: Int, $pageSize: Int) {
   activities(page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
     objects {
       id
       description
