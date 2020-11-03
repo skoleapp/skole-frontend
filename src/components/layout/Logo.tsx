@@ -1,19 +1,21 @@
 import { makeStyles } from '@material-ui/core';
+import Link from 'next/link';
 import React from 'react';
+import { urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles({
     root: {
-        height: '4rem',
-        [breakpoints.up('sm')]: {
-            height: '5rem',
-        },
-        [breakpoints.up('md')]: {
-            height: '6rem',
-        },
+        cursor: 'pointer',
+        height: '1.25rem',
     },
-}));
+});
 
 export const Logo: React.FC = () => {
     const classes = useStyles();
-    return <img className={classes.root} src="/images/icons/skole-icon-text.svg" />;
+
+    return (
+        <Link href={urls.home}>
+            <img className={classes.root} src="/images/icons/skole-icon-text.svg" />
+        </Link>
+    );
 };
