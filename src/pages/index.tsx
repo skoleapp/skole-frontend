@@ -10,9 +10,9 @@ import {
     makeStyles,
     Typography,
 } from '@material-ui/core';
-import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
+import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import clsx from 'clsx';
-import { MainLayout } from 'components';
+import { MainBackground, MainLayout } from 'components';
 import { useLanguageSelector, useSearch, useShare } from 'hooks';
 import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -23,30 +23,35 @@ import { UrlObject } from 'url';
 import { HOME_PAGE_SHORTCUTS } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
-    slogan: {
+    container: {
+        flexGrow: 1,
         position: 'relative',
-        paddingTop: spacing(8),
-        color: palette.common.white,
     },
     searchContainer: {
-        textAlign: 'center',
-        paddingBottom: spacing(16),
         position: 'relative',
+        padding: spacing(4),
+        marginTop: spacing(4),
+        [breakpoints.up('sm')]: {
+            marginTop: spacing(8),
+        },
         [breakpoints.up('md')]: {
-            minHeight: '20rem',
+            marginTop: spacing(16),
+            padding: spacing(8),
         },
     },
-    form: {
-        position: 'relative',
+    header: {
+        fontSize: '1.5rem',
     },
-    searchFieldContainer: {
+    subheader: {
+        fontSize: '1.25rem',
+    },
+    searchForm: {
         marginTop: spacing(4),
-        padding: `0 ${spacing(2)}`,
+        display: 'flex',
     },
     searchField: {
         display: 'flex',
-        width: '100%',
-        maxWidth: '20rem',
+        flexGrow: 1,
         backgroundColor: palette.common.white,
         border: `0.05rem solid ${palette.primary.main}`,
         borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
@@ -56,20 +61,21 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
     },
     shortcutsContainer: {
-        padding: `${spacing(8)} 0`,
-    },
-    inviteContainer: {
-        flexGrow: 1,
         position: 'relative',
-        padding: spacing(8),
+        backgroundColor: '#dbdbdb',
+        padding: `${spacing(4)} ${spacing(2)}`,
+        [breakpoints.up('md')]: {
+            padding: spacing(10),
+        },
     },
     card: {
         width: '100%',
-        minHeight: '12rem',
+        minHeight: '14rem',
         position: 'relative',
+        margin: spacing(2),
         [breakpoints.up('sm')]: {
-            width: '12rem',
-            height: '12rem',
+            width: '14rem',
+            height: '14rem',
         },
     },
     cardActionArea: {
@@ -95,6 +101,21 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         height: '3rem',
         width: '3rem',
     },
+    inviteContainer: {
+        position: 'relative',
+        backgroundColor: palette.common.white,
+        flexGrow: 1,
+    },
+    inviteContent: {
+        padding: spacing(4),
+        textAlign: 'center',
+        [breakpoints.up('md')]: {
+            padding: spacing(12),
+        },
+    },
+    inviteButton: {
+        marginTop: spacing(4),
+    },
 }));
 
 interface Shortcut {
@@ -110,71 +131,77 @@ const IndexPage: NextPage = () => {
     const { renderLanguageButton } = useLanguageSelector();
     const { handleShare } = useShare({});
 
-    const renderMainBackground = <Box className="main-background" />;
+    const colSpan: {} = {
+        xs: 12,
+        md: 10,
+        lg: 8,
+        xl: 6,
+    };
 
-    const renderSlogan = (
-        <Typography className={classes.slogan} variant="h1" gutterBottom>
-            {t('common:slogan')}
-        </Typography>
-    );
+    const renderBackground = <MainBackground />;
 
-    const renderSearchField = (
-        <form className={classes.form} onSubmit={handleSubmit}>
-            <Box className={classes.searchFieldContainer} display="flex" justifyContent="center">
+    const renderSearch = (
+        <Grid className={classes.searchContainer} item container direction="column" {...colSpan}>
+            <Typography className={classes.header} variant="h1" color="secondary">
+                {t('index:header')}
+            </Typography>
+            <Typography className={classes.subheader} variant="subtitle1" color="secondary">
+                {t('index:subheader')}
+            </Typography>
+            <form className={classes.searchForm} onSubmit={handleSubmit}>
                 <Box className={classes.searchField}>
                     <InputBase {...inputProps} />
                 </Box>
                 <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
                     <SearchOutlined />
                 </Button>
-            </Box>
-        </form>
-    );
-
-    const renderSearch = (
-        <Grid container direction="column" justify="center" className={classes.searchContainer}>
-            {renderMainBackground}
-            {renderSlogan}
-            {renderSearchField}
+            </form>
         </Grid>
     );
 
     const renderHomepageShortcuts = HOME_PAGE_SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
-        <Grid item xs={12} sm={4} container justify="center" key={i}>
-            <Link href={href}>
-                <Card className={clsx(classes.card)}>
-                    <CardActionArea className={classes.cardActionArea}>
-                        <CardContent className={classes.cardContent}>
-                            <Avatar className={clsx(classes.avatar)}>
-                                <Icon className={classes.avatarIcon} />
-                            </Avatar>
-                            <Typography variant="h5" color="primary" align="center">
-                                {t(text)}
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
-            </Link>
-        </Grid>
+        <Link href={href} key={i}>
+            <Card className={clsx(classes.card)}>
+                <CardActionArea className={classes.cardActionArea}>
+                    <CardContent className={classes.cardContent}>
+                        <Avatar className={clsx(classes.avatar)}>
+                            <Icon className={classes.avatarIcon} />
+                        </Avatar>
+                        <Typography variant="h5" color="primary" align="center">
+                            {t(text)}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        </Link>
     ));
 
     const renderShortcuts = (
         <Grid container justify="center" className={classes.shortcutsContainer}>
-            <Grid item xs={12} md={8} lg={6} xl={4} container spacing={2}>
+            <Grid item container spacing={4} justify="space-between" {...colSpan}>
                 {renderHomepageShortcuts}
             </Grid>
         </Grid>
     );
 
-    const renderInvite = (
-        <Grid container direction="column" alignItems="center" className={classes.inviteContainer}>
-            <Typography variant="subtitle1" color="primary" gutterBottom>
-                {t('index:inviteHeader')}
-            </Typography>
-            <Typography component="br" />
-            <Button onClick={handleShare} color="primary" variant="contained" endIcon={<ArrowForwardOutlined />}>
-                {t('index:inviteText')}
-            </Button>
+    const renderInfo = (
+        <Grid className={classes.inviteContainer} container justify="center">
+            <Grid
+                className={classes.inviteContent}
+                item
+                container
+                direction="column"
+                alignItems="center"
+                justify="center"
+                {...colSpan}
+            >
+                <Typography className={classes.subheader} variant="subtitle1" color="textSecondary" gutterBottom>
+                    {t('index:inviteHeader')}
+                </Typography>
+                <Button className={classes.inviteButton} onClick={handleShare} color="primary" variant="outlined">
+                    {t('index:inviteFriends')}
+                </Button>
+            </Grid>
         </Grid>
     );
 
@@ -195,9 +222,12 @@ const IndexPage: NextPage = () => {
 
     return (
         <MainLayout {...layoutProps}>
-            {renderSearch}
-            {renderShortcuts}
-            {renderInvite}
+            <Grid container direction="column" alignItems="center" className={classes.container}>
+                {renderBackground}
+                {renderSearch}
+                {renderShortcuts}
+                {renderInfo}
+            </Grid>
         </MainLayout>
     );
 };

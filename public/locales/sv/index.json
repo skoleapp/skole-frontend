@@ -1,9 +1,11 @@
 {
     "title": "Hemsida",
-    "description": "Kurser, resurser, diskussion. Allt på ett ställe.",
-    "resources": "Resurser",
-    "upload": "Upload",
-    "addCourse": "Lägg till en kurs",
-    "inviteHeader": "Bjud in dina vänner att använda Skole!",
-    "inviteText": "Bjud in nu!"
+    "description": "Hitta, dela och diskutera de bästa studiematerialen.",
+    "header": "Hitta, dela och diskutera de bästa studiematerialen.",
+    "subheader": "Försök att söka efter en kurs!",
+    "browseCourses": "Bläddra kurser",
+    "uploadMaterial": "Upload material",
+    "addCourses": "Lägg till kurser",
+    "inviteHeader": "Stjärnmärka dina favoritkurser och material för att hålla dig uppdaterad. Bjud in dina vänner att gå med dig!",
+    "inviteFriends": "Bjud in vänner nu"
 }

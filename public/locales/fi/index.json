@@ -1,9 +1,11 @@
 {
     "title": "Koti",
     "description": "Löydä, jaa ja keskustele parhaista oppimateriaaleista.",
-    "resources": "Resurssit",
-    "upload": "Lataa",
-    "addCourse": "Lisää kurssi",
-    "inviteHeader": "Kutsu kaverisi käyttämään Skolea!",
-    "inviteText": "Kutsu heti!"
+    "header": "Löydä, jaa ja keskustele parhaista oppimateriaaleista.",
+    "subheader": "Koita etsiä kurssia!",
+    "browse": "Selaa kursseja",
+    "upload": "Lataa Materiaalia",
+    "addCourses": "Lisää kursseja",
+    "inviteHeader": "Merkitse lempi-kurssisi ja -materiaalit pysyäksesi ajan tasalla. Kutsu kaverisi mukaan!",
+    "inviteText": "Kutsu kavereita nyt"
 }

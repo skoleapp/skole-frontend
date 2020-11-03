@@ -1,6 +1,6 @@
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, MainLayout, TextLink } from 'components';
+import { ButtonLink, MainBackground, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
 import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -14,15 +14,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-    },
-    background: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        background: 'linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(/images/background.jpg)',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
     },
     headerContainer: {
         position: 'relative',
@@ -127,13 +118,13 @@ const GetStartedPage: NextPage = () => {
         },
     };
 
-    const renderBackground = <Box className={classes.background} />;
+    const renderBackground = <MainBackground />;
 
     const renderHeaders = (
         <Box className={classes.headerContainer}>
             <img className={classes.logo} src="/images/icons/skole-icon-text.svg" />
             <Typography className={classes.slogan} variant="h1" color="secondary" gutterBottom>
-                {t('common:slogan')}
+                {t('get-started:slogan')}
             </Typography>
         </Box>
     );
