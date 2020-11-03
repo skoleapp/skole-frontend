@@ -81,6 +81,10 @@ export const HeadComponent: React.FC<SEOProps> = ({ title: customTitle, descript
                 media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
                 rel="apple-touch-startup-image"
             />
+            <link
+                rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+            />
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
             <script dangerouslySetInnerHTML={GAScript} />
         </Head>
