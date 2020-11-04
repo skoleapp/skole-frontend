@@ -4,7 +4,7 @@ import React from 'react';
 
 type Props = LinkProps & Omit<MaterialLinkProps, 'href'>;
 
-export const TextLink: React.FC<Props> = ({ href, as, children, ...props }) => (
+export const TextLink: React.FC<Props> = ({ href, children, ...props }) => (
     <Link href={href} passHref>
         <MaterialLink {...props}>{children}</MaterialLink>
     </Link>

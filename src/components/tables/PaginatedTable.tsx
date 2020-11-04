@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';
 import { CustomTableHeadProps } from 'types';
-import { getQueryWithPagination, redirect } from 'utils';
+import { getQueryWithPagination, redirect, RESULTS_PER_PAGE_OPTIONS } from 'utils';
 
 import { CustomTableFooter } from './CustomTableFooter';
 import { CustomTableHead } from './CustomTableHead';
@@ -18,7 +18,7 @@ interface Props {
 export const PaginatedTable: React.FC<Props> = ({ count, tableHeadProps, extraFilters = {}, renderTableBody }) => {
     const { query, pathname } = useRouter();
     const page = Number(R.propOr(1, 'page', query));
-    const rowsPerPage = Number(R.propOr(10, 'pageSize', query));
+    const rowsPerPage = Number(R.propOr(RESULTS_PER_PAGE_OPTIONS[0], 'pageSize', query));
 
     const handleReloadPage = async (values: {}): Promise<void> => {
         const query = getQueryWithPagination({ query: values, extraFilters });
@@ -30,7 +30,7 @@ export const PaginatedTable: React.FC<Props> = ({ count, tableHeadProps, extraFi
     };
 
     const handleChangeRowsPerPage = async (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
-        const pageSize = parseInt(e.target.value, 10);
+        const pageSize = parseInt(e.target.value);
         await handleReloadPage({ ...query, pageSize });
     };
 

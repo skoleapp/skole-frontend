@@ -10,7 +10,7 @@ import {
     makeStyles,
     Typography,
 } from '@material-ui/core';
-import { SearchOutlined, SvgIconComponent } from '@material-ui/icons';
+import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import clsx from 'clsx';
 import { MainBackground, MainLayout } from 'components';
 import { useLanguageSelector, useSearch, useShare } from 'hooks';
@@ -198,7 +198,13 @@ const IndexPage: NextPage = () => {
                 <Typography className={classes.subheader} variant="subtitle1" color="textSecondary" gutterBottom>
                     {t('index:inviteHeader')}
                 </Typography>
-                <Button className={classes.inviteButton} onClick={handleShare} color="primary" variant="outlined">
+                <Button
+                    className={classes.inviteButton}
+                    onClick={handleShare}
+                    color="primary"
+                    variant="outlined"
+                    endIcon={<ArrowForwardOutlined />}
+                >
                     {t('index:inviteFriends')}
                 </Button>
             </Grid>

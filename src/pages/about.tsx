@@ -27,13 +27,7 @@ const AboutPage: NextPage = () => {
             <Typography component="br" />
             <Typography variant="subtitle2">{t('about:feedbackHeader')}</Typography>
             <Typography component="br" />
-            <ButtonLink
-                href={urls.contact}
-                color="primary"
-                variant="contained"
-                fullWidth
-                endIcon={<ArrowForwardOutlined />}
-            >
+            <ButtonLink href={urls.contact} color="primary" variant="contained" endIcon={<ArrowForwardOutlined />}>
                 {t('about:feedbackText')}
             </ButtonLink>
         </SettingsLayout>
