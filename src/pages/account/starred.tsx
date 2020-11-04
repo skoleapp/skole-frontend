@@ -10,12 +10,12 @@ import {
     ResourceTableBody,
     SettingsLayout,
 } from 'components';
+import { useAuthContext } from 'context';
 import {
     CourseObjectType,
     ResourceObjectType,
     ResourceTypeObjectType,
     StarredQueryVariables,
-    UserObjectType,
     useStarredQuery,
 } from 'generated';
 import { useLanguageHeaderContext, useSwipeableTabs } from 'hooks';
@@ -33,11 +33,11 @@ const StarredPage: NextPage = () => {
     const variables: StarredQueryVariables = R.pick(['page', 'pageSize'], query);
     const context = useLanguageHeaderContext();
     const { data, loading, error } = useStarredQuery({ variables, context });
-    const userMe: UserObjectType = R.propOr(null, 'userMe', data);
-    const courses: CourseObjectType[] = R.pathOr([], ['courses', 'objects'], data);
-    const resources: ResourceObjectType[] = R.pathOr([], ['resources', 'objects'], data);
-    const courseCount = R.pathOr(0, ['courses', 'count'], data);
-    const resourceCount = R.pathOr(0, ['resource', 'count'], data);
+    const { userMe } = useAuthContext();
+    const courses: CourseObjectType[] = R.pathOr([], ['starredCourses', 'objects'], data);
+    const resources: ResourceObjectType[] = R.pathOr([], ['starredResources', 'objects'], data);
+    const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
+    const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const commonTableHeadProps = { titleRight: t('common:score') };
 
