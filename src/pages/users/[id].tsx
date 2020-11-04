@@ -68,11 +68,12 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
         },
     },
     avatar: {
-        margin: 0,
+        width: '5rem',
+        height: '5rem',
         marginBottom: spacing(4),
     },
     statsContainer: {
-        marginTop: spacing(4),
+        marginTop: spacing(2),
         marginBottom: spacing(2),
         textAlign: 'center',
     },
@@ -89,12 +90,17 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     badge: {
         margin: spacing(1),
     },
+    actionButton: {
+        [breakpoints.down('md')]: {
+            marginTop: spacing(2),
+        },
+    },
 }));
 
 const UserPage: NextPage = () => {
     const { spacing } = useTheme();
     const classes = useStyles();
-    const { isMobile, isDesktop } = useMediaQueries();
+    const { isMobile, isMobileOrTablet, isDesktop } = useMediaQueries();
     const { t } = useTranslation();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
@@ -175,7 +181,7 @@ const UserPage: NextPage = () => {
         }
     };
 
-    const renderAvatar = <Avatar className={clsx('main-avatar', classes.avatar)} src={mediaURL(avatar)} />;
+    const renderAvatar = <Avatar className={classes.avatar} src={mediaURL(avatar)} />;
     const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
 
     const renderTitle = !!title && (
@@ -184,35 +190,33 @@ const UserPage: NextPage = () => {
         </Typography>
     );
 
-    const renderDesktopUsername = !isMobile && renderUsername;
-    const renderDesktopTitle = !isMobile && renderTitle;
+    const renderDesktopUsername = isDesktop && renderUsername;
+    const renderDesktopTitle = isDesktop && renderTitle;
 
     const renderEditProfileButton = isOwnProfile && (
-        <Box display="flex" marginTop={isMobile ? spacing(2) : 0}>
-            <ButtonLink
-                href={urls.editProfile}
-                color="primary"
-                variant="outlined"
-                endIcon={<EditOutlined />}
-                fullWidth={isMobile}
-            >
-                {t('profile:editProfile')}
-            </ButtonLink>
-        </Box>
+        <ButtonLink
+            className={classes.actionButton}
+            href={urls.editProfile}
+            color="primary"
+            variant="outlined"
+            endIcon={<EditOutlined />}
+            fullWidth={isMobile}
+        >
+            {t('profile:editProfile')}
+        </ButtonLink>
     );
 
     const renderViewStarredButton = isOwnProfile && (
-        <Box marginTop={isMobile ? spacing(2) : 0}>
-            <ButtonLink
-                href={urls.starred}
-                color="primary"
-                variant="outlined"
-                endIcon={<StarBorderOutlined />}
-                fullWidth
-            >
-                {t('profile:viewStarred')}
-            </ButtonLink>
-        </Box>
+        <ButtonLink
+            className={classes.actionButton}
+            href={urls.starred}
+            color="primary"
+            variant="outlined"
+            endIcon={<StarBorderOutlined />}
+            fullWidth
+        >
+            {t('profile:viewStarred')}
+        </ButtonLink>
     );
 
     const renderSettingsButton = isOwnProfile && (
@@ -327,24 +331,26 @@ const UserPage: NextPage = () => {
         </Box>
     );
 
-    const renderActions = isDesktop && (
-        <Grid item container>
+    const renderDesktopActions = isDesktop && (
+        <Grid item xs={12} container alignItems="center">
             {renderEditProfileButton}
             {renderSettingsButton}
         </Grid>
     );
 
+    const statsDirection = isMobileOrTablet ? 'column' : 'row';
+
     const renderStats = (
-        <Grid container xs={12} sm={8} md={4} spacing={2} className={classes.statsContainer}>
-            <Grid item xs={4} container direction={isMobile ? 'column' : 'row'}>
+        <Grid item container xs={12} sm={8} md={4} spacing={2} className={classes.statsContainer}>
+            <Grid item xs={4} container direction={statsDirection}>
                 {renderScoreValue}
                 {renderScoreTitle}
             </Grid>
-            <Grid item xs={4} container direction={isMobile ? 'column' : 'row'}>
+            <Grid item xs={4} container direction={statsDirection}>
                 {renderCourseCountValue}
                 {renderCourseCountTitle}
             </Grid>
-            <Grid item xs={4} container direction={isMobile ? 'column' : 'row'}>
+            <Grid item xs={4} container direction={statsDirection}>
                 {renderResourceCountValue}
                 {renderResourceCountTitle}
             </Grid>
@@ -352,14 +358,14 @@ const UserPage: NextPage = () => {
     );
 
     const renderDesktopInfo = isDesktop && (
-        <Grid item container direction="column">
+        <>
             {renderBio}
             {renderRank}
             {renderBadges}
             {renderVerifyAccountLink}
             {renderProfileStrength}
             {renderJoined}
-        </Grid>
+        </>
     );
 
     const renderResponsiveInfo = (
@@ -370,21 +376,28 @@ const UserPage: NextPage = () => {
                 container
                 direction="column"
                 justify="center"
-                alignItems={isMobile ? 'flex-start' : 'center'}
+                alignItems={isMobileOrTablet ? 'flex-start' : 'center'}
             >
                 {renderAvatar}
                 {renderDesktopUsername}
                 {renderDesktopTitle}
             </Grid>
-            <Grid item xs={8}>
-                {renderActions}
+            <Grid
+                item
+                xs={8}
+                container
+                direction="column"
+                wrap="nowrap"
+                alignItems={isMobileOrTablet ? 'center' : 'flex-start'}
+            >
+                {renderDesktopActions}
                 {renderStats}
                 {renderDesktopInfo}
             </Grid>
         </Grid>
     );
 
-    const renderMobileInfo = isMobile && (
+    const renderMobileInfo = isMobileOrTablet && (
         <Grid container direction="column">
             {renderUsername}
             {renderTitle}
@@ -403,7 +416,7 @@ const UserPage: NextPage = () => {
         </Paper>
     );
 
-    const renderMobileActionsCard = isMobile && isOwnProfile && (
+    const renderMobileActionsCard = isMobileOrTablet && isOwnProfile && (
         <Paper className={clsx(classes.paper, classes.contentCard)}>
             {renderProfileStrength}
             {renderEditProfileButton}
@@ -506,7 +519,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        _ns: await loadNamespaces(['course'], locale),
+        _ns: await loadNamespaces(['profile', 'profile-strength'], locale),
     },
 });
 

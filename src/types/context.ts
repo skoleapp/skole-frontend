@@ -1,4 +1,4 @@
-import { CommentObjectType, PaginatedActivityObjectType, UserObjectType } from 'generated';
+import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
 import SwipeableViews from 'react-swipeable-views';
@@ -6,8 +6,6 @@ import SwipeableViews from 'react-swipeable-views';
 export interface AuthContextType {
     userMe: UserObjectType | null;
     setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
-    activities: PaginatedActivityObjectType | null;
-    setActivities: Dispatch<SetStateAction<PaginatedActivityObjectType | null>>;
     authNetworkError: boolean;
     setAuthNetworkError: Dispatch<SetStateAction<boolean>>;
 }

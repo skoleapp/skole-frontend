@@ -1,4 +1,4 @@
-import { Button, FormControl, FormHelperText, makeStyles, Typography } from '@material-ui/core';
+import { FormControl, FormHelperText, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
     AutocompleteField,
@@ -32,7 +32,7 @@ import * as Yup from 'yup';
 const useStyles = makeStyles(({ spacing }) => ({
     link: {
         textAlign: 'center',
-        marginTop: spacing(2),
+        marginTop: spacing(4),
     },
 }));
 
@@ -190,7 +190,7 @@ const RegisterPage: NextPage = () => {
                 email: R.propOr('', 'email', registeredUser),
                 title: '',
                 bio: '',
-                avatar: "R.propOr('', 'avatar', registeredUser)",
+                avatar: R.propOr('', 'avatar', registeredUser),
                 school: R.propOr('', 'id', school),
                 subject: R.propOr('', 'id', subject),
             },
@@ -237,8 +237,6 @@ const RegisterPage: NextPage = () => {
         <FormSubmitSection submitButtonText={t('common:register')} {...props} />
     );
 
-    const renderLineBreak = <Typography component="br" />;
-
     const renderLoginLink = (
         <FormControl className={classes.link}>
             <TextLink href={urls.login}>{t('common:login')}</TextLink>
@@ -254,7 +252,6 @@ const RegisterPage: NextPage = () => {
             {renderConfirmPasswordField}
             {renderTermsLink}
             {renderRegisterFormSubmitSection(props)}
-            {renderLineBreak}
             {renderLoginLink}
         </Form>
     );
@@ -303,10 +300,10 @@ const RegisterPage: NextPage = () => {
     );
 
     const renderSkipButton = (
-        <FormControl>
-            <Button onClick={handleSkipUpdateProfile} color="primary" fullWidth>
+        <FormControl className={classes.link}>
+            <TextLink href="#" onClick={handleSkipUpdateProfile}>
                 {t('common:skip')}
-            </Button>
+            </TextLink>
         </FormControl>
     );
 

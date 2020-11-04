@@ -1,4 +1,4 @@
-import { Avatar, Box, FormControl, Grid, Link as MuiLink, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, FormControl, Grid, Link as MuiLink, makeStyles, Typography } from '@material-ui/core';
 import { FormLayout, FormSubmitSection, PasswordField, TextFormField, TextLink } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -12,12 +12,19 @@ import React, { useEffect, useState } from 'react';
 import { mediaURL, redirect, urls } from 'utils';
 import * as Yup from 'yup';
 
-const useStyles = makeStyles(({ spacing }) => ({
-    avatarContainer: {
-        padding: spacing(4),
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+    avatar: {
+        width: '5rem',
+        height: '5rem',
+        marginBottom: spacing(4),
+        [breakpoints.up('md')]: {
+            width: '7rem',
+            height: '7rem',
+        },
     },
     link: {
         textAlign: 'center',
+        marginTop: spacing(4),
     },
 }));
 
@@ -93,9 +100,7 @@ const LoginPage: NextPage = () => {
 
     const renderExistingUserGreeting = (
         <Grid container alignItems="center" direction="column">
-            <Box className={classes.avatarContainer}>
-                <Avatar className="main-avatar" src={mediaURL(R.propOr('', 'avatar', existingUser))} />
-            </Box>
+            <Avatar className={classes.avatar} src={mediaURL(R.propOr('', 'avatar', existingUser))} />
             <Typography variant="subtitle1" gutterBottom>
                 {t('login:existingUserGreeting', { username: R.propOr('-', 'username', existingUser) })}
             </Typography>
