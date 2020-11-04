@@ -141,10 +141,10 @@ const SearchPage: NextPage = () => {
     const schoolType: SchoolTypeObjectType = R.propOr(null, 'schoolType', data);
     const country: CountryObjectType = R.propOr(null, 'county', data);
     const city: CityObjectType = R.propOr(null, 'city', data);
-    const count = R.pathOr(0, ['searchCourses', 'count'], data) as number;
-    const courseName = R.propOr('', 'courseName', query) as string;
-    const courseCode = R.propOr('', 'courseCode', query) as string;
-    const ordering = R.propOr('', 'ordering', query) as string;
+    const count: number = R.pathOr(0, ['courses', 'count'], data);
+    const courseName: string = R.propOr('', 'courseName', query);
+    const courseCode: string = R.propOr('', 'courseCode', query);
+    const ordering: string = R.propOr('', 'ordering', query);
     const [searchValue, setSearchValue] = useState(courseName);
     const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
 

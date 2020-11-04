@@ -239,11 +239,6 @@ let theme = createMuiTheme({
                 body: {
                     backgroundColor: COLORS.secondary,
                 },
-                '.main-avatar': {
-                    height: '6rem',
-                    width: '6rem',
-                    margin: spacing(2),
-                },
                 '.avatar-thumbnail': {
                     height: '1.35rem !important',
                     width: '1.35rem !important',
@@ -275,16 +270,6 @@ let theme = createMuiTheme({
                 },
                 '.table-action-area': {
                     display: 'flex',
-                },
-                '.main-background': {
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    background:
-                        'linear-gradient(rgba(255, 42, 0, 0.55), rgba(255, 42, 0, 0.55)), url(/images/background.jpg)',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
                 },
                 '.text-center': {
                     textAlign: 'center',
