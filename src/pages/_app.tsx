@@ -3,7 +3,6 @@ import 'draft-js/dist/Draft.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
-import { PageTransition } from 'components';
 import {
     AuthContextProvider,
     DiscussionContextProvider,
@@ -14,7 +13,7 @@ import {
 } from 'context';
 import { I18nProvider, Trans, useApollo } from 'lib';
 import { ConfirmOptions, ConfirmProvider } from 'material-ui-confirm';
-import App, { AppContext, AppProps } from 'next/app';
+import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { BORDER_RADIUS, theme } from 'theme';
@@ -69,9 +68,7 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
                                         <ThemeProvider theme={theme}>
                                             <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
                                                 <CssBaseline />
-                                                <PageTransition>
-                                                    <Component {...pageProps} />
-                                                </PageTransition>
+                                                <Component {...pageProps} />
                                             </ConfirmProvider>
                                         </ThemeProvider>
                                     </PDFViewerContextProvider>
@@ -84,9 +81,5 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
         </I18nProvider>
     );
 };
-
-SkoleApp.getInitialProps = async (appContext: AppContext): Promise<{}> => ({
-    ...(await App.getInitialProps(appContext)),
-});
 
 export default SkoleApp;
