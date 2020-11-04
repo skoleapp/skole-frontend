@@ -5,7 +5,6 @@ export { IconButtonLink } from './IconButtonLink';
 export { InfoDialogContent } from './InfoDialogContent';
 export { LoadingBox } from './LoadingBox';
 export { NotFoundBox } from './NotFoundBox';
-export { PageTransition } from './PageTransition';
 export { ResponsiveDialog } from './ResponsiveDialog';
 export { SettingsButton } from './SettingsButton';
 export { SkoleDialog } from './SkoleDialog';

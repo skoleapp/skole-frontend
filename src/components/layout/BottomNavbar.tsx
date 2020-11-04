@@ -32,7 +32,7 @@ export const BottomNavbar: React.FC = () => {
             case urls.activity: {
                 return 4;
             }
-            case '/user/[id]': {
+            case '/users/[id]': {
                 if (!!userMe && query.id === userMe.id) {
                     return 5;
                 }
