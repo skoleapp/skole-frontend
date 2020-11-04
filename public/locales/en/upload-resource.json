@@ -10,5 +10,6 @@
     "schoolHelperText": "Can't find your school?",
     "schoolHelperLink": "Contact us and we'll add it!",
     "courseHelperText": "Can't find your course?",
-    "courseHelperLink": "Try adding it!"
+    "courseHelperLink": "Try adding it!",
+    "resourceTitleHelperText": "Give a descriptive name to the resource."
 }

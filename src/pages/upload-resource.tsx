@@ -148,7 +148,12 @@ const UploadResourcePage: NextPage = () => {
         <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema} ref={formRef}>
             {(props): JSX.Element => (
                 <Form>
-                    <Field name="resourceTitle" label={t('forms:resourceTitle')} component={TextFormField} />
+                    <Field
+                        name="resourceTitle"
+                        label={t('forms:resourceTitle')}
+                        component={TextFormField}
+                        helperText={t('upload-resource:resourceTitleHelperText')}
+                    />
                     <Field
                         name="resourceType"
                         label={t('forms:resourceType')}

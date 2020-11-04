@@ -10,5 +10,6 @@
     "schoolHelperText": "Hittar du inte din skola?",
     "schoolHelperLink": "Kontakta oss så lägger vi till det!",
     "courseHelperText": "Hittar du inte din kurs?",
-    "courseHelperLink": "Försök att lägga till det!"
+    "courseHelperLink": "Försök att lägga till det!",
+    "resourceTitleHelperText": "Ge resursen ett beskrivande namn."
 }
