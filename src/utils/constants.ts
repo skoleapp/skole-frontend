@@ -43,7 +43,7 @@ export const HOME_PAGE_SHORTCUTS = [
         justify: 'flex-start' as GridJustification,
     },
     {
-        text: 'index:uploadMaterial',
+        text: 'index:uploadResources',
         icon: CloudUploadOutlined,
         href: urls.uploadResource,
         justify: 'center' as GridJustification,
