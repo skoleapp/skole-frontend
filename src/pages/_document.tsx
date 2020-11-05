@@ -1,5 +1,4 @@
 import { ServerStyleSheets } from '@material-ui/styles';
-// import { documentLang } from 'lib';
 import { DocumentInitialProps, RenderPageResult } from 'next/dist/next-server/lib/utils';
 import NextDocument, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 import React from 'react';
@@ -7,9 +6,7 @@ import React from 'react';
 export default class SkoleDocument extends NextDocument {
     render(): JSX.Element {
         return (
-            <Html
-            // lang={documentLang(this.props)}
-            >
+            <Html>
                 <Head />
                 <body>
                     <Main />
