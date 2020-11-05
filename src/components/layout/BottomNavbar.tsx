@@ -46,7 +46,6 @@ export const BottomNavbar: React.FC = () => {
     const [value, setValue] = useState(getNavbarValue());
     const handleChange = (_e: ChangeEvent<{}>, newValue: number): void => setValue(newValue);
     const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => redirect(url);
-
     const renderProfileLabel = !!userMe ? t('common:profile') : t('common:login');
     const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />;
 
@@ -97,7 +96,13 @@ export const BottomNavbar: React.FC = () => {
     );
 
     const renderProfileAction = (
-        <BottomNavigationAction value={5} label={renderProfileLabel} showLabel icon={renderAvatar} />
+        <BottomNavigationAction
+            value={5}
+            label={renderProfileLabel}
+            showLabel
+            onClick={handleRedirect(urls.user(userMeId))}
+            icon={renderAvatar}
+        />
     );
 
     return (
