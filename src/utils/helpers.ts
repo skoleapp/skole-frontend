@@ -5,7 +5,7 @@ import * as url from 'url';
 import { UrlObject } from 'url';
 
 // A utility that we use to display all media from our backend.
-export const mediaURL = (filePath: string): string => {
+export const mediaUrl = (filePath: string): string => {
     return !filePath ? '' : filePath.includes('//') ? filePath : url.resolve(process.env.API_URL || '', filePath);
 };
 
@@ -26,11 +26,6 @@ export const getQueryWithPagination = ({ query, extraFilters }: QueryWithPaginat
 // This will lose all other query params so only use this when you want to reset all other query params except the pagination ones.
 export const getPaginationQuery = (query: ParsedUrlQueryInput): ParsedUrlQueryInput =>
     R.pickBy((val: string, key: string): boolean => (!!val && key === 'page') || key === 'pageSize', query);
-
-// Utility that we use for all client-side redirects.
-// We must explicitly use Router object provided by i18n client.
-// Using this utility prevents us to mistakenly import the wrong Router object.
-export const redirect = (location: string | UrlObject): Promise<boolean> => Router.push(location);
 
 // A utility that we use to truncate strings to a given length.
 export const truncate = (str: string, num: number): string => {

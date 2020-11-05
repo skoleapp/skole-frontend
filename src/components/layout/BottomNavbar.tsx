@@ -5,16 +5,17 @@ import { useSearch } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { UrlObject } from 'url';
-import { mediaURL, redirect, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 
 export const BottomNavbar: React.FC = () => {
     const { t } = useTranslation();
     const { userMe } = useAuthContext();
     const userMeId: string = R.propOr('', 'id', userMe);
-    const avatarThumb = R.propOr('', 'avatar', userMe) as string;
+    const avatarThumb: string = R.propOr('', 'avatar', userMe);
     const { pathname, query } = useRouter();
     const { searchUrl } = useSearch();
 
@@ -45,9 +46,9 @@ export const BottomNavbar: React.FC = () => {
 
     const [value, setValue] = useState(getNavbarValue());
     const handleChange = (_e: ChangeEvent<{}>, newValue: number): void => setValue(newValue);
-    const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => redirect(url);
+    const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
     const renderProfileLabel = !!userMe ? t('common:profile') : t('common:login');
-    const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />;
+    const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />;
 
     const renderAvatar = !!userMe ? (
         <Link href={urls.user(userMeId)}>{renderAvatarThumbnail}</Link>

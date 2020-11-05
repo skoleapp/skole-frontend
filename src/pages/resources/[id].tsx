@@ -55,11 +55,12 @@ import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { mediaURL, redirect, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
     mobileContainer: {
@@ -108,7 +109,7 @@ const ResourceDetailPage: NextPage = () => {
     const schoolId: string = R.pathOr('', ['school', 'id'], resource);
     const creatorId: string = R.pathOr('', ['user', 'id'], resource);
     const title = `${resourceTitle} - ${resourceDate}`;
-    const file = mediaURL(R.propOr(undefined, 'file', resource));
+    const file = mediaUrl(R.propOr(undefined, 'file', resource));
     const resourceId: string = R.propOr('', 'id', resource);
     const comments: CommentObjectType[] = R.propOr([], 'comments', resource);
     const initialVote: VoteObjectType | null = R.propOr(null, 'vote', resource);
@@ -168,7 +169,7 @@ const ResourceDetailPage: NextPage = () => {
                 deleteResourceError();
             } else if (deleteResource.message) {
                 toggleNotification(deleteResource.message);
-                await redirect(urls.course(courseId));
+                await Router.push(urls.course(courseId));
             } else {
                 deleteResourceError();
             }
@@ -465,7 +466,7 @@ const ResourceDetailPage: NextPage = () => {
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true,
+        fallback: 'blocking',
     };
 };
 

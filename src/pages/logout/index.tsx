@@ -7,7 +7,7 @@ import { GraphQlLogoutMutation, useGraphQlLogoutMutation } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { urls } from 'utils';
 
@@ -23,6 +23,7 @@ const LogoutPage: NextPage = () => {
         if (!!logout && logout.deleted) {
             await apolloClient.clearStore();
             localStorage.setItem('logout', String(Date.now()));
+            !!query.next && Router.push(String(query.next)); // Automatically redirect to the next page if one exists.
         }
     };
 
@@ -62,7 +63,7 @@ const LogoutPage: NextPage = () => {
             </Typography>
             <Typography component="br" />
             <ButtonLink
-                href={{ pathname: urls.login, query }}
+                href={urls.login}
                 color="primary"
                 variant="contained"
                 endIcon={<ArrowForwardOutlined />}
@@ -72,7 +73,7 @@ const LogoutPage: NextPage = () => {
             </ButtonLink>
             <FormControl>
                 <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
-                    {t('logout:backToHome')}
+                    {t('common:backToHome')}
                 </ButtonLink>
             </FormControl>
         </FormLayout>

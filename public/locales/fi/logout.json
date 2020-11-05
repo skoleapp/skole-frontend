@@ -3,6 +3,5 @@
     "description": "Kirjauduttu ulos Skolesta.",
     "header": "Kirjauduttu ulos",
     "loggedOut": "Olet kirjautunut ulos!",
-    "logInAgain": "Kirjaudu uudestaan",
-    "backToHome": "Takaisin kotiin"
+    "logInAgain": "Kirjaudu uudestaan"
 }

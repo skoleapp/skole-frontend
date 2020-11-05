@@ -26,10 +26,11 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';
-import { redirect, urls } from 'utils';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 interface UploadResourceFormValues {
@@ -73,7 +74,7 @@ const UploadResourcePage: NextPage = () => {
             } else if (!!createResource.resource && !!createResource.resource.id && !!createResource.message) {
                 resetForm();
                 toggleNotification(createResource.message);
-                await redirect(`/resources/${createResource.resource.id}`);
+                await Router.push(urls.resource(createResource.resource.id));
             } else {
                 unexpectedError();
             }
@@ -86,15 +87,19 @@ const UploadResourcePage: NextPage = () => {
 
     const handleUpload = async ({
         resourceTitle,
-        resourceType,
-        course,
-        file,
+        resourceType: _resourceType,
+        course: _course,
+        file: _file,
     }: UploadResourceFormValues): Promise<void> => {
+        const resourceType: string = R.propOr('', 'id', _resourceType);
+        const course: string = R.propOr('', 'id', _course);
+        const file = String(_file);
+
         const variables = {
             resourceTitle,
-            resourceType: R.propOr('', 'id', resourceType) as string,
-            course: R.propOr('', 'id', course) as string,
-            file: (file as unknown) as string,
+            resourceType,
+            course,
+            file,
         };
 
         setFieldValue('general', t('upload-resource:fileUploadingText'));

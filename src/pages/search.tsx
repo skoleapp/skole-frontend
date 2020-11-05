@@ -48,11 +48,12 @@ import { useForm, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hoo
 import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
-import { getPaginationQuery, getQueryWithPagination, redirect, urls } from 'utils';
+import { getPaginationQuery, getQueryWithPagination, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     rootContainer: {
@@ -153,7 +154,7 @@ const SearchPage: NextPage = () => {
         const validQuery: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, filteredValues);
         resetForm();
         handleCloseFilters();
-        await redirect({ pathname, query: validQuery });
+        await Router.push({ pathname, query: validQuery });
     };
 
     // Clear the query params and reset form.
@@ -162,7 +163,7 @@ const SearchPage: NextPage = () => {
         resetForm();
         setSearchValue('');
         handleCloseFilters();
-        await redirect({ pathname, query: paginationQuery });
+        await Router.push({ pathname, query: paginationQuery });
     };
 
     // Pre-load query params to the form.
@@ -183,6 +184,12 @@ const SearchPage: NextPage = () => {
     // Query that holds only pagination.
     const paginationQuery = getPaginationQuery(query);
 
+    const schoolName: string = R.propOr(undefined, 'name', school);
+    const subjectName: string = R.propOr(undefined, 'name', subject);
+    const schoolTypeName: string = R.propOr(undefined, 'name', schoolType);
+    const countryName: string = R.propOr(undefined, 'name', country);
+    const cityName: string = R.propOr(undefined, 'name', city);
+
     const filtersArr = [
         {
             name: 'courseName',
@@ -194,23 +201,23 @@ const SearchPage: NextPage = () => {
         },
         {
             name: 'school',
-            value: R.propOr(undefined, 'name', school) as string,
+            value: schoolName,
         },
         {
             name: 'subject',
-            value: R.propOr(undefined, 'name', subject) as string,
+            value: subjectName,
         },
         {
             name: 'schoolType',
-            value: R.propOr(undefined, 'name', schoolType) as string,
+            value: schoolTypeName,
         },
         {
             name: 'country',
-            value: R.propOr(undefined, 'name', country) as string,
+            value: countryName,
         },
         {
             name: 'city',
-            value: R.propOr(undefined, 'name', city) as string,
+            value: cityName,
         },
     ];
 
@@ -223,12 +230,12 @@ const SearchPage: NextPage = () => {
 
     const handleClearSearchInput = async (): Promise<void> => {
         setSearchValue('');
-        await redirect({ pathname, query: { ...paginationQuery } });
+        await Router.push({ pathname, query: { ...paginationQuery } });
     };
 
     const handleSubmitSearchInput = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
-        await redirect({ pathname, query: { ...queryWithPagination, courseName: searchValue } });
+        await Router.push({ pathname, query: { ...queryWithPagination, courseName: searchValue } });
     };
 
     const handlePreSubmit = async <T extends FilterSearchResultsFormValues>(values: T): Promise<void> => {
@@ -256,7 +263,7 @@ const SearchPage: NextPage = () => {
         );
 
         filterName === 'courseName' && (await handleClearSearchInput());
-        await redirect({ pathname, query });
+        await Router.push({ pathname, query });
     };
 
     const renderFilterNames = !!validFilters.length && (

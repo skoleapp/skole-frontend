@@ -23,9 +23,10 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { redirect, urls } from 'utils';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 interface CreateCourseFormValues {
@@ -62,7 +63,7 @@ const CreateCoursePage: NextPage = () => {
             } else if (!!createCourse.course && !!createCourse.message) {
                 resetForm();
                 toggleNotification(createCourse.message);
-                await redirect(urls.course(createCourse.course.id));
+                await Router.push(urls.course(createCourse.course.id));
             } else {
                 unexpectedError();
             }
@@ -74,13 +75,15 @@ const CreateCoursePage: NextPage = () => {
     const [createCourse] = useCreateCourseMutation({ onCompleted, onError, context });
 
     const handleSubmit = async (values: CreateCourseFormValues): Promise<void> => {
-        const { courseName, courseCode, school, subjects } = values;
+        const { courseName, courseCode, school: _school, subjects: _subjects } = values;
+        const school: string = R.propOr('', 'id', _school);
+        const subjects = _subjects.map(s => s.id);
 
         const variables = {
             courseName,
             courseCode,
-            school: R.propOr('', 'id', school) as string,
-            subjects: subjects.map(s => s.id),
+            school,
+            subjects,
         };
 
         await createCourse({ variables });

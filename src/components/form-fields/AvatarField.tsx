@@ -57,7 +57,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ se
             reader.readAsDataURL(avatar);
             reader.onloadend = (): void => {
                 setFieldValue('avatar', avatar);
-                setPreview(reader.result as string);
+                setPreview(String(reader.result));
                 handleCloseDialog();
             };
         }

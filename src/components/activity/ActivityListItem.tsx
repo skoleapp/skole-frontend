@@ -5,9 +5,10 @@ import { useNotificationsContext } from 'context';
 import { ActivityObjectType, MarkActivityAsReadMutation, useMarkActivityAsReadMutation } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import { mediaURL, redirect, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles({
     unread: {
@@ -66,12 +67,12 @@ export const ActivityListItem: React.FC<Props> = ({
         await markSingleActivityRead({ variables: { id, read: true } });
         // The activities should always have a pathname but technically it's possible that the pathname is undefined.
         // In that case we do nothing besides marking the activity as read.
-        !!pathname && (await redirect({ pathname, query }));
+        !!pathname && (await Router.push({ pathname, query }));
     };
 
     const renderAvatar = !!targetUser && (
         <ListItemAvatar>
-            <Avatar src={mediaURL(R.propOr('', 'avatarThumbnail', targetUser))} />
+            <Avatar src={mediaUrl(R.propOr('', 'avatarThumbnail', targetUser))} />
         </ListItemAvatar>
     );
 

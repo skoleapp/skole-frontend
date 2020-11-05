@@ -4,6 +4,7 @@ import { ButtonLink, MainBackground, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
 import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
@@ -26,6 +27,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     },
     logo: {
         height: '4rem',
+        position: 'relative',
         [breakpoints.up('sm')]: {
             height: '5rem',
         },
@@ -71,6 +73,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
         width: '8rem',
         height: '4rem',
         margin: spacing(2),
+        position: 'relative',
         [breakpoints.up('sm')]: {
             width: '10rem',
             height: '4rem',
@@ -98,6 +101,16 @@ const GetStartedPage: NextPage = () => {
     const { query } = useRouter();
     const { renderLanguageButton } = useLanguageSelector();
 
+    const ctaUrl = {
+        pathname: urls.register,
+        query,
+    };
+
+    const skipLoginUrl = {
+        pathname: !!query.next ? String(query.next) : urls.home,
+        query,
+    };
+
     useEffect(() => {
         localStorage.setItem(GET_STARTED_PAGE_VISITED_KEY, new Date().toString());
     }, []);
@@ -122,7 +135,9 @@ const GetStartedPage: NextPage = () => {
 
     const renderHeaders = (
         <Box className={classes.headerContainer}>
-            <img className={classes.logo} src="/images/icons/skole-icon-text.svg" />
+            <Box className={classes.logo}>
+                <Image layout="fill" src="/images/icons/skole-icon-text.svg" />
+            </Box>
             <Typography className={classes.slogan} variant="h1" color="secondary" gutterBottom>
                 {t('get-started:slogan')}
             </Typography>
@@ -136,7 +151,7 @@ const GetStartedPage: NextPage = () => {
             </Typography>
             <ButtonLink
                 className={classes.ctaButton}
-                href={{ pathname: urls.register, query }}
+                href={ctaUrl}
                 color="primary"
                 variant="contained"
                 endIcon={<ArrowForwardOutlined />}
@@ -147,7 +162,7 @@ const GetStartedPage: NextPage = () => {
                 {t('get-started:or')}
             </Typography>
             <Typography className={classes.authLink}>
-                <TextLink color="secondary" href={{ pathname: (query.next as string) || urls.home, query }}>
+                <TextLink color="secondary" href={skipLoginUrl}>
                     {t('get-started:skipLogin')}
                 </TextLink>
             </Typography>
@@ -160,8 +175,12 @@ const GetStartedPage: NextPage = () => {
                 {t('get-started:appStoreCta')}
             </Typography>
             <Grid container justify="center">
-                <img className={classes.badge} src="/images/app-store-badges/apple-app-store-badge.svg" />
-                <img className={classes.badge} src="/images/app-store-badges/google-play-badge.svg" />
+                <Box className={classes.badge}>
+                    <Image layout="fill" src="/images/app-store-badges/apple-app-store-badge.svg" />
+                </Box>
+                <Box className={classes.badge}>
+                    <Image layout="fill" src="/images/app-store-badges/google-play-badge.svg" />
+                </Box>
             </Grid>
         </Box>
     );

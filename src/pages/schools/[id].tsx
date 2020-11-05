@@ -34,7 +34,6 @@ import {
     TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import { query } from 'express';
 import { CourseObjectType, SchoolObjectType, SchoolQueryVariables, SubjectObjectType, useSchoolQuery } from 'generated';
 import {
     useActionsDialog,
@@ -48,6 +47,7 @@ import {
 import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
@@ -81,6 +81,7 @@ const SchoolDetailPage: NextPage = () => {
     const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { searchUrl } = useSearch();
+    const { query } = useRouter();
     const variables: SchoolQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
     const context = useLanguageHeaderContext();
     const { data, loading, error } = useSchoolQuery({ variables, context });
@@ -357,7 +358,7 @@ const SchoolDetailPage: NextPage = () => {
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true,
+        fallback: 'blocking',
     };
 };
 

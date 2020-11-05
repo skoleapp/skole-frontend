@@ -40,11 +40,11 @@ const ConfirmLoginPage: NextPage = () => {
                 endIcon={<ArrowForwardOutlined />}
                 fullWidth
             >
-                {t('confirm:continue')}
+                {t('common:continue')}
             </ButtonLink>
             <FormControl>
                 <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
-                    {t('confirm-login:backToHome')}
+                    {t('common:backToHome')}
                 </ButtonLink>
             </FormControl>
         </FormLayout>

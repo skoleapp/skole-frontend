@@ -72,5 +72,7 @@
     "home": "Home",
     "search": "Search",
     "upload": "Upload",
-    "profile": "Profile"
+    "profile": "Profile",
+    "commentAttachment": "Comment Attachment",
+    "backToHome": "Back to Home"
 }

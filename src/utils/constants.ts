@@ -1,6 +1,6 @@
+import { GridJustification } from '@material-ui/core';
 import {
     AssignmentOutlined,
-    ChatOutlined,
     CloudUploadOutlined,
     ContactSupportOutlined,
     DeleteForeverOutlined,
@@ -40,16 +40,19 @@ export const HOME_PAGE_SHORTCUTS = [
         text: 'index:browseCourses',
         icon: AssignmentOutlined,
         href: urls.search,
+        justify: 'flex-start' as GridJustification,
     },
     {
         text: 'index:uploadMaterial',
         icon: CloudUploadOutlined,
         href: urls.uploadResource,
+        justify: 'center' as GridJustification,
     },
     {
         text: 'index:addCourses',
         icon: SchoolOutlined,
         href: urls.createCourse,
+        justify: 'flex-end' as GridJustification,
     },
 ];
 

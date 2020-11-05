@@ -48,7 +48,7 @@ import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { mediaURL, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     paper: {
@@ -181,7 +181,7 @@ const UserPage: NextPage = () => {
         }
     };
 
-    const renderAvatar = <Avatar className={classes.avatar} src={mediaURL(avatar)} />;
+    const renderAvatar = <Avatar className={classes.avatar} src={mediaUrl(avatar)} />;
     const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
 
     const renderTitle = !!title && (
@@ -513,7 +513,7 @@ const UserPage: NextPage = () => {
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true,
+        fallback: 'blocking',
     };
 };
 

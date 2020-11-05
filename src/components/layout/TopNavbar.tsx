@@ -31,7 +31,7 @@ import * as R from 'ramda';
 import React, { MouseEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { TopNavbarProps } from 'types';
-import { mediaURL, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 
 import { ButtonLink, IconButtonLink, Logo } from '..';
 import { ActivityPreview } from '../activity';
@@ -173,7 +173,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 <Typography component="span">
                     <Link href={urls.user(userMeId)}>
                         <IconButton color="secondary">
-                            <Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />
+                            <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />
                         </IconButton>
                     </Link>
                 </Typography>

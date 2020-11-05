@@ -32,7 +32,7 @@ export const useForm = <T>(): UseForm<T> => {
     const setFieldValue = (fieldName: string, val: FieldValue): void => formRef.current.setFieldValue(fieldName, val);
     const setFieldError = (fieldName: string, val: string): void => formRef.current.setFieldError(fieldName, val);
 
-    // A general error in the form not related to any specific field.
+    // Set form errors either for specific fields or as general errors.
     const handleMutationErrors = (err: MutationErrors): void => {
         const formErrors: FormErrors = { general: '' };
 
@@ -54,7 +54,7 @@ export const useForm = <T>(): UseForm<T> => {
         setFormErrors(formErrors);
     };
 
-    // Apollo error, e.g. a network error.
+    // Set general form error due to network error or any unexpected error.
     const onError = (err: ApolloError): void => {
         const formErrors = { general: '' };
 

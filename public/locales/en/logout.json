@@ -3,6 +3,5 @@
     "description": "Logged out from Skole.",
     "header": "Logged Out",
     "loggedOut": "You have been logged out!",
-    "logInAgain": "Log in again",
-    "backToHome": "Back to Home"
+    "logInAgain": "Log in again"
 }

@@ -6,8 +6,9 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticProps, NextPage } from 'next';
+import Router from 'next/router';
 import React from 'react';
-import { redirect, urls } from 'utils';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -37,7 +38,7 @@ export const DeleteAccountPage: NextPage = () => {
                 resetForm();
                 toggleNotification(deleteUser.message);
                 localStorage.removeItem('user');
-                await redirect(urls.logout);
+                await Router.push(urls.logout);
             } else {
                 unexpectedError();
             }

@@ -72,5 +72,7 @@
     "home": "Koti",
     "search": "Haku",
     "upload": "Lataa",
-    "profile": "Profiili"
+    "profile": "Profiili",
+    "commentAttachment": "Kommentin liite",
+    "backToHome": "Takaisin kotiin"
 }

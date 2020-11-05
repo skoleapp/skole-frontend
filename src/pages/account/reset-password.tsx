@@ -12,8 +12,9 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import React, { useState } from 'react';
-import { redirect, urls } from 'utils';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const emailFormInitialValues = {
@@ -55,7 +56,7 @@ const ResetPasswordPage: NextPage = () => {
 
     const { t } = useTranslation();
     const { query } = useRouter();
-    const token = (query.token as string) || '';
+    const token = !!query.token ? String(query.token) : '';
     const [emailSubmitted, setEmailSubmitted] = useState(false);
     const { toggleNotification } = useNotificationsContext();
     const header = !emailSubmitted ? t('reset-password:header') : t('reset-password:emailSubmittedHeader');
@@ -97,7 +98,7 @@ const ResetPasswordPage: NextPage = () => {
             } else if (!!resetPassword.message) {
                 resetPasswordForm();
                 toggleNotification(resetPassword.message);
-                await redirect(urls.logout);
+                await Router.push(urls.logout);
             } else {
                 passwordFormUnexpectedError();
             }

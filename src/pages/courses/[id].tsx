@@ -60,12 +60,13 @@ import {
 import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import Router from 'next/router';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { redirect, urls } from 'utils';
+import { urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
     mobileContainer: {
@@ -103,7 +104,7 @@ const CourseDetailPage: NextPage = () => {
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
     const courseName: string = R.propOr('', 'name', course);
     const courseCode: string = R.propOr('', 'code', course);
-    const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course) as SubjectObjectType[];
+    const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
     const schoolName: string = R.pathOr('', ['school', 'name'], course);
     const creatorId: string = R.pathOr('', ['user', 'id'], course);
     const courseId: string = R.propOr('', 'id', course);
@@ -111,13 +112,13 @@ const CourseDetailPage: NextPage = () => {
     const initialScore = String(R.propOr(0, 'score', course));
     const resources: ResourceObjectType[] = R.pathOr([], ['resources', 'objects'], data);
     const resourceCount = R.pathOr(0, ['resources', 'count'], data);
-    const comments = R.propOr([], 'comments', course) as CommentObjectType[];
+    const comments: CommentObjectType[] = R.propOr([], 'comments', course);
     const { commentCount } = useDiscussionContext(comments);
     const initialVote: VoteObjectType = R.propOr(null, 'vote', course);
     const starred = !!R.propOr(undefined, 'starred', course);
     const isOwner = !!userMe && userMe.id === creatorId;
-    const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
-    const created = R.propOr(undefined, 'created', course) as string;
+    const courseUser: UserObjectType = R.propOr(undefined, 'user', course);
+    const created: string = R.propOr(undefined, 'created', course);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: courseName });
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
@@ -149,7 +150,7 @@ const CourseDetailPage: NextPage = () => {
                 deleteCourseError();
             } else if (!!deleteCourse.message) {
                 toggleNotification(deleteCourse.message);
-                await redirect(urls.home);
+                await Router.push(urls.home);
             } else {
                 deleteCourseError();
             }
@@ -420,7 +421,7 @@ const CourseDetailPage: NextPage = () => {
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true,
+        fallback: 'blocking',
     };
 };
 

@@ -32,7 +32,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
             if (!!star.errors && !!star.errors.length) {
                 onError();
             } else {
-                setStarred(star.starred as boolean);
+                setStarred(!!star.starred);
             }
         }
     };

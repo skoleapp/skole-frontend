@@ -1,11 +1,12 @@
 import { InputProps } from '@material-ui/core';
 import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
+import Router from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { UrlObject } from 'url';
-import { redirect, urls } from 'utils';
+import { urls } from 'utils';
 
 interface SearchUrl extends UrlObject {
     query: ParsedUrlQueryInput;
@@ -35,7 +36,7 @@ export const useSearch = (): UseSearch => {
     const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
         setValue('');
-        await redirect({ ...searchUrl, query: { ...searchUrl.query, courseName: value } });
+        await Router.push({ ...searchUrl, query: { ...searchUrl.query, courseName: value } });
     };
 
     return { handleSubmit, searchUrl, inputProps: { value, onChange, placeholder, autoComplete, fullWidth } };

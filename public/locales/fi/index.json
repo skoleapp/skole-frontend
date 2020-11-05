@@ -3,9 +3,9 @@
     "description": "Löydä, jaa ja keskustele parhaista oppimateriaaleista.",
     "header": "Löydä, jaa ja keskustele parhaista oppimateriaaleista.",
     "subheader": "Koita etsiä kurssia!",
-    "browse": "Selaa kursseja",
-    "upload": "Lataa Materiaalia",
+    "browseCourses": "Selaa kursseja",
+    "uploadMaterial": "Lataa Materiaalia",
     "addCourses": "Lisää kursseja",
     "inviteHeader": "Merkitse lempi-kurssisi ja -materiaalit pysyäksesi ajan tasalla. Kutsu kaverisi mukaan!",
-    "inviteText": "Kutsu kavereita nyt"
+    "inviteFriends": "Kutsu kavereita nyt"
 }

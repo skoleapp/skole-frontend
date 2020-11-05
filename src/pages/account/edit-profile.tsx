@@ -25,7 +25,7 @@ import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { UpdateProfileFormValues } from 'types';
-import { mediaURL, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 import * as Yup from 'yup';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -42,6 +42,14 @@ const EditProfilePage: NextPage = () => {
     const { userMe, setUserMe, verified } = useAuthContext();
     const { formRef, handleMutationErrors, onError, resetForm, unexpectedError } = useForm<UpdateProfileFormValues>();
     const { toggleNotification } = useNotificationsContext();
+    const id: string = R.propOr('', 'id', userMe);
+    const title: string = R.propOr('', 'title', userMe);
+    const username: string = R.propOr('', 'username', userMe);
+    const email: string = R.propOr('', 'email', userMe);
+    const bio: string = R.propOr('', 'bio', userMe);
+    const avatar: string = R.propOr('', 'avatar', userMe);
+    const school: SchoolObjectType = R.propOr(null, 'school', userMe);
+    const subject: SubjectObjectType = R.propOr(null, 'subject', userMe);
 
     const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
         if (!!updateUser) {
@@ -78,14 +86,14 @@ const EditProfilePage: NextPage = () => {
     };
 
     const initialValues = {
-        id: R.propOr('', 'id', userMe) as string,
-        title: R.propOr('', 'title', userMe) as string,
-        username: R.propOr('', 'username', userMe) as string,
-        email: R.propOr('', 'email', userMe) as string,
-        bio: R.propOr('', 'bio', userMe) as string,
-        avatar: mediaURL(R.propOr('', 'avatar', userMe) as string),
-        school: R.propOr(null, 'school', userMe) as SchoolObjectType,
-        subject: R.propOr(null, 'subject', userMe) as SubjectObjectType,
+        id,
+        title,
+        username,
+        email,
+        bio,
+        avatar: mediaUrl(avatar),
+        school,
+        subject,
         general: '',
     };
 
