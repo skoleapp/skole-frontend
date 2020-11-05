@@ -6,7 +6,6 @@ import {
     CardActionArea,
     CardContent,
     Grid,
-    GridJustification,
     InputBase,
     makeStyles,
     Typography,
@@ -43,7 +42,10 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         },
     },
     header: {
-        fontSize: '1.5rem',
+        fontSize: '2rem',
+        [breakpoints.up('md')]: {
+            fontSize: '2.75rem',
+        },
     },
     subheader: {
         fontSize: '1.25rem',
@@ -82,8 +84,8 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         position: 'relative',
         margin: spacing(2),
         [breakpoints.up('md')]: {
-            width: '14rem',
-            height: '14rem',
+            width: '16rem',
+            height: '16rem',
         },
     },
     cardActionArea: {
@@ -97,6 +99,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    shortcutText: {
+        fontSize: '1.5rem',
     },
     avatar: {
         height: '5rem',
@@ -130,7 +135,6 @@ interface Shortcut {
     text: string;
     icon: SvgIconComponent;
     href: string | UrlObject;
-    justify: GridJustification;
 }
 
 const IndexPage: NextPage = () => {
@@ -139,19 +143,11 @@ const IndexPage: NextPage = () => {
     const { handleSubmit, inputProps } = useSearch();
     const { renderLanguageButton } = useLanguageSelector();
     const { handleShare } = useShare({});
-
-    const colSpan: {} = {
-        xs: 12,
-        md: 10,
-        lg: 7,
-        xl: 5,
-    };
-
     const renderBackground = <MainBackground />;
 
     const renderSearch = (
-        <Grid className={classes.searchContainer} item container direction="column" {...colSpan}>
-            <Typography className={classes.header} variant="h1" color="secondary">
+        <Grid className={classes.searchContainer} item xs={12} container direction="column">
+            <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
                 {t('index:header')}
             </Typography>
             <Typography className={classes.subheader} variant="subtitle1" color="secondary">
@@ -168,30 +164,31 @@ const IndexPage: NextPage = () => {
         </Grid>
     );
 
-    const renderHomepageShortcuts = HOME_PAGE_SHORTCUTS.map(
-        ({ href, text, justify, icon: Icon }: Shortcut, i: number) => (
-            <Grid item xs={12} md={4} container justify={justify} key={i}>
-                <Link href={href}>
-                    <Card className={clsx(classes.card)}>
-                        <CardActionArea className={classes.cardActionArea}>
-                            <CardContent className={classes.cardContent}>
-                                <Avatar className={clsx(classes.avatar)}>
-                                    <Icon className={classes.avatarIcon} />
-                                </Avatar>
-                                <Typography variant="h5" color="primary" align="center">
-                                    {t(text)}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </Link>
-            </Grid>
-        ),
-    );
+    const renderHomepageShortcuts = HOME_PAGE_SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+        <Link href={href} key={i}>
+            <Card className={clsx(classes.card)}>
+                <CardActionArea className={classes.cardActionArea}>
+                    <CardContent className={classes.cardContent}>
+                        <Avatar className={clsx(classes.avatar)}>
+                            <Icon className={classes.avatarIcon} />
+                        </Avatar>
+                        <Typography
+                            className={classes.shortcutText}
+                            variant="subtitle1"
+                            color="textSecondary"
+                            align="center"
+                        >
+                            {t(text)}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        </Link>
+    ));
 
     const renderShortcuts = (
         <Grid container justify="center" alignItems="center" className={classes.shortcutsContainer}>
-            <Grid item container spacing={4} justify="space-between" {...colSpan}>
+            <Grid item container spacing={4} justify="center">
                 {renderHomepageShortcuts}
             </Grid>
         </Grid>
@@ -206,7 +203,6 @@ const IndexPage: NextPage = () => {
                 direction="column"
                 alignItems="center"
                 justify="center"
-                {...colSpan}
             >
                 <Typography className={classes.subheader} variant="subtitle1" color="textSecondary" gutterBottom>
                     {t('index:inviteHeader')}

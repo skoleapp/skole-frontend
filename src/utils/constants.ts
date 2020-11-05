@@ -1,4 +1,3 @@
-import { GridJustification } from '@material-ui/core';
 import {
     AssignmentOutlined,
     CloudUploadOutlined,
@@ -37,22 +36,19 @@ export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
 
 export const HOME_PAGE_SHORTCUTS = [
     {
-        text: 'index:browseCourses',
+        text: 'index:findResources',
         icon: AssignmentOutlined,
         href: urls.search,
-        justify: 'flex-start' as GridJustification,
     },
     {
         text: 'index:uploadResources',
         icon: CloudUploadOutlined,
         href: urls.uploadResource,
-        justify: 'center' as GridJustification,
     },
     {
-        text: 'index:addCourses',
+        text: 'index:createCourses',
         icon: SchoolOutlined,
         href: urls.createCourse,
-        justify: 'flex-end' as GridJustification,
     },
 ];
 
