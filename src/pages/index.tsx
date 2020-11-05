@@ -19,7 +19,7 @@ import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER_RADIUS, COLORS } from 'theme';
 import { UrlObject } from 'url';
 import { HOME_PAGE_SHORTCUTS } from 'utils';
 
@@ -32,12 +32,14 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         position: 'relative',
         padding: spacing(6),
         marginTop: spacing(4),
+        textAlign: 'center',
+        flexGrow: 1,
         [breakpoints.up('sm')]: {
             marginTop: spacing(10),
         },
         [breakpoints.up('md')]: {
             marginTop: spacing(16),
-            padding: spacing(10),
+            padding: spacing(16),
         },
     },
     header: {
@@ -49,6 +51,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     searchForm: {
         marginTop: spacing(4),
         display: 'flex',
+        justifyContent: 'center',
     },
     searchField: {
         display: 'flex',
@@ -57,16 +60,20 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         border: `0.05rem solid ${palette.primary.main}`,
         borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
         padding: spacing(3),
+        [breakpoints.up('md')]: {
+            maxWidth: '20rem',
+        },
     },
     searchButton: {
         borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
     },
     shortcutsContainer: {
         position: 'relative',
-        backgroundColor: '#dbdbdb',
+        backgroundColor: COLORS.backgroundGrey,
         padding: `${spacing(4)} ${spacing(2)}`,
+        flexGrow: 1,
         [breakpoints.up('md')]: {
-            padding: spacing(10),
+            padding: spacing(14),
         },
     },
     card: {
@@ -104,7 +111,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     },
     inviteContainer: {
         position: 'relative',
-        backgroundColor: palette.common.white,
+        backgroundColor: COLORS.backgroundGrey,
         flexGrow: 1,
     },
     inviteContent: {
@@ -183,7 +190,7 @@ const IndexPage: NextPage = () => {
     );
 
     const renderShortcuts = (
-        <Grid container justify="center" className={classes.shortcutsContainer}>
+        <Grid container justify="center" alignItems="center" className={classes.shortcutsContainer}>
             <Grid item container spacing={4} justify="space-between" {...colSpan}>
                 {renderHomepageShortcuts}
             </Grid>

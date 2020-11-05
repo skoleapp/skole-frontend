@@ -7,6 +7,7 @@ import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import { COLORS } from 'theme';
 import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -67,7 +68,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
         position: 'relative',
         textAlign: 'center',
         padding: `${spacing(4)} ${spacing(2)}`,
-        backgroundColor: '#dbdbdb',
+        backgroundColor: COLORS.backgroundGrey,
     },
     badge: {
         width: '8rem',

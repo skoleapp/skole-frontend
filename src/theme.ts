@@ -11,11 +11,12 @@ export const BOTTOM_NAVBAR_HEIGHT = '3rem';
 export const TOP_NAVBAR_HEIGHT_MOBILE = '3rem';
 export const TOP_NAVBAR_HEIGHT_DESKTOP = '4rem';
 
-const COLORS = {
+export const COLORS = {
     primary: '#ad3636',
     secondary: '#faf2de',
     white: '#ffffff',
     black: '#000000',
+    backgroundGrey: '#dbdbdb',
 };
 
 const breakpointOptions = {
