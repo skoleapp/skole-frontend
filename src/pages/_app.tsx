@@ -1,3 +1,4 @@
+import 'nprogress/nprogress.css';
 import 'typeface-roboto';
 import 'draft-js/dist/Draft.css';
 
@@ -14,9 +15,15 @@ import {
 import { I18nProvider, Trans, useApollo } from 'lib';
 import { ConfirmOptions, ConfirmProvider } from 'material-ui-confirm';
 import { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
+import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
 import { BORDER_RADIUS, theme } from 'theme';
+
+NProgress.configure({ showSpinner: false });
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeError', () => NProgress.done());
+Router.events.on('routeChangeComplete', () => NProgress.done());
 
 const useStyles = makeStyles(({ spacing }) => ({
     confirmDialogPaper: {

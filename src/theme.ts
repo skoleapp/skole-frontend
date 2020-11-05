@@ -280,6 +280,16 @@ let theme = createMuiTheme({
                 '.screenshot-border': {
                     border: `0.05rem dashed ${COLORS.black}`,
                 },
+                '#nprogress': {
+                    '& .bar': {
+                        height: '0.25rem',
+                        zIndex: 1101,
+                    },
+                    '& .peg': {
+                        boxShadow: 'none',
+                        transform: 'none',
+                    },
+                },
             },
         },
     },
