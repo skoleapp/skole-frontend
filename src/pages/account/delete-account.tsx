@@ -1,4 +1,5 @@
-import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
+import { FormControl } from '@material-ui/core';
+import { ButtonLink, FormSubmitSection, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
@@ -75,6 +76,11 @@ export const DeleteAccountPage: NextPage = () => {
                 <Form>
                     <Field name="password" label={t('forms:password')} component={TextFormField} type="password" />
                     <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
+                    <FormControl>
+                        <ButtonLink href={urls.editProfile} variant="outlined" color="primary">
+                            {t('common:cancel')}
+                        </ButtonLink>
+                    </FormControl>
                 </Form>
             )}
         </Formik>
