@@ -1,8 +1,6 @@
-import Router from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import * as url from 'url';
-import { UrlObject } from 'url';
 
 // A utility that we use to display all media from our backend.
 export const mediaUrl = (filePath: string): string => {

@@ -64,7 +64,8 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     }, []);
 
     return (
-        <I18nProvider lang={locale} namespaces={pageProps._ns}>
+        // The `locale` can be undefined according to Next.js typings but we assert that it will always be defined since the `I18nProvider` expects a string value.
+        <I18nProvider lang={locale!} namespaces={pageProps._ns}>
             <ApolloProvider client={apolloClient}>
                 <AuthContextProvider>
                     <LanguageSelectorContextProvider>
