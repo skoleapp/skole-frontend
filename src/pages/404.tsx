@@ -1,13 +1,13 @@
 import { NotFoundLayout } from 'components';
-import { includeDefaultNamespaces } from 'lib';
+import { loadNamespaces } from 'lib';
 import { GetStaticProps } from 'next';
 import React from 'react';
 
 const NotFoundPage = (): JSX.Element => <NotFoundLayout />;
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces([]),
+        _ns: await loadNamespaces([], locale),
     },
 });
 

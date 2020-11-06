@@ -2,38 +2,43 @@ import { Box, Tab, Tabs } from '@material-ui/core';
 import {
     CourseTableBody,
     ErrorLayout,
-    FrontendPaginatedTable,
     LoadingLayout,
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
+    PaginatedTable,
     ResourceTableBody,
     SettingsLayout,
 } from 'components';
+import { useAuthContext } from 'context';
 import {
     CourseObjectType,
     ResourceObjectType,
     ResourceTypeObjectType,
-    UserObjectType,
+    StarredQueryVariables,
     useStarredQuery,
 } from 'generated';
-import { useFrontendPagination, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { useLanguageHeaderContext, useSwipeableTabs } from 'hooks';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 
 const StarredPage: NextPage = () => {
     const { t } = useTranslation();
+    const { query } = useRouter();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-    const { data, loading, error } = useStarredQuery();
-    const userMe: UserObjectType = R.propOr(null, 'userMe', data);
-    const starredCourses: CourseObjectType[] = R.propOr([], 'starredCourses', userMe);
-    const starredResources: ResourceObjectType[] = R.propOr([], 'starredResources', userMe);
+    const variables: StarredQueryVariables = R.pick(['page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useStarredQuery({ variables, context });
+    const { userMe } = useAuthContext();
+    const courses: CourseObjectType[] = R.pathOr([], ['starredCourses', 'objects'], data);
+    const resources: ResourceObjectType[] = R.pathOr([], ['starredResources', 'objects'], data);
+    const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
+    const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
-    const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(starredCourses);
-    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(starredResources);
     const commonTableHeadProps = { titleRight: t('common:score') };
 
     const courseTableHeadProps = {
@@ -46,21 +51,24 @@ const StarredPage: NextPage = () => {
         ...commonTableHeadProps,
     };
 
-    const renderStarredCourses = !!starredCourses.length ? (
-        <FrontendPaginatedTable
+    const renderResourceTableBody = <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />;
+    const renderCourseTableBody = <CourseTableBody courses={courses} />;
+
+    const renderStarredCourses = !!courses.length ? (
+        <PaginatedTable
             tableHeadProps={courseTableHeadProps}
-            paginationProps={coursePaginationProps}
-            renderTableBody={<CourseTableBody courses={paginatedCourses} />}
+            renderTableBody={renderCourseTableBody}
+            count={courseCount}
         />
     ) : (
         <NotFoundBox text={t('starred:noCourses')} />
     );
 
-    const renderStarredResources = !!starredResources.length ? (
-        <FrontendPaginatedTable
+    const renderStarredResources = !!resources.length ? (
+        <PaginatedTable
             tableHeadProps={resourceTableHeadProps}
-            paginationProps={resourcePaginationProps}
-            renderTableBody={<ResourceTableBody resourceTypes={resourceTypes} resources={paginatedResources} />}
+            renderTableBody={renderResourceTableBody}
+            count={resourceCount}
         />
     ) : (
         <NotFoundBox text={t('starred:noResources')} />
@@ -68,8 +76,8 @@ const StarredPage: NextPage = () => {
 
     const renderTabs = (
         <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label={t('common:courses')} />
-            <Tab label={t('common:resources')} />
+            <Tab label={`${t('common:courses')} (${courseCount})`} />
+            <Tab label={`${t('common:resources')} (${resourceCount})`} />
         </Tabs>
     );
 
@@ -116,9 +124,9 @@ const StarredPage: NextPage = () => {
     }
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['starred']),
+        _ns: await loadNamespaces(['starred'], locale),
     },
 });
 

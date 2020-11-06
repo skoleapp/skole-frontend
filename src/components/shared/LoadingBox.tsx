@@ -11,7 +11,7 @@ export const LoadingBox: React.FC<Props> = ({ text }) => {
     const { t } = useTranslation();
 
     return (
-        <Grid container direction="column" alignItems="center">
+        <Grid container direction="column" alignItems="center" justify="center">
             <CircularProgress color="primary" disableShrink size={40} />
             <Box marginTop={spacing(2)}>
                 <Typography variant="subtitle1" color="textSecondary">

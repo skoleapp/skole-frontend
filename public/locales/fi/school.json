@@ -1,5 +1,6 @@
 {
     "description": "Näytä {{ schoolName }} Skolessa.",
     "noSubjects": "Tällä koululla ei ole oppiaineita.",
-    "noCourses": "Tällä koululla ei ole kursseja."
+    "noCourses": "Tällä koululla ei ole kursseja.",
+    "addCourse": "Lisää kurssi tälle koululle"
 }

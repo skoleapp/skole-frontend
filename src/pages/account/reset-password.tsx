@@ -8,12 +8,13 @@ import {
     useResetPasswordMutation,
     useSendPasswordResetEmailMutation,
 } from 'generated';
-import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
+import { useForm, useLanguageHeaderContext } from 'hooks';
+import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import React, { useState } from 'react';
-import { redirect, urls } from 'utils';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const emailFormInitialValues = {
@@ -55,10 +56,11 @@ const ResetPasswordPage: NextPage = () => {
 
     const { t } = useTranslation();
     const { query } = useRouter();
-    const token = (query.token as string) || '';
+    const token = !!query.token ? String(query.token) : '';
     const [emailSubmitted, setEmailSubmitted] = useState(false);
     const { toggleNotification } = useNotificationsContext();
     const header = !emailSubmitted ? t('reset-password:header') : t('reset-password:emailSubmittedHeader');
+    const context = useLanguageHeaderContext();
 
     const emailValidationSchema = Yup.object().shape({
         email: Yup.string()
@@ -96,7 +98,7 @@ const ResetPasswordPage: NextPage = () => {
             } else if (!!resetPassword.message) {
                 resetPasswordForm();
                 toggleNotification(resetPassword.message);
-                await redirect(urls.logout);
+                await Router.push(urls.logout);
             } else {
                 passwordFormUnexpectedError();
             }
@@ -106,11 +108,13 @@ const ResetPasswordPage: NextPage = () => {
     const [sendPasswordResetEmail] = useSendPasswordResetEmailMutation({
         onCompleted: onEmailFormCompleted,
         onError: onEmailFormError,
+        context,
     });
 
     const [resetPassword] = useResetPasswordMutation({
         onCompleted: onPasswordFormCompleted,
         onError: onPasswordFormError,
+        context,
     });
 
     const handleSubmitEmail = async (values: EmailFormValues): Promise<void> => {
@@ -199,9 +203,9 @@ const ResetPasswordPage: NextPage = () => {
     );
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['reset-password']),
+        _ns: await loadNamespaces(['reset-password'], locale),
     },
 });
 

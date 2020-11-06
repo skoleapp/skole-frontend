@@ -23,7 +23,6 @@
     "subjects": "Oppiaineet",
     "resources": "Resurssit",
     "resource": "Resurssi",
-    "skoleTeam": "Skole-tiimi",
     "save": "Tallenna",
     "confirm": "Vahvista",
     "submit": "Lähetä",
@@ -60,7 +59,6 @@
     "close": "Sulje",
     "actions": "Toiminnot",
     "verifyAccount": "Vahvista tili",
-    "slogan": "Opiskelijoille.",
     "faq": "FAQ",
     "continue": "Jatka",
     "info": "Tiedot",
@@ -74,5 +72,7 @@
     "home": "Koti",
     "search": "Haku",
     "upload": "Lataa",
-    "profile": "Profiili"
+    "profile": "Profiili",
+    "commentAttachment": "Kommentin liite",
+    "backToHome": "Takaisin kotiin"
 }

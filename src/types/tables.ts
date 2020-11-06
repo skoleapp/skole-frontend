@@ -10,8 +10,3 @@ export interface CustomTableHeadProps {
     titleLeftDesktop?: string;
     titleRight?: string;
 }
-
-export interface CommonPaginatedTableProps {
-    tableHeadProps: CustomTableHeadProps;
-    renderTableBody: JSX.Element;
-}

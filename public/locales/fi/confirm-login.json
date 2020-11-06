@@ -2,6 +2,5 @@
     "title": "Kirjautuminen vaadittu",
     "description": "Sinun pitää kirjautua sisään jatkaaksesi.",
     "header": "Kirjautuminen vaadittu",
-    "confirmLogin": "Sinun pitää kirjautua sisään jatkaaksesi.",
-    "backToHome": "Takaisin kotiin"
+    "confirmLogin": "Sinun pitää kirjautua sisään jatkaaksesi."
 }

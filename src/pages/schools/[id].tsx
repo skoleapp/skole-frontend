@@ -2,8 +2,12 @@ import {
     Box,
     CardActionArea,
     CardHeader,
+    Grid,
     List,
+    ListItemIcon,
+    ListItemText,
     makeStyles,
+    MenuItem,
     Paper,
     Tab,
     TableBody,
@@ -13,11 +17,11 @@ import {
     Tooltip,
     Typography,
 } from '@material-ui/core';
-import { AddCircleOutlineOutlined } from '@material-ui/icons';
+import { AddCircleOutlineOutlined, AssignmentOutlined, SchoolOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import {
     CourseTableBody,
     ErrorLayout,
-    FrontendPaginatedTable,
     IconButtonLink,
     InfoDialogContent,
     LoadingLayout,
@@ -25,30 +29,32 @@ import {
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
+    PaginatedTable,
     ResponsiveDialog,
     TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import { CourseObjectType, SchoolObjectType, SubjectObjectType, useSchoolQuery } from 'generated';
+import { CourseObjectType, SchoolObjectType, SchoolQueryVariables, SubjectObjectType, useSchoolQuery } from 'generated';
 import {
     useActionsDialog,
-    useFrontendPagination,
     useInfoDialog,
+    useLanguageHeaderContext,
     useMediaQueries,
-    useQueryOptions,
     useSearch,
     useShare,
     useSwipeableTabs,
 } from 'hooks';
-import { includeDefaultNamespaces, Link, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     root: {
         flexGrow: 1,
         display: 'flex',
@@ -58,35 +64,45 @@ const useStyles = makeStyles(({ breakpoints }) => ({
             borderRadius: BORDER_RADIUS,
         },
     },
+    icon: {
+        marginRight: spacing(0.5),
+        marginLeft: spacing(1.5),
+        width: '1rem',
+        height: '1rem',
+    },
+    courseIcon: {
+        marginLeft: 0,
+    },
 }));
 
 const SchoolDetailPage: NextPage = () => {
     const classes = useStyles();
-    const queryOptions = useQueryOptions();
-    const { data, loading, error } = useSchoolQuery(queryOptions);
     const { verified, verificationRequiredTooltip } = useAuthContext();
     const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
     const { searchUrl } = useSearch();
+    const { query } = useRouter();
+    const variables: SchoolQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useSchoolQuery({ variables, context });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
-    const schoolId = R.propOr('', 'id', school) as string;
-    const schoolName = R.propOr('', 'name', school) as string;
-    const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school) as string;
-    const schoolTypeId = R.pathOr('', ['schoolType', 'id'], school) as string;
-    const country = R.pathOr('', ['country', 'name'], school) as string;
-    const city = R.pathOr('', ['city', 'name'], school) as string;
-    const subjects = R.propOr([], 'subjects', school) as SubjectObjectType[];
-    const courses = R.propOr([], 'courses', school) as CourseObjectType[];
-    const subjectCount = subjects.length;
-    const courseCount = courses.length;
-    const countryId = R.pathOr('', ['country', 'id'], school);
-    const cityId = R.pathOr('', ['city', 'id'], school);
-    const { paginatedItems: paginatedSubjects, ...subjectPaginationProps } = useFrontendPagination(subjects);
-    const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(courses);
+    const schoolId: string = R.propOr('', 'id', school);
+    const schoolName: string = R.propOr('', 'name', school);
+    const schoolTypeName: string = R.pathOr('', ['schoolType', 'name'], school);
+    const schoolTypeId: string = R.pathOr('', ['schoolType', 'id'], school);
+    const country: string = R.pathOr('', ['country', 'name'], school);
+    const city: string = R.pathOr('', ['city', 'name'], school);
+    const subjects: SubjectObjectType[] = R.pathOr([], ['subjects', 'objects'], school);
+    const courses: CourseObjectType[] = R.pathOr([], ['courses', 'objects'], school);
+    const subjectCount = R.pathOr(0, ['subjects', 'count'], data);
+    const courseCount = R.pathOr(0, ['courses', 'count'], data);
+    const countryId: string = R.pathOr('', ['country', 'id'], school);
+    const cityId: string = R.pathOr('', ['city', 'id'], school);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { renderShareButton } = useShare({ text: schoolName });
     const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
+    const addCourseHref = { pathname: urls.createCourse, query: { school: schoolId } };
 
     const {
         actionsDialogOpen,
@@ -160,7 +176,7 @@ const SchoolDetailPage: NextPage = () => {
         <Tooltip title={addCourseTooltip}>
             <Typography component="span">
                 <IconButtonLink
-                    href={{ pathname: urls.createCourse, query: { school: schoolId } }}
+                    href={addCourseHref}
                     icon={AddCircleOutlineOutlined}
                     disabled={verified === false}
                     color={isMobileOrTablet ? 'secondary' : 'default'}
@@ -170,14 +186,25 @@ const SchoolDetailPage: NextPage = () => {
         </Tooltip>
     );
 
+    const renderCourseIcon = <SchoolOutlined className={clsx(classes.icon, classes.courseIcon)} />;
+    const renderResourceIcon = <AssignmentOutlined className={classes.icon} />;
+
     const renderSubjectsTableBody = (
         <TableBody>
-            {paginatedSubjects.map((s: SubjectObjectType, i: number) => (
+            {subjects.map((s: SubjectObjectType, i: number) => (
                 <Link href={{ ...searchUrl, query: { ...searchUrl.query, subject: s.id } }} key={i}>
                     <CardActionArea>
                         <TableRow>
                             <TableCell>
                                 <Typography variant="body2">{R.propOr('-', 'name', s)}</Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                    <Grid container alignItems="center">
+                                        {renderCourseIcon}
+                                        {s.courseCount}
+                                        {renderResourceIcon}
+                                        {s.resourceCount}
+                                    </Grid>
+                                </Typography>
                             </TableCell>
                         </TableRow>
                     </CardActionArea>
@@ -186,30 +213,32 @@ const SchoolDetailPage: NextPage = () => {
         </TableBody>
     );
 
+    const renderCourseTableBody = <CourseTableBody courses={courses} />;
+
     const commonTableHeadProps = {
         titleLeft: t('common:name'),
     };
-
-    const renderSubjects = !!subjects.length ? (
-        <FrontendPaginatedTable
-            tableHeadProps={commonTableHeadProps}
-            renderTableBody={renderSubjectsTableBody}
-            paginationProps={subjectPaginationProps}
-        />
-    ) : (
-        <NotFoundBox text={t('school:noSubjects')} />
-    );
 
     const courseTableHeadProps = {
         ...commonTableHeadProps,
         titleRight: t('common:score'),
     };
 
+    const renderSubjects = !!subjects.length ? (
+        <PaginatedTable
+            tableHeadProps={commonTableHeadProps}
+            renderTableBody={renderSubjectsTableBody}
+            count={subjectCount}
+        />
+    ) : (
+        <NotFoundBox text={t('school:noSubjects')} />
+    );
+
     const renderCourses = !!courses.length ? (
-        <FrontendPaginatedTable
+        <PaginatedTable
             tableHeadProps={courseTableHeadProps}
-            renderTableBody={<CourseTableBody courses={paginatedCourses} />}
-            paginationProps={coursePaginationProps}
+            renderTableBody={renderCourseTableBody}
+            count={courseCount}
         />
     ) : (
         <NotFoundBox text={t('school:noCourses')} />
@@ -262,7 +291,23 @@ const SchoolDetailPage: NextPage = () => {
         </ResponsiveDialog>
     );
 
-    const renderActionsDialogContent = <List>{renderShareAction}</List>;
+    const renderAddCourseAction = (
+        <Link href={addCourseHref}>
+            <MenuItem>
+                <ListItemIcon>
+                    <AddCircleOutlineOutlined />
+                </ListItemIcon>
+                <ListItemText>{t('school:addCourse')}</ListItemText>
+            </MenuItem>
+        </Link>
+    );
+
+    const renderActionsDialogContent = (
+        <List>
+            {renderShareAction}
+            {renderAddCourseAction}
+        </List>
+    );
 
     const renderActionsDrawer = (
         <ResponsiveDialog
@@ -313,13 +358,13 @@ const SchoolDetailPage: NextPage = () => {
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true,
+        fallback: 'blocking',
     };
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['school']),
+        _ns: await loadNamespaces(['school'], locale),
     },
 });
 

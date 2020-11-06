@@ -21,7 +21,7 @@ interface Props {
 
 export const InfoDialogContent: React.FC<Props> = ({ user, created, infoItems }) => {
     const { t } = useTranslation();
-    const userId = R.propOr(undefined, 'id', user);
+    const userId: string = R.propOr(undefined, 'id', user);
 
     const renderInfoItems = infoItems.map(({ label, value }, i) => (
         <Grid key={i} container>
@@ -43,7 +43,7 @@ export const InfoDialogContent: React.FC<Props> = ({ user, created, infoItems })
             <Typography variant="body2" color="textSecondary">
                 {t('common:createdBy')}{' '}
                 {!!user ? (
-                    <TextLink href={urls.user} as={`/users/${userId}`} color="primary">
+                    <TextLink href={urls.user(userId)} color="primary">
                         {user.username}
                     </TextLink>
                 ) : (

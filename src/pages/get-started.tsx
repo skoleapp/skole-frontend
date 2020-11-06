@@ -1,73 +1,98 @@
-import { Avatar, Box, Card, CardContent, CardHeader, CardMedia, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, MainLayout, TextLink } from 'components';
+import { ButtonLink, MainBackground, MainLayout, TextLink } from 'components';
 import { useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
+import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { GET_STARTED_ITEMS, GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
+import { COLORS } from 'theme';
+import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
 
-const useStyles = makeStyles(({ spacing, palette }) => ({
-    topSectionContainer: {
-        minHeight: '25rem',
-        position: 'relative',
-    },
-    topSectionContent: {
-        padding: spacing(8),
-        color: palette.common.white,
-        position: 'relative',
-    },
-    bottomSectionContainer: {
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+    container: {
         flexGrow: 1,
-    },
-    card: {
-        height: '100%',
         display: 'flex',
         flexDirection: 'column',
+        position: 'relative',
     },
-    getStartedItem: {
+    headerContainer: {
+        position: 'relative',
+        textAlign: 'center',
+        marginTop: spacing(8),
+        padding: spacing(2),
+        [breakpoints.up('lg')]: {
+            marginTop: spacing(16),
+        },
+    },
+    logo: {
+        height: '4rem',
+        position: 'relative',
+        [breakpoints.up('sm')]: {
+            height: '5rem',
+        },
+        [breakpoints.up('md')]: {
+            height: '6rem',
+        },
+    },
+    slogan: {
+        fontSize: '1.5rem',
         marginTop: spacing(4),
     },
-    cardHeader: {
+    ctaContainer: {
+        position: 'relative',
+        textAlign: 'center',
+        padding: `${spacing(4)} ${spacing(2)}`,
+        flexGrow: 1,
         display: 'flex',
-        padding: spacing(3),
-    },
-    cardHeaderContent: {
-        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
         alignItems: 'center',
     },
-    avatar: {
-        backgroundColor: palette.primary.light,
-        color: palette.secondary.main,
-        height: '3rem',
-        width: '3rem',
-    },
-    icon: {
-        height: '2rem',
-        width: '2rem',
-    },
-    ctaContainer: {
-        padding: spacing(8),
-        textAlign: 'center',
+    ctaHeader: {
+        fontSize: '1.25rem',
+        [breakpoints.up('sm')]: {
+            fontSize: '1.5rem',
+        },
+        [breakpoints.up('md')]: {
+            fontSize: '1.75rem',
+        },
     },
     ctaButton: {
         minWidth: '10rem',
         padding: spacing(3),
         marginTop: spacing(8),
     },
+    badgeContainer: {
+        position: 'relative',
+        textAlign: 'center',
+        padding: `${spacing(4)} ${spacing(2)}`,
+        backgroundColor: COLORS.backgroundGrey,
+    },
+    badge: {
+        width: '8rem',
+        height: '4rem',
+        margin: spacing(2),
+        position: 'relative',
+        [breakpoints.up('sm')]: {
+            width: '10rem',
+            height: '4rem',
+        },
+        [breakpoints.up('md')]: {
+            width: '12rem',
+            height: '5rem',
+        },
+        [breakpoints.up('lg')]: {
+            width: '15rem',
+            height: '7rem',
+        },
+    },
+    or: {
+        marginTop: spacing(4),
+    },
     authLink: {
-        marginTop: spacing(8),
-    },
-    cardTextContainer: {
-        flexGrow: 1,
-    },
-    chip: {
-        marginTop: spacing(2),
-    },
-    chipIcon: {
-        marginLeft: spacing(2),
-        height: '1rem',
+        marginTop: spacing(4),
     },
 }));
 
@@ -76,6 +101,16 @@ const GetStartedPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { renderLanguageButton } = useLanguageSelector();
+
+    const ctaUrl = {
+        pathname: urls.register,
+        query,
+    };
+
+    const skipLoginUrl = {
+        pathname: !!query.next ? String(query.next) : urls.home,
+        query,
+    };
 
     useEffect(() => {
         localStorage.setItem(GET_STARTED_PAGE_VISITED_KEY, new Date().toString());
@@ -88,8 +123,8 @@ const GetStartedPage: NextPage = () => {
         },
         disableBottomNavbar: true,
         topNavbarProps: {
-            disableAuthButtons: true,
             headerRight: renderLanguageButton,
+            disableLogo: true,
         },
         containerProps: {
             fullWidth: true,
@@ -97,80 +132,75 @@ const GetStartedPage: NextPage = () => {
         },
     };
 
+    const renderBackground = <MainBackground />;
+
+    const renderHeaders = (
+        <Box className={classes.headerContainer}>
+            <Box className={classes.logo}>
+                <Image layout="fill" src="/images/icons/skole-icon-text.svg" />
+            </Box>
+            <Typography className={classes.slogan} variant="h1" color="secondary" gutterBottom>
+                {t('get-started:slogan')}
+            </Typography>
+        </Box>
+    );
+
+    const renderCta = (
+        <Box className={classes.ctaContainer}>
+            <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary">
+                {t('get-started:header')}
+            </Typography>
+            <ButtonLink
+                className={classes.ctaButton}
+                href={ctaUrl}
+                color="primary"
+                variant="contained"
+                endIcon={<ArrowForwardOutlined />}
+            >
+                {t('get-started:cta')}
+            </ButtonLink>
+            <Typography className={classes.or} variant="body2" color="secondary">
+                {t('get-started:or').toUpperCase()}
+            </Typography>
+            <Typography className={classes.authLink}>
+                <TextLink color="secondary" href={skipLoginUrl}>
+                    {t('get-started:skipLogin')}
+                </TextLink>
+            </Typography>
+        </Box>
+    );
+
+    const renderAppStoreBadges = (
+        <Box className={classes.badgeContainer}>
+            <Typography variant="subtitle1" color="textSecondary">
+                {t('get-started:appStoreCta')}
+            </Typography>
+            <Grid container justify="center">
+                <Box className={classes.badge}>
+                    <Image layout="fill" src="/images/app-store-badges/apple-app-store-badge.svg" />
+                </Box>
+                <Box className={classes.badge}>
+                    <Image layout="fill" src="/images/app-store-badges/google-play-badge.svg" />
+                </Box>
+            </Grid>
+        </Box>
+    );
+
     return (
         <MainLayout {...layoutProps}>
-            <Grid container justify="center" alignItems="center" className={classes.topSectionContainer}>
-                <Box className="main-background" />
-                <Grid item xs={12} lg={10} xl={8} className={classes.topSectionContent}>
-                    <Typography variant="h1" gutterBottom>
-                        {t('common:slogan')}
-                    </Typography>
-                    <Typography variant="h5" gutterBottom>
-                        {t('get-started:header')}
-                    </Typography>
-                    <Typography variant="h6">{t('get-started:header2')}</Typography>
-                </Grid>
-            </Grid>
-            <Grid className={classes.bottomSectionContainer} container justify="center" alignItems="center">
-                <Grid item xs={12} lg={10} xl={8} container spacing={4}>
-                    {GET_STARTED_ITEMS.map(({ title, image, description, icon: Icon }, i) => (
-                        <Grid className={classes.getStartedItem} key={i} item xs={12} sm={4}>
-                            <Card className={classes.card}>
-                                <CardHeader
-                                    classes={{ root: classes.cardHeader, content: classes.cardHeaderContent }}
-                                    avatar={
-                                        <Avatar className={classes.avatar}>
-                                            <Icon className={classes.icon} />
-                                        </Avatar>
-                                    }
-                                    title={
-                                        <Typography variant="h5" color="primary">
-                                            {t(title)}
-                                        </Typography>
-                                    }
-                                />
-                                <CardMedia component="img" image={image} alt={title} height="160" />
-                                <CardContent className={classes.cardTextContainer}>
-                                    <Typography variant="body2" color="textSecondary">
-                                        {t(description)}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Grid>
-            <Grid className={classes.ctaContainer} container direction="column" alignItems="center">
-                <Typography variant="h5" color="primary">
-                    {t('get-started:subheader')}
-                </Typography>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2} container direction="column" alignItems="center">
-                    <ButtonLink
-                        className={classes.ctaButton}
-                        href={{ pathname: urls.register, query }}
-                        color="primary"
-                        variant="contained"
-                        endIcon={<ArrowForwardOutlined />}
-                        fullWidth
-                    >
-                        {t('get-started:cta')}
-                    </ButtonLink>
-                    <TextLink
-                        className={classes.authLink}
-                        color="primary"
-                        href={{ pathname: (query.next as string) || urls.home, query }}
-                    >
-                        {t('get-started:skipLogin')}
-                    </TextLink>
-                </Grid>
-            </Grid>
+            <Box className={classes.container}>
+                {renderBackground}
+                {renderHeaders}
+                {renderCta}
+                {renderAppStoreBadges}
+            </Box>
         </MainLayout>
     );
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['get-started']),
+        _ns: await loadNamespaces(['get-started'], locale),
     },
 });
 

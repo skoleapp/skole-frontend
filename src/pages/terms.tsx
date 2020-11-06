@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
-import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 
@@ -26,9 +26,9 @@ const TermsPage: NextPage = () => {
     );
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['terms']),
+        _ns: await loadNamespaces(['terms'], locale),
     },
 });
 

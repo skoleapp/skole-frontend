@@ -20,12 +20,12 @@ import {
     ButtonLink,
     CourseTableBody,
     ErrorLayout,
-    FrontendPaginatedTable,
     LoadingLayout,
     MainLayout,
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
+    PaginatedTable,
     ResourceTableBody,
     SettingsButton,
     TextLink,
@@ -37,16 +37,18 @@ import {
     ResourceObjectType,
     ResourceTypeObjectType,
     UserObjectType,
+    UserQueryVariables,
     useUserQuery,
 } from 'generated';
-import { useDayjs, useFrontendPagination, useMediaQueries, useQueryOptions, useSwipeableTabs } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
+import { useDayjs, useLanguageHeaderContext, useMediaQueries, useSwipeableTabs } from 'hooks';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { mediaURL, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     paper: {
@@ -66,11 +68,12 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
         },
     },
     avatar: {
-        margin: 0,
+        width: '5rem',
+        height: '5rem',
         marginBottom: spacing(4),
     },
     statsContainer: {
-        marginTop: spacing(4),
+        marginTop: spacing(2),
         marginBottom: spacing(2),
         textAlign: 'center',
     },
@@ -87,35 +90,40 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     badge: {
         margin: spacing(1),
     },
+    actionButton: {
+        [breakpoints.down('md')]: {
+            marginTop: spacing(2),
+        },
+    },
 }));
 
 const UserPage: NextPage = () => {
     const { spacing } = useTheme();
     const classes = useStyles();
-    const { isMobile, isDesktop } = useMediaQueries();
+    const { isMobile, isMobileOrTablet, isDesktop } = useMediaQueries();
     const { t } = useTranslation();
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
     const { userMe, verified } = useAuthContext();
-    const queryOptions = useQueryOptions();
-    const { data, loading, error } = useUserQuery(queryOptions);
+    const { query } = useRouter();
+    const variables: UserQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useUserQuery({ variables, context });
     const user: UserObjectType = R.propOr(null, 'user', data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
-    const rank = R.propOr('', 'rank', user) as string;
-    const username = R.propOr('-', 'username', user) as string;
-    const avatar = R.propOr('', 'avatar', user) as string;
-    const title = R.propOr('', 'title', user) as string;
-    const bio = R.propOr('', 'bio', user) as string;
+    const rank: string = R.propOr('', 'rank', user);
+    const username: string = R.propOr('-', 'username', user);
+    const avatar: string = R.propOr('', 'avatar', user);
+    const title: string = R.propOr('', 'title', user);
+    const bio: string = R.propOr('', 'bio', user);
     const school = R.propOr('', 'school', userMe);
     const subject = R.propOr('', 'subject', userMe);
-    const score = R.propOr('-', 'score', user) as string;
+    const score: string = R.propOr('-', 'score', user);
     const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
-    const badges = R.propOr([], 'badges', user) as BadgeObjectType[];
-    const createdCourses = R.propOr([], 'createdCourses', user) as CourseObjectType[];
-    const createdResources = R.propOr([], 'createdResources', user) as ResourceObjectType[];
-    const courseCount = createdCourses.length;
-    const resourceCount = createdResources.length;
-    const { paginatedItems: paginatedCourses, ...coursePaginationProps } = useFrontendPagination(createdCourses);
-    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(createdResources);
+    const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
+    const courses: CourseObjectType[] = R.pathOr([], ['courses', 'objects'], data);
+    const resources: ResourceObjectType[] = R.pathOr([], ['resources', 'objects'], data);
+    const courseCount = R.pathOr(0, ['courses', 'count'], data);
+    const resourceCount = R.pathOr(0, ['resources', 'count'], data);
     const coursesTabLabel = isOwnProfile ? t('profile:ownProfileCourses') : t('common:courses');
     const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
     const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
@@ -173,7 +181,7 @@ const UserPage: NextPage = () => {
         }
     };
 
-    const renderAvatar = <Avatar className={clsx('main-avatar', classes.avatar)} src={mediaURL(avatar)} />;
+    const renderAvatar = <Avatar className={classes.avatar} src={mediaUrl(avatar)} />;
     const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
 
     const renderTitle = !!title && (
@@ -182,35 +190,33 @@ const UserPage: NextPage = () => {
         </Typography>
     );
 
-    const renderDesktopUsername = !isMobile && renderUsername;
-    const renderDesktopTitle = !isMobile && renderTitle;
+    const renderDesktopUsername = isDesktop && renderUsername;
+    const renderDesktopTitle = isDesktop && renderTitle;
 
     const renderEditProfileButton = isOwnProfile && (
-        <Box display="flex" marginTop={isMobile ? spacing(2) : 0}>
-            <ButtonLink
-                href={urls.editProfile}
-                color="primary"
-                variant="outlined"
-                endIcon={<EditOutlined />}
-                fullWidth={isMobile}
-            >
-                {t('profile:editProfile')}
-            </ButtonLink>
-        </Box>
+        <ButtonLink
+            className={classes.actionButton}
+            href={urls.editProfile}
+            color="primary"
+            variant="outlined"
+            endIcon={<EditOutlined />}
+            fullWidth={isMobile}
+        >
+            {t('profile:editProfile')}
+        </ButtonLink>
     );
 
     const renderViewStarredButton = isOwnProfile && (
-        <Box marginTop={isMobile ? spacing(2) : 0}>
-            <ButtonLink
-                href={urls.starred}
-                color="primary"
-                variant="outlined"
-                endIcon={<StarBorderOutlined />}
-                fullWidth
-            >
-                {t('profile:viewStarred')}
-            </ButtonLink>
-        </Box>
+        <ButtonLink
+            className={classes.actionButton}
+            href={urls.starred}
+            color="primary"
+            variant="outlined"
+            endIcon={<StarBorderOutlined />}
+            fullWidth
+        >
+            {t('profile:viewStarred')}
+        </ButtonLink>
     );
 
     const renderSettingsButton = isOwnProfile && (
@@ -325,24 +331,26 @@ const UserPage: NextPage = () => {
         </Box>
     );
 
-    const renderActions = isDesktop && (
-        <Grid item container>
+    const renderDesktopActions = isDesktop && (
+        <Grid item xs={12} container alignItems="center">
             {renderEditProfileButton}
             {renderSettingsButton}
         </Grid>
     );
 
+    const statsDirection = isMobileOrTablet ? 'column' : 'row';
+
     const renderStats = (
-        <Grid container xs={12} sm={8} md={4} spacing={2} className={classes.statsContainer}>
-            <Grid item xs={4} container direction={isMobile ? 'column' : 'row'}>
+        <Grid item container xs={12} sm={8} md={4} spacing={2} className={classes.statsContainer}>
+            <Grid item xs={4} container direction={statsDirection}>
                 {renderScoreValue}
                 {renderScoreTitle}
             </Grid>
-            <Grid item xs={4} container direction={isMobile ? 'column' : 'row'}>
+            <Grid item xs={4} container direction={statsDirection}>
                 {renderCourseCountValue}
                 {renderCourseCountTitle}
             </Grid>
-            <Grid item xs={4} container direction={isMobile ? 'column' : 'row'}>
+            <Grid item xs={4} container direction={statsDirection}>
                 {renderResourceCountValue}
                 {renderResourceCountTitle}
             </Grid>
@@ -350,14 +358,14 @@ const UserPage: NextPage = () => {
     );
 
     const renderDesktopInfo = isDesktop && (
-        <Grid item container direction="column">
+        <>
             {renderBio}
             {renderRank}
             {renderBadges}
             {renderVerifyAccountLink}
             {renderProfileStrength}
             {renderJoined}
-        </Grid>
+        </>
     );
 
     const renderResponsiveInfo = (
@@ -368,21 +376,28 @@ const UserPage: NextPage = () => {
                 container
                 direction="column"
                 justify="center"
-                alignItems={isMobile ? 'flex-start' : 'center'}
+                alignItems={isMobileOrTablet ? 'flex-start' : 'center'}
             >
                 {renderAvatar}
                 {renderDesktopUsername}
                 {renderDesktopTitle}
             </Grid>
-            <Grid item xs={8}>
-                {renderActions}
+            <Grid
+                item
+                xs={8}
+                container
+                direction="column"
+                wrap="nowrap"
+                alignItems={isMobileOrTablet ? 'center' : 'flex-start'}
+            >
+                {renderDesktopActions}
                 {renderStats}
                 {renderDesktopInfo}
             </Grid>
         </Grid>
     );
 
-    const renderMobileInfo = isMobile && (
+    const renderMobileInfo = isMobileOrTablet && (
         <Grid container direction="column">
             {renderUsername}
             {renderTitle}
@@ -401,7 +416,7 @@ const UserPage: NextPage = () => {
         </Paper>
     );
 
-    const renderMobileActionsCard = isMobile && isOwnProfile && (
+    const renderMobileActionsCard = isMobileOrTablet && isOwnProfile && (
         <Paper className={clsx(classes.paper, classes.contentCard)}>
             {renderProfileStrength}
             {renderEditProfileButton}
@@ -414,21 +429,24 @@ const UserPage: NextPage = () => {
         titleRight: t('common:score'),
     };
 
-    const renderCreatedCourses = !!createdCourses.length ? (
-        <FrontendPaginatedTable
+    const renderCourseTableBody = <CourseTableBody courses={courses} />;
+    const renderResourceTableBody = <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />;
+
+    const renderCreatedCourses = !!courses.length ? (
+        <PaginatedTable
             tableHeadProps={commonTableHeadProps}
-            renderTableBody={<CourseTableBody courses={paginatedCourses} />}
-            paginationProps={coursePaginationProps}
+            renderTableBody={renderCourseTableBody}
+            count={courseCount}
         />
     ) : (
         <NotFoundBox text={noCourses} />
     );
 
-    const renderCreatedResources = !!createdResources.length ? (
-        <FrontendPaginatedTable
+    const renderCreatedResources = !!resources.length ? (
+        <PaginatedTable
             tableHeadProps={commonTableHeadProps}
-            renderTableBody={<ResourceTableBody resourceTypes={resourceTypes} resources={paginatedResources} />}
-            paginationProps={resourcePaginationProps}
+            renderTableBody={renderResourceTableBody}
+            count={resourceCount}
         />
     ) : (
         <NotFoundBox text={noResources} />
@@ -495,13 +513,13 @@ const UserPage: NextPage = () => {
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true,
+        fallback: 'blocking',
     };
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['profile']),
+        _ns: await loadNamespaces(['profile', 'profile-strength'], locale),
     },
 });
 

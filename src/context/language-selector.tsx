@@ -1,10 +1,10 @@
-import React, { Context, createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { LanguageSelectorContextType } from 'types';
 
-const LanguageSelectorContext = createContext<LanguageSelectorContextType | null>(null);
-
-export const useLanguageSelectorContext = (): LanguageSelectorContextType =>
-    useContext(LanguageSelectorContext as Context<LanguageSelectorContextType>);
+// Ignore: Initialize context with empty object rather than populating it with placeholder values.
+// @ts-ignore
+const LanguageSelectorContext = createContext<LanguageSelectorContextType>({});
+export const useLanguageSelectorContext = (): LanguageSelectorContextType => useContext(LanguageSelectorContext);
 
 export const LanguageSelectorContextProvider: React.FC = ({ children }) => {
     const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);

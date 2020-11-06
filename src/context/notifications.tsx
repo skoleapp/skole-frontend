@@ -1,10 +1,10 @@
-import React, { Context, createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { NotificationsContextType } from 'types';
 
-const NotificationsContext = createContext<NotificationsContextType | null>(null);
-
-export const useNotificationsContext = (): NotificationsContextType =>
-    useContext(NotificationsContext as Context<NotificationsContextType>);
+// Ignore: Initialize context with empty object rather than populating it with placeholder values.
+// @ts-ignore
+const NotificationsContext = createContext<NotificationsContextType>({});
+export const useNotificationsContext = (): NotificationsContextType => useContext(NotificationsContext);
 
 export const NotificationsContextProvider: React.FC = ({ children }) => {
     const [notification, setNotification] = useState<string | null>(null);

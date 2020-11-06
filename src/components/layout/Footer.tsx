@@ -1,4 +1,5 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import { useLanguageSelector } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -13,6 +14,15 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     },
     copyRightSection: {
         marginTop: spacing(2),
+    },
+    someLink: {
+        color: palette.secondary.main,
+        textDecoration: 'none',
+        // width: '3rem',
+        // height: '3rem',
+    },
+    someLinkContainer: {
+        marginTop: spacing(4),
     },
 }));
 
@@ -36,6 +46,32 @@ export const Footer: React.FC = () => {
                 <TextLink href={urls.faq} color="secondary">
                     {t('common:faq')}
                 </TextLink>
+                <Grid className={classes.someLinkContainer} item container justify="space-between">
+                    <a
+                        href="https://www.facebook.com/skoleofficial"
+                        className={clsx(classes.someLink, 'fa fa-facebook fa-lg')}
+                        target="_blank"
+                        rel="noreferrer"
+                    />
+                    <a
+                        href="https://www.instagram.com/skoleofficial/"
+                        className={clsx(classes.someLink, 'fa fa-instagram fa-lg')}
+                        target="_blank"
+                        rel="noreferrer"
+                    />
+                    <a
+                        href="https://twitter.com/skoleofficial"
+                        className={clsx(classes.someLink, 'fa fa-twitter fa-lg')}
+                        target="_blank"
+                        rel="noreferrer"
+                    />
+                    <a
+                        href="https://www.linkedin.com/company/skole-inc"
+                        className={clsx(classes.someLink, 'fa fa-linkedin fa-lg')}
+                        target="_blank"
+                        rel="noreferrer"
+                    />
+                </Grid>
             </Grid>
         </Grid>
     );
@@ -71,7 +107,7 @@ export const Footer: React.FC = () => {
 
     const renderCopyRight = (
         <Typography variant="subtitle1" color="secondary">
-            © {new Date().getFullYear()} {t('common:skoleTeam')}
+            © {new Date().getFullYear()} Skole
         </Typography>
     );
 

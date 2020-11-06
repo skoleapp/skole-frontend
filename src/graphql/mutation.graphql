@@ -27,7 +27,8 @@ mutation Login($usernameOrEmail: String!, $password: String!) {
     }
 }
 
-mutation BackendLogout {
+# Need to come up with some other name as `Logout` since the GraphQL code generator creates duplicate identifiers if we use that one.
+mutation GraphQLLogout {
     logout {
         deleted
     }
@@ -131,8 +132,8 @@ mutation DeleteUser($password: String!) {
     }
 }
 
-mutation PerformStar($course: ID, $resource: ID) {
-    performStar(input: { course: $course, resource: $resource }) {
+mutation Star($course: ID, $resource: ID) {
+    star(input: { course: $course, resource: $resource }) {
         starred
         errors {
             field
@@ -141,8 +142,8 @@ mutation PerformStar($course: ID, $resource: ID) {
     }
 }
 
-mutation PerformVote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
-    performVote(input: { status: $status, comment: $comment, course: $course, resource: $resource }) {
+mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
+    vote(input: { status: $status, comment: $comment, course: $course, resource: $resource }) {
         vote {
             id
             status
@@ -267,8 +268,8 @@ mutation DeleteResource($id: ID) {
     }
 }
 
-mutation MarkActivityRead($id: ID, $read: Boolean) {
-    markActivityRead(input: { id: $id, read: $read }) {
+mutation MarkActivityAsRead($id: ID, $read: Boolean) {
+    markActivityAsRead(input: { id: $id, read: $read }) {
         errors {
             field
             messages
@@ -295,29 +296,37 @@ mutation MarkActivityRead($id: ID, $read: Boolean) {
     }
 }
 
-mutation MarkAllActivitiesAsRead {
-    markAllActivitiesRead {
+# Need to come up with some other name as `MarkAllActivitiesAsRead` since the GraphQL code generator creates duplicate identifiers if we use that one.
+mutation GraphQLMarkAllActivitiesAsRead {
+    markAllActivitiesAsRead {
         errors {
             field
             messages
         }
         activities {
-            id
-            description
-            read
-            targetUser {
+            page
+            pages
+            hasNext
+            hasPrev
+            count
+            objects {
                 id
-                username
-                avatarThumbnail
-            }
-            course {
-                id
-            }
-            resource {
-                id
-            }
-            comment {
-                id
+                description
+                read
+                targetUser {
+                    id
+                    username
+                    avatarThumbnail
+                }
+                course {
+                    id
+                }
+                resource {
+                    id
+                }
+                comment {
+                    id
+                }
             }
         }
     }

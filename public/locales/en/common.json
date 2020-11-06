@@ -23,7 +23,6 @@
     "subjects": "Subjects",
     "resources": "Resources",
     "resource": "Resource",
-    "skoleTeam": "Skole Team",
     "save": "Save",
     "confirm": "Confirm",
     "submit": "Submit",
@@ -51,7 +50,7 @@
     "reportAbuse": "Report Abuse (coming soon)",
     "comments": "Comments",
     "share": "Share",
-    "resultsPerPage": "Results Per Page",
+    "resultsPerPage": "Results per page",
     "clickToView": "Click to view!",
     "starred": "Starred",
     "settings": "Settings",
@@ -60,7 +59,6 @@
     "close": "Close",
     "actions": "Actions",
     "verifyAccount": "Verify account",
-    "slogan": "For students.",
     "faq": "FAQ",
     "continue": "Continue",
     "info": "Info",
@@ -74,5 +72,7 @@
     "home": "Home",
     "search": "Search",
     "upload": "Upload",
-    "profile": "Profile"
+    "profile": "Profile",
+    "commentAttachment": "Comment Attachment",
+    "backToHome": "Back to Home"
 }

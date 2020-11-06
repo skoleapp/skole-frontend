@@ -3,6 +3,5 @@
     "description": "Loggad ut från Skole.",
     "header": "Utloggad",
     "loggedOut": "Du har loggat ut!",
-    "logInAgain": "Logga in igen",
-    "backToHome": "Tillbaka till hem"
+    "logInAgain": "Logga in igen"
 }

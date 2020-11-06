@@ -19,7 +19,6 @@ import clsx from 'clsx';
 import {
     CustomBottomNavbarContainer,
     ErrorLayout,
-    FrontendPaginatedTable,
     IconButtonLink,
     InfoDialogContent,
     LoadingLayout,
@@ -27,6 +26,7 @@ import {
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
+    PaginatedTable,
     ResourceTableBody,
     ResponsiveDialog,
     StarButton,
@@ -37,6 +37,7 @@ import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'c
 import {
     CommentObjectType,
     CourseObjectType,
+    CourseQueryVariables,
     DeleteCourseMutation,
     ResourceObjectType,
     ResourceTypeObjectType,
@@ -48,23 +49,24 @@ import {
 } from 'generated';
 import {
     useActionsDialog,
-    useFrontendPagination,
     useInfoDialog,
+    useLanguageHeaderContext,
     useMediaQueries,
-    useQueryOptions,
     useSearch,
     useShare,
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import Router from 'next/router';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { redirect, urls } from 'utils';
+import { urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
     mobileContainer: {
@@ -88,37 +90,39 @@ const useStyles = makeStyles(({ breakpoints }) => ({
 
 const CourseDetailPage: NextPage = () => {
     const classes = useStyles();
+    const { query } = useRouter();
     const { t } = useTranslation();
-    const queryOptions = useQueryOptions();
-    const { data, loading, error } = useCourseQuery(queryOptions);
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
+    const variables: CourseQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useCourseQuery({ variables, context });
     const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
     const { searchUrl } = useSearch();
     const course: CourseObjectType = R.propOr(null, 'course', data);
     const resourceTypes: ResourceTypeObjectType[] = R.propOr([], 'resourceTypes', data);
-    const courseName = R.propOr('', 'name', course) as string;
-    const courseCode = R.propOr('', 'code', course) as string;
-    const subjects = R.propOr([], 'subjects', course) as SubjectObjectType[];
-    const schoolName = R.pathOr('', ['school', 'name'], course) as string;
-    const creatorId = R.pathOr('', ['user', 'id'], course) as string;
-    const courseId = R.propOr('', 'id', course) as string;
+    const courseName: string = R.propOr('', 'name', course);
+    const courseCode: string = R.propOr('', 'code', course);
+    const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
+    const schoolName: string = R.pathOr('', ['school', 'name'], course);
+    const creatorId: string = R.pathOr('', ['user', 'id'], course);
+    const courseId: string = R.propOr('', 'id', course);
     const schoolId = R.pathOr('', ['school', 'id'], course);
     const initialScore = String(R.propOr(0, 'score', course));
-    const resources = R.propOr([], 'resources', course) as ResourceObjectType[];
-    const resourceCount = String(resources.length);
-    const comments = R.propOr([], 'comments', course) as CommentObjectType[];
+    const resources: ResourceObjectType[] = R.pathOr([], ['resources', 'objects'], data);
+    const resourceCount = R.pathOr(0, ['resources', 'count'], data);
+    const comments: CommentObjectType[] = R.propOr([], 'comments', course);
     const { commentCount } = useDiscussionContext(comments);
-    const initialVote = (R.propOr(null, 'vote', course) as unknown) as VoteObjectType | null;
+    const initialVote: VoteObjectType = R.propOr(null, 'vote', course);
     const starred = !!R.propOr(undefined, 'starred', course);
     const isOwner = !!userMe && userMe.id === creatorId;
-    const courseUser = R.propOr(undefined, 'user', course) as UserObjectType;
-    const created = R.propOr(undefined, 'created', course) as string;
-    const { paginatedItems: paginatedResources, ...resourcePaginationProps } = useFrontendPagination(resources);
+    const courseUser: UserObjectType = R.propOr(undefined, 'user', course);
+    const created: string = R.propOr(undefined, 'created', course);
     const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: courseName });
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
+    const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
 
     const {
         actionsDialogOpen,
@@ -128,8 +132,6 @@ const CourseDetailPage: NextPage = () => {
         renderReportAction,
         renderActionsButton,
     } = useActionsDialog({ text: courseName });
-
-    const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
 
     const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
         initialVote,
@@ -148,7 +150,7 @@ const CourseDetailPage: NextPage = () => {
                 deleteCourseError();
             } else if (!!deleteCourse.message) {
                 toggleNotification(deleteCourse.message);
-                await redirect(urls.home);
+                await Router.push(urls.home);
             } else {
                 deleteCourseError();
             }
@@ -160,6 +162,7 @@ const CourseDetailPage: NextPage = () => {
     const [deleteCourse] = useDeleteCourseMutation({
         onCompleted: deleteCourseCompleted,
         onError: deleteCourseError,
+        context,
     });
 
     const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
@@ -187,7 +190,7 @@ const CourseDetailPage: NextPage = () => {
     ));
 
     const renderSchoolLink = !!schoolId && (
-        <TextLink href={urls.school} as={`/schools/${schoolId}`} color="primary">
+        <TextLink href={urls.school(schoolId)} color="primary">
             {schoolName}
         </TextLink>
     );
@@ -273,21 +276,28 @@ const CourseDetailPage: NextPage = () => {
         text: t('course:noResourcesLink'),
     };
 
+    const renderResourceTableBody = <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />;
+
     const renderResources = !!resources.length ? (
-        <FrontendPaginatedTable
+        <PaginatedTable
             tableHeadProps={resourceTableHeadProps}
-            renderTableBody={<ResourceTableBody resourceTypes={resourceTypes} resources={paginatedResources} />}
-            paginationProps={resourcePaginationProps}
+            renderTableBody={renderResourceTableBody}
+            count={resourceCount}
         />
     ) : (
         <NotFoundBox text={t('course:noResources')} linkProps={notFoundLinkProps} />
     );
 
+    const uploadResourceHref = {
+        pathname: urls.uploadResource,
+        query: { school: schoolId, course: courseId },
+    };
+
     const renderUploadResourceButton = (
         <Tooltip title={uploadResourceButtonTooltip}>
             <Typography component="span">
                 <IconButtonLink
-                    href={{ pathname: urls.uploadResource, query: { school: schoolId, course: courseId } }}
+                    href={uploadResourceHref}
                     icon={CloudUploadOutlined}
                     disabled={verified === false}
                     color={isMobileOrTablet ? 'secondary' : 'default'}
@@ -411,13 +421,13 @@ const CourseDetailPage: NextPage = () => {
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true,
+        fallback: 'blocking',
     };
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['course']),
+        _ns: await loadNamespaces(['course'], locale),
     },
 });
 

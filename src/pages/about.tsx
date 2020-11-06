@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, SettingsLayout } from 'components';
-import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { urls } from 'utils';
@@ -27,22 +27,16 @@ const AboutPage: NextPage = () => {
             <Typography component="br" />
             <Typography variant="subtitle2">{t('about:feedbackHeader')}</Typography>
             <Typography component="br" />
-            <ButtonLink
-                href={urls.contact}
-                color="primary"
-                variant="contained"
-                fullWidth
-                endIcon={<ArrowForwardOutlined />}
-            >
+            <ButtonLink href={urls.contact} color="primary" variant="contained" endIcon={<ArrowForwardOutlined />}>
                 {t('about:feedbackText')}
             </ButtonLink>
         </SettingsLayout>
     );
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['about']),
+        _ns: await loadNamespaces(['about'], locale),
     },
 });
 

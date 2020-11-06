@@ -10,5 +10,6 @@
     "schoolHelperText": "Etkö löydä kouluasi?",
     "schoolHelperLink": "Ota meihin yhteyttä, niin lisäämme sen!",
     "courseHelperText": "Etkö loydä kurssiasi?",
-    "courseHelperLink": "Yritä lisätä se!"
+    "courseHelperLink": "Yritä lisätä se!",
+    "resourceTitleHelperText": "Anna resurssille kuvaava nimi."
 }

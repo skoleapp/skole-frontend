@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
-import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 
@@ -25,10 +25,9 @@ const PrivacyPage: NextPage = () => {
         </SettingsLayout>
     );
 };
-
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['privacy']),
+        _ns: await loadNamespaces(['privacy'], locale),
     },
 });
 

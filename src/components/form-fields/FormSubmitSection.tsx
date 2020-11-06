@@ -1,6 +1,7 @@
 import { Button, ButtonProps, FormControl, Grid } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
+import * as R from 'ramda';
 import React from 'react';
 
 import { LoadingBox } from '..';
@@ -17,8 +18,10 @@ export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | '
     variant,
     values,
 }) => {
+    const loadingText: string = R.propOr(undefined, 'general', values);
+
     const renderTextContent = isSubmitting ? (
-        <LoadingBox text={(values as { general: string }).general} />
+        <LoadingBox text={loadingText} />
     ) : (
         <ErrorMessage name="general" component={FormErrorMessage} />
     );
@@ -30,7 +33,6 @@ export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | '
             variant={variant || 'contained'}
             endIcon={endIcon || <ArrowForwardOutlined />}
             color="primary"
-            fullWidth
         >
             {submitButtonText}
         </Button>
@@ -43,7 +45,7 @@ export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | '
                     {renderTextContent}
                 </Grid>
             </FormControl>
-            <FormControl>{renderSubmitButton}</FormControl>
+            <FormControl fullWidth>{renderSubmitButton}</FormControl>
         </Grid>
     );
 };

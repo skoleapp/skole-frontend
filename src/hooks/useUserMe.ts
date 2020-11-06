@@ -3,6 +3,8 @@ import { UserMeQueryHookResult, UserObjectType, useUserMeQuery } from 'generated
 import * as R from 'ramda';
 import { useEffect } from 'react';
 
+import { useLanguageHeaderContext } from './useLanguageHeaderContext';
+
 interface UseUserMeQuery extends Omit<UserMeQueryHookResult, 'data' | 'loading' | 'error'> {
     userMe: UserObjectType | null;
     authLoading: boolean;
@@ -10,7 +12,8 @@ interface UseUserMeQuery extends Omit<UserMeQueryHookResult, 'data' | 'loading' 
 }
 
 export const useUserMe = (): UseUserMeQuery => {
-    const { data, loading: authLoading, error, ...result } = useUserMeQuery();
+    const context = useLanguageHeaderContext();
+    const { data, loading: authLoading, error, ...result } = useUserMeQuery({ context });
     const { setUserMe, setAuthNetworkError } = useAuthContext();
     const userMe = R.propOr(null, 'userMe', data) as UserObjectType | null;
     const authNetworkError = !!R.propOr(false, 'networkError', error); // We only care about about network error.

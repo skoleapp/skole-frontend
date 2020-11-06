@@ -11,11 +11,12 @@ export const BOTTOM_NAVBAR_HEIGHT = '3rem';
 export const TOP_NAVBAR_HEIGHT_MOBILE = '3rem';
 export const TOP_NAVBAR_HEIGHT_DESKTOP = '4rem';
 
-const COLORS = {
+export const COLORS = {
     primary: '#ad3636',
     secondary: '#faf2de',
     white: '#ffffff',
     black: '#000000',
+    backgroundGrey: '#dbdbdb',
 };
 
 const breakpointOptions = {
@@ -239,11 +240,6 @@ let theme = createMuiTheme({
                 body: {
                     backgroundColor: COLORS.secondary,
                 },
-                '.main-avatar': {
-                    height: '6rem',
-                    width: '6rem',
-                    margin: spacing(2),
-                },
                 '.avatar-thumbnail': {
                     height: '1.35rem !important',
                     width: '1.35rem !important',
@@ -276,16 +272,6 @@ let theme = createMuiTheme({
                 '.table-action-area': {
                     display: 'flex',
                 },
-                '.main-background': {
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    background:
-                        'linear-gradient(rgba(255, 42, 0, 0.55), rgba(255, 42, 0, 0.55)), url(images/background.jpg)',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
-                },
                 '.text-center': {
                     textAlign: 'center',
                 },
@@ -294,6 +280,16 @@ let theme = createMuiTheme({
                 },
                 '.screenshot-border': {
                     border: `0.05rem dashed ${COLORS.black}`,
+                },
+                '#nprogress': {
+                    '& .bar': {
+                        height: '0.25rem',
+                        zIndex: 1101,
+                    },
+                    '& .peg': {
+                        boxShadow: 'none',
+                        transform: 'none',
+                    },
                 },
             },
         },

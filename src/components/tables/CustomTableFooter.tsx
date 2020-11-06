@@ -1,7 +1,8 @@
-import { makeStyles, TableFooter, TablePagination, TableRow } from '@material-ui/core';
+import { LabelDisplayedRowsArgs, makeStyles, TableFooter, TablePagination, TableRow } from '@material-ui/core';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { CustomTablePaginationProps } from 'types';
+import { RESULTS_PER_PAGE_OPTIONS } from 'utils';
 
 import { CustomTablePaginationActions } from './CustomTablePaginationActions';
 
@@ -20,7 +21,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 }));
 
 const commonTablePaginationProps = {
-    rowsPerPageOptions: [5, 10, 25, 50, 100],
+    rowsPerPageOptions: RESULTS_PER_PAGE_OPTIONS,
     colSpan: 3,
     SelectProps: {
         native: true,
@@ -32,6 +33,7 @@ const commonTablePaginationProps = {
 export const CustomTableFooter: React.FC<CustomTablePaginationProps> = tablePaginationProps => {
     const { t } = useTranslation();
     const classes = useStyles();
+    const labelDisplayedRows = ({ from, to, count }: LabelDisplayedRowsArgs): string => `${from} - ${to} / ${count}`;
 
     return (
         <TableFooter>
@@ -39,6 +41,7 @@ export const CustomTableFooter: React.FC<CustomTablePaginationProps> = tablePagi
                 <TablePagination
                     classes={{ toolbar: classes.toolbar, spacer: classes.spacer }}
                     labelRowsPerPage={t('common:resultsPerPage')}
+                    labelDisplayedRows={labelDisplayedRows}
                     {...commonTablePaginationProps}
                     {...tablePaginationProps}
                 />

@@ -1,11 +1,10 @@
 {
     "title": "Komma igång",
     "description": "Kom igång med att hitta och dela ditt favoritstudiematerial, diskutera med samhället och mycket mer!",
+    "slogan": "För studenter.",
     "header": "Hitta och dela ditt favoritstudiematerial.",
-    "resourcesDescription": "Studiematerial som delas av andra Skole-användare är gratis och tillgängligt för alla utan begränsningar.",
-    "coursesDescription": "Skole är full av kurser från universitet över hela Finland.",
-    "discussionDescription": "Skole låter dig diskutera och dela din kunskap med andra användare.",
-    "header2": "Tusentals kurser och resurser, alla Finlands universitet.",
+    "appStoreCta": "Skaffa det i appbutiker! (på kommande)",
     "cta": "Komma igång!",
-    "skipLogin": "Fortsätt utan att logga in"
+    "or": "eller",
+    "skipLogin": "Hoppa över inloggning"
 }

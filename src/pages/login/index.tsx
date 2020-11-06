@@ -1,23 +1,31 @@
-import { Avatar, Box, FormControl, Grid, Link as MuiLink, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, FormControl, Grid, Link as MuiLink, makeStyles, Typography } from '@material-ui/core';
 import { FormLayout, FormSubmitSection, PasswordField, TextFormField, TextLink } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
-import { useForm, useLanguageSelector } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withNoAuth } from 'lib';
+import { useForm, useLanguageHeaderContext, useLanguageSelector } from 'hooks';
+import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
-import { mediaURL, redirect, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 import * as Yup from 'yup';
 
-const useStyles = makeStyles(({ spacing }) => ({
-    avatarContainer: {
-        padding: spacing(4),
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+    avatar: {
+        width: '5rem',
+        height: '5rem',
+        marginBottom: spacing(4),
+        [breakpoints.up('md')]: {
+            width: '7rem',
+            height: '7rem',
+        },
     },
     link: {
         textAlign: 'center',
+        marginTop: spacing(4),
     },
 }));
 
@@ -34,6 +42,7 @@ const LoginPage: NextPage = () => {
     const { toggleNotification } = useNotificationsContext();
     const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
     const validExistingUser = !!R.propOr(false, 'username', existingUser) && !!R.propOr(false, 'email', existingUser);
+    const context = useLanguageHeaderContext();
     const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<LoginFormValues>();
 
     useEffect(() => {
@@ -57,12 +66,11 @@ const LoginPage: NextPage = () => {
             if (!!login.errors && !!login.errors.length) {
                 handleMutationErrors(login.errors);
             } else if (!!login.message) {
-                const { next } = query;
-
                 try {
                     resetForm();
                     toggleNotification(login.message);
-                    await redirect((next as string) || urls.home);
+                    const nextUrl = !!query.next ? String(query.next) : urls.home;
+                    await Router.push(nextUrl);
                 } catch {
                     unexpectedError();
                 }
@@ -74,13 +82,14 @@ const LoginPage: NextPage = () => {
         }
     };
 
-    const [loginMutation] = useLoginMutation({ onCompleted, onError });
+    const [loginMutation] = useLoginMutation({ onCompleted, onError, context });
 
     const handleSubmit = async (values: LoginFormValues): Promise<void> => {
-        const { usernameOrEmail, password } = values;
+        const { usernameOrEmail: _usernameOrEmail, password } = values;
+        const usernameOrEmail: string = R.propOr(_usernameOrEmail, 'email', existingUser);
 
         await loginMutation({
-            variables: { usernameOrEmail: R.propOr(usernameOrEmail, 'email', existingUser) as string, password },
+            variables: { usernameOrEmail, password },
         });
     };
 
@@ -92,9 +101,7 @@ const LoginPage: NextPage = () => {
 
     const renderExistingUserGreeting = (
         <Grid container alignItems="center" direction="column">
-            <Box className={classes.avatarContainer}>
-                <Avatar className="main-avatar" src={mediaURL(R.propOr('', 'avatar', existingUser))} />
-            </Box>
+            <Avatar className={classes.avatar} src={mediaUrl(R.propOr('', 'avatar', existingUser))} />
             <Typography variant="subtitle1" gutterBottom>
                 {t('login:existingUserGreeting', { username: R.propOr('-', 'username', existingUser) })}
             </Typography>
@@ -174,9 +181,9 @@ const LoginPage: NextPage = () => {
     return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['login']),
+        _ns: await loadNamespaces(['login'], locale),
     },
 });
 

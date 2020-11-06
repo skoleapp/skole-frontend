@@ -2,12 +2,13 @@ import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
-import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { useForm, useLanguageHeaderContext } from 'hooks';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticProps, NextPage } from 'next';
+import Router from 'next/router';
 import React from 'react';
-import { redirect, urls } from 'utils';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -26,6 +27,7 @@ export const DeleteAccountPage: NextPage = () => {
 
     const { t } = useTranslation();
     const confirm = useConfirm();
+    const context = useLanguageHeaderContext();
     const { toggleNotification } = useNotificationsContext();
 
     const onCompleted = async ({ deleteUser }: DeleteUserMutation): Promise<void> => {
@@ -36,7 +38,7 @@ export const DeleteAccountPage: NextPage = () => {
                 resetForm();
                 toggleNotification(deleteUser.message);
                 localStorage.removeItem('user');
-                await redirect(urls.logout);
+                await Router.push(urls.logout);
             } else {
                 unexpectedError();
             }
@@ -45,7 +47,7 @@ export const DeleteAccountPage: NextPage = () => {
         }
     };
 
-    const [deleteUserMutation] = useDeleteUserMutation({ onCompleted, onError });
+    const [deleteUser] = useDeleteUserMutation({ onCompleted, onError, context });
 
     const handleSubmit = async (values: DeleteAccountFormValues): Promise<void> => {
         setSubmitting(false);
@@ -57,7 +59,7 @@ export const DeleteAccountPage: NextPage = () => {
             });
 
             setSubmitting(true);
-            await deleteUserMutation({ variables: { password: values.password } });
+            await deleteUser({ variables: { password: values.password } });
         } catch {
             // User cancelled.
         }
@@ -93,9 +95,9 @@ export const DeleteAccountPage: NextPage = () => {
     return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['delete-account']),
+        _ns: await loadNamespaces(['delete-account'], locale),
     },
 });
 

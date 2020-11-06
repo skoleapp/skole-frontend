@@ -8,8 +8,8 @@ import {
     useVerifyAccountMutation,
     VerifyAccountMutation,
 } from 'generated/graphql';
-import { useForm } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { useForm, useLanguageHeaderContext } from 'hooks';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -35,12 +35,13 @@ const VerifyAccountPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { userMe, verified: initialVerified } = useAuthContext();
-    const email = R.propOr('', 'email', userMe) as string;
-    const token = (query.token as string) || '';
+    const email: string = R.propOr('', 'email', userMe);
+    const token = !!query.token ? String(query.token) : '';
     const [emailSubmitted, setEmailSubmitted] = useState(false);
     const [verified, setVerified] = useState(initialVerified);
     const { toggleNotification } = useNotificationsContext();
     const header = !emailSubmitted ? t('verify-account:header') : t('verify-account:emailSubmittedHeader');
+    const context = useLanguageHeaderContext();
 
     const onEmailFormCompleted = ({ resendVerificationEmail }: ResendVerificationEmailMutation): void => {
         if (!!resendVerificationEmail) {
@@ -77,11 +78,13 @@ const VerifyAccountPage: NextPage = () => {
     const [resendVerificationEmail] = useResendVerificationEmailMutation({
         onCompleted: onEmailFormCompleted,
         onError: onEmailFormError,
+        context,
     });
 
     const [verifyAccount] = useVerifyAccountMutation({
         onCompleted: onConfirmationFormCompleted,
         onError: onConfirmationFormError,
+        context,
     });
 
     const handleSubmitEmail = async (): Promise<void> => {
@@ -93,7 +96,7 @@ const VerifyAccountPage: NextPage = () => {
     };
 
     const initialEmailFormValues = {
-        email: R.propOr('', 'email', userMe) as string,
+        email,
         general: '',
     };
 
@@ -169,9 +172,9 @@ const VerifyAccountPage: NextPage = () => {
     );
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['verify-account']),
+        _ns: await loadNamespaces(['verify-account'], locale),
     },
 });
 

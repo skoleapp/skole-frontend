@@ -1,7 +1,7 @@
-import { Typography } from '@material-ui/core';
+import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout } from 'components';
-import { includeDefaultNamespaces, useTranslation, withAuth } from 'lib';
+import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -38,13 +38,18 @@ const ConfirmLogoutPage: NextPage = () => {
             >
                 {t('common:confirm')}
             </ButtonLink>
+            <FormControl>
+                <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
+                    {t('common:backToHome')}
+                </ButtonLink>
+            </FormControl>
         </FormLayout>
     );
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['confirm-logout']),
+        _ns: await loadNamespaces(['confirm-logout'], locale),
     },
 });
 

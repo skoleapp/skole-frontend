@@ -1,26 +1,29 @@
 import { Table, TableContainer } from '@material-ui/core';
+import Router from 'next/router';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';
-import { CommonPaginatedTableProps } from 'types';
-import { getQueryWithPagination, redirect } from 'utils';
+import { CustomTableHeadProps } from 'types';
+import { getQueryWithPagination, RESULTS_PER_PAGE_OPTIONS } from 'utils';
 
 import { CustomTableFooter } from './CustomTableFooter';
 import { CustomTableHead } from './CustomTableHead';
 
-interface Props extends CommonPaginatedTableProps {
+interface Props {
+    tableHeadProps?: CustomTableHeadProps;
     count: number;
-    extraFilters?: {};
+    extraFilters?: {}; // Additional query parameters to the pagination params.
+    renderTableBody: JSX.Element;
 }
 
 export const PaginatedTable: React.FC<Props> = ({ count, tableHeadProps, extraFilters = {}, renderTableBody }) => {
     const { query, pathname } = useRouter();
     const page = Number(R.propOr(1, 'page', query));
-    const rowsPerPage = Number(R.propOr(10, 'pageSize', query));
+    const rowsPerPage = Number(R.propOr(RESULTS_PER_PAGE_OPTIONS[0], 'pageSize', query));
 
     const handleReloadPage = async (values: {}): Promise<void> => {
         const query = getQueryWithPagination({ query: values, extraFilters });
-        await redirect({ pathname, query });
+        await Router.push({ pathname, query });
     };
 
     const handleChangePage = async (_e: MouseEvent<HTMLButtonElement> | null, page: number): Promise<void> => {
@@ -28,7 +31,7 @@ export const PaginatedTable: React.FC<Props> = ({ count, tableHeadProps, extraFi
     };
 
     const handleChangeRowsPerPage = async (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
-        const pageSize = parseInt(e.target.value, 10);
+        const pageSize = parseInt(e.target.value);
         await handleReloadPage({ ...query, pageSize });
     };
 

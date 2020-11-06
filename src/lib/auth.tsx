@@ -2,8 +2,9 @@ import { LoadingLayout, OfflineLayout } from 'components';
 import { useUserMe } from 'hooks';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Router from 'next/router';
 import React, { useEffect } from 'react';
-import { GET_STARTED_PAGE_VISITED_KEY, redirect, urls } from 'utils';
+import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
 
 // Sync authentication between pages.
 // Wrap all pages that require authentication with this.
@@ -15,7 +16,7 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
 
         const syncLogout = async (e: StorageEvent): Promise<void> => {
             if (e.key === 'logout') {
-                await redirect(urls.logout);
+                await Router.push(urls.logout);
             }
         };
 
@@ -29,9 +30,9 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
                 // Only redirect new users to get started page (users who have already logged in at some point).
                 // Redirect old users and users who have visited get started page to login page.
                 if (!!existingUser || getStartedPageVisited) {
-                    redirect({ pathname: urls.confirmLogin, query });
+                    Router.push({ pathname: urls.confirmLogin, query });
                 } else {
-                    redirect({ pathname: urls.getStarted, query });
+                    Router.push({ pathname: urls.getStarted, query });
                 }
             }
         }, [shouldRedirect]);
@@ -69,7 +70,7 @@ export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage =
 
         // Automatically redirect user to logout if he is authenticated.
         useEffect(() => {
-            !!userMe && redirect({ pathname: urls.confirmLogout, query: { next: asPath } });
+            !!userMe && Router.push({ pathname: urls.confirmLogout, query: { next: asPath } });
         }, [userMe]);
 
         if (authLoading) {
@@ -96,7 +97,7 @@ export const withUserMe = <T extends {}>(PageComponent: NextPage<T>): NextPage =
 
         useEffect(() => {
             const getStartedPageVisited = !!localStorage.getItem(GET_STARTED_PAGE_VISITED_KEY);
-            !getStartedPageVisited && redirect({ pathname: urls.getStarted, query: { next: asPath } });
+            !getStartedPageVisited && Router.push({ pathname: urls.getStarted, query: { next: asPath } });
         }, []);
 
         if (authLoading) {

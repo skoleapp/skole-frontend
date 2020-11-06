@@ -2,6 +2,5 @@
     "title": "Inloggning krävs",
     "description": "Du måste logga in för att fortsätta.",
     "header": "Inloggning krävs",
-    "confirmLogin": "Du måste logga in för att fortsätta.",
-    "backToHome": "Tillbaka till hem"
+    "confirmLogin": "Du måste logga in för att fortsätta."
 }

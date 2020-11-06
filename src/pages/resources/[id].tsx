@@ -36,6 +36,7 @@ import {
     CommentObjectType,
     DeleteResourceMutation,
     ResourceObjectType,
+    ResourceQueryVariables,
     useDeleteResourceMutation,
     useResourceQuery,
     UserObjectType,
@@ -44,20 +45,22 @@ import {
 import {
     useActionsDialog,
     useInfoDialog,
+    useLanguageHeaderContext,
     useMediaQueries,
-    useQueryOptions,
     useShare,
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
-import { mediaURL, redirect, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
     mobileContainer: {
@@ -88,31 +91,33 @@ const useStyles = makeStyles(({ breakpoints }) => ({
 const ResourceDetailPage: NextPage = () => {
     const classes = useStyles();
     const { t } = useTranslation();
-    const queryOptions = useQueryOptions();
-    const { data, loading, error } = useResourceQuery(queryOptions);
+    const { query } = useRouter();
     const { isMobileOrTablet } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
+    const variables: ResourceQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
+    const context = useLanguageHeaderContext();
+    const { data, loading, error } = useResourceQuery({ variables, context });
     const { userMe, verified } = useAuthContext();
     const resource: ResourceObjectType = R.propOr(null, 'resource', data);
-    const resourceTitle = R.propOr('', 'title', resource) as string;
-    const resourceDate = R.propOr('', 'date', resource) as string;
-    const resourceType = R.pathOr('', ['resourceType', 'name'], resource) as string;
-    const courseName = R.pathOr('', ['course', 'name'], resource) as string;
-    const schoolName = R.pathOr('', ['school', 'name'], resource) as string;
-    const courseId = R.pathOr('', ['course', 'id'], resource) as string;
-    const schoolId = R.pathOr('', ['school', 'id'], resource) as string;
-    const creatorId = R.pathOr('', ['user', 'id'], resource) as string;
+    const resourceTitle: string = R.propOr('', 'title', resource);
+    const resourceDate: string = R.propOr('', 'date', resource);
+    const resourceType: string = R.pathOr('', ['resourceType', 'name'], resource);
+    const courseName: string = R.pathOr('', ['course', 'name'], resource);
+    const schoolName: string = R.pathOr('', ['school', 'name'], resource);
+    const courseId: string = R.pathOr('', ['course', 'id'], resource);
+    const schoolId: string = R.pathOr('', ['school', 'id'], resource);
+    const creatorId: string = R.pathOr('', ['user', 'id'], resource);
     const title = `${resourceTitle} - ${resourceDate}`;
-    const file = mediaURL(R.propOr(undefined, 'file', resource));
-    const resourceId = R.propOr('', 'id', resource) as string;
-    const comments = R.propOr([], 'comments', resource) as CommentObjectType[];
-    const initialVote = (R.propOr(null, 'vote', resource) as unknown) as VoteObjectType | null;
+    const file = mediaUrl(R.propOr(undefined, 'file', resource));
+    const resourceId: string = R.propOr('', 'id', resource);
+    const comments: CommentObjectType[] = R.propOr([], 'comments', resource);
+    const initialVote: VoteObjectType | null = R.propOr(null, 'vote', resource);
     const initialScore = String(R.propOr(0, 'score', resource));
     const starred = !!R.propOr(undefined, 'starred', resource);
     const isOwner = !!userMe && userMe.id === creatorId;
-    const resourceUser = R.propOr(undefined, 'user', resource) as UserObjectType;
-    const created = R.propOr(undefined, 'created', resource) as string;
+    const resourceUser: UserObjectType = R.propOr(undefined, 'user', resource);
+    const created: string = R.propOr(undefined, 'created', resource);
     const commentCount = comments.length;
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: resourceTitle });
@@ -151,8 +156,7 @@ const ResourceDetailPage: NextPage = () => {
     }, [tabValue]);
 
     const staticBackUrl = {
-        href: urls.course,
-        as: `/courses/${courseId}`,
+        href: urls.course(courseId),
     };
 
     const deleteResourceError = (): void => {
@@ -165,7 +169,7 @@ const ResourceDetailPage: NextPage = () => {
                 deleteResourceError();
             } else if (deleteResource.message) {
                 toggleNotification(deleteResource.message);
-                await redirect(`/courses/${courseId}`);
+                await Router.push(urls.course(courseId));
             } else {
                 deleteResourceError();
             }
@@ -177,6 +181,7 @@ const ResourceDetailPage: NextPage = () => {
     const [deleteResource] = useDeleteResourceMutation({
         onCompleted: deleteResourceCompleted,
         onError: deleteResourceError,
+        context,
     });
 
     const handleDeleteResource = async (e: SyntheticEvent): Promise<void> => {
@@ -241,7 +246,7 @@ const ResourceDetailPage: NextPage = () => {
     const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
 
     const renderSchoolLink = !!schoolId && (
-        <TextLink href={urls.school} as={`/schools/${schoolId}`} color="primary">
+        <TextLink href={urls.school(schoolId)} as={schoolId} color="primary">
             {schoolName}
         </TextLink>
     );
@@ -461,13 +466,13 @@ const ResourceDetailPage: NextPage = () => {
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true,
+        fallback: 'blocking',
     };
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['resource']),
+        _ns: await loadNamespaces(['resource'], locale),
     },
 });
 

@@ -37,7 +37,7 @@ export const FormLayout: React.FC<Props> = ({ children, header, ...props }) => {
     const renderCardContent = (
         <CardContent>
             <Grid container justify="center">
-                <Grid item xs={12} sm={8} md={5} lg={4} xl={3}>
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                     {children}
                 </Grid>
             </Grid>

@@ -1,10 +1,11 @@
-import { DialogContent, Grid, makeStyles } from '@material-ui/core';
+import { Box, DialogContent, Grid, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import { useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
-import { useForm, useMediaQueries } from 'hooks';
+import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataURItoFile, useTranslation } from 'lib';
+import Image from 'next/image';
 import React, { useEffect } from 'react';
 import { CommentTarget, CreateCommentFormValues } from 'types';
 
@@ -13,12 +14,12 @@ import { SkoleDialog } from '../shared/SkoleDialog';
 import { RichTextEditor } from './RichTextEditor';
 
 const useStyles = makeStyles(({ spacing }) => ({
-    attachment: {
+    attachmentContainer: {
         width: '100%',
-        height: 'auto',
-        maxHeight: '25rem',
+        height: '25rem',
         margin: `${spacing(2)} 0`,
         marginBottom: 'auto',
+        position: 'relative',
     },
     container: {
         flexGrow: 1,
@@ -44,6 +45,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const { toggleNotification } = useNotificationsContext();
     const { commentModalOpen, toggleCommentModal, commentAttachment, setCommentAttachment } = useDiscussionContext();
     const { screenshot, setScreenshot } = usePDFViewerContext();
+    const context = useLanguageHeaderContext();
 
     // Use screenshot as attachment if area has been marked.
     useEffect(() => {
@@ -84,7 +86,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
             toggleNotification(t('notifications:messageEmpty'));
         } else {
             await createCommentMutation({
-                variables: { ...values, attachment: (values.attachment as unknown) as string },
+                variables: { ...values, attachment: String(values.attachment) },
+                context,
             });
 
             resetForm();
@@ -105,11 +108,14 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         isDesktop && <RichTextEditor {...formikProps} />;
 
     const renderAttachment = !!commentAttachment && (
-        <img
-            className={clsx(classes.attachment, !!screenshot && 'screenshot-border')}
-            src={commentAttachment as string}
-            alt={commentAttachment as string}
-        />
+        <Box className={clsx(classes.attachmentContainer, !!screenshot && 'screenshot-border')}>
+            <Image
+                layout="fill"
+                src={String(commentAttachment)}
+                unoptimized // Must be used for base64 images for now (v10.0.1). TODO: See if this is fixed in future Next.js versions.
+                alt={t('common:commentAttachment')}
+            />
+        </Box>
     );
 
     const renderRichTextEditor = (formikProps: T): JSX.Element => <RichTextEditor {...formikProps} />;

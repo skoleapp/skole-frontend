@@ -1,6 +1,6 @@
 import { Box, Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
-import { includeDefaultNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { FAQ_ITEMS } from 'utils';
@@ -33,9 +33,9 @@ const FAQPage: NextPage = () => {
     return <SettingsLayout {...layoutProps}>{renderContent}</SettingsLayout>;
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['faq']),
+        _ns: await loadNamespaces(['faq'], locale),
     },
 });
 

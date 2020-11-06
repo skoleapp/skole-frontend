@@ -12,63 +12,80 @@ import {
 } from '@material-ui/core';
 import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import clsx from 'clsx';
-import { MainLayout } from 'components';
+import { MainBackground, MainLayout } from 'components';
 import { useLanguageSelector, useSearch, useShare } from 'hooks';
-import { includeDefaultNamespaces, Link, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import Link from 'next/link';
 import React from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER_RADIUS, COLORS } from 'theme';
 import { UrlObject } from 'url';
 import { HOME_PAGE_SHORTCUTS } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
-    slogan: {
+    container: {
+        flexGrow: 1,
         position: 'relative',
-        paddingTop: spacing(8),
-        color: palette.common.white,
     },
     searchContainer: {
-        textAlign: 'center',
-        paddingBottom: spacing(16),
         position: 'relative',
+        padding: spacing(6),
+        marginTop: spacing(4),
+        textAlign: 'center',
+        flexGrow: 1,
+        [breakpoints.up('sm')]: {
+            marginTop: spacing(10),
+        },
         [breakpoints.up('md')]: {
-            minHeight: '20rem',
+            marginTop: spacing(16),
+            padding: spacing(16),
         },
     },
-    form: {
-        position: 'relative',
+    header: {
+        fontSize: '2rem',
+        [breakpoints.up('md')]: {
+            fontSize: '2.75rem',
+        },
     },
-    searchFieldContainer: {
+    subheader: {
+        fontSize: '1.25rem',
+    },
+    searchForm: {
         marginTop: spacing(4),
-        padding: `0 ${spacing(2)}`,
+        display: 'flex',
+        justifyContent: 'center',
     },
     searchField: {
         display: 'flex',
-        width: '100%',
-        maxWidth: '20rem',
+        flexGrow: 1,
         backgroundColor: palette.common.white,
         border: `0.05rem solid ${palette.primary.main}`,
         borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
         padding: spacing(3),
+        [breakpoints.up('md')]: {
+            maxWidth: '20rem',
+        },
     },
     searchButton: {
         borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
     },
     shortcutsContainer: {
-        padding: `${spacing(8)} 0`,
-    },
-    inviteContainer: {
-        flexGrow: 1,
         position: 'relative',
-        padding: spacing(8),
+        backgroundColor: COLORS.backgroundGrey,
+        padding: `${spacing(4)} ${spacing(2)}`,
+        flexGrow: 1,
+        [breakpoints.up('md')]: {
+            padding: spacing(14),
+        },
     },
     card: {
         width: '100%',
-        minHeight: '12rem',
+        minHeight: '14rem',
         position: 'relative',
-        [breakpoints.up('sm')]: {
-            width: '12rem',
-            height: '12rem',
+        margin: spacing(2),
+        [breakpoints.up('md')]: {
+            width: '16rem',
+            height: '16rem',
         },
     },
     cardActionArea: {
@@ -83,6 +100,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    shortcutText: {
+        fontSize: '1.5rem',
+    },
     avatar: {
         height: '5rem',
         width: '5rem',
@@ -93,6 +113,21 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     avatarIcon: {
         height: '3rem',
         width: '3rem',
+    },
+    inviteContainer: {
+        position: 'relative',
+        backgroundColor: COLORS.backgroundGrey,
+        flexGrow: 1,
+    },
+    inviteContent: {
+        padding: spacing(4),
+        textAlign: 'center',
+        [breakpoints.up('md')]: {
+            padding: spacing(12),
+        },
+    },
+    inviteButton: {
+        marginTop: spacing(4),
     },
 }));
 
@@ -108,66 +143,78 @@ const IndexPage: NextPage = () => {
     const { handleSubmit, inputProps } = useSearch();
     const { renderLanguageButton } = useLanguageSelector();
     const { handleShare } = useShare({});
+    const renderBackground = <MainBackground />;
 
     const renderSearch = (
-        <Grid container direction="column" justify="center" className={classes.searchContainer}>
-            <Box className="main-background" />
-            <Typography className={classes.slogan} variant="h1" gutterBottom>
-                {t('common:slogan')}
+        <Grid className={classes.searchContainer} item xs={12} container direction="column">
+            <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
+                {t('index:header')}
             </Typography>
-            <form className={classes.form} onSubmit={handleSubmit}>
-                <Box className={classes.searchFieldContainer} display="flex" justifyContent="center">
-                    <Box className={classes.searchField}>
-                        <InputBase {...inputProps} />
-                    </Box>
-                    <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
-                        <SearchOutlined />
-                    </Button>
+            <Typography className={classes.subheader} variant="subtitle1" color="secondary">
+                {t('index:subheader')}
+            </Typography>
+            <form className={classes.searchForm} onSubmit={handleSubmit}>
+                <Box className={classes.searchField}>
+                    <InputBase {...inputProps} />
                 </Box>
+                <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
+                    <SearchOutlined />
+                </Button>
             </form>
         </Grid>
     );
 
+    const renderHomepageShortcuts = HOME_PAGE_SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+        <Link href={href} key={i}>
+            <Card className={clsx(classes.card)}>
+                <CardActionArea className={classes.cardActionArea}>
+                    <CardContent className={classes.cardContent}>
+                        <Avatar className={clsx(classes.avatar)}>
+                            <Icon className={classes.avatarIcon} />
+                        </Avatar>
+                        <Typography
+                            className={classes.shortcutText}
+                            variant="subtitle1"
+                            color="textSecondary"
+                            align="center"
+                        >
+                            {t(text)}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        </Link>
+    ));
+
     const renderShortcuts = (
-        <Grid container justify="center" className={classes.shortcutsContainer}>
-            <Grid item xs={12} md={8} lg={6} xl={4} container spacing={2}>
-                {HOME_PAGE_SHORTCUTS.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
-                    <Grid item xs={12} sm={4} container justify="center" key={i}>
-                        <Link href={href}>
-                            <Card className={clsx(classes.card)}>
-                                <CardActionArea className={classes.cardActionArea}>
-                                    <CardContent className={classes.cardContent}>
-                                        <Avatar className={clsx(classes.avatar)}>
-                                            <Icon className={classes.avatarIcon} />
-                                        </Avatar>
-                                        <Typography variant="h5" color="primary" align="center">
-                                            {t(text)}
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Link>
-                    </Grid>
-                ))}
+        <Grid container justify="center" alignItems="center" className={classes.shortcutsContainer}>
+            <Grid item container spacing={4} justify="center">
+                {renderHomepageShortcuts}
             </Grid>
         </Grid>
     );
 
-    const renderInvite = (
-        <Grid container direction="column" alignItems="center" className={classes.inviteContainer}>
-            <Typography variant="h6" color="primary" gutterBottom>
-                {t('index:inviteHeader')}
-            </Typography>
-            <Typography component="br" />
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} container>
+    const renderInfo = (
+        <Grid className={classes.inviteContainer} container justify="center">
+            <Grid
+                className={classes.inviteContent}
+                item
+                container
+                direction="column"
+                alignItems="center"
+                justify="center"
+            >
+                <Typography className={classes.subheader} variant="subtitle1" color="textSecondary" gutterBottom>
+                    {t('index:inviteHeader')}
+                </Typography>
                 <Button
+                    className={classes.inviteButton}
                     onClick={handleShare}
                     color="primary"
                     variant="outlined"
                     endIcon={<ArrowForwardOutlined />}
-                    fullWidth
                 >
-                    {t('index:inviteText')}
+                    {t('index:inviteFriends')}
                 </Button>
             </Grid>
         </Grid>
@@ -190,16 +237,19 @@ const IndexPage: NextPage = () => {
 
     return (
         <MainLayout {...layoutProps}>
-            {renderSearch}
-            {renderShortcuts}
-            {renderInvite}
+            <Grid container direction="column" alignItems="center" className={classes.container}>
+                {renderBackground}
+                {renderSearch}
+                {renderShortcuts}
+                {renderInfo}
+            </Grid>
         </MainLayout>
     );
 };
 
-export const getStaticProps: GetStaticProps = async () => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
-        namespacesRequired: includeDefaultNamespaces(['index']),
+        _ns: await loadNamespaces(['index'], locale),
     },
 });
 

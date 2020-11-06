@@ -24,12 +24,12 @@ import {
 } from '@material-ui/icons';
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation, VoteObjectType } from 'generated';
-import { useActionsDialog, useDayjs, useVotes } from 'hooks';
+import { useActionsDialog, useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
 import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { mediaURL, truncate } from 'utils';
+import { mediaUrl, truncate, urls } from 'utils';
 
 import { ResponsiveDialog, TextLink } from '..';
 
@@ -74,24 +74,27 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const classes = useStyles();
     const { t } = useTranslation();
     const { userMe, verified } = useAuthContext();
-    const created = useDayjs(comment.created)
-        .startOf('m')
-        .fromNow();
-    const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user) as string;
+    const userId: string = R.propOr('', 'id', comment.user);
+    const avatarThumb: string = R.propOr('', 'avatarThumbnail', comment.user);
     const confirm = useConfirm();
     const attachmentOnly = comment.text == '' && comment.attachment !== '';
-    const initialVote = R.propOr(null, 'vote', comment) as VoteObjectType | null;
+    const initialVote: VoteObjectType = R.propOr(null, 'vote', comment);
     const initialScore = String(R.propOr(0, 'score', comment));
-    const creatorId = R.propOr('', 'id', comment.user) as string;
+    const creatorId: string = R.propOr('', 'id', comment.user);
     const isOwner = !!userMe && userMe.id === creatorId;
-    const commentId = R.propOr('', 'id', comment) as string;
+    const commentId: string = R.propOr('', 'id', comment);
     const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', comment);
     const replyCount = replyComments.length;
     const { toggleNotification } = useNotificationsContext();
     const { toggleTopComment, setAttachmentViewerValue } = useDiscussionContext();
     const shareQuery = `?comment=${commentId}`;
-    const creatorUsername = R.propOr(t('common:communityUser'), 'username', comment.user) as string;
+    const creatorUsername: string = R.propOr(t('common:communityUser'), 'username', comment.user);
     const shareText = t('common:commentShareText', { creatorUsername, commentPreview: truncate(comment.text, 20) });
+    const context = useLanguageHeaderContext();
+
+    const created = useDayjs(comment.created)
+        .startOf('m')
+        .fromNow();
 
     const {
         actionsDialogOpen,
@@ -137,6 +140,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const [deleteComment] = useDeleteCommentMutation({
         onCompleted: deleteCommentCompleted,
         onError: deleteCommentError,
+        context,
     });
 
     const handleAttachmentClick = (e: SyntheticEvent): void => {
@@ -157,10 +161,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     };
 
     const renderTitle = !!comment.user ? (
-        <TextLink
-            href={`/users/${R.propOr('', 'id', comment.user)}`}
-            onClick={(e: SyntheticEvent): void => e.stopPropagation()}
-        >
+        <TextLink href={urls.user(userId)} onClick={(e: SyntheticEvent): void => e.stopPropagation()}>
             {comment.user.username}
         </TextLink>
     ) : (
@@ -172,7 +173,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     const renderCardHeader = (
         <CardHeader
             classes={{ root: classes.cardHeader, title: classes.cardTitle, subheader: classes.cardSubHeader }}
-            avatar={<Avatar className="avatar-thumbnail" src={mediaURL(avatarThumb)} />}
+            avatar={<Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />}
             title={renderTitle}
             subheader={created}
         />

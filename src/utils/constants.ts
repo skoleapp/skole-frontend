@@ -1,6 +1,5 @@
 import {
     AssignmentOutlined,
-    ChatOutlined,
     CloudUploadOutlined,
     ContactSupportOutlined,
     DeleteForeverOutlined,
@@ -17,64 +16,43 @@ import {
 
 import { urls } from './urls';
 
-// Token cookie.
+// Token cookie
 
 export const TOKEN_NAME = 'JWT';
 export const MAX_AGE = 60 * 60 * 24 * 30; // 1 month.
 
-// PDF Viewer.
+// PDF viewer
 
 export const DEFAULT_TRANSLATION = { x: 0, y: 0 };
 export const DEFAULT_SCALE = 1.0;
 export const MIN_SCALE = 0.75;
 export const MAX_SCALE = 1.75;
 
-// Get started page.
-
-export const GET_STARTED_ITEMS = [
-    {
-        title: 'common:resources',
-        image: 'images/landing-page/resources.jpg',
-        description: 'get-started:resourcesDescription',
-        icon: AssignmentOutlined,
-    },
-    {
-        title: 'common:courses',
-        image: 'images/landing-page/courses.jpg',
-        description: 'get-started:coursesDescription',
-        icon: SchoolOutlined,
-    },
-    {
-        title: 'common:discussion',
-        image: 'images/landing-page/discussion.jpg',
-        description: 'get-started:discussionDescription',
-        icon: ChatOutlined,
-    },
-];
+// Landing page
 
 export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
 
-// Home page.
+// Home page
 
 export const HOME_PAGE_SHORTCUTS = [
     {
-        text: 'index:resources',
+        text: 'index:findResources',
         icon: AssignmentOutlined,
         href: urls.search,
     },
     {
-        text: 'index:upload',
+        text: 'index:uploadResources',
         icon: CloudUploadOutlined,
         href: urls.uploadResource,
     },
     {
-        text: 'index:addCourse',
+        text: 'index:createCourses',
         icon: SchoolOutlined,
         href: urls.createCourse,
     },
 ];
 
-// Settings.
+// Settings
 
 export const MENU_ITEMS = {
     account: [
@@ -156,7 +134,7 @@ export const MENU_ITEMS = {
     ],
 };
 
-// FAQ items.
+// FAQ items
 
 export const FAQ_ITEMS = [
     {
@@ -173,7 +151,7 @@ export const FAQ_ITEMS = [
     },
 ];
 
-// Rich text editor.
+// Rich text editor
 
 export const RICH_STYLES = {
     bold: 'BOLD',
@@ -186,11 +164,15 @@ export const RICH_STYLES = {
     codeBlock: 'code-block',
 };
 
-// Resource uploads.
+// Resource uploads
 
 export const ACCEPTED_FILES = ['image/*', 'text/*', 'application/*'];
 export const MAX_FILE_SIZE = 10000000;
 
-// Avatar field.
+// Avatar field
 
 export const AVATAR_MAX_FILE_SIZE = 2000000;
+
+// Paginated table
+
+export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];

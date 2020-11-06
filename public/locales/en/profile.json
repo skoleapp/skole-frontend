@@ -7,8 +7,8 @@
     "noResources": "This user has no resources.",
     "noCourses": "This user has no courses.",
     "viewStarred": "View Starred",
-    "ownProfileCourses": "Your Courses",
-    "ownProfileResources": "Your Resources",
+    "ownProfileCourses": "My Courses",
+    "ownProfileResources": "My Resources",
     "ownProfileNoCourses": "You have no courses. All resources that you create will show up here.",
     "ownProfileNoResources": "You have no resources. All resources that you create will show up here."
 }

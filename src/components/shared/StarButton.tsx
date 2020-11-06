@@ -1,7 +1,8 @@
 import { IconButton, IconButtonProps, Tooltip, Typography } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { PerformStarMutation, usePerformStarMutation } from 'generated';
+import { StarMutation, useStarMutation } from 'generated';
+import { useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { useState } from 'react';
 
@@ -17,6 +18,7 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
     const [starred, setStarred] = useState(initialStarred);
     const color = starred ? 'primary' : 'default';
     const { toggleNotification } = useNotificationsContext();
+    const context = useLanguageHeaderContext();
 
     const tooltip =
         loginRequiredTooltip ||
@@ -25,20 +27,20 @@ export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, r
 
     const onError = (): void => toggleNotification(t('notifications:starError'));
 
-    const onCompleted = ({ performStar }: PerformStarMutation): void => {
-        if (!!performStar) {
-            if (!!performStar.errors && !!performStar.errors.length) {
+    const onCompleted = ({ star }: StarMutation): void => {
+        if (!!star) {
+            if (!!star.errors && !!star.errors.length) {
                 onError();
             } else {
-                setStarred(performStar.starred as boolean);
+                setStarred(!!star.starred);
             }
         }
     };
 
-    const [performStar, { loading: starSubmitting }] = usePerformStarMutation({ onCompleted, onError });
+    const [star, { loading: starSubmitting }] = useStarMutation({ onCompleted, onError, context });
 
     const handleStar = async (): Promise<void> => {
-        await performStar({ variables: { course, resource } });
+        await star({ variables: { course, resource } });
     };
 
     return (

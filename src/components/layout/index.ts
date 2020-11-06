@@ -5,6 +5,7 @@ export { Logo } from './Logo';
 export { SkoleGDPR } from './SkoleGDPR';
 export { TopNavbar } from './TopNavbar';
 export { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
+export { MainBackground } from './MainBackground';
 export { Notifications } from './Notifications';
 export { AttachmentViewer } from './AttachmentViewer';
 export { CommentThreadModal } from './CommentThreadModal';

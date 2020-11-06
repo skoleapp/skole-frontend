@@ -21,9 +21,17 @@ import { AVATAR_MAX_FILE_SIZE as maxFileSize } from 'utils';
 
 import { ResponsiveDialog } from '..';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     button: {
         marginTop: spacing(2),
+    },
+    avatar: {
+        width: '5rem',
+        height: '5rem',
+        [breakpoints.up('md')]: {
+            width: '7rem',
+            height: '7rem',
+        },
     },
 }));
 
@@ -49,7 +57,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ se
             reader.readAsDataURL(avatar);
             reader.onloadend = (): void => {
                 setFieldValue('avatar', avatar);
-                setPreview(reader.result as string);
+                setPreview(String(reader.result));
                 handleCloseDialog();
             };
         }
@@ -94,7 +102,7 @@ export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({ se
 
     const renderPreview = (
         <Box display="flex" flexDirection="column" alignItems="center">
-            <Avatar className="main-avatar" src={preview} />
+            <Avatar className={classes.avatar} src={preview} />
             <input
                 value=""
                 id="avatar-input"

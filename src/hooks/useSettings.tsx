@@ -2,10 +2,10 @@ import { Box, List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/co
 import { ExitToAppOutlined, HowToRegOutlined, LanguageOutlined, VerifiedUserOutlined } from '@material-ui/icons';
 import { useAuthContext, useSettingsContext } from 'context';
 import { useTranslation } from 'lib';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { SettingsContextType } from 'types';
-import { MENU_ITEMS, redirect, urls } from 'utils';
+import { MENU_ITEMS, urls } from 'utils';
 
 import { useLanguageSelector } from './useLanguageSelector';
 
@@ -28,7 +28,7 @@ export const useSettings = (modal: boolean): UseSettings => {
 
     const handleMenuItemClick = (href: string) => async (): Promise<void> => {
         modal && handleClose();
-        await redirect(href);
+        await Router.push(href);
     };
 
     const getSelected = (href: string): boolean => !modal && href === pathname;
