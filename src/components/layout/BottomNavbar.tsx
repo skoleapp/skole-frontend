@@ -49,6 +49,7 @@ export const BottomNavbar: React.FC = () => {
     const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
     const renderProfileLabel = !!userMe ? t('common:profile') : t('common:login');
     const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />;
+    const handleProfileActionClick = (): Promise<boolean> => Router.push(!!userMeId ? urls.user(userMeId) : urls.login);
 
     const renderAvatar = !!userMe ? (
         <Link href={urls.user(userMeId)}>{renderAvatarThumbnail}</Link>
@@ -101,7 +102,7 @@ export const BottomNavbar: React.FC = () => {
             value={5}
             label={renderProfileLabel}
             showLabel
-            onClick={handleRedirect(urls.user(userMeId))}
+            onClick={handleProfileActionClick}
             icon={renderAvatar}
         />
     );
