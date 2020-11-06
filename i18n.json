@@ -1,5 +1,4 @@
 {
     "locales": ["en", "fi", "sv"],
-    "defaultLocale": "en",
-    "localesPath": "public/locales"
+    "defaultLocale": "en"
 }

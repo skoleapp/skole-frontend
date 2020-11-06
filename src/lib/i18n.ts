@@ -24,7 +24,7 @@ export const loadNamespaces = async (namespaces: string[], lang?: string): Promi
     const totalNamespaces: Namespaces = {};
 
     for (const ns of [...defaultNamespaces, ...namespaces]) {
-        totalNamespaces[ns] = await import(`../../public/locales/${lang}/${ns}.json`).then(m => m.default);
+        totalNamespaces[ns] = await import(`../../locales/${lang}/${ns}.json`).then(m => m.default);
     }
 
     return totalNamespaces;
