@@ -154,15 +154,21 @@ const EditProfilePage: NextPage = () => {
         <FormSubmitSection submitButtonText={t('common:save')} {...props} />
     );
 
+    const renderVerifyAccountLink = verified === false && (
+        <FormControl className={classes.link}>
+            <TextLink href={urls.verifyAccount}>{t('common:verifyAccount')}</TextLink>
+        </FormControl>
+    );
+
     const renderBackToProfileLink = (
         <FormControl className={classes.link}>
             <TextLink href={urls.user(R.propOr('', 'id', userMe))}>{t('edit-profile:backToProfile')}</TextLink>
         </FormControl>
     );
 
-    const renderVerifyAccountLink = verified === false && (
+    const renderDeleteProfileLink = (
         <FormControl className={classes.link}>
-            <TextLink href={urls.verifyAccount}>{t('common:verifyAccount')}</TextLink>
+            <TextLink href={urls.deleteAccount}>{t('common:deleteAccount')}</TextLink>
         </FormControl>
     );
 
@@ -180,6 +186,7 @@ const EditProfilePage: NextPage = () => {
             {renderFormSubmitSection(props)}
             {renderVerifyAccountLink}
             {renderBackToProfileLink}
+            {renderDeleteProfileLink}
         </Form>
     );
 
