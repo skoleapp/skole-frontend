@@ -160,7 +160,7 @@ const GetStartedPage: NextPage = () => {
                 {t('get-started:cta')}
             </ButtonLink>
             <Typography className={classes.or} variant="body2" color="secondary">
-                {t('get-started:or')}
+                {t('get-started:or').toUpperCase()}
             </Typography>
             <Typography className={classes.authLink}>
                 <TextLink color="secondary" href={skipLoginUrl}>
