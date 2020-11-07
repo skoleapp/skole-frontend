@@ -75,6 +75,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
         height: '4rem',
         margin: spacing(2),
         position: 'relative',
+        opacity: 0.5, // TODO: Remove this when the actual links are available.
         [breakpoints.up('sm')]: {
             width: '10rem',
             height: '4rem',
