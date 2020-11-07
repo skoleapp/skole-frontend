@@ -83,7 +83,7 @@ export const ActivityListItem: React.FC<Props> = ({
     const renderListItemText = <ListItemText primary={renderTargetUserLink} secondary={description} />;
 
     return (
-        <ListItem onClick={handleClick} button className={clsx('border-bottom', !read && classes.unread)}>
+        <ListItem onClick={handleClick} className={!read ? classes.unread : ''} button>
             {renderAvatar}
             {renderListItemText}
         </ListItem>

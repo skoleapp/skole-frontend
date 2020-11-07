@@ -86,6 +86,9 @@ const useStyles = makeStyles(({ breakpoints }) => ({
             borderRadius: BORDER_RADIUS,
         },
     },
+    discussionHeader: {
+        textAlign: 'left',
+    },
 }));
 
 const CourseDetailPage: NextPage = () => {
@@ -232,7 +235,7 @@ const CourseDetailPage: NextPage = () => {
 
     const renderDiscussionHeader = (
         <CardHeader
-            className="text-left"
+            className={classes.discussionHeader}
             subheader={`${t('common:discussion')} (${commentCount})`}
             action={
                 <Grid container>
