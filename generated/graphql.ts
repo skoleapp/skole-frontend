@@ -25,6 +25,10 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Return user profile of the user making the query. Only allowed for authenticated users. */
+  userMe?: Maybe<UserObjectType>;
+  /** Return a single object based on the ID. If an object is not found or it has been soft deleted, return `null` instead. Superusers cannot be queried. */
+  user?: Maybe<UserObjectType>;
   /** Filter results based on the school ID. Results are sorted by amount of courses. */
   subjects?: Maybe<PaginatedSubjectObjectType>;
   /** Return limited amount of results for autocomplete fields. Results are sorted by amount of courses. */
@@ -69,10 +73,11 @@ export type Query = {
   activities?: Maybe<PaginatedActivityObjectType>;
   /** Return limited amount of activity of the user making the query for a preview. */
   activityPreview?: Maybe<Array<Maybe<ActivityObjectType>>>;
-  /** Return user profile of the user making the query. Only allowed for authenticated users. */
-  userMe?: Maybe<UserObjectType>;
-  /** Return a single object based on the ID. If an object is not found or it has been soft deleted, return `null` instead. Superusers cannot be queried. */
-  user?: Maybe<UserObjectType>;
+};
+
+
+export type QueryUserArgs = {
+  id?: Maybe<Scalars['ID']>;
 };
 
 
@@ -175,37 +180,26 @@ export type QueryActivitiesArgs = {
   pageSize?: Maybe<Scalars['Int']>;
 };
 
-
-export type QueryUserArgs = {
-  id?: Maybe<Scalars['ID']>;
-};
-
-/** Models one studyable subject, e.g. Computer Engineering. Results are paginated. */
-export type PaginatedSubjectObjectType = {
-  __typename?: 'PaginatedSubjectObjectType';
-  page?: Maybe<Scalars['Int']>;
-  pages?: Maybe<Scalars['Int']>;
-  hasNext?: Maybe<Scalars['Boolean']>;
-  hasPrev?: Maybe<Scalars['Boolean']>;
-  count?: Maybe<Scalars['Int']>;
-  objects?: Maybe<Array<Maybe<SubjectObjectType>>>;
-};
-
-/** Models one studyable subject, e.g. Computer Engineering. */
-export type SubjectObjectType = {
-  __typename?: 'SubjectObjectType';
+/** Models one user on the platform. The following fields are private, meaning they are returned only if the user is querying one's own profile: `email`, `verified`, `school`, `subject`. For instances that are not the user's own user profile, these fields will return a `null` value. */
+export type UserObjectType = {
+  __typename?: 'UserObjectType';
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  courseCount?: Maybe<Scalars['Int']>;
-  resourceCount?: Maybe<Scalars['Int']>;
+  username: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  bio: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['Int']>;
+  created: Scalars['DateTime'];
+  verified?: Maybe<Scalars['Boolean']>;
+  avatarThumbnail?: Maybe<Scalars['String']>;
+  school?: Maybe<SchoolObjectType>;
+  subject?: Maybe<SubjectObjectType>;
+  rank?: Maybe<Scalars['String']>;
+  badges?: Maybe<Array<Maybe<BadgeObjectType>>>;
+  unreadActivityCount?: Maybe<Scalars['Int']>;
 };
 
-/** Models one type of school, e.g. University of High School. */
-export type SchoolTypeObjectType = {
-  __typename?: 'SchoolTypeObjectType';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-};
 
 /** Models one school on the platform. */
 export type SchoolObjectType = {
@@ -217,6 +211,13 @@ export type SchoolObjectType = {
   name?: Maybe<Scalars['String']>;
   country?: Maybe<CountryObjectType>;
   subjects?: Maybe<Array<Maybe<SubjectObjectType>>>;
+};
+
+/** Models one type of school, e.g. University of High School. */
+export type SchoolTypeObjectType = {
+  __typename?: 'SchoolTypeObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
 };
 
 /** Models one city, e.g. Turku or Helsinki. */
@@ -247,33 +248,13 @@ export type CourseObjectType = {
   commentCount?: Maybe<Scalars['Int']>;
 };
 
-/** Models one user on the platform. The following fields are private, meaning they are returned only if the user is querying one's own profile: `email`, `verified`, `school`, `subject`. For instances that are not the user's own user profile, these fields will return a `null` value. */
-export type UserObjectType = {
-  __typename?: 'UserObjectType';
-  id: Scalars['ID'];
-  username: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
-  bio: Scalars['String'];
-  avatar?: Maybe<Scalars['String']>;
-  score?: Maybe<Scalars['Int']>;
-  created: Scalars['DateTime'];
-  verified?: Maybe<Scalars['Boolean']>;
-  avatarThumbnail?: Maybe<Scalars['String']>;
-  school?: Maybe<SchoolObjectType>;
-  subject?: Maybe<SubjectObjectType>;
-  rank?: Maybe<Scalars['String']>;
-  badges?: Maybe<Array<Maybe<BadgeObjectType>>>;
-  unreadActivityCount?: Maybe<Scalars['Int']>;
-};
-
-
-/** <module 'skole.utils.api_descriptions' from '/home/user/app/skole/utils/api_descriptions.py'> */
-export type BadgeObjectType = {
-  __typename?: 'BadgeObjectType';
+/** Models one studyable subject, e.g. Computer Engineering. */
+export type SubjectObjectType = {
+  __typename?: 'SubjectObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  courseCount?: Maybe<Scalars['Int']>;
+  resourceCount?: Maybe<Scalars['Int']>;
 };
 
 /** Models one comment posted on a comment thread. */
@@ -339,6 +320,25 @@ export type CountryObjectType = {
   __typename?: 'CountryObjectType';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
+};
+
+/** Models a badge awarded for a user, e.g `Moderator`. */
+export type BadgeObjectType = {
+  __typename?: 'BadgeObjectType';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+};
+
+/** Models one studyable subject, e.g. Computer Engineering. Results are paginated. */
+export type PaginatedSubjectObjectType = {
+  __typename?: 'PaginatedSubjectObjectType';
+  page?: Maybe<Scalars['Int']>;
+  pages?: Maybe<Scalars['Int']>;
+  hasNext?: Maybe<Scalars['Boolean']>;
+  hasPrev?: Maybe<Scalars['Boolean']>;
+  count?: Maybe<Scalars['Int']>;
+  objects?: Maybe<Array<Maybe<SubjectObjectType>>>;
 };
 
 export type PaginatedResourceObjectType = {
@@ -1840,7 +1840,7 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  *   },
  * });
  */
-export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+export function useRegisterMutation(baseOptions: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
         return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
       }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
@@ -1877,7 +1877,7 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  *   },
  * });
  */
-export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+export function useLoginMutation(baseOptions: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
         return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
       }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
@@ -1944,7 +1944,7 @@ export type ResendVerificationEmailMutationFn = Apollo.MutationFunction<ResendVe
  *   },
  * });
  */
-export function useResendVerificationEmailMutation(baseOptions?: Apollo.MutationHookOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>) {
+export function useResendVerificationEmailMutation(baseOptions: Apollo.MutationHookOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>) {
         return Apollo.useMutation<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>(ResendVerificationEmailDocument, baseOptions);
       }
 export type ResendVerificationEmailMutationHookResult = ReturnType<typeof useResendVerificationEmailMutation>;
@@ -2016,7 +2016,7 @@ export type SendPasswordResetEmailMutationFn = Apollo.MutationFunction<SendPassw
  *   },
  * });
  */
-export function useSendPasswordResetEmailMutation(baseOptions?: Apollo.MutationHookOptions<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>) {
+export function useSendPasswordResetEmailMutation(baseOptions: Apollo.MutationHookOptions<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>) {
         return Apollo.useMutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables>(SendPasswordResetEmailDocument, baseOptions);
       }
 export type SendPasswordResetEmailMutationHookResult = ReturnType<typeof useSendPasswordResetEmailMutation>;
@@ -2053,7 +2053,7 @@ export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutat
  *   },
  * });
  */
-export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
+export function useResetPasswordMutation(baseOptions: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
         return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, baseOptions);
       }
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
@@ -2061,7 +2061,9 @@ export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMut
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($username: String!, $email: String!, $title: String, $bio: String, $avatar: String, $school: ID, $subject: ID) {
-  updateUser(input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar, school: $school, subject: $subject}) {
+  updateUser(
+    input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar, school: $school, subject: $subject}
+  ) {
     message
     user {
       id
@@ -2105,7 +2107,7 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *   },
  * });
  */
-export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+export function useUpdateUserMutation(baseOptions: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
         return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
       }
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
@@ -2142,7 +2144,7 @@ export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMut
  *   },
  * });
  */
-export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+export function useChangePasswordMutation(baseOptions: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
         return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, baseOptions);
       }
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
@@ -2178,7 +2180,7 @@ export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, D
  *   },
  * });
  */
-export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>) {
+export function useDeleteUserMutation(baseOptions: Apollo.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>) {
         return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument, baseOptions);
       }
 export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
@@ -2223,7 +2225,9 @@ export type StarMutationResult = Apollo.MutationResult<StarMutation>;
 export type StarMutationOptions = Apollo.BaseMutationOptions<StarMutation, StarMutationVariables>;
 export const VoteDocument = gql`
     mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
-  vote(input: {status: $status, comment: $comment, course: $course, resource: $resource}) {
+  vote(
+    input: {status: $status, comment: $comment, course: $course, resource: $resource}
+  ) {
     vote {
       id
       status
@@ -2258,7 +2262,7 @@ export type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationV
  *   },
  * });
  */
-export function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMutation, VoteMutationVariables>) {
+export function useVoteMutation(baseOptions: Apollo.MutationHookOptions<VoteMutation, VoteMutationVariables>) {
         return Apollo.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument, baseOptions);
       }
 export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
@@ -2266,7 +2270,9 @@ export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
 export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
 export const CreateCommentDocument = gql`
     mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $comment: ID) {
-  createComment(input: {text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment}) {
+  createComment(
+    input: {text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment}
+  ) {
     message
     comment {
       id
@@ -2332,7 +2338,7 @@ export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutat
  *   },
  * });
  */
-export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+export function useCreateCommentMutation(baseOptions: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
         return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, baseOptions);
       }
 export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
@@ -2376,7 +2382,9 @@ export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMut
 export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
 export const CreateContactMessageDocument = gql`
     mutation CreateContactMessage($subject: String!, $name: String, $email: String!, $message: String!) {
-  createContactMessage(input: {subject: $subject, name: $name, email: $email, message: $message}) {
+  createContactMessage(
+    input: {subject: $subject, name: $name, email: $email, message: $message}
+  ) {
     message
     errors {
       field
@@ -2407,7 +2415,7 @@ export type CreateContactMessageMutationFn = Apollo.MutationFunction<CreateConta
  *   },
  * });
  */
-export function useCreateContactMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateContactMessageMutation, CreateContactMessageMutationVariables>) {
+export function useCreateContactMessageMutation(baseOptions: Apollo.MutationHookOptions<CreateContactMessageMutation, CreateContactMessageMutationVariables>) {
         return Apollo.useMutation<CreateContactMessageMutation, CreateContactMessageMutationVariables>(CreateContactMessageDocument, baseOptions);
       }
 export type CreateContactMessageMutationHookResult = ReturnType<typeof useCreateContactMessageMutation>;
@@ -2415,7 +2423,9 @@ export type CreateContactMessageMutationResult = Apollo.MutationResult<CreateCon
 export type CreateContactMessageMutationOptions = Apollo.BaseMutationOptions<CreateContactMessageMutation, CreateContactMessageMutationVariables>;
 export const CreateCourseDocument = gql`
     mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
-  createCourse(input: {name: $courseName, code: $courseCode, subjects: $subjects, school: $school}) {
+  createCourse(
+    input: {name: $courseName, code: $courseCode, subjects: $subjects, school: $school}
+  ) {
     message
     course {
       id
@@ -2449,7 +2459,7 @@ export type CreateCourseMutationFn = Apollo.MutationFunction<CreateCourseMutatio
  *   },
  * });
  */
-export function useCreateCourseMutation(baseOptions?: Apollo.MutationHookOptions<CreateCourseMutation, CreateCourseMutationVariables>) {
+export function useCreateCourseMutation(baseOptions: Apollo.MutationHookOptions<CreateCourseMutation, CreateCourseMutationVariables>) {
         return Apollo.useMutation<CreateCourseMutation, CreateCourseMutationVariables>(CreateCourseDocument, baseOptions);
       }
 export type CreateCourseMutationHookResult = ReturnType<typeof useCreateCourseMutation>;
@@ -2493,7 +2503,9 @@ export type DeleteCourseMutationResult = Apollo.MutationResult<DeleteCourseMutat
 export type DeleteCourseMutationOptions = Apollo.BaseMutationOptions<DeleteCourseMutation, DeleteCourseMutationVariables>;
 export const CreateResourceDocument = gql`
     mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
-  createResource(input: {title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file}) {
+  createResource(
+    input: {title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file}
+  ) {
     message
     resource {
       id
@@ -2527,7 +2539,7 @@ export type CreateResourceMutationFn = Apollo.MutationFunction<CreateResourceMut
  *   },
  * });
  */
-export function useCreateResourceMutation(baseOptions?: Apollo.MutationHookOptions<CreateResourceMutation, CreateResourceMutationVariables>) {
+export function useCreateResourceMutation(baseOptions: Apollo.MutationHookOptions<CreateResourceMutation, CreateResourceMutationVariables>) {
         return Apollo.useMutation<CreateResourceMutation, CreateResourceMutationVariables>(CreateResourceDocument, baseOptions);
       }
 export type CreateResourceMutationHookResult = ReturnType<typeof useCreateResourceMutation>;
@@ -3002,7 +3014,18 @@ export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const SearchCoursesDocument = gql`
     query SearchCourses($courseName: String, $courseCode: String, $school: ID, $subject: ID, $schoolType: ID, $country: ID, $city: ID, $ordering: String, $page: Int, $pageSize: Int) {
-  courses(courseName: $courseName, courseCode: $courseCode, school: $school, subject: $subject, schoolType: $schoolType, country: $country, city: $city, ordering: $ordering, page: $page, pageSize: $pageSize) {
+  courses(
+    courseName: $courseName
+    courseCode: $courseCode
+    school: $school
+    subject: $subject
+    schoolType: $schoolType
+    country: $country
+    city: $city
+    ordering: $ordering
+    page: $page
+    pageSize: $pageSize
+  ) {
     page
     pages
     hasPrev

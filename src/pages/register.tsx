@@ -129,18 +129,13 @@ const RegisterPage: NextPage = () => {
 
     const onRegisterCompleted = async ({ register, login }: RegisterMutation): Promise<void> => {
         if (!!register && !!register.errors && !!register.errors.length) {
-            console.log(register.errors);
             handleRegisterMutationErrors(register.errors);
         } else if (!!login && !!login.errors && !!login.errors.length) {
             handleRegisterMutationErrors(login.errors);
-        } else if (!!login && !!login.user && !!register) {
-            try {
-                resetRegisterForm();
-                setRegisteredUser(login.user);
-                setPhase(RegisterPhases.UPDATE_USER);
-            } catch {
-                unexpectedRegisterError();
-            }
+        } else if (!!login && !!login.user) {
+            resetRegisterForm();
+            setRegisteredUser(login.user);
+            setPhase(RegisterPhases.UPDATE_USER);
         } else {
             unexpectedRegisterError();
         }

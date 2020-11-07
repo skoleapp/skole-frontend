@@ -64,9 +64,8 @@ export const SettingsLayout: React.FC<Props> = ({
     };
 
     const colSpan = dense ? denseColSpan : {};
-
-    const renderSettingsButton = isMobileOrTablet ? <SettingsButton color="secondary" /> : undefined;
-    const renderHeaderRight = headerRight || renderSettingsButton;
+    const renderMobileSettingsButton = isMobileOrTablet ? <SettingsButton color="secondary" size="small" /> : undefined;
+    const renderHeaderRight = headerRight || renderMobileSettingsButton;
 
     const customTopNavbarProps = {
         ...topNavbarProps,
