@@ -181,12 +181,21 @@ let theme = createMuiTheme({
                 display: 'flex',
                 backgroundColor: COLORS.white,
                 flexGrow: 1,
+                position: 'relative',
             },
         },
         MuiTableContainer: {
             root: {
                 display: 'flex',
                 flexDirection: 'column',
+                position: 'absolute',
+                height: '100%',
+                overflow: 'hidden',
+            },
+        },
+        MuiTableBody: {
+            root: {
+                overflowY: 'auto',
             },
         },
         MuiTableRow: {
@@ -205,6 +214,11 @@ let theme = createMuiTheme({
         MuiTableFooter: {
             root: {
                 marginTop: 'auto',
+            },
+        },
+        MuiTablePagination: {
+            input: {
+                margin: 0,
             },
         },
         MuiCardHeader: {
