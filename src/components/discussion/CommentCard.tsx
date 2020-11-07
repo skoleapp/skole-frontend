@@ -21,6 +21,7 @@ import {
     DeleteOutline,
     KeyboardArrowDownOutlined,
     KeyboardArrowUpOutlined,
+    MoreHorizOutlined,
 } from '@material-ui/icons';
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation, VoteObjectType } from 'generated';
@@ -61,10 +62,18 @@ const useStyles = makeStyles(({ spacing }) => ({
         paddingTop: spacing(3),
     },
     toolbarButton: {
-        marginLeft: spacing(1),
+        marginLeft: spacing(2),
     },
     icon: {
         marginRight: spacing(1),
+    },
+    actionsButton: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        margin: '0 auto',
+        width: '2.5rem',
+        bottom: spacing(2),
     },
 }));
 
@@ -106,7 +115,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         handleCloseActionsDialog,
         renderShareAction,
         renderReportAction,
-        renderDefaultActionsButton,
+        actionsButtonProps,
     } = useActionsDialog({ query: shareQuery, text: shareText });
 
     const { score, upVoteButtonProps, downVoteButtonProps, upVoteButtonTooltip, downVoteButtonTooltip } = useVotes({
@@ -199,7 +208,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
             <Tooltip title={t('tooltips:commentReplies', { replyCount })}>
                 <CommentOutlined className={classes.icon} color="disabled" />
             </Tooltip>
-            <Typography className={classes.toolbarButton} variant="body2" color="textSecondary">
+            <Typography variant="body2" color="textSecondary">
                 {replyCount}
             </Typography>
         </>
@@ -213,16 +222,18 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         </Tooltip>
     );
 
+    const renderActionsButton = (
+        <Tooltip title={t('common:actions')}>
+            <IconButton className={classes.actionsButton} {...actionsButtonProps} color="default">
+                <MoreHorizOutlined />
+            </IconButton>
+        </Tooltip>
+    );
+
     const renderMessageInfo = (
         <Grid className={classes.messageInfo} container alignItems="center">
-            <Grid item xs={4} container alignItems="center">
-                {renderReplyCount}
-                {renderAttachmentButton}
-            </Grid>
-            <Grid container item xs={4} justify="center">
-                {renderDefaultActionsButton}
-            </Grid>
-            <Grid item xs={4} />
+            {renderReplyCount}
+            {renderAttachmentButton}
         </Grid>
     );
 
@@ -279,6 +290,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
                 {renderCardHeader}
                 {renderMessageContent}
                 {renderMessageInfo}
+                {renderActionsButton}
                 {renderActionsDrawer}
             </CardContent>
         </Grid>
