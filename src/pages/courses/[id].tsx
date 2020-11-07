@@ -148,8 +148,8 @@ const CourseDetailPage: NextPage = () => {
         if (!!deleteCourse) {
             if (!!deleteCourse.errors && !!deleteCourse.errors.length) {
                 deleteCourseError();
-            } else if (!!deleteCourse.message) {
-                toggleNotification(deleteCourse.message);
+            } else if (!!deleteCourse.successMessage) {
+                toggleNotification(deleteCourse.successMessage);
                 await Router.push(urls.home);
             } else {
                 deleteCourseError();

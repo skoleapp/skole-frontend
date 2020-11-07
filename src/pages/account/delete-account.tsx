@@ -35,9 +35,9 @@ export const DeleteAccountPage: NextPage = () => {
         if (!!deleteUser) {
             if (!!deleteUser.errors && !!deleteUser.errors.length) {
                 handleMutationErrors(deleteUser.errors);
-            } else if (!!deleteUser.message) {
+            } else if (!!deleteUser.successMessage) {
                 resetForm();
-                toggleNotification(deleteUser.message);
+                toggleNotification(deleteUser.successMessage);
                 localStorage.removeItem('user');
                 await Router.push(urls.logout);
             } else {

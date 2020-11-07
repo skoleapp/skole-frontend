@@ -71,9 +71,9 @@ const UploadResourcePage: NextPage = () => {
         if (!!createResource) {
             if (!!createResource.errors && !!createResource.errors.length) {
                 handleMutationErrors(createResource.errors);
-            } else if (!!createResource.resource && !!createResource.resource.id && !!createResource.message) {
+            } else if (!!createResource.resource && !!createResource.resource.id && !!createResource.successMessage) {
                 resetForm();
-                toggleNotification(createResource.message);
+                toggleNotification(createResource.successMessage);
                 await Router.push(urls.resource(createResource.resource.id));
             } else {
                 unexpectedError();

@@ -42,9 +42,9 @@ const ContactPage: NextPage = () => {
         if (!!createContactMessage) {
             if (!!createContactMessage.errors && !!createContactMessage.errors.length) {
                 handleMutationErrors(createContactMessage.errors);
-            } else if (!!createContactMessage.message) {
+            } else if (!!createContactMessage.successMessage) {
                 resetForm();
-                toggleNotification(createContactMessage.message);
+                toggleNotification(createContactMessage.successMessage);
             } else {
                 unexpectedError();
             }

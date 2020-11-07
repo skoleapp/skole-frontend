@@ -41,9 +41,9 @@ const ChangePasswordPage: NextPage = () => {
         if (!!changePassword) {
             if (!!changePassword.errors && !!changePassword.errors.length) {
                 handleMutationErrors(changePassword.errors);
-            } else if (!!changePassword.message) {
+            } else if (!!changePassword.successMessage) {
                 resetForm();
-                toggleNotification(changePassword.message);
+                toggleNotification(changePassword.successMessage);
             } else {
                 unexpectedError();
             }

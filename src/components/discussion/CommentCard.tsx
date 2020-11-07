@@ -130,9 +130,9 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         if (!!deleteComment) {
             if (!!deleteComment.errors && !!deleteComment.errors.length) {
                 deleteCommentError();
-            } else if (!!deleteComment.message) {
+            } else if (!!deleteComment.successMessage) {
                 removeComment(comment.id);
-                toggleNotification(deleteComment.message);
+                toggleNotification(deleteComment.successMessage);
             } else {
                 deleteCommentError();
             }

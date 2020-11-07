@@ -167,8 +167,8 @@ const ResourceDetailPage: NextPage = () => {
         if (!!deleteResource) {
             if (!!deleteResource.errors && !!deleteResource.errors.length) {
                 deleteResourceError();
-            } else if (deleteResource.message) {
-                toggleNotification(deleteResource.message);
+            } else if (deleteResource.successMessage) {
+                toggleNotification(deleteResource.successMessage);
                 await Router.push(urls.course(courseId));
             } else {
                 deleteResourceError();

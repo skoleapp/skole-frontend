@@ -55,9 +55,9 @@ const EditProfilePage: NextPage = () => {
         if (!!updateUser) {
             if (!!updateUser.errors && !!updateUser.errors.length) {
                 handleMutationErrors(updateUser.errors);
-            } else if (!!updateUser.message) {
+            } else if (!!updateUser.successMessage) {
                 resetForm();
-                toggleNotification(updateUser.message);
+                toggleNotification(updateUser.successMessage);
                 setUserMe(updateUser.user as UserObjectType);
             } else {
                 unexpectedError();

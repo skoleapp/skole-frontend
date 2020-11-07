@@ -19,7 +19,7 @@ mutation Register($username: String!, $email: String!, $password: String!) {
 
 mutation Login($usernameOrEmail: String!, $password: String!) {
     login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -36,7 +36,7 @@ mutation GraphQLLogout {
 
 mutation ResendVerificationEmail($email: String!) {
     resendVerificationEmail(input: { email: $email }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -46,7 +46,7 @@ mutation ResendVerificationEmail($email: String!) {
 
 mutation VerifyAccount($token: String) {
     verifyAccount(input: { token: $token }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -56,7 +56,7 @@ mutation VerifyAccount($token: String) {
 
 mutation SendPasswordResetEmail($email: String!) {
     sendPasswordResetEmail(input: { email: $email }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -66,7 +66,7 @@ mutation SendPasswordResetEmail($email: String!) {
 
 mutation ResetPassword($token: String, $newPassword: String!) {
     resetPassword(input: { token: $token, newPassword: $newPassword }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -94,7 +94,7 @@ mutation UpdateUser(
             subject: $subject
         }
     ) {
-        message
+        successMessage
         user {
             id
             username
@@ -114,7 +114,7 @@ mutation UpdateUser(
 
 mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
     changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -124,7 +124,7 @@ mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
 
 mutation DeleteUser($password: String!) {
     deleteUser(input: { password: $password }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -160,7 +160,7 @@ mutation CreateComment($text: String!, $attachment: String, $course: ID, $resour
     createComment(
         input: { text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment }
     ) {
-        message
+        successMessage
         comment {
             id
             user {
@@ -204,7 +204,7 @@ mutation CreateComment($text: String!, $attachment: String, $course: ID, $resour
 
 mutation DeleteComment($id: ID) {
     deleteComment(input: { id: $id }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -214,7 +214,7 @@ mutation DeleteComment($id: ID) {
 
 mutation CreateContactMessage($subject: String!, $name: String, $email: String!, $message: String!) {
     createContactMessage(input: { subject: $subject, name: $name, email: $email, message: $message }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -224,7 +224,7 @@ mutation CreateContactMessage($subject: String!, $name: String, $email: String!,
 
 mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
     createCourse(input: { name: $courseName, code: $courseCode, subjects: $subjects, school: $school }) {
-        message
+        successMessage
         course {
             id
         }
@@ -237,7 +237,7 @@ mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID]
 
 mutation DeleteCourse($id: ID) {
     deleteCourse(input: { id: $id }) {
-        message
+        successMessage
         errors {
             field
             messages
@@ -247,7 +247,7 @@ mutation DeleteCourse($id: ID) {
 
 mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
     createResource(input: { title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file }) {
-        message
+        successMessage
         resource {
             id
         }
@@ -260,7 +260,7 @@ mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID
 
 mutation DeleteResource($id: ID) {
     deleteResource(input: { id: $id }) {
-        message
+        successMessage
         errors {
             field
             messages
