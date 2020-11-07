@@ -33,6 +33,7 @@ import { useAuthContext, useDiscussionContext } from 'context';
 import {
     CompositeDecorator,
     ContentBlock,
+    ContentState,
     DraftHandleValue,
     Editor,
     EditorState,
@@ -92,7 +93,11 @@ const useStyles = makeStyles(({ spacing }) => ({
     },
 }));
 
-export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({ setFieldValue, submitForm }) => {
+export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
+    values,
+    setFieldValue,
+    submitForm,
+}) => {
     const { spacing } = useTheme();
     const classes = useStyles();
     const decorator = new CompositeDecorator([
@@ -102,7 +107,10 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         },
     ]);
 
-    const [editorState, setEditorState] = useState(() => EditorState.createEmpty(decorator));
+    const [editorState, setEditorState] = useState(() =>
+        EditorState.createWithContent(ContentState.createFromText(values.text), decorator),
+    );
+
     const ref = useRef<Editor>(null!);
     const { t } = useTranslation();
     const { isDesktop, isMobileOrTablet } = useMediaQueries();
