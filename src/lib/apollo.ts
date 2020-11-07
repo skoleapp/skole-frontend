@@ -1,5 +1,6 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, QueryOptions, WatchQueryOptions } from '@apollo/client';
 import { NormalizedCacheObject } from '@apollo/client/cache';
+import { MutationBaseOptions } from '@apollo/client/core/watchQueryOptions';
 import { createUploadLink } from 'apollo-upload-client';
 import { useMemo } from 'react';
 
@@ -12,10 +13,11 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
     const httpLink = createUploadLink({
         uri: uri + 'graphql/',
         credentials: 'include',
-        fetchOptions: {
-            fetchPolicy: 'no-cache', // Disable caching to make sure we always get the correct translations and content.
-        },
     });
+
+    const fetchPolicyOptions = {
+        fetchPolicy: 'no-cache', // Disable caching to make sure we always get the correct translations and content.
+    };
 
     return new ApolloClient({
         ssrMode: isBrowser,
@@ -23,6 +25,11 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
         // @ts-ignore
         link: httpLink,
         cache: new InMemoryCache(),
+        defaultOptions: {
+            query: fetchPolicyOptions as Partial<QueryOptions>,
+            watchQuery: fetchPolicyOptions as Partial<WatchQueryOptions>,
+            mutate: fetchPolicyOptions as Partial<MutationBaseOptions>,
+        },
     });
 };
 
