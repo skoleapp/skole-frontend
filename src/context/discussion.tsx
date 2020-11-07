@@ -1,5 +1,6 @@
 import { CommentObjectType } from 'generated';
-import React, { createContext, useState } from 'react';
+import Router from 'next/router';
+import React, { createContext, useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { DiscussionContextType } from 'types';
 
@@ -33,6 +34,13 @@ export const DiscussionContextProvider: React.FC = ({ children }) => {
     const toggleTopComment = (payload: CommentObjectType | null): void => setTopComment(payload);
     const [attachmentViewerValue, setAttachmentViewerValue] = useState<string | null>(null); // Attachment of an existing comment.
     const [commentAttachment, setCommentAttachment] = useState<string | ArrayBuffer | null>(null); // Attachment for comment creation form.
+
+    // Reset the top level comments when changing routes.
+    // This is a potential fix for: https://trello.com/c/I2npl2pi/497-discussion-tab-content-not-refreshed-after-switching-to-a-resource-or-another-course
+    // TODO: If this will not fix the issue, remove this.
+    useEffect(() => {
+        Router.events.on('routeChangeComplete', () => setTopLevelComments([]));
+    }, []);
 
     const value = {
         commentModalOpen,
