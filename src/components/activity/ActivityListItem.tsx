@@ -1,5 +1,4 @@
 import { Avatar, ListItem, ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
-import clsx from 'clsx';
 import { TextLink } from 'components';
 import { useNotificationsContext } from 'context';
 import { ActivityObjectType, MarkActivityAsReadMutation, useMarkActivityAsReadMutation } from 'generated';
