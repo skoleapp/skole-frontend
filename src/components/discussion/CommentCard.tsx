@@ -86,7 +86,7 @@ interface Props {
 export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment }) => {
     const classes = useStyles();
     const { t } = useTranslation();
-    const { userMe, verified } = useAuthContext();
+    const { userMe } = useAuthContext();
     const userId: string = R.propOr('', 'id', comment.user);
     const avatarThumb: string = R.propOr('', 'avatarThumbnail', comment.user);
     const confirm = useConfirm();
@@ -258,7 +258,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     );
 
     const renderDeleteAction = isOwner && (
-        <MenuItem disabled={verified === false}>
+        <MenuItem>
             <ListItemIcon>
                 <DeleteOutline />
             </ListItemIcon>
