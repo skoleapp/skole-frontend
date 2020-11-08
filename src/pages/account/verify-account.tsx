@@ -13,7 +13,7 @@ import { loadNamespaces, useTranslation, withAuth } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const VerifyAccountPage: NextPage = () => {
     const {
@@ -38,10 +38,14 @@ const VerifyAccountPage: NextPage = () => {
     const email: string = R.propOr('', 'email', userMe);
     const token = !!query.token ? String(query.token) : '';
     const [emailSubmitted, setEmailSubmitted] = useState(false);
-    const [verified, setVerified] = useState(initialVerified);
+    const [verified, setVerified] = useState<boolean | null>(false);
     const { toggleNotification } = useNotificationsContext();
     const header = !emailSubmitted ? t('verify-account:header') : t('verify-account:emailSubmittedHeader');
     const context = useLanguageHeaderContext();
+
+    useEffect(() => {
+        setVerified(initialVerified);
+    }, [initialVerified]);
 
     const onEmailFormCompleted = ({ resendVerificationEmail }: ResendVerificationEmailMutation): void => {
         if (!!resendVerificationEmail) {
