@@ -331,3 +331,15 @@ mutation GraphQLMarkAllActivitiesAsRead {
         }
     }
 }
+
+mutation DownloadResource($id: ID) {
+    downloadResource(input: { id: $id }) {
+        resource {
+            downloads
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}

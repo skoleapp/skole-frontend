@@ -54,6 +54,7 @@ query Starred($page: Int, $pageSize: Int) {
             date
             starCount
             commentCount
+            downloads
             resourceType {
                 id
             }
@@ -166,6 +167,7 @@ query User($id: ID, $page: Int, $pageSize: Int) {
             date
             starCount
             commentCount
+            downloads
             resourceType {
                 id
             }
@@ -315,6 +317,7 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
             date
             starCount
             commentCount
+            downloads
             resourceType {
                 id
             }
@@ -336,6 +339,7 @@ query Resource($id: ID) {
         created
         score
         starred
+        downloads
         resourceType {
             id
             name

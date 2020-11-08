@@ -428,6 +428,8 @@ export type Mutation = {
   updateResource?: Maybe<UpdateResourceMutationPayload>;
   /** Delete a resource. Only allowed for authenticated users that have verified their accounts and are the creators of the object. Results are sorted by creation time. */
   deleteResource?: Maybe<DeleteResourceMutationPayload>;
+  /** Download a resource. This mutation only increments the amount of downloads of a single resource. */
+  downloadResource?: Maybe<DownloadResourceMutationPayload>;
   /** Create a new course. Only allowed for authenticated users that have verified their accounts. */
   createCourse?: Maybe<CreateCourseMutationPayload>;
   /** Delete a course. Only allowed for authenticated users that are the creators of the object. */
@@ -514,6 +516,11 @@ export type MutationUpdateResourceArgs = {
 
 export type MutationDeleteResourceArgs = {
   input: DeleteResourceMutationInput;
+};
+
+
+export type MutationDownloadResourceArgs = {
+  input: DownloadResourceMutationInput;
 };
 
 
@@ -769,6 +776,19 @@ export type DeleteResourceMutationPayload = {
 };
 
 export type DeleteResourceMutationInput = {
+  id?: Maybe<Scalars['ID']>;
+  clientMutationId?: Maybe<Scalars['String']>;
+};
+
+export type DownloadResourceMutationPayload = {
+  __typename?: 'DownloadResourceMutationPayload';
+  resource?: Maybe<ResourceObjectType>;
+  errors?: Maybe<Array<Maybe<ErrorType>>>;
+  successMessage?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']>;
+};
+
+export type DownloadResourceMutationInput = {
   id?: Maybe<Scalars['ID']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -1335,6 +1355,25 @@ export type GraphQlMarkAllActivitiesAsReadMutation = (
   )> }
 );
 
+export type DownloadResourceMutationVariables = Exact<{
+  id?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type DownloadResourceMutation = (
+  { __typename?: 'Mutation' }
+  & { downloadResource?: Maybe<(
+    { __typename?: 'DownloadResourceMutationPayload' }
+    & { resource?: Maybe<(
+      { __typename?: 'ResourceObjectType' }
+      & Pick<ResourceObjectType, 'downloads'>
+    )>, errors?: Maybe<Array<Maybe<(
+      { __typename?: 'ErrorType' }
+      & Pick<ErrorType, 'field' | 'messages'>
+    )>>> }
+  )> }
+);
+
 export type UserMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1377,7 +1416,7 @@ export type StarredQuery = (
     & Pick<PaginatedResourceObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
     & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount' | 'downloads'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id'>
@@ -1476,7 +1515,7 @@ export type UserQuery = (
     & Pick<PaginatedResourceObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
     & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount' | 'downloads'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id'>
@@ -1583,7 +1622,7 @@ export type CourseQuery = (
     & Pick<PaginatedResourceObjectType, 'page' | 'pages' | 'hasNext' | 'hasPrev' | 'count'>
     & { objects?: Maybe<Array<Maybe<(
       { __typename?: 'ResourceObjectType' }
-      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount'>
+      & Pick<ResourceObjectType, 'id' | 'title' | 'score' | 'date' | 'starCount' | 'commentCount' | 'downloads'>
       & { resourceType?: Maybe<(
         { __typename?: 'ResourceTypeObjectType' }
         & Pick<ResourceTypeObjectType, 'id'>
@@ -1604,7 +1643,7 @@ export type ResourceQuery = (
   { __typename?: 'Query' }
   & { resource?: Maybe<(
     { __typename?: 'ResourceObjectType' }
-    & Pick<ResourceObjectType, 'id' | 'title' | 'file' | 'date' | 'modified' | 'created' | 'score' | 'starred'>
+    & Pick<ResourceObjectType, 'id' | 'title' | 'file' | 'date' | 'modified' | 'created' | 'score' | 'starred' | 'downloads'>
     & { resourceType?: Maybe<(
       { __typename?: 'ResourceTypeObjectType' }
       & Pick<ResourceTypeObjectType, 'id' | 'name'>
@@ -2697,6 +2736,44 @@ export function useGraphQlMarkAllActivitiesAsReadMutation(baseOptions?: Apollo.M
 export type GraphQlMarkAllActivitiesAsReadMutationHookResult = ReturnType<typeof useGraphQlMarkAllActivitiesAsReadMutation>;
 export type GraphQlMarkAllActivitiesAsReadMutationResult = Apollo.MutationResult<GraphQlMarkAllActivitiesAsReadMutation>;
 export type GraphQlMarkAllActivitiesAsReadMutationOptions = Apollo.BaseMutationOptions<GraphQlMarkAllActivitiesAsReadMutation, GraphQlMarkAllActivitiesAsReadMutationVariables>;
+export const DownloadResourceDocument = gql`
+    mutation DownloadResource($id: ID) {
+  downloadResource(input: {id: $id}) {
+    resource {
+      downloads
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+export type DownloadResourceMutationFn = Apollo.MutationFunction<DownloadResourceMutation, DownloadResourceMutationVariables>;
+
+/**
+ * __useDownloadResourceMutation__
+ *
+ * To run a mutation, you first call `useDownloadResourceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDownloadResourceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [downloadResourceMutation, { data, loading, error }] = useDownloadResourceMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDownloadResourceMutation(baseOptions?: Apollo.MutationHookOptions<DownloadResourceMutation, DownloadResourceMutationVariables>) {
+        return Apollo.useMutation<DownloadResourceMutation, DownloadResourceMutationVariables>(DownloadResourceDocument, baseOptions);
+      }
+export type DownloadResourceMutationHookResult = ReturnType<typeof useDownloadResourceMutation>;
+export type DownloadResourceMutationResult = Apollo.MutationResult<DownloadResourceMutation>;
+export type DownloadResourceMutationOptions = Apollo.BaseMutationOptions<DownloadResourceMutation, DownloadResourceMutationVariables>;
 export const UserMeDocument = gql`
     query UserMe {
   userMe {
@@ -2780,6 +2857,7 @@ export const StarredDocument = gql`
       date
       starCount
       commentCount
+      downloads
       resourceType {
         id
       }
@@ -2974,6 +3052,7 @@ export const UserDocument = gql`
       date
       starCount
       commentCount
+      downloads
       resourceType {
         id
       }
@@ -3177,6 +3256,7 @@ export const CourseDocument = gql`
       date
       starCount
       commentCount
+      downloads
       resourceType {
         id
       }
@@ -3227,6 +3307,7 @@ export const ResourceDocument = gql`
     created
     score
     starred
+    downloads
     resourceType {
       id
       name
