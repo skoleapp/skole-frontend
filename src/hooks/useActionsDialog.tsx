@@ -15,7 +15,10 @@ interface UseActionsDialog {
     renderShareAction: false | JSX.Element;
     renderReportAction: JSX.Element;
     renderActionsButton: JSX.Element;
-    renderDefaultActionsButton: JSX.Element;
+    actionsButtonProps: {
+        onClick: (e: SyntheticEvent) => void;
+        size: Size;
+    };
 }
 
 export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => {
@@ -68,22 +71,14 @@ export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => 
         </MenuItem>
     );
 
-    const commonActionsButtonProps = {
+    const actionsButtonProps = {
         onClick: handleOpenActionsDialog,
         size: 'small' as Size,
     };
 
     const renderActionsButton = (
         <Tooltip title={tooltip}>
-            <IconButton {...commonActionsButtonProps} color={isMobileOrTablet ? 'secondary' : 'default'}>
-                <MoreHorizOutlined />
-            </IconButton>
-        </Tooltip>
-    );
-
-    const renderDefaultActionsButton = (
-        <Tooltip title={tooltip}>
-            <IconButton {...commonActionsButtonProps} color="default">
+            <IconButton {...actionsButtonProps} color={isMobileOrTablet ? 'secondary' : 'default'}>
                 <MoreHorizOutlined />
             </IconButton>
         </Tooltip>
@@ -96,6 +91,6 @@ export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => 
         renderShareAction,
         renderReportAction,
         renderActionsButton,
-        renderDefaultActionsButton,
+        actionsButtonProps,
     };
 };

@@ -65,10 +65,10 @@ const LoginPage: NextPage = () => {
         if (!!login) {
             if (!!login.errors && !!login.errors.length) {
                 handleMutationErrors(login.errors);
-            } else if (!!login.message) {
+            } else if (!!login.successMessage) {
                 try {
                     resetForm();
-                    toggleNotification(login.message);
+                    toggleNotification(login.successMessage);
                     const nextUrl = !!query.next ? String(query.next) : urls.home;
                     await Router.push(nextUrl);
                 } catch {

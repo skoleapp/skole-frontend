@@ -1,5 +1,4 @@
 import { Avatar, ListItem, ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
-import clsx from 'clsx';
 import { TextLink } from 'components';
 import { useNotificationsContext } from 'context';
 import { ActivityObjectType, MarkActivityAsReadMutation, useMarkActivityAsReadMutation } from 'generated';
@@ -83,7 +82,7 @@ export const ActivityListItem: React.FC<Props> = ({
     const renderListItemText = <ListItemText primary={renderTargetUserLink} secondary={description} />;
 
     return (
-        <ListItem onClick={handleClick} button className={clsx('border-bottom', !read && classes.unread)}>
+        <ListItem onClick={handleClick} className={!read ? classes.unread : ''} button>
             {renderAvatar}
             {renderListItemText}
         </ListItem>

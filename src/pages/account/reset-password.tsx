@@ -81,9 +81,9 @@ const ResetPasswordPage: NextPage = () => {
         if (!!sendPasswordResetEmail) {
             if (sendPasswordResetEmail.errors && !!sendPasswordResetEmail.errors.length) {
                 handleEmailFormMutationErrors(sendPasswordResetEmail.errors);
-            } else if (sendPasswordResetEmail.message) {
+            } else if (sendPasswordResetEmail.successMessage) {
                 resetEmailForm();
-                toggleNotification(sendPasswordResetEmail.message);
+                toggleNotification(sendPasswordResetEmail.successMessage);
                 setEmailSubmitted(true);
             } else {
                 emailFormUnexpectedError();
@@ -95,9 +95,9 @@ const ResetPasswordPage: NextPage = () => {
         if (!!resetPassword) {
             if (!!resetPassword.errors && !!resetPassword.errors.length) {
                 handlePasswordFormMutationErrors(resetPassword.errors);
-            } else if (!!resetPassword.message) {
+            } else if (!!resetPassword.successMessage) {
                 resetPasswordForm();
-                toggleNotification(resetPassword.message);
+                toggleNotification(resetPassword.successMessage);
                 await Router.push(urls.logout);
             } else {
                 passwordFormUnexpectedError();

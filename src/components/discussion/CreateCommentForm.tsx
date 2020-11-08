@@ -69,7 +69,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         if (!!createComment) {
             if (!!createComment.errors && !!createComment.errors.length) {
                 onError();
-            } else if (!!createComment.comment && !!createComment.message) {
+            } else if (!!createComment.comment) {
                 appendComments(createComment.comment as CommentObjectType);
             } else {
                 onError();

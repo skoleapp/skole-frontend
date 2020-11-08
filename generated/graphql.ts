@@ -599,7 +599,7 @@ export type VoteMutationInput = {
 
 export type RegisterMutationPayload = {
   __typename?: 'RegisterMutationPayload';
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -615,7 +615,7 @@ export type VerifyAccountMutationPayload = {
   __typename?: 'VerifyAccountMutationPayload';
   token?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -628,7 +628,7 @@ export type ResendVerificationEmailMutationPayload = {
   __typename?: 'ResendVerificationEmailMutationPayload';
   email: Scalars['String'];
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -641,7 +641,7 @@ export type SendPasswordResetEmailMutationPayload = {
   __typename?: 'SendPasswordResetEmailMutationPayload';
   email: Scalars['String'];
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -655,7 +655,7 @@ export type ResetPasswordMutationPayload = {
   token?: Maybe<Scalars['String']>;
   newPassword: Scalars['String'];
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -669,7 +669,7 @@ export type LoginMutationPayload = {
   __typename?: 'LoginMutationPayload';
   user?: Maybe<UserObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -686,7 +686,7 @@ export type LogoutMutation = {
 
 export type ChangePasswordMutationPayload = {
   __typename?: 'ChangePasswordMutationPayload';
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -701,7 +701,7 @@ export type UpdateUserMutationPayload = {
   __typename?: 'UpdateUserMutationPayload';
   user?: Maybe<UserObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -718,7 +718,7 @@ export type UpdateUserMutationInput = {
 
 export type DeleteUserMutationPayload = {
   __typename?: 'DeleteUserMutationPayload';
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -732,7 +732,7 @@ export type CreateResourceMutationPayload = {
   __typename?: 'CreateResourceMutationPayload';
   resource?: Maybe<ResourceObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -749,7 +749,7 @@ export type UpdateResourceMutationPayload = {
   __typename?: 'UpdateResourceMutationPayload';
   resource?: Maybe<ResourceObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -763,7 +763,7 @@ export type UpdateResourceMutationInput = {
 
 export type DeleteResourceMutationPayload = {
   __typename?: 'DeleteResourceMutationPayload';
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -777,7 +777,7 @@ export type CreateCourseMutationPayload = {
   __typename?: 'CreateCourseMutationPayload';
   course?: Maybe<CourseObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -791,7 +791,7 @@ export type CreateCourseMutationInput = {
 
 export type DeleteCourseMutationPayload = {
   __typename?: 'DeleteCourseMutationPayload';
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -806,8 +806,9 @@ export type ContactMutationPayload = {
   subject: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   email: Scalars['String'];
-  message?: Maybe<Scalars['String']>;
+  message: Scalars['String'];
   errors?: Maybe<Array<Maybe<ErrorType>>>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -823,7 +824,7 @@ export type CreateCommentMutationPayload = {
   __typename?: 'CreateCommentMutationPayload';
   comment?: Maybe<CommentObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -840,7 +841,7 @@ export type UpdateCommentMutationPayload = {
   __typename?: 'UpdateCommentMutationPayload';
   comment?: Maybe<CommentObjectType>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
@@ -853,7 +854,7 @@ export type UpdateCommentMutationInput = {
 
 export type DeleteCommentMutationPayload = {
   __typename?: 'DeleteCommentMutationPayload';
-  message?: Maybe<Scalars['String']>;
+  successMessage?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<Maybe<ErrorType>>>;
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -919,7 +920,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login?: Maybe<(
     { __typename?: 'LoginMutationPayload' }
-    & Pick<LoginMutationPayload, 'message'>
+    & Pick<LoginMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -947,7 +948,7 @@ export type ResendVerificationEmailMutation = (
   { __typename?: 'Mutation' }
   & { resendVerificationEmail?: Maybe<(
     { __typename?: 'ResendVerificationEmailMutationPayload' }
-    & Pick<ResendVerificationEmailMutationPayload, 'message'>
+    & Pick<ResendVerificationEmailMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -964,7 +965,7 @@ export type VerifyAccountMutation = (
   { __typename?: 'Mutation' }
   & { verifyAccount?: Maybe<(
     { __typename?: 'VerifyAccountMutationPayload' }
-    & Pick<VerifyAccountMutationPayload, 'message'>
+    & Pick<VerifyAccountMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -981,7 +982,7 @@ export type SendPasswordResetEmailMutation = (
   { __typename?: 'Mutation' }
   & { sendPasswordResetEmail?: Maybe<(
     { __typename?: 'SendPasswordResetEmailMutationPayload' }
-    & Pick<SendPasswordResetEmailMutationPayload, 'message'>
+    & Pick<SendPasswordResetEmailMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -999,7 +1000,7 @@ export type ResetPasswordMutation = (
   { __typename?: 'Mutation' }
   & { resetPassword?: Maybe<(
     { __typename?: 'ResetPasswordMutationPayload' }
-    & Pick<ResetPasswordMutationPayload, 'message'>
+    & Pick<ResetPasswordMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1022,7 +1023,7 @@ export type UpdateUserMutation = (
   { __typename?: 'Mutation' }
   & { updateUser?: Maybe<(
     { __typename?: 'UpdateUserMutationPayload' }
-    & Pick<UpdateUserMutationPayload, 'message'>
+    & Pick<UpdateUserMutationPayload, 'successMessage'>
     & { user?: Maybe<(
       { __typename?: 'UserObjectType' }
       & Pick<UserObjectType, 'id' | 'username' | 'email' | 'title' | 'bio' | 'avatar' | 'score' | 'created'>
@@ -1043,7 +1044,7 @@ export type ChangePasswordMutation = (
   { __typename?: 'Mutation' }
   & { changePassword?: Maybe<(
     { __typename?: 'ChangePasswordMutationPayload' }
-    & Pick<ChangePasswordMutationPayload, 'message'>
+    & Pick<ChangePasswordMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1060,7 +1061,7 @@ export type DeleteUserMutation = (
   { __typename?: 'Mutation' }
   & { deleteUser?: Maybe<(
     { __typename?: 'DeleteUserMutationPayload' }
-    & Pick<DeleteUserMutationPayload, 'message'>
+    & Pick<DeleteUserMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1122,7 +1123,7 @@ export type CreateCommentMutation = (
   { __typename?: 'Mutation' }
   & { createComment?: Maybe<(
     { __typename?: 'CreateCommentMutationPayload' }
-    & Pick<CreateCommentMutationPayload, 'message'>
+    & Pick<CreateCommentMutationPayload, 'successMessage'>
     & { comment?: Maybe<(
       { __typename?: 'CommentObjectType' }
       & Pick<CommentObjectType, 'id' | 'text' | 'attachment' | 'modified' | 'created' | 'score'>
@@ -1159,7 +1160,7 @@ export type DeleteCommentMutation = (
   { __typename?: 'Mutation' }
   & { deleteComment?: Maybe<(
     { __typename?: 'DeleteCommentMutationPayload' }
-    & Pick<DeleteCommentMutationPayload, 'message'>
+    & Pick<DeleteCommentMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1179,7 +1180,7 @@ export type CreateContactMessageMutation = (
   { __typename?: 'Mutation' }
   & { createContactMessage?: Maybe<(
     { __typename?: 'ContactMutationPayload' }
-    & Pick<ContactMutationPayload, 'message'>
+    & Pick<ContactMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1199,7 +1200,7 @@ export type CreateCourseMutation = (
   { __typename?: 'Mutation' }
   & { createCourse?: Maybe<(
     { __typename?: 'CreateCourseMutationPayload' }
-    & Pick<CreateCourseMutationPayload, 'message'>
+    & Pick<CreateCourseMutationPayload, 'successMessage'>
     & { course?: Maybe<(
       { __typename?: 'CourseObjectType' }
       & Pick<CourseObjectType, 'id'>
@@ -1219,7 +1220,7 @@ export type DeleteCourseMutation = (
   { __typename?: 'Mutation' }
   & { deleteCourse?: Maybe<(
     { __typename?: 'DeleteCourseMutationPayload' }
-    & Pick<DeleteCourseMutationPayload, 'message'>
+    & Pick<DeleteCourseMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1239,7 +1240,7 @@ export type CreateResourceMutation = (
   { __typename?: 'Mutation' }
   & { createResource?: Maybe<(
     { __typename?: 'CreateResourceMutationPayload' }
-    & Pick<CreateResourceMutationPayload, 'message'>
+    & Pick<CreateResourceMutationPayload, 'successMessage'>
     & { resource?: Maybe<(
       { __typename?: 'ResourceObjectType' }
       & Pick<ResourceObjectType, 'id'>
@@ -1259,7 +1260,7 @@ export type DeleteResourceMutation = (
   { __typename?: 'Mutation' }
   & { deleteResource?: Maybe<(
     { __typename?: 'DeleteResourceMutationPayload' }
-    & Pick<DeleteResourceMutationPayload, 'message'>
+    & Pick<DeleteResourceMutationPayload, 'successMessage'>
     & { errors?: Maybe<Array<Maybe<(
       { __typename?: 'ErrorType' }
       & Pick<ErrorType, 'field' | 'messages'>
@@ -1849,7 +1850,7 @@ export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutatio
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(input: {usernameOrEmail: $usernameOrEmail, password: $password}) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -1917,7 +1918,7 @@ export type GraphQlLogoutMutationOptions = Apollo.BaseMutationOptions<GraphQlLog
 export const ResendVerificationEmailDocument = gql`
     mutation ResendVerificationEmail($email: String!) {
   resendVerificationEmail(input: {email: $email}) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -1953,7 +1954,7 @@ export type ResendVerificationEmailMutationOptions = Apollo.BaseMutationOptions<
 export const VerifyAccountDocument = gql`
     mutation VerifyAccount($token: String) {
   verifyAccount(input: {token: $token}) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -1989,7 +1990,7 @@ export type VerifyAccountMutationOptions = Apollo.BaseMutationOptions<VerifyAcco
 export const SendPasswordResetEmailDocument = gql`
     mutation SendPasswordResetEmail($email: String!) {
   sendPasswordResetEmail(input: {email: $email}) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -2025,7 +2026,7 @@ export type SendPasswordResetEmailMutationOptions = Apollo.BaseMutationOptions<S
 export const ResetPasswordDocument = gql`
     mutation ResetPassword($token: String, $newPassword: String!) {
   resetPassword(input: {token: $token, newPassword: $newPassword}) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -2064,7 +2065,7 @@ export const UpdateUserDocument = gql`
   updateUser(
     input: {username: $username, email: $email, title: $title, bio: $bio, avatar: $avatar, school: $school, subject: $subject}
   ) {
-    message
+    successMessage
     user {
       id
       username
@@ -2116,7 +2117,7 @@ export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMut
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
   changePassword(input: {oldPassword: $oldPassword, newPassword: $newPassword}) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -2153,7 +2154,7 @@ export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePas
 export const DeleteUserDocument = gql`
     mutation DeleteUser($password: String!) {
   deleteUser(input: {password: $password}) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -2273,7 +2274,7 @@ export const CreateCommentDocument = gql`
   createComment(
     input: {text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment}
   ) {
-    message
+    successMessage
     comment {
       id
       user {
@@ -2347,7 +2348,7 @@ export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateComm
 export const DeleteCommentDocument = gql`
     mutation DeleteComment($id: ID) {
   deleteComment(input: {id: $id}) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -2385,7 +2386,7 @@ export const CreateContactMessageDocument = gql`
   createContactMessage(
     input: {subject: $subject, name: $name, email: $email, message: $message}
   ) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -2426,7 +2427,7 @@ export const CreateCourseDocument = gql`
   createCourse(
     input: {name: $courseName, code: $courseCode, subjects: $subjects, school: $school}
   ) {
-    message
+    successMessage
     course {
       id
     }
@@ -2468,7 +2469,7 @@ export type CreateCourseMutationOptions = Apollo.BaseMutationOptions<CreateCours
 export const DeleteCourseDocument = gql`
     mutation DeleteCourse($id: ID) {
   deleteCourse(input: {id: $id}) {
-    message
+    successMessage
     errors {
       field
       messages
@@ -2506,7 +2507,7 @@ export const CreateResourceDocument = gql`
   createResource(
     input: {title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file}
   ) {
-    message
+    successMessage
     resource {
       id
     }
@@ -2548,7 +2549,7 @@ export type CreateResourceMutationOptions = Apollo.BaseMutationOptions<CreateRes
 export const DeleteResourceDocument = gql`
     mutation DeleteResource($id: ID) {
   deleteResource(input: {id: $id}) {
-    message
+    successMessage
     errors {
       field
       messages

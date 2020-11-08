@@ -47,9 +47,9 @@ const VerifyAccountPage: NextPage = () => {
         if (!!resendVerificationEmail) {
             if (!!resendVerificationEmail.errors && !!resendVerificationEmail.errors.length) {
                 handleEmailFormMutationErrors(resendVerificationEmail.errors);
-            } else if (!!resendVerificationEmail.message) {
+            } else if (!!resendVerificationEmail.successMessage) {
                 resetEmailForm();
-                toggleNotification(resendVerificationEmail.message);
+                toggleNotification(resendVerificationEmail.successMessage);
                 setEmailSubmitted(true);
             } else {
                 emailFormUnexpectedError();
@@ -63,9 +63,9 @@ const VerifyAccountPage: NextPage = () => {
         if (!!verifyAccount) {
             if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
                 handleConfirmationFormMutationErrors(verifyAccount.errors);
-            } else if (!!verifyAccount.message) {
+            } else if (!!verifyAccount.successMessage) {
                 resetConfirmationForm();
-                toggleNotification(verifyAccount.message);
+                toggleNotification(verifyAccount.successMessage);
                 setVerified(true);
             } else {
                 confirmationFormUnexpectedError();

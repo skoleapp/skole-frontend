@@ -193,7 +193,7 @@ const UserPage: NextPage = () => {
     const renderDesktopUsername = isDesktop && renderUsername;
     const renderDesktopTitle = isDesktop && renderTitle;
 
-    const renderEditProfileButton = isOwnProfile && (
+    const renderEditProfileButton = (
         <ButtonLink
             className={classes.actionButton}
             href={urls.editProfile}
@@ -206,7 +206,7 @@ const UserPage: NextPage = () => {
         </ButtonLink>
     );
 
-    const renderViewStarredButton = isOwnProfile && (
+    const renderViewStarredButton = (
         <ButtonLink
             className={classes.actionButton}
             href={urls.starred}
@@ -219,7 +219,7 @@ const UserPage: NextPage = () => {
         </ButtonLink>
     );
 
-    const renderSettingsButton = isOwnProfile && (
+    const renderSettingsButton = (
         <Box marginLeft={spacing(2)}>
             <Tooltip title={t('tooltips:settings')}>
                 <SettingsButton color="primary" />
@@ -331,7 +331,7 @@ const UserPage: NextPage = () => {
         </Box>
     );
 
-    const renderDesktopActions = isDesktop && (
+    const renderDesktopActions = isDesktop && isOwnProfile && (
         <Grid item xs={12} container alignItems="center">
             {renderEditProfileButton}
             {renderSettingsButton}

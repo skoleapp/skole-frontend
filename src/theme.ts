@@ -181,12 +181,21 @@ let theme = createMuiTheme({
                 display: 'flex',
                 backgroundColor: COLORS.white,
                 flexGrow: 1,
+                position: 'relative',
             },
         },
         MuiTableContainer: {
             root: {
                 display: 'flex',
                 flexDirection: 'column',
+                position: 'absolute',
+                height: '100%',
+                overflow: 'hidden',
+            },
+        },
+        MuiTableBody: {
+            root: {
+                overflowY: 'auto',
             },
         },
         MuiTableRow: {
@@ -205,6 +214,11 @@ let theme = createMuiTheme({
         MuiTableFooter: {
             root: {
                 marginTop: 'auto',
+            },
+        },
+        MuiTablePagination: {
+            input: {
+                margin: 0,
             },
         },
         MuiCardHeader: {
@@ -251,9 +265,6 @@ let theme = createMuiTheme({
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                 },
-                '.border-bottom': {
-                    borderBottom: BORDER,
-                },
                 "input[type='file']": {
                     display: 'none',
                 },
@@ -268,15 +279,6 @@ let theme = createMuiTheme({
                     '& > div': {
                         display: 'flex',
                     },
-                },
-                '.table-action-area': {
-                    display: 'flex',
-                },
-                '.text-center': {
-                    textAlign: 'center',
-                },
-                '.text-left': {
-                    textAlign: 'left',
                 },
                 '.screenshot-border': {
                     border: `0.05rem dashed ${COLORS.black}`,

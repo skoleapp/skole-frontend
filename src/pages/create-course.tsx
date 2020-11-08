@@ -60,9 +60,9 @@ const CreateCoursePage: NextPage = () => {
         if (!!createCourse) {
             if (!!createCourse.errors && !!createCourse.errors.length) {
                 handleMutationErrors(createCourse.errors);
-            } else if (!!createCourse.course && !!createCourse.message) {
+            } else if (!!createCourse.course && !!createCourse.successMessage) {
                 resetForm();
-                toggleNotification(createCourse.message);
+                toggleNotification(createCourse.successMessage);
                 await Router.push(urls.course(createCourse.course.id));
             } else {
                 unexpectedError();

@@ -140,7 +140,7 @@ const SearchPage: NextPage = () => {
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const subject: SubjectObjectType = R.propOr(null, 'subject', data);
     const schoolType: SchoolTypeObjectType = R.propOr(null, 'schoolType', data);
-    const country: CountryObjectType = R.propOr(null, 'county', data);
+    const country: CountryObjectType = R.propOr(null, 'country', data);
     const city: CityObjectType = R.propOr(null, 'city', data);
     const count: number = R.pathOr(0, ['courses', 'count'], data);
     const courseName: string = R.propOr('', 'courseName', query);
@@ -238,18 +238,31 @@ const SearchPage: NextPage = () => {
         await Router.push({ pathname, query: { ...queryWithPagination, courseName: searchValue } });
     };
 
-    const handlePreSubmit = async <T extends FilterSearchResultsFormValues>(values: T): Promise<void> => {
-        const { courseName, courseCode, school, subject, schoolType, country, city, ordering } = values;
+    const handlePreSubmit = async <T extends FilterSearchResultsFormValues>({
+        courseName,
+        courseCode,
+        school: _school,
+        subject: _subject,
+        schoolType: _schoolType,
+        country: _country,
+        city: _city,
+        ordering,
+    }: T): Promise<void> => {
+        const school = R.propOr('', 'id', _school);
+        const subject = R.propOr('', 'id', _subject);
+        const schoolType = R.propOr('', 'id', _schoolType);
+        const country = R.propOr('', 'id', _country);
+        const city = R.propOr('', 'id', _city);
 
-        const filteredValues: FilterSearchResultsFormValues = {
+        const filteredValues = {
             ...queryWithPagination, // Define this first to override the values.
             courseName,
             courseCode,
-            school: R.propOr('', 'id', school),
-            subject: R.propOr('', 'id', subject),
-            schoolType: R.propOr('', 'id', schoolType),
-            country: R.propOr('', 'id', country),
-            city: R.propOr('', 'id', city),
+            school,
+            subject,
+            schoolType,
+            country,
+            city,
             ordering,
         };
 
