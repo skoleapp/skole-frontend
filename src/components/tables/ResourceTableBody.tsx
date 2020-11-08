@@ -1,5 +1,5 @@
 import { CardActionArea, Grid, makeStyles, TableBody, TableCell, TableRow, Typography } from '@material-ui/core';
-import { AccountCircleOutlined, ChatOutlined, StarBorderOutlined } from '@material-ui/icons';
+import { AccountCircleOutlined, ChatOutlined, CloudDownloadOutlined, StarBorderOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import { ResourceObjectType, ResourceTypeObjectType } from 'generated';
 import { useTranslation } from 'lib';
@@ -69,6 +69,7 @@ export const ResourceTableBody: React.FC<Props> = ({ resourceTypes, resources })
     const renderUserIcon = <AccountCircleOutlined className={clsx(classes.icon, classes.userIcon)} />;
     const renderStarIcon = <StarBorderOutlined className={classes.icon} />;
     const renderDiscussionIcon = <ChatOutlined className={classes.icon} />;
+    const renderDownloadsIcon = <CloudDownloadOutlined className={classes.icon} />;
 
     const renderResourceInfo = (r: ResourceObjectType): JSX.Element => (
         <Typography variant="body2" color="textSecondary">
@@ -79,6 +80,8 @@ export const ResourceTableBody: React.FC<Props> = ({ resourceTypes, resources })
                 {r.starCount}
                 {renderDiscussionIcon}
                 {r.commentCount}
+                {renderDownloadsIcon}
+                {r.downloads}
             </Grid>
         </Typography>
     );

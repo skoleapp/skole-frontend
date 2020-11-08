@@ -35,9 +35,11 @@ import { useAuthContext, useDiscussionContext, useNotificationsContext, usePDFVi
 import {
     CommentObjectType,
     DeleteResourceMutation,
+    DownloadResourceMutation,
     ResourceObjectType,
     ResourceQueryVariables,
     useDeleteResourceMutation,
+    useDownloadResourceMutation,
     useResourceQuery,
     UserObjectType,
     VoteObjectType,
@@ -57,7 +59,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useEffect } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { mediaUrl, urls } from 'utils';
@@ -99,7 +101,7 @@ const ResourceDetailPage: NextPage = () => {
     const context = useLanguageHeaderContext();
     const { data, loading, error } = useResourceQuery({ variables, context });
     const { userMe, verified } = useAuthContext();
-    const resource: ResourceObjectType = R.propOr(null, 'resource', data);
+    const [resource, setResource] = useState<ResourceObjectType | null>(null);
     const resourceTitle: string = R.propOr('', 'title', resource);
     const resourceDate: string = R.propOr('', 'date', resource);
     const resourceType: string = R.pathOr('', ['resourceType', 'name'], resource);
@@ -114,6 +116,7 @@ const ResourceDetailPage: NextPage = () => {
     const comments: CommentObjectType[] = R.propOr([], 'comments', resource);
     const initialVote: VoteObjectType | null = R.propOr(null, 'vote', resource);
     const initialScore = String(R.propOr(0, 'score', resource));
+    const downloads = String(R.propOr(0, 'downloads', resource));
     const starred = !!R.propOr(undefined, 'starred', resource);
     const isOwner = !!userMe && userMe.id === creatorId;
     const resourceUser: UserObjectType = R.propOr(undefined, 'user', resource);
@@ -124,6 +127,12 @@ const ResourceDetailPage: NextPage = () => {
     const { commentModalOpen } = useDiscussionContext();
     const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
+
+    // Update state whenever we finish fetching.
+    useEffect(() => {
+        const initialResource: ResourceObjectType = R.propOr(null, 'resource', data);
+        setResource(initialResource);
+    }, [data]);
 
     const {
         actionsDialogOpen,
@@ -199,8 +208,28 @@ const ResourceDetailPage: NextPage = () => {
         }
     };
 
+    // Do nothing except log the error so we can see it in CloudWatch if the mutation fails.
+    const onDownloadResourceError = (): void => console.log('Downloading resource failed.');
+
+    const onDownloadResourceCompleted = ({ downloadResource }: DownloadResourceMutation): void => {
+        if (!!downloadResource) {
+            if (!!downloadResource.errors && !!downloadResource.errors.length) {
+                onDownloadResourceError();
+            } else if (!!downloadResource.resource) {
+                setResource({ ...resource, downloads: downloadResource.resource.downloads } as ResourceObjectType);
+            }
+        }
+    };
+
+    const [downloadResource] = useDownloadResourceMutation({
+        onCompleted: onDownloadResourceCompleted,
+        onError: onDownloadResourceError,
+        context,
+    });
+
     const handleDownloadButtonClick = async (e: SyntheticEvent): Promise<void> => {
         handleCloseActionsDialog(e);
+        await downloadResource({ variables: { id: resourceId } });
 
         try {
             const res = await fetch(file, {
@@ -267,6 +296,10 @@ const ResourceDetailPage: NextPage = () => {
         {
             label: t('common:score'),
             value: score,
+        },
+        {
+            label: t('common:downloads'),
+            value: downloads,
         },
         {
             label: t('common:course'),
