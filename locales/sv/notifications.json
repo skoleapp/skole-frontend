@@ -12,6 +12,5 @@
     "sharingError": "Fel vid delning!",
     "appUpdated": "App uppdaterad!",
     "markSingleActivityReadError": "Denna aktivitet har troligen tagits bort. Uppdatera sidan.",
-    "markAllActivitiesReadError": "Fel vid markering av aktiviteter som läst!",
-    "logoutError": "Fel vid utloggning!"
+    "markAllActivitiesReadError": "Fel vid markering av aktiviteter som läst!"
 }
