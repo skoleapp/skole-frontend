@@ -8,7 +8,7 @@ import { useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { urls } from 'utils';
 
 const LogoutPage: NextPage = () => {
@@ -16,8 +16,13 @@ const LogoutPage: NextPage = () => {
     const { t } = useTranslation();
     const { query } = useRouter();
     const { toggleNotification } = useNotificationsContext();
+    const [logoutComplete, setLogoutComplete] = useState(false);
     const context = useLanguageHeaderContext();
-    const onError = (): void => toggleNotification(t('notifications:logoutError'));
+
+    const onError = (): void => {
+        toggleNotification(t('notifications:logoutError'));
+        setLogoutComplete(true);
+    };
 
     const onCompleted = async ({ logout }: GraphQlLogoutMutation): Promise<void> => {
         if (!!logout && logout.deleted) {
@@ -25,6 +30,8 @@ const LogoutPage: NextPage = () => {
             localStorage.setItem('logout', String(Date.now()));
             !!query.next && Router.push(String(query.next)); // Automatically redirect to the next page if one exists.
         }
+
+        setLogoutComplete(true);
     };
 
     const [logout, { loading, error }] = useGraphQlLogoutMutation({ onCompleted, onError, context });
@@ -46,7 +53,7 @@ const LogoutPage: NextPage = () => {
         },
     };
 
-    if (loading) {
+    if (loading || !logoutComplete) {
         return <LoadingLayout />;
     }
 
