@@ -1,20 +1,19 @@
 import { List, MenuItem } from '@material-ui/core';
 import { useLanguageSelector } from 'hooks';
 import { useTranslation } from 'lib';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import React from 'react';
 
 import { ResponsiveDialog } from '..';
 
 export const LanguageSelectorDialog: React.FC = () => {
-    const router = useRouter();
+    const { asPath } = useRouter();
     const { t } = useTranslation();
     const { languageSelectorOpen, toggleLanguageSelector, languages, languageToFlag } = useLanguageSelector();
 
     const handleLanguageChange = (val: string) => async (): Promise<void> => {
-        const { asPath } = router;
         toggleLanguageSelector(false);
-        await router.push(asPath, asPath, { locale: val });
+        await Router.push(asPath, asPath, { locale: val });
     };
 
     const handleClose = (): void => {

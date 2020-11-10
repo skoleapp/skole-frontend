@@ -2,8 +2,7 @@ import { useApolloClient } from '@apollo/client';
 import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, ErrorLayout, FormLayout, LoadingLayout, OfflineLayout } from 'components';
-import { useNotificationsContext } from 'context';
-import { GraphQlLogoutMutation, useGraphQlLogoutMutation } from 'generated';
+import { useGraphQlLogoutMutation } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation, withUserMe } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -15,22 +14,16 @@ const LogoutPage: NextPage = () => {
     const apolloClient = useApolloClient();
     const { t } = useTranslation();
     const { query } = useRouter();
-    const { toggleNotification } = useNotificationsContext();
     const context = useLanguageHeaderContext();
-    const onError = (): void => toggleNotification(t('notifications:logoutError'));
-
-    const onCompleted = async ({ logout }: GraphQlLogoutMutation): Promise<void> => {
-        if (!!logout && logout.deleted) {
-            await apolloClient.clearStore();
-            localStorage.setItem('logout', String(Date.now()));
-            !!query.next && Router.push(String(query.next)); // Automatically redirect to the next page if one exists.
-        }
-    };
-
-    const [logout, { loading, error }] = useGraphQlLogoutMutation({ onCompleted, onError, context });
+    const [logout, { loading, error }] = useGraphQlLogoutMutation({ context });
 
     useEffect(() => {
-        logout();
+        (async (): Promise<void> => {
+            await logout();
+            await apolloClient.clearStore();
+            localStorage.setItem('logout', String(Date.now()));
+            !!query.next && (await Router.push(String(query.next))); // Automatically redirect to the next page if one has been provided as a query parameter.
+        })();
     }, []);
 
     const layoutProps = {
@@ -46,7 +39,7 @@ const LogoutPage: NextPage = () => {
         },
     };
 
-    if (loading) {
+    if (loading || !!query.next) {
         return <LoadingLayout />;
     }
 

@@ -30,7 +30,7 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
                 // Only redirect new users to get started page (users who have already logged in at some point).
                 // Redirect old users and users who have visited get started page to login page.
                 if (!!existingUser || getStartedPageVisited) {
-                    Router.push({ pathname: urls.confirmLogin, query });
+                    Router.replace({ pathname: urls.confirmLogin, query });
                 } else {
                     Router.push({ pathname: urls.getStarted, query });
                 }
@@ -47,15 +47,15 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
             };
         }, []);
 
-        if (authLoading) {
-            return <LoadingLayout />;
-        }
-
         if (authNetworkError) {
             return <OfflineLayout />;
         }
 
-        return <PageComponent {...(pageProps as T)} />;
+        if (!!userMe) {
+            return <PageComponent {...(pageProps as T)} />;
+        }
+
+        return <LoadingLayout />;
     };
 
     return withAuth;
@@ -66,22 +66,23 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
 export const withNoAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => {
     const WithNoAuth: NextPage = pageProps => {
         const { userMe, authLoading, authNetworkError } = useUserMe();
+        const shouldRedirect = !(authLoading || authNetworkError || !userMe);
         const { asPath } = useRouter();
 
         // Automatically redirect user to logout if he is authenticated.
         useEffect(() => {
-            !!userMe && Router.push({ pathname: urls.confirmLogout, query: { next: asPath } });
-        }, [userMe]);
-
-        if (authLoading) {
-            return <LoadingLayout />;
-        }
+            shouldRedirect && Router.replace({ pathname: urls.confirmLogout, query: { next: asPath } });
+        }, [shouldRedirect]);
 
         if (authNetworkError) {
             return <OfflineLayout />;
         }
 
-        return <PageComponent {...(pageProps as T)} />;
+        if (!userMe && !authLoading) {
+            return <PageComponent {...(pageProps as T)} />;
+        }
+
+        return <LoadingLayout />;
     };
 
     return WithNoAuth;
@@ -100,15 +101,15 @@ export const withUserMe = <T extends {}>(PageComponent: NextPage<T>): NextPage =
             !getStartedPageVisited && Router.push({ pathname: urls.getStarted, query: { next: asPath } });
         }, []);
 
-        if (authLoading) {
-            return <LoadingLayout />;
-        }
-
         if (authNetworkError) {
             return <OfflineLayout />;
         }
 
-        return <PageComponent {...(pageProps as T)} />;
+        if (!authLoading && !authNetworkError) {
+            return <PageComponent {...(pageProps as T)} />;
+        }
+
+        return <LoadingLayout />;
     };
 
     return WithUserMe;

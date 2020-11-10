@@ -19,8 +19,9 @@ export const useUserMe = (): UseUserMeQuery => {
     const authNetworkError = !!R.propOr(false, 'networkError', error); // We only care about about network error.
 
     useEffect(() => {
+        setUserMe(userMe);
+
         if (!!userMe) {
-            setUserMe(userMe);
             localStorage.setItem('user', JSON.stringify(userMe));
         } else if (authNetworkError) {
             setAuthNetworkError(true);
