@@ -287,6 +287,7 @@ let theme = createMuiTheme({
                     '& .bar': {
                         height: '0.25rem',
                         zIndex: 1101,
+                        top: 'env(safe-area-inset-top)',
                     },
                     '& .peg': {
                         boxShadow: 'none',
