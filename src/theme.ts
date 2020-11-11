@@ -190,12 +190,15 @@ let theme = createMuiTheme({
                 flexDirection: 'column',
                 position: 'absolute',
                 height: '100%',
-                overflow: 'hidden',
+                overflowY: 'auto',
             },
         },
         MuiTableBody: {
             root: {
-                overflowY: 'auto',
+                // TODO: See if this works in production.
+                [breakpoints.up('md')]: {
+                    overflowY: 'auto',
+                },
             },
         },
         MuiTableRow: {
@@ -253,6 +256,8 @@ let theme = createMuiTheme({
             '@global': {
                 body: {
                     backgroundColor: COLORS.secondary,
+                    height: '100vh',
+                    overflow: 'hidden',
                 },
                 '.avatar-thumbnail': {
                     height: '1.35rem !important',
