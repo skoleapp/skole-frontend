@@ -1,8 +1,9 @@
 import { Button, FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, FormLayout } from 'components';
+import { withNoAuth } from 'hocs';
 import { useLanguageSelector } from 'hooks';
-import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React from 'react';

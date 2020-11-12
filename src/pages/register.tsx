@@ -21,8 +21,9 @@ import {
     UserObjectType,
     useUpdateUserMutation,
 } from 'generated';
+import { withNoAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext, useLanguageSelector } from 'hooks';
-import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { useState } from 'react';

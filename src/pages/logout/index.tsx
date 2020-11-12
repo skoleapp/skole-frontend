@@ -3,8 +3,9 @@ import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, ErrorLayout, FormLayout, LoadingLayout, OfflineLayout } from 'components';
 import { useGraphQlLogoutMutation } from 'generated';
+import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -39,6 +40,7 @@ const LogoutPage: NextPage = () => {
         },
     };
 
+    // Show loading screen when loading the next page that the user will be automatically redirected to.
     if (loading || !!query.next) {
         return <LoadingLayout />;
     }

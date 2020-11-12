@@ -3,8 +3,9 @@ import { ButtonLink, FormSubmitSection, SettingsLayout, TextFormField } from 'co
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
+import { withAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';

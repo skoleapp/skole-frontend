@@ -47,6 +47,7 @@ import {
     UserObjectType,
     VoteObjectType,
 } from 'generated';
+import { withUserMe } from 'hocs';
 import {
     useActionsDialog,
     useInfoDialog,
@@ -57,11 +58,10 @@ import {
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import Router from 'next/router';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';

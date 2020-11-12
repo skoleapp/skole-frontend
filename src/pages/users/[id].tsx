@@ -40,8 +40,9 @@ import {
     UserQueryVariables,
     useUserQuery,
 } from 'generated';
+import { withUserMe } from 'hocs';
 import { useDayjs, useLanguageHeaderContext, useMediaQueries, useSwipeableTabs } from 'hooks';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';

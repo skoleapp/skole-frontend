@@ -22,11 +22,11 @@ import {
     useCreateResourceAutocompleteDataQuery,
     useCreateResourceMutation,
 } from 'generated';
+import { withAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import Resizer from 'react-image-file-resizer';

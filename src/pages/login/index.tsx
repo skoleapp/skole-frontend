@@ -3,11 +3,11 @@ import { FormLayout, FormSubmitSection, PasswordField, TextFormField, TextLink }
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
+import { withNoAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext, useLanguageSelector } from 'hooks';
-import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
 import { mediaUrl, urls } from 'utils';

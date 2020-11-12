@@ -44,11 +44,11 @@ import {
     SubjectObjectType,
     useSearchCoursesQuery,
 } from 'generated';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';

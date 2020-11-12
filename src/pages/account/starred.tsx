@@ -18,8 +18,9 @@ import {
     StarredQueryVariables,
     useStarredQuery,
 } from 'generated';
+import { withAuth } from 'hocs';
 import { useLanguageHeaderContext, useSwipeableTabs } from 'hooks';
-import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';

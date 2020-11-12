@@ -1,7 +1,8 @@
 import { Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, SettingsLayout } from 'components';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { withUserMe } from 'hocs';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { urls } from 'utils';

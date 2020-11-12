@@ -19,8 +19,9 @@ import {
     UserObjectType,
     useUpdateUserMutation,
 } from 'generated';
+import { withAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
