@@ -8,7 +8,7 @@ import { CustomTablePaginationActions } from './CustomTablePaginationActions';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     toolbar: {
-        padding: spacing(2),
+        padding: spacing(4),
         display: 'flex',
         justifyContent: 'center',
         [breakpoints.down('sm')]: {
