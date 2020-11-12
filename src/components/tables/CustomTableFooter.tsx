@@ -18,25 +18,28 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     spacer: {
         flex: 0,
     },
+    dense: {
+        marginTop: 0,
+    },
 }));
 
 const commonTablePaginationProps = {
     rowsPerPageOptions: RESULTS_PER_PAGE_OPTIONS,
     colSpan: 3,
+    ActionsComponent: CustomTablePaginationActions,
     SelectProps: {
         native: true,
         fullWidth: false,
     },
-    ActionsComponent: CustomTablePaginationActions,
 };
 
-export const CustomTableFooter: React.FC<CustomTablePaginationProps> = tablePaginationProps => {
+export const CustomTableFooter: React.FC<CustomTablePaginationProps> = ({ dense, ...tablePaginationProps }) => {
     const { t } = useTranslation();
     const classes = useStyles();
     const labelDisplayedRows = ({ from, to, count }: LabelDisplayedRowsArgs): string => `${from} - ${to} / ${count}`;
 
     return (
-        <TableFooter>
+        <TableFooter className={dense ? classes.dense : ''}>
             <TableRow>
                 <TablePagination
                     classes={{ toolbar: classes.toolbar, spacer: classes.spacer }}
