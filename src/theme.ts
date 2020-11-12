@@ -248,8 +248,12 @@ let theme = createMuiTheme({
             },
         },
         MuiDialog: {
+            container: {
+                paddingTop: 'env(safe-area-inset-top)',
+            },
             paper: {
                 overflow: 'hidden',
+                paddingBottom: 'env(safe-area-inset-bottom)',
             },
         },
         MuiCssBaseline: {
