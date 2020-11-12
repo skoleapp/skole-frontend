@@ -470,7 +470,6 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         </Box>
     );
 
-    // TODO: Add this toolbar behind some expansion thingy as the toolbar does not fit very narrow screens.
     const renderBottomToolbar = (
         <Box marginTop={spacing(1)} display="flex">
             {renderInlineStyles}
