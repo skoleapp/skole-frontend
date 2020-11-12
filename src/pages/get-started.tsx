@@ -1,8 +1,9 @@
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, MainBackground, MainLayout, TextLink } from 'components';
+import { withNoAuth } from 'hocs';
 import { useLanguageSelector } from 'hooks';
-import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';

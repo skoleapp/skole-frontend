@@ -1,13 +1,13 @@
-import { LTWH, PDFTranslation } from 'types';
+import { LTWH, PdfTranslation } from 'types';
 import { MAX_SCALE, MIN_SCALE } from 'utils';
 
 // Map interaction helpers.
 
 // Return touch point on element.
-export const getTouchPoint = (t: Touch): PDFTranslation => ({ x: t.clientX, y: t.clientY });
+export const getTouchPoint = (t: Touch): PdfTranslation => ({ x: t.clientX, y: t.clientY });
 
 // Return distance between points.
-export const getDistance = (p1: PDFTranslation, p2: PDFTranslation): number => {
+export const getDistance = (p1: PdfTranslation, p2: PdfTranslation): number => {
     const dx = p1.x - p2.x;
     const dy = p1.y - p2.y;
     return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
@@ -24,7 +24,7 @@ export const getTouchDistance = (t0: Touch, t1: Touch): number => {
 export const getClampedScale = (value: number): number => Math.max(MIN_SCALE, Math.min(value, MAX_SCALE));
 
 // Get mid point between translation points.
-export const getMidPoint = (p1: PDFTranslation, p2: PDFTranslation): PDFTranslation => ({
+export const getMidPoint = (p1: PdfTranslation, p2: PdfTranslation): PdfTranslation => ({
     x: (p1.x + p2.x) / 2,
     y: (p1.y + p2.y) / 2,
 });
@@ -35,7 +35,7 @@ export const getCoordChange = (coordinate: number, scaleRatio: number): number =
 // Area selection helpers.
 
 // Get rectangle coordinates on container element.
-export const getBoundingRect = (start: PDFTranslation, end: PDFTranslation): LTWH => ({
+export const getBoundingRect = (start: PdfTranslation, end: PdfTranslation): LTWH => ({
     left: Math.min(end.x, start.x),
     top: Math.min(end.y, start.y),
     width: Math.abs(end.x - start.x),

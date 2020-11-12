@@ -24,14 +24,14 @@ import {
     MainLayout,
     NotFoundLayout,
     OfflineLayout,
-    PDFViewer,
+    PdfViewer,
     ResourceToolbar,
     ResponsiveDialog,
     StarButton,
     TextLink,
     TopLevelCommentThread,
 } from 'components';
-import { useAuthContext, useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
+import { useAuthContext, useDiscussionContext, useNotificationsContext, usePdfViewerContext } from 'context';
 import {
     CommentObjectType,
     DeleteResourceMutation,
@@ -44,6 +44,7 @@ import {
     UserObjectType,
     VoteObjectType,
 } from 'generated';
+import { withDiscussion, withPdfViewer, withUserMe } from 'hocs';
 import {
     useActionsDialog,
     useInfoDialog,
@@ -53,11 +54,10 @@ import {
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
@@ -125,7 +125,7 @@ const ResourceDetailPage: NextPage = () => {
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: resourceTitle });
     const { commentModalOpen } = useDiscussionContext();
-    const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
+    const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePdfViewerContext();
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     // Update state whenever we finish fetching.
@@ -359,7 +359,7 @@ const ResourceDetailPage: NextPage = () => {
     };
 
     const renderToolbar = <ResourceToolbar {...toolbarProps} />;
-    const renderPDFViewer = <PDFViewer file={file} />;
+    const renderPdfViewer = <PdfViewer file={file} />;
     const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
     const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
 
@@ -376,7 +376,7 @@ const ResourceDetailPage: NextPage = () => {
                     onChangeIndex={handleIndexChange}
                     ref={swipeableViewsRef}
                 >
-                    {renderPDFViewer}
+                    {renderPdfViewer}
                     {renderDiscussion}
                 </SwipeableViews>
             </Box>
@@ -388,7 +388,7 @@ const ResourceDetailPage: NextPage = () => {
             <Grid item container xs={12} md={7} lg={8}>
                 <Paper className={clsx(classes.paperContainer, classes.resourceContainer)}>
                     {renderToolbar}
-                    {renderPDFViewer}
+                    {renderPdfViewer}
                 </Paper>
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
@@ -509,4 +509,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     },
 });
 
-export default withUserMe(ResourceDetailPage);
+const withWrappers = R.compose<NextPage, NextPage, NextPage, NextPage>(withPdfViewer, withDiscussion, withUserMe);
+
+export default withWrappers(ResourceDetailPage);

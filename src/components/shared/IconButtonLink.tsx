@@ -8,7 +8,7 @@ interface Props extends IconButtonProps, LinkProps {
     icon: SvgIconComponent;
 }
 
-export const IconButtonLink = forwardRef<HTMLButtonElement, Props>(({ href, as, icon: Icon, ...props }, ref) => (
+export const IconButtonLink = forwardRef<HTMLButtonElement, Props>(({ href, icon: Icon, ...props }, ref) => (
     <Link href={href}>
         <IconButton {...props} ref={ref}>
             <Icon />

@@ -17,8 +17,9 @@ import {
     useActivitiesQuery,
     useGraphQlMarkAllActivitiesAsReadMutation,
 } from 'generated';
+import { withAuth } from 'hocs';
 import { useActionsDialog, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation, withAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';

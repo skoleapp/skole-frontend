@@ -8,11 +8,11 @@ import {
     useResetPasswordMutation,
     useSendPasswordResetEmailMutation,
 } from 'generated';
+import { withNoAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation, withNoAuth } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { urls } from 'utils';
 import * as Yup from 'yup';

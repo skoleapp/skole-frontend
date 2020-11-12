@@ -13,8 +13,9 @@ import {
 import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import clsx from 'clsx';
 import { MainBackground, MainLayout } from 'components';
+import { withUserMe } from 'hocs';
 import { useLanguageSelector, useSearch, useShare } from 'hooks';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';

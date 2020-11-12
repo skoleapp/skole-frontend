@@ -1,4 +1,4 @@
-export { PDFViewer } from './PDFViewer';
+export { PdfViewer } from './PdfViewer';
 export { AreaSelection } from './AreaSelection';
 export { MapInteraction } from './MapInteraction';
 export { MapControls } from './MapControls';

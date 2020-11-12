@@ -25,7 +25,7 @@ export interface SettingsContextType {
     toggleSettings: (payload: boolean) => void;
 }
 
-export interface PDFViewerContextType {
+export interface PdfViewerContextType {
     documentRef: MutableRefObject<Document>;
     pageNumberInputRef: MutableRefObject<HTMLInputElement>;
     drawMode: boolean;

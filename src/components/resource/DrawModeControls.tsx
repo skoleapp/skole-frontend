@@ -1,6 +1,6 @@
 import { Button, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined, ClearOutlined } from '@material-ui/icons';
-import { useDiscussionContext, usePDFViewerContext } from 'context';
+import { useDiscussionContext, usePdfViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -16,7 +16,7 @@ export const DrawModeControls: React.FC = () => {
     const { t } = useTranslation();
     const { isMobileOrTablet } = useMediaQueries();
     const colWidth = isMobileOrTablet ? 6 : 5;
-    const { setDrawMode, screenshot } = usePDFViewerContext();
+    const { setDrawMode, screenshot } = usePdfViewerContext();
     const { toggleCommentModal } = useDiscussionContext();
     const handleExitButtonClick = (): void => setDrawMode(false);
 

@@ -1,7 +1,7 @@
 import { Box, Grid, IconButton, makeStyles, TextField, Tooltip, Typography } from '@material-ui/core';
 import { CloudDownloadOutlined, PrintOutlined, RotateRightOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
-import { usePDFViewerContext } from 'context';
+import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent } from 'react';
@@ -58,7 +58,7 @@ export const ResourceToolbar: React.FC<Props> = ({ title, handleDownloadButtonCl
         drawMode,
         documentRef,
         controlsDisabled,
-    } = usePDFViewerContext();
+    } = usePdfViewerContext();
 
     const handleRotateButtonClick = (): void => (rotate === 270 ? setRotate(0) : setRotate(rotate + 90));
 

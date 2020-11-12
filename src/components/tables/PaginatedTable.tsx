@@ -1,6 +1,5 @@
 import { Table, TableContainer } from '@material-ui/core';
-import Router from 'next/router';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';
 import { CustomTableHeadProps } from 'types';

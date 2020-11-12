@@ -1,6 +1,6 @@
 import { Box, DialogContent, Grid, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
-import { useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
+import { useDiscussionContext, useNotificationsContext, usePdfViewerContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
 import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
@@ -44,7 +44,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const { formRef, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
     const { toggleNotification } = useNotificationsContext();
     const { commentModalOpen, toggleCommentModal, commentAttachment, setCommentAttachment } = useDiscussionContext();
-    const { screenshot, setScreenshot } = usePDFViewerContext();
+    const { screenshot, setScreenshot } = usePdfViewerContext();
     const context = useLanguageHeaderContext();
 
     // Use screenshot as attachment if area has been marked.

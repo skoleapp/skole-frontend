@@ -1,10 +1,10 @@
 import { Box, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
-import { usePDFViewerContext } from 'context';
+import { usePdfViewerContext } from 'context';
 import { useStateRef } from 'hooks';
 import { getBoundingRect, getPageFromElement } from 'lib';
 import React, { useEffect } from 'react';
-import { LTWH, PDFTranslation } from 'types';
+import { LTWH, PdfTranslation } from 'types';
 
 const useStyles = makeStyles({
     root: {
@@ -15,8 +15,8 @@ const useStyles = makeStyles({
 
 interface State {
     locked: boolean;
-    start: PDFTranslation | null;
-    end: PDFTranslation | null;
+    start: PdfTranslation | null;
+    end: PdfTranslation | null;
 }
 
 const initialState = { start: null, end: null, locked: false };
@@ -26,7 +26,7 @@ const initialState = { start: null, end: null, locked: false };
 // TODO: Add a listener that cancels the draw mode from ESC key.
 export const AreaSelection: React.FC = () => {
     const classes = useStyles();
-    const { setScreenshot, drawMode, setSwipingDisabled } = usePDFViewerContext();
+    const { setScreenshot, drawMode, setSwipingDisabled } = usePdfViewerContext();
     const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
     const { start, end } = stateRef.current;
 
@@ -70,7 +70,7 @@ export const AreaSelection: React.FC = () => {
     };
 
     // Get coordinates on document node.
-    const getDocumentCoords = (pageX: number, pageY: number): PDFTranslation => {
+    const getDocumentCoords = (pageX: number, pageY: number): PdfTranslation => {
         const documentNode = getDocumentNode();
         const { left, top } = documentNode.getBoundingClientRect();
 

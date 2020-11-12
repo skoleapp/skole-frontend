@@ -6,10 +6,8 @@ import { ApolloProvider } from '@apollo/client';
 import { CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import {
     AuthContextProvider,
-    DiscussionContextProvider,
     LanguageSelectorContextProvider,
     NotificationsContextProvider,
-    PDFViewerContextProvider,
     SettingsContextProvider,
 } from 'context';
 import { I18nProvider, Trans, useApollo } from 'lib';
@@ -64,6 +62,7 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     }, []);
 
     return (
+        // TODO: Place some of these context wrappers lower in the component tree.
         // The `locale` can be undefined according to Next.js typings but we assert that it will always be defined since the `I18nProvider` expects a string value.
         <I18nProvider lang={locale!} namespaces={pageProps._ns}>
             <ApolloProvider client={apolloClient}>
@@ -71,16 +70,12 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
                     <LanguageSelectorContextProvider>
                         <NotificationsContextProvider>
                             <SettingsContextProvider>
-                                <DiscussionContextProvider>
-                                    <PDFViewerContextProvider>
-                                        <ThemeProvider theme={theme}>
-                                            <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
-                                                <CssBaseline />
-                                                <Component {...pageProps} />
-                                            </ConfirmProvider>
-                                        </ThemeProvider>
-                                    </PDFViewerContextProvider>
-                                </DiscussionContextProvider>
+                                <ThemeProvider theme={theme}>
+                                    <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
+                                        <CssBaseline />
+                                        <Component {...pageProps} />
+                                    </ConfirmProvider>
+                                </ThemeProvider>
                             </SettingsContextProvider>
                         </NotificationsContextProvider>
                     </LanguageSelectorContextProvider>

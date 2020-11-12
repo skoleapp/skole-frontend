@@ -1,10 +1,10 @@
 import { Box, makeStyles } from '@material-ui/core';
-import { usePDFViewerContext } from 'context';
+import { usePdfViewerContext } from 'context';
 import { useMediaQueries, useStateRef } from 'hooks';
 import { getClampedScale, getCoordChange, getMidPoint, getTouchDistance, getTouchPoint } from 'lib';
 import throttle from 'lodash.throttle';
 import React, { useEffect, useState } from 'react';
-import { PDFTranslation } from 'types';
+import { PdfTranslation } from 'types';
 import { DEFAULT_SCALE, DEFAULT_TRANSLATION, MAX_SCALE, MIN_SCALE } from 'utils';
 
 import { MapControls } from './MapControls';
@@ -24,7 +24,7 @@ const useStyles = makeStyles(({ palette }) => ({
 }));
 
 interface StartPointersInfo {
-    translation: PDFTranslation;
+    translation: PdfTranslation;
     scale: number;
     pointers: TouchList;
 }
@@ -43,7 +43,7 @@ export const MapInteraction: React.FC = ({ children }) => {
         pageNumberInputRef,
         setSwipingDisabled,
         swipeableViewsRef,
-    } = usePDFViewerContext();
+    } = usePdfViewerContext();
 
     const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
     const [scale, setScale] = useState(DEFAULT_SCALE);
@@ -81,7 +81,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     const getMapContainerBoundingClientRect = (): DOMRect | ClientRect => getMapContainerNode().getBoundingClientRect();
 
     // Return calculated translation from page.
-    const getTranslatedOrigin = (translation: PDFTranslation): PDFTranslation => {
+    const getTranslatedOrigin = (translation: PdfTranslation): PdfTranslation => {
         const clientOffset = getMapContainerBoundingClientRect();
 
         return {
@@ -92,9 +92,9 @@ export const MapInteraction: React.FC = ({ children }) => {
 
     // From a given screen point return it as a point in the coordinate system of the map interaction component.
     const getClientPosToTranslatedPos = (
-        { x, y }: PDFTranslation,
-        _translation: PDFTranslation = translation,
-    ): PDFTranslation => {
+        { x, y }: PdfTranslation,
+        _translation: PdfTranslation = translation,
+    ): PdfTranslation => {
         const origin = getTranslatedOrigin(_translation);
 
         return {

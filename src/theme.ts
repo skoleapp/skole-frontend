@@ -190,12 +190,15 @@ let theme = createMuiTheme({
                 flexDirection: 'column',
                 position: 'absolute',
                 height: '100%',
-                overflow: 'hidden',
+                overflowY: 'auto',
             },
         },
         MuiTableBody: {
             root: {
-                overflowY: 'auto',
+                // TODO: See if this works in production.
+                [breakpoints.up('md')]: {
+                    overflowY: 'auto',
+                },
             },
         },
         MuiTableRow: {
@@ -245,14 +248,26 @@ let theme = createMuiTheme({
             },
         },
         MuiDialog: {
+            container: {
+                paddingTop: 'env(safe-area-inset-top)',
+            },
             paper: {
                 overflow: 'hidden',
+                paddingBottom: 'env(safe-area-inset-bottom)',
+            },
+        },
+        MuiBackdrop: {
+            root: {
+                marginTop: 'env(safe-area-inset-top)',
+                marginBottom: 'env(safe-area-inset-bottom)',
             },
         },
         MuiCssBaseline: {
             '@global': {
                 body: {
                     backgroundColor: COLORS.secondary,
+                    height: '100vh',
+                    overflow: 'hidden',
                 },
                 '.avatar-thumbnail': {
                     height: '1.35rem !important',
@@ -287,6 +302,7 @@ let theme = createMuiTheme({
                     '& .bar': {
                         height: '0.25rem',
                         zIndex: 1101,
+                        top: 'env(safe-area-inset-top)',
                     },
                     '& .peg': {
                         boxShadow: 'none',

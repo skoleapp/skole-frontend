@@ -47,6 +47,7 @@ import {
     UserObjectType,
     VoteObjectType,
 } from 'generated';
+import { withDiscussion, withUserMe } from 'hocs';
 import {
     useActionsDialog,
     useInfoDialog,
@@ -57,11 +58,10 @@ import {
     useSwipeableTabs,
     useVotes,
 } from 'hooks';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import Router from 'next/router';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
@@ -95,7 +95,7 @@ const CourseDetailPage: NextPage = () => {
     const classes = useStyles();
     const { query } = useRouter();
     const { t } = useTranslation();
-    const { isMobileOrTablet } = useMediaQueries();
+    const { isMobileOrTablet, isDesktop } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const variables: CourseQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
@@ -296,7 +296,8 @@ const CourseDetailPage: NextPage = () => {
         query: { school: schoolId, course: courseId },
     };
 
-    const renderUploadResourceButton = (
+    // Do not render a disabled button at all on mobile.
+    const renderUploadResourceButton = (!!verified || isDesktop) && (
         <Tooltip title={uploadResourceButtonTooltip}>
             <Typography component="span">
                 <IconButtonLink
@@ -434,4 +435,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     },
 });
 
-export default withUserMe(CourseDetailPage);
+const withWrappers = R.compose<NextPage, NextPage, NextPage>(withDiscussion, withUserMe);
+
+export default withWrappers(CourseDetailPage);

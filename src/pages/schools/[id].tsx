@@ -35,6 +35,7 @@ import {
 } from 'components';
 import { useAuthContext } from 'context';
 import { CourseObjectType, SchoolObjectType, SchoolQueryVariables, SubjectObjectType, useSchoolQuery } from 'generated';
+import { withUserMe } from 'hocs';
 import {
     useActionsDialog,
     useInfoDialog,
@@ -44,7 +45,7 @@ import {
     useShare,
     useSwipeableTabs,
 } from 'hooks';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

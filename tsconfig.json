@@ -9,6 +9,7 @@
             "components": ["src/components"],
             "context": ["src/context"],
             "generated": ["generated/graphql.ts"],
+            "hocs": ["src/hocs"],
             "hooks": ["src/hooks"],
             "lib": ["src/lib"],
             "types": ["src/types"],

@@ -1,6 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import { SettingsLayout } from 'components';
-import { loadNamespaces, useTranslation, withUserMe } from 'lib';
+import { withUserMe } from 'hocs';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { FAQ_ITEMS } from 'utils';

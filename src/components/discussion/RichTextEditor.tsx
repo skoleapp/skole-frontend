@@ -91,6 +91,9 @@ const useStyles = makeStyles(({ spacing }) => ({
     newLineHelpText: {
         marginLeft: spacing(4),
     },
+    iconButton: {
+        padding: spacing(1.5),
+    },
 }));
 
 export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
@@ -219,6 +222,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
     const commonToolbarButtonProps = {
         size: 'small' as Size,
+        className: classes.iconButton,
     };
 
     useEffect(() => {
@@ -466,7 +470,6 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         </Box>
     );
 
-    // TODO: Add this toolbar behind some expansion thingy as the toolbar does not fit very narrow screens.
     const renderBottomToolbar = (
         <Box marginTop={spacing(1)} display="flex">
             {renderInlineStyles}
@@ -500,8 +503,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
             <Tooltip title={attachmentTooltip}>
                 <Typography component="span">
                     <IconButton
-                        onClick={handleUploadAttachment}
                         {...commonToolbarButtonProps}
+                        onClick={handleUploadAttachment}
                         disabled={verified === false || !userMe}
                     >
                         {isMobileOrTablet ? <CameraAltOutlined /> : <AttachFileOutlined />}
@@ -514,7 +517,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     const renderClearAttachmentButton = !!commentAttachment && (
         <Tooltip title={t('tooltips:clearAttachment')}>
             <Typography component="span">
-                <IconButton onClick={handleClearAttachment} {...commonToolbarButtonProps}>
+                <IconButton {...commonToolbarButtonProps} onClick={handleClearAttachment}>
                     <ClearOutlined />
                 </IconButton>
             </Typography>

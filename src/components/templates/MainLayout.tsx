@@ -6,23 +6,13 @@ import React from 'react';
 import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { MainLayoutProps } from 'types';
 
-import {
-    AttachmentViewer,
-    BottomNavbar,
-    CommentThreadModal,
-    Footer,
-    Head,
-    LanguageSelectorDialog,
-    Notifications,
-    SettingsModal,
-    TopNavbar,
-} from '..';
+import { BottomNavbar, Footer, Head, LanguageSelectorDialog, Notifications, SettingsModal, TopNavbar } from '..';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     root: {
         minHeight: '100vh',
         backgroundColor: palette.secondary.main,
-        marginTop: 'env(safe-area-inset-top)', // Push content under iOS status bar.
+        paddingTop: 'env(safe-area-inset-top)', // Push content under iOS status bar.
         overflow: 'hidden',
     },
     container: {
@@ -89,8 +79,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     const renderBottomNavbar = isMobileOrTablet && (customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />));
     const renderFooter = isDesktop && !disableFooter && <Footer />;
     const renderNotifications = <Notifications />;
-    const renderAttachmentViewer = <AttachmentViewer />;
-    const renderCommentThreadModal = <CommentThreadModal />;
     const renderSettingsModal = <SettingsModal />;
     const renderLanguageSelectorModal = <LanguageSelectorDialog />;
 
@@ -102,8 +90,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
             {renderBottomNavbar}
             {renderFooter}
             {renderNotifications}
-            {renderAttachmentViewer}
-            {renderCommentThreadModal}
             {renderSettingsModal}
             {renderLanguageSelectorModal}
         </Grid>
