@@ -256,6 +256,12 @@ let theme = createMuiTheme({
                 paddingBottom: 'env(safe-area-inset-bottom)',
             },
         },
+        MuiBackdrop: {
+            root: {
+                marginTop: 'env(safe-area-inset-top)',
+                marginBottom: 'env(safe-area-inset-bottom)',
+            },
+        },
         MuiCssBaseline: {
             '@global': {
                 body: {
