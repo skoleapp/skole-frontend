@@ -6,7 +6,6 @@ import { ApolloProvider } from '@apollo/client';
 import { CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
 import {
     AuthContextProvider,
-    DiscussionContextProvider,
     LanguageSelectorContextProvider,
     NotificationsContextProvider,
     PDFViewerContextProvider,
@@ -71,16 +70,14 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
                     <LanguageSelectorContextProvider>
                         <NotificationsContextProvider>
                             <SettingsContextProvider>
-                                <DiscussionContextProvider>
-                                    <PDFViewerContextProvider>
-                                        <ThemeProvider theme={theme}>
-                                            <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
-                                                <CssBaseline />
-                                                <Component {...pageProps} />
-                                            </ConfirmProvider>
-                                        </ThemeProvider>
-                                    </PDFViewerContextProvider>
-                                </DiscussionContextProvider>
+                                <PDFViewerContextProvider>
+                                    <ThemeProvider theme={theme}>
+                                        <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
+                                            <CssBaseline />
+                                            <Component {...pageProps} />
+                                        </ConfirmProvider>
+                                    </ThemeProvider>
+                                </PDFViewerContextProvider>
                             </SettingsContextProvider>
                         </NotificationsContextProvider>
                     </LanguageSelectorContextProvider>

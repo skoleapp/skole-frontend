@@ -47,7 +47,7 @@ import {
     UserObjectType,
     VoteObjectType,
 } from 'generated';
-import { withUserMe } from 'hocs';
+import { withDiscussion, withUserMe } from 'hocs';
 import {
     useActionsDialog,
     useInfoDialog,
@@ -435,4 +435,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     },
 });
 
-export default withUserMe(CourseDetailPage);
+const withWrappers = R.compose<NextPage, NextPage, NextPage>(withDiscussion, withUserMe);
+
+export default withWrappers(CourseDetailPage);
