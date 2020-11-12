@@ -95,7 +95,7 @@ const CourseDetailPage: NextPage = () => {
     const classes = useStyles();
     const { query } = useRouter();
     const { t } = useTranslation();
-    const { isMobileOrTablet } = useMediaQueries();
+    const { isMobileOrTablet, isDesktop } = useMediaQueries();
     const { toggleNotification } = useNotificationsContext();
     const confirm = useConfirm();
     const variables: CourseQueryVariables = R.pick(['id', 'page', 'pageSize'], query);
@@ -296,7 +296,8 @@ const CourseDetailPage: NextPage = () => {
         query: { school: schoolId, course: courseId },
     };
 
-    const renderUploadResourceButton = (
+    // Do not render a disabled button at all on mobile.
+    const renderUploadResourceButton = (!!verified || isDesktop) && (
         <Tooltip title={uploadResourceButtonTooltip}>
             <Typography component="span">
                 <IconButtonLink

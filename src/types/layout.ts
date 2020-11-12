@@ -17,9 +17,9 @@ export interface TopNavbarProps {
     disableSearch?: boolean;
     disableAuthButtons?: boolean;
     disableLogo?: boolean;
-    headerRight?: JSX.Element;
-    headerRightSecondary?: JSX.Element;
-    headerLeft?: JSX.Element;
+    headerRight?: JSX.Element | false;
+    headerRightSecondary?: JSX.Element | false;
+    headerLeft?: JSX.Element | false;
 }
 
 interface CustomContainerProps extends Omit<ContainerProps, 'children'> {

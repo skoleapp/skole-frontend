@@ -23,7 +23,7 @@ export const withAuth = <T extends {}>(PageComponent: NextPage<T>): NextPage => 
         // Automatically redirect user to get started/login page if not authenticated.
         useEffect(() => {
             if (shouldRedirect) {
-                const query = asPath !== urls.home ? { next: asPath } : undefined;
+                const query = asPath !== urls.home ? { next: asPath } : {};
                 const existingUser = localStorage.getItem('user');
                 const getStartedPageVisited = !!localStorage.getItem(GET_STARTED_PAGE_VISITED_KEY);
 

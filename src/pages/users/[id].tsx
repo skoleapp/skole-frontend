@@ -475,6 +475,8 @@ const UserPage: NextPage = () => {
         </Paper>
     );
 
+    const renderHeaderRight = isOwnProfile && <SettingsButton color="secondary" size="small" />;
+
     const layoutProps = {
         seoProps: {
             title: username,
@@ -483,7 +485,7 @@ const UserPage: NextPage = () => {
         topNavbarProps: {
             header: username,
             dynamicBackUrl: true,
-            headerRight: isOwnProfile ? <SettingsButton color="secondary" size="small" /> : undefined,
+            headerRight: renderHeaderRight,
         },
     };
 
