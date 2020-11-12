@@ -44,7 +44,7 @@ import {
     UserObjectType,
     VoteObjectType,
 } from 'generated';
-import { withDiscussion, withUserMe } from 'hocs';
+import { withDiscussion, withPdfViewer, withUserMe } from 'hocs';
 import {
     useActionsDialog,
     useInfoDialog,
@@ -359,7 +359,7 @@ const ResourceDetailPage: NextPage = () => {
     };
 
     const renderToolbar = <ResourceToolbar {...toolbarProps} />;
-    const renderPDFViewer = <PdfViewer file={file} />;
+    const renderPdfViewer = <PdfViewer file={file} />;
     const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
     const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
 
@@ -376,7 +376,7 @@ const ResourceDetailPage: NextPage = () => {
                     onChangeIndex={handleIndexChange}
                     ref={swipeableViewsRef}
                 >
-                    {renderPDFViewer}
+                    {renderPdfViewer}
                     {renderDiscussion}
                 </SwipeableViews>
             </Box>
@@ -388,7 +388,7 @@ const ResourceDetailPage: NextPage = () => {
             <Grid item container xs={12} md={7} lg={8}>
                 <Paper className={clsx(classes.paperContainer, classes.resourceContainer)}>
                     {renderToolbar}
-                    {renderPDFViewer}
+                    {renderPdfViewer}
                 </Paper>
             </Grid>
             <Grid item container xs={12} md={5} lg={4}>
@@ -509,6 +509,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     },
 });
 
-const withWrappers = R.compose<NextPage, NextPage, NextPage>(withDiscussion, withUserMe);
+const withWrappers = R.compose<NextPage, NextPage, NextPage, NextPage>(withPdfViewer, withDiscussion, withUserMe);
 
 export default withWrappers(ResourceDetailPage);

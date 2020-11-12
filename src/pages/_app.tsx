@@ -8,7 +8,6 @@ import {
     AuthContextProvider,
     LanguageSelectorContextProvider,
     NotificationsContextProvider,
-    PDFViewerContextProvider,
     SettingsContextProvider,
 } from 'context';
 import { I18nProvider, Trans, useApollo } from 'lib';
@@ -70,14 +69,12 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
                     <LanguageSelectorContextProvider>
                         <NotificationsContextProvider>
                             <SettingsContextProvider>
-                                <PDFViewerContextProvider>
-                                    <ThemeProvider theme={theme}>
-                                        <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
-                                            <CssBaseline />
-                                            <Component {...pageProps} />
-                                        </ConfirmProvider>
-                                    </ThemeProvider>
-                                </PDFViewerContextProvider>
+                                <ThemeProvider theme={theme}>
+                                    <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
+                                        <CssBaseline />
+                                        <Component {...pageProps} />
+                                    </ConfirmProvider>
+                                </ThemeProvider>
                             </SettingsContextProvider>
                         </NotificationsContextProvider>
                     </LanguageSelectorContextProvider>
