@@ -281,7 +281,6 @@ const CourseDetailPage: NextPage = () => {
             tableHeadProps={resourceTableHeadProps}
             renderTableBody={renderResourceTableBody}
             count={resourceCount}
-            dense
         />
     ) : (
         <NotFoundBox text={t('course:noResources')} linkProps={notFoundLinkProps} />
