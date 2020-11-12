@@ -1,6 +1,6 @@
 import { IconButton, Tooltip, Typography } from '@material-ui/core';
 import { TabUnselectedOutlined } from '@material-ui/icons';
-import { usePDFViewerContext } from 'context';
+import { usePdfViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -13,7 +13,7 @@ export const DrawModeButton: React.FC = () => {
     const {
         setDrawMode,
         // controlsDisabled
-    } = usePDFViewerContext();
+    } = usePdfViewerContext();
     const color = isMobileOrTablet ? 'default' : 'secondary';
     const handleClick = (): void => setDrawMode(true);
 

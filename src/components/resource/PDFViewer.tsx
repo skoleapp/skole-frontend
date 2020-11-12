@@ -1,7 +1,7 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
-import { usePDFViewerContext } from 'context';
+import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
-import { PDFDocumentProxy } from 'pdfjs-dist';
+import { PdfDocumentProxy } from 'pdfjs-dist';
 import React from 'react';
 import { Document, Page } from 'react-pdf';
 
@@ -50,12 +50,12 @@ interface Props {
     file: string;
 }
 
-export const PDFViewer: React.FC<Props> = ({ file }) => {
+export const PdfViewer: React.FC<Props> = ({ file }) => {
     const classes = useStyles();
     const { t } = useTranslation();
-    const { documentRef, numPages, setPageNumber, setNumPages, rotate, setControlsDisabled } = usePDFViewerContext();
+    const { documentRef, numPages, setPageNumber, setNumPages, rotate, setControlsDisabled } = usePdfViewerContext();
 
-    const handleLoadSuccess = (document: PDFDocumentProxy): void => {
+    const handleLoadSuccess = (document: PdfDocumentProxy): void => {
         const { numPages } = document;
         setNumPages(numPages);
         setPageNumber(1);

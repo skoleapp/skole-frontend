@@ -24,14 +24,14 @@ import {
     MainLayout,
     NotFoundLayout,
     OfflineLayout,
-    PDFViewer,
+    PdfViewer,
     ResourceToolbar,
     ResponsiveDialog,
     StarButton,
     TextLink,
     TopLevelCommentThread,
 } from 'components';
-import { useAuthContext, useDiscussionContext, useNotificationsContext, usePDFViewerContext } from 'context';
+import { useAuthContext, useDiscussionContext, useNotificationsContext, usePdfViewerContext } from 'context';
 import {
     CommentObjectType,
     DeleteResourceMutation,
@@ -125,7 +125,7 @@ const ResourceDetailPage: NextPage = () => {
     const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
     const { renderShareButton } = useShare({ text: resourceTitle });
     const { commentModalOpen } = useDiscussionContext();
-    const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePDFViewerContext();
+    const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePdfViewerContext();
     const { infoDialogOpen, infoDialogHeaderProps, renderInfoButton, handleCloseInfoDialog } = useInfoDialog();
 
     // Update state whenever we finish fetching.
@@ -359,7 +359,7 @@ const ResourceDetailPage: NextPage = () => {
     };
 
     const renderToolbar = <ResourceToolbar {...toolbarProps} />;
-    const renderPDFViewer = <PDFViewer file={file} />;
+    const renderPDFViewer = <PdfViewer file={file} />;
     const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
     const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
 

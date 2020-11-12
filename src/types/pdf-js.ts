@@ -5,7 +5,7 @@ export interface LTWH {
     height: number;
 }
 
-export interface PDFTranslation {
+export interface PdfTranslation {
     x: number;
     y: number;
 }
