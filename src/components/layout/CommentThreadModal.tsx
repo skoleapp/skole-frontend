@@ -2,9 +2,8 @@ import { Box, makeStyles } from '@material-ui/core';
 import { useDiscussionContext } from 'context';
 import React from 'react';
 
-import { DialogHeader } from '..';
-import { ReplyCommentThread } from '..';
-import { SkoleDialog } from '../shared';
+import { ReplyCommentThread } from '../discussion';
+import { DialogHeader, SkoleDialog } from '../shared';
 
 const useStyles = makeStyles({
     paper: {

@@ -6,7 +6,7 @@ import React from 'react';
 import { BORDER_RADIUS } from 'theme';
 import { MainLayoutProps, TopNavbarProps } from 'types';
 
-import { SettingsButton } from '..';
+import { SettingsButton } from '../shared';
 import { MainLayout } from './MainLayout';
 
 const useStyles = makeStyles(({ breakpoints }) => ({

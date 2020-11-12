@@ -19,7 +19,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { UpdateProfileFormValues } from 'types';
 import { AVATAR_MAX_FILE_SIZE as maxFileSize } from 'utils';
 
-import { ResponsiveDialog } from '..';
+import { ResponsiveDialog } from '../shared';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     button: {

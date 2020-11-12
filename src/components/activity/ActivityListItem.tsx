@@ -1,5 +1,4 @@
 import { Avatar, ListItem, ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
-import { TextLink } from 'components';
 import { useNotificationsContext } from 'context';
 import { ActivityObjectType, MarkActivityAsReadMutation, useMarkActivityAsReadMutation } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
@@ -8,6 +7,8 @@ import Router from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { mediaUrl, urls } from 'utils';
+
+import { TextLink } from '../shared';
 
 const useStyles = makeStyles({
     unread: {

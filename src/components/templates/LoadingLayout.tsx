@@ -1,7 +1,7 @@
 import { Box, makeStyles } from '@material-ui/core';
 import React from 'react';
 
-import { LoadingBox } from '..';
+import { LoadingBox } from '../shared';
 import { MainLayout } from './MainLayout';
 
 const useStyles = makeStyles(({ palette }) => ({

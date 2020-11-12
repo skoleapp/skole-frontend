@@ -1,12 +1,12 @@
 import { List, makeStyles } from '@material-ui/core';
-import { ActivityListItem, NotFoundBox } from 'components';
 import { ActivityObjectType, useActivityPreviewQuery } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
 
-import { LoadingBox } from '../shared';
+import { LoadingBox, NotFoundBox } from '../shared';
+import { ActivityListItem } from './ActivityListItem';
 
 const useStyles = makeStyles({
     list: {

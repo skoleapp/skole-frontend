@@ -6,7 +6,7 @@ import React from 'react';
 import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { MainLayoutProps } from 'types';
 
-import { BottomNavbar, Footer, Head, LanguageSelectorDialog, Notifications, SettingsModal, TopNavbar } from '..';
+import { BottomNavbar, Footer, Head, LanguageSelectorDialog, Notifications, SettingsModal, TopNavbar } from '../layout';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     root: {

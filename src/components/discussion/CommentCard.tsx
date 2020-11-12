@@ -32,7 +32,7 @@ import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { mediaUrl, truncate, urls } from 'utils';
 
-import { ResponsiveDialog, TextLink } from '..';
+import { ResponsiveDialog, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
     root: {
