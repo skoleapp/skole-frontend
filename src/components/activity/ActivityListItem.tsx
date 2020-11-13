@@ -1,4 +1,4 @@
-import { Avatar, ListItem, ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
+import { Avatar, ListItem, ListItemAvatar, ListItemText, makeStyles, Typography } from '@material-ui/core';
 import { useNotificationsContext } from 'context';
 import { ActivityObjectType, MarkActivityAsReadMutation, useMarkActivityAsReadMutation } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
@@ -70,14 +70,18 @@ export const ActivityListItem: React.FC<Props> = ({
         !!pathname && (await Router.push({ pathname, query }));
     };
 
-    const renderAvatar = !!targetUser && (
+    const renderAvatar = (
         <ListItemAvatar>
             <Avatar src={mediaUrl(R.propOr('', 'avatarThumbnail', targetUser))} />
         </ListItemAvatar>
     );
 
-    const renderTargetUserLink = !!targetUser && (
+    const renderTargetUserLink = !!targetUser ? (
         <TextLink href={urls.user(R.propOr('', 'id', targetUser))}>{R.propOr('', 'username', targetUser)}</TextLink>
+    ) : (
+        <Typography variant="body2" color="textSecondary">
+            {t('common:communityUser')}
+        </Typography>
     );
 
     const renderListItemText = <ListItemText primary={renderTargetUserLink} secondary={description} />;
