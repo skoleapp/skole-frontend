@@ -1,7 +1,10 @@
-import { ApolloClient, InMemoryCache, QueryOptions, WatchQueryOptions } from '@apollo/client';
+import { ApolloClient, GraphQLRequest, InMemoryCache, QueryOptions, WatchQueryOptions } from '@apollo/client';
 import { NormalizedCacheObject } from '@apollo/client/cache';
 import { MutationBaseOptions } from '@apollo/client/core/watchQueryOptions';
+import { setContext } from '@apollo/client/link/context';
+import { HttpConfig } from '@apollo/client/link/http/selectHttpOptionsAndBody';
 import { createUploadLink } from 'apollo-upload-client';
+import cookie from 'cookie';
 import { useMemo } from 'react';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
@@ -15,6 +18,13 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
         credentials: 'include',
     });
 
+    const headerLink = setContext((_req: GraphQLRequest, { headers }: HttpConfig) => ({
+        headers: {
+            'X-CSRFToken': cookie.parse(document.cookie).csrftoken,
+            ...headers,
+        },
+    }));
+
     const fetchPolicyOptions = {
         fetchPolicy: 'no-cache', // Disable caching to make sure we always get the correct translations and content.
     };
@@ -23,7 +33,7 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
         ssrMode: isBrowser,
         // Ignore: Apollo client's types have been updated so that they do not match apollo-upload-client's types.
         // @ts-ignore
-        link: httpLink,
+        link: headerLink.concat(httpLink),
         cache: new InMemoryCache(),
         defaultOptions: {
             query: fetchPolicyOptions as Partial<QueryOptions>,
