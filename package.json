@@ -6,7 +6,7 @@
     "license": "UNLICENSED",
     "author": "Skole",
     "scripts": {
-        "dev": "next-translate && NODE_OPTIONS=--max_old_space_size=8192 next dev -p 3001",
+        "dev": "next-translate && next dev -p 3001",
         "build": "next-translate && next build",
         "start": "next start -p 3001",
         "type-check": "tsc",
