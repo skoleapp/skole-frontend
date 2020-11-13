@@ -138,6 +138,7 @@ const ResourceDetailPage: NextPage = () => {
         actionsDialogOpen,
         actionsDialogHeaderProps,
         handleCloseActionsDialog,
+        renderShareAction,
         renderReportAction,
         renderActionsButton,
     } = useActionsDialog({ text: resourceTitle });
@@ -444,6 +445,7 @@ const ResourceDetailPage: NextPage = () => {
             {renderDeleteAction}
             {renderDownloadAction}
             {renderPrintAction}
+            {renderShareAction}
             {renderReportAction}
         </List>
     );
