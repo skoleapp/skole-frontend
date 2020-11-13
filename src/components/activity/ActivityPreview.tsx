@@ -11,6 +11,7 @@ import { ActivityListItem } from './ActivityListItem';
 const useStyles = makeStyles({
     list: {
         width: '100%',
+        overflowY: 'auto',
     },
 });
 
@@ -23,7 +24,7 @@ export const ActivityPreview: React.FC = () => {
     const renderActivities = activities.map((a, i) => <ActivityListItem activity={a} key={i} />);
 
     if (loading) {
-        return <LoadingBox />;
+        return <LoadingBox text={t('activity:loading')} />;
     }
 
     if (error) {

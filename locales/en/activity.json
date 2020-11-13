@@ -5,5 +5,6 @@
     "noActivity": "You have no activity.",
     "markAllAsRead": "Mark all as Read",
     "notificationSettings": "Notification Settings (coming soon)",
-    "error": "Error loading activity."
+    "error": "Error loading activity.",
+    "loading": "Loading activity..."
 }

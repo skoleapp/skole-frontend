@@ -5,5 +5,6 @@
     "noActivity": "Sinulla ei ole toimintaa.",
     "markAllAsRead": "Merkitse kaikki luetuiksi",
     "notificationSettings": "Ilmoitusasetukset (tulossa pian)",
-    "error": "Virhe ladattaessa toimintaa."
+    "error": "Virhe ladattaessa toimintaa.",
+    "loading": "Ladataan toimintaa..."
 }
