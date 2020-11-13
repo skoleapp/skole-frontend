@@ -3,6 +3,5 @@
     "description": "Visa dina stjärnmärkta objekt på Skole.",
     "header": "Stjärnmärkt",
     "noResources": "Du har inga stjärnmärkta resurser.",
-    "noCourses": "Du har inga stjärnmärkta kurser.",
-    "loading": "Laddar stjärnmärkta objekt..."
+    "noCourses": "Du har inga stjärnmärkta kurser."
 }

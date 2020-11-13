@@ -412,7 +412,7 @@ const SearchPage: NextPage = () => {
         text: t('search:noCoursesLink'),
     };
 
-    const renderLoading = <LoadingBox text={t('search:loading')} />;
+    const renderLoading = <LoadingBox />;
     const renderCourses = <CourseTableBody courses={courses} />;
 
     const renderTable = (

@@ -3,6 +3,5 @@
     "description": "Näytä tähdellä merkityt Skolessa.",
     "header": "Tähdellä merkityt",
     "noResources": "Sinulla ei ole tähdellä merkittyjä resursseja.",
-    "noCourses": "Sinulla ei ole tähdellä merkittyjä kursseja.",
-    "loading": "Ladataan tähdellä merkittyjä kohteita..."
+    "noCourses": "Sinulla ei ole tähdellä merkittyjä kursseja."
 }

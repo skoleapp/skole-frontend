@@ -67,12 +67,12 @@ export const PdfViewer: React.FC<Props> = ({ file }) => {
     ));
 
     const renderAreaSelection = <AreaSelection />;
-    const renderLoading = <LoadingBox text={t('resource:loadingResource')} />;
+    const renderLoading = <LoadingBox />;
 
     const renderError = (
         <Box flexGrow="1" display="flex" justifyContent="center" alignItems="center">
             <Typography variant="body2" color="textSecondary">
-                {t('resource:errorLoadingResource')}
+                {t('resource:error')}
             </Typography>
         </Box>
     );

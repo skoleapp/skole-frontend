@@ -24,7 +24,7 @@ export const ActivityPreview: React.FC = () => {
     const renderActivities = activities.map((a, i) => <ActivityListItem activity={a} key={i} />);
 
     if (loading) {
-        return <LoadingBox text={t('activity:loading')} />;
+        return <LoadingBox />;
     }
 
     if (error) {

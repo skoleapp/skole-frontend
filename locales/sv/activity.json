@@ -5,6 +5,5 @@
     "noActivity": "Du har inga aktiviteter.",
     "markAllAsRead": "Markera allt som läst",
     "notificationSettings": "Anmälningsinställningar (på kommande)",
-    "error": "Fel vid inläsning av aktivitet.",
-    "loading": "Laddar aktivitet..."
+    "error": "Fel vid inläsning av aktivitet."
 }

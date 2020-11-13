@@ -92,7 +92,7 @@ const ActivityPage: NextPage = () => {
         </List>
     );
 
-    const renderLoading = <LoadingBox text={t('activity:loading')} />;
+    const renderLoading = <LoadingBox />;
 
     const renderActivityTableBody = (
         <TableBody>

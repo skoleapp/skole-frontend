@@ -52,7 +52,7 @@ const StarredPage: NextPage = () => {
         ...commonTableHeadProps,
     };
 
-    const renderLoading = <LoadingBox text={t('starred:loading')} />;
+    const renderLoading = <LoadingBox />;
     const renderResourceTableBody = <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />;
     const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
