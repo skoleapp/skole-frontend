@@ -4,7 +4,6 @@ import {
     ActivityListItem,
     ErrorLayout,
     LoadingBox,
-    LoadingLayout,
     NotFoundBox,
     OfflineLayout,
     PaginatedTable,
