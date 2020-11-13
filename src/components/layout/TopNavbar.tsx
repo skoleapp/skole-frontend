@@ -195,7 +195,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </>
     );
 
-    const renderSearch = !disableSearch && !!userMe && <TopNavbarSearchWidget />;
+    const renderSearch = !disableSearch && <TopNavbarSearchWidget />;
     const renderButtons = !!userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
 
     const renderDesktopContent = !isMobileOrTablet && (
