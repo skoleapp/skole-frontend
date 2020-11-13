@@ -2,11 +2,12 @@ import { Box, CircularProgress, Grid, makeStyles, Typography, useTheme } from '@
 import { useTranslation } from 'lib';
 import React from 'react';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ palette }) => ({
     root: {
         flexGrow: 1,
+        backgroundColor: palette.common.white,
     },
-});
+}));
 
 interface Props {
     text?: string;
