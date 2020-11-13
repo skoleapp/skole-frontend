@@ -1,6 +1,12 @@
-import { Box, CircularProgress, Grid, Typography, useTheme } from '@material-ui/core';
+import { Box, CircularProgress, Grid, makeStyles, Typography, useTheme } from '@material-ui/core';
 import { useTranslation } from 'lib';
 import React from 'react';
+
+const useStyles = makeStyles({
+    root: {
+        flexGrow: 1,
+    },
+});
 
 interface Props {
     text?: string;
@@ -9,9 +15,10 @@ interface Props {
 export const LoadingBox: React.FC<Props> = ({ text }) => {
     const { spacing } = useTheme();
     const { t } = useTranslation();
+    const classes = useStyles();
 
     return (
-        <Grid container direction="column" alignItems="center" justify="center">
+        <Grid className={classes.root} container direction="column" alignItems="center" justify="center">
             <CircularProgress color="primary" disableShrink size={40} />
             <Box marginTop={spacing(2)}>
                 <Typography variant="subtitle1" color="textSecondary">

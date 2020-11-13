@@ -3,5 +3,6 @@
     "description": "Hae kursseja Skolessa.",
     "coursesSubHeader": "Kurssit",
     "noCourses": "Hakuehdoilla ei löytynyt kursseja. Voit luoda kurssin, mikäli sitä ei vielä ole.",
-    "noCoursesLink": "Luo kurssi täältä!"
+    "noCoursesLink": "Luo kurssi täältä!",
+    "loading": "Ladataan kursseja..."
 }

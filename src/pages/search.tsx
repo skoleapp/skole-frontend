@@ -19,7 +19,7 @@ import {
     DialogHeader,
     ErrorLayout,
     FormSubmitSection,
-    LoadingLayout,
+    LoadingBox,
     MainLayout,
     NativeSelectField,
     NotFoundBox,
@@ -412,18 +412,20 @@ const SearchPage: NextPage = () => {
         text: t('search:noCoursesLink'),
     };
 
+    const renderLoading = <LoadingBox text={t('search:loading')} />;
     const renderCourses = <CourseTableBody courses={courses} />;
 
-    const renderResults = !!courses.length ? (
+    const renderTable = (
         <PaginatedTable
             count={count}
             tableHeadProps={tableHeadProps}
             renderTableBody={renderCourses}
             extraFilters={initialValues}
         />
-    ) : (
-        <NotFoundBox text={t('search:noCourses')} linkProps={notFoundLinkProps} />
     );
+
+    const renderNotFound = <NotFoundBox text={t('search:noCourses')} linkProps={notFoundLinkProps} />;
+    const renderResults = loading ? renderLoading : !!courses.length ? renderTable : renderNotFound;
 
     const renderClearFiltersButton = (
         <IconButton onClick={handleClearFilters} size="small">
@@ -515,10 +517,6 @@ const SearchPage: NextPage = () => {
             disableSearch: true,
         },
     };
-
-    if (loading) {
-        return <LoadingLayout />;
-    }
 
     if (!!error && !!error.networkError) {
         return <OfflineLayout />;
