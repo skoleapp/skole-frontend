@@ -3,7 +3,7 @@ import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import {
     ActivityListItem,
     ErrorLayout,
-    LoadingLayout,
+    LoadingBox,
     NotFoundBox,
     OfflineLayout,
     PaginatedTable,
@@ -92,6 +92,8 @@ const ActivityPage: NextPage = () => {
         </List>
     );
 
+    const renderLoading = <LoadingBox />;
+
     const renderActivityTableBody = (
         <TableBody>
             {activities.map((a, i) => (
@@ -100,11 +102,9 @@ const ActivityPage: NextPage = () => {
         </TableBody>
     );
 
-    const renderActivities = !!activities.length ? (
-        <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
-    ) : (
-        <NotFoundBox text={t('activity:noActivity')} />
-    );
+    const renderTable = <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />;
+    const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
+    const renderActivities = loading ? renderLoading : !!activities.length ? renderTable : renderNotFound;
 
     const renderActionsDialog = (
         <ResponsiveDialog
@@ -128,10 +128,6 @@ const ActivityPage: NextPage = () => {
             dynamicBackUrl: true,
         },
     };
-
-    if (loading) {
-        return <LoadingLayout />;
-    }
 
     if (!!error && !!error.networkError) {
         return <OfflineLayout />;

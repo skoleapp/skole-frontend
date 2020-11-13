@@ -2,7 +2,7 @@ import { Box, Tab, Tabs } from '@material-ui/core';
 import {
     CourseTableBody,
     ErrorLayout,
-    LoadingLayout,
+    LoadingBox,
     NotFoundBox,
     NotFoundLayout,
     OfflineLayout,
@@ -52,28 +52,35 @@ const StarredPage: NextPage = () => {
         ...commonTableHeadProps,
     };
 
+    const renderLoading = <LoadingBox />;
     const renderResourceTableBody = <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />;
     const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
-    const renderStarredCourses = !!courses.length ? (
+    const renderCourseTable = (
         <PaginatedTable
             tableHeadProps={courseTableHeadProps}
             renderTableBody={renderCourseTableBody}
             count={courseCount}
         />
-    ) : (
-        <NotFoundBox text={t('starred:noCourses')} />
     );
 
-    const renderStarredResources = !!resources.length ? (
+    const renderResourceTable = (
         <PaginatedTable
             tableHeadProps={resourceTableHeadProps}
             renderTableBody={renderResourceTableBody}
             count={resourceCount}
         />
-    ) : (
-        <NotFoundBox text={t('starred:noResources')} />
     );
+
+    const renderCoursesNotFound = <NotFoundBox text={t('starred:noCourses')} />;
+    const renderResourcesNotFound = <NotFoundBox text={t('starred:noResources')} />;
+    const renderStarredCourses = loading ? renderLoading : !!courses.length ? renderCourseTable : renderCoursesNotFound;
+
+    const renderStarredResources = loading
+        ? renderLoading
+        : !!resources.length
+        ? renderResourceTable
+        : renderResourcesNotFound;
 
     const renderTabs = (
         <Tabs value={tabValue} onChange={handleTabChange}>
@@ -102,10 +109,6 @@ const StarredPage: NextPage = () => {
             dynamicBackUrl: true,
         },
     };
-
-    if (loading) {
-        return <LoadingLayout />;
-    }
 
     if (!!error && !!error.networkError) {
         return <OfflineLayout />;

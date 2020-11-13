@@ -11,6 +11,7 @@ import { ActivityListItem } from './ActivityListItem';
 const useStyles = makeStyles({
     list: {
         width: '100%',
+        overflowY: 'auto',
     },
 });
 

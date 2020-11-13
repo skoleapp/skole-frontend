@@ -1,5 +1,4 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core';
-import clsx from 'clsx';
 import { useLanguageSelector } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -15,15 +14,6 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     copyRightSection: {
         marginTop: spacing(2),
     },
-    someLink: {
-        color: palette.secondary.main,
-        textDecoration: 'none',
-        // width: '3rem',
-        // height: '3rem',
-    },
-    someLinkContainer: {
-        marginTop: spacing(4),
-    },
 }));
 
 export const Footer: React.FC = () => {
@@ -31,7 +21,7 @@ export const Footer: React.FC = () => {
     const { t } = useTranslation();
     const { renderLanguageButton } = useLanguageSelector();
 
-    const renderAboutSection = (
+    const renderSkole = (
         <Grid item xs={4} container justify="center">
             <Grid item xs={2} container direction="column">
                 <Typography variant="subtitle1" color="secondary" gutterBottom>
@@ -46,32 +36,12 @@ export const Footer: React.FC = () => {
                 <TextLink href={urls.faq} color="secondary">
                     {t('common:faq')}
                 </TextLink>
-                <Grid className={classes.someLinkContainer} item container justify="space-between">
-                    <a
-                        href="https://www.facebook.com/skoleofficial"
-                        className={clsx(classes.someLink, 'fa fa-facebook fa-lg')}
-                        target="_blank"
-                        rel="noreferrer"
-                    />
-                    <a
-                        href="https://www.instagram.com/skoleofficial/"
-                        className={clsx(classes.someLink, 'fa fa-instagram fa-lg')}
-                        target="_blank"
-                        rel="noreferrer"
-                    />
-                    <a
-                        href="https://twitter.com/skoleofficial"
-                        className={clsx(classes.someLink, 'fa fa-twitter fa-lg')}
-                        target="_blank"
-                        rel="noreferrer"
-                    />
-                    <a
-                        href="https://www.linkedin.com/company/skole-inc"
-                        className={clsx(classes.someLink, 'fa fa-linkedin fa-lg')}
-                        target="_blank"
-                        rel="noreferrer"
-                    />
-                </Grid>
+                <TextLink href={urls.terms} color="secondary">
+                    {t('common:terms')}
+                </TextLink>
+                <TextLink href={urls.privacy} color="secondary">
+                    {t('common:privacy')}
+                </TextLink>
             </Grid>
         </Grid>
     );
@@ -82,24 +52,45 @@ export const Footer: React.FC = () => {
         </Typography>
     );
 
-    const renderLanguageSection = (
+    const renderLanguage = (
         <Grid item xs={4} container direction="column" alignItems="center">
             {renderLanguageHeader}
             {renderLanguageButton}
         </Grid>
     );
 
-    const renderLegalSection = (
+    const renderSocial = (
         <Grid item xs={4} container justify="center">
             <Grid item xs={2} container direction="column">
                 <Typography variant="subtitle1" color="secondary" gutterBottom>
-                    {t('common:legal').toUpperCase()}
+                    SOCIAL
                 </Typography>
-                <TextLink href={urls.terms} color="secondary">
-                    {t('common:terms')}
+                <TextLink
+                    href="https://www.facebook.com/skoleofficial"
+                    color="secondary"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    Facebook
                 </TextLink>
-                <TextLink href={urls.privacy} color="secondary">
-                    {t('common:privacy')}
+                <TextLink
+                    href="https://www.instagram.com/skoleofficial/"
+                    color="secondary"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    Instagram
+                </TextLink>
+                <TextLink href="https://twitter.com/skoleofficial" color="secondary" target="_blank" rel="noreferrer">
+                    Twitter
+                </TextLink>
+                <TextLink
+                    href="https://www.linkedin.com/company/skole-inc"
+                    color="secondary"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    LinkedIn
                 </TextLink>
             </Grid>
         </Grid>
@@ -114,11 +105,11 @@ export const Footer: React.FC = () => {
     return (
         <Grid container className={classes.root}>
             <Grid item xs={12} container>
-                {renderAboutSection}
-                {renderLanguageSection}
-                {renderLegalSection}
+                {renderSkole}
+                {renderLanguage}
+                {renderSocial}
             </Grid>
-            <Grid item xs={12} container className={classes.copyRightSection} justify="center">
+            <Grid item xs={12} container justify="center" className={classes.copyRightSection}>
                 {renderCopyRight}
             </Grid>
         </Grid>

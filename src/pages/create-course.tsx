@@ -3,7 +3,6 @@ import {
     ErrorLayout,
     FormLayout,
     FormSubmitSection,
-    LoadingLayout,
     OfflineLayout,
     TextFormField,
 } from 'components';
@@ -43,7 +42,7 @@ const CreateCoursePage: NextPage = () => {
     const { query } = useRouter();
     const variables: CreateCourseAutocompleteDataQueryVariables = R.pick(['school'], query);
     const context = useLanguageHeaderContext();
-    const { data, loading, error } = useCreateCourseAutocompleteDataQuery({ variables, context });
+    const { data, error } = useCreateCourseAutocompleteDataQuery({ variables, context });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm<CreateCourseFormValues>();
 
@@ -136,10 +135,6 @@ const CreateCoursePage: NextPage = () => {
             dynamicBackUrl: true,
         },
     };
-
-    if (loading) {
-        return <LoadingLayout />;
-    }
 
     if (!!error && !!error.networkError) {
         return <OfflineLayout />;

@@ -4,7 +4,6 @@ import {
     FileField,
     FormLayout,
     FormSubmitSection,
-    LoadingLayout,
     OfflineLayout,
     TextFormField,
     TextLink,
@@ -47,7 +46,7 @@ const UploadResourcePage: NextPage = () => {
     const { t } = useTranslation();
     const variables: CreateResourceAutocompleteDataQueryVariables = R.pick(['school', 'course'], query);
     const context = useLanguageHeaderContext();
-    const { data, loading, error } = useCreateResourceAutocompleteDataQuery({ variables, context });
+    const { data, error } = useCreateResourceAutocompleteDataQuery({ variables, context });
     const school: SchoolObjectType = R.propOr(null, 'school', data);
     const course: CourseObjectType = R.propOr(null, 'course', data);
 
@@ -213,10 +212,6 @@ const UploadResourcePage: NextPage = () => {
             dynamicBackUrl: true,
         },
     };
-
-    if (loading) {
-        return <LoadingLayout />;
-    }
 
     if (!!error && !!error.networkError) {
         return <OfflineLayout />;
