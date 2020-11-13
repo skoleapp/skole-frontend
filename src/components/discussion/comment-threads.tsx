@@ -9,7 +9,7 @@ import React from 'react';
 import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { TopLevelCommentThreadProps } from 'types';
 
-import { NotFoundBox } from '..';
+import { NotFoundBox } from '../shared';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 

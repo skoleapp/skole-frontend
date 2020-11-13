@@ -138,6 +138,7 @@ const ResourceDetailPage: NextPage = () => {
         actionsDialogOpen,
         actionsDialogHeaderProps,
         handleCloseActionsDialog,
+        renderShareAction,
         renderReportAction,
         renderActionsButton,
     } = useActionsDialog({ text: resourceTitle });
@@ -360,8 +361,8 @@ const ResourceDetailPage: NextPage = () => {
 
     const renderToolbar = <ResourceToolbar {...toolbarProps} />;
     const renderPdfViewer = <PdfViewer file={file} />;
-    const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
     const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
+    const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
     const renderMobileContent = isMobileOrTablet && (
         <Paper className={classes.mobileContainer}>
@@ -444,6 +445,7 @@ const ResourceDetailPage: NextPage = () => {
             {renderDeleteAction}
             {renderDownloadAction}
             {renderPrintAction}
+            {renderShareAction}
             {renderReportAction}
         </List>
     );

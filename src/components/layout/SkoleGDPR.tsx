@@ -17,7 +17,7 @@ import React from 'react';
 import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { urls } from 'utils';
 
-import { TextLink } from '..';
+import { TextLink } from '../shared';
 import { SkoleDialog } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({

@@ -23,11 +23,11 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 const commonTablePaginationProps = {
     rowsPerPageOptions: RESULTS_PER_PAGE_OPTIONS,
     colSpan: 3,
+    ActionsComponent: CustomTablePaginationActions,
     SelectProps: {
         native: true,
         fullWidth: false,
     },
-    ActionsComponent: CustomTablePaginationActions,
 };
 
 export const CustomTableFooter: React.FC<CustomTablePaginationProps> = tablePaginationProps => {

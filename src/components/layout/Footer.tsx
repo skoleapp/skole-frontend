@@ -5,7 +5,7 @@ import { useTranslation } from 'lib';
 import React from 'react';
 import { urls } from 'utils';
 
-import { TextLink } from '..';
+import { TextLink } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
     root: {

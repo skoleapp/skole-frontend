@@ -9,8 +9,7 @@ import Image from 'next/image';
 import React, { useEffect } from 'react';
 import { CommentTarget, CreateCommentFormValues } from 'types';
 
-import { DialogHeader } from '..';
-import { SkoleDialog } from '../shared/SkoleDialog';
+import { DialogHeader, SkoleDialog } from '../shared';
 import { RichTextEditor } from './RichTextEditor';
 
 const useStyles = makeStyles(({ spacing }) => ({

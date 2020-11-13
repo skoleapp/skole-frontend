@@ -1,5 +1,4 @@
-import { Avatar, ListItem, ListItemAvatar, ListItemText, makeStyles } from '@material-ui/core';
-import { TextLink } from 'components';
+import { Avatar, ListItem, ListItemAvatar, ListItemText, makeStyles, Typography } from '@material-ui/core';
 import { useNotificationsContext } from 'context';
 import { ActivityObjectType, MarkActivityAsReadMutation, useMarkActivityAsReadMutation } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
@@ -8,6 +7,8 @@ import Router from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { mediaUrl, urls } from 'utils';
+
+import { TextLink } from '../shared';
 
 const useStyles = makeStyles({
     unread: {
@@ -69,14 +70,18 @@ export const ActivityListItem: React.FC<Props> = ({
         !!pathname && (await Router.push({ pathname, query }));
     };
 
-    const renderAvatar = !!targetUser && (
+    const renderAvatar = (
         <ListItemAvatar>
             <Avatar src={mediaUrl(R.propOr('', 'avatarThumbnail', targetUser))} />
         </ListItemAvatar>
     );
 
-    const renderTargetUserLink = !!targetUser && (
+    const renderTargetUserLink = !!targetUser ? (
         <TextLink href={urls.user(R.propOr('', 'id', targetUser))}>{R.propOr('', 'username', targetUser)}</TextLink>
+    ) : (
+        <Typography variant="body2" color="textSecondary">
+            {t('common:communityUser')}
+        </Typography>
     );
 
     const renderListItemText = <ListItemText primary={renderTargetUserLink} secondary={description} />;

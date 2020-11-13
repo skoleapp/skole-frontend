@@ -18,6 +18,7 @@ import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
 import clsx from 'clsx';
 import {
     CustomBottomNavbarContainer,
+    DiscussionHeader,
     ErrorLayout,
     IconButtonLink,
     InfoDialogContent,
@@ -227,29 +228,23 @@ const CourseDetailPage: NextPage = () => {
 
     const renderStarButton = <StarButton starred={starred} course={courseId} />;
 
+    const discussionHeaderProps = {
+        commentCount,
+        renderStarButton,
+        renderUpVoteButton,
+        renderDownVoteButton,
+        renderShareButton,
+        renderInfoButton,
+        renderActionsButton,
+    };
+
     const commentThreadProps = {
         comments,
         target: { course: Number(courseId) },
         noComments: t('course:noComments'),
     };
 
-    const renderDiscussionHeader = (
-        <CardHeader
-            className={classes.discussionHeader}
-            subheader={`${t('common:discussion')} (${commentCount})`}
-            action={
-                <Grid container>
-                    {renderStarButton}
-                    {renderUpVoteButton}
-                    {renderDownVoteButton}
-                    {renderShareButton}
-                    {renderInfoButton}
-                    {renderActionsButton}
-                </Grid>
-            }
-        />
-    );
-
+    const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
     const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
     const renderCustomBottomNavbar = (

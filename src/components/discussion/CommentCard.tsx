@@ -32,7 +32,7 @@ import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { mediaUrl, truncate, urls } from 'utils';
 
-import { ResponsiveDialog, TextLink } from '..';
+import { ResponsiveDialog, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
     root: {
@@ -71,9 +71,9 @@ const useStyles = makeStyles(({ spacing }) => ({
         position: 'absolute',
         left: 0,
         right: 0,
+        bottom: 0,
         margin: '0 auto',
         width: '2.5rem',
-        bottom: spacing(2),
     },
 }));
 

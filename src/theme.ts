@@ -195,7 +195,6 @@ let theme = createMuiTheme({
         },
         MuiTableBody: {
             root: {
-                // TODO: See if this works in production.
                 [breakpoints.up('md')]: {
                     overflowY: 'auto',
                 },
@@ -266,8 +265,6 @@ let theme = createMuiTheme({
             '@global': {
                 body: {
                     backgroundColor: COLORS.secondary,
-                    height: '100vh',
-                    overflow: 'hidden',
                 },
                 '.avatar-thumbnail': {
                     height: '1.35rem !important',

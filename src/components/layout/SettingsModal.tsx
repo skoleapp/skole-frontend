@@ -3,7 +3,7 @@ import { useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-import { DialogHeader } from '..';
+import { DialogHeader } from '../shared';
 import { SkoleDialog } from '../shared';
 
 export const SettingsModal: React.FC = () => {

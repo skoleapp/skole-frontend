@@ -6,13 +6,13 @@ import React from 'react';
 import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { MainLayoutProps } from 'types';
 
-import { BottomNavbar, Footer, Head, LanguageSelectorDialog, Notifications, SettingsModal, TopNavbar } from '..';
+import { BottomNavbar, Footer, Head, LanguageSelectorDialog, Notifications, SettingsModal, TopNavbar } from '../layout';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     root: {
         minHeight: '100vh',
         backgroundColor: palette.secondary.main,
-        paddingTop: 'env(safe-area-inset-top)', // Push content under iOS status bar.
+        paddingTop: 'env(safe-area-inset-top)',
         overflow: 'hidden',
     },
     container: {
@@ -20,15 +20,16 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
         display: 'flex',
         flexDirection: 'column',
         margin: '0 auto',
-        marginBottom: `calc(${BOTTOM_NAVBAR_HEIGHT} + env(safe-area-inset-bottom))`,
         padding: 0,
+        marginBottom: `calc(${BOTTOM_NAVBAR_HEIGHT} + env(safe-area-inset-bottom))`,
         paddingTop: TOP_NAVBAR_HEIGHT_MOBILE,
         [breakpoints.up('lg')]: {
+            minHeight: '100vh',
             padding: spacing(4),
             paddingTop: `calc(${TOP_NAVBAR_HEIGHT_DESKTOP} + ${spacing(4)})`,
         },
     },
-    containerDisableMarginBottom: {
+    disableMarginBottom: {
         marginBottom: 0,
     },
     containerDense: {
@@ -65,7 +66,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
 
     const containerClasses = clsx(
         classes.container,
-        (disableBottomNavbar || isDesktop) && classes.containerDisableMarginBottom,
+        (disableBottomNavbar || isDesktop) && classes.disableMarginBottom,
         containerFullWidth && classes.containerFullWidth,
         containerDense && classes.containerDense,
     );

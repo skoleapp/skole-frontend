@@ -4,7 +4,7 @@ import { ErrorMessage, FormikProps } from 'formik';
 import * as R from 'ramda';
 import React from 'react';
 
-import { LoadingBox } from '..';
+import { LoadingBox } from '../shared';
 import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props extends FormikProps<{}> {

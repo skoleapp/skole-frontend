@@ -4,7 +4,7 @@ import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
 import React from 'react';
 
-import { ResponsiveDialog } from '..';
+import { ResponsiveDialog } from '../shared';
 
 export const LanguageSelectorDialog: React.FC = () => {
     const { asPath } = useRouter();

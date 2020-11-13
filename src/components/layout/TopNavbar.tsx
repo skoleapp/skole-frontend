@@ -33,8 +33,9 @@ import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } fr
 import { TopNavbarProps } from 'types';
 import { mediaUrl, urls } from 'utils';
 
-import { ButtonLink, IconButtonLink, Logo } from '..';
 import { ActivityPreview } from '../activity';
+import { Logo } from '../layout';
+import { ButtonLink, IconButtonLink } from '../shared';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({

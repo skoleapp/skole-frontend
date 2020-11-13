@@ -5,7 +5,7 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import React from 'react';
 import { Document, Page } from 'react-pdf';
 
-import { LoadingBox } from '..';
+import { LoadingBox } from '../shared';
 import { AreaSelection } from './AreaSelection';
 import { MapInteraction } from './MapInteraction';
 
