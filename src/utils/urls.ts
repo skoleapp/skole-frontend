@@ -8,7 +8,7 @@ export const urls = {
     verifyAccount: '/account/verify-account',
     course: (id: string): string => `/courses/${id}`,
     resource: (id: string): string => `/resources/${id}`,
-    school: (id: string): string => `/users/${id}`,
+    school: (id: string): string => `/schools/${id}`,
     user: (id: string): string => `/users/${id}`,
     about: '/about',
     contact: '/contact',
