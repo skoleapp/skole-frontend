@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Box,
     Card,
     CardActionArea,
     CardContent,
@@ -42,7 +43,6 @@ const useStyles = makeStyles(({ spacing }) => ({
     },
     cardHeader: {
         padding: 0,
-        paddingBottom: spacing(3),
         textAlign: 'left',
     },
     cardTitle: {
@@ -52,14 +52,15 @@ const useStyles = makeStyles(({ spacing }) => ({
         fontSize: '0.75rem',
     },
     cardContent: {
-        padding: `${spacing(2)} ${spacing(2)} !important`,
+        padding: `${spacing(2)} !important`,
+    },
+    messageContent: {
+        paddingTop: spacing(3),
+        paddingBottom: spacing(3),
     },
     text: {
         overflow: 'hidden',
         wordBreak: 'break-word',
-    },
-    messageInfo: {
-        paddingTop: spacing(3),
     },
     toolbarButton: {
         marginLeft: spacing(2),
@@ -71,9 +72,10 @@ const useStyles = makeStyles(({ spacing }) => ({
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: 0,
+        bottom: spacing(1),
         margin: '0 auto',
-        width: '2.5rem',
+        width: '2rem',
+        padding: spacing(1.5),
     },
 }));
 
@@ -192,15 +194,19 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         />
     );
 
-    const renderMessageContent = attachmentOnly ? (
+    const renderCommentAttachment = (
         <Grid container>
             <CameraAltOutlined className={classes.icon} color="disabled" />
             <Typography className={classes.text} variant="body2">
                 {t('common:clickToView')}
             </Typography>
         </Grid>
-    ) : (
-        <Typography variant="body2">{comment.text}</Typography>
+    );
+
+    const renderCommentText = <Typography variant="body2">{comment.text}</Typography>;
+
+    const renderMessageContent = (
+        <Box className={classes.messageContent}>{attachmentOnly ? renderCommentAttachment : renderCommentText}</Box>
     );
 
     const renderReplyCount = !isThread && (
@@ -231,7 +237,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     );
 
     const renderMessageInfo = (
-        <Grid className={classes.messageInfo} container alignItems="center">
+        <Grid container alignItems="center">
             {renderReplyCount}
             {renderAttachmentButton}
         </Grid>
