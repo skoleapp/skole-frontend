@@ -353,11 +353,11 @@ const CourseDetailPage: NextPage = () => {
     );
 
     const renderDeleteAction = isOwner && (
-        <MenuItem disabled={verified === false}>
+        <MenuItem onClick={handleDeleteCourse} disabled={verified === false}>
             <ListItemIcon>
                 <DeleteOutline />
             </ListItemIcon>
-            <ListItemText onClick={handleDeleteCourse}>{t('common:delete')}</ListItemText>
+            <ListItemText>{t('common:delete')}</ListItemText>
         </MenuItem>
     );
 
