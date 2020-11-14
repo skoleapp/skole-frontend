@@ -414,11 +414,11 @@ const ResourceDetailPage: NextPage = () => {
     );
 
     const renderDeleteAction = isOwner && (
-        <MenuItem disabled={verified === false}>
+        <MenuItem onClick={handleDeleteResource} disabled={verified === false}>
             <ListItemIcon>
                 <DeleteOutline />
             </ListItemIcon>
-            <ListItemText onClick={handleDeleteResource}>{t('common:delete')}</ListItemText>
+            <ListItemText>{t('common:delete')}</ListItemText>
         </MenuItem>
     );
 

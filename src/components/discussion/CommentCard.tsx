@@ -264,11 +264,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     );
 
     const renderDeleteAction = isOwner && (
-        <MenuItem>
+        <MenuItem onClick={handleDeleteComment}>
             <ListItemIcon>
                 <DeleteOutline />
             </ListItemIcon>
-            <ListItemText onClick={handleDeleteComment}>{t('common:delete')}</ListItemText>
+            <ListItemText>{t('common:delete')}</ListItemText>
         </MenuItem>
     );
 
