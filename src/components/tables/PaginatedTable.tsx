@@ -47,12 +47,12 @@ export const PaginatedTable: React.FC<Props> = ({ count, tableHeadProps, extraFi
     );
 
     return (
-        <Table>
-            <TableContainer>
+        <TableContainer>
+            <Table>
                 {renderTableHead}
                 {renderTableBody}
                 {renderTableFooter}
-            </TableContainer>
-        </Table>
+            </Table>
+        </TableContainer>
     );
 };

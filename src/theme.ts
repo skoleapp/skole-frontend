@@ -176,7 +176,7 @@ let theme = createMuiTheme({
                 borderBottom: BORDER,
             },
         },
-        MuiTable: {
+        MuiTableContainer: {
             root: {
                 display: 'flex',
                 backgroundColor: COLORS.white,
@@ -184,7 +184,7 @@ let theme = createMuiTheme({
                 position: 'relative',
             },
         },
-        MuiTableContainer: {
+        MuiTable: {
             root: {
                 display: 'flex',
                 flexDirection: 'column',
