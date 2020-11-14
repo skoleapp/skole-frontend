@@ -24,7 +24,7 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { UpdateProfileFormValues } from 'types';
 import { mediaUrl, urls } from 'utils';
 import * as Yup from 'yup';
@@ -41,7 +41,11 @@ const EditProfilePage: NextPage = () => {
     const classes = useStyles();
     const context = useLanguageHeaderContext();
     const { userMe, setUserMe, verified } = useAuthContext();
-    const { formRef, handleMutationErrors, onError, resetForm, unexpectedError } = useForm<UpdateProfileFormValues>();
+
+    const { formRef, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm<
+        UpdateProfileFormValues
+    >();
+
     const { toggleNotification } = useNotificationsContext();
     const id: string = R.propOr('', 'id', userMe);
     const title: string = R.propOr('', 'title', userMe);
@@ -57,7 +61,7 @@ const EditProfilePage: NextPage = () => {
             if (!!updateUser.errors && !!updateUser.errors.length) {
                 handleMutationErrors(updateUser.errors);
             } else if (!!updateUser.successMessage) {
-                resetForm();
+                setSubmitting(false);
                 toggleNotification(updateUser.successMessage);
                 setUserMe(updateUser.user as UserObjectType);
             } else {
