@@ -24,7 +24,7 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { UpdateProfileFormValues } from 'types';
 import { mediaUrl, urls } from 'utils';
 import * as Yup from 'yup';
