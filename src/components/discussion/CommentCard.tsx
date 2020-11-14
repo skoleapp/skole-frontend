@@ -24,6 +24,7 @@ import {
     KeyboardArrowUpOutlined,
     MoreHorizOutlined,
 } from '@material-ui/icons';
+import clsx from 'clsx';
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation, VoteObjectType } from 'generated';
 import { useActionsDialog, useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
@@ -68,6 +69,9 @@ const useStyles = makeStyles(({ spacing }) => ({
     icon: {
         marginRight: spacing(1),
     },
+    iconButton: {
+        padding: spacing(1.5),
+    },
     actionsButton: {
         position: 'absolute',
         left: 0,
@@ -75,7 +79,6 @@ const useStyles = makeStyles(({ spacing }) => ({
         bottom: spacing(1),
         margin: '0 auto',
         width: '2rem',
-        padding: spacing(1.5),
     },
 }));
 
@@ -230,7 +233,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
 
     const renderActionsButton = (
         <Tooltip title={t('common:actions')}>
-            <IconButton className={classes.actionsButton} {...actionsButtonProps} color="default">
+            <IconButton
+                className={clsx(classes.iconButton, classes.actionsButton)}
+                {...actionsButtonProps}
+                color="default"
+            >
                 <MoreHorizOutlined />
             </IconButton>
         </Tooltip>
@@ -247,7 +254,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
         <Grid item container xs={2} sm={1} direction="column" justify="center" alignItems="center">
             <Tooltip title={upVoteButtonTooltip}>
                 <Typography component="span">
-                    <IconButton {...upVoteButtonProps}>
+                    <IconButton className={classes.iconButton} {...upVoteButtonProps}>
                         <KeyboardArrowUpOutlined className="vote-button" />
                     </IconButton>
                 </Typography>
@@ -255,7 +262,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
             <Typography variant="body2">{score}</Typography>
             <Tooltip title={downVoteButtonTooltip}>
                 <Typography component="span">
-                    <IconButton {...downVoteButtonProps}>
+                    <IconButton className={classes.iconButton} {...downVoteButtonProps}>
                         <KeyboardArrowDownOutlined className="vote-button" />
                     </IconButton>
                 </Typography>
@@ -264,11 +271,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     );
 
     const renderDeleteAction = isOwner && (
-        <MenuItem>
+        <MenuItem onClick={handleDeleteComment}>
             <ListItemIcon>
                 <DeleteOutline />
             </ListItemIcon>
-            <ListItemText onClick={handleDeleteComment}>{t('common:delete')}</ListItemText>
+            <ListItemText>{t('common:delete')}</ListItemText>
         </MenuItem>
     );
 
