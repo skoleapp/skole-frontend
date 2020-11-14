@@ -39,7 +39,7 @@
     "nameOrderingReverse": "Name (Z-A)",
     "scoreOrdering": "Score",
     "bestOrdering": "Best",
-    "name": "Name",
+    "name": "Name (Optional)",
     "schoolHelpText": "By adding school we will be able to automatically show you content based on it.",
     "subjectHelpText": "By adding subject we will be able to automatically show you content based on it.",
     "marketingPermission": "Marketing Permission (coming soon)",
