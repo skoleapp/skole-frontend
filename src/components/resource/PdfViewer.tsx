@@ -63,7 +63,7 @@ export const PdfViewer: React.FC<Props> = ({ file }) => {
     };
 
     const renderPages = Array.from(new Array(numPages), (_, i) => (
-        <Page key={`page_${i + 1}`} pageNumber={i + 1} renderTextLayer={false} renderAnnotationLayer={false} />
+        <Page key={`page_${i + 1}`} pageNumber={i + 1} renderAnnotationLayer={false} />
     ));
 
     const renderAreaSelection = <AreaSelection />;
