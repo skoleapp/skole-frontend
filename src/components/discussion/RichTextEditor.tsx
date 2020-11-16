@@ -161,8 +161,9 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         .getType();
 
     const handleChange = (editorState: EditorState): void => {
+        const newTextContent = editorState.getCurrentContent().getPlainText('\u0001');
         setEditorState(editorState);
-        setFieldValue('text', textContent);
+        setFieldValue('text', newTextContent);
     };
 
     const [isMac, setIsMac] = useState<boolean | null>(null);
