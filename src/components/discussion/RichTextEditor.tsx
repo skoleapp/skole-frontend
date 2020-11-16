@@ -11,7 +11,6 @@ import {
     TextField,
     Tooltip,
     Typography,
-    useTheme,
 } from '@material-ui/core';
 import {
     AlternateEmailOutlined,

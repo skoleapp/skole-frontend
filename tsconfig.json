@@ -8,7 +8,7 @@
         "paths": {
             "components": ["src/components"],
             "context": ["src/context"],
-            "generated": ["generated/graphql.ts"],
+            "generated": ["src/graphql/common.graphql"],
             "hocs": ["src/hocs"],
             "hooks": ["src/hooks"],
             "lib": ["src/lib"],

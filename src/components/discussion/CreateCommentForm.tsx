@@ -12,7 +12,7 @@ import { CommentTarget, CreateCommentFormValues } from 'types';
 import { DialogHeader, SkoleDialog } from '../shared';
 import { RichTextEditor } from './RichTextEditor';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     attachmentContainer: {
         width: '100%',
         height: '25rem',
@@ -23,6 +23,9 @@ const useStyles = makeStyles(({ spacing }) => ({
     container: {
         flexGrow: 1,
         display: 'flex',
+        [breakpoints.up('md')]: {
+            padding: spacing(2),
+        },
     },
     dialogContent: {
         display: 'flex',
@@ -58,8 +61,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     const handleCloseCreateCommentModal = (): void => {
         setFieldValue('attachment', null);
         toggleCommentModal(false);
-        setScreenshot(null);
         setCommentAttachment(null);
+        !!setScreenshot && setScreenshot(null); // Not defined when in course page.
     };
 
     const onError = (): void => toggleNotification(t('notifications:messageError'));

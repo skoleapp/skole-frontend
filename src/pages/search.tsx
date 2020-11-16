@@ -38,11 +38,11 @@ import {
     CityObjectType,
     CountryObjectType,
     CourseObjectType,
+    CoursesQueryVariables,
     SchoolObjectType,
     SchoolTypeObjectType,
-    SearchCoursesQueryVariables,
     SubjectObjectType,
-    useSearchCoursesQuery,
+    useCoursesQuery,
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
@@ -116,7 +116,7 @@ const SearchPage: NextPage = () => {
     const { t } = useTranslation();
     const { pathname, query } = useRouter();
 
-    const variables: SearchCoursesQueryVariables = R.pick(
+    const variables: CoursesQueryVariables = R.pick(
         [
             'courseName',
             'courseCode',
@@ -133,7 +133,7 @@ const SearchPage: NextPage = () => {
     );
 
     const context = useLanguageHeaderContext();
-    const { data, loading, error } = useSearchCoursesQuery({ variables, context });
+    const { data, loading, error } = useCoursesQuery({ variables, context });
     const { open: filtersOpen, handleOpen: handleOpenFilters, handleClose: handleCloseFilters } = useOpen();
     const { formRef, resetForm } = useForm<FilterSearchResultsFormValues>();
     const courses: CourseObjectType[] = R.pathOr([], ['courses', 'objects'], data);

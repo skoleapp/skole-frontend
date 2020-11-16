@@ -7,7 +7,7 @@ import {
     useResendVerificationEmailMutation,
     useVerifyAccountMutation,
     VerifyAccountMutation,
-} from 'generated/graphql';
+} from 'generated';
 import { withAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
