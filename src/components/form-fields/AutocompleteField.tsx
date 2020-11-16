@@ -82,6 +82,10 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <T extends {}
         } else {
             fetchOptions();
         }
+
+        return (): void => {
+            setOptions([]);
+        };
     }, [open]);
 
     // For fields that perform filtering in the backend with the search variables, perform the data fetching also in the following cases:
