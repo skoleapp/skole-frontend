@@ -29,8 +29,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
         height: '100%',
     },
     inputAreaContainer: {
-        display: 'flex',
-        minHeight: '9rem',
+        maxHeight: '50%',
         [breakpoints.up('md')]: {
             padding: spacing(2),
         },
@@ -182,16 +181,10 @@ export const ReplyCommentThread: React.FC = () => {
 
     const renderCreateCommentForm = <CreateCommentForm {...createCommentFormProps} />;
 
-    const renderInputArea = isMobileOrTablet ? (
-        renderCreateCommentForm
-    ) : (
-        <Box padding={spacing(2)}>{renderCreateCommentForm}</Box>
-    );
-
     return (
         <Grid container direction="column" className={classes.root}>
             {renderMessageArea}
-            {renderInputArea}
+            {renderCreateCommentForm}
         </Grid>
     );
 };

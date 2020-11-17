@@ -52,7 +52,7 @@ import { DialogHeader, SkoleDialog } from '../shared';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     root: {
         width: '100%',
         wordBreak: 'break-all',
@@ -62,10 +62,13 @@ const useStyles = makeStyles(({ spacing }) => ({
             flexGrow: 1,
             display: 'flex',
             alignItems: 'center',
-            height: '2rem',
             overflowY: 'auto',
+            maxHeight: '10rem',
             overflowX: 'hidden',
-            padding: `0 ${spacing(2)}`,
+            padding: spacing(2),
+            [breakpoints.up('md')]: {
+                maxHeight: '20rem',
+            },
             '& .DraftEditor-editorContainer': {
                 flexGrow: 1,
                 '& .RichEditor-blockquote': {
@@ -100,7 +103,6 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     setFieldValue,
     submitForm,
 }) => {
-    const { spacing } = useTheme();
     const classes = useStyles();
     const decorator = new CompositeDecorator([
         {
@@ -471,12 +473,12 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     const renderBottomToolbar = (
-        <Box marginTop={spacing(1)} display="flex">
+        <Grid container>
             {renderInlineStyles}
             {renderLinkButton}
             {renderBlockStyles}
             {renderSendButton}
-        </Box>
+        </Grid>
     );
 
     const renderMentionButton = isDesktop && (
@@ -552,12 +554,10 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     );
 
     const renderTopToolbar = (
-        <Box marginBottom={spacing(2)}>
-            <Grid container alignItems="center">
-                {renderTopToolbarButtons}
-                {renderHelpTexts}
-            </Grid>
-        </Box>
+        <Grid container alignItems="center">
+            {renderTopToolbarButtons}
+            {renderHelpTexts}
+        </Grid>
     );
 
     return (
