@@ -7,45 +7,41 @@ import React from 'react';
 import { LoadingBox } from '../shared';
 import { FormErrorMessage } from './FormErrorMessage';
 
-interface Props extends FormikProps<{}> {
-    submitButtonText: string;
+interface Props extends FormikProps<Record<symbol, unknown>> {
+  submitButtonText: string;
 }
 
-export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | 'endIcon'>> = ({
-    isSubmitting,
-    submitButtonText,
-    endIcon,
-    variant,
-    values,
-}) => {
-    const loadingText: string = R.propOr(undefined, 'general', values);
+export const FormSubmitSection: React.FC<
+  Props & Pick<ButtonProps, 'variant' | 'endIcon'>
+> = ({ isSubmitting, submitButtonText, endIcon, variant, values }) => {
+  const loadingText: string = R.propOr(undefined, 'general', values);
 
-    const renderTextContent = isSubmitting ? (
-        <LoadingBox text={loadingText} />
-    ) : (
-        <ErrorMessage name="general" component={FormErrorMessage} />
-    );
+  const renderTextContent = isSubmitting ? (
+    <LoadingBox text={loadingText} />
+  ) : (
+    <ErrorMessage name="general" component={FormErrorMessage} />
+  );
 
-    const renderSubmitButton = (
-        <Button
-            type="submit"
-            disabled={isSubmitting}
-            variant={variant || 'contained'}
-            endIcon={endIcon || <ArrowForwardOutlined />}
-            color="primary"
-        >
-            {submitButtonText}
-        </Button>
-    );
+  const renderSubmitButton = (
+    <Button
+      type="submit"
+      disabled={isSubmitting}
+      variant={variant || 'contained'}
+      endIcon={endIcon || <ArrowForwardOutlined />}
+      color="primary"
+    >
+      {submitButtonText}
+    </Button>
+  );
 
-    return (
-        <Grid container direction="column" alignItems="center">
-            <FormControl>
-                <Grid container justify="center">
-                    {renderTextContent}
-                </Grid>
-            </FormControl>
-            <FormControl fullWidth>{renderSubmitButton}</FormControl>
+  return (
+    <Grid container direction="column" alignItems="center">
+      <FormControl>
+        <Grid container justify="center">
+          {renderTextContent}
         </Grid>
-    );
+      </FormControl>
+      <FormControl fullWidth>{renderSubmitButton}</FormControl>
+    </Grid>
+  );
 };

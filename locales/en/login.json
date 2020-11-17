@@ -1,8 +1,8 @@
 {
-    "title": "Log In",
-    "description": "Log in to Skole.",
-    "header": "Log In",
-    "forgotPassword": "Forgot password?",
-    "existingUserGreeting": "Welcome back, {{ username }}.",
-    "loginWithDifferentCredentials": "Log in with different credentials"
+  "title": "Log In",
+  "description": "Log in to Skole.",
+  "header": "Log In",
+  "forgotPassword": "Forgot password?",
+  "existingUserGreeting": "Welcome back, {{ username }}.",
+  "loginWithDifferentCredentials": "Log in with different credentials"
 }

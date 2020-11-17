@@ -1,14 +1,14 @@
 {
-    "description": "View Skole profile for user {{ username }}.",
-    "score": "score",
-    "courses": "courses",
-    "resources": "resources",
-    "editProfile": "Edit Profile",
-    "noResources": "This user has no resources.",
-    "noCourses": "This user has no courses.",
-    "viewStarred": "View Starred",
-    "ownProfileCourses": "My Courses",
-    "ownProfileResources": "My Resources",
-    "ownProfileNoCourses": "You have no courses. All resources that you create will show up here.",
-    "ownProfileNoResources": "You have no resources. All resources that you create will show up here."
+  "description": "View Skole profile for user {{ username }}.",
+  "score": "score",
+  "courses": "courses",
+  "resources": "resources",
+  "editProfile": "Edit Profile",
+  "noResources": "This user has no resources.",
+  "noCourses": "This user has no courses.",
+  "viewStarred": "View Starred",
+  "ownProfileCourses": "My Courses",
+  "ownProfileResources": "My Resources",
+  "ownProfileNoCourses": "You have no courses. All resources that you create will show up here.",
+  "ownProfileNoResources": "You have no resources. All resources that you create will show up here."
 }

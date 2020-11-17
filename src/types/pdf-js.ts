@@ -1,11 +1,11 @@
 export interface LTWH {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
 }
 
 export interface PdfTranslation {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 }

@@ -1,9 +1,9 @@
 {
-    "invalidEmail": "Invalid email",
-    "passwordTooShort": "Lösenordet måste vara minst 8 tecken lång",
-    "passwordsNotMatch": "Lösenorden stämmer inte överens",
-    "required": "This fält krävs.",
-    "unexpectedError": "Oväntat fel.",
-    "networkError": "Nätverksfel.",
-    "fileSizeError": "Filen är för stor!"
+  "invalidEmail": "Invalid email",
+  "passwordTooShort": "Lösenordet måste vara minst 8 tecken lång",
+  "passwordsNotMatch": "Lösenorden stämmer inte överens",
+  "required": "This fält krävs.",
+  "unexpectedError": "Oväntat fel.",
+  "networkError": "Nätverksfel.",
+  "fileSizeError": "Filen är för stor!"
 }

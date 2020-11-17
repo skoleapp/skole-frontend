@@ -1,11 +1,11 @@
 {
-    "title": "FAQ",
-    "description": "Löydä usein kysytyt kysymykset Skolessa.",
-    "header": "FAQ",
-    "title-1": "Kuinka voin ansaita mainetta ja kunniaa käyttäjälleni?",
-    "text-1": "Voit parantaa käyttätilisi arvoa ansaitsemalla pisteitä. Saat pisteitä kun käyttäjät äänestävät ylös sisältöäsi, oli se sitten kursseja, resursseja tai kommentteja.",
-    "title-2": "Kuinka löydän lempisisältöni?",
-    "text-2": "Kaikki luomasi kurssit ja resurssit näkyvät profiilissasi. Voit myös merkitä kursseja ja resursseja tähdellä, jonka jälkeen ne näkyvät tähdellä merkittyjen kohtien joukossa. Voit näyttää tähdellä merkityt kohtasi klikkaamalla tähti-ikonia.",
-    "title-3": "Kuinka löydän sisällön koulustani ja oppiaineestani?",
-    "text-3": "Voit valita profiilissasi koulusi ja oppiaineesi. Näytämme sinulle automaattisesti sisältöä perustuen valintoisihisi."
+  "title": "FAQ",
+  "description": "Löydä usein kysytyt kysymykset Skolessa.",
+  "header": "FAQ",
+  "title-1": "Kuinka voin ansaita mainetta ja kunniaa käyttäjälleni?",
+  "text-1": "Voit parantaa käyttätilisi arvoa ansaitsemalla pisteitä. Saat pisteitä kun käyttäjät äänestävät ylös sisältöäsi, oli se sitten kursseja, resursseja tai kommentteja.",
+  "title-2": "Kuinka löydän lempisisältöni?",
+  "text-2": "Kaikki luomasi kurssit ja resurssit näkyvät profiilissasi. Voit myös merkitä kursseja ja resursseja tähdellä, jonka jälkeen ne näkyvät tähdellä merkittyjen kohtien joukossa. Voit näyttää tähdellä merkityt kohtasi klikkaamalla tähti-ikonia.",
+  "title-3": "Kuinka löydän sisällön koulustani ja oppiaineestani?",
+  "text-3": "Voit valita profiilissasi koulusi ja oppiaineesi. Näytämme sinulle automaattisesti sisältöä perustuen valintoisihisi."
 }

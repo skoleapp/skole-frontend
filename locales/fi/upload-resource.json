@@ -1,15 +1,15 @@
 {
-    "title": "Lisää resurssi",
-    "description": "Lataa uusi resurssi Skoleen.",
-    "header": "Lisää resurssi",
-    "fileUploadingText": "Lähetetään tiedostoa...",
-    "maxFileSize": "Maksimi tiedostokoko",
-    "fileSelected": "{{ fileName }} valittu.",
-    "uploadFileButtonText": "Lisää tiedosto",
-    "dropZoneText": "Raahaa tiedosto tähän, tai klikkaa valitaksesi tiedosto.",
-    "schoolHelperText": "Etkö löydä kouluasi?",
-    "schoolHelperLink": "Ota meihin yhteyttä, niin lisäämme sen!",
-    "courseHelperText": "Etkö loydä kurssiasi?",
-    "courseHelperLink": "Yritä lisätä se!",
-    "resourceTitleHelperText": "Anna resurssille kuvaava nimi."
+  "title": "Lisää resurssi",
+  "description": "Lataa uusi resurssi Skoleen.",
+  "header": "Lisää resurssi",
+  "fileUploadingText": "Lähetetään tiedostoa...",
+  "maxFileSize": "Maksimi tiedostokoko",
+  "fileSelected": "{{ fileName }} valittu.",
+  "uploadFileButtonText": "Lisää tiedosto",
+  "dropZoneText": "Raahaa tiedosto tähän, tai klikkaa valitaksesi tiedosto.",
+  "schoolHelperText": "Etkö löydä kouluasi?",
+  "schoolHelperLink": "Ota meihin yhteyttä, niin lisäämme sen!",
+  "courseHelperText": "Etkö loydä kurssiasi?",
+  "courseHelperLink": "Yritä lisätä se!",
+  "resourceTitleHelperText": "Anna resurssille kuvaava nimi."
 }

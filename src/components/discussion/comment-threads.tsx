@@ -1,4 +1,12 @@
-import { Box, Button, Fab, Grid, makeStyles, Typography, useTheme } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Fab,
+  Grid,
+  makeStyles,
+  Typography,
+  useTheme,
+} from '@material-ui/core';
 import { AddOutlined } from '@material-ui/icons';
 import { useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
@@ -14,177 +22,219 @@ import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
-    root: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        flexWrap: 'nowrap',
+  root: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flexWrap: 'nowrap',
+  },
+  messageArea: {
+    flexGrow: 1,
+    overflowY: 'auto',
+    flexWrap: 'nowrap',
+    height: '100%',
+  },
+  inputAreaContainer: {
+    [breakpoints.up('md')]: {
+      padding: spacing(2),
     },
-    messageArea: {
-        flexGrow: 1,
-        overflowY: 'auto',
-        flexWrap: 'nowrap',
-        height: '100%',
-    },
-    inputAreaContainer: {
-        maxHeight: '50%',
-        [breakpoints.up('md')]: {
-            padding: spacing(2),
-        },
-    },
-    createCommentButton: {
-        position: 'absolute',
-        bottom: `calc(${BOTTOM_NAVBAR_HEIGHT} + ${spacing(5)})`,
-        left: 0,
-        right: 0,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        opacity: 0.7,
-    },
+  },
+  createCommentButton: {
+    position: 'absolute',
+    bottom: `calc(${BOTTOM_NAVBAR_HEIGHT} + ${spacing(5)})`,
+    left: 0,
+    right: 0,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    opacity: 0.7,
+  },
 }));
 
 export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
-    comments: initialComments,
-    target,
-    noComments,
+  comments: initialComments,
+  target,
+  noComments,
 }) => {
-    const classes = useStyles();
-    const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext(initialComments);
-    const { isMobileOrTablet } = useMediaQueries();
-    const appendComments = (comment: CommentObjectType): void => setTopLevelComments([...topLevelComments, comment]);
-    const openCommentModal = (): void => toggleCommentModal(true);
-    const removeComment = (id: string): void => setTopLevelComments(topLevelComments.filter(c => c.id !== id));
+  const classes = useStyles();
+  const { isMobileOrTablet } = useMediaQueries();
 
-    const commentCardProps = {
-        isThread: false,
-        removeComment,
-    };
+  const {
+    topLevelComments,
+    setTopLevelComments,
+    toggleCommentModal,
+  } = useDiscussionContext(initialComments);
 
-    const createCommentFormProps = {
-        target,
-        appendComments,
-    };
+  const appendComments = (comment: CommentObjectType): void =>
+    setTopLevelComments([...topLevelComments, comment]);
 
-    const renderTopLevelComments =
-        !!topLevelComments.length &&
-        topLevelComments.map((c, i) => <CommentCard {...commentCardProps} key={i} comment={c} />);
+  const openCommentModal = (): void => toggleCommentModal(true);
 
-    const renderCommentsNotFound = !topLevelComments.length && !!noComments && <NotFoundBox text={noComments} />;
+  const removeComment = (id: string): void =>
+    setTopLevelComments(topLevelComments.filter((c) => c.id !== id));
 
-    const renderMessageArea = (
-        <Grid container direction="column" className={classes.messageArea}>
-            {renderTopLevelComments}
-            {renderCommentsNotFound}
-        </Grid>
-    );
+  const commentCardProps = {
+    isThread: false,
+    removeComment,
+  };
 
-    // For mobile devices, we only want to show a hidden element since the actual logic happens in the modal.
-    const renderInputArea = isMobileOrTablet ? (
-        <Box display="none">
-            <CreateCommentForm {...createCommentFormProps} />
-        </Box>
-    ) : (
-        <Box className={classes.inputAreaContainer}>
-            <CreateCommentForm {...createCommentFormProps} />
-        </Box>
-    );
+  const createCommentFormProps = {
+    target,
+    appendComments,
+  };
 
-    const renderCreateCommentButton = isMobileOrTablet && (
-        <Fab className={classes.createCommentButton} color="secondary" onClick={openCommentModal}>
-            <AddOutlined />
-        </Fab>
-    );
+  const renderTopLevelComments =
+    !!topLevelComments.length &&
+    topLevelComments.map((c, i) => (
+      <CommentCard {...commentCardProps} key={i} comment={c} />
+    ));
 
-    return (
-        <Box flexGrow="1" position="relative">
-            <Grid container direction="column" className={classes.root}>
-                {renderMessageArea}
-                {renderInputArea}
-                {renderCreateCommentButton}
-            </Grid>
-        </Box>
-    );
+  const renderCommentsNotFound = !topLevelComments.length && !!noComments && (
+    <NotFoundBox text={noComments} />
+  );
+
+  const renderMessageArea = (
+    <Grid container direction="column" className={classes.messageArea}>
+      {renderTopLevelComments}
+      {renderCommentsNotFound}
+    </Grid>
+  );
+
+  // For mobile devices, we only want to show a hidden element since the actual logic happens in the modal.
+  const renderInputArea = isMobileOrTablet ? (
+    <Box display="none">
+      <CreateCommentForm {...createCommentFormProps} />
+    </Box>
+  ) : (
+    <Box className={classes.inputAreaContainer}>
+      <CreateCommentForm {...createCommentFormProps} />
+    </Box>
+  );
+
+  const renderCreateCommentButton = isMobileOrTablet && (
+    <Fab
+      className={classes.createCommentButton}
+      color="secondary"
+      onClick={openCommentModal}
+    >
+      <AddOutlined />
+    </Fab>
+  );
+
+  return (
+    <Box flexGrow="1" position="relative">
+      <Grid container direction="column" className={classes.root}>
+        {renderMessageArea}
+        {renderInputArea}
+        {renderCreateCommentButton}
+      </Grid>
+    </Box>
+  );
 };
 
 export const ReplyCommentThread: React.FC = () => {
-    const classes = useStyles();
-    const { spacing } = useTheme();
-    const { t } = useTranslation();
-    const { isMobileOrTablet } = useMediaQueries();
-    const { topComment, toggleTopComment, toggleCommentModal } = useDiscussionContext();
-    const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
-    const target = { comment: Number(R.propOr(undefined, 'id', topComment)) };
-    const openCommentModal = (): void => toggleCommentModal(true);
+  const classes = useStyles();
+  const { spacing } = useTheme();
+  const { t } = useTranslation();
+  const { isMobileOrTablet } = useMediaQueries();
+  const {
+    topComment,
+    toggleTopComment,
+    toggleCommentModal,
+  } = useDiscussionContext();
 
-    const appendComments = (comment: CommentObjectType): void => {
-        if (!!topComment) {
-            toggleTopComment({
-                ...topComment,
-                replyComments: [...topComment.replyComments, comment],
-            });
-        }
-    };
+  const replyComments: CommentObjectType[] = R.propOr(
+    [],
+    'replyComments',
+    topComment
+  );
 
-    const removeComment = (id: string): void => {
-        if (!!topComment) {
-            if (id === topComment.id) {
-                toggleTopComment(null); // Close modal if top comment gets deleted.
-            } else {
-                const filteredReplyComments: CommentObjectType[] = replyComments.filter(c => c.id !== id);
-                toggleTopComment({ ...topComment, replyComments: filteredReplyComments });
-            }
-        }
-    };
+  const target = { comment: Number(R.propOr(undefined, 'id', topComment)) };
+  const openCommentModal = (): void => toggleCommentModal(true);
 
-    const commentCardProps = {
-        isThread: true,
-        removeComment,
-    };
+  const appendComments = (comment: CommentObjectType): void => {
+    if (topComment) {
+      toggleTopComment({
+        ...topComment,
+        replyComments: [...topComment.replyComments, comment],
+      });
+    }
+  };
 
-    const createCommentFormProps = {
-        target,
-        appendComments,
-    };
+  const removeComment = (id: string): void => {
+    if (topComment) {
+      if (id === topComment.id) {
+        toggleTopComment(null); // Close modal if top comment gets deleted.
+      } else {
+        const filteredReplyComments: CommentObjectType[] = replyComments.filter(
+          (c) => c.id !== id
+        );
 
-    const renderTopComment = !!topComment && (
-        <>
-            <CommentCard {...commentCardProps} comment={topComment} />
-            <Box padding={spacing(2)} display="flex" alignItems="center">
-                <Typography variant="body2" color="textSecondary">
-                    {replyComments.length} replies
-                </Typography>
-            </Box>
-        </>
-    );
+        toggleTopComment({
+          ...topComment,
+          replyComments: filteredReplyComments,
+        });
+      }
+    }
+  };
 
-    const renderReplyComments =
-        !!replyComments.length &&
-        replyComments.map((c, i) => <CommentCard {...commentCardProps} key={i} comment={c} />);
+  const commentCardProps = {
+    isThread: true,
+    removeComment,
+  };
 
-    const renderReplyButton = !!topComment && isMobileOrTablet && (
-        <Box padding={spacing(2)} marginTop="auto">
-            <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
-                {t('common:reply')}
-            </Button>
-        </Box>
-    );
+  const createCommentFormProps = {
+    target,
+    appendComments,
+  };
 
-    const renderMessageArea = (
-        <Grid container direction="column" className={classes.messageArea}>
-            {renderTopComment}
-            {renderReplyComments}
-            {renderReplyButton}
-        </Grid>
-    );
+  const renderTopComment = !!topComment && (
+    <>
+      <CommentCard {...commentCardProps} comment={topComment} />
+      <Box padding={spacing(2)} display="flex" alignItems="center">
+        <Typography variant="body2" color="textSecondary">
+          {replyComments.length} replies
+        </Typography>
+      </Box>
+    </>
+  );
 
-    const renderCreateCommentForm = <CreateCommentForm {...createCommentFormProps} />;
+  const renderReplyComments =
+    !!replyComments.length &&
+    replyComments.map((c, i) => (
+      <CommentCard {...commentCardProps} key={i} comment={c} />
+    ));
 
-    return (
-        <Grid container direction="column" className={classes.root}>
-            {renderMessageArea}
-            {renderCreateCommentForm}
-        </Grid>
-    );
+  const renderReplyButton = !!topComment && isMobileOrTablet && (
+    <Box padding={spacing(2)} marginTop="auto">
+      <Button
+        onClick={openCommentModal}
+        color="primary"
+        variant="contained"
+        fullWidth
+      >
+        {t('common:reply')}
+      </Button>
+    </Box>
+  );
+
+  const renderMessageArea = (
+    <Grid container direction="column" className={classes.messageArea}>
+      {renderTopComment}
+      {renderReplyComments}
+      {renderReplyButton}
+    </Grid>
+  );
+
+  const renderCreateCommentForm = (
+    <CreateCommentForm {...createCommentFormProps} />
+  );
+
+  return (
+    <Grid container direction="column" className={classes.root}>
+      {renderMessageArea}
+      {renderCreateCommentForm}
+    </Grid>
+  );
 };

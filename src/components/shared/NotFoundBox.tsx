@@ -5,43 +5,53 @@ import React from 'react';
 import { TextLink } from './TextLink';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
-    root: {
-        flexGrow: 1,
-        padding: spacing(2),
-        textAlign: 'center',
-        backgroundColor: palette.common.white,
-    },
-    icon: {
-        width: '3.5rem',
-        height: '3.5rem',
-        marginBottom: spacing(2),
-    },
+  root: {
+    flexGrow: 1,
+    padding: spacing(2),
+    textAlign: 'center',
+    backgroundColor: palette.common.white,
+  },
+  icon: {
+    width: '3.5rem',
+    height: '3.5rem',
+    marginBottom: spacing(2),
+  },
 }));
 
 interface Props {
+  text: string;
+  linkProps?: {
+    href: string;
     text: string;
-    linkProps?: {
-        href: string;
-        text: string;
-    };
+  };
 }
 
 export const NotFoundBox: React.FC<Props> = ({ text, linkProps }) => {
-    const classes = useStyles();
-    const renderIcon = <MoodBadOutlined className={classes.icon} color="disabled" />;
-    const renderLink = !!linkProps && <TextLink href={linkProps.href}>{linkProps.text}</TextLink>;
+  const classes = useStyles();
+  const renderIcon = (
+    <MoodBadOutlined className={classes.icon} color="disabled" />
+  );
+  const renderLink = !!linkProps && (
+    <TextLink href={linkProps.href}>{linkProps.text}</TextLink>
+  );
 
-    const renderText = (
-        <Typography variant="body2" color="textSecondary">
-            {text}
-        </Typography>
-    );
+  const renderText = (
+    <Typography variant="body2" color="textSecondary">
+      {text}
+    </Typography>
+  );
 
-    return (
-        <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
-            {renderIcon}
-            {renderText}
-            {renderLink}
-        </Grid>
-    );
+  return (
+    <Grid
+      container
+      direction="column"
+      justify="center"
+      alignItems="center"
+      className={classes.root}
+    >
+      {renderIcon}
+      {renderText}
+      {renderLink}
+    </Grid>
+  );
 };

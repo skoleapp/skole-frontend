@@ -9,31 +9,39 @@ import { LoadingBox, NotFoundBox } from '../shared';
 import { ActivityListItem } from './ActivityListItem';
 
 const useStyles = makeStyles({
-    list: {
-        width: '100%',
-        overflowY: 'auto',
-    },
+  list: {
+    width: '100%',
+    overflowY: 'auto',
+  },
 });
 
 export const ActivityPreview: React.FC = () => {
-    const classes = useStyles();
-    const { t } = useTranslation();
-    const context = useLanguageHeaderContext();
-    const { data, loading, error } = useActivityPreviewQuery({ context });
-    const activities: ActivityObjectType[] = R.propOr([], 'activityPreview', data);
-    const renderActivities = activities.map((a, i) => <ActivityListItem activity={a} key={i} />);
+  const classes = useStyles();
+  const { t } = useTranslation();
+  const context = useLanguageHeaderContext();
+  const { data, loading, error } = useActivityPreviewQuery({ context });
 
-    if (loading) {
-        return <LoadingBox />;
-    }
+  const activities: ActivityObjectType[] = R.propOr(
+    [],
+    'activityPreview',
+    data
+  );
 
-    if (error) {
-        return <NotFoundBox text={t('activity:error')} />;
-    }
+  const renderActivities = activities.map((a, i) => (
+    <ActivityListItem activity={a} key={i} />
+  ));
 
-    return !!activities.length ? (
-        <List className={classes.list}>{renderActivities}</List>
-    ) : (
-        <NotFoundBox text={t('activity:noActivity')} />
-    );
+  if (loading) {
+    return <LoadingBox />;
+  }
+
+  if (error) {
+    return <NotFoundBox text={t('activity:error')} />;
+  }
+
+  return activities.length ? (
+    <List className={classes.list}>{renderActivities}</List>
+  ) : (
+    <NotFoundBox text={t('activity:noActivity')} />
+  );
 };

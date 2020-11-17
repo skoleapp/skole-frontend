@@ -1,14 +1,14 @@
 {
-    "description": "Visa Skole-profilen för användaren {{ username }}.",
-    "score": "poäng",
-    "courses": "kurser",
-    "resources": "resurser",
-    "editProfile": "Redigera Profil",
-    "noResources": "Denna användare har inga resurser.",
-    "noCourses": "Denna användare har inga kurser.",
-    "viewStarred": "Visa stjärnmärkt",
-    "ownProfileCourses": "Mina kurser",
-    "ownProfileResources": "Mina resurser",
-    "ownProfileNoCourses": "Du har inga kurser. Alla kurser som du skapar kommer att visas här.",
-    "ownProfileNoResources": "Du har inga resurser. Alla resurser som du skapar kommer att visas här."
+  "description": "Visa Skole-profilen för användaren {{ username }}.",
+  "score": "poäng",
+  "courses": "kurser",
+  "resources": "resurser",
+  "editProfile": "Redigera Profil",
+  "noResources": "Denna användare har inga resurser.",
+  "noCourses": "Denna användare har inga kurser.",
+  "viewStarred": "Visa stjärnmärkt",
+  "ownProfileCourses": "Mina kurser",
+  "ownProfileResources": "Mina resurser",
+  "ownProfileNoCourses": "Du har inga kurser. Alla kurser som du skapar kommer att visas här.",
+  "ownProfileNoResources": "Du har inga resurser. Alla resurser som du skapar kommer att visas här."
 }

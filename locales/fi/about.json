@@ -1,8 +1,8 @@
 {
-    "title": "Meistä",
-    "description": "Löydä mitä Skolessa on.",
-    "header": "Meistä",
-    "content": "Skole on alusta opiskelun avuksi, jolla saat opiskelumateriaalista enemmän irti.",
-    "feedbackHeader": "Haluatko auttaa meitä parantamaan palveluamme?",
-    "feedbackText": "Anna meille palautetta"
+  "title": "Meistä",
+  "description": "Löydä mitä Skolessa on.",
+  "header": "Meistä",
+  "content": "Skole on alusta opiskelun avuksi, jolla saat opiskelumateriaalista enemmän irti.",
+  "feedbackHeader": "Haluatko auttaa meitä parantamaan palveluamme?",
+  "feedbackText": "Anna meille palautetta"
 }

@@ -1,8 +1,8 @@
 {
-    "description": "Näytä {{ courseName }} Skolessa.",
-    "noResources": "Tällä kurssilla ei ole resursseja.",
-    "noResourcesLink": "Lisää resurssi täältä!",
-    "deleteCourseTitle": "Poista kurssi",
-    "deleteCourseDescription": "Oletko varma että haluat poistaa tämän kurssin?",
-    "noComments": "Tällä kurssilla ei ole kommentteja. Lisää kommentti alta!"
+  "description": "Näytä {{ courseName }} Skolessa.",
+  "noResources": "Tällä kurssilla ei ole resursseja.",
+  "noResourcesLink": "Lisää resurssi täältä!",
+  "deleteCourseTitle": "Poista kurssi",
+  "deleteCourseDescription": "Oletko varma että haluat poistaa tämän kurssin?",
+  "noComments": "Tällä kurssilla ei ole kommentteja. Lisää kommentti alta!"
 }

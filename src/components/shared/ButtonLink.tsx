@@ -6,7 +6,7 @@ import React from 'react';
 type Props = LinkProps & Omit<ButtonProps, 'href'>;
 
 export const ButtonLink: React.FC<Props> = ({ href, children, ...props }) => (
-    <Link href={href}>
-        <Button {...props}>{children}</Button>
-    </Link>
+  <Link href={href}>
+    <Button {...props}>{children}</Button>
+  </Link>
 );

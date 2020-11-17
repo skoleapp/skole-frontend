@@ -1,6 +1,6 @@
 {
-    "description": "View {{ schoolName }} on Skole.",
-    "noSubjects": "This school has no subjects.",
-    "noCourses": "This school has no courses.",
-    "addCourse": "Add a course for this school"
+  "description": "View {{ schoolName }} on Skole.",
+  "noSubjects": "This school has no subjects.",
+  "noCourses": "This school has no courses.",
+  "addCourse": "Add a course for this school"
 }

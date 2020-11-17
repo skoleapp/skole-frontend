@@ -1,4 +1,5 @@
 .next
 build
-generated
+*.graphql.d.ts
+__generated__
 gtag.js

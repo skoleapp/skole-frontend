@@ -1,19 +1,19 @@
 import { CommentObjectType } from 'generated';
 
 export interface CommentTarget {
-    [key: string]: number;
+  [key: string]: number;
 }
 
 export interface TopLevelCommentThreadProps {
-    comments: CommentObjectType[];
-    target: CommentTarget;
-    noComments?: string;
+  comments: CommentObjectType[];
+  target: CommentTarget;
+  noComments?: string;
 }
 
 export interface CreateCommentFormValues {
-    text: string;
-    attachment: File | null;
-    course?: string;
-    resource?: string;
-    comment?: string;
+  text: string;
+  attachment: File | null;
+  course?: string;
+  resource?: string;
+  comment?: string;
 }

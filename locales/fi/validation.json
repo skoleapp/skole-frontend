@@ -1,9 +1,9 @@
 {
-    "invalidEmail": "Virheellinen sähköposti.",
-    "passwordTooShort": "Salasanan tulee olla vähintään 8 merkkiä pitkä.",
-    "passwordsNotMatch": "Salasanat eivät täsmää.",
-    "required": "Tämä kenttä on vaadittu.",
-    "unexpectedError": "Odottamaton virhe.",
-    "networkError": "Yhteysvirhe.",
-    "fileSizeError": "Tiedosto on liian suuri!"
+  "invalidEmail": "Virheellinen sähköposti.",
+  "passwordTooShort": "Salasanan tulee olla vähintään 8 merkkiä pitkä.",
+  "passwordsNotMatch": "Salasanat eivät täsmää.",
+  "required": "Tämä kenttä on vaadittu.",
+  "unexpectedError": "Odottamaton virhe.",
+  "networkError": "Yhteysvirhe.",
+  "fileSizeError": "Tiedosto on liian suuri!"
 }

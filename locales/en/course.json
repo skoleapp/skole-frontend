@@ -1,8 +1,8 @@
 {
-    "description": "View {{ courseName }} on Skole.",
-    "noResources": "This course has no resources.",
-    "noResourcesLink": "Add a resource here!",
-    "deleteCourseTitle": "Delete Course",
-    "deleteCourseDescription": "Are you sure you want to delete this course?",
-    "noComments": "This course has no comments. Add a comment below!"
+  "description": "View {{ courseName }} on Skole.",
+  "noResources": "This course has no resources.",
+  "noResourcesLink": "Add a resource here!",
+  "deleteCourseTitle": "Delete Course",
+  "deleteCourseDescription": "Are you sure you want to delete this course?",
+  "noComments": "This course has no comments. Add a comment below!"
 }

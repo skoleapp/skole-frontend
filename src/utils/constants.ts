@@ -1,16 +1,16 @@
 import {
-    AssignmentOutlined,
-    CloudUploadOutlined,
-    ContactSupportOutlined,
-    EditOutlined,
-    HelpOutlineOutlined,
-    LockOutlined,
-    NotificationsOutlined,
-    QuestionAnswerOutlined,
-    SchoolOutlined,
-    SecurityOutlined,
-    SettingsBackupRestoreOutlined,
-    StarBorderOutlined,
+  AssignmentOutlined,
+  CloudUploadOutlined,
+  ContactSupportOutlined,
+  EditOutlined,
+  HelpOutlineOutlined,
+  LockOutlined,
+  NotificationsOutlined,
+  QuestionAnswerOutlined,
+  SchoolOutlined,
+  SecurityOutlined,
+  SettingsBackupRestoreOutlined,
+  StarBorderOutlined,
 } from '@material-ui/icons';
 
 import { urls } from './urls';
@@ -34,128 +34,128 @@ export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
 // Home page.
 
 export const HOME_PAGE_SHORTCUTS = [
-    {
-        text: 'index:findResources',
-        icon: AssignmentOutlined,
-        href: urls.search,
-    },
-    {
-        text: 'index:uploadResources',
-        icon: CloudUploadOutlined,
-        href: urls.uploadResource,
-    },
-    {
-        text: 'index:createCourses',
-        icon: SchoolOutlined,
-        href: urls.createCourse,
-    },
+  {
+    text: 'index:findResources',
+    icon: AssignmentOutlined,
+    href: urls.search,
+  },
+  {
+    text: 'index:uploadResources',
+    icon: CloudUploadOutlined,
+    href: urls.uploadResource,
+  },
+  {
+    text: 'index:createCourses',
+    icon: SchoolOutlined,
+    href: urls.createCourse,
+  },
 ];
 
 // Settings.
 
 export const MENU_ITEMS = {
-    account: [
-        {
-            icon: NotificationsOutlined,
-            text: 'common:activity',
-            href: urls.activity,
-        },
-        {
-            icon: StarBorderOutlined,
-            text: 'common:starred',
-            href: urls.starred,
-        },
-        {
-            icon: EditOutlined,
-            text: 'common:editProfile',
-            href: urls.editProfile,
-        },
-        {
-            icon: LockOutlined,
-            text: 'common:changePassword',
-            href: urls.changePassword,
-        },
-    ],
-    commonAccount: [
-        {
-            icon: SettingsBackupRestoreOutlined,
-            text: 'common:resetPassword',
-            href: urls.resetPassword,
-        },
-    ],
-    language: [
-        {
-            title: 'languages:english',
-            value: 'en',
-        },
-        {
-            title: 'languages:finnish',
-            value: 'fi',
-        },
-        {
-            title: 'languages:swedish',
-            value: 'sv',
-        },
-    ],
-    about: [
-        {
-            icon: HelpOutlineOutlined,
-            text: 'common:about',
-            href: urls.about,
-        },
-        {
-            icon: ContactSupportOutlined,
-            text: 'common:contact',
-            href: urls.contact,
-        },
-        {
-            icon: QuestionAnswerOutlined,
-            text: 'common:faq',
-            href: urls.faq,
-        },
-    ],
-    legal: [
-        {
-            icon: AssignmentOutlined,
-            text: 'common:terms',
-            href: urls.terms,
-        },
-        {
-            icon: SecurityOutlined,
-            text: 'common:privacy',
-            href: urls.privacy,
-        },
-    ],
+  account: [
+    {
+      icon: NotificationsOutlined,
+      text: 'common:activity',
+      href: urls.activity,
+    },
+    {
+      icon: StarBorderOutlined,
+      text: 'common:starred',
+      href: urls.starred,
+    },
+    {
+      icon: EditOutlined,
+      text: 'common:editProfile',
+      href: urls.editProfile,
+    },
+    {
+      icon: LockOutlined,
+      text: 'common:changePassword',
+      href: urls.changePassword,
+    },
+  ],
+  commonAccount: [
+    {
+      icon: SettingsBackupRestoreOutlined,
+      text: 'common:resetPassword',
+      href: urls.resetPassword,
+    },
+  ],
+  language: [
+    {
+      title: 'languages:english',
+      value: 'en',
+    },
+    {
+      title: 'languages:finnish',
+      value: 'fi',
+    },
+    {
+      title: 'languages:swedish',
+      value: 'sv',
+    },
+  ],
+  about: [
+    {
+      icon: HelpOutlineOutlined,
+      text: 'common:about',
+      href: urls.about,
+    },
+    {
+      icon: ContactSupportOutlined,
+      text: 'common:contact',
+      href: urls.contact,
+    },
+    {
+      icon: QuestionAnswerOutlined,
+      text: 'common:faq',
+      href: urls.faq,
+    },
+  ],
+  legal: [
+    {
+      icon: AssignmentOutlined,
+      text: 'common:terms',
+      href: urls.terms,
+    },
+    {
+      icon: SecurityOutlined,
+      text: 'common:privacy',
+      href: urls.privacy,
+    },
+  ],
 };
 
 // FAQ items.
 
 export const FAQ_ITEMS = [
-    {
-        title: 'faq:title-1',
-        text: 'faq:text-1',
-    },
-    {
-        title: 'faq:title-2',
-        text: 'faq:text-2',
-    },
-    {
-        title: 'faq:title-3',
-        text: 'faq:text-3',
-    },
+  {
+    title: 'faq:title-1',
+    text: 'faq:text-1',
+  },
+  {
+    title: 'faq:title-2',
+    text: 'faq:text-2',
+  },
+  {
+    title: 'faq:title-3',
+    text: 'faq:text-3',
+  },
 ];
 
 // Rich text editor.
 
 export const RICH_STYLES = {
-    bold: 'BOLD',
-    italic: 'ITALIC',
-    strikeThrough: 'STRIKETHROUGH',
-    link: 'link-entity',
-    orderedList: 'ordered-list-item',
-    unorderedList: 'unordered-list-item',
-    blockQuote: 'blockquote',
-    codeBlock: 'code-block',
+  bold: 'BOLD',
+  italic: 'ITALIC',
+  strikeThrough: 'STRIKETHROUGH',
+  link: 'link-entity',
+  orderedList: 'ordered-list-item',
+  unorderedList: 'unordered-list-item',
+  blockQuote: 'blockquote',
+  codeBlock: 'code-block',
 };
 
 // Resource uploads.

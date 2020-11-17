@@ -1,10 +1,10 @@
 {
-    "title": "Redigera profil",
-    "description": "Redigera din Skole-profil.",
-    "header": "Redigera profil",
-    "avatar": "Avatar",
-    "addAvatar": "Lägg till avatar",
-    "changeAvatar": "Byt Foton",
-    "clearAvatar": "Ta bort",
-    "backToProfile": "Tillbaka till profilen"
+  "title": "Redigera profil",
+  "description": "Redigera din Skole-profil.",
+  "header": "Redigera profil",
+  "avatar": "Avatar",
+  "addAvatar": "Lägg till avatar",
+  "changeAvatar": "Byt Foton",
+  "clearAvatar": "Ta bort",
+  "backToProfile": "Tillbaka till profilen"
 }

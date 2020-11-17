@@ -1,6 +1,6 @@
 {
-    "title": "Kirjaudu ulos",
-    "description": "Kirjaudu ulos Skolesta.",
-    "header": "Kirjaudu ulos",
-    "confirmLogout": "Sinun pitää kirjautua ulos jatkaaksesi."
+  "title": "Kirjaudu ulos",
+  "description": "Kirjaudu ulos Skolesta.",
+  "header": "Kirjaudu ulos",
+  "confirmLogout": "Sinun pitää kirjautua ulos jatkaaksesi."
 }

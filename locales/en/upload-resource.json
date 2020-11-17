@@ -1,15 +1,15 @@
 {
-    "title": "Upload Resource",
-    "description": "Upload new resource on Skole.",
-    "header": "Upload Resource",
-    "fileUploadingText": "Uploading file...",
-    "maxFileSize": "Maximum file size",
-    "fileSelected": "{{ fileName }} selected.",
-    "uploadFileButtonText": "Upload a file",
-    "dropZoneText": "Drag & Drop a file here or click to select a file.",
-    "schoolHelperText": "Can't find your school?",
-    "schoolHelperLink": "Contact us and we'll add it!",
-    "courseHelperText": "Can't find your course?",
-    "courseHelperLink": "Try adding it!",
-    "resourceTitleHelperText": "Give a descriptive name to the resource."
+  "title": "Upload Resource",
+  "description": "Upload new resource on Skole.",
+  "header": "Upload Resource",
+  "fileUploadingText": "Uploading file...",
+  "maxFileSize": "Maximum file size",
+  "fileSelected": "{{ fileName }} selected.",
+  "uploadFileButtonText": "Upload a file",
+  "dropZoneText": "Drag & Drop a file here or click to select a file.",
+  "schoolHelperText": "Can't find your school?",
+  "schoolHelperLink": "Contact us and we'll add it!",
+  "courseHelperText": "Can't find your course?",
+  "courseHelperLink": "Try adding it!",
+  "resourceTitleHelperText": "Give a descriptive name to the resource."
 }

@@ -9,35 +9,46 @@ import { UrlObject } from 'url';
 import { urls } from 'utils';
 
 interface SearchUrl extends UrlObject {
-    query: ParsedUrlQueryInput;
+  query: ParsedUrlQueryInput;
 }
 
 interface UseSearch {
-    handleSubmit: (e: SyntheticEvent) => void;
-    searchUrl: SearchUrl;
-    inputProps: InputProps;
+  handleSubmit: (e: SyntheticEvent) => void;
+  searchUrl: SearchUrl;
+  inputProps: InputProps;
 }
 
 export const useSearch = (): UseSearch => {
-    const [value, setValue] = useState('');
-    const { t } = useTranslation();
-    const { userMe } = useAuthContext();
-    const placeholder = t('forms:searchCourses');
-    const autoComplete = 'off';
-    const fullWidth = true;
+  const [value, setValue] = useState('');
+  const { t } = useTranslation();
+  const { userMe } = useAuthContext();
+  const placeholder = t('forms:searchCourses');
+  const autoComplete = 'off';
+  const fullWidth = true;
 
-    // Construct a query from user's selected school and subject.
-    const school = R.pathOr(undefined, ['school', 'id'], userMe);
-    const subject = R.pathOr(undefined, ['subject', 'id'], userMe);
-    const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, { school, subject });
-    const searchUrl = { pathname: urls.search, query };
-    const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
+  // Construct a query from user's selected school and subject.
+  const school = R.pathOr(undefined, ['school', 'id'], userMe);
+  const subject = R.pathOr(undefined, ['subject', 'id'], userMe);
+  const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, {
+    school,
+    subject,
+  });
+  const searchUrl = { pathname: urls.search, query };
+  const onChange = (e: ChangeEvent<HTMLInputElement>): void =>
+    setValue(e.target.value);
 
-    const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
-        e.preventDefault();
-        setValue('');
-        await Router.push({ ...searchUrl, query: { ...searchUrl.query, courseName: value } });
-    };
+  const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
+    e.preventDefault();
+    setValue('');
+    await Router.push({
+      ...searchUrl,
+      query: { ...searchUrl.query, courseName: value },
+    });
+  };
 
-    return { handleSubmit, searchUrl, inputProps: { value, onChange, placeholder, autoComplete, fullWidth } };
+  return {
+    handleSubmit,
+    searchUrl,
+    inputProps: { value, onChange, placeholder, autoComplete, fullWidth },
+  };
 };
