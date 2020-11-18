@@ -1,10 +1,10 @@
 {
-    "header": "Profilstyrka",
-    "step1": "Verifiera konto.",
-    "step2": "Fyll i din profil.",
-    "step3": "Lägg till din skola och ämne.",
-    "poor": "Fattig",
-    "weak": "Svag",
-    "intermediate": "Intermediate",
-    "strong": "Stark"
+  "header": "Profilstyrka",
+  "step1": "Verifiera konto.",
+  "step2": "Fyll i din profil.",
+  "step3": "Lägg till din skola och ämne.",
+  "poor": "Fattig",
+  "weak": "Svag",
+  "intermediate": "Intermediate",
+  "strong": "Stark"
 }

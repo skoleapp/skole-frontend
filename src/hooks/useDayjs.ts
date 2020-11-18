@@ -12,6 +12,6 @@ dayjs.extend(relativeTime);
 
 // Custom hook for setting dayjs locale to selected language.
 export const useDayjs = (date?: string): Dayjs => {
-    const { lang } = useTranslation();
-    return !!date ? dayjs(date).locale(lang) : dayjs().locale(lang);
+  const { lang } = useTranslation();
+  return date ? dayjs(date).locale(lang) : dayjs().locale(lang);
 };

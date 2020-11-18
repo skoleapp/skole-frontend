@@ -6,31 +6,31 @@ import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 
 const TermsPage: NextPage = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const layoutProps = {
-        seoProps: {
-            title: t('terms:title'),
-            description: t('terms:description'),
-        },
-        header: t('terms:header'),
-        dense: true,
-        topNavbarProps: {
-            dynamicBackUrl: true,
-        },
-    };
+  const layoutProps = {
+    seoProps: {
+      title: t('terms:title'),
+      description: t('terms:description'),
+    },
+    header: t('terms:header'),
+    dense: true,
+    topNavbarProps: {
+      dynamicBackUrl: true,
+    },
+  };
 
-    return (
-        <SettingsLayout {...layoutProps}>
-            <Typography variant="body2">{t('terms:content')}</Typography>
-        </SettingsLayout>
-    );
+  return (
+    <SettingsLayout {...layoutProps}>
+      <Typography variant="body2">{t('terms:content')}</Typography>
+    </SettingsLayout>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-    props: {
-        _ns: await loadNamespaces(['terms'], locale),
-    },
+  props: {
+    _ns: await loadNamespaces(['terms'], locale),
+  },
 });
 
 export default withUserMe(TermsPage);

@@ -1,7 +1,7 @@
 {
-    "title": "Courses",
-    "description": "Search courses on Skole.",
-    "coursesSubHeader": "Courses",
-    "noCourses": "No courses were found with the provided search criteria. You can create the course if it does not yet exist.",
-    "noCoursesLink": "Create a course here!"
+  "title": "Courses",
+  "description": "Search courses on Skole.",
+  "coursesSubHeader": "Courses",
+  "noCourses": "No courses were found with the provided search criteria. You can create the course if it does not yet exist.",
+  "noCoursesLink": "Create a course here!"
 }

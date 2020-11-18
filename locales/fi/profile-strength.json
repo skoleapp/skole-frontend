@@ -1,10 +1,10 @@
 {
-    "header": "Profiilin vahvuus",
-    "step1": "Vahvista tili.",
-    "step2": "Viimeistele profiilisi.",
-    "step3": "Lisää koulusi ja oppiaineesi.",
-    "poor": "Kehno",
-    "weak": "Heikko",
-    "intermediate": "Keskiverto",
-    "strong": "Vahva"
+  "header": "Profiilin vahvuus",
+  "step1": "Vahvista tili.",
+  "step2": "Viimeistele profiilisi.",
+  "step3": "Lisää koulusi ja oppiaineesi.",
+  "poor": "Kehno",
+  "weak": "Heikko",
+  "intermediate": "Keskiverto",
+  "strong": "Vahva"
 }

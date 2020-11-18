@@ -1,15 +1,15 @@
 {
-    "title": "Ladda Upp Resurs",
-    "description": "Ladda upp ny resurs på Skole.",
-    "header": "Ladda Upp Resurs",
-    "fileUploadingText": "Laddar upp fil...",
-    "maxFileSize": "Maximal filstorlek",
-    "fileSelected": "{{ fileName }} vald.",
-    "uploadFileButtonText": "Ladda upp fil",
-    "dropZoneText": "Dra och släpp en fil här eller klicka för att välja en fil.",
-    "schoolHelperText": "Hittar du inte din skola?",
-    "schoolHelperLink": "Kontakta oss så lägger vi till det!",
-    "courseHelperText": "Hittar du inte din kurs?",
-    "courseHelperLink": "Försök att lägga till det!",
-    "resourceTitleHelperText": "Ge resursen ett beskrivande namn."
+  "title": "Ladda Upp Resurs",
+  "description": "Ladda upp ny resurs på Skole.",
+  "header": "Ladda Upp Resurs",
+  "fileUploadingText": "Laddar upp fil...",
+  "maxFileSize": "Maximal filstorlek",
+  "fileSelected": "{{ fileName }} vald.",
+  "uploadFileButtonText": "Ladda upp fil",
+  "dropZoneText": "Dra och släpp en fil här eller klicka för att välja en fil.",
+  "schoolHelperText": "Hittar du inte din skola?",
+  "schoolHelperLink": "Kontakta oss så lägger vi till det!",
+  "courseHelperText": "Hittar du inte din kurs?",
+  "courseHelperLink": "Försök att lägga till det!",
+  "resourceTitleHelperText": "Ge resursen ett beskrivande namn."
 }

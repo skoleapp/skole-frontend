@@ -1,13 +1,13 @@
 {
-    "privacyPreferesnces": "Tietosuoja-asetukset",
-    "warningDesc": "Tämä sivusto tallentaa evästeitä laitteellesi. Näitä evästeitä käytetään tiedon keräämiseen siitä, miten käytät sivustoamme ja tämä auttaa meidät muistamaan sinut. Käytämme tätä tietoa parantaaksemme ja muuttaaksemme käyttökokemustasi ja analytiikkaan ja metriikoihin vierailijoista tällä ja muilla sivustoilla. Oppiaksesi listää evästeistämme, katso tietosuojaselosteemme.",
-    "consentManagement": "Suostumuksen hallinta",
-    "consentManagementDesc": "Kun vierailet millä tahansa sivustolla, se voi varastoida tai hakea tietoa selaimeltasi, enimmäkseen evästeiden avulla. Tämä tieto voi koskea sinua, asetuksiasi tai laitettasi ja sitä käytetään sivuston optimointiin. Tämä tieto et yleensä suoraan tunnista sinua, mutta se voi antaa sinulle personoidumman selauskokemuksen. Koska kunnioitamme oikeuttasi yksityisyyteen, voit valita olla käyttämättä joitakin evästeitä. Joidenkin evästeiden blokkaaminen voi vaikuttaa tarjoamiimme palveluihin.",
-    "privacyPolicy": "Tietosuojaseloste",
-    "privacyPolicyDesc": "Olen lukenu ja tutustunut seuraavaan:",
-    "termsAndConditions": "Käyttöehdot",
-    "termsAndConditionsDesc": "Olen lukenut ja tutustunut seuraavaan:",
-    "cookieSettings": "Evästeasetukset",
-    "cookieSettingsDesc": "Käytämme evästeitä varmistaaksemme, että kieliasetuksesi ovat valittu oikein perustuen sijaintiisi, sekä varmistaakseemme yleisen sivuston toiminnallisuuden.",
-    "cookies": "Evästeet"
+  "privacyPreferesnces": "Tietosuoja-asetukset",
+  "warningDesc": "Tämä sivusto tallentaa evästeitä laitteellesi. Näitä evästeitä käytetään tiedon keräämiseen siitä, miten käytät sivustoamme ja tämä auttaa meidät muistamaan sinut. Käytämme tätä tietoa parantaaksemme ja muuttaaksemme käyttökokemustasi ja analytiikkaan ja metriikoihin vierailijoista tällä ja muilla sivustoilla. Oppiaksesi listää evästeistämme, katso tietosuojaselosteemme.",
+  "consentManagement": "Suostumuksen hallinta",
+  "consentManagementDesc": "Kun vierailet millä tahansa sivustolla, se voi varastoida tai hakea tietoa selaimeltasi, enimmäkseen evästeiden avulla. Tämä tieto voi koskea sinua, asetuksiasi tai laitettasi ja sitä käytetään sivuston optimointiin. Tämä tieto et yleensä suoraan tunnista sinua, mutta se voi antaa sinulle personoidumman selauskokemuksen. Koska kunnioitamme oikeuttasi yksityisyyteen, voit valita olla käyttämättä joitakin evästeitä. Joidenkin evästeiden blokkaaminen voi vaikuttaa tarjoamiimme palveluihin.",
+  "privacyPolicy": "Tietosuojaseloste",
+  "privacyPolicyDesc": "Olen lukenu ja tutustunut seuraavaan:",
+  "termsAndConditions": "Käyttöehdot",
+  "termsAndConditionsDesc": "Olen lukenut ja tutustunut seuraavaan:",
+  "cookieSettings": "Evästeasetukset",
+  "cookieSettingsDesc": "Käytämme evästeitä varmistaaksemme, että kieliasetuksesi ovat valittu oikein perustuen sijaintiisi, sekä varmistaakseemme yleisen sivuston toiminnallisuuden.",
+  "cookies": "Evästeet"
 }

@@ -1,0 +1,13 @@
+schema: 'http://backend:8000/graphql/'
+documents: 'src/graphql/*.graphql'
+plugins:
+  - typescript
+  - typescript-operations
+  - typescript-react-apollo
+config:
+  reactApolloVersion: 3
+  skipTypename: false
+  withHooks: true
+  withHOC: false
+  withComponent: false
+cacheDir: __generated__

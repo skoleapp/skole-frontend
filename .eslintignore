@@ -1,5 +1,6 @@
 .next
 build
 next.config.js
-generated
+*.graphql.d.ts
+__generated__
 gtag.js

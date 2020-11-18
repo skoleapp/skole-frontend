@@ -1,10 +1,10 @@
 {
-    "title": "Muokkaa profiilia",
-    "description": "Muokkaa Skole-profiiliasi.",
-    "header": "Muokkaa profiilia",
-    "avatar": "Avatar",
-    "addAvatar": "Lisää avatar",
-    "changeAvatar": "Muokkaa avataria",
-    "clearAvatar": "Poista avatar",
-    "backToProfile": "Takaisin profiiliin"
+  "title": "Muokkaa profiilia",
+  "description": "Muokkaa Skole-profiiliasi.",
+  "header": "Muokkaa profiilia",
+  "avatar": "Avatar",
+  "addAvatar": "Lisää avatar",
+  "changeAvatar": "Muokkaa avataria",
+  "clearAvatar": "Poista avatar",
+  "backToProfile": "Takaisin profiiliin"
 }

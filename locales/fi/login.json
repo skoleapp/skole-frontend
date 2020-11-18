@@ -1,8 +1,8 @@
 {
-    "title": "Kirjaudu sisään",
-    "description": "Kirjaudu Skoleen.",
-    "header": "Kirjaudu sisään",
-    "forgotPassword": "Unohtuiko salasana?",
-    "existingUserGreeting": "Tervetuloa takaisin, {{ username }}.",
-    "loginWithDifferentCredentials": "Kirjaudu eri tunnuksilla"
+  "title": "Kirjaudu sisään",
+  "description": "Kirjaudu Skoleen.",
+  "header": "Kirjaudu sisään",
+  "forgotPassword": "Unohtuiko salasana?",
+  "existingUserGreeting": "Tervetuloa takaisin, {{ username }}.",
+  "loginWithDifferentCredentials": "Kirjaudu eri tunnuksilla"
 }

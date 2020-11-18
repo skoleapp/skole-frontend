@@ -5,13 +5,15 @@ import Link, { LinkProps } from 'next/link';
 import React, { forwardRef } from 'react';
 
 interface Props extends IconButtonProps, LinkProps {
-    icon: SvgIconComponent;
+  icon: SvgIconComponent;
 }
 
-export const IconButtonLink = forwardRef<HTMLButtonElement, Props>(({ href, icon: Icon, ...props }, ref) => (
+export const IconButtonLink = forwardRef<HTMLButtonElement, Props>(
+  ({ href, icon: Icon, ...props }, ref) => (
     <Link href={href}>
-        <IconButton {...props} ref={ref}>
-            <Icon />
-        </IconButton>
+      <IconButton {...props} ref={ref}>
+        <Icon />
+      </IconButton>
     </Link>
-));
+  )
+);

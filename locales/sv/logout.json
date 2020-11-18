@@ -1,7 +1,7 @@
 {
-    "title": "Loggad ut",
-    "description": "Loggad ut från Skole.",
-    "header": "Utloggad",
-    "loggedOut": "Du har loggat ut!",
-    "logInAgain": "Logga in igen"
+  "title": "Loggad ut",
+  "description": "Loggad ut från Skole.",
+  "header": "Utloggad",
+  "loggedOut": "Du har loggat ut!",
+  "logInAgain": "Logga in igen"
 }

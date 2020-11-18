@@ -1,1 +1,2 @@
-generated/* linguist-generated=true
+*.graphql.d.ts linguist-generated=true
+*.graphql.tsx linguist-generated=true

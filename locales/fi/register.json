@@ -1,10 +1,10 @@
 {
-    "title": "Rekisteröidy",
-    "description": "Rekisteröidy Skoleen.",
-    "header": "Rekisteröidy",
-    "termsHelpText": "Rekisteröitymällä hyväksyt",
-    "updateUserHeader": "Lähes valmista!",
-    "registerCompleteHeader": "Valmista!",
-    "registerCompleteEmailSent": "Tarkista vielä sähköpostistasi linkki, jolla voit vahvistaa tilisi.",
-    "registerCompleteHelpText": "Lisäämällä koulun ja oppiaineen voimme näyttää sinulle automaattisesti sisältöä perustuen niihin. Voit lisätä nämä myös myöhemmin."
+  "title": "Rekisteröidy",
+  "description": "Rekisteröidy Skoleen.",
+  "header": "Rekisteröidy",
+  "termsHelpText": "Rekisteröitymällä hyväksyt",
+  "updateUserHeader": "Lähes valmista!",
+  "registerCompleteHeader": "Valmista!",
+  "registerCompleteEmailSent": "Tarkista vielä sähköpostistasi linkki, jolla voit vahvistaa tilisi.",
+  "registerCompleteHelpText": "Lisäämällä koulun ja oppiaineen voimme näyttää sinulle automaattisesti sisältöä perustuen niihin. Voit lisätä nämä myös myöhemmin."
 }

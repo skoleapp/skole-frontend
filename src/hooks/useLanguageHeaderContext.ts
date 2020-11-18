@@ -6,11 +6,11 @@ import { useRouter } from 'next/router';
 // TODO: Find out if we can automatically inject this in the apollo client.
 // The problem is that the `locale` cannot be accessed in server-side code.
 export const useLanguageHeaderContext = (): OperationVariables => {
-    const { locale } = useRouter();
+  const { locale } = useRouter();
 
-    return {
-        headers: {
-            'Accept-Language': locale,
-        },
-    };
+  return {
+    headers: {
+      'Accept-Language': locale,
+    },
+  };
 };

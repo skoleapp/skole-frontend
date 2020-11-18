@@ -1,8 +1,8 @@
 {
-    "description": "Visa {{ resourceTitle }} på Skole.",
-    "noResources": "Denna kurs har inga resurser.",
-    "noResourcesLink": "Lägg till en resurs här!",
-    "deleteCourseTitle": "Ta bort kurs",
-    "deleteCourseDescription": "Är du säker på att du vill ta bort den här kursen?",
-    "noComments": "Denna kurs har inga kommentarer. Lägg till en kommentar nedan!"
+  "description": "Visa {{ resourceTitle }} på Skole.",
+  "noResources": "Denna kurs har inga resurser.",
+  "noResourcesLink": "Lägg till en resurs här!",
+  "deleteCourseTitle": "Ta bort kurs",
+  "deleteCourseDescription": "Är du säker på att du vill ta bort den här kursen?",
+  "noComments": "Denna kurs har inga kommentarer. Lägg till en kommentar nedan!"
 }

@@ -6,9 +6,9 @@ import React from 'react';
 const NotFoundPage = (): JSX.Element => <NotFoundLayout />;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-    props: {
-        _ns: await loadNamespaces([], locale),
-    },
+  props: {
+    _ns: await loadNamespaces([], locale),
+  },
 });
 
 export default NotFoundPage;

@@ -1,10 +1,10 @@
 {
-    "title": "Get Started",
-    "description": "Get started to find and share your favorite study material, discuss with the community and much more!",
-    "slogan": "For students.",
-    "header": "Find, share and discuss the top study materials.",
-    "appStoreCta": "Download from app stores! (coming soon)",
-    "cta": "Get Started!",
-    "or": "or",
-    "skipLogin": "Skip login"
+  "title": "Get Started",
+  "description": "Get started to find and share your favorite study material, discuss with the community and much more!",
+  "slogan": "For students.",
+  "header": "Find, share and discuss the top study materials.",
+  "appStoreCta": "Download from app stores! (coming soon)",
+  "cta": "Get Started!",
+  "or": "or",
+  "skipLogin": "Skip login"
 }

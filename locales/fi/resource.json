@@ -1,8 +1,8 @@
 {
-    "description": "Näytä {{ resourceTitle }} Skolessa.",
-    "deleteResourceTitle": "Poista resurssi",
-    "deleteResourceDescription": "Oletko varma että haluat poistaa tämän resurssin?",
-    "error": "Virhe ladattaessa resurssia.",
-    "noComments": "Tällä resurssilla ei ole kommentteja. Lisää kommentti alta!",
-    "drawMode": "Piirtotila"
+  "description": "Näytä {{ resourceTitle }} Skolessa.",
+  "deleteResourceTitle": "Poista resurssi",
+  "deleteResourceDescription": "Oletko varma että haluat poistaa tämän resurssin?",
+  "error": "Virhe ladattaessa resurssia.",
+  "noComments": "Tällä resurssilla ei ole kommentteja. Lisää kommentti alta!",
+  "drawMode": "Piirtotila"
 }

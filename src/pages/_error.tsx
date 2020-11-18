@@ -6,9 +6,9 @@ import React from 'react';
 const ErrorPage = (): JSX.Element => <ErrorLayout />;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-    props: {
-        _ns: await loadNamespaces([], locale),
-    },
+  props: {
+    _ns: await loadNamespaces([], locale),
+  },
 });
 
 export default ErrorPage;
