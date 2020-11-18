@@ -6,10 +6,9 @@
   "license": "UNLICENSED",
   "author": "Skole",
   "scripts": {
-    "dev": "next-translate && NODE_OPTIONS=--inspect next dev -p 3001",
+    "dev": "next-translate && next dev -p 3001",
     "build": "next-translate && next build",
     "start": "next start -p 3001",
-    "codegen": "graphql-let",
     "type-check": "tsc",
     "format": "yarn prettier --write '**/*.{ts,tsx,js,json}'",
     "lint": "yarn prettier --check '**/*.{ts,tsx,js,json}' && eslint . --ext .ts,.tsx,.js,.json"
