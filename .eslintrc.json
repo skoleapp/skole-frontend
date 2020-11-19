@@ -23,6 +23,7 @@
     "react/display-name": "off",
     "react/prop-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/indent": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-unused-vars": [
