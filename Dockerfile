@@ -12,6 +12,8 @@ RUN yarn install
 
 RUN mkdir /home/user/app/.next
 
+ENV NEXT_TELEMETRY_DISABLED=1
+
 CMD ["yarn", "dev"]
 
 
