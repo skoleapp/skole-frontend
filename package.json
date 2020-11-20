@@ -11,7 +11,7 @@
     "start": "next start -p 3001",
     "type-check": "tsc",
     "format": "yarn prettier --write '**/*.{ts,tsx,js,json}'",
-    "lint": "yarn prettier --check '**/*.{ts,tsx,js,json}' && eslint . --ext .ts,.tsx,.js,.json"
+    "lint": "yarn prettier --check '**/*.{ts,tsx,js,json}' && eslint . --ext .ts,.tsx,.js,.json && dpdm --tree=false --exit-code=circular:1 $(find src/)"
   },
   "dependencies": {
     "@apollo/client": "^3.2.5",
@@ -58,6 +58,7 @@
     "@types/yup": "^0.26.23",
     "@typescript-eslint/eslint-plugin": "^4.8.1",
     "@typescript-eslint/parser": "^4.8.1",
+    "dpdm": "^3.5.0",
     "eslint": "^7.13.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-react": "^7.21.5",
