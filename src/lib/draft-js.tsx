@@ -1,4 +1,4 @@
-import { TextLink } from 'components';
+import { TextLink } from '../components/shared/TextLink';
 import { ContentBlock, ContentState } from 'draft-js';
 import React from 'react';
 
