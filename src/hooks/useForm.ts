@@ -6,7 +6,7 @@ import { FieldValue, MutationErrors, MutationFormError, UseForm } from 'types';
 
 const snakeCaseToCamelCase = (str: string): string => {
   return str.replace(/([-_][a-z])/g, (group) =>
-    group.toUpperCase().replace('-', '').replace('_', '')
+    group.toUpperCase().replace('-', '').replace('_', ''),
   );
 };
 
@@ -21,7 +21,7 @@ export const useForm = <T>(): UseForm<T> => {
 
   const setFormErrors = (formErrors: FormErrors): void =>
     Object.keys(formErrors).forEach((key) =>
-      formRef.current.setFieldError(key, (formErrors as FormErrors)[key])
+      formRef.current.setFieldError(key, (formErrors as FormErrors)[key]),
     );
 
   const unexpectedError = (): void =>

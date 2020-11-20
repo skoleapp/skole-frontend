@@ -58,9 +58,12 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
 
-  const { formRef, setSubmitting, resetForm, setFieldValue } = useForm<
-    CreateCommentFormValues
-  >();
+  const {
+    formRef,
+    setSubmitting,
+    resetForm,
+    setFieldValue,
+  } = useForm<CreateCommentFormValues>();
 
   const {
     commentModalOpen,
@@ -108,7 +111,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   });
 
   const handleSubmit = async (
-    values: CreateCommentFormValues
+    values: CreateCommentFormValues,
   ): Promise<void> => {
     if (!commentAttachment && !values.text) {
       toggleNotification(t('notifications:messageEmpty'));
@@ -139,7 +142,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     <Box
       className={clsx(
         classes.attachmentContainer,
-        !!screenshot && 'screenshot-border'
+        !!screenshot && 'screenshot-border',
       )}
     >
       <Image

@@ -25,7 +25,7 @@ export const InfoDialogContent: React.FC<Props> = ({
   infoItems,
 }) => {
   const { t } = useTranslation();
-  const userId: string = R.propOr(undefined, 'id', user);
+  const userId = R.prop('id', user);
 
   const renderInfoItems = infoItems.map(({ label, value }, i) => (
     <Grid key={i} container>

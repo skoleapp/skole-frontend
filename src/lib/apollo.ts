@@ -38,7 +38,7 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
 };
 
 export const initApolloClient = (
-  initialState: NormalizedCacheObject | null = null
+  initialState: NormalizedCacheObject | null = null,
 ): ApolloClient<NormalizedCacheObject> => {
   const _apolloClient = apolloClient || createApolloClient();
 
@@ -62,7 +62,7 @@ export const initApolloClient = (
 
 // A client side hook to retrieve apollo client with initial state from cache.
 export const useApollo = (
-  initialState: NormalizedCacheObject
+  initialState: NormalizedCacheObject,
 ): ApolloClient<NormalizedCacheObject> => {
   return useMemo(() => initApolloClient(initialState), [initialState]);
 };

@@ -138,6 +138,7 @@ export const ReplyCommentThread: React.FC = () => {
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { isMobileOrTablet } = useMediaQueries();
+
   const {
     topComment,
     toggleTopComment,
@@ -147,10 +148,11 @@ export const ReplyCommentThread: React.FC = () => {
   const replyComments: CommentObjectType[] = R.propOr(
     [],
     'replyComments',
-    topComment
+    topComment,
   );
 
-  const target = { comment: Number(R.propOr(undefined, 'id', topComment)) };
+  const topCommentId = R.prop('id', topComment);
+  const target = { comment: Number(topCommentId) };
   const openCommentModal = (): void => toggleCommentModal(true);
 
   const appendComments = (comment: CommentObjectType): void => {
@@ -167,9 +169,7 @@ export const ReplyCommentThread: React.FC = () => {
       if (id === topComment.id) {
         toggleTopComment(null); // Close modal if top comment gets deleted.
       } else {
-        const filteredReplyComments: CommentObjectType[] = replyComments.filter(
-          (c) => c.id !== id
-        );
+        const filteredReplyComments = replyComments.filter((c) => c.id !== id);
 
         toggleTopComment({
           ...topComment,

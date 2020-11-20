@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core';
-import { SettingsLayout } from 'components';
+import { SettingsTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -21,9 +21,9 @@ const PrivacyPage: NextPage = () => {
   };
 
   return (
-    <SettingsLayout {...layoutProps}>
+    <SettingsTemplate {...layoutProps}>
       <Typography variant="body2">{t('privacy:content')}</Typography>
-    </SettingsLayout>
+    </SettingsTemplate>
   );
 };
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

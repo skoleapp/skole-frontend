@@ -25,18 +25,18 @@ export const getQueryWithPagination = ({
   R.pickBy(
     (val: string, key: string): boolean =>
       (!!val && key === 'page') || key === 'pageSize' || key in extraFilters,
-    query
+    query,
   );
 
 // A utility that we use to get *only* the pagination query.
 // This will lose all other query params so only use this when you want to reset all other query params except the pagination ones.
 export const getPaginationQuery = (
-  query: ParsedUrlQueryInput
+  query: ParsedUrlQueryInput,
 ): ParsedUrlQueryInput =>
   R.pickBy(
     (val: string, key: string): boolean =>
       (!!val && key === 'page') || key === 'pageSize',
-    query
+    query,
   );
 
 // A utility that we use to truncate strings to a given length.

@@ -1,7 +1,7 @@
-export { MainLayout } from './MainLayout';
-export { FormLayout } from './FormLayout';
-export { SettingsLayout } from './SettingsLayout';
-export { NotFoundLayout } from './NotFoundLayout';
-export { ErrorLayout } from './ErrorLayout';
-export { OfflineLayout } from './OfflineLayout';
-export { LoadingLayout } from './LoadingLayout';
+export { MainTemplate } from './MainTemplate';
+export { FormTemplate } from './FormTemplate';
+export { SettingsTemplate } from './SettingsTemplate';
+export { NotFoundTemplate } from './NotFoundTemplate';
+export { ErrorTemplate } from './ErrorTemplate';
+export { OfflineTemplate } from './OfflineTemplate';
+export { LoadingTemplate } from './LoadingTemplate';

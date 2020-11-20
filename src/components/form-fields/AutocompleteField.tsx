@@ -104,7 +104,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <
 
   const handleAutocompleteChange = (
     _e: ChangeEvent<Record<symbol, unknown>>,
-    val: T | T[] | null
+    val: T | T[] | null,
   ): void => {
     val ? form.setFieldValue(name, val) : form.setFieldValue(name, null);
   };

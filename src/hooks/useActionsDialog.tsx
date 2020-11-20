@@ -33,7 +33,7 @@ interface UseActionsDialog {
 }
 
 export const useActionsDialog = (
-  shareParams: ShareParams
+  shareParams: ShareParams,
 ): UseActionsDialog => {
   const { t } = useTranslation();
   const { handleShare: _handleShare } = useShare(shareParams);

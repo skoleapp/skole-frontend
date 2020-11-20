@@ -8,17 +8,16 @@ import {
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import {
   ActivityListItem,
-  ErrorLayout,
+  ErrorTemplate,
   LoadingBox,
   NotFoundBox,
-  OfflineLayout,
+  OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
-  SettingsLayout,
+  SettingsTemplate,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import {
-  ActivitiesQueryVariables,
   GraphQlMarkAllActivitiesAsReadMutation,
   useActivitiesQuery,
   useGraphQlMarkAllActivitiesAsReadMutation,
@@ -35,22 +34,20 @@ const ActivityPage: NextPage = () => {
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
   const { query } = useRouter();
-  const variables: ActivitiesQueryVariables = R.pick(
-    ['page', 'pageSize'],
-    query
-  );
+  const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivitiesQuery({ variables, context });
-  const activityCount = R.pathOr(0, ['activities', 'count'], data);
   const [activities, setActivities] = useState([]);
-  const onError = (): void =>
-    toggleNotification(t('notifications:markAllActivitiesAsReadError'));
+  const activityCount = R.pathOr(0, ['activities', 'count'], data);
 
-  // Update state whenever we finish fetching.
+  // Update state after data fetching is complete.
   useEffect(() => {
     const initialActivities = R.pathOr([], ['activities', 'objects'], data);
     setActivities(initialActivities);
   }, [data]);
+
+  const onError = (): void =>
+    toggleNotification(t('notifications:markAllActivitiesAsReadError'));
 
   const {
     actionsDialogOpen,
@@ -75,7 +72,7 @@ const ActivityPage: NextPage = () => {
         const newActivities = R.pathOr(
           [],
           ['activities', 'objects'],
-          markAllActivitiesAsRead
+          markAllActivitiesAsRead,
         );
 
         setActivities(newActivities);
@@ -94,7 +91,7 @@ const ActivityPage: NextPage = () => {
   });
 
   const handleClickMarkAllActivitiesAsReadButton = async (
-    e: SyntheticEvent
+    e: SyntheticEvent,
   ): Promise<void> => {
     await markAllActivitiesAsRead();
     handleCloseActionsDialog(e);
@@ -133,7 +130,9 @@ const ActivityPage: NextPage = () => {
       count={activityCount}
     />
   );
+
   const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
+
   const renderActivities = loading
     ? renderLoading
     : activities.length
@@ -164,16 +163,16 @@ const ActivityPage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   return (
-    <SettingsLayout {...layoutProps}>
+    <SettingsTemplate {...layoutProps}>
       {renderActivities}
       {renderActionsDialog}
-    </SettingsLayout>
+    </SettingsTemplate>
   );
 };
 

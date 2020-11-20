@@ -22,13 +22,13 @@ interface Namespaces {
 
 export const loadNamespaces = async (
   namespaces: string[],
-  lang?: string
+  lang?: string,
 ): Promise<Namespaces> => {
   const totalNamespaces: Namespaces = {};
 
   for (const ns of [...defaultNamespaces, ...namespaces]) {
     totalNamespaces[ns] = await import(`../../locales/${lang}/${ns}.json`).then(
-      (m) => m.default
+      (m) => m.default,
     );
   }
 

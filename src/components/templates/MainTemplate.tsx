@@ -8,7 +8,7 @@ import {
   TOP_NAVBAR_HEIGHT_DESKTOP,
   TOP_NAVBAR_HEIGHT_MOBILE,
 } from 'theme';
-import { MainLayoutProps } from 'types';
+import { MainTemplateProps } from 'types';
 
 import {
   BottomNavbar,
@@ -58,7 +58,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   },
 }));
 
-export const MainLayout: React.FC<MainLayoutProps> = ({
+export const MainTemplate: React.FC<MainTemplateProps> = ({
   seoProps,
   topNavbarProps,
   containerProps,
@@ -72,17 +72,24 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   const classes = useStyles();
   const { isMobileOrTablet, isDesktop } = useMediaQueries();
   const renderHead = <Head {...seoProps} />;
+
   const renderTopNavbar = (isMobileOrTablet && customTopNavbar) || (
     <TopNavbar {...topNavbarProps} />
   );
-  const containerFullWidth = R.propOr(false, 'fullWidth', containerProps);
-  const containerDense = R.propOr(false, 'dense', containerProps);
+
+  const containerFullWidth: boolean = R.propOr(
+    false,
+    'fullWidth',
+    containerProps,
+  );
+
+  const containerDense: boolean = R.propOr(false, 'dense', containerProps);
 
   const containerClasses = clsx(
     classes.container,
     (disableBottomNavbar || isDesktop) && classes.disableMarginBottom,
     containerFullWidth && classes.containerFullWidth,
-    containerDense && classes.containerDense
+    containerDense && classes.containerDense,
   );
 
   const renderChildren = (
@@ -97,6 +104,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   const renderBottomNavbar =
     isMobileOrTablet &&
     (customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />));
+
   const renderFooter = isDesktop && !disableFooter && <Footer />;
   const renderNotifications = <Notifications />;
   const renderSettingsModal = <SettingsModal />;

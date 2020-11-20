@@ -19,14 +19,14 @@ import clsx from 'clsx';
 import {
   CustomBottomNavbarContainer,
   DiscussionHeader,
-  ErrorLayout,
+  ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
-  LoadingLayout,
-  MainLayout,
+  LoadingTemplate,
+  MainTemplate,
   NotFoundBox,
-  NotFoundLayout,
-  OfflineLayout,
+  NotFoundTemplate,
+  OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
   ResponsiveDialog,
@@ -40,17 +40,9 @@ import {
   useNotificationsContext,
 } from 'context';
 import {
-  CommentObjectType,
-  CourseObjectType,
-  CourseQueryVariables,
   DeleteCourseMutation,
-  ResourceObjectType,
-  ResourceTypeObjectType,
-  SubjectObjectType,
   useCourseQuery,
   useDeleteCourseMutation,
-  UserObjectType,
-  VoteObjectType,
 } from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
 import {
@@ -72,6 +64,7 @@ import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
+import { SubjectObjectType } from '__generated__/src/graphql/common.graphql';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   mobileContainer: {
@@ -103,53 +96,45 @@ const CourseDetailPage: NextPage = () => {
   const { isMobileOrTablet, isDesktop } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
   const confirm = useConfirm();
-  const variables: CourseQueryVariables = R.pick(
-    ['id', 'page', 'pageSize'],
-    query
-  );
+  const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useCourseQuery({ variables, context });
   const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
   const { searchUrl } = useSearch();
-  const course: CourseObjectType = R.propOr(null, 'course', data);
-  const resourceTypes: ResourceTypeObjectType[] = R.propOr(
-    [],
-    'resourceTypes',
-    data
-  );
-  const courseName: string = R.propOr('', 'name', course);
-  const courseCode: string = R.propOr('', 'code', course);
+  const course = R.propOr(null, 'course', data);
+  const courseName = R.propOr('', 'name', course);
+  const courseCode = R.propOr('', 'code', course);
   const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
-  const schoolName: string = R.pathOr('', ['school', 'name'], course);
-  const creatorId: string = R.pathOr('', ['user', 'id'], course);
-  const courseId: string = R.propOr('', 'id', course);
+  const schoolName = R.pathOr('', ['school', 'name'], course);
+  const creatorId = R.pathOr('', ['user', 'id'], course);
+  const courseId = R.propOr('', 'id', course);
   const schoolId = R.pathOr('', ['school', 'id'], course);
   const initialScore = String(R.propOr(0, 'score', course));
-  const resources: ResourceObjectType[] = R.pathOr(
-    [],
-    ['resources', 'objects'],
-    data
-  );
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
-  const comments: CommentObjectType[] = R.propOr([], 'comments', course);
+  const comments = R.propOr([], 'comments', course);
   const { commentCount } = useDiscussionContext(comments);
-  const initialVote: VoteObjectType = R.propOr(null, 'vote', course);
-  const starred = !!R.propOr(undefined, 'starred', course);
+  const initialVote = R.propOr(null, 'vote', course);
+  const starred = !!R.prop('starred', course);
   const isOwner = !!userMe && userMe.id === creatorId;
-  const courseUser: UserObjectType = R.propOr(undefined, 'user', course);
-  const created: string = R.propOr(undefined, 'created', course);
-  const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(
-    comments
-  );
+  const courseUser = R.prop('user', course);
+  const created = R.prop('created', course);
+  const resourceTypes = R.propOr([], 'resourceTypes', data);
+  const resources = R.pathOr([], ['resources', 'objects'], data);
   const { renderShareButton } = useShare({ text: courseName });
+
+  const uploadResourceButtonTooltip =
+    verificationRequiredTooltip || t('tooltips:uploadResource');
+
+  const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(
+    comments,
+  );
+
   const {
     infoDialogOpen,
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog();
-  const uploadResourceButtonTooltip =
-    verificationRequiredTooltip || t('tooltips:uploadResource');
 
   const {
     actionsDialogOpen,
@@ -167,9 +152,8 @@ const CourseDetailPage: NextPage = () => {
     variables: { course: courseId },
   });
 
-  const deleteCourseError = (): void => {
+  const deleteCourseError = (): void =>
     toggleNotification(t('notifications:deleteCourseError'));
-  };
 
   const deleteCourseCompleted = async ({
     deleteCourse,
@@ -437,26 +421,26 @@ const CourseDetailPage: NextPage = () => {
   };
 
   if (loading) {
-    return <LoadingLayout />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   if (course) {
     return (
-      <MainLayout {...layoutProps}>
+      <MainTemplate {...layoutProps}>
         {renderMobileContent}
         {renderDesktopContent}
         {renderInfoDialog}
         {renderActionsDialog}
-      </MainLayout>
+      </MainTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 
@@ -473,9 +457,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-const withWrappers = R.compose<NextPage, NextPage, NextPage>(
-  withDiscussion,
-  withUserMe
-);
+const withWrappers = R.compose(withDiscussion, withUserMe);
 
 export default withWrappers(CourseDetailPage);

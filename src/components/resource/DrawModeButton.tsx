@@ -10,10 +10,12 @@ import React from 'react';
 export const DrawModeButton: React.FC = () => {
   const { t } = useTranslation();
   const { isMobileOrTablet, isDesktop } = useMediaQueries();
+
   const {
     setDrawMode,
     // controlsDisabled
   } = usePdfViewerContext();
+
   const color = isMobileOrTablet ? 'default' : 'secondary';
   const handleClick = (): void => setDrawMode(true);
 
@@ -23,7 +25,7 @@ export const DrawModeButton: React.FC = () => {
         <IconButton
           onClick={handleClick}
           // disabled={controlsDisabled} // The actual logic that we want to use when we enable this component.
-          disabled // Explicitly disable for now.
+          disabled // Explicitly disabled for now.
           size="small"
           color={color}
         >

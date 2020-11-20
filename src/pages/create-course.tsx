@@ -1,9 +1,9 @@
 import {
   AutocompleteField,
-  ErrorLayout,
-  FormLayout,
+  ErrorTemplate,
+  FormTemplate,
   FormSubmitSection,
-  OfflineLayout,
+  OfflineTemplate,
   TextFormField,
 } from 'components';
 import { useNotificationsContext } from 'context';
@@ -11,7 +11,6 @@ import { Field, Form, Formik } from 'formik';
 import {
   AutocompleteSchoolsDocument,
   AutocompleteSubjectsDocument,
-  CreateCourseAutocompleteDataQueryVariables,
   CreateCourseMutation,
   SchoolObjectType,
   SubjectObjectType,
@@ -40,16 +39,16 @@ const CreateCoursePage: NextPage = () => {
   const { toggleNotification } = useNotificationsContext();
   const { t } = useTranslation();
   const { query } = useRouter();
-  const variables: CreateCourseAutocompleteDataQueryVariables = R.pick(
-    ['school'],
-    query
-  );
   const context = useLanguageHeaderContext();
+  const variables = R.pick(['school'], query);
+
   const { data, error } = useCreateCourseAutocompleteDataQuery({
     variables,
     context,
   });
-  const school: SchoolObjectType = R.propOr(null, 'school', data);
+
+  const school = R.propOr(null, 'school', data);
+
   const {
     formRef,
     resetForm,
@@ -90,7 +89,7 @@ const CreateCoursePage: NextPage = () => {
   });
 
   const handleSubmit = async (
-    values: CreateCourseFormValues
+    values: CreateCourseFormValues,
   ): Promise<void> => {
     const {
       courseName,
@@ -98,7 +97,8 @@ const CreateCoursePage: NextPage = () => {
       school: _school,
       subjects: _subjects,
     } = values;
-    const school: string = R.propOr('', 'id', _school);
+
+    const school = R.propOr('', 'id', _school);
     const subjects = _subjects.map((s) => s.id);
 
     const variables = {
@@ -173,12 +173,12 @@ const CreateCoursePage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
-  return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
+  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

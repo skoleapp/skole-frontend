@@ -4,7 +4,7 @@ import React from 'react';
 
 // Provide PDF viewer context for child components.
 export const withPdfViewer = <T extends Record<symbol, unknown>>(
-  PageComponent: NextPage<T>
+  PageComponent: NextPage<T>,
 ): NextPage => {
   const WithPdfViewer: NextPage = (pageProps) => (
     <PdfViewerContextProvider>

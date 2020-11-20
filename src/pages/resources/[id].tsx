@@ -22,12 +22,12 @@ import {
   DiscussionHeader,
   DrawModeButton,
   DrawModeControls,
-  ErrorLayout,
+  ErrorTemplate,
   InfoDialogContent,
-  LoadingLayout,
-  MainLayout,
-  NotFoundLayout,
-  OfflineLayout,
+  LoadingTemplate,
+  MainTemplate,
+  NotFoundTemplate,
+  OfflineTemplate,
   PdfViewer,
   ResourceToolbar,
   ResponsiveDialog,
@@ -42,16 +42,12 @@ import {
   usePdfViewerContext,
 } from 'context';
 import {
-  CommentObjectType,
   DeleteResourceMutation,
   DownloadResourceMutation,
   ResourceObjectType,
-  ResourceQueryVariables,
   useDeleteResourceMutation,
   useDownloadResourceMutation,
   useResourceQuery,
-  UserObjectType,
-  VoteObjectType,
 } from 'generated';
 import { withDiscussion, withPdfViewer, withUserMe } from 'hocs';
 import {
@@ -106,64 +102,55 @@ const ResourceDetailPage: NextPage = () => {
   const { isMobileOrTablet } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
   const confirm = useConfirm();
-  const variables: ResourceQueryVariables = R.pick(
-    ['id', 'page', 'pageSize'],
-    query
-  );
+  const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
-  const { data, loading, error } = useResourceQuery({ variables, context });
   const { userMe, verified } = useAuthContext();
+  const { data, loading, error } = useResourceQuery({ variables, context });
   const [resource, setResource] = useState<ResourceObjectType | null>(null);
-  const resourceTitle: string = R.propOr('', 'title', resource);
-  const resourceDate: string = R.propOr('', 'date', resource);
-  const resourceType: string = R.pathOr('', ['resourceType', 'name'], resource);
-  const courseName: string = R.pathOr('', ['course', 'name'], resource);
-  const schoolName: string = R.pathOr('', ['school', 'name'], resource);
-  const courseId: string = R.pathOr('', ['course', 'id'], resource);
-  const schoolId: string = R.pathOr('', ['school', 'id'], resource);
-  const creatorId: string = R.pathOr('', ['user', 'id'], resource);
+  const resourceTitle = R.propOr('', 'title', resource);
+  const resourceDate = R.propOr('', 'date', resource);
+  const resourceType = R.pathOr('', ['resourceType', 'name'], resource);
+  const courseName = R.pathOr('', ['course', 'name'], resource);
+  const schoolName = R.pathOr('', ['school', 'name'], resource);
+  const courseId = R.pathOr('', ['course', 'id'], resource);
+  const schoolId = R.pathOr('', ['school', 'id'], resource);
+  const creatorId = R.pathOr('', ['user', 'id'], resource);
   const title = `${resourceTitle} - ${resourceDate}`;
-  const file = mediaUrl(R.propOr(undefined, 'file', resource));
-  const resourceId: string = R.propOr('', 'id', resource);
-  const comments: CommentObjectType[] = R.propOr([], 'comments', resource);
-  const initialVote: VoteObjectType | null = R.propOr(null, 'vote', resource);
+  const file = mediaUrl(R.propOr('', 'file', resource));
+  const resourceId = R.propOr('', 'id', resource);
+  const comments = R.propOr([], 'comments', resource);
+  const initialVote = R.propOr(null, 'vote', resource);
   const initialScore = String(R.propOr(0, 'score', resource));
   const downloads = String(R.propOr(0, 'downloads', resource));
-  const starred = !!R.propOr(undefined, 'starred', resource);
+  const starred = !!R.prop('starred', resource);
   const isOwner = !!userMe && userMe.id === creatorId;
-  const resourceUser: UserObjectType = R.propOr(undefined, 'user', resource);
-  const created: string = R.propOr(undefined, 'created', resource);
+  const resourceUser = R.prop('user', resource);
+  const created = R.prop('created', resource);
   const commentCount = comments.length;
+
   const {
     tabValue,
     setTabValue,
     handleTabChange,
     handleIndexChange,
   } = useSwipeableTabs(comments);
+
   const { renderShareButton } = useShare({ text: resourceTitle });
   const { commentModalOpen } = useDiscussionContext();
+
   const {
     drawMode,
     setDrawMode,
     swipingDisabled,
     swipeableViewsRef,
   } = usePdfViewerContext();
+
   const {
     infoDialogOpen,
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog();
-
-  // Update state whenever we finish fetching.
-  useEffect(() => {
-    const initialResource: ResourceObjectType = R.propOr(
-      null,
-      'resource',
-      data
-    );
-    setResource(initialResource);
-  }, [data]);
 
   const {
     actionsDialogOpen,
@@ -180,6 +167,12 @@ const ResourceDetailPage: NextPage = () => {
     isOwner,
     variables: { resource: resourceId },
   });
+
+  // Update state after data fetching is complete.
+  useEffect(() => {
+    const initialResource = R.propOr(null, 'resource', data);
+    setResource(initialResource);
+  }, [data]);
 
   // If comment modal is opened in main tab, automatically switch to discussion tab.
   useEffect(() => {
@@ -253,10 +246,11 @@ const ResourceDetailPage: NextPage = () => {
       if (!!downloadResource.errors && !!downloadResource.errors.length) {
         onDownloadResourceError();
       } else if (downloadResource.resource) {
-        setResource({
-          ...resource,
-          downloads: downloadResource.resource.downloads,
-        } as ResourceObjectType);
+        !!resource &&
+          setResource({
+            ...resource,
+            downloads: downloadResource.resource.downloads,
+          });
       }
     }
   };
@@ -268,7 +262,7 @@ const ResourceDetailPage: NextPage = () => {
   });
 
   const handleDownloadButtonClick = async (
-    e: SyntheticEvent
+    e: SyntheticEvent,
   ): Promise<void> => {
     handleCloseActionsDialog(e);
     await downloadResource({ variables: { id: resourceId } });
@@ -530,26 +524,26 @@ const ResourceDetailPage: NextPage = () => {
   };
 
   if (loading) {
-    return <LoadingLayout />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   if (resource) {
     return (
-      <MainLayout {...layoutProps}>
+      <MainTemplate {...layoutProps}>
         {renderMobileContent}
         {renderDesktopContent}
         {renderInfoDialog}
         {renderActionsDialog}
-      </MainLayout>
+      </MainTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 
@@ -566,10 +560,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-const withWrappers = R.compose<NextPage, NextPage, NextPage, NextPage>(
-  withPdfViewer,
-  withDiscussion,
-  withUserMe
-);
+const withWrappers = R.compose(withPdfViewer, withDiscussion, withUserMe);
 
 export default withWrappers(ResourceDetailPage);

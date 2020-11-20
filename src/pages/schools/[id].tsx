@@ -25,26 +25,20 @@ import {
 import clsx from 'clsx';
 import {
   CourseTableBody,
-  ErrorLayout,
+  ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
-  LoadingLayout,
-  MainLayout,
+  LoadingTemplate,
+  MainTemplate,
   NotFoundBox,
-  NotFoundLayout,
-  OfflineLayout,
+  NotFoundTemplate,
+  OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
   TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import {
-  CourseObjectType,
-  SchoolObjectType,
-  SchoolQueryVariables,
-  SubjectObjectType,
-  useSchoolQuery,
-} from 'generated';
+import { SubjectObjectType, useSchoolQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import {
   useActionsDialog,
@@ -93,43 +87,35 @@ const SchoolDetailPage: NextPage = () => {
   const { isDesktop, isMobileOrTablet } = useMediaQueries();
   const { searchUrl } = useSearch();
   const { query } = useRouter();
-  const variables: SchoolQueryVariables = R.pick(
-    ['id', 'page', 'pageSize'],
-    query
-  );
+  const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useSchoolQuery({ variables, context });
-  const school: SchoolObjectType = R.propOr(null, 'school', data);
-  const schoolId: string = R.propOr('', 'id', school);
-  const schoolName: string = R.propOr('', 'name', school);
-  const schoolTypeName: string = R.pathOr('', ['schoolType', 'name'], school);
-  const schoolTypeId: string = R.pathOr('', ['schoolType', 'id'], school);
-  const country: string = R.pathOr('', ['country', 'name'], school);
-  const city: string = R.pathOr('', ['city', 'name'], school);
-  const subjects: SubjectObjectType[] = R.pathOr(
-    [],
-    ['subjects', 'objects'],
-    school
-  );
-  const courses: CourseObjectType[] = R.pathOr(
-    [],
-    ['courses', 'objects'],
-    school
-  );
+  const school = R.propOr(null, 'school', data);
+  const schoolId = R.propOr('', 'id', school);
+  const schoolName = R.propOr('', 'name', school);
+  const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school);
+  const schoolTypeId = R.pathOr('', ['schoolType', 'id'], school);
+  const country = R.pathOr('', ['country', 'name'], school);
+  const city = R.pathOr('', ['city', 'name'], school);
   const subjectCount = R.pathOr(0, ['subjects', 'count'], data);
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
-  const countryId: string = R.pathOr('', ['country', 'id'], school);
-  const cityId: string = R.pathOr('', ['city', 'id'], school);
+  const countryId = R.pathOr('', ['country', 'id'], school);
+  const cityId = R.pathOr('', ['city', 'id'], school);
+  const subjects = R.pathOr([], ['subjects', 'objects'])(school);
+  const courses = R.pathOr([], ['courses', 'objects'])(school);
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
   const { renderShareButton } = useShare({ text: schoolName });
+
   const addCourseTooltip =
     verificationRequiredTooltip || t('tooltips:addCourse');
+
   const {
     infoDialogOpen,
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog();
+
   const addCourseHref = {
     pathname: urls.createCourse,
     query: { school: schoolId },
@@ -265,25 +251,32 @@ const SchoolDetailPage: NextPage = () => {
     titleRight: t('common:score'),
   };
 
-  const renderSubjects = subjects.length ? (
+  const renderSubjectsTable = (
     <PaginatedTable
       tableHeadProps={commonTableHeadProps}
       renderTableBody={renderSubjectsTableBody}
       count={subjectCount}
     />
-  ) : (
-    <NotFoundBox text={t('school:noSubjects')} />
   );
 
-  const renderCourses = courses.length ? (
+  const renderCourseTable = (
     <PaginatedTable
       tableHeadProps={courseTableHeadProps}
       renderTableBody={renderCourseTableBody}
       count={courseCount}
     />
-  ) : (
-    <NotFoundBox text={t('school:noCourses')} />
   );
+
+  const renderSubjectsNotFound = <NotFoundBox text={t('school:noSubjects')} />;
+  const renderCoursesNotFound = <NotFoundBox text={t('school:noCourses')} />;
+
+  const renderSubjects = subjects.length
+    ? renderSubjectsTable
+    : renderSubjectsNotFound;
+
+  const renderCourses = courses.length
+    ? renderCourseTable
+    : renderCoursesNotFound;
 
   const renderAction = (
     <>
@@ -376,25 +369,25 @@ const SchoolDetailPage: NextPage = () => {
   };
 
   if (loading) {
-    return <LoadingLayout />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   if (school) {
     return (
-      <MainLayout {...layoutProps}>
+      <MainTemplate {...layoutProps}>
         {renderContent}
         {renderInfoDialog}
         {renderActionsDrawer}
-      </MainLayout>
+      </MainTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 

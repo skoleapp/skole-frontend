@@ -82,13 +82,13 @@ export const ResourceToolbar: React.FC<Props> = ({
   // Scroll into page from given page number.
   // FIXME: Providing a custom value in the input won't work atm.
   const handleChangePage = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     const val = Number(e.target.value);
     !!val && setPageNumber(val);
     const page: HTMLDivElement | undefined = R.path(
       ['current', 'pages', val - 1],
-      documentRef
+      documentRef,
     );
     !!page &&
       page.scrollIntoView({

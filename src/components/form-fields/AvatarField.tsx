@@ -20,10 +20,13 @@ import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
-import { UpdateProfileFormValues } from 'types';
 import { AVATAR_MAX_FILE_SIZE as maxFileSize } from 'utils';
 
 import { ResponsiveDialog } from '../shared';
+
+interface FormFields {
+  avatar: string;
+}
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   button: {
@@ -39,7 +42,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
 }));
 
-export const AvatarField: React.FC<FormikProps<UpdateProfileFormValues>> = ({
+export const AvatarField: React.FC<FormikProps<FormFields>> = ({
   setFieldValue,
   values,
 }) => {

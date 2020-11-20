@@ -50,6 +50,7 @@ export const ActivityListItem: React.FC<Props> = ({
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
+
   const onError = (): void =>
     toggleNotification(t('notifications:markSingleActivityReadError'));
 

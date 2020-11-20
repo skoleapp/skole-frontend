@@ -8,8 +8,8 @@ import {
   AutocompleteField,
   AvatarField,
   FormSubmitSection,
-  NotFoundLayout,
-  SettingsLayout,
+  NotFoundTemplate,
+  SettingsTemplate,
   TextFormField,
   TextLink,
 } from 'components';
@@ -30,9 +30,18 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { UpdateProfileFormValues } from 'types';
 import { mediaUrl, urls } from 'utils';
 import * as Yup from 'yup';
+
+interface UpdateProfileFormValues {
+  username: string;
+  email: string;
+  title: string;
+  bio: string;
+  avatar: string;
+  school: SchoolObjectType | null;
+  subject: SubjectObjectType | null;
+}
 
 const useStyles = makeStyles(({ spacing }) => ({
   link: {
@@ -56,14 +65,14 @@ const EditProfilePage: NextPage = () => {
   } = useForm<UpdateProfileFormValues>();
 
   const { toggleNotification } = useNotificationsContext();
-  const id: string = R.propOr('', 'id', userMe);
-  const title: string = R.propOr('', 'title', userMe);
-  const username: string = R.propOr('', 'username', userMe);
-  const email: string = R.propOr('', 'email', userMe);
-  const bio: string = R.propOr('', 'bio', userMe);
-  const avatar: string = R.propOr('', 'avatar', userMe);
-  const school: SchoolObjectType = R.propOr(null, 'school', userMe);
-  const subject: SubjectObjectType = R.propOr(null, 'subject', userMe);
+  const id = R.propOr('', 'id', userMe);
+  const title = R.propOr('', 'title', userMe);
+  const username = R.propOr('', 'username', userMe);
+  const email = R.propOr('', 'email', userMe);
+  const bio = R.propOr('', 'bio', userMe);
+  const avatar = R.propOr('', 'avatar', userMe);
+  const school = R.propOr(null, 'school', userMe);
+  const subject = R.propOr(null, 'subject', userMe);
 
   const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
     if (updateUser) {
@@ -88,7 +97,7 @@ const EditProfilePage: NextPage = () => {
   });
 
   const handleSubmit = async (
-    values: UpdateProfileFormValues
+    values: UpdateProfileFormValues,
   ): Promise<void> => {
     const { username, email, title, bio, avatar, school, subject } = values;
 
@@ -127,7 +136,7 @@ const EditProfilePage: NextPage = () => {
   });
 
   const renderAvatarField = (
-    props: FormikProps<UpdateProfileFormValues>
+    props: FormikProps<UpdateProfileFormValues>,
   ): JSX.Element => <AvatarField {...props} />;
   const renderTitleField = (
     <Field name="title" component={TextFormField} label={t('forms:title')} />
@@ -203,7 +212,7 @@ const EditProfilePage: NextPage = () => {
   );
 
   const renderFormSubmitSection = (
-    props: FormikProps<UpdateProfileFormValues>
+    props: FormikProps<UpdateProfileFormValues>,
   ): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
   );
@@ -229,7 +238,7 @@ const EditProfilePage: NextPage = () => {
   );
 
   const renderEditProfileFormContent = (
-    props: FormikProps<UpdateProfileFormValues>
+    props: FormikProps<UpdateProfileFormValues>,
   ): JSX.Element => (
     <Form>
       {renderAvatarField(props)}
@@ -273,10 +282,12 @@ const EditProfilePage: NextPage = () => {
 
   if (userMe) {
     return (
-      <SettingsLayout {...layoutProps}>{renderEditProfileForm}</SettingsLayout>
+      <SettingsTemplate {...layoutProps}>
+        {renderEditProfileForm}
+      </SettingsTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 

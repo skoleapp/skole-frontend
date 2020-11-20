@@ -67,7 +67,6 @@ export const SkoleGDPR: React.FC = () => {
   };
 
   const openPrivacyPreferences = (): void => setPrivacyPreferencesOpen(true);
-
   const closePrivacyPreferences = (): void => setPrivacyPreferencesOpen(false);
 
   const savePrivacyPreferences = (): void => {

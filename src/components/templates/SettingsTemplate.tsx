@@ -10,10 +10,10 @@ import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
-import { MainLayoutProps, TopNavbarProps } from 'types';
+import { MainTemplateProps, TopNavbarProps } from 'types';
 
 import { SettingsButton } from '../shared';
-import { MainLayout } from './MainLayout';
+import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   root: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
 }));
 
-interface Props extends Omit<MainLayoutProps, 'topNavbarProps'> {
+interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
   topNavbarProps: Omit<TopNavbarProps, 'header' | 'headerRight'>;
   header: string;
   headerRight?: JSX.Element;
@@ -48,7 +48,7 @@ interface Props extends Omit<MainLayoutProps, 'topNavbarProps'> {
   disablePadding?: boolean; // Disable padding on the right-hand paper's card content.
 }
 
-export const SettingsLayout: React.FC<Props> = ({
+export const SettingsTemplate: React.FC<Props> = ({
   topNavbarProps,
   header,
   headerRight,
@@ -100,7 +100,7 @@ export const SettingsLayout: React.FC<Props> = ({
     <CardContent
       className={clsx(
         classes.container,
-        disablePadding && classes.disablePadding
+        disablePadding && classes.disablePadding,
       )}
     >
       <Grid container alignItems="center" className={classes.container}>
@@ -126,7 +126,7 @@ export const SettingsLayout: React.FC<Props> = ({
       container
       className={clsx(
         classes.container,
-        isMobileOrTablet && classes.disablePadding
+        isMobileOrTablet && classes.disablePadding,
       )}
     >
       <Paper className={clsx(classes.container, classes.paperContainer)}>
@@ -137,11 +137,11 @@ export const SettingsLayout: React.FC<Props> = ({
   );
 
   return (
-    <MainLayout {...props} topNavbarProps={customTopNavbarProps}>
+    <MainTemplate {...props} topNavbarProps={customTopNavbarProps}>
       <Grid container spacing={2} className={classes.root}>
         {renderSettingsCard}
         {renderContentCard}
       </Grid>
-    </MainLayout>
+    </MainTemplate>
   );
 };

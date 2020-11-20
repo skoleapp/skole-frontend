@@ -1,5 +1,5 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
-import { FormSubmitSection, SettingsLayout } from 'components';
+import { FormSubmitSection, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik } from 'formik';
 import {
@@ -16,6 +16,10 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
 
+interface EmailFormValues {
+  email: string;
+}
+
 const VerifyAccountPage: NextPage = () => {
   const {
     formRef: emailFormRef,
@@ -23,7 +27,7 @@ const VerifyAccountPage: NextPage = () => {
     onError: onEmailFormError,
     resetForm: resetEmailForm,
     unexpectedError: emailFormUnexpectedError,
-  } = useForm<Record<symbol, unknown>>();
+  } = useForm<EmailFormValues>();
 
   const {
     formRef: confirmationFormRef,
@@ -31,24 +35,26 @@ const VerifyAccountPage: NextPage = () => {
     onError: onConfirmationFormError,
     resetForm: resetConfirmationForm,
     unexpectedError: confirmationFormUnexpectedError,
-  } = useForm<Record<symbol, unknown>>();
+  } = useForm();
 
   const { t } = useTranslation();
   const { query } = useRouter();
   const { userMe, verified: initialVerified } = useAuthContext();
-  const email: string = R.propOr('', 'email', userMe);
+  const email = R.propOr('', 'email', userMe);
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(false);
   const { toggleNotification } = useNotificationsContext();
-  const header = !emailSubmitted
-    ? t('verify-account:header')
-    : t('verify-account:emailSubmittedHeader');
   const context = useLanguageHeaderContext();
 
+  // Update state whenever context value changes.
   useEffect(() => {
     setVerified(initialVerified);
   }, [initialVerified]);
+
+  const header = !emailSubmitted
+    ? t('verify-account:header')
+    : t('verify-account:emailSubmittedHeader');
 
   const onEmailFormCompleted = ({
     resendVerificationEmail,
@@ -188,12 +194,12 @@ const VerifyAccountPage: NextPage = () => {
   };
 
   return (
-    <SettingsLayout {...layoutProps}>
+    <SettingsTemplate {...layoutProps}>
       {renderEmailForm}
       {renderEmailSubmitted}
       {renderConfirmationForm}
       {renderVerified}
-    </SettingsLayout>
+    </SettingsTemplate>
   );
 };
 

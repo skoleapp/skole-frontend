@@ -24,7 +24,7 @@ export const ActivityPreview: React.FC = () => {
   const activities: ActivityObjectType[] = R.propOr(
     [],
     'activityPreview',
-    data
+    data,
   );
 
   const renderActivities = activities.map((a, i) => (

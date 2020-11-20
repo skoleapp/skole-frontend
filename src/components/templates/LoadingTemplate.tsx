@@ -2,7 +2,7 @@ import { Box, makeStyles } from '@material-ui/core';
 import Image from 'next/image';
 import React from 'react';
 
-import { MainLayout } from './MainLayout';
+import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ palette }) => ({
   root: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles(({ palette }) => ({
   },
 }));
 
-export const LoadingLayout: React.FC = () => {
+export const LoadingTemplate: React.FC = () => {
   const classes = useStyles();
 
   const layoutProps = {
@@ -51,7 +51,7 @@ export const LoadingLayout: React.FC = () => {
   };
 
   return (
-    <MainLayout {...layoutProps}>
+    <MainTemplate {...layoutProps}>
       <Box className={classes.root}>
         <Image
           height={120}
@@ -60,6 +60,6 @@ export const LoadingLayout: React.FC = () => {
           src="/images/icons/skole-icon-text-red.svg"
         />
       </Box>
-    </MainLayout>
+    </MainTemplate>
   );
 };

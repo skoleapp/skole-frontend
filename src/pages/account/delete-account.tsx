@@ -2,7 +2,7 @@ import { FormControl } from '@material-ui/core';
 import {
   ButtonLink,
   FormSubmitSection,
-  SettingsLayout,
+  SettingsTemplate,
   TextFormField,
 } from 'components';
 import { useNotificationsContext } from 'context';
@@ -68,21 +68,17 @@ export const DeleteAccountPage: NextPage = () => {
   });
 
   const handleSubmit = async (
-    values: DeleteAccountFormValues
+    values: DeleteAccountFormValues,
   ): Promise<void> => {
     setSubmitting(false);
 
-    try {
-      await confirm({
-        title: t('delete-account:deleteAccountTitle'),
-        description: t('delete-account:deleteAccountDescription'),
-      });
+    await confirm({
+      title: t('delete-account:deleteAccountTitle'),
+      description: t('delete-account:deleteAccountDescription'),
+    });
 
-      setSubmitting(true);
-      await deleteUser({ variables: { password: values.password } });
-    } catch {
-      // User cancelled.
-    }
+    setSubmitting(true);
+    await deleteUser({ variables: { password: values.password } });
   };
 
   const validationSchema = Yup.object().shape({
@@ -134,7 +130,7 @@ export const DeleteAccountPage: NextPage = () => {
     },
   };
 
-  return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
+  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

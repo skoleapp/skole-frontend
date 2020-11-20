@@ -74,7 +74,7 @@ export const ResourceTableBody: React.FC<Props> = ({
   );
 
   const renderResourceCreator = (
-    resource: ResourceObjectType
+    resource: ResourceObjectType,
   ): JSX.Element | string =>
     resource.user ? (
       <TextLink href={urls.user(resource.user.id)} color="primary">
@@ -87,8 +87,10 @@ export const ResourceTableBody: React.FC<Props> = ({
   const renderUserIcon = (
     <AccountCircleOutlined className={clsx(classes.icon, classes.userIcon)} />
   );
+
   const renderStarIcon = <StarBorderOutlined className={classes.icon} />;
   const renderDiscussionIcon = <ChatOutlined className={classes.icon} />;
+
   const renderDownloadsIcon = (
     <CloudDownloadOutlined className={classes.icon} />
   );
@@ -130,20 +132,28 @@ export const ResourceTableBody: React.FC<Props> = ({
         </Link>
       ));
 
+  // Filter out resource types that have no resources.
+  const filterResourceTypes = ({
+    id,
+  }: ResourceTypeObjectType): ResourceObjectType | undefined =>
+    resources.find(
+      ({ resourceType }) => R.propOr('', 'id', resourceType) === id,
+    );
+
+  // Map through filtered resource types and resources under them.
+  const mapResourceTypes = (
+    { id, name }: ResourceTypeObjectType,
+    i: number,
+  ): JSX.Element => (
+    <Fragment key={i}>
+      {renderResourceTypeHeader(name)}
+      {renderResources(id)}
+    </Fragment>
+  );
+
   return (
     <TableBody>
-      {resourceTypes
-        .filter(({ id }) =>
-          resources.find(
-            ({ resourceType }) => R.propOr('', 'id', resourceType) === id
-          )
-        ) // Filter out resource types that have no resources.
-        .map(({ id, name }, i) => (
-          <Fragment key={i}>
-            {renderResourceTypeHeader(name)}
-            {renderResources(id)}
-          </Fragment>
-        ))}
+      {resourceTypes.filter(filterResourceTypes).map(mapResourceTypes)}
     </TableBody>
   );
 };

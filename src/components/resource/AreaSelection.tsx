@@ -40,7 +40,7 @@ export const AreaSelection: React.FC = () => {
   // It clearly has something to do with the `window.devicePixelRatio` function since it messes up the dimensions.
   const getScreenshot = (
     target: HTMLElement,
-    position: LTWH
+    position: LTWH,
   ): string | null => {
     const { left, top, width, height } = position;
     const canvas = target.closest('canvas');
@@ -60,7 +60,7 @@ export const AreaSelection: React.FC = () => {
         0,
         0,
         width,
-        height
+        height,
       );
       return newCanvas.toDataURL();
     } else {
@@ -119,7 +119,7 @@ export const AreaSelection: React.FC = () => {
       !!currentTarget &&
         currentTarget.removeEventListener(
           'mouseup',
-          onMouseUp as EventListener
+          onMouseUp as EventListener,
         );
 
       if (start) {
@@ -168,7 +168,7 @@ export const AreaSelection: React.FC = () => {
         ...stateRef.current,
         end: getDocumentCoords(
           e.changedTouches[0].pageX,
-          e.changedTouches[0].pageY
+          e.changedTouches[0].pageY,
         ),
       });
     }
@@ -188,13 +188,13 @@ export const AreaSelection: React.FC = () => {
       !!currentTarget &&
         currentTarget.removeEventListener(
           'mouseup',
-          onTouchUp as EventListener
+          onTouchUp as EventListener,
         );
 
       if (start) {
         const end = getDocumentCoords(
           e.changedTouches[0].pageX,
-          e.changedTouches[0].pageY
+          e.changedTouches[0].pageY,
         );
         const boundingRect = getBoundingRect(start, end);
 
@@ -220,7 +220,7 @@ export const AreaSelection: React.FC = () => {
     setState({
       start: getDocumentCoords(
         e.targetTouches[0].pageX,
-        e.targetTouches[0].pageY
+        e.targetTouches[0].pageY,
       ),
       end: null,
       locked: false,
@@ -243,7 +243,7 @@ export const AreaSelection: React.FC = () => {
       documentNode.addEventListener('touchmove', onTouchMove as EventListener);
       documentNode.addEventListener(
         'touchstart',
-        onTouchStart as EventListener
+        onTouchStart as EventListener,
       );
       documentNode.addEventListener('mousemove', onMouseMove as EventListener, {
         passive: true,
@@ -258,19 +258,19 @@ export const AreaSelection: React.FC = () => {
     return (): void => {
       documentNode.removeEventListener(
         'touchmove',
-        onTouchMove as EventListener
+        onTouchMove as EventListener,
       );
       documentNode.removeEventListener(
         'touchstart',
-        onTouchStart as EventListener
+        onTouchStart as EventListener,
       );
       documentNode.removeEventListener(
         'mousemove',
-        onMouseMove as EventListener
+        onMouseMove as EventListener,
       );
       documentNode.removeEventListener(
         'mousedown',
-        onMouseDown as EventListener
+        onMouseDown as EventListener,
       );
     };
   }, [drawMode]);

@@ -1,6 +1,6 @@
 import { ApolloError } from '@apollo/client';
 import { Formik } from 'formik';
-import { ErrorType, SchoolObjectType, SubjectObjectType } from 'generated';
+import { ErrorType, SchoolObjectType } from 'generated';
 import { Maybe } from 'graphql/jsutils/Maybe';
 import { MutableRefObject } from 'react';
 
@@ -22,14 +22,4 @@ export interface UseForm<T> {
   setFieldValue: (fieldName: string, val: FieldValue) => void;
   setFieldError: (fieldName: string, val: string) => void;
   unexpectedError: () => void;
-}
-
-export interface UpdateProfileFormValues {
-  username: string;
-  email: string;
-  title: string;
-  bio: string;
-  avatar: string;
-  school: SchoolObjectType | null;
-  subject: SubjectObjectType | null;
 }

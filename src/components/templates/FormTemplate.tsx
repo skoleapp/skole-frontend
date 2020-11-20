@@ -8,9 +8,9 @@ import {
 import { useMediaQueries } from 'hooks';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
-import { MainLayoutProps, TopNavbarProps } from 'types';
+import { MainTemplateProps, TopNavbarProps } from 'types';
 
-import { MainLayout } from './MainLayout';
+import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   root: {
@@ -21,12 +21,16 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
 }));
 
-interface Props extends Omit<MainLayoutProps, 'topNavbarProps'> {
+interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
   topNavbarProps: Omit<TopNavbarProps, 'header'>;
   header: string;
 }
 
-export const FormLayout: React.FC<Props> = ({ children, header, ...props }) => {
+export const FormTemplate: React.FC<Props> = ({
+  children,
+  header,
+  ...props
+}) => {
   const classes = useStyles();
   const { isDesktop } = useMediaQueries();
 
@@ -51,11 +55,11 @@ export const FormLayout: React.FC<Props> = ({ children, header, ...props }) => {
   );
 
   return (
-    <MainLayout {...layoutProps}>
+    <MainTemplate {...layoutProps}>
       <Paper className={classes.root}>
         {renderCardHeader}
         {renderCardContent}
       </Paper>
-    </MainLayout>
+    </MainTemplate>
   );
 };

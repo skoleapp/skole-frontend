@@ -3,10 +3,10 @@ import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
   ButtonLink,
-  ErrorLayout,
-  FormLayout,
-  LoadingLayout,
-  OfflineLayout,
+  ErrorTemplate,
+  FormTemplate,
+  LoadingTemplate,
+  OfflineTemplate,
 } from 'components';
 import { useGraphQlLogoutMutation } from 'generated';
 import { withUserMe } from 'hocs';
@@ -48,17 +48,17 @@ const LogoutPage: NextPage = () => {
 
   // Show loading screen when loading the next page that the user will be automatically redirected to.
   if (loading || !!query.next) {
-    return <LoadingLayout />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   return (
-    <FormLayout {...layoutProps}>
+    <FormTemplate {...layoutProps}>
       <Typography variant="subtitle1" align="center">
         {t('logout:loggedOut')}
       </Typography>
@@ -82,7 +82,7 @@ const LogoutPage: NextPage = () => {
           {t('common:backToHome')}
         </ButtonLink>
       </FormControl>
-    </FormLayout>
+    </FormTemplate>
   );
 };
 

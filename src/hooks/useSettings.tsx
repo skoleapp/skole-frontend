@@ -61,7 +61,7 @@ export const useSettings = (modal: boolean): UseSettings => {
         </ListItemIcon>
         <ListItemText>{t(text)}</ListItemText>
       </MenuItem>
-    )
+    ),
   );
 
   const renderVerifyAccountMenuItem = verified === false && (
@@ -88,7 +88,7 @@ export const useSettings = (modal: boolean): UseSettings => {
         </ListItemIcon>
         <ListItemText>{t(text)}</ListItemText>
       </MenuItem>
-    )
+    ),
   );
 
   const renderAboutMenuItems = MENU_ITEMS.about.map(
@@ -103,7 +103,7 @@ export const useSettings = (modal: boolean): UseSettings => {
         </ListItemIcon>
         <ListItemText>{t(text)}</ListItemText>
       </MenuItem>
-    )
+    ),
   );
 
   const renderLegalItems = MENU_ITEMS.legal.map(
@@ -118,7 +118,7 @@ export const useSettings = (modal: boolean): UseSettings => {
         </ListItemIcon>
         <ListItemText>{t(text)}</ListItemText>
       </MenuItem>
-    )
+    ),
   );
 
   const renderLanguageMenuItem = (

@@ -1,4 +1,4 @@
-import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
+import { FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import {
@@ -29,7 +29,9 @@ interface ContactFormValues {
 
 const ContactPage: NextPage = () => {
   const { t } = useTranslation();
+  const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
+
   const {
     formRef,
     onError,
@@ -37,7 +39,6 @@ const ContactPage: NextPage = () => {
     handleMutationErrors,
     unexpectedError,
   } = useForm<ContactFormValues>();
-  const context = useLanguageHeaderContext();
 
   const validationSchema = Yup.object().shape({
     subject: Yup.string().required(t('validation:required')),
@@ -136,7 +137,7 @@ const ContactPage: NextPage = () => {
     },
   };
 
-  return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
+  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
-import { SettingsLayout } from 'components';
+import { SettingsTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -31,7 +31,7 @@ const FAQPage: NextPage = () => {
     },
   };
 
-  return <SettingsLayout {...layoutProps}>{renderContent}</SettingsLayout>;
+  return <SettingsTemplate {...layoutProps}>{renderContent}</SettingsTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

@@ -1,10 +1,8 @@
 import { ServerStyleSheets } from '@material-ui/styles';
-import {
-  DocumentInitialProps,
-  RenderPageResult,
-} from 'next/dist/next-server/lib/utils';
+import { RenderPageResult } from 'next/dist/next-server/lib/utils';
 import NextDocument, {
   DocumentContext,
+  DocumentInitialProps,
   Head,
   Html,
   Main,
@@ -27,7 +25,7 @@ export default class SkoleDocument extends NextDocument {
 }
 
 SkoleDocument.getInitialProps = async (
-  ctx: DocumentContext
+  ctx: DocumentContext,
 ): Promise<DocumentInitialProps> => {
   const sheets = new ServerStyleSheets();
   const originalRenderPage = ctx.renderPage;

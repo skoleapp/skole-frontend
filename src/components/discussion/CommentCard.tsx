@@ -34,7 +34,6 @@ import {
   CommentObjectType,
   DeleteCommentMutation,
   useDeleteCommentMutation,
-  VoteObjectType,
 } from 'generated';
 import {
   useActionsDialog,
@@ -47,7 +46,6 @@ import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { mediaUrl, truncate, urls } from 'utils';
-
 import { ResponsiveDialog, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -112,31 +110,24 @@ export const CommentCard: React.FC<Props> = ({
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
-  const userId: string = R.propOr('', 'id', comment.user);
-  const avatarThumb: string = R.propOr('', 'avatarThumbnail', comment.user);
+  const userId = R.propOr('', 'id', comment.user);
+  const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user);
   const confirm = useConfirm();
   const attachmentOnly = comment.text == '' && comment.attachment !== '';
-  const initialVote: VoteObjectType = R.propOr(null, 'vote', comment);
+  const initialVote = R.propOr(null, 'vote', comment);
   const initialScore = String(R.propOr(0, 'score', comment));
-  const creatorId: string = R.propOr('', 'id', comment.user);
+  const creatorId = R.propOr('', 'id', comment.user);
   const isOwner = !!userMe && userMe.id === creatorId;
-  const commentId: string = R.propOr('', 'id', comment);
+  const commentId = R.propOr('', 'id', comment);
   const shareQuery = `?comment=${commentId}`;
-
-  const replyComments: CommentObjectType[] = R.propOr(
-    [],
-    'replyComments',
-    comment
-  );
-
+  const replyComments = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
-
   const { toggleTopComment, setAttachmentViewerValue } = useDiscussionContext();
 
-  const creatorUsername: string = R.propOr(
+  const creatorUsername = R.propOr(
     t('common:communityUser'),
     'username',
-    comment.user
+    comment.user,
   );
 
   const shareText = t('common:commentShareText', {
@@ -211,15 +202,12 @@ export const CommentCard: React.FC<Props> = ({
     e.stopPropagation();
     handleCloseActionsDialog(e);
 
-    try {
-      await confirm({
-        title: t('common:deleteCommentTitle'),
-        description: t('common:deleteCommentDescription'),
-      });
-      await deleteComment({ variables: { id: comment.id } });
-    } catch {
-      // User cancelled.
-    }
+    await confirm({
+      title: t('common:deleteCommentTitle'),
+      description: t('common:deleteCommentDescription'),
+    });
+
+    await deleteComment({ variables: { id: comment.id } });
   };
 
   const renderTitle = comment.user ? (

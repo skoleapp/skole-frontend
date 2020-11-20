@@ -1,9 +1,9 @@
-import { NotFoundLayout } from 'components';
+import { NotFoundTemplate } from 'components';
 import { loadNamespaces } from 'lib';
 import { GetStaticProps } from 'next';
 import React from 'react';
 
-const NotFoundPage = (): JSX.Element => <NotFoundLayout />;
+const NotFoundPage = (): JSX.Element => <NotFoundTemplate />;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {

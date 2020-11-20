@@ -1,20 +1,19 @@
 import { Button, ButtonProps, FormControl, Grid } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ErrorMessage, FormikProps } from 'formik';
-import * as R from 'ramda';
 import React from 'react';
-
+import * as R from 'ramda';
 import { LoadingBox } from '../shared';
 import { FormErrorMessage } from './FormErrorMessage';
 
-interface Props extends FormikProps<Record<symbol, unknown>> {
+interface Props extends FormikProps<unknown> {
   submitButtonText: string;
 }
 
 export const FormSubmitSection: React.FC<
   Props & Pick<ButtonProps, 'variant' | 'endIcon'>
 > = ({ isSubmitting, submitButtonText, endIcon, variant, values }) => {
-  const loadingText: string = R.propOr(undefined, 'general', values);
+  const loadingText = R.prop('general', values);
 
   const renderTextContent = isSubmitting ? (
     <LoadingBox text={loadingText} />

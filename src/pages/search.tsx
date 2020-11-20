@@ -22,13 +22,13 @@ import {
   AutocompleteField,
   CourseTableBody,
   DialogHeader,
-  ErrorLayout,
+  ErrorTemplate,
   FormSubmitSection,
   LoadingBox,
-  MainLayout,
+  MainTemplate,
   NativeSelectField,
   NotFoundBox,
-  OfflineLayout,
+  OfflineTemplate,
   PaginatedTable,
   SkoleDialog,
   TextFormField,
@@ -42,8 +42,6 @@ import {
   AutocompleteSubjectsDocument,
   CityObjectType,
   CountryObjectType,
-  CourseObjectType,
-  CoursesQueryVariables,
   SchoolObjectType,
   SchoolTypeObjectType,
   SubjectObjectType,
@@ -59,7 +57,6 @@ import {
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
-import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
@@ -126,7 +123,7 @@ const SearchPage: NextPage = () => {
   const { t } = useTranslation();
   const { pathname, query } = useRouter();
 
-  const variables: CoursesQueryVariables = R.pick(
+  const variables = R.pick(
     [
       'courseName',
       'courseCode',
@@ -139,59 +136,29 @@ const SearchPage: NextPage = () => {
       'page',
       'pageSize',
     ],
-    query
+    query,
   );
 
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useCoursesQuery({ variables, context });
   const { formRef, resetForm } = useForm<FilterSearchResultsFormValues>();
+  const courses = R.pathOr([], ['courses', 'objects'], data);
+  const school = R.propOr(null, 'school', data);
+  const subject = R.propOr(null, 'subject', data);
+  const schoolType = R.propOr(null, 'schoolType', data);
+  const country = R.propOr(null, 'country', data);
+  const city = R.propOr(null, 'city', data);
+  const count = R.pathOr(0, ['courses', 'count'], data);
+  const courseName = R.propOr('', 'courseName', query);
+  const courseCode = R.propOr('', 'courseCode', query);
+  const ordering = R.propOr('', 'ordering', query);
+  const [searchValue, setSearchValue] = useState(courseName);
 
   const {
     open: filtersOpen,
     handleOpen: handleOpenFilters,
     handleClose: handleCloseFilters,
   } = useOpen();
-
-  const courses: CourseObjectType[] = R.pathOr(
-    [],
-    ['courses', 'objects'],
-    data
-  );
-
-  const school: SchoolObjectType = R.propOr(null, 'school', data);
-  const subject: SubjectObjectType = R.propOr(null, 'subject', data);
-  const schoolType: SchoolTypeObjectType = R.propOr(null, 'schoolType', data);
-  const country: CountryObjectType = R.propOr(null, 'country', data);
-  const city: CityObjectType = R.propOr(null, 'city', data);
-  const count: number = R.pathOr(0, ['courses', 'count'], data);
-  const courseName: string = R.propOr('', 'courseName', query);
-  const courseCode: string = R.propOr('', 'courseCode', query);
-  const ordering: string = R.propOr('', 'ordering', query);
-  const [searchValue, setSearchValue] = useState(courseName);
-  const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void =>
-    setSearchValue(e.target.value);
-
-  // Pick non-empty values and reload the page with new query params.
-  const handleSubmitFilters = async (
-    filteredValues: Record<symbol, unknown>
-  ): Promise<void> => {
-    const validQuery: ParsedUrlQueryInput = R.pickBy(
-      (val: string): boolean => !!val,
-      filteredValues
-    );
-    resetForm();
-    handleCloseFilters();
-    await Router.push({ pathname, query: validQuery });
-  };
-
-  // Clear the query params and reset form.
-  const handleClearFilters = async (): Promise<void> => {
-    const paginationQuery = getPaginationQuery(query);
-    resetForm();
-    setSearchValue('');
-    handleCloseFilters();
-    await Router.push({ pathname, query: paginationQuery });
-  };
 
   // Pre-load query params to the form.
   const initialValues = {
@@ -214,11 +181,37 @@ const SearchPage: NextPage = () => {
   // Query that holds only pagination.
   const paginationQuery = getPaginationQuery(query);
 
-  const schoolName: string = R.propOr(undefined, 'name', school);
-  const subjectName: string = R.propOr(undefined, 'name', subject);
-  const schoolTypeName: string = R.propOr(undefined, 'name', schoolType);
-  const countryName: string = R.propOr(undefined, 'name', country);
-  const cityName: string = R.propOr(undefined, 'name', city);
+  const schoolName = R.prop('name', school);
+  const subjectName = R.prop('name', subject);
+  const schoolTypeName = R.prop('name', schoolType);
+  const countryName = R.prop('name', country);
+  const cityName = R.prop('name', city);
+
+  const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void =>
+    setSearchValue(e.target.value);
+
+  // Pick non-empty values and reload the page with new query params.
+  const handleSubmitFilters = async (
+    filteredValues: Record<symbol, unknown>,
+  ): Promise<void> => {
+    const validQuery = R.pickBy(
+      (val: string): boolean => !!val,
+      filteredValues,
+    );
+
+    resetForm();
+    handleCloseFilters();
+    await Router.push({ pathname, query: validQuery });
+  };
+
+  // Clear the query params and reset form.
+  const handleClearFilters = async (): Promise<void> => {
+    const paginationQuery = getPaginationQuery(query);
+    resetForm();
+    setSearchValue('');
+    handleCloseFilters();
+    await Router.push({ pathname, query: paginationQuery });
+  };
 
   const filtersArr = [
     {
@@ -302,12 +295,12 @@ const SearchPage: NextPage = () => {
     await handleSubmitFilters(filteredValues);
   };
 
-  const handleDeleteFilter = (filterName: string) => async (): Promise<
-    void
-  > => {
-    const query: ParsedUrlQueryInput = R.pickBy(
+  const handleDeleteFilter = (
+    filterName: string,
+  ) => async (): Promise<void> => {
+    const query = R.pickBy(
       (_: string, key: string) => key !== filterName,
-      queryWithPagination
+      queryWithPagination,
     );
 
     filterName === 'courseName' && (await handleClearSearchInput());
@@ -410,13 +403,13 @@ const SearchPage: NextPage = () => {
   );
 
   const renderFormSubmitSection = (
-    props: FormikProps<FilterSearchResultsFormValues>
+    props: FormikProps<FilterSearchResultsFormValues>,
   ): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:apply')} {...props} />
   );
 
   const renderClearButton = (
-    props: FormikProps<FilterSearchResultsFormValues>
+    props: FormikProps<FilterSearchResultsFormValues>,
   ): JSX.Element | false =>
     !isMobileOrTablet && (
       <FormControl>
@@ -434,7 +427,7 @@ const SearchPage: NextPage = () => {
     );
 
   const renderSearchFormContent = (
-    props: FormikProps<FilterSearchResultsFormValues>
+    props: FormikProps<FilterSearchResultsFormValues>,
   ): JSX.Element => (
     <Form>
       {renderCourseNameField}
@@ -589,16 +582,16 @@ const SearchPage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   return (
-    <MainLayout {...layoutProps}>
+    <MainTemplate {...layoutProps}>
       {renderMobileContent}
       {renderDesktopContent}
-    </MainLayout>
+    </MainTemplate>
   );
 };
 

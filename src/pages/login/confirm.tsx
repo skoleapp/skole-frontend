@@ -1,6 +1,6 @@
 import { Button, FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, FormLayout } from 'components';
+import { ButtonLink, FormTemplate } from 'components';
 import { withNoAuth } from 'hocs';
 import { useLanguageSelector } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -30,7 +30,7 @@ const ConfirmLoginPage: NextPage = () => {
   };
 
   return (
-    <FormLayout {...layoutProps}>
+    <FormTemplate {...layoutProps}>
       <Typography variant="subtitle1" align="center">
         {t('confirm-login:confirmLogin')}
       </Typography>
@@ -54,7 +54,7 @@ const ConfirmLoginPage: NextPage = () => {
           {t('common:cancel')}
         </Button>
       </FormControl>
-    </FormLayout>
+    </FormTemplate>
   );
 };
 

@@ -22,8 +22,8 @@ import { mediaUrl, urls } from 'utils';
 export const BottomNavbar: React.FC = () => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
-  const userMeId: string = R.propOr('', 'id', userMe);
-  const avatarThumb: string = R.propOr('', 'avatar', userMe);
+  const userMeId = R.propOr('', 'id', userMe);
+  const avatarThumb = R.propOr('', 'avatar', userMe);
   const { pathname, query } = useRouter();
   const { searchUrl } = useSearch();
 
@@ -59,7 +59,7 @@ export const BottomNavbar: React.FC = () => {
 
   const handleChange = (
     _e: ChangeEvent<Record<symbol, unknown>>,
-    newValue: number
+    newValue: number,
   ): void => setValue(newValue);
 
   const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> =>
