@@ -132,14 +132,14 @@ const ResetPasswordPage: NextPage = () => {
   };
 
   const handleSubmitPassword = async (
-    values: PasswordFormValues
+    values: PasswordFormValues,
   ): Promise<void> => {
     const { newPassword } = values;
     await resetPassword({ variables: { newPassword, token } });
   };
 
   const renderEmailFormContent = (
-    props: FormikProps<EmailFormValues>
+    props: FormikProps<EmailFormValues>,
   ): JSX.Element => (
     <Form>
       <Field
@@ -153,7 +153,7 @@ const ResetPasswordPage: NextPage = () => {
   );
 
   const renderPasswordFormContent = (
-    props: FormikProps<PasswordFormValues>
+    props: FormikProps<PasswordFormValues>,
   ): JSX.Element => (
     <Form>
       <Field

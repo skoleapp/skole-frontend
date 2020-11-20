@@ -83,8 +83,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { t } = useTranslation();
   const { isMobileOrTablet } = useMediaQueries();
   const { userMe, authNetworkError } = useAuthContext();
-  const userMeId: string = R.propOr('', 'id', userMe);
-  const avatarThumb: string = R.propOr('', 'avatar', userMe);
+  const userMeId = R.propOr('', 'id', userMe);
+  const avatarThumb = R.propOr('', 'avatar', userMe);
   const dense = !!headerLeft || !!headerRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
 
@@ -97,7 +97,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     setActivityPopperOpen(false);
 
   const handleActivityButtonClick = (
-    e: MouseEvent<HTMLButtonElement>
+    e: MouseEvent<HTMLButtonElement>,
   ): void => {
     setActivityPopperAnchorEl(e.currentTarget);
     setActivityPopperOpen(!activityPopperOpen);

@@ -16,5 +16,5 @@ export const SettingsButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         <SettingsOutlined />
       </IconButton>
     );
-  }
+  },
 );

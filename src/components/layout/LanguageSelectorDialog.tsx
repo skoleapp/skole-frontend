@@ -9,6 +9,7 @@ import { ResponsiveDialog } from '../shared';
 export const LanguageSelectorDialog: React.FC = () => {
   const { asPath } = useRouter();
   const { t } = useTranslation();
+
   const {
     languageSelectorOpen,
     toggleLanguageSelector,

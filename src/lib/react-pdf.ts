@@ -30,7 +30,7 @@ export const getClampedScale = (value: number): number =>
 // Get mid point between translation points.
 export const getMidPoint = (
   p1: PdfTranslation,
-  p2: PdfTranslation
+  p2: PdfTranslation,
 ): PdfTranslation => ({
   x: (p1.x + p2.x) / 2,
   y: (p1.y + p2.y) / 2,
@@ -39,7 +39,7 @@ export const getMidPoint = (
 // The amount that a value of a dimension will change given a new scale.
 export const getCoordChange = (
   coordinate: number,
-  scaleRatio: number
+  scaleRatio: number,
 ): number => scaleRatio * coordinate - coordinate;
 
 // Area selection helpers.
@@ -47,7 +47,7 @@ export const getCoordChange = (
 // Get rectangle coordinates on container element.
 export const getBoundingRect = (
   start: PdfTranslation,
-  end: PdfTranslation
+  end: PdfTranslation,
 ): LTWH => ({
   left: Math.min(end.x, start.x),
   top: Math.min(end.y, start.y),
@@ -62,7 +62,7 @@ interface PageFromElement {
 
 // Find closest page canvas from DOM node.
 export const getPageFromElement = (
-  target: HTMLElement
+  target: HTMLElement,
 ): PageFromElement | null => {
   const node = target.closest('.react-pdf__Page');
 

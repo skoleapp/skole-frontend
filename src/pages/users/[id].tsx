@@ -31,15 +31,7 @@ import {
   TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import {
-  BadgeObjectType,
-  CourseObjectType,
-  ResourceObjectType,
-  ResourceTypeObjectType,
-  UserObjectType,
-  UserQueryVariables,
-  useUserQuery,
-} from 'generated';
+import { BadgeObjectType, useUserQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import {
   useDayjs,
@@ -111,45 +103,25 @@ const UserPage: NextPage = () => {
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
   const { userMe, verified } = useAuthContext();
   const { query } = useRouter();
-
-  const variables: UserQueryVariables = R.pick(
-    ['id', 'page', 'pageSize'],
-    query
-  );
-
+  const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useUserQuery({ variables, context });
-  const user: UserObjectType = R.propOr(null, 'user', data);
-  const rank: string = R.propOr('', 'rank', user);
-  const username: string = R.propOr('-', 'username', user);
-  const avatar: string = R.propOr('', 'avatar', user);
-  const title: string = R.propOr('', 'title', user);
-  const bio: string = R.propOr('', 'bio', user);
+  const user = R.propOr(null, 'user', data);
+  const rank = R.propOr('', 'rank', user);
+  const username = R.propOr('-', 'username', user);
+  const avatar = R.propOr('', 'avatar', user);
+  const title = R.propOr('', 'title', user);
+  const bio = R.propOr('', 'bio', user);
   const school = R.propOr('', 'school', userMe);
   const subject = R.propOr('', 'subject', userMe);
-  const score: string = R.propOr('-', 'score', user);
+  const score = R.propOr('-', 'score')(user);
   const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
-
-  const resourceTypes: ResourceTypeObjectType[] = R.propOr(
-    [],
-    'resourceTypes',
-    data
-  );
-
-  const courses: CourseObjectType[] = R.pathOr(
-    [],
-    ['courses', 'objects'],
-    data
-  );
-
-  const resources: ResourceObjectType[] = R.pathOr(
-    [],
-    ['resources', 'objects'],
-    data
-  );
+  const resourceTypes = R.propOr([], 'resourceTypes', data);
+  const courses = R.pathOr([], ['courses', 'objects'], data);
+  const resources = R.pathOr([], ['resources', 'objects'], data);
 
   const coursesTabLabel = isOwnProfile
     ? t('profile:ownProfileCourses')

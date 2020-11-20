@@ -11,7 +11,6 @@ import { Field, Form, Formik } from 'formik';
 import {
   AutocompleteSchoolsDocument,
   AutocompleteSubjectsDocument,
-  CreateCourseAutocompleteDataQueryVariables,
   CreateCourseMutation,
   SchoolObjectType,
   SubjectObjectType,
@@ -40,16 +39,16 @@ const CreateCoursePage: NextPage = () => {
   const { toggleNotification } = useNotificationsContext();
   const { t } = useTranslation();
   const { query } = useRouter();
-  const variables: CreateCourseAutocompleteDataQueryVariables = R.pick(
-    ['school'],
-    query
-  );
   const context = useLanguageHeaderContext();
+  const variables = R.pick(['school'], query);
+
   const { data, error } = useCreateCourseAutocompleteDataQuery({
     variables,
     context,
   });
-  const school: SchoolObjectType = R.propOr(null, 'school', data);
+
+  const school = R.propOr(null, 'school', data);
+
   const {
     formRef,
     resetForm,
@@ -90,7 +89,7 @@ const CreateCoursePage: NextPage = () => {
   });
 
   const handleSubmit = async (
-    values: CreateCourseFormValues
+    values: CreateCourseFormValues,
   ): Promise<void> => {
     const {
       courseName,
@@ -98,7 +97,8 @@ const CreateCoursePage: NextPage = () => {
       school: _school,
       subjects: _subjects,
     } = values;
-    const school: string = R.propOr('', 'id', _school);
+
+    const school = R.propOr('', 'id', _school);
     const subjects = _subjects.map((s) => s.id);
 
     const variables = {

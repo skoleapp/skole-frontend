@@ -29,7 +29,9 @@ interface ContactFormValues {
 
 const ContactPage: NextPage = () => {
   const { t } = useTranslation();
+  const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
+
   const {
     formRef,
     onError,
@@ -37,7 +39,6 @@ const ContactPage: NextPage = () => {
     handleMutationErrors,
     unexpectedError,
   } = useForm<ContactFormValues>();
-  const context = useLanguageHeaderContext();
 
   const validationSchema = Yup.object().shape({
     subject: Yup.string().required(t('validation:required')),

@@ -14,7 +14,7 @@ interface Props {
   rowsPerPage: number;
   onChangePage: (
     e: MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ) => void;
 }
 
@@ -25,15 +25,18 @@ export const CustomTablePaginationActions: React.FC<Props> = ({
   onChangePage,
 }) => {
   const { t } = useTranslation();
+
   const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void =>
     onChangePage(e, 0);
+
   const handleBackButtonClick = (e: MouseEvent<HTMLButtonElement>): void =>
     onChangePage(e, page - 1);
+
   const handleNextButtonClick = (e: MouseEvent<HTMLButtonElement>): void =>
     onChangePage(e, page + 1);
 
   const handleLastPageButtonClick = (
-    e: MouseEvent<HTMLButtonElement>
+    e: MouseEvent<HTMLButtonElement>,
   ): void => {
     onChangePage(e, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };

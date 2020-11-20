@@ -64,14 +64,16 @@ const RegisterPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { renderLanguageButton } = useLanguageSelector();
+  const [phase, setPhase] = useState(RegisterPhases.REGISTER);
+  const context = useLanguageHeaderContext();
+
   const [registeredUser, setRegisteredUser] = useState<Pick<
     UserObjectType,
     'username' | 'email'
   > | null>(null);
-  const [phase, setPhase] = useState(RegisterPhases.REGISTER);
+
   const handleSkipUpdateProfile = (): void =>
     setPhase(RegisterPhases.REGISTER_COMPLETE);
-  const context = useLanguageHeaderContext();
 
   const {
     formRef: registerFormRef,
@@ -161,7 +163,7 @@ const RegisterPage: NextPage = () => {
   });
 
   const handleRegisterSubmit = async (
-    values: RegisterFormValues
+    values: RegisterFormValues,
   ): Promise<void> => {
     const { username, email, password } = values;
 
@@ -203,7 +205,7 @@ const RegisterPage: NextPage = () => {
         email: R.propOr('', 'email', registeredUser),
         title: '',
         bio: '',
-        avatar: R.propOr('', 'avatar', registeredUser),
+        avatar: '',
         school: R.propOr('', 'id', school),
         subject: R.propOr('', 'id', subject),
       },
@@ -229,11 +231,11 @@ const RegisterPage: NextPage = () => {
   );
 
   const renderPasswordField = (
-    props: FormikProps<RegisterFormValues>
+    props: FormikProps<RegisterFormValues>,
   ): JSX.Element => <PasswordField {...props} />;
 
   const renderConfirmPasswordField = (
-    props: FormikProps<RegisterFormValues>
+    props: FormikProps<RegisterFormValues>,
   ): JSX.Element => (
     <PasswordField
       label={t('forms:confirmPassword')}
@@ -255,7 +257,7 @@ const RegisterPage: NextPage = () => {
   );
 
   const renderRegisterFormSubmitSection = (
-    props: FormikProps<RegisterFormValues>
+    props: FormikProps<RegisterFormValues>,
   ): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:register')} {...props} />
   );
@@ -267,7 +269,7 @@ const RegisterPage: NextPage = () => {
   );
 
   const renderRegisterFormContent = (
-    props: FormikProps<RegisterFormValues>
+    props: FormikProps<RegisterFormValues>,
   ): JSX.Element => (
     <Form>
       {renderUsernameField}
@@ -321,7 +323,7 @@ const RegisterPage: NextPage = () => {
   );
 
   const renderUpdateUserFormSubmitSection = (
-    props: FormikProps<UpdateUserFormValues>
+    props: FormikProps<UpdateUserFormValues>,
   ): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
   );
@@ -335,7 +337,7 @@ const RegisterPage: NextPage = () => {
   );
 
   const renderUpdateUserFormContent = (
-    props: FormikProps<UpdateUserFormValues>
+    props: FormikProps<UpdateUserFormValues>,
   ): JSX.Element => (
     <Form>
       {renderRegisterCompleteHelpText}

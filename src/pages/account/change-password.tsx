@@ -30,6 +30,7 @@ const ChangePasswordPage: NextPage = () => {
     onError,
     unexpectedError,
   } = useForm<ChangePasswordFormValues>();
+
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
@@ -66,7 +67,7 @@ const ChangePasswordPage: NextPage = () => {
   });
 
   const handleSubmit = async (
-    values: ChangePasswordFormValues
+    values: ChangePasswordFormValues,
   ): Promise<void> => {
     const { oldPassword, newPassword } = values;
     await changePassword({ variables: { oldPassword, newPassword } });

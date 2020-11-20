@@ -10,7 +10,7 @@ export const SettingsModal: React.FC = () => {
   const { t } = useTranslation();
 
   const { renderSettingsMenuList, settingsOpen, toggleSettings } = useSettings(
-    true
+    true,
   );
 
   const handleClose = (): void => toggleSettings(false);

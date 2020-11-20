@@ -39,9 +39,8 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
   const { isMobileOrTablet, isDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
-  const fileName: string = R.propOr('', 'name', field.value);
+  const fileName = R.propOr('', 'name', field.value);
   const fileInputRef = useRef<HTMLInputElement>(null!);
-
   const handleFileInputClick = (): false | void => fileInputRef.current.click();
 
   const preventDefaultDragBehavior = (e: DragEvent<HTMLElement>): void =>
@@ -55,8 +54,10 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
     }
   };
 
-  const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>): void =>
-    validateAndSetFile(R.path(['currentTarget', 'files', '0'], e) as File);
+  const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const file: File = R.path(['currentTarget', 'files', '0'], e);
+    validateAndSetFile(file);
+  };
 
   const handleFileDrop = (e: DragEvent<HTMLElement>): void => {
     e.preventDefault();

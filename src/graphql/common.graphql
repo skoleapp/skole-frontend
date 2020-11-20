@@ -1,863 +1,915 @@
 query Activities($page: Int, $pageSize: Int) {
-    activities(page: $page, pageSize: $pageSize) {
-        page
-        pages
-        hasNext
-        hasPrev
-        count
-        objects {
-            id
-            description
-            read
-            targetUser {
-                id
-                username
-                avatarThumbnail
-            }
-            course {
-                id
-            }
-            resource {
-                id
-            }
-            comment {
-                id
-            }
-        }
+  activities(page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      description
+      read
+      targetUser {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+      }
+      resource {
+        id
+      }
+      comment {
+        id
+      }
     }
+  }
 }
 
 query ActivityPreview {
-    activityPreview {
-        id
-        description
-        read
-        targetUser {
-            id
-            username
-            avatarThumbnail
-        }
-        course {
-            id
-        }
-        resource {
-            id
-        }
-        comment {
-            id
-        }
+  activityPreview {
+    id
+    description
+    read
+    targetUser {
+      id
+      username
+      avatarThumbnail
     }
+    course {
+      id
+    }
+    resource {
+      id
+    }
+    comment {
+      id
+    }
+  }
 }
 
 mutation MarkActivityAsRead($id: ID, $read: Boolean) {
-    markActivityAsRead(input: { id: $id, read: $read }) {
-        errors {
-            field
-            messages
-        }
-        activity {
-            id
-            description
-            read
-            targetUser {
-                id
-                username
-                avatarThumbnail
-            }
-            course {
-                id
-            }
-            resource {
-                id
-            }
-            comment {
-                id
-            }
-        }
+  markActivityAsRead(input: { id: $id, read: $read }) {
+    errors {
+      field
+      messages
     }
+    activity {
+      id
+      description
+      read
+      targetUser {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+      }
+      resource {
+        id
+      }
+      comment {
+        id
+      }
+    }
+  }
 }
 
 # Need to come up with some other name as `MarkAllActivitiesAsRead` since the GraphQL code generator creates duplicate identifiers if we use that one.
 mutation GraphQLMarkAllActivitiesAsRead {
-    markAllActivitiesAsRead {
-        errors {
-            field
-            messages
-        }
-        activities {
-            page
-            pages
-            hasNext
-            hasPrev
-            count
-            objects {
-                id
-                description
-                read
-                targetUser {
-                    id
-                    username
-                    avatarThumbnail
-                }
-                course {
-                    id
-                }
-                resource {
-                    id
-                }
-                comment {
-                    id
-                }
-            }
-        }
+  markAllActivitiesAsRead {
+    errors {
+      field
+      messages
     }
+    activities {
+      page
+      pages
+      hasNext
+      hasPrev
+      count
+      objects {
+        id
+        description
+        read
+        targetUser {
+          id
+          username
+          avatarThumbnail
+        }
+        course {
+          id
+        }
+        resource {
+          id
+        }
+        comment {
+          id
+        }
+      }
+    }
+  }
 }
 
 query AutocompleteCities {
-    autocompleteCities {
-        id
-        name
-    }
+  autocompleteCities {
+    id
+    name
+  }
 }
 
-mutation CreateComment($text: String!, $attachment: String, $course: ID, $resource: ID, $comment: ID) {
-    createComment(
-        input: { text: $text, attachment: $attachment, course: $course, resource: $resource, comment: $comment }
-    ) {
-        successMessage
-        comment {
-            id
-            user {
-                id
-                username
-                avatarThumbnail
-            }
-            text
-            attachment
-            modified
-            created
-            replyComments {
-                id
-                user {
-                    id
-                    username
-                    avatarThumbnail
-                }
-                text
-                attachment
-                modified
-                created
-                score
-                vote {
-                    id
-                    status
-                }
-            }
-            score
-            vote {
-                id
-                status
-            }
-        }
-        errors {
-            field
-            messages
-        }
+mutation CreateComment(
+  $text: String!
+  $attachment: String
+  $course: ID
+  $resource: ID
+  $comment: ID
+) {
+  createComment(
+    input: {
+      text: $text
+      attachment: $attachment
+      course: $course
+      resource: $resource
+      comment: $comment
     }
+  ) {
+    successMessage
+    comment {
+      id
+      user {
+        id
+        username
+        avatarThumbnail
+      }
+      text
+      attachment
+      modified
+      created
+      replyComments {
+        id
+        user {
+          id
+          username
+          avatarThumbnail
+        }
+        text
+        attachment
+        modified
+        created
+        score
+        vote {
+          id
+          status
+        }
+      }
+      score
+      vote {
+        id
+        status
+      }
+    }
+    errors {
+      field
+      messages
+    }
+  }
 }
 
 mutation DeleteComment($id: ID) {
-    deleteComment(input: { id: $id }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  deleteComment(input: { id: $id }) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
-mutation CreateContactMessage($subject: String!, $name: String, $email: String!, $message: String!) {
-    createContactMessage(input: { subject: $subject, name: $name, email: $email, message: $message }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+mutation CreateContactMessage(
+  $subject: String!
+  $name: String
+  $email: String!
+  $message: String!
+) {
+  createContactMessage(
+    input: { subject: $subject, name: $name, email: $email, message: $message }
+  ) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 query AutocompleteCountries {
-    autocompleteCountries {
-        id
-        name
-    }
+  autocompleteCountries {
+    id
+    name
+  }
 }
 
 query Courses(
-    $courseName: String
-    $courseCode: String
-    $school: ID
-    $subject: ID
-    $schoolType: ID
-    $country: ID
-    $city: ID
-    $ordering: String
-    $page: Int
-    $pageSize: Int
+  $courseName: String
+  $courseCode: String
+  $school: ID
+  $subject: ID
+  $schoolType: ID
+  $country: ID
+  $city: ID
+  $ordering: String
+  $page: Int
+  $pageSize: Int
 ) {
-    courses(
-        courseName: $courseName
-        courseCode: $courseCode
-        school: $school
-        subject: $subject
-        schoolType: $schoolType
-        country: $country
-        city: $city
-        ordering: $ordering
-        page: $page
-        pageSize: $pageSize
-    ) {
-        page
-        pages
-        hasPrev
-        hasNext
-        count
-        objects {
-            id
-            name
-            code
-            score
-            starCount
-            resourceCount
-            commentCount
-            user {
-                id
-                username
-            }
-        }
-    }
-    school(id: $school) {
+  courses(
+    courseName: $courseName
+    courseCode: $courseCode
+    school: $school
+    subject: $subject
+    schoolType: $schoolType
+    country: $country
+    city: $city
+    ordering: $ordering
+    page: $page
+    pageSize: $pageSize
+  ) {
+    page
+    pages
+    hasPrev
+    hasNext
+    count
+    objects {
+      id
+      name
+      code
+      score
+      starCount
+      resourceCount
+      commentCount
+      user {
         id
-        name
+        username
+      }
     }
-    subject(id: $subject) {
-        id
-        name
-    }
-    schoolType(id: $schoolType) {
-        id
-        name
-    }
-    country(id: $country) {
-        id
-        name
-    }
-    city(id: $city) {
-        id
-        name
-    }
+  }
+  school(id: $school) {
+    id
+    name
+  }
+  subject(id: $subject) {
+    id
+    name
+  }
+  schoolType(id: $schoolType) {
+    id
+    name
+  }
+  country(id: $country) {
+    id
+    name
+  }
+  city(id: $city) {
+    id
+    name
+  }
 }
 
 query Course($id: ID, $page: Int, $pageSize: Int) {
-    course(id: $id) {
+  course(id: $id) {
+    id
+    name
+    code
+    modified
+    created
+    score
+    starred
+    vote {
+      id
+      status
+    }
+    subjects {
+      id
+      name
+    }
+    school {
+      id
+      name
+    }
+    user {
+      id
+      username
+    }
+    comments {
+      id
+      user {
         id
-        name
-        code
+        username
+        avatarThumbnail
+      }
+      text
+      attachment
+      modified
+      created
+      replyComments {
+        id
+        user {
+          id
+          username
+          avatarThumbnail
+        }
+        text
+        attachment
         modified
         created
         score
-        starred
         vote {
-            id
-            status
+          id
+          status
         }
-        subjects {
-            id
-            name
-        }
-        school {
-            id
-            name
-        }
-        user {
-            id
-            username
-        }
-        comments {
-            id
-            user {
-                id
-                username
-                avatarThumbnail
-            }
-            text
-            attachment
-            modified
-            created
-            replyComments {
-                id
-                user {
-                    id
-                    username
-                    avatarThumbnail
-                }
-                text
-                attachment
-                modified
-                created
-                score
-                vote {
-                    id
-                    status
-                }
-            }
-            score
-            vote {
-                id
-                status
-            }
-        }
-    }
-    resources(course: $id, page: $page, pageSize: $pageSize) {
-        page
-        pages
-        hasNext
-        hasPrev
-        count
-        objects {
-            id
-            title
-            score
-            date
-            starCount
-            commentCount
-            downloads
-            resourceType {
-                id
-            }
-        }
-    }
-    resourceTypes {
+      }
+      score
+      vote {
         id
-        name
+        status
+      }
     }
+  }
+  resources(course: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      title
+      score
+      date
+      starCount
+      commentCount
+      downloads
+      resourceType {
+        id
+      }
+    }
+  }
+  resourceTypes {
+    id
+    name
+  }
 }
 
 query CreateCourseAutocompleteData($school: ID) {
-    school(id: $school) {
-        id
-        name
-    }
+  school(id: $school) {
+    id
+    name
+  }
 }
 
 query AutocompleteCourses($school: ID, $name: String) {
-    autocompleteCourses(school: $school, name: $name) {
-        id
-        name
-    }
+  autocompleteCourses(school: $school, name: $name) {
+    id
+    name
+  }
 }
 
-mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
-    createCourse(input: { name: $courseName, code: $courseCode, subjects: $subjects, school: $school }) {
-        successMessage
-        course {
-            id
-        }
-        errors {
-            field
-            messages
-        }
+mutation CreateCourse(
+  $courseName: String!
+  $courseCode: String
+  $subjects: [ID]
+  $school: ID!
+) {
+  createCourse(
+    input: {
+      name: $courseName
+      code: $courseCode
+      subjects: $subjects
+      school: $school
     }
+  ) {
+    successMessage
+    course {
+      id
+    }
+    errors {
+      field
+      messages
+    }
+  }
 }
 
 mutation DeleteCourse($id: ID) {
-    deleteCourse(input: { id: $id }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  deleteCourse(input: { id: $id }) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 query Resource($id: ID) {
-    resource(id: $id) {
-        id
-        title
-        file
-        date
-        modified
-        created
-        score
-        starred
-        downloads
-        resourceType {
-            id
-            name
-        }
-        school {
-            id
-            name
-        }
-        course {
-            id
-            name
-        }
-        user {
-            id
-            username
-        }
-        vote {
-            id
-            status
-        }
-        comments {
-            id
-            text
-            attachment
-            modified
-            created
-            modified
-            created
-            score
-            user {
-                id
-                username
-                avatarThumbnail
-            }
-            vote {
-                id
-                status
-            }
-            replyComments {
-                id
-                user {
-                    id
-                    username
-                    avatarThumbnail
-                }
-                text
-                attachment
-                score
-                vote {
-                    id
-                    status
-                }
-            }
-        }
+  resource(id: $id) {
+    id
+    title
+    file
+    date
+    modified
+    created
+    score
+    starred
+    downloads
+    resourceType {
+      id
+      name
     }
+    school {
+      id
+      name
+    }
+    course {
+      id
+      name
+    }
+    user {
+      id
+      username
+    }
+    vote {
+      id
+      status
+    }
+    comments {
+      id
+      text
+      attachment
+      modified
+      created
+      modified
+      created
+      score
+      user {
+        id
+        username
+        avatarThumbnail
+      }
+      vote {
+        id
+        status
+      }
+      replyComments {
+        id
+        user {
+          id
+          username
+          avatarThumbnail
+        }
+        text
+        attachment
+        score
+        vote {
+          id
+          status
+        }
+      }
+    }
+  }
 }
 
 query CreateResourceAutocompleteData($school: ID, $course: ID) {
-    school(id: $school) {
-        id
-        name
-    }
-    course(id: $course) {
-        id
-        name
-    }
+  school(id: $school) {
+    id
+    name
+  }
+  course(id: $course) {
+    id
+    name
+  }
 }
 
 query AutocompleteResourceTypes {
-    autocompleteResourceTypes {
-        id
-        name
-    }
+  autocompleteResourceTypes {
+    id
+    name
+  }
 }
 
-mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
-    createResource(input: { title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file }) {
-        successMessage
-        resource {
-            id
-        }
-        errors {
-            field
-            messages
-        }
+mutation CreateResource(
+  $resourceTitle: String!
+  $resourceType: ID!
+  $course: ID!
+  $file: String!
+) {
+  createResource(
+    input: {
+      title: $resourceTitle
+      resourceType: $resourceType
+      course: $course
+      file: $file
     }
+  ) {
+    successMessage
+    resource {
+      id
+    }
+    errors {
+      field
+      messages
+    }
+  }
 }
 
 mutation DeleteResource($id: ID) {
-    deleteResource(input: { id: $id }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  deleteResource(input: { id: $id }) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 mutation DownloadResource($id: ID) {
-    downloadResource(input: { id: $id }) {
-        resource {
-            downloads
-        }
-        errors {
-            field
-            messages
-        }
+  downloadResource(input: { id: $id }) {
+    resource {
+      downloads
     }
+    errors {
+      field
+      messages
+    }
+  }
 }
 
 query School($id: ID, $page: Int, $pageSize: Int) {
-    school(id: $id) {
+  school(id: $id) {
+    id
+    name
+    city {
+      id
+      name
+    }
+    country {
+      id
+      name
+    }
+    schoolType {
+      id
+      name
+    }
+  }
+  subjects(school: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      name
+      courseCount
+      resourceCount
+    }
+  }
+  courses(school: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      name
+      code
+      score
+      starCount
+      resourceCount
+      commentCount
+      user {
         id
-        name
-        city {
-            id
-            name
-        }
-        country {
-            id
-            name
-        }
-        schoolType {
-            id
-            name
-        }
+        username
+      }
     }
-    subjects(school: $id, page: $page, pageSize: $pageSize) {
-        page
-        pages
-        hasNext
-        hasPrev
-        count
-        objects {
-            id
-            name
-            courseCount
-            resourceCount
-        }
-    }
-    courses(school: $id, page: $page, pageSize: $pageSize) {
-        page
-        pages
-        hasNext
-        hasPrev
-        count
-        objects {
-            id
-            name
-            code
-            score
-            starCount
-            resourceCount
-            commentCount
-            user {
-                id
-                username
-            }
-        }
-    }
+  }
 }
 
 query AutocompleteSchools($name: String) {
-    autocompleteSchools(name: $name) {
-        id
-        name
-    }
+  autocompleteSchools(name: $name) {
+    id
+    name
+  }
 }
 
 query AutocompleteSchoolTypes {
-    autocompleteSchoolTypes {
-        id
-        name
-    }
+  autocompleteSchoolTypes {
+    id
+    name
+  }
 }
 
 query Starred($page: Int, $pageSize: Int) {
-    starredCourses(page: $page, pageSize: $pageSize) {
-        page
-        pages
-        hasNext
-        hasPrev
-        count
-        objects {
-            id
-            name
-            code
-            score
-            starCount
-            resourceCount
-            commentCount
-            user {
-                id
-                username
-            }
-        }
-    }
-    starredResources {
-        page
-        pages
-        hasNext
-        hasPrev
-        count
-        objects {
-            id
-            title
-            score
-            date
-            starCount
-            commentCount
-            downloads
-            resourceType {
-                id
-            }
-        }
-    }
-    resourceTypes {
+  starredCourses(page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      name
+      code
+      score
+      starCount
+      resourceCount
+      commentCount
+      user {
         id
-        name
+        username
+      }
     }
+  }
+  starredResources {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      title
+      score
+      date
+      starCount
+      commentCount
+      downloads
+      resourceType {
+        id
+      }
+    }
+  }
+  resourceTypes {
+    id
+    name
+  }
 }
 
 mutation Star($course: ID, $resource: ID) {
-    star(input: { course: $course, resource: $resource }) {
-        starred
-        errors {
-            field
-            messages
-        }
+  star(input: { course: $course, resource: $resource }) {
+    starred
+    errors {
+      field
+      messages
     }
+  }
 }
 
 query AutocompleteSubjects {
-    autocompleteSubjects {
-        id
-        name
-    }
+  autocompleteSubjects {
+    id
+    name
+  }
 }
 
 query UserMe {
-    userMe {
-        id
-        username
-        email
-        title
-        bio
-        avatar
-        score
-        created
-        verified
-        school {
-            id
-            name
-        }
-        subject {
-            id
-            name
-        }
+  userMe {
+    id
+    username
+    email
+    title
+    bio
+    avatar
+    score
+    created
+    verified
+    school {
+      id
+      name
     }
+    subject {
+      id
+      name
+    }
+  }
 }
 
 query User($id: ID, $page: Int, $pageSize: Int) {
-    user(id: $id) {
+  user(id: $id) {
+    id
+    username
+    title
+    bio
+    avatar
+    score
+    created
+    verified
+    rank
+    badges {
+      id
+      name
+      description
+    }
+  }
+  courses(user: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      name
+      code
+      score
+      starCount
+      resourceCount
+      commentCount
+      user {
         id
         username
-        title
-        bio
-        avatar
-        score
-        created
-        verified
-        rank
-        badges {
-            id
-            name
-            description
-        }
+      }
     }
-    courses(user: $id, page: $page, pageSize: $pageSize) {
-        page
-        pages
-        hasNext
-        hasPrev
-        count
-        objects {
-            id
-            name
-            code
-            score
-            starCount
-            resourceCount
-            commentCount
-            user {
-                id
-                username
-            }
-        }
-    }
-    resources(user: $id, page: $page, pageSize: $pageSize) {
-        page
-        pages
-        hasNext
-        hasPrev
-        count
-        objects {
-            id
-            title
-            score
-            date
-            starCount
-            commentCount
-            downloads
-            resourceType {
-                id
-            }
-        }
-    }
-    resourceTypes {
+  }
+  resources(user: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      title
+      score
+      date
+      starCount
+      commentCount
+      downloads
+      resourceType {
         id
-        name
+      }
     }
+  }
+  resourceTypes {
+    id
+    name
+  }
 }
 
 mutation Register($username: String!, $email: String!, $password: String!) {
-    register(input: { username: $username, email: $email, password: $password }) {
-        errors {
-            field
-            messages
-        }
+  register(input: { username: $username, email: $email, password: $password }) {
+    errors {
+      field
+      messages
     }
-    login(input: { usernameOrEmail: $username, password: $password }) {
-        user {
-            username
-            email
-        }
-        errors {
-            field
-            messages
-        }
+  }
+  login(input: { usernameOrEmail: $username, password: $password }) {
+    user {
+      username
+      email
     }
+    errors {
+      field
+      messages
+    }
+  }
 }
 
 mutation Login($usernameOrEmail: String!, $password: String!) {
-    login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 # Need to come up with some other name as `Logout` since the GraphQL code generator creates duplicate identifiers if we use that one.
 mutation GraphQLLogout {
-    logout {
-        deleted
-    }
+  logout {
+    deleted
+  }
 }
 
 mutation ResendVerificationEmail($email: String!) {
-    resendVerificationEmail(input: { email: $email }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  resendVerificationEmail(input: { email: $email }) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 mutation VerifyAccount($token: String) {
-    verifyAccount(input: { token: $token }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  verifyAccount(input: { token: $token }) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 mutation SendPasswordResetEmail($email: String!) {
-    sendPasswordResetEmail(input: { email: $email }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  sendPasswordResetEmail(input: { email: $email }) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 mutation ResetPassword($token: String, $newPassword: String!) {
-    resetPassword(input: { token: $token, newPassword: $newPassword }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  resetPassword(input: { token: $token, newPassword: $newPassword }) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 mutation UpdateUser(
-    $username: String!
-    $email: String!
-    $title: String
-    $bio: String
-    $avatar: String
-    $school: ID
-    $subject: ID
+  $username: String!
+  $email: String!
+  $title: String
+  $bio: String
+  $avatar: String
+  $school: ID
+  $subject: ID
 ) {
-    updateUser(
-        input: {
-            username: $username
-            email: $email
-            title: $title
-            bio: $bio
-            avatar: $avatar
-            school: $school
-            subject: $subject
-        }
-    ) {
-        successMessage
-        user {
-            id
-            username
-            email
-            title
-            bio
-            avatar
-            score
-            created
-        }
-        errors {
-            field
-            messages
-        }
+  updateUser(
+    input: {
+      username: $username
+      email: $email
+      title: $title
+      bio: $bio
+      avatar: $avatar
+      school: $school
+      subject: $subject
     }
+  ) {
+    successMessage
+    user {
+      id
+      username
+      email
+      title
+      bio
+      avatar
+      score
+      created
+    }
+    errors {
+      field
+      messages
+    }
+  }
 }
 
 mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
-    changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  changePassword(
+    input: { oldPassword: $oldPassword, newPassword: $newPassword }
+  ) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 mutation DeleteUser($password: String!) {
-    deleteUser(input: { password: $password }) {
-        successMessage
-        errors {
-            field
-            messages
-        }
+  deleteUser(input: { password: $password }) {
+    successMessage
+    errors {
+      field
+      messages
     }
+  }
 }
 
 mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
-    vote(input: { status: $status, comment: $comment, course: $course, resource: $resource }) {
-        vote {
-            id
-            status
-        }
-        targetScore
-        errors {
-            field
-            messages
-        }
+  vote(
+    input: {
+      status: $status
+      comment: $comment
+      course: $course
+      resource: $resource
     }
+  ) {
+    vote {
+      id
+      status
+    }
+    targetScore
+    errors {
+      field
+      messages
+    }
+  }
 }

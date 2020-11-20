@@ -15,5 +15,5 @@ export const IconButtonLink = forwardRef<HTMLButtonElement, Props>(
         <Icon />
       </IconButton>
     </Link>
-  )
+  ),
 );

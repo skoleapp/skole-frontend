@@ -210,7 +210,7 @@ const IndexPage: NextPage = () => {
           </CardActionArea>
         </Card>
       </Link>
-    )
+    ),
   );
 
   const renderShortcuts = (

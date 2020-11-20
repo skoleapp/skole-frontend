@@ -100,7 +100,7 @@ export const SettingsLayout: React.FC<Props> = ({
     <CardContent
       className={clsx(
         classes.container,
-        disablePadding && classes.disablePadding
+        disablePadding && classes.disablePadding,
       )}
     >
       <Grid container alignItems="center" className={classes.container}>
@@ -126,7 +126,7 @@ export const SettingsLayout: React.FC<Props> = ({
       container
       className={clsx(
         classes.container,
-        isMobileOrTablet && classes.disablePadding
+        isMobileOrTablet && classes.disablePadding,
       )}
     >
       <Paper className={clsx(classes.container, classes.paperContainer)}>

@@ -36,6 +36,7 @@ export const useLanguageSelector = (): UseLanguageSelector => {
   const classes = useStyles();
   const { t, lang } = useTranslation();
   const [value, setValue] = useState(lang);
+
   const {
     toggleLanguageSelector,
     languageSelectorOpen,
@@ -45,18 +46,18 @@ export const useLanguageSelector = (): UseLanguageSelector => {
     setValue(lang);
   }, [lang]);
 
-  const languageToFlag = (isoCode: string): string => {
-    return typeof String.fromCodePoint !== 'undefined'
+  const languageToFlag = (isoCode: string): string =>
+    typeof String.fromCodePoint !== 'undefined'
       ? isoCode
           .toUpperCase()
           .replace(/./g, (char) =>
-            String.fromCodePoint(char.charCodeAt(0) + 127397)
+            String.fromCodePoint(char.charCodeAt(0) + 127397),
           )
       : isoCode;
-  };
 
   const openLanguageMenu = (): void => toggleLanguageSelector(true);
   const language = languages.find((c) => c.value === value) as Language;
+
   const renderCurrentFlag =
     !!language && !!language.code
       ? languageToFlag(language.code)

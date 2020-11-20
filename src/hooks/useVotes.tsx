@@ -44,13 +44,14 @@ export const useVotes = ({
   isOwner,
   variables,
 }: UseVotesProps): UseVotes => {
-  const { t } = useTranslation();
   const {
     userMe,
     verified,
     loginRequiredTooltip,
     verificationRequiredTooltip,
   } = useAuthContext();
+
+  const { t } = useTranslation();
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [score, setScore] = useState(initialScore);
   const { toggleNotification } = useNotificationsContext();
@@ -89,7 +90,7 @@ export const useVotes = ({
   });
 
   const handleVote = (status: number) => async (
-    e: SyntheticEvent
+    e: SyntheticEvent,
   ): Promise<void> => {
     e.stopPropagation(); // Prevent opening comment thread for top-level comments.
     await vote({ variables: { status, ...variables } });

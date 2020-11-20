@@ -8,7 +8,7 @@ import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
 // Sync authentication between pages.
 // Wrap all pages that require authentication with this.
 export const withAuth = <T extends Record<symbol, unknown>>(
-  PageComponent: NextPage<T>
+  PageComponent: NextPage<T>,
 ): NextPage => {
   const withAuth: NextPage = (pageProps) => {
     const { userMe, authLoading, authNetworkError } = useUserMe();
@@ -26,8 +26,9 @@ export const withAuth = <T extends Record<symbol, unknown>>(
       if (shouldRedirect) {
         const query = asPath !== urls.home ? { next: asPath } : {};
         const existingUser = localStorage.getItem('user');
+
         const getStartedPageVisited = !!localStorage.getItem(
-          GET_STARTED_PAGE_VISITED_KEY
+          GET_STARTED_PAGE_VISITED_KEY,
         );
 
         // Only redirect new users to get started page (users who have already logged in at some point).

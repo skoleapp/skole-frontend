@@ -5,7 +5,7 @@ import React from 'react';
 
 // Provide discussion context for child components.
 export const withDiscussion = <T extends Record<symbol, unknown>>(
-  PageComponent: NextPage<T>
+  PageComponent: NextPage<T>,
 ): NextPage => {
   const WithDiscussion: NextPage = (pageProps) => (
     <DiscussionContextProvider>

@@ -22,13 +22,15 @@ export const PaginatedTable: React.FC<Props> = ({
   renderTableBody,
 }) => {
   const { query, pathname } = useRouter();
+
   const page = Number(R.propOr(1, 'page', query));
+
   const rowsPerPage = Number(
-    R.propOr(RESULTS_PER_PAGE_OPTIONS[0], 'pageSize', query)
+    R.propOr(RESULTS_PER_PAGE_OPTIONS[0], 'pageSize', query),
   );
 
   const handleReloadPage = async (
-    values: Record<symbol, unknown>
+    values: Record<symbol, unknown>,
   ): Promise<void> => {
     const query = getQueryWithPagination({ query: values, extraFilters });
     await Router.push({ pathname, query });
@@ -36,13 +38,13 @@ export const PaginatedTable: React.FC<Props> = ({
 
   const handleChangePage = async (
     _e: MouseEvent<HTMLButtonElement> | null,
-    page: number
+    page: number,
   ): Promise<void> => {
     await handleReloadPage({ ...query, page: page + 1 }); // Backend indexing starts from 1.
   };
 
   const handleChangeRowsPerPage = async (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): Promise<void> => {
     const pageSize = parseInt(e.target.value);
     await handleReloadPage({ ...query, pageSize });

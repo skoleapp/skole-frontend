@@ -26,7 +26,7 @@ export const Notifications: React.FC = () => {
 
   const handleClose = (
     _e: SyntheticEvent | MouseEvent,
-    reason?: string
+    reason?: string,
   ): void => {
     if (reason !== 'clickaway') {
       toggleNotification(null);

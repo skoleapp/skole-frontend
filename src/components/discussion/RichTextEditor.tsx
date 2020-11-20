@@ -120,8 +120,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   const [editorState, setEditorState] = useState(() =>
     EditorState.createWithContent(
       ContentState.createFromText(values.text),
-      decorator
-    )
+      decorator,
+    ),
   );
 
   const {
@@ -290,7 +290,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     const contentStateWithEntity = contentState.createEntity(
       'LINK',
       'MUTABLE',
-      { url: URL }
+      { url: URL },
     );
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
     const newEditorState = EditorState.set(editorState, {
@@ -300,8 +300,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
       RichUtils.toggleLink(
         newEditorState,
         newEditorState.getSelection(),
-        entityKey
-      )
+        entityKey,
+      ),
     );
     setURLInputOpen(false);
     setURL('');
@@ -320,7 +320,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
   const handleKeyCommand = (
     command: string,
-    editorState: EditorState
+    editorState: EditorState,
   ): DraftHandleValue => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
 
@@ -368,7 +368,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   };
 
   const getKeyBinding = (
-    e: KeyboardEvent<Record<symbol, unknown>>
+    e: KeyboardEvent<Record<symbol, unknown>>,
   ): string | null => {
     switch (e.keyCode) {
       // CMD + Shift + X
@@ -409,7 +409,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
   const handleReturn = (
     e: KeyboardEvent<Record<symbol, unknown>>,
-    editorState: EditorState
+    editorState: EditorState,
   ): DraftHandleValue => {
     if (e.shiftKey) {
       setEditorState(RichUtils.insertSoftNewline(editorState));
@@ -469,7 +469,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
           </IconButton>
         </Typography>
       </Tooltip>
-    )
+    ),
   );
 
   const renderLinkButton = (
@@ -520,7 +520,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
           </IconButton>
         </Typography>
       </Tooltip>
-    )
+    ),
   );
 
   const renderSendButton = (
@@ -638,7 +638,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     <Box
       className={clsx(
         classes.root,
-        hidePlaceholder && classes.placeholderHidden
+        hidePlaceholder && classes.placeholderHidden,
       )}
     >
       {renderTopToolbar}

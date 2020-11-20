@@ -27,13 +27,16 @@ export const useSearch = (): UseSearch => {
   const fullWidth = true;
 
   // Construct a query from user's selected school and subject.
-  const school = R.pathOr(undefined, ['school', 'id'], userMe);
-  const subject = R.pathOr(undefined, ['subject', 'id'], userMe);
+  const school = R.path(['school', 'id'], userMe);
+  const subject = R.path(['subject', 'id'], userMe);
+
   const query: ParsedUrlQueryInput = R.pickBy((val: string): boolean => !!val, {
     school,
     subject,
   });
+
   const searchUrl = { pathname: urls.search, query };
+
   const onChange = (e: ChangeEvent<HTMLInputElement>): void =>
     setValue(e.target.value);
 

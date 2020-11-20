@@ -54,7 +54,7 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
   );
 
   const renderCourseCreator = (
-    course: CourseObjectType
+    course: CourseObjectType,
   ): JSX.Element | string =>
     course.user ? (
       <TextLink href={urls.user(course.user.id)} color="primary">

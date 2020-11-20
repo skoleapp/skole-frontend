@@ -67,7 +67,7 @@ export const MapInteraction: React.FC = ({ children }) => {
   const [fullscreen, setFullscreen] = useState(true);
 
   const [transformContainerClasses, setTransformContainerClasses] = useState(
-    ''
+    '',
   );
 
   // Change cursor mode when CTRL key is pressed.
@@ -114,7 +114,7 @@ export const MapInteraction: React.FC = ({ children }) => {
   // From a given screen point return it as a point in the coordinate system of the map interaction component.
   const getClientPosToTranslatedPos = (
     { x, y }: PdfTranslation,
-    _translation: PdfTranslation = translation
+    _translation: PdfTranslation = translation,
   ): PdfTranslation => {
     const origin = getTranslatedOrigin(_translation);
 
@@ -148,11 +148,11 @@ export const MapInteraction: React.FC = ({ children }) => {
     // Calculate mid points.
     const startMidpoint = getMidPoint(
       getTouchPoint(startTouches[0]),
-      getTouchPoint(startTouches[1])
+      getTouchPoint(startTouches[1]),
     );
     const newMidPoint = getMidPoint(
       getTouchPoint(newTouches[0]),
-      getTouchPoint(newTouches[1])
+      getTouchPoint(newTouches[1]),
     );
 
     // The amount we need to translate by in order for the mid point to stay in the middle (before thinking about scaling factor).
@@ -164,7 +164,7 @@ export const MapInteraction: React.FC = ({ children }) => {
     // The point originally in the middle of the fingers on the initial zoom start.
     const focalPoint = getClientPosToTranslatedPos(
       startMidpoint,
-      startTranslation
+      startTranslation,
     );
     const { scrollTop } = getMapContainerNode();
 
@@ -245,7 +245,7 @@ export const MapInteraction: React.FC = ({ children }) => {
   const pageListener = (): void => {
     if (document.activeElement !== pageNumberInputRef.current) {
       const page = Array.from(
-        document.querySelectorAll('.react-pdf__Page')
+        document.querySelectorAll('.react-pdf__Page'),
       ).find(elementInViewport);
       const newPageNumber = page && page.getAttribute('data-page-number');
       setPageNumber(Number(newPageNumber));
@@ -322,17 +322,17 @@ export const MapInteraction: React.FC = ({ children }) => {
       mapContainerNode.addEventListener(
         'touchstart',
         onTouchStart as EventListener,
-        { passive: true }
+        { passive: true },
       );
 
       mapContainerNode.addEventListener(
         'touchmove',
-        onTouchMove as EventListener
+        onTouchMove as EventListener,
       );
       mapContainerNode.addEventListener(
         'touchend',
         onTouchEnd as EventListener,
-        { passive: true }
+        { passive: true },
       );
     }
 
@@ -340,15 +340,15 @@ export const MapInteraction: React.FC = ({ children }) => {
       mapContainerNode.removeEventListener('wheel', onWheel as EventListener);
       mapContainerNode.removeEventListener(
         'touchstart',
-        onTouchStart as EventListener
+        onTouchStart as EventListener,
       );
       mapContainerNode.removeEventListener(
         'touchmove',
-        onTouchMove as EventListener
+        onTouchMove as EventListener,
       );
       mapContainerNode.removeEventListener(
         'touchend',
-        onTouchEnd as EventListener
+        onTouchEnd as EventListener,
       );
     };
   }, [scale, translation, drawMode, controlsDisabled]);
@@ -372,11 +372,11 @@ export const MapInteraction: React.FC = ({ children }) => {
     return (): void => {
       mapContainerNode.removeEventListener(
         'scroll',
-        pageListener as EventListener
+        pageListener as EventListener,
       );
       mapContainerNode.removeEventListener(
         'resize',
-        pageListener as EventListener
+        pageListener as EventListener,
       );
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);

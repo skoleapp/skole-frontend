@@ -15,7 +15,7 @@ import {
 } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { LoginMutation, useLoginMutation, UserObjectType } from 'generated';
+import { LoginMutation, useLoginMutation } from 'generated';
 import { withNoAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext, useLanguageSelector } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -53,11 +53,19 @@ const LoginPage: NextPage = () => {
   const { query } = useRouter();
   const { renderLanguageButton } = useLanguageSelector();
   const { toggleNotification } = useNotificationsContext();
-  const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
+  const [existingUser, setExistingUser] = useState(null);
+  const existingUserAvatar = mediaUrl(R.propOr('', 'avatar', existingUser));
+
+  const existingUserGreeting = t('login:existingUserGreeting', {
+    username: R.propOr('-', 'username', existingUser),
+  });
+
   const validExistingUser =
     !!R.propOr(false, 'username', existingUser) &&
     !!R.propOr(false, 'email', existingUser);
+
   const context = useLanguageHeaderContext();
+
   const {
     formRef,
     resetForm,
@@ -109,11 +117,8 @@ const LoginPage: NextPage = () => {
 
   const handleSubmit = async (values: LoginFormValues): Promise<void> => {
     const { usernameOrEmail: _usernameOrEmail, password } = values;
-    const usernameOrEmail: string = R.propOr(
-      _usernameOrEmail,
-      'email',
-      existingUser
-    );
+
+    const usernameOrEmail = R.propOr(_usernameOrEmail, 'email', existingUser);
 
     await loginMutation({
       variables: { usernameOrEmail, password },
@@ -128,14 +133,9 @@ const LoginPage: NextPage = () => {
 
   const renderExistingUserGreeting = (
     <Grid container alignItems="center" direction="column">
-      <Avatar
-        className={classes.avatar}
-        src={mediaUrl(R.propOr('', 'avatar', existingUser))}
-      />
+      <Avatar className={classes.avatar} src={existingUserAvatar} />
       <Typography variant="subtitle1" gutterBottom>
-        {t('login:existingUserGreeting', {
-          username: R.propOr('-', 'username', existingUser),
-        })}
+        {existingUserGreeting}
       </Typography>
     </Grid>
   );
@@ -149,11 +149,11 @@ const LoginPage: NextPage = () => {
   );
 
   const renderPasswordField = (
-    props: FormikProps<LoginFormValues>
+    props: FormikProps<LoginFormValues>,
   ): JSX.Element => <PasswordField {...props} />;
 
   const renderFormSubmitSection = (
-    props: FormikProps<LoginFormValues>
+    props: FormikProps<LoginFormValues>,
   ): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:login')} {...props} />
   );
@@ -179,7 +179,7 @@ const LoginPage: NextPage = () => {
   );
 
   const renderExistingUserForm = (
-    props: FormikProps<LoginFormValues>
+    props: FormikProps<LoginFormValues>,
   ): JSX.Element => (
     <Form>
       {renderExistingUserGreeting}
@@ -192,7 +192,7 @@ const LoginPage: NextPage = () => {
   );
 
   const renderNewUserForm = (
-    props: FormikProps<LoginFormValues>
+    props: FormikProps<LoginFormValues>,
   ): JSX.Element => (
     <Form>
       {renderUsernameOrEmailField}

@@ -15,7 +15,6 @@ import {
   AutocompleteResourceTypesDocument,
   AutocompleteSchoolsDocument,
   CourseObjectType,
-  CreateResourceAutocompleteDataQueryVariables,
   CreateResourceMutation,
   SchoolObjectType,
   useCreateResourceAutocompleteDataQuery,
@@ -44,17 +43,16 @@ const UploadResourcePage: NextPage = () => {
   const { query } = useRouter();
   const { toggleNotification } = useNotificationsContext();
   const { t } = useTranslation();
-  const variables: CreateResourceAutocompleteDataQueryVariables = R.pick(
-    ['school', 'course'],
-    query
-  );
   const context = useLanguageHeaderContext();
+  const variables = R.pick(['school', 'course'], query);
+
   const { data, error } = useCreateResourceAutocompleteDataQuery({
     variables,
     context,
   });
-  const school: SchoolObjectType = R.propOr(null, 'school', data);
-  const course: CourseObjectType = R.propOr(null, 'course', data);
+
+  const school = R.propOr(null, 'school', data);
+  const course = R.propOr(null, 'course', data);
 
   const {
     formRef,
@@ -107,8 +105,8 @@ const UploadResourcePage: NextPage = () => {
     course: _course,
     file: _file,
   }: UploadResourceFormValues): Promise<void> => {
-    const resourceType: string = R.propOr('', 'id', _resourceType);
-    const course: string = R.propOr('', 'id', _course);
+    const resourceType = R.propOr('', 'id', _resourceType);
+    const course = R.propOr('', 'id', _course);
     const file = String(_file);
 
     const variables = {
@@ -123,7 +121,7 @@ const UploadResourcePage: NextPage = () => {
   };
 
   const handleSubmit = async (
-    variables: UploadResourceFormValues
+    variables: UploadResourceFormValues,
   ): Promise<void> => {
     const { file } = variables;
     if (file) {
@@ -149,7 +147,7 @@ const UploadResourcePage: NextPage = () => {
           90,
           0,
           (file: File) => handleUpload({ ...variables, file }),
-          'blob'
+          'blob',
         );
       } else {
         // File is not an image, can't do any processing so just send it as is.
@@ -214,8 +212,8 @@ const UploadResourcePage: NextPage = () => {
             document={AutocompleteCoursesDocument}
             component={AutocompleteField}
             variables={{
-              school: R.pathOr(undefined, ['values', 'school', 'id'], props),
-            }} // Filter courses based on selected school.
+              school: R.path(['values', 'school', 'id'], props), // Filter courses based on selected school.
+            }}
             helperText={
               <>
                 {t('upload-resource:courseHelperText')}{' '}

@@ -11,13 +11,7 @@ import {
   SettingsLayout,
 } from 'components';
 import { useAuthContext } from 'context';
-import {
-  CourseObjectType,
-  ResourceObjectType,
-  ResourceTypeObjectType,
-  StarredQueryVariables,
-  useStarredQuery,
-} from 'generated';
+import { useStarredQuery } from 'generated';
 import { withAuth } from 'hocs';
 import { useLanguageHeaderContext, useSwipeableTabs } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -31,27 +25,15 @@ const StarredPage: NextPage = () => {
   const { t } = useTranslation();
   const { query } = useRouter();
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-  const variables: StarredQueryVariables = R.pick(['page', 'pageSize'], query);
+  const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useStarredQuery({ variables, context });
   const { userMe } = useAuthContext();
-  const courses: CourseObjectType[] = R.pathOr(
-    [],
-    ['starredCourses', 'objects'],
-    data
-  );
-  const resources: ResourceObjectType[] = R.pathOr(
-    [],
-    ['starredResources', 'objects'],
-    data
-  );
+  const courses = R.pathOr([], ['starredCourses', 'objects'], data);
+  const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
   const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
-  const resourceTypes: ResourceTypeObjectType[] = R.propOr(
-    [],
-    'resourceTypes',
-    data
-  );
+  const resourceTypes = R.propOr([], 'resourceTypes', data);
   const commonTableHeadProps = { titleRight: t('common:score') };
 
   const courseTableHeadProps = {
@@ -65,9 +47,11 @@ const StarredPage: NextPage = () => {
   };
 
   const renderLoading = <LoadingBox />;
+
   const renderResourceTableBody = (
     <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />
   );
+
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
   const renderCourseTable = (
@@ -87,9 +71,11 @@ const StarredPage: NextPage = () => {
   );
 
   const renderCoursesNotFound = <NotFoundBox text={t('starred:noCourses')} />;
+
   const renderResourcesNotFound = (
     <NotFoundBox text={t('starred:noResources')} />
   );
+
   const renderStarredCourses = loading
     ? renderLoading
     : courses.length
