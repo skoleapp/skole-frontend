@@ -42,7 +42,8 @@ import {
 } from 'draft-js';
 import { FormikProps } from 'formik';
 import { useMediaQueries } from 'hooks';
-import { DraftLink, linkStrategy, useTranslation } from 'lib';
+import { linkStrategy, useTranslation } from 'lib';
+import { DraftLink } from './DraftLink';
 import * as R from 'ramda';
 import React, {
   ChangeEvent,
