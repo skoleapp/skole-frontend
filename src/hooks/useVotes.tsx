@@ -2,7 +2,7 @@ import { IconButton, Size, Tooltip, Typography } from '@material-ui/core';
 import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
-import { useLanguageHeaderContext } from 'hooks';
+import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { useState } from 'react';

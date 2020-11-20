@@ -38,7 +38,7 @@ import { TopNavbarProps } from 'types';
 import { mediaUrl, urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
-import { Logo } from '../layout';
+import { Logo } from './Logo';
 import { ButtonLink, IconButtonLink } from '../shared';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
