@@ -6,5 +6,5 @@ export * from './forms';
 export * from './hooks';
 export * from './layout';
 export * from './mui';
-export * from './pdf-js';
+export * from './pdfJs';
 export * from './tables';
