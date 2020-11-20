@@ -1,5 +1,5 @@
 import { FormControl, Typography } from '@material-ui/core';
-import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
+import { FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -215,11 +215,11 @@ const ResetPasswordPage: NextPage = () => {
   };
 
   return (
-    <SettingsLayout {...layoutProps}>
+    <SettingsTemplate {...layoutProps}>
       {renderPasswordForm}
       {renderEmailForm}
       {renderEmailSubmitted}
-    </SettingsLayout>
+    </SettingsTemplate>
   );
 };
 

@@ -22,13 +22,13 @@ import {
   AutocompleteField,
   CourseTableBody,
   DialogHeader,
-  ErrorLayout,
+  ErrorTemplate,
   FormSubmitSection,
   LoadingBox,
-  MainLayout,
+  MainTemplate,
   NativeSelectField,
   NotFoundBox,
-  OfflineLayout,
+  OfflineTemplate,
   PaginatedTable,
   SkoleDialog,
   TextFormField,
@@ -582,16 +582,16 @@ const SearchPage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   return (
-    <MainLayout {...layoutProps}>
+    <MainTemplate {...layoutProps}>
       {renderMobileContent}
       {renderDesktopContent}
-    </MainLayout>
+    </MainTemplate>
   );
 };
 

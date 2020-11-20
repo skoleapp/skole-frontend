@@ -1,4 +1,4 @@
-import { FormSubmitSection, SettingsLayout, TextFormField } from 'components';
+import { FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
@@ -118,7 +118,7 @@ const ChangePasswordPage: NextPage = () => {
     },
   };
 
-  return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
+  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

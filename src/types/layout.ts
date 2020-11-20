@@ -27,7 +27,7 @@ interface CustomContainerProps extends Omit<ContainerProps, 'children'> {
   dense?: boolean; // Disable paddings.
 }
 
-export interface MainLayoutProps extends GridProps {
+export interface MainTemplateProps extends GridProps {
   children: NonNullable<ReactNode>;
   seoProps: SEOProps;
   topNavbarProps?: TopNavbarProps;

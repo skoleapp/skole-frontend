@@ -1,9 +1,9 @@
 import {
   AutocompleteField,
-  ErrorLayout,
-  FormLayout,
+  ErrorTemplate,
+  FormTemplate,
   FormSubmitSection,
-  OfflineLayout,
+  OfflineTemplate,
   TextFormField,
 } from 'components';
 import { useNotificationsContext } from 'context';
@@ -173,12 +173,12 @@ const CreateCoursePage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
-  return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
+  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

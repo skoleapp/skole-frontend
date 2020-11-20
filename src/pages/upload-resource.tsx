@@ -1,10 +1,10 @@
 import {
   AutocompleteField,
-  ErrorLayout,
+  ErrorTemplate,
   FileField,
-  FormLayout,
+  FormTemplate,
   FormSubmitSection,
-  OfflineLayout,
+  OfflineTemplate,
   TextFormField,
   TextLink,
 } from 'components';
@@ -242,12 +242,12 @@ const UploadResourcePage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
-  return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
+  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

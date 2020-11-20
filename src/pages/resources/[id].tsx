@@ -22,12 +22,12 @@ import {
   DiscussionHeader,
   DrawModeButton,
   DrawModeControls,
-  ErrorLayout,
+  ErrorTemplate,
   InfoDialogContent,
-  LoadingLayout,
-  MainLayout,
-  NotFoundLayout,
-  OfflineLayout,
+  LoadingTemplate,
+  MainTemplate,
+  NotFoundTemplate,
+  OfflineTemplate,
   PdfViewer,
   ResourceToolbar,
   ResponsiveDialog,
@@ -524,26 +524,26 @@ const ResourceDetailPage: NextPage = () => {
   };
 
   if (loading) {
-    return <LoadingLayout />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   if (resource) {
     return (
-      <MainLayout {...layoutProps}>
+      <MainTemplate {...layoutProps}>
         {renderMobileContent}
         {renderDesktopContent}
         {renderInfoDialog}
         {renderActionsDialog}
-      </MainLayout>
+      </MainTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 

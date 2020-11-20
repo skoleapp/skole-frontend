@@ -19,12 +19,12 @@ import clsx from 'clsx';
 import {
   ButtonLink,
   CourseTableBody,
-  ErrorLayout,
-  LoadingLayout,
-  MainLayout,
+  ErrorTemplate,
+  LoadingTemplate,
+  MainTemplate,
   NotFoundBox,
-  NotFoundLayout,
-  OfflineLayout,
+  NotFoundTemplate,
+  OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
   SettingsButton,
@@ -530,25 +530,25 @@ const UserPage: NextPage = () => {
   };
 
   if (loading) {
-    return <LoadingLayout />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   if (user) {
     return (
-      <MainLayout {...layoutProps}>
+      <MainTemplate {...layoutProps}>
         {renderResponsiveContent}
         {renderMobileActionsCard}
         {renderCreatedContent}
-      </MainLayout>
+      </MainTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 

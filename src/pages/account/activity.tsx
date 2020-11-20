@@ -8,13 +8,13 @@ import {
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import {
   ActivityListItem,
-  ErrorLayout,
+  ErrorTemplate,
   LoadingBox,
   NotFoundBox,
-  OfflineLayout,
+  OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
-  SettingsLayout,
+  SettingsTemplate,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import {
@@ -163,16 +163,16 @@ const ActivityPage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   return (
-    <SettingsLayout {...layoutProps}>
+    <SettingsTemplate {...layoutProps}>
       {renderActivities}
       {renderActionsDialog}
-    </SettingsLayout>
+    </SettingsTemplate>
   );
 };
 

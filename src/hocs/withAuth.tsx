@@ -1,4 +1,4 @@
-import { LoadingLayout, OfflineLayout } from 'components';
+import { LoadingTemplate, OfflineTemplate } from 'components';
 import { useUserMe } from 'hooks';
 import { NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
@@ -52,14 +52,14 @@ export const withAuth = <T extends Record<symbol, unknown>>(
     }, []);
 
     if (authNetworkError) {
-      return <OfflineLayout />;
+      return <OfflineTemplate />;
     }
 
     if (userMe) {
       return <PageComponent {...(pageProps as T)} />;
     }
 
-    return <LoadingLayout />;
+    return <LoadingTemplate />;
   };
 
   return withAuth;

@@ -1,14 +1,14 @@
 import { Box, Tab, Tabs } from '@material-ui/core';
 import {
   CourseTableBody,
-  ErrorLayout,
+  ErrorTemplate,
   LoadingBox,
   NotFoundBox,
-  NotFoundLayout,
-  OfflineLayout,
+  NotFoundTemplate,
+  OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
-  SettingsLayout,
+  SettingsTemplate,
 } from 'components';
 import { useAuthContext } from 'context';
 import { useStarredQuery } from 'generated';
@@ -117,20 +117,20 @@ const StarredPage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   if (userMe) {
     return (
-      <SettingsLayout {...layoutProps}>
+      <SettingsTemplate {...layoutProps}>
         {renderTabs}
         {renderSwipeableViews}
-      </SettingsLayout>
+      </SettingsTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 

@@ -25,14 +25,14 @@ import {
 import clsx from 'clsx';
 import {
   CourseTableBody,
-  ErrorLayout,
+  ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
-  LoadingLayout,
-  MainLayout,
+  LoadingTemplate,
+  MainTemplate,
   NotFoundBox,
-  NotFoundLayout,
-  OfflineLayout,
+  NotFoundTemplate,
+  OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
   TextLink,
@@ -369,25 +369,25 @@ const SchoolDetailPage: NextPage = () => {
   };
 
   if (loading) {
-    return <LoadingLayout />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   if (school) {
     return (
-      <MainLayout {...layoutProps}>
+      <MainTemplate {...layoutProps}>
         {renderContent}
         {renderInfoDialog}
         {renderActionsDrawer}
-      </MainLayout>
+      </MainTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 

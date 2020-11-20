@@ -4,7 +4,7 @@ import React from 'react';
 import { BORDER_RADIUS } from 'theme';
 
 import { NotFoundBox } from '../shared';
-import { MainLayout } from './MainLayout';
+import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   root: {
@@ -18,14 +18,14 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
 }));
 
-export const OfflineLayout: React.FC = () => {
+export const NotFoundTemplate: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
 
   const layoutProps = {
     seoProps: {
-      title: t('offline:title'),
-      description: t('offline:description'),
+      title: t('404:title'),
+      description: t('404:description'),
     },
     topNavbarProps: {
       dynamicBackUrl: true,
@@ -34,11 +34,11 @@ export const OfflineLayout: React.FC = () => {
   };
 
   return (
-    <MainLayout {...layoutProps}>
+    <MainTemplate {...layoutProps}>
       <Paper className={classes.root}>
-        <CardHeader title={t('offline:header')} />
-        <NotFoundBox text={t('offline:text')} />
+        <CardHeader title={t('404:header')} />
+        <NotFoundBox text={t('404:text')} />
       </Paper>
-    </MainLayout>
+    </MainTemplate>
   );
 };

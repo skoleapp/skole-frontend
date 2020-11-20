@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import {
-  FormLayout,
+  FormTemplate,
   FormSubmitSection,
   PasswordField,
   TextFormField,
@@ -229,7 +229,7 @@ const LoginPage: NextPage = () => {
     },
   };
 
-  return <FormLayout {...layoutProps}>{renderForm}</FormLayout>;
+  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

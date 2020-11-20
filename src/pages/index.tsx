@@ -16,7 +16,7 @@ import {
   SvgIconComponent,
 } from '@material-ui/icons';
 import clsx from 'clsx';
-import { MainBackground, MainLayout } from 'components';
+import { MainBackground, MainTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { useLanguageSelector, useSearch, useShare } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -273,7 +273,7 @@ const IndexPage: NextPage = () => {
   };
 
   return (
-    <MainLayout {...layoutProps}>
+    <MainTemplate {...layoutProps}>
       <Grid
         container
         direction="column"
@@ -285,7 +285,7 @@ const IndexPage: NextPage = () => {
         {renderShortcuts}
         {renderInfo}
       </Grid>
-    </MainLayout>
+    </MainTemplate>
   );
 };
 

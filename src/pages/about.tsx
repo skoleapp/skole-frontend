@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, SettingsLayout } from 'components';
+import { ButtonLink, SettingsTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -23,7 +23,7 @@ const AboutPage: NextPage = () => {
   };
 
   return (
-    <SettingsLayout {...layoutProps}>
+    <SettingsTemplate {...layoutProps}>
       <Typography variant="body2">{t('about:content')}</Typography>
       <Typography component="br" />
       <Typography variant="subtitle2">{t('about:feedbackHeader')}</Typography>
@@ -36,7 +36,7 @@ const AboutPage: NextPage = () => {
       >
         {t('about:feedbackText')}
       </ButtonLink>
-    </SettingsLayout>
+    </SettingsTemplate>
   );
 };
 

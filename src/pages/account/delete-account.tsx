@@ -2,7 +2,7 @@ import { FormControl } from '@material-ui/core';
 import {
   ButtonLink,
   FormSubmitSection,
-  SettingsLayout,
+  SettingsTemplate,
   TextFormField,
 } from 'components';
 import { useNotificationsContext } from 'context';
@@ -130,7 +130,7 @@ export const DeleteAccountPage: NextPage = () => {
     },
   };
 
-  return <SettingsLayout {...layoutProps}>{renderForm}</SettingsLayout>;
+  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

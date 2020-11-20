@@ -1,5 +1,5 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
-import { FormSubmitSection, SettingsLayout } from 'components';
+import { FormSubmitSection, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik } from 'formik';
 import {
@@ -194,12 +194,12 @@ const VerifyAccountPage: NextPage = () => {
   };
 
   return (
-    <SettingsLayout {...layoutProps}>
+    <SettingsTemplate {...layoutProps}>
       {renderEmailForm}
       {renderEmailSubmitted}
       {renderConfirmationForm}
       {renderVerified}
-    </SettingsLayout>
+    </SettingsTemplate>
   );
 };
 

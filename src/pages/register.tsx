@@ -8,7 +8,7 @@ import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
   AutocompleteField,
   ButtonLink,
-  FormLayout,
+  FormTemplate,
   FormSubmitSection,
   PasswordField,
   TextFormField,
@@ -393,11 +393,11 @@ const RegisterPage: NextPage = () => {
   };
 
   return (
-    <FormLayout {...layoutProps}>
+    <FormTemplate {...layoutProps}>
       {renderRegisterForm}
       {renderUpdateUserForm}
       {renderRegisterComplete}
-    </FormLayout>
+    </FormTemplate>
   );
 };
 

@@ -8,7 +8,7 @@ import {
   TOP_NAVBAR_HEIGHT_DESKTOP,
   TOP_NAVBAR_HEIGHT_MOBILE,
 } from 'theme';
-import { MainLayoutProps } from 'types';
+import { MainTemplateProps } from 'types';
 
 import {
   BottomNavbar,
@@ -58,7 +58,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   },
 }));
 
-export const MainLayout: React.FC<MainLayoutProps> = ({
+export const MainTemplate: React.FC<MainTemplateProps> = ({
   seoProps,
   topNavbarProps,
   containerProps,

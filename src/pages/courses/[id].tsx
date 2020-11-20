@@ -19,14 +19,14 @@ import clsx from 'clsx';
 import {
   CustomBottomNavbarContainer,
   DiscussionHeader,
-  ErrorLayout,
+  ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
-  LoadingLayout,
-  MainLayout,
+  LoadingTemplate,
+  MainTemplate,
   NotFoundBox,
-  NotFoundLayout,
-  OfflineLayout,
+  NotFoundTemplate,
+  OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
   ResponsiveDialog,
@@ -421,26 +421,26 @@ const CourseDetailPage: NextPage = () => {
   };
 
   if (loading) {
-    return <LoadingLayout />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineLayout />;
+    return <OfflineTemplate />;
   } else if (error) {
-    return <ErrorLayout />;
+    return <ErrorTemplate />;
   }
 
   if (course) {
     return (
-      <MainLayout {...layoutProps}>
+      <MainTemplate {...layoutProps}>
         {renderMobileContent}
         {renderDesktopContent}
         {renderInfoDialog}
         {renderActionsDialog}
-      </MainLayout>
+      </MainTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 

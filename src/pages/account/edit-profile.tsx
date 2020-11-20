@@ -8,8 +8,8 @@ import {
   AutocompleteField,
   AvatarField,
   FormSubmitSection,
-  NotFoundLayout,
-  SettingsLayout,
+  NotFoundTemplate,
+  SettingsTemplate,
   TextFormField,
   TextLink,
 } from 'components';
@@ -282,10 +282,12 @@ const EditProfilePage: NextPage = () => {
 
   if (userMe) {
     return (
-      <SettingsLayout {...layoutProps}>{renderEditProfileForm}</SettingsLayout>
+      <SettingsTemplate {...layoutProps}>
+        {renderEditProfileForm}
+      </SettingsTemplate>
     );
   } else {
-    return <NotFoundLayout />;
+    return <NotFoundTemplate />;
   }
 };
 

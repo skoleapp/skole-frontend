@@ -4,7 +4,7 @@ import React from 'react';
 import { BORDER_RADIUS } from 'theme';
 
 import { NotFoundBox } from '../shared';
-import { MainLayout } from './MainLayout';
+import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   root: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
 }));
 
-export const ErrorLayout: React.FC = () => {
+export const ErrorTemplate: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -34,11 +34,11 @@ export const ErrorLayout: React.FC = () => {
   };
 
   return (
-    <MainLayout {...layoutProps}>
+    <MainTemplate {...layoutProps}>
       <Paper className={classes.root}>
         <CardHeader title={t('_error:header')} />
         <NotFoundBox text={t('_error:text')} />
       </Paper>
-    </MainLayout>
+    </MainTemplate>
   );
 };
