@@ -55,7 +55,7 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
   );
 
   const renderResourceDate = (r: ResourceObjectType): JSX.Element => {
-    const date = useDayjs(R.propOr('-', 'date', r)).format('LL');
+    const date = useDayjs(R.prop('date', r)).format('LL');
     return (
       <Typography variant="body2" color="textSecondary">
         {date}
