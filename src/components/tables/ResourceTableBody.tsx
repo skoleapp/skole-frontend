@@ -14,19 +14,17 @@ import {
   StarBorderOutlined,
 } from '@material-ui/icons';
 import clsx from 'clsx';
-import { ResourceObjectType, ResourceTypeObjectType } from 'generated';
+import { ResourceObjectType } from 'generated';
+import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import * as R from 'ramda';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { urls } from 'utils';
 
 import { TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
-  resourceTypeHeader: {
-    paddingLeft: spacing(1),
-  },
   resource: {
     paddingLeft: spacing(2),
   },
@@ -43,35 +41,24 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 interface Props {
   resources: ResourceObjectType[];
-  resourceTypes: ResourceTypeObjectType[];
 }
 
-export const ResourceTableBody: React.FC<Props> = ({
-  resourceTypes,
-  resources,
-}) => {
+export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-
-  const renderResourceTypeHeader = (name?: string | null): JSX.Element => (
-    <TableRow className={classes.resourceTypeHeader}>
-      <TableCell>
-        <Typography variant="body2" color="textSecondary">
-          {name}
-        </Typography>
-      </TableCell>
-    </TableRow>
-  );
 
   const renderResourceTitle = (r: ResourceObjectType): JSX.Element => (
     <Typography variant="body2">{R.propOr('-', 'title', r)}</Typography>
   );
 
-  const renderResourceDate = (r: ResourceObjectType): JSX.Element => (
-    <Typography variant="body2" color="textSecondary">
-      {R.propOr('-', 'date', r)}
-    </Typography>
-  );
+  const renderResourceDate = (r: ResourceObjectType): JSX.Element => {
+    const date = useDayjs(R.prop('date', r)).format('LL');
+    return (
+      <Typography variant="body2" color="textSecondary">
+        {date}
+      </Typography>
+    );
+  };
 
   const renderResourceCreator = (
     resource: ResourceObjectType,
@@ -95,65 +82,48 @@ export const ResourceTableBody: React.FC<Props> = ({
     <CloudDownloadOutlined className={classes.icon} />
   );
 
-  const renderResourceInfo = (r: ResourceObjectType): JSX.Element => (
-    <Typography variant="body2" color="textSecondary">
-      <Grid container alignItems="center">
-        {renderUserIcon}
-        {renderResourceCreator(r)}
-        {renderStarIcon}
-        {r.starCount}
-        {renderDiscussionIcon}
-        {r.commentCount}
-        {renderDownloadsIcon}
-        {r.downloads}
-      </Grid>
-    </Typography>
-  );
-
-  const renderResources = (id: string): JSX.Element[] =>
-    resources
-      .filter(({ resourceType }) => R.propOr('', 'id', resourceType) === id)
-      .map((r, i) => (
-        <Link href={urls.resource(r.id)} key={i}>
-          <CardActionArea>
-            <TableRow className={classes.resource}>
-              <TableCell>
-                {renderResourceTitle(r)}
-                {renderResourceDate(r)}
-                {renderResourceInfo(r)}
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="body2">
-                  {R.propOr('-', 'score', r)}
-                </Typography>
-              </TableCell>
-            </TableRow>
-          </CardActionArea>
-        </Link>
-      ));
-
-  // Filter out resource types that have no resources.
-  const filterResourceTypes = ({
-    id,
-  }: ResourceTypeObjectType): ResourceObjectType | undefined =>
-    resources.find(
-      ({ resourceType }) => R.propOr('', 'id', resourceType) === id,
+  const renderResourceInfo = (r: ResourceObjectType): JSX.Element => {
+    return (
+      <Typography variant="body2" color="textSecondary">
+        <Grid container alignItems="center">
+          {renderUserIcon}
+          {renderResourceCreator(r)}
+          {renderStarIcon}
+          {r.starCount}
+          {renderDiscussionIcon}
+          {r.commentCount}
+          {renderDownloadsIcon}
+          {r.downloads}
+        </Grid>
+      </Typography>
     );
+  };
 
-  // Map through filtered resource types and resources under them.
-  const mapResourceTypes = (
-    { id, name }: ResourceTypeObjectType,
-    i: number,
-  ): JSX.Element => (
-    <Fragment key={i}>
-      {renderResourceTypeHeader(name)}
-      {renderResources(id)}
-    </Fragment>
-  );
+  const renderResourceType = (r: ResourceObjectType): JSX.Element => {
+    return (
+      <Typography variant="body2" color="textSecondary">
+        {R.path(['resourceType', 'name'], r)}
+      </Typography>
+    );
+  };
 
-  return (
-    <TableBody>
-      {resourceTypes.filter(filterResourceTypes).map(mapResourceTypes)}
-    </TableBody>
-  );
+  const renderResources = resources.map((r, i) => (
+    <Link href={urls.resource(r.id)} key={i}>
+      <CardActionArea>
+        <TableRow className={classes.resource}>
+          <TableCell>
+            {renderResourceTitle(r)}
+            {renderResourceType(r)}
+            {renderResourceDate(r)}
+            {renderResourceInfo(r)}
+          </TableCell>
+          <TableCell align="right">
+            <Typography variant="body2">{R.propOr('-', 'score', r)}</Typography>
+          </TableCell>
+        </TableRow>
+      </CardActionArea>
+    </Link>
+  ));
+
+  return <TableBody>{renderResources}</TableBody>;
 };

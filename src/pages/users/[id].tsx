@@ -119,7 +119,6 @@ const UserPage: NextPage = () => {
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
-  const resourceTypes = R.propOr([], 'resourceTypes', data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const resources = R.pathOr([], ['resources', 'objects'], data);
 
@@ -459,9 +458,7 @@ const UserPage: NextPage = () => {
 
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
-  const renderResourceTableBody = (
-    <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />
-  );
+  const renderResourceTableBody = <ResourceTableBody resources={resources} />;
 
   const renderCourseTable = (
     <PaginatedTable

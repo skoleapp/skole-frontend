@@ -352,13 +352,9 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
       commentCount
       downloads
       resourceType {
-        id
+        name
       }
     }
-  }
-  resourceTypes {
-    id
-    name
   }
 }
 
@@ -646,13 +642,9 @@ query Starred($page: Int, $pageSize: Int) {
       commentCount
       downloads
       resourceType {
-        id
+        name
       }
     }
-  }
-  resourceTypes {
-    id
-    name
   }
 }
 
@@ -747,13 +739,9 @@ query User($id: ID, $page: Int, $pageSize: Int) {
       commentCount
       downloads
       resourceType {
-        id
+        name
       }
     }
-  }
-  resourceTypes {
-    id
-    name
   }
 }
 
