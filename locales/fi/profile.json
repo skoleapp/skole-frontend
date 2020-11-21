@@ -1,8 +1,8 @@
 {
   "description": "Katso käyttäjän {{ username }} Skole-profiili.",
   "score": "pistettä",
-  "courses": "kurssia",
-  "resources": "resurssia",
+  "courses": "kursseja",
+  "resources": "resursseja",
   "editProfile": "Muokkaa profiilia",
   "noResources": "Tällä käyttäjällä ei ole resursseja.",
   "noCourses": "Tällä käyttäjällä ei ole kursseja.",
