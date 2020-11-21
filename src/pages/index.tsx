@@ -49,7 +49,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   header: {
     fontSize: '2rem',
     [breakpoints.up('md')]: {
-      fontSize: '2.75rem',
+      fontSize: '2.5rem',
     },
   },
   subheader: {
@@ -76,7 +76,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   shortcutsContainer: {
     position: 'relative',
-    backgroundColor: COLORS.backgroundGrey,
     padding: `${spacing(4)} ${spacing(2)}`,
     flexGrow: 1,
     [breakpoints.up('md')]: {
@@ -151,13 +150,7 @@ const IndexPage: NextPage = () => {
   const renderBackground = <MainBackground />;
 
   const renderSearch = (
-    <Grid
-      className={classes.searchContainer}
-      item
-      xs={12}
-      container
-      direction="column"
-    >
+    <Grid className={classes.searchContainer} item container direction="column">
       <Typography
         className={classes.header}
         variant="h1"
@@ -215,6 +208,7 @@ const IndexPage: NextPage = () => {
 
   const renderShortcuts = (
     <Grid
+      item
       container
       justify="center"
       alignItems="center"
