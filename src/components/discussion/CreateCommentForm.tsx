@@ -28,6 +28,9 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     marginBottom: 'auto',
     position: 'relative',
   },
+  attachmentImage: {
+    objectFit: 'contain',
+  },
   container: {
     flexGrow: 1,
     display: 'flex',
@@ -147,6 +150,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     >
       <Image
         layout="fill"
+        className={classes.attachmentImage}
         src={String(commentAttachment)}
         unoptimized // Must be used for base64 images for now (v10.0.1). TODO: See if this is fixed in future Next.js versions.
         alt={t('common:commentAttachment')}
