@@ -178,13 +178,18 @@ const CourseDetailPage: NextPage = () => {
   });
 
   const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
-    await confirm({
-      title: t('course:deleteCourseTitle'),
-      description: t('course:deleteCourseDescription'),
-    });
+    try {
+      await confirm({
+        title: t('course:deleteCourseTitle'),
+        description: t('course:deleteCourseDescription'),
+      });
 
-    await deleteCourse({ variables: { id: courseId } });
-    handleCloseActionsDialog(e);
+      await deleteCourse({ variables: { id: courseId } });
+    } catch {
+      // User cancelled.
+    } finally {
+      handleCloseActionsDialog(e);
+    }
   };
 
   const renderSubjectLinks = subjects.map(({ id, name }, i) => (

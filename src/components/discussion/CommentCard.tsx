@@ -202,12 +202,16 @@ export const CommentCard: React.FC<Props> = ({
     e.stopPropagation();
     handleCloseActionsDialog(e);
 
-    await confirm({
-      title: t('common:deleteCommentTitle'),
-      description: t('common:deleteCommentDescription'),
-    });
+    try {
+      await confirm({
+        title: t('common:deleteCommentTitle'),
+        description: t('common:deleteCommentDescription'),
+      });
 
-    await deleteComment({ variables: { id: comment.id } });
+      await deleteComment({ variables: { id: comment.id } });
+    } catch {
+      // User cancelled.
+    }
   };
 
   const renderTitle = comment.user ? (

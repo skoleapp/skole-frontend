@@ -72,13 +72,18 @@ export const DeleteAccountPage: NextPage = () => {
   ): Promise<void> => {
     setSubmitting(false);
 
-    await confirm({
-      title: t('delete-account:deleteAccountTitle'),
-      description: t('delete-account:deleteAccountDescription'),
-    });
+    try {
+      await confirm({
+        title: t('delete-account:deleteAccountTitle'),
+        description: t('delete-account:deleteAccountDescription'),
+      });
 
-    setSubmitting(true);
-    await deleteUser({ variables: { password: values.password } });
+      await deleteUser({ variables: { password: values.password } });
+    } catch {
+      // User cancelled.
+    } finally {
+      setSubmitting(true);
+    }
   };
 
   const validationSchema = Yup.object().shape({
