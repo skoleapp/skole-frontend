@@ -53,6 +53,7 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
 
   const renderResourceDate = (r: ResourceObjectType): JSX.Element => {
     const date = useDayjs(R.prop('date', r)).format('LL');
+
     return (
       <Typography variant="body2" color="textSecondary">
         {date}
@@ -82,22 +83,20 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
     <CloudDownloadOutlined className={classes.icon} />
   );
 
-  const renderResourceInfo = (r: ResourceObjectType): JSX.Element => {
-    return (
-      <Typography variant="body2" color="textSecondary">
-        <Grid container alignItems="center">
-          {renderUserIcon}
-          {renderResourceCreator(r)}
-          {renderStarIcon}
-          {r.starCount}
-          {renderDiscussionIcon}
-          {r.commentCount}
-          {renderDownloadsIcon}
-          {r.downloads}
-        </Grid>
-      </Typography>
-    );
-  };
+  const renderResourceInfo = (r: ResourceObjectType): JSX.Element => (
+    <Typography variant="body2" color="textSecondary">
+      <Grid container alignItems="center">
+        {renderUserIcon}
+        {renderResourceCreator(r)}
+        {renderStarIcon}
+        {r.starCount}
+        {renderDiscussionIcon}
+        {r.commentCount}
+        {renderDownloadsIcon}
+        {r.downloads}
+      </Grid>
+    </Typography>
+  );
 
   const renderResourceType = (r: ResourceObjectType): JSX.Element => {
     return (
