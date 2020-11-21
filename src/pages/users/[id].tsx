@@ -138,9 +138,7 @@ const UserPage: NextPage = () => {
     ? t('profile:ownProfileNoResources')
     : t('profile:noResources');
 
-  const joined = useDayjs(R.propOr('', 'created', user))
-    .startOf('m')
-    .fromNow();
+  const joined = useDayjs(R.propOr('', 'created', user)).startOf('m').fromNow();
 
   // Order steps so that the completed ones are first.
   const profileStrengthSteps = [
@@ -156,14 +154,14 @@ const UserPage: NextPage = () => {
       label: t('profile-strength:step3'),
       completed: !!school && !!subject,
     },
-  ].sort(prev => (prev.completed ? -1 : 1));
+  ].sort((prev) => (prev.completed ? -1 : 1));
 
   // Calculate score for profile strength
   const profileStrengthScore = profileStrengthSteps
-    .map(s => s.completed)
+    .map((s) => s.completed)
     .reduce((total, completed) => (completed ? total + 1 : total), 0);
 
-  const allStepsCompleted = !profileStrengthSteps.some(s => !s.completed);
+  const allStepsCompleted = !profileStrengthSteps.some((s) => !s.completed);
 
   // Get label for profile strength score.
   const getProfileStrengthText = (): string => {
