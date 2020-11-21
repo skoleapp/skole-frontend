@@ -25,9 +25,6 @@ import { urls } from 'utils';
 import { TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
-  resourceTypeName: {
-    paddingRight: spacing(1),
-  },
   resource: {
     paddingLeft: spacing(2),
   },
@@ -104,14 +101,8 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
 
   const renderResourceType = (r: ResourceObjectType): JSX.Element => {
     return (
-      <Typography
-        variant="body2"
-        color="textSecondary"
-        className={classes.resourceTypeName}
-      >
-        <Grid container alignItems="center">
-          {R.path(['resourceType', 'name'], r)}
-        </Grid>
+      <Typography variant="body2" color="textSecondary">
+        {R.path(['resourceType', 'name'], r)}
       </Typography>
     );
   };
