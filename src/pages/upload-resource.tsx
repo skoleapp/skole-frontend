@@ -103,11 +103,10 @@ const UploadResourcePage: NextPage = () => {
     resourceTitle,
     resourceType: _resourceType,
     course: _course,
-    file: _file,
+    file,
   }: UploadResourceFormValues): Promise<void> => {
     const resourceType = R.propOr('', 'id', _resourceType);
     const course = R.propOr('', 'id', _course);
-    const file = String(_file);
 
     const variables = {
       resourceTitle,
@@ -117,6 +116,8 @@ const UploadResourcePage: NextPage = () => {
     };
 
     setFieldValue('general', t('upload-resource:fileUploadingText'));
+
+    // @ts-ignore: A string value is expected for the file field, which is incorrect.
     await createResource({ variables });
   };
 
@@ -124,6 +125,7 @@ const UploadResourcePage: NextPage = () => {
     variables: UploadResourceFormValues,
   ): Promise<void> => {
     const { file } = variables;
+
     if (file) {
       const imageTypes = [
         'image/apng',

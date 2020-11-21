@@ -26,7 +26,6 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
 
   return new ApolloClient({
     ssrMode: isBrowser,
-    // @ts-ignore: Apollo client's types have been updated so that they do not match apollo-upload-client's types.
     link: httpLink,
     cache: new InMemoryCache(),
     defaultOptions: {

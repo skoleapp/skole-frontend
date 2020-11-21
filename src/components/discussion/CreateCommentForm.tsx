@@ -120,7 +120,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       toggleNotification(t('notifications:messageEmpty'));
     } else {
       await createCommentMutation({
-        variables: { ...values, attachment: String(values.attachment) },
+        variables: { ...values, attachment: values.attachment },
         context,
       });
 
