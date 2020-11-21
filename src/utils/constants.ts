@@ -35,7 +35,7 @@ export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
 
 export const HOME_PAGE_SHORTCUTS = [
   {
-    text: 'index:findResources',
+    text: 'index:findContent',
     icon: AssignmentOutlined,
     href: urls.search,
   },
