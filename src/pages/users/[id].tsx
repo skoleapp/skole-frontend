@@ -119,7 +119,6 @@ const UserPage: NextPage = () => {
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
-  const resourceTypes = R.propOr([], 'resourceTypes', data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const resources = R.pathOr([], ['resources', 'objects'], data);
 
@@ -139,7 +138,9 @@ const UserPage: NextPage = () => {
     ? t('profile:ownProfileNoResources')
     : t('profile:noResources');
 
-  const joined = useDayjs(R.propOr('', 'created', user)).startOf('m').fromNow();
+  const joined = useDayjs(R.propOr('', 'created', user))
+    .startOf('m')
+    .fromNow();
 
   // Order steps so that the completed ones are first.
   const profileStrengthSteps = [
@@ -155,14 +156,14 @@ const UserPage: NextPage = () => {
       label: t('profile-strength:step3'),
       completed: !!school && !!subject,
     },
-  ].sort((prev) => (prev.completed ? -1 : 1));
+  ].sort(prev => (prev.completed ? -1 : 1));
 
   // Calculate score for profile strength
   const profileStrengthScore = profileStrengthSteps
-    .map((s) => s.completed)
+    .map(s => s.completed)
     .reduce((total, completed) => (completed ? total + 1 : total), 0);
 
-  const allStepsCompleted = !profileStrengthSteps.some((s) => !s.completed);
+  const allStepsCompleted = !profileStrengthSteps.some(s => !s.completed);
 
   // Get label for profile strength score.
   const getProfileStrengthText = (): string => {
@@ -459,9 +460,7 @@ const UserPage: NextPage = () => {
 
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
-  const renderResourceTableBody = (
-    <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />
-  );
+  const renderResourceTableBody = <ResourceTableBody resources={resources} />;
 
   const renderCourseTable = (
     <PaginatedTable

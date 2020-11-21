@@ -118,7 +118,6 @@ const CourseDetailPage: NextPage = () => {
   const isOwner = !!userMe && userMe.id === creatorId;
   const courseUser = R.prop('user', course);
   const created = R.prop('created', course);
-  const resourceTypes = R.propOr([], 'resourceTypes', data);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const { renderShareButton } = useShare({ text: courseName });
 
@@ -285,9 +284,7 @@ const CourseDetailPage: NextPage = () => {
     text: t('course:noResourcesLink'),
   };
 
-  const renderResourceTableBody = (
-    <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />
-  );
+  const renderResourceTableBody = <ResourceTableBody resources={resources} />;
 
   const renderResourceTable = (
     <PaginatedTable

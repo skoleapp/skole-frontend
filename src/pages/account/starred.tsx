@@ -33,7 +33,6 @@ const StarredPage: NextPage = () => {
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
   const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
-  const resourceTypes = R.propOr([], 'resourceTypes', data);
   const commonTableHeadProps = { titleRight: t('common:score') };
 
   const courseTableHeadProps = {
@@ -48,9 +47,7 @@ const StarredPage: NextPage = () => {
 
   const renderLoading = <LoadingBox />;
 
-  const renderResourceTableBody = (
-    <ResourceTableBody resourceTypes={resourceTypes} resources={resources} />
-  );
+  const renderResourceTableBody = <ResourceTableBody resources={resources} />;
 
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
