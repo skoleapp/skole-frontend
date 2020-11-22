@@ -1,11 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Grid,
-  makeStyles,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
+import { Box, CircularProgress, Grid, makeStyles, Typography, useTheme } from '@material-ui/core';
 import { useTranslation } from 'lib';
 import React from 'react';
 

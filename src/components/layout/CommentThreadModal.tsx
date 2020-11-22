@@ -17,11 +17,7 @@ export const CommentThreadModal: React.FC = () => {
   const handleClose = (): void => toggleTopComment(null);
 
   return (
-    <SkoleDialog
-      open={!!topComment}
-      onClose={handleClose}
-      classes={{ paper: classes.paper }}
-    >
+    <SkoleDialog open={!!topComment} onClose={handleClose} classes={{ paper: classes.paper }}>
       <DialogHeader onCancel={handleClose} />
       <Box position="relative" flexGrow="1">
         <ReplyCommentThread />

@@ -10,9 +10,13 @@ interface Props extends FormikProps<unknown> {
   submitButtonText: string;
 }
 
-export const FormSubmitSection: React.FC<
-  Props & Pick<ButtonProps, 'variant' | 'endIcon'>
-> = ({ isSubmitting, submitButtonText, endIcon, variant, values }) => {
+export const FormSubmitSection: React.FC<Props & Pick<ButtonProps, 'variant' | 'endIcon'>> = ({
+  isSubmitting,
+  submitButtonText,
+  endIcon,
+  variant,
+  values,
+}) => {
   const loadingText = R.prop('general', values);
 
   const renderTextContent = isSubmitting ? (

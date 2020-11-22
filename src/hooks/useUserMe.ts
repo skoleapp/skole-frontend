@@ -1,16 +1,11 @@
 import { useAuthContext } from 'context';
-import {
-  UserMeQueryHookResult,
-  UserObjectType,
-  useUserMeQuery,
-} from 'generated';
+import { UserMeQueryHookResult, UserObjectType, useUserMeQuery } from 'generated';
 import * as R from 'ramda';
 import { useEffect } from 'react';
 
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 
-interface UseUserMeQuery
-  extends Omit<UserMeQueryHookResult, 'data' | 'loading' | 'error'> {
+interface UseUserMeQuery extends Omit<UserMeQueryHookResult, 'data' | 'loading' | 'error'> {
   userMe: UserObjectType | null;
   authLoading: boolean;
   authNetworkError: boolean;

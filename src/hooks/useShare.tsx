@@ -37,7 +37,11 @@ export const useShare = ({ query = '', text }: ShareParams): UseShare => {
     const url = `${window.location.href + query}`;
 
     if (!!navigator && !!navigator.share) {
-      await navigator.share({ title: 'Skole', text, url });
+      try {
+        await navigator.share({ title: 'Skole', text, url });
+      } catch {
+        // User cancelled.
+      }
     } else if (!!navigator && !!navigator.clipboard) {
       await navigator.clipboard.writeText(url);
       toggleNotification(t('notifications:linkCopied'));

@@ -1,10 +1,4 @@
-import {
-  Backdrop,
-  Grid,
-  IconButton,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Backdrop, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
 import { useDiscussionContext } from 'context';
 import { useTranslation } from 'lib';
@@ -57,13 +51,9 @@ export const AttachmentViewer: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  const {
-    attachmentViewerValue,
-    setAttachmentViewerValue,
-  } = useDiscussionContext();
+  const { attachmentViewerValue, setAttachmentViewerValue } = useDiscussionContext();
 
-  const attachmentName =
-    attachmentViewerValue && attachmentViewerValue.split('/').pop();
+  const attachmentName = attachmentViewerValue && attachmentViewerValue.split('/').pop();
 
   const handleClose = (): void => setAttachmentViewerValue(null);
 
@@ -76,18 +66,10 @@ export const AttachmentViewer: React.FC = () => {
       alignItems="center"
       justify="space-between"
     >
-      <Typography
-        className="truncate-text"
-        variant="subtitle1"
-        color="secondary"
-      >
+      <Typography className="truncate-text" variant="subtitle1" color="secondary">
         {attachmentName}
       </Typography>
-      <IconButton
-        className={classes.iconButton}
-        onClick={handleClose}
-        color="secondary"
-      >
+      <IconButton className={classes.iconButton} onClick={handleClose} color="secondary">
         <CloseOutlined />
       </IconButton>
     </Grid>
@@ -112,11 +94,7 @@ export const AttachmentViewer: React.FC = () => {
   );
 
   return (
-    <Backdrop
-      className={classes.root}
-      open={!!attachmentViewerValue}
-      onClick={handleClose}
-    >
+    <Backdrop className={classes.root} open={!!attachmentViewerValue} onClick={handleClose}>
       <Grid container direction="column" className={classes.container}>
         {renderToolbar}
         {renderAttachment}

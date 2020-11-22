@@ -65,9 +65,7 @@ const ResetPasswordPage: NextPage = () => {
   const context = useLanguageHeaderContext();
 
   const emailValidationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email(t('validation:invalidEmail'))
-      .required(t('validation:required')),
+    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
   });
 
   const passwordValidationSchema = Yup.object().shape({
@@ -83,10 +81,7 @@ const ResetPasswordPage: NextPage = () => {
     sendPasswordResetEmail,
   }: SendPasswordResetEmailMutation): void => {
     if (sendPasswordResetEmail) {
-      if (
-        sendPasswordResetEmail.errors &&
-        !!sendPasswordResetEmail.errors.length
-      ) {
+      if (sendPasswordResetEmail.errors && !!sendPasswordResetEmail.errors.length) {
         handleEmailFormMutationErrors(sendPasswordResetEmail.errors);
       } else if (sendPasswordResetEmail.successMessage) {
         resetEmailForm();
@@ -131,16 +126,12 @@ const ResetPasswordPage: NextPage = () => {
     await sendPasswordResetEmail({ variables: { email } });
   };
 
-  const handleSubmitPassword = async (
-    values: PasswordFormValues,
-  ): Promise<void> => {
+  const handleSubmitPassword = async (values: PasswordFormValues): Promise<void> => {
     const { newPassword } = values;
     await resetPassword({ variables: { newPassword, token } });
   };
 
-  const renderEmailFormContent = (
-    props: FormikProps<EmailFormValues>,
-  ): JSX.Element => (
+  const renderEmailFormContent = (props: FormikProps<EmailFormValues>): JSX.Element => (
     <Form>
       <Field
         name="email"
@@ -152,9 +143,7 @@ const ResetPasswordPage: NextPage = () => {
     </Form>
   );
 
-  const renderPasswordFormContent = (
-    props: FormikProps<PasswordFormValues>,
-  ): JSX.Element => (
+  const renderPasswordFormContent = (props: FormikProps<PasswordFormValues>): JSX.Element => (
     <Form>
       <Field
         name="newPassword"

@@ -3,10 +3,8 @@ import {
   CloudUploadOutlined,
   ContactSupportOutlined,
   EditOutlined,
-  HelpOutlineOutlined,
   LockOutlined,
   NotificationsOutlined,
-  QuestionAnswerOutlined,
   SchoolOutlined,
   SecurityOutlined,
   SettingsBackupRestoreOutlined,
@@ -35,7 +33,7 @@ export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
 
 export const HOME_PAGE_SHORTCUTS = [
   {
-    text: 'index:findResources',
+    text: 'index:findContent',
     icon: AssignmentOutlined,
     href: urls.search,
   },
@@ -83,38 +81,12 @@ export const MENU_ITEMS = {
       href: urls.resetPassword,
     },
   ],
-  language: [
-    {
-      title: 'languages:english',
-      value: 'en',
-    },
-    {
-      title: 'languages:finnish',
-      value: 'fi',
-    },
-    {
-      title: 'languages:swedish',
-      value: 'sv',
-    },
-  ],
-  about: [
-    {
-      icon: HelpOutlineOutlined,
-      text: 'common:about',
-      href: urls.about,
-    },
+  common: [
     {
       icon: ContactSupportOutlined,
       text: 'common:contact',
       href: urls.contact,
     },
-    {
-      icon: QuestionAnswerOutlined,
-      text: 'common:faq',
-      href: urls.faq,
-    },
-  ],
-  legal: [
     {
       icon: AssignmentOutlined,
       text: 'common:terms',
@@ -127,23 +99,6 @@ export const MENU_ITEMS = {
     },
   ],
 };
-
-// FAQ items.
-
-export const FAQ_ITEMS = [
-  {
-    title: 'faq:title-1',
-    text: 'faq:text-1',
-  },
-  {
-    title: 'faq:title-2',
-    text: 'faq:text-2',
-  },
-  {
-    title: 'faq:title-3',
-    text: 'faq:text-3',
-  },
-];
 
 // Rich text editor.
 

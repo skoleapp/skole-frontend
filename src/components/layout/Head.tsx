@@ -4,10 +4,7 @@ import Head from 'next/head';
 import React from 'react';
 import { SEOProps } from 'types';
 
-export const HeadComponent: React.FC<SEOProps> = ({
-  title: customTitle,
-  description,
-}) => {
+export const HeadComponent: React.FC<SEOProps> = ({ title: customTitle, description }) => {
   const { palette } = useTheme();
   const title = customTitle ? `Skole | ${customTitle}` : 'Skole';
 
@@ -29,16 +26,9 @@ export const HeadComponent: React.FC<SEOProps> = ({
       <meta content="yes" name="mobile-web-app-capable" />
       <meta name="apple-mobile-web-app-title" content="Skole" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent"
-      />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       <link rel="shortcut icon" href="images/icons/favicon.ico" />
-      <link
-        rel="apple-touch-icon"
-        sizes="180x180"
-        href="images/icons/icon-180x180.png"
-      />
+      <link rel="apple-touch-icon" sizes="180x180" href="images/icons/icon-180x180.png" />
       <link
         rel="mask-icon"
         href="images/icons/safari-pinned-tab.svg"
@@ -95,10 +85,7 @@ export const HeadComponent: React.FC<SEOProps> = ({
         media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
         rel="apple-touch-startup-image"
       />
-      <script
-        async
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-      />
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
       <script dangerouslySetInnerHTML={GAScript} />
     </Head>
   );

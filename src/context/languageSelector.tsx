@@ -10,8 +10,7 @@ export const useLanguageSelectorContext = (): LanguageSelectorContextType =>
 export const LanguageSelectorContextProvider: React.FC = ({ children }) => {
   const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);
 
-  const toggleLanguageSelector = (open: boolean): void =>
-    setLanguageSelectorOpen(open);
+  const toggleLanguageSelector = (open: boolean): void => setLanguageSelectorOpen(open);
 
   const value = {
     languageSelectorOpen,
@@ -19,8 +18,6 @@ export const LanguageSelectorContextProvider: React.FC = ({ children }) => {
   };
 
   return (
-    <LanguageSelectorContext.Provider value={value}>
-      {children}
-    </LanguageSelectorContext.Provider>
+    <LanguageSelectorContext.Provider value={value}>{children}</LanguageSelectorContext.Provider>
   );
 };

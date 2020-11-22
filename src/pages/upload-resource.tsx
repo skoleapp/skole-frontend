@@ -71,9 +71,7 @@ const UploadResourcePage: NextPage = () => {
     file: Yup.mixed().required(t('validation:required')),
   });
 
-  const onCompleted = async ({
-    createResource,
-  }: CreateResourceMutation): Promise<void> => {
+  const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {
     if (createResource) {
       if (!!createResource.errors && !!createResource.errors.length) {
         handleMutationErrors(createResource.errors);
@@ -103,11 +101,10 @@ const UploadResourcePage: NextPage = () => {
     resourceTitle,
     resourceType: _resourceType,
     course: _course,
-    file: _file,
+    file,
   }: UploadResourceFormValues): Promise<void> => {
     const resourceType = R.propOr('', 'id', _resourceType);
     const course = R.propOr('', 'id', _course);
-    const file = String(_file);
 
     const variables = {
       resourceTitle,
@@ -117,13 +114,14 @@ const UploadResourcePage: NextPage = () => {
     };
 
     setFieldValue('general', t('upload-resource:fileUploadingText'));
+
+    // @ts-ignore: A string value is expected for the file field, which is incorrect.
     await createResource({ variables });
   };
 
-  const handleSubmit = async (
-    variables: UploadResourceFormValues,
-  ): Promise<void> => {
+  const handleSubmit = async (variables: UploadResourceFormValues): Promise<void> => {
     const { file } = variables;
+
     if (file) {
       const imageTypes = [
         'image/apng',
@@ -198,9 +196,7 @@ const UploadResourcePage: NextPage = () => {
             helperText={
               <>
                 {t('upload-resource:schoolHelperText')}{' '}
-                <TextLink href={urls.contact}>
-                  {t('upload-resource:schoolHelperLink')}
-                </TextLink>
+                <TextLink href={urls.contact}>{t('upload-resource:schoolHelperLink')}</TextLink>
               </>
             }
           />
@@ -243,7 +239,8 @@ const UploadResourcePage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorTemplate />;
   }
 

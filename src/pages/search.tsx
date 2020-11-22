@@ -48,12 +48,7 @@ import {
   useCoursesQuery,
 } from 'generated';
 import { withUserMe } from 'hocs';
-import {
-  useForm,
-  useLanguageHeaderContext,
-  useMediaQueries,
-  useOpen,
-} from 'hooks';
+import { useForm, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
@@ -187,17 +182,11 @@ const SearchPage: NextPage = () => {
   const countryName = R.prop('name', country);
   const cityName = R.prop('name', city);
 
-  const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void =>
-    setSearchValue(e.target.value);
+  const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
 
   // Pick non-empty values and reload the page with new query params.
-  const handleSubmitFilters = async (
-    filteredValues: Record<symbol, unknown>,
-  ): Promise<void> => {
-    const validQuery = R.pickBy(
-      (val: string): boolean => !!val,
-      filteredValues,
-    );
+  const handleSubmitFilters = async (filteredValues: Record<symbol, unknown>): Promise<void> => {
+    const validQuery = R.pickBy((val: string): boolean => !!val, filteredValues);
 
     resetForm();
     handleCloseFilters();
@@ -295,13 +284,8 @@ const SearchPage: NextPage = () => {
     await handleSubmitFilters(filteredValues);
   };
 
-  const handleDeleteFilter = (
-    filterName: string,
-  ) => async (): Promise<void> => {
-    const query = R.pickBy(
-      (_: string, key: string) => key !== filterName,
-      queryWithPagination,
-    );
+  const handleDeleteFilter = (filterName: string) => async (): Promise<void> => {
+    const query = R.pickBy((_: string, key: string) => key !== filterName, queryWithPagination);
 
     filterName === 'courseName' && (await handleClearSearchInput());
     await Router.push({ pathname, query });
@@ -310,30 +294,17 @@ const SearchPage: NextPage = () => {
   const renderFilterNames = !!validFilters.length && (
     <Box className={classes.filterNames}>
       {validFilters.map(({ name, value }, i) => (
-        <Chip
-          className={classes.chip}
-          key={i}
-          label={value}
-          onDelete={handleDeleteFilter(name)}
-        />
+        <Chip className={classes.chip} key={i} label={value} onDelete={handleDeleteFilter(name)} />
       ))}
     </Box>
   );
 
   const renderCourseNameField = !isMobileOrTablet && (
-    <Field
-      name="courseName"
-      label={t('forms:courseName')}
-      component={TextFormField}
-    />
+    <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
   );
 
   const renderCourseCodeField = (
-    <Field
-      name="courseCode"
-      label={t('forms:courseCode')}
-      component={TextFormField}
-    />
+    <Field name="courseCode" label={t('forms:courseCode')} component={TextFormField} />
   );
 
   const renderSubjectField = (
@@ -404,9 +375,7 @@ const SearchPage: NextPage = () => {
 
   const renderFormSubmitSection = (
     props: FormikProps<FilterSearchResultsFormValues>,
-  ): JSX.Element => (
-    <FormSubmitSection submitButtonText={t('common:apply')} {...props} />
-  );
+  ): JSX.Element => <FormSubmitSection submitButtonText={t('common:apply')} {...props} />;
 
   const renderClearButton = (
     props: FormikProps<FilterSearchResultsFormValues>,
@@ -445,11 +414,7 @@ const SearchPage: NextPage = () => {
 
   const renderFilterResultsForm = (
     <DialogContent>
-      <Formik
-        onSubmit={handlePreSubmit}
-        initialValues={initialValues}
-        ref={formRef}
-      >
+      <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={formRef}>
         {renderSearchFormContent}
       </Formik>
     </DialogContent>
@@ -477,14 +442,8 @@ const SearchPage: NextPage = () => {
     />
   );
 
-  const renderNotFound = (
-    <NotFoundBox text={t('search:noCourses')} linkProps={notFoundLinkProps} />
-  );
-  const renderResults = loading
-    ? renderLoading
-    : courses.length
-    ? renderTable
-    : renderNotFound;
+  const renderNotFound = <NotFoundBox text={t('search:noCourses')} linkProps={notFoundLinkProps} />;
+  const renderResults = loading ? renderLoading : courses.length ? renderTable : renderNotFound;
 
   const renderClearFiltersButton = (
     <IconButton onClick={handleClearFilters} size="small">
@@ -583,7 +542,9 @@ const SearchPage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+
+  if (error) {
     return <ErrorTemplate />;
   }
 

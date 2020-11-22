@@ -1,10 +1,4 @@
-import {
-  Box,
-  List,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-} from '@material-ui/core';
+import { Box, List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
 import {
   ExitToAppOutlined,
   HowToRegOutlined,
@@ -49,20 +43,14 @@ export const useSettings = (modal: boolean): UseSettings => {
     openLanguageMenu();
   };
 
-  const renderAccountMenuItems = MENU_ITEMS.account.map(
-    ({ icon: Icon, href, text }, i) => (
-      <MenuItem
-        key={i}
-        onClick={handleMenuItemClick(href)}
-        selected={getSelected(href)}
-      >
-        <ListItemIcon>
-          <Icon />
-        </ListItemIcon>
-        <ListItemText>{t(text)}</ListItemText>
-      </MenuItem>
-    ),
-  );
+  const renderAccountMenuItems = MENU_ITEMS.account.map(({ icon: Icon, href, text }, i) => (
+    <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
+      <ListItemIcon>
+        <Icon />
+      </ListItemIcon>
+      <ListItemText>{t(text)}</ListItemText>
+    </MenuItem>
+  ));
 
   const renderVerifyAccountMenuItem = verified === false && (
     <MenuItem
@@ -78,11 +66,7 @@ export const useSettings = (modal: boolean): UseSettings => {
 
   const renderCommonAccountMenuItems = MENU_ITEMS.commonAccount.map(
     ({ icon: Icon, href, text }, i) => (
-      <MenuItem
-        key={i}
-        onClick={handleMenuItemClick(href)}
-        selected={getSelected(href)}
-      >
+      <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
         <ListItemIcon>
           <Icon />
         </ListItemIcon>
@@ -91,35 +75,14 @@ export const useSettings = (modal: boolean): UseSettings => {
     ),
   );
 
-  const renderAboutMenuItems = MENU_ITEMS.about.map(
-    ({ icon: Icon, href, text }, i) => (
-      <MenuItem
-        key={i}
-        onClick={handleMenuItemClick(href)}
-        selected={getSelected(href)}
-      >
-        <ListItemIcon>
-          <Icon />
-        </ListItemIcon>
-        <ListItemText>{t(text)}</ListItemText>
-      </MenuItem>
-    ),
-  );
-
-  const renderLegalItems = MENU_ITEMS.legal.map(
-    ({ icon: Icon, href, text }, i) => (
-      <MenuItem
-        key={i}
-        onClick={handleMenuItemClick(href)}
-        selected={getSelected(href)}
-      >
-        <ListItemIcon>
-          <Icon />
-        </ListItemIcon>
-        <ListItemText>{t(text)}</ListItemText>
-      </MenuItem>
-    ),
-  );
+  const renderCommonMenuItems = MENU_ITEMS.common.map(({ icon: Icon, href, text }, i) => (
+    <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
+      <ListItemIcon>
+        <Icon />
+      </ListItemIcon>
+      <ListItemText>{t(text)}</ListItemText>
+    </MenuItem>
+  ));
 
   const renderLanguageMenuItem = (
     <MenuItem onClick={handleLanguageClick}>
@@ -148,12 +111,11 @@ export const useSettings = (modal: boolean): UseSettings => {
     </MenuItem>
   );
 
-  const renderCommonMenuItems = (
+  const renderUnAuthenticatedMenuItems = (
     <List>
       {renderCommonAccountMenuItems}
       {renderLanguageMenuItem}
-      {renderAboutMenuItems}
-      {renderLegalItems}
+      {renderCommonMenuItems}
       {renderLoginMenuItem}
     </List>
   );
@@ -163,16 +125,13 @@ export const useSettings = (modal: boolean): UseSettings => {
       {renderAccountMenuItems}
       {renderVerifyAccountMenuItem}
       {renderLanguageMenuItem}
-      {renderAboutMenuItems}
-      {renderLegalItems}
+      {renderCommonMenuItems}
       {renderLogoutMenuItem}
     </List>
   );
 
   const renderSettingsMenuList = (
-    <Box flexGrow="1">
-      {userMe ? renderAuthenticatedMenuList : renderCommonMenuItems}
-    </Box>
+    <Box flexGrow="1">{userMe ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuItems}</Box>
   );
 
   return { renderSettingsMenuList, settingsOpen, toggleSettings };

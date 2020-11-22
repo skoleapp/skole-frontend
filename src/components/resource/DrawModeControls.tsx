@@ -1,10 +1,4 @@
-import {
-  Button,
-  Grid,
-  IconButton,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Button, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined, ClearOutlined } from '@material-ui/icons';
 import { useDiscussionContext, usePdfViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';

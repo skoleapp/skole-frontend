@@ -70,9 +70,7 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
             <NotificationsContextProvider>
               <SettingsContextProvider>
                 <ThemeProvider theme={theme}>
-                  <ConfirmProvider
-                    defaultOptions={defaultConfirmOptions as ConfirmOptions}
-                  >
+                  <ConfirmProvider defaultOptions={defaultConfirmOptions as ConfirmOptions}>
                     <CssBaseline />
                     <Component {...pageProps} />
                   </ConfirmProvider>

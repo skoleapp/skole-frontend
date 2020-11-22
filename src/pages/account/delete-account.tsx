@@ -1,10 +1,5 @@
 import { FormControl } from '@material-ui/core';
-import {
-  ButtonLink,
-  FormSubmitSection,
-  SettingsTemplate,
-  TextFormField,
-} from 'components';
+import { ButtonLink, FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
@@ -42,9 +37,7 @@ export const DeleteAccountPage: NextPage = () => {
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
 
-  const onCompleted = async ({
-    deleteUser,
-  }: DeleteUserMutation): Promise<void> => {
+  const onCompleted = async ({ deleteUser }: DeleteUserMutation): Promise<void> => {
     if (deleteUser) {
       if (!!deleteUser.errors && !!deleteUser.errors.length) {
         handleMutationErrors(deleteUser.errors);
@@ -67,18 +60,21 @@ export const DeleteAccountPage: NextPage = () => {
     context,
   });
 
-  const handleSubmit = async (
-    values: DeleteAccountFormValues,
-  ): Promise<void> => {
+  const handleSubmit = async (values: DeleteAccountFormValues): Promise<void> => {
     setSubmitting(false);
 
-    await confirm({
-      title: t('delete-account:deleteAccountTitle'),
-      description: t('delete-account:deleteAccountDescription'),
-    });
+    try {
+      await confirm({
+        title: t('delete-account:deleteAccountTitle'),
+        description: t('delete-account:deleteAccountDescription'),
+      });
 
-    setSubmitting(true);
-    await deleteUser({ variables: { password: values.password } });
+      await deleteUser({ variables: { password: values.password } });
+    } catch {
+      // User cancelled.
+    } finally {
+      setSubmitting(true);
+    }
   };
 
   const validationSchema = Yup.object().shape({
@@ -100,16 +96,9 @@ export const DeleteAccountPage: NextPage = () => {
             component={TextFormField}
             type="password"
           />
-          <FormSubmitSection
-            submitButtonText={t('common:confirm')}
-            {...props}
-          />
+          <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
           <FormControl>
-            <ButtonLink
-              href={urls.editProfile}
-              variant="outlined"
-              color="primary"
-            >
+            <ButtonLink href={urls.editProfile} variant="outlined" color="primary">
               {t('common:cancel')}
             </ButtonLink>
           </FormControl>

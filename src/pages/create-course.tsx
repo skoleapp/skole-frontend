@@ -64,9 +64,7 @@ const CreateCoursePage: NextPage = () => {
     school: Yup.object().nullable().required(t('validation:required')),
   });
 
-  const onCompleted = async ({
-    createCourse,
-  }: CreateCourseMutation): Promise<void> => {
+  const onCompleted = async ({ createCourse }: CreateCourseMutation): Promise<void> => {
     if (createCourse) {
       if (!!createCourse.errors && !!createCourse.errors.length) {
         handleMutationErrors(createCourse.errors);
@@ -88,15 +86,8 @@ const CreateCoursePage: NextPage = () => {
     context,
   });
 
-  const handleSubmit = async (
-    values: CreateCourseFormValues,
-  ): Promise<void> => {
-    const {
-      courseName,
-      courseCode,
-      school: _school,
-      subjects: _subjects,
-    } = values;
+  const handleSubmit = async (values: CreateCourseFormValues): Promise<void> => {
+    const { courseName, courseCode, school: _school, subjects: _subjects } = values;
 
     const school = R.propOr('', 'id', _school);
     const subjects = _subjects.map((s) => s.id);
@@ -128,16 +119,8 @@ const CreateCoursePage: NextPage = () => {
     >
       {(props): JSX.Element => (
         <Form>
-          <Field
-            name="courseName"
-            label={t('forms:courseName')}
-            component={TextFormField}
-          />
-          <Field
-            name="courseCode"
-            label={t('forms:courseCode')}
-            component={TextFormField}
-          />
+          <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
+          <Field name="courseCode" label={t('forms:courseCode')} component={TextFormField} />
           <Field
             name="school"
             label={t('forms:school')}
@@ -174,7 +157,8 @@ const CreateCoursePage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorTemplate />;
   }
 

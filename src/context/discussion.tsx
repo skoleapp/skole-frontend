@@ -1,6 +1,6 @@
 import { CommentObjectType } from 'generated';
-import React, { createContext, useState } from 'react';
-import { useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
+
 import { DiscussionContextType } from 'types';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
@@ -39,28 +39,20 @@ export const useDiscussionContext = (
 export const DiscussionContextProvider: React.FC = ({ children }) => {
   const [commentModalOpen, setCommentModalOpen] = useState(false);
 
-  const toggleCommentModal = (payload: boolean): void =>
-    setCommentModalOpen(payload);
+  const toggleCommentModal = (payload: boolean): void => setCommentModalOpen(payload);
 
   // List of top-level comments on a course/resource.
-  const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>(
-    [],
-  );
+  const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]);
 
   const [topComment, setTopComment] = useState<CommentObjectType | null>(null); // Top comment that starts a thread of reply comments.
 
-  const toggleTopComment = (payload: CommentObjectType | null): void =>
-    setTopComment(payload);
+  const toggleTopComment = (payload: CommentObjectType | null): void => setTopComment(payload);
 
   // Attachment of an existing comment.
-  const [attachmentViewerValue, setAttachmentViewerValue] = useState<
-    string | null
-  >(null);
+  const [attachmentViewerValue, setAttachmentViewerValue] = useState<string | null>(null);
 
   // Attachment for comment creation form.
-  const [commentAttachment, setCommentAttachment] = useState<
-    string | ArrayBuffer | null
-  >(null);
+  const [commentAttachment, setCommentAttachment] = useState<string | ArrayBuffer | null>(null);
 
   const value = {
     commentModalOpen,
@@ -75,9 +67,5 @@ export const DiscussionContextProvider: React.FC = ({ children }) => {
     setCommentAttachment,
   };
 
-  return (
-    <DiscussionContext.Provider value={value}>
-      {children}
-    </DiscussionContext.Provider>
-  );
+  return <DiscussionContext.Provider value={value}>{children}</DiscussionContext.Provider>;
 };

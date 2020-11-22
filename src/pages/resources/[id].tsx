@@ -11,11 +11,7 @@ import {
   Tab,
   Tabs,
 } from '@material-ui/core';
-import {
-  CloudDownloadOutlined,
-  DeleteOutline,
-  PrintOutlined,
-} from '@material-ui/icons';
+import { CloudDownloadOutlined, DeleteOutline, PrintOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import {
   CustomBottomNavbarContainer,
@@ -128,22 +124,12 @@ const ResourceDetailPage: NextPage = () => {
   const created = R.prop('created', resource);
   const commentCount = comments.length;
 
-  const {
-    tabValue,
-    setTabValue,
-    handleTabChange,
-    handleIndexChange,
-  } = useSwipeableTabs(comments);
+  const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
 
   const { renderShareButton } = useShare({ text: resourceTitle });
   const { commentModalOpen } = useDiscussionContext();
 
-  const {
-    drawMode,
-    setDrawMode,
-    swipingDisabled,
-    swipeableViewsRef,
-  } = usePdfViewerContext();
+  const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePdfViewerContext();
 
   const {
     infoDialogOpen,
@@ -235,35 +221,22 @@ const ResourceDetailPage: NextPage = () => {
     }
   };
 
-  // Do nothing except log the error so we can see it in CloudWatch if the mutation fails.
-  const onDownloadResourceError = (): void =>
-    console.log('Downloading resource failed.');
-
-  const onDownloadResourceCompleted = ({
-    downloadResource,
-  }: DownloadResourceMutation): void => {
-    if (downloadResource) {
-      if (!!downloadResource.errors && !!downloadResource.errors.length) {
-        onDownloadResourceError();
-      } else if (downloadResource.resource) {
-        !!resource &&
-          setResource({
-            ...resource,
-            downloads: downloadResource.resource.downloads,
-          });
-      }
+  const onDownloadResourceCompleted = ({ downloadResource }: DownloadResourceMutation): void => {
+    if (downloadResource && downloadResource.resource) {
+      !!resource &&
+        setResource({
+          ...resource,
+          downloads: downloadResource.resource.downloads,
+        });
     }
   };
 
   const [downloadResource] = useDownloadResourceMutation({
     onCompleted: onDownloadResourceCompleted,
-    onError: onDownloadResourceError,
     context,
   });
 
-  const handleDownloadButtonClick = async (
-    e: SyntheticEvent,
-  ): Promise<void> => {
+  const handleDownloadButtonClick = async (e: SyntheticEvent): Promise<void> => {
     handleCloseActionsDialog(e);
     await downloadResource({ variables: { id: resourceId } });
 
@@ -308,9 +281,7 @@ const ResourceDetailPage: NextPage = () => {
     }
   };
 
-  const renderCourseLink = !!courseId && (
-    <TextLink {...staticBackUrl}>{courseName}</TextLink>
-  );
+  const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
 
   const renderSchoolLink = !!schoolId && (
     <TextLink href={urls.school(schoolId)} as={schoolId} color="primary">
@@ -349,9 +320,7 @@ const ResourceDetailPage: NextPage = () => {
     },
   ];
 
-  const renderStarButton = (
-    <StarButton starred={starred} resource={resourceId} />
-  );
+  const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
   const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
 
@@ -400,9 +369,7 @@ const ResourceDetailPage: NextPage = () => {
 
   const renderToolbar = <ResourceToolbar {...toolbarProps} />;
   const renderPdfViewer = <PdfViewer file={file} />;
-  const renderDiscussionHeader = (
-    <DiscussionHeader {...discussionHeaderProps} />
-  );
+  const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
   const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
   const renderMobileContent = isMobileOrTablet && (
@@ -428,9 +395,7 @@ const ResourceDetailPage: NextPage = () => {
   const renderDesktopContent = !isMobileOrTablet && (
     <Grid container spacing={2} className={classes.desktopContainer}>
       <Grid item container xs={12} md={7} lg={8}>
-        <Paper
-          className={clsx(classes.paperContainer, classes.resourceContainer)}
-        >
+        <Paper className={clsx(classes.paperContainer, classes.resourceContainer)}>
           {renderToolbar}
           {renderPdfViewer}
         </Paper>
@@ -445,11 +410,7 @@ const ResourceDetailPage: NextPage = () => {
   );
 
   const renderInfoDialogContent = (
-    <InfoDialogContent
-      user={resourceUser}
-      created={created}
-      infoItems={infoItems}
-    />
+    <InfoDialogContent user={resourceUser} created={created} infoItems={infoItems} />
   );
 
   const renderInfoDialog = (
@@ -516,7 +477,7 @@ const ResourceDetailPage: NextPage = () => {
     },
     customBottomNavbar: renderCustomBottomNavbar,
     topNavbarProps: {
-      staticBackUrl: staticBackUrl,
+      staticBackUrl,
       headerLeft: renderShareButton,
       headerRight: renderActionsButton,
       headerRightSecondary: renderInfoButton,
@@ -529,7 +490,8 @@ const ResourceDetailPage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorTemplate />;
   }
 
@@ -542,9 +504,8 @@ const ResourceDetailPage: NextPage = () => {
         {renderActionsDialog}
       </MainTemplate>
     );
-  } else {
-    return <NotFoundTemplate />;
   }
+  return <NotFoundTemplate />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {

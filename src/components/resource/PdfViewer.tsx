@@ -1,9 +1,9 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
-import { PDFDocumentProxy } from 'pdfjs-dist';
 import React from 'react';
 import { Document, Page } from 'react-pdf';
+import { PdfDocumentProxy } from 'types';
 
 import { LoadingBox } from '../shared';
 import { AreaSelection } from './AreaSelection';
@@ -63,7 +63,7 @@ export const PdfViewer: React.FC<Props> = ({ file }) => {
     setControlsDisabled,
   } = usePdfViewerContext();
 
-  const handleLoadSuccess = (document: PDFDocumentProxy): void => {
+  const handleLoadSuccess = (document: PdfDocumentProxy): void => {
     const { numPages } = document;
     setNumPages(numPages);
     setPageNumber(1);
@@ -71,23 +71,14 @@ export const PdfViewer: React.FC<Props> = ({ file }) => {
   };
 
   const renderPages = Array.from(new Array(numPages), (_, i) => (
-    <Page
-      key={`page_${i + 1}`}
-      pageNumber={i + 1}
-      renderAnnotationLayer={false}
-    />
+    <Page key={`page_${i + 1}`} pageNumber={i + 1} renderAnnotationLayer={false} />
   ));
 
   const renderAreaSelection = <AreaSelection />;
   const renderLoading = <LoadingBox />;
 
   const renderError = (
-    <Box
-      flexGrow="1"
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-    >
+    <Box flexGrow="1" display="flex" justifyContent="center" alignItems="center">
       <Typography variant="body2" color="textSecondary">
         {t('resource:error')}
       </Typography>

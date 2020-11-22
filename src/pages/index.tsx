@@ -10,11 +10,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import {
-  ArrowForwardOutlined,
-  SearchOutlined,
-  SvgIconComponent,
-} from '@material-ui/icons';
+import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
 import clsx from 'clsx';
 import { MainBackground, MainTemplate } from 'components';
 import { withUserMe } from 'hocs';
@@ -49,7 +45,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   header: {
     fontSize: '2rem',
     [breakpoints.up('md')]: {
-      fontSize: '2.75rem',
+      fontSize: '2.5rem',
     },
   },
   subheader: {
@@ -76,7 +72,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   shortcutsContainer: {
     position: 'relative',
-    backgroundColor: COLORS.backgroundGrey,
     padding: `${spacing(4)} ${spacing(2)}`,
     flexGrow: 1,
     [breakpoints.up('md')]: {
@@ -151,38 +146,18 @@ const IndexPage: NextPage = () => {
   const renderBackground = <MainBackground />;
 
   const renderSearch = (
-    <Grid
-      className={classes.searchContainer}
-      item
-      xs={12}
-      container
-      direction="column"
-    >
-      <Typography
-        className={classes.header}
-        variant="h1"
-        color="secondary"
-        gutterBottom
-      >
+    <Grid className={classes.searchContainer} item container direction="column">
+      <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
         {t('index:header')}
       </Typography>
-      <Typography
-        className={classes.subheader}
-        variant="subtitle1"
-        color="secondary"
-      >
+      <Typography className={classes.subheader} variant="subtitle1" color="secondary">
         {t('index:subheader')}
       </Typography>
       <form className={classes.searchForm} onSubmit={handleSubmit}>
         <Box className={classes.searchField}>
           <InputBase {...inputProps} />
         </Box>
-        <Button
-          className={classes.searchButton}
-          type="submit"
-          color="primary"
-          variant="contained"
-        >
+        <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
           <SearchOutlined />
         </Button>
       </form>
@@ -215,6 +190,7 @@ const IndexPage: NextPage = () => {
 
   const renderShortcuts = (
     <Grid
+      item
       container
       justify="center"
       alignItems="center"
@@ -274,12 +250,7 @@ const IndexPage: NextPage = () => {
 
   return (
     <MainTemplate {...layoutProps}>
-      <Grid
-        container
-        direction="column"
-        alignItems="center"
-        className={classes.container}
-      >
+      <Grid container direction="column" alignItems="center" className={classes.container}>
         {renderBackground}
         {renderSearch}
         {renderShortcuts}

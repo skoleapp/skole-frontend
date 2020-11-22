@@ -3,15 +3,12 @@ import { useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-import { DialogHeader } from '../shared';
-import { SkoleDialog } from '../shared';
+import { DialogHeader, SkoleDialog } from '../shared';
 
 export const SettingsModal: React.FC = () => {
   const { t } = useTranslation();
 
-  const { renderSettingsMenuList, settingsOpen, toggleSettings } = useSettings(
-    true,
-  );
+  const { renderSettingsMenuList, settingsOpen, toggleSettings } = useSettings(true);
 
   const handleClose = (): void => toggleSettings(false);
 

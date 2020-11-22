@@ -33,12 +33,7 @@ import {
 import { useAuthContext } from 'context';
 import { BadgeObjectType, useUserQuery } from 'generated';
 import { withUserMe } from 'hocs';
-import {
-  useDayjs,
-  useLanguageHeaderContext,
-  useMediaQueries,
-  useSwipeableTabs,
-} from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useMediaQueries, useSwipeableTabs } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -122,21 +117,13 @@ const UserPage: NextPage = () => {
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const resources = R.pathOr([], ['resources', 'objects'], data);
 
-  const coursesTabLabel = isOwnProfile
-    ? t('profile:ownProfileCourses')
-    : t('common:courses');
+  const coursesTabLabel = isOwnProfile ? t('profile:ownProfileCourses') : t('common:courses');
 
-  const resourcesTabLabel = isOwnProfile
-    ? t('profile:ownProfileResources')
-    : t('common:resources');
+  const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
 
-  const noCourses = isOwnProfile
-    ? t('profile:ownProfileNoCourses')
-    : t('profile:noCourses');
+  const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
 
-  const noResources = isOwnProfile
-    ? t('profile:ownProfileNoResources')
-    : t('profile:noResources');
+  const noResources = isOwnProfile ? t('profile:ownProfileNoResources') : t('profile:noResources');
 
   const joined = useDayjs(R.propOr('', 'created', user)).startOf('m').fromNow();
 
@@ -188,12 +175,8 @@ const UserPage: NextPage = () => {
     }
   };
 
-  const renderAvatar = (
-    <Avatar className={classes.avatar} src={mediaUrl(avatar)} />
-  );
-  const renderUsername = (
-    <Typography variant="subtitle2">{username}</Typography>
-  );
+  const renderAvatar = <Avatar className={classes.avatar} src={mediaUrl(avatar)} />;
+  const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
 
   const renderTitle = !!title && (
     <Typography variant="subtitle2" color="textSecondary">
@@ -299,10 +282,7 @@ const UserPage: NextPage = () => {
   );
 
   const renderBadges = !!badges.length && (
-    <Box
-      display="flex"
-      margin={`${spacing(1)} -${spacing(1)} -${spacing(1)} -${spacing(1)}`}
-    >
+    <Box display="flex" margin={`${spacing(1)} -${spacing(1)} -${spacing(1)} -${spacing(1)}`}>
       {badges.map(({ name, description }, i) => (
         <Box key={i}>
           <Tooltip title={description || ''}>
@@ -323,8 +303,7 @@ const UserPage: NextPage = () => {
 
   const renderProfileStrengthHeader = (
     <Typography variant="body2" color="textSecondary" gutterBottom>
-      {t('profile-strength:header')}:{' '}
-      <strong>{getProfileStrengthText()}</strong>
+      {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
     </Typography>
   );
 
@@ -332,11 +311,7 @@ const UserPage: NextPage = () => {
   const renderProfileStrengthStepper = !allStepsCompleted && (
     <Stepper className={classes.stepper} alternativeLabel={isMobile}>
       {profileStrengthSteps.map(({ label }, i) => (
-        <Step
-          key={i}
-          completed={profileStrengthSteps[i].completed}
-          active={false}
-        >
+        <Step key={i} completed={profileStrengthSteps[i].completed} active={false}>
           <StepLabel>{label}</StepLabel>
         </Step>
       ))}
@@ -360,15 +335,7 @@ const UserPage: NextPage = () => {
   const statsDirection = isMobileOrTablet ? 'column' : 'row';
 
   const renderStats = (
-    <Grid
-      item
-      container
-      xs={12}
-      sm={8}
-      md={4}
-      spacing={2}
-      className={classes.statsContainer}
-    >
+    <Grid item container xs={12} sm={8} md={4} spacing={2} className={classes.statsContainer}>
       <Grid item xs={4} container direction={statsDirection}>
         {renderScoreValue}
         {renderScoreTitle}
@@ -479,13 +446,9 @@ const UserPage: NextPage = () => {
   const renderCoursesNotFound = <NotFoundBox text={noCourses} />;
   const renderResourcesNotFound = <NotFoundBox text={noResources} />;
 
-  const renderCreatedCourses = courses.length
-    ? renderCourseTable
-    : renderCoursesNotFound;
+  const renderCreatedCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
 
-  const renderCreatedResources = resources.length
-    ? renderResourceTable
-    : renderResourcesNotFound;
+  const renderCreatedResources = resources.length ? renderResourceTable : renderResourcesNotFound;
 
   const renderTabs = (
     <Tabs value={tabValue} onChange={handleTabChange}>
@@ -510,9 +473,7 @@ const UserPage: NextPage = () => {
     </Paper>
   );
 
-  const renderHeaderRight = isOwnProfile && (
-    <SettingsButton color="secondary" size="small" />
-  );
+  const renderHeaderRight = isOwnProfile && <SettingsButton color="secondary" size="small" />;
 
   const layoutProps = {
     seoProps: {
@@ -532,7 +493,9 @@ const UserPage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+
+  if (error) {
     return <ErrorTemplate />;
   }
 
@@ -544,9 +507,8 @@ const UserPage: NextPage = () => {
         {renderCreatedContent}
       </MainTemplate>
     );
-  } else {
-    return <NotFoundTemplate />;
   }
+  return <NotFoundTemplate />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {

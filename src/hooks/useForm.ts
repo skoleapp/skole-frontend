@@ -24,11 +24,9 @@ export const useForm = <T>(): UseForm<T> => {
       formRef.current.setFieldError(key, (formErrors as FormErrors)[key]),
     );
 
-  const unexpectedError = (): void =>
-    setFormErrors({ general: t('validation:unexpectedError') });
+  const unexpectedError = (): void => setFormErrors({ general: t('validation:unexpectedError') });
 
-  const setSubmitting = (val: boolean): void | null =>
-    formRef.current.setSubmitting(val);
+  const setSubmitting = (val: boolean): void | null => formRef.current.setSubmitting(val);
 
   const resetForm = (): void | null => formRef.current.resetForm();
   const submitForm = (): Promise<void> | null => formRef.current.submitForm();

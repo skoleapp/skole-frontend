@@ -1,37 +1,56 @@
 {
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
+  "env": {
+    "browser": true,
+    "es6": true
   },
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
   "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
+    "airbnb-typescript",
+    "airbnb/hooks",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "prettier/@typescript-eslint"
+    "prettier/react",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
-  "env": {
-    "es6": true,
-    "browser": true,
-    "jest": true,
-    "node": true
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
   },
+  "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "react/display-name": "off",
-    "react/prop-types": "off",
-    "@typescript-eslint/explicit-function-return-type": "warn",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/indent": "off",
-    "@typescript-eslint/ban-ts-ignore": "off",
-    "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-unused-vars": [
-      2,
-      {
-        "argsIgnorePattern": "^_"
-      }
-    ]
+    "array-callback-return": "off", // Allows us not to return anything from arrow functions.
+    "consistent-return": "off", // Allows us not to return anything from arrow functions.
+    "import/prefer-default-export": "off", // Allows us to use named exports.
+    "react/prop-types": "off", // Allows us to not use prop-types.
+    "@typescript-eslint/ban-ts-comment": "off", // Allows us to make TS ignores with ignore comments.
+    "@typescript-eslint/no-non-null-assertion": "off", // Allows us to make non-null assertions for e.g. ref objects that are cumbersome to use with TS.
+    // TODO: Under this comment, remove all rule overrides and make the necessary refactors to fix the linting errors.
+    "import/no-mutable-exports": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/no-array-index-key": "off",
+    "react/jsx-no-duplicate-props": "off",
+    "react/no-danger": "off",
+    "react/require-default-props": "off",
+    "react-hooks/rules-of-hooks": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "default-case": "off",
+    "no-nested-ternary": "off",
+    "no-underscore-dangle": "off",
+    "no-restricted-globals": "off",
+    "no-plusplus": "off",
+    "no-useless-concat": "off",
+    "no-restricted-properties": "off",
+    "no-restricted-syntax": "off",
+    "no-await-in-loop": "off",
+    "radix": "off",
+    "eqeqeq": "off",
+    "@typescript-eslint/no-shadow": "off",
+    "@typescript-eslint/no-unused-expressions": "off",
+    "@typescript-eslint/naming-convention": "off"
   }
 }

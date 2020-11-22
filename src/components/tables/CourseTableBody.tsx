@@ -5,8 +5,9 @@ import {
   TableCell,
   TableRow,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core';
+
 import {
   AccountCircleOutlined,
   AssignmentOutlined,
@@ -53,9 +54,7 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
     </Typography>
   );
 
-  const renderCourseCreator = (
-    course: CourseObjectType,
-  ): JSX.Element | string =>
+  const renderCourseCreator = (course: CourseObjectType): JSX.Element | string =>
     course.user ? (
       <TextLink href={urls.user(course.user.id)} color="primary">
         {course.user.username}
@@ -64,9 +63,7 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
       t('common:communityUser')
     );
 
-  const renderUserIcon = (
-    <AccountCircleOutlined className={clsx(classes.icon, classes.userIcon)} />
-  );
+  const renderUserIcon = <AccountCircleOutlined className={clsx(classes.icon, classes.userIcon)} />;
 
   const renderStarIcon = <StarBorderOutlined className={classes.icon} />;
   const renderResourceIcon = <AssignmentOutlined className={classes.icon} />;

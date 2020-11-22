@@ -1,3 +1,7 @@
+export interface PdfDocumentProxy {
+  numPages: number;
+}
+
 export interface LTWH {
   left: number;
   top: number;

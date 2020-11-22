@@ -141,12 +141,7 @@ const GetStartedPage: NextPage = () => {
       <Box className={classes.logo}>
         <Image layout="fill" src="/images/icons/skole-icon-text.svg" />
       </Box>
-      <Typography
-        className={classes.slogan}
-        variant="h1"
-        color="secondary"
-        gutterBottom
-      >
+      <Typography className={classes.slogan} variant="h1" color="secondary" gutterBottom>
         {t('get-started:slogan')}
       </Typography>
     </Box>
@@ -154,11 +149,7 @@ const GetStartedPage: NextPage = () => {
 
   const renderCta = (
     <Box className={classes.ctaContainer}>
-      <Typography
-        className={classes.ctaHeader}
-        variant="subtitle1"
-        color="secondary"
-      >
+      <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary">
         {t('get-started:header')}
       </Typography>
       <ButtonLink
@@ -188,16 +179,10 @@ const GetStartedPage: NextPage = () => {
       </Typography>
       <Grid container justify="center">
         <Box className={classes.badge}>
-          <Image
-            layout="fill"
-            src="/images/app-store-badges/apple-app-store-badge.svg"
-          />
+          <Image layout="fill" src="/images/app-store-badges/apple-app-store-badge.svg" />
         </Box>
         <Box className={classes.badge}>
-          <Image
-            layout="fill"
-            src="/images/app-store-badges/google-play-badge.svg"
-          />
+          <Image layout="fill" src="/images/app-store-badges/google-play-badge.svg" />
         </Box>
       </Grid>
     </Box>

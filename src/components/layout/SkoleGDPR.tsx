@@ -12,13 +12,12 @@ import {
 import { CheckOutlined } from '@material-ui/icons';
 import cookie from 'cookie';
 import { useTranslation } from 'lib';
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { urls } from 'utils';
 
-import { TextLink } from '../shared';
-import { SkoleDialog } from '../shared';
+import { TextLink, SkoleDialog } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   root: {
@@ -79,14 +78,7 @@ export const SkoleGDPR: React.FC = () => {
       <Grid item xs={12} md={8}>
         {t('gdpr:warningDesc')}
       </Grid>
-      <Grid
-        item
-        container
-        xs={12}
-        md={4}
-        justify="space-evenly"
-        alignItems="center"
-      >
+      <Grid item container xs={12} md={4} justify="space-evenly" alignItems="center">
         <Button
           className={classes.button}
           onClick={openPrivacyPreferences}
@@ -109,19 +101,14 @@ export const SkoleGDPR: React.FC = () => {
   );
 
   const renderPrivacyPreferences = (
-    <SkoleDialog
-      open={privacyPreferencesOpen}
-      onClose={closePrivacyPreferences}
-    >
+    <SkoleDialog open={privacyPreferencesOpen} onClose={closePrivacyPreferences}>
       <DialogTitle>Privacy Preferences</DialogTitle>
       <DialogContent>
         <Box textAlign="left">
           <Typography variant="subtitle1" gutterBottom>
             {t('gdpr:consentManagement')}
           </Typography>
-          <DialogContentText>
-            {t('gdpr:consentManagementDesc')}
-          </DialogContentText>
+          <DialogContentText>{t('gdpr:consentManagementDesc')}</DialogContentText>
         </Box>
         <Box textAlign="left">
           <Typography variant="subtitle1" gutterBottom>
@@ -138,10 +125,7 @@ export const SkoleGDPR: React.FC = () => {
           </Typography>
           <DialogContentText>
             {t('gdpr:termsAndConditionsDesc')}{' '}
-            <TextLink href={urls.terms}>
-              {t('gdpr:termsAndConditions')}
-            </TextLink>
-            .
+            <TextLink href={urls.terms}>{t('gdpr:termsAndConditions')}</TextLink>.
           </DialogContentText>
         </Box>
         <Box textAlign="left">
@@ -155,12 +139,7 @@ export const SkoleGDPR: React.FC = () => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={savePrivacyPreferences}
-          variant="contained"
-          color="primary"
-          autoFocus
-        >
+        <Button onClick={savePrivacyPreferences} variant="contained" color="primary" autoFocus>
           {t('common:save')}
         </Button>
       </DialogActions>

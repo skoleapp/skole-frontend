@@ -35,15 +35,7 @@ interface Props {
 }
 
 export const ActivityListItem: React.FC<Props> = ({
-  activity: {
-    id,
-    targetUser,
-    course,
-    resource,
-    comment,
-    read: initialRead,
-    description,
-  },
+  activity: { id, targetUser, course, resource, comment, read: initialRead, description },
 }) => {
   const classes = useStyles();
   const [read, setRead] = useState(initialRead);
@@ -51,19 +43,13 @@ export const ActivityListItem: React.FC<Props> = ({
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
 
-  const onError = (): void =>
-    toggleNotification(t('notifications:markSingleActivityReadError'));
+  const onError = (): void => toggleNotification(t('notifications:markSingleActivityReadError'));
 
-  const onCompleted = ({
-    markActivityAsRead,
-  }: MarkActivityAsReadMutation): void => {
+  const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
     if (markActivityAsRead) {
       if (!!markActivityAsRead.errors && !!markActivityAsRead.errors.length) {
         onError();
-      } else if (
-        !!markActivityAsRead.activity &&
-        markActivityAsRead.activity.read != null
-      ) {
+      } else if (!!markActivityAsRead.activity && markActivityAsRead.activity.read != null) {
         // We use the abstract equality operator here on purpose to compare against both `null` and `undefined` values.
         setRead(markActivityAsRead.activity.read);
       } else {
@@ -81,8 +67,8 @@ export const ActivityListItem: React.FC<Props> = ({
   });
 
   const handleClick = async (): Promise<void> => {
-    let pathname = undefined;
-    let query = undefined;
+    let pathname;
+    let query;
 
     if (course) {
       pathname = urls.course(course.id);
@@ -121,11 +107,7 @@ export const ActivityListItem: React.FC<Props> = ({
   );
 
   return (
-    <ListItem
-      onClick={handleClick}
-      className={!read ? classes.unread : ''}
-      button
-    >
+    <ListItem onClick={handleClick} className={!read ? classes.unread : ''} button>
       {renderAvatar}
       {renderListItemText}
     </ListItem>

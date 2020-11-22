@@ -1,10 +1,4 @@
-import {
-  CardContent,
-  CardHeader,
-  Grid,
-  makeStyles,
-  Paper,
-} from '@material-ui/core';
+import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
 import { useMediaQueries } from 'hooks';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
@@ -26,18 +20,14 @@ interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
   header: string;
 }
 
-export const FormTemplate: React.FC<Props> = ({
-  children,
-  header,
-  ...props
-}) => {
+export const FormTemplate: React.FC<Props> = ({ children, header, topNavbarProps, ...props }) => {
   const classes = useStyles();
   const { isDesktop } = useMediaQueries();
 
   const layoutProps = {
     ...props,
     topNavbarProps: {
-      ...props.topNavbarProps,
+      ...topNavbarProps,
       header,
     },
   };

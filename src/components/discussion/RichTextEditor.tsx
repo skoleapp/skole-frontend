@@ -43,7 +43,6 @@ import {
 import { FormikProps } from 'formik';
 import { useMediaQueries } from 'hooks';
 import { linkStrategy, useTranslation } from 'lib';
-import { DraftLink } from './DraftLink';
 import * as R from 'ramda';
 import React, {
   ChangeEvent,
@@ -55,6 +54,7 @@ import React, {
 } from 'react';
 import { CreateCommentFormValues } from 'types';
 import { RICH_STYLES } from 'utils';
+import { DraftLink } from './DraftLink';
 
 import { DialogHeader, SkoleDialog } from '../shared';
 
@@ -119,30 +119,18 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   ]);
 
   const [editorState, setEditorState] = useState(() =>
-    EditorState.createWithContent(
-      ContentState.createFromText(values.text),
-      decorator,
-    ),
+    EditorState.createWithContent(ContentState.createFromText(values.text), decorator),
   );
 
-  const {
-    commentAttachment,
-    setCommentAttachment,
-    toggleCommentModal,
-  } = useDiscussionContext();
+  const { commentAttachment, setCommentAttachment, toggleCommentModal } = useDiscussionContext();
 
-  const {
-    verified,
-    userMe,
-    loginRequiredTooltip,
-    verificationRequiredTooltip,
-  } = useAuthContext();
+  const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
 
   const classes = useStyles();
   const ref = useRef<Editor>(null!);
   const { t } = useTranslation();
   const { isDesktop, isMobileOrTablet } = useMediaQueries();
-  const placeholder = t('forms:createComment') + '...';
+  const placeholder = `${t('forms:createComment')}...`;
   const contentState = editorState.getCurrentContent();
   const selection = editorState.getSelection();
   const selectionCollapsed = selection.isCollapsed();
@@ -156,12 +144,9 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   const [URL, setURL] = useState('');
 
   const attachmentTooltip =
-    loginRequiredTooltip ||
-    !!verificationRequiredTooltip ||
-    t('tooltips:attachFile');
+    loginRequiredTooltip || !!verificationRequiredTooltip || t('tooltips:attachFile');
 
-  const handleUploadAttachment = (): false | void =>
-    attachmentInputRef.current.click();
+  const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
 
   const blurEditor = (): false | void => {
     ref.current.blur();
@@ -173,14 +158,12 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     focusEditor();
   };
 
-  const handleLinkInputChange = (e: ChangeEvent<HTMLInputElement>): void =>
-    setURL(e.target.value);
+  const handleLinkInputChange = (e: ChangeEvent<HTMLInputElement>): void => setURL(e.target.value);
 
   // If the user changes block type before entering any text, we hide the placeholder.
   // Placeholder is also hidden whenever editor is focused.
   const hidePlaceholder =
-    (!contentState.hasText() &&
-      contentState.getBlockMap().first().getType() !== 'unstyled') ||
+    (!contentState.hasText() && contentState.getBlockMap().first().getType() !== 'unstyled') ||
     focused;
 
   const blockType = editorState
@@ -189,9 +172,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     .getType();
 
   const handleChange = (editorState: EditorState): void => {
-    const newTextContent = editorState
-      .getCurrentContent()
-      .getPlainText('\u0001');
+    const newTextContent = editorState.getCurrentContent().getPlainText('\u0001');
     setEditorState(editorState);
     setFieldValue('text', newTextContent);
   };
@@ -288,22 +269,12 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   };
 
   const confirmLink = (): void => {
-    const contentStateWithEntity = contentState.createEntity(
-      'LINK',
-      'MUTABLE',
-      { url: URL },
-    );
+    const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', { url: URL });
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
     const newEditorState = EditorState.set(editorState, {
       currentContent: contentStateWithEntity,
     });
-    setEditorState(
-      RichUtils.toggleLink(
-        newEditorState,
-        newEditorState.getSelection(),
-        entityKey,
-      ),
-    );
+    setEditorState(RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey));
     setURLInputOpen(false);
     setURL('');
     setTimeout(() => focusEditor(), 0);
@@ -319,10 +290,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     setEditorState(RichUtils.toggleBlockType(editorState, blockType));
   };
 
-  const handleKeyCommand = (
-    command: string,
-    editorState: EditorState,
-  ): DraftHandleValue => {
+  const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
 
     if (newState) {
@@ -368,9 +336,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     }, 0);
   };
 
-  const getKeyBinding = (
-    e: KeyboardEvent<Record<symbol, unknown>>,
-  ): string | null => {
+  const getKeyBinding = (e: KeyboardEvent<Record<symbol, unknown>>): string | null => {
     switch (e.keyCode) {
       // CMD + Shift + X
       case 88: {
@@ -415,10 +381,9 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     if (e.shiftKey) {
       setEditorState(RichUtils.insertSoftNewline(editorState));
       return 'handled';
-    } else {
-      handleSubmit();
-      return 'handled';
     }
+    handleSubmit();
+    return 'handled';
   };
 
   const handleAttachmentChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -453,25 +418,19 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     />
   );
 
-  const renderInlineStyles = inlineStyles.map(
-    ({ tooltip, icon: Icon, style }, i) => (
-      <Tooltip key={i} title={tooltip}>
-        <Typography component="span">
-          <IconButton
-            {...commonToolbarButtonProps}
-            onMouseDown={toggleInlineStyle(style)}
-            color={
-              editorState.getCurrentInlineStyle().has(style)
-                ? 'primary'
-                : 'default'
-            }
-          >
-            <Icon />
-          </IconButton>
-        </Typography>
-      </Tooltip>
-    ),
-  );
+  const renderInlineStyles = inlineStyles.map(({ tooltip, icon: Icon, style }, i) => (
+    <Tooltip key={i} title={tooltip}>
+      <Typography component="span">
+        <IconButton
+          {...commonToolbarButtonProps}
+          onMouseDown={toggleInlineStyle(style)}
+          color={editorState.getCurrentInlineStyle().has(style) ? 'primary' : 'default'}
+        >
+          <Icon />
+        </IconButton>
+      </Typography>
+    </Tooltip>
+  ));
 
   const renderLinkButton = (
     <Tooltip title={t('tooltips:link', { hotkeyLink })}>
@@ -508,21 +467,19 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     </SkoleDialog>
   );
 
-  const renderBlockStyles = blockTypes.map(
-    ({ tooltip, icon: Icon, style }, i) => (
-      <Tooltip key={i} title={tooltip}>
-        <Typography component="span">
-          <IconButton
-            {...commonToolbarButtonProps}
-            onMouseDown={toggleBlockStyle(style)}
-            color={style === blockType ? 'primary' : 'default'}
-          >
-            <Icon />
-          </IconButton>
-        </Typography>
-      </Tooltip>
-    ),
-  );
+  const renderBlockStyles = blockTypes.map(({ tooltip, icon: Icon, style }, i) => (
+    <Tooltip key={i} title={tooltip}>
+      <Typography component="span">
+        <IconButton
+          {...commonToolbarButtonProps}
+          onMouseDown={toggleBlockStyle(style)}
+          color={style === blockType ? 'primary' : 'default'}
+        >
+          <Icon />
+        </IconButton>
+      </Typography>
+    </Tooltip>
+  ));
 
   const renderSendButton = (
     <Box marginLeft="auto">
@@ -561,10 +518,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   );
 
   // For anonymous users and user without verification that are on mobile, hide the entire button.
-  const renderAttachmentButton = ((isMobileOrTablet &&
-    !!userMe &&
-    !!verified) ||
-    isDesktop) && (
+  const renderAttachmentButton = ((isMobileOrTablet && !!userMe && !!verified) || isDesktop) && (
     <>
       <input
         ref={attachmentInputRef}
@@ -591,10 +545,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   const renderClearAttachmentButton = !!commentAttachment && (
     <Tooltip title={t('tooltips:clearAttachment')}>
       <Typography component="span">
-        <IconButton
-          {...commonToolbarButtonProps}
-          onClick={handleClearAttachment}
-        >
+        <IconButton {...commonToolbarButtonProps} onClick={handleClearAttachment}>
           <ClearOutlined />
         </IconButton>
       </Typography>
@@ -636,12 +587,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   );
 
   return (
-    <Box
-      className={clsx(
-        classes.root,
-        hidePlaceholder && classes.placeholderHidden,
-      )}
-    >
+    <Box className={clsx(classes.root, hidePlaceholder && classes.placeholderHidden)}>
       {renderTopToolbar}
       {renderTextField}
       {renderBottomToolbar}

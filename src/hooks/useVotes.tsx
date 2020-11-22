@@ -2,11 +2,11 @@ import { IconButton, Size, Tooltip, Typography } from '@material-ui/core';
 import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
-import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 import { useTranslation } from 'lib';
-import React, { SyntheticEvent } from 'react';
-import { useState } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
+
 import { MuiColor } from 'types';
+import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 
 interface VoteVariables {
   course?: string;
@@ -44,12 +44,7 @@ export const useVotes = ({
   isOwner,
   variables,
 }: UseVotesProps): UseVotes => {
-  const {
-    userMe,
-    verified,
-    loginRequiredTooltip,
-    verificationRequiredTooltip,
-  } = useAuthContext();
+  const { userMe, verified, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
 
   const { t } = useTranslation();
   const [currentVote, setCurrentVote] = useState(initialVote);
@@ -89,9 +84,7 @@ export const useVotes = ({
     context,
   });
 
-  const handleVote = (status: number) => async (
-    e: SyntheticEvent,
-  ): Promise<void> => {
+  const handleVote = (status: number) => async (e: SyntheticEvent): Promise<void> => {
     e.stopPropagation(); // Prevent opening comment thread for top-level comments.
     await vote({ variables: { status, ...variables } });
   };
@@ -104,19 +97,13 @@ export const useVotes = ({
   const upVoteButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(1),
-    color:
-      !!currentVote && currentVote.status === 1
-        ? 'primary'
-        : ('default' as MuiColor),
+    color: !!currentVote && currentVote.status === 1 ? 'primary' : ('default' as MuiColor),
   };
 
   const downVoteButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(-1),
-    color:
-      !!currentVote && currentVote.status === -1
-        ? 'primary'
-        : ('default' as MuiColor),
+    color: !!currentVote && currentVote.status === -1 ? 'primary' : ('default' as MuiColor),
   };
 
   const renderUpVoteButton = (

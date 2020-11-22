@@ -29,13 +29,9 @@ interface Props {
 export const NotFoundBox: React.FC<Props> = ({ text, linkProps }) => {
   const classes = useStyles();
 
-  const renderIcon = (
-    <MoodBadOutlined className={classes.icon} color="disabled" />
-  );
+  const renderIcon = <MoodBadOutlined className={classes.icon} color="disabled" />;
 
-  const renderLink = !!linkProps && (
-    <TextLink href={linkProps.href}>{linkProps.text}</TextLink>
-  );
+  const renderLink = !!linkProps && <TextLink href={linkProps.href}>{linkProps.text}</TextLink>;
 
   const renderText = (
     <Typography variant="body2" color="textSecondary">

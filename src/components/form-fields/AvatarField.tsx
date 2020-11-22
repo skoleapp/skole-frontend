@@ -9,11 +9,7 @@ import {
   makeStyles,
   MenuItem,
 } from '@material-ui/core';
-import {
-  AddCircleOutlineOutlined,
-  ClearOutlined,
-  EditOutlined,
-} from '@material-ui/icons';
+import { AddCircleOutlineOutlined, ClearOutlined, EditOutlined } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
 import { FormikProps } from 'formik';
 import { useOpen } from 'hooks';
@@ -42,10 +38,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
 }));
 
-export const AvatarField: React.FC<FormikProps<FormFields>> = ({
-  setFieldValue,
-  values,
-}) => {
+export const AvatarField: React.FC<FormikProps<FormFields>> = ({ setFieldValue, values }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [preview, setPreview] = useState(values.avatar);

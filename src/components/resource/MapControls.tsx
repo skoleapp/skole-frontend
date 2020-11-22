@@ -1,11 +1,4 @@
-import {
-  Box,
-  Fab,
-  makeStyles,
-  Size,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import { Box, Fab, makeStyles, Size, Tooltip, Typography } from '@material-ui/core';
 import {
   AddOutlined,
   FullscreenExitOutlined,
@@ -56,13 +49,7 @@ export const MapControls: React.FC<Props> = ({
   };
 
   const renderFullscreenButton = (
-    <Tooltip
-      title={
-        fullscreen
-          ? t('tooltips:exitFullscreen')
-          : t('tooltips:enterFullscreen')
-      }
-    >
+    <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
       <Typography component="span">
         <Fab {...commonButtonProps} onClick={handleFullscreenButtonClick}>
           {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}

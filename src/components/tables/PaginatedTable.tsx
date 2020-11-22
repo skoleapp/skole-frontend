@@ -25,13 +25,9 @@ export const PaginatedTable: React.FC<Props> = ({
 
   const page = Number(R.propOr(1, 'page', query));
 
-  const rowsPerPage = Number(
-    R.propOr(RESULTS_PER_PAGE_OPTIONS[0], 'pageSize', query),
-  );
+  const rowsPerPage = Number(R.propOr(RESULTS_PER_PAGE_OPTIONS[0], 'pageSize', query));
 
-  const handleReloadPage = async (
-    values: Record<symbol, unknown>,
-  ): Promise<void> => {
+  const handleReloadPage = async (values: Record<symbol, unknown>): Promise<void> => {
     const query = getQueryWithPagination({ query: values, extraFilters });
     await Router.push({ pathname, query });
   };

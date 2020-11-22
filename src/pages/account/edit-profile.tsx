@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  FormHelperText,
-  makeStyles,
-  Switch,
-} from '@material-ui/core';
+import { FormControl, FormHelperText, makeStyles, Switch } from '@material-ui/core';
 import {
   AutocompleteField,
   AvatarField,
@@ -96,9 +91,7 @@ const EditProfilePage: NextPage = () => {
     context,
   });
 
-  const handleSubmit = async (
-    values: UpdateProfileFormValues,
-  ): Promise<void> => {
+  const handleSubmit = async (values: UpdateProfileFormValues): Promise<void> => {
     const { username, email, title, bio, avatar, school, subject } = values;
 
     await updateUserMutation({
@@ -135,30 +128,20 @@ const EditProfilePage: NextPage = () => {
     subject: Yup.object().nullable(),
   });
 
-  const renderAvatarField = (
-    props: FormikProps<UpdateProfileFormValues>,
-  ): JSX.Element => <AvatarField {...props} />;
+  const renderAvatarField = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
+    <AvatarField {...props} />
+  );
   const renderTitleField = (
     <Field name="title" component={TextFormField} label={t('forms:title')} />
   );
   const renderUsernameField = (
-    <Field
-      name="username"
-      component={TextFormField}
-      label={t('forms:username')}
-    />
+    <Field name="username" component={TextFormField} label={t('forms:username')} />
   );
   const renderEmailField = (
     <Field name="email" component={TextFormField} label={t('forms:email')} />
   );
   const renderBioField = (
-    <Field
-      name="bio"
-      component={TextFormField}
-      label={t('forms:bio')}
-      rows="4"
-      multiline
-    />
+    <Field name="bio" component={TextFormField} label={t('forms:bio')} rows="4" multiline />
   );
 
   const renderSchoolField = (
@@ -188,32 +171,18 @@ const EditProfilePage: NextPage = () => {
   const renderMarketingPermissionField = (
     <FormControl>
       <FormHelperText>{t('forms:marketingPermission')}</FormHelperText>
-      <Field
-        name="marketingPermission"
-        component={Switch}
-        fullWidth
-        disabled
-        color="primary"
-      />
+      <Field name="marketingPermission" component={Switch} fullWidth disabled color="primary" />
     </FormControl>
   );
 
   const renderPushNotificationsField = (
     <FormControl>
       <FormHelperText>{t('forms:pushNotifications')}</FormHelperText>
-      <Field
-        name="pushNotifications"
-        component={Switch}
-        fullWidth
-        disabled
-        color="primary"
-      />
+      <Field name="pushNotifications" component={Switch} fullWidth disabled color="primary" />
     </FormControl>
   );
 
-  const renderFormSubmitSection = (
-    props: FormikProps<UpdateProfileFormValues>,
-  ): JSX.Element => (
+  const renderFormSubmitSection = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:save')} {...props} />
   );
 
@@ -281,14 +250,9 @@ const EditProfilePage: NextPage = () => {
   };
 
   if (userMe) {
-    return (
-      <SettingsTemplate {...layoutProps}>
-        {renderEditProfileForm}
-      </SettingsTemplate>
-    );
-  } else {
-    return <NotFoundTemplate />;
+    return <SettingsTemplate {...layoutProps}>{renderEditProfileForm}</SettingsTemplate>;
   }
+  return <NotFoundTemplate />;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

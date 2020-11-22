@@ -45,12 +45,7 @@ const ConfirmLoginPage: NextPage = () => {
         {t('common:continue')}
       </ButtonLink>
       <FormControl>
-        <Button
-          onClick={handleClickCancelButton}
-          color="primary"
-          variant="outlined"
-          fullWidth
-        >
+        <Button onClick={handleClickCancelButton} color="primary" variant="outlined" fullWidth>
           {t('common:cancel')}
         </Button>
       </FormControl>

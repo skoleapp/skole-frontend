@@ -12,7 +12,7 @@ export interface TopLevelCommentThreadProps {
 
 export interface CreateCommentFormValues {
   text: string;
-  attachment: File | null;
+  attachment: string | null;
   course?: string;
   resource?: string;
   comment?: string;

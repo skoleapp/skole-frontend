@@ -28,27 +28,19 @@ export const getClampedScale = (value: number): number =>
   Math.max(MIN_SCALE, Math.min(value, MAX_SCALE));
 
 // Get mid point between translation points.
-export const getMidPoint = (
-  p1: PdfTranslation,
-  p2: PdfTranslation,
-): PdfTranslation => ({
+export const getMidPoint = (p1: PdfTranslation, p2: PdfTranslation): PdfTranslation => ({
   x: (p1.x + p2.x) / 2,
   y: (p1.y + p2.y) / 2,
 });
 
 // The amount that a value of a dimension will change given a new scale.
-export const getCoordChange = (
-  coordinate: number,
-  scaleRatio: number,
-): number => scaleRatio * coordinate - coordinate;
+export const getCoordChange = (coordinate: number, scaleRatio: number): number =>
+  scaleRatio * coordinate - coordinate;
 
 // Area selection helpers.
 
 // Get rectangle coordinates on container element.
-export const getBoundingRect = (
-  start: PdfTranslation,
-  end: PdfTranslation,
-): LTWH => ({
+export const getBoundingRect = (start: PdfTranslation, end: PdfTranslation): LTWH => ({
   left: Math.min(end.x, start.x),
   top: Math.min(end.y, start.y),
   width: Math.abs(end.x - start.x),
@@ -61,24 +53,21 @@ interface PageFromElement {
 }
 
 // Find closest page canvas from DOM node.
-export const getPageFromElement = (
-  target: HTMLElement,
-): PageFromElement | null => {
+export const getPageFromElement = (target: HTMLElement): PageFromElement | null => {
   const node = target.closest('.react-pdf__Page');
 
   if (node instanceof HTMLElement) {
     const number = Number(node.dataset.pageNumber);
     return { node, number };
-  } else {
-    return null;
   }
+  return null;
 };
 
 // Converts a data URI string into a File object.
 export const dataURItoFile = (dataURI: string): File => {
   const BASE64_MARKER = ';base64,';
   const mime = dataURI.split(BASE64_MARKER)[0].split(':')[1];
-  const filename = 'screenshot' + '.' + mime.split('/')[1];
+  const filename = `${'screenshot' + '.'}${mime.split('/')[1]}`;
   const bytes = atob(dataURI.split(BASE64_MARKER)[1]);
   const writer = new Uint8Array(new ArrayBuffer(bytes.length));
 

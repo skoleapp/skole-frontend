@@ -1,16 +1,5 @@
-import {
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  Size,
-  Tooltip,
-} from '@material-ui/core';
-import {
-  FlagOutlined,
-  MoreHorizOutlined,
-  ShareOutlined,
-} from '@material-ui/icons';
+import { IconButton, ListItemIcon, ListItemText, MenuItem, Size, Tooltip } from '@material-ui/core';
+import { FlagOutlined, MoreHorizOutlined, ShareOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps, ShareParams } from 'types';
@@ -32,9 +21,7 @@ interface UseActionsDialog {
   };
 }
 
-export const useActionsDialog = (
-  shareParams: ShareParams,
-): UseActionsDialog => {
+export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => {
   const { t } = useTranslation();
   const { handleShare: _handleShare } = useShare(shareParams);
   const { isMobileOrTablet } = useMediaQueries();
@@ -91,10 +78,7 @@ export const useActionsDialog = (
 
   const renderActionsButton = (
     <Tooltip title={tooltip}>
-      <IconButton
-        {...actionsButtonProps}
-        color={isMobileOrTablet ? 'secondary' : 'default'}
-      >
+      <IconButton {...actionsButtonProps} color={isMobileOrTablet ? 'secondary' : 'default'}>
         <MoreHorizOutlined />
       </IconButton>
     </Tooltip>

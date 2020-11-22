@@ -69,9 +69,7 @@ const StarredPage: NextPage = () => {
 
   const renderCoursesNotFound = <NotFoundBox text={t('starred:noCourses')} />;
 
-  const renderResourcesNotFound = (
-    <NotFoundBox text={t('starred:noResources')} />
-  );
+  const renderResourcesNotFound = <NotFoundBox text={t('starred:noResources')} />;
 
   const renderStarredCourses = loading
     ? renderLoading
@@ -115,7 +113,8 @@ const StarredPage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorTemplate />;
   }
 
@@ -126,9 +125,8 @@ const StarredPage: NextPage = () => {
         {renderSwipeableViews}
       </SettingsTemplate>
     );
-  } else {
-    return <NotFoundTemplate />;
   }
+  return <NotFoundTemplate />;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

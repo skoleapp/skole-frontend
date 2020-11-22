@@ -2,14 +2,13 @@ import { IconButton, InputAdornment, TextFieldProps } from '@material-ui/core';
 import { VisibilityOffOutlined, VisibilityOutlined } from '@material-ui/icons';
 import { Field, FormikProps } from 'formik';
 import { useTranslation } from 'lib';
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { TextFormField } from './TextFormField';
 
-export const PasswordField: React.FC<
-  FormikProps<Record<symbol, unknown>> & TextFieldProps
-> = (props) => {
+export const PasswordField: React.FC<FormikProps<Record<symbol, unknown>> & TextFieldProps> = (
+  props,
+) => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = (): void => setShowPassword(!showPassword);

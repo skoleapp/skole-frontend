@@ -1,10 +1,4 @@
-import {
-  CardContent,
-  CardHeader,
-  Grid,
-  makeStyles,
-  Paper,
-} from '@material-ui/core';
+import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
 import clsx from 'clsx';
 import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
@@ -97,21 +91,9 @@ export const SettingsTemplate: React.FC<Props> = ({
   );
 
   const renderContent = (
-    <CardContent
-      className={clsx(
-        classes.container,
-        disablePadding && classes.disablePadding,
-      )}
-    >
+    <CardContent className={clsx(classes.container, disablePadding && classes.disablePadding)}>
       <Grid container alignItems="center" className={classes.container}>
-        <Grid
-          item
-          container
-          direction="column"
-          xs={12}
-          className={classes.container}
-          {...colSpan}
-        >
+        <Grid item container direction="column" xs={12} className={classes.container} {...colSpan}>
           {children}
         </Grid>
       </Grid>
@@ -124,10 +106,7 @@ export const SettingsTemplate: React.FC<Props> = ({
       xs={12}
       lg={9}
       container
-      className={clsx(
-        classes.container,
-        isMobileOrTablet && classes.disablePadding,
-      )}
+      className={clsx(classes.container, isMobileOrTablet && classes.disablePadding)}
     >
       <Paper className={clsx(classes.container, classes.paperContainer)}>
         {renderHeader}

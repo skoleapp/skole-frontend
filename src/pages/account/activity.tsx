@@ -1,10 +1,4 @@
-import {
-  List,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  TableBody,
-} from '@material-ui/core';
+import { List, ListItemIcon, ListItemText, MenuItem, TableBody } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import {
   ActivityListItem,
@@ -46,8 +40,7 @@ const ActivityPage: NextPage = () => {
     setActivities(initialActivities);
   }, [data]);
 
-  const onError = (): void =>
-    toggleNotification(t('notifications:markAllActivitiesAsReadError'));
+  const onError = (): void => toggleNotification(t('notifications:markAllActivitiesAsReadError'));
 
   const {
     actionsDialogOpen,
@@ -60,20 +53,13 @@ const ActivityPage: NextPage = () => {
     markAllActivitiesAsRead,
   }: GraphQlMarkAllActivitiesAsReadMutation): void => {
     if (markAllActivitiesAsRead) {
-      if (
-        !!markAllActivitiesAsRead.errors &&
-        !!markAllActivitiesAsRead.errors.length
-      ) {
+      if (!!markAllActivitiesAsRead.errors && !!markAllActivitiesAsRead.errors.length) {
         onError();
       } else if (
         !!markAllActivitiesAsRead.activities &&
         !!markAllActivitiesAsRead.activities.objects
       ) {
-        const newActivities = R.pathOr(
-          [],
-          ['activities', 'objects'],
-          markAllActivitiesAsRead,
-        );
+        const newActivities = R.pathOr([], ['activities', 'objects'], markAllActivitiesAsRead);
 
         setActivities(newActivities);
       } else {
@@ -90,9 +76,7 @@ const ActivityPage: NextPage = () => {
     context,
   });
 
-  const handleClickMarkAllActivitiesAsReadButton = async (
-    e: SyntheticEvent,
-  ): Promise<void> => {
+  const handleClickMarkAllActivitiesAsReadButton = async (e: SyntheticEvent): Promise<void> => {
     await markAllActivitiesAsRead();
     handleCloseActionsDialog(e);
   };
@@ -125,10 +109,7 @@ const ActivityPage: NextPage = () => {
   );
 
   const renderTable = (
-    <PaginatedTable
-      renderTableBody={renderActivityTableBody}
-      count={activityCount}
-    />
+    <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
   );
 
   const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
@@ -164,7 +145,8 @@ const ActivityPage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorTemplate />;
   }
 

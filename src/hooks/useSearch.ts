@@ -37,8 +37,7 @@ export const useSearch = (): UseSearch => {
 
   const searchUrl = { pathname: urls.search, query };
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>): void =>
-    setValue(e.target.value);
+  const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
 
   const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
     e.preventDefault();
