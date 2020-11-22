@@ -27,14 +27,8 @@ export const Footer: React.FC = () => {
         <Typography variant="subtitle1" color="secondary" gutterBottom>
           SKOLE
         </Typography>
-        <TextLink href={urls.about} color="secondary">
-          {t('common:about')}
-        </TextLink>
         <TextLink href={urls.contact} color="secondary">
           {t('common:contact')}
-        </TextLink>
-        <TextLink href={urls.faq} color="secondary">
-          {t('common:faq')}
         </TextLink>
         <TextLink href={urls.terms} color="secondary">
           {t('common:terms')}

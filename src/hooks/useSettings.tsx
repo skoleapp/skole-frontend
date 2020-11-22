@@ -91,22 +91,7 @@ export const useSettings = (modal: boolean): UseSettings => {
     ),
   );
 
-  const renderAboutMenuItems = MENU_ITEMS.about.map(
-    ({ icon: Icon, href, text }, i) => (
-      <MenuItem
-        key={i}
-        onClick={handleMenuItemClick(href)}
-        selected={getSelected(href)}
-      >
-        <ListItemIcon>
-          <Icon />
-        </ListItemIcon>
-        <ListItemText>{t(text)}</ListItemText>
-      </MenuItem>
-    ),
-  );
-
-  const renderLegalItems = MENU_ITEMS.legal.map(
+  const renderCommonMenuItems = MENU_ITEMS.common.map(
     ({ icon: Icon, href, text }, i) => (
       <MenuItem
         key={i}
@@ -148,12 +133,11 @@ export const useSettings = (modal: boolean): UseSettings => {
     </MenuItem>
   );
 
-  const renderCommonMenuItems = (
+  const renderUnAuthenticatedMenuItems = (
     <List>
       {renderCommonAccountMenuItems}
       {renderLanguageMenuItem}
-      {renderAboutMenuItems}
-      {renderLegalItems}
+      {renderCommonMenuItems}
       {renderLoginMenuItem}
     </List>
   );
@@ -163,15 +147,14 @@ export const useSettings = (modal: boolean): UseSettings => {
       {renderAccountMenuItems}
       {renderVerifyAccountMenuItem}
       {renderLanguageMenuItem}
-      {renderAboutMenuItems}
-      {renderLegalItems}
+      {renderCommonMenuItems}
       {renderLogoutMenuItem}
     </List>
   );
 
   const renderSettingsMenuList = (
     <Box flexGrow="1">
-      {userMe ? renderAuthenticatedMenuList : renderCommonMenuItems}
+      {userMe ? renderAuthenticatedMenuList : renderUnAuthenticatedMenuItems}
     </Box>
   );
 
