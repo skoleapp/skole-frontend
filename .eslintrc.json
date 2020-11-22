@@ -1,37 +1,30 @@
 {
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
+  "env": {
+    "browser": true,
+    "es6": true
   },
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
   "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
+    "airbnb-typescript",
+    "airbnb/hooks",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "prettier/@typescript-eslint"
+    "prettier/react",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
-  "env": {
-    "es6": true,
-    "browser": true,
-    "jest": true,
-    "node": true
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
   },
+  "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "react/display-name": "off",
-    "react/prop-types": "off",
-    "@typescript-eslint/explicit-function-return-type": "warn",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/indent": "off",
-    "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-unused-vars": [
-      2,
-      {
-        "argsIgnorePattern": "^_"
-      }
-    ]
+    "react/jsx-props-no-spreading": "off", // TODO: Make necessary refactors so we can remove this ignore.
+    "@typescript-eslint/no-shadow": "off" // TODO: Make necessary refactors so we can remove this ignore.
   }
 }
