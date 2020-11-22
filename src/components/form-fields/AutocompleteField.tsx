@@ -1,8 +1,8 @@
-import { OperationVariables, useApolloClient } from '@apollo/client';
+import { OperationVariables, useApolloClient, DocumentNode } from '@apollo/client';
 import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
 import { FieldAttributes, FormikProps, getIn } from 'formik';
-import { DocumentNode } from 'graphql';
+
 import { useLanguageHeaderContext } from 'hooks';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';

@@ -1,9 +1,4 @@
-import {
-  IconButton,
-  IconButtonProps,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import { IconButton, IconButtonProps, Tooltip, Typography } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { StarMutation, useStarMutation } from 'generated';
@@ -17,19 +12,10 @@ interface Props extends IconButtonProps {
   resource?: string;
 }
 
-export const StarButton: React.FC<Props> = ({
-  starred: initialStarred,
-  course,
-  resource,
-}) => {
+export const StarButton: React.FC<Props> = ({ starred: initialStarred, course, resource }) => {
   const { t } = useTranslation();
 
-  const {
-    verified,
-    userMe,
-    loginRequiredTooltip,
-    verificationRequiredTooltip,
-  } = useAuthContext();
+  const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
 
   const [starred, setStarred] = useState(initialStarred);
   const color = starred ? 'primary' : 'default';

@@ -108,13 +108,7 @@ export const Footer: React.FC = () => {
         {renderLanguage}
         {renderSocial}
       </Grid>
-      <Grid
-        item
-        xs={12}
-        container
-        justify="center"
-        className={classes.copyRightSection}
-      >
+      <Grid item xs={12} container justify="center" className={classes.copyRightSection}>
         {renderCopyRight}
       </Grid>
     </Grid>

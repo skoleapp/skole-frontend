@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Fab,
-  Grid,
-  makeStyles,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
+import { Box, Button, Fab, Grid, makeStyles, Typography, useTheme } from '@material-ui/core';
 import { AddOutlined } from '@material-ui/icons';
 import { useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
@@ -60,11 +52,9 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
   const classes = useStyles();
   const { isMobileOrTablet } = useMediaQueries();
 
-  const {
-    topLevelComments,
-    setTopLevelComments,
-    toggleCommentModal,
-  } = useDiscussionContext(initialComments);
+  const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext(
+    initialComments,
+  );
 
   const appendComments = (comment: CommentObjectType): void =>
     setTopLevelComments([...topLevelComments, comment]);
@@ -86,9 +76,7 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
 
   const renderTopLevelComments =
     !!topLevelComments.length &&
-    topLevelComments.map((c, i) => (
-      <CommentCard {...commentCardProps} key={i} comment={c} />
-    ));
+    topLevelComments.map((c, i) => <CommentCard {...commentCardProps} key={i} comment={c} />);
 
   const renderCommentsNotFound = !topLevelComments.length && !!noComments && (
     <NotFoundBox text={noComments} />
@@ -113,11 +101,7 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
   );
 
   const renderCreateCommentButton = isMobileOrTablet && (
-    <Fab
-      className={classes.createCommentButton}
-      color="secondary"
-      onClick={openCommentModal}
-    >
+    <Fab className={classes.createCommentButton} color="secondary" onClick={openCommentModal}>
       <AddOutlined />
     </Fab>
   );
@@ -139,17 +123,9 @@ export const ReplyCommentThread: React.FC = () => {
   const { t } = useTranslation();
   const { isMobileOrTablet } = useMediaQueries();
 
-  const {
-    topComment,
-    toggleTopComment,
-    toggleCommentModal,
-  } = useDiscussionContext();
+  const { topComment, toggleTopComment, toggleCommentModal } = useDiscussionContext();
 
-  const replyComments: CommentObjectType[] = R.propOr(
-    [],
-    'replyComments',
-    topComment,
-  );
+  const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
 
   const topCommentId = R.prop('id', topComment);
   const target = { comment: Number(topCommentId) };
@@ -202,18 +178,11 @@ export const ReplyCommentThread: React.FC = () => {
 
   const renderReplyComments =
     !!replyComments.length &&
-    replyComments.map((c, i) => (
-      <CommentCard {...commentCardProps} key={i} comment={c} />
-    ));
+    replyComments.map((c, i) => <CommentCard {...commentCardProps} key={i} comment={c} />);
 
   const renderReplyButton = !!topComment && isMobileOrTablet && (
     <Box padding={spacing(2)} marginTop="auto">
-      <Button
-        onClick={openCommentModal}
-        color="primary"
-        variant="contained"
-        fullWidth
-      >
+      <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
         {t('common:reply')}
       </Button>
     </Box>
@@ -227,9 +196,7 @@ export const ReplyCommentThread: React.FC = () => {
     </Grid>
   );
 
-  const renderCreateCommentForm = (
-    <CreateCommentForm {...createCommentFormProps} />
-  );
+  const renderCreateCommentForm = <CreateCommentForm {...createCommentFormProps} />;
 
   return (
     <Grid container direction="column" className={classes.root}>

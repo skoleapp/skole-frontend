@@ -1,10 +1,4 @@
-import {
-  Grid,
-  IconButton,
-  makeStyles,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import { Grid, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -19,11 +13,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
 }));
 
-export const DialogHeader: React.FC<DialogHeaderProps> = ({
-  text,
-  onCancel,
-  headerRight,
-}) => {
+export const DialogHeader: React.FC<DialogHeaderProps> = ({ text, onCancel, headerRight }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 

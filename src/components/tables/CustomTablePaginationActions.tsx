@@ -12,10 +12,7 @@ interface Props {
   count: number;
   page: number;
   rowsPerPage: number;
-  onChangePage: (
-    e: MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => void;
+  onChangePage: (e: MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
 }
 
 export const CustomTablePaginationActions: React.FC<Props> = ({
@@ -26,8 +23,7 @@ export const CustomTablePaginationActions: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
 
-  const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void =>
-    onChangePage(e, 0);
+  const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, 0);
 
   const handleBackButtonClick = (e: MouseEvent<HTMLButtonElement>): void =>
     onChangePage(e, page - 1);
@@ -35,9 +31,7 @@ export const CustomTablePaginationActions: React.FC<Props> = ({
   const handleNextButtonClick = (e: MouseEvent<HTMLButtonElement>): void =>
     onChangePage(e, page + 1);
 
-  const handleLastPageButtonClick = (
-    e: MouseEvent<HTMLButtonElement>,
-  ): void => {
+  const handleLastPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
     onChangePage(e, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
@@ -45,22 +39,14 @@ export const CustomTablePaginationActions: React.FC<Props> = ({
     <Box display="flex" margin="0.5rem">
       <Tooltip title={t('tooltips:firstPage')}>
         <Typography component="span">
-          <IconButton
-            onClick={handleFirstPageButtonClick}
-            disabled={page === 0}
-            size="small"
-          >
+          <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
             <FirstPageOutlined />
           </IconButton>
         </Typography>
       </Tooltip>
       <Tooltip title={t('tooltips:previousPage')}>
         <Typography component="span">
-          <IconButton
-            onClick={handleBackButtonClick}
-            disabled={page === 0}
-            size="small"
-          >
+          <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
             <KeyboardArrowLeftOutlined />
           </IconButton>
         </Typography>

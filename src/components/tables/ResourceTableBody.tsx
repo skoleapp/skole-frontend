@@ -61,9 +61,7 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
     );
   };
 
-  const renderResourceCreator = (
-    resource: ResourceObjectType,
-  ): JSX.Element | string =>
+  const renderResourceCreator = (resource: ResourceObjectType): JSX.Element | string =>
     resource.user ? (
       <TextLink href={urls.user(resource.user.id)} color="primary">
         {resource.user.username}
@@ -72,16 +70,12 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
       t('common:communityUser')
     );
 
-  const renderUserIcon = (
-    <AccountCircleOutlined className={clsx(classes.icon, classes.userIcon)} />
-  );
+  const renderUserIcon = <AccountCircleOutlined className={clsx(classes.icon, classes.userIcon)} />;
 
   const renderStarIcon = <StarBorderOutlined className={classes.icon} />;
   const renderDiscussionIcon = <ChatOutlined className={classes.icon} />;
 
-  const renderDownloadsIcon = (
-    <CloudDownloadOutlined className={classes.icon} />
-  );
+  const renderDownloadsIcon = <CloudDownloadOutlined className={classes.icon} />;
 
   const renderResourceInfo = (r: ResourceObjectType): JSX.Element => (
     <Typography variant="body2" color="textSecondary">

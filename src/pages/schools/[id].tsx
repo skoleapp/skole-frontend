@@ -17,11 +17,7 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core';
-import {
-  AddCircleOutlineOutlined,
-  AssignmentOutlined,
-  SchoolOutlined,
-} from '@material-ui/icons';
+import { AddCircleOutlineOutlined, AssignmentOutlined, SchoolOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import {
   CourseTableBody,
@@ -106,8 +102,7 @@ const SchoolDetailPage: NextPage = () => {
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
   const { renderShareButton } = useShare({ text: schoolName });
 
-  const addCourseTooltip =
-    verificationRequiredTooltip || t('tooltips:addCourse');
+  const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
 
   const {
     infoDialogOpen,
@@ -203,9 +198,7 @@ const SchoolDetailPage: NextPage = () => {
     </Tooltip>
   );
 
-  const renderCourseIcon = (
-    <SchoolOutlined className={clsx(classes.icon, classes.courseIcon)} />
-  );
+  const renderCourseIcon = <SchoolOutlined className={clsx(classes.icon, classes.courseIcon)} />;
   const renderResourceIcon = <AssignmentOutlined className={classes.icon} />;
 
   const renderSubjectsTableBody = (
@@ -221,9 +214,7 @@ const SchoolDetailPage: NextPage = () => {
           <CardActionArea>
             <TableRow>
               <TableCell>
-                <Typography variant="body2">
-                  {R.propOr('-', 'name', s)}
-                </Typography>
+                <Typography variant="body2">{R.propOr('-', 'name', s)}</Typography>
                 <Typography variant="body2" color="textSecondary">
                   <Grid container alignItems="center">
                     {renderCourseIcon}
@@ -270,13 +261,9 @@ const SchoolDetailPage: NextPage = () => {
   const renderSubjectsNotFound = <NotFoundBox text={t('school:noSubjects')} />;
   const renderCoursesNotFound = <NotFoundBox text={t('school:noCourses')} />;
 
-  const renderSubjects = subjects.length
-    ? renderSubjectsTable
-    : renderSubjectsNotFound;
+  const renderSubjects = subjects.length ? renderSubjectsTable : renderSubjectsNotFound;
 
-  const renderCourses = courses.length
-    ? renderCourseTable
-    : renderCoursesNotFound;
+  const renderCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
 
   const renderAction = (
     <>
@@ -287,9 +274,7 @@ const SchoolDetailPage: NextPage = () => {
     </>
   );
 
-  const renderSchoolHeader = isDesktop && (
-    <CardHeader title={schoolName} action={renderAction} />
-  );
+  const renderSchoolHeader = isDesktop && <CardHeader title={schoolName} action={renderAction} />;
 
   const renderTabs = (
     <Tabs value={tabValue} onChange={handleTabChange}>
@@ -374,7 +359,8 @@ const SchoolDetailPage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorTemplate />;
   }
 
@@ -386,9 +372,8 @@ const SchoolDetailPage: NextPage = () => {
         {renderActionsDrawer}
       </MainTemplate>
     );
-  } else {
-    return <NotFoundTemplate />;
   }
+  return <NotFoundTemplate />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {

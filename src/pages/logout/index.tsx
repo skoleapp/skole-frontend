@@ -53,7 +53,9 @@ const LogoutPage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+
+  if (error) {
     return <ErrorTemplate />;
   }
 
@@ -73,12 +75,7 @@ const LogoutPage: NextPage = () => {
         {t('logout:logInAgain')}
       </ButtonLink>
       <FormControl>
-        <ButtonLink
-          href={urls.home}
-          color="primary"
-          variant="outlined"
-          fullWidth
-        >
+        <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
           {t('common:backToHome')}
         </ButtonLink>
       </FormControl>

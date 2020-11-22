@@ -1,10 +1,7 @@
 import { FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik } from 'formik';
-import {
-  CreateContactMessageMutation,
-  useCreateContactMessageMutation,
-} from 'generated';
+import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -43,20 +40,13 @@ const ContactPage: NextPage = () => {
   const validationSchema = Yup.object().shape({
     subject: Yup.string().required(t('validation:required')),
     name: Yup.string(),
-    email: Yup.string()
-      .email(t('validation:invalidEmail'))
-      .required(t('validation:required')),
+    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     message: Yup.string().required(t('validation:required')),
   });
 
-  const onCompleted = ({
-    createContactMessage,
-  }: CreateContactMessageMutation): void => {
+  const onCompleted = ({ createContactMessage }: CreateContactMessageMutation): void => {
     if (createContactMessage) {
-      if (
-        !!createContactMessage.errors &&
-        !!createContactMessage.errors.length
-      ) {
+      if (!!createContactMessage.errors && !!createContactMessage.errors.length) {
         handleMutationErrors(createContactMessage.errors);
       } else if (createContactMessage.successMessage) {
         resetForm();
@@ -97,21 +87,9 @@ const ContactPage: NextPage = () => {
     >
       {(props): JSX.Element => (
         <Form>
-          <Field
-            name="subject"
-            component={TextFormField}
-            label={t('forms:messageSubject')}
-          />
-          <Field
-            name="name"
-            component={TextFormField}
-            label={t('forms:name')}
-          />
-          <Field
-            name="email"
-            component={TextFormField}
-            label={t('forms:email')}
-          />
+          <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />
+          <Field name="name" component={TextFormField} label={t('forms:name')} />
+          <Field name="email" component={TextFormField} label={t('forms:email')} />
           <Field
             name="message"
             component={TextFormField}

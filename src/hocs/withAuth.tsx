@@ -27,9 +27,7 @@ export const withAuth = <T extends Record<symbol, unknown>>(
         const query = asPath !== urls.home ? { next: asPath } : {};
         const existingUser = localStorage.getItem('user');
 
-        const getStartedPageVisited = !!localStorage.getItem(
-          GET_STARTED_PAGE_VISITED_KEY,
-        );
+        const getStartedPageVisited = !!localStorage.getItem(GET_STARTED_PAGE_VISITED_KEY);
 
         // Only redirect new users to get started page (users who have already logged in at some point).
         // Redirect old users and users who have visited get started page to login page.

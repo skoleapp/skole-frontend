@@ -4,8 +4,7 @@ import { SettingsContextType } from 'types';
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
 const SettingsContext = createContext<SettingsContextType>({});
 
-export const useSettingsContext = (): SettingsContextType =>
-  useContext(SettingsContext);
+export const useSettingsContext = (): SettingsContextType => useContext(SettingsContext);
 
 export const SettingsContextProvider: React.FC = ({ children }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -16,9 +15,5 @@ export const SettingsContextProvider: React.FC = ({ children }) => {
     toggleSettings,
   };
 
-  return (
-    <SettingsContext.Provider value={value}>
-      {children}
-    </SettingsContext.Provider>
-  );
+  return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
 };

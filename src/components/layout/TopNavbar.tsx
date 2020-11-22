@@ -29,11 +29,7 @@ import Link from 'next/link';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React, { MouseEvent, useState } from 'react';
-import {
-  BORDER_RADIUS,
-  TOP_NAVBAR_HEIGHT_DESKTOP,
-  TOP_NAVBAR_HEIGHT_MOBILE,
-} from 'theme';
+import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { TopNavbarProps } from 'types';
 import { mediaUrl, urls } from 'utils';
 
@@ -88,27 +84,19 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const dense = !!headerLeft || !!headerRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
 
-  const [
-    activityPopperAnchorEl,
-    setActivityPopperAnchorEl,
-  ] = useState<HTMLButtonElement | null>(null);
+  const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(
+    null,
+  );
 
-  const handleActivityPopperClickAway = (): void =>
-    setActivityPopperOpen(false);
+  const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
-  const handleActivityButtonClick = (
-    e: MouseEvent<HTMLButtonElement>,
-  ): void => {
+  const handleActivityButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
     setActivityPopperAnchorEl(e.currentTarget);
     setActivityPopperOpen(!activityPopperOpen);
   };
 
   const renderDynamicBackButton = dynamicBackUrl && (
-    <IconButton
-      onClick={(): void => Router.back()}
-      color="secondary"
-      size="small"
-    >
+    <IconButton onClick={(): void => Router.back()} color="secondary" size="small">
       <ArrowBackOutlined />
     </IconButton>
   );
@@ -126,32 +114,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const renderMobileContent = isMobileOrTablet && (
     <Grid container alignItems="center">
-      <Grid
-        item
-        xs={dense ? 4 : 2}
-        container
-        justify="flex-start"
-        alignItems="center"
-      >
+      <Grid item xs={dense ? 4 : 2} container justify="flex-start" alignItems="center">
         {renderStaticBackButton || renderDynamicBackButton}
         {headerLeft}
       </Grid>
-      <Grid
-        item
-        xs={dense ? 4 : 8}
-        container
-        justify="center"
-        alignItems="center"
-      >
+      <Grid item xs={dense ? 4 : 8} container justify="center" alignItems="center">
         {header ? renderHeader : renderLogo}
       </Grid>
-      <Grid
-        item
-        xs={dense ? 4 : 2}
-        container
-        justify="flex-end"
-        alignItems="center"
-      >
+      <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
         {headerRightSecondary}
         {headerRight}
       </Grid>
@@ -207,20 +177,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </Box>
       </ClickAwayListener>
       <Tooltip title={t('tooltips:starred')}>
-        <IconButtonLink
-          icon={StarBorderOutlined}
-          href={urls.starred}
-          color="secondary"
-        />
+        <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
       </Tooltip>
       <Tooltip title={t('tooltips:profile')}>
         <Typography component="span">
           <Link href={urls.user(userMeId)}>
             <IconButton color="secondary">
-              <Avatar
-                className="avatar-thumbnail"
-                src={mediaUrl(avatarThumb)}
-              />
+              <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />
             </IconButton>
           </Link>
         </Typography>
@@ -230,30 +193,19 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   // Allow disabling auth buttons manually.
   // Also disable them automatically in case of a network error when authenticating/fetching user.
-  const renderUnAuthenticatedButtons = !disableAuthButtons &&
-    !authNetworkError && (
-      <>
-        <ButtonLink
-          href={urls.login}
-          color="secondary"
-          endIcon={<HowToRegOutlined />}
-        >
-          {t('common:login')}
-        </ButtonLink>
-        <ButtonLink
-          href={urls.register}
-          color="secondary"
-          endIcon={<AddCircleOutlineOutlined />}
-        >
-          {t('common:register')}
-        </ButtonLink>
-      </>
-    );
+  const renderUnAuthenticatedButtons = !disableAuthButtons && !authNetworkError && (
+    <>
+      <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
+        {t('common:login')}
+      </ButtonLink>
+      <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
+        {t('common:register')}
+      </ButtonLink>
+    </>
+  );
 
   const renderSearch = !disableSearch && <TopNavbarSearchWidget />;
-  const renderButtons = userMe
-    ? renderAuthenticatedButtons
-    : renderUnAuthenticatedButtons;
+  const renderButtons = userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
 
   const renderDesktopContent = !isMobileOrTablet && (
     <Grid container alignItems="center">

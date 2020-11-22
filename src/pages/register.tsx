@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  FormHelperText,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { FormControl, FormHelperText, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
   AutocompleteField,
@@ -72,8 +67,7 @@ const RegisterPage: NextPage = () => {
     'username' | 'email'
   > | null>(null);
 
-  const handleSkipUpdateProfile = (): void =>
-    setPhase(RegisterPhases.REGISTER_COMPLETE);
+  const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
 
   const {
     formRef: registerFormRef,
@@ -120,9 +114,7 @@ const RegisterPage: NextPage = () => {
     password: Yup.string()
       .min(8, t('validation:passwordTooShort'))
       .required(t('validation:required')),
-    email: Yup.string()
-      .email(t('validation:invalidEmail'))
-      .required(t('validation:required')),
+    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
       .required(t('validation:required')),
@@ -139,10 +131,7 @@ const RegisterPage: NextPage = () => {
     subject: Yup.object().nullable(),
   });
 
-  const onRegisterCompleted = async ({
-    register,
-    login,
-  }: RegisterMutation): Promise<void> => {
+  const onRegisterCompleted = async ({ register, login }: RegisterMutation): Promise<void> => {
     if (!!register && !!register.errors && !!register.errors.length) {
       handleRegisterMutationErrors(register.errors);
     } else if (!!login && !!login.errors && !!login.errors.length) {
@@ -162,9 +151,7 @@ const RegisterPage: NextPage = () => {
     context,
   });
 
-  const handleRegisterSubmit = async (
-    values: RegisterFormValues,
-  ): Promise<void> => {
+  const handleRegisterSubmit = async (values: RegisterFormValues): Promise<void> => {
     const { username, email, password } = values;
 
     await registerMutation({
@@ -230,18 +217,12 @@ const RegisterPage: NextPage = () => {
     />
   );
 
-  const renderPasswordField = (
-    props: FormikProps<RegisterFormValues>,
-  ): JSX.Element => <PasswordField {...props} />;
+  const renderPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => (
+    <PasswordField {...props} />
+  );
 
-  const renderConfirmPasswordField = (
-    props: FormikProps<RegisterFormValues>,
-  ): JSX.Element => (
-    <PasswordField
-      label={t('forms:confirmPassword')}
-      name="confirmPassword"
-      {...props}
-    />
+  const renderConfirmPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => (
+    <PasswordField label={t('forms:confirmPassword')} name="confirmPassword" {...props} />
   );
 
   const renderTermsLink = (
@@ -256,9 +237,7 @@ const RegisterPage: NextPage = () => {
     </FormControl>
   );
 
-  const renderRegisterFormSubmitSection = (
-    props: FormikProps<RegisterFormValues>,
-  ): JSX.Element => (
+  const renderRegisterFormSubmitSection = (props: FormikProps<RegisterFormValues>): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:register')} {...props} />
   );
 
@@ -268,9 +247,7 @@ const RegisterPage: NextPage = () => {
     </FormControl>
   );
 
-  const renderRegisterFormContent = (
-    props: FormikProps<RegisterFormValues>,
-  ): JSX.Element => (
+  const renderRegisterFormContent = (props: FormikProps<RegisterFormValues>): JSX.Element => (
     <Form>
       {renderUsernameField}
       {renderEmailField}
@@ -324,9 +301,7 @@ const RegisterPage: NextPage = () => {
 
   const renderUpdateUserFormSubmitSection = (
     props: FormikProps<UpdateUserFormValues>,
-  ): JSX.Element => (
-    <FormSubmitSection submitButtonText={t('common:save')} {...props} />
-  );
+  ): JSX.Element => <FormSubmitSection submitButtonText={t('common:save')} {...props} />;
 
   const renderSkipButton = (
     <FormControl className={classes.link}>
@@ -336,9 +311,7 @@ const RegisterPage: NextPage = () => {
     </FormControl>
   );
 
-  const renderUpdateUserFormContent = (
-    props: FormikProps<UpdateUserFormValues>,
-  ): JSX.Element => (
+  const renderUpdateUserFormContent = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
     <Form>
       {renderRegisterCompleteHelpText}
       {renderSchoolField}

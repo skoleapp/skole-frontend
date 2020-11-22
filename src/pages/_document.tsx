@@ -1,4 +1,4 @@
-import { ServerStyleSheets } from '@material-ui/styles';
+import { ServerStyleSheets } from '@material-ui/core';
 import { RenderPageResult } from 'next/dist/next-server/lib/utils';
 import NextDocument, {
   DocumentContext,
@@ -24,25 +24,19 @@ export default class SkoleDocument extends NextDocument {
   }
 }
 
-SkoleDocument.getInitialProps = async (
-  ctx: DocumentContext,
-): Promise<DocumentInitialProps> => {
+SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<DocumentInitialProps> => {
   const sheets = new ServerStyleSheets();
   const originalRenderPage = ctx.renderPage;
 
   ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> =>
     originalRenderPage({
-      enhanceApp: (App) => (props): JSX.Element =>
-        sheets.collect(<App {...props} />),
+      enhanceApp: (App) => (props): JSX.Element => sheets.collect(<App {...props} />),
     });
 
   const initialProps = await NextDocument.getInitialProps(ctx);
 
   return {
     ...initialProps,
-    styles: [
-      ...React.Children.toArray(initialProps.styles),
-      sheets.getStyleElement(),
-    ],
+    styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
   };
 };

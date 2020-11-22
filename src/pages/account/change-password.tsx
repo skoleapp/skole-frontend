@@ -45,9 +45,7 @@ const ChangePasswordPage: NextPage = () => {
       .required(t('validation:required')),
   });
 
-  const onCompleted = async ({
-    changePassword,
-  }: ChangePasswordMutation): Promise<void> => {
+  const onCompleted = async ({ changePassword }: ChangePasswordMutation): Promise<void> => {
     if (changePassword) {
       if (!!changePassword.errors && !!changePassword.errors.length) {
         handleMutationErrors(changePassword.errors);
@@ -66,9 +64,7 @@ const ChangePasswordPage: NextPage = () => {
     context,
   });
 
-  const handleSubmit = async (
-    values: ChangePasswordFormValues,
-  ): Promise<void> => {
+  const handleSubmit = async (values: ChangePasswordFormValues): Promise<void> => {
     const { oldPassword, newPassword } = values;
     await changePassword({ variables: { oldPassword, newPassword } });
   };

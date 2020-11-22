@@ -16,9 +16,7 @@ export const withUserMe = <T extends Record<symbol, unknown>>(
     const { asPath } = useRouter();
 
     useEffect(() => {
-      const getStartedPageVisited = !!localStorage.getItem(
-        GET_STARTED_PAGE_VISITED_KEY,
-      );
+      const getStartedPageVisited = !!localStorage.getItem(GET_STARTED_PAGE_VISITED_KEY);
 
       !getStartedPageVisited &&
         Router.push({

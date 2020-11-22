@@ -1,10 +1,4 @@
-import {
-  IconButton,
-  makeStyles,
-  Snackbar,
-  SnackbarOrigin,
-  Typography,
-} from '@material-ui/core';
+import { IconButton, makeStyles, Snackbar, SnackbarOrigin, Typography } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
 import Router from 'next/router';
@@ -24,10 +18,7 @@ export const Notifications: React.FC = () => {
   const { notification, toggleNotification } = useNotificationsContext();
   Router.events.on('routeChangeComplete', () => toggleNotification(null));
 
-  const handleClose = (
-    _e: SyntheticEvent | MouseEvent,
-    reason?: string,
-  ): void => {
+  const handleClose = (_e: SyntheticEvent | MouseEvent, reason?: string): void => {
     if (reason !== 'clickaway') {
       toggleNotification(null);
     }
@@ -42,9 +33,7 @@ export const Notifications: React.FC = () => {
     'aria-describedby': 'message-id',
   };
 
-  const renderMessage = (
-    <Typography component="span">{notification}</Typography>
-  );
+  const renderMessage = <Typography component="span">{notification}</Typography>;
 
   const renderAction = [
     <IconButton key="close" color="inherit" onClick={handleClose}>

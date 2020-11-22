@@ -1,10 +1,5 @@
-import React, {
-  createContext,
-  MutableRefObject,
-  useRef,
-  useState,
-} from 'react';
-import { useContext } from 'react';
+import React, { createContext, MutableRefObject, useRef, useState, useContext } from 'react';
+
 import { Document } from 'react-pdf';
 import SwipeableViews from 'react-swipeable-views';
 import { PdfViewerContextType } from 'types';
@@ -12,8 +7,7 @@ import { PdfViewerContextType } from 'types';
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
 const PdfViewerContext = createContext<PdfViewerContextType>({});
 
-export const usePdfViewerContext = (): PdfViewerContextType =>
-  useContext(PdfViewerContext);
+export const usePdfViewerContext = (): PdfViewerContextType => useContext(PdfViewerContext);
 
 export const PdfViewerContextProvider: React.FC = ({ children }) => {
   const documentRef = useRef<Document>(null!);
@@ -26,9 +20,7 @@ export const PdfViewerContextProvider: React.FC = ({ children }) => {
   const [pageNumber, setPageNumber] = useState(0);
   const [swipingDisabled, setSwipingDisabled] = useState(false);
 
-  const swipeableViewsRef = (useRef(
-    null!,
-  ) as unknown) as MutableRefObject<SwipeableViews> & string;
+  const swipeableViewsRef = (useRef(null!) as unknown) as MutableRefObject<SwipeableViews> & string;
 
   const value = {
     documentRef,
@@ -50,9 +42,5 @@ export const PdfViewerContextProvider: React.FC = ({ children }) => {
     swipeableViewsRef,
   };
 
-  return (
-    <PdfViewerContext.Provider value={value}>
-      {children}
-    </PdfViewerContext.Provider>
-  );
+  return <PdfViewerContext.Provider value={value}>{children}</PdfViewerContext.Provider>;
 };

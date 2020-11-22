@@ -36,17 +36,12 @@ const commonTablePaginationProps = {
   },
 };
 
-export const CustomTableFooter: React.FC<CustomTablePaginationProps> = (
-  tablePaginationProps,
-) => {
+export const CustomTableFooter: React.FC<CustomTablePaginationProps> = (tablePaginationProps) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const labelDisplayedRows = ({
-    from,
-    to,
-    count,
-  }: LabelDisplayedRowsArgs): string => `${from} - ${to} / ${count}`;
+  const labelDisplayedRows = ({ from, to, count }: LabelDisplayedRowsArgs): string =>
+    `${from} - ${to} / ${count}`;
 
   return (
     <TableFooter>

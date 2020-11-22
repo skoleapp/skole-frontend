@@ -1,16 +1,8 @@
 import { Box, DialogContent, Grid, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
-import {
-  useDiscussionContext,
-  useNotificationsContext,
-  usePdfViewerContext,
-} from 'context';
+import { useDiscussionContext, useNotificationsContext, usePdfViewerContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
-import {
-  CommentObjectType,
-  CreateCommentMutation,
-  useCreateCommentMutation,
-} from 'generated';
+import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
 import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataURItoFile, useTranslation } from 'lib';
 import Image from 'next/image';
@@ -50,10 +42,7 @@ interface CreateCommentFormProps {
   appendComments: (comments: CommentObjectType) => void;
 }
 
-export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
-  appendComments,
-  target,
-}) => {
+export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isDesktop } = useMediaQueries();
@@ -61,12 +50,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
 
-  const {
-    formRef,
-    setSubmitting,
-    resetForm,
-    setFieldValue,
-  } = useForm<CreateCommentFormValues>();
+  const { formRef, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
 
   const {
     commentModalOpen,
@@ -91,8 +75,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     !!setScreenshot && setScreenshot(null); // Not defined when in course page.
   };
 
-  const onError = (): void =>
-    toggleNotification(t('notifications:messageError'));
+  const onError = (): void => toggleNotification(t('notifications:messageError'));
 
   const onCompleted = ({ createComment }: CreateCommentMutation): void => {
     if (createComment) {
@@ -113,9 +96,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     onError,
   });
 
-  const handleSubmit = async (
-    values: CreateCommentFormValues,
-  ): Promise<void> => {
+  const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
     if (!commentAttachment && !values.text) {
       toggleNotification(t('notifications:messageEmpty'));
     } else {
@@ -142,12 +123,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     isDesktop && <RichTextEditor {...formikProps} />;
 
   const renderAttachment = !!commentAttachment && (
-    <Box
-      className={clsx(
-        classes.attachmentContainer,
-        !!screenshot && 'screenshot-border',
-      )}
-    >
+    <Box className={clsx(classes.attachmentContainer, !!screenshot && 'screenshot-border')}>
       <Image
         layout="fill"
         className={classes.attachmentImage}
@@ -158,26 +134,13 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     </Box>
   );
 
-  const renderRichTextEditor = (formikProps: T): JSX.Element => (
-    <RichTextEditor {...formikProps} />
-  );
+  const renderRichTextEditor = (formikProps: T): JSX.Element => <RichTextEditor {...formikProps} />;
 
   const renderCreateCommentModal = (formikProps: T): JSX.Element => (
-    <SkoleDialog
-      open={commentModalOpen}
-      onClose={handleCloseCreateCommentModal}
-    >
-      <DialogHeader
-        onCancel={handleCloseCreateCommentModal}
-        text={t('forms:createComment')}
-      />
+    <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
+      <DialogHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
       <DialogContent className={classes.dialogContent}>
-        <Grid
-          className={classes.container}
-          container
-          direction="column"
-          justify="flex-end"
-        >
+        <Grid className={classes.container} container direction="column" justify="flex-end">
           {renderAttachment}
           {renderRichTextEditor(formikProps)}
         </Grid>

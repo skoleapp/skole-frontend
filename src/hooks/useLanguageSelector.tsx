@@ -1,8 +1,8 @@
 import { Button, makeStyles, Tooltip } from '@material-ui/core';
 import { useLanguageSelectorContext } from 'context';
 import { useTranslation } from 'lib';
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { LanguageSelectorContextType } from 'types';
 
 const useStyles = makeStyles({
@@ -37,10 +37,7 @@ export const useLanguageSelector = (): UseLanguageSelector => {
   const { t, lang } = useTranslation();
   const [value, setValue] = useState(lang);
 
-  const {
-    toggleLanguageSelector,
-    languageSelectorOpen,
-  } = useLanguageSelectorContext();
+  const { toggleLanguageSelector, languageSelectorOpen } = useLanguageSelectorContext();
 
   useEffect(() => {
     setValue(lang);
@@ -50,18 +47,14 @@ export const useLanguageSelector = (): UseLanguageSelector => {
     typeof String.fromCodePoint !== 'undefined'
       ? isoCode
           .toUpperCase()
-          .replace(/./g, (char) =>
-            String.fromCodePoint(char.charCodeAt(0) + 127397),
-          )
+          .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
       : isoCode;
 
   const openLanguageMenu = (): void => toggleLanguageSelector(true);
   const language = languages.find((c) => c.value === value) as Language;
 
   const renderCurrentFlag =
-    !!language && !!language.code
-      ? languageToFlag(language.code)
-      : languageToFlag('US');
+    !!language && !!language.code ? languageToFlag(language.code) : languageToFlag('US');
 
   const renderLanguageButton = (
     <Tooltip title={t('tooltips:language')}>

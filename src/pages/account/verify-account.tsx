@@ -60,10 +60,7 @@ const VerifyAccountPage: NextPage = () => {
     resendVerificationEmail,
   }: ResendVerificationEmailMutation): void => {
     if (resendVerificationEmail) {
-      if (
-        !!resendVerificationEmail.errors &&
-        !!resendVerificationEmail.errors.length
-      ) {
+      if (!!resendVerificationEmail.errors && !!resendVerificationEmail.errors.length) {
         handleEmailFormMutationErrors(resendVerificationEmail.errors);
       } else if (resendVerificationEmail.successMessage) {
         resetEmailForm();
@@ -77,9 +74,7 @@ const VerifyAccountPage: NextPage = () => {
     }
   };
 
-  const onConfirmationFormCompleted = ({
-    verifyAccount,
-  }: VerifyAccountMutation): void => {
+  const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
     if (verifyAccount) {
       if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
         handleConfirmationFormMutationErrors(verifyAccount.errors);
@@ -125,17 +120,11 @@ const VerifyAccountPage: NextPage = () => {
   };
 
   const renderEmailForm = verified === false && !token && !emailSubmitted && (
-    <Formik
-      initialValues={initialEmailFormValues}
-      onSubmit={handleSubmitEmail}
-      ref={emailFormRef}
-    >
+    <Formik initialValues={initialEmailFormValues} onSubmit={handleSubmitEmail} ref={emailFormRef}>
       {(props): JSX.Element => (
         <Form>
           <Box flexGrow="1" textAlign="center">
-            <Typography variant="body2">
-              {t('verify-account:emailHelpText')}
-            </Typography>
+            <Typography variant="body2">{t('verify-account:emailHelpText')}</Typography>
           </Box>
           <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
         </Form>
@@ -160,14 +149,9 @@ const VerifyAccountPage: NextPage = () => {
       {(props): JSX.Element => (
         <Form>
           <Box flexGrow="1" textAlign="center">
-            <Typography variant="body2">
-              {t('verify-account:confirmationHelpText')}
-            </Typography>
+            <Typography variant="body2">{t('verify-account:confirmationHelpText')}</Typography>
           </Box>
-          <FormSubmitSection
-            submitButtonText={t('common:confirm')}
-            {...props}
-          />
+          <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
         </Form>
       )}
     </Formik>

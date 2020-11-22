@@ -1,9 +1,4 @@
-export type MuiColor =
-  | 'inherit'
-  | 'default'
-  | 'primary'
-  | 'secondary'
-  | undefined;
+export type MuiColor = 'inherit' | 'default' | 'primary' | 'secondary' | undefined;
 export type ButtonColor = 'inherit' | 'primary' | 'secondary' | 'default';
 export type ButtonVariant = 'text' | 'outlined' | 'contained' | undefined;
 

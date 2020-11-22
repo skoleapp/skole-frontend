@@ -1,8 +1,4 @@
-import {
-  Avatar,
-  BottomNavigation,
-  BottomNavigationAction,
-} from '@material-ui/core';
+import { Avatar, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import {
   CloudUploadOutlined,
   HomeOutlined,
@@ -57,19 +53,14 @@ export const BottomNavbar: React.FC = () => {
 
   const [value, setValue] = useState(getNavbarValue());
 
-  const handleChange = (
-    _e: ChangeEvent<Record<symbol, unknown>>,
-    newValue: number,
-  ): void => setValue(newValue);
+  const handleChange = (_e: ChangeEvent<Record<symbol, unknown>>, newValue: number): void =>
+    setValue(newValue);
 
-  const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> =>
-    Router.push(url);
+  const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
 
   const renderProfileLabel = userMe ? t('common:profile') : t('common:login');
 
-  const renderAvatarThumbnail = (
-    <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />
-  );
+  const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />;
 
   const handleProfileActionClick = (): Promise<boolean> =>
     Router.push(userMeId ? urls.user(userMeId) : urls.login);

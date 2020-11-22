@@ -9,9 +9,6 @@ export const linkStrategy = (
 ): void => {
   contentBlock.findEntityRanges((character) => {
     const entityKey = character.getEntity();
-    return (
-      entityKey !== null &&
-      contentState.getEntity(entityKey).getType() === 'LINK'
-    );
+    return entityKey !== null && contentState.getEntity(entityKey).getType() === 'LINK';
   }, callback);
 };

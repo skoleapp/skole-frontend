@@ -3,11 +3,7 @@ import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
 import * as R from 'ramda';
 import React from 'react';
-import {
-  BOTTOM_NAVBAR_HEIGHT,
-  TOP_NAVBAR_HEIGHT_DESKTOP,
-  TOP_NAVBAR_HEIGHT_MOBILE,
-} from 'theme';
+import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { MainTemplateProps } from 'types';
 
 import {
@@ -77,11 +73,7 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
     <TopNavbar {...topNavbarProps} />
   );
 
-  const containerFullWidth: boolean = R.propOr(
-    false,
-    'fullWidth',
-    containerProps,
-  );
+  const containerFullWidth: boolean = R.propOr(false, 'fullWidth', containerProps);
 
   const containerDense: boolean = R.propOr(false, 'dense', containerProps);
 
@@ -93,17 +85,13 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   );
 
   const renderChildren = (
-    <Container
-      {...R.omit(['fullWidth', 'dense'], containerProps)}
-      className={containerClasses}
-    >
+    <Container {...R.omit(['fullWidth', 'dense'], containerProps)} className={containerClasses}>
       {children}
     </Container>
   );
 
   const renderBottomNavbar =
-    isMobileOrTablet &&
-    (customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />));
+    isMobileOrTablet && (customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />));
 
   const renderFooter = isDesktop && !disableFooter && <Footer />;
   const renderNotifications = <Notifications />;

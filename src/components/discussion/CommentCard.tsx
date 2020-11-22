@@ -25,22 +25,9 @@ import {
   MoreHorizOutlined,
 } from '@material-ui/icons';
 import clsx from 'clsx';
-import {
-  useAuthContext,
-  useDiscussionContext,
-  useNotificationsContext,
-} from 'context';
-import {
-  CommentObjectType,
-  DeleteCommentMutation,
-  useDeleteCommentMutation,
-} from 'generated';
-import {
-  useActionsDialog,
-  useDayjs,
-  useLanguageHeaderContext,
-  useVotes,
-} from 'hooks';
+import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
+import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation } from 'generated';
+import { useActionsDialog, useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
 import { useTranslation } from 'lib';
 import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
@@ -100,11 +87,7 @@ interface Props {
   removeComment: (id: string) => void; // Callback function for removing the comment.
 }
 
-export const CommentCard: React.FC<Props> = ({
-  comment,
-  isThread,
-  removeComment,
-}) => {
+export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment }) => {
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
@@ -124,11 +107,7 @@ export const CommentCard: React.FC<Props> = ({
   const replyCount = replyComments.length;
   const { toggleTopComment, setAttachmentViewerValue } = useDiscussionContext();
 
-  const creatorUsername = R.propOr(
-    t('common:communityUser'),
-    'username',
-    comment.user,
-  );
+  const creatorUsername = R.propOr(t('common:communityUser'), 'username', comment.user);
 
   const shareText = t('common:commentShareText', {
     creatorUsername,
@@ -167,12 +146,9 @@ export const CommentCard: React.FC<Props> = ({
     }
   };
 
-  const deleteCommentError = (): void =>
-    toggleNotification(t('notifications:deleteCommentError'));
+  const deleteCommentError = (): void => toggleNotification(t('notifications:deleteCommentError'));
 
-  const deleteCommentCompleted = ({
-    deleteComment,
-  }: DeleteCommentMutation): void => {
+  const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
     if (deleteComment) {
       if (!!deleteComment.errors && !!deleteComment.errors.length) {
         deleteCommentError();
@@ -215,10 +191,7 @@ export const CommentCard: React.FC<Props> = ({
   };
 
   const renderTitle = comment.user ? (
-    <TextLink
-      href={urls.user(userId)}
-      onClick={(e: SyntheticEvent): void => e.stopPropagation()}
-    >
+    <TextLink href={urls.user(userId)} onClick={(e: SyntheticEvent): void => e.stopPropagation()}>
       {comment.user.username}
     </TextLink>
   ) : (
@@ -234,9 +207,7 @@ export const CommentCard: React.FC<Props> = ({
         title: classes.cardTitle,
         subheader: classes.cardSubHeader,
       }}
-      avatar={
-        <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />
-      }
+      avatar={<Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />}
       title={renderTitle}
       subheader={created}
     />
@@ -251,9 +222,7 @@ export const CommentCard: React.FC<Props> = ({
     </Grid>
   );
 
-  const renderCommentText = (
-    <Typography variant="body2">{comment.text}</Typography>
-  );
+  const renderCommentText = <Typography variant="body2">{comment.text}</Typography>;
 
   const renderMessageContent = (
     <Box className={classes.messageContent}>
@@ -274,11 +243,7 @@ export const CommentCard: React.FC<Props> = ({
 
   const renderAttachmentButton = !!comment.attachment && !attachmentOnly && (
     <Tooltip title={t('tooltips:attachment')}>
-      <IconButton
-        className={classes.toolbarButton}
-        size="small"
-        onClick={handleAttachmentClick}
-      >
+      <IconButton className={classes.toolbarButton} size="small" onClick={handleAttachmentClick}>
         <AttachFileOutlined />
       </IconButton>
     </Tooltip>
@@ -304,15 +269,7 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderVoteButtons = (
-    <Grid
-      item
-      container
-      xs={2}
-      sm={1}
-      direction="column"
-      justify="center"
-      alignItems="center"
-    >
+    <Grid item container xs={2} sm={1} direction="column" justify="center" alignItems="center">
       <Tooltip title={upVoteButtonTooltip}>
         <Typography component="span">
           <IconButton className={classes.iconButton} {...upVoteButtonProps}>

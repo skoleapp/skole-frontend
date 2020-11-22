@@ -32,16 +32,12 @@ export const AreaSelection: React.FC = () => {
 
   // Ignore: Document node is always defined even if the PDF fails to load.
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const getDocumentNode = (): Element =>
-    document.querySelector('.react-pdf__Document')!;
+  const getDocumentNode = (): Element => document.querySelector('.react-pdf__Document')!;
 
   // Get closest PDF page and take screenshot of selected area.
   // FIXME: Screenshots from this function end up being misaligned.
   // It clearly has something to do with the `window.devicePixelRatio` function since it messes up the dimensions.
-  const getScreenshot = (
-    target: HTMLElement,
-    position: LTWH,
-  ): string | null => {
+  const getScreenshot = (target: HTMLElement, position: LTWH): string | null => {
     const { left, top, width, height } = position;
     const canvas = target.closest('canvas');
     const newCanvas = document.createElement('canvas');
@@ -63,9 +59,8 @@ export const AreaSelection: React.FC = () => {
         height,
       );
       return newCanvas.toDataURL();
-    } else {
-      return null;
     }
+    return null;
   };
 
   const onSelection = (startTarget: HTMLElement, boundingRect: LTWH): void => {
@@ -116,11 +111,7 @@ export const AreaSelection: React.FC = () => {
       const { currentTarget } = e;
 
       // Emulate listen once.
-      !!currentTarget &&
-        currentTarget.removeEventListener(
-          'mouseup',
-          onMouseUp as EventListener,
-        );
+      !!currentTarget && currentTarget.removeEventListener('mouseup', onMouseUp as EventListener);
 
       if (start) {
         const end = getDocumentCoords(e.pageX, e.pageY);
@@ -166,10 +157,7 @@ export const AreaSelection: React.FC = () => {
     if (!!start && !locked) {
       setState({
         ...stateRef.current,
-        end: getDocumentCoords(
-          e.changedTouches[0].pageX,
-          e.changedTouches[0].pageY,
-        ),
+        end: getDocumentCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
       });
     }
   };
@@ -185,17 +173,10 @@ export const AreaSelection: React.FC = () => {
       const { currentTarget } = e;
 
       // Emulate listen once.
-      !!currentTarget &&
-        currentTarget.removeEventListener(
-          'mouseup',
-          onTouchUp as EventListener,
-        );
+      !!currentTarget && currentTarget.removeEventListener('mouseup', onTouchUp as EventListener);
 
       if (start) {
-        const end = getDocumentCoords(
-          e.changedTouches[0].pageX,
-          e.changedTouches[0].pageY,
-        );
+        const end = getDocumentCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
         const boundingRect = getBoundingRect(start, end);
 
         if (documentNode.contains(e.target as Node)) {
@@ -218,10 +199,7 @@ export const AreaSelection: React.FC = () => {
     };
 
     setState({
-      start: getDocumentCoords(
-        e.targetTouches[0].pageX,
-        e.targetTouches[0].pageY,
-      ),
+      start: getDocumentCoords(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
       end: null,
       locked: false,
     });
@@ -241,10 +219,7 @@ export const AreaSelection: React.FC = () => {
     if (drawMode) {
       setSwipingDisabled(true); // Disable swipeable views during draw mode.
       documentNode.addEventListener('touchmove', onTouchMove as EventListener);
-      documentNode.addEventListener(
-        'touchstart',
-        onTouchStart as EventListener,
-      );
+      documentNode.addEventListener('touchstart', onTouchStart as EventListener);
       documentNode.addEventListener('mousemove', onMouseMove as EventListener, {
         passive: true,
       });
@@ -256,29 +231,14 @@ export const AreaSelection: React.FC = () => {
     }
 
     return (): void => {
-      documentNode.removeEventListener(
-        'touchmove',
-        onTouchMove as EventListener,
-      );
-      documentNode.removeEventListener(
-        'touchstart',
-        onTouchStart as EventListener,
-      );
-      documentNode.removeEventListener(
-        'mousemove',
-        onMouseMove as EventListener,
-      );
-      documentNode.removeEventListener(
-        'mousedown',
-        onMouseDown as EventListener,
-      );
+      documentNode.removeEventListener('touchmove', onTouchMove as EventListener);
+      documentNode.removeEventListener('touchstart', onTouchStart as EventListener);
+      documentNode.removeEventListener('mousemove', onMouseMove as EventListener);
+      documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
     };
   }, [drawMode]);
 
   return drawMode && !!start && !!end ? (
-    <Box
-      className={clsx('screenshot-border', classes.root)}
-      style={getBoundingRect(start, end)}
-    />
+    <Box className={clsx('screenshot-border', classes.root)} style={getBoundingRect(start, end)} />
   ) : null;
 };

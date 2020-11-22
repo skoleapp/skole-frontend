@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, Button, FormControl, FormHelperText, makeStyles } from '@material-ui/core';
 import { useNotificationsContext } from 'context';
 import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
 import { useMediaQueries } from 'hooks';
@@ -43,8 +37,7 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
   const fileInputRef = useRef<HTMLInputElement>(null!);
   const handleFileInputClick = (): false | void => fileInputRef.current.click();
 
-  const preventDefaultDragBehavior = (e: DragEvent<HTMLElement>): void =>
-    e.preventDefault();
+  const preventDefaultDragBehavior = (e: DragEvent<HTMLElement>): void => e.preventDefault();
 
   const validateAndSetFile = (file: File): void => {
     if (file.size > MAX_FILE_SIZE) {
@@ -69,18 +62,13 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
       ref={fileInputRef}
       value=""
       type="file"
-      accept={ACCEPTED_FILES.toString + ';capture=camera'}
+      accept={`${ACCEPTED_FILES.toString};capture=camera`}
       onChange={handleFileInputChange}
     />
   );
 
   const renderMobileUploadFileButton = isMobileOrTablet && (
-    <Button
-      onClick={handleFileInputClick}
-      color="primary"
-      variant="outlined"
-      fullWidth
-    >
+    <Button onClick={handleFileInputClick} color="primary" variant="outlined" fullWidth>
       {t('upload-resource:uploadFileButtonText')}
     </Button>
   );
@@ -112,9 +100,7 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
     </FormHelperText>
   );
 
-  const renderErrorMessage = (
-    <ErrorMessage name={field.name} component={FormErrorMessage} />
-  );
+  const renderErrorMessage = <ErrorMessage name={field.name} component={FormErrorMessage} />;
 
   return (
     <FormControl>

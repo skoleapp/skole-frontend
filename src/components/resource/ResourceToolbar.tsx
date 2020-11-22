@@ -7,11 +7,7 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core';
-import {
-  CloudDownloadOutlined,
-  PrintOutlined,
-  RotateRightOutlined,
-} from '@material-ui/icons';
+import { CloudDownloadOutlined, PrintOutlined, RotateRightOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
@@ -81,15 +77,10 @@ export const ResourceToolbar: React.FC<Props> = ({
 
   // Scroll into page from given page number.
   // FIXME: Providing a custom value in the input won't work atm.
-  const handleChangePage = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
+  const handleChangePage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const val = Number(e.target.value);
     !!val && setPageNumber(val);
-    const page: HTMLDivElement | undefined = R.path(
-      ['current', 'pages', val - 1],
-      documentRef,
-    );
+    const page: HTMLDivElement | undefined = R.path(['current', 'pages', val - 1], documentRef);
     !!page &&
       page.scrollIntoView({
         behavior: 'smooth',

@@ -34,16 +34,8 @@ import {
   TextLink,
   TopLevelCommentThread,
 } from 'components';
-import {
-  useAuthContext,
-  useDiscussionContext,
-  useNotificationsContext,
-} from 'context';
-import {
-  DeleteCourseMutation,
-  useCourseQuery,
-  useDeleteCourseMutation,
-} from 'generated';
+import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
+import { DeleteCourseMutation, useCourseQuery, useDeleteCourseMutation } from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
 import {
   useActionsDialog,
@@ -121,12 +113,9 @@ const CourseDetailPage: NextPage = () => {
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const { renderShareButton } = useShare({ text: courseName });
 
-  const uploadResourceButtonTooltip =
-    verificationRequiredTooltip || t('tooltips:uploadResource');
+  const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
 
-  const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(
-    comments,
-  );
+  const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
 
   const {
     infoDialogOpen,
@@ -151,12 +140,9 @@ const CourseDetailPage: NextPage = () => {
     variables: { course: courseId },
   });
 
-  const deleteCourseError = (): void =>
-    toggleNotification(t('notifications:deleteCourseError'));
+  const deleteCourseError = (): void => toggleNotification(t('notifications:deleteCourseError'));
 
-  const deleteCourseCompleted = async ({
-    deleteCourse,
-  }: DeleteCourseMutation): Promise<void> => {
+  const deleteCourseCompleted = async ({ deleteCourse }: DeleteCourseMutation): Promise<void> => {
     if (deleteCourse) {
       if (!!deleteCourse.errors && !!deleteCourse.errors.length) {
         deleteCourseError();
@@ -257,9 +243,7 @@ const CourseDetailPage: NextPage = () => {
     noComments: t('course:noComments'),
   };
 
-  const renderDiscussionHeader = (
-    <DiscussionHeader {...discussionHeaderProps} />
-  );
+  const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
   const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
   const renderCustomBottomNavbar = (
@@ -303,9 +287,7 @@ const CourseDetailPage: NextPage = () => {
     <NotFoundBox text={t('course:noResources')} linkProps={notFoundLinkProps} />
   );
 
-  const renderResources = resources.length
-    ? renderResourceTable
-    : renderResourcesNotFound;
+  const renderResources = resources.length ? renderResourceTable : renderResourcesNotFound;
 
   const uploadResourceHref = {
     pathname: urls.uploadResource,
@@ -364,11 +346,7 @@ const CourseDetailPage: NextPage = () => {
   );
 
   const renderInfoDialogContent = (
-    <InfoDialogContent
-      user={courseUser}
-      created={created}
-      infoItems={infoItems}
-    />
+    <InfoDialogContent user={courseUser} created={created} infoItems={infoItems} />
   );
 
   const renderInfoDialog = (
@@ -428,7 +406,8 @@ const CourseDetailPage: NextPage = () => {
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorTemplate />;
   }
 
@@ -441,9 +420,8 @@ const CourseDetailPage: NextPage = () => {
         {renderActionsDialog}
       </MainTemplate>
     );
-  } else {
-    return <NotFoundTemplate />;
   }
+  return <NotFoundTemplate />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
