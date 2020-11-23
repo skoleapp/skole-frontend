@@ -18,10 +18,10 @@ import { mediaUrl, urls } from 'utils';
 export const BottomNavbar: React.FC = () => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
-  const userMeId = R.propOr('', 'id', userMe);
-  const avatarThumb = R.propOr('', 'avatar', userMe);
   const { searchUrl } = useSearch();
   const { pathname, query } = useRouter();
+  const userMeId = R.propOr('', 'id', userMe);
+  const avatarThumb = R.propOr('', 'avatar', userMe);
 
   const getNavbarValue = (): void | number | null => {
     switch (pathname) {

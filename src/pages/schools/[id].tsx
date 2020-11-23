@@ -99,10 +99,9 @@ const SchoolDetailPage: NextPage = () => {
   const cityId = R.pathOr('', ['city', 'id'], school);
   const subjects = R.pathOr([], ['subjects', 'objects'])(school);
   const courses = R.pathOr([], ['courses', 'objects'])(school);
+  const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
   const { renderShareButton } = useShare({ text: schoolName });
-
-  const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
 
   const {
     infoDialogOpen,
