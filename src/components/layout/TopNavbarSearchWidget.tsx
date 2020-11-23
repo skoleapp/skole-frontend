@@ -20,12 +20,12 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
 
 export const TopNavbarSearchWidget: React.FC = () => {
   const classes = useStyles();
-  const { handleSubmit, inputProps } = useSearch();
+  const { searchInputProps, handleSubmitSearch } = useSearch();
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmitSearch}>
       <InputBase
-        {...inputProps}
+        {...searchInputProps}
         className={classes.inputBase}
         endAdornment={
           <InputAdornment position="end">

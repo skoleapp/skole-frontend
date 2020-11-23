@@ -20,15 +20,15 @@ export const BottomNavbar: React.FC = () => {
   const { userMe } = useAuthContext();
   const userMeId = R.propOr('', 'id', userMe);
   const avatarThumb = R.propOr('', 'avatar', userMe);
-  const { pathname, query } = useRouter();
   const { searchUrl } = useSearch();
+  const { pathname, query } = useRouter();
 
   const getNavbarValue = (): void | number | null => {
     switch (pathname) {
       case urls.home: {
         return 1;
       }
-      case searchUrl.pathname: {
+      case urls.search: {
         return 2;
       }
       case urls.uploadResource: {
