@@ -96,7 +96,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
 }));
 
-interface FilterSearchResultsFormValues {
+interface SearchFormValues {
   courseName: string;
   courseCode: string;
   school: SchoolObjectType | null;
@@ -136,7 +136,7 @@ const SearchPage: NextPage = () => {
 
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useCoursesQuery({ variables, context });
-  const { formRef, resetForm } = useForm<FilterSearchResultsFormValues>();
+  const { formRef, resetForm } = useForm();
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const school = R.propOr(null, 'school', data);
   const subject = R.propOr(null, 'subject', data);
@@ -148,6 +148,11 @@ const SearchPage: NextPage = () => {
   const courseCode = R.propOr('', 'courseCode', query);
   const ordering = R.propOr('', 'ordering', query);
   const [searchValue, setSearchValue] = useState(courseName);
+  const schoolName = R.prop('name', school);
+  const subjectName = R.prop('name', subject);
+  const schoolTypeName = R.prop('name', schoolType);
+  const countryName = R.prop('name', country);
+  const cityName = R.prop('name', city);
 
   const {
     open: filtersOpen,
@@ -167,27 +172,19 @@ const SearchPage: NextPage = () => {
     ordering,
   };
 
+  const paginationQuery = getPaginationQuery(query); // Query that holds only pagination.
+
   // Query that holds pagination plus all search params.
   const queryWithPagination = getQueryWithPagination({
     query,
     extraFilters: initialValues,
   });
 
-  // Query that holds only pagination.
-  const paginationQuery = getPaginationQuery(query);
-
-  const schoolName = R.prop('name', school);
-  const subjectName = R.prop('name', subject);
-  const schoolTypeName = R.prop('name', schoolType);
-  const countryName = R.prop('name', country);
-  const cityName = R.prop('name', city);
-
   const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
 
   // Pick non-empty values and reload the page with new query params.
   const handleSubmitFilters = async (filteredValues: Record<symbol, unknown>): Promise<void> => {
     const validQuery = R.pickBy((val: string): boolean => !!val, filteredValues);
-
     resetForm();
     handleCloseFilters();
     await Router.push({ pathname, query: validQuery });
@@ -253,7 +250,7 @@ const SearchPage: NextPage = () => {
     });
   };
 
-  const handlePreSubmit = async <T extends FilterSearchResultsFormValues>({
+  const handlePreSubmit = async ({
     courseName,
     courseCode,
     school: _school,
@@ -262,7 +259,7 @@ const SearchPage: NextPage = () => {
     country: _country,
     city: _city,
     ordering,
-  }: T): Promise<void> => {
+  }: SearchFormValues): Promise<void> => {
     const school = R.propOr('', 'id', _school);
     const subject = R.propOr('', 'id', _subject);
     const schoolType = R.propOr('', 'id', _schoolType);
@@ -373,13 +370,11 @@ const SearchPage: NextPage = () => {
     </Field>
   );
 
-  const renderFormSubmitSection = (
-    props: FormikProps<FilterSearchResultsFormValues>,
-  ): JSX.Element => <FormSubmitSection submitButtonText={t('common:apply')} {...props} />;
+  const renderFormSubmitSection = (props: FormikProps<SearchFormValues>): JSX.Element => (
+    <FormSubmitSection submitButtonText={t('common:apply')} {...props} />
+  );
 
-  const renderClearButton = (
-    props: FormikProps<FilterSearchResultsFormValues>,
-  ): JSX.Element | false =>
+  const renderClearButton = (props: FormikProps<SearchFormValues>): JSX.Element | false =>
     !isMobileOrTablet && (
       <FormControl>
         <Button
@@ -395,9 +390,7 @@ const SearchPage: NextPage = () => {
       </FormControl>
     );
 
-  const renderSearchFormContent = (
-    props: FormikProps<FilterSearchResultsFormValues>,
-  ): JSX.Element => (
+  const renderSearchFormFields = (props: FormikProps<SearchFormValues>): JSX.Element => (
     <Form>
       {renderCourseNameField}
       {renderCourseCodeField}
@@ -415,7 +408,7 @@ const SearchPage: NextPage = () => {
   const renderFilterResultsForm = (
     <DialogContent>
       <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={formRef}>
-        {renderSearchFormContent}
+        {renderSearchFormFields}
       </Formik>
     </DialogContent>
   );

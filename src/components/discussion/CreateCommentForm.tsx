@@ -35,8 +35,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
 }));
 
-type T = FormikProps<CreateCommentFormValues>;
-
 interface CreateCommentFormProps {
   target: CommentTarget;
   appendComments: (comments: CommentObjectType) => void;
@@ -49,8 +47,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const { screenshot, setScreenshot } = usePdfViewerContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
-
-  const { formRef, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
+  const { formRef, setSubmitting, resetForm, setFieldValue } = useForm();
 
   const {
     commentModalOpen,
@@ -119,8 +116,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     ...target,
   };
 
-  const renderDesktopInputArea = (formikProps: T): false | JSX.Element =>
-    isDesktop && <RichTextEditor {...formikProps} />;
+  const renderDesktopInputArea = (
+    props: FormikProps<CreateCommentFormValues>,
+  ): false | JSX.Element => isDesktop && <RichTextEditor {...props} />;
 
   const renderAttachment = !!commentAttachment && (
     <Box className={clsx(classes.attachmentContainer, !!screenshot && 'screenshot-border')}>
@@ -134,28 +132,32 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Box>
   );
 
-  const renderRichTextEditor = (formikProps: T): JSX.Element => <RichTextEditor {...formikProps} />;
+  const renderRichTextEditor = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
+    <RichTextEditor {...props} />
+  );
 
-  const renderCreateCommentModal = (formikProps: T): JSX.Element => (
+  const renderCreateCommentModal = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
       <DialogHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
       <DialogContent className={classes.dialogContent}>
         <Grid className={classes.container} container direction="column" justify="flex-end">
           {renderAttachment}
-          {renderRichTextEditor(formikProps)}
+          {renderRichTextEditor(props)}
         </Grid>
       </DialogContent>
     </SkoleDialog>
   );
 
+  const renderFormFields = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
+    <Form className={classes.container}>
+      {renderDesktopInputArea(props)}
+      {renderCreateCommentModal(props)}
+    </Form>
+  );
+
   return (
     <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={formRef}>
-      {(props): JSX.Element => (
-        <Form className={classes.container}>
-          {renderDesktopInputArea(props)}
-          {renderCreateCommentModal(props)}
-        </Form>
-      )}
+      {renderFormFields}
     </Formik>
   );
 };

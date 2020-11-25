@@ -7,9 +7,13 @@ import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { urls } from 'utils';
 import * as R from 'ramda';
 
+interface SearchUrl extends UrlObject {
+  query: Record<symbol, unknown>;
+}
+
 interface UseSearch {
   handleSubmitSearch: (e: SyntheticEvent) => void;
-  searchUrl: UrlObject;
+  searchUrl: SearchUrl;
   searchInputProps: InputProps;
 }
 

@@ -75,7 +75,7 @@ const RegisterPage: NextPage = () => {
     handleMutationErrors: handleRegisterMutationErrors,
     onError: onRegisterError,
     unexpectedError: unexpectedRegisterError,
-  } = useForm<RegisterFormValues>();
+  } = useForm();
 
   const {
     formRef: updateUserFormRef,
@@ -83,7 +83,7 @@ const RegisterPage: NextPage = () => {
     handleMutationErrors: handleUpdateUserMutationErrors,
     onError: onUpdateUserError,
     unexpectedError: updateUserUnexpectedError,
-  } = useForm<UpdateUserFormValues>();
+  } = useForm();
 
   const getHeader = (): string => {
     switch (phase) {
@@ -116,7 +116,7 @@ const RegisterPage: NextPage = () => {
       .required(t('validation:required')),
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('validation:passwordsNotMatch'))
+      .oneOf([Yup.ref('password'), ''], t('validation:passwordsNotMatch'))
       .required(t('validation:required')),
   });
 
@@ -247,7 +247,7 @@ const RegisterPage: NextPage = () => {
     </FormControl>
   );
 
-  const renderRegisterFormContent = (props: FormikProps<RegisterFormValues>): JSX.Element => (
+  const renderRegisterFormFields = (props: FormikProps<RegisterFormValues>): JSX.Element => (
     <Form>
       {renderUsernameField}
       {renderEmailField}
@@ -267,7 +267,7 @@ const RegisterPage: NextPage = () => {
       onSubmit={handleRegisterSubmit}
       ref={registerFormRef}
     >
-      {renderRegisterFormContent}
+      {renderRegisterFormFields}
     </Formik>
   );
 
@@ -311,7 +311,7 @@ const RegisterPage: NextPage = () => {
     </FormControl>
   );
 
-  const renderUpdateUserFormContent = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
+  const renderUpdateUserFormFields = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
     <Form>
       {renderRegisterCompleteHelpText}
       {renderSchoolField}
@@ -328,7 +328,7 @@ const RegisterPage: NextPage = () => {
       onSubmit={handleRegisterCompleteSubmit}
       ref={updateUserFormRef}
     >
-      {renderUpdateUserFormContent}
+      {renderUpdateUserFormFields}
     </Formik>
   );
 

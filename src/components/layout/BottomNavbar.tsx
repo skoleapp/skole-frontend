@@ -57,9 +57,7 @@ export const BottomNavbar: React.FC = () => {
     setValue(newValue);
 
   const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
-
   const renderProfileLabel = userMe ? t('common:profile') : t('common:login');
-
   const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />;
 
   const handleProfileActionClick = (): Promise<boolean> =>

@@ -23,14 +23,7 @@ interface ChangePasswordFormValues {
 }
 
 const ChangePasswordPage: NextPage = () => {
-  const {
-    formRef,
-    resetForm,
-    handleMutationErrors,
-    onError,
-    unexpectedError,
-  } = useForm<ChangePasswordFormValues>();
-
+  const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm();
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
@@ -41,7 +34,7 @@ const ChangePasswordPage: NextPage = () => {
       .min(8, t('validation:passwordTooShort'))
       .required(t('validation:required')),
     confirmNewPassword: Yup.string()
-      .oneOf([Yup.ref('newPassword'), null], t('validation:passwordsNotMatch'))
+      .oneOf([Yup.ref('newPassword'), ''], t('validation:passwordsNotMatch'))
       .required(t('validation:required')),
   });
 

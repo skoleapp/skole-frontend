@@ -28,14 +28,7 @@ const ContactPage: NextPage = () => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
-
-  const {
-    formRef,
-    onError,
-    resetForm,
-    handleMutationErrors,
-    unexpectedError,
-  } = useForm<ContactFormValues>();
+  const { formRef, onError, resetForm, handleMutationErrors, unexpectedError } = useForm();
 
   const validationSchema = Yup.object().shape({
     subject: Yup.string().required(t('validation:required')),

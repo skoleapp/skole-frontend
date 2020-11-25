@@ -122,11 +122,8 @@ export const ReplyCommentThread: React.FC = () => {
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { isMobileOrTablet } = useMediaQueries();
-
   const { topComment, toggleTopComment, toggleCommentModal } = useDiscussionContext();
-
   const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
-
   const topCommentId = R.prop('id', topComment);
   const target = { comment: Number(topCommentId) };
   const openCommentModal = (): void => toggleCommentModal(true);

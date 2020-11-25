@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, FormHelperText, makeStyles } from '@material-ui/core';
 import { useNotificationsContext } from 'context';
-import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
+import { ErrorMessage, FieldAttributes, FormikProps, FormikValues } from 'formik';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
@@ -24,8 +24,8 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
 }));
 
 interface Props {
-  form: FormikProps<Record<symbol, unknown>>;
-  field: FieldAttributes<Record<symbol, unknown>>;
+  form: FormikProps<FormikValues>;
+  field: FieldAttributes<FormikValues>;
 }
 
 export const FileField: React.FC<Props> = ({ form, field }) => {
@@ -36,8 +36,11 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
   const fileName = R.propOr('', 'name', field.value);
   const fileInputRef = useRef<HTMLInputElement>(null!);
   const handleFileInputClick = (): false | void => fileInputRef.current.click();
-
   const preventDefaultDragBehavior = (e: DragEvent<HTMLElement>): void => e.preventDefault();
+
+  const fileSelectedText = t('upload-resource:fileSelected', {
+    fileName: truncate(fileName, 20),
+  });
 
   const validateAndSetFile = (file: File): void => {
     if (file.size > MAX_FILE_SIZE) {
@@ -92,14 +95,7 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
     </FormHelperText>
   );
 
-  const renderFileSelectedText = !!fileName && (
-    <FormHelperText>
-      {t('upload-resource:fileSelected', {
-        fileName: truncate(fileName, 20),
-      })}
-    </FormHelperText>
-  );
-
+  const renderFileSelectedText = !!fileName && <FormHelperText>{fileSelectedText}</FormHelperText>;
   const renderErrorMessage = <ErrorMessage name={field.name} component={FormErrorMessage} />;
 
   return (

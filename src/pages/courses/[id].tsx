@@ -112,9 +112,7 @@ const CourseDetailPage: NextPage = () => {
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const { renderShareButton } = useShare({ text: courseName });
-
   const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
-
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
 
   const {

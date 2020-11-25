@@ -123,9 +123,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   );
 
   const { commentAttachment, setCommentAttachment, toggleCommentModal } = useDiscussionContext();
-
   const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
-
   const classes = useStyles();
   const ref = useRef<Editor>(null!);
   const { t } = useTranslation();
