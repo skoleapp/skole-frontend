@@ -5,7 +5,7 @@ import createPalette from '@material-ui/core/styles/createPalette';
 import createTypography from '@material-ui/core/styles/createTypography';
 
 // Global constants, feel free to use these where ever.
-export const BORDER_RADIUS = '1.25rem';
+export const BORDER_RADIUS = '1.75rem';
 export const BORDER = `0.05rem solid ${grey[300]}`;
 export const BOTTOM_NAVBAR_HEIGHT = '3rem';
 export const TOP_NAVBAR_HEIGHT_MOBILE = '3rem';
