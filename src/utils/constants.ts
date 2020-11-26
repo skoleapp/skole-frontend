@@ -1,11 +1,9 @@
 import {
   AssignmentOutlined,
-  CloudUploadOutlined,
   ContactSupportOutlined,
   EditOutlined,
   LockOutlined,
   NotificationsOutlined,
-  SchoolOutlined,
   SecurityOutlined,
   SettingsBackupRestoreOutlined,
   StarBorderOutlined,
@@ -28,26 +26,6 @@ export const MAX_SCALE = 1.75;
 // Landing page.
 
 export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
-
-// Home page.
-
-export const HOME_PAGE_SHORTCUTS = [
-  {
-    text: 'index:findContent',
-    icon: AssignmentOutlined,
-    href: urls.search,
-  },
-  {
-    text: 'index:uploadResources',
-    icon: CloudUploadOutlined,
-    href: urls.uploadResource,
-  },
-  {
-    text: 'index:createCourses',
-    icon: SchoolOutlined,
-    href: urls.createCourse,
-  },
-];
 
 // Settings.
 

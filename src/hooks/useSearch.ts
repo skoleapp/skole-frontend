@@ -20,13 +20,19 @@ interface UseSearch {
 export const useSearch = (): UseSearch => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
-  const school = R.propOr(null, 'school', userMe);
+  const school = R.pathOr(null, ['school', 'id'], userMe);
   const [value, setValue] = useState('');
   const placeholder = t('forms:searchCourses');
   const autoComplete = 'off';
   const fullWidth = true;
   const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
-  const searchUrl = { pathname: urls.search, query: { school } };
+
+  const searchUrl = {
+    pathname: urls.search,
+    query: {
+      school,
+    },
+  };
 
   const handleSubmitSearch = async (e: SyntheticEvent): Promise<void> => {
     e.preventDefault();

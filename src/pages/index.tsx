@@ -10,7 +10,14 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
+import {
+  ArrowForwardOutlined,
+  AssignmentOutlined,
+  CloudUploadOutlined,
+  SchoolOutlined,
+  SearchOutlined,
+  SvgIconComponent,
+} from '@material-ui/icons';
 import clsx from 'clsx';
 import { MainBackground, MainTemplate } from 'components';
 import { withUserMe } from 'hocs';
@@ -21,7 +28,7 @@ import Link from 'next/link';
 import React from 'react';
 import { BORDER_RADIUS, COLORS } from 'theme';
 import { UrlObject } from 'url';
-import { HOME_PAGE_SHORTCUTS } from 'utils';
+import { urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   container: {
@@ -138,7 +145,25 @@ const IndexPage: NextPage = () => {
   const { t } = useTranslation();
   const { renderLanguageButton } = useLanguageSelector();
   const { handleShare } = useShare({});
-  const { searchInputProps, handleSubmitSearch } = useSearch();
+  const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
+
+  const shortcuts = [
+    {
+      text: 'index:findContent',
+      icon: AssignmentOutlined,
+      href: searchUrl,
+    },
+    {
+      text: 'index:uploadResources',
+      icon: CloudUploadOutlined,
+      href: urls.uploadResource,
+    },
+    {
+      text: 'index:createCourses',
+      icon: SchoolOutlined,
+      href: urls.createCourse,
+    },
+  ];
 
   const renderBackground = <MainBackground />;
 
@@ -173,7 +198,7 @@ const IndexPage: NextPage = () => {
     </Grid>
   );
 
-  const renderHomepageShortcuts = HOME_PAGE_SHORTCUTS.map(
+  const renderHomepageShortcuts = shortcuts.map(
     ({ href, text, icon: Icon }: Shortcut, i: number) => (
       <Link href={href} key={i}>
         <Card className={clsx(classes.card)}>
