@@ -222,7 +222,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     </Grid>
   );
 
-  const renderCommentText = <Typography variant="body2">{comment.text}</Typography>;
+  const renderCommentText = (
+    <Typography className={classes.text} variant="body2">
+      {comment.text}
+    </Typography>
+  );
 
   const renderMessageContent = (
     <Box className={classes.messageContent}>
@@ -252,8 +256,8 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
   const renderActionsButton = (
     <Tooltip title={t('common:actions')}>
       <IconButton
-        className={clsx(classes.iconButton, classes.actionsButton)}
         {...actionsButtonProps}
+        className={clsx(classes.iconButton, classes.actionsButton)}
         color="default"
       >
         <MoreHorizOutlined />
