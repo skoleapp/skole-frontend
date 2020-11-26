@@ -30,6 +30,7 @@ export const OfflineTemplate: React.FC = () => {
     topNavbarProps: {
       dynamicBackUrl: true,
       disableAuthButtons: true,
+      disableSearch: true,
     },
   };
 

@@ -30,6 +30,7 @@ export const ErrorTemplate: React.FC = () => {
     topNavbarProps: {
       dynamicBackUrl: true,
       disableAuthButtons: true,
+      disableSearch: true,
     },
   };
 
