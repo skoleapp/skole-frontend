@@ -116,6 +116,9 @@ let theme = createMuiTheme({
       root: {
         borderRadius: BORDER_RADIUS,
       },
+      adornedEnd: {
+        paddingRight: spacing(1),
+      },
     },
     MuiInputLabel: {
       // This fixes the buggy label on Safari: https://github.com/mui-org/material-ui/issues/20391
