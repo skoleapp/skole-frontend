@@ -5,7 +5,7 @@ import { CommentObjectType } from 'generated';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { TopLevelCommentThreadProps } from 'types';
 
@@ -40,21 +40,21 @@ const useStyles = makeStyles(({ spacing }) => ({
 }));
 
 export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
-  comments: initialComments,
+  comments: initialTopLevelComments,
   target,
   noComments,
 }) => {
   const classes = useStyles();
   const { isMobileOrTablet } = useMediaQueries();
+  const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext();
+  const openCommentModal = (): void => toggleCommentModal(true);
 
-  const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext(
-    initialComments,
-  );
+  useEffect(() => {
+    setTopLevelComments(initialTopLevelComments);
+  }, [initialTopLevelComments]);
 
   const appendComments = (comment: CommentObjectType): void =>
     setTopLevelComments([...topLevelComments, comment]);
-
-  const openCommentModal = (): void => toggleCommentModal(true);
 
   const removeComment = (id: string): void =>
     setTopLevelComments(topLevelComments.filter((c) => c.id !== id));
@@ -108,32 +108,69 @@ export const ReplyCommentThread: React.FC = () => {
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { isMobileOrTablet } = useMediaQueries();
-  const { topComment, toggleTopComment, toggleCommentModal } = useDiscussionContext();
+
+  const {
+    topComment,
+    setTopComment,
+    toggleCommentModal,
+    topLevelComments,
+    setTopLevelComments,
+  } = useDiscussionContext();
+
   const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
-  const topCommentId = R.prop('id', topComment);
-  const target = { comment: Number(topCommentId) };
+  const target = { comment: Number(R.prop('id', topComment)) };
   const openCommentModal = (): void => toggleCommentModal(true);
 
   const appendComments = (comment: CommentObjectType): void => {
     if (topComment) {
-      toggleTopComment({
+      setTopComment({
         ...topComment,
         replyComments: [...topComment.replyComments, comment],
       });
+
+      // Update top-level comments.
+      setTopLevelComments(
+        topLevelComments.map((c) => {
+          if (c.id === topComment.id) {
+            return {
+              ...topComment,
+              replyComments: [...topComment.replyComments, comment],
+            };
+          }
+
+          return c;
+        }),
+      );
     }
   };
 
   const removeComment = (id: string): void => {
     if (topComment) {
       if (id === topComment.id) {
-        toggleTopComment(null); // Close modal if top comment gets deleted.
+        setTopComment(null); // Close modal if top comment gets deleted.
+        setTopLevelComments(topLevelComments.filter((c) => c.id !== id)); // Filter deleted comment from top-level comments.
       } else {
         const filteredReplyComments = replyComments.filter((c) => c.id !== id);
 
-        toggleTopComment({
+        // Update reply comments for top comment.
+        setTopComment({
           ...topComment,
           replyComments: filteredReplyComments,
         });
+
+        // Update top-level comments.
+        setTopLevelComments(
+          topLevelComments.map((c) => {
+            if (c.id === topComment.id) {
+              return {
+                ...c,
+                replyComments: filteredReplyComments,
+              };
+            }
+
+            return c;
+          }),
+        );
       }
     }
   };

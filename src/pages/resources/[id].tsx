@@ -122,13 +122,10 @@ const ResourceDetailPage: NextPage = () => {
   const isOwner = !!userMe && userMe.id === creatorId;
   const resourceUser = R.prop('user', resource);
   const created = R.prop('created', resource);
-  const commentCount = comments.length;
-
+  const { commentCount } = useDiscussionContext();
   const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
-
   const { renderShareButton } = useShare({ text: resourceTitle });
   const { commentModalOpen } = useDiscussionContext();
-
   const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePdfViewerContext();
 
   const {

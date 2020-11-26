@@ -104,7 +104,7 @@ const CourseDetailPage: NextPage = () => {
   const initialScore = String(R.propOr(0, 'score', course));
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
   const comments = R.propOr([], 'comments', course);
-  const { commentCount } = useDiscussionContext(comments);
+  const { commentCount } = useDiscussionContext();
   const initialVote = R.propOr(null, 'vote', course);
   const starred = !!R.prop('starred', course);
   const isOwner = !!userMe && userMe.id === creatorId;

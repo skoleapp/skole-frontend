@@ -105,7 +105,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
   const shareQuery = `?comment=${commentId}`;
   const replyComments = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
-  const { toggleTopComment, setAttachmentViewerValue } = useDiscussionContext();
+  const { setTopComment, setAttachmentViewerValue } = useDiscussionContext();
 
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', comment.user);
 
@@ -142,7 +142,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     if (isThread) {
       attachmentOnly && setAttachmentViewerValue(comment.attachment);
     } else {
-      toggleTopComment(comment);
+      setTopComment(comment);
     }
   };
 
