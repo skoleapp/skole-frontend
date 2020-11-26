@@ -13,7 +13,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
 }));
 
-export const DialogHeader: React.FC<DialogHeaderProps> = ({ text, onCancel, headerRight }) => {
+export const DialogHeader: React.FC<DialogHeaderProps> = ({ text, onCancel, headerLeft }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -34,13 +34,13 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({ text, onCancel, head
   return (
     <Grid container alignItems="center" className={classes.root}>
       <Grid item xs={2} container justify="flex-start">
-        {renderCloseButton}
+        {headerLeft}
       </Grid>
       <Grid item container xs={8} justify="center">
         {renderHeaderText}
       </Grid>
       <Grid item container xs={2} justify="flex-end">
-        {headerRight}
+        {renderCloseButton}
       </Grid>
     </Grid>
   );

@@ -453,7 +453,7 @@ const SearchPage: NextPage = () => {
     <DialogHeader
       onCancel={handleCloseFilters}
       text={t('common:filters')}
-      headerRight={renderClearFiltersButton}
+      headerLeft={renderClearFiltersButton}
     />
   );
 
