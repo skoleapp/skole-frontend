@@ -114,9 +114,15 @@ let theme = createMuiTheme({
     },
     MuiOutlinedInput: {
       root: {
-        // FIXME: The border radius causes the shrinked label to get overlapped by the input outlines on Safari.
-        // This is an issue with MUI: https://github.com/mui-org/material-ui/issues/13297
         borderRadius: BORDER_RADIUS,
+      },
+    },
+    MuiInputLabel: {
+      // This fixes the buggy label on Safari: https://github.com/mui-org/material-ui/issues/20391
+      shrink: {
+        paddingLeft: spacing(1),
+        paddingRight: spacing(1),
+        backgroundColor: palette.common.white,
       },
     },
     MuiListItemAvatar: {
