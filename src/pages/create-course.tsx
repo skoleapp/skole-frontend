@@ -48,7 +48,14 @@ const CreateCoursePage: NextPage = () => {
   });
 
   const school = R.propOr(null, 'school', data);
-  const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm();
+
+  const {
+    formRef,
+    resetForm,
+    handleMutationErrors,
+    onError,
+    unexpectedError,
+  } = useForm<CreateCourseFormValues>();
 
   const validationSchema = Yup.object().shape({
     courseName: Yup.string().required(t('validation:required')),

@@ -11,9 +11,9 @@ const snakeCaseToCamelCase = (str: string): string => {
 };
 
 // A custom hook that provides useful helpers for integrating Formik with GraphQL mutations.
-export const useForm = (): UseForm => {
+export const useForm = <T extends FormikValues>(): UseForm<T> => {
   const { t } = useTranslation();
-  const formRef = useRef<FormikProps<FormikValues>>(null!);
+  const formRef = useRef<FormikProps<T>>(null!);
 
   const setFormErrors = (formErrors: FormikValues): void =>
     Object.keys(formErrors).forEach((key) => formRef.current.setFieldError(key, formErrors[key]));

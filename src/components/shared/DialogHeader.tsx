@@ -7,7 +7,7 @@ import { DialogHeaderProps } from 'types';
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   root: {
     padding: `${spacing(2)} ${spacing(2)} ${spacing(1)} ${spacing(2)}`,
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       padding: `${spacing(4)} ${spacing(4)} ${spacing(2)} ${spacing(4)}`,
     },
   },

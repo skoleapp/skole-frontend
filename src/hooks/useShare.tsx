@@ -29,8 +29,8 @@ interface UseShare {
 export const useShare = ({ query = '', text }: ShareParams): UseShare => {
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
-  const { isMobileOrTablet } = useMediaQueries();
-  const color = isMobileOrTablet ? 'secondary' : 'default';
+  const { isMobile } = useMediaQueries();
+  const color = isMobile ? 'secondary' : 'default';
 
   const handleShare = async (): Promise<void> => {
     const { navigator } = window as ShareNavigatorWindow;

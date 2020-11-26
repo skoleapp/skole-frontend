@@ -1,4 +1,4 @@
 export interface ShareParams {
-  query?: string;
-  text?: string;
+  query?: string; // Query used in shareable link.
+  text?: string; // Text used in shareable link.
 }

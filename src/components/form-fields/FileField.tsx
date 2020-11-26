@@ -30,7 +30,7 @@ interface Props {
 
 export const FileField: React.FC<Props> = ({ form, field }) => {
   const classes = useStyles();
-  const { isMobileOrTablet, isDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
   const fileName = R.propOr('', 'name', field.value);
@@ -70,13 +70,13 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
     />
   );
 
-  const renderMobileUploadFileButton = isMobileOrTablet && (
+  const renderMobileUploadFileButton = isMobile && (
     <Button onClick={handleFileInputClick} color="primary" variant="outlined" fullWidth>
       {t('upload-resource:uploadFileButtonText')}
     </Button>
   );
 
-  const renderDropZone = isDesktop && (
+  const renderDropZone = isTabletOrDesktop && (
     <Box
       className={classes.dropZone}
       onDragOver={preventDefaultDragBehavior}

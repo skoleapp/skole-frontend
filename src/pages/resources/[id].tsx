@@ -27,6 +27,7 @@ import {
   PdfViewer,
   ResourceToolbar,
   ResponsiveDialog,
+  RotateButton,
   StarButton,
   TextLink,
   TopLevelCommentThread,
@@ -83,12 +84,12 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
   resourceContainer: {
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0.25rem 0.25rem`, // Disable round border for bottom right corner to better fit with the scroll bar.
     },
   },
@@ -98,7 +99,7 @@ const ResourceDetailPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { isMobileOrTablet } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
   const confirm = useConfirm();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
@@ -127,9 +128,12 @@ const ResourceDetailPage: NextPage = () => {
   const created = R.prop('created', resource);
   const { commentCount } = useDiscussionContext();
   const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
-  const { renderShareButton } = useShare({ text: resourceTitle });
   const { commentModalOpen } = useDiscussionContext();
   const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePdfViewerContext();
+
+  const { renderShareButton } = useShare({
+    text: resourceTitle,
+  });
 
   const {
     infoDialogOpen,
@@ -323,10 +327,12 @@ const ResourceDetailPage: NextPage = () => {
   const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
   const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
+  const renderRotateButton = <RotateButton />;
 
   const renderDefaultBottomNavbarContent = (
     <Grid container>
       <Grid item xs={6} container justify="flex-start">
+        {renderRotateButton}
         {renderDrawModeButton}
       </Grid>
       <Grid item xs={6} container justify="flex-end">
@@ -372,7 +378,7 @@ const ResourceDetailPage: NextPage = () => {
   const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
   const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
-  const renderMobileContent = isMobileOrTablet && (
+  const renderMobileContent = isMobile && (
     <Paper className={classes.mobileContainer}>
       <Tabs value={tabValue} onChange={handleTabChange}>
         <Tab label={t('common:resource')} />
@@ -392,15 +398,15 @@ const ResourceDetailPage: NextPage = () => {
     </Paper>
   );
 
-  const renderDesktopContent = !isMobileOrTablet && (
+  const renderDesktopContent = isTabletOrDesktop && (
     <Grid container spacing={2} className={classes.desktopContainer}>
-      <Grid item container xs={12} md={7} lg={8}>
+      <Grid item container xs={12} md={6} lg={8}>
         <Paper className={clsx(classes.paperContainer, classes.resourceContainer)}>
           {renderToolbar}
           {renderPdfViewer}
         </Paper>
       </Grid>
-      <Grid item container xs={12} md={5} lg={4}>
+      <Grid item container xs={12} md={6} lg={4}>
         <Paper className={clsx(classes.paperContainer)}>
           {renderDiscussionHeader}
           {renderDiscussion}
@@ -432,7 +438,7 @@ const ResourceDetailPage: NextPage = () => {
     </MenuItem>
   );
 
-  const renderDownloadAction = isMobileOrTablet && (
+  const renderDownloadAction = isMobile && (
     <MenuItem onClick={handleDownloadButtonClick}>
       <ListItemIcon>
         <CloudDownloadOutlined />
@@ -441,7 +447,7 @@ const ResourceDetailPage: NextPage = () => {
     </MenuItem>
   );
 
-  const renderPrintAction = isMobileOrTablet && (
+  const renderPrintAction = isMobile && (
     <MenuItem onClick={handlePrintButtonClick}>
       <ListItemIcon>
         <PrintOutlined />

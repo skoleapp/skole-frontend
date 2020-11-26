@@ -43,13 +43,13 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
     display: 'flex',
     justifyContent: 'flex-end',
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       height: TOP_NAVBAR_HEIGHT_DESKTOP,
       justifyContent: 'center',
     },
   },
   toolbar: {
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       paddingLeft: spacing(4),
       paddingRight: spacing(4),
     },
@@ -77,18 +77,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const classes = useStyles();
   const { spacing } = useTheme();
   const { t } = useTranslation();
-  const { isMobileOrTablet } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { userMe, authNetworkError } = useAuthContext();
   const userMeId = R.propOr('', 'id', userMe);
   const avatarThumb = R.propOr('', 'avatar', userMe);
   const dense = !!headerLeft || !!headerRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
+  const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
   const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(
     null,
   );
-
-  const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
   const handleActivityButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
     setActivityPopperAnchorEl(e.currentTarget);
@@ -112,7 +111,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderHeader = <Typography variant="h5">{header}</Typography>;
   const renderLogo = !disableLogo && <Logo />;
 
-  const renderMobileContent = isMobileOrTablet && (
+  const renderMobileContent = isMobile && (
     <Grid container alignItems="center">
       <Grid item xs={dense ? 4 : 2} container justify="flex-start" alignItems="center">
         {renderStaticBackButton || renderDynamicBackButton}
@@ -122,8 +121,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         {header ? renderHeader : renderLogo}
       </Grid>
       <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
-        {headerRightSecondary}
         {headerRight}
+        {headerRightSecondary}
       </Grid>
     </Grid>
   );
@@ -207,12 +206,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderSearch = !disableSearch && <TopNavbarSearchWidget />;
   const renderButtons = userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
 
-  const renderDesktopContent = !isMobileOrTablet && (
+  const renderDesktopContent = isTabletOrDesktop && (
     <Grid container alignItems="center">
-      <Grid item xs={6} container>
+      <Grid item xs={2} container>
         {renderLogo}
       </Grid>
-      <Grid item xs={6} container justify="flex-end" alignItems="center">
+      <Grid item xs={10} container justify="flex-end" alignItems="center">
         {renderSearch}
         {renderButtons}
       </Grid>

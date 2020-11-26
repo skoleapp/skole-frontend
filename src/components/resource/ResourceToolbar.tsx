@@ -7,15 +7,16 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core';
-import { CloudDownloadOutlined, PrintOutlined, RotateRightOutlined } from '@material-ui/icons';
+import { CloudDownloadOutlined, PrintOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent } from 'react';
 
-import { DrawModeButton } from './DrawModeButton';
+// import { DrawModeButton } from './DrawModeButton';
 import { DrawModeControls } from './DrawModeControls';
+import { RotateButton } from './RotateButton';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   root: {
@@ -65,15 +66,10 @@ export const ResourceToolbar: React.FC<Props> = ({
     pageNumber,
     numPages,
     setPageNumber,
-    rotate,
-    setRotate,
     drawMode,
     documentRef,
     controlsDisabled,
   } = usePdfViewerContext();
-
-  const handleRotateButtonClick = (): void =>
-    rotate === 270 ? setRotate(0) : setRotate(rotate + 90);
 
   // Scroll into page from given page number.
   // FIXME: Providing a custom value in the input won't work atm.
@@ -115,8 +111,9 @@ export const ResourceToolbar: React.FC<Props> = ({
     </Box>
   );
 
-  const renderDrawModeButton = <DrawModeButton />;
+  //   const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
+  const renderRotateButton = <RotateButton />;
 
   const renderDownloadButton = (
     <Tooltip title={t('tooltips:download')}>
@@ -148,21 +145,6 @@ export const ResourceToolbar: React.FC<Props> = ({
     </Tooltip>
   );
 
-  const renderRotateButton = (
-    <Tooltip title={t('tooltips:rotate')}>
-      <Typography component="span">
-        <IconButton
-          size="small"
-          color="inherit"
-          onClick={handleRotateButtonClick}
-          disabled={controlsDisabled}
-        >
-          <RotateRightOutlined />
-        </IconButton>
-      </Typography>
-    </Tooltip>
-  );
-
   const renderResourceTitle = (
     <Typography className="truncate-text" variant="subtitle1">
       {title}
@@ -178,7 +160,7 @@ export const ResourceToolbar: React.FC<Props> = ({
         {renderPageNumbers}
       </Grid>
       <Grid item xs={5} container justify="flex-end" alignItems="center">
-        {renderDrawModeButton}
+        {/* {renderDrawModeButton} Hidden for now. */}
         {renderRotateButton}
         {renderDownloadButton}
         {renderPrintButton}

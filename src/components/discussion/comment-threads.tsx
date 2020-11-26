@@ -45,7 +45,7 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
   noComments,
 }) => {
   const classes = useStyles();
-  const { isMobileOrTablet } = useMediaQueries();
+  const { isMobile } = useMediaQueries();
   const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext();
   const openCommentModal = (): void => toggleCommentModal(true);
 
@@ -86,7 +86,7 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
 
   const renderInputArea = <CreateCommentForm {...createCommentFormProps} />;
 
-  const renderCreateCommentButton = isMobileOrTablet && (
+  const renderCreateCommentButton = isMobile && (
     <Fab className={classes.createCommentButton} color="secondary" onClick={openCommentModal}>
       <AddOutlined />
     </Fab>
@@ -107,7 +107,7 @@ export const ReplyCommentThread: React.FC = () => {
   const classes = useStyles();
   const { spacing } = useTheme();
   const { t } = useTranslation();
-  const { isMobileOrTablet } = useMediaQueries();
+  const { isMobile } = useMediaQueries();
 
   const {
     topComment,
@@ -200,7 +200,7 @@ export const ReplyCommentThread: React.FC = () => {
     !!replyComments.length &&
     replyComments.map((c, i) => <CommentCard {...commentCardProps} key={i} comment={c} />);
 
-  const renderReplyButton = !!topComment && isMobileOrTablet && (
+  const renderReplyButton = !!topComment && isMobile && (
     <Box padding={spacing(2)} marginTop="auto">
       <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
         {t('common:reply')}

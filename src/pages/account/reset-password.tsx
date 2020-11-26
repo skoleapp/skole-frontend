@@ -28,11 +28,11 @@ const passwordFormInitialValues = {
   general: '',
 };
 
-export interface EmailFormValues {
+interface EmailFormValues {
   email: string;
 }
 
-export interface PasswordFormValues {
+interface PasswordFormValues {
   newPassword: string;
   confirmNewPassword: string;
 }
@@ -44,7 +44,7 @@ const ResetPasswordPage: NextPage = () => {
     onError: onEmailFormError,
     resetForm: resetEmailForm,
     unexpectedError: emailFormUnexpectedError,
-  } = useForm();
+  } = useForm<EmailFormValues>();
 
   const {
     formRef: passwordFormRef,
@@ -52,7 +52,7 @@ const ResetPasswordPage: NextPage = () => {
     onError: onPasswordFormError,
     resetForm: resetPasswordForm,
     unexpectedError: passwordFormUnexpectedError,
-  } = useForm();
+  } = useForm<PasswordFormValues>();
 
   const { t } = useTranslation();
   const { query } = useRouter();

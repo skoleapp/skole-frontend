@@ -50,7 +50,15 @@ const EditProfilePage: NextPage = () => {
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const { userMe, setUserMe, verified } = useAuthContext();
-  const { formRef, handleMutationErrors, onError, setSubmitting, unexpectedError } = useForm();
+
+  const {
+    formRef,
+    handleMutationErrors,
+    onError,
+    setSubmitting,
+    unexpectedError,
+  } = useForm<UpdateProfileFormValues>();
+
   const { toggleNotification } = useNotificationsContext();
   const id = R.propOr('', 'id', userMe);
   const title = R.propOr('', 'title', userMe);

@@ -61,7 +61,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
@@ -80,7 +80,7 @@ const SchoolDetailPage: NextPage = () => {
   const classes = useStyles();
   const { verified, verificationRequiredTooltip } = useAuthContext();
   const { t } = useTranslation();
-  const { isDesktop, isMobileOrTablet } = useMediaQueries();
+  const { isTabletOrDesktop, isMobile } = useMediaQueries();
   const { searchUrl } = useSearch();
   const { query } = useRouter();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
@@ -190,7 +190,7 @@ const SchoolDetailPage: NextPage = () => {
           href={addCourseHref}
           icon={AddCircleOutlineOutlined}
           disabled={verified === false}
-          color={isMobileOrTablet ? 'secondary' : 'default'}
+          color={isMobile ? 'secondary' : 'default'}
           size="small"
         />
       </Typography>
@@ -259,9 +259,7 @@ const SchoolDetailPage: NextPage = () => {
 
   const renderSubjectsNotFound = <NotFoundBox text={t('school:noSubjects')} />;
   const renderCoursesNotFound = <NotFoundBox text={t('school:noCourses')} />;
-
   const renderSubjects = subjects.length ? renderSubjectsTable : renderSubjectsNotFound;
-
   const renderCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
 
   const renderAction = (
@@ -273,7 +271,9 @@ const SchoolDetailPage: NextPage = () => {
     </>
   );
 
-  const renderSchoolHeader = isDesktop && <CardHeader title={schoolName} action={renderAction} />;
+  const renderSchoolHeader = isTabletOrDesktop && (
+    <CardHeader title={schoolName} action={renderAction} />
+  );
 
   const renderTabs = (
     <Tabs value={tabValue} onChange={handleTabChange}>

@@ -13,8 +13,8 @@ export const CustomTableHead: React.FC<CustomTableHeadProps> = ({
   titleLeftDesktop = titleLeft,
   titleRight,
 }) => {
-  const { isMobileOrTablet } = useMediaQueries();
-  const renderTitleLeft = isMobileOrTablet ? titleLeft : titleLeftDesktop;
+  const { isMobile } = useMediaQueries();
+  const renderTitleLeft = isMobile ? titleLeft : titleLeftDesktop;
 
   return (
     <TableHead>

@@ -25,7 +25,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
   container: {
     [breakpoints.up('md')]: {
-      padding: spacing(4),
+      padding: spacing(3),
     },
   },
   dialogContent: {
@@ -41,11 +41,11 @@ interface CreateCommentFormProps {
 export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { isDesktop } = useMediaQueries();
+  const { isTabletOrDesktop } = useMediaQueries();
   const { screenshot, setScreenshot } = usePdfViewerContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
-  const { formRef, setSubmitting, resetForm, setFieldValue } = useForm();
+  const { formRef, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
 
   const {
     commentModalOpen,
@@ -132,7 +132,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
   const renderDesktopInputArea = (
     props: FormikProps<CreateCommentFormValues>,
-  ): false | JSX.Element => isDesktop && renderRichTextEditor(props);
+  ): false | JSX.Element => isTabletOrDesktop && renderRichTextEditor(props);
 
   const renderCreateCommentModal = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
@@ -154,7 +154,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   );
 
   return (
-    <Formik onSubmit={handleSubmit} initialValues={initialValues} ref={formRef}>
+    <Formik onSubmit={handleSubmit} initialValues={initialValues} innerRef={formRef}>
       {renderFormFields}
     </Formik>
   );

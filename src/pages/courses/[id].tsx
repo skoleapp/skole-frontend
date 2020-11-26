@@ -72,7 +72,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
@@ -85,7 +85,7 @@ const CourseDetailPage: NextPage = () => {
   const classes = useStyles();
   const { query } = useRouter();
   const { t } = useTranslation();
-  const { isMobileOrTablet, isDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
   const confirm = useConfirm();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
@@ -293,14 +293,14 @@ const CourseDetailPage: NextPage = () => {
   };
 
   // Do not render a disabled button at all on mobile.
-  const renderUploadResourceButton = (!!verified || isDesktop) && (
+  const renderUploadResourceButton = (!!verified || isTabletOrDesktop) && (
     <Tooltip title={uploadResourceButtonTooltip}>
       <Typography component="span">
         <IconButtonLink
           href={uploadResourceHref}
           icon={CloudUploadOutlined}
           disabled={verified === false}
-          color={isMobileOrTablet ? 'secondary' : 'default'}
+          color={isMobile ? 'secondary' : 'default'}
           size="small"
         />
       </Typography>
@@ -311,7 +311,7 @@ const CourseDetailPage: NextPage = () => {
     <CardHeader title={courseName} action={renderUploadResourceButton} />
   );
 
-  const renderMobileContent = isMobileOrTablet && (
+  const renderMobileContent = isMobile && (
     <Paper className={classes.mobileContainer}>
       <Tabs value={tabValue} onChange={handleTabChange}>
         <Tab label={`${t('common:resources')} (${resourceCount})`} />
@@ -326,15 +326,15 @@ const CourseDetailPage: NextPage = () => {
     </Paper>
   );
 
-  const renderDesktopContent = !isMobileOrTablet && (
+  const renderDesktopContent = isTabletOrDesktop && (
     <Grid container spacing={2} className={classes.desktopContainer}>
-      <Grid item container xs={12} md={7} lg={8}>
+      <Grid item container xs={12} md={6} lg={8}>
         <Paper className={clsx(classes.paperContainer)}>
           {renderResourcesHeader}
           {renderResources}
         </Paper>
       </Grid>
-      <Grid item container xs={12} md={5} lg={4}>
+      <Grid item container xs={12} md={6} lg={4}>
         <Paper className={clsx(classes.paperContainer)}>
           {renderDiscussionHeader}
           {renderDiscussion}

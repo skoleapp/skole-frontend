@@ -66,7 +66,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
@@ -114,7 +114,7 @@ interface ValidFilter {
 
 const SearchPage: NextPage = () => {
   const classes = useStyles();
-  const { isMobileOrTablet, isDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { pathname, query } = useRouter();
 
@@ -136,7 +136,7 @@ const SearchPage: NextPage = () => {
 
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useCoursesQuery({ variables, context });
-  const { formRef, resetForm } = useForm();
+  const { formRef, resetForm } = useForm<SearchFormValues>();
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const school = R.propOr(null, 'school', data);
   const subject = R.propOr(null, 'subject', data);
@@ -296,7 +296,7 @@ const SearchPage: NextPage = () => {
     </Box>
   );
 
-  const renderCourseNameField = !isMobileOrTablet && (
+  const renderCourseNameField = isTabletOrDesktop && (
     <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
   );
 
@@ -375,7 +375,7 @@ const SearchPage: NextPage = () => {
   );
 
   const renderClearButton = (props: FormikProps<SearchFormValues>): JSX.Element | false =>
-    !isMobileOrTablet && (
+    isTabletOrDesktop && (
       <FormControl>
         <Button
           onClick={handleClearFilters}
@@ -464,7 +464,7 @@ const SearchPage: NextPage = () => {
     </SkoleDialog>
   );
 
-  const renderMobileContent = isMobileOrTablet && (
+  const renderMobileContent = isMobile && (
     <Grid container direction="column" className={classes.container}>
       {renderFilterNames}
       {renderResults}
@@ -475,15 +475,15 @@ const SearchPage: NextPage = () => {
   const renderFilterResultsHeader = <CardHeader title={t('common:filters')} />;
   const renderResultsHeader = <CardHeader title={t('common:searchResults')} />;
 
-  const renderDesktopContent = isDesktop && (
+  const renderDesktopContent = isTabletOrDesktop && (
     <Grid container spacing={2} className={classes.rootContainer}>
-      <Grid item container xs={5} md={4} lg={3}>
+      <Grid item container xs={12} md={4} lg={3}>
         <Paper className={classes.container}>
           {renderFilterResultsHeader}
           {renderFilterResultsForm}
         </Paper>
       </Grid>
-      <Grid item container xs={7} md={8} lg={9}>
+      <Grid item container xs={12} md={8} lg={9}>
         <Paper className={classes.container}>
           {renderResultsHeader}
           {renderFilterNames}

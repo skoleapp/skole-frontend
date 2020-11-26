@@ -16,6 +16,10 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
 
+interface EmailFormValues {
+  email: string;
+}
+
 const VerifyAccountPage: NextPage = () => {
   const {
     formRef: emailFormRef,
@@ -23,7 +27,7 @@ const VerifyAccountPage: NextPage = () => {
     onError: onEmailFormError,
     resetForm: resetEmailForm,
     unexpectedError: emailFormUnexpectedError,
-  } = useForm();
+  } = useForm<EmailFormValues>();
 
   const {
     formRef: confirmationFormRef,
@@ -31,7 +35,7 @@ const VerifyAccountPage: NextPage = () => {
     onError: onConfirmationFormError,
     resetForm: resetConfirmationForm,
     unexpectedError: confirmationFormUnexpectedError,
-  } = useForm();
+  } = useForm<Record<string, never>>();
 
   const { t } = useTranslation();
   const { query } = useRouter();

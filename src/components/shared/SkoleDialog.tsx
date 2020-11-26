@@ -10,7 +10,7 @@ const Transition = forwardRef((props: TransitionProps, ref: Ref<unknown>) => (
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   paper: {
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
@@ -19,14 +19,14 @@ const useStyles = makeStyles(({ breakpoints }) => ({
 // A simple wrapper around MUI dialog to provide global styles that cannot be provided in the theme overrides.
 export const SkoleDialog: React.FC<DialogProps> = (props) => {
   const classes = useStyles();
-  const { isMobileOrTablet, isDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const handleClick = (e: SyntheticEvent): void => e.stopPropagation();
 
   return (
     <Dialog
       onClick={handleClick}
-      fullScreen={isMobileOrTablet}
-      fullWidth={isDesktop}
+      fullScreen={isMobile}
+      fullWidth={isTabletOrDesktop}
       TransitionComponent={Transition}
       PaperProps={{ className: classes.paper }}
       {...props}

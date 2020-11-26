@@ -56,7 +56,14 @@ const LoginPage: NextPage = () => {
   const [existingUser, setExistingUser] = useState(null);
   const existingUserAvatar = mediaUrl(R.propOr('', 'avatar', existingUser));
   const context = useLanguageHeaderContext();
-  const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm();
+
+  const {
+    formRef,
+    resetForm,
+    handleMutationErrors,
+    onError,
+    unexpectedError,
+  } = useForm<LoginFormValues>();
 
   const existingUserGreeting = t('login:existingUserGreeting', {
     username: R.propOr('-', 'username', existingUser),

@@ -30,7 +30,7 @@ export const DeleteAccountPage: NextPage = () => {
     handleMutationErrors,
     onError,
     unexpectedError,
-  } = useForm();
+  } = useForm<DeleteAccountFormValues>();
 
   const { t } = useTranslation();
   const confirm = useConfirm();

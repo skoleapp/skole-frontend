@@ -23,7 +23,14 @@ interface ChangePasswordFormValues {
 }
 
 const ChangePasswordPage: NextPage = () => {
-  const { formRef, resetForm, handleMutationErrors, onError, unexpectedError } = useForm();
+  const {
+    formRef,
+    resetForm,
+    handleMutationErrors,
+    onError,
+    unexpectedError,
+  } = useForm<ChangePasswordFormValues>();
+
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();

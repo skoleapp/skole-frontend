@@ -75,7 +75,7 @@ const RegisterPage: NextPage = () => {
     handleMutationErrors: handleRegisterMutationErrors,
     onError: onRegisterError,
     unexpectedError: unexpectedRegisterError,
-  } = useForm();
+  } = useForm<RegisterFormValues>();
 
   const {
     formRef: updateUserFormRef,
@@ -83,7 +83,7 @@ const RegisterPage: NextPage = () => {
     handleMutationErrors: handleUpdateUserMutationErrors,
     onError: onUpdateUserError,
     unexpectedError: updateUserUnexpectedError,
-  } = useForm();
+  } = useForm<UpdateUserFormValues>();
 
   const getHeader = (): string => {
     switch (phase) {

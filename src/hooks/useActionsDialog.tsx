@@ -3,10 +3,15 @@ import { FlagOutlined, MoreHorizOutlined, ShareOutlined } from '@material-ui/ico
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps, ShareParams } from 'types';
+import { useDialogButton } from './useDialogButton';
 
-import { useMediaQueries } from './useMediaQueries';
 import { useOpen } from './useOpen';
 import { useShare } from './useShare';
+
+interface ActionsButtonProps {
+  onClick: (e: SyntheticEvent) => void;
+  size: Size;
+}
 
 interface UseActionsDialog {
   actionsDialogOpen: boolean;
@@ -15,16 +20,13 @@ interface UseActionsDialog {
   renderShareAction: false | JSX.Element;
   renderReportAction: JSX.Element;
   renderActionsButton: JSX.Element;
-  actionsButtonProps: {
-    onClick: (e: SyntheticEvent) => void;
-    size: Size;
-  };
+  actionsButtonProps: ActionsButtonProps;
 }
 
-export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => {
+export const useActionsDialog = ({ query, text }: ShareParams): UseActionsDialog => {
   const { t } = useTranslation();
-  const { handleShare: _handleShare } = useShare(shareParams);
-  const { isMobileOrTablet } = useMediaQueries();
+  const { handleShare: _handleShare } = useShare({ query, text });
+  const dialogButtonProps = useDialogButton();
   const tooltip = t('tooltips:actions');
 
   const {
@@ -53,6 +55,11 @@ export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => 
     onCancel: handleCloseActionsDialog,
   };
 
+  const actionsButtonProps = {
+    ...dialogButtonProps,
+    onClick: handleOpenActionsDialog,
+  };
+
   const renderShareAction = (
     <MenuItem onClick={handleShare}>
       <ListItemIcon>
@@ -71,14 +78,9 @@ export const useActionsDialog = (shareParams: ShareParams): UseActionsDialog => 
     </MenuItem>
   );
 
-  const actionsButtonProps = {
-    onClick: handleOpenActionsDialog,
-    size: 'small' as Size,
-  };
-
   const renderActionsButton = (
     <Tooltip title={tooltip}>
-      <IconButton {...actionsButtonProps} color={isMobileOrTablet ? 'secondary' : 'default'}>
+      <IconButton {...actionsButtonProps}>
         <MoreHorizOutlined />
       </IconButton>
     </Tooltip>

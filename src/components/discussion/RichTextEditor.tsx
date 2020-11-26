@@ -127,7 +127,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   const classes = useStyles();
   const ref = useRef<Editor>(null!);
   const { t } = useTranslation();
-  const { isDesktop, isMobileOrTablet } = useMediaQueries();
+  const { isTabletOrDesktop, isMobile } = useMediaQueries();
   const placeholder = `${t('forms:createComment')}...`;
   const contentState = editorState.getCurrentContent();
   const selection = editorState.getSelection();
@@ -505,7 +505,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     </Grid>
   );
 
-  const renderMentionButton = isDesktop && (
+  const renderMentionButton = isTabletOrDesktop && (
     <Tooltip title={t('tooltips:mention')}>
       <Typography component="span">
         <IconButton {...commonToolbarButtonProps} disabled>
@@ -516,7 +516,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   );
 
   // For anonymous users and user without verification that are on mobile, hide the entire button.
-  const renderAttachmentButton = ((isMobileOrTablet && !!userMe && !!verified) || isDesktop) && (
+  const renderAttachmentButton = ((isMobile && !!userMe && !!verified) || isTabletOrDesktop) && (
     <>
       <input
         ref={attachmentInputRef}
@@ -533,7 +533,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
             onClick={handleUploadAttachment}
             disabled={verified === false || !userMe}
           >
-            {isMobileOrTablet ? <CameraAltOutlined /> : <AttachFileOutlined />}
+            {isMobile ? <CameraAltOutlined /> : <AttachFileOutlined />}
           </IconButton>
         </Typography>
       </Tooltip>
@@ -570,7 +570,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     </Grid>
   );
 
-  const renderHelpTexts = isDesktop && (
+  const renderHelpTexts = isTabletOrDesktop && (
     <Grid item md={9} container justify="flex-end">
       {renderSendHelpText}
       {renderNewLineHelpText}

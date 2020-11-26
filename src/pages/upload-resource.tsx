@@ -61,7 +61,7 @@ const UploadResourcePage: NextPage = () => {
     handleMutationErrors,
     setFieldValue,
     unexpectedError,
-  } = useForm();
+  } = useForm<UploadResourceFormValues>();
 
   const validationSchema = Yup.object().shape({
     resourceTitle: Yup.string().required(t('validation:required')),
