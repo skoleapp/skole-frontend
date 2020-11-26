@@ -407,7 +407,12 @@ const SearchPage: NextPage = () => {
 
   const renderFilterResultsForm = (
     <DialogContent>
-      <Formik onSubmit={handlePreSubmit} initialValues={initialValues} ref={formRef}>
+      <Formik
+        onSubmit={handlePreSubmit}
+        initialValues={initialValues}
+        ref={formRef}
+        enableReinitialize
+      >
         {renderSearchFormFields}
       </Formik>
     </DialogContent>

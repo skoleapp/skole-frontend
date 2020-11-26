@@ -16,10 +16,6 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
 
-interface EmailFormValues {
-  email: string;
-}
-
 const VerifyAccountPage: NextPage = () => {
   const {
     formRef: emailFormRef,
@@ -120,7 +116,12 @@ const VerifyAccountPage: NextPage = () => {
   };
 
   const renderEmailForm = verified === false && !token && !emailSubmitted && (
-    <Formik initialValues={initialEmailFormValues} onSubmit={handleSubmitEmail} ref={emailFormRef}>
+    <Formik
+      initialValues={initialEmailFormValues}
+      onSubmit={handleSubmitEmail}
+      ref={emailFormRef}
+      enableReinitialize
+    >
       {(props): JSX.Element => (
         <Form>
           <Box flexGrow="1" textAlign="center">

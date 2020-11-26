@@ -243,6 +243,7 @@ const UploadResourcePage: NextPage = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       ref={formRef}
+      enableReinitialize
     >
       {renderformFields}
     </Formik>

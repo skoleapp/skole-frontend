@@ -228,6 +228,7 @@ const EditProfilePage: NextPage = () => {
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       ref={formRef}
+      enableReinitialize
     >
       {renderEditProfileformFields}
     </Formik>
