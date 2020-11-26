@@ -10,7 +10,7 @@ import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { SettingsContextType } from 'types';
-import { MENU_ITEMS, urls } from 'utils';
+import { SETTINGS_ITEMS, urls } from 'utils';
 
 import { useLanguageSelector } from './useLanguageSelector';
 
@@ -43,7 +43,7 @@ export const useSettings = (modal: boolean): UseSettings => {
     openLanguageMenu();
   };
 
-  const renderAccountMenuItems = MENU_ITEMS.account.map(({ icon: Icon, href, text }, i) => (
+  const renderAccountMenuItems = SETTINGS_ITEMS.account.map(({ icon: Icon, href, text }, i) => (
     <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
       <ListItemIcon>
         <Icon />
@@ -64,7 +64,7 @@ export const useSettings = (modal: boolean): UseSettings => {
     </MenuItem>
   );
 
-  const renderCommonAccountMenuItems = MENU_ITEMS.commonAccount.map(
+  const renderCommonAccountMenuItems = SETTINGS_ITEMS.commonAccount.map(
     ({ icon: Icon, href, text }, i) => (
       <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
         <ListItemIcon>
@@ -75,7 +75,7 @@ export const useSettings = (modal: boolean): UseSettings => {
     ),
   );
 
-  const renderCommonMenuItems = MENU_ITEMS.common.map(({ icon: Icon, href, text }, i) => (
+  const renderCommonMenuItems = SETTINGS_ITEMS.common.map(({ icon: Icon, href, text }, i) => (
     <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
       <ListItemIcon>
         <Icon />

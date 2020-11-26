@@ -36,7 +36,7 @@ export const getPaginationQuery = (query: ParsedUrlQueryInput): ParsedUrlQueryIn
     query,
   );
 
-// A utility that we use to truncate strings to a given length.
+// Truncate strings to a given length.
 export const truncate = (str: string, num: number): string => {
   if (str.length > num) {
     return `${str.slice(0, num)}...`;

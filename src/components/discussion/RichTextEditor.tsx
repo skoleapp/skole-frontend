@@ -53,7 +53,7 @@ import React, {
   useState,
 } from 'react';
 import { CreateCommentFormValues } from 'types';
-import { RICH_STYLES } from 'utils';
+import { RICH_TEXT_EDITOR_STYLES } from 'utils';
 import { DraftLink } from './DraftLink';
 
 import { DialogHeader, SkoleDialog } from '../shared';
@@ -195,7 +195,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     unorderedList,
     blockQuote,
     codeBlock,
-  } = RICH_STYLES;
+  } = RICH_TEXT_EDITOR_STYLES;
 
   const inlineStyles = [
     {
@@ -296,12 +296,12 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
       return 'handled';
     }
 
-    if (command === RICH_STYLES.strikeThrough) {
+    if (command === RICH_TEXT_EDITOR_STYLES.strikeThrough) {
       setEditorState(RichUtils.toggleInlineStyle(editorState, command));
       return 'handled';
     }
 
-    if (command === RICH_STYLES.link) {
+    if (command === RICH_TEXT_EDITOR_STYLES.link) {
       handleLinkPrompt();
       return 'handled';
     }
