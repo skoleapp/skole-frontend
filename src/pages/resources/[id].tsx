@@ -64,6 +64,9 @@ import React, { SyntheticEvent, useEffect, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { mediaUrl, urls } from 'utils';
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   mobileContainer: {
