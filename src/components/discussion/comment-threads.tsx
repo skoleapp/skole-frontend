@@ -13,7 +13,7 @@ import { NotFoundBox } from '../shared';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 
-const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+const useStyles = makeStyles(({ spacing }) => ({
   root: {
     position: 'absolute',
     top: 0,
@@ -27,11 +27,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     overflowY: 'auto',
     flexWrap: 'nowrap',
     height: '100%',
-  },
-  inputAreaContainer: {
-    [breakpoints.up('md')]: {
-      padding: spacing(2),
-    },
   },
   createCommentButton: {
     position: 'absolute',
@@ -89,16 +84,7 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
     </Grid>
   );
 
-  // For mobile devices, we only want to show a hidden element since the actual logic happens in the modal.
-  const renderInputArea = isMobileOrTablet ? (
-    <Box display="none">
-      <CreateCommentForm {...createCommentFormProps} />
-    </Box>
-  ) : (
-    <Box className={classes.inputAreaContainer}>
-      <CreateCommentForm {...createCommentFormProps} />
-    </Box>
-  );
+  const renderInputArea = <CreateCommentForm {...createCommentFormProps} />;
 
   const renderCreateCommentButton = isMobileOrTablet && (
     <Fab className={classes.createCommentButton} color="secondary" onClick={openCommentModal}>

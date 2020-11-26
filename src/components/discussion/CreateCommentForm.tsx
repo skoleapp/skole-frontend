@@ -24,10 +24,8 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     objectFit: 'contain',
   },
   container: {
-    flexGrow: 1,
-    display: 'flex',
     [breakpoints.up('md')]: {
-      padding: spacing(2),
+      padding: spacing(4),
     },
   },
   dialogContent: {
@@ -116,10 +114,6 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     ...target,
   };
 
-  const renderDesktopInputArea = (
-    props: FormikProps<CreateCommentFormValues>,
-  ): false | JSX.Element => isDesktop && <RichTextEditor {...props} />;
-
   const renderAttachment = !!commentAttachment && (
     <Box className={clsx(classes.attachmentContainer, !!screenshot && 'screenshot-border')}>
       <Image
@@ -135,6 +129,10 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const renderRichTextEditor = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <RichTextEditor {...props} />
   );
+
+  const renderDesktopInputArea = (
+    props: FormikProps<CreateCommentFormValues>,
+  ): false | JSX.Element => isDesktop && renderRichTextEditor(props);
 
   const renderCreateCommentModal = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
