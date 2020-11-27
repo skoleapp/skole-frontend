@@ -39,6 +39,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { mediaUrl, urls } from 'utils';
@@ -255,7 +256,7 @@ const UserPage: NextPage = () => {
   const renderBio = !!bio && (
     <Box marginTop={spacing(1)}>
       <Typography className={classes.bio} variant="body2">
-        {bio}
+        <ReactMarkdown>{bio}</ReactMarkdown>
       </Typography>
     </Box>
   );
