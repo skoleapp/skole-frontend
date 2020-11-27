@@ -16,7 +16,7 @@ interface UseSwipeableTabs {
 // we change to the discussion tab and open comment modal automatically.
 export const useSwipeableTabs = (comments?: CommentObjectType[]): UseSwipeableTabs => {
   const { query } = useRouter();
-  const { toggleTopComment } = useDiscussionContext();
+  const { setTopComment } = useDiscussionContext();
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (_e: ChangeEvent<Record<symbol, unknown>>, val: number): void =>
@@ -29,14 +29,14 @@ export const useSwipeableTabs = (comments?: CommentObjectType[]): UseSwipeableTa
       const comment = comments.find((c) => c.id === query.comment);
 
       if (comment) {
-        toggleTopComment(comment); // Query is  a top level comment.
+        setTopComment(comment); // Query is  a top level comment.
       } else {
         // Query is a reply comment. We find it's top level comment.
         const comment = comments.find((c) => c.replyComments.some((r) => r.id === query.comment));
 
         if (comment) {
           setTabValue(1);
-          toggleTopComment(comment);
+          setTopComment(comment);
         }
       }
     }

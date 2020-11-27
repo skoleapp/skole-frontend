@@ -21,11 +21,11 @@ export const Footer: React.FC = () => {
   const { t } = useTranslation();
   const { renderLanguageButton } = useLanguageSelector();
 
-  const renderSkole = (
+  const renderCompany = (
     <Grid item xs={4} container justify="center">
       <Grid item xs={2} container direction="column">
         <Typography variant="subtitle1" color="secondary" gutterBottom>
-          SKOLE
+          {t('common:company').toUpperCase()}
         </Typography>
         <TextLink href={urls.contact} color="secondary">
           {t('common:contact')}
@@ -57,7 +57,7 @@ export const Footer: React.FC = () => {
     <Grid item xs={4} container justify="center">
       <Grid item xs={2} container direction="column">
         <Typography variant="subtitle1" color="secondary" gutterBottom>
-          SOCIAL
+          {t('common:social').toUpperCase()}
         </Typography>
         <TextLink
           href="https://www.facebook.com/skoleofficial"
@@ -104,7 +104,7 @@ export const Footer: React.FC = () => {
   return (
     <Grid container className={classes.root}>
       <Grid item xs={12} container>
-        {renderSkole}
+        {renderCompany}
         {renderLanguage}
         {renderSocial}
       </Grid>

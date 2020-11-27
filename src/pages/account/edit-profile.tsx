@@ -131,15 +131,19 @@ const EditProfilePage: NextPage = () => {
   const renderAvatarField = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
     <AvatarField {...props} />
   );
+
   const renderTitleField = (
     <Field name="title" component={TextFormField} label={t('forms:title')} />
   );
+
   const renderUsernameField = (
     <Field name="username" component={TextFormField} label={t('forms:username')} />
   );
+
   const renderEmailField = (
     <Field name="email" component={TextFormField} label={t('forms:email')} />
   );
+
   const renderBioField = (
     <Field name="bio" component={TextFormField} label={t('forms:bio')} rows="4" multiline />
   );
@@ -206,7 +210,7 @@ const EditProfilePage: NextPage = () => {
     </FormControl>
   );
 
-  const renderEditProfileFormContent = (
+  const renderEditProfileformFields = (
     props: FormikProps<UpdateProfileFormValues>,
   ): JSX.Element => (
     <Form>
@@ -232,8 +236,9 @@ const EditProfilePage: NextPage = () => {
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       ref={formRef}
+      enableReinitialize
     >
-      {renderEditProfileFormContent}
+      {renderEditProfileformFields}
     </Formik>
   );
 

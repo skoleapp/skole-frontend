@@ -9,23 +9,17 @@ import React from 'react';
 // TODO: Enable this when we have fixed the draw mode feature.
 export const DrawModeButton: React.FC = () => {
   const { t } = useTranslation();
-  const { isMobileOrTablet, isDesktop } = useMediaQueries();
-
-  const {
-    setDrawMode,
-    // controlsDisabled
-  } = usePdfViewerContext();
-
-  const color = isMobileOrTablet ? 'default' : 'secondary';
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
+  const { setDrawMode, controlsDisabled } = usePdfViewerContext();
+  const color = isMobile ? 'default' : 'secondary';
   const handleClick = (): void => setDrawMode(true);
 
-  return isDesktop ? (
+  return isTabletOrDesktop ? (
     <Tooltip title={t('tooltips:markArea')}>
       <Typography component="span">
         <IconButton
           onClick={handleClick}
-          // disabled={controlsDisabled} // The actual logic that we want to use when we enable this component.
-          disabled // Explicitly disabled for now.
+          disabled={controlsDisabled} // The actual logic that we want to use when we enable this component.
           size="small"
           color={color}
         >

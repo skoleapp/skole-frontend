@@ -1,12 +1,12 @@
 import { TextField, TextFieldProps } from '@material-ui/core';
-import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
+import { ErrorMessage, FieldAttributes, FormikProps, FormikValues } from 'formik';
 import React from 'react';
 
 import { FormErrorMessage } from './FormErrorMessage';
 
 interface Props {
   field: FieldAttributes<TextFieldProps>;
-  form: FormikProps<Record<symbol, unknown>>;
+  form: FormikProps<FormikValues>;
 }
 
 // A wrapper around MUI's `TextField` to allow it's usage directly as form field components.

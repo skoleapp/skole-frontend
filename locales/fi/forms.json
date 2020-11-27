@@ -23,7 +23,7 @@
   "schoolType": "Koulutyyppi",
   "country": "Maa",
   "city": "Kaupunki",
-  "searchCourses": "Hae kursseja...",
+  "searchCourses": "Kirjoita kurssin nimi...",
   "contactType": "Yhteydenottotyyppi",
   "feedback": "Palaute",
   "requestSchool": "Ehdota uutta koulua",

@@ -5,7 +5,7 @@ import createPalette from '@material-ui/core/styles/createPalette';
 import createTypography from '@material-ui/core/styles/createTypography';
 
 // Global constants, feel free to use these where ever.
-export const BORDER_RADIUS = '1.25rem';
+export const BORDER_RADIUS = '1.75rem';
 export const BORDER = `0.05rem solid ${grey[300]}`;
 export const BOTTOM_NAVBAR_HEIGHT = '3rem';
 export const TOP_NAVBAR_HEIGHT_MOBILE = '3rem';
@@ -114,9 +114,18 @@ let theme = createMuiTheme({
     },
     MuiOutlinedInput: {
       root: {
-        // FIXME: The border radius causes the shrinked label to get overlapped by the input outlines on Safari.
-        // This is an issue with MUI: https://github.com/mui-org/material-ui/issues/13297
         borderRadius: BORDER_RADIUS,
+      },
+      adornedEnd: {
+        paddingRight: spacing(1),
+      },
+    },
+    MuiInputLabel: {
+      // This fixes the buggy label on Safari: https://github.com/mui-org/material-ui/issues/20391
+      shrink: {
+        paddingLeft: spacing(1),
+        paddingRight: spacing(1),
+        backgroundColor: palette.common.white,
       },
     },
     MuiListItemAvatar: {

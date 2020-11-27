@@ -31,7 +31,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     padding: 0,
     marginBottom: `calc(${BOTTOM_NAVBAR_HEIGHT} + env(safe-area-inset-bottom))`,
     paddingTop: TOP_NAVBAR_HEIGHT_MOBILE,
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       minHeight: '100vh',
       padding: spacing(4),
       paddingTop: `calc(${TOP_NAVBAR_HEIGHT_DESKTOP} + ${spacing(4)})`,
@@ -45,7 +45,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     paddingRight: 0,
     paddingBottom: 0,
     paddingTop: TOP_NAVBAR_HEIGHT_MOBILE,
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       paddingTop: TOP_NAVBAR_HEIGHT_DESKTOP,
     },
   },
@@ -66,20 +66,15 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { isMobileOrTablet, isDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const renderHead = <Head {...seoProps} />;
-
-  const renderTopNavbar = (isMobileOrTablet && customTopNavbar) || (
-    <TopNavbar {...topNavbarProps} />
-  );
-
+  const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
   const containerFullWidth: boolean = R.propOr(false, 'fullWidth', containerProps);
-
   const containerDense: boolean = R.propOr(false, 'dense', containerProps);
 
   const containerClasses = clsx(
     classes.container,
-    (disableBottomNavbar || isDesktop) && classes.disableMarginBottom,
+    (disableBottomNavbar || isTabletOrDesktop) && classes.disableMarginBottom,
     containerFullWidth && classes.containerFullWidth,
     containerDense && classes.containerDense,
   );
@@ -91,9 +86,9 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   );
 
   const renderBottomNavbar =
-    isMobileOrTablet && (customBottomNavbar || (!disableBottomNavbar && <BottomNavbar />));
+    isMobile && !disableBottomNavbar && (customBottomNavbar || <BottomNavbar />);
 
-  const renderFooter = isDesktop && !disableFooter && <Footer />;
+  const renderFooter = isTabletOrDesktop && !disableFooter && <Footer />;
   const renderNotifications = <Notifications />;
   const renderSettingsModal = <SettingsModal />;
   const renderLanguageSelectorModal = <LanguageSelectorDialog />;

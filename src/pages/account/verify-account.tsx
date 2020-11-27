@@ -1,7 +1,7 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
 import { FormSubmitSection, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikProps, FormikValues } from 'formik';
 import {
   ResendVerificationEmailMutation,
   useResendVerificationEmailMutation,
@@ -35,7 +35,7 @@ const VerifyAccountPage: NextPage = () => {
     onError: onConfirmationFormError,
     resetForm: resetConfirmationForm,
     unexpectedError: confirmationFormUnexpectedError,
-  } = useForm();
+  } = useForm<Record<string, never>>();
 
   const { t } = useTranslation();
   const { query } = useRouter();
@@ -120,7 +120,12 @@ const VerifyAccountPage: NextPage = () => {
   };
 
   const renderEmailForm = verified === false && !token && !emailSubmitted && (
-    <Formik initialValues={initialEmailFormValues} onSubmit={handleSubmitEmail} ref={emailFormRef}>
+    <Formik
+      initialValues={initialEmailFormValues}
+      onSubmit={handleSubmitEmail}
+      ref={emailFormRef}
+      enableReinitialize
+    >
       {(props): JSX.Element => (
         <Form>
           <Box flexGrow="1" textAlign="center">
@@ -140,20 +145,22 @@ const VerifyAccountPage: NextPage = () => {
     </FormControl>
   );
 
+  const renderConfirmationFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
+    <Form>
+      <Box flexGrow="1" textAlign="center">
+        <Typography variant="body2">{t('verify-account:confirmationHelpText')}</Typography>
+      </Box>
+      <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
+    </Form>
+  );
+
   const renderConfirmationForm = verified === false && !!token && (
     <Formik
       initialValues={initialConfirmationFormValues}
       onSubmit={handleSubmitConfirmation}
       ref={confirmationFormRef}
     >
-      {(props): JSX.Element => (
-        <Form>
-          <Box flexGrow="1" textAlign="center">
-            <Typography variant="body2">{t('verify-account:confirmationHelpText')}</Typography>
-          </Box>
-          <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
-        </Form>
-      )}
+      {renderConfirmationFormFields}
     </Formik>
   );
 

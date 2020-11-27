@@ -10,7 +10,14 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { ArrowForwardOutlined, SearchOutlined, SvgIconComponent } from '@material-ui/icons';
+import {
+  ArrowForwardOutlined,
+  AssignmentOutlined,
+  CloudUploadOutlined,
+  SchoolOutlined,
+  SearchOutlined,
+  SvgIconComponent,
+} from '@material-ui/icons';
 import clsx from 'clsx';
 import { MainBackground, MainTemplate } from 'components';
 import { withUserMe } from 'hocs';
@@ -21,7 +28,7 @@ import Link from 'next/link';
 import React from 'react';
 import { BORDER_RADIUS, COLORS } from 'theme';
 import { UrlObject } from 'url';
-import { HOME_PAGE_SHORTCUTS } from 'utils';
+import { urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   container: {
@@ -33,13 +40,11 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     padding: spacing(6),
     marginTop: spacing(4),
     textAlign: 'center',
-    flexGrow: 1,
     [breakpoints.up('sm')]: {
       marginTop: spacing(10),
     },
     [breakpoints.up('md')]: {
       marginTop: spacing(16),
-      padding: spacing(16),
     },
   },
   header: {
@@ -55,6 +60,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     marginTop: spacing(4),
     display: 'flex',
     justifyContent: 'center',
+    width: '100%',
   },
   searchField: {
     display: 'flex',
@@ -74,9 +80,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     position: 'relative',
     padding: `${spacing(4)} ${spacing(2)}`,
     flexGrow: 1,
-    [breakpoints.up('md')]: {
-      padding: spacing(14),
-    },
   },
   card: {
     width: '100%',
@@ -140,31 +143,62 @@ interface Shortcut {
 const IndexPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { handleSubmit, inputProps } = useSearch();
   const { renderLanguageButton } = useLanguageSelector();
   const { handleShare } = useShare({});
+  const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
+
+  const shortcuts = [
+    {
+      text: 'index:findContent',
+      icon: AssignmentOutlined,
+      href: searchUrl,
+    },
+    {
+      text: 'index:uploadResources',
+      icon: CloudUploadOutlined,
+      href: urls.uploadResource,
+    },
+    {
+      text: 'index:createCourses',
+      icon: SchoolOutlined,
+      href: urls.createCourse,
+    },
+  ];
+
   const renderBackground = <MainBackground />;
 
+  const renderHeader = (
+    <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
+      {t('index:header')}
+    </Typography>
+  );
+
+  const renderSubHeader = (
+    <Typography className={classes.subheader} variant="subtitle1" color="secondary">
+      {t('index:subheader')}
+    </Typography>
+  );
+
+  const renderSearchField = (
+    <form className={classes.searchForm} onSubmit={handleSubmitSearch}>
+      <Box className={classes.searchField}>
+        <InputBase {...searchInputProps} />
+      </Box>
+      <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
+        <SearchOutlined />
+      </Button>
+    </form>
+  );
+
   const renderSearch = (
-    <Grid className={classes.searchContainer} item container direction="column">
-      <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
-        {t('index:header')}
-      </Typography>
-      <Typography className={classes.subheader} variant="subtitle1" color="secondary">
-        {t('index:subheader')}
-      </Typography>
-      <form className={classes.searchForm} onSubmit={handleSubmit}>
-        <Box className={classes.searchField}>
-          <InputBase {...inputProps} />
-        </Box>
-        <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
-          <SearchOutlined />
-        </Button>
-      </form>
+    <Grid className={classes.searchContainer} item container direction="column" alignItems="center">
+      {renderHeader}
+      {renderSubHeader}
+      {renderSearchField}
     </Grid>
   );
 
-  const renderHomepageShortcuts = HOME_PAGE_SHORTCUTS.map(
+  const renderHomepageShortcuts = shortcuts.map(
     ({ href, text, icon: Icon }: Shortcut, i: number) => (
       <Link href={href} key={i}>
         <Card className={clsx(classes.card)}>

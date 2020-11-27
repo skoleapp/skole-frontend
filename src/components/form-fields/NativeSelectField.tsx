@@ -5,7 +5,7 @@ import {
   Select,
   SelectProps as MuiSelectProps,
 } from '@material-ui/core';
-import { ErrorMessage, FieldAttributes, FormikProps } from 'formik';
+import { ErrorMessage, FieldAttributes, FormikProps, FormikValues } from 'formik';
 import React from 'react';
 import * as R from 'ramda';
 import { FormErrorMessage } from './FormErrorMessage';
@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 
 interface Props {
   field: FieldAttributes<MuiSelectProps>;
-  form: FormikProps<Record<symbol, unknown>>;
+  form: FormikProps<FormikValues>;
   label: string;
 }
 

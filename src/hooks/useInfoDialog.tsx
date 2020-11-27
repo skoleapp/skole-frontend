@@ -3,8 +3,8 @@ import { InfoOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
+import { useDialogButton } from './useDialogButton';
 
-import { useMediaQueries } from './useMediaQueries';
 import { useOpen } from './useOpen';
 
 interface UseInfoDrawer {
@@ -16,8 +16,8 @@ interface UseInfoDrawer {
 
 export const useInfoDialog = (): UseInfoDrawer => {
   const { t } = useTranslation();
-  const { isMobileOrTablet } = useMediaQueries();
-  const color = isMobileOrTablet ? 'secondary' : 'default';
+  const dialogButtonProps = useDialogButton();
+
   const {
     open: infoDialogOpen,
     handleOpen: handleOpenInfoDialog,
@@ -36,7 +36,7 @@ export const useInfoDialog = (): UseInfoDrawer => {
 
   const renderInfoButton = (
     <Tooltip title={t('tooltips:info')}>
-      <IconButton onClick={handleOpenInfoDialog} size="small" color={color}>
+      <IconButton {...dialogButtonProps} onClick={handleOpenInfoDialog}>
         <InfoOutlined />
       </IconButton>
     </Tooltip>

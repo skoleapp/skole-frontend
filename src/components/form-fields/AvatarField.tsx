@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { AddCircleOutlineOutlined, ClearOutlined, EditOutlined } from '@material-ui/icons';
 import { useNotificationsContext } from 'context';
-import { FormikProps } from 'formik';
+import { FormikProps, FormikValues } from 'formik';
 import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
@@ -19,10 +19,6 @@ import React, { ChangeEvent, useState } from 'react';
 import { AVATAR_MAX_FILE_SIZE as maxFileSize } from 'utils';
 
 import { ResponsiveDialog } from '../shared';
-
-interface FormFields {
-  avatar: string;
-}
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   button: {
@@ -38,7 +34,10 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
 }));
 
-export const AvatarField: React.FC<FormikProps<FormFields>> = ({ setFieldValue, values }) => {
+export const AvatarField = <T extends FormikValues>({
+  setFieldValue,
+  values,
+}: FormikProps<T>): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [preview, setPreview] = useState(values.avatar);

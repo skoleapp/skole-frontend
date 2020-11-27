@@ -1,11 +1,9 @@
 import {
   AssignmentOutlined,
-  CloudUploadOutlined,
   ContactSupportOutlined,
   EditOutlined,
   LockOutlined,
   NotificationsOutlined,
-  SchoolOutlined,
   SecurityOutlined,
   SettingsBackupRestoreOutlined,
   StarBorderOutlined,
@@ -13,45 +11,19 @@ import {
 
 import { urls } from './urls';
 
-// Token cookie.
-
 export const TOKEN_NAME = 'JWT';
 export const MAX_AGE = 60 * 60 * 24 * 30; // 1 month.
-
-// PDF viewer.
-
 export const DEFAULT_TRANSLATION = { x: 0, y: 0 };
 export const DEFAULT_SCALE = 1.0;
 export const MIN_SCALE = 0.75;
 export const MAX_SCALE = 1.75;
-
-// Landing page.
-
 export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
+export const ACCEPTED_FILES = ['image/*', 'text/*', 'application/*'];
+export const MAX_FILE_SIZE = 10000000;
+export const AVATAR_MAX_FILE_SIZE = 2000000;
+export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
 
-// Home page.
-
-export const HOME_PAGE_SHORTCUTS = [
-  {
-    text: 'index:findContent',
-    icon: AssignmentOutlined,
-    href: urls.search,
-  },
-  {
-    text: 'index:uploadResources',
-    icon: CloudUploadOutlined,
-    href: urls.uploadResource,
-  },
-  {
-    text: 'index:createCourses',
-    icon: SchoolOutlined,
-    href: urls.createCourse,
-  },
-];
-
-// Settings.
-
-export const MENU_ITEMS = {
+export const SETTINGS_ITEMS = {
   account: [
     {
       icon: NotificationsOutlined,
@@ -100,9 +72,7 @@ export const MENU_ITEMS = {
   ],
 };
 
-// Rich text editor.
-
-export const RICH_STYLES = {
+export const RICH_TEXT_EDITOR_STYLES = {
   bold: 'BOLD',
   italic: 'ITALIC',
   strikeThrough: 'STRIKETHROUGH',
@@ -112,16 +82,3 @@ export const RICH_STYLES = {
   blockQuote: 'blockquote',
   codeBlock: 'code-block',
 };
-
-// Resource uploads.
-
-export const ACCEPTED_FILES = ['image/*', 'text/*', 'application/*'];
-export const MAX_FILE_SIZE = 10000000;
-
-// Avatar field.
-
-export const AVATAR_MAX_FILE_SIZE = 2000000;
-
-// Paginated table.
-
-export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];

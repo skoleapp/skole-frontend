@@ -14,7 +14,7 @@ import {
   TextLink,
 } from 'components';
 import { useNotificationsContext } from 'context';
-import { Field, Form, Formik, FormikProps } from 'formik';
+import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
 import { LoginMutation, useLoginMutation } from 'generated';
 import { withNoAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext, useLanguageSelector } from 'hooks';
@@ -55,14 +55,6 @@ const LoginPage: NextPage = () => {
   const { toggleNotification } = useNotificationsContext();
   const [existingUser, setExistingUser] = useState(null);
   const existingUserAvatar = mediaUrl(R.propOr('', 'avatar', existingUser));
-
-  const existingUserGreeting = t('login:existingUserGreeting', {
-    username: R.propOr('-', 'username', existingUser),
-  });
-
-  const validExistingUser =
-    !!R.propOr(false, 'username', existingUser) && !!R.propOr(false, 'email', existingUser);
-
   const context = useLanguageHeaderContext();
 
   const {
@@ -72,6 +64,13 @@ const LoginPage: NextPage = () => {
     onError,
     unexpectedError,
   } = useForm<LoginFormValues>();
+
+  const existingUserGreeting = t('login:existingUserGreeting', {
+    username: R.propOr('-', 'username', existingUser),
+  });
+
+  const validExistingUser =
+    !!R.propOr(false, 'username', existingUser) && !!R.propOr(false, 'email', existingUser);
 
   useEffect(() => {
     const existingUser = JSON.parse(localStorage.getItem('user') || 'null');
@@ -143,11 +142,11 @@ const LoginPage: NextPage = () => {
     <Field name="usernameOrEmail" component={TextFormField} label={t('forms:usernameOrEmail')} />
   );
 
-  const renderPasswordField = (props: FormikProps<LoginFormValues>): JSX.Element => (
+  const renderPasswordField = (props: FormikProps<FormikValues>): JSX.Element => (
     <PasswordField {...props} />
   );
 
-  const renderFormSubmitSection = (props: FormikProps<LoginFormValues>): JSX.Element => (
+  const renderFormSubmitSection = (props: FormikProps<FormikValues>): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:login')} {...props} />
   );
 
@@ -171,7 +170,7 @@ const LoginPage: NextPage = () => {
     </FormControl>
   );
 
-  const renderExistingUserForm = (props: FormikProps<LoginFormValues>): JSX.Element => (
+  const renderExistingUserForm = (props: FormikProps<FormikValues>): JSX.Element => (
     <Form>
       {renderExistingUserGreeting}
       {renderUsernameOrEmailField}
@@ -182,7 +181,7 @@ const LoginPage: NextPage = () => {
     </Form>
   );
 
-  const renderNewUserForm = (props: FormikProps<LoginFormValues>): JSX.Element => (
+  const renderNewUserForm = (props: FormikProps<FormikValues>): JSX.Element => (
     <Form>
       {renderUsernameOrEmailField}
       {renderPasswordField(props)}

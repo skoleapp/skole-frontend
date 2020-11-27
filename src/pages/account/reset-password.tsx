@@ -28,11 +28,11 @@ const passwordFormInitialValues = {
   general: '',
 };
 
-export interface EmailFormValues {
+interface EmailFormValues {
   email: string;
 }
 
-export interface PasswordFormValues {
+interface PasswordFormValues {
   newPassword: string;
   confirmNewPassword: string;
 }
@@ -73,7 +73,7 @@ const ResetPasswordPage: NextPage = () => {
       .min(8, t('validation:passwordTooShort'))
       .required(t('validation:required')),
     confirmNewPassword: Yup.string()
-      .oneOf([Yup.ref('newPassword'), null], t('validation:passwordsNotMatch'))
+      .oneOf([Yup.ref('newPassword'), ''], t('validation:passwordsNotMatch'))
       .required(t('validation:required')),
   });
 
@@ -131,7 +131,7 @@ const ResetPasswordPage: NextPage = () => {
     await resetPassword({ variables: { newPassword, token } });
   };
 
-  const renderEmailFormContent = (props: FormikProps<EmailFormValues>): JSX.Element => (
+  const renderEmailFormFields = (props: FormikProps<EmailFormValues>): JSX.Element => (
     <Form>
       <Field
         name="email"
@@ -143,7 +143,7 @@ const ResetPasswordPage: NextPage = () => {
     </Form>
   );
 
-  const renderPasswordFormContent = (props: FormikProps<PasswordFormValues>): JSX.Element => (
+  const renderPasswordFormFields = (props: FormikProps<PasswordFormValues>): JSX.Element => (
     <Form>
       <Field
         name="newPassword"
@@ -168,7 +168,7 @@ const ResetPasswordPage: NextPage = () => {
       onSubmit={handleSubmitPassword}
       ref={passwordFormRef}
     >
-      {renderPasswordFormContent}
+      {renderPasswordFormFields}
     </Formik>
   );
 
@@ -179,7 +179,7 @@ const ResetPasswordPage: NextPage = () => {
       onSubmit={handleSubmitEmail}
       ref={emailFormRef}
     >
-      {renderEmailFormContent}
+      {renderEmailFormFields}
     </Formik>
   );
 

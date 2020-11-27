@@ -116,6 +116,7 @@ const CreateCoursePage: NextPage = () => {
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       ref={formRef}
+      enableReinitialize
     >
       {(props): JSX.Element => (
         <Form>

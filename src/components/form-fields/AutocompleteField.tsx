@@ -1,15 +1,15 @@
 import { OperationVariables, useApolloClient, DocumentNode } from '@apollo/client';
 import { CircularProgress, TextField, TextFieldProps } from '@material-ui/core';
 import { Autocomplete, AutocompleteRenderInputParams } from '@material-ui/lab';
-import { FieldAttributes, FormikProps, getIn } from 'formik';
+import { FieldAttributes, FormikProps, FormikValues, getIn } from 'formik';
 
 import { useLanguageHeaderContext } from 'hooks';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
 interface Props {
-  field: FieldAttributes<Record<symbol, unknown>>;
-  form: FormikProps<Record<symbol, unknown>>;
+  field: FieldAttributes<FormikValues>;
+  form: FormikProps<FormikValues>;
   labelKey: string; // Used to access the label on the object.
   searchKey: string; // Name of the variable that we use as the search key.
   dataKey: string; // Used to access the data after a successful query.
@@ -19,9 +19,7 @@ interface Props {
 }
 
 // A custom auto-complete form field that always fetches translated options from backend.
-export const AutocompleteField: React.FC<Props & TextFieldProps> = <
-  T extends Record<symbol, unknown>
->({
+export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
   field,
   form,
   labelKey = 'name',
@@ -33,7 +31,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <
   variables: queryVariables,
   multiple,
   ...textFieldProps
-}: Props & TextFieldProps) => {
+}) => {
   const context = useLanguageHeaderContext();
   const [open, setOpen] = useState(false);
   const handleOpen = (): void => setOpen(true);
@@ -46,8 +44,8 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <
   const { touched, errors, isSubmitting } = form;
   const fieldError = getIn(errors, name);
   const showError = getIn(touched, name) && !!fieldError;
-
-  const getOptionLabel = (option: T): string => R.propOr('', labelKey, option);
+  const getOptionLabel = (option: Record<symbol, unknown>): string =>
+    R.propOr('', labelKey, option);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void =>
     setInputValue(e.target.value);
@@ -102,8 +100,8 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = <
     }
   }, [inputValue]);
 
-  const handleAutocompleteChange = (
-    _e: ChangeEvent<Record<symbol, unknown>>,
+  const handleAutocompleteChange = <T extends Record<symbol, unknown>>(
+    _e: ChangeEvent<T>,
     val: T | T[] | null,
   ): void => {
     val ? form.setFieldValue(name, val) : form.setFieldValue(name, null);

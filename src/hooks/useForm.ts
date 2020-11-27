@@ -1,8 +1,8 @@
 import { ApolloError } from '@apollo/client';
-import { Formik } from 'formik';
+import { FormikProps, FormikValues } from 'formik';
 import { useTranslation } from 'lib';
 import { useRef } from 'react';
-import { FieldValue, MutationErrors, MutationFormError, UseForm } from 'types';
+import { MutationErrors, MutationFormError, UseForm } from 'types';
 
 const snakeCaseToCamelCase = (str: string): string => {
   return str.replace(/([-_][a-z])/g, (group) =>
@@ -10,28 +10,20 @@ const snakeCaseToCamelCase = (str: string): string => {
   );
 };
 
-interface FormErrors {
-  [key: string]: string;
-}
-
 // A custom hook that provides useful helpers for integrating Formik with GraphQL mutations.
-export const useForm = <T>(): UseForm<T> => {
+export const useForm = <T extends FormikValues>(): UseForm<T> => {
   const { t } = useTranslation();
-  const formRef = useRef<Formik<T>>(null!);
+  const formRef = useRef<FormikProps<T>>(null!);
 
-  const setFormErrors = (formErrors: FormErrors): void =>
-    Object.keys(formErrors).forEach((key) =>
-      formRef.current.setFieldError(key, (formErrors as FormErrors)[key]),
-    );
+  const setFormErrors = (formErrors: FormikValues): void =>
+    Object.keys(formErrors).forEach((key) => formRef.current.setFieldError(key, formErrors[key]));
 
   const unexpectedError = (): void => setFormErrors({ general: t('validation:unexpectedError') });
-
   const setSubmitting = (val: boolean): void | null => formRef.current.setSubmitting(val);
-
   const resetForm = (): void | null => formRef.current.resetForm();
   const submitForm = (): Promise<void> | null => formRef.current.submitForm();
 
-  const setFieldValue = (fieldName: string, val: FieldValue): void =>
+  const setFieldValue = (fieldName: string, val: unknown): void =>
     formRef.current.setFieldValue(fieldName, val);
 
   const setFieldError = (fieldName: string, val: string): void =>
@@ -39,7 +31,7 @@ export const useForm = <T>(): UseForm<T> => {
 
   // Set form errors either for specific fields or as general errors.
   const handleMutationErrors = (err: MutationErrors): void => {
-    const formErrors: FormErrors = { general: '' };
+    const formErrors: FormikValues = { general: '' };
 
     if (err.length) {
       (err as MutationFormError[]).map((e: MutationFormError) => {

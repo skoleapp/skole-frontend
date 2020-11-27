@@ -9,7 +9,7 @@ import { MainTemplate } from './MainTemplate';
 const useStyles = makeStyles(({ breakpoints }) => ({
   root: {
     flexGrow: 1,
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
@@ -22,7 +22,7 @@ interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
 
 export const FormTemplate: React.FC<Props> = ({ children, header, topNavbarProps, ...props }) => {
   const classes = useStyles();
-  const { isDesktop } = useMediaQueries();
+  const { isTabletOrDesktop } = useMediaQueries();
 
   const layoutProps = {
     ...props,
@@ -32,7 +32,7 @@ export const FormTemplate: React.FC<Props> = ({ children, header, topNavbarProps
     },
   };
 
-  const renderCardHeader = isDesktop && <CardHeader title={header} />;
+  const renderCardHeader = isTabletOrDesktop && <CardHeader title={header} />;
 
   const renderCardContent = (
     <CardContent>

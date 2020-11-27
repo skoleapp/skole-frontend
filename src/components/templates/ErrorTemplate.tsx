@@ -12,7 +12,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
@@ -30,6 +30,7 @@ export const ErrorTemplate: React.FC = () => {
     topNavbarProps: {
       dynamicBackUrl: true,
       disableAuthButtons: true,
+      disableSearch: true,
     },
   };
 

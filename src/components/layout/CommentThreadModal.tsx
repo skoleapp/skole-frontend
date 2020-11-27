@@ -13,8 +13,8 @@ const useStyles = makeStyles({
 
 export const CommentThreadModal: React.FC = () => {
   const classes = useStyles();
-  const { topComment, toggleTopComment } = useDiscussionContext();
-  const handleClose = (): void => toggleTopComment(null);
+  const { topComment, setTopComment } = useDiscussionContext();
+  const handleClose = (): void => setTopComment(null);
 
   return (
     <SkoleDialog open={!!topComment} onClose={handleClose} classes={{ paper: classes.paper }}>

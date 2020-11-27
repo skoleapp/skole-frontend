@@ -1,8 +1,6 @@
 import { LTWH, PdfTranslation } from 'types';
 import { MAX_SCALE, MIN_SCALE } from 'utils';
 
-// Map interaction helpers.
-
 // Return touch point on element.
 export const getTouchPoint = (t: Touch): PdfTranslation => ({
   x: t.clientX,
@@ -36,8 +34,6 @@ export const getMidPoint = (p1: PdfTranslation, p2: PdfTranslation): PdfTranslat
 // The amount that a value of a dimension will change given a new scale.
 export const getCoordChange = (coordinate: number, scaleRatio: number): number =>
   scaleRatio * coordinate - coordinate;
-
-// Area selection helpers.
 
 // Get rectangle coordinates on container element.
 export const getBoundingRect = (start: PdfTranslation, end: PdfTranslation): LTWH => ({

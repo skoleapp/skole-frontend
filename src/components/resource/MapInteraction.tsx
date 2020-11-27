@@ -33,7 +33,7 @@ interface StartPointersInfo {
 // Inspired by: https://github.com/transcriptic/react-map-interaction
 export const MapInteraction: React.FC = ({ children }) => {
   const classes = useStyles();
-  const { isMobileOrTablet } = useMediaQueries();
+  const { isMobileOrTablet, isDesktop } = useMediaQueries();
 
   const {
     drawMode,
@@ -46,12 +46,10 @@ export const MapInteraction: React.FC = ({ children }) => {
   } = usePdfViewerContext();
 
   const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
-
   const [scale, setScale] = useState(DEFAULT_SCALE);
   const [translation, setTranslation] = useState(DEFAULT_TRANSLATION);
   const [ctrlKey, setCtrlKey] = useState(false);
   const [fullscreen, setFullscreen] = useState(true);
-
   const [transformContainerClasses, setTransformContainerClasses] = useState('');
 
   // Change cursor mode when CTRL key is pressed.
@@ -361,7 +359,8 @@ export const MapInteraction: React.FC = ({ children }) => {
       {children}
     </Box>
   );
-  const renderMapControls = !isMobileOrTablet && !drawMode && <MapControls {...mapControlsProps} />;
+
+  const renderMapControls = isDesktop && !drawMode && <MapControls {...mapControlsProps} />;
 
   return (
     <Box id="map-container" className={classes.mapContainer} style={mapContainerStyle}>

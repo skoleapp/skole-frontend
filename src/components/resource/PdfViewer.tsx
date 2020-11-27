@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
     flexGrow: 1,
     display: 'flex',
     overflow: 'hidden',
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: '0 0 0.25rem 0.25rem',
     },
     '& .react-pdf__Document': {
@@ -38,7 +38,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
         backgroundColor: palette.common.white,
         display: 'flex',
         alignItems: 'center',
-        [breakpoints.up('lg')]: {
+        [breakpoints.up('md')]: {
           borderRadius: '0 0 0.25rem 0.25rem',
         },
       },

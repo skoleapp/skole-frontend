@@ -5,3 +5,4 @@ export { MapControls } from './MapControls';
 export { ResourceToolbar } from './ResourceToolbar';
 export { DrawModeButton } from './DrawModeButton';
 export { DrawModeControls } from './DrawModeControls';
+export { RotateButton } from './RotateButton';

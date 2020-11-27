@@ -18,17 +18,17 @@ import { mediaUrl, urls } from 'utils';
 export const BottomNavbar: React.FC = () => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
+  const { searchUrl } = useSearch();
+  const { pathname, query } = useRouter();
   const userMeId = R.propOr('', 'id', userMe);
   const avatarThumb = R.propOr('', 'avatar', userMe);
-  const { pathname, query } = useRouter();
-  const { searchUrl } = useSearch();
 
   const getNavbarValue = (): void | number | null => {
     switch (pathname) {
       case urls.home: {
         return 1;
       }
-      case searchUrl.pathname: {
+      case urls.search: {
         return 2;
       }
       case urls.uploadResource: {
@@ -57,9 +57,7 @@ export const BottomNavbar: React.FC = () => {
     setValue(newValue);
 
   const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
-
   const renderProfileLabel = userMe ? t('common:profile') : t('common:login');
-
   const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />;
 
   const handleProfileActionClick = (): Promise<boolean> =>

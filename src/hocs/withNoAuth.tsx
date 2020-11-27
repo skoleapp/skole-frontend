@@ -7,9 +7,7 @@ import { urls } from 'utils';
 
 // Disable access for authenticated users.
 // Wrap all pages that require access only for unauthenticated users with this for all pages.
-export const withNoAuth = <T extends Record<symbol, unknown>>(
-  PageComponent: NextPage<T>,
-): NextPage => {
+export const withNoAuth = (PageComponent: NextPage): NextPage => {
   const WithNoAuth: NextPage = (pageProps) => {
     const { userMe, authLoading, authNetworkError } = useUserMe();
     const shouldRedirect = !(authLoading || authNetworkError || !userMe);
@@ -29,7 +27,7 @@ export const withNoAuth = <T extends Record<symbol, unknown>>(
     }
 
     if (!userMe && !authLoading) {
-      return <PageComponent {...(pageProps as T)} />;
+      return <PageComponent {...pageProps} />;
     }
 
     return <LoadingTemplate />;

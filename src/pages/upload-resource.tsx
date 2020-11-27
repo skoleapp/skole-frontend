@@ -9,7 +9,7 @@ import {
   TextLink,
 } from 'components';
 import { useNotificationsContext } from 'context';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   AutocompleteCoursesDocument,
   AutocompleteResourceTypesDocument,
@@ -163,66 +163,89 @@ const UploadResourcePage: NextPage = () => {
     general: '',
   };
 
+  const renderResourceTitleField = (
+    <Field
+      name="resourceTitle"
+      label={t('forms:resourceTitle')}
+      component={TextFormField}
+      helperText={t('upload-resource:resourceTitleHelperText')}
+    />
+  );
+
+  const renderResourceTypeField = (
+    <Field
+      name="resourceType"
+      label={t('forms:resourceType')}
+      dataKey="autocompleteResourceTypes"
+      document={AutocompleteResourceTypesDocument}
+      component={AutocompleteField}
+      disableSearch
+    />
+  );
+
+  const renderSchoolField = (
+    <Field
+      name="school"
+      label={t('forms:schoolOptional')}
+      dataKey="autocompleteSchools"
+      searchKey="name"
+      document={AutocompleteSchoolsDocument}
+      component={AutocompleteField}
+      helperText={
+        <>
+          {t('upload-resource:schoolHelperText')}{' '}
+          <TextLink href={urls.contact}>{t('upload-resource:schoolHelperLink')}</TextLink>
+        </>
+      }
+    />
+  );
+
+  const renderCourseField = (props: FormikProps<UploadResourceFormValues>) => (
+    <Field
+      name="course"
+      label={t('forms:course')}
+      dataKey="autocompleteCourses"
+      searchKey="name"
+      document={AutocompleteCoursesDocument}
+      component={AutocompleteField}
+      variables={{
+        school: R.path(['values', 'school', 'id'], props), // Filter courses based on selected school.
+      }}
+      helperText={
+        <>
+          {t('upload-resource:courseHelperText')}{' '}
+          <TextLink href={urls.createCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
+        </>
+      }
+    />
+  );
+
+  const renderFileField = <Field name="file" component={FileField} />;
+
+  const renderFormSubmitSection = (props: FormikProps<UploadResourceFormValues>) => (
+    <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+  );
+
+  const renderformFields = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
+    <Form>
+      {renderResourceTitleField}
+      {renderResourceTypeField}
+      {renderSchoolField}
+      {renderCourseField(props)}
+      {renderFileField}
+      {renderFormSubmitSection(props)}
+    </Form>
+  );
+
   const renderForm = (
     <Formik
       onSubmit={handleSubmit}
       initialValues={initialValues}
       validationSchema={validationSchema}
       ref={formRef}
+      enableReinitialize
     >
-      {(props): JSX.Element => (
-        <Form>
-          <Field
-            name="resourceTitle"
-            label={t('forms:resourceTitle')}
-            component={TextFormField}
-            helperText={t('upload-resource:resourceTitleHelperText')}
-          />
-          <Field
-            name="resourceType"
-            label={t('forms:resourceType')}
-            dataKey="autocompleteResourceTypes"
-            document={AutocompleteResourceTypesDocument}
-            component={AutocompleteField}
-            disableSearch
-          />
-          <Field
-            name="school"
-            label={t('forms:schoolOptional')}
-            dataKey="autocompleteSchools"
-            searchKey="name"
-            document={AutocompleteSchoolsDocument}
-            component={AutocompleteField}
-            helperText={
-              <>
-                {t('upload-resource:schoolHelperText')}{' '}
-                <TextLink href={urls.contact}>{t('upload-resource:schoolHelperLink')}</TextLink>
-              </>
-            }
-          />
-          <Field
-            name="course"
-            label={t('forms:course')}
-            dataKey="autocompleteCourses"
-            searchKey="name"
-            document={AutocompleteCoursesDocument}
-            component={AutocompleteField}
-            variables={{
-              school: R.path(['values', 'school', 'id'], props), // Filter courses based on selected school.
-            }}
-            helperText={
-              <>
-                {t('upload-resource:courseHelperText')}{' '}
-                <TextLink href={urls.createCourse}>
-                  {t('upload-resource:courseHelperLink')}
-                </TextLink>
-              </>
-            }
-          />
-          <Field name="file" component={FileField} />
-          <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-        </Form>
-      )}
+      {renderformFields}
     </Formik>
   );
 

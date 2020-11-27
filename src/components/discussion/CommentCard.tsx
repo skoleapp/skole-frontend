@@ -33,6 +33,7 @@ import { useConfirm } from 'material-ui-confirm';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { mediaUrl, truncate, urls } from 'utils';
+import ReactMarkdown from 'react-markdown';
 import { ResponsiveDialog, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -105,7 +106,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
   const shareQuery = `?comment=${commentId}`;
   const replyComments = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
-  const { toggleTopComment, setAttachmentViewerValue } = useDiscussionContext();
+  const { setTopComment, setAttachmentViewerValue } = useDiscussionContext();
 
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', comment.user);
 
@@ -142,7 +143,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     if (isThread) {
       attachmentOnly && setAttachmentViewerValue(comment.attachment);
     } else {
-      toggleTopComment(comment);
+      setTopComment(comment);
     }
   };
 
@@ -222,7 +223,11 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     </Grid>
   );
 
-  const renderCommentText = <Typography variant="body2">{comment.text}</Typography>;
+  const renderCommentText = (
+    <Typography className={classes.text} variant="body2">
+      <ReactMarkdown>{comment.text}</ReactMarkdown>
+    </Typography>
+  );
 
   const renderMessageContent = (
     <Box className={classes.messageContent}>
@@ -252,8 +257,8 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
   const renderActionsButton = (
     <Tooltip title={t('common:actions')}>
       <IconButton
-        className={clsx(classes.iconButton, classes.actionsButton)}
         {...actionsButtonProps}
+        className={clsx(classes.iconButton, classes.actionsButton)}
         color="default"
       >
         <MoreHorizOutlined />

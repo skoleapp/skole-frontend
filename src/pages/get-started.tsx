@@ -23,7 +23,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     textAlign: 'center',
     marginTop: spacing(8),
     padding: spacing(2),
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       marginTop: spacing(16),
     },
   },
@@ -85,7 +85,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       width: '12rem',
       height: '5rem',
     },
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       width: '15rem',
       height: '7rem',
     },

@@ -14,13 +14,13 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     flexGrow: 1,
     display: 'flex',
     width: '100%',
-    [breakpoints.down('lg')]: {
+    [breakpoints.down('md')]: {
       margin: 0,
     },
   },
   paperContainer: {
     overflow: 'hidden',
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
@@ -54,7 +54,7 @@ export const SettingsTemplate: React.FC<Props> = ({
   const classes = useStyles();
   const { renderSettingsMenuList } = useSettings(false);
   const { t } = useTranslation();
-  const { isMobileOrTablet } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
 
   const denseColSpan = {
     xs: 12,
@@ -64,9 +64,7 @@ export const SettingsTemplate: React.FC<Props> = ({
   };
 
   const colSpan = dense ? denseColSpan : {};
-  const renderMobileSettingsButton = isMobileOrTablet && (
-    <SettingsButton color="secondary" size="small" />
-  );
+  const renderMobileSettingsButton = isMobile && <SettingsButton color="secondary" size="small" />;
   const renderHeaderRight = headerRight || renderMobileSettingsButton;
 
   const customTopNavbarProps = {
@@ -77,8 +75,8 @@ export const SettingsTemplate: React.FC<Props> = ({
 
   const renderSettingsHeader = <CardHeader title={t('common:settings')} />;
 
-  const renderSettingsCard = !isMobileOrTablet && (
-    <Grid item xs={12} lg={3} className={classes.container}>
+  const renderSettingsCard = isTabletOrDesktop && (
+    <Grid item xs={12} md={4} lg={3} className={classes.container}>
       <Paper className={clsx(classes.container, classes.paperContainer)}>
         {renderSettingsHeader}
         {renderSettingsMenuList}
@@ -86,7 +84,7 @@ export const SettingsTemplate: React.FC<Props> = ({
     </Grid>
   );
 
-  const renderHeader = !isMobileOrTablet && (
+  const renderHeader = isTabletOrDesktop && (
     <CardHeader title={header} action={renderHeaderRight} />
   );
 
@@ -104,9 +102,10 @@ export const SettingsTemplate: React.FC<Props> = ({
     <Grid
       item
       xs={12}
+      md={8}
       lg={9}
       container
-      className={clsx(classes.container, isMobileOrTablet && classes.disablePadding)}
+      className={clsx(classes.container, isMobile && classes.disablePadding)}
     >
       <Paper className={clsx(classes.container, classes.paperContainer)}>
         {renderHeader}

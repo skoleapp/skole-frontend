@@ -5,7 +5,7 @@ import { CommentObjectType } from 'generated';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { TopLevelCommentThreadProps } from 'types';
 
@@ -13,7 +13,7 @@ import { NotFoundBox } from '../shared';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 
-const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+const useStyles = makeStyles(({ spacing }) => ({
   root: {
     position: 'absolute',
     top: 0,
@@ -28,11 +28,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     flexWrap: 'nowrap',
     height: '100%',
   },
-  inputAreaContainer: {
-    [breakpoints.up('md')]: {
-      padding: spacing(2),
-    },
-  },
   createCommentButton: {
     position: 'absolute',
     bottom: `calc(${BOTTOM_NAVBAR_HEIGHT} + ${spacing(5)})`,
@@ -45,21 +40,21 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 }));
 
 export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
-  comments: initialComments,
+  comments: initialTopLevelComments,
   target,
   noComments,
 }) => {
   const classes = useStyles();
-  const { isMobileOrTablet } = useMediaQueries();
+  const { isMobile } = useMediaQueries();
+  const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext();
+  const openCommentModal = (): void => toggleCommentModal(true);
 
-  const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext(
-    initialComments,
-  );
+  useEffect(() => {
+    setTopLevelComments(initialTopLevelComments);
+  }, [initialTopLevelComments]);
 
   const appendComments = (comment: CommentObjectType): void =>
     setTopLevelComments([...topLevelComments, comment]);
-
-  const openCommentModal = (): void => toggleCommentModal(true);
 
   const removeComment = (id: string): void =>
     setTopLevelComments(topLevelComments.filter((c) => c.id !== id));
@@ -89,18 +84,9 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
     </Grid>
   );
 
-  // For mobile devices, we only want to show a hidden element since the actual logic happens in the modal.
-  const renderInputArea = isMobileOrTablet ? (
-    <Box display="none">
-      <CreateCommentForm {...createCommentFormProps} />
-    </Box>
-  ) : (
-    <Box className={classes.inputAreaContainer}>
-      <CreateCommentForm {...createCommentFormProps} />
-    </Box>
-  );
+  const renderInputArea = <CreateCommentForm {...createCommentFormProps} />;
 
-  const renderCreateCommentButton = isMobileOrTablet && (
+  const renderCreateCommentButton = isMobile && (
     <Fab className={classes.createCommentButton} color="secondary" onClick={openCommentModal}>
       <AddOutlined />
     </Fab>
@@ -121,36 +107,70 @@ export const ReplyCommentThread: React.FC = () => {
   const classes = useStyles();
   const { spacing } = useTheme();
   const { t } = useTranslation();
-  const { isMobileOrTablet } = useMediaQueries();
+  const { isMobile } = useMediaQueries();
 
-  const { topComment, toggleTopComment, toggleCommentModal } = useDiscussionContext();
+  const {
+    topComment,
+    setTopComment,
+    toggleCommentModal,
+    topLevelComments,
+    setTopLevelComments,
+  } = useDiscussionContext();
 
   const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
-
-  const topCommentId = R.prop('id', topComment);
-  const target = { comment: Number(topCommentId) };
+  const target = { comment: Number(R.prop('id', topComment)) };
   const openCommentModal = (): void => toggleCommentModal(true);
 
   const appendComments = (comment: CommentObjectType): void => {
     if (topComment) {
-      toggleTopComment({
+      setTopComment({
         ...topComment,
         replyComments: [...topComment.replyComments, comment],
       });
+
+      // Update top-level comments.
+      setTopLevelComments(
+        topLevelComments.map((c) => {
+          if (c.id === topComment.id) {
+            return {
+              ...topComment,
+              replyComments: [...topComment.replyComments, comment],
+            };
+          }
+
+          return c;
+        }),
+      );
     }
   };
 
   const removeComment = (id: string): void => {
     if (topComment) {
       if (id === topComment.id) {
-        toggleTopComment(null); // Close modal if top comment gets deleted.
+        setTopComment(null); // Close modal if top comment gets deleted.
+        setTopLevelComments(topLevelComments.filter((c) => c.id !== id)); // Filter deleted comment from top-level comments.
       } else {
         const filteredReplyComments = replyComments.filter((c) => c.id !== id);
 
-        toggleTopComment({
+        // Update reply comments for top comment.
+        setTopComment({
           ...topComment,
           replyComments: filteredReplyComments,
         });
+
+        // Update top-level comments.
+        setTopLevelComments(
+          topLevelComments.map((c) => {
+            if (c.id === topComment.id) {
+              return {
+                ...c,
+                replyComments: filteredReplyComments,
+              };
+            }
+
+            return c;
+          }),
+        );
       }
     }
   };
@@ -180,7 +200,7 @@ export const ReplyCommentThread: React.FC = () => {
     !!replyComments.length &&
     replyComments.map((c, i) => <CommentCard {...commentCardProps} key={i} comment={c} />);
 
-  const renderReplyButton = !!topComment && isMobileOrTablet && (
+  const renderReplyButton = !!topComment && isMobile && (
     <Box padding={spacing(2)} marginTop="auto">
       <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
         {t('common:reply')}

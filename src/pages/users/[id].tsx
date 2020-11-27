@@ -39,6 +39,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { mediaUrl, urls } from 'utils';
@@ -46,7 +47,7 @@ import { mediaUrl, urls } from 'utils';
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   paper: {
     padding: spacing(4),
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
@@ -56,7 +57,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    [breakpoints.up('lg')]: {
+    [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
@@ -93,7 +94,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 const UserPage: NextPage = () => {
   const { spacing } = useTheme();
   const classes = useStyles();
-  const { isMobile, isMobileOrTablet, isDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
   const { userMe, verified } = useAuthContext();
@@ -116,15 +117,10 @@ const UserPage: NextPage = () => {
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const resources = R.pathOr([], ['resources', 'objects'], data);
-
   const coursesTabLabel = isOwnProfile ? t('profile:ownProfileCourses') : t('common:courses');
-
   const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
-
   const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
-
   const noResources = isOwnProfile ? t('profile:ownProfileNoResources') : t('profile:noResources');
-
   const joined = useDayjs(R.propOr('', 'created', user)).startOf('m').fromNow();
 
   // Order steps so that the completed ones are first.
@@ -184,8 +180,8 @@ const UserPage: NextPage = () => {
     </Typography>
   );
 
-  const renderDesktopUsername = isDesktop && renderUsername;
-  const renderDesktopTitle = isDesktop && renderTitle;
+  const renderDesktopUsername = isTabletOrDesktop && renderUsername;
+  const renderDesktopTitle = isTabletOrDesktop && renderTitle;
 
   const renderEditProfileButton = (
     <ButtonLink
@@ -260,7 +256,7 @@ const UserPage: NextPage = () => {
   const renderBio = !!bio && (
     <Box marginTop={spacing(1)}>
       <Typography className={classes.bio} variant="body2">
-        {bio}
+        <ReactMarkdown>{bio}</ReactMarkdown>
       </Typography>
     </Box>
   );
@@ -325,14 +321,14 @@ const UserPage: NextPage = () => {
     </Box>
   );
 
-  const renderDesktopActions = isDesktop && isOwnProfile && (
+  const renderDesktopActions = isTabletOrDesktop && isOwnProfile && (
     <Grid item xs={12} container alignItems="center">
       {renderEditProfileButton}
       {renderSettingsButton}
     </Grid>
   );
 
-  const statsDirection = isMobileOrTablet ? 'column' : 'row';
+  const statsDirection = isMobile ? 'column' : 'row';
 
   const renderStats = (
     <Grid item container xs={12} sm={8} md={4} spacing={2} className={classes.statsContainer}>
@@ -351,7 +347,7 @@ const UserPage: NextPage = () => {
     </Grid>
   );
 
-  const renderDesktopInfo = isDesktop && (
+  const renderDesktopInfo = isTabletOrDesktop && (
     <>
       {renderBio}
       {renderRank}
@@ -370,7 +366,7 @@ const UserPage: NextPage = () => {
         container
         direction="column"
         justify="center"
-        alignItems={isMobileOrTablet ? 'flex-start' : 'center'}
+        alignItems={isMobile ? 'flex-start' : 'center'}
       >
         {renderAvatar}
         {renderDesktopUsername}
@@ -382,7 +378,7 @@ const UserPage: NextPage = () => {
         container
         direction="column"
         wrap="nowrap"
-        alignItems={isMobileOrTablet ? 'center' : 'flex-start'}
+        alignItems={isMobile ? 'center' : 'flex-start'}
       >
         {renderDesktopActions}
         {renderStats}
@@ -391,7 +387,7 @@ const UserPage: NextPage = () => {
     </Grid>
   );
 
-  const renderMobileInfo = isMobileOrTablet && (
+  const renderMobileInfo = isMobile && (
     <Grid container direction="column">
       {renderUsername}
       {renderTitle}
@@ -410,7 +406,7 @@ const UserPage: NextPage = () => {
     </Paper>
   );
 
-  const renderMobileActionsCard = isMobileOrTablet && isOwnProfile && (
+  const renderMobileActionsCard = isMobile && isOwnProfile && (
     <Paper className={clsx(classes.paper, classes.contentCard)}>
       {renderProfileStrength}
       {renderEditProfileButton}
@@ -424,7 +420,6 @@ const UserPage: NextPage = () => {
   };
 
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
-
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;
 
   const renderCourseTable = (
@@ -445,9 +440,7 @@ const UserPage: NextPage = () => {
 
   const renderCoursesNotFound = <NotFoundBox text={noCourses} />;
   const renderResourcesNotFound = <NotFoundBox text={noResources} />;
-
   const renderCreatedCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
-
   const renderCreatedResources = resources.length ? renderResourceTable : renderResourcesNotFound;
 
   const renderTabs = (
