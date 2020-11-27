@@ -54,8 +54,8 @@ import React, {
 } from 'react';
 import { CreateCommentFormValues } from 'types';
 import { RICH_TEXT_EDITOR_STYLES } from 'utils';
+import { stateToMarkdown } from 'draft-js-export-markdown';
 import { DraftLink } from './DraftLink';
-
 import { DialogHeader, SkoleDialog } from '../shared';
 
 const { hasCommandModifier } = KeyBindingUtil;
@@ -138,8 +138,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   const onFocus = (): void => setFocused(true);
   const onBlur = (): void => setFocused(false);
   const focusEditor = (): false | void => ref.current.focus();
-  const [URLInputOpen, setURLInputOpen] = useState(false);
-  const [URL, setURL] = useState('');
+  const [urlInputOpen, setUrlInputOpen] = useState(false);
+  const [url, setUrl] = useState('');
 
   const attachmentTooltip =
     loginRequiredTooltip || !!verificationRequiredTooltip || t('tooltips:attachFile');
@@ -151,12 +151,12 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     onBlur();
   };
 
-  const handleCloseURLInput = (): void => {
-    setURLInputOpen(false);
+  const handleCloseUrlInput = (): void => {
+    setUrlInputOpen(false);
     focusEditor();
   };
 
-  const handleLinkInputChange = (e: ChangeEvent<HTMLInputElement>): void => setURL(e.target.value);
+  const handleLinkInputChange = (e: ChangeEvent<HTMLInputElement>): void => setUrl(e.target.value);
 
   // If the user changes block type before entering any text, we hide the placeholder.
   // Placeholder is also hidden whenever editor is focused.
@@ -170,9 +170,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     .getType();
 
   const handleChange = (editorState: EditorState): void => {
-    const newTextContent = editorState.getCurrentContent().getPlainText('\u0001');
     setEditorState(editorState);
-    setFieldValue('text', newTextContent);
+    setFieldValue('text', stateToMarkdown(editorState.getCurrentContent()));
   };
 
   const [isMac, setIsMac] = useState<boolean | null>(null);
@@ -261,20 +260,22 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         url = linkInstance.getData().url;
       }
 
-      setURLInputOpen(true);
-      setURL(url);
+      setUrlInputOpen(true);
+      setUrl(url);
     }
   };
 
   const confirmLink = (): void => {
-    const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', { url: URL });
+    const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', { url });
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+
     const newEditorState = EditorState.set(editorState, {
       currentContent: contentStateWithEntity,
     });
+
     setEditorState(RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey));
-    setURLInputOpen(false);
-    setURL('');
+    setUrlInputOpen(false);
+    setUrl('');
     setTimeout(() => focusEditor(), 0);
   };
 
@@ -380,6 +381,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
       setEditorState(RichUtils.insertSoftNewline(editorState));
       return 'handled';
     }
+
     handleSubmit();
     return 'handled';
   };
@@ -401,7 +403,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     setCommentAttachment(null);
   };
 
-  const renderTextField = (
+  const renderEditor = (
     <Editor
       ref={ref}
       editorState={editorState}
@@ -444,12 +446,12 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     </Tooltip>
   );
 
-  const renderURLInput = (
-    <SkoleDialog open={URLInputOpen} onClose={handleCloseURLInput}>
-      <DialogHeader onCancel={handleCloseURLInput} text={t('forms:addLink')} />
+  const renderUrlInput = (
+    <SkoleDialog open={urlInputOpen} onClose={handleCloseUrlInput}>
+      <DialogHeader onCancel={handleCloseUrlInput} text={t('forms:addLink')} />
       <DialogContent>
         <TextField
-          value={URL}
+          value={url}
           onChange={handleLinkInputChange}
           label={t('forms:url')}
           placeholder={t('forms:urlPlaceholder')}
@@ -457,7 +459,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCloseURLInput}>{t('common:cancel')}</Button>
+        <Button onClick={handleCloseUrlInput}>{t('common:cancel')}</Button>
         <Button onClick={confirmLink} color="primary">
           {t('common:confirm')}
         </Button>
@@ -587,9 +589,9 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   return (
     <Box className={clsx(classes.root, hidePlaceholder && classes.placeholderHidden)}>
       {renderTopToolbar}
-      {renderTextField}
+      {renderEditor}
       {renderBottomToolbar}
-      {renderURLInput}
+      {renderUrlInput}
     </Box>
   );
 };
