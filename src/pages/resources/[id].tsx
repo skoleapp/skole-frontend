@@ -109,7 +109,7 @@ const ResourceDetailPage: NextPage = () => {
   const [resource, setResource] = useState<ResourceObjectType | null>(null);
   const resourceTitle = R.propOr('', 'title', resource);
   const resourceDate = R.propOr('', 'date', resource);
-  const resourceType = R.pathOr('', ['resourceType', 'name'], resource);
+  const resourceType = R.pathOr('-', ['resourceType', 'name'], resource);
   const courseName = R.pathOr('', ['course', 'name'], resource);
   const schoolName = R.pathOr('', ['school', 'name'], resource);
   const courseId = R.pathOr('', ['course', 'id'], resource);

@@ -32,7 +32,7 @@ export const InfoDialogContent: React.FC<Props> = ({ user, created, infoItems })
       </Grid>
       <Grid item xs={7}>
         <Typography className="truncate-text" variant="body2">
-          {value || '-'}
+          {value}
         </Typography>
       </Grid>
     </Grid>
