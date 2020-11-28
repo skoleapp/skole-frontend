@@ -86,7 +86,7 @@ export const DeleteAccountPage: NextPage = () => {
       onSubmit={handleSubmit}
       initialValues={initialValues}
       validationSchema={validationSchema}
-      ref={formRef}
+      innerRef={formRef}
     >
       {(props): JSX.Element => (
         <Form>
