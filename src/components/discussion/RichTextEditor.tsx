@@ -53,7 +53,7 @@ import React, {
   useState,
 } from 'react';
 import { CreateCommentFormValues } from 'types';
-import { RICH_TEXT_EDITOR_STYLES } from 'utils';
+import { ACCEPTED_ATTACHMENT_FILES, RICH_TEXT_EDITOR_STYLES } from 'utils';
 import { stateToMarkdown } from 'draft-js-export-markdown';
 import { DraftLink } from './DraftLink';
 import { DialogHeader, SkoleDialog } from '../shared';
@@ -524,7 +524,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         ref={attachmentInputRef}
         value=""
         type="file"
-        accept=".png, .jpg, .jpeg;capture=camera"
+        accept={`${ACCEPTED_ATTACHMENT_FILES.toString};capture=camera`}
         onChange={handleAttachmentChange}
         disabled={!userMe}
       />

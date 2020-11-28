@@ -16,7 +16,7 @@ import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
-import { AVATAR_MAX_FILE_SIZE as maxFileSize } from 'utils';
+import { ACCEPTED_AVATAR_FILES, AVATAR_MAX_FILE_SIZE as maxFileSize } from 'utils';
 
 import { ResponsiveDialog } from '../shared';
 
@@ -114,7 +114,7 @@ export const AvatarField = <T extends FormikValues>({
         value=""
         id="avatar-input"
         type="file"
-        accept=".png, .jpg, .jpeg;capture=camera"
+        accept={`${ACCEPTED_AVATAR_FILES.toString};capture=camera`}
         onChange={handleAvatarChange}
       />
       <Button

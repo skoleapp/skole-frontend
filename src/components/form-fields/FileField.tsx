@@ -6,7 +6,7 @@ import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, DragEvent, useRef } from 'react';
 import { BORDER_RADIUS } from 'theme';
-import { ACCEPTED_FILES, MAX_FILE_SIZE, truncate } from 'utils';
+import { ACCEPTED_RESOURCE_FILES, MAX_FILE_SIZE, truncate } from 'utils';
 
 import { FormErrorMessage } from './FormErrorMessage';
 
@@ -65,7 +65,7 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
       ref={fileInputRef}
       value=""
       type="file"
-      accept={`${ACCEPTED_FILES.toString};capture=camera`}
+      accept={`${ACCEPTED_RESOURCE_FILES.toString};capture=camera`}
       onChange={handleFileInputChange}
     />
   );
