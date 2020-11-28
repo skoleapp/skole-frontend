@@ -2,12 +2,14 @@ import { Box, makeStyles, Typography } from '@material-ui/core';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
-import { Document, Page } from 'react-pdf';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { PdfDocumentProxy } from 'types';
 
 import { LoadingBox } from '../shared';
 import { AreaSelection } from './AreaSelection';
 import { MapInteraction } from './MapInteraction';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles(({ palette, breakpoints }) => ({
   root: {
