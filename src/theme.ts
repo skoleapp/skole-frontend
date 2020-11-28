@@ -72,6 +72,10 @@ let theme = createMuiTheme({
       fullWidth: true,
       variant: 'outlined',
       margin: 'normal',
+      inputProps: {
+        autoCapitalize: 'off',
+        autoComplete: 'off',
+      },
     },
     MuiSelect: {
       fullWidth: true,
