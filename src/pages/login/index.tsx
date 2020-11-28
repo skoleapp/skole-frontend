@@ -196,7 +196,7 @@ const LoginPage: NextPage = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
-      ref={formRef}
+      innerRef={formRef}
     >
       {validExistingUser ? renderExistingUserForm : renderNewUserForm}
     </Formik>

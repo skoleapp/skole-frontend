@@ -410,7 +410,7 @@ const SearchPage: NextPage = () => {
       <Formik
         onSubmit={handlePreSubmit}
         initialValues={initialValues}
-        ref={formRef}
+        innerRef={formRef}
         enableReinitialize
       >
         {renderSearchFormFields}
