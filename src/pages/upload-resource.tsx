@@ -242,7 +242,7 @@ const UploadResourcePage: NextPage = () => {
       onSubmit={handleSubmit}
       initialValues={initialValues}
       validationSchema={validationSchema}
-      ref={formRef}
+      innerRef={formRef}
       enableReinitialize
     >
       {renderformFields}

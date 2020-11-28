@@ -235,7 +235,7 @@ const EditProfilePage: NextPage = () => {
       initialValues={initialValues}
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
-      ref={formRef}
+      innerRef={formRef}
       enableReinitialize
     >
       {renderEditProfileformFields}

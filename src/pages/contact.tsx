@@ -83,7 +83,7 @@ const ContactPage: NextPage = () => {
       onSubmit={handleSubmit}
       initialValues={initialValues}
       validationSchema={validationSchema}
-      ref={formRef}
+      innerRef={formRef}
     >
       {(props): JSX.Element => (
         <Form>
