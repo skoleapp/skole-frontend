@@ -75,7 +75,7 @@ export const AttachmentViewer: React.FC = () => {
     </Grid>
   );
 
-  // TODO: Replace this with `next/image`. As of now (v10.0.1), having the image source in our backend media folder does not work with the `next/image`.
+  // TODO: Replace this with `next/image`. As of now (v10.0.3), having the image source in our backend media folder does not work with the `next/image`.
   const renderAttachment = !!attachmentViewerValue && (
     <Grid
       item
