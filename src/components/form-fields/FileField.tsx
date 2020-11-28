@@ -6,8 +6,14 @@ import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, DragEvent, useRef } from 'react';
 import { BORDER_RADIUS } from 'theme';
-import { ACCEPTED_RESOURCE_FILES, MAX_FILE_SIZE, truncate } from 'utils';
-
+import {
+  ACCEPTED_RESOURCE_FILES,
+  IMAGE_TYPES,
+  MAX_RESOURCE_FILE_SIZE,
+  MAX_RESOURCE_IMAGE_WIDTH_HEIGHT,
+  truncate,
+} from 'utils';
+import imageCompression from 'browser-image-compression';
 import { FormErrorMessage } from './FormErrorMessage';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
@@ -33,31 +39,51 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
-  const fileName = R.propOr('', 'name', field.value);
+  const _fileName = R.propOr('', 'name', field.value);
+  const fileName = truncate(_fileName, 20);
+  const maxFileSize = MAX_RESOURCE_FILE_SIZE / 1000000; // Convert to megabytes.
   const fileInputRef = useRef<HTMLInputElement>(null!);
   const handleFileInputClick = (): false | void => fileInputRef.current.click();
   const preventDefaultDragBehavior = (e: DragEvent<HTMLElement>): void => e.preventDefault();
+  const fileSelectedText = t('upload-resource:fileSelected', { fileName });
 
-  const fileSelectedText = t('upload-resource:fileSelected', {
-    fileName: truncate(fileName, 20),
-  });
-
-  const validateAndSetFile = (file: File): void => {
-    if (file.size > MAX_FILE_SIZE) {
+  const validateAndSetFile = (file: File | Blob) => {
+    if (file.size > MAX_RESOURCE_FILE_SIZE) {
       toggleNotification(t('validation:fileSizeError'));
     } else {
       form.setFieldValue(field.name, file);
     }
   };
 
+  // If the file is an image, automatically resize it.
+  // Otherwise, check if it's too large and update the field value.
+  const processFile = async (file: File): Promise<void> => {
+    if (IMAGE_TYPES.includes(file.type)) {
+      const options = {
+        maxSizeMB: maxFileSize,
+        maxWidthOrHeight: MAX_RESOURCE_IMAGE_WIDTH_HEIGHT,
+      };
+
+      try {
+        const compressedFile = await imageCompression(file, options);
+        validateAndSetFile(compressedFile);
+      } catch {
+        // Compression failed. Try to set the field value still if the image is small enough.
+        validateAndSetFile(file);
+      }
+    } else {
+      validateAndSetFile(file);
+    }
+  };
+
   const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const file: File = R.path(['currentTarget', 'files', '0'], e);
-    validateAndSetFile(file);
+    const file = R.path(['currentTarget', 'files', '0'], e);
+    processFile(file);
   };
 
   const handleFileDrop = (e: DragEvent<HTMLElement>): void => {
     e.preventDefault();
-    validateAndSetFile(!!e.dataTransfer && e.dataTransfer.files[0]);
+    processFile(!!e.dataTransfer && e.dataTransfer.files[0]);
   };
 
   const renderFileInput = (
@@ -65,7 +91,8 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
       ref={fileInputRef}
       value=""
       type="file"
-      accept={`${ACCEPTED_RESOURCE_FILES.toString};capture=camera`}
+      accept={ACCEPTED_RESOURCE_FILES.toString()}
+      capture="environment" // Outward-facing camera.
       onChange={handleFileInputChange}
     />
   );
@@ -90,9 +117,7 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
   );
 
   const renderFormHelperText = !fileName && (
-    <FormHelperText>
-      {t('upload-resource:maxFileSize')}: {MAX_FILE_SIZE / 1000000} MB
-    </FormHelperText>
+    <FormHelperText>{t('upload-resource:fileHelpText', { maxFileSize })}</FormHelperText>
   );
 
   const renderFileSelectedText = !!fileName && <FormHelperText>{fileSelectedText}</FormHelperText>;

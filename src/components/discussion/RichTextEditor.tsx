@@ -28,7 +28,7 @@ import {
   StrikethroughSRounded,
 } from '@material-ui/icons';
 import clsx from 'clsx';
-import { useAuthContext, useDiscussionContext } from 'context';
+import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import {
   CompositeDecorator,
   ContentBlock,
@@ -53,8 +53,14 @@ import React, {
   useState,
 } from 'react';
 import { CreateCommentFormValues } from 'types';
-import { ACCEPTED_ATTACHMENT_FILES, RICH_TEXT_EDITOR_STYLES } from 'utils';
+import {
+  ACCEPTED_ATTACHMENT_FILES,
+  MAX_COMMENT_ATTACHMENT_FILE_SIZE,
+  RICH_TEXT_EDITOR_STYLES,
+  MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT,
+} from 'utils';
 import { stateToMarkdown } from 'draft-js-export-markdown';
+import imageCompression from 'browser-image-compression';
 import { DraftLink } from './DraftLink';
 import { DialogHeader, SkoleDialog } from '../shared';
 
@@ -128,6 +134,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   const ref = useRef<Editor>(null!);
   const { t } = useTranslation();
   const { isTabletOrDesktop, isMobile } = useMediaQueries();
+  const { toggleNotification } = useNotificationsContext();
   const placeholder = `${t('forms:createComment')}...`;
   const contentState = editorState.getCurrentContent();
   const selection = editorState.getSelection();
@@ -386,16 +393,38 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     return 'handled';
   };
 
-  const handleAttachmentChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const reader = new FileReader();
-    const attachment = R.path(['currentTarget', 'files', '0'], e) as File;
-    reader.readAsDataURL(attachment);
-
-    reader.onloadend = (): void => {
-      setFieldValue('attachment', attachment);
-      setCommentAttachment(reader.result);
+  const validateAndSetFile = (file: File | Blob) => {
+    if (file.size > MAX_COMMENT_ATTACHMENT_FILE_SIZE) {
+      toggleNotification(t('validation:fileSizeError'));
+    } else {
+      setFieldValue('attachment', file);
       toggleCommentModal(true);
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onloadend = (): void => {
+        setCommentAttachment(reader.result);
+      };
+    }
+  };
+
+  // Automatically resize the image and update the field value.
+  const handleAttachmentChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const file: File = R.path(['currentTarget', 'files', '0'], e);
+
+    const options = {
+      maxSizeMB: MAX_COMMENT_ATTACHMENT_FILE_SIZE / 1000000,
+      maxWidthOrHeight: MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT,
     };
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      validateAndSetFile(compressedFile);
+    } catch {
+      // Compression failed. Try to set the field value still if the image is small enough.
+      validateAndSetFile(file);
+    }
   };
 
   const handleClearAttachment = (): void => {
@@ -524,7 +553,8 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         ref={attachmentInputRef}
         value=""
         type="file"
-        accept={`${ACCEPTED_ATTACHMENT_FILES.toString};capture=camera`}
+        accept={ACCEPTED_ATTACHMENT_FILES.toString()}
+        capture="environment" // Outward-facing camera.
         onChange={handleAttachmentChange}
         disabled={!userMe}
       />

@@ -27,7 +27,6 @@ import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import Resizer from 'react-image-file-resizer';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -119,41 +118,6 @@ const UploadResourcePage: NextPage = () => {
     await createResource({ variables });
   };
 
-  const handleSubmit = async (variables: UploadResourceFormValues): Promise<void> => {
-    const { file } = variables;
-
-    if (file) {
-      const imageTypes = [
-        'image/apng',
-        'image/bmp',
-        'image/gif',
-        'image/x-icon',
-        'image/jpeg',
-        'image/png',
-        'image/svg+xml',
-        'image/tiff',
-        'image/webp	',
-      ];
-
-      if (imageTypes.includes(file.type)) {
-        // File is an image, resize it first before sending to backend.
-        Resizer.imageFileResizer(
-          file,
-          1400,
-          1400,
-          'JPEG',
-          90,
-          0,
-          (file: File) => handleUpload({ ...variables, file }),
-          'blob',
-        );
-      } else {
-        // File is not an image, can't do any processing so just send it as is.
-        await handleUpload(variables);
-      }
-    }
-  };
-
   const initialValues = {
     resourceTitle: '',
     resourceType: '',
@@ -239,7 +203,7 @@ const UploadResourcePage: NextPage = () => {
 
   const renderForm = (
     <Formik
-      onSubmit={handleSubmit}
+      onSubmit={handleUpload}
       initialValues={initialValues}
       validationSchema={validationSchema}
       innerRef={formRef}

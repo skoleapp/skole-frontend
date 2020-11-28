@@ -19,6 +19,9 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     margin: `${spacing(2)} 0`,
     marginBottom: 'auto',
     position: 'relative',
+    [breakpoints.up('md')]: {
+      marginBottom: spacing(8),
+    },
   },
   attachmentImage: {
     objectFit: 'contain',
