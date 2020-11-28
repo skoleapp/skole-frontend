@@ -29,9 +29,7 @@ export const useSearch = (): UseSearch => {
 
   const searchUrl = {
     pathname: urls.search,
-    query: {
-      school,
-    },
+    query: school ? { school } : {},
   };
 
   const handleSubmitSearch = async (e: SyntheticEvent): Promise<void> => {
