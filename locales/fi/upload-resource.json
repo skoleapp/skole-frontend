@@ -3,7 +3,7 @@
   "description": "Lataa uusi resurssi Skoleen.",
   "header": "Lisää resurssi",
   "fileUploadingText": "Lähetetään tiedostoa...",
-  "maxFileSize": "Maksimi tiedostokoko",
+  "fileHelpText": "Muiden kuin kuvien tiedostokoko on enintään {{ maxFileSize }} Mt. Tekijänoikeudella suojattujen tiedostojen lataamiseen tarvitaan tekijän lupa.",
   "fileSelected": "{{ fileName }} valittu.",
   "uploadFileButtonText": "Lisää tiedosto",
   "dropZoneText": "Raahaa tiedosto tähän, tai klikkaa valitaksesi tiedosto.",

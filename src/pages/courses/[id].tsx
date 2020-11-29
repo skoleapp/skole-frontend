@@ -95,7 +95,7 @@ const CourseDetailPage: NextPage = () => {
   const { searchUrl } = useSearch();
   const course = R.propOr(null, 'course', data);
   const courseName = R.propOr('', 'name', course);
-  const courseCode = R.propOr('', 'code', course);
+  const courseCode = R.propOr('-', 'code', course);
   const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
   const schoolName = R.pathOr('', ['school', 'name'], course);
   const creatorId = R.pathOr('', ['user', 'id'], course);

@@ -10,15 +10,16 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { AddCircleOutlineOutlined, ClearOutlined, EditOutlined } from '@material-ui/icons';
-import { useNotificationsContext } from 'context';
-import { FormikProps, FormikValues } from 'formik';
+import { ErrorMessage, FormikProps, FormikValues } from 'formik';
 import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
-import { AVATAR_MAX_FILE_SIZE as maxFileSize } from 'utils';
-
+import { ACCEPTED_AVATAR_FILES, MAX_AVATAR_FILE_SIZE, MAX_AVATAR_WIDTH_HEIGHT } from 'utils';
+import imageCompression from 'browser-image-compression';
+import { useNotificationsContext } from 'context';
 import { ResponsiveDialog } from '../shared';
+import { FormErrorMessage } from './FormErrorMessage';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   button: {
@@ -32,6 +33,9 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       height: '7rem',
     },
   },
+  errorMessage: {
+    textAlign: 'center',
+  },
 }));
 
 export const AvatarField = <T extends FormikValues>({
@@ -40,8 +44,8 @@ export const AvatarField = <T extends FormikValues>({
 }: FormikProps<T>): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const [preview, setPreview] = useState(values.avatar);
   const { toggleNotification } = useNotificationsContext();
+  const [preview, setPreview] = useState(values.avatar);
 
   const {
     open: dialogOpen,
@@ -54,19 +58,37 @@ export const AvatarField = <T extends FormikValues>({
     onCancel: handleCloseDialog,
   };
 
-  const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const reader = new FileReader();
-    const avatar = R.path(['currentTarget', 'files', '0'], e) as File;
-
-    if (avatar.size > maxFileSize) {
+  const validateAndSetFile = (file: File | Blob) => {
+    if (file.size > MAX_AVATAR_FILE_SIZE) {
       toggleNotification(t('validation:fileSizeError'));
     } else {
-      reader.readAsDataURL(avatar);
+      setFieldValue('avatar', file);
+      handleCloseDialog();
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
       reader.onloadend = (): void => {
-        setFieldValue('avatar', avatar);
         setPreview(String(reader.result));
-        handleCloseDialog();
       };
+    }
+  };
+
+  // Automatically resize the image and update the field value.
+  const handleAvatarChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const file: File = R.path(['currentTarget', 'files', '0'], e);
+
+    const options = {
+      maxSizeMB: MAX_AVATAR_FILE_SIZE / 1000000,
+      maxWidthOrHeight: MAX_AVATAR_WIDTH_HEIGHT,
+    };
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      validateAndSetFile(compressedFile);
+    } catch {
+      // Compression failed. Try to set the field value still if the image is small enough.
+      validateAndSetFile(file);
     }
   };
 
@@ -114,7 +136,8 @@ export const AvatarField = <T extends FormikValues>({
         value=""
         id="avatar-input"
         type="file"
-        accept=".png, .jpg, .jpeg;capture=camera"
+        accept={ACCEPTED_AVATAR_FILES.toString()}
+        capture="user" // User-facing camera.
         onChange={handleAvatarChange}
       />
       <Button
@@ -127,6 +150,10 @@ export const AvatarField = <T extends FormikValues>({
         {t('edit-profile:changeAvatar')}
       </Button>
     </Box>
+  );
+
+  const renderErrorMessage = (
+    <ErrorMessage className={classes.errorMessage} name="avatar" component={FormErrorMessage} />
   );
 
   const renderDialog = (
@@ -146,6 +173,7 @@ export const AvatarField = <T extends FormikValues>({
   return (
     <FormControl>
       {renderPreview}
+      {renderErrorMessage}
       {renderDialog}
     </FormControl>
   );

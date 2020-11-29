@@ -1,20 +1,23 @@
 import { Box, makeStyles } from '@material-ui/core';
 import React from 'react';
+import Image from 'next/image';
 
 const useStyles = makeStyles({
-  root: {
+  colorLayer: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    background:
-      'linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(/images/background.jpg)',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
   },
 });
 
 export const MainBackground: React.FC = () => {
   const classes = useStyles();
-  return <Box className={classes.root} />;
+
+  return (
+    <>
+      <Image layout="fill" src="/images/background.jpg" />
+      <Box className={classes.colorLayer} />
+    </>
+  );
 };

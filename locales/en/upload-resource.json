@@ -3,7 +3,7 @@
   "description": "Upload new resource on Skole.",
   "header": "Upload Resource",
   "fileUploadingText": "Uploading file...",
-  "maxFileSize": "Maximum file size",
+  "fileHelpText": "Maximum file size for non-images is {{ maxFileSize }} MB. To upload copyrighted files you must have the author's permission.",
   "fileSelected": "{{ fileName }} selected.",
   "uploadFileButtonText": "Upload a file",
   "dropZoneText": "Drag & Drop a file here or click to select a file.",

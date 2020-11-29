@@ -24,7 +24,6 @@ import {
   MainTemplate,
   NotFoundTemplate,
   OfflineTemplate,
-  PdfViewer,
   ResourceToolbar,
   ResponsiveDialog,
   RotateButton,
@@ -32,6 +31,7 @@ import {
   TextLink,
   TopLevelCommentThread,
 } from 'components';
+import dynamic from 'next/dynamic';
 import {
   useAuthContext,
   useDiscussionContext,
@@ -65,9 +65,9 @@ import React, { SyntheticEvent, useEffect, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { mediaUrl, urls } from 'utils';
-import { pdfjs } from 'react-pdf';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+// @ts-ignore: TS clashes with the props' types somehow.
+const PdfViewer = dynamic(() => import('components').then((mod) => mod.PdfViewer));
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   mobileContainer: {
@@ -109,7 +109,7 @@ const ResourceDetailPage: NextPage = () => {
   const [resource, setResource] = useState<ResourceObjectType | null>(null);
   const resourceTitle = R.propOr('', 'title', resource);
   const resourceDate = R.propOr('', 'date', resource);
-  const resourceType = R.pathOr('', ['resourceType', 'name'], resource);
+  const resourceType = R.pathOr('-', ['resourceType', 'name'], resource);
   const courseName = R.pathOr('', ['course', 'name'], resource);
   const schoolName = R.pathOr('', ['school', 'name'], resource);
   const courseId = R.pathOr('', ['course', 'id'], resource);

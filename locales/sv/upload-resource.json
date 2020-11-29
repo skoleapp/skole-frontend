@@ -3,7 +3,7 @@
   "description": "Ladda upp ny resurs på Skole.",
   "header": "Ladda Upp Resurs",
   "fileUploadingText": "Laddar upp fil...",
-  "maxFileSize": "Maximal filstorlek",
+  "fileHelpText": "Högsta filstorlek för icke-bilder är {{ maxFileSize }} MB. För att ladda upp upphovsrättsskyddade filer måste du ha författarens tillstånd.",
   "fileSelected": "{{ fileName }} vald.",
   "uploadFileButtonText": "Ladda upp fil",
   "dropZoneText": "Dra och släpp en fil här eller klicka för att välja en fil.",

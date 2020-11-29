@@ -18,10 +18,28 @@ export const DEFAULT_SCALE = 1.0;
 export const MIN_SCALE = 0.75;
 export const MAX_SCALE = 1.75;
 export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
-export const ACCEPTED_FILES = ['image/*', 'text/*', 'application/*'];
-export const MAX_FILE_SIZE = 10000000;
-export const AVATAR_MAX_FILE_SIZE = 2000000;
+export const ACCEPTED_RESOURCE_FILES = ['image/*', 'text/*', 'application/*'];
+export const ACCEPTED_ATTACHMENT_FILES = ['image/*'];
+export const ACCEPTED_AVATAR_FILES = ['image/*'];
+export const MAX_RESOURCE_FILE_SIZE = 10000000; // 10 MB.
+export const MAX_RESOURCE_IMAGE_WIDTH_HEIGHT = 1200; // Pixels.
+export const MAX_AVATAR_FILE_SIZE = 3500000; // 3.5 MB.
+export const MAX_AVATAR_WIDTH_HEIGHT = 200; // Pixels.
+export const MAX_COMMENT_ATTACHMENT_FILE_SIZE = 3500000; // 3.5 MB.
+export const MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT = 1200; // Pixels.
 export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
+
+export const IMAGE_TYPES = [
+  'image/apng',
+  'image/bmp',
+  'image/gif',
+  'image/x-icon',
+  'image/jpeg',
+  'image/png',
+  'image/svg+xml',
+  'image/tiff',
+  'image/webp	',
+];
 
 export const SETTINGS_ITEMS = {
   account: [
