@@ -249,16 +249,6 @@ let theme = createMuiTheme({
         alignSelf: 'center',
       },
     },
-    MuiDialogTitle: {
-      root: {
-        padding: spacing(2),
-      },
-    },
-    MuiDialogContent: {
-      root: {
-        padding: spacing(2),
-      },
-    },
     MuiDialog: {
       container: {
         paddingTop: 'env(safe-area-inset-top)',
@@ -266,6 +256,16 @@ let theme = createMuiTheme({
       paper: {
         overflow: 'hidden',
         paddingBottom: 'env(safe-area-inset-bottom)',
+      },
+    },
+    MuiDialogTitle: {
+      root: {
+        padding: spacing(2),
+      },
+    },
+    MuiDialogContent: {
+      root: {
+        textAlign: 'center',
       },
     },
     MuiBackdrop: {

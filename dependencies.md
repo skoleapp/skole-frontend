@@ -22,7 +22,6 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [formik](https://www.npmjs.com/package/formik)                                       | Provides useful and extensible form logic.                                                    |
 | [graphql](https://www.npmjs.com/package/graphql)                                     | Only used for getting useful GraphQL typings.                                                 |
 | [lodash.throttle](https://www.npmjs.com/package/lodash.thorttle)                     | Single utility function from [Lodash](https://www.npmjs.com/package/lodash).                  |
-| [material-ui-confirm](https://www.npmjs.com/package/material-ui-confirm)             | MUI wrapper for confirmation dialogs.                                                         |
 | [next](https://www.npmjs.com/package/next)                                           | Rendering framework for [React](https://www.npmjs.com/package/react).                         |
 | [next-offline](https://www.npmjs.com/package/next-offline)                           | Offline support for [Next.js](https://www.npmjs.com/package/next).                            |
 | [next-translate](https://www.npmjs.com/package/next-translate)                       | I18n support for [Next.js](https://www.npmjs.com/package/next).                               |

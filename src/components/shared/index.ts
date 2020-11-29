@@ -1,4 +1,5 @@
 export { ButtonLink } from './ButtonLink';
+export { ConfirmationDialog } from './ConfirmationDialog';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { DialogHeader } from './DialogHeader';
 export { IconButtonLink } from './IconButtonLink';

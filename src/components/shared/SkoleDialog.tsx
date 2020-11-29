@@ -1,5 +1,6 @@
 import { Dialog, DialogProps, makeStyles, Slide } from '@material-ui/core';
 import { TransitionProps } from '@material-ui/core/transitions';
+import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
 import React, { forwardRef, Ref, SyntheticEvent } from 'react';
 import { BORDER_RADIUS } from 'theme';
@@ -14,10 +15,13 @@ const useStyles = makeStyles(({ breakpoints }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
+  alwaysBorderRadius: {
+    borderRadius: BORDER_RADIUS,
+  },
 }));
 
-// A simple wrapper around MUI dialog to provide global styles that cannot be provided in the theme overrides.
-export const SkoleDialog: React.FC<DialogProps> = (props) => {
+// A simple wrapper around MUI dialog to provide responsive styles consistently for all dialogs.
+export const SkoleDialog: React.FC<DialogProps> = ({ fullScreen, ...props }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const handleClick = (e: SyntheticEvent): void => e.stopPropagation();
@@ -25,10 +29,12 @@ export const SkoleDialog: React.FC<DialogProps> = (props) => {
   return (
     <Dialog
       onClick={handleClick}
-      fullScreen={isMobile}
+      fullScreen={fullScreen === false ? fullScreen : isMobile}
       fullWidth={isTabletOrDesktop}
       TransitionComponent={Transition}
-      PaperProps={{ className: classes.paper }}
+      PaperProps={{
+        className: clsx(classes.paper, fullScreen === false && classes.alwaysBorderRadius),
+      }}
       {...props}
     />
   );

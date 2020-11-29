@@ -34,7 +34,12 @@ import {
   TextLink,
   TopLevelCommentThread,
 } from 'components';
-import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
+import {
+  useAuthContext,
+  useDiscussionContext,
+  useNotificationsContext,
+  useConfirmContext,
+} from 'context';
 import { DeleteCourseMutation, useCourseQuery, useDeleteCourseMutation } from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
 import {
@@ -48,7 +53,7 @@ import {
   useVotes,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
-import { useConfirm } from 'material-ui-confirm';
+
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -87,7 +92,7 @@ const CourseDetailPage: NextPage = () => {
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
-  const confirm = useConfirm();
+  const confirm = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useCourseQuery({ variables, context });

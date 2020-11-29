@@ -1,12 +1,11 @@
 import { FormControl } from '@material-ui/core';
 import { ButtonLink, FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
-import { useNotificationsContext } from 'context';
+import { useNotificationsContext, useConfirmContext } from 'context';
 import { Field, Form, Formik } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
 import { withAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
-import { useConfirm } from 'material-ui-confirm';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import React from 'react';
@@ -33,7 +32,7 @@ export const DeleteAccountPage: NextPage = () => {
   } = useForm<DeleteAccountFormValues>();
 
   const { t } = useTranslation();
-  const confirm = useConfirm();
+  const confirm = useConfirmContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
 

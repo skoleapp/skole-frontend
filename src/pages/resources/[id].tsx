@@ -37,6 +37,7 @@ import {
   useDiscussionContext,
   useNotificationsContext,
   usePdfViewerContext,
+  useConfirmContext,
 } from 'context';
 import {
   DeleteResourceMutation,
@@ -57,7 +58,6 @@ import {
   useVotes,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
-import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -101,7 +101,7 @@ const ResourceDetailPage: NextPage = () => {
   const { query } = useRouter();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
-  const confirm = useConfirm();
+  const confirm = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { userMe, verified } = useAuthContext();

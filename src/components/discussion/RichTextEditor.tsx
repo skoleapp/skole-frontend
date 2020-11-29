@@ -476,7 +476,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
   );
 
   const renderUrlInput = (
-    <SkoleDialog open={urlInputOpen} onClose={handleCloseUrlInput}>
+    <SkoleDialog open={urlInputOpen} onClose={handleCloseUrlInput} fullScreen={false}>
       <DialogHeader onCancel={handleCloseUrlInput} text={t('forms:addLink')} />
       <DialogContent>
         <TextField
@@ -488,8 +488,10 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCloseUrlInput}>{t('common:cancel')}</Button>
-        <Button onClick={confirmLink} color="primary">
+        <Button onClick={handleCloseUrlInput} fullWidth>
+          {t('common:cancel')}
+        </Button>
+        <Button onClick={confirmLink} color="primary" fullWidth>
           {t('common:confirm')}
         </Button>
       </DialogActions>

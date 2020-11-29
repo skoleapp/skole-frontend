@@ -33,6 +33,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
   dialogContent: {
     display: 'flex',
+    padding: spacing(2),
   },
 }));
 
