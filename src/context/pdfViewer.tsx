@@ -19,7 +19,6 @@ export const PdfViewerContextProvider: React.FC = ({ children }) => {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
   const [swipingDisabled, setSwipingDisabled] = useState(false);
-
   const swipeableViewsRef = (useRef(null!) as unknown) as MutableRefObject<SwipeableViews> & string;
 
   const value = {

@@ -18,7 +18,6 @@ export const useAuthContext = (): UseAuthContext => {
   const { t } = useTranslation();
   const { userMe, setUserMe, ...authContext } = useContext(AuthContext);
   const verified: boolean = R.propOr(null, 'verified', userMe);
-
   const loginRequiredTooltip: string | false = !userMe && t('tooltips:loginRequired');
 
   const verificationRequiredTooltip: string | false =
@@ -37,7 +36,6 @@ export const useAuthContext = (): UseAuthContext => {
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [userMe, setUserMe] = useState<UserObjectType | null>(null);
   const [authNetworkError, setAuthNetworkError] = useState(false);
-
   const [activities, setActivities] = useState<PaginatedActivityObjectType | null>(null);
 
   const value = {

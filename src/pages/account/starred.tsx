@@ -46,9 +46,7 @@ const StarredPage: NextPage = () => {
   };
 
   const renderLoading = <LoadingBox />;
-
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;
-
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
   const renderCourseTable = (
@@ -68,7 +66,6 @@ const StarredPage: NextPage = () => {
   );
 
   const renderCoursesNotFound = <NotFoundBox text={t('starred:noCourses')} />;
-
   const renderResourcesNotFound = <NotFoundBox text={t('starred:noResources')} />;
 
   const renderStarredCourses = loading
@@ -91,7 +88,7 @@ const StarredPage: NextPage = () => {
   );
 
   const renderSwipeableViews = (
-    <Box flexGrow="1" position="relative" minHeight="30rem">
+    <Box flexGrow="1" position="relative" minHeight="30rem" overflow="hidden">
       <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
         {renderStarredCourses}
         {renderStarredResources}

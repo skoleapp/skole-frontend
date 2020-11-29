@@ -74,6 +74,8 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
   },
   desktopContainer: {
     flexGrow: 1,
@@ -384,7 +386,7 @@ const ResourceDetailPage: NextPage = () => {
         <Tab label={t('common:resource')} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <Box flexGrow="1" position="relative">
+      <Box flexGrow="1" position="relative" overflow="hidden">
         <SwipeableViews
           disabled={swipingDisabled}
           index={tabValue}

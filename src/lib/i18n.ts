@@ -1,6 +1,5 @@
 import DynamicNamespaces from 'next-translate/DynamicNamespaces';
 import I18nProvider from 'next-translate/I18nProvider';
-import Trans from 'next-translate/Trans';
 import useTranslation from 'next-translate/useTranslation';
 
 const defaultNamespaces = [
@@ -16,9 +15,7 @@ const defaultNamespaces = [
   'offline',
 ];
 
-interface Namespaces {
-  [key: string]: string;
-}
+type Namespaces = Record<string, string>;
 
 export const loadNamespaces = async (namespaces: string[], lang?: string): Promise<Namespaces> => {
   const totalNamespaces: Namespaces = {};
@@ -31,4 +28,4 @@ export const loadNamespaces = async (namespaces: string[], lang?: string): Promi
 };
 
 // Re-export only modules that we need with named exports so we can import all translation related modules from one place.
-export { useTranslation, Trans, DynamicNamespaces, I18nProvider };
+export { useTranslation, DynamicNamespaces, I18nProvider };

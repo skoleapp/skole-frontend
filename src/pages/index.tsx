@@ -38,6 +38,8 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchContainer: {
     position: 'relative',
     padding: spacing(6),
+    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(6)})`,
+    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(6)})`,
     marginTop: spacing(4),
     textAlign: 'center',
     [breakpoints.up('sm')]: {
@@ -79,6 +81,8 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   shortcutsContainer: {
     position: 'relative',
     padding: `${spacing(4)} ${spacing(2)}`,
+    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
+    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
     flexGrow: 1,
   },
   card: {

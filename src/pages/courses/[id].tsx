@@ -40,7 +40,12 @@ import {
   useNotificationsContext,
   useConfirmContext,
 } from 'context';
-import { DeleteCourseMutation, useCourseQuery, useDeleteCourseMutation } from 'generated';
+import {
+  DeleteCourseMutation,
+  useCourseQuery,
+  useDeleteCourseMutation,
+  SubjectObjectType,
+} from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
 import {
   useActionsDialog,
@@ -61,13 +66,14 @@ import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
-import { SubjectObjectType } from '__generated__/src/graphql/common.graphql';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   mobileContainer: {
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
   },
   desktopContainer: {
     flexGrow: 1,
@@ -322,7 +328,7 @@ const CourseDetailPage: NextPage = () => {
         <Tab label={`${t('common:resources')} (${resourceCount})`} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <Box flexGrow="1" position="relative">
+      <Box flexGrow="1" position="relative" overflow="hidden">
         <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
           {renderResources}
           {renderDiscussion}

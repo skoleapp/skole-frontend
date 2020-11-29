@@ -9,7 +9,6 @@ export const useNotificationsContext = (): NotificationsContextType =>
 
 export const NotificationsContextProvider: React.FC = ({ children }) => {
   const [notification, setNotification] = useState<string | null>(null);
-
   const toggleNotification = (payload: string | null): void => setNotification(payload);
 
   const value = {

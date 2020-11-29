@@ -1,4 +1,4 @@
-import { useTranslation } from 'next-translate';
+import { useTranslation } from 'lib';
 import React from 'react';
 import { Button, DialogActions, DialogContentText, DialogContent } from '@material-ui/core';
 import { useConfirmContext } from 'context';

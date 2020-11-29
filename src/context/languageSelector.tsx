@@ -9,7 +9,6 @@ export const useLanguageSelectorContext = (): LanguageSelectorContextType =>
 
 export const LanguageSelectorContextProvider: React.FC = ({ children }) => {
   const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);
-
   const toggleLanguageSelector = (open: boolean): void => setLanguageSelectorOpen(open);
 
   const value = {

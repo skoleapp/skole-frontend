@@ -1,5 +1,6 @@
 import { Box, Button, Fab, Grid, makeStyles, Typography, useTheme } from '@material-ui/core';
 import { AddOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import { useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
 import { useMediaQueries } from 'hooks';
@@ -12,7 +13,7 @@ import { NotFoundBox } from '../shared';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   root: {
     position: 'absolute',
     top: 0,
@@ -27,9 +28,14 @@ const useStyles = makeStyles(({ spacing }) => ({
     flexWrap: 'nowrap',
     height: '100%',
   },
+  topLevelMessageArea: {
+    [breakpoints.down('md')]: {
+      paddingBottom: '5.5rem', // Make sure the create comment button won't block the last comment.
+    },
+  },
   createCommentButton: {
     position: 'absolute',
-    bottom: `calc(${BOTTOM_NAVBAR_HEIGHT} + ${spacing(5)})`,
+    bottom: spacing(4),
     left: 0,
     right: 0,
     marginLeft: 'auto',
@@ -77,7 +83,11 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
   );
 
   const renderMessageArea = (
-    <Grid container direction="column" className={classes.messageArea}>
+    <Grid
+      container
+      direction="column"
+      className={clsx(classes.messageArea, classes.topLevelMessageArea)}
+    >
       {renderTopLevelComments}
       {renderCommentsNotFound}
     </Grid>
