@@ -32,7 +32,7 @@ export const DeleteAccountPage: NextPage = () => {
   } = useForm<DeleteAccountFormValues>();
 
   const { t } = useTranslation();
-  const confirm = useConfirmContext();
+  const { confirm } = useConfirmContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
 

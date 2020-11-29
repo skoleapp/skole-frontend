@@ -6,7 +6,6 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
-import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { TopLevelCommentThreadProps } from 'types';
 
 import { NotFoundBox } from '../shared';

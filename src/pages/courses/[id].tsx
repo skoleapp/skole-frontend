@@ -92,7 +92,7 @@ const CourseDetailPage: NextPage = () => {
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
-  const confirm = useConfirmContext();
+  const { confirm } = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useCourseQuery({ variables, context });

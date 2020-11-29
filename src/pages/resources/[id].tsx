@@ -101,7 +101,7 @@ const ResourceDetailPage: NextPage = () => {
   const { query } = useRouter();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
-  const confirm = useConfirmContext();
+  const { confirm } = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { userMe, verified } = useAuthContext();

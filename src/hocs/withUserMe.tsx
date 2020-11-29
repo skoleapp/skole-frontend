@@ -4,6 +4,7 @@ import { NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
+import { withCommonContexts } from './withCommonContexts';
 
 // Fetch user from API and set context with the value.
 // If user has not visited get started page, redirect there.
@@ -34,5 +35,5 @@ export const withUserMe = (PageComponent: NextPage): NextPage => {
     return <LoadingTemplate />;
   };
 
-  return WithUserMe;
+  return withCommonContexts(WithUserMe);
 };

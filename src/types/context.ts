@@ -63,4 +63,10 @@ export interface ConfirmOptions {
   description: string;
 }
 
-export type ConfirmContextType = (confirmOptions: ConfirmOptions) => Promise<void>;
+export interface ConfirmContextType {
+  dialogOpen: boolean;
+  confirm: (confirmOptions: ConfirmOptions) => Promise<void>;
+  confirmOptions: ConfirmOptions;
+  handleConfirm: () => void;
+  handleCancel: () => void;
+}

@@ -100,7 +100,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
   const { userMe } = useAuthContext();
   const userId = R.propOr('', 'id', comment.user);
   const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user);
-  const confirm = useConfirmContext();
+  const { confirm } = useConfirmContext();
   const attachmentOnly = comment.text == '' && comment.attachment !== '';
   const initialVote = R.propOr(null, 'vote', comment);
   const initialScore = String(R.propOr(0, 'score', comment));

@@ -4,6 +4,7 @@ import { NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { urls } from 'utils';
+import { withCommonContexts } from './withCommonContexts';
 
 // Disable access for authenticated users.
 // Wrap all pages that require access only for unauthenticated users with this for all pages.
@@ -33,5 +34,5 @@ export const withNoAuth = (PageComponent: NextPage): NextPage => {
     return <LoadingTemplate />;
   };
 
-  return WithNoAuth;
+  return withCommonContexts(WithNoAuth);
 };

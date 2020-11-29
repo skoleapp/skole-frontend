@@ -1,23 +1,19 @@
 import { useTranslation } from 'next-translate';
 import React from 'react';
 import { Button, DialogActions, DialogContentText, DialogContent } from '@material-ui/core';
-import { ConfirmOptions } from 'types';
+import { useConfirmContext } from 'context';
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
 
-interface Props extends ConfirmOptions {
-  dialogOpen: boolean;
-  handleConfirm: () => void;
-  handleCancel: () => void;
-}
-export const ConfirmationDialog: React.FC<Props> = ({
-  dialogOpen,
-  handleCancel,
-  handleConfirm,
-  title,
-  description,
-}) => {
+export const ConfirmationDialog: React.FC = () => {
   const { t } = useTranslation();
+
+  const {
+    dialogOpen,
+    handleCancel,
+    handleConfirm,
+    confirmOptions: { title, description },
+  } = useConfirmContext();
 
   return (
     <SkoleDialog open={dialogOpen} fullScreen={false}>

@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from 'react';
-import { ConfirmationDialog } from 'components';
 import { ConfirmContextType, ConfirmOptions } from 'types';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
@@ -9,6 +8,7 @@ export const useConfirmContext = (): ConfirmContextType => useContext(ConfirmCon
 export const ConfirmContextProvider: React.FC = ({ children }) => {
   const [confirmOptions, setConfirmOptions] = useState({ title: '', description: '' });
   const [resolveReject, setResolveReject] = useState<(() => void)[]>([]);
+  const dialogOpen = resolveReject.length === 2;
   const [resolve, reject] = resolveReject;
   const handleClose = () => setResolveReject([]);
 
@@ -27,19 +27,13 @@ export const ConfirmContextProvider: React.FC = ({ children }) => {
     handleClose();
   };
 
-  const renderConfirmationDialog = (
-    <ConfirmationDialog
-      dialogOpen={!!resolveReject.length}
-      handleConfirm={handleConfirm}
-      handleCancel={handleCancel}
-      {...confirmOptions}
-    />
-  );
+  const value = {
+    dialogOpen,
+    confirm,
+    confirmOptions,
+    handleConfirm,
+    handleCancel,
+  };
 
-  return (
-    <ConfirmContext.Provider value={confirm}>
-      {children}
-      {renderConfirmationDialog}
-    </ConfirmContext.Provider>
-  );
+  return <ConfirmContext.Provider value={value}>{children}</ConfirmContext.Provider>;
 };
