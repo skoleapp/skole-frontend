@@ -326,7 +326,12 @@ const ResourceDetailPage: NextPage = () => {
     },
   ];
 
-  const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
+  // On desktop, render a disabled button for non-verified users.
+  // On mobile, do not render the button at all for non-verified users.
+  const renderStarButton = (!!verified || isTabletOrDesktop) && (
+    <StarButton starred={starred} resource={resourceId} />
+  );
+
   const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
   const renderRotateButton = <RotateButton />;

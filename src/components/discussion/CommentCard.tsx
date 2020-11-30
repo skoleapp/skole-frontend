@@ -111,7 +111,6 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
   const replyComments = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
   const { setTopComment, setAttachmentViewerValue } = useDiscussionContext();
-
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', comment.user);
 
   const shareText = t('common:commentShareText', {
@@ -277,23 +276,33 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
     </Grid>
   );
 
+  const renderUpvoteButton = (
+    <Tooltip title={upVoteButtonTooltip}>
+      <Typography component="span">
+        <IconButton className={classes.iconButton} {...upVoteButtonProps}>
+          <KeyboardArrowUpOutlined />
+        </IconButton>
+      </Typography>
+    </Tooltip>
+  );
+
+  const renderScore = <Typography variant="body2">{score}</Typography>;
+
+  const renderDownvoteButton = (
+    <Tooltip title={downVoteButtonTooltip}>
+      <Typography component="span">
+        <IconButton className={classes.iconButton} {...downVoteButtonProps}>
+          <KeyboardArrowDownOutlined />
+        </IconButton>
+      </Typography>
+    </Tooltip>
+  );
+
   const renderVoteButtons = (
     <Grid item container xs={2} sm={1} direction="column" justify="center" alignItems="center">
-      <Tooltip title={upVoteButtonTooltip}>
-        <Typography component="span">
-          <IconButton className={classes.iconButton} {...upVoteButtonProps}>
-            <KeyboardArrowUpOutlined className="vote-button" />
-          </IconButton>
-        </Typography>
-      </Tooltip>
-      <Typography variant="body2">{score}</Typography>
-      <Tooltip title={downVoteButtonTooltip}>
-        <Typography component="span">
-          <IconButton className={classes.iconButton} {...downVoteButtonProps}>
-            <KeyboardArrowDownOutlined className="vote-button" />
-          </IconButton>
-        </Typography>
-      </Tooltip>
+      {renderUpvoteButton}
+      {renderScore}
+      {renderDownvoteButton}
     </Grid>
   );
 

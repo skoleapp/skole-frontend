@@ -17,12 +17,7 @@ export const DrawModeButton: React.FC = () => {
   return isTabletOrDesktop ? (
     <Tooltip title={t('tooltips:markArea')}>
       <Typography component="span">
-        <IconButton
-          onClick={handleClick}
-          disabled={controlsDisabled} // The actual logic that we want to use when we enable this component.
-          size="small"
-          color={color}
-        >
+        <IconButton onClick={handleClick} disabled={controlsDisabled} size="small" color={color}>
           <TabUnselectedOutlined />
         </IconButton>
       </Typography>

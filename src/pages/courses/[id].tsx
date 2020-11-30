@@ -234,7 +234,11 @@ const CourseDetailPage: NextPage = () => {
     },
   ];
 
-  const renderStarButton = <StarButton starred={starred} course={courseId} />;
+  // On desktop, render a disabled button for non-verified users.
+  // On mobile, do not render the button at all for non-verified users.
+  const renderStarButton = (!!verified || isTabletOrDesktop) && (
+    <StarButton starred={starred} course={courseId} />
+  );
 
   const discussionHeaderProps = {
     commentCount,
