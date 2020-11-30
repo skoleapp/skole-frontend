@@ -47,6 +47,8 @@ import { mediaUrl, urls } from 'utils';
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   paper: {
     padding: spacing(4),
+    paddingRight: `calc(${spacing(4)} + env(safe-area-inset-right))`,
+    paddingLeft: `calc(${spacing(4)} + env(safe-area-inset-left))`,
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
@@ -57,6 +59,8 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
+    paddingRight: 'env(safe-area-inset-right)',
+    paddingLeft: 'env(safe-area-inset-left)',
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
@@ -451,7 +455,7 @@ const UserPage: NextPage = () => {
   );
 
   const renderSwipeableViews = (
-    <Box flexGrow="1" position="relative" minHeight="30rem">
+    <Box flexGrow="1" position="relative" minHeight="30rem" overflow="hidden">
       <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
         {renderCreatedCourses}
         {renderCreatedResources}

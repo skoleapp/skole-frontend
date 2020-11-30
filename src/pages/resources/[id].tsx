@@ -37,6 +37,7 @@ import {
   useDiscussionContext,
   useNotificationsContext,
   usePdfViewerContext,
+  useConfirmContext,
 } from 'context';
 import {
   DeleteResourceMutation,
@@ -57,7 +58,6 @@ import {
   useVotes,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
-import { useConfirm } from 'material-ui-confirm';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -74,6 +74,8 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
   },
   desktopContainer: {
     flexGrow: 1,
@@ -101,7 +103,7 @@ const ResourceDetailPage: NextPage = () => {
   const { query } = useRouter();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
-  const confirm = useConfirm();
+  const { confirm } = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { userMe, verified } = useAuthContext();
@@ -384,7 +386,7 @@ const ResourceDetailPage: NextPage = () => {
         <Tab label={t('common:resource')} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <Box flexGrow="1" position="relative">
+      <Box flexGrow="1" position="relative" overflow="hidden">
         <SwipeableViews
           disabled={swipingDisabled}
           index={tabValue}

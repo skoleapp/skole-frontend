@@ -20,6 +20,8 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
   paperContainer: {
     overflow: 'hidden',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },

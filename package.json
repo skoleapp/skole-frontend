@@ -29,7 +29,6 @@
     "draft-js-export-markdown": "^1.4.0",
     "formik": "^2.2.5",
     "lodash.throttle": "^4.1.1",
-    "material-ui-confirm": "^2.0.4",
     "next": "^10.0.3",
     "next-offline": "^5.0.2",
     "next-translate": "^0.20.2",

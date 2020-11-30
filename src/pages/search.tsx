@@ -66,6 +66,8 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
@@ -75,9 +77,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     boxShadow: 'none',
+    backgroundColor: palette.common.white,
   },
   searchContainer: {
-    backgroundColor: palette.common.white,
     padding: spacing(1),
     minHeight: TOP_NAVBAR_HEIGHT_MOBILE,
   },
@@ -85,7 +87,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     paddingLeft: spacing(2),
   },
   filterNames: {
-    backgroundColor: palette.common.white, // For mobile.
     display: 'flex',
     flexFlow: 'row wrap',
     paddingTop: spacing(2),
@@ -93,6 +94,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   chip: {
     margin: `0 ${spacing(1)} ${spacing(1)} 0`,
+  },
+  dialogContent: {
+    padding: spacing(2),
   },
 }));
 
@@ -406,7 +410,7 @@ const SearchPage: NextPage = () => {
   );
 
   const renderFilterResultsForm = (
-    <DialogContent>
+    <DialogContent className={classes.dialogContent}>
       <Formik
         onSubmit={handlePreSubmit}
         initialValues={initialValues}
@@ -465,11 +469,11 @@ const SearchPage: NextPage = () => {
   );
 
   const renderMobileContent = isMobile && (
-    <Grid container direction="column" className={classes.container}>
+    <Paper className={classes.container}>
       {renderFilterNames}
       {renderResults}
       {renderFilterResultsDrawer}
-    </Grid>
+    </Paper>
   );
 
   const renderFilterResultsHeader = <CardHeader title={t('common:filters')} />;

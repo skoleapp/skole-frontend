@@ -1,4 +1,4 @@
-import { DialogContent, Drawer } from '@material-ui/core';
+import { DialogContent, Drawer, makeStyles } from '@material-ui/core';
 import { useMediaQueries } from 'hooks';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
@@ -12,15 +12,25 @@ interface Props {
   dialogHeaderProps: DialogHeaderProps;
 }
 
-// A responsive dialog component, that renders a drawer with anchor in the bottom for mobile devices, and a dialog for desktop devices.
+const useStyles = makeStyles(({ spacing }) => ({
+  dialogContent: {
+    padding: spacing(2),
+  },
+}));
+
+// A responsive wrapper component that renders a drawer for mobile devices and a dialog for desktop devices.
 export const ResponsiveDialog: React.FC<Props> = ({
   children,
   dialogHeaderProps,
   ...dialogProps
 }) => {
   const { isMobile } = useMediaQueries();
+  const classes = useStyles();
   const renderDialogHeader = <DialogHeader {...dialogHeaderProps} />;
-  const renderDialogContent = <DialogContent>{children}</DialogContent>;
+
+  const renderDialogContent = (
+    <DialogContent className={classes.dialogContent}>{children}</DialogContent>
+  );
 
   const renderDrawer = (
     <Drawer anchor="bottom" {...dialogProps}>

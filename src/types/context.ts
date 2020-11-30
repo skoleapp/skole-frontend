@@ -57,3 +57,16 @@ export interface DiscussionContextType {
   commentAttachment: string | ArrayBuffer | null;
   setCommentAttachment: Dispatch<SetStateAction<string | ArrayBuffer | null>>;
 }
+
+export interface ConfirmOptions {
+  title: string;
+  description: string;
+}
+
+export interface ConfirmContextType {
+  dialogOpen: boolean;
+  confirm: (confirmOptions: ConfirmOptions) => Promise<void>;
+  confirmOptions: ConfirmOptions;
+  handleConfirm: () => void;
+  handleCancel: () => void;
+}

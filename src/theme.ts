@@ -150,12 +150,11 @@ let theme = createMuiTheme({
       },
     },
     MuiDrawer: {
-      paperAnchorLeft: {
-        minWidth: '20rem',
-      },
       paperAnchorBottom: {
         borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0 0`,
         paddingBottom: 'env(safe-area-inset-bottom)',
+        marginRight: 'env(safe-area-inset-right)',
+        marginLeft: 'env(safe-area-inset-left)',
       },
     },
     MuiBottomNavigation: {
@@ -167,6 +166,8 @@ let theme = createMuiTheme({
         height: `calc(env(safe-area-inset-bottom) + ${BOTTOM_NAVBAR_HEIGHT})`,
         display: 'flex',
         paddingBottom: 'env(safe-area-inset-bottom)',
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
       },
     },
     MuiBottomNavigationAction: {
@@ -249,6 +250,17 @@ let theme = createMuiTheme({
         alignSelf: 'center',
       },
     },
+    MuiDialog: {
+      container: {
+        paddingTop: 'env(safe-area-inset-top)',
+      },
+      paper: {
+        overflow: 'hidden',
+        paddingRight: 'env(safe-area-inset-right)',
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      },
+    },
     MuiDialogTitle: {
       root: {
         padding: spacing(2),
@@ -256,16 +268,7 @@ let theme = createMuiTheme({
     },
     MuiDialogContent: {
       root: {
-        padding: spacing(2),
-      },
-    },
-    MuiDialog: {
-      container: {
-        paddingTop: 'env(safe-area-inset-top)',
-      },
-      paper: {
-        overflow: 'hidden',
-        paddingBottom: 'env(safe-area-inset-bottom)',
+        textAlign: 'center',
       },
     },
     MuiBackdrop: {
@@ -274,10 +277,17 @@ let theme = createMuiTheme({
         marginBottom: 'env(safe-area-inset-bottom)',
       },
     },
+    MuiAppBar: {
+      root: {
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
+      },
+    },
     MuiCssBaseline: {
       '@global': {
         body: {
           backgroundColor: COLORS.secondary,
+          userSelect: 'none',
         },
         '.avatar-thumbnail': {
           height: '1.35rem !important',
@@ -300,9 +310,9 @@ let theme = createMuiTheme({
           position: 'absolute',
           width: '100%',
           height: '100%',
-          willChange: 'auto !important', // Fix overflow issues with border radiuses.
           '& > div': {
             display: 'flex',
+            overflow: 'hidden !important',
           },
         },
         '.screenshot-border': {

@@ -34,8 +34,18 @@ import {
   TextLink,
   TopLevelCommentThread,
 } from 'components';
-import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
-import { DeleteCourseMutation, useCourseQuery, useDeleteCourseMutation } from 'generated';
+import {
+  useAuthContext,
+  useDiscussionContext,
+  useNotificationsContext,
+  useConfirmContext,
+} from 'context';
+import {
+  DeleteCourseMutation,
+  useCourseQuery,
+  useDeleteCourseMutation,
+  SubjectObjectType,
+} from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
 import {
   useActionsDialog,
@@ -48,7 +58,7 @@ import {
   useVotes,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
-import { useConfirm } from 'material-ui-confirm';
+
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -56,13 +66,14 @@ import React, { SyntheticEvent } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
-import { SubjectObjectType } from '__generated__/src/graphql/common.graphql';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   mobileContainer: {
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
   },
   desktopContainer: {
     flexGrow: 1,
@@ -87,7 +98,7 @@ const CourseDetailPage: NextPage = () => {
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
-  const confirm = useConfirm();
+  const { confirm } = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useCourseQuery({ variables, context });
@@ -317,7 +328,7 @@ const CourseDetailPage: NextPage = () => {
         <Tab label={`${t('common:resources')} (${resourceCount})`} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <Box flexGrow="1" position="relative">
+      <Box flexGrow="1" position="relative" overflow="hidden">
         <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
           {renderResources}
           {renderDiscussion}

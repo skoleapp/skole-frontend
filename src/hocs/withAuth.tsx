@@ -4,11 +4,12 @@ import { NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
+import { withCommonContexts } from './withCommonContexts';
 
 // Sync authentication between pages.
 // Wrap all pages that require authentication with this.
 export const withAuth = (PageComponent: NextPage): NextPage => {
-  const withAuth: NextPage = (pageProps) => {
+  const WithAuth: NextPage = (pageProps) => {
     const { userMe, authLoading, authNetworkError } = useUserMe();
     const shouldRedirect = !(authLoading || authNetworkError || !!userMe);
     const { asPath } = useRouter();
@@ -58,5 +59,5 @@ export const withAuth = (PageComponent: NextPage): NextPage => {
     return <LoadingTemplate />;
   };
 
-  return withAuth;
+  return withCommonContexts(WithAuth);
 };
