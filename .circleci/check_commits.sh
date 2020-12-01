@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 # CircleCI runs this script to check that there are no extra merge commits
 # in the feature branch that is being merged, and that the branch was rebased
