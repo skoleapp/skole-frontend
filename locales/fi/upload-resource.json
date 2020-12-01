@@ -3,13 +3,14 @@
   "description": "Lataa uusi resurssi Skoleen.",
   "header": "Lisää resurssi",
   "fileUploadingText": "Lähetetään tiedostoa...",
-  "fileHelpText": "Muiden kuin kuvien tiedostokoko on enintään {{ maxFileSize }} Mt. Tekijänoikeudella suojattujen tiedostojen lataamiseen tarvitaan tekijän lupa.",
+  "fileHelpText": "Voit valita minkä tahansa yleisen tiedostomuodon, ja me muunnamme sen automaattisesti PDF-muotoon puolestasi. Muiden kuin kuvien tiedostokoko on enintään {{ maxFileSize }} Mt. Tekijänoikeudella suojattujen tiedostojen lataamiseen tarvitaan tekijän lupa.",
   "fileSelected": "{{ fileName }} valittu.",
   "uploadFileButtonText": "Lisää tiedosto",
   "dropZoneText": "Raahaa tiedosto tähän, tai klikkaa valitaksesi tiedosto.",
-  "schoolHelperText": "Etkö löydä kouluasi?",
+  "schoolHelperText": "Koulu jonka kurssille tämä materiaali kuuluu. Etkö löydä kouluasi?",
   "schoolHelperLink": "Ota meihin yhteyttä, niin lisäämme sen!",
   "courseHelperText": "Etkö loydä kurssiasi?",
   "courseHelperLink": "Yritä lisätä se!",
-  "resourceTitleHelperText": "Anna resurssille kuvaava nimi."
+  "resourceTitleHelperText": "Kuvaava nimi resurssille.",
+  "resourceTypeHelperText": "Resurssin tyyppi, esim. tentti."
 }

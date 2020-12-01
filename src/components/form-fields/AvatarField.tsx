@@ -22,9 +22,6 @@ import { ResponsiveDialog } from '../shared';
 import { FormErrorMessage } from './FormErrorMessage';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
-  button: {
-    marginTop: spacing(2),
-  },
   avatar: {
     width: '5rem',
     height: '5rem',
@@ -32,6 +29,9 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       width: '7rem',
       height: '7rem',
     },
+  },
+  button: {
+    marginTop: spacing(4),
   },
   errorMessage: {
     textAlign: 'center',

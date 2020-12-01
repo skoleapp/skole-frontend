@@ -229,13 +229,13 @@ const UserPage: NextPage = () => {
 
   const renderCourseCountTitle = (
     <Typography variant="body2" color="textSecondary">
-      {t('profile:courses')}
+      {t('common:courses')}
     </Typography>
   );
 
   const renderResourceCountTitle = (
     <Typography variant="body2" color="textSecondary">
-      {t('profile:resources')}
+      {t('common:resources')}
     </Typography>
   );
 

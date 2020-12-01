@@ -6,5 +6,6 @@
   "addAvatar": "Add Avatar",
   "changeAvatar": "Change Avatar",
   "clearAvatar": "Clear Avatar",
-  "backToProfile": "Back to profile"
+  "backToProfile": "Back to profile",
+  "avatarHelperText": "Your avatar will show to other users."
 }

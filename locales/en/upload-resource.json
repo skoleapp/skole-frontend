@@ -3,13 +3,14 @@
   "description": "Upload new resource on Skole.",
   "header": "Upload Resource",
   "fileUploadingText": "Uploading file...",
-  "fileHelpText": "Maximum file size for non-images is {{ maxFileSize }} MB. To upload copyrighted files you must have the author's permission.",
+  "fileHelpText": "You can pick any common file format and we'll automatically convert it into a PDF format for you. Maximum file size for non-images is {{ maxFileSize }} MB. To upload copyrighted files you must have the author's permission.",
   "fileSelected": "{{ fileName }} selected.",
   "uploadFileButtonText": "Upload a file",
   "dropZoneText": "Drag & Drop a file here or click to select a file.",
-  "schoolHelperText": "Can't find your school?",
+  "schoolHelperText": "The school to whose course this resource belongs. Can't find your school?",
   "schoolHelperLink": "Contact us and we'll add it!",
-  "courseHelperText": "Can't find your course?",
+  "courseHelperText": "The course to which this resource belongs. Can't find your course?",
   "courseHelperLink": "Try adding it!",
-  "resourceTitleHelperText": "Give a descriptive name to the resource."
+  "resourceTitleHelperText": "A descriptive name for the resource.",
+  "resourceTypeHelperText": "The type of resource, e.g. an exam."
 }

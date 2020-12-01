@@ -121,7 +121,7 @@ const GetStartedPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('get-started:title'),
-      description: t('get-started:description'),
+      description: t('marketing:description'),
     },
     disableBottomNavbar: true,
     topNavbarProps: {
@@ -150,7 +150,7 @@ const GetStartedPage: NextPage = () => {
   const renderCta = (
     <Box className={classes.ctaContainer}>
       <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary">
-        {t('get-started:header')}
+        {t('marketing:slogan')}
       </Typography>
       <ButtonLink
         className={classes.ctaButton}

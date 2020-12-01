@@ -126,16 +126,12 @@ const ResourceDetailPage: NextPage = () => {
   const downloads = String(R.propOr(0, 'downloads', resource));
   const starred = !!R.prop('starred', resource);
   const isOwner = !!userMe && userMe.id === creatorId;
-  const resourceUser = R.prop('user', resource);
+  const resourceCreator = R.prop('user', resource);
   const created = R.prop('created', resource);
   const { commentCount } = useDiscussionContext();
   const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
   const { commentModalOpen } = useDiscussionContext();
   const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePdfViewerContext();
-
-  const { renderShareButton } = useShare({
-    text: resourceTitle,
-  });
 
   const {
     infoDialogOpen,
@@ -151,6 +147,7 @@ const ResourceDetailPage: NextPage = () => {
     renderShareAction,
     renderReportAction,
     renderActionsButton,
+    renderShareButton,
   } = useActionsDialog({ text: resourceTitle });
 
   const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
@@ -423,7 +420,7 @@ const ResourceDetailPage: NextPage = () => {
   );
 
   const renderInfoDialogContent = (
-    <InfoDialogContent user={resourceUser} created={created} infoItems={infoItems} />
+    <InfoDialogContent creator={resourceCreator} created={created} infoItems={infoItems} />
   );
 
   const renderInfoDialog = (

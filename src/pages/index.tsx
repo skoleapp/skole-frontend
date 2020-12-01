@@ -158,7 +158,7 @@ const IndexPage: NextPage = () => {
       href: searchUrl,
     },
     {
-      text: 'index:uploadResources',
+      text: 'index:uploadMaterial',
       icon: CloudUploadOutlined,
       href: urls.uploadResource,
     },
@@ -173,7 +173,7 @@ const IndexPage: NextPage = () => {
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
-      {t('index:header')}
+      {t('marketing:description')}
     </Typography>
   );
 
@@ -274,7 +274,7 @@ const IndexPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('index:title'),
-      description: t('index:description'),
+      description: t('marketing:description'),
     },
     topNavbarProps: {
       disableSearch: true,

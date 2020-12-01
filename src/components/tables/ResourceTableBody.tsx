@@ -71,10 +71,8 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
     );
 
   const renderUserIcon = <AccountCircleOutlined className={clsx(classes.icon, classes.userIcon)} />;
-
   const renderStarIcon = <StarBorderOutlined className={classes.icon} />;
   const renderDiscussionIcon = <ChatOutlined className={classes.icon} />;
-
   const renderDownloadsIcon = <CloudDownloadOutlined className={classes.icon} />;
 
   const renderResourceInfo = (r: ResourceObjectType): JSX.Element => (
@@ -92,13 +90,11 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
     </Typography>
   );
 
-  const renderResourceType = (r: ResourceObjectType): JSX.Element => {
-    return (
-      <Typography variant="body2" color="textSecondary">
-        {R.path(['resourceType', 'name'], r)}
-      </Typography>
-    );
-  };
+  const renderResourceType = (r: ResourceObjectType): JSX.Element => (
+    <Typography variant="body2" color="textSecondary">
+      {R.path(['resourceType', 'name'], r)}
+    </Typography>
+  );
 
   const renderResources = resources.map((r, i) => (
     <Link href={urls.resource(r.id)} key={i}>

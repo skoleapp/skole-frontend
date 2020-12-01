@@ -16,8 +16,8 @@ const useStyles = makeStyles(({ spacing }) => ({
 interface Props {
   commentCount: number;
   renderStarButton: JSX.Element | false;
-  renderUpVoteButton: JSX.Element;
-  renderDownVoteButton: JSX.Element;
+  renderUpVoteButton: JSX.Element | false;
+  renderDownVoteButton: JSX.Element | false;
   renderShareButton: JSX.Element;
   renderInfoButton: JSX.Element;
   renderActionsButton: JSX.Element;

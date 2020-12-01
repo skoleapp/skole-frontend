@@ -6,5 +6,6 @@
   "addAvatar": "Lägg till avatar",
   "changeAvatar": "Byt Foton",
   "clearAvatar": "Ta bort",
-  "backToProfile": "Tillbaka till profilen"
+  "backToProfile": "Tillbaka till profilen",
+  "avatarHelperText": "Avatar är din profilbild som kommer att visas för andra användare."
 }

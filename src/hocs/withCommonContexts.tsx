@@ -1,3 +1,4 @@
+import { ConfirmationDialog } from 'components';
 import {
   AuthContextProvider,
   LanguageSelectorContextProvider,
@@ -17,6 +18,7 @@ export const withCommonContexts = (PageComponent: NextPage): NextPage => {
           <SettingsContextProvider>
             <ConfirmContextProvider>
               <PageComponent {...pageProps} />
+              <ConfirmationDialog />
             </ConfirmContextProvider>
           </SettingsContextProvider>
         </NotificationsContextProvider>

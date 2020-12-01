@@ -3,13 +3,14 @@
   "description": "Ladda upp ny resurs på Skole.",
   "header": "Ladda Upp Resurs",
   "fileUploadingText": "Laddar upp fil...",
-  "fileHelpText": "Högsta filstorlek för icke-bilder är {{ maxFileSize }} MB. För att ladda upp upphovsrättsskyddade filer måste du ha författarens tillstånd.",
+  "fileHelpText": "Du kan välja vilket vanligt filformat som helst så konverterar vi det automatiskt till ett PDF-format åt dig. Högsta filstorlek för icke-bilder är {{ maxFileSize }} MB. För att ladda upp upphovsrättsskyddade filer måste du ha författarens tillstånd.",
   "fileSelected": "{{ fileName }} vald.",
   "uploadFileButtonText": "Ladda upp fil",
   "dropZoneText": "Dra och släpp en fil här eller klicka för att välja en fil.",
-  "schoolHelperText": "Hittar du inte din skola?",
+  "schoolHelperText": "Skolan till vars kurs detta resurs tillhör. Hittar du inte din skola?",
   "schoolHelperLink": "Kontakta oss så lägger vi till det!",
-  "courseHelperText": "Hittar du inte din kurs?",
+  "courseHelperText": "Kursen som detta resurs tillhör. Hittar du inte din kurs?",
   "courseHelperLink": "Försök att lägga till det!",
-  "resourceTitleHelperText": "Ge resursen ett beskrivande namn."
+  "resourceTitleHelperText": "Ett beskrivande namn för resursen.",
+  "resourceTypeHelperText": "Typen av resurs, t.ex. en tenta."
 }

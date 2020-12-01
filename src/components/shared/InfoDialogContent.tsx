@@ -14,7 +14,7 @@ interface InfoItem {
 }
 
 interface Props {
-  user?: UserObjectType | null;
+  creator?: UserObjectType | null;
   created?: string;
   infoItems: InfoItem[];
 }

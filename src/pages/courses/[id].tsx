@@ -119,7 +119,7 @@ const CourseDetailPage: NextPage = () => {
   const initialVote = R.propOr(null, 'vote', course);
   const starred = !!R.prop('starred', course);
   const isOwner = !!userMe && userMe.id === creatorId;
-  const courseUser = R.prop('user', course);
+  const courseCreator = R.prop('user', course);
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const { renderShareButton } = useShare({ text: courseName });
@@ -359,7 +359,7 @@ const CourseDetailPage: NextPage = () => {
   );
 
   const renderInfoDialogContent = (
-    <InfoDialogContent user={courseUser} created={created} infoItems={infoItems} />
+    <InfoDialogContent creator={courseCreator} created={created} infoItems={infoItems} />
   );
 
   const renderInfoDialog = (
