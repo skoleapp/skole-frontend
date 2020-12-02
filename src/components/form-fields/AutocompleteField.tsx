@@ -44,6 +44,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
   const { touched, errors, isSubmitting } = form;
   const fieldError = getIn(errors, name);
   const showError = getIn(touched, name) && !!fieldError;
+
   const getOptionLabel = (option: Record<symbol, unknown>): string =>
     R.propOr('', labelKey, option);
 
@@ -69,7 +70,13 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
         context,
       });
 
-      data[dataKey] && setOptions(data[dataKey]);
+      // Filter out options that have already been chosen.
+      const filteredOptions = data[dataKey].filter(
+        (o: Record<string, unknown>) =>
+          !field.value?.some((v: Record<string, unknown>) => v.id === o.id),
+      );
+
+      setOptions(filteredOptions);
     } catch {
       setOptions([]);
     } finally {
