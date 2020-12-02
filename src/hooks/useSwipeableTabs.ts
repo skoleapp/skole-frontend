@@ -40,7 +40,7 @@ export const useSwipeableTabs = (comments?: CommentObjectType[]): UseSwipeableTa
         }
       }
     }
-  }, [comments]);
+  }, [comments, query]);
 
   return { tabValue, setTabValue, handleTabChange, handleIndexChange };
 };
