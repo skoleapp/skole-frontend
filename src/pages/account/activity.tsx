@@ -33,6 +33,7 @@ const ActivityPage: NextPage = () => {
   const { data, loading, error } = useActivitiesQuery({ variables, context });
   const [activities, setActivities] = useState([]);
   const activityCount = R.pathOr(0, ['activities', 'count'], data);
+  const markAllAsReadDisabled = !activities.length;
 
   // Update state after data fetching is complete.
   useEffect(() => {
@@ -81,20 +82,29 @@ const ActivityPage: NextPage = () => {
     handleCloseActionsDialog(e);
   };
 
+  // Disable this action if user has no activities.
+  const renderMarkAllAsReadAction = (
+    <MenuItem onClick={handleClickMarkAllActivitiesAsReadButton} disabled={markAllAsReadDisabled}>
+      <ListItemIcon>
+        <DoneOutlineOutlined />
+      </ListItemIcon>
+      <ListItemText>{t('activity:markAllAsRead')}</ListItemText>
+    </MenuItem>
+  );
+
+  const renderNotificationSettingsAction = (
+    <MenuItem disabled>
+      <ListItemIcon>
+        <SettingsOutlined />
+      </ListItemIcon>
+      <ListItemText>{t('activity:notificationSettings')}</ListItemText>
+    </MenuItem>
+  );
+
   const renderActionsDialogContent = (
     <List>
-      <MenuItem onClick={handleClickMarkAllActivitiesAsReadButton}>
-        <ListItemIcon>
-          <DoneOutlineOutlined />
-        </ListItemIcon>
-        <ListItemText>{t('activity:markAllAsRead')}</ListItemText>
-      </MenuItem>
-      <MenuItem disabled>
-        <ListItemIcon>
-          <SettingsOutlined />
-        </ListItemIcon>
-        <ListItemText>{t('activity:notificationSettings')}</ListItemText>
-      </MenuItem>
+      {renderMarkAllAsReadAction}
+      {renderNotificationSettingsAction}
     </List>
   );
 
