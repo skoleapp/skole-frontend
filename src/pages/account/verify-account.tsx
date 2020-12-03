@@ -52,6 +52,15 @@ const VerifyAccountPage: NextPage = () => {
     setVerified(initialVerified);
   }, [initialVerified]);
 
+  useEffect(() => {
+    const handleVerifyAccount = async (): Promise<void> => {
+      await verifyAccount({ variables: { token } });
+    };
+    if (!!token) {
+      handleVerifyAccount();
+    }
+  }, [token]);
+
   const header = !emailSubmitted
     ? t('verify-account:header')
     : t('verify-account:emailSubmittedHeader');
@@ -106,16 +115,8 @@ const VerifyAccountPage: NextPage = () => {
     await resendVerificationEmail({ variables: { email } });
   };
 
-  const handleSubmitConfirmation = async (): Promise<void> => {
-    await verifyAccount({ variables: { token } });
-  };
-
   const initialEmailFormValues = {
     email,
-    general: '',
-  };
-
-  const initialConfirmationFormValues = {
     general: '',
   };
 
@@ -145,25 +146,6 @@ const VerifyAccountPage: NextPage = () => {
     </FormControl>
   );
 
-  const renderConfirmationFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
-    <Form>
-      <Box flexGrow="1" textAlign="center">
-        <Typography variant="body2">{t('verify-account:confirmationHelpText')}</Typography>
-      </Box>
-      <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
-    </Form>
-  );
-
-  const renderConfirmationForm = verified === false && !!token && (
-    <Formik
-      initialValues={initialConfirmationFormValues}
-      onSubmit={handleSubmitConfirmation}
-      ref={confirmationFormRef}
-    >
-      {renderConfirmationFormFields}
-    </Formik>
-  );
-
   const renderVerified = verified && (
     <FormControl>
       <Typography variant="subtitle1" align="center">
@@ -188,7 +170,6 @@ const VerifyAccountPage: NextPage = () => {
     <SettingsTemplate {...layoutProps}>
       {renderEmailForm}
       {renderEmailSubmitted}
-      {renderConfirmationForm}
       {renderVerified}
     </SettingsTemplate>
   );
