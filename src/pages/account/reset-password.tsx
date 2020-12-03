@@ -166,7 +166,7 @@ const ResetPasswordPage: NextPage = () => {
       initialValues={passwordFormInitialValues}
       validationSchema={passwordValidationSchema}
       onSubmit={handleSubmitPassword}
-      ref={passwordFormRef}
+      innerRef={passwordFormRef}
     >
       {renderPasswordFormFields}
     </Formik>
@@ -177,7 +177,7 @@ const ResetPasswordPage: NextPage = () => {
       initialValues={emailFormInitialValues}
       validationSchema={emailValidationSchema}
       onSubmit={handleSubmitEmail}
-      ref={emailFormRef}
+      innerRef={emailFormRef}
     >
       {renderEmailFormFields}
     </Formik>

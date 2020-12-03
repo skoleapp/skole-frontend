@@ -1,7 +1,7 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
 import { FormSubmitSection, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { Form, Formik, FormikProps, FormikValues } from 'formik';
+import { Form, Formik } from 'formik';
 import {
   ResendVerificationEmailMutation,
   useResendVerificationEmailMutation,
@@ -18,6 +18,7 @@ import React, { useEffect, useState } from 'react';
 
 interface EmailFormValues {
   email: string;
+  general: string;
 }
 
 const VerifyAccountPage: NextPage = () => {
@@ -29,14 +30,6 @@ const VerifyAccountPage: NextPage = () => {
     unexpectedError: emailFormUnexpectedError,
   } = useForm<EmailFormValues>();
 
-  const {
-    formRef: confirmationFormRef,
-    handleMutationErrors: handleConfirmationFormMutationErrors,
-    onError: onConfirmationFormError,
-    resetForm: resetConfirmationForm,
-    unexpectedError: confirmationFormUnexpectedError,
-  } = useForm<Record<string, never>>();
-
   const { t } = useTranslation();
   const { query } = useRouter();
   const { userMe, verified: initialVerified } = useAuthContext();
@@ -44,6 +37,8 @@ const VerifyAccountPage: NextPage = () => {
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(false);
+  const [confirmationError, setConfirmationError] = useState<string | null>(null);
+
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
 
@@ -51,6 +46,44 @@ const VerifyAccountPage: NextPage = () => {
   useEffect(() => {
     setVerified(initialVerified);
   }, [initialVerified]);
+
+  const handleUnexpectedConfirmationError = (): void => {
+    setConfirmationError(t('validation:unexpectedError'));
+  };
+
+  const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
+    if (verifyAccount) {
+      if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
+        verifyAccount.errors.map((e) => {
+          if (e?.field === '__all__') {
+            setConfirmationError(e?.messages.join());
+          }
+        });
+      } else if (verifyAccount.successMessage) {
+        toggleNotification(verifyAccount.successMessage);
+        setVerified(true);
+      } else {
+        handleUnexpectedConfirmationError();
+      }
+    } else {
+      handleUnexpectedConfirmationError();
+    }
+  };
+
+  const [verifyAccount] = useVerifyAccountMutation({
+    onCompleted: onConfirmationFormCompleted,
+    onError: handleUnexpectedConfirmationError,
+    context,
+  });
+
+  useEffect(() => {
+    const handleVerifyAccount = async (): Promise<void> => {
+      await verifyAccount({ variables: { token } });
+    };
+    if (!!token && !verified && !initialVerified) {
+      handleVerifyAccount();
+    }
+  }, [token]);
 
   const header = !emailSubmitted
     ? t('verify-account:header')
@@ -74,31 +107,9 @@ const VerifyAccountPage: NextPage = () => {
     }
   };
 
-  const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
-    if (verifyAccount) {
-      if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
-        handleConfirmationFormMutationErrors(verifyAccount.errors);
-      } else if (verifyAccount.successMessage) {
-        resetConfirmationForm();
-        toggleNotification(verifyAccount.successMessage);
-        setVerified(true);
-      } else {
-        confirmationFormUnexpectedError();
-      }
-    } else {
-      confirmationFormUnexpectedError();
-    }
-  };
-
   const [resendVerificationEmail] = useResendVerificationEmailMutation({
     onCompleted: onEmailFormCompleted,
     onError: onEmailFormError,
-    context,
-  });
-
-  const [verifyAccount] = useVerifyAccountMutation({
-    onCompleted: onConfirmationFormCompleted,
-    onError: onConfirmationFormError,
     context,
   });
 
@@ -106,24 +117,16 @@ const VerifyAccountPage: NextPage = () => {
     await resendVerificationEmail({ variables: { email } });
   };
 
-  const handleSubmitConfirmation = async (): Promise<void> => {
-    await verifyAccount({ variables: { token } });
-  };
-
   const initialEmailFormValues = {
     email,
     general: '',
   };
 
-  const initialConfirmationFormValues = {
-    general: '',
-  };
-
-  const renderEmailForm = verified === false && !token && !emailSubmitted && (
+  const renderEmailForm = !verified && !token && !emailSubmitted && (
     <Formik
       initialValues={initialEmailFormValues}
       onSubmit={handleSubmitEmail}
-      ref={emailFormRef}
+      innerRef={emailFormRef}
       enableReinitialize
     >
       {(props): JSX.Element => (
@@ -145,29 +148,17 @@ const VerifyAccountPage: NextPage = () => {
     </FormControl>
   );
 
-  const renderConfirmationFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
-    <Form>
-      <Box flexGrow="1" textAlign="center">
-        <Typography variant="body2">{t('verify-account:confirmationHelpText')}</Typography>
-      </Box>
-      <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
-    </Form>
-  );
-
-  const renderConfirmationForm = verified === false && !!token && (
-    <Formik
-      initialValues={initialConfirmationFormValues}
-      onSubmit={handleSubmitConfirmation}
-      ref={confirmationFormRef}
-    >
-      {renderConfirmationFormFields}
-    </Formik>
-  );
-
   const renderVerified = verified && (
     <FormControl>
       <Typography variant="subtitle1" align="center">
         {t('verify-account:verified')}
+      </Typography>
+    </FormControl>
+  );
+  const renderConfirmationError = !!confirmationError && !verified && (
+    <FormControl>
+      <Typography color="error" variant="subtitle1" align="center">
+        {confirmationError}
       </Typography>
     </FormControl>
   );
@@ -188,7 +179,7 @@ const VerifyAccountPage: NextPage = () => {
     <SettingsTemplate {...layoutProps}>
       {renderEmailForm}
       {renderEmailSubmitted}
-      {renderConfirmationForm}
+      {renderConfirmationError}
       {renderVerified}
     </SettingsTemplate>
   );
