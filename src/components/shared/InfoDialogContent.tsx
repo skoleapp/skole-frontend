@@ -19,9 +19,11 @@ interface Props {
   infoItems: InfoItem[];
 }
 
-export const InfoDialogContent: React.FC<Props> = ({ user, created, infoItems }) => {
+export const InfoDialogContent: React.FC<Props> = ({ creator, created, infoItems }) => {
   const { t } = useTranslation();
-  const userId = R.prop('id', user);
+  const userId = R.prop('id', creator);
+  const communityUser = t('common:communityUser');
+  const createdBy = t('common:createdBy');
 
   const renderInfoItems = infoItems.map(({ label, value }, i) => (
     <Grid key={i} container>
@@ -38,18 +40,19 @@ export const InfoDialogContent: React.FC<Props> = ({ user, created, infoItems })
     </Grid>
   ));
 
+  const renderCreatorLink = !!creator && (
+    <TextLink href={urls.user(userId)} color="primary">
+      {creator.username}
+    </TextLink>
+  );
+
+  const renderCreator = creator ? renderCreatorLink : communityUser;
+  const renderCreationTime = useDayjs(created).startOf('day').fromNow();
+
   const renderCreated = !!created && (
     <Box marginTop="1rem">
       <Typography variant="body2" color="textSecondary">
-        {t('common:createdBy')}{' '}
-        {user ? (
-          <TextLink href={urls.user(userId)} color="primary">
-            {user.username}
-          </TextLink>
-        ) : (
-          t('common:communityUser')
-        )}{' '}
-        {useDayjs(created).startOf('day').fromNow()}
+        {createdBy} {renderCreator} {renderCreationTime}
       </Typography>
     </Box>
   );

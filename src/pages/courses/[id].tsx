@@ -53,7 +53,6 @@ import {
   useLanguageHeaderContext,
   useMediaQueries,
   useSearch,
-  useShare,
   useSwipeableTabs,
   useVotes,
 } from 'hooks';
@@ -122,7 +121,6 @@ const CourseDetailPage: NextPage = () => {
   const courseCreator = R.prop('user', course);
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
-  const { renderShareButton } = useShare({ text: courseName });
   const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
 
@@ -140,6 +138,7 @@ const CourseDetailPage: NextPage = () => {
     renderShareAction,
     renderReportAction,
     renderActionsButton,
+    renderShareButton,
   } = useActionsDialog({ text: courseName });
 
   const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({

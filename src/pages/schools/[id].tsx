@@ -42,7 +42,6 @@ import {
   useLanguageHeaderContext,
   useMediaQueries,
   useSearch,
-  useShare,
   useSwipeableTabs,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -101,7 +100,6 @@ const SchoolDetailPage: NextPage = () => {
   const courses = R.pathOr([], ['courses', 'objects'])(school);
   const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
-  const { renderShareButton } = useShare({ text: schoolName });
 
   const {
     infoDialogOpen,
@@ -121,6 +119,7 @@ const SchoolDetailPage: NextPage = () => {
     handleCloseActionsDialog,
     renderActionsButton,
     renderShareAction,
+    renderShareButton,
   } = useActionsDialog({ text: schoolName });
 
   const schoolTypeLink = {

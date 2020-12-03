@@ -26,6 +26,8 @@ interface UseShare {
   handleShare: () => void;
 }
 
+// Provide the needed logic for sharing the current page.
+// This hook may be consumed directly or through the `useActionsDialog` hook.
 export const useShare = ({ query = '', text }: ShareParams): UseShare => {
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
