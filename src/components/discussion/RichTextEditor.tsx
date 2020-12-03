@@ -77,7 +77,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       display: 'flex',
       alignItems: 'center',
       overflowY: 'auto',
-      maxHeight: '10rem',
+      maxHeight: '50rem',
       overflowX: 'hidden',
       padding: spacing(2),
       [breakpoints.up('md')]: {

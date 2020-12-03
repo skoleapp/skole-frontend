@@ -1,5 +1,5 @@
 import { Box, Button, Fab, Grid, makeStyles, Typography, useTheme } from '@material-ui/core';
-import { AddOutlined } from '@material-ui/icons';
+import { AddOutlined, CommentOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import { useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
@@ -41,6 +41,16 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     opacity: 0.7,
+  },
+  replyButton: {
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+  },
+  commentsIcon: {
+    marginRight: spacing(1),
+    width: '1rem',
+    height: '1rem',
   },
 }));
 
@@ -196,10 +206,11 @@ export const ReplyCommentThread: React.FC = () => {
 
   const renderTopComment = !!topComment && (
     <>
-      <CommentCard {...commentCardProps} comment={topComment} />
+      <CommentCard {...commentCardProps} comment={topComment} isTopComment={!!topComment} />
       <Box padding={spacing(2)} display="flex" alignItems="center">
+        <CommentOutlined className={classes.commentsIcon} color="disabled" />
         <Typography variant="body2" color="textSecondary">
-          {replyComments.length} replies
+          {replyComments.length}
         </Typography>
       </Box>
     </>
@@ -207,10 +218,17 @@ export const ReplyCommentThread: React.FC = () => {
 
   const renderReplyComments =
     !!replyComments.length &&
-    replyComments.map((c, i) => <CommentCard {...commentCardProps} key={i} comment={c} />);
+    replyComments.map((c, i) => (
+      <CommentCard
+        {...commentCardProps}
+        key={i}
+        comment={c}
+        isLast={isMobile && i === replyComments.length - 1}
+      />
+    ));
 
   const renderReplyButton = !!topComment && isMobile && (
-    <Box padding={spacing(2)} marginTop="auto">
+    <Box className={classes.replyButton} padding={spacing(2)} marginTop="auto">
       <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
         {t('common:reply')}
       </Button>
