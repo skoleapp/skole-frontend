@@ -53,7 +53,6 @@ import {
   useLanguageHeaderContext,
   useMediaQueries,
   useSearch,
-  useShare,
   useSwipeableTabs,
   useVotes,
 } from 'hooks';
@@ -119,10 +118,9 @@ const CourseDetailPage: NextPage = () => {
   const initialVote = R.propOr(null, 'vote', course);
   const starred = !!R.prop('starred', course);
   const isOwner = !!userMe && userMe.id === creatorId;
-  const courseUser = R.prop('user', course);
+  const courseCreator = R.prop('user', course);
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
-  const { renderShareButton } = useShare({ text: courseName });
   const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
   const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
 
@@ -140,6 +138,7 @@ const CourseDetailPage: NextPage = () => {
     renderShareAction,
     renderReportAction,
     renderActionsButton,
+    renderShareButton,
   } = useActionsDialog({ text: courseName });
 
   const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
@@ -234,7 +233,11 @@ const CourseDetailPage: NextPage = () => {
     },
   ];
 
-  const renderStarButton = <StarButton starred={starred} course={courseId} />;
+  // On desktop, render a disabled button for non-verified users.
+  // On mobile, do not render the button at all for non-verified users.
+  const renderStarButton = (!!verified || isTabletOrDesktop) && (
+    <StarButton starred={starred} course={courseId} />
+  );
 
   const discussionHeaderProps = {
     commentCount,
@@ -355,7 +358,7 @@ const CourseDetailPage: NextPage = () => {
   );
 
   const renderInfoDialogContent = (
-    <InfoDialogContent user={courseUser} created={created} infoItems={infoItems} />
+    <InfoDialogContent creator={courseCreator} created={created} infoItems={infoItems} />
   );
 
   const renderInfoDialog = (

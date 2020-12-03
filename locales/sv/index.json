@@ -1,10 +1,8 @@
 {
   "title": "Hemsida",
-  "description": "Hitta, dela och diskutera de bästa studiematerialen.",
-  "header": "Hitta, dela och diskutera de bästa studiematerialen.",
   "subheader": "Försök att söka efter en kurs!",
   "findContent": "Hitta innehåll",
-  "uploadResources": "Upload resurser",
+  "uploadMaterial": "Ladda upp material",
   "createCourses": "Skapa kurser",
   "inviteHeader": "Stjärnmärka dina favoritkurser och material för att hålla dig uppdaterad. Bjud in dina vänner att gå med dig!",
   "inviteFriends": "Bjud in vänner nu"

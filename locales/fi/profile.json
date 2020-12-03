@@ -1,14 +1,12 @@
 {
   "description": "Katso käyttäjän {{ username }} Skole-profiili.",
   "score": "pistettä",
-  "courses": "kursseja",
-  "resources": "resursseja",
   "editProfile": "Muokkaa profiilia",
-  "noResources": "Tällä käyttäjällä ei ole resursseja.",
-  "noCourses": "Tällä käyttäjällä ei ole kursseja.",
+  "noResources": "Tämä käyttäjä ei ole lisännyt yhtään resurssia.",
+  "noCourses": "Tämä käyttäjä ei ole lisännyt yhtään kurssia.",
   "viewStarred": "Näytä tähdellä merkityt",
   "ownProfileCourses": "Kurssini",
   "ownProfileResources": "Resurssini",
-  "ownProfileNoCourses": "Sinulla ei ole kursseja. Kaikki luomasi kurssit ilmestyvät tänne.",
-  "ownProfileNoResources": "Sinulla ei ole resursseja. Kaikki luomasi resurssit ilmestyvät tänne."
+  "ownProfileNoCourses": "Et ole lisännyt yhtään kurssia. Kaikki luomasi kurssit ilmestyvät tänne.",
+  "ownProfileNoResources": "Et ole lisännyt yhtään resurssia. Kaikki luomasi resurssit ilmestyvät tänne."
 }

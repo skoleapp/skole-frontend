@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, makeStyles, Switch } from '@material-ui/core';
+import { FormControl, makeStyles } from '@material-ui/core';
 import {
   AutocompleteField,
   AvatarField,
@@ -133,19 +133,29 @@ const EditProfilePage: NextPage = () => {
   );
 
   const renderTitleField = (
-    <Field name="title" component={TextFormField} label={t('forms:title')} />
+    <Field name="title" component={TextFormField} label={t('forms:titleOptional')} />
   );
 
   const renderUsernameField = (
-    <Field name="username" component={TextFormField} label={t('forms:username')} />
+    <Field
+      name="username"
+      component={TextFormField}
+      label={t('forms:username')}
+      helperText={t('forms:usernameHelperText')}
+    />
   );
 
   const renderEmailField = (
-    <Field name="email" component={TextFormField} label={t('forms:email')} />
+    <Field
+      name="email"
+      component={TextFormField}
+      label={t('forms:email')}
+      helperText={t('forms:emailHelperText')}
+    />
   );
 
   const renderBioField = (
-    <Field name="bio" component={TextFormField} label={t('forms:bio')} rows="4" multiline />
+    <Field name="bio" component={TextFormField} label={t('forms:bioOptional')} rows="4" multiline />
   );
 
   const renderSchoolField = (
@@ -170,20 +180,6 @@ const EditProfilePage: NextPage = () => {
       component={AutocompleteField}
       helperText={t('forms:subjectHelpText')}
     />
-  );
-
-  const renderMarketingPermissionField = (
-    <FormControl>
-      <FormHelperText>{t('forms:marketingPermission')}</FormHelperText>
-      <Field name="marketingPermission" component={Switch} fullWidth disabled color="primary" />
-    </FormControl>
-  );
-
-  const renderPushNotificationsField = (
-    <FormControl>
-      <FormHelperText>{t('forms:pushNotifications')}</FormHelperText>
-      <Field name="pushNotifications" component={Switch} fullWidth disabled color="primary" />
-    </FormControl>
   );
 
   const renderFormSubmitSection = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
@@ -221,8 +217,6 @@ const EditProfilePage: NextPage = () => {
       {renderBioField}
       {renderSchoolField}
       {renderSubjectField}
-      {renderMarketingPermissionField}
-      {renderPushNotificationsField}
       {renderFormSubmitSection(props)}
       {renderVerifyAccountLink}
       {renderBackToProfileLink}

@@ -6,15 +6,7 @@ import React from 'react';
 import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import {
-  BottomNavbar,
-  Footer,
-  Head,
-  LanguageSelectorDialog,
-  Notifications,
-  SettingsModal,
-  TopNavbar,
-} from '../layout';
+import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   root: {
@@ -79,7 +71,7 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
     containerDense && classes.containerDense,
   );
 
-  const renderChildren = (
+  const renderContainer = (
     <Container {...R.omit(['fullWidth', 'dense'], containerProps)} className={containerClasses}>
       {children}
     </Container>
@@ -89,20 +81,14 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
     isMobile && !disableBottomNavbar && (customBottomNavbar || <BottomNavbar />);
 
   const renderFooter = isTabletOrDesktop && !disableFooter && <Footer />;
-  const renderNotifications = <Notifications />;
-  const renderSettingsModal = <SettingsModal />;
-  const renderLanguageSelectorModal = <LanguageSelectorDialog />;
 
   return (
     <Grid container direction="column" className={classes.root} {...props}>
       {renderHead}
       {renderTopNavbar}
-      {renderChildren}
+      {renderContainer}
       {renderBottomNavbar}
       {renderFooter}
-      {renderNotifications}
-      {renderSettingsModal}
-      {renderLanguageSelectorModal}
     </Grid>
   );
 };

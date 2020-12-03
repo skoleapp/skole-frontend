@@ -1,6 +1,12 @@
 import {
+  ConfirmationDialog,
+  LanguageSelectorDialog,
+  Notifications,
+  SettingsModal,
+} from 'components';
+import {
   AuthContextProvider,
-  LanguageSelectorContextProvider,
+  LanguageContextProvider,
   NotificationsContextProvider,
   SettingsContextProvider,
   ConfirmContextProvider,
@@ -12,15 +18,19 @@ import React from 'react';
 export const withCommonContexts = (PageComponent: NextPage): NextPage => {
   const WithCommonContexts: NextPage = (pageProps) => (
     <AuthContextProvider>
-      <LanguageSelectorContextProvider>
+      <LanguageContextProvider>
         <NotificationsContextProvider>
           <SettingsContextProvider>
             <ConfirmContextProvider>
               <PageComponent {...pageProps} />
+              <ConfirmationDialog />
+              <Notifications />
+              <SettingsModal />
+              <LanguageSelectorDialog />
             </ConfirmContextProvider>
           </SettingsContextProvider>
         </NotificationsContextProvider>
-      </LanguageSelectorContextProvider>
+      </LanguageContextProvider>
     </AuthContextProvider>
   );
 

@@ -1,8 +1,6 @@
 {
   "description": "Visa Skole-profilen för användaren {{ username }}.",
   "score": "poäng",
-  "courses": "kurser",
-  "resources": "resurser",
   "editProfile": "Redigera Profil",
   "noResources": "Denna användare har inga resurser.",
   "noCourses": "Denna användare har inga kurser.",

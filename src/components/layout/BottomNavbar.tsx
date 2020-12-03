@@ -89,7 +89,7 @@ export const BottomNavbar: React.FC = () => {
     />
   );
 
-  const renderUploadResourceAction = (
+  const renderUploadAction = (
     <BottomNavigationAction
       value={3}
       label={t('common:upload')}
@@ -123,7 +123,7 @@ export const BottomNavbar: React.FC = () => {
     <BottomNavigation value={value} onChange={handleChange}>
       {renderHomeAction}
       {renderSearchAction}
-      {renderUploadResourceAction}
+      {renderUploadAction}
       {renderActivityAction}
       {renderProfileAction}
     </BottomNavigation>

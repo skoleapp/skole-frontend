@@ -53,7 +53,6 @@ import {
   useInfoDialog,
   useLanguageHeaderContext,
   useMediaQueries,
-  useShare,
   useSwipeableTabs,
   useVotes,
 } from 'hooks';
@@ -126,16 +125,12 @@ const ResourceDetailPage: NextPage = () => {
   const downloads = String(R.propOr(0, 'downloads', resource));
   const starred = !!R.prop('starred', resource);
   const isOwner = !!userMe && userMe.id === creatorId;
-  const resourceUser = R.prop('user', resource);
+  const resourceCreator = R.prop('user', resource);
   const created = R.prop('created', resource);
   const { commentCount } = useDiscussionContext();
   const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
   const { commentModalOpen } = useDiscussionContext();
   const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePdfViewerContext();
-
-  const { renderShareButton } = useShare({
-    text: resourceTitle,
-  });
 
   const {
     infoDialogOpen,
@@ -151,6 +146,7 @@ const ResourceDetailPage: NextPage = () => {
     renderShareAction,
     renderReportAction,
     renderActionsButton,
+    renderShareButton,
   } = useActionsDialog({ text: resourceTitle });
 
   const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
@@ -326,7 +322,12 @@ const ResourceDetailPage: NextPage = () => {
     },
   ];
 
-  const renderStarButton = <StarButton starred={starred} resource={resourceId} />;
+  // On desktop, render a disabled button for non-verified users.
+  // On mobile, do not render the button at all for non-verified users.
+  const renderStarButton = (!!verified || isTabletOrDesktop) && (
+    <StarButton starred={starred} resource={resourceId} />
+  );
+
   const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
   const renderRotateButton = <RotateButton />;
@@ -418,7 +419,7 @@ const ResourceDetailPage: NextPage = () => {
   );
 
   const renderInfoDialogContent = (
-    <InfoDialogContent user={resourceUser} created={created} infoItems={infoItems} />
+    <InfoDialogContent creator={resourceCreator} created={created} infoItems={infoItems} />
   );
 
   const renderInfoDialog = (

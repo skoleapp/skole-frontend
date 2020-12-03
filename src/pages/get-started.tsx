@@ -1,8 +1,7 @@
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, MainBackground, MainTemplate, TextLink } from 'components';
+import { ButtonLink, LanguageButton, MainBackground, MainTemplate, TextLink } from 'components';
 import { withNoAuth } from 'hocs';
-import { useLanguageSelector } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
@@ -102,7 +101,6 @@ const GetStartedPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { renderLanguageButton } = useLanguageSelector();
 
   const ctaUrl = {
     pathname: urls.register,
@@ -118,23 +116,8 @@ const GetStartedPage: NextPage = () => {
     localStorage.setItem(GET_STARTED_PAGE_VISITED_KEY, new Date().toString());
   }, []);
 
-  const layoutProps = {
-    seoProps: {
-      title: t('get-started:title'),
-      description: t('get-started:description'),
-    },
-    disableBottomNavbar: true,
-    topNavbarProps: {
-      headerRight: renderLanguageButton,
-      disableLogo: true,
-    },
-    containerProps: {
-      fullWidth: true,
-      dense: true,
-    },
-  };
-
   const renderBackground = <MainBackground />;
+  const renderLanguageButton = <LanguageButton />;
 
   const renderHeaders = (
     <Box className={classes.headerContainer}>
@@ -150,7 +133,7 @@ const GetStartedPage: NextPage = () => {
   const renderCta = (
     <Box className={classes.ctaContainer}>
       <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary">
-        {t('get-started:header')}
+        {t('marketing:slogan')}
       </Typography>
       <ButtonLink
         className={classes.ctaButton}
@@ -187,6 +170,22 @@ const GetStartedPage: NextPage = () => {
       </Grid>
     </Box>
   );
+
+  const layoutProps = {
+    seoProps: {
+      title: t('get-started:title'),
+      description: t('marketing:description'),
+    },
+    disableBottomNavbar: true,
+    topNavbarProps: {
+      headerRight: renderLanguageButton,
+      disableLogo: true,
+    },
+    containerProps: {
+      fullWidth: true,
+      dense: true,
+    },
+  };
 
   return (
     <MainTemplate {...layoutProps}>

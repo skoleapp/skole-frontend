@@ -1,10 +1,8 @@
 {
   "title": "Home",
-  "description": "Find, share and discuss the top study materials.",
-  "header": "Find, share and discuss the top study materials.",
   "subheader": "Try searching for a course!",
   "findContent": "Find Content",
-  "uploadResources": "Upload Resources",
+  "uploadMaterial": "Upload Material",
   "createCourses": "Create Courses",
   "inviteHeader": "Star your favorite courses and materials to stay updated. Invite your friends to join you!",
   "inviteFriends": "Invite Friends Now"

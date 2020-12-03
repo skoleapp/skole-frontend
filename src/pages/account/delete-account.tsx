@@ -1,7 +1,7 @@
 import { FormControl } from '@material-ui/core';
 import { ButtonLink, FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
 import { useNotificationsContext, useConfirmContext } from 'context';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
 import { withAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
@@ -80,6 +80,23 @@ export const DeleteAccountPage: NextPage = () => {
     password: Yup.string().required(t('validation:required')),
   });
 
+  const renderFormFields = (props: FormikProps<DeleteAccountFormValues>): JSX.Element => (
+    <Form>
+      <Field
+        name="password"
+        label={t('forms:password')}
+        component={TextFormField}
+        type="password"
+      />
+      <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
+      <FormControl>
+        <ButtonLink href={urls.editProfile} variant="outlined" color="primary">
+          {t('common:cancel')}
+        </ButtonLink>
+      </FormControl>
+    </Form>
+  );
+
   const renderForm = (
     <Formik
       onSubmit={handleSubmit}
@@ -87,22 +104,7 @@ export const DeleteAccountPage: NextPage = () => {
       validationSchema={validationSchema}
       innerRef={formRef}
     >
-      {(props): JSX.Element => (
-        <Form>
-          <Field
-            name="password"
-            label={t('forms:password')}
-            component={TextFormField}
-            type="password"
-          />
-          <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
-          <FormControl>
-            <ButtonLink href={urls.editProfile} variant="outlined" color="primary">
-              {t('common:cancel')}
-            </ButtonLink>
-          </FormControl>
-        </Form>
-      )}
+      {renderFormFields}
     </Formik>
   );
 

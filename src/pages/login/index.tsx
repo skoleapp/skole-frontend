@@ -12,12 +12,13 @@ import {
   PasswordField,
   TextFormField,
   TextLink,
+  LanguageButton,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
 import { LoginMutation, useLoginMutation } from 'generated';
 import { withNoAuth } from 'hocs';
-import { useForm, useLanguageHeaderContext, useLanguageSelector } from 'hooks';
+import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
@@ -51,7 +52,6 @@ const LoginPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { renderLanguageButton } = useLanguageSelector();
   const { toggleNotification } = useNotificationsContext();
   const [existingUser, setExistingUser] = useState(null);
   const existingUserAvatar = mediaUrl(R.propOr('', 'avatar', existingUser));
@@ -128,6 +128,8 @@ const LoginPage: NextPage = () => {
     setExistingUser(null);
     resetForm();
   };
+
+  const renderLanguageButton = <LanguageButton />;
 
   const renderExistingUserGreeting = (
     <Grid container alignItems="center" direction="column">

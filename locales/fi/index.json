@@ -1,10 +1,8 @@
 {
   "title": "Koti",
-  "description": "Löydä, jaa ja keskustele parhaista opiskelumateriaaleista.",
-  "header": "Löydä, jaa ja keskustele parhaista opiskelumateriaaleista.",
   "subheader": "Koita etsiä kurssia!",
   "findContent": "Löydä sisältöä",
-  "uploadResources": "Lisää resursseja",
+  "uploadMaterial": "Lisää materiaalia",
   "createCourses": "Luo kursseja",
   "inviteHeader": "Merkitse tähdellä lempikurssisi ja -materiaalisi pysyäksesi ajan tasalla. Kutsu kaverisi mukaan!",
   "inviteFriends": "Kutsu kavereita nyt"

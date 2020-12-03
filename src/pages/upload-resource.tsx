@@ -1,3 +1,4 @@
+import { Collapse } from '@material-ui/core';
 import {
   AutocompleteField,
   ErrorTemplate,
@@ -65,7 +66,7 @@ const UploadResourcePage: NextPage = () => {
   const validationSchema = Yup.object().shape({
     resourceTitle: Yup.string().required(t('validation:required')),
     resourceType: Yup.object().nullable().required(t('validation:required')),
-    school: Yup.object().nullable(),
+    school: Yup.object().nullable().required(t('validation:required')),
     course: Yup.object().nullable().required(t('validation:required')),
     file: Yup.mixed().required(t('validation:required')),
   });
@@ -143,14 +144,14 @@ const UploadResourcePage: NextPage = () => {
       dataKey="autocompleteResourceTypes"
       document={AutocompleteResourceTypesDocument}
       component={AutocompleteField}
-      disableSearch
+      helperText={t('upload-resource:resourceTypeHelperText')}
     />
   );
 
   const renderSchoolField = (
     <Field
       name="school"
-      label={t('forms:schoolOptional')}
+      label={t('forms:school')}
       dataKey="autocompleteSchools"
       searchKey="name"
       document={AutocompleteSchoolsDocument}
@@ -164,24 +165,27 @@ const UploadResourcePage: NextPage = () => {
     />
   );
 
+  // Only collapse this field in once the school has been selected.
   const renderCourseField = (props: FormikProps<UploadResourceFormValues>) => (
-    <Field
-      name="course"
-      label={t('forms:course')}
-      dataKey="autocompleteCourses"
-      searchKey="name"
-      document={AutocompleteCoursesDocument}
-      component={AutocompleteField}
-      variables={{
-        school: R.path(['values', 'school', 'id'], props), // Filter courses based on selected school.
-      }}
-      helperText={
-        <>
-          {t('upload-resource:courseHelperText')}{' '}
-          <TextLink href={urls.createCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
-        </>
-      }
-    />
+    <Collapse in={!!props.values.school}>
+      <Field
+        name="course"
+        label={t('forms:course')}
+        dataKey="autocompleteCourses"
+        searchKey="name"
+        document={AutocompleteCoursesDocument}
+        component={AutocompleteField}
+        variables={{
+          school: R.path(['values', 'school', 'id'], props), // Filter courses based on selected school.
+        }}
+        helperText={
+          <>
+            {t('upload-resource:courseHelperText')}{' '}
+            <TextLink href={urls.createCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
+          </>
+        }
+      />
+    </Collapse>
   );
 
   const renderFileField = <Field name="file" component={FileField} />;
@@ -190,7 +194,7 @@ const UploadResourcePage: NextPage = () => {
     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
   );
 
-  const renderformFields = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
+  const renderFormFields = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
     <Form>
       {renderResourceTitleField}
       {renderResourceTypeField}
@@ -209,7 +213,7 @@ const UploadResourcePage: NextPage = () => {
       innerRef={formRef}
       enableReinitialize
     >
-      {renderformFields}
+      {renderFormFields}
     </Formik>
   );
 
@@ -227,6 +231,7 @@ const UploadResourcePage: NextPage = () => {
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
+
   if (error) {
     return <ErrorTemplate />;
   }

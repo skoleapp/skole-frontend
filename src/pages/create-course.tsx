@@ -120,8 +120,18 @@ const CreateCoursePage: NextPage = () => {
     >
       {(props): JSX.Element => (
         <Form>
-          <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
-          <Field name="courseCode" label={t('forms:courseCode')} component={TextFormField} />
+          <Field
+            name="courseName"
+            label={t('forms:courseName')}
+            component={TextFormField}
+            helperText={t('create-course:courseNameHelperText')}
+          />
+          <Field
+            name="courseCode"
+            label={t('forms:courseCodeOptional')}
+            component={TextFormField}
+            helperText={t('create-course:courseCodeHelperText')}
+          />
           <Field
             name="school"
             label={t('forms:school')}
@@ -129,6 +139,7 @@ const CreateCoursePage: NextPage = () => {
             searchKey="name"
             document={AutocompleteSchoolsDocument}
             component={AutocompleteField}
+            helperText={t('create-course:schoolHelperText')}
           />
           <Field
             name="subjects"
@@ -137,6 +148,7 @@ const CreateCoursePage: NextPage = () => {
             dataKey="autocompleteSubjects"
             document={AutocompleteSubjectsDocument}
             component={AutocompleteField}
+            helperText={t('create-course:subjectsHelperText')}
             multiple
           />
           <FormSubmitSection submitButtonText={t('common:submit')} {...props} />

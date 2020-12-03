@@ -7,6 +7,7 @@ import React, { SyntheticEvent, useState } from 'react';
 
 import { MuiColor } from 'types';
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
+import { useMediaQueries } from './useMediaQueries';
 
 interface VoteVariables {
   course?: string;
@@ -28,8 +29,8 @@ interface VoteButtonProps {
 }
 
 interface UseVotes {
-  renderUpVoteButton: JSX.Element;
-  renderDownVoteButton: JSX.Element;
+  renderUpVoteButton: JSX.Element | false;
+  renderDownVoteButton: JSX.Element | false;
   score: string;
   upVoteButtonProps: VoteButtonProps;
   downVoteButtonProps: VoteButtonProps;
@@ -45,8 +46,8 @@ export const useVotes = ({
   variables,
 }: UseVotesProps): UseVotes => {
   const { userMe, verified, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
-
   const { t } = useTranslation();
+  const { isTabletOrDesktop } = useMediaQueries();
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [score, setScore] = useState(initialScore);
   const { toggleNotification } = useNotificationsContext();
@@ -106,7 +107,9 @@ export const useVotes = ({
     color: !!currentVote && currentVote.status === -1 ? 'primary' : ('default' as MuiColor),
   };
 
-  const renderUpVoteButton = (
+  // On desktop, render a disabled button for non-verified users and for users who are the creators of the comment.
+  // On mobile, do not render the button at all in these cases.
+  const renderUpVoteButton = ((!!verified && !isOwner) || isTabletOrDesktop) && (
     <Tooltip title={upVoteButtonTooltip}>
       <Typography component="span">
         <IconButton {...upVoteButtonProps}>
@@ -116,7 +119,9 @@ export const useVotes = ({
     </Tooltip>
   );
 
-  const renderDownVoteButton = (
+  // On desktop, render a disabled button for non-verified users and for users who are the creators of the comment.
+  // On mobile, do not render the button at all in these cases.
+  const renderDownVoteButton = ((!!verified && !isOwner) || isTabletOrDesktop) && (
     <Tooltip title={downVoteButtonTooltip}>
       <Typography component="span">
         <IconButton {...downVoteButtonProps}>

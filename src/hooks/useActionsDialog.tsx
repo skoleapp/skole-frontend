@@ -20,12 +20,13 @@ interface UseActionsDialog {
   renderShareAction: false | JSX.Element;
   renderReportAction: JSX.Element;
   renderActionsButton: JSX.Element;
+  renderShareButton: JSX.Element;
   actionsButtonProps: ActionsButtonProps;
 }
 
 export const useActionsDialog = ({ query, text }: ShareParams): UseActionsDialog => {
   const { t } = useTranslation();
-  const { handleShare: _handleShare } = useShare({ query, text });
+  const { handleShare: _handleShare, renderShareButton } = useShare({ query, text });
   const dialogButtonProps = useDialogButton();
   const tooltip = t('tooltips:actions');
 
@@ -94,5 +95,6 @@ export const useActionsDialog = ({ query, text }: ShareParams): UseActionsDialog
     renderReportAction,
     renderActionsButton,
     actionsButtonProps,
+    renderShareButton,
   };
 };
