@@ -1,7 +1,7 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
 import { FormSubmitSection, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { Form, Formik, FormikProps, FormikValues } from 'formik';
+import { Form, Formik } from 'formik';
 import {
   ResendVerificationEmailMutation,
   useResendVerificationEmailMutation,
@@ -37,7 +37,7 @@ const VerifyAccountPage: NextPage = () => {
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(false);
-  const [confirmationError, setConfirmationError] = useState<String | null>(null);
+  const [confirmationError, setConfirmationError] = useState<string | null>(null);
 
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
@@ -46,6 +46,35 @@ const VerifyAccountPage: NextPage = () => {
   useEffect(() => {
     setVerified(initialVerified);
   }, [initialVerified]);
+
+  const handleUnexpectedConfirmationError = (): void => {
+    setConfirmationError(t('validation:unexpectedError'));
+  };
+
+  const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
+    if (verifyAccount) {
+      if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
+        verifyAccount.errors.map((e) => {
+          if (e?.field === '__all__') {
+            setConfirmationError(e?.messages.join());
+          }
+        });
+      } else if (verifyAccount.successMessage) {
+        toggleNotification(verifyAccount.successMessage);
+        setVerified(true);
+      } else {
+        handleUnexpectedConfirmationError();
+      }
+    } else {
+      handleUnexpectedConfirmationError();
+    }
+  };
+
+  const [verifyAccount] = useVerifyAccountMutation({
+    onCompleted: onConfirmationFormCompleted,
+    onError: handleUnexpectedConfirmationError,
+    context,
+  });
 
   useEffect(() => {
     const handleVerifyAccount = async (): Promise<void> => {
@@ -78,38 +107,9 @@ const VerifyAccountPage: NextPage = () => {
     }
   };
 
-  const handleUnexpectedConfirmationError = (): void => {
-    setConfirmationError(t('validation:unexpectedError'));
-  };
-
-  const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
-    if (verifyAccount) {
-      if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
-        verifyAccount.errors.map((e) => {
-          if (e?.field === '__all__') {
-            setConfirmationError(e?.messages.join());
-          }
-        });
-      } else if (verifyAccount.successMessage) {
-        toggleNotification(verifyAccount.successMessage);
-        setVerified(true);
-      } else {
-        handleUnexpectedConfirmationError();
-      }
-    } else {
-      handleUnexpectedConfirmationError();
-    }
-  };
-
   const [resendVerificationEmail] = useResendVerificationEmailMutation({
     onCompleted: onEmailFormCompleted,
     onError: onEmailFormError,
-    context,
-  });
-
-  const [verifyAccount] = useVerifyAccountMutation({
-    onCompleted: onConfirmationFormCompleted,
-    onError: handleUnexpectedConfirmationError,
     context,
   });
 
