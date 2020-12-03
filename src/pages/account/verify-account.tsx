@@ -1,5 +1,6 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
-import { FormSubmitSection, SettingsTemplate } from 'components';
+import { ArrowForwardOutlined } from '@material-ui/icons';
+import { ButtonLink, FormSubmitSection, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik } from 'formik';
 import {
@@ -15,6 +16,7 @@ import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
+import { urls } from 'utils';
 
 interface EmailFormValues {
   email: string;
@@ -122,6 +124,18 @@ const VerifyAccountPage: NextPage = () => {
     general: '',
   };
 
+  const renderHomeButton = (
+    <ButtonLink
+      href={urls.home}
+      endIcon={<ArrowForwardOutlined />}
+      color="primary"
+      variant="contained"
+      fullWidth
+    >
+      {t('common:continue')}
+    </ButtonLink>
+  );
+
   const renderEmailForm = !verified && !token && !emailSubmitted && (
     <Formik
       initialValues={initialEmailFormValues}
@@ -145,6 +159,7 @@ const VerifyAccountPage: NextPage = () => {
       <Typography variant="subtitle1" align="center">
         {t('verify-account:emailSubmitted')}
       </Typography>
+      <Typography component="br" />
     </FormControl>
   );
 
@@ -153,6 +168,8 @@ const VerifyAccountPage: NextPage = () => {
       <Typography variant="subtitle1" align="center">
         {t('verify-account:verified')}
       </Typography>
+      <Typography component="br" />
+      {renderHomeButton}
     </FormControl>
   );
   const renderConfirmationError = !!confirmationError && !verified && (
@@ -160,6 +177,8 @@ const VerifyAccountPage: NextPage = () => {
       <Typography color="error" variant="subtitle1" align="center">
         {confirmationError}
       </Typography>
+      <Typography component="br" />
+      {renderHomeButton}
     </FormControl>
   );
 
