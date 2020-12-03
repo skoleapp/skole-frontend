@@ -78,21 +78,26 @@ const VerifyAccountPage: NextPage = () => {
     }
   };
 
-  const handleConfirmationError = (): void => {
-    const invalidTokenMessage = t('verify-account:invalidToken');
-    setConfirmationError(invalidTokenMessage);
+  const handleUnexpectedConfirmationError = (): void => {
+    setConfirmationError(t('validation:unexpectedError'));
   };
 
   const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
     if (verifyAccount) {
-      if (verifyAccount.successMessage) {
+      if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
+        verifyAccount.errors.map((e) => {
+          if (e?.field === '__all__') {
+            setConfirmationError(e?.messages.join());
+          }
+        });
+      } else if (verifyAccount.successMessage) {
         toggleNotification(verifyAccount.successMessage);
         setVerified(true);
       } else {
-        handleConfirmationError();
+        handleUnexpectedConfirmationError();
       }
     } else {
-      handleConfirmationError();
+      handleUnexpectedConfirmationError();
     }
   };
 
@@ -104,7 +109,7 @@ const VerifyAccountPage: NextPage = () => {
 
   const [verifyAccount] = useVerifyAccountMutation({
     onCompleted: onConfirmationFormCompleted,
-    onError: handleConfirmationError,
+    onError: handleUnexpectedConfirmationError,
     context,
   });
 
@@ -117,7 +122,7 @@ const VerifyAccountPage: NextPage = () => {
     general: '',
   };
 
-  const renderEmailForm = verified === false && !token && !emailSubmitted && (
+  const renderEmailForm = !verified && !token && !emailSubmitted && (
     <Formik
       initialValues={initialEmailFormValues}
       onSubmit={handleSubmitEmail}
