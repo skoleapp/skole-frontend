@@ -30,14 +30,6 @@ const VerifyAccountPage: NextPage = () => {
     unexpectedError: emailFormUnexpectedError,
   } = useForm<EmailFormValues>();
 
-  const {
-    formRef: confirmationFormRef,
-    handleMutationErrors: handleConfirmationFormMutationErrors,
-    onError: onConfirmationFormError,
-    resetForm: resetConfirmationForm,
-    unexpectedError: confirmationFormUnexpectedError,
-  } = useForm<Record<string, never>>();
-
   const { t } = useTranslation();
   const { query } = useRouter();
   const { userMe, verified: initialVerified } = useAuthContext();
@@ -45,6 +37,8 @@ const VerifyAccountPage: NextPage = () => {
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(false);
+  const [confirmationError, setConfirmationError] = useState<String | null>(null);
+
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
 
@@ -57,7 +51,7 @@ const VerifyAccountPage: NextPage = () => {
     const handleVerifyAccount = async (): Promise<void> => {
       await verifyAccount({ variables: { token } });
     };
-    if (!!token) {
+    if (!!token && !verified && !initialVerified) {
       handleVerifyAccount();
     }
   }, [token]);
@@ -84,19 +78,21 @@ const VerifyAccountPage: NextPage = () => {
     }
   };
 
+  const handleConfirmationError = (): void => {
+    const invalidTokenMessage = t('verify-account:invalidToken');
+    setConfirmationError(invalidTokenMessage);
+  };
+
   const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
     if (verifyAccount) {
-      if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
-        handleConfirmationFormMutationErrors(verifyAccount.errors);
-      } else if (verifyAccount.successMessage) {
-        resetConfirmationForm();
+      if (verifyAccount.successMessage) {
         toggleNotification(verifyAccount.successMessage);
         setVerified(true);
       } else {
-        confirmationFormUnexpectedError();
+        handleConfirmationError();
       }
     } else {
-      confirmationFormUnexpectedError();
+      handleConfirmationError();
     }
   };
 
@@ -108,7 +104,7 @@ const VerifyAccountPage: NextPage = () => {
 
   const [verifyAccount] = useVerifyAccountMutation({
     onCompleted: onConfirmationFormCompleted,
-    onError: onConfirmationFormError,
+    onError: handleConfirmationError,
     context,
   });
 
@@ -154,6 +150,13 @@ const VerifyAccountPage: NextPage = () => {
       </Typography>
     </FormControl>
   );
+  const renderConfirmationError = !!confirmationError && !verified && (
+    <FormControl>
+      <Typography color="error" variant="subtitle1" align="center">
+        {confirmationError}
+      </Typography>
+    </FormControl>
+  );
 
   const layoutProps = {
     seoProps: {
@@ -171,6 +174,7 @@ const VerifyAccountPage: NextPage = () => {
     <SettingsTemplate {...layoutProps}>
       {renderEmailForm}
       {renderEmailSubmitted}
+      {renderConfirmationError}
       {renderVerified}
     </SettingsTemplate>
   );
