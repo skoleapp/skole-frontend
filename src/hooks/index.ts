@@ -6,7 +6,6 @@ export * from './useStateRef';
 export * from './useShare';
 export * from './useOpen';
 export * from './useLanguageHeaderContext';
-export * from './useLanguageSelector';
 export * from './useMediaQueries';
 export * from './useForm';
 export * from './useSearch';

@@ -10,9 +10,10 @@ export interface AuthContextType {
   setAuthNetworkError: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface LanguageSelectorContextType {
+export interface LanguageContextType {
   languageSelectorOpen: boolean;
-  toggleLanguageSelector: (payload: boolean) => void;
+  handleOpenLanguageMenu: () => void;
+  handleCloseLanguageMenu: () => void;
 }
 
 export interface NotificationsContextType {

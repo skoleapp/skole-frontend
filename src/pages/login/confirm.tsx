@@ -1,8 +1,7 @@
 import { Button, FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, FormTemplate } from 'components';
+import { ButtonLink, FormTemplate, LanguageButton } from 'components';
 import { withNoAuth } from 'hocs';
-import { useLanguageSelector } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
@@ -12,8 +11,8 @@ import { urls } from 'utils';
 const ConfirmLoginPage: NextPage = () => {
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { renderLanguageButton } = useLanguageSelector();
   const handleClickCancelButton = (): void => Router.back();
+  const renderLanguageButton = <LanguageButton />;
 
   const layoutProps = {
     seoProps: {

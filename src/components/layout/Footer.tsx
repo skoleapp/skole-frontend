@@ -1,10 +1,9 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core';
-import { useLanguageSelector } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { urls } from 'utils';
 
-import { TextLink } from '../shared';
+import { LanguageButton, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   root: {
@@ -19,7 +18,6 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
 export const Footer: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { renderLanguageButton } = useLanguageSelector();
 
   const renderCompany = (
     <Grid item xs={4} container justify="center">
@@ -45,6 +43,8 @@ export const Footer: React.FC = () => {
       {t('common:language').toUpperCase()}
     </Typography>
   );
+
+  const renderLanguageButton = <LanguageButton />;
 
   const renderLanguage = (
     <Grid item xs={4} container direction="column" alignItems="center">

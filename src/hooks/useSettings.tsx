@@ -5,14 +5,12 @@ import {
   LanguageOutlined,
   VerifiedUserOutlined,
 } from '@material-ui/icons';
-import { useAuthContext, useSettingsContext } from 'context';
+import { useAuthContext, useLanguageContext, useSettingsContext } from 'context';
 import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { SettingsContextType } from 'types';
 import { SETTINGS_ITEMS, urls } from 'utils';
-
-import { useLanguageSelector } from './useLanguageSelector';
 
 interface UseSettings extends SettingsContextType {
   renderSettingsMenuList: JSX.Element;
@@ -25,7 +23,7 @@ export const useSettings = (modal: boolean): UseSettings => {
   const { settingsOpen, toggleSettings } = useSettingsContext();
   const { t } = useTranslation();
   const { pathname } = useRouter();
-  const { openLanguageMenu } = useLanguageSelector();
+  const { handleOpenLanguageMenu } = useLanguageContext();
 
   const handleClose = (): void => {
     toggleSettings(false);
@@ -40,7 +38,7 @@ export const useSettings = (modal: boolean): UseSettings => {
 
   const handleLanguageClick = (): void => {
     handleClose();
-    openLanguageMenu();
+    handleOpenLanguageMenu();
   };
 
   const renderAccountMenuItems = SETTINGS_ITEMS.account.map(({ icon: Icon, href, text }, i) => (

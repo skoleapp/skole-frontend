@@ -8,6 +8,7 @@ import {
   PasswordField,
   TextFormField,
   TextLink,
+  LanguageButton,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -22,7 +23,7 @@ import {
   useUpdateUserMutation,
 } from 'generated';
 import { withNoAuth } from 'hocs';
-import { useForm, useLanguageHeaderContext, useLanguageSelector } from 'hooks';
+import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -58,7 +59,6 @@ enum RegisterPhases {
 const RegisterPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { renderLanguageButton } = useLanguageSelector();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
 
@@ -198,6 +198,8 @@ const RegisterPage: NextPage = () => {
       },
     });
   };
+
+  const renderLanguageButton = <LanguageButton />;
 
   const renderUsernameField = (
     <Field

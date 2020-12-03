@@ -19,9 +19,9 @@ import {
   SvgIconComponent,
 } from '@material-ui/icons';
 import clsx from 'clsx';
-import { MainBackground, MainTemplate } from 'components';
+import { LanguageButton, MainBackground, MainTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { useLanguageSelector, useSearch, useShare } from 'hooks';
+import { useSearch, useShare } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
@@ -147,7 +147,6 @@ interface Shortcut {
 const IndexPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { renderLanguageButton } = useLanguageSelector();
   const { handleShare } = useShare({});
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
 
@@ -170,6 +169,7 @@ const IndexPage: NextPage = () => {
   ];
 
   const renderBackground = <MainBackground />;
+  const renderLanguageButton = <LanguageButton />;
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>

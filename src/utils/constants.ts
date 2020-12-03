@@ -11,6 +11,12 @@ import {
 
 import { urls } from './urls';
 
+export const LANGUAGES = [
+  { label: 'languages:english', value: 'en' },
+  { label: 'languages:finnish', value: 'fi' },
+  { label: 'languages:swedish', value: 'sv' },
+];
+
 export const TOKEN_NAME = 'JWT';
 export const MAX_AGE = 60 * 60 * 24 * 30; // 1 month.
 export const DEFAULT_TRANSLATION = { x: 0, y: 0 };

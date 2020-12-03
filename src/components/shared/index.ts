@@ -4,6 +4,8 @@ export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { DialogHeader } from './DialogHeader';
 export { IconButtonLink } from './IconButtonLink';
 export { InfoDialogContent } from './InfoDialogContent';
+export { LanguageButton } from './LanguageButton';
+export { LanguageFlag } from './LanguageFlag';
 export { LoadingBox } from './LoadingBox';
 export { NotFoundBox } from './NotFoundBox';
 export { ResponsiveDialog } from './ResponsiveDialog';

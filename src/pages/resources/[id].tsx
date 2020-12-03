@@ -53,7 +53,6 @@ import {
   useInfoDialog,
   useLanguageHeaderContext,
   useMediaQueries,
-  useShare,
   useSwipeableTabs,
   useVotes,
 } from 'hooks';
