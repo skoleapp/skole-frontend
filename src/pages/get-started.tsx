@@ -125,7 +125,7 @@ const GetStartedPage: NextPage = () => {
         <Image layout="fill" src="/images/icons/skole-icon-text.svg" />
       </Box>
       <Typography className={classes.slogan} variant="h1" color="secondary" gutterBottom>
-        {t('get-started:slogan')}
+        {t('marketing:slogan')}
       </Typography>
     </Box>
   );
