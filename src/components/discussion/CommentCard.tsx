@@ -46,6 +46,12 @@ const useStyles = makeStyles(({ spacing }) => ({
     overflow: 'visible',
     boxShadow: 'none',
   },
+  topComment: {
+    borderBottom: '0.2rem solid #dbdbdb',
+  },
+  lastComment: {
+    marginBottom: spacing(16),
+  },
   cardHeader: {
     padding: 0,
     textAlign: 'left',
@@ -57,7 +63,10 @@ const useStyles = makeStyles(({ spacing }) => ({
     fontSize: '0.75rem',
   },
   cardContent: {
-    padding: `${spacing(2)} !important`,
+    padding: `${spacing(3)} !important`,
+  },
+  voteButtons: {
+    marginTop: '1rem',
   },
   messageContent: {
     paddingTop: spacing(3),
@@ -84,15 +93,28 @@ const useStyles = makeStyles(({ spacing }) => ({
     margin: '0 auto',
     width: '2rem',
   },
+  commentsIcon: {
+    marginRight: spacing(1),
+    width: '1rem',
+    height: '1rem',
+  },
 }));
 
 interface Props {
   comment: CommentObjectType;
   isThread?: boolean;
+  isTopComment?: boolean;
+  isLast?: boolean;
   removeComment: (id: string) => void; // Callback function for removing the comment.
 }
 
-export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment }) => {
+export const CommentCard: React.FC<Props> = ({
+  comment,
+  isThread,
+  isTopComment,
+  isLast,
+  removeComment,
+}) => {
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
@@ -241,7 +263,7 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
   const renderReplyCount = !isThread && (
     <>
       <Tooltip title={t('tooltips:commentReplies', { replyCount })}>
-        <CommentOutlined className={classes.icon} color="disabled" />
+        <CommentOutlined className={classes.commentsIcon} color="disabled" />
       </Tooltip>
       <Typography variant="body2" color="textSecondary">
         {replyCount}
@@ -299,7 +321,16 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
   );
 
   const renderVoteButtons = (
-    <Grid item container xs={2} sm={1} direction="column" justify="center" alignItems="center">
+    <Grid
+      item
+      container
+      xs={2}
+      sm={1}
+      className={classes.voteButtons}
+      direction="column"
+      justify="flex-start"
+      alignItems="center"
+    >
       {renderUpvoteButton}
       {renderScore}
       {renderDownvoteButton}
@@ -346,7 +377,15 @@ export const CommentCard: React.FC<Props> = ({ comment, isThread, removeComment 
   );
 
   return (
-    <Card className={classes.root}>
+    <Card
+      className={
+        isTopComment
+          ? clsx(classes.root, classes.topComment)
+          : isLast
+          ? clsx(classes.root, classes.lastComment)
+          : classes.root
+      }
+    >
       <CardActionArea onClick={handleClick}>
         <Grid container>
           {renderMessage}
