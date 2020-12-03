@@ -124,7 +124,7 @@ const VerifyAccountPage: NextPage = () => {
     <Formik
       initialValues={initialEmailFormValues}
       onSubmit={handleSubmitEmail}
-      ref={emailFormRef}
+      innerRef={emailFormRef}
       enableReinitialize
     >
       {(props): JSX.Element => (

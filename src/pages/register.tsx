@@ -267,7 +267,7 @@ const RegisterPage: NextPage = () => {
       initialValues={registerInitialValues}
       validationSchema={registerValidationSchema}
       onSubmit={handleRegisterSubmit}
-      ref={registerFormRef}
+      innerRef={registerFormRef}
     >
       {renderRegisterFormFields}
     </Formik>
@@ -328,7 +328,7 @@ const RegisterPage: NextPage = () => {
       initialValues={updateUserInitialValues}
       validationSchema={updateUserValidationSchema}
       onSubmit={handleRegisterCompleteSubmit}
-      ref={updateUserFormRef}
+      innerRef={updateUserFormRef}
     >
       {renderUpdateUserFormFields}
     </Formik>
