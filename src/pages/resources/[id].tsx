@@ -27,6 +27,7 @@ import {
   ResourceToolbar,
   ResponsiveDialog,
   RotateButton,
+  ShareButton,
   StarButton,
   TextLink,
   TopLevelCommentThread,
@@ -126,6 +127,10 @@ const ResourceDetailPage: NextPage = () => {
   const starred = !!R.prop('starred', resource);
   const isOwner = !!userMe && userMe.id === creatorId;
   const resourceCreator = R.prop('user', resource);
+  const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], resource);
+  const shareTitle = t('resource:shareTitle', { resourceTitle });
+  const shareText = t('resource:shareText', { resourceTitle, creatorUsername });
+  const shareParams = { shareTitle, shareText };
   const created = R.prop('created', resource);
   const { commentCount } = useDiscussionContext();
   const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
@@ -146,8 +151,7 @@ const ResourceDetailPage: NextPage = () => {
     renderShareAction,
     renderReportAction,
     renderActionsButton,
-    renderShareButton,
-  } = useActionsDialog({ text: resourceTitle });
+  } = useActionsDialog(shareParams);
 
   const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
     initialVote,
@@ -328,6 +332,7 @@ const ResourceDetailPage: NextPage = () => {
     <StarButton starred={starred} resource={resourceId} />
   );
 
+  const renderShareButton = <ShareButton {...shareParams} />;
   const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
   const renderRotateButton = <RotateButton />;
@@ -530,6 +535,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-const withWrappers = R.compose(withPdfViewer, withDiscussion, withUserMe);
+const withWrappers = R.compose(withUserMe, withPdfViewer, withDiscussion);
 
 export default withWrappers(ResourceDetailPage);

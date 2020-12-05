@@ -200,7 +200,7 @@ const UserPage: NextPage = () => {
     </ButtonLink>
   );
 
-  const renderViewStarredButton = (
+  const renderStarredButton = (
     <ButtonLink
       className={classes.actionButton}
       href={urls.starred}
@@ -414,7 +414,7 @@ const UserPage: NextPage = () => {
     <Paper className={clsx(classes.paper, classes.contentCard)}>
       {renderProfileStrength}
       {renderEditProfileButton}
-      {renderViewStarredButton}
+      {renderStarredButton}
     </Paper>
   );
 

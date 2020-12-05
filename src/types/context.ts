@@ -71,3 +71,15 @@ export interface ConfirmContextType {
   handleConfirm: () => void;
   handleCancel: () => void;
 }
+
+export interface ShareParams {
+  shareTitle: string;
+  shareText: string;
+}
+
+export interface ShareContextType {
+  shareDialogOpen: boolean;
+  handleOpenShareDialog: (shareParams: ShareParams) => void;
+  handleCloseShareDialog: () => void;
+  shareParams: ShareParams;
+}

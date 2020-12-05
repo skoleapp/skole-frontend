@@ -1,11 +1,14 @@
 const withOffline = require('next-offline');
 const { locales, defaultLocale } = require('./i18n.json');
+const { API_URL, BACKEND_URL, FRONTEND_URL, FACEBOOK_APP_ID } = process.env;
 
 const config = {
   target: 'server',
   env: {
-    API_URL: process.env.API_URL,
-    BACKEND_URL: process.env.BACKEND_URL || process.env.API_URL,
+    API_URL,
+    BACKEND_URL: BACKEND_URL || API_URL,
+    FRONTEND_URL,
+    FACEBOOK_APP_ID,
   },
   typescript: {
     ignoreDevErrors: true,

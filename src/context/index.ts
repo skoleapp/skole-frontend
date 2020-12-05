@@ -5,3 +5,4 @@ export * from './pdfViewer';
 export * from './language';
 export * from './notifications';
 export * from './settings';
+export * from './share';

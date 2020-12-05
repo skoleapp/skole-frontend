@@ -9,7 +9,6 @@
   "downloadResourceError": "Virhe ladattaessa resurssia!",
   "printResourceError": "Virhe tulostettaessa resurssia!",
   "messageError": "Virhe lähetettäessä viestiä!",
-  "sharingError": "Virhe jakamisessa!",
   "appUpdated": "Sovellus päivitetty!",
   "markSingleActivityReadError": "Tämä toiminta on todennäköisesti poistettu. Lataa sivu uudelleen.",
   "markAllActivitiesReadError": "Virhe merkittäessä toiminnat luetuiksi!"

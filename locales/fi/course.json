@@ -4,5 +4,7 @@
   "noResourcesLink": "Lisää resurssi täältä!",
   "deleteCourseTitle": "Poista kurssi",
   "deleteCourseDescription": "Oletko varma että haluat poistaa tämän kurssin?",
-  "noComments": "Tällä kurssilla ei ole kommentteja. Lisää kommentti alta!"
+  "noComments": "Tällä kurssilla ei ole kommentteja. Lisää kommentti alta!",
+  "shareTitle": "{{ courseName }} Skolessa",
+  "shareText": "Katso {{ courseName }} käyttäjältä {{ creatorUsername }} Skolessa"
 }

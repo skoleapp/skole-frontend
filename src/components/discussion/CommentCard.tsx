@@ -47,7 +47,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     boxShadow: 'none',
   },
   topComment: {
-    borderBottom: `0.05rem solid ${palette.grey[400]}`,
+    borderBottom: `0.05rem solid ${palette.grey[300]}`,
   },
   cardHeader: {
     padding: 0,

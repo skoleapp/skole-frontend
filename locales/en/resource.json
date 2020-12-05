@@ -4,5 +4,7 @@
   "deleteResourceDescription": "Are you sure you want to delete this resource?",
   "error": "Error loading resource.",
   "noComments": "This resource has no comments. Add a comment below!",
-  "drawMode": "Draw Mode"
+  "drawMode": "Draw Mode",
+  "shareTitle": "{{ resourceTitle }} på Skole",
+  "shareText": "Se {{ resourceTitle }} av {{ creatorUsername }} på Skole"
 }

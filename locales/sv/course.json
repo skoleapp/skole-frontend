@@ -4,5 +4,7 @@
   "noResourcesLink": "Lägg till en resurs här!",
   "deleteCourseTitle": "Ta bort kurs",
   "deleteCourseDescription": "Är du säker på att du vill ta bort den här kursen?",
-  "noComments": "Denna kurs har inga kommentarer. Lägg till en kommentar nedan!"
+  "noComments": "Denna kurs har inga kommentarer. Lägg till en kommentar nedan!",
+  "shareTitle": "{{ courseName }} på Skole",
+  "shareText": "Se {{ courseName }} av {{ creatorUsername }} på Skole"
 }

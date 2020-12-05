@@ -40,7 +40,6 @@ const VerifyAccountPage: NextPage = () => {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(false);
   const [confirmationError, setConfirmationError] = useState<string | null>();
-
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
 

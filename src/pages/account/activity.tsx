@@ -48,7 +48,7 @@ const ActivityPage: NextPage = () => {
     actionsDialogHeaderProps,
     renderActionsButton,
     handleCloseActionsDialog,
-  } = useActionsDialog({});
+  } = useActionsDialog();
 
   const onCompleted = ({
     markAllActivitiesAsRead,

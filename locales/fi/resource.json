@@ -4,5 +4,7 @@
   "deleteResourceDescription": "Oletko varma että haluat poistaa tämän resurssin?",
   "error": "Virhe ladattaessa resurssia.",
   "noComments": "Tällä resurssilla ei ole kommentteja. Lisää kommentti alta!",
-  "drawMode": "Piirtotila"
+  "drawMode": "Piirtotila",
+  "shareTitle": "{{ resourceTitle }} Skolessa",
+  "shareText": "Katso {{ resourceTitle }} käyttäjältä {{ creatorUsername }} Skolessa"
 }

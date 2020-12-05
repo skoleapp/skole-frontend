@@ -14,6 +14,7 @@ const defaultNamespaces = [
   'tooltips',
   'activity',
   'offline',
+  'sharing',
 ];
 
 type Namespaces = Record<string, string>;
