@@ -6,5 +6,5 @@ interface Props {
 }
 
 export const LanguageFlag: React.FC<Props> = ({ lang }) => (
-  <Image src={`/language-flags/${lang}.svg`} width={20} height={20} />
+  <Image src={`/images/language-flags/${lang}.svg`} width={20} height={20} />
 );
