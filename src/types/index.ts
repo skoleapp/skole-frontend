@@ -1,4 +1,3 @@
-export * from './apollo';
 export * from './context';
 export * from './dialogs';
 export * from './discussion';

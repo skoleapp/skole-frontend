@@ -107,9 +107,8 @@ export const CommentCard: React.FC<Props> = ({
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
-  const userId = R.propOr('', 'id', comment.user);
-  const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user);
   const { confirm } = useConfirmContext();
+  const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user);
   const attachmentOnly = comment.text == '' && comment.attachment !== '';
   const initialVote = R.propOr(null, 'vote', comment);
   const initialScore = String(R.propOr(0, 'score', comment));
@@ -207,7 +206,10 @@ export const CommentCard: React.FC<Props> = ({
   };
 
   const renderTitle = comment.user ? (
-    <TextLink href={urls.user(userId)} onClick={(e: SyntheticEvent): void => e.stopPropagation()}>
+    <TextLink
+      href={urls.user(comment.user.id)}
+      onClick={(e: SyntheticEvent): void => e.stopPropagation()}
+    >
       {comment.user.username}
     </TextLink>
   ) : (
@@ -229,7 +231,7 @@ export const CommentCard: React.FC<Props> = ({
     />
   );
 
-  const renderCommentAttachment = (
+  const renderAttachment = (
     <Grid container>
       <CameraAltOutlined className={classes.icon} color="disabled" />
       <Typography className={classes.text} variant="body2">
@@ -238,16 +240,14 @@ export const CommentCard: React.FC<Props> = ({
     </Grid>
   );
 
-  const renderCommentText = (
+  const renderText = (
     <Typography className={classes.text} variant="body2">
       <ReactMarkdown>{comment.text}</ReactMarkdown>
     </Typography>
   );
 
   const renderMessageContent = (
-    <Box className={classes.messageContent}>
-      {attachmentOnly ? renderCommentAttachment : renderCommentText}
-    </Box>
+    <Box className={classes.messageContent}>{attachmentOnly ? renderAttachment : renderText}</Box>
   );
 
   const renderReplyCount = (!isThread || isTopComment) && (

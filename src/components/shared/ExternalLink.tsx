@@ -12,6 +12,8 @@ interface Props {
   href: string;
 }
 
+// A wrapper for any element that is used as a link.
+// A normal anchor tag with all styles removed.
 export const ExternalLink: React.FC<Props> = ({ href, children }) => {
   const classes = useStyles();
 

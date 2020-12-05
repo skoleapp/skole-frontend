@@ -77,11 +77,11 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       display: 'flex',
       alignItems: 'center',
       overflowY: 'auto',
-      maxHeight: '50rem',
+      maxHeight: '20rem',
       overflowX: 'hidden',
       padding: spacing(2),
       [breakpoints.up('md')]: {
-        maxHeight: '20rem',
+        maxHeight: '30rem',
       },
       '& .DraftEditor-editorContainer': {
         flexGrow: 1,

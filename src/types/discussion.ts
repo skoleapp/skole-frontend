@@ -1,4 +1,4 @@
-import { CommentObjectType } from 'generated';
+import { CommentObjectType, UserObjectType } from 'generated';
 
 export interface CommentTarget {
   [key: string]: number;
@@ -11,6 +11,7 @@ export interface TopLevelCommentThreadProps {
 }
 
 export interface CreateCommentFormValues {
+  user: UserObjectType | null;
   text: string;
   attachment: string | null;
   course?: string;

@@ -11,11 +11,19 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       padding: `${spacing(4)} ${spacing(4)} ${spacing(2)} ${spacing(4)}`,
     },
   },
+  headerCenter: {
+    padding: `0 ${spacing(2)}`,
+  },
 }));
 
-export const DialogHeader: React.FC<DialogHeaderProps> = ({ text, onCancel, headerLeft }) => {
-  const classes = useStyles();
+export const DialogHeader: React.FC<DialogHeaderProps> = ({
+  text,
+  onCancel,
+  headerLeft,
+  headerCenter,
+}) => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   const renderCloseButton = (
     <Tooltip title={t('common:close')}>
@@ -33,13 +41,13 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({ text, onCancel, head
 
   return (
     <Grid container alignItems="center" className={classes.root}>
-      <Grid item xs={2} container justify="flex-start">
+      <Grid item xs={1} container justify="center">
         {headerLeft}
       </Grid>
-      <Grid item container xs={8} justify="center">
-        {renderHeaderText}
+      <Grid className={classes.headerCenter} item container xs={10} justify="center">
+        {headerCenter || renderHeaderText}
       </Grid>
-      <Grid item container xs={2} justify="flex-end">
+      <Grid item container xs={1} justify="center">
         {renderCloseButton}
       </Grid>
     </Grid>

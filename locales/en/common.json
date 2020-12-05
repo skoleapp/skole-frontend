@@ -74,5 +74,9 @@
   "backToHome": "Back to Home",
   "downloads": "Downloads",
   "company": "Company",
-  "social": "Social"
+  "social": "Social",
+  "postWithAccount": "Post with your account",
+  "postAs": "Post as {{ username }}",
+  "postAsAnonymous": "Post as anonymous",
+  "selectAuthor": "Select Author"
 }
