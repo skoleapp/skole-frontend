@@ -70,21 +70,26 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     overflow: 'hidden',
     wordBreak: 'break-word',
   },
+  messageInfo: {
+    minHeight: '1.85rem', // If the message info contains no buttons with relative position, make it have the same height as with the buttons though.
+  },
   icon: {
     marginRight: spacing(1),
   },
   iconButton: {
     padding: spacing(1),
   },
-  attachmentButton: {
-    marginLeft: spacing(2),
+  replyCount: {
+    marginRight: spacing(1),
+    padding: spacing(1),
   },
   actionsButton: {
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: spacing(3),
+    bottom: 0,
     margin: '0 auto',
+    marginBottom: spacing(3),
     width: '2rem',
   },
 }));
@@ -251,23 +256,19 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderReplyCount = (!isThread || isTopComment) && (
-    <>
+    <Box display="flex" className={classes.replyCount}>
       <Tooltip title={t('tooltips:commentReplies', { replyCount })}>
         <CommentOutlined className={classes.icon} color="disabled" />
       </Tooltip>
       <Typography variant="body2" color="textSecondary">
         {replyCount}
       </Typography>
-    </>
+    </Box>
   );
 
   const renderAttachmentButton = !!comment.attachment && !attachmentOnly && (
     <Tooltip title={t('tooltips:attachment')}>
-      <IconButton
-        className={clsx(classes.iconButton, classes.attachmentButton)}
-        size="small"
-        onClick={handleAttachmentClick}
-      >
+      <IconButton className={classes.iconButton} size="small" onClick={handleAttachmentClick}>
         <AttachFileOutlined />
       </IconButton>
     </Tooltip>
@@ -286,7 +287,7 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderMessageInfo = (
-    <Grid container alignItems="center">
+    <Grid className={classes.messageInfo} container alignItems="center">
       {renderReplyCount}
       {renderAttachmentButton}
       {renderActionsButton}
