@@ -1,5 +1,5 @@
-import { Box, Button, Fab, Grid, makeStyles, Typography, useTheme } from '@material-ui/core';
-import { AddOutlined, CommentOutlined } from '@material-ui/icons';
+import { Box, Button, Fab, Grid, makeStyles, useTheme } from '@material-ui/core';
+import { AddOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import { useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
@@ -30,7 +30,12 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
   topLevelMessageArea: {
     [breakpoints.down('md')]: {
-      paddingBottom: '5.5rem', // Make sure the create comment button won't block the last comment.
+      paddingBottom: spacing(22), // Make room for the create comment button on mobile.
+    },
+  },
+  threadMessageArea: {
+    [breakpoints.down('md')]: {
+      marginBottom: spacing(16), // Make room for the reply button on mobile.
     },
   },
   createCommentButton: {
@@ -46,11 +51,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     position: 'fixed',
     bottom: 0,
     width: '100%',
-  },
-  commentsIcon: {
-    marginRight: spacing(1),
-    width: '1rem',
-    height: '1rem',
   },
 }));
 
@@ -205,27 +205,12 @@ export const ReplyCommentThread: React.FC = () => {
   };
 
   const renderTopComment = !!topComment && (
-    <>
-      <CommentCard {...commentCardProps} comment={topComment} isTopComment={!!topComment} />
-      <Box padding={spacing(2)} display="flex" alignItems="center">
-        <CommentOutlined className={classes.commentsIcon} color="disabled" />
-        <Typography variant="body2" color="textSecondary">
-          {replyComments.length}
-        </Typography>
-      </Box>
-    </>
+    <CommentCard {...commentCardProps} comment={topComment} isTopComment />
   );
 
   const renderReplyComments =
     !!replyComments.length &&
-    replyComments.map((c, i) => (
-      <CommentCard
-        {...commentCardProps}
-        key={i}
-        comment={c}
-        isLast={isMobile && i === replyComments.length - 1}
-      />
-    ));
+    replyComments.map((c, i) => <CommentCard {...commentCardProps} key={i} comment={c} />);
 
   const renderReplyButton = !!topComment && isMobile && (
     <Box className={classes.replyButton} padding={spacing(2)} marginTop="auto">
@@ -236,7 +221,11 @@ export const ReplyCommentThread: React.FC = () => {
   );
 
   const renderMessageArea = (
-    <Grid container direction="column" className={classes.messageArea}>
+    <Grid
+      container
+      direction="column"
+      className={clsx(classes.messageArea, classes.threadMessageArea)}
+    >
       {renderTopComment}
       {renderReplyComments}
       {renderReplyButton}

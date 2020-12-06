@@ -3,7 +3,6 @@ export * from './useActionsDialog';
 export * from './useVotes';
 export * from './useDayjs';
 export * from './useStateRef';
-export * from './useShare';
 export * from './useOpen';
 export * from './useLanguageHeaderContext';
 export * from './useMediaQueries';

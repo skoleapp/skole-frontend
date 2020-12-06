@@ -290,8 +290,8 @@ let theme = createMuiTheme({
           userSelect: 'none',
         },
         '.avatar-thumbnail': {
-          height: '1.35rem !important',
-          width: '1.35rem !important',
+          height: '1.5rem !important',
+          width: '1.5rem !important',
           padding: spacing(0.25),
           margin: spacing(0.25),
         },

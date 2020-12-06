@@ -121,6 +121,7 @@ query AutocompleteCities {
 }
 
 mutation CreateComment(
+  $user: String
   $text: String!
   $attachment: String
   $course: ID
@@ -129,6 +130,7 @@ mutation CreateComment(
 ) {
   createComment(
     input: {
+      user: $user
       text: $text
       attachment: $attachment
       course: $course
@@ -372,19 +374,9 @@ query AutocompleteCourses($school: ID, $name: String) {
   }
 }
 
-mutation CreateCourse(
-  $courseName: String!
-  $courseCode: String
-  $subjects: [ID]
-  $school: ID!
-) {
+mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
   createCourse(
-    input: {
-      name: $courseName
-      code: $courseCode
-      subjects: $subjects
-      school: $school
-    }
+    input: { name: $courseName, code: $courseCode, subjects: $subjects, school: $school }
   ) {
     successMessage
     course {
@@ -493,19 +485,9 @@ query AutocompleteResourceTypes {
   }
 }
 
-mutation CreateResource(
-  $resourceTitle: String!
-  $resourceType: ID!
-  $course: ID!
-  $file: String!
-) {
+mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
   createResource(
-    input: {
-      title: $resourceTitle
-      resourceType: $resourceType
-      course: $course
-      file: $file
-    }
+    input: { title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file }
   ) {
     successMessage
     resource {
@@ -860,9 +842,7 @@ mutation UpdateUser(
 }
 
 mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
-  changePassword(
-    input: { oldPassword: $oldPassword, newPassword: $newPassword }
-  ) {
+  changePassword(input: { oldPassword: $oldPassword, newPassword: $newPassword }) {
     successMessage
     errors {
       field
@@ -882,14 +862,7 @@ mutation DeleteUser($password: String!) {
 }
 
 mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
-  vote(
-    input: {
-      status: $status
-      comment: $comment
-      course: $course
-      resource: $resource
-    }
-  ) {
+  vote(input: { status: $status, comment: $comment, course: $course, resource: $resource }) {
     vote {
       id
       status

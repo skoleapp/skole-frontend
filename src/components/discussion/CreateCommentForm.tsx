@@ -1,16 +1,23 @@
-import { Box, DialogContent, Grid, makeStyles } from '@material-ui/core';
+import { Avatar, Box, DialogContent, Grid, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
-import { useDiscussionContext, useNotificationsContext, usePdfViewerContext } from 'context';
+import {
+  useAuthContext,
+  useDiscussionContext,
+  useNotificationsContext,
+  usePdfViewerContext,
+} from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
 import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataURItoFile, useTranslation } from 'lib';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
-import { CommentTarget, CreateCommentFormValues } from 'types';
-
+import { CommentTarget, CreateCommentFormValues, RichTextEditorProps } from 'types';
+import { mediaUrl } from 'utils';
+import * as R from 'ramda';
 import { DialogHeader, SkoleDialog } from '../shared';
 import { RichTextEditor } from './RichTextEditor';
+import { AuthorSelection } from './AuthorSelection';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   attachmentContainer: {
@@ -47,9 +54,10 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
   const { screenshot, setScreenshot } = usePdfViewerContext();
-  const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
   const { formRef, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
+  const { userMe } = useAuthContext();
+  const context = useLanguageHeaderContext();
 
   const {
     commentModalOpen,
@@ -95,12 +103,19 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     onError,
   });
 
-  const handleSubmit = async (values: CreateCommentFormValues): Promise<void> => {
-    if (!commentAttachment && !values.text) {
+  const handleSubmit = async ({
+    user: _user,
+    text,
+    attachment,
+    ...values
+  }: CreateCommentFormValues): Promise<void> => {
+    if (!text && !attachment) {
       toggleNotification(t('notifications:messageEmpty'));
     } else {
+      const user = R.prop('id', _user);
+
       await createCommentMutation({
-        variables: { ...values, attachment: values.attachment },
+        variables: { user, text, attachment, ...values },
         context,
       });
 
@@ -113,6 +128,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   };
 
   const initialValues = {
+    user: userMe,
     text: '',
     attachment: null,
     ...target,
@@ -130,19 +146,42 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Box>
   );
 
-  const renderRichTextEditor = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
+  const renderRichTextEditor = (props: RichTextEditorProps): JSX.Element => (
     <RichTextEditor {...props} />
   );
 
   const renderDesktopInputArea = (
     props: FormikProps<CreateCommentFormValues>,
-  ): false | JSX.Element => isTabletOrDesktop && renderRichTextEditor(props);
+  ): false | JSX.Element =>
+    isTabletOrDesktop && renderRichTextEditor({ ...props, enableAuthorSelection: true });
+
+  const renderHeaderLeft = ({ values }: FormikProps<CreateCommentFormValues>) =>
+    !!userMe && (
+      <Avatar
+        className="avatar-thumbnail"
+        src={mediaUrl(R.pathOr('', ['user', 'avatarThumbnail'], values))}
+      />
+    );
+
+  const renderHeaderCenter = (props: FormikProps<CreateCommentFormValues>) =>
+    !!userMe && <AuthorSelection {...props} />;
 
   const renderCreateCommentModal = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
-      <DialogHeader onCancel={handleCloseCreateCommentModal} text={t('forms:createComment')} />
+      <DialogHeader
+        headerLeft={renderHeaderLeft(props)}
+        headerCenter={renderHeaderCenter(props)}
+        text={t('forms:createComment')}
+        onCancel={handleCloseCreateCommentModal}
+      />
       <DialogContent className={classes.dialogContent}>
-        <Grid className={classes.container} container direction="column" justify="flex-end">
+        <Grid
+          className={classes.container}
+          container
+          direction="column"
+          justify="flex-end"
+          wrap="nowrap"
+        >
           {renderAttachment}
           {renderRichTextEditor(props)}
         </Grid>

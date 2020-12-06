@@ -52,7 +52,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { CreateCommentFormValues } from 'types';
+import { CreateCommentFormValues, RichTextEditorProps } from 'types';
 import {
   ACCEPTED_ATTACHMENT_FILES,
   MAX_COMMENT_ATTACHMENT_FILE_SIZE,
@@ -63,6 +63,7 @@ import { stateToMarkdown } from 'draft-js-export-markdown';
 import imageCompression from 'browser-image-compression';
 import { DraftLink } from './DraftLink';
 import { DialogHeader, SkoleDialog } from '../shared';
+import { AuthorSelection } from './AuthorSelection';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
@@ -77,11 +78,11 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       display: 'flex',
       alignItems: 'center',
       overflowY: 'auto',
-      maxHeight: '50rem',
+      maxHeight: '20rem',
       overflowX: 'hidden',
       padding: spacing(2),
       [breakpoints.up('md')]: {
-        maxHeight: '20rem',
+        maxHeight: '30rem',
       },
       '& .DraftEditor-editorContainer': {
         flexGrow: 1,
@@ -110,13 +111,17 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   iconButton: {
     padding: spacing(1.5),
   },
+  authorSelectionContainer: {
+    padding: spacing(2),
+  },
 }));
 
-export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
-  values,
-  setFieldValue,
-  submitForm,
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({
+  enableAuthorSelection,
+  ...props
 }) => {
+  const { values, setFieldValue, submitForm } = props;
+
   const decorator = new CompositeDecorator([
     {
       strategy: linkStrategy,
@@ -596,6 +601,12 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
     </FormHelperText>
   );
 
+  const renderAuthorSelection = !!userMe && enableAuthorSelection && (
+    <Grid className={classes.authorSelectionContainer} container>
+      <AuthorSelection {...props} />
+    </Grid>
+  );
+
   const renderTopToolbarButtons = (
     <Grid item xs={12} md={3} container justify="flex-start">
       {renderMentionButton}
@@ -620,6 +631,7 @@ export const RichTextEditor: React.FC<FormikProps<CreateCommentFormValues>> = ({
 
   return (
     <Box className={clsx(classes.root, hidePlaceholder && classes.placeholderHidden)}>
+      {renderAuthorSelection}
       {renderTopToolbar}
       {renderEditor}
       {renderBottomToolbar}

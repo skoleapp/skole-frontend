@@ -2,5 +2,7 @@
   "description": "Näytä {{ schoolName }} Skolessa.",
   "noSubjects": "Tällä koululla ei ole oppiaineita.",
   "noCourses": "Tällä koululla ei ole kursseja.",
-  "addCourse": "Lisää kurssi tälle koululle"
+  "addCourse": "Lisää kurssi tälle koululle",
+  "shareTitle": "{{ schoolName }} Skolessa",
+  "shareText": "Näytä {{ schoolName }} Skolessa"
 }

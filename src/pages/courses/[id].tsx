@@ -30,6 +30,7 @@ import {
   PaginatedTable,
   ResourceTableBody,
   ResponsiveDialog,
+  ShareButton,
   StarButton,
   TextLink,
   TopLevelCommentThread,
@@ -119,6 +120,10 @@ const CourseDetailPage: NextPage = () => {
   const starred = !!R.prop('starred', course);
   const isOwner = !!userMe && userMe.id === creatorId;
   const courseCreator = R.prop('user', course);
+  const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], course);
+  const shareTitle = t('course:shareTitle', { courseName });
+  const shareText = t('course:shareText', { courseName, creatorUsername });
+  const shareParams = { shareTitle, shareText };
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
@@ -138,8 +143,7 @@ const CourseDetailPage: NextPage = () => {
     renderShareAction,
     renderReportAction,
     renderActionsButton,
-    renderShareButton,
-  } = useActionsDialog({ text: courseName });
+  } = useActionsDialog(shareParams);
 
   const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
     initialVote,
@@ -238,6 +242,8 @@ const CourseDetailPage: NextPage = () => {
   const renderStarButton = (!!verified || isTabletOrDesktop) && (
     <StarButton starred={starred} course={courseId} />
   );
+
+  const renderShareButton = <ShareButton {...shareParams} />;
 
   const discussionHeaderProps = {
     commentCount,
@@ -449,6 +455,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-const withWrappers = R.compose(withDiscussion, withUserMe);
+const withWrappers = R.compose(withUserMe, withDiscussion);
 
 export default withWrappers(CourseDetailPage);

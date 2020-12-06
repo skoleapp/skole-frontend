@@ -20,8 +20,9 @@ import {
 } from '@material-ui/icons';
 import clsx from 'clsx';
 import { LanguageButton, MainBackground, MainTemplate } from 'components';
+import { useShareContext } from 'context';
 import { withUserMe } from 'hocs';
-import { useSearch, useShare } from 'hooks';
+import { useSearch } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
@@ -147,8 +148,12 @@ interface Shortcut {
 const IndexPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { handleShare } = useShare({});
+  const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
+  const shareTitle = `Skole | ${t('marketing:slogan')}`;
+  const shareText = t('marketing:description');
+  const shareParams = { shareTitle, shareText };
+  const handleClickShareButton = () => handleOpenShareDialog(shareParams);
 
   const shortcuts = [
     {
@@ -260,7 +265,7 @@ const IndexPage: NextPage = () => {
         </Typography>
         <Button
           className={classes.inviteButton}
-          onClick={handleShare}
+          onClick={handleClickShareButton}
           color="primary"
           variant="outlined"
           endIcon={<ArrowForwardOutlined />}

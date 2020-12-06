@@ -62,7 +62,8 @@
   "print": "Skriva ut",
   "activity": "Aktivitet",
   "seeAll": "Visa allt",
-  "commentShareText": "{{ creatorUsername }} på Skole: {{ commentPreview }}",
+  "commentShareTitle": "Kommentar av användare {{ creatorUsername }} på Skole",
+  "commentShareText": "Se kommentar av användare {{ creatorUsername }} på Skole: {{ commentPreview }}",
   "skip": "Hoppa",
   "loading": "Laddar...",
   "home": "Hem",
@@ -73,5 +74,9 @@
   "backToHome": "Tillbaka till hem",
   "downloads": "Nedladdningar",
   "company": "Företag",
-  "social": "Social"
+  "social": "Social",
+  "postWithAccount": "Lägg upp med ditt konto",
+  "postAs": "Lägg upp som {{ användarnamn }}",
+  "postAsAnonymous": "Skicka som anonym",
+  "selectAuthor": "Välj auktor"
 }

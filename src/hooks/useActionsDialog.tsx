@@ -1,12 +1,12 @@
 import { IconButton, ListItemIcon, ListItemText, MenuItem, Size, Tooltip } from '@material-ui/core';
 import { FlagOutlined, MoreHorizOutlined, ShareOutlined } from '@material-ui/icons';
+import { useShareContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps, ShareParams } from 'types';
 import { useDialogButton } from './useDialogButton';
 
 import { useOpen } from './useOpen';
-import { useShare } from './useShare';
 
 interface ActionsButtonProps {
   onClick: (e: SyntheticEvent) => void;
@@ -17,16 +17,16 @@ interface UseActionsDialog {
   actionsDialogOpen: boolean;
   actionsDialogHeaderProps: DialogHeaderProps;
   handleCloseActionsDialog: (e: SyntheticEvent) => void;
-  renderShareAction: false | JSX.Element;
+  renderShareAction: JSX.Element | false;
   renderReportAction: JSX.Element;
   renderActionsButton: JSX.Element;
-  renderShareButton: JSX.Element;
   actionsButtonProps: ActionsButtonProps;
 }
 
-export const useActionsDialog = ({ query, text }: ShareParams): UseActionsDialog => {
+// Custom hook for rendering common actions and providing helpers and props for multiple action dialogs.
+export const useActionsDialog = (shareParams?: ShareParams): UseActionsDialog => {
   const { t } = useTranslation();
-  const { handleShare: _handleShare, renderShareButton } = useShare({ query, text });
+  const { handleOpenShareDialog } = useShareContext();
   const dialogButtonProps = useDialogButton();
   const tooltip = t('tooltips:actions');
 
@@ -46,9 +46,9 @@ export const useActionsDialog = ({ query, text }: ShareParams): UseActionsDialog
     _handleCloseActionsDialog();
   };
 
-  const handleShare = (e: SyntheticEvent): void => {
+  const handleClickShare = (e: SyntheticEvent): void => {
     handleCloseActionsDialog(e);
-    _handleShare();
+    handleOpenShareDialog(shareParams!); // Make non-null assertion since we can be sure this function call happens only when the `shareParams` object exists.
   };
 
   const actionsDialogHeaderProps = {
@@ -61,8 +61,8 @@ export const useActionsDialog = ({ query, text }: ShareParams): UseActionsDialog
     onClick: handleOpenActionsDialog,
   };
 
-  const renderShareAction = (
-    <MenuItem onClick={handleShare}>
+  const renderShareAction = !!shareParams && (
+    <MenuItem onClick={handleClickShare}>
       <ListItemIcon>
         <ShareOutlined />
       </ListItemIcon>
@@ -95,6 +95,5 @@ export const useActionsDialog = ({ query, text }: ShareParams): UseActionsDialog
     renderReportAction,
     renderActionsButton,
     actionsButtonProps,
-    renderShareButton,
   };
 };

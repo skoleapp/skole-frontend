@@ -62,7 +62,8 @@
   "print": "Tulosta",
   "activity": "Toiminta",
   "seeAll": "Katso kaikki",
-  "commentShareText": "{{ creatorUsername }} Skolessa: {{ commentPreview }}",
+  "commentShareTitle": "Käyttäjän {{ creatorUsername }} kommentti Skolessa",
+  "commentShareText": "Katso kommentti käyttäjältä {{ creatorUsername }} Skolessa: {{ commentPreview }}",
   "skip": "Ohita",
   "loading": "Ladataan...",
   "home": "Koti",
@@ -73,5 +74,9 @@
   "backToHome": "Takaisin kotiin",
   "downloads": "Lataukset",
   "company": "Yritys",
-  "social": "Sosiaalinen"
+  "social": "Sosiaalinen",
+  "postWithAccount": "Lähetä tilisi kanssa",
+  "postAs": "Lähetä käyttäjällä {{ username }}",
+  "postAsAnonymous": "Lähetä anonyyminä",
+  "selectAuthor": "Valitse luoja"
 }

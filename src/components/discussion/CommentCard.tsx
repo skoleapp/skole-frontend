@@ -40,17 +40,14 @@ import { mediaUrl, truncate, urls } from 'utils';
 import ReactMarkdown from 'react-markdown';
 import { ResponsiveDialog, TextLink } from '../shared';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     borderRadius: 0,
     overflow: 'visible',
     boxShadow: 'none',
   },
   topComment: {
-    borderBottom: '0.2rem solid #dbdbdb',
-  },
-  lastComment: {
-    marginBottom: spacing(16),
+    borderBottom: `0.05rem solid ${palette.grey[300]}`,
   },
   cardHeader: {
     padding: 0,
@@ -65,9 +62,6 @@ const useStyles = makeStyles(({ spacing }) => ({
   cardContent: {
     padding: `${spacing(3)} !important`,
   },
-  voteButtons: {
-    marginTop: '1rem',
-  },
   messageContent: {
     paddingTop: spacing(3),
     paddingBottom: spacing(3),
@@ -76,27 +70,27 @@ const useStyles = makeStyles(({ spacing }) => ({
     overflow: 'hidden',
     wordBreak: 'break-word',
   },
-  toolbarButton: {
-    marginLeft: spacing(2),
+  messageInfo: {
+    minHeight: '1.85rem', // If the message info contains no buttons with relative position, make it have the same height as with the buttons though.
   },
   icon: {
     marginRight: spacing(1),
   },
   iconButton: {
-    padding: spacing(1.5),
+    padding: spacing(1),
+  },
+  replyCount: {
+    marginRight: spacing(1),
+    padding: spacing(1),
   },
   actionsButton: {
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: spacing(1),
+    bottom: 0,
     margin: '0 auto',
+    marginBottom: spacing(3),
     width: '2rem',
-  },
-  commentsIcon: {
-    marginRight: spacing(1),
-    width: '1rem',
-    height: '1rem',
   },
 }));
 
@@ -104,7 +98,6 @@ interface Props {
   comment: CommentObjectType;
   isThread?: boolean;
   isTopComment?: boolean;
-  isLast?: boolean;
   removeComment: (id: string) => void; // Callback function for removing the comment.
 }
 
@@ -112,7 +105,6 @@ export const CommentCard: React.FC<Props> = ({
   comment,
   isThread,
   isTopComment,
-  isLast,
   removeComment,
 }) => {
   const classes = useStyles();
@@ -120,27 +112,29 @@ export const CommentCard: React.FC<Props> = ({
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
-  const userId = R.propOr('', 'id', comment.user);
-  const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user);
   const { confirm } = useConfirmContext();
+  const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user);
   const attachmentOnly = comment.text == '' && comment.attachment !== '';
   const initialVote = R.propOr(null, 'vote', comment);
   const initialScore = String(R.propOr(0, 'score', comment));
   const creatorId = R.propOr('', 'id', comment.user);
   const isOwner = !!userMe && userMe.id === creatorId;
   const commentId = R.propOr('', 'id', comment);
-  const shareQuery = `?comment=${commentId}`;
   const replyComments = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
   const { setTopComment, setAttachmentViewerValue } = useDiscussionContext();
-  const creatorUsername = R.propOr(t('common:communityUser'), 'username', comment.user);
+  const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], comment);
+  const commentPreview = truncate(comment.text, 20);
+  const created = useDayjs(comment.created).startOf('m').fromNow();
+
+  const shareTitle = t('common:commentShareTitle', {
+    creatorUsername,
+  });
 
   const shareText = t('common:commentShareText', {
     creatorUsername,
-    commentPreview: truncate(comment.text, 20),
+    commentPreview,
   });
-
-  const created = useDayjs(comment.created).startOf('m').fromNow();
 
   const {
     actionsDialogOpen,
@@ -149,7 +143,7 @@ export const CommentCard: React.FC<Props> = ({
     renderShareAction,
     renderReportAction,
     actionsButtonProps,
-  } = useActionsDialog({ query: shareQuery, text: shareText });
+  } = useActionsDialog({ shareTitle, shareText });
 
   const {
     score,
@@ -217,7 +211,10 @@ export const CommentCard: React.FC<Props> = ({
   };
 
   const renderTitle = comment.user ? (
-    <TextLink href={urls.user(userId)} onClick={(e: SyntheticEvent): void => e.stopPropagation()}>
+    <TextLink
+      href={urls.user(comment.user.id)}
+      onClick={(e: SyntheticEvent): void => e.stopPropagation()}
+    >
       {comment.user.username}
     </TextLink>
   ) : (
@@ -239,7 +236,7 @@ export const CommentCard: React.FC<Props> = ({
     />
   );
 
-  const renderCommentAttachment = (
+  const renderAttachment = (
     <Grid container>
       <CameraAltOutlined className={classes.icon} color="disabled" />
       <Typography className={classes.text} variant="body2">
@@ -248,32 +245,30 @@ export const CommentCard: React.FC<Props> = ({
     </Grid>
   );
 
-  const renderCommentText = (
+  const renderText = (
     <Typography className={classes.text} variant="body2">
       <ReactMarkdown>{comment.text}</ReactMarkdown>
     </Typography>
   );
 
   const renderMessageContent = (
-    <Box className={classes.messageContent}>
-      {attachmentOnly ? renderCommentAttachment : renderCommentText}
-    </Box>
+    <Box className={classes.messageContent}>{attachmentOnly ? renderAttachment : renderText}</Box>
   );
 
-  const renderReplyCount = !isThread && (
-    <>
+  const renderReplyCount = (!isThread || isTopComment) && (
+    <Box display="flex" className={classes.replyCount}>
       <Tooltip title={t('tooltips:commentReplies', { replyCount })}>
-        <CommentOutlined className={classes.commentsIcon} color="disabled" />
+        <CommentOutlined className={classes.icon} color="disabled" />
       </Tooltip>
       <Typography variant="body2" color="textSecondary">
         {replyCount}
       </Typography>
-    </>
+    </Box>
   );
 
   const renderAttachmentButton = !!comment.attachment && !attachmentOnly && (
     <Tooltip title={t('tooltips:attachment')}>
-      <IconButton className={classes.toolbarButton} size="small" onClick={handleAttachmentClick}>
+      <IconButton className={classes.iconButton} size="small" onClick={handleAttachmentClick}>
         <AttachFileOutlined />
       </IconButton>
     </Tooltip>
@@ -292,9 +287,10 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderMessageInfo = (
-    <Grid container alignItems="center">
+    <Grid className={classes.messageInfo} container alignItems="center">
       {renderReplyCount}
       {renderAttachmentButton}
+      {renderActionsButton}
     </Grid>
   );
 
@@ -321,16 +317,7 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderVoteButtons = (
-    <Grid
-      item
-      container
-      xs={2}
-      sm={1}
-      className={classes.voteButtons}
-      direction="column"
-      justify="flex-start"
-      alignItems="center"
-    >
+    <Grid item container xs={2} sm={1} direction="column" justify="center" alignItems="center">
       {renderUpvoteButton}
       {renderScore}
       {renderDownvoteButton}
@@ -370,22 +357,13 @@ export const CommentCard: React.FC<Props> = ({
         {renderCardHeader}
         {renderMessageContent}
         {renderMessageInfo}
-        {renderActionsButton}
         {renderActionsDrawer}
       </CardContent>
     </Grid>
   );
 
   return (
-    <Card
-      className={
-        isTopComment
-          ? clsx(classes.root, classes.topComment)
-          : isLast
-          ? clsx(classes.root, classes.lastComment)
-          : classes.root
-      }
-    >
+    <Card className={clsx(classes.root, isTopComment && classes.topComment)}>
       <CardActionArea onClick={handleClick}>
         <Grid container>
           {renderMessage}

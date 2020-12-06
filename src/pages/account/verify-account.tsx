@@ -2,7 +2,7 @@ import { Box, FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, FormSubmitSection, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikProps } from 'formik';
 import {
   ResendVerificationEmailMutation,
   useResendVerificationEmailMutation,
@@ -39,8 +39,7 @@ const VerifyAccountPage: NextPage = () => {
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(false);
-  const [confirmationError, setConfirmationError] = useState<string | null>(null);
-
+  const [confirmationError, setConfirmationError] = useState<string | null>();
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
 
@@ -49,9 +48,8 @@ const VerifyAccountPage: NextPage = () => {
     setVerified(initialVerified);
   }, [initialVerified]);
 
-  const handleUnexpectedConfirmationError = (): void => {
+  const handleUnexpectedConfirmationError = (): void =>
     setConfirmationError(t('validation:unexpectedError'));
-  };
 
   const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
     if (verifyAccount) {
@@ -136,6 +134,35 @@ const VerifyAccountPage: NextPage = () => {
     </ButtonLink>
   );
 
+  const renderLineBreak = <Typography component="br" />;
+
+  const renderEmailSubmittedText = (
+    <Typography variant="subtitle1" align="center">
+      {t('verify-account:emailSubmitted')}
+    </Typography>
+  );
+
+  const renderVerifiedText = (
+    <Typography variant="subtitle1" align="center">
+      {t('verify-account:verified')}
+    </Typography>
+  );
+
+  const renderConfirmationErrorText = (
+    <Typography color="error" variant="subtitle1" align="center">
+      {confirmationError}
+    </Typography>
+  );
+
+  const renderEmailFormFields = (props: FormikProps<EmailFormValues>): JSX.Element => (
+    <Form>
+      <Box flexGrow="1" textAlign="center">
+        <Typography variant="body2">{t('verify-account:emailHelpText')}</Typography>
+      </Box>
+      <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+    </Form>
+  );
+
   const renderEmailForm = !verified && !token && !emailSubmitted && (
     <Formik
       initialValues={initialEmailFormValues}
@@ -143,41 +170,26 @@ const VerifyAccountPage: NextPage = () => {
       innerRef={emailFormRef}
       enableReinitialize
     >
-      {(props): JSX.Element => (
-        <Form>
-          <Box flexGrow="1" textAlign="center">
-            <Typography variant="body2">{t('verify-account:emailHelpText')}</Typography>
-          </Box>
-          <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-        </Form>
-      )}
+      {renderEmailFormFields}
     </Formik>
   );
 
   const renderEmailSubmitted = verified === false && !token && emailSubmitted && (
-    <FormControl>
-      <Typography variant="subtitle1" align="center">
-        {t('verify-account:emailSubmitted')}
-      </Typography>
-      <Typography component="br" />
-    </FormControl>
+    <FormControl>{renderEmailSubmittedText}</FormControl>
   );
 
-  const renderVerified = verified && (
+  const renderVerified = verified && !confirmationError && (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
-        {t('verify-account:verified')}
-      </Typography>
-      <Typography component="br" />
+      {renderVerifiedText}
+      {renderLineBreak}
       {renderHomeButton}
     </FormControl>
   );
-  const renderConfirmationError = !!confirmationError && !verified && (
+
+  const renderConfirmationError = !!confirmationError && (
     <FormControl>
-      <Typography color="error" variant="subtitle1" align="center">
-        {confirmationError}
-      </Typography>
-      <Typography component="br" />
+      {renderConfirmationErrorText}
+      {renderLineBreak}
       {renderHomeButton}
     </FormControl>
   );
