@@ -1,16 +1,4 @@
-import {
-  Avatar,
-  Box,
-  DialogContent,
-  Grid,
-  List,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  MenuItem,
-  Typography,
-} from '@material-ui/core';
-import { DeviceUnknownOutlined, KeyboardArrowDown } from '@material-ui/icons';
+import { Avatar, Box, DialogContent, Grid, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import {
   useAuthContext,
@@ -19,21 +7,17 @@ import {
   usePdfViewerContext,
 } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
-import {
-  CommentObjectType,
-  CreateCommentMutation,
-  useCreateCommentMutation,
-  UserObjectType,
-} from 'generated';
-import { useForm, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
+import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
+import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataURItoFile, useTranslation } from 'lib';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
-import { CommentTarget, CreateCommentFormValues } from 'types';
+import { CommentTarget, CreateCommentFormValues, RichTextEditorProps } from 'types';
 import { mediaUrl } from 'utils';
 import * as R from 'ramda';
-import { DialogHeader, ResponsiveDialog, SkoleDialog } from '../shared';
+import { DialogHeader, SkoleDialog } from '../shared';
 import { RichTextEditor } from './RichTextEditor';
+import { AuthorSelection } from './AuthorSelection';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   attachmentContainer: {
@@ -58,9 +42,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     display: 'flex',
     padding: spacing(2),
   },
-  authorSelection: {
-    cursor: 'pointer',
-  },
 }));
 
 interface CreateCommentFormProps {
@@ -76,7 +57,6 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const { toggleNotification } = useNotificationsContext();
   const { formRef, setSubmitting, resetForm, setFieldValue } = useForm<CreateCommentFormValues>();
   const { userMe } = useAuthContext();
-  const username = R.prop('username', userMe);
   const context = useLanguageHeaderContext();
 
   const {
@@ -147,12 +127,6 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     setCommentAttachment(null);
   };
 
-  const {
-    open: authorSelectionOpen,
-    handleOpen: handleOpenAuthorSelection,
-    handleClose: handleCloseAuthorSelection,
-  } = useOpen();
-
   const initialValues = {
     user: userMe,
     text: '',
@@ -172,13 +146,14 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Box>
   );
 
-  const renderRichTextEditor = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
+  const renderRichTextEditor = (props: RichTextEditorProps): JSX.Element => (
     <RichTextEditor {...props} />
   );
 
   const renderDesktopInputArea = (
     props: FormikProps<CreateCommentFormValues>,
-  ): false | JSX.Element => isTabletOrDesktop && renderRichTextEditor(props);
+  ): false | JSX.Element =>
+    isTabletOrDesktop && renderRichTextEditor({ ...props, enableAuthorSelection: true });
 
   const renderHeaderLeft = ({ values }: FormikProps<CreateCommentFormValues>) =>
     !!userMe && (
@@ -188,35 +163,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
       />
     );
 
-  const renderAuthorName = (user: UserObjectType | null) =>
-    user ? (
-      <Typography variant="body2">{user.username}</Typography>
-    ) : (
-      <Typography variant="body2" color="textSecondary">
-        {t('common:communityUser')}
-      </Typography>
-    );
-
-  const renderAuthorSelectionText = (user: UserObjectType | null) => (
-    <Typography variant="body2" color="textSecondary">
-      <Grid container alignItems="center">
-        {user ? t('common:postWithAccount') : t('common:postAsAnonymous')} <KeyboardArrowDown />
-      </Grid>
-    </Typography>
-  );
-
-  const renderHeaderCenter = ({ values }: FormikProps<CreateCommentFormValues>) =>
-    !!userMe && (
-      <Grid
-        onClick={handleOpenAuthorSelection}
-        className={classes.authorSelection}
-        container
-        direction="column"
-      >
-        {renderAuthorName(values.user)}
-        {renderAuthorSelectionText(values.user)}
-      </Grid>
-    );
+  const renderHeaderCenter = (props: FormikProps<CreateCommentFormValues>) =>
+    !!userMe && <AuthorSelection {...props} />;
 
   const renderCreateCommentModal = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
@@ -241,63 +189,10 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </SkoleDialog>
   );
 
-  const authorSelectionDialogHeaderProps = {
-    text: t('common:selectAuthor'),
-    onCancel: handleCloseAuthorSelection,
-  };
-
-  const renderAuthenticatedMenuItem = ({ values }: FormikProps<CreateCommentFormValues>) => (
-    <MenuItem
-      onClick={() => {
-        setFieldValue('user', userMe);
-        handleCloseAuthorSelection();
-      }}
-    >
-      <ListItemIcon>
-        <Avatar
-          className="avatar-thumbnail"
-          src={mediaUrl(R.pathOr('', ['user', 'avatarThumbnail'], values))}
-        />
-      </ListItemIcon>
-      <ListItemText>{t('common:postAs', { username })}</ListItemText>
-    </MenuItem>
-  );
-
-  const renderAnonymousMenuItem = ({ setFieldValue }: FormikProps<CreateCommentFormValues>) => (
-    <MenuItem
-      onClick={() => {
-        setFieldValue('user', null);
-        handleCloseAuthorSelection();
-      }}
-    >
-      <ListItemIcon>
-        <DeviceUnknownOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('common:postAsAnonymous')}</ListItemText>
-    </MenuItem>
-  );
-
-  const renderAuthorSelectionModal = (
-    props: FormikProps<CreateCommentFormValues>,
-  ): JSX.Element | false =>
-    !!userMe && (
-      <ResponsiveDialog
-        open={authorSelectionOpen}
-        onClose={handleCloseAuthorSelection}
-        dialogHeaderProps={authorSelectionDialogHeaderProps}
-      >
-        <List>
-          {renderAuthenticatedMenuItem(props)}
-          {renderAnonymousMenuItem(props)}
-        </List>
-      </ResponsiveDialog>
-    );
-
   const renderFormFields = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <Form className={classes.container}>
       {renderDesktopInputArea(props)}
       {renderCreateCommentModal(props)}
-      {renderAuthorSelectionModal(props)}
     </Form>
   );
 

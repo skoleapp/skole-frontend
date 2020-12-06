@@ -1,3 +1,4 @@
+import { FormikProps } from 'formik';
 import { CommentObjectType, UserObjectType } from 'generated';
 
 export interface CommentTarget {
@@ -17,4 +18,8 @@ export interface CreateCommentFormValues {
   course?: string;
   resource?: string;
   comment?: string;
+}
+
+export interface RichTextEditorProps extends FormikProps<CreateCommentFormValues> {
+  enableAuthorSelection?: boolean;
 }
