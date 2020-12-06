@@ -131,14 +131,17 @@ const UserPage: NextPage = () => {
   const profileStrengthSteps = [
     {
       label: t('profile-strength:step1'),
+      href: urls.verifyAccount,
       completed: !!verified,
     },
     {
       label: t('profile-strength:step2'),
+      href: urls.editProfile,
       completed: !!title && !!bio,
     },
     {
       label: t('profile-strength:step3'),
+      href: urls.editProfile,
       completed: !!school && !!subject,
     },
   ].sort((prev) => (prev.completed ? -1 : 1));
@@ -310,9 +313,9 @@ const UserPage: NextPage = () => {
   // Hide stepper is all steps have been completed.
   const renderProfileStrengthStepper = !allStepsCompleted && (
     <Stepper className={classes.stepper} alternativeLabel={isMobile}>
-      {profileStrengthSteps.map(({ label }, i) => (
+      {profileStrengthSteps.map(({ label, href, completed }, i) => (
         <Step key={i} completed={profileStrengthSteps[i].completed} active={false}>
-          <StepLabel>{label}</StepLabel>
+          <StepLabel>{!completed ? <TextLink href={href}>{label}</TextLink> : label}</StepLabel>
         </Step>
       ))}
     </Stepper>
