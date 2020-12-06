@@ -49,7 +49,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
   replyButton: {
     position: 'fixed',
-    bottom: 0,
+    bottom: 'env(safe-area-inset-bottom)',
     width: '100%',
   },
 }));
