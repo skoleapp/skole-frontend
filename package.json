@@ -12,6 +12,7 @@
     "type-check": "tsc",
     "format": "yarn prettier --write '**/*.{ts,tsx,js,json}'",
     "lint": "yarn prettier --check '**/*.{ts,tsx,js,json}' && eslint . --ext .ts,.tsx,.js && dpdm --tree=false --exit-code=circular:1 $(find src/)",
+    "cypress:open": "cypress open",
     "update-deps:patch": "yarn upgrade",
     "update-deps:latest": "yarn upgrade --latest"
   },
