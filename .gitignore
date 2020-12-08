@@ -3,6 +3,8 @@
 .next/
 build/
 node_modules/
+.nyc_output
+coverage
 
 npm-debug.log*
 yarn-debug.log*

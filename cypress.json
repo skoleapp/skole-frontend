@@ -1,6 +1,8 @@
 {
   "baseUrl": "http://localhost:3001",
-  "pluginsFile": false,
-  "supportFile": false,
-  "fixturesFolder": false
+  "env": {
+    "codeCoverage": {
+      "url": "/api/__coverage__"
+    }
+  }
 }

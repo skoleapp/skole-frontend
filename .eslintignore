@@ -4,3 +4,4 @@ next.config.js
 *.graphql.d.ts
 __generated__
 gtag.js
+cypress/plugins/index.ts
