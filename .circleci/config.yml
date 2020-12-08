@@ -1,5 +1,8 @@
 version: 2
 
+orbs:
+  cypress: cypress-io/cypress@1.26.0
+
 jobs:
   build:
     branches:
@@ -11,8 +14,19 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Check commits of the PR branch"
+          name: 'Check commits of the PR branch'
           command: ./.circleci/check_commits.sh
       - run:
-          name: "Run linters, type-check, and build"
+          name: 'Run linters, type-check, and build'
           command: docker build --target circleci --tag frontend . && docker run frontend
+
+workflows:
+  build:
+    jobs:
+      - cypress/run:
+          start: yarn dev
+          wait-on: 'http://localhost:3001'
+          no-workspace: true
+          post-steps:
+            - store_artifacts:
+                path: coverage
