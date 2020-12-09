@@ -65,9 +65,13 @@ import React, { SyntheticEvent, useEffect, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { mediaUrl, urls } from 'utils';
+import { PdfViewerProps } from 'types';
 
-// @ts-ignore: TS clashes with the props' types somehow.
-const PdfViewer = dynamic(() => import('components').then((mod) => mod.PdfViewer));
+// Here we make an exception for exclusive usage of named exports and use a default import to make sure this is never imported server-side.
+// Reference: https://github.com/wojtekmaj/react-pdf/issues/136#issuecomment-716643894.
+const PdfViewer = dynamic<PdfViewerProps>(() => import('../../components/resource/PdfViewer'), {
+  ssr: false,
+});
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   mobileContainer: {
