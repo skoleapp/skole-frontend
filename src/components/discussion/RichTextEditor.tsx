@@ -86,6 +86,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       },
       '& .DraftEditor-editorContainer': {
         flexGrow: 1,
+        height: '100%',
         '& .RichEditor-blockquote': {
           borderLeft: `${spacing(2)} solid #eee`,
           color: '#666',

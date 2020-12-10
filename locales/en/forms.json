@@ -38,7 +38,7 @@
   "name": "Name (Optional)",
   "schoolHelpText": "Your preferred school. With this information we can automatically show you content based on it. This field is only visible for you.",
   "subjectHelpText": "Your preferred subject. With this information we can automatically show you content based on it. This field is only visible for you.",
-  "createComment": "Create Comment",
+  "createComment": "Add Comment",
   "sendHelpText": "to send",
   "newLineHelpText": "to add a new line",
   "addLink": "Add Link",
