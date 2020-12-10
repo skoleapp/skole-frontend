@@ -29,6 +29,7 @@ CMD yarn lint \
 FROM circleci as prod
 
 ARG API_URL
+ARG FRONTEND_URL
 
 RUN yarn build
 

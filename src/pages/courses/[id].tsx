@@ -287,7 +287,13 @@ const CourseDetailPage: NextPage = () => {
   };
 
   const notFoundLinkProps = {
-    href: urls.createCourse,
+    href: {
+      pathname: urls.uploadResource,
+      query: {
+        school: schoolId,
+        course: courseId,
+      },
+    },
     text: t('course:noResourcesLink'),
   };
 

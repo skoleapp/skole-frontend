@@ -109,7 +109,7 @@ const ContactPage: NextPage = () => {
       description: t('contact:description'),
     },
     header: t('contact:header'),
-    dense: true,
+    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },

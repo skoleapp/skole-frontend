@@ -73,6 +73,7 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "graphql-let": "^0.16.2",
     "prettier": "^2.2.0",
+    "raw-loader": "^4.0.2",
     "typescript": "^4.1.0"
   }
 }

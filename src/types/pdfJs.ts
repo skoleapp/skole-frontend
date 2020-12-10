@@ -13,3 +13,7 @@ export interface PdfTranslation {
   x: number;
   y: number;
 }
+
+export interface PdfViewerProps {
+  file: string;
+}

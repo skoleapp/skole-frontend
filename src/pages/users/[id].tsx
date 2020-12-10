@@ -310,7 +310,8 @@ const UserPage: NextPage = () => {
     </Typography>
   );
 
-  // Hide stepper is all steps have been completed.
+  // Render uncompleted items as links and completed ones as regular text.
+  // Hide stepper if all steps have been completed.
   const renderProfileStrengthStepper = !allStepsCompleted && (
     <Stepper className={classes.stepper} alternativeLabel={isMobile}>
       {profileStrengthSteps.map(({ label, href, completed }, i) => (

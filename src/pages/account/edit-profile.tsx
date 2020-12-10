@@ -242,7 +242,7 @@ const EditProfilePage: NextPage = () => {
       description: t('edit-profile:description'),
     },
     header: t('edit-profile:header'),
-    dense: true,
+    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },

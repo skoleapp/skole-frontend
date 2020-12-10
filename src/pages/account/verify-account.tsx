@@ -200,7 +200,7 @@ const VerifyAccountPage: NextPage = () => {
       description: t('verify-account:description'),
     },
     header,
-    dense: true,
+    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },

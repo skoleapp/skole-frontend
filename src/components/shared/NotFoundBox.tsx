@@ -1,5 +1,6 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { MoodBadOutlined } from '@material-ui/icons';
+import { UrlObject } from 'url';
 import React from 'react';
 
 import { TextLink } from './TextLink';
@@ -21,7 +22,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 interface Props {
   text: string;
   linkProps?: {
-    href: string;
+    href: string | UrlObject;
     text: string;
   };
 }
