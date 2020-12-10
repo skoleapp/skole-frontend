@@ -14,12 +14,14 @@ import {
 } from '@material-ui/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMediaQueries } from 'hooks';
 import { ExternalLink, ResponsiveDialog } from '../shared';
 
 export const ShareDialog: React.FC = () => {
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
   const { asPath } = useRouter();
+  const { isMobile } = useMediaQueries();
 
   const {
     shareDialogOpen,
@@ -136,7 +138,7 @@ export const ShareDialog: React.FC = () => {
     </MenuItem>
   );
 
-  const renderSeeAllMenuItem = (
+  const renderSeeAllMenuItem = isMobile && (
     <MenuItem onClick={handleClickSeeAll}>
       <ListItemIcon>
         <ArrowForwardOutlined />
