@@ -16,7 +16,7 @@ export const PasswordField = <T extends FormikValues>(
   const inputProps = {
     endAdornment: (
       <InputAdornment position="end">
-        <IconButton onClick={handleClickShowPassword}>
+        <IconButton onClick={handleClickShowPassword} tabIndex="-1">
           {showPassword ? <VisibilityOutlined /> : <VisibilityOffOutlined />}
         </IconButton>
       </InputAdornment>

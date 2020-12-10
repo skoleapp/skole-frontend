@@ -294,6 +294,9 @@ let theme = createMuiTheme({
           width: '1.5rem !important',
           padding: spacing(0.25),
           margin: spacing(0.25),
+          borderStyle: 'solid',
+          borderWidth: 'thin',
+          borderColor: 'secondary',
         },
         '.truncate-text': {
           overflow: 'hidden',
