@@ -1,9 +1,10 @@
-import { Typography } from '@material-ui/core';
 import { SettingsTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import terms from '../terms.md'; // TODO: See if this can be imported via absolute path.
 
 const TermsPage: NextPage = () => {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ const TermsPage: NextPage = () => {
 
   return (
     <SettingsTemplate {...layoutProps}>
-      <Typography variant="body2">{t('terms:content')}</Typography>
+      <ReactMarkdown source={terms} />
     </SettingsTemplate>
   );
 };
