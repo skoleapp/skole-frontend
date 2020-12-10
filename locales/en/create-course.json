@@ -1,7 +1,7 @@
 {
-  "title": "Create Course",
-  "description": "Create new course on Skole.",
-  "header": "Create Course",
+  "title": "Add Course",
+  "description": "Add new course on Skole.",
+  "header": "Add Course",
   "courseNameHelperText": "The name of the course. Do not include the course code in this field.",
   "courseCodeHelperText": "The course code. Other users can use this code to find your course.",
   "schoolHelperText": "The school to which this course belongs.",

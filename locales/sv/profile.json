@@ -7,6 +7,6 @@
   "viewStarred": "Visa stjärnmärkt",
   "ownProfileCourses": "Mina kurser",
   "ownProfileResources": "Mina resurser",
-  "ownProfileNoCourses": "Du har inga kurser. Alla kurser som du skapar kommer att visas här.",
-  "ownProfileNoResources": "Du har inga resurser. Alla resurser som du skapar kommer att visas här."
+  "ownProfileNoCourses": "Du har inga kurser. Alla kurser som du tillagt kommer att visas här.",
+  "ownProfileNoResources": "Du har inga resurser. Alla resurser som du tillagt kommer att visas här."
 }

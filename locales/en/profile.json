@@ -3,10 +3,10 @@
   "score": "score",
   "editProfile": "Edit Profile",
   "noResources": "This user has not uploaded any resources.",
-  "noCourses": "This user has not created any courses.",
+  "noCourses": "This user has not added any courses.",
   "viewStarred": "View Starred",
   "ownProfileCourses": "My Courses",
   "ownProfileResources": "My Resources",
-  "ownProfileNoCourses": "You have no courses. All courses that you create will show up here.",
+  "ownProfileNoCourses": "You have no courses. All courses that you add will show up here.",
   "ownProfileNoResources": "You have not uploaded any resources. All resources that you upload will show up here."
 }
