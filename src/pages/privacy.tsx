@@ -16,7 +16,7 @@ const PrivacyPage: NextPage = () => {
       description: t('privacy:description'),
     },
     header: t('privacy:header'),
-    dense: true,
+    text: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },

@@ -114,7 +114,7 @@ export const DeleteAccountPage: NextPage = () => {
       description: t('delete-account:description'),
     },
     header: t('delete-account:header'),
-    dense: true,
+    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },

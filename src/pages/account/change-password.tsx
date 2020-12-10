@@ -108,7 +108,7 @@ const ChangePasswordPage: NextPage = () => {
       description: t('change-password:description'),
     },
     header: t('change-password:header'),
-    dense: true,
+    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },

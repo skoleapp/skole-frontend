@@ -4,6 +4,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+// @ts-ignore: TS cannot detect markdown files by default.
 import terms from '../terms.md'; // TODO: See if this can be imported via absolute path.
 
 const TermsPage: NextPage = () => {
@@ -15,7 +16,7 @@ const TermsPage: NextPage = () => {
       description: t('terms:description'),
     },
     header: t('terms:header'),
-    dense: true,
+    text: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },

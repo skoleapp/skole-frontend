@@ -197,7 +197,7 @@ const ResetPasswordPage: NextPage = () => {
       description: t('reset-password:description'),
     },
     header,
-    dense: true,
+    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },
