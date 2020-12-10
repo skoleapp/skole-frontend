@@ -77,7 +77,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     marginRight: spacing(1),
   },
   iconButton: {
-    padding: spacing(1),
+    padding: spacing(2),
   },
   replyCount: {
     marginRight: spacing(1),
