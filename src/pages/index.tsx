@@ -167,9 +167,9 @@ const IndexPage: NextPage = () => {
       href: urls.uploadResource,
     },
     {
-      text: 'index:createCourses',
+      text: 'index:addCourses',
       icon: SchoolOutlined,
-      href: urls.createCourse,
+      href: urls.addCourse,
     },
   ];
 

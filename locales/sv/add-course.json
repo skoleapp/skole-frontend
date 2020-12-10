@@ -1,7 +1,7 @@
 {
-  "title": "Skapa en kurs",
-  "description": "Skapa ny kurs på Skole.",
-  "header": "Skapa en kurs",
+  "title": "Lägg till en kurs",
+  "description": "Lägg till en ny kurs på Skole.",
+  "header": "Lägg till en kurs",
   "courseNameHelperText": "Kursens namn. Inkludera inte kurskoden i det här fältet.",
   "courseCodeHelperText": "Kurskoden. Andra användare kan använda den här koden för att hitta din kurs.",
   "schoolHelperText": "Skolan som den här kursen tillhör.",

@@ -35,7 +35,7 @@ interface CreateCourseFormValues {
   general: string;
 }
 
-const CreateCoursePage: NextPage = () => {
+const AddCoursePage: NextPage = () => {
   const { toggleNotification } = useNotificationsContext();
   const { t } = useTranslation();
   const { query } = useRouter();
@@ -124,13 +124,13 @@ const CreateCoursePage: NextPage = () => {
             name="courseName"
             label={t('forms:courseName')}
             component={TextFormField}
-            helperText={t('create-course:courseNameHelperText')}
+            helperText={t('add-course:courseNameHelperText')}
           />
           <Field
             name="courseCode"
             label={t('forms:courseCodeOptional')}
             component={TextFormField}
-            helperText={t('create-course:courseCodeHelperText')}
+            helperText={t('add-course:courseCodeHelperText')}
           />
           <Field
             name="school"
@@ -139,7 +139,7 @@ const CreateCoursePage: NextPage = () => {
             searchKey="name"
             document={AutocompleteSchoolsDocument}
             component={AutocompleteField}
-            helperText={t('create-course:schoolHelperText')}
+            helperText={t('add-course:schoolHelperText')}
           />
           <Field
             name="subjects"
@@ -148,7 +148,7 @@ const CreateCoursePage: NextPage = () => {
             dataKey="autocompleteSubjects"
             document={AutocompleteSubjectsDocument}
             component={AutocompleteField}
-            helperText={t('create-course:subjectsHelperText')}
+            helperText={t('add-course:subjectsHelperText')}
             multiple
           />
           <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
@@ -159,10 +159,10 @@ const CreateCoursePage: NextPage = () => {
 
   const layoutProps = {
     seoProps: {
-      title: t('create-course:title'),
-      description: t('create-course:description'),
+      title: t('add-course:title'),
+      description: t('add-course:description'),
     },
-    header: t('create-course:header'),
+    header: t('add-course:header'),
     topNavbarProps: {
       dynamicBackUrl: true,
     },
@@ -180,8 +180,8 @@ const CreateCoursePage: NextPage = () => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    _ns: await loadNamespaces(['create-course'], locale),
+    _ns: await loadNamespaces(['add-course'], locale),
   },
 });
 
-export default withAuth(CreateCoursePage);
+export default withAuth(AddCoursePage);

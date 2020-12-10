@@ -428,7 +428,7 @@ const SearchPage: NextPage = () => {
   };
 
   const notFoundLinkProps = {
-    href: urls.createCourse,
+    href: urls.addCourse,
     text: t('search:noCoursesLink'),
   };
 

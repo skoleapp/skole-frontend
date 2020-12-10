@@ -11,7 +11,7 @@ export const urls = {
   school: (id: string): string => `/schools/${id}`,
   user: (id: string): string => `/users/${id}`,
   contact: '/contact',
-  createCourse: '/create-course',
+  addCourse: '/add-course',
   getStarted: '/get-started',
   home: '/',
   confirmLogin: '/login/confirm',
