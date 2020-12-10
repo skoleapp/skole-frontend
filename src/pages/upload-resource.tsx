@@ -181,7 +181,7 @@ const UploadResourcePage: NextPage = () => {
         helperText={
           <>
             {t('upload-resource:courseHelperText')}{' '}
-            <TextLink href={urls.createCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
+            <TextLink href={urls.addCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
           </>
         }
       />

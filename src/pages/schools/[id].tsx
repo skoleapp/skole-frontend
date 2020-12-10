@@ -113,7 +113,7 @@ const SchoolDetailPage: NextPage = () => {
   } = useInfoDialog();
 
   const addCourseHref = {
-    pathname: urls.createCourse,
+    pathname: urls.addCourse,
     query: { school: schoolId },
   };
 
