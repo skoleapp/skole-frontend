@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
 import { urls } from 'utils';
+import { formatFormError, urls } from 'utils';
 
 interface EmailFormValues {
   email: string;
@@ -56,7 +57,7 @@ const VerifyAccountPage: NextPage = () => {
       if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
         verifyAccount.errors.map((e) => {
           if (e?.field === '__all__') {
-            setConfirmationError(e?.messages.join());
+            setConfirmationError(!e ? null : formatFormError(e));
           }
         });
       } else if (verifyAccount.successMessage) {
