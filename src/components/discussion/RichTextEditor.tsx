@@ -40,7 +40,6 @@ import {
   KeyBindingUtil,
   RichUtils,
 } from 'draft-js';
-import { FormikProps } from 'formik';
 import { useMediaQueries } from 'hooks';
 import { linkStrategy, useTranslation } from 'lib';
 import * as R from 'ramda';
@@ -52,7 +51,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { CreateCommentFormValues, RichTextEditorProps } from 'types';
+import { RichTextEditorProps } from 'types';
 import {
   ACCEPTED_ATTACHMENT_FILES,
   MAX_COMMENT_ATTACHMENT_FILE_SIZE,
