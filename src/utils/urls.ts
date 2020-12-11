@@ -2,6 +2,7 @@ export const urls = {
   activity: '/account/activity',
   changePassword: '/account/change-password',
   deleteAccount: '/account/delete-account',
+  myData: '/account/my-data',
   editProfile: '/account/edit-profile',
   resetPassword: '/account/reset-password',
   starred: '/account/starred',

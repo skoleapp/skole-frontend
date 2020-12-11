@@ -7,6 +7,7 @@ import {
   SecurityOutlined,
   SettingsBackupRestoreOutlined,
   StarBorderOutlined,
+  StorageOutlined,
 } from '@material-ui/icons';
 
 import { urls } from './urls';
@@ -69,6 +70,11 @@ export const SETTINGS_ITEMS = {
       icon: LockOutlined,
       text: 'common:changePassword',
       href: urls.changePassword,
+    },
+    {
+      icon: StorageOutlined,
+      text: 'common:myData',
+      href: urls.myData,
     },
   ],
   commonAccount: [

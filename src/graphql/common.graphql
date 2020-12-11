@@ -774,6 +774,16 @@ mutation GraphQLResendVerificationEmail {
   }
 }
 
+mutation GraphQLMyData {
+  myData {
+    successMessage
+    errors {
+      field
+      messages
+    }
+  }
+}
+
 mutation VerifyAccount($token: String) {
   verifyAccount(input: { token: $token }) {
     successMessage
