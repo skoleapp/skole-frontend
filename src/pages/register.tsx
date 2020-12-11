@@ -28,7 +28,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { useState } from 'react';
-import { urls } from 'utils';
+import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -112,7 +112,7 @@ const RegisterPage: NextPage = () => {
   const registerValidationSchema = Yup.object().shape({
     username: Yup.string().required(t('validation:required')),
     password: Yup.string()
-      .min(8, t('validation:passwordTooShort'))
+      .min(PASSWORD_MIN_LENGTH, t('validation:passwordTooShort', { length: PASSWORD_MIN_LENGTH }))
       .required(t('validation:required')),
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     confirmPassword: Yup.string()

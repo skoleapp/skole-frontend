@@ -14,7 +14,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { urls } from 'utils';
+import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
 const emailFormInitialValues = {
@@ -70,7 +70,7 @@ const ResetPasswordPage: NextPage = () => {
 
   const passwordValidationSchema = Yup.object().shape({
     newPassword: Yup.string()
-      .min(8, t('validation:passwordTooShort'))
+      .min(PASSWORD_MIN_LENGTH, t('validation:passwordTooShort', { length: PASSWORD_MIN_LENGTH }))
       .required(t('validation:required')),
     confirmNewPassword: Yup.string()
       .oneOf([Yup.ref('newPassword'), ''], t('validation:passwordsNotMatch'))
