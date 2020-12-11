@@ -756,15 +756,16 @@ mutation Login($usernameOrEmail: String!, $password: String!) {
   }
 }
 
-# Need to come up with some other name as `Logout` since the GraphQL code generator creates duplicate identifiers if we use that one.
+# Need to come up with some other name as `Logout` since the the code generator creates duplicate
+# identifiers for non-input mutations if we use that one.
 mutation GraphQLLogout {
   logout {
     deleted
   }
 }
 
-mutation ResendVerificationEmail($email: String!) {
-  resendVerificationEmail(input: { email: $email }) {
+mutation GraphQLResendVerificationEmail {
+  resendVerificationEmail {
     successMessage
     errors {
       field
