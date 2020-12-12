@@ -640,8 +640,8 @@ mutation Star($course: ID, $resource: ID) {
   }
 }
 
-query AutocompleteSubjects {
-  autocompleteSubjects {
+query AutocompleteSubjects($name: String) {
+  autocompleteSubjects(name: $name) {
     id
     name
   }
