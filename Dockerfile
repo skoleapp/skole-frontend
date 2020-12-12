@@ -30,6 +30,7 @@ FROM circleci as prod
 
 ARG API_URL
 ARG FRONTEND_URL
+ARG GA_TRACKING_ID
 
 RUN yarn build
 

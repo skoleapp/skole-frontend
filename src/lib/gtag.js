@@ -1,5 +1,3 @@
-export const GA_TRACKING_ID = 'UA-159917631-1';
-
 export const GAScript = {
     __html: `
         window.dataLayer = window.dataLayer || [];
@@ -10,7 +8,7 @@ export const GAScript = {
 
         gtag('js', new Date());
 
-        gtag('config', '${GA_TRACKING_ID}', {
+        gtag('config', '${process.env.GA_TRACKING_ID}', {
             page_path: window.location.pathname,
         });
     `,
@@ -18,7 +16,7 @@ export const GAScript = {
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageView = url => {
-    window.gtag('config', GA_TRACKING_ID, {
+    window.gtag('config', process.env.GA_TRACKING_ID, {
         page_path: url,
     });
 };
