@@ -2,4 +2,3 @@
 build
 *.graphql.d.ts
 __generated__
-gtag.js
