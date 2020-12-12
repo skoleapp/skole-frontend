@@ -8,6 +8,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
+import { PASSWORD_MIN_LENGTH } from 'utils';
 
 const initialValues = {
   oldPassword: '',
@@ -38,7 +39,7 @@ const ChangePasswordPage: NextPage = () => {
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required(t('validation:required')),
     newPassword: Yup.string()
-      .min(8, t('validation:passwordTooShort'))
+      .min(PASSWORD_MIN_LENGTH, t('validation:passwordTooShort', { length: PASSWORD_MIN_LENGTH }))
       .required(t('validation:required')),
     confirmNewPassword: Yup.string()
       .oneOf([Yup.ref('newPassword'), ''], t('validation:passwordsNotMatch'))

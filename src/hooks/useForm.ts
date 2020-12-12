@@ -3,6 +3,7 @@ import { FormikProps, FormikValues } from 'formik';
 import { useTranslation } from 'lib';
 import { useRef } from 'react';
 import { MutationErrors, MutationFormError, UseForm } from 'types';
+import { formatFormError } from 'utils';
 
 const snakeCaseToCamelCase = (str: string): string => {
   return str.replace(/([-_][a-z])/g, (group) =>
@@ -35,12 +36,13 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
 
     if (err.length) {
       (err as MutationFormError[]).map((e: MutationFormError) => {
+        const msg = formatFormError(e);
         if (e.field === '__all__') {
-          formErrors.general = e.messages.join();
+          formErrors.general = msg;
         } else if (e.field) {
-          formErrors[snakeCaseToCamelCase(e.field)] = e.messages.join();
+          formErrors[snakeCaseToCamelCase(e.field)] = msg;
         } else {
-          formErrors.general = e.messages.join();
+          formErrors.general = msg;
         }
       });
     } else {

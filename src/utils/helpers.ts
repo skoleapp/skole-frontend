@@ -1,6 +1,7 @@
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import * as url from 'url';
+import { MutationFormError } from 'types';
 
 // A utility that we use to display all media from our backend.
 export const mediaUrl = (filePath: string): string => {
@@ -43,3 +44,5 @@ export const truncate = (str: string, num: number): string => {
   }
   return str;
 };
+
+export const formatFormError = (error: MutationFormError): string => error.messages.join('\n');

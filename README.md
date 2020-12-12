@@ -18,58 +18,35 @@ Other useful documentation:
 
 ## What's inside? 🧐
 
-A quick look at the top-level files and directories excluding `node_modules` and other built locations.
+A quick look at the top-level files and directories excluding Git ignored locations.
 
-    .
-    ├── .circleci/
-    ├── .idea/
-    ├── .vscode/
-    ├── generated/
-    ├── public/
-    ├── src/
-    ├── .dockerignore
-    ├── .eslintignore
-    ├── .eslintrc.js
-    ├── .gitignore
-    ├── .graphqlconfig
-    ├── .prettierignore
-    ├── .prettierrc
-    ├── .codegen.yml
-    ├── dependencies.md
-    ├── Dockerfile
-    ├── Dockerfile.prod
-    ├── next-env.d.ts
-    ├── next.config.js
-    ├── package.json
-    ├── README.md
-    ├── tsconfig.json
-    ├── types.d.ts
-    └── yarn.lock
-
-1.  **`.circleci/`**: Configuration for [CircleCI](https://circleci.com/).
-2.  **`.idea/`**: [Jetbrains](https://www.jetbrains.com/) editor configuration.
-3.  **`.vscode/`**: [VSCode](https://code.visualstudio.com/) configuration.
-4.  **`generated/`**: Generated code by [GraphQL Code Generator](https://www.npmjs.com/package/@graphql-codegen).
-5.  **`public/`**: Static assets exposed in the browser.
-6.  **`src/`**: Source code.
-7.  **`.dockerignore`**: List of files ignored by [Docker](https://www.docker.com/).
-8.  **`.eslintignore`**: List of files ignored by [ESLint](https://www.npmjs.com/package/eslint).
-9.  **`.eslintrc.js`**: ESLint configuration.
-10. **`.gitignore`**: List of files ignored by [Git](https://git-scm.com/).
-11. **`.graphqlconfig`**: GraphQL configuration file, used by e.g. Jetbrains editors.
-12. **`.prettierignore`**: List of files ignored by [Prettier](https://prettier.io/).
-13. **`.prettierrc.js`**: Prettier configuration.
-14. **`codegen.yml`**: GraphQL Code Generator configuration.
-15. **`dependencies`**: Documentation for top-level dependencies.
-16. **`Dockerfile`**: Docker configuration for development.
-17. **`Dockerfile.prod`**: Docker configuration for production.
-18. **`next-env.d.ts`**: [Next.js](https://nextjs.org/) typings for [TypeScript](https://www.typescriptlang.org/) compiler.
-19. **`next.config.js`**: Next.js configuration.
-20. **`package.json`**: Manifest file for [Node.js](https://nodejs.org/en/).
-21. **`README.md`**: Text file containing useful reference information about this project.
-22. **`tsconfig.json`**: TypeScript configuration.
-23. **`types.d.ts`**: Module declarations for dependencies that do not have TypeScript typings.
-24. **`yarn.lock`**: Auto-generated file for locking version numbers of all dependencies listed in `package.json`.
+1.  [**`.circleci/`**](.circleci/): Configuration for [CircleCI](https://circleci.com/).
+2.  [**`.github/`**](.github/): Configuration for [Github Actions](https://github.com/features/actions).
+3.  [**`.idea/`**](.idea/): [Jetbrains](https://www.jetbrains.com/) editor configuration.
+4.  [**`.vscode/`**](.vscode/): [VSCode](https://code.visualstudio.com/) configuration.
+5.  [**`__generated__/`**](__generated__/): Generated code by [graphql-let](https://www.npmjs.com/package/graphql-let).
+6.  [**`locales/`**](locales/): Contains JSON files with all of the translated UI strings.
+7.  [**`public/`**](public/): Static assets exposed in the browser.
+8.  [**`src/`**](src/): Source code.
+9.  [**`.dockerignore`**](.dockerignore): List of files ignored by [Docker](https://www.docker.com/).
+10.  [**`.eslintignore`**](.eslintignore): List of files ignored by [ESLint](https://www.npmjs.com/package/eslint).
+11.  [**`.eslintrc.json`**](.eslintrc.json): ESLint configuration.
+12. [**`.gitattributes`**](.gitattributes): Additional Git [repo metadata](https://git-scm.com/docs/gitattributes).
+13. [**`.gitignore`**](.gitignore): List of files ignored by [Git](https://git-scm.com/).
+14. [**`.graphql-let.yml`**](.graphql-let.yml): Configuration for [graphql-let](https://www.npmjs.com/package/graphql-let).
+15. [**`.graphqlconfig`**](.graphqlconfig): GraphQL configuration file, used by e.g. Jetbrains editors.
+16. [**`.prettierignore`**](.prettierignore): List of files ignored by [Prettier](https://prettier.io/).
+17. [**`.prettierrc.json`**](.prettierrc.json): Prettier configuration.
+18. [**`Dockerfile`**](Dockerfile): Formal instructions for Docker how to build the image for the app.
+19. [**`README.md`**](README.md): The file you're reading.
+20. [**`dependencies.md`**](dependencies.md): Documentation for top-level dependencies.
+21. [**`i18n.json`**](i18n.json): Configuration for [next-translate](https://www.npmjs.com/package/next-translate).
+22. [**`next-env.d.ts`**](next-env.d.ts): [Next.js](https://nextjs.org/) typings for [TypeScript](https://www.typescriptlang.org/) compiler.
+23. [**`next.config.js`**](next.config.js): Next.js configuration.
+24. [**`package.json`**](package.json): Manifest file for [Node.js](https://nodejs.org/en/).
+25. [**`tsconfig.json`**](tsconfig.json): TypeScript configuration.
+26. [**`types.d.ts`**](types.d.ts): Module de[Next.js](https://nextjs.org/) typings for [TypeScript](https://www.typescriptlang.org/) compiler.larations for dependencies that do not have TypeScript typings.
+27. [**`yarn.lock`**](yarn.lock): Auto-generated file for locking version numbers of all dependencies listed in `package.json`.
 
 ## Development Tips 🚀
 

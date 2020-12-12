@@ -7,6 +7,7 @@ import {
   SecurityOutlined,
   SettingsBackupRestoreOutlined,
   StarBorderOutlined,
+  StorageOutlined,
 } from '@material-ui/icons';
 
 import { urls } from './urls';
@@ -34,6 +35,7 @@ export const MAX_AVATAR_WIDTH_HEIGHT = 200; // Pixels.
 export const MAX_COMMENT_ATTACHMENT_FILE_SIZE = 3500000; // 3.5 MB.
 export const MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT = 1200; // Pixels.
 export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
+export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is using.
 
 export const IMAGE_TYPES = [
   'image/apng',
@@ -68,6 +70,11 @@ export const SETTINGS_ITEMS = {
       icon: LockOutlined,
       text: 'common:changePassword',
       href: urls.changePassword,
+    },
+    {
+      icon: StorageOutlined,
+      text: 'common:myData',
+      href: urls.myData,
     },
   ],
   commonAccount: [

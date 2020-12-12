@@ -4,8 +4,8 @@ import { ButtonLink, FormSubmitSection, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import {
-  ResendVerificationEmailMutation,
-  useResendVerificationEmailMutation,
+  GraphQlResendVerificationEmailMutation,
+  useGraphQlResendVerificationEmailMutation,
   useVerifyAccountMutation,
   VerifyAccountMutation,
 } from 'generated';
@@ -14,12 +14,10 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
-import { urls } from 'utils';
+import { formatFormError, urls } from 'utils';
 
 interface EmailFormValues {
-  email: string;
   general: string;
 }
 
@@ -34,8 +32,7 @@ const VerifyAccountPage: NextPage = () => {
 
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { userMe, verified: initialVerified } = useAuthContext();
-  const email = R.propOr('', 'email', userMe);
+  const { verified: initialVerified } = useAuthContext();
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(false);
@@ -56,7 +53,7 @@ const VerifyAccountPage: NextPage = () => {
       if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
         verifyAccount.errors.map((e) => {
           if (e?.field === '__all__') {
-            setConfirmationError(e?.messages.join());
+            setConfirmationError(!e ? null : formatFormError(e));
           }
         });
       } else if (verifyAccount.successMessage) {
@@ -91,7 +88,7 @@ const VerifyAccountPage: NextPage = () => {
 
   const onEmailFormCompleted = ({
     resendVerificationEmail,
-  }: ResendVerificationEmailMutation): void => {
+  }: GraphQlResendVerificationEmailMutation): void => {
     if (resendVerificationEmail) {
       if (!!resendVerificationEmail.errors && !!resendVerificationEmail.errors.length) {
         handleEmailFormMutationErrors(resendVerificationEmail.errors);
@@ -107,18 +104,17 @@ const VerifyAccountPage: NextPage = () => {
     }
   };
 
-  const [resendVerificationEmail] = useResendVerificationEmailMutation({
+  const [resendVerificationEmail] = useGraphQlResendVerificationEmailMutation({
     onCompleted: onEmailFormCompleted,
     onError: onEmailFormError,
     context,
   });
 
   const handleSubmitEmail = async (): Promise<void> => {
-    await resendVerificationEmail({ variables: { email } });
+    await resendVerificationEmail();
   };
 
   const initialEmailFormValues = {
-    email,
     general: '',
   };
 
