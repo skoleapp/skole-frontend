@@ -30,6 +30,7 @@ FROM circleci as prod
 
 ARG API_URL
 ARG FRONTEND_URL
+ARG SA_URL
 
 RUN yarn build
 
