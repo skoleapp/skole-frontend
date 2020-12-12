@@ -1,5 +1,5 @@
 import { useTheme } from '@material-ui/core';
-import { GA_TRACKING_ID, GAScript } from 'lib';
+import { GAScript } from 'lib';
 import Head from 'next/head';
 import React from 'react';
 import { SEOProps } from 'types';
@@ -119,9 +119,12 @@ export const HeadComponent: React.FC<SEOProps> = ({ title: customTitle, descript
     </>
   );
 
-  const renderScriptTags = (
+  const renderGaScriptTags = !!process.env.GA_TRACKING_ID && (
     <>
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
+      <script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_TRACKING_ID}`}
+      />
       <script dangerouslySetInnerHTML={GAScript} />
     </>
   );
@@ -134,7 +137,7 @@ export const HeadComponent: React.FC<SEOProps> = ({ title: customTitle, descript
       {renderOgMetaTags}
       {renderTwitterMetaTags}
       {renderLinkTags}
-      {renderScriptTags}
+      {renderGaScriptTags}
     </Head>
   );
 };
