@@ -1,23 +1,55 @@
 import { ServerStyleSheets } from '@material-ui/core';
 import { RenderPageResult } from 'next/dist/next-server/lib/utils';
-import NextDocument, { DocumentContext, DocumentInitialProps } from 'next/document';
+import Document, {
+  DocumentContext,
+  DocumentInitialProps,
+  Html,
+  Head,
+  Main,
+  NextScript,
+} from 'next/document';
 import React from 'react';
 
-export default class SkoleDocument extends NextDocument {
-  static getInitialProps = async (ctx: DocumentContext): Promise<DocumentInitialProps> => {
-    const originalRenderPage = ctx.renderPage;
-    const sheets = new ServerStyleSheets();
+const { SA_URL } = process.env;
 
-    ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> =>
-      originalRenderPage({
-        enhanceApp: (App) => (props): JSX.Element => sheets.collect(<App {...props} />),
-      });
+const SAScript = () =>
+  SA_URL ? (
+    <>
+      <script async defer src={`https://${SA_URL}/latest.js`} />
+      <noscript>
+        <img src={`https://${SA_URL}/noscript.gif`} alt="" />
+      </noscript>
+    </>
+  ) : null;
 
-    const initialProps = await NextDocument.getInitialProps(ctx);
-
-    return {
-      ...initialProps,
-      styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
-    };
-  };
+export default class SkoleDocument extends Document {
+  render(): JSX.Element {
+    return (
+      <Html>
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+          <SAScript />
+        </body>
+      </Html>
+    );
+  }
 }
+
+SkoleDocument.getInitialProps = async (ctx: DocumentContext): Promise<DocumentInitialProps> => {
+  const originalRenderPage = ctx.renderPage;
+  const sheets = new ServerStyleSheets();
+
+  ctx.renderPage = (): RenderPageResult | Promise<RenderPageResult> =>
+    originalRenderPage({
+      enhanceApp: (App) => (props): JSX.Element => sheets.collect(<App {...props} />),
+    });
+
+  const initialProps = await Document.getInitialProps(ctx);
+
+  return {
+    ...initialProps,
+    styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
+  };
+};
