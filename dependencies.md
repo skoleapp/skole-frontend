@@ -16,7 +16,6 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [apollo-upload-client](https://www.npmjs.com/package/apollo-upload-client)           | Allows file uploads with GraphQL mutations.                                                   |
 | [browser-image-compression](https://www.npmjs.com/package/browser-image-compression) | Used for resizing uploaded images.                                                            |
 | [clsx](https://www.npmjs.com/package/clsx)                                           | A minimalistic library to connect Material UI classes.                                        |
-| [cookie](https://www.npmjs.com/package/cookie)                                       | Allows reading/writing client-side cookies.                                                   |
 | [dayjs](https://www.npmjs.com/package/days)                                          | Immutable date library.                                                                       |
 | [draft-js](https://www.npmjs.com/package/draft-js)                                   | Rich text editor.                                                                             |
 | [formik](https://www.npmjs.com/package/formik)                                       | Provides useful and extensible form logic.                                                    |

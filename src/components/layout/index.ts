@@ -9,6 +9,5 @@ export { MainBackground } from './MainBackground';
 export { Notifications } from './Notifications';
 export { SettingsModal } from './SettingsModal';
 export { ShareDialog } from './ShareDialog';
-export { SkoleGDPR } from './SkoleGDPR';
 export { TopNavbar } from './TopNavbar';
 export { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
