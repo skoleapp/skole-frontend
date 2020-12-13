@@ -33,7 +33,7 @@ import * as Yup from 'yup';
 
 interface UploadResourceFormValues {
   resourceTitle: string;
-  resourceType: string;
+  resourceType: string | null;
   school: SchoolObjectType | null;
   course: CourseObjectType | null;
   file: File | null;
@@ -121,7 +121,7 @@ const UploadResourcePage: NextPage = () => {
 
   const initialValues = {
     resourceTitle: '',
-    resourceType: '',
+    resourceType: null,
     school,
     course,
     file: null,
