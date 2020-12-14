@@ -58,20 +58,16 @@ export const AvatarField = <T extends FormikValues>({
     onCancel: handleCloseDialog,
   };
 
-  const validateAndSetFile = (file: File | Blob) => {
-    if (file.size > MAX_AVATAR_FILE_SIZE) {
-      toggleNotification(t('validation:fileSizeError'));
-    } else {
-      setFieldValue('avatar', file);
-      handleCloseDialog();
+  const setAvatar = (file: File | Blob) => {
+    setFieldValue('avatar', file);
+    handleCloseDialog();
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
 
-      reader.onloadend = (): void => {
-        setPreview(String(reader.result));
-      };
-    }
+    reader.onloadend = (): void => {
+      setPreview(String(reader.result));
+    };
   };
 
   // Automatically resize the image and update the field value.
@@ -83,12 +79,15 @@ export const AvatarField = <T extends FormikValues>({
       maxWidthOrHeight: MAX_AVATAR_WIDTH_HEIGHT,
     };
 
-    try {
-      const compressedFile = await imageCompression(file, options);
-      validateAndSetFile(compressedFile);
-    } catch {
-      // Compression failed. Try to set the field value still if the image is small enough.
-      validateAndSetFile(file);
+    if (file.size > MAX_AVATAR_FILE_SIZE) {
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setAvatar(compressedFile);
+      } catch {
+        toggleNotification(t('validation:fileSizeError'));
+      }
+    } else {
+      setAvatar(file);
     }
   };
 

@@ -398,20 +398,16 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     return 'handled';
   };
 
-  const validateAndSetFile = (file: File | Blob) => {
-    if (file.size > MAX_COMMENT_ATTACHMENT_FILE_SIZE) {
-      toggleNotification(t('validation:fileSizeError'));
-    } else {
-      setFieldValue('attachment', file);
-      toggleCommentModal(true);
+  const setAttachment = (file: File | Blob) => {
+    setFieldValue('attachment', file);
+    toggleCommentModal(true);
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
 
-      reader.onloadend = (): void => {
-        setCommentAttachment(reader.result);
-      };
-    }
+    reader.onloadend = (): void => {
+      setCommentAttachment(reader.result);
+    };
   };
 
   // Automatically resize the image and update the field value.
@@ -423,12 +419,15 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       maxWidthOrHeight: MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT,
     };
 
-    try {
-      const compressedFile = await imageCompression(file, options);
-      validateAndSetFile(compressedFile);
-    } catch {
-      // Compression failed. Try to set the field value still if the image is small enough.
-      validateAndSetFile(file);
+    if (file.size > MAX_COMMENT_ATTACHMENT_FILE_SIZE) {
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setAttachment(compressedFile);
+      } catch {
+        toggleNotification(t('validation:fileSizeError'));
+      }
+    } else {
+      setAttachment(file);
     }
   };
 
