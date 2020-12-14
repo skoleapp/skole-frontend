@@ -70,9 +70,6 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     overflow: 'hidden',
     wordBreak: 'break-word',
   },
-  messageInfo: {
-    minHeight: '1.85rem', // If the message info contains no buttons with relative position, make it have the same height as with the buttons though.
-  },
   icon: {
     marginRight: spacing(1),
   },
@@ -81,7 +78,8 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   },
   replyCount: {
     marginRight: spacing(1),
-    padding: spacing(1),
+    padding: spacing(2),
+    paddingLeft: 0,
   },
   actionsButton: {
     position: 'absolute',
@@ -287,7 +285,7 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderMessageInfo = (
-    <Grid className={classes.messageInfo} container alignItems="center">
+    <Grid container alignItems="center">
       {renderReplyCount}
       {renderAttachmentButton}
       {renderActionsButton}
