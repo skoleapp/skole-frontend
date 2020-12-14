@@ -97,8 +97,8 @@ const SchoolDetailPage: NextPage = () => {
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const countryId = R.pathOr('', ['country', 'id'], school);
   const cityId = R.pathOr('', ['city', 'id'], school);
-  const subjects = R.pathOr([], ['subjects', 'objects'])(school);
-  const courses = R.pathOr([], ['courses', 'objects'])(school);
+  const subjects = R.pathOr([], ['subjects', 'objects'], data);
+  const courses = R.pathOr([], ['courses', 'objects'], data);
   const shareTitle = t('school:shareTitle', { schoolName });
   const shareText = t('school:shareText', { schoolName });
   const shareParams = { shareTitle, shareText };

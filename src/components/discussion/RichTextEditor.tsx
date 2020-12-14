@@ -109,9 +109,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     marginLeft: spacing(4),
   },
   iconButton: {
-    padding: spacing(1.5),
-  },
-  authorSelectionContainer: {
     padding: spacing(2),
   },
 }));
@@ -600,11 +597,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     </FormHelperText>
   );
 
-  const renderAuthorSelection = !!userMe && enableAuthorSelection && (
-    <Grid className={classes.authorSelectionContainer} container>
-      <AuthorSelection {...props} />
-    </Grid>
-  );
+  const renderAuthorSelection = !!userMe && enableAuthorSelection && <AuthorSelection {...props} />;
 
   const renderTopToolbarButtons = (
     <Grid item xs={12} md={3} container justify="flex-start">

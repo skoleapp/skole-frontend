@@ -44,6 +44,7 @@ export const ShareDialog: React.FC = () => {
 
   const handleClickCopyLink = () => {
     toggleNotification(t('notifications:linkCopied'));
+    navigator.clipboard.writeText(url);
     handleCloseShareDialog();
   };
 
