@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Grid,
   List,
   ListItemIcon,
@@ -19,11 +20,13 @@ import { mediaUrl } from 'utils';
 import * as R from 'ramda';
 import { ResponsiveDialog } from '../shared';
 
-const useStyles = makeStyles({
-  root: {
-    cursor: 'pointer',
+const useStyles = makeStyles(({ spacing }) => ({
+  button: {
+    borderRadius: '0.25rem',
+    padding: spacing(2),
+    textTransform: 'none',
   },
-});
+}));
 
 export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = ({
   values: { user },
@@ -95,10 +98,12 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
   );
 
   const renderAuthorInfo = (
-    <Grid onClick={handleOpenAuthorSelection} className={classes.root} container direction="column">
-      {renderAuthorName}
-      {renderAuthorSelectionText}
-    </Grid>
+    <Button className={classes.button}>
+      <Grid onClick={handleOpenAuthorSelection} container direction="column">
+        {renderAuthorName}
+        {renderAuthorSelectionText}
+      </Grid>
+    </Button>
   );
 
   const renderAuthorSelectionDialog = (
@@ -115,9 +120,9 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
   );
 
   return (
-    <>
+    <Grid container>
       {renderAuthorInfo}
       {renderAuthorSelectionDialog}
-    </>
+    </Grid>
   );
 };
