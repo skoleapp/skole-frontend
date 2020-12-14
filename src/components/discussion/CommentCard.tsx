@@ -90,7 +90,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     bottom: 0,
     margin: '0 auto',
     marginBottom: spacing(3),
-    width: '2rem',
+    width: '2.35rem',
   },
 }));
 
