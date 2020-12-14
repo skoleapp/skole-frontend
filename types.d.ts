@@ -3,6 +3,7 @@ declare module 'lodash.throttle';
 declare module 'ramda';
 declare module 'next-translate/*';
 declare module 'draft-js-export-markdown';
+declare module 'draft-js-import-markdown';
 declare module 'markdown/*';
 
 declare namespace window {

@@ -26,6 +26,7 @@
     "dayjs": "^1.8.36",
     "draft-js": "^0.11.7",
     "draft-js-export-markdown": "^1.4.0",
+    "draft-js-import-markdown": "^1.4.0",
     "formik": "^2.2.5",
     "lodash.throttle": "^4.1.1",
     "next": "^10.0.3",

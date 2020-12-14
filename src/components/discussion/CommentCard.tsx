@@ -37,7 +37,8 @@ import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { mediaUrl, truncate, urls } from 'utils';
-import ReactMarkdown from 'react-markdown';
+import { Editor, EditorState, ContentBlock } from 'draft-js';
+import { stateFromMarkdown } from 'draft-js-import-markdown';
 import { ResponsiveDialog, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
@@ -69,6 +70,12 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   text: {
     overflow: 'hidden',
     wordBreak: 'break-word',
+    '& .RichEditor-blockquote': {
+      borderLeft: `${spacing(2)} solid #eee`,
+      color: '#666',
+      padding: spacing(2),
+      margin: 0,
+    },
   },
   icon: {
     marginRight: spacing(1),
@@ -243,9 +250,21 @@ export const CommentCard: React.FC<Props> = ({
     </Grid>
   );
 
+  const getBlockStyle = (block: ContentBlock): string => {
+    switch (block.getType()) {
+      case 'blockquote': {
+        return 'RichEditor-blockquote';
+      }
+      default: {
+        return '';
+      }
+    }
+  };
+
+  const editorState = EditorState.createWithContent(stateFromMarkdown(comment.text));
   const renderText = (
     <Typography className={classes.text} variant="body2">
-      <ReactMarkdown>{comment.text}</ReactMarkdown>
+      <Editor blockStyleFn={getBlockStyle} editorState={editorState} readOnly onChange={(e) => e} />
     </Typography>
   );
 
