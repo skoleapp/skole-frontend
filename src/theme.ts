@@ -266,11 +266,6 @@ let theme = createMuiTheme({
         padding: spacing(2),
       },
     },
-    MuiDialogContent: {
-      root: {
-        textAlign: 'center',
-      },
-    },
     MuiBackdrop: {
       root: {
         marginTop: 'env(safe-area-inset-top)',
