@@ -107,10 +107,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
   step: {
     paddingLeft: 0,
-    paddingRight: spacing(2),
-  },
-  stepLabel: {
-    fontWeight: 'normal',
+    paddingRight: spacing(4),
   },
   joined: {
     marginTop: spacing(2),
@@ -347,8 +344,14 @@ const UserPage: NextPage = () => {
       completed={profileStrengthSteps[i].completed}
       active={false}
     >
-      <StepLabel classes={{ label: classes.stepLabel }}>
-        {!completed ? <TextLink href={href}>{label}</TextLink> : label}
+      <StepLabel>
+        {!completed ? (
+          <TextLink href={href}>{label}</TextLink>
+        ) : (
+          <Typography variant="body2" color="textSecondary">
+            {label}
+          </Typography>
+        )}
       </StepLabel>
     </Step>
   ));
