@@ -40,7 +40,6 @@
   "orderedList": "Beställd lista ({{ hotkeyOrderedList }}).",
   "bulletedList": "Lista över punkter ({{ hotkeyBulletedList }}).",
   "blockQuote": "Citatblock ({{ hotkeyBlockQuote }}).",
-  "codeBlock": "Kodblock ({{ hotkeyCodeBlock }}).",
   "mention": "Nämn användare (på kommande).",
   "addCourse": "Lägg till en kurs för den här skolan."
 }
