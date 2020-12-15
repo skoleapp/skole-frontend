@@ -1,6 +1,8 @@
 {
   "description": "Katso käyttäjän {{ username }} Skole-profiili.",
   "score": "pistettä",
+  "rank": "Arvo",
+  "badges": "Merkit",
   "editProfile": "Muokkaa profiilia",
   "noResources": "Tämä käyttäjä ei ole lisännyt yhtään resurssia.",
   "noCourses": "Tämä käyttäjä ei ole lisännyt yhtään kurssia.",

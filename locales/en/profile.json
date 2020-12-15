@@ -1,6 +1,8 @@
 {
   "description": "View Skole profile for user {{ username }}.",
   "score": "score",
+  "rank": "Rank",
+  "badges": "Badges",
   "editProfile": "Edit Profile",
   "noResources": "This user has not uploaded any resources.",
   "noCourses": "This user has not added any courses.",
