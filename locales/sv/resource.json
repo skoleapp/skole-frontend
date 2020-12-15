@@ -4,5 +4,7 @@
   "deleteResourceDescription": "Är du säker på att du vill ta bort den här resursen?",
   "error": "Fel vid inläsning av resurs.",
   "noComments": "Den här resursen har inga kommentarer. Var den första att lägga till en kommentar nedan!",
-  "drawMode": "Ritningsläge"
+  "drawMode": "Ritningsläge",
+  "shareTitle": "{{ resourceTitle }} på Skole",
+  "shareText": "Se {{ resourceTitle }} av {{ creatorUsername }} på Skole"
 }
