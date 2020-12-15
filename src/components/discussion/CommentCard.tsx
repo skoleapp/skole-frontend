@@ -251,17 +251,15 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const getBlockStyle = (block: ContentBlock): string => {
-    switch (block.getType()) {
-      case 'blockquote': {
-        return 'RichEditor-blockquote';
-      }
-      default: {
-        return '';
-      }
+    if (block.getType() === 'blockquote') {
+      return 'RichEditor-blockquote';
     }
+
+    return '';
   };
 
   const editorState = EditorState.createWithContent(stateFromMarkdown(comment.text));
+
   const renderText = (
     <Typography className={classes.text} variant="body2">
       <Editor blockStyleFn={getBlockStyle} editorState={editorState} readOnly onChange={(e) => e} />
