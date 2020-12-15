@@ -1,11 +1,24 @@
 import { useTranslation } from 'lib';
 import React from 'react';
-import { Button, DialogActions, DialogContentText, DialogContent } from '@material-ui/core';
+import {
+  Button,
+  DialogActions,
+  DialogContentText,
+  DialogContent,
+  makeStyles,
+} from '@material-ui/core';
 import { useConfirmContext } from 'context';
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
 
+const useStyles = makeStyles({
+  dialogContentText: {
+    textAlign: 'center',
+  },
+});
+
 export const ConfirmationDialog: React.FC = () => {
+  const classes = useStyles();
   const { t } = useTranslation();
 
   const {
@@ -19,7 +32,7 @@ export const ConfirmationDialog: React.FC = () => {
     <SkoleDialog open={dialogOpen} fullScreen={false}>
       <DialogHeader onCancel={handleCancel} text={title} />
       <DialogContent>
-        <DialogContentText>{description}</DialogContentText>
+        <DialogContentText className={classes.dialogContentText}>{description}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel} fullWidth>

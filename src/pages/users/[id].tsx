@@ -53,7 +53,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
-  contentCard: {
+  createdContent: {
     flexGrow: 1,
     marginTop: spacing(2),
     display: 'flex',
@@ -64,6 +64,9 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
+  },
+  mobileActionsCard: {
+    marginTop: spacing(2),
   },
   avatar: {
     width: '5rem',
@@ -85,8 +88,32 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     overflow: 'hidden',
     wordBreak: 'break-word',
   },
+  badgeContainer: {
+    marginTop: spacing(4),
+  },
+  badgeChipContainer: {
+    margin: spacing(-1),
+  },
   badge: {
     margin: spacing(1),
+  },
+  verifyAccount: {
+    marginTop: spacing(4),
+  },
+  profileStrengthContainer: {
+    [breakpoints.up('md')]: {
+      marginTop: spacing(4),
+    },
+  },
+  step: {
+    paddingLeft: 0,
+    paddingRight: spacing(2),
+  },
+  stepLabel: {
+    fontWeight: 'normal',
+  },
+  joined: {
+    marginTop: spacing(2),
   },
   actionButton: {
     [breakpoints.down('md')]: {
@@ -261,23 +288,22 @@ const UserPage: NextPage = () => {
   );
 
   const renderBio = !!bio && (
-    <Box marginTop={spacing(1)}>
-      <Typography className={classes.bio} variant="body2">
-        <ReactMarkdown>{bio}</ReactMarkdown>
-      </Typography>
-    </Box>
+    <Typography className={classes.bio} variant="body2">
+      <ReactMarkdown>{bio}</ReactMarkdown>
+    </Typography>
   );
 
   const renderJoined = (
-    <Box marginTop={spacing(2)}>
-      <Typography variant="body2" color="textSecondary">
-        {t('common:joined')} {joined}
-      </Typography>
-    </Box>
+    <Typography className={classes.joined} variant="body2" color="textSecondary">
+      {t('common:joined')} {joined}
+    </Typography>
   );
 
   const renderRank = !!rank && (
-    <Box marginTop={spacing(2)}>
+    <Box>
+      <Typography variant="body2" color="textSecondary" gutterBottom>
+        {t('profile:rank')}
+      </Typography>
       <Tooltip title={t('tooltips:rank', { rank })}>
         <Chip size="small" label={rank} />
       </Tooltip>
@@ -285,45 +311,57 @@ const UserPage: NextPage = () => {
   );
 
   const renderBadges = !!badges.length && (
-    <Box display="flex" margin={`${spacing(1)} -${spacing(1)} -${spacing(1)} -${spacing(1)}`}>
-      {badges.map(({ name, description }, i) => (
-        <Box key={i}>
-          <Tooltip title={description || ''}>
-            <Chip className={classes.badge} size="small" label={name} />
-          </Tooltip>
-        </Box>
-      ))}
+    <Box className={classes.badgeContainer}>
+      <Typography variant="body2" color="textSecondary" gutterBottom>
+        {t('profile:badges')}
+      </Typography>
+      <Grid className={classes.badgeChipContainer} container>
+        {badges.map(({ name, description }, i) => (
+          <Box key={i}>
+            <Tooltip title={description || ''}>
+              <Chip className={classes.badge} size="small" label={name} />
+            </Tooltip>
+          </Box>
+        ))}
+      </Grid>
     </Box>
   );
 
   const renderVerifyAccountLink = isOwnProfile && verified === false && (
-    <Box marginTop={spacing(2)}>
-      <TextLink href={urls.verifyAccount} color="primary">
-        {t('common:verifyAccount')}
-      </TextLink>
-    </Box>
+    <TextLink className={classes.verifyAccount} href={urls.verifyAccount} color="primary">
+      {t('common:verifyAccount')}
+    </TextLink>
   );
 
   const renderProfileStrengthHeader = (
-    <Typography variant="body2" color="textSecondary" gutterBottom>
+    <Typography variant="body2" color="textSecondary">
       {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
     </Typography>
   );
 
   // Render uncompleted items as links and completed ones as regular text.
+  const renderProfileStrengthSteps = profileStrengthSteps.map(({ label, href, completed }, i) => (
+    <Step
+      className={classes.step}
+      key={i}
+      completed={profileStrengthSteps[i].completed}
+      active={false}
+    >
+      <StepLabel classes={{ label: classes.stepLabel }}>
+        {!completed ? <TextLink href={href}>{label}</TextLink> : label}
+      </StepLabel>
+    </Step>
+  ));
+
   // Hide stepper if all steps have been completed.
   const renderProfileStrengthStepper = !allStepsCompleted && (
     <Stepper className={classes.stepper} alternativeLabel={isMobile}>
-      {profileStrengthSteps.map(({ label, href, completed }, i) => (
-        <Step key={i} completed={profileStrengthSteps[i].completed} active={false}>
-          <StepLabel>{!completed ? <TextLink href={href}>{label}</TextLink> : label}</StepLabel>
-        </Step>
-      ))}
+      {renderProfileStrengthSteps}
     </Stepper>
   );
 
   const renderProfileStrength = isOwnProfile && (
-    <Box marginTop={spacing(2)}>
+    <Box className={classes.profileStrengthContainer}>
       {renderProfileStrengthHeader}
       {renderProfileStrengthStepper}
     </Box>
@@ -415,7 +453,7 @@ const UserPage: NextPage = () => {
   );
 
   const renderMobileActionsCard = isMobile && isOwnProfile && (
-    <Paper className={clsx(classes.paper, classes.contentCard)}>
+    <Paper className={clsx(classes.paper, classes.mobileActionsCard)}>
       {renderProfileStrength}
       {renderEditProfileButton}
       {renderStarredButton}
@@ -468,7 +506,7 @@ const UserPage: NextPage = () => {
   );
 
   const renderCreatedContent = (
-    <Paper className={classes.contentCard}>
+    <Paper className={classes.createdContent}>
       {renderTabs}
       {renderSwipeableViews}
     </Paper>
