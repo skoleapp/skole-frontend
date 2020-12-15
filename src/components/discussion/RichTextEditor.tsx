@@ -17,7 +17,6 @@ import {
   AttachFileOutlined,
   CameraAltOutlined,
   ClearOutlined,
-  CodeOutlined,
   FormatBoldOutlined,
   FormatItalicOutlined,
   FormatListBulletedOutlined,
@@ -192,7 +191,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const hotkeyOrderedList = `${actionKey} + Shift + 7`;
   const hotkeyBulletedList = `${actionKey} + Shift + 8`;
   const hotkeyBlockQuote = `${actionKey} + Shift + 9`;
-  const hotkeyCodeBlock = `${actionKey} + Option + Shift + C`;
 
   const {
     bold,
@@ -202,7 +200,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     orderedList,
     unorderedList,
     blockQuote,
-    codeBlock,
   } = RICH_TEXT_EDITOR_STYLES;
 
   const inlineStyles = [
@@ -238,11 +235,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       tooltip: t('tooltips:blockQuote', { hotkeyBlockQuote }),
       icon: FormatQuoteOutlined,
       style: blockQuote,
-    },
-    {
-      tooltip: t('tooltips:codeBlock', { hotkeyCodeBlock }),
-      icon: CodeOutlined,
-      style: codeBlock,
     },
   ];
 
@@ -316,7 +308,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       return 'handled';
     }
 
-    if ([orderedList, unorderedList, blockQuote, codeBlock].includes(command)) {
+    if ([orderedList, unorderedList, blockQuote].includes(command)) {
       setEditorState(RichUtils.toggleBlockType(editorState, command));
       return 'handled';
     }
@@ -369,11 +361,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       // CMD + Shift + 9
       case 57: {
         return hasCommandModifier(e) && e.shiftKey ? blockQuote : null;
-      }
-
-      // CMD + Shift + C
-      case 67: {
-        return hasCommandModifier(e) && e.shiftKey ? codeBlock : null;
       }
 
       default: {

@@ -40,7 +40,6 @@
   "orderedList": "Ordered list ({{ hotkeyOrderedList }}).",
   "bulletedList": "Bulleted list ({{ hotkeyBulletedList }}).",
   "blockQuote": "Block quote ({{ hotkeyBlockQuote }}).",
-  "codeBlock": "Code block ({{ hotkeyCodeBlock }}).",
   "mention": "Mention user (coming soon).",
   "addCourse": "Add a course for this school."
 }

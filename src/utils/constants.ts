@@ -111,5 +111,4 @@ export const RICH_TEXT_EDITOR_STYLES = {
   orderedList: 'ordered-list-item',
   unorderedList: 'unordered-list-item',
   blockQuote: 'blockquote',
-  codeBlock: 'code-block',
 };

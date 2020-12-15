@@ -40,7 +40,6 @@
   "orderedList": "Järjestetty lista ({{ hotkeyOrderedList }}).",
   "bulletedList": "Ei-järjestetty lista ({{ hotkeyBulletedList }}).",
   "blockQuote": "Lainauslohko ({{ hotkeyBlockQuote }}).",
-  "codeBlock": "Koodilohko ({{ hotkeyCodeBlock }}).",
   "mention": "Mainitse käyttäjä (tulossa pian).",
   "addCourse": "Lisää kurssi tälle koululle."
 }
